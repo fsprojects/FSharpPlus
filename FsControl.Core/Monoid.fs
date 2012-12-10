@@ -9,6 +9,8 @@ module Monoid =
         static member        instance (Mempty, _:array<'a> ) = fun () -> [||] : array<'a>
         static member        instance (Mempty, _:string    ) = fun () -> ""
         static member        instance (Mempty, _:unit      ) = fun () -> ()
+        static member        instance (Mempty, _:Set<'a>   ) = fun () -> Set.empty : Set<'a>
+        static member        instance (Mempty, _:Map<'a,'b>) = fun () -> Map.empty : Map<'a,'b>
 
     let inline internal mempty() = Inline.instance Mempty ()
 
@@ -27,6 +29,8 @@ module Monoid =
         static member        instance (Mappend, x:array<_> , _) = fun y -> Array.append x y
         static member        instance (Mappend, x:string   , _) = fun y -> x + y
         static member        instance (Mappend, ()         , _) = fun () -> ()
+        static member        instance (Mappend, x:Set<_>   , _) = fun y -> Set.union x y
+        static member        instance (Mappend, x:Map<_,_> , _) = fun y -> Seq.fold (fun m (k,v) -> Map.add k v m) x y
 
     let inline internal mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
 
