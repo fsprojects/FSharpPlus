@@ -45,7 +45,7 @@ type ListT<'Ma> with
     static member inline instance (MonadPlus.Mplus, ListT x, _) = fun (ListT y) -> ListT <| do'() {
         let! a = x
         let! b = y
-        return (a ++ b)}
+        return (a @ b)}
 
 
 open OptionT

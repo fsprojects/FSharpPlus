@@ -20,7 +20,6 @@ module Category =
 
     let inline internal id'() = Inline.instance Id ()
     let inline internal (<<<) f g = Inline.instance (Comp, f) g
-    let inline internal (>>>) g f = Inline.instance (Comp, f) g
 
 open Category
 
@@ -34,14 +33,6 @@ module Arrow =
         static member inline instance (First, Kleisli f, _:Kleisli<_,_>) = fun () -> Kleisli (fun (b,d) -> f b >>= fun c -> return' (c,d))
 
     let inline internal arr   f = Inline.instance  Arr    f
-    let inline internal first f = Inline.instance (First, f) ()
-
-    let inline internal second f = 
-        let swap (x,y) = (y,x)
-        arr swap >>> first f >>> arr swap
-
-    let inline internal ( *** ) f g = first f >>> second g
-    let inline internal ( &&& ) f g = arr (fun b -> (b,b)) >>> f *** g
 
 open Arrow
 
@@ -68,13 +59,8 @@ module ArrowChoice =
         static member inline instance (AcRight, f:_->_   , _) = fun () -> id          +++ f
         static member inline instance (AcRight, Kleisli f, _) = fun () -> arr (id'()) +++ Kleisli f
 
-    let inline internal left  f = Inline.instance (AcLeft,  f) ()
-    let inline internal right f = Inline.instance (AcRight, f) ()
-
 
 module ArrowApply =
     type Apply = Apply with
         static member instance (Apply, _: ('a -> 'b) * 'a -> 'b          ) = fun () ->          fun (f,x)          -> f x
         static member instance (Apply, _: Kleisli<Kleisli<'a,'b> * 'a,'b>) = fun () -> Kleisli (fun (Kleisli f, x) -> f x)
-
-    let inline internal app() = Inline.instance Apply ()

@@ -81,24 +81,14 @@ module internal Numerics =
     let inline internal fromInteger (x:bigint) :'Num = Inline.instance Num.FromInteger x
     let inline internal abs (x:'Num) :'Num = Inline.instance (Num.Abs, x) ()
     let inline internal signum (x:'Num) :'Num = Inline.instance (Num.Signum, x) ()
-
-    // let inline internal (+) (a:'Num) (b:'Num) :'Num = a </opPlus    /> b
-    // let inline internal (-) (a:'Num) (b:'Num) :'Num = a </opMinus   /> b
-    // let inline internal (*) (a:'Num) (b:'Num) :'Num = a </opMultiply/> b
-   
     let inline internal negate (x:'Num) :'Num = Inline.instance (Num.Negate, x) ()
-    //let inline internal (~-)   (x:'Num) :'Num = Inline.instance (Num.Negate, x) ()
 
     let inline internal toInteger (x:'Integral) :bigint = Inline.instance (Integral.ToInteger, x) ()
 
     let inline internal fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
-    module NumericLiteralG =
-        let inline FromZero() = fromIntegral 0
-        let inline FromOne () = fromIntegral 1
-        let inline FromInt32  (i:int   ) = fromIntegral i
-        let inline FromInt64  (i:int64 ) = fromIntegral i
-        let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
+    let inline internal G0() = fromIntegral 0
+    let inline internal G1() = fromIntegral 1
 
     let inline internal whenIntegral a = let _ = if false then toInteger a else 0I in ()
 
@@ -106,21 +96,13 @@ module internal Numerics =
     let inline internal rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
     let inline internal quotRem a b :'Integral * 'Integral = (quot a b, rem a b)
 
-    open Num
 
-    let inline internal div (a:'Integral) b :'Integral =
-        whenIntegral a
-        let (a,b) = if b < 0G then (negate a, negate b) else (a,b)
-        (if a < 0G then (a </opMinus/> b </opPlus/> 1G) else a) / b
-
-    let inline internal mod'   a b :'Integral = whenIntegral a; ((a % b) </opPlus/> b) % b  
-    let inline internal divMod a b :'Integral * 'Integral = (div a b, mod' a b)
 
 
     // Numeric Functions ------------------------------------------------------
 
     let inline internal gcd x y :'Integral =
-        let zero = 0G
+        let zero = G0()
         let rec gcd' a = function
             | b when b = zero -> a
             | b -> gcd' b (rem a b)
@@ -145,7 +127,7 @@ module Ratio =
 
     let inline internal ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
         whenIntegral a
-        let zero = 0G
+        let zero = G0()
         if b = zero then failwith "Ratio.%: zero denominator"
         let (a,b) = if b < zero then (negate a, negate b) else (a, b)
         let gcd = gcd a b
@@ -164,8 +146,8 @@ module Ratio =
         static member inline (*) (Ratio(a,b), Ratio(c,d)) = (a </opMultiply/> c) </ratio/> (b </opMultiply/> d)
 
     type Ratio<'RA> with static member inline instance (Num.Abs        , r:Ratio<_>, _) = fun () -> (abs    (numerator r)) </ratio/> (denominator r)
-    type Ratio<'RA> with static member inline instance (Num.Signum     , r:Ratio<_>, _) = fun () -> (signum (numerator r)) </ratio/> 1G
-    type Ratio<'RA> with static member inline instance (dm:Num.FromInteger, _:Ratio<_>) = fun (x:bigint) -> Inline.instance Num.FromInteger x </ratio/> 1G
+    type Ratio<'RA> with static member inline instance (Num.Signum     , r:Ratio<_>, _) = fun () -> (signum (numerator r)) </ratio/> G1()
+    type Ratio<'RA> with static member inline instance (dm:Num.FromInteger, _:Ratio<_>) = fun (x:bigint) -> Inline.instance Num.FromInteger x </ratio/> G1()
     type Ratio<'RA> with static member inline instance (Num.Negate     , r:Ratio<_>, _) = fun () -> -(numerator r) </ratio/> (denominator r)
 
 type Rational = Ratio.Ratio<bigint>

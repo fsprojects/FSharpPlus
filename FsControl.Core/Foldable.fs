@@ -37,5 +37,3 @@ module Foldable =
         static member instance (Foldl, x:array<_> , _) = fun (f,z) -> DefaultImpl.FoldlFromFoldMap f z x
 
     let inline internal foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
-    let inline internal foldMap f x = Inline.instance (FoldMap, x) f
-    let inline internal foldl (f: 'a -> 'b -> 'a) (z:'a) x :'a = Inline.instance (Foldl, x) (f,z)

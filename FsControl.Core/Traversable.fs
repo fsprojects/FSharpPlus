@@ -11,6 +11,3 @@ module Traversable =
         static member inline instance (Traverse, t:List<_>  , _) = fun f ->            
             let cons_f x ys = fmap cons (f x) <*> ys
             foldr cons_f (pure' []) t
-
-    let inline internal traverse f t = Inline.instance (Traverse, t) f
-    let inline internal sequenceA  x = traverse id x

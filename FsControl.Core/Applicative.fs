@@ -39,11 +39,3 @@ module Alternative =
     type Append = Append with   
         static member instance (_Alternative:Append, x:option<_>, _) = fun y -> match x with | None -> y | xs -> xs
         static member instance (_Alternative:Append, x:List<_>  , _) = fun y -> x @ y
-
-    let inline internal empty() = Inline.instance Empty ()
-    let inline internal (<|>) (x:'a) (y:'a) :'a = Inline.instance (Append, x) y
-    
-    let inline internal liftA2 f a b = pure' f <*> a <*> b
-    let inline internal (  *>)   x   = x |> liftA2 (const' id)
-    let inline internal (<*  )   x   = x |> liftA2 const'
-    let inline internal (<**>)   x   = x |> liftA2 (|>)

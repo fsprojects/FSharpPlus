@@ -24,4 +24,3 @@ module Functor =
         static member instance (Fmap, x:Choice<_,_>, _) = fun f -> match x with Choice2Of2 x -> Choice2Of2(f x) | x -> x
 
     let inline internal fmap   f x = Inline.instance (Fmap, x) f
-    let inline internal (<<|>) f x = Inline.instance (Fmap, x) f

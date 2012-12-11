@@ -29,7 +29,6 @@ module Monad =
 
     let inline internal return' x = Inline.instance Return x
     let inline internal (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
-    let inline internal (=<<) (f:_->'R) x : 'R = Inline.instance (Bind, x) f
 
     let inline internal sequence ms =
         let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (return' :list<'a> -> 'M) (List.Cons(x,xs))
@@ -39,12 +38,9 @@ module Monad =
 
     let inline internal liftM  f m1    = m1 >>= (return' << f)
     let inline internal liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
-    let inline internal when'  p s     = if p then s else return' ()
-    let inline internal unless p s     = when' (not p) s
     let inline internal ap     x y     = liftM2 id x y
 
     let inline internal (>=>)  f g x   = f x >>= g
-    let inline internal (<=<)  g f x   = f x >>= g
 
 // Do notation ------------------------------------------------------------
 
