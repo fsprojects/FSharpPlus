@@ -20,8 +20,8 @@ module Monad =
         static member instance (Bind, x:List<_>     , _:List<'b>   ) = fun (f:_->List<'b>  ) -> List.collect f x
         static member instance (Bind, f:'r->'a      , _:'r->'b     ) = fun (k:_->_->'b) r    -> k (f r) r    
         static member instance (Bind, x:Async<'a>   , _:'b Async   ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
-        static member instance (Bind, x:Choice<_,'e>, _:Choice<'b,'e>) = fun (k:_->Choice<'b,_>) -> 
-            match x with Choice1Of2 r -> k r | x -> x
+        static member instance (Bind, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun (k:'a->Choice<'b,'e>) -> 
+            match x with Choice1Of2 r -> k r | Choice2Of2 e -> Choice2Of2 e
 
         //Restricted Monad
         static member instance (Bind, x:Nullable<_> , _:'b Nullable) = fun f ->
