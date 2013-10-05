@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FsControl</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Gusty</authors>
+    <owners>Gusty</owners>
+    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
+    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>FsControl is an overload library for F#.</description>
+    <releaseNotes>Version 1.0.0</releaseNotes>
+    <copyright>Copyright 2012-2013</copyright>
+    <tags>F#</tags>
+  </metadata>
+</package>
