@@ -42,6 +42,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="InlineHelper.fs" />
     <Compile Include="Prelude.fs" />
     <Compile Include="NumericH98.fs" />
