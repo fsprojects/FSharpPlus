@@ -50,6 +50,7 @@
     <Compile Include="Monad.fs" />
     <Compile Include="Applicative.fs" />
     <Compile Include="Functor.fs" />
+    <Compile Include="Comonad.fs" />
     <Compile Include="MonadPlus.fs" />
     <Compile Include="Arrow.fs" />
     <Compile Include="Foldable.fs" />
