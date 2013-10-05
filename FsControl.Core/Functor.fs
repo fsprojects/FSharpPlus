@@ -14,6 +14,7 @@ module Functor =
         static member instance (Fmap, x:option<_>    , _) = fun f -> Option.map  f x
         static member instance (Fmap, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
         static member instance (Fmap, g:_->_         , _) = (>>) g
+        static member instance (Fmap, (m,a)          , _) = fun f -> (m, f a)
         static member instance (Fmap, x:array<_>     , _) = fun f -> Array.map   f x
         static member instance (Fmap, x:_ [,]        , _) = fun f -> Array2D.map f x
         static member instance (Fmap, x:_ [,,]       , _) = fun f -> Array3D.map f x

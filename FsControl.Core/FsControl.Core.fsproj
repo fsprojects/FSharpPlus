@@ -45,12 +45,12 @@
     <Compile Include="InlineHelper.fs" />
     <Compile Include="Prelude.fs" />
     <Compile Include="NumericH98.fs" />
+    <Compile Include="Monoid.fs" />
     <Compile Include="Monad.fs" />
     <Compile Include="Applicative.fs" />
     <Compile Include="Functor.fs" />
     <Compile Include="MonadPlus.fs" />
     <Compile Include="Arrow.fs" />
-    <Compile Include="Monoid.fs" />
     <Compile Include="Foldable.fs" />
     <Compile Include="Traversable.fs" />
     <Compile Include="Cont.fs" />
