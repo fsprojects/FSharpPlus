@@ -1,12 +1,12 @@
-﻿module InlineAbstractions.Types.StateT
+﻿module FsControl.Core.Types.StateT
 
-open InlineAbstractions.Prelude
-open InlineAbstractions.TypeClasses
-open InlineAbstractions.TypeClasses.Monad
-open InlineAbstractions.TypeClasses.MonadPlus
-open InlineAbstractions.Types.MonadTrans
-open InlineAbstractions.Types.MonadAsync
-open InlineAbstractions.Types.State
+open FsControl.Core.Prelude
+open FsControl.Core.Abstractions
+open FsControl.Core.Abstractions.Monad
+open FsControl.Core.Abstractions.MonadPlus
+open FsControl.Core.Types.MonadTrans
+open FsControl.Core.Types.MonadAsync
+open FsControl.Core.Types.State
 
 type StateT<'S,'MaS> = StateT of ('S -> 'MaS)
 

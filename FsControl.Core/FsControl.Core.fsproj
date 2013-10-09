@@ -63,6 +63,7 @@
     <Compile Include="ContT.fs" />
     <Compile Include="ReaderT.fs" />
     <Compile Include="WriterT.fs" />
+    <Compile Include="StateT.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
