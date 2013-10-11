@@ -7,10 +7,12 @@ open FsControl.Core.Abstractions.MonadPlus
 open FsControl.Core.Abstractions.Monoid
 open FsControl.Core.Types.MonadTrans
 open FsControl.Core.Types.MonadAsync
+open FsControl.Core.Types.MonadError
 open FsControl.Core.Types.Cont
 open FsControl.Core.Types.Reader
 open FsControl.Core.Types.State
 open FsControl.Core.Types.Writer
+
 
 type WriterT<'WMa> = WriterT of 'WMa
 
@@ -52,6 +54,10 @@ type WriterT<'WMa> with
         return (a, mempty())}
     
     static member inline instance (MonadAsync.LiftAsync    , _:WriterT<_>   ) = fun (x: Async<_>) -> lift (liftAsync x)
+
+    static member inline instance (MonadError.ThrowError, _:WriterT<'U>    ) = lift << throwError
+    static member inline instance (MonadError.CatchError, m:WriterT<'U> , _:WriterT<'U>) = fun (h:'e -> WriterT<'U>) -> 
+            WriterT <| catchError (runWriterT m) (runWriterT << h) :WriterT<'U>
 
     static member inline instance (MonadCont.CallCC  , _:WriterT<Cont<'r,'a*'b>>) : (('a->WriterT<Cont<'r,'t>>)->_) -> WriterT<Cont<'r,'a*'b>>= 
         fun f -> WriterT (callCC <| fun c -> runWriterT (f (fun a -> WriterT <| c (a, mempty()))))

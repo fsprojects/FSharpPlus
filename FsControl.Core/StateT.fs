@@ -6,6 +6,7 @@ open FsControl.Core.Abstractions.Monad
 open FsControl.Core.Abstractions.MonadPlus
 open FsControl.Core.Types.MonadTrans
 open FsControl.Core.Types.MonadAsync
+open FsControl.Core.Types.MonadError
 open FsControl.Core.Types.State
 
 type StateT<'S,'MaS> = StateT of ('S -> 'MaS)
@@ -36,3 +37,7 @@ type StateT<'S,'MaS> with
     static member inline instance (MonadState.Put, _:StateT<_,_>    ) = fun x  -> StateT (fun _ -> return' ((), x))
 
     static member inline instance (MonadAsync.LiftAsync, _:StateT<_,_>) = fun (x: Async<_>) -> lift (liftAsync x)
+
+    static member inline instance (MonadError.ThrowError, _:StateT<_,_>    ) = lift << throwError
+    static member inline instance (MonadError.CatchError,  m:StateT<'T,'U> , _:StateT<'T,'U>) = fun (h:'e -> StateT<'T,'U>) -> 
+        StateT (fun s -> catchError (runStateT m s)   (fun e -> runStateT (h e) s)):StateT<'T,'U>

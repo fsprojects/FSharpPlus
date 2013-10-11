@@ -334,7 +334,7 @@ let res230hiSum2 = mappend (mempty(), mempty(), Sum 2) ([2], ([3.0], "hi"), memp
 let res230hiS4P3 = mappend (mempty(), mempty()       ) ([2], ([3.0], "hi", Sum 4, Product (6 % 2)))
 let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
-// Control Monad
+// Monad Plus
 open FsControl.Core.Abstractions.MonadPlus
 let inline mzero () = Inline.instance Mzero ()
 let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
@@ -391,7 +391,7 @@ let inline right f = Inline.instance (AcRight, f) ()
 let inline app() = Inline.instance Apply ()
 let runKleisli (Kleisli f) = f
 
-
+// Test Arrows
 let r5:List<_>  = (runKleisli (id'())) 5
 let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
 let r8n16n24n10n20n30 = runKleisli k <| 5
@@ -404,12 +404,12 @@ let res500n14 = ( (*) 100) &&& ((+) 9)  <| 5
 let (res10x13n10x20n15x13n15x20:list<_>) = runKleisli (Kleisli (fun y -> [y * 2; y * 3]) *** Kleisli (fun x -> [x + 3; x *  2] )) (5,10)
 let (res10x8n10x10n15x8n15x10  :list<_>) = runKleisli (Kleisli (fun y -> [y * 2; y * 3]) &&& Kleisli (fun x -> [x + 3; x *  2] )) 5
 
-// Arrow choice
+// Test Arrow Choice
 let resLeft7       = ( (+) 2) +++ ( (*) 10)   <| Left  5
 let res7n50        = runKleisli (Kleisli (fun y -> [y; y * 2 ; y * 3]) ||| Kleisli (fun x -> [x + 2; x * 10] )) (Right 5)
 let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2 ; y * 3]) +++ Kleisli (fun x -> [x + 3; x *  2] )) (Left  5)
 
-//Arrow Apply
+// Test Arrow Apply
 let res7      = app() ( (+) 3 , 4)
 let res4n8n12 = runKleisli (app()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
 
@@ -438,17 +438,17 @@ type ZipList<'s> = ZipList of 's seq with
     static member instance (_Applicative:Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
 
-// lists
+// Test Applicative w/lists
 let res3n4   = pure' ((+) 2) <*> [1;2]
 let res2n4n8 = pure' ( **^) </ap/> pure' 2. <*> [1;2;3]
 
-// functions
+// Test Applicative w/functions
 let res3 = pure' 3 "anything"
 let res607 = fmap (+) ( (*) 100 ) 6 7
 let res606 = ( (+) <*>  (*) 100 ) 6
 let res508 = (fmap (+) ((+) 3 ) <*> (*) 100) 5
 
-//ZipList
+// Test Applicative w/ZipList
 let res9n5   = fmap ((+) 1) (ZipList(seq [8;4]))
 let res18n24 = pure' (+) <*> ZipList(seq [8;4]) <*> ZipList(seq [10;20])
 let res6n7n8 = pure' (+) <*> pure' 5G <*> ZipList [1;2;3]
@@ -487,6 +487,7 @@ let resJust2'' = iI safeDivBy (Just 4G) J (Just 8G) Ii
 let resNothing = iI safeDivBy (Just 0G) J (Just 8G) Ii
 let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii
 
+
 // Foldable
 open FsControl.Core.Abstractions
 open FsControl.Core.Abstractions.Foldable
@@ -494,7 +495,7 @@ open FsControl.Core.Abstractions.Foldable
 let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
 let inline foldMap f x = Inline.instance (FoldMap, x) f
 
-
+// Test Foldable
 let resGt = foldMap (compare' 2) [1;2;3]
 let resHW = foldMap (fun x -> Just ("hello " + x)) (Just "world")
 
@@ -527,6 +528,7 @@ open FsControl.Core.Abstractions.Traversable
 let inline traverse f t = Inline.instance (Traverse, t) f
 let inline sequenceA  x = traverse id x
 
+// Test Traversable
 let f x = if x < 200 then [3 - x] else []
 let g x = if x < 200 then Just (3 - x) else Nothing
 
@@ -544,12 +546,12 @@ let get3strings = sequenceA [getLine;getLine;getLine]
 
 
 
-// CONT
+// Cont
 open FsControl.Core.Types.Cont
 let inline when'  p s     = if p then s else return' ()
 let inline unless p s     = when' (not p) s
 
-
+// Test Cont
 let square_C   x = return' (x * x)
 let addThree_C x = return' (x + 3)
 
@@ -575,7 +577,7 @@ let foo n =
 let res''3''  = runCont (foo  2) id
 let resOver20 = runCont (foo 16) id
 
-
+// Reader
 open FsControl.Core.Types.Reader
 
 let calculateContentLen = do' {
@@ -594,6 +596,7 @@ let readerMain = do' {
 
 // try -> runIO readerMain ;;
 
+// State
 open FsControl.Core.Types.State
 
 // from http://www.haskell.org/haskellwiki/State_Monad
@@ -622,12 +625,13 @@ let plusOne n = execState tick n
 let plus  n x = execState (sequence <| List.replicate n tick) x
 
 
+// Writer
 open FsControl.Core.Types.Writer
 
 let res12n44x55x1x2 = (+) <<|> Writer (3,[44;55]) </ap/> Writer (9,[1;2])
 
 
-
+// Monad Transformers
 open FsControl.Core.Types.MonadTrans
 open FsControl.Core.Types.OptionT
 open FsControl.Core.Types.ListT
@@ -655,7 +659,7 @@ let inline internal tell   x = Inline.instance  Tell x
 let inline internal listen m = Inline.instance (Listen, m) ()
 let inline internal pass   m = Inline.instance (Pass  , m) ()
 
-
+// Test Monad Transformers
 let maybeT4x6xN = fmap ((+) 2) (MaybeT [Just 2; Just 4; Nothing])
 let maybeT = MaybeT [Some 2; Some 4] >>= fun x -> MaybeT [Some x; Some (x+10)]
 
@@ -693,7 +697,7 @@ let askPass = runMaybeT askPassword
 
 let resLiftIOMaybeT = liftIO getLine : MaybeT<IO<_>>
 
-
+// ContT
 open FsControl.Core.Types.ContT
 open FsControl.Core.Types.ContT.ContT
 
@@ -730,12 +734,11 @@ let resList29 = runCont (runListT  (bar 'h' !"i"   )) id
 
 let resLiftIOContT = liftIO getLine : ContT<IO<string>,_>
 
-
+// ReaderT
 open FsControl.Core.Types.ReaderT
 open FsControl.Core.Types.ReaderT.ReaderT
 
 let res15'' = runCont (runReaderT (bar 'h' !"ello") "anything") id
-
 
 // from http://www.haskell.org/ghc/docs/6.10.4/html/libraries/mtl/Control-Monad-Reader.html
 let printReaderContent = do' {
@@ -749,7 +752,7 @@ let _ = runIO readerTMain
 // try -> runIO readerTMain ;;
 
 
-
+// StateT
 open FsControl.Core.Types.StateT
 open FsControl.Core.Types.StateT.StateT
 
@@ -772,7 +775,7 @@ let main = runStateT code [1..10] >>= fun _ -> return' ()
 
 let resLiftIOStateT = liftIO getLine : StateT<string,IO<_>>
 
-
+// WriterT
 open FsControl.Core.Types.WriterT
 open FsControl.Core.Types.WriterT.WriterT
 
@@ -807,10 +810,30 @@ let logstatecase3 x y z : WriterT<_> =  do' {
 let resLiftIOWriterT = liftIO getLine : WriterT<IO<_ * string>>
 
 
-// N-layers Monad Transformer
+// Test N-layers Monad Transformer
 
 let res3Layers   = (lift << lift)         getLine : MaybeT<ReaderT<string,_>>
 let res3Layers'  = (lift << lift)         getLine : MaybeT<WriterT<IO<_ * string>>>
 let res3Layers'' = liftIO                 getLine : MaybeT<WriterT<IO<_ * string>>>
 let res4Layers   = (lift << lift << lift) getLine : ListT<MaybeT<WriterT<IO<_ * string>>>>
 let res4Layers'  = liftIO                 getLine : ListT<MaybeT<WriterT<IO<_ * string>>>>
+
+
+// MonadError
+open FsControl.Core.Types.MonadError
+let inline throwError x   = Inline.instance  ThrowError x
+let inline catchError v h = Inline.instance (CatchError, v) h
+
+// Test MonadError
+let err          = throwError "Invalid Value" : MaybeT<Either<_,Maybe<int>>>
+let err1Layers   = catchError (Left "Invalid Value") (fun s -> Left ("the error was: " + s) ) : Either<string,int>
+let err2Layers   = catchError (MaybeT (Left "Invalid Value")) (fun s -> MaybeT (Left ("the error was: " + s))) : MaybeT<Either<string,Maybe<int>>>
+let err3Layers   = catchError (MaybeT(ListT (Left "Invalid Value"))) (fun s -> MaybeT (ListT (Left ("the error was: " + s)))) : MaybeT<ListT<Either<string,List<int>>>>
+
+let err'         = throwError "Invalid Value" : ReaderT<int,Either<_,int>>
+let inv = runReaderT err' 5
+let err2Layers'   = catchError err' (fun s -> ReaderT (fun x-> Left ("the error was: " + s))) : ReaderT<_,_>
+let errWasInv  = runReaderT err2Layers' 5
+
+let err3Layers'  = catchError (MaybeT (throwError "Invalid Value" )) (fun s -> MaybeT(ReaderT (fun x-> Left ("the error was: " + s)))) : OptionT<ReaderT<int,Either<string,Maybe<int>>>>
+let err3Layers'' = catchError (ReaderT (fun x -> throwError "Invalid Value" )) (fun s -> ReaderT(fun x-> MaybeT (Left ("the error was: " + s)))) : ReaderT<int,MaybeT<Either<string,Maybe<int>>>>

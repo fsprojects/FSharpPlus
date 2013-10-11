@@ -6,6 +6,7 @@ open FsControl.Core.Abstractions.Monad
 open FsControl.Core.Abstractions.MonadPlus
 open FsControl.Core.Types.MonadTrans
 open FsControl.Core.Types.MonadAsync
+open FsControl.Core.Types.MonadError
 open FsControl.Core.Types.Reader
 open FsControl.Core.Types.State
 open FsControl.Core.Types.Writer
@@ -40,6 +41,10 @@ type ReaderT<'R,'Ma> with
     static member inline instance (MonadReader.Local, ReaderT m, _:ReaderT<_,_>) = fun f  -> ReaderT(fun r -> m (f r))
 
     static member inline instance (MonadAsync.LiftAsync,  _:ReaderT<_,_>        ) = fun (x: Async<_>) -> lift (liftAsync x)
+
+    static member inline instance (MonadError.ThrowError, _:ReaderT<_,_>    ) = lift << throwError
+    static member inline instance (MonadError.CatchError,  m:ReaderT<'T,'U> , _:ReaderT<'T,'U>) = fun (h:'e -> ReaderT<'T,'U>) -> 
+        ReaderT (fun s -> catchError (runReaderT m s)   (fun e -> runReaderT (h e) s)):ReaderT<'T,'U>
 
     static member instance (MonadCont.CallCC , _:ReaderT<'r,Cont<'c,'a>> ) : (('a -> ReaderT<'t,Cont<'c,'u>>) -> ReaderT<'r,Cont<'c,'a>>) -> ReaderT<'r,Cont<'c,'a>> =
         fun f -> ReaderT(fun r -> callCC <| fun c -> runReaderT (f (fun a -> ReaderT <| fun _ -> c a)) r)
