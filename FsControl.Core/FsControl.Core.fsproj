@@ -52,8 +52,8 @@
     <Compile Include="Traversable.fs" />
     <Compile Include="Cont.fs" />
     <Compile Include="Reader.fs" />
-    <Compile Include="State.fs" />
     <Compile Include="Writer.fs" />
+    <Compile Include="State.fs" />
     <Compile Include="MonadTrans.fs" />
     <Compile Include="ContT.fs" />
     <Compile Include="ReaderT.fs" />

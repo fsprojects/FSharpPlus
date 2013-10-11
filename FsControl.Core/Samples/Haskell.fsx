@@ -24,13 +24,13 @@ let  Nothing:Maybe<'t> = None
 let  (|Just|Nothing|) = function Some x -> Just x | _ -> Nothing
 let maybe  n f = function | Nothing -> n | Just x -> f x
 
-
 type Either<'a,'b> = Choice<'b,'a>
 let  Right x :Either<'a,'b> = Choice1Of2 x
 let  Left  x :Either<'a,'b> = Choice2Of2 x
 let  (|Right|Left|) = function Choice1Of2 x -> Right x | Choice2Of2 x -> Left x
 let either f g = function Left x -> f x | Right y -> g y
 
+// Numerics
 type Integer = bigint
 open System.Numerics
 open FsControl.Core.NumericH98.Abstractions
@@ -43,9 +43,7 @@ open FsControl.Core.NumericH98.Abstractions.RealFrac
 open FsControl.Core.NumericH98.Types.Ratio
 
 let inline fromInteger (x:Integer) :'Num = Inline.instance FromInteger x
-
 let inline toInteger (x:'Integral) :Integer = Inline.instance (ToInteger, x) ()
-
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
@@ -54,9 +52,6 @@ module NumericLiteralG =
     let inline FromInt32  (i:int   ) = fromIntegral i
     let inline FromInt64  (i:int64 ) = fromIntegral i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
-
-
-
 
 let inline abs (x:'Num) :'Num = Inline.instance (Abs, x) ()
 let inline signum (x:'Num) :'Num = Inline.instance (Signum, x) ()
@@ -83,11 +78,10 @@ let inline divMod a b :'Integral * 'Integral = (div a b, mod' a b)
 
 type Rational = Ratio<Integer>
 
+let inline G0() = fromIntegral 0
+let inline G1() = fromIntegral 1
 
-let inline internal G0() = fromIntegral 0
-let inline internal G1() = fromIntegral 1
-
-let inline internal gcd x y :'Integral =
+let inline gcd x y :'Integral =
     let zero = G0()
     let rec gcd' a = function
         | b when b = zero -> a
@@ -97,7 +91,7 @@ let inline internal gcd x y :'Integral =
     | _                      -> gcd' (abs x) (abs y)
 
 
-let inline internal ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
+let inline ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
     whenIntegral a
     let zero = G0()
     if b = zero then failwith "Ratio.%: zero denominator"
@@ -111,14 +105,12 @@ let inline whenFractional a = let _ = if false then fromRational (1I % 1I) else 
 let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = whenFractional a; a / b
 let inline recip x :'Fractional = 1G / x
 
-// Exp functions ----------------------------------------------------------
+// Exp functions
 let inline ( **^ ) (x:'Num) (n:'Integral)  = 
     whenIntegral n
     let rec f a b n = if n == 0G then a else f (b * a) b (n - 1G)
     if (n < 0G) then failwith "Negative exponent" else f 1G x n
 let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
-
-
 
 let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
     let (a, b:'RealFrac) = Inline.instance (ProperFraction, x) ()
@@ -138,11 +130,7 @@ let inline atanh x :'Floating = (1G/2G) * log ((1G+x) / (1G-x))
 let inline logBase x y  :'Floating =  log y / log x
 
 
-
-
-
-// Numerics
-
+// Test Numerics
 let res5_55:Integer * _ = properFraction 5.55M
 let res111_20 = toRational 5.55
 let res4_3    = toRational (12 % 9)
@@ -160,27 +148,21 @@ let resCmplx:System.Numerics.Complex * _ = quadratic 2G -3G 9G
 
 
 
-
-// Define Monads
+// Monads
 open FsControl.Core.Abstractions.Monad
+let inline return' x = Inline.instance Return x
+let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
 
-let inline internal return' x = Inline.instance Return x
-let inline internal (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
-
-let inline internal sequence ms =
+let inline sequence ms =
     let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (return' :list<'a> -> 'M) (List.Cons(x,xs))
     List.foldBack k ms ((return' :list<'a> -> 'M) [])
 
-let inline internal mapM f as' = sequence (List.map f as')
-
-let inline internal liftM  f m1    = m1 >>= (return' << f)
-let inline internal liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
-let inline internal ap     x y     = liftM2 id x y
-
+let inline mapM f as' = sequence (List.map f as')
+let inline liftM  f m1    = m1 >>= (return' << f)
+let inline liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
+let inline ap     x y     = liftM2 id x y
 let inline (>=>)  f g x   = f x >>= g
 let inline (<=<)  g f x   = f x >>= g
-
-// Do notation ------------------------------------------------------------
 
 type DoNotationBuilder() =
     member inline b.Return(x)    = return' x
@@ -190,14 +172,12 @@ type DoNotationBuilder() =
 let do' = new DoNotationBuilder()
 
 
-// TEST return
-
+// Test return
 let resSome2 :option<_> = return' 2
 let resSing2 :list<_>   = return' 2
 
 
-// TEST List Monad
-
+// Test List Monad
 // F#                           // Haskell
 let result = 
     do' {                       // do {
@@ -209,22 +189,14 @@ let result =
 let lst11n21n12n22 = [1;2]  >>= (fun x1 -> [10;20] >>= (fun x2 ->  return'((+) x1 x2 )))
 
 
-
-// IO ---------------------------------------------------------------------
-
+// IO
 type IO<'a> = Async<'a>
 let runIO  f   = Async.RunSynchronously f
-//let primretIO  f    = async {f}
-//let primbindIO io f = IO(fun () -> runIO (f (runIO io )))
-
 let getLine    = async { return System.Console.ReadLine() }
 let putStrLn x = async { printfn "%s" x}
 let print    x = async { printfn "%A" x}
 
-// IO Monad
-
-
-
+// Test IO
 let action = do' {
     do! putStrLn  "What is your first name?"
     let! fn = getLine
@@ -237,14 +209,12 @@ let action = do' {
 // try -> runIO action ;;
 
 
-
-// Define Functors
+// Functors
 open FsControl.Core.Abstractions.Functor
-let inline internal fmap   f x = Inline.instance (Fmap, x) f
-// TEST Functors
+let inline fmap   f x = Inline.instance (Fmap, x) f
 
+// Test Functors
 let times2,minus3 = (*) 2, (-)/> 3
-
 let resJust1      = fmap minus3 (Some 4G)
 let noValue       = fmap minus3 None
 let lstTimes2     = fmap times2 [1;2;3;4]
@@ -253,10 +223,7 @@ let res39         = fTimes2minus3 21G
 let getChars      = fmap (fun (x:string) -> x.ToCharArray() |> Seq.toList ) action
 // try -> runIO getChars ;;
 
-
-
 // Define a type Tree
-
 type Tree<'a> =
     | Tree of 'a * Tree<'a> * Tree<'a>
     | Leaf of 'a
@@ -272,13 +239,10 @@ let myTree = Tree(6, Tree(2, Leaf(1), Leaf(3)), Leaf(9))
 let mappedTree = fmap fTimes2minus3 myTree
 
 
-
-
 // Monoids
 open FsControl.Core.Abstractions.Monoid
 open FsControl.Core.Types.Dual
 open FsControl.Core.Types.Endo
-
 
 type Ordering = LT|EQ|GT with
     static member        instance (_Monoid:Mempty, _:Ordering ) = fun () -> EQ
@@ -294,7 +258,6 @@ let inline compare' x y =
     | a when a < 0 -> LT
     | _            -> EQ
 
-
 type Sum<'a> = Sum of 'a with
     static member inline instance (Mempty, _:Sum<'n>      ) = fun ()          -> Sum 0G     :Sum<'n>
     static member inline instance (Mappend,  Sum (x:'n), _) = fun (Sum(y:'n)) -> Sum (x + y):Sum<'n>
@@ -305,11 +268,12 @@ type Product<'a> = Product of 'a with
 
 let inline mempty() = Inline.instance Mempty ()
 let inline mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
-let inline internal mconcat x =
+let inline mconcat x =
     let foldR f s lst = List.foldBack f lst s
     foldR mappend (mempty()) x
 
 
+// Test Monoids
 let emptyLst:list<int> = mempty()
 let zeroInt:Sum<int>   = mempty()
 let res10 = mappend (mempty()) (Sum 10)
@@ -334,6 +298,7 @@ let res230hiSum2 = mappend (mempty(), mempty(), Sum 2) ([2], ([3.0], "hi"), memp
 let res230hiS4P3 = mappend (mempty(), mempty()       ) ([2], ([3.0], "hi", Sum 4, Product (6 % 2)))
 let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
+
 // Monad Plus
 open FsControl.Core.Abstractions.MonadPlus
 let inline mzero () = Inline.instance Mzero ()
@@ -348,12 +313,13 @@ type DoPlusNotationBuilder() =
     member inline x.Combine(a, b) = mplus a b
 let doPlus = new DoPlusNotationBuilder()
 
+// Test MonadPlus
 let nameAndAddress = mapM (fun x -> putStrLn x >>= fun _ -> getLine) ["name";"address"]
 
 let a:list<int> = mzero()
 let res123      = mplus (mempty()) ([1;2;3])
 
-// MonadPlus (sample code from http://en.wikibooks.org/wiki/Haskell/MonadPlus)
+// sample code from http://en.wikibooks.org/wiki/Haskell/MonadPlus
 let pythags = do'{
   let! z = [1..50]
   let! x = [1..z]
@@ -376,16 +342,16 @@ open FsControl.Core.Abstractions.Arrow
 open FsControl.Core.Abstractions.ArrowChoice
 open FsControl.Core.Abstractions.ArrowApply
 
-let inline internal id'() = Inline.instance Id ()
-let inline internal (<<<) f g = Inline.instance (Comp, f) g
+let inline id'() = Inline.instance Id ()
+let inline (<<<) f g = Inline.instance (Comp, f) g
 let inline (>>>) g f = Inline.instance (Comp, f) g
-let inline internal arr   f = Inline.instance  Arr    f
+let inline arr   f = Inline.instance  Arr    f
 let inline first f = Inline.instance (First, f) ()
 let inline second f = let swap (x,y) = (y,x) in arr swap >>> first f >>> arr swap
 let inline ( *** ) f g = first f >>> second g
 let inline ( &&& ) f g = arr (fun b -> (b,b)) >>> f *** g
-let inline internal (|||) f g = Inline.instance AcEither (f, g)
-let inline internal (+++) f g = Inline.instance AcMerge (f, g)
+let inline (|||) f g = Inline.instance AcEither (f, g)
+let inline (+++) f g = Inline.instance AcMerge (f, g)
 let inline left f = Inline.instance (AcLeft, f) ()
 let inline right f = Inline.instance (AcRight, f) ()
 let inline app() = Inline.instance Apply ()
@@ -418,8 +384,8 @@ let res4n8n12 = runKleisli (app()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
 // Applicative functors
 open FsControl.Core.Abstractions.Applicative
 open FsControl.Core.Abstractions.Alternative
-let inline internal pure' x   = Inline.instance Pure x
-let inline internal (<*>) x y = Inline.instance (Ap, x, y) ()
+let inline pure' x   = Inline.instance Pure x
+let inline (<*>) x y = Inline.instance (Ap, x, y) ()
 let inline empty() = Inline.instance Empty ()
 let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Append, x) y
 
@@ -438,17 +404,17 @@ type ZipList<'s> = ZipList of 's seq with
     static member instance (_Applicative:Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
 
-// Test Applicative w/lists
+// Test Applicative (lists)
 let res3n4   = pure' ((+) 2) <*> [1;2]
 let res2n4n8 = pure' ( **^) </ap/> pure' 2. <*> [1;2;3]
 
-// Test Applicative w/functions
+// Test Applicative (functions)
 let res3 = pure' 3 "anything"
 let res607 = fmap (+) ( (*) 100 ) 6 7
 let res606 = ( (+) <*>  (*) 100 ) 6
 let res508 = (fmap (+) ((+) 3 ) <*> (*) 100) 5
 
-// Test Applicative w/ZipList
+// Test Applicative (ZipList)
 let res9n5   = fmap ((+) 1) (ZipList(seq [8;4]))
 let res18n24 = pure' (+) <*> ZipList(seq [8;4]) <*> ZipList(seq [10;20])
 let res6n7n8 = pure' (+) <*> pure' 5G <*> ZipList [1;2;3]
@@ -513,14 +479,12 @@ module FoldableTree =
                 | Leaf n       -> f n
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
             _foldMap t
-        //static member inline instance (_:Foldable.Foldr, x:Tree<_>, _) = fun (f,z) -> Foldable.foldr f z x
         static member inline instance (_:Foldr, x:Tree<_>, _) = fun (f,z) -> DefaultImpl.FoldrFromFoldMap f z x
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree
     let resProduct324 = foldMap Product myTree
     let res21         = foldr   (+) 0   myTree
-
 
 
 // Traversable
@@ -543,7 +507,6 @@ let resNone     = sequenceA [Some 3;None  ;Some 1]
 let res654      = sequenceA [ (+)3 ; (+)2 ; (+) 1] 3
 let resCombined = sequenceA [ [1;2;3] ; [4;5;6]  ]
 let get3strings = sequenceA [getLine;getLine;getLine]
-
 
 
 // Cont
@@ -577,6 +540,7 @@ let foo n =
 let res''3''  = runCont (foo  2) id
 let resOver20 = runCont (foo 16) id
 
+
 // Reader
 open FsControl.Core.Types.Reader
 
@@ -593,8 +557,13 @@ let readerMain = do' {
     do!     putStrLn <| "Modified 's' length: " + (string modifiedLen)
     return! putStrLn <| "Original 's' length: " + (string len)
     }
-
 // try -> runIO readerMain ;;
+
+
+// Writer
+open FsControl.Core.Types.Writer
+let res12n44x55x1x2 = (+) <<|> Writer (3,[44;55]) </ap/> Writer (9,[1;2])
+
 
 // State
 open FsControl.Core.Types.State
@@ -625,12 +594,6 @@ let plusOne n = execState tick n
 let plus  n x = execState (sequence <| List.replicate n tick) x
 
 
-// Writer
-open FsControl.Core.Types.Writer
-
-let res12n44x55x1x2 = (+) <<|> Writer (3,[44;55]) </ap/> Writer (9,[1;2])
-
-
 // Monad Transformers
 open FsControl.Core.Types.MonadTrans
 open FsControl.Core.Types.OptionT
@@ -648,16 +611,16 @@ let MaybeT x = OptionT x
 let runMaybeT   (OptionT m) = m
 let mapMaybeT f (OptionT m) = MaybeT (f m)
 
-let inline internal lift (x:'ma) = Inline.instance Lift x
-let inline internal liftIO (x: Async<'a>) = Inline.instance LiftAsync x
-let inline internal callCC f = Inline.instance CallCC f
-let inline internal get() = Inline.instance Get ()
-let inline internal put x = Inline.instance Put x
-let inline internal ask()     = Inline.instance  Ask ()
-let inline internal local f m = Inline.instance (Local, m) f
-let inline internal tell   x = Inline.instance  Tell x
-let inline internal listen m = Inline.instance (Listen, m) ()
-let inline internal pass   m = Inline.instance (Pass  , m) ()
+let inline lift (x:'ma) = Inline.instance Lift x
+let inline liftIO (x: Async<'a>) = Inline.instance LiftAsync x
+let inline callCC f = Inline.instance CallCC f
+let inline get() = Inline.instance Get ()
+let inline put x = Inline.instance Put x
+let inline ask()     = Inline.instance  Ask ()
+let inline local f m = Inline.instance (Local, m) f
+let inline tell   x = Inline.instance  Tell x
+let inline listen m = Inline.instance (Listen, m) ()
+let inline pass   m = Inline.instance (Pass  , m) ()
 
 // Test Monad Transformers
 let maybeT4x6xN = fmap ((+) 2) (MaybeT [Just 2; Just 4; Nothing])
@@ -673,7 +636,6 @@ let resListTSome2547 = (ListT (Some [2;4] )) >>=  (fun x -> ListT ( Some [x;x+3G
 
 let getAtLeast8Chars:MaybeT<_> =  lift getLine >>= fun s -> (guard (String.length s >= 8) ) >>= fun _ -> return' s
 //try -> runIO <| runMaybeT getAtLeast8Chars
-
 
 let isValid s = String.length s >= 8 && String.exists System.Char.IsLetter s && String.exists System.Char.IsNumber s && String.exists System.Char.IsPunctuation s
 
@@ -692,17 +654,16 @@ let askPassword = do' {
     }
 
 let askPass = runMaybeT askPassword
-
 //try -> runIO askPass
 
 let resLiftIOMaybeT = liftIO getLine : MaybeT<IO<_>>
+
 
 // ContT
 open FsControl.Core.Types.ContT
 open FsControl.Core.Types.ContT.ContT
 
 // from http://en.wikibooks.org/wiki/Haskell/Continuation_passing_style
-
 //askString :: (String -> ContT () IO String) -> ContT () IO String
 let askString next = do' {
   do! (liftIO <| putStrLn "Please enter a string") 
@@ -730,9 +691,8 @@ let inline bar c s = do' {
 let res15'    = runCont            (bar 'h' !"ello")  id
 let resSome15 = runCont (runMaybeT (bar 'h' !"ello")) id
 let resList29 = runCont (runListT  (bar 'h' !"i"   )) id
-
-
 let resLiftIOContT = liftIO getLine : ContT<IO<string>,_>
+
 
 // ReaderT
 open FsControl.Core.Types.ReaderT
@@ -750,6 +710,40 @@ let readerTMain = do'{
 
 let _ = runIO readerTMain
 // try -> runIO readerTMain ;;
+
+
+// WriterT
+open FsControl.Core.Types.WriterT
+open FsControl.Core.Types.WriterT.WriterT
+
+let toLower (s:char) = s.ToString().ToLower().Chars(0)
+let toUpper (s:char) = s.ToString().ToUpper().Chars(0)
+
+let chncase x = function
+    | true -> ((toLower x), false) 
+    | _    -> ((toUpper x), true)
+
+let logchncase x = function
+    | true -> (((toLower x), "Low "), false)
+    | _    -> (((toUpper x), "Up " ), true)
+                      
+let statecase x = State (logchncase x)
+let logstatecase x = WriterT (statecase x)
+
+// runState (runWriterT (logstatecase 'a')) true  -> (char * string) * bool = (('a', "Low "), false)
+// runState (runWriterT (logstatecase 'a')) false -> (char * string) * bool = (('A', "Up "), true)
+
+let logstatecase3 x y z : WriterT<_> =  do' {
+    let! u = logstatecase x
+    let! v = logstatecase y
+    let! w = logstatecase z
+    do! tell "thats all"
+    return [u,v,w]}
+
+//runState (runWriterT (logstatecase3 'a' 'b' 'c')) true  -> ((char * char * char) list * string) * bool = (([('a', 'B', 'c')], "Low Up Low "), false)
+//runState (runWriterT (logstatecase3 'a' 'b' 'c')) false -> ((char * char * char) list * string) * bool = (([('A', 'b', 'C')], "Up Low Up "), true)
+
+let resLiftIOWriterT = liftIO getLine : WriterT<IO<_ * string>>
 
 
 // StateT
@@ -775,43 +769,8 @@ let main = runStateT code [1..10] >>= fun _ -> return' ()
 
 let resLiftIOStateT = liftIO getLine : StateT<string,IO<_>>
 
-// WriterT
-open FsControl.Core.Types.WriterT
-open FsControl.Core.Types.WriterT.WriterT
-
-let toLower (s:char) = s.ToString().ToLower().Chars(0)
-let toUpper (s:char) = s.ToString().ToUpper().Chars(0)
-
-let chncase x = function
-    | true -> ((toLower x), false) 
-    | _    -> ((toUpper x), true)
-
-let logchncase x = function
-    | true -> (((toLower x), "Low "), false)
-    | _    -> (((toUpper x), "Up " ), true)
-                      
-let statecase x = State (logchncase x)
-
-let logstatecase x = WriterT (statecase x)
-
-// runState (runWriterT (logstatecase 'a')) true  -> (char * string) * bool = (('a', "Low "), false)
-// runState (runWriterT (logstatecase 'a')) false -> (char * string) * bool = (('A', "Up "), true)
-
-let logstatecase3 x y z : WriterT<_> =  do' {
-    let! u = logstatecase x
-    let! v = logstatecase y
-    let! w = logstatecase z
-    do! tell "thats all"
-    return [u,v,w]}
-
-//runState (runWriterT (logstatecase3 'a' 'b' 'c')) true  -> ((char * char * char) list * string) * bool = (([('a', 'B', 'c')], "Low Up Low "), false)
-//runState (runWriterT (logstatecase3 'a' 'b' 'c')) false -> ((char * char * char) list * string) * bool = (([('A', 'b', 'C')], "Up Low Up "), true)
-
-let resLiftIOWriterT = liftIO getLine : WriterT<IO<_ * string>>
-
 
 // Test N-layers Monad Transformer
-
 let res3Layers   = (lift << lift)         getLine : MaybeT<ReaderT<string,_>>
 let res3Layers'  = (lift << lift)         getLine : MaybeT<WriterT<IO<_ * string>>>
 let res3Layers'' = liftIO                 getLine : MaybeT<WriterT<IO<_ * string>>>
