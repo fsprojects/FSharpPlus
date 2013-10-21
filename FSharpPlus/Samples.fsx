@@ -3,5 +3,5 @@
 
 open FSharpPlus
 
-let x = fmap ((+)4) [1;2]
+let x = map ((+)4) [1;2]
 let y = (+) <!> [3] <*> [45]

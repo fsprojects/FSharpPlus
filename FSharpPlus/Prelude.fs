@@ -14,7 +14,7 @@ module Prelude =
 
 
     // Functor ----------------------------------------------------------------
-    let inline fmap f x = Inline.instance (Functor.Fmap, x) f
+    let inline map f x = Inline.instance (Functor.Fmap, x) f
 
 
     // Applicative ------------------------------------------------------------
@@ -22,7 +22,7 @@ module Prelude =
     let inline (<*>) x y = Inline.instance (Applicative.Ap, x, y) ()
     let inline empty() = Inline.instance Alternative.Empty ()
     let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Alternative.Append, x) y
-    let inline (<!>)  f a   = fmap f a
+    let inline (<!>)  f a   = map f a
     let inline liftA2 f a b = f <!> a <*> b
     let inline (  *>)   x   = x |> liftA2 (konst id)
     let inline (<*  )   x   = x |> liftA2  konst
