@@ -59,6 +59,7 @@
     <Compile Include="ReaderT.fs" />
     <Compile Include="WriterT.fs" />
     <Compile Include="StateT.fs" />
+    <Compile Include="ErrorT.fs" />
     <None Include="Samples/Haskell.fsx" />
   </ItemGroup>
   <ItemGroup>

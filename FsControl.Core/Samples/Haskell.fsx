@@ -796,3 +796,35 @@ let errWasInv  = runReaderT err2Layers' 5
 
 let err3Layers'  = catchError (MaybeT (throwError "Invalid Value" )) (fun s -> MaybeT(ReaderT (fun x-> Left ("the error was: " + s)))) : OptionT<ReaderT<int,Either<string,Maybe<int>>>>
 let err3Layers'' = catchError (ReaderT (fun x -> throwError "Invalid Value" )) (fun s -> ReaderT(fun x-> MaybeT (Left ("the error was: " + s)))) : ReaderT<int,MaybeT<Either<string,Maybe<int>>>>
+
+
+// ErrorT
+open FsControl.Core.Types.ErrorT
+open FsControl.Core.Types.ErrorT.ErrorT
+
+let errorT4x6xN = fmap ((+) 2) (ErrorT [Right 2; Right 4; Left "Error"]) : ErrorT<List<Either<string,int>>>
+let errorT = ErrorT [Right 2; Right 4] >>= fun x -> ErrorT [Right x; Right (x+10)] : ErrorT<List<Either<string,_>>>
+let apErrorT = ap (ErrorT [Right ((+) 3)] ) ( ErrorT [Right  3 ] ) : ErrorT<List<Either<string,_>>>
+
+let decodeError = function
+    | -1 -> "Password not valid"
+    | _  -> "Unknown"
+
+let getValidPassword' : ErrorT<_> =
+    do' {
+        let! s = liftIO getLine
+        if isValid s then return s
+        else return! throwError -1
+        } </catchError/> (fun s -> throwError ("The error was: " + decodeError s))
+    
+let askPassword' = do' {
+    do! lift <| putStrLn "Insert your new password:"
+    let! value = getValidPassword'
+    do! lift <| putStrLn "Storing in database..."
+    return value
+    }
+
+let askPass' = runErrorT askPassword'
+//try -> runIO askPass'
+
+let resLiftIOErrorT = liftIO getLine : ErrorT<IO<Either<string,_>>>
