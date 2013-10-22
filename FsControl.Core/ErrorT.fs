@@ -22,7 +22,7 @@ module ErrorT =
 open ErrorT
 
 type ErrorT<'R,'Ma> with
-    static member inline instance (Functor.Fmap, ErrorT x :ErrorT<'ma>, _) = fun (f) -> ErrorT (Functor.fmap (mapError f) x) :ErrorT<'mb>
+    static member inline instance (Functor.Map, ErrorT x :ErrorT<'ma>, _) = fun (f) -> ErrorT (Functor.fmap (mapError f) x) :ErrorT<'mb>
 
 type ErrorT<'R,'Ma> with 
     static member inline instance (Monad.Return, _:ErrorT<'ma>) = ErrorT << return' << Choice1Of2 :'a -> ErrorT<'ma>

@@ -19,7 +19,7 @@ module StateT =
 open StateT
 
 type StateT<'S,'MaS> with
-    static member inline instance (Functor.Fmap, StateT m, _) = fun f -> StateT <| fun s -> do'(){
+    static member inline instance (Functor.Map, StateT m, _) = fun f -> StateT <| fun s -> do'(){
         let! (x, s') = m s
         return (f x, s')}
     static member inline instance (Monad.Return, _:StateT<'s,'ma>                        ) : 'a -> StateT<'s,'ma> = fun a -> StateT <| fun s -> return' (a, s)

@@ -17,7 +17,7 @@ module State =
 open State
 
 type State<'S,'A> with
-    static member instance (Functor.Fmap  , State m,              _) = fun f -> State(fun s -> let (a, s') = m s in (f a, s')) :State<'s,_>
+    static member instance (Functor.Map  , State m,              _) = fun f -> State(fun s -> let (a, s') = m s in (f a, s')) :State<'s,_>
     static member instance (Monad.Return, _:State<'s,'a>           ) = fun a -> State(fun s -> (a, s))                                :State<'s,'a>
     static member instance (Monad.Bind  ,   State m, _:State<'s,'b>) = fun k -> State(fun s -> let (a, s') = m s in runState(k a) s') :State<'s,'b>
     static member instance (Applicative.Pure, _:State<'s,'a>) = fun (x:'a) -> DefaultImpl.PureFromMonad x :State<'s,_>

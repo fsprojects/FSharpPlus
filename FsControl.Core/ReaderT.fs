@@ -22,7 +22,7 @@ module ReaderT =
 open ReaderT
 
 type ReaderT<'R,'Ma> with
-    static member inline instance (Functor.Fmap  , ReaderT m    , _) = fun f -> ReaderT <| fun r -> do'(){
+    static member inline instance (Functor.Map  , ReaderT m    , _) = fun f -> ReaderT <| fun r -> do'(){
         let! a = m r
         return (f a)}
 type ReaderT<'R,'Ma> with

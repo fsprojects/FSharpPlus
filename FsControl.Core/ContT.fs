@@ -9,7 +9,7 @@ open FsControl.Core.Types.State
 open FsControl.Core.Types.MonadAsync
 
 type ContT<'Mr,'A> = ContT of  (('A -> 'Mr) -> 'Mr) with
-    static member instance (Functor.Fmap, ContT m, _) = fun f -> ContT(fun c -> m (c << f))
+    static member instance (Functor.Map, ContT m, _) = fun f -> ContT(fun c -> m (c << f))
 
 module ContT =
     let  runContT   (ContT x) = x

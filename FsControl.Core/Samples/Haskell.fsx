@@ -211,7 +211,7 @@ let action = do' {
 
 // Functors
 open FsControl.Core.Abstractions.Functor
-let inline fmap   f x = Inline.instance (Fmap, x) f
+let inline fmap   f x = Inline.instance (Map, x) f
 
 // Test Functors
 let times2,minus3 = (*) 2, (-)/> 3
@@ -233,7 +233,7 @@ type Tree<'a> =
         | Tree(x,t1,t2) -> Tree(f x, Tree.map f t1, Tree.map f t2)
 
 // add ìnstance for Functor class
-    static member instance (_Functor:Fmap, x:Tree<_>, _) = fun f -> Tree.map f x
+    static member instance (_Functor:Map, x:Tree<_>, _) = fun f -> Tree.map f x
 
 let myTree = Tree(6, Tree(2, Leaf(1), Leaf(3)), Leaf(9))
 let mappedTree = fmap fTimes2minus3 myTree
@@ -399,7 +399,7 @@ let inline (<**>)   x   = x |> liftA2 (|>)
 let inline optional v = Just <<|> v <|> pure' Nothing
 
 type ZipList<'s> = ZipList of 's seq with
-    static member instance (_Functor    :Fmap,   ZipList x  , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
+    static member instance (_Functor    :Map,   ZipList x  , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
     static member instance (_Applicative:Pure, _:ZipList<'a>   ) = fun (x:'a)     -> ZipList (Seq.initInfinite (const' x))
     static member instance (_Applicative:Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
