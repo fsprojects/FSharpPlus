@@ -1,7 +1,9 @@
 ﻿namespace FsControl.Core.Types
 
 type Kleisli<'a, 'm> = Kleisli of ('a -> 'm)
-module Kleisli = let runKleisli (Kleisli f) = f
+
+[<RequireQualifiedAccess>]
+module Kleisli = let run (Kleisli f) = f
 
 namespace FsControl.Core.Abstractions
 

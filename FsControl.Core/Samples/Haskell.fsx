@@ -400,7 +400,7 @@ let inline optional v = Just <<|> v <|> pure' Nothing
 
 type ZipList<'s> = ZipList of 's seq with
     static member instance (_Functor    :Map,   ZipList x  , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
-    static member instance (_Applicative:Pure, _:ZipList<'a>   ) = fun (x:'a)     -> ZipList (Seq.initInfinite (const' x))
+    static member instance (_Applicative:Pure, _:ZipList<'a>  ) = fun (x:'a)     -> ZipList (Seq.initInfinite (const' x))
     static member instance (_Applicative:Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
 
@@ -510,9 +510,10 @@ let get3strings = sequenceA [getLine;getLine;getLine]
 
 
 // Cont
-open FsControl.Core.Types.Cont
-let inline when'  p s     = if p then s else return' ()
-let inline unless p s     = when' (not p) s
+let runCont = Cont.run
+let callCC'  = Cont.callCC
+let inline when'  p s = if p then s else return' ()
+let inline unless p s = when' (not p) s
 
 // Test Cont
 let square_C   x = return' (x * x)
@@ -532,7 +533,7 @@ let pythagoras_cont x y = do' {
 let resPyth373205 = runCont (pythagoras_cont 3. 4.) string
 
 let foo n =
-  callCC <| fun k -> do' {
+  callCC' <| fun k -> do' {
     let n' = (n * n) + 3
     do! when' (n' > 20) <| k "over twenty"
     return (string <| n' - 4) }
@@ -542,13 +543,16 @@ let resOver20 = runCont (foo 16) id
 
 
 // Reader
-open FsControl.Core.Types.Reader
+let ask'      = Reader.ask
+let local'    = Reader.local
+let runReader = Reader.run
 
+// Test Reader
 let calculateContentLen = do' {
-    let! content = ask()
+    let! content = ask'()
     return (String.length content)}
 
-let calculateModifiedContentLen = local ( (+) "Prefix ") calculateContentLen
+let calculateModifiedContentLen = local' ( (+) "Prefix ") calculateContentLen
 
 let readerMain = do' {
     let s = "12345"
@@ -561,33 +565,35 @@ let readerMain = do' {
 
 
 // Writer
-open FsControl.Core.Types.Writer
 let res12n44x55x1x2 = (+) <<|> Writer (3,[44;55]) </ap/> Writer (9,[1;2])
 
 
 // State
-open FsControl.Core.Types.State
+let runState  = State.run
+let get'      = State.get
+let put'      = State.put
+let execState = State.exec
 
 // from http://www.haskell.org/haskellwiki/State_Monad
 let x1 = runState (return' 'X') 1
 let xf:State<int,_> = return' 'X'
-let r11    = runState (get()) 1
-let rUnit5 = runState (put 5) 1
+let r11    = runState (get'()) 1
+let rUnit5 = runState (put' 5) 1
 
 let rX5    = runState (do' { 
-    do! put 5
+    do! put' 5
     return 'X' }) 1
 
 let postincrement = do' {
-    let! x = get()
-    do! put (x+1)
+    let! x = get'()
+    do! put' (x+1)
     return x }
 
 let r12 = runState postincrement 1
 
 let tick :State<_,_> = do'{
-    let! n = get()
-    do! put (n+1)
+    let! n = get'()
+    do! put' (n+1)
     return n}
 
 let plusOne n = execState tick n
@@ -595,21 +601,18 @@ let plus  n x = execState (sequence <| List.replicate n tick) x
 
 
 // Monad Transformers
-open FsControl.Core.Types.MonadTrans
-open FsControl.Core.Types.OptionT
-open FsControl.Core.Types.ListT
-open FsControl.Core.Types.ListT
-open FsControl.Core.Types.MonadAsync
-open FsControl.Core.Types.MonadCont
-open FsControl.Core.Types.MonadState
-open FsControl.Core.Types.MonadReader
-open FsControl.Core.Types.MonadWriter
+open FsControl.Core.Abstractions.MonadTrans
+open FsControl.Core.Abstractions.MonadAsync
+open FsControl.Core.Abstractions.MonadCont
+open FsControl.Core.Abstractions.MonadState
+open FsControl.Core.Abstractions.MonadReader
+open FsControl.Core.Abstractions.MonadWriter
 
 type MaybeT<'T> = OptionT<'T>
-let MaybeT x = OptionT x
-
-let runMaybeT   (OptionT m) = m
-let mapMaybeT f (OptionT m) = MaybeT (f m)
+let MaybeT  x = OptionT x
+let runMaybeT = OptionT.run
+let mapMaybeT = OptionT.map
+let runListT  = ListT.run
 
 let inline lift (x:'ma) = Inline.instance Lift x
 let inline liftIO (x: Async<'a>) = Inline.instance LiftAsync x
@@ -660,8 +663,8 @@ let resLiftIOMaybeT = liftIO getLine : MaybeT<IO<_>>
 
 
 // ContT
-open FsControl.Core.Types.ContT
-open FsControl.Core.Types.ContT.ContT
+let runContT  = ContT.run
+
 
 // from http://en.wikibooks.org/wiki/Haskell/Continuation_passing_style
 //askString :: (String -> ContT () IO String) -> ContT () IO String
@@ -695,8 +698,8 @@ let resLiftIOContT = liftIO getLine : ContT<IO<string>,_>
 
 
 // ReaderT
-open FsControl.Core.Types.ReaderT
-open FsControl.Core.Types.ReaderT.ReaderT
+let runReaderT = ReaderT.run
+
 
 let res15'' = runCont (runReaderT (bar 'h' !"ello") "anything") id
 
@@ -713,9 +716,6 @@ let _ = runIO readerTMain
 
 
 // WriterT
-open FsControl.Core.Types.WriterT
-open FsControl.Core.Types.WriterT.WriterT
-
 let toLower (s:char) = s.ToString().ToLower().Chars(0)
 let toUpper (s:char) = s.ToString().ToUpper().Chars(0)
 
@@ -747,8 +747,7 @@ let resLiftIOWriterT = liftIO getLine : WriterT<IO<_ * string>>
 
 
 // StateT
-open FsControl.Core.Types.StateT
-open FsControl.Core.Types.StateT.StateT
+let runStateT = StateT.run
 
 // from http://www.haskell.org/haskellwiki/Simple_StateT_use
 #nowarn "0025"  // Incomplete pattern match, list cannot be infinite if F#
@@ -779,7 +778,7 @@ let res4Layers'  = liftIO                 getLine : ListT<MaybeT<WriterT<IO<_ * 
 
 
 // MonadError
-open FsControl.Core.Types.MonadError
+open FsControl.Core.Abstractions.MonadError
 let inline throwError x   = Inline.instance  ThrowError x
 let inline catchError v h = Inline.instance (CatchError, v) h
 
@@ -799,8 +798,8 @@ let err3Layers'' = catchError (ReaderT (fun x -> throwError "Invalid Value" )) (
 
 
 // ErrorT
-open FsControl.Core.Types.ErrorT
-open FsControl.Core.Types.ErrorT.ErrorT
+let runErrorT = ErrorT.run
+
 
 let errorT4x6xN = fmap ((+) 2) (ErrorT [Right 2; Right 4; Left "Error"]) : ErrorT<List<Either<string,int>>>
 let errorT = ErrorT [Right 2; Right 4] >>= fun x -> ErrorT [Right x; Right (x+10)] : ErrorT<List<Either<string,_>>>
