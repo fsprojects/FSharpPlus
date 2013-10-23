@@ -99,6 +99,13 @@ module Prelude =
     let inline sequenceA  x = traverse id x
 
 
+    // Comonads
+    let inline extract   x = Inline.instance (Comonad.Extract  , x) ()
+    let inline duplicate x = Inline.instance (Comonad.Duplicate, x) ()
+    let inline extend  g s = map g (duplicate s)
+    let inline (=>>)   s g = map g (duplicate s)
+
+
     // Monad Transformers
     open FsControl.Core.Types
     let runOptionT   (OptionT m) = m
