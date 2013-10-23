@@ -140,10 +140,6 @@ module Prelude =
 
 
     // Monad Transformers
-    open FsControl.Core.Types
-    let runOptionT   (OptionT m) = m
-    let mapOptionT f (OptionT m) = OptionT (f m)
-
     let inline lift (x:'ma) = Inline.instance MonadTrans.Lift x
     let inline liftIO (x: Async<'a>) = Inline.instance MonadAsync.LiftAsync x
     let inline callCC f = Inline.instance MonadCont.CallCC f
