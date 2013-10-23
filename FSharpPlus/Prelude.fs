@@ -14,7 +14,7 @@ module Prelude =
 
 
     // Functor ----------------------------------------------------------------
-    let inline map f x = Inline.instance (Functor.Fmap, x) f
+    let inline map f x = Inline.instance (Functor.Map, x) f
 
 
     // Applicative ------------------------------------------------------------
@@ -30,14 +30,20 @@ module Prelude =
     let inline optional v = Some <<|> v <|> result None
 
     type ZipList<'s> = ZipList of 's seq with
-        static member instance (_Functor    :Functor.Fmap,   ZipList x   , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
+        static member instance (_Functor    :Functor.Map,    ZipList x   , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
         static member instance (_Applicative:Applicative.Pure, _:ZipList<'a>) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
         static member instance (_Applicative:Applicative.Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
             ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
 
+    [<RequireQualifiedAccess>]
+    module ZipList =
+        let run   (ZipList x) = x
+        let map f (ZipList x) = ZipList (Seq.map f x)
+
 
     // Monad -----------------------------------------------------------
     let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
+    let inline (=<<) (f:_->'R) x : 'R = Inline.instance (Monad.Bind, x) f
     let inline join x =  x >>= id
 
 
