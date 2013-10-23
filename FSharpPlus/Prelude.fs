@@ -29,16 +29,49 @@ module Prelude =
     let inline (<**>)   x   = x |> liftA2 (|>)
     let inline optional v = Some <<|> v <|> result None
 
+
+    // ZipList
     type ZipList<'s> = ZipList of 's seq with
-        static member instance (_Functor    :Functor.Map,    ZipList x   , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
-        static member instance (_Applicative:Applicative.Pure, _:ZipList<'a>) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
-        static member instance (_Applicative:Applicative.Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
+        static member instance (_:Functor.Map,    ZipList x   , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
+        static member instance (_:Applicative.Pure, _:ZipList<'a>) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
+        static member instance (_:Applicative.Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
             ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
 
     [<RequireQualifiedAccess>]
     module ZipList =
         let run   (ZipList x) = x
         let map f (ZipList x) = ZipList (Seq.map f x)
+
+
+    // NonEmptyList
+    type NonEmptyList<'T> = {Head: 'T; Tail: 'T list }
+
+    [<RequireQualifiedAccess>]
+    module NonEmptyList =
+        let toList {Head = x; Tail = xs} = x::xs
+        let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
+        let cons e {Head = x; Tail = xs} = {Head = e  ; Tail = x::xs}
+        let rec tails s =
+            let {Head = x; Tail = xs} = s
+            match xs with
+            | []   -> {Head = s; Tail = []}
+            | h::t -> cons s (tails {Head = h; Tail = t})
+         
+    type NonEmptyList<'T> with
+        static member instance (_:Functor.Map      , x:NonEmptyList<'a>, _:NonEmptyList<'b>) = fun (f:'a->'b) -> NonEmptyList.map f x
+        
+        static member instance (_:Monad.Return, _:NonEmptyList<'a>) = fun (x:'a)     -> {Head = x; Tail = []}                        
+        static member instance (_:Monad.Bind, {Head = x; Tail = xs}, _:NonEmptyList<'b>   ) = fun (f:_->NonEmptyList<'b>  ) ->
+            let {Head = y; Tail = ys} = f x
+            let ys' = List.collect (NonEmptyList.toList << f) xs
+            {Head = y; Tail = (ys @ ys')}
+
+        static member instance (_:Applicative.Pure, _:NonEmptyList<'a>) = fun (x:'a)     -> {Head = x; Tail = []}
+        static member instance (_:Applicative.Ap  , f:NonEmptyList<'a->'b>, x:NonEmptyList<'a> ,_:NonEmptyList<'b>) = fun () ->
+             Applicative.DefaultImpl.ApFromMonad f x :NonEmptyList<'b>
+
+        static member instance (_:Comonad.Extract  , {Head = h; Tail = _} ,_) = fun () -> h
+        static member instance (_:Comonad.Duplicate, s:NonEmptyList<'a>, _:NonEmptyList<NonEmptyList<'a>>) = fun () -> NonEmptyList.tails s
 
 
     // Monad -----------------------------------------------------------
