@@ -86,7 +86,7 @@ module Prelude =
     let inline (++++) f g = Inline.instance  ArrowChoice.AcMerge  (f, g)
     let inline left   f   = Inline.instance (ArrowChoice.AcLeft , f) ()
     let inline right  f   = Inline.instance (ArrowChoice.AcRight, f) ()
-    let inline app()      = Inline.instance  ArrowApply.Apply ()
+    let inline arrAp()    = Inline.instance  ArrowApply.Apply ()
 
 
     // Foldable
@@ -114,6 +114,8 @@ module Prelude =
     let inline tell    x = Inline.instance  MonadWriter.Tell x
     let inline listen  m = Inline.instance (MonadWriter.Listen, m) ()
     let inline pass    m = Inline.instance (MonadWriter.Pass  , m) ()
+    let inline throw x   = Inline.instance  MonadError.ThrowError x
+    let inline catch v h = Inline.instance (MonadError.CatchError, v) h
 
 
     // Idiom brackets
