@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus
+namespace FSharpPlus
 
 open FsControl.Core.Abstractions
 
@@ -14,20 +14,20 @@ module Prelude =
 
 
     // Functor ----------------------------------------------------------------
-    let inline map f x = Inline.instance (Functor.Map, x) f
+    let inline map (f:'a->'b) (x:'Functor'a) :'Functor'b = Inline.instance (Functor.Map, x) f
 
 
     // Applicative ------------------------------------------------------------
-    let inline result x  = Inline.instance Applicative.Pure x
-    let inline (<*>) x y = Inline.instance (Applicative.Ap, x, y) ()
-    let inline empty() = Inline.instance Alternative.Empty ()
-    let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Alternative.Append, x) y
-    let inline (<!>)  f a   = map f a
-    let inline liftA2 f a b = f <!> a <*> b
-    let inline (  *>)   x   = x |> liftA2 (konst id)
-    let inline (<*  )   x   = x |> liftA2  konst
-    let inline (<**>)   x   = x |> liftA2 (|>)
-    let inline optional v = Some <<|> v <|> result None
+    let inline result (x:'a): 'Functor'a = Inline.instance Applicative.Pure x
+    let inline (<*>) (x:'Functor'a_'b) (y:'Functor'a): 'Functor'b = Inline.instance (Applicative.Ap, x, y) ()
+    let inline empty() :'Alternative'a = Inline.instance Alternative.Empty ()
+    let inline (<|>) (x:'Alternative'a) (y:'Alternative'a) :'Alternative'a = Inline.instance (Alternative.Append, x) y
+    let inline (<!>)  (f:'a->'b) (x:'Functor'a) :'Functor'b   = map f x
+    let inline liftA2 (f:'a->'b->'c) (a:'Applicative'a) (b:'Applicative'b) :'Applicative'c = f <!> a <*> b
+    let inline (  *>) (x:'Applicative'a) :'Applicative'b->'Applicative'b = x |> liftA2 (konst id)
+    let inline (<*  ) (x:'Applicative'a) :'Applicative'b->'Applicative'a = x |> liftA2  konst
+    let inline (<**>) (x:'Applicative'a): 'Applicative'a_'b->'Applicative'b = x |> liftA2 (|>)
+    let inline optional (v:'Alternative'a) :'Alternative'Option'a = Some <!> v <|> result None
 
 
     // ZipList
@@ -44,7 +44,7 @@ module Prelude =
 
 
     // NonEmptyList
-    type NonEmptyList<'T> = {Head: 'T; Tail: 'T list }
+    type NonEmptyList<'t> = {Head: 't; Tail: 't list}
 
     [<RequireQualifiedAccess>]
     module NonEmptyList =
@@ -75,35 +75,35 @@ module Prelude =
 
 
     // Monad -----------------------------------------------------------
-    let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
-    let inline (=<<) (f:_->'R) x : 'R = Inline.instance (Monad.Bind, x) f
-    let inline join x =  x >>= id
+    let inline (>>=) (x:'Monad'a) (f:'a->'Monad'b) :'Monad'b = Inline.instance (Monad.Bind, x) f
+    let inline (=<<) (f:'a->'Monad'b) (x:'Monad'a) :'Monad'b = Inline.instance (Monad.Bind, x) f
+    let inline join (x:'Monad'Monad'a) :'Monad'a =  x >>= id
 
 
     // Monoid -----------------------------------------------------------------
-    let inline mempty() = Inline.instance Monoid.Mempty ()
-    let inline mappend (x:'a) (y:'a) :'a = Inline.instance (Monoid.Mappend, x) y
-    let inline mconcat x =
+    let inline mempty() :'Monoid = Inline.instance Monoid.Mempty ()
+    let inline mappend (x:'Monoid) (y:'Monoid) :'Monoid = Inline.instance (Monoid.Mappend, x) y
+    let inline mconcat (x:List<'Monoid>) :'Monoid  =
         let foldR f s lst = List.foldBack f lst s
         foldR mappend (mempty()) x
 
 
     // Monad plus -------------------------------------------------------------
-    let inline sequence ms =
-        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (result :list<'a> -> 'M) (List.Cons(x,xs))
-        List.foldBack k ms ((result :list<'a> -> 'M) [])
+    let inline sequence (ms:List<'Monad'a>) :'Monad'List'a =
+        let k m m' = m >>= fun (x:'Monad'a) -> m' >>= fun xs -> (result :list<'Monad'a> -> 'Monad'List'a) (List.Cons(x,xs))
+        List.foldBack k ms ((result :list<'Monad'a> -> 'Monad'List'a) [])
 
-    let inline mapM f as' = sequence (List.map f as')
-    let inline liftM  f m1    = m1 >>= (result << f)
-    let inline liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
-    let inline ap     x y     = liftM2 id x y
+    let inline mapM   (f:'a->'Monad'b) (xs:List<'a>) :'Monad'List'b = sequence (List.map f xs)
+    let inline liftM  (f:'a->'b) (m1:'Monad'a) :'Monad'b = m1 >>= (result << f)
+    let inline liftM2 (f:'a1->'a2->'r) (m1:'Monad'a1) (m2:'Monad'a2) :'Monad'r = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
+    let inline ap (x:'Monad'a_'b) (y:'Monad'a): 'Monad'b = liftM2 id x y
 
-    let inline (>=>)  f g x   = f x >>= g
-    let inline (<=<)  g f x   = f x >>= g
+    let inline (>=>)  (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
+    let inline (<=<)  (g:'b->'Monad'c) (f:'a->'Monad'b) (x:'a) :'Monad'c = f x >>= g
 
-    let inline mzero() = Inline.instance MonadPlus.Mzero ()
-    let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (MonadPlus.Mplus, x) y
-    let inline guard x = if x then result () else mzero()
+    let inline mzero() :'MonadPlus'a = Inline.instance MonadPlus.Mzero ()
+    let inline mplus (x:'MonadPlus'a) (y:'MonadPlus'a) :'MonadPlus'a = Inline.instance (MonadPlus.Mplus, x) y
+    let inline guard x: 'MonadPlus'unit = if x then result () else mzero()
 
 
     // Arrows -----------------------------------------------------------------
@@ -123,35 +123,56 @@ module Prelude =
 
 
     // Foldable
-    let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldable.Foldr, x) (f,z)
-    let inline foldMap f x = Inline.instance (Foldable.FoldMap, x) f
+    let inline foldr  (f:'a->'b->'b) (z:'b) (x:'Foldable'a) :'b = Inline.instance (Foldable.Foldr  , x) (f,z)
+    let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
 
 
     // Traversable
-    let inline traverse f t = Inline.instance (Traversable.Traverse, t) f
-    let inline sequenceA  x = traverse id x
+    let inline traverse  (f:'a->'Applicative'b) (t:'Traversable'a) : 'Applicative'Traversable'b = Inline.instance (Traversable.Traverse, t) f
+    let inline sequenceA (x:'Traversable'Applicative'a) : 'Applicative'Traversable'a = traverse id x
 
 
     // Comonads
-    let inline extract   x = Inline.instance (Comonad.Extract  , x) ()
-    let inline duplicate x = Inline.instance (Comonad.Duplicate, x) ()
-    let inline extend  g s = map g (duplicate s)
-    let inline (=>>)   s g = map g (duplicate s)
+    let inline extract   (x:'Comonad'a): 'a = Inline.instance (Comonad.Extract, x) ()
+    let inline duplicate (x:'Comonad'a): 'Comonad'Comonad'a = Inline.instance (Comonad.Duplicate, x) ()
+    let inline extend  (g:'Comonad'a->'b) (s:'Comonad'a): 'Comonad'b = map g (duplicate s)
+    let inline (=>>)   (s:'Comonad'a) (g:'Comonad'a->'b): 'Comonad'b = map g (duplicate s)
 
 
     // Monad Transformers
-    let inline lift (x:'ma) = Inline.instance MonadTrans.Lift x
-    let inline liftIO (x: Async<'a>) = Inline.instance MonadAsync.LiftAsync x
-    let inline callCC f = Inline.instance MonadCont.CallCC f
-    let inline get() = Inline.instance MonadState.Get ()
-    let inline put x = Inline.instance MonadState.Put x
-    let inline ask()     = Inline.instance  MonadReader.Ask ()
-    let inline local f m = Inline.instance (MonadReader.Local, m) f
-    let inline tell    x = Inline.instance  MonadWriter.Tell x
-    let inline listen  m = Inline.instance (MonadWriter.Listen, m) ()
-    let inline pass    m = Inline.instance (MonadWriter.Pass  , m) ()
-    let inline throw x   = Inline.instance  MonadError.ThrowError x
-    let inline catch v h = Inline.instance (MonadError.CatchError, v) h
+    open FsControl.Core.Types
+
+    let inline lift   (x:'Monad'a ) : 'MonadTrans'Monad'a = Inline.instance MonadTrans.Lift x
+    let inline liftIO (x:Async<'a>) : 'MonadAsync'a       = Inline.instance MonadAsync.LiftAsync x
+
+    let inline callCC (f:('a->'MonadCont'b)->'MonadCont'a): 'MonadCont'a = Inline.instance  MonadCont.CallCC f
+    
+    /// <summary>get    :: MonadState  s m => m s</summary>
+    let inline get() :'ms = Inline.instance MonadState.Get ()
+
+    /// <summary>put    :: MonadState  s m => s -> m ()</summary>
+    let inline put (x:'s) :'m = Inline.instance MonadState.Put x
+
+    /// <summary>ask    :: MonadReader r m => m r</summary>
+    let inline ask() :'mr = Inline.instance  MonadReader.Ask ()
+    
+    /// <summary>local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
+    let inline local (f:'rr) (m:'ma) :'ma = Inline.instance (MonadReader.Local, m) f
+
+    /// <summary>tell   :: MonadWriter w m => w   -> m ()</summary>
+    let inline tell (x:'w) :'m = Inline.instance  MonadWriter.Tell x
+
+    /// <summary>listen :: MonadWriter w m => m a -> m (a,w)</summary>
+    let inline listen (m:'ma) :'maw = Inline.instance (MonadWriter.Listen, m) ()
+
+    /// <summary>pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
+    let inline pass (m:'maww) :'ma = Inline.instance (MonadWriter.Pass  , m) ()
+
+    /// <summary>throw :: MonadError e m => e -> m a</summary>
+    let inline throw (x:'e) :'ma = Inline.instance  MonadError.ThrowError x
+
+    /// <summary>catch :: MonadError e m => m a -> (e -> m b) -> m b</summary>
+    let inline catch (v:'ma) (h:'e->'mb) :'mb = Inline.instance (MonadError.CatchError, v) h
 
 
     // Idiom brackets
