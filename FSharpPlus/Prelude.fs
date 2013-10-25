@@ -19,7 +19,7 @@ module Prelude =
 
     // Applicative ------------------------------------------------------------
     let inline result (x:'a): 'Functor'a = Inline.instance Applicative.Pure x
-    let inline (<*>) (x:'Functor'a_'b) (y:'Functor'a): 'Functor'b = Inline.instance (Applicative.Ap, x, y) ()
+    let inline (<*>) (x:'Applicative'a_'b) (y:'Applicative'a): 'Applicative'b = Inline.instance (Applicative.Ap, x, y) ()
     let inline empty() :'Alternative'a = Inline.instance Alternative.Empty ()
     let inline (<|>) (x:'Alternative'a) (y:'Alternative'a) :'Alternative'a = Inline.instance (Alternative.Append, x) y
     let inline (<!>)  (f:'a->'b) (x:'Functor'a) :'Functor'b   = map f x
