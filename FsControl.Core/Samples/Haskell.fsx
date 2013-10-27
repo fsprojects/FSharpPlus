@@ -386,7 +386,7 @@ let res4n8n12 = runKleisli (app()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
 open FsControl.Core.Abstractions.Applicative
 open FsControl.Core.Abstractions.Alternative
 let inline pure' x   = Inline.instance Pure x
-let inline (<*>) x y = Inline.instance (Ap, x, y) ()
+let inline (<*>) x y = Inline.instance (Apply, x, y) ()
 let inline empty() = Inline.instance Empty ()
 let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Append, x) y
 
@@ -402,7 +402,7 @@ let inline optional v = Just <<|> v <|> pure' Nothing
 type ZipList<'s> = ZipList of 's seq with
     static member instance (_Functor    :Map,   ZipList x  , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
     static member instance (_Applicative:Pure, _:ZipList<'a>  ) = fun (x:'a)     -> ZipList (Seq.initInfinite (const' x))
-    static member instance (_Applicative:Ap  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
+    static member instance (_Applicative:Apply  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
 
 // Test Applicative (lists)

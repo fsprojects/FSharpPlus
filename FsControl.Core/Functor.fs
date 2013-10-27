@@ -38,22 +38,22 @@ module Applicative =
     let inline internal pure' x   = Inline.instance Pure x
 
     type DefaultImpl =         
-        static member inline ApFromMonad f x = f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
+        static member inline ApplyFromMonad f x = f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
 
-    type Ap = Ap with
-        static member        instance (Ap, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> DefaultImpl.ApFromMonad f x :option<'b>
-        static member        instance (Ap, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApFromMonad f x :List<'b>
-        static member        instance (Ap, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
-        static member inline instance (Ap, f:'m * _      , x:'m * 'a      , _:'m * 'b      ) = fun () -> DefaultImpl.ApFromMonad f x :'m *'b
-        static member        instance (Ap, f:Async<_>    , x:Async<'a>    , _:Async<'b>    ) = fun () -> DefaultImpl.ApFromMonad f x :Async<'b>
-        static member        instance (Ap, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () ->
+    type Apply = Apply with
+        static member        instance (Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> DefaultImpl.ApplyFromMonad f x :option<'b>
+        static member        instance (Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
+        static member        instance (Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
+        static member inline instance (Apply, f:'m * _      , x:'m * 'a      , _:'m * 'b      ) = fun () -> DefaultImpl.ApplyFromMonad f x :'m *'b
+        static member        instance (Apply, f:Async<_>    , x:Async<'a>    , _:Async<'b>    ) = fun () -> DefaultImpl.ApplyFromMonad f x :Async<'b>
+        static member        instance (Apply, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () ->
             match (f,x) with
             | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
             | (Choice2Of2 a, _)            -> Choice2Of2 a
             | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
 
     
-    let inline internal (<*>) x y = Inline.instance (Ap, x, y) ()
+    let inline internal (<*>) x y = Inline.instance (Apply, x, y) ()
 
 open Applicative
 
