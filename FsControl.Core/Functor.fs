@@ -12,8 +12,16 @@ module Monad =
         static member        instance (Bind, f:'r->'a      , _:'r->'b     ) = fun (k:_->_->'b) r    -> k (f r) r
         static member inline instance (Bind, (w, a):'m * 'a, _:'m * 'b    ) = fun (k:_->'m * 'b   ) -> let (w', b) = k a in (mappend w w', b)
         static member        instance (Bind, x:Async<'a>   , _:'b Async   ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
+
         static member        instance (Bind, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun (k:'a->Choice<'b,'e>) -> 
             match x with Choice1Of2 r -> k r | Choice2Of2 e -> Choice2Of2 e
+
+        static member        instance (Bind, x:Map<'k,'a>, _:Map<'k,'b>) = fun (f:'a->Map<'k,'b>) -> Map.ofSeq (seq {
+            for e in x do
+                let k,v = e.Key, e.Value
+                match Map.tryFind k (f v) with
+                | Some v -> yield k,v
+                | _ -> () })
 
         //Restricted Monad
         static member instance (Bind, x:Nullable<_> , _:'b Nullable) = fun f -> if x.HasValue then f x.Value else Nullable() : Nullable<'b>
@@ -51,7 +59,10 @@ module Applicative =
             | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
             | (Choice2Of2 a, _)            -> Choice2Of2 a
             | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
-
+        static member        instance (Apply, f:Map<'k,_>   , x:Map<'k,'a>   , _:Map<'k,'b>   ) :unit->Map<'k,'b> = fun () -> Map.ofSeq (seq {
+            for e in f do
+                let k,v = e.Key, e.Value
+                if Map.containsKey k x then yield (k, f.[k] x.[k])})
     
     let inline internal (<*>) x y = Inline.instance (Apply, x, y) ()
 
@@ -87,6 +98,7 @@ module Functor =
         static member instance (Map, x:Async<_>   , _) = fun f -> DefaultImpl.MapFromMonad f x
         static member instance (Map, x:Nullable<_>, _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
         static member instance (Map, x:Choice<_,_>, _) = fun f -> match x with Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
+        static member instance (Map, x:Map<'a,'b> , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
 
     let inline internal fmap   f x = Inline.instance (Map, x) f
 
