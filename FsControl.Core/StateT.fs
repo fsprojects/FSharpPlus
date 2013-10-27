@@ -2,6 +2,7 @@
 
 open FsControl.Core.Prelude
 open FsControl.Core.Abstractions
+open FsControl.Core.Abstractions.Functor
 open FsControl.Core.Abstractions.Monad
 open FsControl.Core.Abstractions.MonadPlus
 open FsControl.Core.Abstractions.MonadTrans
@@ -20,7 +21,7 @@ type StateT<'S,'MaS> with
         let! (x, s') = m s
         return (f x, s')}
 
-    static member inline instance (Monad.Return, _:StateT<'s,'ma>                        ) : 'a -> StateT<'s,'ma> = fun a -> StateT <| fun s -> return' (a, s)
+    static member inline instance (Applicative.Pure, _:StateT<'s,'ma>                        ) : 'a -> StateT<'s,'ma> = fun a -> StateT <| fun s -> return' (a, s)
     static member inline instance (Monad.Bind  ,   StateT (m:'s->'mas), _:StateT<'s,'mbs>) :('a -> StateT<'s,'mbs>) -> StateT<'s,'mbs> = 
         fun k -> StateT <| fun s -> do'(){
             let! (a, s') = m s

@@ -9,6 +9,7 @@ namespace FsControl.Core.Abstractions
 
 open FsControl.Core.Prelude
 open FsControl.Core.Abstractions.Monad
+open FsControl.Core.Abstractions.Functor
 open FsControl.Core.Types
 
 module Category =

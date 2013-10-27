@@ -149,8 +149,9 @@ let resCmplx:System.Numerics.Complex * _ = quadratic 2G -3G 9G
 
 
 // Monads
+open FsControl.Core.Abstractions.Applicative
 open FsControl.Core.Abstractions.Monad
-let inline return' x = Inline.instance Return x
+let inline return' x = Inline.instance Pure x
 let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
 
 let inline sequence ms =

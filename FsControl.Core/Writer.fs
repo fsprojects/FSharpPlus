@@ -18,7 +18,7 @@ module Writer =
 
 type Writer<'W,'A> with
     static member        instance (Functor.Map,   Writer(a,w),                _) = fun f -> Writer(f a, w) :Writer<'w,_>
-    static member inline instance (Monad.Return, _:Writer<'w,'a>                ) = fun a -> Writer(a, mempty())                                        :Writer<'w,'a>
+    static member inline instance (Applicative.Pure, _:Writer<'w,'a>                ) = fun a -> Writer(a, mempty())                                        :Writer<'w,'a>
     static member inline instance (Monad.Bind  ,   Writer(a, w), _:Writer<'w,'b>) = fun k -> Writer(let (b, w') = Writer.run(k a) in (b, mappend w w')) :Writer<'w,'b>
-    static member inline instance (Applicative.Pure, _:Writer<'w,'a>) = fun (x:'a) -> DefaultImpl.PureFromMonad x :Writer<'w,_>
+    //static member inline instance (Applicative.Pure, _:Writer<'w,'a>) = fun (x:'a) -> DefaultImpl.PureFromMonad x :Writer<'w,_>
     static member inline instance (Applicative.Ap, f:Writer<'w,_>, x:Writer<'w,'a>, _:Writer<'w,'b>) = fun () -> DefaultImpl.ApFromMonad f x :Writer<'w,'b>

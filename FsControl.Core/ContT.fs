@@ -3,6 +3,7 @@
 open FsControl.Core.Prelude
 open FsControl.Core.Abstractions
 open FsControl.Core.Abstractions.Monad
+open FsControl.Core.Abstractions.Functor
 open FsControl.Core.Abstractions.MonadTrans
 open FsControl.Core.Abstractions.MonadAsync
 
@@ -16,7 +17,7 @@ module ContT =
 type ContT<'Mr,'A> with
     static member instance (Functor.Map, ContT m, _) = fun f -> ContT(fun c -> m (c << f))
 
-    static member instance (Monad.Return, _:ContT<'mr,'a>           ) = fun a -> ContT((|>) a) :ContT<'mr,'a>
+    static member instance (Applicative.Pure, _:ContT<'mr,'a>           ) = fun a -> ContT((|>) a) :ContT<'mr,'a>
     static member instance (Monad.Bind  ,   ContT m, _:ContT<'mr,'b>) = fun k -> ContT(fun c -> m (fun a -> ContT.run(k a) c)) :ContT<'mr,'b>
 
     static member inline instance (MonadTrans.Lift  , _:ContT<'mr,'a>) = fun (m:'ma) -> ContT((>>=) m) : ContT<'mr,'a>    
