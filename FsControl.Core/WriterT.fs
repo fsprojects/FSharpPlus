@@ -3,6 +3,7 @@
 open FsControl.Core.Prelude
 open FsControl.Core.Abstractions
 open FsControl.Core.Abstractions.Functor
+open FsControl.Core.Abstractions.Applicative
 open FsControl.Core.Abstractions.Monad
 open FsControl.Core.Abstractions.MonadPlus
 open FsControl.Core.Abstractions.Monoid
@@ -26,6 +27,8 @@ type WriterT<'WMa> with
         return (f a, w)}
 
     static member inline instance (Applicative.Pure,                 _:WriterT<'wma>) :'a -> WriterT<'wma> = fun a -> WriterT (return' (a, mempty()))
+    static member inline instance (Applicative.Apply, WriterT(f), WriterT(x),  _:WriterT<'r>) = fun () ->
+        WriterT(fmap (<*>) f <*> x) :WriterT<'r>
     static member inline instance (Monad.Bind, WriterT (m:'wma), _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> =
         fun k -> WriterT <| do'(){
             let! (a, w ) = m

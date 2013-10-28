@@ -3,6 +3,7 @@
 open FsControl.Core.Prelude
 open FsControl.Core.Abstractions
 open FsControl.Core.Abstractions.Functor
+open FsControl.Core.Abstractions.Applicative
 open FsControl.Core.Abstractions.Monad
 open FsControl.Core.Abstractions.MonadPlus
 open FsControl.Core.Abstractions.MonadTrans
@@ -20,6 +21,8 @@ type ErrorT<'R> with
     static member inline instance (Functor.Map, ErrorT x :ErrorT<'ma>, _) = fun (f) -> ErrorT (Functor.fmap (ErrorT.mapError f) x) :ErrorT<'mb>
 
     static member inline instance (Applicative.Pure, _:ErrorT<'ma>) = ErrorT << return' << Choice1Of2 :'a -> ErrorT<'ma>
+    static member inline instance (Applicative.Apply, ErrorT(f:'ma_b), ErrorT(x:'ma),  _:ErrorT<'mb>) = fun () ->
+        ErrorT(fmap (<*>) f <*> x) :ErrorT<'mb>
     static member inline instance (Monad.Bind  , ErrorT x :ErrorT<'ma>, _:ErrorT<'mb>) = 
         fun (f: 'a -> ErrorT<'mb>) -> (ErrorT <| do'() {
             let! a = x
