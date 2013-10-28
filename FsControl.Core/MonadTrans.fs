@@ -1,8 +1,9 @@
-namespace FsControl.Core.Types
+﻿namespace FsControl.Core.Types
 
 open FsControl.Core.Prelude
 open FsControl.Core.Abstractions
 open FsControl.Core.Abstractions.Functor
+open FsControl.Core.Abstractions.Applicative
 open FsControl.Core.Abstractions.Monad
 
 type OptionT<'Ma> = OptionT of 'Ma
