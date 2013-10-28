@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.Types
+namespace FsControl.Core.Types
 
 open FsControl.Core.Prelude
 open FsControl.Core.Abstractions
@@ -15,6 +15,8 @@ module OptionT =
 type OptionT<'Ma> with
     static member inline instance (Functor.Map, OptionT x :OptionT<'ma>, _) = fun (f:'a->'b) -> OptionT (fmap (Option.map f) x) :OptionT<'mb>
     static member inline instance (Applicative.Pure,            _:OptionT<'ma>) = OptionT << return' << Some :'a -> OptionT<'ma>
+    static member inline instance (Applicative.Apply, OptionT(f), OptionT(x),  _:OptionT<'r>) = fun () ->
+        OptionT(fmap (<*>) f <*> x) :OptionT<'r>
     static member inline instance (Monad.Bind  , OptionT x :OptionT<'ma>, _:OptionT<'mb>) = 
         fun (f: 'a -> OptionT<'mb>) -> (OptionT <| do'() {
             let! maybe_value = x
@@ -35,6 +37,8 @@ module ListT =
 type ListT<'Ma> with
     static member inline instance (Functor.Map ,            ListT x:ListT<'ma>, _) = fun (f:'a->'b) -> ListT (fmap (List.map f) x):ListT<'mb>
     static member inline instance (Applicative.Pure,                     _:ListT<'ma>) = ListT << return' << singleton :'a -> ListT<'ma>
+    static member inline instance (Applicative.Apply, ListT(f), ListT(x),  _:ListT<'r>) = fun () ->
+        ListT(fmap (<*>) f <*> x) :ListT<'r>
     static member inline instance (Monad.Bind  , ListT x:ListT<'ma>, _:ListT<'mb>) =
         fun (k: 'a -> ListT<'mb>) -> 
             (ListT (x >>= mapM(ListT.run << k) >>= (concat >> return'))) :ListT<'mb>
