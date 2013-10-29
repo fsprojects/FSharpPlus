@@ -8,8 +8,9 @@ open Monoid
 // Monad class ------------------------------------------------------------
 module Monad =
     type Bind = Bind with
-        static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind  f x
-        static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect f x
+        static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
+        static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect  f x
+        static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
         static member        instance (Bind, f:'r->'a       , _:'r->'b       ) = fun (k:_->_->'b) r    -> k (f r) r
         static member inline instance (Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let w', b = k a in (mappend w w', b)
         static member        instance (Bind, x:Async<'a>    , _:'b Async     ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
@@ -32,11 +33,12 @@ open Monad
 module Applicative =
     type Pure = Pure with
         static member        instance (Pure, _:option<'a>   ) = fun x -> Some x      :option<'a>
-        static member        instance (Pure, _:List<'a>     ) = fun x -> [x]         :List<'a>
+        static member        instance (Pure, _:List<'a>     ) = fun x -> [ x ]       :List<'a>
+        static member        instance (Pure, _:'a []        ) = fun x -> [|x|]       :'a []
         static member        instance (Pure, _:'r -> 'a     ) = const':'a  -> 'r -> _
         static member inline instance (Pure, _: 'm * 'a     ) = fun (x:'a) -> (mempty(), x)
         static member        instance (Pure, _:'a Async     ) = fun (x:'a) -> async.Return x        
-        static member        instance (Pure, _:Choice<'a,'e>) = fun x -> Choice1Of2 x :Choice<'a,'e>
+        static member        instance (Pure, _:Choice<'a,'e>) = fun x -> Choice1Of2 x :Choice<'a,'e>        
 
         //Restricted
         static member instance (Pure, _:'a Nullable  ) = fun (x:'a) -> Nullable x
@@ -49,6 +51,7 @@ module Applicative =
     type Apply = Apply with
         static member        instance (Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> DefaultImpl.ApplyFromMonad f x :option<'b>
         static member        instance (Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
+        static member        instance (Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []  
         static member        instance (Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
         static member inline instance (Apply, f:'m * _      , x:'m * 'a      , _:'m * 'b      ) = fun () -> DefaultImpl.ApplyFromMonad f x :'m *'b
         static member        instance (Apply, f:Async<_>    , x:Async<'a>    , _:Async<'b>    ) = fun () -> DefaultImpl.ApplyFromMonad f x :Async<'b>
@@ -68,12 +71,14 @@ open Applicative
 
 module Alternative =
     type Empty = Empty with
-        static member instance (_Alternative:Empty, _:option<'a>) = fun () -> None
-        static member instance (_Alternative:Empty, _:List<'a>  ) = fun () -> []
+        static member instance (Empty, _:option<'a>) = fun () -> None
+        static member instance (Empty, _:List<'a>  ) = fun () -> [  ]
+        static member instance (Empty, _:'a []     ) = fun () -> [||]
 
     type Append = Append with   
-        static member instance (_Alternative:Append, x:option<_>, _) = fun y -> match x with | None -> y | xs -> xs
-        static member instance (_Alternative:Append, x:List<_>  , _) = fun y -> x @ y
+        static member instance (Append, x:option<_>, _) = fun y -> match x with None -> y | xs -> xs
+        static member instance (Append, x:List<_>  , _) = fun y -> x @ y
+        static member instance (Append, x:_ []     , _) = fun y -> Array.append x y
 
 
 // Functor class ----------------------------------------------------------
@@ -151,11 +156,13 @@ module Comonad =
 module MonadPlus =
     type Mzero = Mzero with
         static member instance (Mzero, _:option<'a>) = fun () -> None
-        static member instance (Mzero, _:List<'a>  ) = fun () -> []
+        static member instance (Mzero, _:List<'a>  ) = fun () -> [  ]
+        static member instance (Mzero, _:'a []     ) = fun () -> [||]
 
     type Mplus = Mplus with
         static member instance (Mplus, x:option<_>, _) = fun y -> match x with None -> y | xs -> xs
         static member instance (Mplus, x:List<_>  , _) = fun y -> x @ y
+        static member instance (Mplus, x:_ []     , _) = fun y -> Array.append x y
 
     let inline internal mzero () = Inline.instance Mzero ()
     let inline internal mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
