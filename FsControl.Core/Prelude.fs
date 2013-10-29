@@ -14,6 +14,18 @@ module internal Prelude =
     let inline  internal cons x y = x :: y
 
 
+namespace FsControl.Core.Types
+
+[<RequireQualifiedAccess>]
+module Error =
+    let map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
+    let result = Choice1Of2
+    let throw  = Choice2Of2
+    let bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
+    let catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
+
+
+
 
 
 

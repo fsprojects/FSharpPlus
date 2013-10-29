@@ -15,10 +15,9 @@ type ErrorT<'R> = ErrorT of 'R
 module ErrorT =
     let run   (ErrorT x) = x
     let map f (ErrorT m) = ErrorT(f m)
-    let inline internal mapError f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
 
 type ErrorT<'R> with
-    static member inline instance (Functor.Map, ErrorT x :ErrorT<'ma>, _) = fun (f) -> ErrorT (Functor.fmap (ErrorT.mapError f) x) :ErrorT<'mb>
+    static member inline instance (Functor.Map, ErrorT x :ErrorT<'ma>, _) = fun (f) -> ErrorT (Functor.fmap (Error.map f) x) :ErrorT<'mb>
 
     static member inline instance (Applicative.Pure, _:ErrorT<'ma>) = ErrorT << return' << Choice1Of2 :'a -> ErrorT<'ma>
     static member inline instance (Applicative.Apply, ErrorT(f:'ma_b), ErrorT(x:'ma),  _:ErrorT<'mb>) = fun () ->
@@ -49,7 +48,7 @@ type ErrorT<'R> with
 
     static member inline instance (MonadWriter.Tell, _:ErrorT<_> ) = lift << Writer.tell
     static member inline instance (MonadWriter.Listen, m, _:ErrorT<_> ) = fun () ->
-        let liftError (m,w) = ErrorT.mapError (fun x -> (x,w)) m
+        let liftError (m,w) = Error.map (fun x -> (x,w)) m
         ErrorT (Writer.listen (ErrorT.run m) >>= (return' << liftError))
     static member inline instance (MonadWriter.Pass, m, _:ErrorT<_> ) = fun () -> ErrorT (ErrorT.run m >>= maybe (return' None) (liftM Some << Writer.pass << return'))
 
