@@ -88,8 +88,8 @@ module MonadError =
             OptionT ( (fun v h -> Inline.instance (CatchError, v) h) (OptionT.run m) (OptionT.run << h) ) :OptionT<'U>
         static member inline instance (CatchError,  m:ListT<'U> , _:ListT<'U>  ) = fun (h:'e -> ListT<'U>) -> 
             ListT ( (fun v h -> Inline.instance (CatchError, v) h) (ListT.run m) (ListT.run << h) ) :ListT<'U>
-        static member        instance (CatchError, m:Choice<'v,'e>, _:Choice<'v,'e>) = fun (h:'e -> Choice<'v,'e>) -> Error.catch h m
-        static member        instance (CatchError, m:'e * 'v, _:'e * 'v) = fun (h:'e -> 'e * 'v) -> h (fst m) 
+        static member        instance (CatchError, m:Choice<'v,'t>, _:Choice<'v,'e>) = fun (h:'t -> Choice<'v,'e>) -> Error.catch h m
+        static member        instance (CatchError, m:'t * 'v, _:'e * 'v) = fun (h:'t -> 'e * 'v) -> h (fst m) 
 
     let inline throwError x   = Inline.instance  ThrowError x
     let inline catchError v h = Inline.instance (CatchError, v) h
