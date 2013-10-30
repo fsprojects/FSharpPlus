@@ -2,6 +2,7 @@ namespace FsControl.Core.Abstractions
 
 open System
 open System.Collections
+open System.Text
 open Microsoft.FSharp.Quotations
 open FsControl.Core.Prelude
 open FsControl.Core.Types
@@ -45,7 +46,10 @@ module Applicative =
         static member        instance (Pure, _:'a Generic.List) = fun x -> new Generic.List<'a>(Seq.singleton x)        
 
         //Restricted
-        static member instance (Pure, _:'a Nullable  ) = fun (x:'a) -> Nullable x
+        static member instance (Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
+        static member instance (Pure, _:string       ) = fun (x:char) -> string x : string
+        static member instance (Pure, _:StringBuilder) = fun (x:char) -> new StringBuilder(string x):StringBuilder
+        
 
     let inline internal pure' x   = Inline.instance Pure x
 
@@ -113,11 +117,15 @@ module Functor =
         static member instance (Map, x:_ [,,,]       , _) = fun f ->
             Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
         static member instance (Map, x:Async<_>      , _) = fun f -> DefaultImpl.MapFromMonad f x
-        static member instance (Map, x:Nullable<_>   , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
         static member instance (Map, x:Choice<_,_>   , _) = fun f -> Error.map f x
         static member instance (Map, x:Map<'a,'b>    , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
         static member instance (Map, x:Expr<_>       , _) = fun f -> <@ f %x @>
         static member instance (Map, x:_ Generic.List, _) = fun f -> new Generic.List<'b>(Seq.map f x)
+
+        // Restricted
+        static member instance (Map, x:Nullable<_>   , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
+        static member instance (Map, x:string        , _) = fun f -> String.map f x
+        static member instance (Map, x:StringBuilder , _) = fun f -> new StringBuilder(String.map f (x.ToString()))
         
 
     let inline internal fmap   f x = Inline.instance (Map, x) f
