@@ -163,12 +163,23 @@ module Comonad =
         static member        instance (Extract, (w:'w,a:'a) ,_) = fun () -> a
         static member inline instance (Extract, f:'m->'t ,_:'t) = fun () -> f (mempty())
 
+        // Restricted
+        static member        instance (Extract, x:'t list         , _:'t) = fun () -> List.head x
+        static member        instance (Extract, x:'t []           , _:'t) = fun () -> x.[0]
+        static member        instance (Extract, x:string          , _   ) = fun () -> x.[0]
+        static member        instance (Extract, x:StringBuilder   , _   ) = fun () -> x.ToString().[0]
+
     let inline internal extract x = Inline.instance (Extract, x) ()
 
 
     type Duplicate = Duplicate with
         static member        instance (Duplicate, (w:'w, a:'a), _:'w * ('w*'a)) = fun () -> (w,(w,a))
         static member inline instance (Duplicate, f:'m->'a, _:'m->'m->'a) = fun () a b -> f (mappend a b)
+
+        // Restricted
+        static member        instance (Duplicate, s:List<'a>, _:List<List<'a>>) = fun () -> 
+            let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
+            tails s
 
     let inline internal duplicate x = Inline.instance (Duplicate, x) ()
 
