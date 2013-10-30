@@ -1,5 +1,6 @@
-﻿namespace FsControl.Core.Abstractions
+namespace FsControl.Core.Abstractions
 
+open System.Text
 open FsControl.Core.Prelude
 
 module Monoid =
@@ -8,6 +9,7 @@ module Monoid =
         static member        instance (Mempty, _:option<'a>) = fun () -> None :option<'a>
         static member        instance (Mempty, _:array<'a> ) = fun () -> [||] : array<'a>
         static member        instance (Mempty, _:string    ) = fun () -> ""
+        static member        instance (Mempty, _:StringBuilder) = fun () -> new StringBuilder()
         static member        instance (Mempty, _:unit      ) = fun () -> ()
         static member        instance (Mempty, _:Set<'a>   ) = fun () -> Set.empty : Set<'a>
         static member        instance (Mempty, _:Map<'a,'b>) = fun () -> Map.empty : Map<'a,'b>
@@ -25,12 +27,17 @@ module Monoid =
 
 
     type Mappend = Mappend with       
-        static member        instance (Mappend, x:List<_>  , _) = fun y -> x @ y       
-        static member        instance (Mappend, x:array<_> , _) = fun y -> Array.append x y
-        static member        instance (Mappend, x:string   , _) = fun y -> x + y
-        static member        instance (Mappend, ()         , _) = fun () -> ()
-        static member        instance (Mappend, x:Set<_>   , _) = fun y -> Set.union x y
-        static member        instance (Mappend, x:Map<_,_> , _) = fun y -> Seq.fold (fun m (k,v) -> Map.add k v m) x y
+        static member        instance (Mappend, x:List<_>      , _) = fun y -> x @ y       
+        static member        instance (Mappend, x:array<_>     , _) = fun y -> Array.append x y
+        static member        instance (Mappend, ()             , _) = fun () -> ()
+        static member        instance (Mappend, x:Set<_>       , _) = fun y -> Set.union x y
+        static member        instance (Mappend, x:Map<_,_>     , _) = fun y -> Seq.fold (fun m (k,v) -> Map.add k v m) x y
+        static member        instance (Mappend, x:string       , _) = fun y -> x + y
+        static member        instance (Mappend, x:StringBuilder, _) = fun (y:StringBuilder) -> 
+            let sb = new StringBuilder()
+            sb.Append(x.ToString()) |> ignore
+            sb.Append(y.ToString()) |> ignore
+            y
 
     let inline internal mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
 
