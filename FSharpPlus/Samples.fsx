@@ -1,4 +1,4 @@
-﻿#r @"..\packages\FsControl.1.0.2\lib\net40\FsControl.Core.dll"
+﻿#r @"..\packages\FsControl.1.0.3\lib\net40\FsControl.Core.dll"
 #load "Prelude.fs"
 
 open FSharpPlus
