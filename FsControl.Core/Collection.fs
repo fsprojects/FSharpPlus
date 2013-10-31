@@ -26,3 +26,23 @@ module Collection =
         static member instance (Take, x:List<'a>       , _:List<'a>       ) = fun n -> Seq.take n x |> Seq.toList
 
     let inline internal take (n:int) x = Inline.instance (Take, x) n
+
+
+    type FromList = FromList with
+        static member instance (FromList, _:string         ) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList)
+        static member instance (FromList, _:StringBuilder  ) = fun (x:list<char>) -> new StringBuilder(String.Join("",  x |> Array.ofList))
+        static member instance (FromList, _:'a []          ) = fun (x:list<'a>)   -> Array.ofList x
+        static member instance (FromList, _:'a Generic.List) = fun (x:list<'a>)   -> new Generic.List<'a>(x)
+        static member instance (FromList, _:List<'a>       ) = fun (x:list<'a>)   -> x
+
+    let inline internal fromList (value:list<'t>)  = Inline.instance FromList value
+
+
+    type ToList = ToList with
+        static member instance (ToList, x:string         , _) = fun () -> x.ToCharArray() |> Array.toList
+        static member instance (ToList, x:StringBuilder  , _) = fun () -> x.ToString().ToCharArray() |> Array.toList
+        static member instance (ToList, x:'a []          , _) = fun () -> Array.toList x
+        static member instance (ToList, x:'a Generic.List, _) = fun () -> Seq.toList x
+        static member instance (ToList, x:List<'a>       , _) = fun () -> x
+
+    let inline internal toList value :list<'t> = Inline.instance (ToList, value) ()
