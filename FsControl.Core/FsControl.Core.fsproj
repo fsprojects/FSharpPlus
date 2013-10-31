@@ -70,8 +70,9 @@
     <Compile Include="ErrorT.fs" />
     <Compile Include="Converter.fs" />
     <Compile Include="Collection.fs" />
-    <None Include="Samples/Haskell.fsx" />
+    <None Include="Samples\Haskell.fsx" />    
     <None Include="Samples\Collections.fsx" />
+    <None Include="Samples\Converter.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core" Condition="$(TargetFrameworkVersion) == 'v3.5'">
