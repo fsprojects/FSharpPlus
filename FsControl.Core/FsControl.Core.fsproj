@@ -68,7 +68,9 @@
     <Compile Include="WriterT.fs" />
     <Compile Include="StateT.fs" />
     <Compile Include="ErrorT.fs" />
+    <Compile Include="Collection.fs" />
     <None Include="Samples/Haskell.fsx" />
+    <None Include="Samples\Collections.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core" Condition="$(TargetFrameworkVersion) == 'v3.5'">
