@@ -30,49 +30,6 @@ module Prelude =
     let inline optional (v:'Alternative'a) :'Alternative'Option'a = Some <!> v <|> result None
 
 
-    // ZipList
-    type ZipList<'s> = ZipList of 's seq with
-        static member instance (_:Functor.Map,    ZipList x   , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
-        static member instance (_:Applicative.Pure, _:ZipList<'a>) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
-        static member instance (_:Applicative.Apply,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
-            ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-
-    [<RequireQualifiedAccess>]
-    module ZipList =
-        let run   (ZipList x) = x
-        let map f (ZipList x) = ZipList (Seq.map f x)
-
-
-    // NonEmptyList
-    type NonEmptyList<'t> = {Head: 't; Tail: 't list}
-
-    [<RequireQualifiedAccess>]
-    module NonEmptyList =
-        let toList {Head = x; Tail = xs} = x::xs
-        let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
-        let cons e {Head = x; Tail = xs} = {Head = e  ; Tail = x::xs}
-        let rec tails s =
-            let {Head = x; Tail = xs} = s
-            match xs with
-            | []   -> {Head = s; Tail = []}
-            | h::t -> cons s (tails {Head = h; Tail = t})
-         
-    type NonEmptyList<'T> with
-        static member instance (_:Functor.Map      , x:NonEmptyList<'a>, _:NonEmptyList<'b>) = fun (f:'a->'b) -> NonEmptyList.map f x
-        
-        static member instance (_:Monad.Bind, {Head = x; Tail = xs}, _:NonEmptyList<'b>   ) = fun (f:_->NonEmptyList<'b>  ) ->
-            let {Head = y; Tail = ys} = f x
-            let ys' = List.collect (NonEmptyList.toList << f) xs
-            {Head = y; Tail = (ys @ ys')}
-
-        static member instance (_:Applicative.Pure, _:NonEmptyList<'a>) = fun (x:'a)     -> {Head = x; Tail = []}
-        static member instance (_:Applicative.Apply  , f:NonEmptyList<'a->'b>, x:NonEmptyList<'a> ,_:NonEmptyList<'b>) = fun () ->
-             Applicative.DefaultImpl.ApplyFromMonad f x :NonEmptyList<'b>
-
-        static member instance (_:Comonad.Extract  , {Head = h; Tail = _} ,_) = fun () -> h
-        static member instance (_:Comonad.Duplicate, s:NonEmptyList<'a>, _:NonEmptyList<NonEmptyList<'a>>) = fun () -> NonEmptyList.tails s
-
-
     // Monad -----------------------------------------------------------
     let inline (>>=) (x:'Monad'a) (f:'a->'Monad'b) :'Monad'b = Inline.instance (Monad.Bind, x) f
     let inline (=<<) (f:'a->'Monad'b) (x:'Monad'a) :'Monad'b = Inline.instance (Monad.Bind, x) f
@@ -204,3 +161,19 @@ module Prelude =
     
     let monad     = new MonadBuilder()
     let monadPlus = new MonadPlusBuilder()
+
+
+    // Collection
+
+    let inline skip (n:int) x = Inline.instance (Collection.Skip, x) n
+    let inline take (n:int) x = Inline.instance (Collection.Take, x) n
+    let inline fromList (value :list<'t>) = Inline.instance  Collection.FromList value
+    let inline toList    value :list<'t>  = Inline.instance (Collection.ToList,  value) ()
+
+
+    // Converter
+
+    let inline fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance Converter.FromBytes (value, startIndex)
+    let inline fromBytes                            (value:byte[]) = Inline.instance Converter.FromBytes (value, 0         )
+    let inline toBytes value :byte[] = Inline.instance (Converter.ToBytes, value) ()
+    let inline parse (value:string)  = Inline.instance  Converter.Parse    value
