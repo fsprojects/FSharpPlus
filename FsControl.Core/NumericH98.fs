@@ -120,6 +120,9 @@ open Num
 open Integral
 
 module Ratio = 
+    let inline internal (</) x = (|>) x
+    let inline internal (/>) x = flip x
+
     type Ratio<'Integral> = Ratio of 'Integral * 'Integral with
         override this.ToString() =
             let (Ratio(n,d)) = this
@@ -173,24 +176,26 @@ module Fractional =
         static member        instance (FromRational, _:float   ) = fun (r:Rational) -> float   (numerator r) / float   (denominator r)
         static member        instance (FromRational, _:float32 ) = fun (r:Rational) -> float32 (numerator r) / float32 (denominator r)    
         static member        instance (FromRational, _:decimal ) = fun (r:Rational) -> decimal (numerator r) / decimal (denominator r)
-        static member inline instance (FromRational, _:Ratio<_>) = fun (r:Rational) -> fromIntegral  (numerator r) </ratio/> fromIntegral (denominator r)
+        static member inline instance (FromRational, _:Ratio<_>) = fun (r:Rational) -> ratio (fromIntegral  (numerator r))  (fromIntegral (denominator r))
         static member        instance (FromRational, _:Complex ) = fun (r:Rational) -> Complex(float (numerator r) / float (denominator r), 0.0)
 
 
 // RealFrac class ---------------------------------------------------------
 module RealFrac =
     type ProperFraction = ProperFraction with
-        static member        instance (ProperFraction, x:float   , _) = fun () -> let t = truncate x in (bigint (decimal t), x </opMinus/> t)
-        static member        instance (ProperFraction, x:float32 , _) = fun () -> let t = truncate x in (bigint (decimal t), x </opMinus/> t)
-        static member        instance (ProperFraction, x:decimal , _) = fun () -> let t = truncate x in (bigint          t , x </opMinus/> t)
+        static member        instance (ProperFraction, x:float   , _) = fun () -> let t = truncate x in (bigint (decimal t), opMinus x t)
+        static member        instance (ProperFraction, x:float32 , _) = fun () -> let t = truncate x in (bigint (decimal t), opMinus x t)
+        static member        instance (ProperFraction, x:decimal , _) = fun () -> let t = truncate x in (bigint          t , opMinus x t)
         static member inline instance (ProperFraction, r:Ratio<_>, _) = fun () -> 
             let (a,b) = (numerator r, denominator r)
             let (i,f) = quotRem a b
-            (i, f </ratio/> b)
+            (i, ratio f b)
 
 
 // Real class -------------------------------------------------------------
 module Real =
+    let inline internal (</) x = (|>) x
+    let inline internal (/>) x = flip x
     type ToRational = ToRational with
         static member inline instance (ToRational, r:Ratio<_>, _) = fun () -> toInteger (numerator r) </ratio/> toInteger (denominator r) :Rational
         static member inline instance (ToRational, x:'t      , _) = fun () ->
