@@ -49,6 +49,7 @@ module Applicative =
         static member instance (Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
         static member instance (Pure, _:string       ) = fun (x:char) -> string x : string
         static member instance (Pure, _:StringBuilder) = fun (x:char) -> new StringBuilder(string x):StringBuilder
+        static member instance (Pure, _:'a Set       ) = fun (x:'a  ) -> Set.singleton x
         
 
     let inline internal pure' x   = Inline.instance Pure x
@@ -126,6 +127,7 @@ module Functor =
         static member instance (Map, x:Nullable<_>   , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
         static member instance (Map, x:string        , _) = fun f -> String.map f x
         static member instance (Map, x:StringBuilder , _) = fun f -> new StringBuilder(String.map f (x.ToString()))
+        static member instance (Map, x:Set<_>        , _) = fun f -> Set.map f x
         
 
     let inline internal fmap   f x = Inline.instance (Map, x) f
