@@ -512,6 +512,7 @@ let get3strings = sequenceA [getLine;getLine;getLine]
 let inline filter predicate : 't->'t = foldMap (fun a -> if predicate a then pure' a else mempty())
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
+let five   = filter ((=) 5) (set [1;2;3;4;5;6])
 
 
 // Cont
