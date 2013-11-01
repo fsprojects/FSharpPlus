@@ -30,10 +30,11 @@ module Collection =
 
     type FromList = FromList with
         static member instance (FromList, _:string         ) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList)
-        static member instance (FromList, _:StringBuilder  ) = fun (x:list<char>) -> new StringBuilder(String.Join("",  x |> Array.ofList))
-        static member instance (FromList, _:'a []          ) = fun (x:list<'a>)   -> Array.ofList x
+        static member instance (FromList, _:StringBuilder  ) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList))
+        static member instance (FromList, _:'a []          ) = Array.ofList<'a>
         static member instance (FromList, _:'a Generic.List) = fun (x:list<'a>)   -> new Generic.List<'a>(x)
-        static member instance (FromList, _:List<'a>       ) = fun (x:list<'a>)   -> x
+        static member instance (FromList, _:List<'a>       ) = id<list<'a>>
+        static member instance (FromList, _:Set<'a>        ) = Set.ofList<'a>
 
     let inline internal fromList (value:list<'t>)  = Inline.instance FromList value
 
@@ -44,5 +45,6 @@ module Collection =
         static member instance (ToList, x:'a []          , _) = fun () -> Array.toList x
         static member instance (ToList, x:'a Generic.List, _) = fun () -> Seq.toList x
         static member instance (ToList, x:List<'a>       , _) = fun () -> x
+        static member instance (ToList, x:Set<'a>        , _) = fun () -> Set.toList x
 
     let inline internal toList value :list<'t> = Inline.instance (ToList, value) ()
