@@ -1,8 +1,20 @@
 ﻿    namespace FSharpPlus
 
+    open FSharpPlus.Extensions
     open FsControl.Core.Abstractions
 
-    type NonEmptyList<'t> = {Head: 't; Tail: 't list}
+    type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
+        member this.head = let {Head = a} = this in a
+        member this.tail = let {Tail = a} = this in a
+        member this.Item = function 0 -> this.head | n -> this.tail.[n-1]
+        member this.GetSlice = function
+            | None  , None
+            | Some 0, None
+            | Some 0, Some 0 -> this
+            | Some a, None   -> let {Head = x; Tail = xs} = this in {Head = xs.[a-1]; Tail = xs.[a..   ]}
+            | None  , Some b 
+            | Some 0, Some b -> let {Head = x; Tail = xs} = this in {Head = x       ; Tail = xs.[ ..b-1]}
+            | Some a, Some b -> let {          Tail = xs} = this in {Head = xs.[a-1]; Tail = xs.[a..b-1]}
 
     [<RequireQualifiedAccess>]
     module NonEmptyList =
@@ -15,7 +27,7 @@
             | []   -> {Head = s; Tail = []}
             | h::t -> cons s (tails {Head = h; Tail = t})
          
-    type NonEmptyList<'T> with
+    type NonEmptyList with
         static member instance (_:Functor.Map      , x:NonEmptyList<'a>, _:NonEmptyList<'b>) = fun (f:'a->'b) -> NonEmptyList.map f x
         
         static member instance (_:Monad.Bind, {Head = x; Tail = xs}, _:NonEmptyList<'b>   ) = fun (f:_->NonEmptyList<'b>  ) ->

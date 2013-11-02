@@ -24,4 +24,7 @@ let r07 = monad {
     let! x2 = {Head = 10; Tail = [20]}
     return ((+) x1 x2)}
 
-let r08 = (parse "12" + 11 |> toBytes |> toList).[0..1]
+let r08 = r07.[1..2]
+let r09 = (ZipList [1;2;3;4]).[2..3]
+
+let r10 = (parse "12" + 11 |> toBytes |> toList).[0..1]
