@@ -45,9 +45,9 @@ module Prelude =
 
 
     // Monad plus -------------------------------------------------------------
-    let inline sequence (ms:List<'Monad'a>) :'Monad'List'a =
-        let k m m' = m >>= fun (x:'Monad'a) -> m' >>= fun xs -> (result :list<'Monad'a> -> 'Monad'List'a) (List.Cons(x,xs))
-        List.foldBack k ms ((result :list<'Monad'a> -> 'Monad'List'a) [])
+    let inline sequence (ms:List<'Monad'a>) =
+        let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (List.Cons(x,xs))
+        List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
 
     let inline mapM   (f:'a->'Monad'b) (xs:List<'a>) :'Monad'List'b = sequence (List.map f xs)
     let inline liftM  (f:'a->'b) (m1:'Monad'a) :'Monad'b = m1 >>= (result << f)
@@ -79,8 +79,8 @@ module Prelude =
 
 
     // Foldable
-    let inline foldr  (f:'a->'b->'b) (z:'b) (x:'Foldable'a) :'b = Inline.instance (Foldable.Foldr  , x) (f,z)
-    let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
+    let inline foldr (f:'a->'b->'b) (z:'b) (x:'Foldable'a) :'b = Inline.instance (Foldable.Foldr  , x) (f,z)
+    let inline foldMap (f:'a_'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
 
 
     // Traversable
