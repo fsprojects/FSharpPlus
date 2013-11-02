@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-open FSharpPlus.Prelude
+open FSharpPlus.Operators
 
 module Extensions =
 

@@ -1,7 +1,7 @@
 ﻿namespace FSharpPlus
 
 open FsControl.Core.Abstractions
-open FSharpPlus.Prelude
+open FSharpPlus.Operators
 
 type ZipList<'s> = ZipList of 's seq with
     member this.Item n = let (ZipList s) = this in Seq.nth n s
