@@ -55,6 +55,7 @@
     <Compile Include="Extensions.fs" />
     <Compile Include="NonEmptyList.fs" />
     <Compile Include="ZipList.fs" />
+    <Compile Include="ParallelArray.fs" />
     <None Include="Samples.fsx" />
   </ItemGroup>
   <PropertyGroup>
