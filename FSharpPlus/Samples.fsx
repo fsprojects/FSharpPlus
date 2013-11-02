@@ -5,6 +5,7 @@
 #load "Extensions.fs"
 #load "NonEmptyList.fs"
 #load "ZipList.fs"
+#load "ParallelArray.fs"
 
 open FSharpPlus
 open FSharpPlus.Extensions
@@ -28,3 +29,8 @@ let r08 = r07.[1..2]
 let r09 = (ZipList [1;2;3;4]).[2..3]
 
 let r10 = (parse "12" + 11 |> toBytes |> toList).[0..1]
+
+let r11 = [| 1..10000000|]
+let r12 = [|10..10000000|]
+
+let r13 = (+) <!> parray r11 <*> parray r12
