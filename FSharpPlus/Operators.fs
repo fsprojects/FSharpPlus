@@ -3,7 +3,7 @@ namespace FSharpPlus
 open FsControl.Core.Abstractions
 
 [<AutoOpenAttribute>]
-module Prelude =
+module Operators =
 
     let inline flip f x y = f y x
     let inline konst k _ = k

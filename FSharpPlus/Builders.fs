@@ -3,7 +3,7 @@
 [<AutoOpenAttribute>]
 module Builders =    
 
-    open FSharpPlus.Prelude
+    open FSharpPlus.Operators
 
     // Idiom brackets
     type Ii = Ii

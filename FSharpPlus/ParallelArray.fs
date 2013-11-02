@@ -1,7 +1,7 @@
 ﻿namespace FSharpPlus
 
 open FsControl.Core.Abstractions
-open FSharpPlus.Prelude
+open FSharpPlus.Operators
 
 type ParallelArray<'t> =
     | Const   of 't
