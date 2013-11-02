@@ -1,5 +1,7 @@
 ﻿#r @"..\packages\FsControl.1.0.3\lib\net40\FsControl.Core.dll"
+
 #load "Prelude.fs"
+#load "Builders.fs"
 #load "Extensions.fs"
 #load "NonEmptyList.fs"
 #load "ZipList.fs"

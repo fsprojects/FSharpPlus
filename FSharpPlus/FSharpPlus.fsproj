@@ -51,10 +51,11 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Compile Include="Prelude.fs" />
-    <None Include="Samples.fsx" />
+    <Compile Include="Builders.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="NonEmptyList.fs" />
     <Compile Include="ZipList.fs" />
+    <None Include="Samples.fsx" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
