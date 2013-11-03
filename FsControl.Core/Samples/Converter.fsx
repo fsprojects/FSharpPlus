@@ -1,4 +1,4 @@
-﻿#r @"..\bin\Debug\FsControl.Core.dll"
+﻿#r @"..\bin\Release\FsControl.Core.dll"
 
 open System
 open FsControl.Core.Abstractions.Converter
@@ -16,3 +16,11 @@ let r130 = toString [1;2;3]
 let r140 = toString (1,2)
 let r150 = toString (Some 22)
 let r160 = toString ([1;2;3] :> _ seq)
+let r170 = toString (new ResizeArray<_>([1;2;3] :> _ seq))
+let r180 = toString (Set [1;2;3])
+let r190 = toString [|1;2;3|]
+let r200 = toString [|([1;2;3] :> _ seq);([1;2;3] :> _ seq);([1;2;3] :> _ seq)|]
+
+// print as sequences, seems to be taking the wrong overload.
+let r210 = toString (Map ['a',1; 'b',2; 'c',3])
+let r220 = toString (dict ['a',1; 'b',2; 'c',3])

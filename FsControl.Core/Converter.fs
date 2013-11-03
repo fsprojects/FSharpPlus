@@ -77,7 +77,6 @@ module Converter =
         static member instance (ToString, x:DateTime,      _) = fun () -> x.ToString inv
         static member instance (ToString, x:DateTimeOffset,_) = fun () -> x.ToString inv
         static member instance (ToString, x:StringBuilder, _) = fun () -> if x = null then "null" else x.ToString()
-        static member instance (ToString, x:Expr<_>,       _) = fun () -> x.ToString()
 
     let inline toString value : string = Inline.instance (ToString, value) ()
 
@@ -102,8 +101,7 @@ module Converter =
                 notFirst := true
         }
 
-    // can't make it internal? Error: The value 'instance' was marked inline but its implementation makes use of an internal or private function which is not sufficiently accessible.
-    let inline seqToString sepOpen sepClose x (b: StringBuilder) =
+    let inline internal seqToString sepOpen sepClose x (b: StringBuilder) =
         let inline append (s:string) = b.Append s |> ignore
         append sepOpen
         let withSemiColons = intersperse "; " (Seq.map toString x)
@@ -119,16 +117,12 @@ module Converter =
                         let b = StringBuilder()
                         seqToString "[|" "|]" x b
 
-    type ToString with static member inline instance (ToString, x:_ Set, _) = fun () ->
+    type ToString with 
+        static member inline instance (ToString, x:_ ResizeArray, _) = fun () ->
                         let b = StringBuilder()
-                        b.Append "set " |> ignore
+                        b.Append "ResizeArray " |> ignore
                         seqToString "[" "]" x b
-
-    // Error: Failed to inline the value 'instance' marked 'inline', perhaps because a recursive value was marked 'inline'
-//    type ToString with static member inline instance (ToString, x:_ ResizeArray, _) = fun () ->
-//                        let b = StringBuilder()
-//                        b.Append "ResizeArray " |> ignore
-//                        seqToString "[" "]" x b
+        static member instance (ToString, x:Expr<_>,       _) = fun () -> x.ToString()
 
     type ToString with static member inline instance (ToString, x:_ seq, _) = fun () ->
                         let b = StringBuilder()
@@ -144,12 +138,14 @@ module Converter =
     type ToString with static member inline instance (ToString, x:Map<_,_>, _) = fun () ->
                         toString (x :> seq<KeyValuePair<_,_>>)
 
-    // Errors:
-    // Failed to inline the value 'instance' marked 'inline', perhaps because a recursive value was marked 'inline'
-    // The value 'FsControl.Core.Abstractions.Converter.ToString.instance' was marked inline but was not bound in the optimization environment
-    // The value 'instance' was marked inline but its implementation makes use of an internal or private function which is not sufficiently accessible
-//    type ToString with static member inline instance (ToString, x:Dictionary<_,_>, _) = fun () ->
-//                        toString (x :> seq<KeyValuePair<_,_>>)
+    type ToString with 
+        static member inline instance (ToString, x:Dictionary<_,_>, _) = fun () ->
+                        toString (x :> seq<KeyValuePair<_,_>>)
+
+        static member inline instance (ToString, x:_ Set, _) = fun () ->
+                        let b = StringBuilder()
+                        b.Append "set " |> ignore
+                        seqToString "[" "]" x b
 
     type ToString with static member inline instance (ToString, x:IDictionary<_,_>, _) = fun () ->
                         toString (x :> seq<KeyValuePair<_,_>>)
