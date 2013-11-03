@@ -1,6 +1,11 @@
 ﻿namespace FsControl.Core.Abstractions
 
 open System
+open System.Collections.Generic
+open System.Text
+open Microsoft.FSharp.Quotations
+open Microsoft.FSharp.Core.Printf
+open FsControl.Core.Prelude
 
 module Converter =
 
@@ -51,3 +56,105 @@ module Converter =
         static member instance (Parse, _:uint64 ) = UInt64 .Parse
 
     let inline internal parse (value:string) = Inline.instance Parse value
+
+    let internal inv = System.Globalization.CultureInfo.InvariantCulture
+
+    type ToString = ToString with
+        static member instance (ToString, x:bool,          _) = fun () -> x.ToString inv
+        static member instance (ToString, x:char,          _) = fun () -> x.ToString inv
+        static member instance (ToString, x:byte,          _) = fun () -> x.ToString inv
+        static member instance (ToString, x:sbyte,         _) = fun () -> x.ToString inv
+        static member instance (ToString, x:float,         _) = fun () -> x.ToString inv
+        static member instance (ToString, x:int16,         _) = fun () -> x.ToString inv
+        static member instance (ToString, x:int,           _) = fun () -> x.ToString inv
+        static member instance (ToString, x:int64,         _) = fun () -> x.ToString inv
+        static member instance (ToString, x:float32,       _) = fun () -> x.ToString inv
+        static member instance (ToString, x:string,        _) = fun () -> if x = null then "null" else x
+        static member instance (ToString, x:uint16,        _) = fun () -> x.ToString inv
+        static member instance (ToString, x:uint32,        _) = fun () -> x.ToString inv
+        static member instance (ToString, x:uint64,        _) = fun () -> x.ToString inv
+        static member instance (ToString, x:decimal,       _) = fun () -> x.ToString inv
+        static member instance (ToString, x:DateTime,      _) = fun () -> x.ToString inv
+        static member instance (ToString, x:DateTimeOffset,_) = fun () -> x.ToString inv
+        static member instance (ToString, x:StringBuilder, _) = fun () -> if x = null then "null" else x.ToString()
+        static member instance (ToString, x:Expr<_>,       _) = fun () -> x.ToString()
+
+    let inline toString value : string = Inline.instance (ToString, value) ()
+
+    type ToString with static member inline instance (ToString, KeyValue(a,b), _) = fun () ->
+                        "(" + toString a + ", " + toString b + ")"
+    type ToString with static member inline instance (ToString, (a,b),         _) = fun () ->
+                        "(" + toString a + ", " + toString b + ")"
+    type ToString with static member inline instance (ToString, (a,b,c),       _) = fun () ->
+                        "(" + toString a + ", " + toString b + ", " + toString c + ")"
+    type ToString with static member inline instance (ToString, (a,b,c,d),     _) = fun () ->
+                        "(" + toString a + ", " + toString b + ", " + toString c + ", " + toString d + ")"
+    type ToString with static member inline instance (ToString, (a,b,c,d,e),   _) = fun () ->
+                        "(" + toString a + ", " + toString b + ", " + toString c + ", " + toString d + ", " + toString e + ")"
+
+    // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
+    let intersperse sep list =
+        seq {
+            let notFirst = ref false
+            for element in list do 
+                if !notFirst then yield sep
+                yield element
+                notFirst := true
+        }
+
+    // can't make it internal? Error: The value 'instance' was marked inline but its implementation makes use of an internal or private function which is not sufficiently accessible.
+    let inline seqToString sepOpen sepClose x (b: StringBuilder) =
+        let inline append (s:string) = b.Append s |> ignore
+        append sepOpen
+        let withSemiColons = intersperse "; " (Seq.map toString x)
+        Seq.iter append withSemiColons
+        append sepClose
+        toString b
+
+    type ToString with static member inline instance (ToString, x:_ list, _) = fun () ->
+                        let b = StringBuilder()
+                        seqToString "[" "]" x b
+
+    type ToString with static member inline instance (ToString, x:_ array, _) = fun () ->
+                        let b = StringBuilder()
+                        seqToString "[|" "|]" x b
+
+    type ToString with static member inline instance (ToString, x:_ Set, _) = fun () ->
+                        let b = StringBuilder()
+                        b.Append "set " |> ignore
+                        seqToString "[" "]" x b
+
+    // Error: Failed to inline the value 'instance' marked 'inline', perhaps because a recursive value was marked 'inline'
+//    type ToString with static member inline instance (ToString, x:_ ResizeArray, _) = fun () ->
+//                        let b = StringBuilder()
+//                        b.Append "ResizeArray " |> ignore
+//                        seqToString "[" "]" x b
+
+    type ToString with static member inline instance (ToString, x:_ seq, _) = fun () ->
+                        let b = StringBuilder()
+                        b.Append "seq " |> ignore
+                        seqToString "[" "]" x b
+
+    type ToString with static member inline instance (ToString, x:_ ICollection, _) = fun () ->
+                        toString (x :> _ seq)
+
+    type ToString with static member inline instance (ToString, x:_ IList, _) = fun () ->
+                        toString (x :> _ seq)
+
+    type ToString with static member inline instance (ToString, x:Map<_,_>, _) = fun () ->
+                        toString (x :> seq<KeyValuePair<_,_>>)
+
+    // Errors:
+    // Failed to inline the value 'instance' marked 'inline', perhaps because a recursive value was marked 'inline'
+    // The value 'FsControl.Core.Abstractions.Converter.ToString.instance' was marked inline but was not bound in the optimization environment
+    // The value 'instance' was marked inline but its implementation makes use of an internal or private function which is not sufficiently accessible
+//    type ToString with static member inline instance (ToString, x:Dictionary<_,_>, _) = fun () ->
+//                        toString (x :> seq<KeyValuePair<_,_>>)
+
+    type ToString with static member inline instance (ToString, x:IDictionary<_,_>, _) = fun () ->
+                        toString (x :> seq<KeyValuePair<_,_>>)
+
+    type ToString with static member inline instance (ToString, x:_ option, _) = fun () ->
+                        match x with
+                        | Some a -> "Some " + toString a
+                        | None -> "None"
