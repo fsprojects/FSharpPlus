@@ -41,23 +41,27 @@ module Converter =
 
     let inline internal toBytes value :byte[] = Inline.instance (ToBytes, value) ()
 
+    let internal inv = System.Globalization.CultureInfo.InvariantCulture
 
     type Parse = Parse with
-        static member instance (Parse, _:bool   ) = Boolean.Parse
-        static member instance (Parse, _:char   ) = Char   .Parse
-        static member instance (Parse, _:float  ) = Double .Parse
-        static member instance (Parse, _: int16 ) = Int16  .Parse
-        static member instance (Parse, _: int   ) = Int32  .Parse
-        static member instance (Parse, _:int64  ) = Int64  .Parse
-        static member instance (Parse, _:float32) = Single .Parse
-        static member instance (Parse, _:string ) = id :string->_            
-        static member instance (Parse, _:uint16 ) = UInt16 .Parse
-        static member instance (Parse, _:uint32 ) = UInt32 .Parse
-        static member instance (Parse, _:uint64 ) = UInt64 .Parse
+        static member instance (Parse, _:bool          ) = fun x -> Boolean       .Parse(x)
+        static member instance (Parse, _:char          ) = fun x -> Char          .Parse(x)
+        static member instance (Parse, _:byte          ) = fun x -> Byte          .Parse(x, inv)
+        static member instance (Parse, _:sbyte         ) = fun x -> SByte         .Parse(x, inv)
+        static member instance (Parse, _:float         ) = fun x -> Double        .Parse(x, inv)
+        static member instance (Parse, _: int16        ) = fun x -> Int16         .Parse(x, inv)
+        static member instance (Parse, _: int          ) = fun x -> Int32         .Parse(x, inv)
+        static member instance (Parse, _:int64         ) = fun x -> Int64         .Parse(x, inv)
+        static member instance (Parse, _:float32       ) = fun x -> Single        .Parse(x, inv)
+        static member instance (Parse, _:uint16        ) = fun x -> UInt16        .Parse(x, inv)
+        static member instance (Parse, _:uint32        ) = fun x -> UInt32        .Parse(x, inv)
+        static member instance (Parse, _:uint64        ) = fun x -> UInt64        .Parse(x, inv)
+        static member instance (Parse, _:decimal       ) = fun x -> Decimal       .Parse(x, inv)
+        static member instance (Parse, _:DateTime      ) = fun x -> DateTime      .Parse(x, inv)
+        static member instance (Parse, _:DateTimeOffset) = fun x -> DateTimeOffset.Parse(x, inv)
+        static member instance (Parse, _:string ) = id :string->_
 
     let inline internal parse (value:string) = Inline.instance Parse value
-
-    let internal inv = System.Globalization.CultureInfo.InvariantCulture
 
     type ToString = ToString with
         static member instance (ToString, x:bool,          _) = fun () -> x.ToString inv
