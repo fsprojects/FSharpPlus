@@ -56,7 +56,14 @@
     <Compile Include="NonEmptyList.fs" />
     <Compile Include="ZipList.fs" />
     <Compile Include="ParallelArray.fs" />
-    <None Include="Samples.fsx" />
+    <None Include="Samples\Collections.fsx" />
+    <None Include="Samples\Conversions.fsx" />
+    <None Include="Samples\Applicatives.fsx" />
+    <None Include="Samples\Monads.fsx" />
+    <None Include="Samples\Comonads.fsx" />
+    <None Include="Samples\MonadTransformers.fsx" />
+    <None Include="Samples\ParallelArrays.fsx" />
+    <None Include="Samples\ZipLists.fsx" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
