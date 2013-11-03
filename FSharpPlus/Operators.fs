@@ -1,6 +1,6 @@
 namespace FSharpPlus
 
-open FsControl.Core.Abstractions
+open FsControl.Core.TypeMethods
 
 [<AutoOpenAttribute>]
 module Operators =
@@ -143,8 +143,9 @@ module Operators =
 
     let inline fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance Converter.FromBytes (value, startIndex)
     let inline fromBytes                            (value:byte[]) = Inline.instance Converter.FromBytes (value, 0         )
-    let inline toBytes value :byte[] = Inline.instance (Converter.ToBytes, value) ()
-    let inline parse (value:string)  = Inline.instance  Converter.Parse    value
+    let inline toBytes value :byte[]  = Inline.instance (Converter.ToBytes , value) ()
+    let inline parse (value:string)   = Inline.instance  Converter.Parse     value
+    let inline toString value :string = Inline.instance (Converter.ToString, value) ()
 
 
     // Applicative Operators

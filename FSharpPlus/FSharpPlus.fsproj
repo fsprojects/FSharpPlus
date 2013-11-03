@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FsControl.Core">
-      <HintPath>..\packages\FsControl.1.0.3\lib\net40\FsControl.Core.dll</HintPath>
+      <HintPath>..\packages\FsControl.1.0.4\lib\net40\FsControl.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Core" Condition="$(TargetFrameworkVersion) == 'v3.5'">
