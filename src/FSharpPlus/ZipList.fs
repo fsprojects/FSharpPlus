@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-open FsControl.Core.Abstractions
+open FsControl.Core.TypeMethods
 open FSharpPlus.Operators
 
 type ZipList<'s> = ZipList of 's seq with

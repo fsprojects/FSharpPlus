@@ -1,7 +1,7 @@
 ﻿namespace FSharpPlus
 
 open FSharpPlus.Extensions
-open FsControl.Core.Abstractions
+open FsControl.Core.TypeMethods
 
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     member this.head = let {Head = a; Tail = _} = this in a
