@@ -149,22 +149,22 @@ module Operators =
 
     // Applicative Operators
 
-    let inline ( |+  ) (x :'Applicative't)  y                  = map ((+)/> y) x
-    let inline (  +| )  x                  (y :'Applicative't) = map ((+)   x) y
-    let inline ( |+| ) (x :'Applicative't) (y: 'Applicative't) = (+) <!> x <*> y
+    let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
+    let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
+    let inline ( |+| ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
 
-    let inline ( |-  ) (x :'Applicative't)  y                  = map ((-)/> y) x
-    let inline (  -| )  x                  (y :'Applicative't) = map ((-)   x) y
-    let inline ( |-| ) (x :'Applicative't) (y: 'Applicative't) = (-) <!> x <*> y
+    let inline ( |-  ) (x :'Functor't)     (y :'t)             = map ((-)/> y) x :'Functor't
+    let inline (  -| ) (x :'t)             (y :'Functor't)     = map ((-)   x) y :'Functor't
+    let inline ( |-| ) (x :'Applicative't) (y :'Applicative't) = (-) <!> x <*> y :'Applicative't
 
-    let inline ( |*  ) (x :'Applicative't)  y                  = map ((*)/> y) x
-    let inline (  *| )  x                  (y :'Applicative't) = map ((*)   x) y
-    let inline ( |*| ) (x :'Applicative't) (y: 'Applicative't) = (*) <!> x <*> y
+    let inline ( |*  ) (x :'Functor't)     (y :'t)             = map ((*)/> y) x :'Functor't
+    let inline (  *| ) (x :'t)             (y :'Functor't)     = map ((*)   x) y :'Functor't
+    let inline ( |*| ) (x :'Applicative't) (y :'Applicative't) = (*) <!> x <*> y :'Applicative't
 
-    let inline ( |%  ) (x :'Applicative't)  y                  = map ((%)/> y) x
-    let inline (  %| )  x                  (y :'Applicative't) = map ((%)   x) y
-    let inline ( |%| ) (x :'Applicative't) (y: 'Applicative't) = (%) <!> x <*> y
+    let inline ( |%  ) (x :'Functor't)     (y :'t)             = map ((%)/> y) x :'Functor't
+    let inline (  %| ) (x :'t)             (y :'Functor't)     = map ((%)   x) y :'Functor't
+    let inline ( |%| ) (x :'Applicative't) (y :'Applicative't) = (%) <!> x <*> y :'Applicative't
 
-    let inline ( |/  ) (x :'Applicative't)  y                  = map ((/)/> y) x
-    let inline (  /| )  x                  (y :'Applicative't) = map ((/)   x) y
-    let inline ( |/| ) (x :'Applicative't) (y: 'Applicative't) = (/) <!> x <*> y
+    let inline ( |/  ) (x :'Functor't)     (y :'t)             = map ((/)/> y) x :'Functor't
+    let inline (  /| ) (x :'t)             (y :'Functor't)     = map ((/)   x) y :'Functor't
+    let inline ( |/| ) (x :'Applicative't) (y :'Applicative't) = (/) <!> x <*> y :'Applicative't
