@@ -7,4 +7,4 @@ The goal is to create overloads of standard F# types, organized into 'type metho
 
 Type methods are similar to type classes but with a single method.
 
-It is also possible to create libraries (like FSharpPlus) that define their own custom types and add overloads for those types, making them instances of the type methods defined in FsControl.
+It is also possible to create libraries (like [FSharpPlus](https://github.com/gmpl/FSharpPlus)) that define their own custom types and add overloads for those types, making them instances of the type methods defined in FsControl.
