@@ -26,10 +26,12 @@ module ParallelArray =
             if f.LongLength < x.LongLength then Bounded (Array.Parallel.mapi (fun i f -> f x.[i]) f)
             else                                Bounded (Array.Parallel.mapi (fun i x -> f.[i] x) x)
 
-    let apend a b = 
+    let append a b = 
         match (a,b) with
-        | Bounded a, Bounded b -> Bounded (Array.append a b)
-        | _                    -> invalidOp "Resulting array would be infinite."
+        | Bounded a   , Bounded b    -> Bounded (Array.append a b)
+        | Const   a   , Bounded [||] -> Const   a
+        | Bounded [||], Const   b    -> Const   b
+        | _                          -> invalidOp "Resulting array would be infinite."
 
 type parray<'t> = ParallelArray<'t>
 
@@ -42,4 +44,4 @@ type ParallelArray with
     static member instance (_:Applicative.Pure , _:parray<'a>   ) = fun (x:'a) -> Const x
     static member instance (_:Applicative.Apply, f:parray<'a->'b>, x:parray<_> ,_:parray<'b>) = fun () -> ParallelArray.ap f x :parray<'b>
     static member instance (_:Monoid.Mempty   , _:parray<'a>   ) = fun () -> Bounded Array.empty : parray<'a>
-    static member instance (_:Monoid.Mappend  , x:parray<'a>, _) = fun y  -> ParallelArray.apend x y
+    static member instance (_:Monoid.Mappend  , x:parray<'a>, _) = fun y  -> ParallelArray.append x y

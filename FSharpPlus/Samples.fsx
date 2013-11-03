@@ -30,7 +30,7 @@ let r09 = (ZipList [1;2;3;4]).[2..3]
 
 let r10 = (parse "12" + 11 |> toBytes |> toList).[0..1]
 
-let r11 = [| 1..10000000|]
-let r12 = [|10..10000000|]
-
+let r11 = [| 1..100000|]
+let r12 = [|10..100000|]
 let r13 = (+) <!> parray r11 <*> parray r12
+let r14 = Const 1 </mappend/> parray [||]
