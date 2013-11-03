@@ -145,3 +145,26 @@ module Operators =
     let inline fromBytes                            (value:byte[]) = Inline.instance Converter.FromBytes (value, 0         )
     let inline toBytes value :byte[] = Inline.instance (Converter.ToBytes, value) ()
     let inline parse (value:string)  = Inline.instance  Converter.Parse    value
+
+
+    // Applicative Operators
+
+    let inline ( |+  ) (x :'Applicative't)  y                  = (+) <!> x        <*> result y
+    let inline (  +| )  x                  (y :'Applicative't) = (+) <!> result x <*>        y
+    let inline ( |+| ) (x :'Applicative't) (y: 'Applicative't) = (+) <!> x        <*>        y
+
+    let inline ( |-  ) (x :'Applicative't)  y                  = (-) <!> x        <*> result y
+    let inline (  -| )  x                  (y :'Applicative't) = (-) <!> result x <*>        y
+    let inline ( |-| ) (x :'Applicative't) (y: 'Applicative't) = (-) <!> x        <*>        y
+
+    let inline ( |*  ) (x :'Applicative't)  y                  = (*) <!> x        <*> result y
+    let inline (  *| )  x                  (y :'Applicative't) = (*) <!> result x <*>        y
+    let inline ( |*| ) (x :'Applicative't) (y: 'Applicative't) = (*) <!> x        <*>        y
+
+    let inline ( |%  ) (x :'Applicative't)  y                  = (%) <!> x        <*> result y
+    let inline (  %| )  x                  (y :'Applicative't) = (%) <!> result x <*>        y
+    let inline ( |%| ) (x :'Applicative't) (y: 'Applicative't) = (%) <!> x        <*>        y
+
+    let inline ( |/  ) (x :'Applicative't)  y                  = (/) <!> x        <*> result y
+    let inline (  /| )  x                  (y :'Applicative't) = (/) <!> result x <*>        y
+    let inline ( |/| ) (x :'Applicative't) (y: 'Applicative't) = (/) <!> x        <*>        y
