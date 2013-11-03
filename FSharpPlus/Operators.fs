@@ -149,22 +149,22 @@ module Operators =
 
     // Applicative Operators
 
-    let inline ( |+  ) (x :'Applicative't)  y                  = (+) <!> x        <*> result y
-    let inline (  +| )  x                  (y :'Applicative't) = (+) <!> result x <*>        y
-    let inline ( |+| ) (x :'Applicative't) (y: 'Applicative't) = (+) <!> x        <*>        y
+    let inline ( |+  ) (x :'Applicative't)  y                  = map ((+)/> y) x
+    let inline (  +| )  x                  (y :'Applicative't) = map ((+)   x) y
+    let inline ( |+| ) (x :'Applicative't) (y: 'Applicative't) = (+) <!> x <*> y
 
-    let inline ( |-  ) (x :'Applicative't)  y                  = (-) <!> x        <*> result y
-    let inline (  -| )  x                  (y :'Applicative't) = (-) <!> result x <*>        y
-    let inline ( |-| ) (x :'Applicative't) (y: 'Applicative't) = (-) <!> x        <*>        y
+    let inline ( |-  ) (x :'Applicative't)  y                  = map ((-)/> y) x
+    let inline (  -| )  x                  (y :'Applicative't) = map ((-)   x) y
+    let inline ( |-| ) (x :'Applicative't) (y: 'Applicative't) = (-) <!> x <*> y
 
-    let inline ( |*  ) (x :'Applicative't)  y                  = (*) <!> x        <*> result y
-    let inline (  *| )  x                  (y :'Applicative't) = (*) <!> result x <*>        y
-    let inline ( |*| ) (x :'Applicative't) (y: 'Applicative't) = (*) <!> x        <*>        y
+    let inline ( |*  ) (x :'Applicative't)  y                  = map ((*)/> y) x
+    let inline (  *| )  x                  (y :'Applicative't) = map ((*)   x) y
+    let inline ( |*| ) (x :'Applicative't) (y: 'Applicative't) = (*) <!> x <*> y
 
-    let inline ( |%  ) (x :'Applicative't)  y                  = (%) <!> x        <*> result y
-    let inline (  %| )  x                  (y :'Applicative't) = (%) <!> result x <*>        y
-    let inline ( |%| ) (x :'Applicative't) (y: 'Applicative't) = (%) <!> x        <*>        y
+    let inline ( |%  ) (x :'Applicative't)  y                  = map ((%)/> y) x
+    let inline (  %| )  x                  (y :'Applicative't) = map ((%)   x) y
+    let inline ( |%| ) (x :'Applicative't) (y: 'Applicative't) = (%) <!> x <*> y
 
-    let inline ( |/  ) (x :'Applicative't)  y                  = (/) <!> x        <*> result y
-    let inline (  /| )  x                  (y :'Applicative't) = (/) <!> result x <*>        y
-    let inline ( |/| ) (x :'Applicative't) (y: 'Applicative't) = (/) <!> x        <*>        y
+    let inline ( |/  ) (x :'Applicative't)  y                  = map ((/)/> y) x
+    let inline (  /| )  x                  (y :'Applicative't) = map ((/)   x) y
+    let inline ( |/| ) (x :'Applicative't) (y: 'Applicative't) = (/) <!> x <*> y
