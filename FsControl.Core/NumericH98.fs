@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.NumericH98.Abstractions
+﻿namespace FsControl.Core.NumericH98.TypeMethods
 
 
 open System.Numerics
@@ -114,8 +114,8 @@ module internal Numerics =
 // Ratio ------------------------------------------------------------------
 namespace FsControl.Core.NumericH98.Types
 open FsControl.Core.Prelude
-open FsControl.Core.NumericH98.Abstractions
-open FsControl.Core.NumericH98.Abstractions.Numerics
+open FsControl.Core.NumericH98.TypeMethods
+open FsControl.Core.NumericH98.TypeMethods.Numerics
 open Num
 open Integral
 
@@ -157,7 +157,7 @@ type Rational = Ratio.Ratio<bigint>
 
 
 
-namespace FsControl.Core.NumericH98.Abstractions
+namespace FsControl.Core.NumericH98.TypeMethods
 
 open FsControl.Core.Prelude
 open Num
@@ -165,7 +165,7 @@ open Integral
 open Numerics
 open FsControl.Core.NumericH98
 open FsControl.Core.NumericH98.Types
-open FsControl.Core.NumericH98.Abstractions
+open FsControl.Core.NumericH98.TypeMethods
 open Ratio
 
 open System.Numerics

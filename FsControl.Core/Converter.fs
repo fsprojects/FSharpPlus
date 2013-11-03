@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.Abstractions
+﻿namespace FsControl.Core.TypeMethods
 
 open System
 open System.Collections.Generic

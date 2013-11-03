@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.Abstractions
+﻿namespace FsControl.Core.TypeMethods
 
 open FsControl.Core.Prelude
 open FsControl.Core.Types

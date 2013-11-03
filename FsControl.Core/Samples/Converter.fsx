@@ -1,7 +1,7 @@
 ﻿#r @"..\bin\Release\FsControl.Core.dll"
 
 open System
-open FsControl.Core.Abstractions.Converter
+open FsControl.Core.TypeMethods.Converter
 
 let inline internal fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex)
 let inline internal fromBytes                            (value:byte[]) = Inline.instance FromBytes (value, 0         )

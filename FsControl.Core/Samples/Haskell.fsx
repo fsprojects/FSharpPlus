@@ -33,13 +33,13 @@ let either f g = function Left x -> f x | Right y -> g y
 // Numerics
 type Integer = bigint
 open System.Numerics
-open FsControl.Core.NumericH98.Abstractions
-open FsControl.Core.NumericH98.Abstractions.Num
-open FsControl.Core.NumericH98.Abstractions.Integral
-open FsControl.Core.NumericH98.Abstractions.Floating
-open FsControl.Core.NumericH98.Abstractions.Fractional
-open FsControl.Core.NumericH98.Abstractions.Real
-open FsControl.Core.NumericH98.Abstractions.RealFrac
+open FsControl.Core.NumericH98.TypeMethods
+open FsControl.Core.NumericH98.TypeMethods.Num
+open FsControl.Core.NumericH98.TypeMethods.Integral
+open FsControl.Core.NumericH98.TypeMethods.Floating
+open FsControl.Core.NumericH98.TypeMethods.Fractional
+open FsControl.Core.NumericH98.TypeMethods.Real
+open FsControl.Core.NumericH98.TypeMethods.RealFrac
 open FsControl.Core.NumericH98.Types.Ratio
 
 let inline fromInteger (x:Integer) :'Num = Inline.instance FromInteger x
@@ -149,8 +149,8 @@ let resCmplx:System.Numerics.Complex * _ = quadratic 2G -3G 9G
 
 
 // Monads
-open FsControl.Core.Abstractions.Applicative
-open FsControl.Core.Abstractions.Monad
+open FsControl.Core.TypeMethods.Applicative
+open FsControl.Core.TypeMethods.Monad
 let inline return' x = Inline.instance Pure x
 let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
 
@@ -211,7 +211,7 @@ let action = do' {
 
 
 // Functors
-open FsControl.Core.Abstractions.Functor
+open FsControl.Core.TypeMethods.Functor
 let inline fmap   f x = Inline.instance (Map, x) f
 
 // Test Functors
@@ -241,7 +241,7 @@ let mappedTree = fmap fTimes2minus3 myTree
 
 
 // Monoids
-open FsControl.Core.Abstractions.Monoid
+open FsControl.Core.TypeMethods.Monoid
 open FsControl.Core.Types.Dual
 open FsControl.Core.Types.Endo
 
@@ -301,7 +301,7 @@ let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
 
 // Monad Plus
-open FsControl.Core.Abstractions.MonadPlus
+open FsControl.Core.TypeMethods.MonadPlus
 let inline mzero () = Inline.instance Mzero ()
 let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
 let inline guard x = if x then return' () else mzero()
@@ -338,10 +338,10 @@ let allCombinations = sequence [!"abc"; !"12"]
 
 
 // Arrows
-open FsControl.Core.Abstractions.Category
-open FsControl.Core.Abstractions.Arrow
-open FsControl.Core.Abstractions.ArrowChoice
-open FsControl.Core.Abstractions.ArrowApply
+open FsControl.Core.TypeMethods.Category
+open FsControl.Core.TypeMethods.Arrow
+open FsControl.Core.TypeMethods.ArrowChoice
+open FsControl.Core.TypeMethods.ArrowApply
 
 let inline id'() = Inline.instance Id ()
 let inline (<<<) f g = Inline.instance (Comp, f) g
@@ -383,8 +383,8 @@ let res4n8n12 = runKleisli (app()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
 
 
 // Applicative functors
-open FsControl.Core.Abstractions.Applicative
-open FsControl.Core.Abstractions.Alternative
+open FsControl.Core.TypeMethods.Applicative
+open FsControl.Core.TypeMethods.Alternative
 let inline pure' x   = Inline.instance Pure x
 let inline (<*>) x y = Inline.instance (Apply, x, y) ()
 let inline empty() = Inline.instance Empty ()
@@ -456,8 +456,8 @@ let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii
 
 
 // Foldable
-open FsControl.Core.Abstractions
-open FsControl.Core.Abstractions.Foldable
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Foldable
 
 let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
 let inline foldMap f x = Inline.instance (FoldMap, x) f
@@ -489,7 +489,7 @@ module FoldableTree =
 
 
 // Traversable
-open FsControl.Core.Abstractions.Traversable
+open FsControl.Core.TypeMethods.Traversable
 let inline traverse f t = Inline.instance (Traverse, t) f
 let inline sequenceA  x = traverse id x
 
@@ -607,12 +607,12 @@ let plus  n x = execState (sequence <| List.replicate n tick) x
 
 
 // Monad Transformers
-open FsControl.Core.Abstractions.MonadTrans
-open FsControl.Core.Abstractions.MonadAsync
-open FsControl.Core.Abstractions.MonadCont
-open FsControl.Core.Abstractions.MonadState
-open FsControl.Core.Abstractions.MonadReader
-open FsControl.Core.Abstractions.MonadWriter
+open FsControl.Core.TypeMethods.MonadTrans
+open FsControl.Core.TypeMethods.MonadAsync
+open FsControl.Core.TypeMethods.MonadCont
+open FsControl.Core.TypeMethods.MonadState
+open FsControl.Core.TypeMethods.MonadReader
+open FsControl.Core.TypeMethods.MonadWriter
 
 type MaybeT<'T> = OptionT<'T>
 let MaybeT  x = OptionT x
@@ -784,7 +784,7 @@ let res4Layers'  = liftIO                 getLine : ListT<MaybeT<WriterT<IO<_ * 
 
 
 // MonadError
-open FsControl.Core.Abstractions.MonadError
+open FsControl.Core.TypeMethods.MonadError
 let inline throwError x   = Inline.instance  ThrowError x
 let inline catchError v h = Inline.instance (CatchError, v) h
 

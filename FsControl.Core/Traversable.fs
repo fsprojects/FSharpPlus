@@ -1,9 +1,9 @@
-﻿namespace FsControl.Core.Abstractions
+﻿namespace FsControl.Core.TypeMethods
 
 open FsControl.Core.Prelude
-open FsControl.Core.Abstractions.Functor
-open FsControl.Core.Abstractions.Applicative
-open FsControl.Core.Abstractions.Foldable
+open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Applicative
+open FsControl.Core.TypeMethods.Foldable
 
 module Traversable = 
     type Traverse = Traverse with

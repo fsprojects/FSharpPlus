@@ -1,9 +1,9 @@
 ﻿namespace FsControl.Core.Types
 
-open FsControl.Core.Abstractions
-open FsControl.Core.Abstractions.Monad
-open FsControl.Core.Abstractions.Monoid
-open FsControl.Core.Abstractions.Applicative
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.Monoid
+open FsControl.Core.TypeMethods.Applicative
 
 type Writer<'W,'A> = Writer of ('A * 'W)
 

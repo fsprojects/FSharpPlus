@@ -1,4 +1,4 @@
-namespace FsControl.Core.Abstractions
+namespace FsControl.Core.TypeMethods
 
 open System.Text
 open FsControl.Core.Prelude
@@ -66,8 +66,8 @@ module Monoid =
 
 namespace FsControl.Core.Types
 open FsControl.Core.Prelude
-open FsControl.Core.Abstractions
-open FsControl.Core.Abstractions.Monoid
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Monoid
 
 
 type Dual<'a> = Dual of 'a with

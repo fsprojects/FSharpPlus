@@ -1,13 +1,13 @@
 ﻿namespace FsControl.Core.Types
 
 open FsControl.Core.Prelude
-open FsControl.Core.Abstractions
-open FsControl.Core.Abstractions.Functor
-open FsControl.Core.Abstractions.Applicative
-open FsControl.Core.Abstractions.Monad
-open FsControl.Core.Abstractions.MonadPlus
-open FsControl.Core.Abstractions.MonadTrans
-open FsControl.Core.Abstractions.MonadAsync
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Applicative
+open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadPlus
+open FsControl.Core.TypeMethods.MonadTrans
+open FsControl.Core.TypeMethods.MonadAsync
 
 type ErrorT<'R> = ErrorT of 'R
 

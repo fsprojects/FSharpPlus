@@ -1,10 +1,10 @@
 ﻿namespace FsControl.Core.Types
 
 open FsControl.Core.Prelude
-open FsControl.Core.Abstractions
-open FsControl.Core.Abstractions.Functor
-open FsControl.Core.Abstractions.Applicative
-open FsControl.Core.Abstractions.Monad
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Applicative
+open FsControl.Core.TypeMethods.Monad
 
 type OptionT<'Ma> = OptionT of 'Ma
 
@@ -50,13 +50,13 @@ type ListT<'Ma> with
         let! b = y
         return (a @ b)}
 
-namespace FsControl.Core.Abstractions
+namespace FsControl.Core.TypeMethods
 
 open FsControl.Core.Prelude
-open FsControl.Core.Abstractions
+open FsControl.Core.TypeMethods
 open FsControl.Core.Types
-open FsControl.Core.Abstractions.Functor
-open FsControl.Core.Abstractions.Monad
+open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Monad
 
 module MonadTrans = 
     type Lift = Lift with

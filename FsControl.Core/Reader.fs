@@ -1,7 +1,7 @@
 ﻿namespace FsControl.Core.Types
 
-open FsControl.Core.Abstractions
-open FsControl.Core.Abstractions.Applicative
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Applicative
 
 type Reader<'R,'A> = Reader of ('R->'A)
 

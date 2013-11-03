@@ -1,13 +1,13 @@
 ﻿#r @"..\bin\Release\FsControl.Core.dll"
 
 open System
-open FsControl.Core.Abstractions
-open FsControl.Core.Abstractions.Collection
-open FsControl.Core.Abstractions.Functor
-open FsControl.Core.Abstractions.Applicative
-open FsControl.Core.Abstractions.Comonad
-open FsControl.Core.Abstractions.Foldable
-open FsControl.Core.Abstractions.Monoid
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Collection
+open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Applicative
+open FsControl.Core.TypeMethods.Comonad
+open FsControl.Core.TypeMethods.Foldable
+open FsControl.Core.TypeMethods.Monoid
 
 let flip f x y = f y x
 let konst k _ = k
