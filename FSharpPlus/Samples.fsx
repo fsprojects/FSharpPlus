@@ -34,5 +34,5 @@ let r11 = [| 1..100000|]
 let r12 = [|10..100000|]
 let r13 = (+) <!> parray r11 <*> parray r12
 let r14 = parray r11 |+| parray r12
-let r15 = parray r11 |+| parray r12 |- 5
+let r15 = 10 *| parray r11 |+| parray r12 |- 5
 let r16 = Const 1 </mappend/> parray [||]
