@@ -20,7 +20,5 @@ let r170 = toString (new ResizeArray<_>([1;2;3] :> _ seq))
 let r180 = toString (Set [1;2;3])
 let r190 = toString [|1;2;3|]
 let r200 = toString [|([1;2;3] :> _ seq);([1;2;3] :> _ seq);([1;2;3] :> _ seq)|]
-
-// print as sequences, seems to be taking the wrong overload.
 let r210 = toString (Map ['a',1; 'b',2; 'c',3])
 let r220 = toString (dict ['a',1; 'b',2; 'c',3])

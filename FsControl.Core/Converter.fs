@@ -136,7 +136,9 @@ module Converter =
                         toString (x :> _ seq)
 
     type ToString with static member inline instance (ToString, x:Map<_,_>, _) = fun () ->
-                        toString (x :> seq<KeyValuePair<_,_>>)
+                        let b = StringBuilder()
+                        b.Append "map " |> ignore
+                        seqToString "[" "]" x b
 
     type ToString with 
         static member inline instance (ToString, x:Dictionary<_,_>, _) = fun () ->
