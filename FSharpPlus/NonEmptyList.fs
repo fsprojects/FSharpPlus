@@ -1,6 +1,7 @@
 ﻿namespace FSharpPlus
 
 open System.Text
+open FSharpPlus
 open FSharpPlus.Extensions
 open FsControl.Core.TypeMethods
 
