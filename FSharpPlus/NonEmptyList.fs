@@ -21,7 +21,7 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
 [<RequireQualifiedAccess>]
 module NonEmptyList =
     let toList {Head = x; Tail = xs} = x::xs
-    let toEnumerable {Head = x; Tail = xs} = seq { yield x; yield! xs; }
+    let toSeq  {Head = x; Tail = xs} = seq { yield x; yield! xs; }
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
     let cons e {Head = x; Tail = xs} = {Head = e  ; Tail = x::xs}
     let rec tails s =
@@ -53,7 +53,7 @@ type NonEmptyList with
             let b = StringBuilder()
             let inline append (s:string) = b.Append s |> ignore
             append "NonEmptyList ["
-            let withSemiColons = NonEmptyList.toEnumerable s |> Seq.map toString |> Converter.intersperse "; "
+            let withSemiColons = NonEmptyList.toSeq s |> Seq.map toString |> Seq.intersperse "; "
             Seq.iter append withSemiColons
             append "]"
             b.ToString()
