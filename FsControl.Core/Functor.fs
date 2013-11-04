@@ -1,7 +1,6 @@
 namespace FsControl.Core.TypeMethods
 
 open System
-open System.Collections
 open System.Text
 open Microsoft.FSharp.Quotations
 open FsControl.Core.Prelude
@@ -35,15 +34,15 @@ open Monad
 
 module Applicative =
     type Pure = Pure with
-        static member        instance (Pure, _:option<'a>     ) = fun x -> Some x      :option<'a>
-        static member        instance (Pure, _:List<'a>       ) = fun x -> [ x ]       :List<'a>
-        static member        instance (Pure, _:'a []          ) = fun x -> [|x|]       :'a []
-        static member        instance (Pure, _:'r -> 'a       ) = const':'a  -> 'r -> _
-        static member inline instance (Pure, _: 'm * 'a       ) = fun (x:'a) -> (mempty(), x)
-        static member        instance (Pure, _:'a Async       ) = fun (x:'a) -> async.Return x
-        static member        instance (Pure, _:Choice<'a,'e>  ) = fun x -> Choice1Of2 x :Choice<'a,'e>
-        static member        instance (Pure, _:Expr<'a>       ) = fun x -> <@ x @>     :Expr<'a>
-        static member        instance (Pure, _:'a Generic.List) = fun x -> new Generic.List<'a>(Seq.singleton x)        
+        static member        instance (Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
+        static member        instance (Pure, _:List<'a>      ) = fun x -> [ x ]       :List<'a>
+        static member        instance (Pure, _:'a []         ) = fun x -> [|x|]       :'a []
+        static member        instance (Pure, _:'r -> 'a      ) = const':'a  -> 'r -> _
+        static member inline instance (Pure, _: 'm * 'a      ) = fun (x:'a) -> (mempty(), x)
+        static member        instance (Pure, _:'a Async      ) = fun (x:'a) -> async.Return x
+        static member        instance (Pure, _:Choice<'a,'e> ) = fun x -> Choice1Of2 x :Choice<'a,'e>
+        static member        instance (Pure, _:Expr<'a>      ) = fun x -> <@ x @>     :Expr<'a>
+        static member        instance (Pure, _:'a ResizeArray) = fun x -> new ResizeArray<'a>(Seq.singleton x)        
 
         //Restricted
         static member instance (Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
@@ -78,8 +77,8 @@ module Applicative =
 
         static member        instance (Apply, f:_ Expr      , x:'a Expr      , _:'b Expr      ) = fun () -> <@ (%f) %x @> :'b Expr
 
-        static member        instance (Apply, f:('a->'b) Generic.List, x:'a Generic.List, _:'b Generic.List) = fun () ->
-            new Generic.List<'b>(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b Generic.List
+        static member        instance (Apply, f:('a->'b) ResizeArray, x:'a ResizeArray, _:'b ResizeArray) = fun () ->
+            new ResizeArray<'b>(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
 
         
    
@@ -108,26 +107,26 @@ module Functor =
         static member inline MapFromMonad f x = x >>= (pure' << f)
 
     type Map = Map with
-        static member instance (Map, x:option<_>     , _) = fun f -> Option.map  f x
-        static member instance (Map, x:List<_>       , _:List<'b>) = fun f -> List.map f x :List<'b>
-        static member instance (Map, g:_->_          , _) = (>>) g
-        static member instance (Map, (m,a)           , _) = fun f -> (m, f a)
-        static member instance (Map, x:_ []          , _) = fun f -> Array.map   f x
-        static member instance (Map, x:_ [,]         , _) = fun f -> Array2D.map f x
-        static member instance (Map, x:_ [,,]        , _) = fun f -> Array3D.map f x
-        static member instance (Map, x:_ [,,,]       , _) = fun f ->
+        static member instance (Map, x:option<_>    , _) = fun f -> Option.map  f x
+        static member instance (Map, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
+        static member instance (Map, g:_->_         , _) = (>>) g
+        static member instance (Map, (m,a)          , _) = fun f -> (m, f a)
+        static member instance (Map, x:_ []         , _) = fun f -> Array.map   f x
+        static member instance (Map, x:_ [,]        , _) = fun f -> Array2D.map f x
+        static member instance (Map, x:_ [,,]       , _) = fun f -> Array3D.map f x
+        static member instance (Map, x:_ [,,,]      , _) = fun f ->
             Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-        static member instance (Map, x:Async<_>      , _) = fun f -> DefaultImpl.MapFromMonad f x
-        static member instance (Map, x:Choice<_,_>   , _) = fun f -> Error.map f x
-        static member instance (Map, x:Map<'a,'b>    , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
-        static member instance (Map, x:Expr<_>       , _) = fun f -> <@ f %x @>
-        static member instance (Map, x:_ Generic.List, _) = fun f -> new Generic.List<'b>(Seq.map f x)
+        static member instance (Map, x:Async<_>     , _) = fun f -> DefaultImpl.MapFromMonad f x
+        static member instance (Map, x:Choice<_,_>  , _) = fun f -> Error.map f x
+        static member instance (Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
+        static member instance (Map, x:Expr<_>      , _) = fun f -> <@ f %x @>
+        static member instance (Map, x:_ ResizeArray, _) = fun f -> new ResizeArray<'b>(Seq.map f x)
 
         // Restricted
-        static member instance (Map, x:Nullable<_>   , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
-        static member instance (Map, x:string        , _) = fun f -> String.map f x
-        static member instance (Map, x:StringBuilder , _) = fun f -> new StringBuilder(String.map f (x.ToString()))
-        static member instance (Map, x:Set<_>        , _) = fun f -> Set.map f x
+        static member instance (Map, x:Nullable<_>  , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
+        static member instance (Map, x:string       , _) = fun f -> String.map f x
+        static member instance (Map, x:StringBuilder, _) = fun f -> new StringBuilder(String.map f (x.ToString()))
+        static member instance (Map, x:Set<_>       , _) = fun f -> Set.map f x
         
 
     let inline internal fmap   f x = Inline.instance (Map, x) f
