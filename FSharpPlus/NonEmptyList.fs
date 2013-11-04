@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus
 
+open System.Text
 open FSharpPlus.Extensions
 open FsControl.Core.TypeMethods
 
@@ -19,6 +20,7 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
 [<RequireQualifiedAccess>]
 module NonEmptyList =
     let toList {Head = x; Tail = xs} = x::xs
+    let toEnumerable {Head = x; Tail = xs} = seq { yield x; yield! xs; }
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
     let cons e {Head = x; Tail = xs} = {Head = e  ; Tail = x::xs}
     let rec tails s =
@@ -41,3 +43,16 @@ type NonEmptyList with
 
     static member instance (_:Comonad.Extract  , {Head = h; Tail = _} ,_) = fun () -> h
     static member instance (_:Comonad.Duplicate, s:NonEmptyList<'a>, _:NonEmptyList<NonEmptyList<'a>>) = fun () -> NonEmptyList.tails s
+
+    static member instance (_:Monoid.Mappend, {Head = h; Tail = t}, _) = fun x -> {Head = h; Tail = t @ NonEmptyList.toList x}
+
+    static member instance (_:Collection.ToList, s:NonEmptyList<'a>, _) = fun () -> NonEmptyList.toList s
+
+    static member inline instance (_:Converter.ToString, s:NonEmptyList<'a>, _) = fun () ->
+            let b = StringBuilder()
+            let inline append (s:string) = b.Append s |> ignore
+            append "NonEmptyList ["
+            let withSemiColons = NonEmptyList.toEnumerable s |> Seq.map toString |> Converter.intersperse "; "
+            Seq.iter append withSemiColons
+            append "]"
+            b.ToString()
