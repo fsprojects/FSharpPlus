@@ -98,8 +98,8 @@ module Operators =
     // Monad Transformers
     open FsControl.Core.Types
 
-    let inline lift   (x:'Monad'a ) : 'MonadTrans'Monad'a = Inline.instance MonadTrans.Lift x
-    let inline liftIO (x:Async<'a>) : 'MonadAsync'a       = Inline.instance MonadAsync.LiftAsync x
+    let inline lift      (x:'Monad'a ) :'MonadTrans'Monad'a = Inline.instance MonadTrans.Lift x
+    let inline liftAsync (x:Async<'a>) :'MonadAsync'a       = Inline.instance MonadAsync.LiftAsync x
 
     let inline callCC (f:('a->'MonadCont'b)->'MonadCont'a): 'MonadCont'a = Inline.instance  MonadCont.CallCC f
     
