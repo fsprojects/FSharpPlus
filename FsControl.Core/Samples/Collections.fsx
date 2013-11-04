@@ -43,7 +43,7 @@ let e2 = filter ((=) '2')  [|'2';'3';'4'|]
 let bigSeq = ZipList (seq {1..10000000})
 let bigLst = [ 1..10000000 ]
 let bigArr = [|1..10000000|]
-let bigMut = new Collections.Generic.List<_>(seq {1..10000000})
+let bigMut = new ResizeArray<_>(seq {1..10000000})
 
 let x = extract bigSeq
 let y = extract bigLst
@@ -55,3 +55,5 @@ let c = skip 1000 bigArr
 let d = skip 1000 bigMut
 let e = "hello world" |> skip 6 |> toList
 let h = fromList ['h';'e';'l';'l';'o';' '] + "world"
+
+let asQuotation = mappend <@ new ResizeArray<_>(["1"]) @> <@ new ResizeArray<_>(["2;3"]) @>

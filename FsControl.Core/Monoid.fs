@@ -2,6 +2,7 @@ namespace FsControl.Core.TypeMethods
 
 open System.Text
 open FsControl.Core.Prelude
+open Microsoft.FSharp.Quotations
 
 module Monoid =
     type Mempty = Mempty with   
@@ -24,6 +25,11 @@ module Monoid =
                         (mempty(),mempty(),mempty(),mempty()         ): 'a*'b*'c*'d
     type Mempty with static member inline instance (Mempty, _ : 'a*'b*'c*'d*'e) = fun () ->
                         (mempty(),mempty(),mempty(),mempty(),mempty()): 'a*'b*'c*'d*'e
+
+    type Mempty with
+        static member inline instance (Mempty, _:Expr<'a>       ) = fun () -> let v = mempty() in <@ v @>
+        static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> new ResizeArray<'a>()
+        
 
 
     type Mappend = Mappend with       
@@ -58,6 +64,11 @@ module Monoid =
                         (mappend x1 y1,mappend x2 y2,mappend x3 y3,mappend x4 y4              ) :'a*'b*'c*'d
     type Mappend with static member inline instance (Mappend, (x1,x2,x3,x4,x5), _) = fun (y1,y2,y3,y4,y5) ->
                         (mappend x1 y1,mappend x2 y2,mappend x3 y3,mappend x4 y4,mappend x5 y5) :'a*'b*'c*'d*'e
+
+    type Mappend with
+        static member inline instance (Mappend, x:Expr<'a>       , _) = fun (y:Expr<'a>       ) -> let f = mappend in <@ f %x %y @>
+        static member        instance (Mappend, x:ResizeArray<'a>, _) = fun (y:ResizeArray<'a>) -> new ResizeArray<'a>(Seq.append x y)
+
 
 
     let inline internal mconcat x =
