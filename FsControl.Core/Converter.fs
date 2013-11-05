@@ -63,6 +63,13 @@ module Converter =
 
     let inline internal parse (value:string) = Inline.instance Parse value
 
+    type Parse with
+        static member instance (Parse, _:'enum         ) = fun x ->
+            (match Enum.TryParse(x) with
+             | (true, v) -> v
+             | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")
+            ):'enum
+
     type ToString = ToString with
         static member instance (ToString, x:bool,          _) = fun () -> x.ToString inv
         static member instance (ToString, x:char,          _) = fun () -> x.ToString inv
