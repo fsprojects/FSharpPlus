@@ -16,7 +16,7 @@ module Monad =
         static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect  f x
         static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
         static member        instance (Bind, f:'r->'a       , _:'r->'b       ) = fun (k:_->_->'b) r    -> k (f r) r
-        static member inline instance (Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let w', b = k a in (mappend w w', b)
+        static member inline instance (Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let m, b = k a in (mappend w m, b)
         static member        instance (Bind, x:Async<'a>    , _:'b Async     ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
         static member        instance (Bind, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun (k:'a->Choice<'b,'e>) -> Error.bind k x
         static member        instance (Bind, x:Map<'k,'a>   , _:Map<'k,'b>   ) = fun (f:'a->Map<'k,'b>) -> Map (seq {
@@ -59,12 +59,17 @@ module Applicative =
         static member inline ApplyFromMonad f x = f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
 
     type Apply = Apply with
-        static member        instance (Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> DefaultImpl.ApplyFromMonad f x :option<'b>
         static member        instance (Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
         static member        instance (Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
         static member        instance (Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
-        static member inline instance (Apply, f:'m * _      , x:'m * 'a      , _:'m * 'b      ) = fun () -> DefaultImpl.ApplyFromMonad f x :'m *'b
+        static member inline instance (Apply, (a:'m, f)     , (b:'m, x:'a)   , _:'m * 'b      ) = fun () -> (mappend a b, f x) :'m *'b
         static member        instance (Apply, f:Async<_>    , x:Async<'a>    , _:Async<'b>    ) = fun () -> DefaultImpl.ApplyFromMonad f x :Async<'b>
+
+        static member        instance (Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> 
+            match (f,x) with 
+            | Some f, Some x -> Some (f x) 
+            | _              -> None :option<'b>
+
         static member        instance (Apply, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () ->
             match (f,x) with
             | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
