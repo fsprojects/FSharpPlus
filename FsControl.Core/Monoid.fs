@@ -67,9 +67,9 @@ module Monoid =
                         (mappend x1 y1,mappend x2 y2,mappend x3 y3,mappend x4 y4,mappend x5 y5) :'a*'b*'c*'d*'e
 
     type Mappend with
-        static member inline instance (Mappend, x:Expr<_>       , _) = fun y -> let f = mappend in <@ f %x %y @>
-        static member        instance (Mappend, x:ResizeArray<_>, _) = fun y -> new ResizeArray<_>(Seq.append x y)
-        static member        instance (Mappend, x:IObservable<_>, _) = fun y -> Observable.merge x y
+        static member inline instance (Mappend, x:_ Expr       , _) = fun  y                -> let f = mappend in <@ f %x %y @>
+        static member        instance (Mappend, x:_ ResizeArray, _) = fun (y:_ ResizeArray) -> new ResizeArray<_>(Seq.append x y)
+        static member        instance (Mappend, x:_ IObservable, _) = fun  y                -> Observable.merge x y
 
 
 
