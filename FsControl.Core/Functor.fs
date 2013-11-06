@@ -121,6 +121,7 @@ module Functor =
         static member instance (Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
         static member instance (Map, x:Expr<_>      , _) = fun f -> <@ f %x @>
         static member instance (Map, x:_ ResizeArray, _) = fun f -> new ResizeArray<'b>(Seq.map f x)
+        static member instance (Map, x:_ IObservable, _) = fun f -> Observable.map f x
 
         // Restricted
         static member instance (Map, x:Nullable<_>  , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
