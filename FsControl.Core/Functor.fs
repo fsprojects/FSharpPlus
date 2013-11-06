@@ -7,6 +7,8 @@ open FsControl.Core.Prelude
 open FsControl.Core.Types
 open Monoid
 
+type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
+
 // Monad class ------------------------------------------------------------
 module Monad =
     type Bind = Bind with
@@ -17,12 +19,11 @@ module Monad =
         static member inline instance (Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let w', b = k a in (mappend w w', b)
         static member        instance (Bind, x:Async<'a>    , _:'b Async     ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
         static member        instance (Bind, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun (k:'a->Choice<'b,'e>) -> Error.bind k x
-        static member        instance (Bind, x:Map<'k,'a>   , _:Map<'k,'b>   ) = fun (f:'a->Map<'k,'b>) -> Map.ofSeq (seq {
-            for e in x do
-                let k,v = e.Key, e.Value
+        static member        instance (Bind, x:Map<'k,'a>   , _:Map<'k,'b>   ) = fun (f:'a->Map<'k,'b>) -> Map (seq {
+            for KeyValue(k, v) in x do
                 match Map.tryFind k (f v) with
-                | Some v -> yield k,v
-                | _ -> () })
+                | Some v -> yield k, v
+                | _      -> () })
 
         //Restricted Monad
         static member instance (Bind, x:Nullable<_> , _:'b Nullable) = fun f -> if x.HasValue then f x.Value else Nullable() : Nullable<'b>
@@ -70,10 +71,12 @@ module Applicative =
             | (Choice2Of2 a, _)            -> Choice2Of2 a
             | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
 
-        static member        instance (Apply, f:Map<'k,_>   , x:Map<'k,'a>   , _:Map<'k,'b>   ) :unit->Map<'k,'b> = fun () -> Map.ofSeq (seq {
-            for e in f do
-                let k,v = e.Key, e.Value
-                if Map.containsKey k x then yield (k, f.[k] x.[k])})
+        static member        instance (Apply, KeyValue(k:'k,f), KeyValue(k:'k,x:'a), _:keyValue<'k,'b>) :unit->keyValue<'k,'b> = fun () -> keyValue(k, f x)
+        static member        instance (Apply, f:Map<'k,_>     , x:Map<'k,'a>       , _:Map<'k,'b>     ) :unit->Map<'k,'b>      = fun () -> Map (seq {
+            for KeyValue(k, vf) in f do
+                match Map.tryFind k x with
+                | Some vx -> yield k, vf vx
+                | _       -> () })
 
         static member        instance (Apply, f:_ Expr      , x:'a Expr      , _:'b Expr      ) = fun () -> <@ (%f) %x @> :'b Expr
 
@@ -118,6 +121,7 @@ module Functor =
             Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
         static member instance (Map, x:Async<_>     , _) = fun f -> DefaultImpl.MapFromMonad f x
         static member instance (Map, x:Choice<_,_>  , _) = fun f -> Error.map f x
+        static member instance (Map, KeyValue(k, x) , _) = fun (f:'b->'c) -> keyValue(k, f x)
         static member instance (Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
         static member instance (Map, x:Expr<_>      , _) = fun f -> <@ f %x @>
         static member instance (Map, x:_ ResizeArray, _) = fun f -> new ResizeArray<'b>(Seq.map f x)
