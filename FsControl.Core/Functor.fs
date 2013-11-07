@@ -31,6 +31,21 @@ module Monad =
     let inline internal (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
 
 
+    type JoinDefault() =
+        static member inline instance (_:JoinDefault, x:#obj, _:#obj) = fun () -> x >>= id :#obj
+
+    type Join() =
+        inherit JoinDefault()
+        static member        instance (_:Join, x:option<option<'a>>    , _:option<'a>   ) = fun () -> Option.bind   id x
+        static member        instance (_:Join, x:List<_>      , _:List<'b>     ) = fun () -> List.collect  id x
+        static member        instance (_:Join, x:'b [] []         , _:'b []        ) = fun () -> Array.collect id x
+
+    let Join = Join()
+
+    let inline internal join (x:'Monad'Monad'a) : 'Monad'a = Inline.instance (Join, x) ()
+
+
+
 open Monad
 
 module Applicative =
@@ -58,37 +73,41 @@ module Applicative =
     type DefaultImpl =        
         static member inline ApplyFromMonad f x = f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
 
-    type Apply = Apply with
-        static member        instance (Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
-        static member        instance (Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
-        static member        instance (Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
-        static member inline instance (Apply, (a:'m, f)     , (b:'m, x:'a)   , _:'m * 'b      ) = fun () -> (mappend a b, f x) :'m *'b
-        static member        instance (Apply, f:Async<_>    , x:Async<'a>    , _:Async<'b>    ) = fun () -> DefaultImpl.ApplyFromMonad f x :Async<'b>
+    type ApplyDefault() =
+        static member inline instance (_:ApplyDefault, f:#obj , x, _:#obj) = fun () -> (f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)) 
 
-        static member        instance (Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> 
+    type Apply() =
+        inherit ApplyDefault()
+        static member        instance (_:Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
+        static member        instance (_:Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
+        static member        instance (_:Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
+        static member inline instance (_:Apply, (a:'m, f)     , (b:'m, x:'a)   , _:'m * 'b      ) = fun () -> (mappend a b, f x) :'m *'b
+        static member        instance (_:Apply, f:Async<_>    , x:Async<'a>    , _:Async<'b>    ) = fun () -> DefaultImpl.ApplyFromMonad f x :Async<'b>
+
+        static member        instance (_:Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> 
             match (f,x) with 
             | Some f, Some x -> Some (f x) 
             | _              -> None :option<'b>
-
-        static member        instance (Apply, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () ->
+        
+        static member        instance (_:Apply, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () ->
             match (f,x) with
             | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
             | (Choice2Of2 a, _)            -> Choice2Of2 a
             | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
 
-        static member        instance (Apply, KeyValue(k:'k,f), KeyValue(k:'k,x:'a), _:keyValue<'k,'b>) :unit->keyValue<'k,'b> = fun () -> keyValue(k, f x)
-        static member        instance (Apply, f:Map<'k,_>     , x:Map<'k,'a>       , _:Map<'k,'b>     ) :unit->Map<'k,'b>      = fun () -> Map (seq {
+        static member        instance (_:Apply, KeyValue(k:'k,f), KeyValue(k:'k,x:'a), _:keyValue<'k,'b>) :unit->keyValue<'k,'b> = fun () -> keyValue(k, f x)
+        static member        instance (_:Apply, f:Map<'k,_>     , x:Map<'k,'a>       , _:Map<'k,'b>     ) :unit->Map<'k,'b>      = fun () -> Map (seq {
             for KeyValue(k, vf) in f do
                 match Map.tryFind k x with
                 | Some vx -> yield k, vf vx
                 | _       -> () })
 
-        static member        instance (Apply, f:_ Expr      , x:'a Expr      , _:'b Expr      ) = fun () -> <@ (%f) %x @> :'b Expr
+        static member        instance (_:Apply, f:_ Expr      , x:'a Expr      , _:'b Expr      ) = fun () -> <@ (%f) %x @> :'b Expr
 
-        static member        instance (Apply, f:('a->'b) ResizeArray, x:'a ResizeArray, _:'b ResizeArray) = fun () ->
+        static member        instance (_:Apply, f:('a->'b) ResizeArray, x:'a ResizeArray, _:'b ResizeArray) = fun () ->
             new ResizeArray<'b>(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
 
-        
+    let Apply = Apply()
    
     let inline internal (<*>) x y = Inline.instance (Apply, x, y) ()
 
@@ -114,30 +133,36 @@ module Functor =
         static member inline MapFromApplicative f x = pure' f <*> x
         static member inline MapFromMonad f x = x >>= (pure' << f)
 
-    type Map = Map with
-        static member instance (Map, x:option<_>    , _) = fun f -> Option.map  f x
-        static member instance (Map, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
-        static member instance (Map, g:_->_         , _) = (>>) g
-        static member instance (Map, (m,a)          , _) = fun f -> (m, f a)
-        static member instance (Map, x:_ []         , _) = fun f -> Array.map   f x
-        static member instance (Map, x:_ [,]        , _) = fun f -> Array2D.map f x
-        static member instance (Map, x:_ [,,]       , _) = fun f -> Array3D.map f x
-        static member instance (Map, x:_ [,,,]      , _) = fun f ->
+    type MapDefault() =
+        static member inline instance (_:MapDefault, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> pure' f <*> x :'r
+
+    type Map() =
+        inherit MapDefault()
+        static member instance (_:Map, x:option<_>    , _) = fun f -> Option.map  f x
+        static member instance (_:Map, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
+        static member instance (_:Map, g:_->_         , _) = (>>) g
+        static member instance (_:Map, (m,a)          , _) = fun f -> (m, f a)
+        static member instance (_:Map, x:_ []         , _) = fun f -> Array.map   f x
+        static member instance (_:Map, x:_ [,]        , _) = fun f -> Array2D.map f x
+        static member instance (_:Map, x:_ [,,]       , _) = fun f -> Array3D.map f x
+        static member instance (_:Map, x:_ [,,,]      , _) = fun f ->
             Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-        static member instance (Map, x:Async<_>     , _) = fun f -> DefaultImpl.MapFromMonad f x
-        static member instance (Map, x:Choice<_,_>  , _) = fun f -> Error.map f x
-        static member instance (Map, KeyValue(k, x) , _) = fun (f:'b->'c) -> keyValue(k, f x)
-        static member instance (Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
-        static member instance (Map, x:Expr<_>      , _) = fun f -> <@ f %x @>
-        static member instance (Map, x:_ ResizeArray, _) = fun f -> new ResizeArray<'b>(Seq.map f x)
-        static member instance (Map, x:_ IObservable, _) = fun f -> Observable.map f x
+        static member instance (_:Map, x:Async<_>     , _) = fun f -> DefaultImpl.MapFromMonad f x
+        static member instance (_:Map, x:Choice<_,_>  , _) = fun f -> Error.map f x
+        static member instance (_:Map, KeyValue(k, x) , _) = fun (f:'b->'c) -> keyValue(k, f x)
+        static member instance (_:Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
+        static member instance (_:Map, x:Expr<_>      , _) = fun f -> <@ f %x @>
+        static member instance (_:Map, x:_ ResizeArray, _) = fun f -> new ResizeArray<'b>(Seq.map f x)
+        static member instance (_:Map, x:_ IObservable, _) = fun f -> Observable.map f x
 
         // Restricted
-        static member instance (Map, x:Nullable<_>  , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
-        static member instance (Map, x:string       , _) = fun f -> String.map f x
-        static member instance (Map, x:StringBuilder, _) = fun f -> new StringBuilder(String.map f (x.ToString()))
-        static member instance (Map, x:Set<_>       , _) = fun f -> Set.map f x
+        static member instance (_:Map, x:Nullable<_>  , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
+        static member instance (_:Map, x:string       , _) = fun f -> String.map f x
+        static member instance (_:Map, x:StringBuilder, _) = fun f -> new StringBuilder(String.map f (x.ToString()))
+        static member instance (_:Map, x:Set<_>       , _) = fun f -> Set.map f x
         
+
+    let Map = Map()
 
     let inline internal fmap   f x = Inline.instance (Map, x) f
 
@@ -183,20 +208,42 @@ module Comonad =
     let inline internal extract x = Inline.instance (Extract, x) ()
 
 
-    type Duplicate = Duplicate with
-        static member        instance (Duplicate, (w:'w, a:'a), _:'w * ('w*'a)) = fun () -> (w,(w,a))
-        static member inline instance (Duplicate, f:'m->'a, _:'m->'m->'a) = fun () a b -> f (mappend a b)
+    type Extend = Extend with
+        static member        instance (Extend, (w:'w, a:'a), _:'w *'b) = fun (f:_->'b) -> (w, f (w,a))        
+        static member inline instance (Extend, (g:'m -> 'a), _:'m->'b) = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
 
         // Restricted
-        static member        instance (Duplicate, s:List<'a>, _:List<List<'a>>) = fun () -> 
+        static member        instance (Extend, s:List<'a>, _:List<'b>) = fun g -> 
+            let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
+            List.map g (tails s)
+
+        static member        instance (Extend, s:'a [], _:'b []) = fun g -> 
+            let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
+            Array.map g (s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray)
+
+    let inline internal extend g s = Inline.instance (Extend, s) g
+    let inline internal (=>>)  s g = extend g s
+
+    type DuplicateDefault() =
+        static member inline instance (_:DuplicateDefault, x:#obj, _:#obj) = fun () -> extend id x :#obj
+
+    type Duplicate() =
+        inherit DuplicateDefault()
+        static member        instance (_:Duplicate, (w:'w, a:'a), _:'w * ('w*'a)) = fun ()     -> (w, (w, a))
+        static member inline instance (_:Duplicate,  f:'m -> 'a , _:'m->'m->'a  ) = fun () a b -> f (mappend a b)
+
+        // Restricted
+        static member        instance (_:Duplicate, s:List<'a>, _:List<List<'a>>) = fun () -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
             tails s
 
+        static member        instance (_:Duplicate, s: array<'a>, _: array<array<'a>>) = fun () -> 
+            let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
+            s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray
+
+    let Duplicate = Duplicate()
+    
     let inline internal duplicate x = Inline.instance (Duplicate, x) ()
-
-
-    let inline internal extend g s = fmap g (duplicate s)
-    let inline internal (=>>)  s g = fmap g (duplicate s)
 
 
 // MonadPlus class ------------------------------------------------------------

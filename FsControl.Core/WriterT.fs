@@ -22,12 +22,12 @@ module WriterT =
         return w}
 
 type WriterT<'WMa> with
-    static member inline instance (Functor.Map, WriterT m, _) = fun f -> WriterT <| do'(){
+    static member inline instance (_:Functor.Map, WriterT m, _) = fun f -> WriterT <| do'(){
         let! (a, w) = m
         return (f a, w)}
 
-    static member inline instance (Applicative.Pure,                 _:WriterT<'wma>) :'a -> WriterT<'wma> = fun a -> WriterT (return' (a, mempty()))
-    static member inline instance (Applicative.Apply, WriterT(f), WriterT(x),  _:WriterT<'r>) = fun () ->
+    static member inline instance (Applicative.Pure   , _:WriterT<'wma>     ) :'a -> WriterT<'wma> = fun a  -> WriterT (return' (a, mempty()))
+    static member inline instance (_:Applicative.Apply,   WriterT(f), WriterT(x),  _:WriterT<'r> ) = fun () ->
         WriterT(fmap (<*>) f <*> x) :WriterT<'r>
     static member inline instance (Monad.Bind, WriterT (m:'wma), _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> =
         fun k -> WriterT <| do'(){

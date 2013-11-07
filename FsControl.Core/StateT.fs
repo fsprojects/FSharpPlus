@@ -17,7 +17,7 @@ module StateT =
     let  map f (StateT m) = StateT(f << m)
 
 type StateT<'S,'MaS> with
-    static member inline instance (Functor.Map, StateT m, _) = fun f -> StateT <| fun s -> do'(){
+    static member inline instance (_:Functor.Map, StateT m, _) = fun f -> StateT <| fun s -> do'(){
         let! (x, s') = m s
         return (f x, s')}
 
