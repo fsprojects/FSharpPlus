@@ -61,14 +61,14 @@ module Operators =
     let inline mplus (x:'MonadPlus'a) (y:'MonadPlus'a) :'MonadPlus'a = Inline.instance (MonadPlus.Mplus, x) y
     let inline guard x: 'MonadPlus'unit = if x then result () else mzero()
 
-
+    
     // Arrows -----------------------------------------------------------------
     let inline catId()    = Inline.instance  Category.Id ()
     let inline (<<<<) f g = Inline.instance (Category.Comp, f) g
     let inline (>>>>) g f = Inline.instance (Category.Comp, f) g
     let inline arr    f   = Inline.instance  Arrow.Arr    f
-    let inline first  f   = Inline.instance (Arrow.First, f) ()
-    let inline second f   = let swap (x,y) = (y,x) in arr swap >>>> first f >>>> arr swap
+    let inline first  f   = Inline.instance (Arrow.First , f) ()
+    let inline second f   = Inline.instance (Arrow.Second, f) ()
     let inline ( **** ) f g = first f >>>> second g
     let inline (&&&&) f g = arr (fun b -> (b,b)) >>>> f **** g
     let inline (||||) f g = Inline.instance  ArrowChoice.AcEither (f, g)
@@ -79,20 +79,21 @@ module Operators =
 
 
     // Foldable
-    let inline foldr (f:'a->'b->'b) (z:'b) (x:'Foldable'a) :'b = Inline.instance (Foldable.Foldr  , x) (f,z)
-    let inline foldMap (f:'a_'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
+    let inline foldr (f:'a->'b->'b) (z:'b) foldable'a : 'b = Inline.instance (Foldable.Foldr, foldable'a) (f,z)
+    let inline foldl (f:'a->'b->'a) (z:'a) foldable'b : 'a = Inline.instance (Foldable.Foldl, foldable'b) (f,z)
+    let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f    
 
 
     // Traversable
-    let inline traverse  (f:'a->'Applicative'b) (t:'Traversable'a) : 'Applicative'Traversable'b = Inline.instance (Traversable.Traverse, t) f
-    let inline sequenceA (x:'Traversable'Applicative'a) : 'Applicative'Traversable'a = traverse id x
+    let inline traverse (f:'a->'Applicative'b) (t:'Traversable'a) :'Applicative'Traversable'b = Inline.instance (Traversable.Traverse , t) f
+    let inline sequenceA    (t:'Traversable'Applicative'a)        :'Applicative'Traversable'a = Inline.instance (Traversable.SequenceA, t) ()
 
 
     // Comonads
-    let inline extract   (x:'Comonad'a): 'a = Inline.instance (Comonad.Extract, x) ()
-    let inline duplicate (x:'Comonad'a): 'Comonad'Comonad'a = Inline.instance (Comonad.Duplicate, x) ()
-    let inline extend  (g:'Comonad'a->'b) (s:'Comonad'a): 'Comonad'b = map g (duplicate s)
-    let inline (=>>)   (s:'Comonad'a) (g:'Comonad'a->'b): 'Comonad'b = map g (duplicate s)
+    let inline extract   (x:'Comonad'a): 'a = Inline.instance (Comonad.Extract  , x) ()
+    let inline duplicate (x)                = Inline.instance (Comonad.Duplicate, x) ()
+    let inline extend  (g:'Comonad'a->'b) (s:'Comonad'a): 'Comonad'b = Inline.instance (Comonad.Extend, s) g
+    let inline (=>>)   (s:'Comonad'a) (g:'Comonad'a->'b): 'Comonad'b = extend g s
 
 
     // Monad Transformers
