@@ -13,6 +13,7 @@ open FsControl.Core.TypeMethods.Functor
 open FsControl.Core.Types
 
 module Category =
+
     type Id = Id with
         static member        instance (Id, _: 'r -> 'r     ) = fun () -> id              : 'r -> 'r
         static member inline instance (Id, _:Kleisli<'a,'b>) = fun () -> Kleisli return' :Kleisli<'a,'b>
@@ -27,6 +28,7 @@ module Category =
 open Category
 
 module Arrow =
+
     type Arr = Arr with
         static member        instance (Arr, _: _ -> _     ) = fun (f:_->_) -> f
         static member inline instance (Arr, _:Kleisli<_,_>) = fun  f       -> Kleisli (return' <<< f)
@@ -36,6 +38,19 @@ module Arrow =
         static member inline instance (First, Kleisli f, _:Kleisli<_,_>) = fun () -> Kleisli (fun (b,d) -> f b >>= fun c -> return' (c,d))
 
     let inline internal arr   f = Inline.instance  Arr    f
+    let inline internal first f = Inline.instance (First, f) ()
+
+    type SecondDefault() =
+        static member inline instance (_:SecondDefault, f:#obj, _:#obj) = fun () ->
+            let aswap = Inline.instance Arr (fun (x,y) -> (y,x))
+            aswap <<< first f <<< aswap
+
+    type Second() =
+        inherit SecondDefault()
+        static member        instance (_:Second, f        , _: 'a -> 'b   ) = fun () -> fun (x,y) -> (x, f y)
+        static member inline instance (_:Second, Kleisli f, _:Kleisli<_,_>) = fun () -> Kleisli (fun (d,b) -> f b >>= fun c -> return' (d,c))
+    
+    let Second = Second()
 
 open Arrow
 
@@ -64,6 +79,7 @@ module ArrowChoice =
 
 
 module ArrowApply =
+
     type Apply = Apply with
         static member instance (Apply, _: ('a -> 'b) * 'a -> 'b          ) = fun () ->          fun (f,x)          -> f x
         static member instance (Apply, _: Kleisli<Kleisli<'a,'b> * 'a,'b>) = fun () -> Kleisli (fun (Kleisli f, x) -> f x)

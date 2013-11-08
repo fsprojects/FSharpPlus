@@ -368,7 +368,7 @@ let inline (<<<) f g = Inline.instance (Comp, f) g
 let inline (>>>) g f = Inline.instance (Comp, f) g
 let inline arr   f = Inline.instance  Arr    f
 let inline first f = Inline.instance (First, f) ()
-let inline second f = let swap (x,y) = (y,x) in arr swap >>> first f >>> arr swap
+let inline second f = Inline.instance (Second, f) ()
 let inline ( *** ) f g = first f >>> second g
 let inline ( &&& ) f g = arr (fun b -> (b,b)) >>> f *** g
 let inline (|||) f g = Inline.instance AcEither (f, g)
@@ -381,7 +381,9 @@ let runKleisli (Kleisli f) = f
 // Test Arrows
 let r5:List<_>  = (runKleisli (id'())) 5
 let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
-let r8n16n24n10n20n30 = runKleisli k <| 5
+let r8n16n24n10n20n30 = runKleisli k  <| 5
+let r20n5n30n5   = runKleisli (first  <| Kleisli (fun y -> [y * 2; y * 3])) (10,5) 
+let r10n10n10n15 = runKleisli (second <| Kleisli (fun y -> [y * 2; y * 3])) (10,5)
 
 let res3n6n9 = (arr (fun y -> [y; y * 2 ; y * 3])) 3
 let resSome2n4n6:option<_> = runKleisli (arr (fun y -> [y; y * 2 ; y * 3])) 2
