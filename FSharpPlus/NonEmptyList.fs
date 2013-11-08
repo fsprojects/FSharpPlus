@@ -42,8 +42,10 @@ type NonEmptyList with
     static member instance (_:Applicative.Apply  , f:NonEmptyList<'a->'b>, x:NonEmptyList<'a> ,_:NonEmptyList<'b>) = fun () ->
             Applicative.DefaultImpl.ApplyFromMonad f x :NonEmptyList<'b>
 
-    static member instance (_:Comonad.Extract  , {Head = h; Tail = _} ,_) = fun () -> h
+    static member instance (_:Comonad.Extract  , {Head = h; Tail = _} ,_:'t) = fun () -> h : 't
     static member instance (_:Comonad.Duplicate, s:NonEmptyList<'a>, _:NonEmptyList<NonEmptyList<'a>>) = fun () -> NonEmptyList.tails s
+    static member instance (_:Comonad.Extend, s, _:NonEmptyList<'b>) = fun g -> NonEmptyList.map g (NonEmptyList.tails s) :NonEmptyList<'b>
+    
 
     static member instance (_:Monoid.Mappend, {Head = h; Tail = t}, _) = fun x -> {Head = h; Tail = t @ NonEmptyList.toList x}
 
