@@ -215,11 +215,11 @@ module Comonad =
         // Restricted
         static member        instance (Extend, s:List<'a>, _:List<'b>) = fun g -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-            List.map g (tails s)
+            List.map g (tails s) :List<'b>
 
         static member        instance (Extend, s:'a [], _:'b []) = fun g -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-            Array.map g (s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray)
+            Array.map g (s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray) :'b []
 
     let inline internal extend g s = Inline.instance (Extend, s) g
     let inline internal (=>>)  s g = extend g s
