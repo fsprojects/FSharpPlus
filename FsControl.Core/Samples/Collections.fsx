@@ -24,7 +24,7 @@ let inline mempty() = Inline.instance Monoid.Mempty ()
 let inline mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
 let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
 let inline foldMap f x = Inline.instance (FoldMap, x) f
-let inline filter p : 't->'t = foldMap (fun a -> if p a then result a else mempty())
+let inline filter (p:_->bool) (x:'t) = (Inline.instance (Filter, x) p) :'t
 
 type ZipList<'s> = ZipList of 's seq with
     static member instance (_:Map,   ZipList x  , _:ZipList<'b>) = fun (f:'a->'b) -> ZipList (Seq.map f x)
@@ -37,8 +37,9 @@ type ZipList<'s> = ZipList of 's seq with
     static member instance (_:Take   , (ZipList s):ZipList<'a> , _:ZipList<'a>) = fun n -> ZipList (Seq.take n s) :ZipList<'a>
     static member instance (_:Extract, (ZipList s):ZipList<'a> , _:'a) = fun () -> Seq.head s
 
-let e1 = filter ((=) '2')  [ '2';'3';'4' ]
-let e2 = filter ((=) '2')  [|'2';'3';'4'|]
+let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
+let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
+let five   = filter ((=) 5) (set [1;2;3;4;5;6])             // <- Uses the default method.
 
 let bigSeq = ZipList (seq {1..10000000})
 let bigLst = [ 1..10000000 ]

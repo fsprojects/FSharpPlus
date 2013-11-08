@@ -240,6 +240,26 @@ let myTree = Tree(6, Tree(2, Leaf(1), Leaf(3)), Leaf(9))
 let mappedTree = fmap fTimes2minus3 myTree
 
 
+// Comonads
+open FsControl.Core.TypeMethods.Comonad
+
+let inline internal extend g s = Inline.instance (Extend, s) g
+let inline internal duplicate x = Inline.instance (Duplicate, x) ()
+let inline internal (=>>)  s g = fmap g (duplicate s)
+
+let ct1 = duplicate [1;2;3;4] // val it : List<List<int>> = [[1; 2; 3; 4]; [2; 3; 4]; [3; 4]; [4]]
+let ct2 = duplicate ("a", 10) // val it : string * (string * int) = ("a", ("a", 10))
+let ct3 = duplicate (fun (x:string) -> System.Int32.Parse x) // r3 "80" "100"  val it : int = 80100
+
+let ct1' = extend id [1;2;3;4]
+let ct2' = extend id ("a", 10)
+let ct3' = extend id (fun (x:string) -> System.Int32.Parse x)
+
+let ct1'' = (=>>) [1;2;3;4] id
+let ct2'' = (=>>) ("a", 10) id
+let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
+
+
 // Monoids
 open FsControl.Core.TypeMethods.Monoid
 open FsControl.Core.Types.Dual
@@ -460,6 +480,7 @@ open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Foldable
 
 let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
+let inline foldl (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldl, x) (f,z)
 let inline foldMap f x = Inline.instance (FoldMap, x) f
 
 // Test Foldable
@@ -473,7 +494,7 @@ module FoldableTree =
         | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
         // add instance for Foldable class
-        static member inline instance (Foldable.FoldMap, t:Tree<_>, _) =
+        static member inline instance (_:Foldable.FoldMap, t:Tree<_>, _) =
             let rec _foldMap x f =
                 match x with
                 | Empty        -> mempty()
@@ -486,12 +507,13 @@ module FoldableTree =
     let resSum21      = foldMap Sum     myTree
     let resProduct324 = foldMap Product myTree
     let res21         = foldr   (+) 0   myTree
+    let res21'        = foldl   (+) 0   myTree      // <- Uses the default method.
 
 
 // Traversable
 open FsControl.Core.TypeMethods.Traversable
-let inline traverse f t = Inline.instance (Traverse, t) f
-let inline sequenceA  x = traverse id x
+let inline traverse f t = Inline.instance (Traverse , t) f
+let inline sequenceA  t = Inline.instance (SequenceA, t) ()
 
 // Test Traversable
 let f x = if x < 200 then [3 - x] else []
@@ -507,17 +529,14 @@ let resSome321  = sequenceA [Some 3;Some 2;Some 1]
 let resNone     = sequenceA [Some 3;None  ;Some 1]
 let res654      = sequenceA [ (+)3 ; (+)2 ; (+) 1] 3
 let resCombined = sequenceA [ [1;2;3] ; [4;5;6]  ]
+let resLstOfArr = sequenceA [|[1;2;3] ; [4;5;6] |]  // <- Uses the default method.
+let resArrOfLst = sequenceA [[|1;2;3|];[|4;5;6 |]]
 let get3strings = sequenceA [getLine;getLine;getLine]
-
-let inline filter predicate : 't->'t = foldMap (fun a -> if predicate a then pure' a else mempty())
-let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
-let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
-let five   = filter ((=) 5) (set [1;2;3;4;5;6])
 
 
 // Cont
 let runCont = Cont.run
-let callCC'  = Cont.callCC
+let callCC' = Cont.callCC
 let inline when'  p s = if p then s else return' ()
 let inline unless p s = when' (not p) s
 
