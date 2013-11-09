@@ -49,7 +49,8 @@ module Converter =
             let mutable r = Unchecked.defaultof< ^R>
             if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
 
-        static member instance (TryParse, _:string        option) = fun x -> Some x
+        static member instance (TryParse, _:string        option) = fun x -> Some x                             :option<string>
+        static member instance (TryParse, _:StringBuilder option) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
         
     let inline tryParse (value:string) = Inline.instance TryParse value
 
@@ -64,7 +65,8 @@ module Converter =
 
         static member instance (Parse, _:bool         ) = fun x -> Boolean.Parse(x)
         static member instance (Parse, _:char         ) = fun x -> Char   .Parse(x)
-        static member instance (Parse, _:string       ) = id :string->_        
+        static member instance (Parse, _:string       ) = id :string->_
+        static member instance (Parse, _:StringBuilder) = fun x -> new StringBuilder(x:string)
 
     let inline internal parse (value:string) = Inline.instance Parse value
 
