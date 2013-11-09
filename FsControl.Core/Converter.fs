@@ -44,7 +44,17 @@ module Converter =
 
     let internal inv = Globalization.CultureInfo.InvariantCulture
 
-    type Parse = Parse with        
+    type TryParse = TryParse with
+        static member inline instance (TryParse, _:'t     option) = fun x -> 
+            let mutable r = Unchecked.defaultof< ^R>
+            if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
+
+        static member instance (TryParse, _:string        option) = fun x -> Some x
+        
+    let inline tryParse (value:string) = Inline.instance TryParse value
+
+
+    type Parse = Parse with
         static member inline instance (Parse, _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
         static member        instance (Parse, _:'T when 'T : enum<_>) = fun x ->
             (match Enum.TryParse(x) with
@@ -54,7 +64,7 @@ module Converter =
 
         static member instance (Parse, _:bool         ) = fun x -> Boolean.Parse(x)
         static member instance (Parse, _:char         ) = fun x -> Char   .Parse(x)
-        static member instance (Parse, _:string       ) = id :string->_
+        static member instance (Parse, _:string       ) = id :string->_        
 
     let inline internal parse (value:string) = Inline.instance Parse value
 

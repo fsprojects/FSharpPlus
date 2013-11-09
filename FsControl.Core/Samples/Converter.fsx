@@ -3,11 +3,16 @@
 open System
 open FsControl.Core.TypeMethods.Converter
 
-let inline internal fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex)
-let inline internal fromBytes                            (value:byte[]) = Inline.instance FromBytes (value, 0         )
-let inline internal toBytes value :byte[] = Inline.instance (ToBytes, value) ()
-let inline internal parse  (value:string) = Inline.instance Parse value
-let inline internal toString value : string = Inline.instance (ToString, value) ()
+let inline fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex)
+let inline fromBytes                            (value:byte[]) = Inline.instance FromBytes (value, 0         )
+let inline toBytes value :byte[]   = Inline.instance (ToBytes , value) ()
+let inline toString  value:string  = Inline.instance (ToString, value) ()
+let inline tryParse (value:string) = Inline.instance TryParse value
+let inline parse    (value:string) = Inline.instance Parse    value
+
+let r101 = tryParse "10.1.0.1" : Net.IPAddress option
+let r102 = tryParse "102" : string option
+let rMTS = [tryParse "Monday" ; Some DayOfWeek.Thursday; Some DayOfWeek.Saturday]
 
 let r111 = parse "true" && true
 let rMTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
