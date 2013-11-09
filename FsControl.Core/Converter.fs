@@ -42,34 +42,22 @@ module Converter =
 
     let inline internal toBytes value :byte[] = Inline.instance (ToBytes, value) ()
 
-    let internal inv = System.Globalization.CultureInfo.InvariantCulture
+    let internal inv = Globalization.CultureInfo.InvariantCulture
 
-    type Parse = Parse with
-        static member instance (Parse, _:bool          ) = fun x -> Boolean       .Parse(x)
-        static member instance (Parse, _:char          ) = fun x -> Char          .Parse(x)
-        static member instance (Parse, _:byte          ) = fun x -> Byte          .Parse(x, inv)
-        static member instance (Parse, _:sbyte         ) = fun x -> SByte         .Parse(x, inv)
-        static member instance (Parse, _:float         ) = fun x -> Double        .Parse(x, inv)
-        static member instance (Parse, _: int16        ) = fun x -> Int16         .Parse(x, inv)
-        static member instance (Parse, _: int          ) = fun x -> Int32         .Parse(x, inv)
-        static member instance (Parse, _:int64         ) = fun x -> Int64         .Parse(x, inv)
-        static member instance (Parse, _:float32       ) = fun x -> Single        .Parse(x, inv)
-        static member instance (Parse, _:uint16        ) = fun x -> UInt16        .Parse(x, inv)
-        static member instance (Parse, _:uint32        ) = fun x -> UInt32        .Parse(x, inv)
-        static member instance (Parse, _:uint64        ) = fun x -> UInt64        .Parse(x, inv)
-        static member instance (Parse, _:decimal       ) = fun x -> Decimal       .Parse(x, inv)
-        static member instance (Parse, _:DateTime      ) = fun x -> DateTime      .Parse(x, inv)
-        static member instance (Parse, _:DateTimeOffset) = fun x -> DateTimeOffset.Parse(x, inv)
-        static member instance (Parse, _:string ) = id :string->_
-
-    let inline internal parse (value:string) = Inline.instance Parse value
-
-    type Parse with
-        static member instance (Parse, _:'enum         ) = fun x ->
+    type Parse = Parse with        
+        static member inline instance (Parse, _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
+        static member        instance (Parse, _:'T when 'T : enum<_>) = fun x ->
             (match Enum.TryParse(x) with
              | (true, v) -> v
              | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")
             ):'enum
+
+        static member instance (Parse, _:bool         ) = fun x -> Boolean.Parse(x)
+        static member instance (Parse, _:char         ) = fun x -> Char   .Parse(x)
+        static member instance (Parse, _:string       ) = id :string->_
+
+    let inline internal parse (value:string) = Inline.instance Parse value
+
 
     type ToString = ToString with
         static member instance (ToString, x:bool,          _) = fun () -> x.ToString inv
@@ -158,4 +146,4 @@ module Converter =
     type ToString with static member inline instance (ToString, x:_ option, _) = fun () ->
                         match x with
                         | Some a -> "Some " + toString a
-                        | None -> "None"
+                        | None   -> "None"

@@ -9,9 +9,13 @@ let inline internal toBytes value :byte[] = Inline.instance (ToBytes, value) ()
 let inline internal parse  (value:string) = Inline.instance Parse value
 let inline internal toString value : string = Inline.instance (ToString, value) ()
 
+let r111 = parse "true" && true
 let rMTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
 let r110 = parse "10" + fromBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
 let r120 = parse "10" + fromBytes [|10uy;0uy;0uy;0uy;|]                + 100
+let r121 = parse "121" : string
+
+
 let r123 = toString [1;2;3]
 let r140 = toString (1,4,0)
 let r150 = toString (Some 150)
