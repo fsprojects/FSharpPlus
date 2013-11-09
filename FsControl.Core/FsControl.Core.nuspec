@@ -10,7 +10,9 @@
     <projectUrl>https://github.com/gmpl/FsControl</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>FsControl is an overload library for F#.</description>
-    <releaseNotes>Version 1.0.4</releaseNotes>
+    <releaseNotes>
+	Version 1.0.5
+    </releaseNotes>
     <copyright>Copyright 2012-2013</copyright>
     <tags>F#</tags>
   </metadata>
