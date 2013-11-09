@@ -85,7 +85,7 @@ open FsControl.Core.TypeMethods.Monoid
 
 type Dual<'a> = Dual of 'a with
     static member inline instance (Monoid.Mempty , _:Dual<'m>   ) = fun () -> Dual (mempty()) :Dual<'m>
-    static member inline instance (Monoid.Mappend,   Dual x  , _) = fun (Dual y) -> Dual (y </mappend/> x)
+    static member inline instance (Monoid.Mappend,   Dual x  , _) = fun (Dual y) -> Dual (mappend y x)
 module Dual = let inline  internal getDual (Dual x) = x
 
 type Endo<'a> = Endo of ('a -> 'a) with

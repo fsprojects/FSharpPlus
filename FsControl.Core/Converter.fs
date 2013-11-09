@@ -5,6 +5,7 @@ open System.Collections.Generic
 open System.Text
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Core.Printf
+open FsControl.Core
 open FsControl.Core.Prelude
 
 module Converter =
@@ -102,20 +103,11 @@ module Converter =
     type ToString with static member inline instance (ToString, (a,b,c,d,e),   _) = fun () ->
                         "(" + toString a + ", " + toString b + ", " + toString c + ", " + toString d + ", " + toString e + ")"
 
-    // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
-    let intersperse sep list =
-        seq {
-            let notFirst = ref false
-            for element in list do 
-                if !notFirst then yield sep
-                yield element
-                notFirst := true
-        }
 
     let inline internal seqToString sepOpen sepClose x (b: StringBuilder) =
         let inline append (s:string) = b.Append s |> ignore
         append sepOpen
-        let withSemiColons = intersperse "; " (Seq.map toString x)
+        let withSemiColons = Seq.intersperse "; " (Seq.map toString x)
         Seq.iter append withSemiColons
         append sepClose
         toString b

@@ -33,7 +33,7 @@ type WriterT<'WMa> with
         fun k -> WriterT <| do'(){
             let! (a, w ) = m
             let! (b, w') = WriterT.run (k a)
-            return (b, w </mappend/> w')}
+            return (b, mappend w w')}
 
     static member inline instance (MonadPlus.Mzero, _:WriterT<_>  ) = fun ()          -> WriterT(mzero())
     static member inline instance (MonadPlus.Mplus,   WriterT m, _) = fun (WriterT n) -> WriterT(mplus m n)

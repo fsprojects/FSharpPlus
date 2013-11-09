@@ -3,31 +3,28 @@
 module internal Prelude =
     let inline flip f x y = f y x
     let inline const' k _ = k
-    let inline (</) x = (|>) x
-    let inline (/>) x = flip x
     let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
-    let inline maybe  n f = function | None -> n | Some x -> f x
-
-    let inline  internal map x = List.map x
-    let inline  internal singleton x = [x]
-    let inline  internal concat (x:List<List<'a>>) :List<'a> = List.concat x
-    let inline  internal cons x y = x :: y
-
-
-namespace FsControl.Core.Types
+    let inline option n f = function None -> n | Some x -> f x
 
 [<RequireQualifiedAccess>]
-module Error =
-    let map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
-    let result = Choice1Of2
-    let throw  = Choice2Of2
-    let bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
-    let catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
+module internal List =
+    let inline singleton x = [x]
+    let inline cons x y = x :: y
 
+[<RequireQualifiedAccess>]
+module internal Seq =
+    // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
+    let inline intersperse sep list = seq {
+        let notFirst = ref false
+        for element in list do 
+            if !notFirst then yield sep
+            yield element
+            notFirst := true}
 
-
-
-
-
-
-
+[<RequireQualifiedAccess>]
+module internal Error =
+    let inline map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
+    let inline result x = Choice1Of2 x
+    let inline throw  x = Choice2Of2 x
+    let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
+    let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e

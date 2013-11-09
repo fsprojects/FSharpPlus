@@ -1,5 +1,6 @@
 ﻿namespace FsControl.Core.Types
 
+open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
@@ -37,12 +38,12 @@ module ListT =
 
 type ListT<'Ma> with
     static member inline instance (_:Functor.Map   ,  ListT x:ListT<'ma>, _) = fun (f:'a->'b) -> ListT (fmap (List.map f) x):ListT<'mb>
-    static member inline instance (Applicative.Pure,           _:ListT<'ma>) = ListT << return' << singleton :'a -> ListT<'ma>
+    static member inline instance (Applicative.Pure,           _:ListT<'ma>) = ListT << return' << List.singleton :'a -> ListT<'ma>
     static member inline instance (_:Applicative.Apply, ListT(f), ListT(x),  _:ListT<'r>) = fun () ->
         ListT(fmap (<*>) f <*> x) :ListT<'r>
     static member inline instance (Monad.Bind  , ListT x:ListT<'ma>, _:ListT<'mb>) =
         fun (k: 'a -> ListT<'mb>) -> 
-            (ListT (x >>= mapM(ListT.run << k) >>= (concat >> return'))) :ListT<'mb>
+            (ListT (x >>= mapM(ListT.run << k) >>= (List.concat >> return'))) :ListT<'mb>
 
     static member inline instance (MonadPlus.Mzero, _:ListT<_>) = fun ()        -> ListT (return' [])
     static member inline instance (MonadPlus.Mplus, ListT x, _) = fun (ListT y) -> ListT <| do'() {
@@ -52,6 +53,7 @@ type ListT<'Ma> with
 
 namespace FsControl.Core.TypeMethods
 
+open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 open FsControl.Core.Types
@@ -60,8 +62,8 @@ open FsControl.Core.TypeMethods.Monad
 
 module MonadTrans = 
     type Lift = Lift with
-        static member inline instance (Lift, _:OptionT<'m_a>) = OptionT << (liftM Some)      :'ma -> OptionT<'m_a>
-        static member inline instance (Lift, _: ListT<'m_a> ) = ListT   << (liftM singleton) :'ma ->  ListT<'m_a> 
+        static member inline instance (Lift, _:OptionT<'m_a>) = OptionT << (liftM Some)       :'ma -> OptionT<'m_a>
+        static member inline instance (Lift, _: ListT<'m_a> ) = ListT << (liftM List.singleton):'ma ->  ListT<'m_a> 
 
     let inline internal lift (x:'ma) = Inline.instance Lift x
 
@@ -98,7 +100,7 @@ module MonadError =
 module MonadCont =
     type CallCC = CallCC with
         static member instance (CallCC, _:OptionT<Cont<'r,option<'a>>>) = fun (f:((_ -> OptionT<Cont<_,'b>>) -> _)) -> OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))     :OptionT<Cont<'r,option<'a>>>
-        static member instance (CallCC, _:ListT<Cont<'r,   List<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT  << c << singleton))) :ListT<  Cont<'r,  List<'a>>>    
+        static member instance (CallCC, _:ListT<Cont<'r,   List<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))):ListT<Cont<'r, List<'a>>>    
         static member instance (CallCC, _:Cont<'r,'a>) = Cont.callCC : (('a -> Cont<'r,'b>) -> _) -> _
 
     let inline internal callCC f = Inline.instance CallCC f
@@ -146,7 +148,7 @@ module MonadWriter =
         static member        instance (Listen, m, _:Writer<_,_>) = fun () -> Writer.listen m
 
     type Pass = Pass with
-        static member inline instance (Pass, m, _:OptionT<_> ) = fun () -> OptionT (OptionT.run m >>= maybe (return' None) (liftM Some << Writer.pass << return'))
+        static member inline instance (Pass, m, _:OptionT<_> ) = fun () -> OptionT (OptionT.run m >>= option (return' None) (liftM Some << Writer.pass << return'))
         static member        instance (Pass, m, _:Writer<_,_>) = fun () -> Writer.pass m
 
     let inline internal tell   x = Inline.instance  Tell x

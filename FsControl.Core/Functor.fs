@@ -3,8 +3,8 @@ namespace FsControl.Core.TypeMethods
 open System
 open System.Text
 open Microsoft.FSharp.Quotations
+open FsControl.Core
 open FsControl.Core.Prelude
-open FsControl.Core.Types
 open Monoid
 
 type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>

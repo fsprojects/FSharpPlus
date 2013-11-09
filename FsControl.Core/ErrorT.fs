@@ -1,5 +1,6 @@
 ﻿namespace FsControl.Core.Types
 
+open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
@@ -50,7 +51,7 @@ type ErrorT<'R> with
     static member inline instance (MonadWriter.Listen, m, _:ErrorT<_> ) = fun () ->
         let liftError (m,w) = Error.map (fun x -> (x,w)) m
         ErrorT (Writer.listen (ErrorT.run m) >>= (return' << liftError))
-    static member inline instance (MonadWriter.Pass, m, _:ErrorT<_> ) = fun () -> ErrorT (ErrorT.run m >>= maybe (return' None) (liftM Some << Writer.pass << return'))
+    static member inline instance (MonadWriter.Pass, m, _:ErrorT<_> ) = fun () -> ErrorT (ErrorT.run m >>= option (return' None) (liftM Some << Writer.pass << return'))
 
     static member inline instance (MonadState.Get, _:ErrorT<_>) = fun () -> lift (State.get())
     static member inline instance (MonadState.Put, _:ErrorT<_>) = lift << State.put
