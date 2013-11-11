@@ -138,6 +138,7 @@ module Operators =
     let inline take (n:int) x = Inline.instance (Collection.Take, x) n
     let inline fromList (value :list<'t>) = Inline.instance  Collection.FromList value
     let inline toList    value :list<'t>  = Inline.instance (Collection.ToList,  value) ()
+    let inline filter predicate x = Inline.instance(Collection.Filter, x) predicate
 
 
     // Converter

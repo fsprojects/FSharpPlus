@@ -35,3 +35,23 @@ module Builders =
     
     let monad     = new MonadBuilder()
     let monadPlus = new MonadPlusBuilder()
+
+
+    // Linq
+    type LinqBuilder() =
+        member inline __.Return(x)     = result x
+        member inline __.Bind(p, rest) = p >>= rest
+        member        __.Let (p, rest) = rest p
+        member    __.ReturnFrom(expr)  = expr
+        member inline __.For(p, rest)  = p >>= rest
+        member inline __.Yield(x)      = result x
+        member inline __.Zero()        = mzero()
+        member inline __.Combine(a, b) = mplus a b
+
+        [<CustomOperation("select", MaintainsVariableSpace=true)>]
+        member inline __.Select(x, [<ProjectionParameter>] f) = map f x
+
+        [<CustomOperation("where", MaintainsVariableSpace=true)>]
+        member inline __.Where(x, [<ProjectionParameter>] p) = filter p x
+
+    let linq = LinqBuilder()
