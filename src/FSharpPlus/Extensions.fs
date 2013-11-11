@@ -44,6 +44,13 @@ module Extensions =
         static member singleton x = [x]
         member this.GetSlice = function
             | None  , None   -> this
-            | Some a, None   -> this |> skip a
-            | None  , Some b -> this |> take b
-            | Some a, Some b -> this |> skip a |> take (b-a+1)
+            | Some a, None   when a < 0 -> this |> skip (this.Length + a)
+            | Some a, None              -> this |> skip                a 
+            | None  , Some b when b < 0 -> this |> take (this.Length + b)
+            | None  , Some b            -> this |> take                b
+            | Some a, Some b when a >= 0 && b >= 0 -> this |> skip a |> take b
+            | Some a, Some b -> 
+                let l = this.Length
+                let f i = if i < 0 then l + i else i
+                let a = f a
+                this |> skip a |> take (f b - a + 1)
