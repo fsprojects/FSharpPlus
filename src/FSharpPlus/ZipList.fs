@@ -17,8 +17,8 @@ type ZipList with
     static member instance (_:Applicative.Pure , _:ZipList<'a>) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
     static member instance (_:Applicative.Apply,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-    static member instance (_:Monoid.Mempty  , _:ZipList<'a>  ) = fun () -> ZipList Seq.empty   : ZipList<'a>
-    static member instance (_:Monoid.Mappend , ZipList(x) , _) = fun (ZipList(y)) -> ZipList (Seq.append x y)
+    static member inline instance (_:Monoid.Mempty  , _:ZipList<'a>   ) = fun () -> result (mempty()) :ZipList<'a>
+    static member inline instance (_:Monoid.Mappend , x:ZipList<'a>, _) = fun (y:ZipList<'a>) -> liftA2 mappend x y :ZipList<'a>
     static member instance (_:Collection.Skip, (ZipList s):ZipList<'a> , _:ZipList<'a>) = fun n -> ZipList (Seq.skip n s) :ZipList<'a>
     static member instance (_:Collection.Take, (ZipList s):ZipList<'a> , _:ZipList<'a>) = fun n -> ZipList (Seq.take n s) :ZipList<'a>
     static member instance (_:Comonad.Extract, (ZipList s):ZipList<'a> , _:'a) = fun () -> Seq.head s

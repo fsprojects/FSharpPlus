@@ -10,7 +10,6 @@ let seq2 = seq {10..100000}
 let seq1_plus_seq2  = (+) <!> ZipList seq1 <*> ZipList seq2
 let seq1_plus_seq2' = ZipList seq1 |+| ZipList seq2
 let arrCombined     = 10 *| ZipList seq1 |+| ZipList seq2 |- 5
-let asMonoid        = result 1 </mappend/> ZipList []
+let asMonoid        = result "Hello " </mappend/> ZipList ["City"; "World"; "Sun"]
 
-// try ZipList.run the results
-let infOnes = ZipList.run asMonoid.[0..10] |> Seq.toList
+// try ZipList.run {the results}
