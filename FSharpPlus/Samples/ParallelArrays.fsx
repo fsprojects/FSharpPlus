@@ -10,4 +10,4 @@ let arr2 = [|10..100000|]
 let arr1_plus_arr2  = (+) <!> parray arr1 <*> parray arr2
 let arr1_plus_arr2' = parray arr1 |+| parray arr2
 let arrCombined     = 10 *| parray arr1 |+| parray arr2 |- 5
-let asMonoid        = Const 1 </mappend/> parray [||]
+let asMonoid        = Const "Hello " </mappend/> parray [|"City"; "World"; "Sun"|]
