@@ -62,6 +62,8 @@ module Collection =
 
         static member instance (_:Filter, x:'t list, _:'t list) = fun p -> List.filter  p x
         static member instance (_:Filter, x:'t []  , _:'t []  ) = fun p -> Array.filter p x
+        static member instance (_:Filter, x:'t IObservable, _:'t IObservable) = fun p -> Observable.filter p x
+        static member instance (_:Filter, x:'t ResizeArray, _:'t ResizeArray) = fun p -> ResizeArray(Seq.filter p x)
 
     let Filter = Filter()
 
