@@ -1,10 +1,14 @@
 ﻿namespace FsControl.Core.TypeMethods
 
+open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.Types
 open Monoid
 open Dual
 open Endo
+open Applicative
+open System
+open System.Text
 
 module Foldable =
 
@@ -56,3 +60,30 @@ module Foldable =
         static member instance (_:Foldl, x:array<_> , _) = fun (f,z) -> DefaultImpl.FoldlFromFoldMap f z x
 
     let Foldl = Foldl()
+
+
+    type ToList() =
+        static member instance (_:ToList, x:string        , _) = fun () -> x.ToCharArray() |> Array.toList
+        static member instance (_:ToList, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray() |> Array.toList
+        static member instance (_:ToList, x:'a []         , _) = fun () -> Array.toList x
+        static member instance (_:ToList, x:'a ResizeArray, _) = fun () -> Seq.toList x
+        static member instance (_:ToList, x:List<'a>      , _) = fun () -> x
+        static member instance (_:ToList, x:Set<'a>       , _) = fun () -> Set.toList x
+
+    let ToList = ToList()
+
+
+    type FilterDefault() =
+        static member inline instance (_:FilterDefault, x:'t when 't :> obj, _:'t) = fun p ->
+            let m:'t = mempty()
+            Inline.instance (Foldr, x) (mappend << (fun a -> if p a then pure' a else m), m) :'t
+   
+    type Filter() =
+        inherit FilterDefault()
+
+        static member instance (_:Filter, x:'t list, _:'t list) = fun p -> List.filter  p x
+        static member instance (_:Filter, x:'t []  , _:'t []  ) = fun p -> Array.filter p x
+        static member instance (_:Filter, x:'t IObservable, _:'t IObservable) = fun p -> Observable.filter p x
+        static member instance (_:Filter, x:'t ResizeArray, _:'t ResizeArray) = fun p -> ResizeArray(Seq.filter p x)
+
+    let Filter = Filter()

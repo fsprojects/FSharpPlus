@@ -36,35 +36,3 @@ module Collection =
         static member instance (FromList, _:Set<'a>       ) = Set.ofList<'a>
 
     let inline internal fromList (value:list<'t>)  = Inline.instance FromList value
-
-
-    type ToList = ToList with
-        static member instance (ToList, x:string        , _) = fun () -> x.ToCharArray() |> Array.toList
-        static member instance (ToList, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray() |> Array.toList
-        static member instance (ToList, x:'a []         , _) = fun () -> Array.toList x
-        static member instance (ToList, x:'a ResizeArray, _) = fun () -> Seq.toList x
-        static member instance (ToList, x:List<'a>      , _) = fun () -> x
-        static member instance (ToList, x:Set<'a>       , _) = fun () -> Set.toList x
-
-    let inline internal toList value :list<'t> = Inline.instance (ToList, value) ()
-
-
-    open FsControl.Core.TypeMethods.Monoid
-    open FsControl.Core.TypeMethods.Applicative
-
-    type FilterDefault() =
-        static member inline instance (_:FilterDefault, x:'t when 't :> obj, _:'t) = fun p ->
-            let m:'t = mempty()
-            Inline.instance (Foldable.Foldr, x) (mappend << (fun a -> if p a then pure' a else m), m) :'t
-   
-    type Filter() =
-        inherit FilterDefault()
-
-        static member instance (_:Filter, x:'t list, _:'t list) = fun p -> List.filter  p x
-        static member instance (_:Filter, x:'t []  , _:'t []  ) = fun p -> Array.filter p x
-        static member instance (_:Filter, x:'t IObservable, _:'t IObservable) = fun p -> Observable.filter p x
-        static member instance (_:Filter, x:'t ResizeArray, _:'t ResizeArray) = fun p -> ResizeArray(Seq.filter p x)
-
-    let Filter = Filter()
-
-    let inline internal filter (p:_->bool) (x:'t) = (Inline.instance (Filter, x) p) :'t
