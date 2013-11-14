@@ -21,6 +21,23 @@ module internal Seq =
             yield element
             notFirst := true}
 
+    let inline splitBy keyMapper (source:_ seq) = seq {
+        use e = source.GetEnumerator()
+        if (e.MoveNext()) then
+            let groupKey = ref (keyMapper e.Current)
+            let values   = ref (new ResizeArray<_>())
+            (!values).Add(e.Current)
+            while (e.MoveNext()) do
+                let key = keyMapper e.Current
+                if !groupKey = key then (!values).Add(e.Current)
+                else
+                    yield (!groupKey, !values)
+                    groupKey := key
+                    values   := new ResizeArray<_>()
+                    (!values).Add(e.Current)
+            yield (!groupKey, !values)}
+
+
 [<RequireQualifiedAccess>]
 module internal Error =
     let inline map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x

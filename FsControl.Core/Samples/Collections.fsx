@@ -17,7 +17,7 @@ let (/>) = flip
 let inline skip (n:int) (x) = Inline.instance (Skip, x) n
 let inline take (n:int) (x) = Inline.instance (Take, x) n
 let inline fromList (value:list<'t>) = Inline.instance FromList value
-let inline toList    value :list<'t> = Inline.instance (ToList, value) ()
+let inline toList value :list<'t> = Inline.instance (ToList, value) ()
 let inline extract x = Inline.instance (Comonad.Extract, x) ()
 let inline result  x = Inline.instance Pure x
 let inline mempty() = Inline.instance Monoid.Mempty ()
@@ -25,6 +25,10 @@ let inline mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
 let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
 let inline foldMap f x = Inline.instance (FoldMap, x) f
 let inline filter (p:_->bool) (x:'t) = (Inline.instance (Filter, x) p) :'t
+
+let inline groupBy (f:'a->'b) (x:'t) = (Inline.instance (GroupBy, x) f)
+let inline splitBy (f:'a->'b) (x:'t) = (Inline.instance (SplitBy, x) f)
+let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (SortBy , x) f) :'t
 
 type ZipList<'s> = ZipList of 's seq with
     static member instance (_:Map,   ZipList x  , _:ZipList<'b>) = fun (f:'a->'b) -> ZipList (Seq.map f x)
@@ -40,6 +44,10 @@ type ZipList<'s> = ZipList of 's seq with
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
 let five   = filter ((=) 5) (set [1;2;3;4;5;6])             // <- Uses the default method.
+
+let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]
+let listGroup  = groupBy ((%)/> 2) [ 11;2;3;9;5;6;7;8;9;10 ]
+let sortedList = sortBy  string    [ 11;2;3;9;5;6;7;8;9;10 ]
 
 let bigSeq = ZipList (seq {1..10000000})
 let bigLst = [ 1..10000000 ]
