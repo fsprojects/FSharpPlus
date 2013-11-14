@@ -62,7 +62,11 @@ module Foldable =
     let Foldl = Foldl()
 
 
+    type ToListDefault() =
+        static member inline instance (_:ToListDefault, x:#obj , _) = foldr List.cons [] x
+
     type ToList() =
+        inherit ToListDefault()
         static member instance (_:ToList, x:string        , _) = fun () -> x.ToCharArray() |> Array.toList
         static member instance (_:ToList, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray() |> Array.toList
         static member instance (_:ToList, x:'a []         , _) = fun () -> Array.toList x
