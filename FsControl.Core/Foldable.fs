@@ -63,7 +63,7 @@ module Foldable =
 
 
     type ToListDefault() =
-        static member inline instance (_:ToListDefault, x:#obj , _) = foldr List.cons [] x
+        static member inline instance (_:ToListDefault, x:#obj , _) = fun () -> foldr List.cons [] x
 
     type ToList() =
         inherit ToListDefault()
@@ -72,7 +72,6 @@ module Foldable =
         static member instance (_:ToList, x:'a []         , _) = fun () -> Array.toList x
         static member instance (_:ToList, x:'a ResizeArray, _) = fun () -> Seq.toList x
         static member instance (_:ToList, x:List<'a>      , _) = fun () -> x
-        static member instance (_:ToList, x:Set<'a>       , _) = fun () -> Set.toList x
 
     let ToList = ToList()
 
