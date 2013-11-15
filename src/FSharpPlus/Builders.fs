@@ -54,4 +54,13 @@ module Builders =
         [<CustomOperation("where", MaintainsVariableSpace=true)>]
         member inline __.Where(x, [<ProjectionParameter>] p) = filter p x
 
+        [<CustomOperation("groupBy", AllowIntoPattern=true)>]
+        member inline __.GroupBy (x,[<ProjectionParameter>] f : 't -> 'key) = groupBy f x
+
+        [<CustomOperation("splitBy", AllowIntoPattern=true)>]
+        member inline __.SplitBy (x,[<ProjectionParameter>] f : 't -> 'key) = splitBy f x
+
+        [<CustomOperation("sortBy", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
+        member inline __.SortBy (x,[<ProjectionParameter>] f : 't -> 'key) = sortBy f x
+
     let linq = LinqBuilder()
