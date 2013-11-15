@@ -13,9 +13,11 @@ open System.Text
 module Foldable =
 
     type Foldr = Foldr with
-        static member instance (Foldr, x:option<_>, _) = fun (f,z) -> match x with Some t -> f t z | _ -> z
-        static member instance (Foldr, x:List<_>  , _) = fun (f,z) -> List.foldBack          f x z
-        static member instance (Foldr, x:Set<_>   , _) = fun (f,z) -> Set.foldBack           f x z
+        static member instance (Foldr, x:option<_>    , _) = fun (f,z) -> match x with Some t -> f t z | _ -> z
+        static member instance (Foldr, x:List<_>      , _) = fun (f,z) -> List.foldBack          f x z
+        static member instance (Foldr, x:Set<_>       , _) = fun (f,z) -> Set.foldBack           f x z
+        static member instance (Foldr, x:string       , _) = fun (f,z) -> Array.foldBack f (x.ToCharArray()) z
+        static member instance (Foldr, x:StringBuilder, _) = fun (f,z) -> Array.foldBack f (x.ToString().ToCharArray()) z
 
     type DefaultImpl =
         static member inline FoldMapFromFoldr f x = Inline.instance (Foldr, x) (mappend << f, mempty())
