@@ -81,7 +81,9 @@ module Operators =
     // Foldable
     let inline foldr (f:'a->'b->'b) (z:'b) foldable'a : 'b = Inline.instance (Foldable.Foldr, foldable'a) (f,z)
     let inline foldl (f:'a->'b->'a) (z:'a) foldable'b : 'a = Inline.instance (Foldable.Foldl, foldable'b) (f,z)
-    let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f    
+    let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
+    let inline toList value :'t list = Inline.instance (Foldable.ToList, value) ()
+    let inline filter predicate x    = Inline.instance (Foldable.Filter, x) predicate
 
 
     // Traversable
@@ -137,8 +139,10 @@ module Operators =
     let inline skip (n:int) x = Inline.instance (Collection.Skip, x) n
     let inline take (n:int) x = Inline.instance (Collection.Take, x) n
     let inline fromList (value :list<'t>) = Inline.instance  Collection.FromList value
-    let inline toList    value :list<'t>  = Inline.instance (Collection.ToList,  value) ()
-    let inline filter predicate x = Inline.instance(Collection.Filter, x) predicate
+    let inline groupBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupBy, x) f)
+    let inline splitBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.SplitBy, x) f)
+    let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy , x) f) :'t
+    
 
 
     // Converter
