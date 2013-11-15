@@ -49,6 +49,7 @@ type NonEmptyList with
 
     static member instance (_:Monoid.Mappend, {Head = h; Tail = t}, _) = fun x -> {Head = h; Tail = t @ NonEmptyList.toList x}
 
+    static member instance (_:Foldable.Foldr, {Head = x; Tail = xs}, _) = fun (f,z) -> List.foldBack f (x::xs) z
     static member instance (_:Foldable.ToList, s:NonEmptyList<'a>, _) = fun () -> NonEmptyList.toList s
 
     static member inline instance (_:Converter.ToString, s:NonEmptyList<'a>, _) = fun () ->
