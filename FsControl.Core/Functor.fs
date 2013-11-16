@@ -2,6 +2,7 @@ namespace FsControl.Core.TypeMethods
 
 open System
 open System.Text
+open System.Threading.Tasks
 open Microsoft.FSharp.Quotations
 open FsControl.Core
 open FsControl.Core.Prelude
@@ -12,6 +13,9 @@ type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
 // Monad class ------------------------------------------------------------
 module Monad =
     type Bind = Bind with
+        static member        instance (Bind, x:seq<_>       , _:seq<'b>       ) = fun (f:_->seq<'b>  )  -> Seq.collect   f x
+        static member        instance (Bind, x:Task<'a>    , _:'b Task     ) = fun (f:_->Task<'b> ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
+
         static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
         static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect  f x
         static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
@@ -50,6 +54,11 @@ open Monad
 
 module Applicative =
     type Pure = Pure with
+        static member        instance (Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
+        static member        instance (Pure, _:'a Task       ) = fun x -> 
+            let s = TaskCompletionSource()
+            s.SetResult x
+            s.Task
         static member        instance (Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
         static member        instance (Pure, _:List<'a>      ) = fun x -> [ x ]       :List<'a>
         static member        instance (Pure, _:'a []         ) = fun x -> [|x|]       :'a []
@@ -58,7 +67,7 @@ module Applicative =
         static member        instance (Pure, _:'a Async      ) = fun (x:'a) -> async.Return x
         static member        instance (Pure, _:Choice<'a,'e> ) = fun x -> Choice1Of2 x :Choice<'a,'e>
         static member        instance (Pure, _:Expr<'a>      ) = fun x -> <@ x @>     :Expr<'a>
-        static member        instance (Pure, _:'a ResizeArray) = fun x -> new ResizeArray<'a>(Seq.singleton x)        
+        static member        instance (Pure, _:'a ResizeArray) = fun x -> new ResizeArray<'a>(Seq.singleton x)
 
         //Restricted
         static member instance (Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
@@ -78,6 +87,7 @@ module Applicative =
 
     type Apply() =
         inherit ApplyDefault()
+        static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> DefaultImpl.ApplyFromMonad f x :seq<'b>
         static member        instance (_:Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
         static member        instance (_:Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
         static member        instance (_:Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
@@ -129,6 +139,14 @@ module Alternative =
 // Functor class ----------------------------------------------------------
 
 module Functor =
+    type SeqMapper = SeqMapper with
+        //static member inline instance (SeqMapper, _:^t when ^t: null and ^t: struct, _) = fun () -> id
+        static member instance (SeqMapper, x:_ list , _, _) = fun f -> Seq.map f x |> Seq.toList
+        static member instance (SeqMapper, x:_ []   , _, _) = fun f -> Seq.map f x |> Seq.toArray        
+        static member instance (SeqMapper, x:_ seq  , _:_ seq option, _) = fun f -> Seq.map f x
+
+    let inline seqMapper f x = Inline.instance(SeqMapper, x, Some x) f
+
     type DefaultImpl =        
         static member inline MapFromApplicative f x = pure' f <*> x
         static member inline MapFromMonad f x = x >>= (pure' << f)
@@ -136,8 +154,14 @@ module Functor =
     type MapDefault() =
         static member inline instance (_:MapDefault, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> pure' f <*> x :'r
 
-    type Map() =
+    type MapDefaultSeq() =
         inherit MapDefault()
+        static member inline instance (_:MapDefaultSeq, x:'f when 'f :> _ seq, _:'r when 'r :> _ seq) = fun (f:'a->'b) -> seqMapper f x
+
+    type Map() =
+        //inherit MapDefaultSeq() another way to implement it. This will not compile if a subclass of seq is provided, which is desired.
+        inherit MapDefault()
+        static member instance (_:Map, x:seq<_>      , _:seq<'b>) = fun f -> Seq.map f x :seq<'b>
         static member instance (_:Map, x:option<_>    , _) = fun f -> Option.map  f x
         static member instance (_:Map, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
         static member instance (_:Map, g:_->_         , _) = (>>) g
