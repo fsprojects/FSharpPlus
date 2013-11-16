@@ -43,7 +43,7 @@ type ZipList<'s> = ZipList of 's seq with
 
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
-let five   = filter ((=) 5) (set [1;2;3;4;5;6])             // <- Uses the default method.
+// let five   = filter ((=) 5) (set [1;2;3;4;5;6])             // <- Uses the default method.
 
 let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]
 let listGroup  = groupBy ((%)/> 2) [ 11;2;3;9;5;6;7;8;9;10 ]
@@ -66,3 +66,45 @@ let e = "hello world" |> skip 6 |> toList
 let h = fromList ['h';'e';'l';'l';'o';' '] + "world"
 
 let asQuotation = mappend <@ new ResizeArray<_>(["1"]) @> <@ new ResizeArray<_>(["2;3"]) @>
+
+let inline internal map   f x = Inline.instance (Map, x) f
+let inline internal (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
+
+// Do notation
+type MonadBuilder() =
+    member inline b.Return(x)    = result x
+    member inline b.Bind(p,rest) = p >>= rest
+    member        b.Let (p,rest) = rest p
+    member    b.ReturnFrom(expr) = expr
+
+let monad     = new MonadBuilder()
+
+
+
+// Seq
+
+let singletonList: _ list = result 1
+let singletonSeq : _ seq  = result 1
+
+
+let stack = new Collections.Generic.Stack<_>([1;2;3])
+
+// This should not compile (but it does)
+let mappedstack = map string stack
+
+// Test Seq Monad
+                        
+let rseq =
+    monad {
+        let! x1 =  [1;2]
+        let! x2 = seq [10;20]
+        return ((+) x1 x2) }
+
+
+// Test SeqT Monad Transformer
+
+open FsControl.Core.Types
+
+let listT  = ListT (Some [2;4]      ) >>= fun x -> ListT (Some [x; x+10]      )
+let seqT   = SeqT  (Some (seq [2;4])) >>= fun x -> SeqT  (Some (seq [x; x+10]))
+let resListTSome2547 = (SeqT (Some (seq [2;4]) )) >>=  (fun x -> SeqT ( Some (seq [x;x+3])) )

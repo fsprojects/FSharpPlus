@@ -59,6 +59,13 @@ module SeqT =
     let run   (SeqT m) = m
     let map f (SeqT m) = SeqT (f m)
 
+    let inline internal sequence (ms:seq<_>) =
+        let ms = Seq.toList ms
+        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (pure' :list<'a> -> 'M) (List.Cons(x,xs))
+        List.foldBack k ms ((pure' :list<'a> -> 'M) [])
+
+    let inline internal mapM f as' = sequence (Seq.map f as')
+
 type SeqT<'Ma> with
     static member inline instance (_:Functor.Map   ,  SeqT x:SeqT<'ma>, _) = fun (f:'a->'b) -> SeqT (fmap (Seq.map f) x):SeqT<'mb>
     static member inline instance (Applicative.Pure,           _:SeqT<'ma>) = SeqT << return' << Seq.singleton :'a -> SeqT<'ma>
@@ -66,7 +73,7 @@ type SeqT<'Ma> with
         SeqT(fmap (<*>) f <*> x) :SeqT<'r>
     static member inline instance (Monad.Bind  , SeqT x:SeqT<'ma>, _:SeqT<'mb>) =
         fun (k: 'a -> SeqT<'mb>) -> 
-            (SeqT (x >>= mapM(SeqT.run << k) >>= (Seq.concat >> return'))) :SeqT<'mb>
+            (SeqT (x >>= SeqT.mapM(SeqT.run << k) >>= (Seq.concat >> return'))) :SeqT<'mb>
 
     static member inline instance (MonadPlus.Mzero, _:SeqT<_>) = fun ()       -> SeqT (return' [])
     static member inline instance (MonadPlus.Mplus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
