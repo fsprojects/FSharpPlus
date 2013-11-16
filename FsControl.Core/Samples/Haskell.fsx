@@ -1,5 +1,8 @@
 ﻿#r @"..\bin\Release\FsControl.Core.dll"
 
+// This sample code mimics Haskell functions.
+// It is based in an initial exploratory project  at http://code.google.com/p/fsharp-typeclasses/ no longer maintained.
+
 open FsControl.Core.Types
 
 let flip f x y = f y x
