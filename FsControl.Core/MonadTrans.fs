@@ -51,6 +51,31 @@ type ListT<'Ma> with
         let! b = y
         return (a @ b)}
 
+
+type SeqT<'Ma> = SeqT of 'Ma
+
+[<RequireQualifiedAccess>]
+module SeqT =
+    let run   (SeqT m) = m
+    let map f (SeqT m) = SeqT (f m)
+
+type SeqT<'Ma> with
+    static member inline instance (_:Functor.Map   ,  SeqT x:SeqT<'ma>, _) = fun (f:'a->'b) -> SeqT (fmap (Seq.map f) x):SeqT<'mb>
+    static member inline instance (Applicative.Pure,           _:SeqT<'ma>) = SeqT << return' << Seq.singleton :'a -> SeqT<'ma>
+    static member inline instance (_:Applicative.Apply, SeqT(f), SeqT(x),  _:SeqT<'r>) = fun () ->
+        SeqT(fmap (<*>) f <*> x) :SeqT<'r>
+    static member inline instance (Monad.Bind  , SeqT x:SeqT<'ma>, _:SeqT<'mb>) =
+        fun (k: 'a -> SeqT<'mb>) -> 
+            (SeqT (x >>= mapM(SeqT.run << k) >>= (Seq.concat >> return'))) :SeqT<'mb>
+
+    static member inline instance (MonadPlus.Mzero, _:SeqT<_>) = fun ()       -> SeqT (return' [])
+    static member inline instance (MonadPlus.Mplus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
+        let! a = x
+        let! b = y
+        return (a @ b)}
+
+
+
 namespace FsControl.Core.TypeMethods
 
 open FsControl.Core
@@ -64,6 +89,7 @@ module MonadTrans =
     type Lift = Lift with
         static member inline instance (Lift, _:OptionT<'m_a>) = OptionT << (liftM Some)       :'ma -> OptionT<'m_a>
         static member inline instance (Lift, _: ListT<'m_a> ) = ListT << (liftM List.singleton):'ma ->  ListT<'m_a> 
+        static member inline instance (Lift, _: SeqT<'m_a> ) = SeqT << (liftM Seq.singleton):'ma ->  SeqT<'m_a> 
 
     let inline internal lift (x:'ma) = Inline.instance Lift x
 
@@ -73,6 +99,7 @@ module MonadAsync =
     type LiftAsync = LiftAsync with  
         static member inline instance (LiftAsync, _:OptionT<'U>) = fun (x :Async<'a>) -> lift (Inline.instance LiftAsync x)
         static member inline instance (LiftAsync, _:ListT< 'U> ) = fun (x :Async<'a>) -> lift (Inline.instance LiftAsync x)
+        static member inline instance (LiftAsync, _:SeqT< 'U> ) = fun (x :Async<'a>) -> lift (Inline.instance LiftAsync x)
         static member        instance (LiftAsync, _:Async<'a>  ) = fun (x :Async<'a>) -> x
 
     let inline internal liftAsync (x: Async<'a>) = Inline.instance LiftAsync x
