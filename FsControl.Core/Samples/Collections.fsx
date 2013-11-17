@@ -83,11 +83,20 @@ let monad     = new MonadBuilder()
 
 // Seq
 
+let stack = new Collections.Generic.Stack<_>([1;2;3])
+
+let twoSeqs = mappend (seq [1;2;3]) (seq [4;5;6])
+let sameSeq = mappend (mempty()) (seq [4;5;6])
+
+// This should not compile
+// twoStacks = mappend stack stack
+// let twoSeqs'  = mappend (seq [1;2;3]) [4;5;6]
+// let twoSeqs'' = mappend [1;2;3] (seq [4;5;6])
+
+
 let singletonList: _ list = result 1
 let singletonSeq : _ seq  = result 1
 
-
-let stack = new Collections.Generic.Stack<_>([1;2;3])
 
 // This should not compile (but it does)
 let mappedstack = map string stack
@@ -99,6 +108,47 @@ let rseq =
         let! x1 =  [1;2]
         let! x2 = seq [10;20]
         return ((+) x1 x2) }
+
+
+// Test Seq Comonad
+let inline duplicate (x)                = Inline.instance (Comonad.Duplicate, x) ()
+let inline extend  (g:'Comonad'a->'b) (s:'Comonad'a): 'Comonad'b = Inline.instance (Comonad.Extend, s) g
+let inline (=>>)   (s:'Comonad'a) (g:'Comonad'a->'b): 'Comonad'b = extend g s
+
+let lst   = seq [1;2;3;4;5]
+let elem1 = extract   lst
+let tails = duplicate lst
+let lst'  = extend extract lst
+
+// This should not compile (but it does)
+let elem3  = extract   stack
+let tails' = duplicate stack
+
+// This should not compile
+// let stk'  = extend extract stack
+
+
+// Test foldable
+
+let r10  = foldr (+) 0 (seq [1;2;3;4])
+let r323 = toList (seq [3;2;3])
+let r03  = filter ((=) 3) (seq [1;2;3])
+
+// This should not compile ??? (but it does)
+let r10' = foldr (+) 0 stack
+let r123 = toList stack
+
+// This should not compile
+// let r03' = filter ((=) 3) stack
+
+
+// Test traversable
+let inline sequenceA  t = Inline.instance (Traversable.SequenceA, t) ()
+
+let resNone  = sequenceA (seq [Some 3;None ;Some 1])
+
+// This should not compile (but it does)
+let resNone' = sequenceA (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
 
 
 // Test SeqT Monad Transformer

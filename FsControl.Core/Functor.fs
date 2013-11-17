@@ -222,12 +222,14 @@ module Comonad =
     type Extract = Extract with
         static member        instance (Extract, (w:'w,a:'a) ,_) = fun () -> a
         static member inline instance (Extract, f:'m->'t ,_:'t) = fun () -> f (mempty())
+        static member        instance (Extract, f:'t Task,_:'t) = fun () -> f.Result
 
-        // Restricted
+        // Restricted        
         static member        instance (Extract, x:'t list         , _:'t) = fun () -> List.head x
         static member        instance (Extract, x:'t []           , _:'t) = fun () -> x.[0]
         static member        instance (Extract, x:string          , _   ) = fun () -> x.[0]
         static member        instance (Extract, x:StringBuilder   , _   ) = fun () -> x.ToString().[0]
+        static member        instance (Extract, x:'t seq          , _:'t) = fun () -> Seq.head x
 
     let inline internal extract x = Inline.instance (Extract, x) ()
 
@@ -235,6 +237,7 @@ module Comonad =
     type Extend = Extend with
         static member        instance (Extend, (w:'w, a:'a), _:'w *'b) = fun (f:_->'b) -> (w, f (w,a))        
         static member inline instance (Extend, (g:'m -> 'a), _:'m->'b) = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
+        static member        instance (Extend, (g:Task<'a>), _:Task<'b>) = fun (f:Task<'a>->'b) -> g.ContinueWith(f)
 
         // Restricted
         static member        instance (Extend, s:List<'a>, _:List<'b>) = fun g -> 
@@ -244,6 +247,10 @@ module Comonad =
         static member        instance (Extend, s:'a [], _:'b []) = fun g -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
             Array.map g (s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray) :'b []
+
+        static member        instance (Extend, s:'a seq, _:'b seq) = fun g -> 
+            let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
+            Seq.map g (s |> Seq.toList |> tails |> List.toSeq |> Seq.map List.toSeq) :'b seq
 
     let inline internal extend g s = Inline.instance (Extend, s) g
     let inline internal (=>>)  s g = extend g s

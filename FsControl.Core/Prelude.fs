@@ -45,3 +45,14 @@ module internal Error =
     let inline throw  x = Choice2Of2 x
     let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
     let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
+
+namespace FsControl.Core.Types
+type Id<'t>(v:'t) =
+   let value = v
+   member this.getValue = value
+
+[<RequireQualifiedAccess>]
+module Id =
+    let run   (x:Id<_>) = x.getValue
+    let map f (x:Id<_>) = Id (f x.getValue)
+    let create x = Id (x)

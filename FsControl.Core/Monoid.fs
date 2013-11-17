@@ -6,7 +6,7 @@ open FsControl.Core.Prelude
 open Microsoft.FSharp.Quotations
 
 module Monoid =
-    type Mempty = Mempty with   
+    type Mempty = Mempty with           
         static member        instance (Mempty, _:List<'a>  ) = fun () -> []   :  List<'a>
         static member        instance (Mempty, _:option<'a>) = fun () -> None :option<'a>
         static member        instance (Mempty, _:array<'a> ) = fun () -> [||] : array<'a>
@@ -30,6 +30,7 @@ module Monoid =
     type Mempty with
         static member inline instance (Mempty, _:Expr<'a>       ) = fun () -> let v = mempty() in <@ v @>
         static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> new ResizeArray<'a>()
+        static member        instance (Mempty, _:seq<'a>  ) = fun () -> Seq.empty   :  seq<'a>
         
 
 
@@ -70,6 +71,7 @@ module Monoid =
         static member inline instance (Mappend, x:_ Expr       , _) = fun  y                -> let f = mappend in <@ f %x %y @>
         static member        instance (Mappend, x:_ ResizeArray, _) = fun (y:_ ResizeArray) -> new ResizeArray<_>(Seq.append x y)
         static member        instance (Mappend, x:_ IObservable, _) = fun  y                -> Observable.merge x y
+        static member        instance (Mappend, x:_ seq        , _) = fun  y                -> Seq.append x y
 
 
 
