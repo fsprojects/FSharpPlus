@@ -151,6 +151,55 @@ let resNone  = sequenceA (seq [Some 3;None ;Some 1])
 let resNone' = sequenceA (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
 
 
+
+
+open FsControl.Core.TypeMethods.MonadPlus
+
+let getLine    = async { return System.Console.ReadLine() }
+let putStrLn x = async { printfn "%s" x}
+
+let inline sequence ms =
+    let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (result :seq<'a> -> 'M) (Seq.append (Seq.singleton x) xs)
+    List.foldBack k (Seq.toList ms) ((result :seq<'a> -> 'M) (Seq.empty))
+
+let inline mapM f as' = sequence (Seq.map f as')
+let inline mzero () = Inline.instance Mzero ()
+let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
+let inline guard x = if x then result () else mzero()
+
+type DoPlusNotationBuilder() =
+    member inline b.Return(x) = result x
+    member inline b.Bind(p,rest) = p >>= rest
+    member b.Let(p,rest) = rest p
+    member b.ReturnFrom(expr) = expr
+    member inline x.Zero() = mzero()
+    member inline x.Combine(a, b) = mplus a b
+let doPlus = new DoPlusNotationBuilder()
+
+// Test MonadPlus
+let nameAndAddress = mapM (fun x -> putStrLn x >>= fun _ -> getLine) (seq ["name";"address"])
+
+// this should compile (but it doesn't)
+(*
+let pythags = monad {
+  let! z = seq [1..50]
+  let! x = seq [1..z]
+  let! y = seq [x..z]
+  do! (guard (x*x + y*y = z*z) )
+  return (x, y, z)}
+*)
+
+let pythags' = doPlus{
+  let! z = seq [1..50]
+  let! x = seq [1..z]
+  let! y = seq [x..z]
+  if (x*x + y*y = z*z) then return (x, y, z)}
+
+let res123123 = mplus (seq [1;2;3]) (seq [1;2;3])
+let allCombinations = sequence (seq [seq ['a';'b';'c']; seq ['1';'2']]) //|> Seq.map Seq.toList |> Seq.toList 
+
+
+
 // Test SeqT Monad Transformer
 
 open FsControl.Core.Types

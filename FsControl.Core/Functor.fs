@@ -278,16 +278,23 @@ module Comonad =
 
 
 // MonadPlus class ------------------------------------------------------------
+open FsControl.Core.Types
+
 module MonadPlus =
     type Mzero = Mzero with
-        static member instance (Mzero, _:option<'a>) = fun () -> None
-        static member instance (Mzero, _:List<'a>  ) = fun () -> [  ]
-        static member instance (Mzero, _:'a []     ) = fun () -> [||]
+        static member        instance (Mzero, _:option<'a>) = fun () -> None        :option<'a>
+        static member        instance (Mzero, _:List<'a>  ) = fun () -> [  ]        :List<'a>  
+        static member        instance (Mzero, _:'a []     ) = fun () -> [||]        :'a []     
+        static member        instance (Mzero, _:seq<'a>   ) = fun () -> Seq.empty   :seq<'a>
+        static member inline instance (Mzero, _:Id<'a>    ) = fun () -> Id (mempty()) :Id<'a>
 
     type Mplus = Mplus with
-        static member instance (Mplus, x:option<_>, _) = fun y -> match x with None -> y | xs -> xs
-        static member instance (Mplus, x:List<_>  , _) = fun y -> x @ y
-        static member instance (Mplus, x:_ []     , _) = fun y -> Array.append x y
+        static member        instance (Mplus, x:_ option, _) = fun y -> match x with None -> y | xs -> xs
+        static member        instance (Mplus, x:_ list  , _) = fun y -> x @ y
+        static member        instance (Mplus, x:_ []    , _) = fun y -> Array.append x y
+        static member        instance (Mplus, x:_ seq   , _) = fun y -> Seq.append   x y
+        static member inline instance (Mplus, x:_ Id    , _) = fun y -> Id (mappend (Id.run x) (Id.run y))
+        
 
     let inline internal mzero () = Inline.instance Mzero ()
     let inline internal mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
