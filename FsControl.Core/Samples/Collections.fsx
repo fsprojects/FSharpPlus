@@ -35,11 +35,9 @@ type ZipList<'s> = ZipList of 's seq with
     static member instance (_:Pure, _:ZipList<'a>  ) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
     static member instance (_:Apply  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-    static member instance (_:Mempty, _:ZipList<'a>  ) = fun () -> ZipList Seq.empty   : ZipList<'a>
-    static member instance (_:Mappend, ZipList(x) , _) = fun (ZipList(y)) -> ZipList (Seq.append x y)
-    static member instance (_:Skip   , (ZipList s):ZipList<'a> , _:ZipList<'a>) = fun n -> ZipList (Seq.skip n s) :ZipList<'a>
-    static member instance (_:Take   , (ZipList s):ZipList<'a> , _:ZipList<'a>) = fun n -> ZipList (Seq.take n s) :ZipList<'a>
-    static member instance (_:Extract, (ZipList s):ZipList<'a> , _:'a) = fun () -> Seq.head s
+    //static member instance (_:Mempty, _:ZipList<'a>  ) = fun () -> ZipList Seq.empty   : ZipList<'a>
+    //static member instance (_:Mappend, ZipList(x) , _) = fun (ZipList(y)) -> ZipList (Seq.append x y)
+    //static member instance (_:Extract, (ZipList s):ZipList<'a> , _:'a) = fun () -> Seq.head s
 
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
@@ -47,9 +45,12 @@ let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
 
 let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]
 let listGroup  = groupBy ((%)/> 2) [ 11;2;3;9;5;6;7;8;9;10 ]
-let sortedList = sortBy  string    [ 11;2;3;9;5;6;7;8;9;10 ]
+let seqGroup   = groupBy ((%)/> 2) (seq [11;2;3;9;5;6;7;8;9;10])
 
-let bigSeq = ZipList (seq {1..10000000})
+let sortedList = sortBy string     [ 11;2;3;9;5;6;7;8;9;10 ]
+let sortedSeq  = sortBy string (seq [11;2;3;9;5;6;7;8;9;10])
+
+let bigSeq = seq {1..10000000}
 let bigLst = [ 1..10000000 ]
 let bigArr = [|1..10000000|]
 let bigMut = new ResizeArray<_>(seq {1..10000000})
@@ -88,10 +89,14 @@ let stack = new Collections.Generic.Stack<_>([1;2;3])
 let twoSeqs = mappend (seq [1;2;3]) (seq [4;5;6])
 let sameSeq = mappend (mempty()) (seq [4;5;6])
 
+let (seqFromLst:_ seq) = fromList [1;2;3;4]
+
 // This should not compile
 // twoStacks = mappend stack stack
 // let twoSeqs'  = mappend (seq [1;2;3]) [4;5;6]
 // let twoSeqs'' = mappend [1;2;3] (seq [4;5;6])
+// let sortedStack = sortBy  string    stack
+// let (stackFromLst:_ Collections.Generic.Stack) = fromList [1;2;3;4]
 
 
 let singletonList: _ list = result 1
@@ -100,6 +105,8 @@ let singletonSeq : _ seq  = result 1
 
 // This should not compile (but it does)
 let mappedstack = map string stack
+let stackGroup  = groupBy ((%)/> 2) stack
+
 
 // Test Seq Monad
                         
