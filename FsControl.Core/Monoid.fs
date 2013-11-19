@@ -69,15 +69,10 @@ module Monoid =
 
     type Mappend with
         static member inline instance (Mappend, x:_ Expr       , _) = fun  y                -> let f = mappend in <@ f %x %y @>
-        static member        instance (Mappend, x:_ ResizeArray, _) = fun (y:_ ResizeArray) -> new ResizeArray<_>(Seq.append x y)
+        static member        instance (Mappend, x:_ ResizeArray, _) = fun (y:_ ResizeArray) -> ResizeArray (Seq.append x y)
         static member        instance (Mappend, x:_ IObservable, _) = fun  y                -> Observable.merge x y
         static member        instance (Mappend, x:_ seq        , _) = fun  y                -> Seq.append x y
 
-
-
-    let inline internal mconcat x =
-        let foldR f s lst = List.foldBack f lst s
-        foldR mappend (mempty()) x
 
 namespace FsControl.Core.Types
 open FsControl.Core.Prelude

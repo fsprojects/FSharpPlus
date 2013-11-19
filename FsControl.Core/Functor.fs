@@ -237,7 +237,7 @@ module Comonad =
     type Extend = Extend with
         static member        instance (Extend, (w:'w, a:'a), _:'w *'b) = fun (f:_->'b) -> (w, f (w,a))        
         static member inline instance (Extend, (g:'m -> 'a), _:'m->'b) = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
-        static member        instance (Extend, (g:Task<'a>), _:Task<'b>) = fun (f:Task<'a>->'b) -> g.ContinueWith(f)
+        static member        instance (Extend, (g:'a Task), _:'b Task) = fun (f:Task<'a>->'b) -> g.ContinueWith(f)
 
         // Restricted
         static member        instance (Extend, s:List<'a>, _:List<'b>) = fun g -> 

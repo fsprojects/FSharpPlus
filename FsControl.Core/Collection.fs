@@ -44,20 +44,19 @@ module Collection =
 
 
     type GroupBy = GroupBy with
-        static member instance (GroupBy, x:Id<'a>  , _) = fun (f:'a->_) -> let a = Id.run x in Id (f a, x)
+        static member instance (GroupBy, x:Id<'a>  , _) = fun f -> let a = Id.run x in Id (f a, x)
         static member instance (GroupBy, x:seq<'a> , _) = fun f -> Seq.groupBy f x
         static member instance (GroupBy, x:List<'a>, _) = fun f -> Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
         static member instance (GroupBy, x:'a []   , _) = fun f -> Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     type SplitBy = SplitBy with
-        static member instance (SplitBy, x:Id<'a>  , _) = fun (f:'a->_) -> let a = Id.run x in Id (f a, x)
+        static member instance (SplitBy, x:Id<'a>  , _) = fun f -> let a = Id.run x in Id (f a, x)
         static member instance (SplitBy, x:seq<'a> , _) = fun f -> Seq.splitBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
         static member instance (SplitBy, x:List<'a>, _) = fun f -> Seq.splitBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
         static member instance (SplitBy, x:'a []   , _) = fun f -> Seq.splitBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     type SortBy = SortBy with
-        static member instance (SortBy, x:Id<'a>  , _) = fun (f:'a->_) -> x
-        //static member instance (SortBy, x:ResizeArray<'a>  , _) = fun f -> ResizeArray (Seq.sortBy f x)
+        static member instance (SortBy, x:Id<'a>   , _) = fun (f:'a->_) -> x
         static member instance (SortBy, x:seq<'a>  , _) = fun f -> Seq.sortBy   f x
         static member instance (SortBy, x:List<'a> , _) = fun f -> List.sortBy  f x
         static member instance (SortBy, x:'a []    , _) = fun f -> Array.sortBy f x

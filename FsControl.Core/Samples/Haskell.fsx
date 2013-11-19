@@ -289,9 +289,7 @@ type Product<'a> = Product of 'a with
 
 let inline mempty() = Inline.instance Mempty ()
 let inline mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
-let inline mconcat x =
-    let foldR f s lst = List.foldBack f lst s
-    foldR mappend (mempty()) x
+let inline mconcat x = List.foldBack mappend x (mempty())
 
 
 // Test Monoids
