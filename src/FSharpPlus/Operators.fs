@@ -141,7 +141,7 @@ module Operators =
     let inline fromList (value :list<'t>) = Inline.instance  Collection.FromList value
     let inline groupBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupBy, x) f)
     let inline splitBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.SplitBy, x) f)
-    let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy , x) f) :'t
+    let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy , x) f)
     
 
 
