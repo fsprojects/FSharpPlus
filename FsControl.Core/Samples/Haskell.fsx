@@ -818,15 +818,15 @@ let inv = runReaderT err' 5
 let err2Layers'   = catchError err' (fun s -> ReaderT (fun x-> Left ("the error was: " + s))) : ReaderT<_,_>
 let errWasInv  = runReaderT err2Layers' 5
 
-let err3Layers'  = catchError (MaybeT (throwError "Invalid Value" )) (fun s -> MaybeT(ReaderT (fun x-> Left ("the error was: " + s)))) : OptionT<ReaderT<int,Either<string,Maybe<int>>>>
-let err3Layers'' = catchError (ReaderT (fun x -> throwError "Invalid Value" )) (fun s -> ReaderT(fun x-> MaybeT (Left ("the error was: " + s)))) : ReaderT<int,MaybeT<Either<string,Maybe<int>>>>
+let err3Layers'  = catchError (MaybeT (throwError "Invalid Value" )) (fun s -> MaybeT(ReaderT (fun x-> Left ("the error was: " + s)))) : OptionT<ReaderT<int,Either<_,Maybe<int>>>>
+let err3Layers'' = catchError (ReaderT (fun x -> throwError "Invalid Value" )) (fun s -> ReaderT(fun x-> MaybeT (Left ("the error was: " + s)))) : ReaderT<int,MaybeT<Either<_,Maybe<int>>>>
 
 
 // ErrorT
 let runErrorT = ErrorT.run
 
 
-let errorT4x6xN = fmap ((+) 2) (ErrorT [Right 2; Right 4; Left "Error"]) : ErrorT<List<Either<string,int>>>
+let errorT4x6xN = fmap ((+) 2) (ErrorT [Right 2; Right 4; Left "Error"])
 let errorT = ErrorT [Right 2; Right 4] >>= fun x -> ErrorT [Right x; Right (x+10)] : ErrorT<List<Either<string,_>>>
 let apErrorT = ap (ErrorT [Right ((+) 3)] ) ( ErrorT [Right  3 ] ) : ErrorT<List<Either<string,_>>>
 
