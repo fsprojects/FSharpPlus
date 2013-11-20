@@ -139,13 +139,6 @@ module Alternative =
 // Functor class ----------------------------------------------------------
 
 module Functor =
-    type SeqMapper = SeqMapper with
-        //static member inline instance (SeqMapper, _:^t when ^t: null and ^t: struct, _) = fun () -> id
-        static member instance (SeqMapper, x:_ list , _, _) = fun f -> Seq.map f x |> Seq.toList
-        static member instance (SeqMapper, x:_ []   , _, _) = fun f -> Seq.map f x |> Seq.toArray        
-        static member instance (SeqMapper, x:_ seq  , _:_ seq option, _) = fun f -> Seq.map f x
-
-    let inline seqMapper f x = Inline.instance(SeqMapper, x, Some x) f
 
     type DefaultImpl =        
         static member inline MapFromApplicative f x = pure' f <*> x
@@ -154,12 +147,7 @@ module Functor =
     type MapDefault() =
         static member inline instance (_:MapDefault, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> pure' f <*> x :'r
 
-    type MapDefaultSeq() =
-        inherit MapDefault()
-        static member inline instance (_:MapDefaultSeq, x:'f when 'f :> _ seq, _:'r when 'r :> _ seq) = fun (f:'a->'b) -> seqMapper f x
-
     type Map() =
-        //inherit MapDefaultSeq() another way to implement it. This will not compile if a subclass of seq is provided, which is desired.
         inherit MapDefault()
         static member instance (_:Map, x:seq<_>      , _:seq<'b>) = fun f -> Seq.map f x :seq<'b>
         static member instance (_:Map, x:option<_>    , _) = fun f -> Option.map  f x
