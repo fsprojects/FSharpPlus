@@ -3,9 +3,9 @@
 open System
 open FsControl.Core.TypeMethods.Converter
 
-let inline fromBytesWithOffset (isLittleEndian:bool) (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex, isLittleEndian)
-let inline fromBytes           (isLittleEndian:bool)                  (value:byte[]) = Inline.instance FromBytes (value, 0         , isLittleEndian)
-let inline toBytes             (isLittleEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLittleEndian
+let inline fromBytesWithOffset (isLtEndian:bool) (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex, isLtEndian)
+let inline fromBytes           (isLtEndian:bool)                  (value:byte[]) = Inline.instance FromBytes (value, 0         , isLtEndian)
+let inline toBytes             (isLtEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLtEndian
 let inline toString  value:string  = Inline.instance (ToString, value) Globalization.CultureInfo.InvariantCulture
 let inline tryParse (value:string) = Inline.instance TryParse value
 let inline parse    (value:string) = Inline.instance Parse    value
@@ -26,7 +26,7 @@ let r123 = toString [1;2;3]
 let r140 = toString (1,4,0)
 let r150 = toString (Some 150)
 let r160 = toString ([1;6;0] :> _ seq)
-let r170 = toString (new ResizeArray<_>([1;7;0] :> _ seq))
+let r170 = toString (ResizeArray([1;7;0]))
 let r180 = toString (Set [1;8;0])
 let r190 = toString [|1;9;0|]
 let r200 = toString [|([1;2;3] :> _ seq);([4;5;6] :> _ seq);([7;8;9] :> _ seq)|]

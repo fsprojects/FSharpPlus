@@ -35,9 +35,6 @@ type ZipList<'s> = ZipList of 's seq with
     static member instance (_:Pure, _:ZipList<'a>  ) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
     static member instance (_:Apply  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-    //static member instance (_:Mempty, _:ZipList<'a>  ) = fun () -> ZipList Seq.empty   : ZipList<'a>
-    //static member instance (_:Mappend, ZipList(x) , _) = fun (ZipList(y)) -> ZipList (Seq.append x y)
-    //static member instance (_:Extract, (ZipList s):ZipList<'a> , _:'a) = fun () -> Seq.head s
 
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
@@ -53,7 +50,7 @@ let sortedSeq  = sortBy string (seq [11;2;3;9;5;6;7;8;9;10])
 let bigSeq = seq {1..10000000}
 let bigLst = [ 1..10000000 ]
 let bigArr = [|1..10000000|]
-let bigMut = new ResizeArray<_>(seq {1..10000000})
+let bigMut = ResizeArray(seq {1..10000000})
 
 let x = extract bigSeq
 let y = extract bigLst

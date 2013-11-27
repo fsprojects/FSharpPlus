@@ -149,8 +149,8 @@ let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy , x) 
 
 // Converter
 
-let inline fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance Converter.FromBytes (value, startIndex)
-let inline fromBytes                            (value:byte[]) = Inline.instance Converter.FromBytes (value, 0         )
-let inline toBytes value :byte[]  = Inline.instance (Converter.ToBytes , value) ()
-let inline parse (value:string)   = Inline.instance  Converter.Parse     value
-let inline toString value :string = Inline.instance (Converter.ToString, value) ()
+let inline fromBytesWithOffset (isLtEndian:bool) (startIndex:int) (value:byte[]) = Inline.instance Converter.FromBytes (value, startIndex, isLtEndian)
+let inline fromBytes           (isLtEndian:bool)                  (value:byte[]) = Inline.instance Converter.FromBytes (value, 0         , isLtEndian)
+let inline toBytes             (isLtEndian:bool) value :byte[] = Inline.instance (Converter.ToBytes, value) isLtEndian
+let inline parse (value:string)    = Inline.instance  Converter.Parse     value
+let inline toString  value:string  = Inline.instance (Converter.ToString, value) System.Globalization.CultureInfo.InvariantCulture
