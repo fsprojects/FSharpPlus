@@ -5,42 +5,43 @@ open System.Collections.Generic
 open System.Text
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Core.Printf
+open FsControl.BaseLib
 open FsControl.Core
 open FsControl.Core.Prelude
 
 module Converter =
 
     type FromBytes = FromBytes with
-        static member instance (FromBytes, _:bool   ) = fun (x, i) -> BitConverter.ToBoolean(x, i)
-        static member instance (FromBytes, _:char   ) = fun (x, i) -> BitConverter.ToChar   (x, i)
-        static member instance (FromBytes, _:float  ) = fun (x, i) -> BitConverter.ToDouble (x, i)
-        static member instance (FromBytes, _: int16 ) = fun (x, i) -> BitConverter.ToInt16  (x, i)
-        static member instance (FromBytes, _: int   ) = fun (x, i) -> BitConverter.ToInt32  (x, i)
-        static member instance (FromBytes, _:int64  ) = fun (x, i) -> BitConverter.ToInt64  (x, i)
-        static member instance (FromBytes, _:float32) = fun (x, i) -> BitConverter.ToSingle (x, i)
-        static member instance (FromBytes, _:string ) = fun (x, i) -> BitConverter.ToString (x, i)
-        static member instance (FromBytes, _:uint16 ) = fun (x, i) -> BitConverter.ToUInt16 (x, i)
-        static member instance (FromBytes, _:uint32 ) = fun (x, i) -> BitConverter.ToUInt32 (x, i)
-        static member instance (FromBytes, _:uint64 ) = fun (x, i) -> BitConverter.ToUInt64 (x, i)
+        static member instance (FromBytes, _:bool   ) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
+        static member instance (FromBytes, _:char   ) = fun (x, i, e) -> BitConverter.ToChar   (x, i, e)
+        static member instance (FromBytes, _:float  ) = fun (x, i, e) -> BitConverter.ToDouble (x, i, e)
+        static member instance (FromBytes, _: int16 ) = fun (x, i, e) -> BitConverter.ToInt16  (x, i, e)
+        static member instance (FromBytes, _: int   ) = fun (x, i, e) -> BitConverter.ToInt32  (x, i, e)
+        static member instance (FromBytes, _:int64  ) = fun (x, i, e) -> BitConverter.ToInt64  (x, i, e)
+        static member instance (FromBytes, _:float32) = fun (x, i, e) -> BitConverter.ToSingle (x, i, e)
+        static member instance (FromBytes, _:string ) = fun (x, i, _) -> BitConverter.ToString (x, i)
+        static member instance (FromBytes, _:uint16 ) = fun (x, i, e) -> BitConverter.ToUInt16 (x, i, e)
+        static member instance (FromBytes, _:uint32 ) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
+        static member instance (FromBytes, _:uint64 ) = fun (x, i, e) -> BitConverter.ToUInt64 (x, i, e)
         
-    let inline internal fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex)
-    let inline internal fromBytes                            (value:byte[]) = Inline.instance FromBytes (value, 0         )
+    let inline internal fromBytesWithOffset (isLittleEndian:bool) (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex, isLittleEndian)
+    let inline internal fromBytes           (isLittleEndian:bool)                  (value:byte[]) = Inline.instance FromBytes (value, 0         , isLittleEndian)
 
 
     type ToBytes = ToBytes with
-        static member instance (ToBytes, x:bool   , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:char   , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:float  , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x: int16 , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x: int   , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:int64  , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:float32, _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:string , _) = fun () -> Array.map byte (x.ToCharArray())
-        static member instance (ToBytes, x:uint16 , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:uint32 , _) = fun () -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:uint64 , _) = fun () -> BitConverter.GetBytes(x)
+        static member instance (ToBytes, x:bool   , _) = fun _ -> BitConverter.GetBytes(x)
+        static member instance (ToBytes, x:char   , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:float  , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x: int16 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x: int   , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:int64  , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:float32, _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:string , _) = fun e -> Array.map byte (x.ToCharArray())
+        static member instance (ToBytes, x:uint16 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:uint32 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:uint64 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
 
-    let inline internal toBytes value :byte[] = Inline.instance (ToBytes, value) ()
+    let inline internal toBytes (isLittleEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLittleEndian
 
     let internal inv = Globalization.CultureInfo.InvariantCulture
 
