@@ -3,9 +3,9 @@
 open System
 open FsControl.Core.TypeMethods.Converter
 
-let inline fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex)
-let inline fromBytes                            (value:byte[]) = Inline.instance FromBytes (value, 0         )
-let inline toBytes value :byte[]   = Inline.instance (ToBytes , value) ()
+let inline fromBytesWithOffset (isLittleEndian:bool) (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex, isLittleEndian)
+let inline fromBytes           (isLittleEndian:bool)                  (value:byte[]) = Inline.instance FromBytes (value, 0         , isLittleEndian)
+let inline toBytes             (isLittleEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLittleEndian
 let inline toString  value:string  = Inline.instance (ToString, value) ()
 let inline tryParse (value:string) = Inline.instance TryParse value
 let inline parse    (value:string) = Inline.instance Parse    value
@@ -17,8 +17,8 @@ let r103 = tryParse "103" : Text.StringBuilder option
 
 let r111 = parse "true" && true
 let rMTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
-let r110 = parse "10" + fromBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
-let r120 = parse "10" + fromBytes [|10uy;0uy;0uy;0uy;|]                + 100
+let r110 = parse "10" + fromBytes true [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
+let r120 = parse "10" + fromBytes true [|10uy;0uy;0uy;0uy;|]                + 100
 let r121 = parse "121" : string
 let r122 = parse "122" : Text.StringBuilder
 
