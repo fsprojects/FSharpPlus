@@ -6,7 +6,7 @@ open FsControl.Core.TypeMethods.Converter
 let inline fromBytesWithOffset (isLittleEndian:bool) (startIndex:int) (value:byte[]) = Inline.instance FromBytes (value, startIndex, isLittleEndian)
 let inline fromBytes           (isLittleEndian:bool)                  (value:byte[]) = Inline.instance FromBytes (value, 0         , isLittleEndian)
 let inline toBytes             (isLittleEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLittleEndian
-let inline toString  value:string  = Inline.instance (ToString, value) ()
+let inline toString  value:string  = Inline.instance (ToString, value) Globalization.CultureInfo.InvariantCulture
 let inline tryParse (value:string) = Inline.instance TryParse value
 let inline parse    (value:string) = Inline.instance Parse    value
 
