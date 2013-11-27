@@ -41,9 +41,7 @@ module Converter =
         static member instance (ToBytes, x:uint32 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
         static member instance (ToBytes, x:uint64 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
 
-    let inline internal toBytes (isLittleEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLittleEndian
-
-    let internal inv = Globalization.CultureInfo.InvariantCulture
+    let inline internal toBytes (isLittleEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLittleEndian    
 
     type TryParse = TryParse with
         static member inline instance (TryParse, _:'t     option) = fun x -> 
@@ -73,90 +71,90 @@ module Converter =
 
 
     type ToString = ToString with
-        static member instance (ToString, x:bool,          _) = fun () -> x.ToString inv
-        static member instance (ToString, x:char,          _) = fun () -> x.ToString inv
-        static member instance (ToString, x:byte,          _) = fun () -> x.ToString inv
-        static member instance (ToString, x:sbyte,         _) = fun () -> x.ToString inv
-        static member instance (ToString, x:float,         _) = fun () -> x.ToString inv
-        static member instance (ToString, x:int16,         _) = fun () -> x.ToString inv
-        static member instance (ToString, x:int,           _) = fun () -> x.ToString inv
-        static member instance (ToString, x:int64,         _) = fun () -> x.ToString inv
-        static member instance (ToString, x:float32,       _) = fun () -> x.ToString inv
-        static member instance (ToString, x:string,        _) = fun () -> if x = null then "null" else x
-        static member instance (ToString, x:uint16,        _) = fun () -> x.ToString inv
-        static member instance (ToString, x:uint32,        _) = fun () -> x.ToString inv
-        static member instance (ToString, x:uint64,        _) = fun () -> x.ToString inv
-        static member instance (ToString, x:decimal,       _) = fun () -> x.ToString inv
-        static member instance (ToString, x:DateTime,      _) = fun () -> x.ToString inv
-        static member instance (ToString, x:DateTimeOffset,_) = fun () -> x.ToString inv
-        static member instance (ToString, x:StringBuilder, _) = fun () -> if x = null then "null" else x.ToString()
+        static member instance (ToString, x:bool,          _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:char,          _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:byte,          _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:sbyte,         _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:float,         _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:int16,         _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:int,           _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:int64,         _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:float32,       _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:string,        _) = fun (_:Globalization.CultureInfo) -> if x = null then "null" else x
+        static member instance (ToString, x:uint16,        _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:uint32,        _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:uint64,        _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:decimal,       _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:DateTime,      _) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:DateTimeOffset,_) = fun (k:Globalization.CultureInfo) -> x.ToString k
+        static member instance (ToString, x:StringBuilder, _) = fun (_:Globalization.CultureInfo) -> if x = null then "null" else x.ToString()
 
-    let inline toString value : string = Inline.instance (ToString, value) ()
+    let inline toString (culture:Globalization.CultureInfo) value : string = Inline.instance (ToString, value) culture
 
-    type ToString with static member inline instance (ToString, KeyValue(a,b), _) = fun () ->
-                        "(" + toString a + ", " + toString b + ")"
-    type ToString with static member inline instance (ToString, (a,b),         _) = fun () ->
-                        "(" + toString a + ", " + toString b + ")"
-    type ToString with static member inline instance (ToString, (a,b,c),       _) = fun () ->
-                        "(" + toString a + ", " + toString b + ", " + toString c + ")"
-    type ToString with static member inline instance (ToString, (a,b,c,d),     _) = fun () ->
-                        "(" + toString a + ", " + toString b + ", " + toString c + ", " + toString d + ")"
-    type ToString with static member inline instance (ToString, (a,b,c,d,e),   _) = fun () ->
-                        "(" + toString a + ", " + toString b + ", " + toString c + ", " + toString d + ", " + toString e + ")"
+    type ToString with static member inline instance (ToString, KeyValue(a,b), _) = fun (k:Globalization.CultureInfo) ->
+                        "(" + toString k a + ", " + toString k b + ")"
+    type ToString with static member inline instance (ToString, (a,b),         _) = fun (k:Globalization.CultureInfo) ->
+                        "(" + toString k a + ", " + toString k b + ")"
+    type ToString with static member inline instance (ToString, (a,b,c),       _) = fun (k:Globalization.CultureInfo) ->
+                        "(" + toString k a + ", " + toString k b + ", " + toString k c + ")"
+    type ToString with static member inline instance (ToString, (a,b,c,d),     _) = fun (k:Globalization.CultureInfo) ->
+                        "(" + toString k a + ", " + toString k b + ", " + toString k c + ", " + toString k d + ")"
+    type ToString with static member inline instance (ToString, (a,b,c,d,e),   _) = fun (k:Globalization.CultureInfo) ->
+                        "(" + toString k a + ", " + toString k b + ", " + toString k c + ", " + toString k d + ", " + toString k e + ")"
 
 
-    let inline internal seqToString sepOpen sepClose x (b: StringBuilder) =
+    let inline internal seqToString (k:Globalization.CultureInfo) sepOpen sepClose x (b: StringBuilder) =
         let inline append (s:string) = b.Append s |> ignore
         append sepOpen
-        let withSemiColons = Seq.intersperse "; " (Seq.map toString x)
+        let withSemiColons = Seq.intersperse "; " (Seq.map (toString k) x)
         Seq.iter append withSemiColons
         append sepClose
-        toString b
+        toString k b
 
-    type ToString with static member inline instance (ToString, x:_ list, _) = fun () ->
+    type ToString with static member inline instance (ToString, x:_ list, _) = fun (k:Globalization.CultureInfo) ->
                         let b = StringBuilder()
-                        seqToString "[" "]" x b
+                        seqToString k "[" "]" x b
 
-    type ToString with static member inline instance (ToString, x:_ array, _) = fun () ->
+    type ToString with static member inline instance (ToString, x:_ array, _) = fun (k:Globalization.CultureInfo) ->
                         let b = StringBuilder()
-                        seqToString "[|" "|]" x b
+                        seqToString k "[|" "|]" x b
 
     type ToString with 
-        static member inline instance (ToString, x:_ ResizeArray, _) = fun () ->
+        static member inline instance (ToString, x:_ ResizeArray, _) = fun (k:Globalization.CultureInfo) ->
                         let b = StringBuilder()
                         b.Append "ResizeArray " |> ignore
-                        seqToString "[" "]" x b
-        static member instance (ToString, x:Expr<_>,       _) = fun () -> x.ToString()
+                        seqToString k "[" "]" x b
+        static member instance (ToString, x:Expr<_>,       _) = fun (k:Globalization.CultureInfo) -> x.ToString()
 
-    type ToString with static member inline instance (ToString, x:_ seq, _) = fun () ->
+    type ToString with static member inline instance (ToString, x:_ seq, _) = fun (k:Globalization.CultureInfo) ->
                         let b = StringBuilder()
                         b.Append "seq " |> ignore
-                        seqToString "[" "]" x b
+                        seqToString k "[" "]" x b
 
-    type ToString with static member inline instance (ToString, x:_ ICollection, _) = fun () ->
-                        toString (x :> _ seq)
+    type ToString with static member inline instance (ToString, x:_ ICollection, _) = fun (k:Globalization.CultureInfo) ->
+                        toString k (x :> _ seq)
 
-    type ToString with static member inline instance (ToString, x:_ IList, _) = fun () ->
-                        toString (x :> _ seq)
+    type ToString with static member inline instance (ToString, x:_ IList, _) = fun (k:Globalization.CultureInfo) ->
+                        toString k (x :> _ seq)
 
-    type ToString with static member inline instance (ToString, x:Map<_,_>, _) = fun () ->
+    type ToString with static member inline instance (ToString, x:Map<_,_>, _) = fun (k:Globalization.CultureInfo) ->
                         let b = StringBuilder()
                         b.Append "map " |> ignore
-                        seqToString "[" "]" x b
+                        seqToString k "[" "]" x b
 
     type ToString with 
-        static member inline instance (ToString, x:Dictionary<_,_>, _) = fun () ->
-                        toString (x :> seq<KeyValuePair<_,_>>)
+        static member inline instance (ToString, x:Dictionary<_,_>, _) = fun (k:Globalization.CultureInfo) ->
+                        toString k (x :> seq<KeyValuePair<_,_>>)
 
-        static member inline instance (ToString, x:_ Set, _) = fun () ->
+        static member inline instance (ToString, x:_ Set, _) = fun (k:Globalization.CultureInfo) ->
                         let b = StringBuilder()
                         b.Append "set " |> ignore
-                        seqToString "[" "]" x b
+                        seqToString k "[" "]" x b
 
-    type ToString with static member inline instance (ToString, x:IDictionary<_,_>, _) = fun () ->
-                        toString (x :> seq<KeyValuePair<_,_>>)
+    type ToString with static member inline instance (ToString, x:IDictionary<_,_>, _) = fun (k:Globalization.CultureInfo) ->
+                        toString k (x :> seq<KeyValuePair<_,_>>)
 
-    type ToString with static member inline instance (ToString, x:_ option, _) = fun () ->
+    type ToString with static member inline instance (ToString, x:_ option, _) = fun (k:Globalization.CultureInfo) ->
                         match x with
-                        | Some a -> "Some " + toString a
+                        | Some a -> "Some " + toString k a
                         | None   -> "None"
