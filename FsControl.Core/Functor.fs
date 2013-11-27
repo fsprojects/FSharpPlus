@@ -2,6 +2,7 @@ namespace FsControl.Core.TypeMethods
 
 open System
 open System.Text
+open System.Threading.Tasks
 open Microsoft.FSharp.Quotations
 open FsControl.Core
 open FsControl.Core.Prelude
@@ -12,6 +13,9 @@ type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
 // Monad class ------------------------------------------------------------
 module Monad =
     type Bind = Bind with
+        static member        instance (Bind, x:seq<_>       , _:seq<'b>       ) = fun (f:_->seq<'b>  )  -> Seq.collect   f x
+        static member        instance (Bind, x:Task<'a>    , _:'b Task     ) = fun (f:_->Task<'b> ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
+
         static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
         static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect  f x
         static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
@@ -50,6 +54,11 @@ open Monad
 
 module Applicative =
     type Pure = Pure with
+        static member        instance (Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
+        static member        instance (Pure, _:'a Task       ) = fun x -> 
+            let s = TaskCompletionSource()
+            s.SetResult x
+            s.Task
         static member        instance (Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
         static member        instance (Pure, _:List<'a>      ) = fun x -> [ x ]       :List<'a>
         static member        instance (Pure, _:'a []         ) = fun x -> [|x|]       :'a []
@@ -58,7 +67,7 @@ module Applicative =
         static member        instance (Pure, _:'a Async      ) = fun (x:'a) -> async.Return x
         static member        instance (Pure, _:Choice<'a,'e> ) = fun x -> Choice1Of2 x :Choice<'a,'e>
         static member        instance (Pure, _:Expr<'a>      ) = fun x -> <@ x @>     :Expr<'a>
-        static member        instance (Pure, _:'a ResizeArray) = fun x -> new ResizeArray<'a>(Seq.singleton x)        
+        static member        instance (Pure, _:'a ResizeArray) = fun x -> new ResizeArray<'a>(Seq.singleton x)
 
         //Restricted
         static member instance (Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
@@ -78,6 +87,7 @@ module Applicative =
 
     type Apply() =
         inherit ApplyDefault()
+        static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> DefaultImpl.ApplyFromMonad f x :seq<'b>
         static member        instance (_:Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
         static member        instance (_:Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
         static member        instance (_:Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
@@ -129,6 +139,7 @@ module Alternative =
 // Functor class ----------------------------------------------------------
 
 module Functor =
+
     type DefaultImpl =        
         static member inline MapFromApplicative f x = pure' f <*> x
         static member inline MapFromMonad f x = x >>= (pure' << f)
@@ -138,6 +149,7 @@ module Functor =
 
     type Map() =
         inherit MapDefault()
+        static member instance (_:Map, x:seq<_>      , _:seq<'b>) = fun f -> Seq.map f x :seq<'b>
         static member instance (_:Map, x:option<_>    , _) = fun f -> Option.map  f x
         static member instance (_:Map, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
         static member instance (_:Map, g:_->_         , _) = (>>) g
@@ -198,12 +210,14 @@ module Comonad =
     type Extract = Extract with
         static member        instance (Extract, (w:'w,a:'a) ,_) = fun () -> a
         static member inline instance (Extract, f:'m->'t ,_:'t) = fun () -> f (mempty())
+        static member        instance (Extract, f:'t Task,_:'t) = fun () -> f.Result
 
-        // Restricted
+        // Restricted        
         static member        instance (Extract, x:'t list         , _:'t) = fun () -> List.head x
         static member        instance (Extract, x:'t []           , _:'t) = fun () -> x.[0]
         static member        instance (Extract, x:string          , _   ) = fun () -> x.[0]
         static member        instance (Extract, x:StringBuilder   , _   ) = fun () -> x.ToString().[0]
+        static member        instance (Extract, x:'t seq          , _:'t) = fun () -> Seq.head x
 
     let inline internal extract x = Inline.instance (Extract, x) ()
 
@@ -211,6 +225,7 @@ module Comonad =
     type Extend = Extend with
         static member        instance (Extend, (w:'w, a:'a), _:'w *'b) = fun (f:_->'b) -> (w, f (w,a))        
         static member inline instance (Extend, (g:'m -> 'a), _:'m->'b) = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
+        static member        instance (Extend, (g:'a Task), _:'b Task) = fun (f:Task<'a>->'b) -> g.ContinueWith(f)
 
         // Restricted
         static member        instance (Extend, s:List<'a>, _:List<'b>) = fun g -> 
@@ -220,6 +235,10 @@ module Comonad =
         static member        instance (Extend, s:'a [], _:'b []) = fun g -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
             Array.map g (s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray) :'b []
+
+        static member        instance (Extend, s:'a seq, _:'b seq) = fun g -> 
+            let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
+            Seq.map g (s |> Seq.toList |> tails |> List.toSeq |> Seq.map List.toSeq) :'b seq
 
     let inline internal extend g s = Inline.instance (Extend, s) g
     let inline internal (=>>)  s g = extend g s
@@ -247,16 +266,23 @@ module Comonad =
 
 
 // MonadPlus class ------------------------------------------------------------
+open FsControl.Core.Types
+
 module MonadPlus =
     type Mzero = Mzero with
-        static member instance (Mzero, _:option<'a>) = fun () -> None
-        static member instance (Mzero, _:List<'a>  ) = fun () -> [  ]
-        static member instance (Mzero, _:'a []     ) = fun () -> [||]
+        static member        instance (Mzero, _:option<'a>) = fun () -> None        :option<'a>
+        static member        instance (Mzero, _:List<'a>  ) = fun () -> [  ]        :List<'a>  
+        static member        instance (Mzero, _:'a []     ) = fun () -> [||]        :'a []     
+        static member        instance (Mzero, _:seq<'a>   ) = fun () -> Seq.empty   :seq<'a>
+        static member inline instance (Mzero, _:Id<'a>    ) = fun () -> Id (mempty()) :Id<'a>
 
     type Mplus = Mplus with
-        static member instance (Mplus, x:option<_>, _) = fun y -> match x with None -> y | xs -> xs
-        static member instance (Mplus, x:List<_>  , _) = fun y -> x @ y
-        static member instance (Mplus, x:_ []     , _) = fun y -> Array.append x y
+        static member        instance (Mplus, x:_ option, _) = fun y -> match x with None -> y | xs -> xs
+        static member        instance (Mplus, x:_ list  , _) = fun y -> x @ y
+        static member        instance (Mplus, x:_ []    , _) = fun y -> Array.append x y
+        static member        instance (Mplus, x:_ seq   , _) = fun y -> Seq.append   x y
+        static member inline instance (Mplus, x:_ Id    , _) = fun y -> Id (mappend (Id.run x) (Id.run y))
+        
 
     let inline internal mzero () = Inline.instance Mzero ()
     let inline internal mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y

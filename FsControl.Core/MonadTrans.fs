@@ -29,6 +29,7 @@ type OptionT<'Ma> with
             let! maybe_value = x
             return! match maybe_value with Some value -> x | _ -> y}
 
+
 type ListT<'Ma> = ListT of 'Ma
 
 [<RequireQualifiedAccess>]
@@ -51,6 +52,38 @@ type ListT<'Ma> with
         let! b = y
         return (a @ b)}
 
+
+type SeqT<'Ma> = SeqT of 'Ma
+
+[<RequireQualifiedAccess>]
+module SeqT =
+    let run   (SeqT m) = m
+    let map f (SeqT m) = SeqT (f m)
+
+    let inline internal sequence (ms:seq<_>) =
+        let ms = Seq.toList ms
+        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (pure' :list<'a> -> 'M) (List.Cons(x,xs))
+        List.foldBack k ms ((pure' :list<'a> -> 'M) [])
+
+    let inline internal mapM f as' = sequence (Seq.map f as')
+
+type SeqT<'Ma> with
+    static member inline instance (_:Functor.Map   ,  SeqT x:SeqT<'ma>, _) = fun (f:'a->'b) -> SeqT (fmap (Seq.map f) x):SeqT<'mb>
+    static member inline instance (Applicative.Pure,           _:SeqT<'ma>) = SeqT << return' << Seq.singleton :'a -> SeqT<'ma>
+    static member inline instance (_:Applicative.Apply, SeqT(f), SeqT(x),  _:SeqT<'r>) = fun () ->
+        SeqT(fmap (<*>) f <*> x) :SeqT<'r>
+    static member inline instance (Monad.Bind  , SeqT x:SeqT<'ma>, _:SeqT<'mb>) =
+        fun (k: 'a -> SeqT<'mb>) -> 
+            (SeqT (x >>= SeqT.mapM(SeqT.run << k) >>= (Seq.concat >> return'))) :SeqT<'mb>
+
+    static member inline instance (MonadPlus.Mzero, _:SeqT<_>) = fun ()       -> SeqT (return' Seq.empty)
+    static member inline instance (MonadPlus.Mplus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
+        let! a = x
+        let! b = y
+        return (Seq.append a b)}
+
+
+
 namespace FsControl.Core.TypeMethods
 
 open FsControl.Core
@@ -62,8 +95,9 @@ open FsControl.Core.TypeMethods.Monad
 
 module MonadTrans = 
     type Lift = Lift with
-        static member inline instance (Lift, _:OptionT<'m_a>) = OptionT << (liftM Some)       :'ma -> OptionT<'m_a>
-        static member inline instance (Lift, _: ListT<'m_a> ) = ListT << (liftM List.singleton):'ma ->  ListT<'m_a> 
+        static member inline instance (Lift, _:OptionT<'m_a>) = OptionT << (liftM Some)          :'ma -> OptionT<'m_a>
+        static member inline instance (Lift, _: ListT<'m_a> ) = ListT   << (liftM List.singleton):'ma ->  ListT<'m_a> 
+        static member inline instance (Lift, _: SeqT<'m_a>  ) = SeqT    << (liftM Seq.singleton ):'ma ->  SeqT<'m_a> 
 
     let inline internal lift (x:'ma) = Inline.instance Lift x
 
@@ -73,6 +107,7 @@ module MonadAsync =
     type LiftAsync = LiftAsync with  
         static member inline instance (LiftAsync, _:OptionT<'U>) = fun (x :Async<'a>) -> lift (Inline.instance LiftAsync x)
         static member inline instance (LiftAsync, _:ListT< 'U> ) = fun (x :Async<'a>) -> lift (Inline.instance LiftAsync x)
+        static member inline instance (LiftAsync, _:SeqT< 'U>  ) = fun (x :Async<'a>) -> lift (Inline.instance LiftAsync x)
         static member        instance (LiftAsync, _:Async<'a>  ) = fun (x :Async<'a>) -> x
 
     let inline internal liftAsync (x: Async<'a>) = Inline.instance LiftAsync x
@@ -83,6 +118,7 @@ module MonadError =
     type ThrowError = ThrowError with
         static member inline instance (ThrowError, _:OptionT<'U>  ) = lift << Inline.instance ThrowError
         static member inline instance (ThrowError, _:ListT<'U>    ) = lift << Inline.instance ThrowError
+        static member inline instance (ThrowError, _:SeqT<'U>     ) = lift << Inline.instance ThrowError
         static member        instance (ThrowError, _:Choice<'v,'e>) = Error.throw
 
     type CatchError = CatchError with
@@ -90,8 +126,10 @@ module MonadError =
             OptionT ( (fun v h -> Inline.instance (CatchError, v) h) (OptionT.run m) (OptionT.run << h) ) :OptionT<'U>
         static member inline instance (CatchError,  m:ListT<'U> , _:ListT<'U>  ) = fun (h:'e -> ListT<'U>) -> 
             ListT ( (fun v h -> Inline.instance (CatchError, v) h) (ListT.run m) (ListT.run << h) ) :ListT<'U>
+        static member inline instance (CatchError,  m:SeqT<'U> , _:SeqT<'U>  ) = fun (h:'e -> SeqT<'U>) -> 
+            SeqT ( (fun v h -> Inline.instance (CatchError, v) h) (SeqT.run m) (SeqT.run << h) ) :SeqT<'U>
         static member        instance (CatchError, m:Choice<'v,'t>, _:Choice<'v,'e>) = fun (h:'t -> Choice<'v,'e>) -> Error.catch h m
-        static member        instance (CatchError, m:'t * 'v, _:'e * 'v) = fun (h:'t -> 'e * 'v) -> h (fst m) 
+        static member        instance (CatchError, m:'t * 'v, _:'e * 'v) = fun (h:'t -> 'e * 'v) -> h (fst m)
 
     let inline throwError x   = Inline.instance  ThrowError x
     let inline catchError v h = Inline.instance (CatchError, v) h
@@ -100,7 +138,8 @@ module MonadError =
 module MonadCont =
     type CallCC = CallCC with
         static member instance (CallCC, _:OptionT<Cont<'r,option<'a>>>) = fun (f:((_ -> OptionT<Cont<_,'b>>) -> _)) -> OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))     :OptionT<Cont<'r,option<'a>>>
-        static member instance (CallCC, _:ListT<Cont<'r,   List<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))):ListT<Cont<'r, List<'a>>>    
+        static member instance (CallCC, _:ListT<Cont<'r ,  List<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))):ListT<Cont<'r, List<'a>>>
+        static member instance (CallCC, _: SeqT<Cont<'r ,  seq<'a>>>  ) = fun (f:((_ -> SeqT<Cont<_,'b>>   ) -> _)) -> SeqT   (Cont.callCC <| fun c ->   SeqT.run (f (SeqT  << c << Seq.singleton ))):SeqT<Cont<'r ,  seq<'a>>>
         static member instance (CallCC, _:Cont<'r,'a>) = Cont.callCC : (('a -> Cont<'r,'b>) -> _) -> _
 
     let inline internal callCC f = Inline.instance CallCC f
@@ -110,11 +149,13 @@ module MonadState =
     type Get = Get with
         static member inline instance (Get, _:OptionT<_>) = fun () -> lift (State.get())
         static member inline instance (Get, _:ListT<_>  ) = fun () -> lift (State.get())
+        static member inline instance (Get, _: SeqT<_>  ) = fun () -> lift (State.get())
         static member        instance (Get, _:State<_,_>) = fun () ->      (State.get())
 
     type Put = Put with
         static member inline instance (Put, _:OptionT<_>) = lift << State.put
         static member inline instance (Put, _:ListT<_>  ) = lift << State.put
+        static member inline instance (Put, _: SeqT<_>  ) = lift << State.put
         static member        instance (Put, _:State<_,_>) =         State.put
 
     let inline internal get() = Inline.instance Get ()
@@ -124,12 +165,14 @@ module MonadState =
 module MonadReader =
     type Ask = Ask with
         static member instance (Ask, _:OptionT<Reader<'a,option<'a>>>) = fun () -> lift (Reader.ask()) :OptionT<Reader<'a,option<'a>>>
-        static member instance (Ask, _:ListT<Reader< 'a,List<   'a>>>) = fun () -> lift (Reader.ask()) :  ListT<Reader<'a,  List<'a>>>
+        static member instance (Ask, _:ListT<Reader< 'a, List<  'a>>>) = fun () -> lift (Reader.ask()) :  ListT<Reader<'a,  List<'a>>>
+        static member instance (Ask, _: SeqT<Reader< 'a,  seq<  'a>>>) = fun () -> lift (Reader.ask()) :   SeqT<Reader<'a,   seq<'a>>>
         static member instance (Ask, _:Reader<'r,'r>                 ) = fun () ->      (Reader.ask()) :Reader<'r,'r>
 
     type Local = Local with
         static member inline instance (Local, OptionT m, _:OptionT<_> ) = fun f -> OptionT <| Reader.local f m
-        static member inline instance (Local, ListT   m, _: ListT<_>  ) = fun f -> ListT   <| Reader.local f m
+        static member inline instance (Local,  ListT  m, _: ListT<_>  ) = fun f ->  ListT  <| Reader.local f m
+        static member inline instance (Local,   SeqT  m, _:  SeqT<_>  ) = fun f ->   SeqT  <| Reader.local f m
         static member        instance (Local,         m, _:Reader<_,_>) = fun f ->            Reader.local f m
 
     let inline internal ask()     = Inline.instance  Ask ()

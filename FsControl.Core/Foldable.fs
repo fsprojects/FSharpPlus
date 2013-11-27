@@ -18,6 +18,8 @@ module Foldable =
         static member instance (Foldr, x:Set<_>       , _) = fun (f,z) -> Set.foldBack           f x z
         static member instance (Foldr, x:string       , _) = fun (f,z) -> Array.foldBack f (x.ToCharArray()) z
         static member instance (Foldr, x:StringBuilder, _) = fun (f,z) -> Array.foldBack f (x.ToString().ToCharArray()) z
+        static member instance (Foldr, x:seq<_>       , _) = fun (f,z) -> List.foldBack  f (Seq.toList x) z
+        static member instance (Foldr, x:Id<'a>       , _) = fun (f,z) -> f (Id.run x) z
 
     type DefaultImpl =
         static member inline FoldMapFromFoldr f x = Inline.instance (Foldr, x) (mappend << f, mempty())
