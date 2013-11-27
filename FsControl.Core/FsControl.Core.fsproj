@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\FsControl.Core.XML</DocumentationFile>
+    <OtherFlags>--staticlink:FsControl.BaseLib</OtherFlags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Release\FsControl.Core.XML</DocumentationFile>
+    <OtherFlags>--staticlink:FsControl.BaseLib</OtherFlags>
   </PropertyGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
@@ -91,7 +93,7 @@
     <ProjectReference Include="..\FsControl.BaseLib\FsControl.BaseLib.csproj">
       <Name>FsControl.BaseLib</Name>
       <Project>{1b99df98-65ac-4038-8be5-e72b0882f420}</Project>
-      <Private>True</Private>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
