@@ -141,17 +141,23 @@ module Operators =
     let inline fromList (value :list<'t>) = Inline.instance  Collection.FromList value
     let inline groupBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupBy, x) f)
     let inline splitBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.SplitBy, x) f)
-    let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy , x) f) :'t
+    let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy , x) f)
     
 
 
     // Converter
 
-    let inline fromBytesWithOffset (startIndex:int) (value:byte[]) = Inline.instance Converter.FromBytes (value, startIndex)
-    let inline fromBytes                            (value:byte[]) = Inline.instance Converter.FromBytes (value, 0         )
-    let inline toBytes value :byte[]  = Inline.instance (Converter.ToBytes , value) ()
-    let inline parse (value:string)   = Inline.instance  Converter.Parse     value
-    let inline toString value :string = Inline.instance (Converter.ToString, value) ()
+    let inline fromBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = Inline.instance Converter.FromBytes (value, startIndex, isLtEndian)
+    let inline fromBytes   (value:byte[]) = Inline.instance Converter.FromBytes (value, 0, true)
+    let inline fromBytesBE (value:byte[]) = Inline.instance Converter.FromBytes (value, 0, false)
+    let inline toBytes   value :byte[] = Inline.instance (Converter.ToBytes, value) true
+    let inline toBytesBE value :byte[] = Inline.instance (Converter.ToBytes, value) false
+    let inline toStringWithCulture (k:System.Globalization.CultureInfo) value:string  = Inline.instance (Converter.ToString, value) k
+    let inline toString  value:string  = Inline.instance (Converter.ToString, value) System.Globalization.CultureInfo.InvariantCulture    
+    let inline tryParse (value:string) = Inline.instance  Converter.TryParse  value
+    let inline parse    (value:string) = Inline.instance  Converter.Parse     value
+
+    let xxx = toString 6
 
 
     // Applicative Operators

@@ -1,4 +1,4 @@
-#r @"..\..\packages\FsControl.1.0.6\lib\net40\FsControl.Core.dll"
+#r @"..\..\FSharpPlus\bin\Release\FsControl.Core.dll"
 #load @"..\Operators.fs"
 #load @"..\Builders.fs"
 #load @"..\Extensions.fs"
@@ -27,6 +27,8 @@ let inline myQuery x1 x2 = linq {
 
 let (arr1, arr2) = [|"1";"2";"3"|], [|10;20;30;40|]
 let (lst1, lst2) = [ "1";"2";"3" ], [ 10;20;30;40 ]
+let (seq1, seq2) = seq ["1";"2";"3"], seq [10;20;30;40]
 
 let arr = myQuery arr1 arr2
 let lst = myQuery lst1 lst2
+let sq  = myQuery seq1 seq2

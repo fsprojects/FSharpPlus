@@ -52,11 +52,11 @@ type NonEmptyList with
     static member instance (_:Foldable.Foldr, {Head = x; Tail = xs}, _) = fun (f,z) -> List.foldBack f (x::xs) z
     static member instance (_:Foldable.ToList, s:NonEmptyList<'a>, _) = fun () -> NonEmptyList.toList s
 
-    static member inline instance (_:Converter.ToString, s:NonEmptyList<'a>, _) = fun () ->
+    static member inline instance (_:Converter.ToString, s:NonEmptyList<'a>, _) = fun (k:System.Globalization.CultureInfo) ->
             let b = StringBuilder()
             let inline append (s:string) = b.Append s |> ignore
             append "NonEmptyList ["
-            let withSemiColons = NonEmptyList.toSeq s |> Seq.map toString |> Seq.intersperse "; "
+            let withSemiColons = NonEmptyList.toSeq s |> Seq.map (toStringWithCulture k) |> Seq.intersperse "; "
             Seq.iter append withSemiColons
             append "]"
             b.ToString()
