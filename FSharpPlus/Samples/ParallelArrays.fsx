@@ -1,4 +1,4 @@
-#r @"..\..\packages\FsControl.1.0.6\lib\net40\FsControl.Core.dll"
+#r @"..\..\FSharpPlus\bin\Release\FsControl.Core.dll"
 #load @"..\Operators.fs"
 #load @"..\ParallelArray.fs"
 
