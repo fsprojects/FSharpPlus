@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.NumericH98.TypeMethods
+﻿namespace FsControl.Core.TypeMethods
 
 
 open System.Numerics
@@ -112,10 +112,10 @@ module internal Numerics =
 
 
 // Ratio ------------------------------------------------------------------
-namespace FsControl.Core.NumericH98.Types
+namespace FsControl.Core.Types
 open FsControl.Core.Prelude
-open FsControl.Core.NumericH98.TypeMethods
-open FsControl.Core.NumericH98.TypeMethods.Numerics
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Numerics
 open Num
 open Integral
 
@@ -157,15 +157,15 @@ type Rational = Ratio.Ratio<bigint>
 
 
 
-namespace FsControl.Core.NumericH98.TypeMethods
+namespace FsControl.Core.TypeMethods
 
 open FsControl.Core.Prelude
 open Num
 open Integral
 open Numerics
-open FsControl.Core.NumericH98
-open FsControl.Core.NumericH98.Types
-open FsControl.Core.NumericH98.TypeMethods
+open FsControl.Core
+open FsControl.Core.Types
+open FsControl.Core.TypeMethods
 open Ratio
 
 open System.Numerics
@@ -217,4 +217,3 @@ module Floating =
         static member instance (Pi, _:float32) = fun () -> 3.14159274f
         static member instance (Pi, _:float  ) = fun () -> System.Math.PI
         static member instance (Pi, _:Complex) = fun () -> Complex(System.Math.PI, 0.0)
-

@@ -36,17 +36,17 @@ let either f g = function Left x -> f x | Right y -> g y
 // Numerics
 type Integer = bigint
 open System.Numerics
-open FsControl.Core.NumericH98.TypeMethods
-open FsControl.Core.NumericH98.TypeMethods.Num
-open FsControl.Core.NumericH98.TypeMethods.Integral
-open FsControl.Core.NumericH98.TypeMethods.Floating
-open FsControl.Core.NumericH98.TypeMethods.Fractional
-open FsControl.Core.NumericH98.TypeMethods.Real
-open FsControl.Core.NumericH98.TypeMethods.RealFrac
-open FsControl.Core.NumericH98.Types.Ratio
+open FsControl.Core.TypeMethods
+open FsControl.Core.TypeMethods.Num
+open FsControl.Core.TypeMethods.Integral
+open FsControl.Core.TypeMethods.Floating
+open FsControl.Core.TypeMethods.Fractional
+open FsControl.Core.TypeMethods.Real
+open FsControl.Core.TypeMethods.RealFrac
+open FsControl.Core.Types.Ratio
 
-let inline fromInteger (x:Integer) :'Num = Inline.instance FromInteger x
-let inline toInteger (x:'Integral) :Integer = Inline.instance (ToInteger, x) ()
+let inline fromInteger  (x:Integer)   :'Num    = Inline.instance FromInteger x
+let inline toInteger    (x:'Integral) :Integer = Inline.instance (ToInteger, x) ()
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
@@ -56,7 +56,7 @@ module NumericLiteralG =
     let inline FromInt64  (i:int64 ) = fromIntegral i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
 
-let inline abs (x:'Num) :'Num = Inline.instance (Abs, x) ()
+let inline abs    (x:'Num) :'Num = Inline.instance (Abs   , x) ()
 let inline signum (x:'Num) :'Num = Inline.instance (Signum, x) ()
 
 let inline (+) (a:'Num) (b:'Num) :'Num = a + b

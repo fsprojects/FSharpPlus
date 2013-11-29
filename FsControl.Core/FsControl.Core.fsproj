@@ -54,7 +54,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="InlineHelper.fs" />
     <Compile Include="Prelude.fs" />
-    <Compile Include="NumericH98.fs" />
+    <Compile Include="Numeric.fs" />
     <Compile Include="Monoid.fs" />
     <Compile Include="Functor.fs" />
     <Compile Include="Arrow.fs" />
