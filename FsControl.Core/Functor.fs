@@ -65,7 +65,7 @@ module Applicative =
         static member inline instance (Pure, _: 'm * 'a      ) = fun (x:'a) -> (mempty(), x)
         static member        instance (Pure, _:'a Async      ) = fun (x:'a) -> async.Return x
         static member        instance (Pure, _:Choice<'a,'e> ) = fun x -> Choice1Of2 x :Choice<'a,'e>
-        static member        instance (Pure, _:Expr<'a>      ) = fun x -> <@ x @>     :Expr<'a>
+        static member        instance (Pure, _:Expr<'a>      ) = fun x -> Expr.Cast<'a>(Expr.Value(x))
         static member        instance (Pure, _:'a ResizeArray) = fun x -> ResizeArray<'a>(Seq.singleton x)
 
         //Restricted
@@ -111,7 +111,7 @@ module Applicative =
                 | Some vx -> yield k, vf vx
                 | _       -> () })
 
-        static member        instance (_:Apply, f:_ Expr      , x:'a Expr      , _:'b Expr      ) = fun () -> <@ (%f) %x @> :'b Expr
+        static member        instance (_:Apply, f:Expr<'a->'b>, x:Expr<'a>, _:Expr<'b>) = fun () -> Expr.Cast<'b>(Expr.Application(f,x))
 
         static member        instance (_:Apply, f:('a->'b) ResizeArray, x:'a ResizeArray, _:'b ResizeArray) = fun () ->
             ResizeArray(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
@@ -162,7 +162,7 @@ module Functor =
         static member instance (_:Map, x:Choice<_,_>  , _) = fun f -> Error.map f x
         static member instance (_:Map, KeyValue(k, x) , _) = fun (f:'b->'c) -> keyValue(k, f x)
         static member instance (_:Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
-        static member instance (_:Map, x:Expr<_>      , _) = fun f -> <@ f %x @>
+        static member instance (_:Map, x:Expr<'a>     , _) = fun (f:'a->'b) -> Expr.Cast<'b>(Expr.Application(Expr.Value(f),x))
         static member instance (_:Map, x:_ ResizeArray, _) = fun f -> ResizeArray(Seq.map f x) : ResizeArray<'b>
         static member instance (_:Map, x:_ IObservable, _) = fun f -> Observable.map f x
 
