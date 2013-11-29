@@ -63,10 +63,17 @@ let d = skip 1000 bigMut
 let e = "hello world" |> skip 6 |> toList
 let h = fromList ['h';'e';'l';'l';'o';' '] + "world"
 
-let asQuotation = mappend <@ new ResizeArray<_>(["1"]) @> <@ new ResizeArray<_>(["2;3"]) @>
+let asQuotation = mappend <@ ResizeArray(["1"]) @> <@ ResizeArray(["2;3"]) @>
+let quot123     = mappend <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>
+let quot1       = mappend <@ ResizeArray([1])   @>      (mempty())
+let quot23      = mappend    (mempty())            <@ ResizeArray([2;3])   @>
+let quot13      = mappend    (mempty())            <@ ("1","3") @>
 
-let inline internal map   f x = Inline.instance (Map, x) f
-let inline internal (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
+let inline map   f x = Inline.instance (Map, x) f
+let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
+
+let quot7 = map ((+)2) <@ 5 @>
+let (quot5:Microsoft.FSharp.Quotations.Expr<int>) = result 5
 
 // Do notation
 type MonadBuilder() =

@@ -25,7 +25,7 @@ module internal Seq =
         use e = source.GetEnumerator()
         if (e.MoveNext()) then
             let groupKey = ref (keyMapper e.Current)
-            let values   = ref (new ResizeArray<_>())
+            let values   = ref (ResizeArray())
             (!values).Add(e.Current)
             while (e.MoveNext()) do
                 let key = keyMapper e.Current
@@ -33,7 +33,7 @@ module internal Seq =
                 else
                     yield (!groupKey, !values)
                     groupKey := key
-                    values   := new ResizeArray<_>()
+                    values   := ResizeArray()
                     (!values).Add(e.Current)
             yield (!groupKey, !values)}
 

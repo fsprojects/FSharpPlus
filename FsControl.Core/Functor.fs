@@ -13,9 +13,8 @@ type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
 // Monad class ------------------------------------------------------------
 module Monad =
     type Bind = Bind with
-        static member        instance (Bind, x:seq<_>       , _:seq<'b>       ) = fun (f:_->seq<'b>  )  -> Seq.collect   f x
-        static member        instance (Bind, x:Task<'a>    , _:'b Task     ) = fun (f:_->Task<'b> ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
-
+        static member        instance (Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.collect   f x
+        static member        instance (Bind, x:Task<'a>     , _:'b Task      ) = fun (f:_->Task<'b>  ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
         static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
         static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect  f x
         static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
@@ -40,9 +39,9 @@ module Monad =
 
     type Join() =
         inherit JoinDefault()
-        static member        instance (_:Join, x:option<option<'a>>    , _:option<'a>   ) = fun () -> Option.bind   id x
-        static member        instance (_:Join, x:List<_>      , _:List<'b>     ) = fun () -> List.collect  id x
-        static member        instance (_:Join, x:'b [] []         , _:'b []        ) = fun () -> Array.collect id x
+        static member        instance (_:Join, x:option<option<'a>>, _:option<'a>) = fun () -> Option.bind   id x
+        static member        instance (_:Join, x:List<_>           , _:List<'b>  ) = fun () -> List.collect  id x
+        static member        instance (_:Join, x:'b [] []          , _:'b []     ) = fun () -> Array.collect id x
 
     let Join = Join()
 
@@ -67,7 +66,7 @@ module Applicative =
         static member        instance (Pure, _:'a Async      ) = fun (x:'a) -> async.Return x
         static member        instance (Pure, _:Choice<'a,'e> ) = fun x -> Choice1Of2 x :Choice<'a,'e>
         static member        instance (Pure, _:Expr<'a>      ) = fun x -> <@ x @>     :Expr<'a>
-        static member        instance (Pure, _:'a ResizeArray) = fun x -> new ResizeArray<'a>(Seq.singleton x)
+        static member        instance (Pure, _:'a ResizeArray) = fun x -> ResizeArray<'a>(Seq.singleton x)
 
         //Restricted
         static member instance (Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
@@ -115,7 +114,7 @@ module Applicative =
         static member        instance (_:Apply, f:_ Expr      , x:'a Expr      , _:'b Expr      ) = fun () -> <@ (%f) %x @> :'b Expr
 
         static member        instance (_:Apply, f:('a->'b) ResizeArray, x:'a ResizeArray, _:'b ResizeArray) = fun () ->
-            new ResizeArray<'b>(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
+            ResizeArray(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
 
     let Apply = Apply()
    
@@ -164,7 +163,7 @@ module Functor =
         static member instance (_:Map, KeyValue(k, x) , _) = fun (f:'b->'c) -> keyValue(k, f x)
         static member instance (_:Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
         static member instance (_:Map, x:Expr<_>      , _) = fun f -> <@ f %x @>
-        static member instance (_:Map, x:_ ResizeArray, _) = fun f -> new ResizeArray<'b>(Seq.map f x)
+        static member instance (_:Map, x:_ ResizeArray, _) = fun f -> ResizeArray(Seq.map f x) : ResizeArray<'b>
         static member instance (_:Map, x:_ IObservable, _) = fun f -> Observable.map f x
 
         // Restricted

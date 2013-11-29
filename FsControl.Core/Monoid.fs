@@ -29,7 +29,7 @@ module Monoid =
 
     type Mempty with
         static member inline instance (Mempty, _:Expr<'a>       ) = fun () -> let v = mempty() in <@ v @>
-        static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> new ResizeArray<'a>()
+        static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> ResizeArray() : ResizeArray<'a>
         static member        instance (Mempty, _:seq<'a>  ) = fun () -> Seq.empty   :  seq<'a>
         
 
