@@ -5,22 +5,22 @@ open System.Numerics
 open FsControl.Core.Prelude
 
 module Num =
-    type FromInteger = FromInteger with
-        static member        instance (FromInteger, _:sbyte     ) = fun (x:bigint) -> sbyte           x
-        static member        instance (FromInteger, _:int16     ) = fun (x:bigint) -> int16           x
-        static member        instance (FromInteger, _:int32     ) = fun (x:bigint) -> int             x
-        static member        instance (FromInteger, _:int64     ) = fun (x:bigint) -> int64           x
-        static member        instance (FromInteger, _:nativeint ) = fun (x:bigint) -> nativeint  (int x)
-        static member        instance (FromInteger, _:byte      ) = fun (x:bigint) -> byte            x
-        static member        instance (FromInteger, _:uint16    ) = fun (x:bigint) -> uint16          x
-        static member        instance (FromInteger, _:uint32    ) = fun (x:bigint) -> uint32          x
-        static member        instance (FromInteger, _:uint64    ) = fun (x:bigint) -> uint64          x
-        static member        instance (FromInteger, _:unativeint) = fun (x:bigint) -> unativeint (int x)
-        static member        instance (FromInteger, _:bigint    ) = fun (x:bigint) ->                 x
-        static member        instance (FromInteger, _:float     ) = fun (x:bigint) -> float           x
-        static member        instance (FromInteger, _:float32   ) = fun (x:bigint) -> float32         x    
-        static member        instance (FromInteger, _:decimal   ) = fun (x:bigint) -> decimal         x
-        static member        instance (FromInteger, _:Complex   ) = fun (x:bigint) -> Complex (float  x, 0.0)
+    type FromBigInteger = FromBigInteger with
+        static member        instance (FromBigInteger, _:sbyte     ) = fun (x:bigint) -> sbyte           x
+        static member        instance (FromBigInteger, _:int16     ) = fun (x:bigint) -> int16           x
+        static member        instance (FromBigInteger, _:int32     ) = fun (x:bigint) -> int             x
+        static member        instance (FromBigInteger, _:int64     ) = fun (x:bigint) -> int64           x
+        static member        instance (FromBigInteger, _:nativeint ) = fun (x:bigint) -> nativeint  (int x)
+        static member        instance (FromBigInteger, _:byte      ) = fun (x:bigint) -> byte            x
+        static member        instance (FromBigInteger, _:uint16    ) = fun (x:bigint) -> uint16          x
+        static member        instance (FromBigInteger, _:uint32    ) = fun (x:bigint) -> uint32          x
+        static member        instance (FromBigInteger, _:uint64    ) = fun (x:bigint) -> uint64          x
+        static member        instance (FromBigInteger, _:unativeint) = fun (x:bigint) -> unativeint (int x)
+        static member        instance (FromBigInteger, _:bigint    ) = fun (x:bigint) ->                 x
+        static member        instance (FromBigInteger, _:float     ) = fun (x:bigint) -> float           x
+        static member        instance (FromBigInteger, _:float32   ) = fun (x:bigint) -> float32         x
+        static member        instance (FromBigInteger, _:decimal   ) = fun (x:bigint) -> decimal         x
+        static member        instance (FromBigInteger, _:Complex   ) = fun (x:bigint) -> Complex (float  x, 0.0)
 
     type Abs = Abs with
         static member inline instance (Abs, _:^t when ^t: null and ^t: struct, _) = fun () -> id
@@ -34,7 +34,7 @@ module Num =
 
     type Signum = Signum with
         static member inline instance (Signum, _:^t when ^t: null and ^t: struct, _) = fun () -> id
-        static member inline instance (Signum, x:'t        , _) = fun () -> Inline.instance FromInteger (bigint (sign x)) :'t
+        static member inline instance (Signum, x:'t        , _) = fun () -> Inline.instance FromBigInteger (bigint (sign x)) :'t
         static member        instance (Signum, x:byte      , _) = fun () -> if x = 0uy then 0uy else 1uy
         static member        instance (Signum, x:uint16    , _) = fun () -> if x = 0us then 0us else 1us
         static member        instance (Signum, x:uint32    , _) = fun () -> if x = 0u  then 0u  else 1u
@@ -61,37 +61,37 @@ module Num =
 
 // Integral class ---------------------------------------------------------
 module Integral =
-    type ToInteger = ToInteger with
-        static member        instance (ToInteger, x:sbyte     , _) = fun () -> bigint (int x)
-        static member        instance (ToInteger, x:int16     , _) = fun () -> bigint (int x)
-        static member        instance (ToInteger, x:int32     , _) = fun () -> bigint      x
-        static member        instance (ToInteger, x:int64     , _) = fun () -> bigint      x
-        static member        instance (ToInteger, x:nativeint , _) = fun () -> bigint (int x)
-        static member        instance (ToInteger, x:byte      , _) = fun () -> bigint (int x)
-        static member        instance (ToInteger, x:uint16    , _) = fun () -> bigint (int x)
-        static member        instance (ToInteger, x:uint32    , _) = fun () -> bigint      x
-        static member        instance (ToInteger, x:uint64    , _) = fun () -> bigint      x
-        static member        instance (ToInteger, x:unativeint, _) = fun () -> bigint (int x)
-        static member        instance (ToInteger, x:bigint    , _) = fun () ->             x
+    type ToBigInteger = ToBigInteger with
+        static member        instance (ToBigInteger, x:sbyte     , _) = fun () -> bigint (int x)
+        static member        instance (ToBigInteger, x:int16     , _) = fun () -> bigint (int x)
+        static member        instance (ToBigInteger, x:int32     , _) = fun () -> bigint      x
+        static member        instance (ToBigInteger, x:int64     , _) = fun () -> bigint      x
+        static member        instance (ToBigInteger, x:nativeint , _) = fun () -> bigint (int x)
+        static member        instance (ToBigInteger, x:byte      , _) = fun () -> bigint (int x)
+        static member        instance (ToBigInteger, x:uint16    , _) = fun () -> bigint (int x)
+        static member        instance (ToBigInteger, x:uint32    , _) = fun () -> bigint      x
+        static member        instance (ToBigInteger, x:uint64    , _) = fun () -> bigint      x
+        static member        instance (ToBigInteger, x:unativeint, _) = fun () -> bigint (int x)
+        static member        instance (ToBigInteger, x:bigint    , _) = fun () ->             x
 
 
 
 open System.Numerics
 
 module internal Numerics =
-    let inline internal fromInteger (x:bigint) :'Num = Inline.instance Num.FromInteger x
+    let inline internal fromBigInteger (x:bigint) :'Num = Inline.instance Num.FromBigInteger x
     let inline internal abs    (x:'Num) :'Num = Inline.instance (Num.Abs   , x) ()
     let inline internal signum (x:'Num) :'Num = Inline.instance (Num.Signum, x) ()
     let inline internal negate (x:'Num) :'Num = Inline.instance (Num.Negate, x) ()
 
-    let inline internal toInteger (x:'Integral) :bigint = Inline.instance (Integral.ToInteger, x) ()
+    let inline internal toBigInteger (x:'Integral) :bigint = Inline.instance (Integral.ToBigInteger, x) ()
 
-    let inline internal fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
+    let inline internal fromIntegral (x:'Integral) :'Num = (fromBigInteger << toBigInteger) x
 
     let inline internal G0() = fromIntegral 0
     let inline internal G1() = fromIntegral 1
 
-    let inline internal whenIntegral a = let _ = if false then toInteger a else 0I in ()
+    let inline internal whenIntegral a = let _ = if false then toBigInteger a else 0I in ()
 
     let inline internal quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
     let inline internal rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
@@ -149,10 +149,10 @@ module Ratio =
         static member inline (-) (Ratio(a,b), Ratio(c,d)) = (a *. d -. c *. b) </ratio/> (b *. d)
         static member inline (*) (Ratio(a,b), Ratio(c,d)) = (a *. c) </ratio/> (b *. d)
 
-    type Ratio<'RA> with static member inline instance (_:Num.Abs        , r:Ratio<_>, _) = fun () -> (abs    (numerator r)) </ratio/> (denominator r)
-    type Ratio<'RA> with static member inline instance (_:Num.Signum     , r:Ratio<_>, _) = fun () -> (signum (numerator r)) </ratio/> G1()
-    type Ratio<'RA> with static member inline instance (_:Num.FromInteger, _:Ratio<_>) = fun (x:bigint) -> Inline.instance Num.FromInteger x </ratio/> G1()
-    type Ratio<'RA> with static member inline instance (_:Num.Negate     , r:Ratio<_>, _) = fun () -> -(numerator r) </ratio/> (denominator r)
+    type Ratio<'RA> with static member inline instance (_:Num.Abs           , r:Ratio<_>, _) = fun () -> (abs    (numerator r)) </ratio/> (denominator r)
+    type Ratio<'RA> with static member inline instance (_:Num.Signum        , r:Ratio<_>, _) = fun () -> (signum (numerator r)) </ratio/> G1()
+    type Ratio<'RA> with static member inline instance (_:Num.FromBigInteger, _:Ratio<_>) = fun (x:bigint) -> Inline.instance Num.FromBigInteger x </ratio/> G1()
+    type Ratio<'RA> with static member inline instance (_:Num.Negate        , r:Ratio<_>, _) = fun () -> -(numerator r) </ratio/> (denominator r)
 
 type Rational = Ratio.Ratio<bigint>
 
@@ -198,7 +198,7 @@ module Real =
     let inline internal (</) x = (|>) x
     let inline internal (/>) x = flip x
     type ToRational = ToRational with
-        static member inline instance (ToRational, r:Ratio<_>, _) = fun () -> toInteger (numerator r) </ratio/> toInteger (denominator r) :Rational
+        static member inline instance (ToRational, r:Ratio<_>, _) = fun () -> toBigInteger (numerator r) </ratio/> toBigInteger (denominator r) :Rational
         static member inline instance (ToRational, x:'t      , _) = fun () ->
             let inline fromRational (x:Rational) :'Fractional = Inline.instance Fractional.FromRational x
             let inline whenFractional a = let _ = if false then fromRational (1I </ratio/> 1I) else a in () 
@@ -209,7 +209,7 @@ module Real =
             let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
             let (i:bigint,d) = properFraction x
             (i </ratio/> 1I) + (truncate (decimal d *. 1000000000000000000000000000M) </ratio/> 1000000000000000000000000000I) :Rational
-        static member inline instance (ToRational, x:'t, _) = fun () -> (toInteger x) </ratio/> 1I
+        static member inline instance (ToRational, x:'t, _) = fun () -> (toBigInteger x) </ratio/> 1I
 
 
 // Floating class ---------------------------------------------------------

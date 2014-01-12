@@ -45,8 +45,8 @@ open FsControl.Core.TypeMethods.Real
 open FsControl.Core.TypeMethods.RealFrac
 open FsControl.Core.Types.Ratio
 
-let inline fromInteger  (x:Integer)   :'Num    = Inline.instance FromInteger x
-let inline toInteger    (x:'Integral) :Integer = Inline.instance (ToInteger, x) ()
+let inline fromInteger  (x:Integer)   :'Num    = Inline.instance FromBigInteger x
+let inline toInteger    (x:'Integral) :Integer = Inline.instance (ToBigInteger, x) ()
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
