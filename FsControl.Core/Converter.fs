@@ -8,8 +8,30 @@ open Microsoft.FSharp.Core.Printf
 open FsControl.BaseLib
 open FsControl.Core
 open FsControl.Core.Prelude
+open System.Numerics
 
 module Converter =
+
+    type Convert = Convert with
+        static member inline instance (Convert, _:sbyte     ) = fun x -> sbyte           x
+        static member inline instance (Convert, _:int16     ) = fun x -> int16           x
+        static member inline instance (Convert, _:int32     ) = fun x -> int             x
+        static member inline instance (Convert, _:int64     ) = fun x -> int64           x
+        static member inline instance (Convert, _:nativeint ) = fun x -> nativeint  (int x)
+        static member inline instance (Convert, _:byte      ) = fun x -> byte            x
+        static member inline instance (Convert, _:uint16    ) = fun x -> uint16          x
+        static member inline instance (Convert, _:uint32    ) = fun x -> uint32          x
+        static member inline instance (Convert, _:uint64    ) = fun x -> uint64          x
+        static member inline instance (Convert, _:unativeint) = fun x -> unativeint (int x)
+        static member inline instance (Convert, _:float     ) = fun x -> float           x
+        static member inline instance (Convert, _:float32   ) = fun x -> float32         x    
+        static member inline instance (Convert, _:decimal   ) = fun x -> decimal         x
+        static member inline instance (Convert, _:Complex   ) = fun x -> Complex (float  x, 0.0)
+        static member inline instance (Convert, _:char      ) = fun x -> char x
+        static member inline instance (Convert, _:string    ) = fun x -> string x
+
+    let inline convert x : 'T  = Inline.instance Convert x
+
 
     type FromBytes = FromBytes with
         static member instance (FromBytes, _:bool   ) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
