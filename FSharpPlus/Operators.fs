@@ -180,3 +180,28 @@ module Operators =
     let inline ( |/  ) (x :'Functor't)     (y :'t)             = map ((/)/> y) x :'Functor't
     let inline (  /| ) (x :'t)             (y :'Functor't)     = map ((/)   x) y :'Functor't
     let inline ( |/| ) (x :'Applicative't) (y :'Applicative't) = (/) <!> x <*> y :'Applicative't
+
+
+    module GenericMath =
+
+        open System.Numerics
+        let inline fromBigInteger (x:bigint   ) :'Num   = Inline.instance Num.FromBigInteger x
+        let inline toBigInteger   (x:'Integral) :bigint = Inline.instance (Integral.ToBigInteger, x) ()
+        let inline fromIntegral   (x:'Integral) :'Num   = (fromBigInteger << toBigInteger) x
+
+        module NumericLiteralG =
+            let inline FromZero() = fromIntegral 0
+            let inline FromOne () = fromIntegral 1
+            let inline FromInt32  (i:int   ) = fromIntegral i
+            let inline FromInt64  (i:int64 ) = fromIntegral i
+            let inline FromString (i:string) = fromBigInteger <| BigInteger.Parse i
+
+        let inline abs    (x:'Num) :'Num = Inline.instance (Num.Abs   , x) ()
+        let inline signum (x:'Num) :'Num = Inline.instance (Num.Signum, x) ()
+
+        let inline (+) (a:'Num) (b:'Num) :'Num = a + b
+        let inline (-) (a:'Num) (b:'Num) :'Num = a - b
+        let inline (*) (a:'Num) (b:'Num) :'Num = a * b
+
+        let inline negate (x:'Num) :'Num = Inline.instance (Num.Negate, x) ()
+        let inline (~-)   (x:'Num) :'Num = Inline.instance (Num.Negate, x) ()
