@@ -8,11 +8,11 @@ open System.Reflection
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
 [<assembly: AssemblyProduct("")>]
-[<assembly: AssemblyCopyright("Copyright © 2012-2013")>]
+[<assembly: AssemblyCopyright("Copyright © 2012-2014")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 
 [<assembly: AssemblyVersion("1.0.0.0")>]
 [<assembly: AssemblyFileVersion("1.0.0.0")>]
-[<assembly: AssemblyInformationalVersion("1.0.7")>]
+[<assembly: AssemblyInformationalVersion("1.0.8")>]
 do()
