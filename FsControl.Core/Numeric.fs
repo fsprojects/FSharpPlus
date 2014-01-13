@@ -4,6 +4,7 @@
 open System.Numerics
 open FsControl.Core.Prelude
 
+#if NOTNET35
 module Num =
     type FromBigInteger = FromBigInteger with
         static member        instance (FromBigInteger, _:sbyte     ) = fun (x:bigint) -> sbyte           x
@@ -218,3 +219,4 @@ module Floating =
         static member instance (Pi, _:float32) = fun () -> 3.14159274f
         static member instance (Pi, _:float  ) = fun () -> System.Math.PI
         static member instance (Pi, _:Complex) = fun () -> Complex(System.Math.PI, 0.0)
+#endif
