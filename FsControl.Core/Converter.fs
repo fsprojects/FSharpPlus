@@ -26,7 +26,9 @@ module Converter =
         static member inline instance (Convert, _:float     ) = fun x -> float           x
         static member inline instance (Convert, _:float32   ) = fun x -> float32         x    
         static member inline instance (Convert, _:decimal   ) = fun x -> decimal         x
+#if NOTNET35
         static member inline instance (Convert, _:Complex   ) = fun x -> Complex (float  x, 0.0)
+#endif
         static member inline instance (Convert, _:char      ) = fun x -> char x
         static member inline instance (Convert, _:string    ) = fun x -> string x
 
@@ -78,12 +80,13 @@ module Converter =
 
     type Parse = Parse with
         static member inline instance (Parse, _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
+#if NOTNET35
         static member        instance (Parse, _:'T when 'T : enum<_>) = fun x ->
             (match Enum.TryParse(x) with
              | (true, v) -> v
              | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")
             ):'enum
-
+#endif
         static member instance (Parse, _:bool         ) = fun x -> Boolean.Parse(x)
         static member instance (Parse, _:char         ) = fun x -> Char   .Parse(x)
         static member instance (Parse, _:string       ) = id :string->_

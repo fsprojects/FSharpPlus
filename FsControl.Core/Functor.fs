@@ -2,7 +2,9 @@ namespace FsControl.Core.TypeMethods
 
 open System
 open System.Text
+#if NOTNET35
 open System.Threading.Tasks
+#endif
 open Microsoft.FSharp.Quotations
 open FsControl.Core
 open FsControl.Core.Prelude
@@ -13,8 +15,10 @@ type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
 // Monad class ------------------------------------------------------------
 module Monad =
     type Bind = Bind with
+#if NOTNET35
         static member        instance (Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.collect   f x
         static member        instance (Bind, x:Task<'a>     , _:'b Task      ) = fun (f:_->Task<'b>  ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
+#endif
         static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
         static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect  f x
         static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
@@ -53,11 +57,13 @@ open Monad
 
 module Applicative =
     type Pure = Pure with
+#if NOTNET35
         static member        instance (Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
         static member        instance (Pure, _:'a Task       ) = fun x -> 
             let s = TaskCompletionSource()
             s.SetResult x
             s.Task
+#endif
         static member        instance (Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
         static member        instance (Pure, _:List<'a>      ) = fun x -> [ x ]       :List<'a>
         static member        instance (Pure, _:'a []         ) = fun x -> [|x|]       :'a []
@@ -86,7 +92,9 @@ module Applicative =
 
     type Apply() =
         inherit ApplyDefault()
+#if NOTNET35
         static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> DefaultImpl.ApplyFromMonad f x :seq<'b>
+#endif
         static member        instance (_:Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
         static member        instance (_:Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
         static member        instance (_:Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
@@ -209,7 +217,9 @@ module Comonad =
     type Extract = Extract with
         static member        instance (Extract, (w:'w,a:'a) ,_) = fun () -> a
         static member inline instance (Extract, f:'m->'t ,_:'t) = fun () -> f (mempty())
+#if NOTNET35
         static member        instance (Extract, f:'t Task,_:'t) = fun () -> f.Result
+#endif
 
         // Restricted        
         static member        instance (Extract, x:'t list         , _:'t) = fun () -> List.head x
@@ -224,8 +234,9 @@ module Comonad =
     type Extend = Extend with
         static member        instance (Extend, (w:'w, a:'a), _:'w *'b) = fun (f:_->'b) -> (w, f (w,a))        
         static member inline instance (Extend, (g:'m -> 'a), _:'m->'b) = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
+#if NOTNET35
         static member        instance (Extend, (g:'a Task), _:'b Task) = fun (f:Task<'a>->'b) -> g.ContinueWith(f)
-
+#endif
         // Restricted
         static member        instance (Extend, s:List<'a>, _:List<'b>) = fun g -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
