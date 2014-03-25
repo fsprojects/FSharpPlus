@@ -88,6 +88,7 @@ module Foldable =
     type Filter() =
         inherit FilterDefault()
 
+        static member instance (_:Filter, x:'t option, _:'t option) = fun p -> match x with None -> None | Some a -> if p a then x else None
         static member instance (_:Filter, x:'t list, _:'t list) = fun p -> List.filter  p x
         static member instance (_:Filter, x:'t []  , _:'t []  ) = fun p -> Array.filter p x
         static member instance (_:Filter, x:'t IObservable, _:'t IObservable) = fun p -> Observable.filter p x

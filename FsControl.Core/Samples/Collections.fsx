@@ -39,6 +39,7 @@ type ZipList<'s> = ZipList of 's seq with
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
 // let five   = filter ((=) 5) (set [1;2;3;4;5;6])             // <- Uses the default method.
+let optionFilter = filter ((=) 3) (Some 4)
 
 let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]
 let listGroup  = groupBy ((%)/> 2) [ 11;2;3;9;5;6;7;8;9;10 ]
