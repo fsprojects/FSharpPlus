@@ -1,4 +1,6 @@
-﻿namespace FsControl.Core
+namespace FsControl.Core
+
+open System.Collections.Generic
 
 module internal Prelude =
     let inline flip f x y = f y x
@@ -21,22 +23,23 @@ module internal Seq =
             yield element
             notFirst := true}
 
-    let inline splitBy keyMapper (source:_ seq) = seq {
-        use e = source.GetEnumerator()
-        if (e.MoveNext()) then
-            let groupKey = ref (keyMapper e.Current)
-            let values   = ref (ResizeArray())
-            (!values).Add(e.Current)
-            while (e.MoveNext()) do
-                let key = keyMapper e.Current
-                if !groupKey = key then (!values).Add(e.Current)
+    let inline splitBy projection (source : _ seq) = seq {
+        let rec loop (e : IEnumerator<_>) g (members : List<_>) = seq {        
+            members.Add(e.Current)
+            if e.MoveNext() then
+                let key = projection e.Current
+                if key = g then
+                    yield! loop e key members
                 else
-                    yield (!groupKey, !values)
-                    groupKey := key
-                    values   := ResizeArray()
-                    (!values).Add(e.Current)
-            yield (!groupKey, !values)}
-
+                    yield g, seq members
+                    yield! loop e key (List())
+            else
+                yield g, seq members
+        }
+        use e = source.GetEnumerator()
+        if e.MoveNext() then
+            yield! loop e (projection e.Current) (List())
+    }
 
 [<RequireQualifiedAccess>]
 module internal Error =
