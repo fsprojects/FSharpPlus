@@ -32,9 +32,14 @@ module Collection =
 
 
     type FromList = FromList with
+
+
 #if NOTNET35
         static member instance (FromList, _:string        ) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList)
         static member instance (FromList, _:StringBuilder ) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList))
+#else
+        static member instance (FromList, _:string        ) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList |> Array.map string)
+        static member instance (FromList, _:StringBuilder ) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList |> Array.map string))
 #endif
         static member instance (FromList, _:'a []         ) = Array.ofList<'a>
         static member instance (FromList, _:'a ResizeArray) = fun (x:list<'a>)   -> ResizeArray x
