@@ -183,3 +183,21 @@ module Converter =
                         match x with
                         | Some a -> "Some " + toString k a
                         | None   -> "None"
+
+    type ToString with static member inline instance (ToString, x:Choice<_,_>, _) = fun (k:Globalization.CultureInfo) ->
+                        match x with
+                        | Choice1Of2 a -> "Choice1Of2 " + toString k a
+                        | Choice2Of2 b -> "Choice2Of2 " + toString k b
+
+    type ToString with static member inline instance (ToString, x:Choice<_,_,_>, _) = fun (k:Globalization.CultureInfo) ->
+                        match x with
+                        | Choice1Of3 a -> "Choice1Of3 " + toString k a
+                        | Choice2Of3 b -> "Choice2Of3 " + toString k b
+                        | Choice3Of3 c -> "Choice3Of3 " + toString k c
+
+    type ToString with static member inline instance (ToString, x:Choice<_,_,_,_>, _) = fun (k:Globalization.CultureInfo) ->
+                        match x with
+                        | Choice1Of4 a -> "Choice1Of4 " + toString k a
+                        | Choice2Of4 b -> "Choice2Of4 " + toString k b
+                        | Choice3Of4 c -> "Choice3Of4 " + toString k c
+                        | Choice4Of4 d -> "Choice4Of4 " + toString k d
