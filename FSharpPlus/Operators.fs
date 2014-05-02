@@ -57,8 +57,16 @@ module Operators =
             | x::xs -> (f a x) >>= fun fax -> loopM f fax xs 
             | [] -> result a
         loopM f a bx
+
+
+    type InternalMonadBuilder() =
+        member inline b.Return(x)    = result x
+        member inline b.Bind(p,rest) = p >>= rest
+        member        b.Let (p,rest) = rest p
+        member    b.ReturnFrom(expr) = expr
         
     let inline filterM (f : 'a -> 'Monad'Bool) (xs : List<'a>) : 'Monad'List'a =
+        let monad = new InternalMonadBuilder()
         let rec loopM (f : 'a -> 'Monad'Bool) (xs : List<'a>) : 'Monad'List'a =
             monad {
                 match xs with
