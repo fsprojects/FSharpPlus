@@ -61,6 +61,7 @@
     <None Include="Samples\MonadTransformers.fsx" />
     <None Include="Samples\ParallelArrays.fsx" />
     <None Include="Samples\ZipLists.fsx" />
+    <None Include="Samples\Miscellaneous" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
