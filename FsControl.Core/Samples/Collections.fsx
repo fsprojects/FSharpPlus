@@ -8,27 +8,12 @@ open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Comonad
 open FsControl.Core.TypeMethods.Foldable
 open FsControl.Core.TypeMethods.Monoid
+open FsControl.Operators
 
 let flip f x y = f y x
 let konst k _ = k
 let (</) = (|>)
 let (/>) = flip
-
-let inline skip (n:int) (x) = Inline.instance (Skip, x) n
-let inline take (n:int) (x) = Inline.instance (Take, x) n
-let inline fromList (value:list<'t>) = Inline.instance FromList value
-let inline toList value :list<'t> = Inline.instance (ToList, value) ()
-let inline extract x = Inline.instance (Comonad.Extract, x) ()
-let inline result  x = Inline.instance Pure x
-let inline mempty() = Inline.instance Monoid.Mempty ()
-let inline mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
-let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
-let inline foldMap f x = Inline.instance (FoldMap, x) f
-let inline filter (p:_->bool) (x:'t) = (Inline.instance (Filter, x) p) :'t
-
-let inline groupBy (f:'a->'b) (x:'t) = (Inline.instance (GroupBy, x) f)
-let inline splitBy (f:'a->'b) (x:'t) = (Inline.instance (SplitBy, x) f)
-let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (SortBy , x) f) :'t
 
 type ZipList<'s> = ZipList of 's seq with
     static member instance (_:Map,   ZipList x  , _:ZipList<'b>) = fun (f:'a->'b) -> ZipList (Seq.map f x)

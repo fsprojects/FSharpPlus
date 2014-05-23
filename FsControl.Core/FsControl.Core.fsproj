@@ -78,6 +78,7 @@
     <Compile Include="ErrorT.fs" />
     <Compile Include="Converter.fs" />
     <Compile Include="Collection.fs" />
+    <Compile Include="Operators.fs" />
     <None Include="Samples\Functions.fsx" />
     <None Include="Samples\Haskell.fsx" />
     <None Include="Samples\Collections.fsx" />
@@ -93,7 +94,7 @@
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics"  Condition="$(TargetFrameworkVersion) != 'v3.5'" />
+    <Reference Include="System.Numerics" Condition="$(TargetFrameworkVersion) != 'v3.5'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FsControl.BaseLib\FsControl.BaseLib.csproj">
