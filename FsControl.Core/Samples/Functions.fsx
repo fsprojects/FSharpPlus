@@ -78,6 +78,8 @@ let inline (++++) f g = Inline.instance  ArrowChoice.AcMerge  (f, g)
 let inline left   f   = Inline.instance (ArrowChoice.AcLeft , f) ()
 let inline right  f   = Inline.instance (ArrowChoice.AcRight, f) ()
 let inline arrAp()    = Inline.instance  ArrowApply.Apply ()
+let inline zeroArrow() = Inline.instance ArrowZero.ZeroArrow ()
+let inline (<+>) f g = Inline.instance (ArrowPlus.Plus, f) g
 
 
 // Foldable

@@ -363,6 +363,8 @@ open FsControl.Core.TypeMethods.Category
 open FsControl.Core.TypeMethods.Arrow
 open FsControl.Core.TypeMethods.ArrowChoice
 open FsControl.Core.TypeMethods.ArrowApply
+open FsControl.Core.TypeMethods.ArrowZero
+open FsControl.Core.TypeMethods.ArrowPlus
 
 let inline id'() = Inline.instance Id ()
 let inline (<<<) f g = Inline.instance (Comp, f) g
@@ -377,6 +379,8 @@ let inline (+++) f g = Inline.instance AcMerge (f, g)
 let inline left f = Inline.instance (AcLeft, f) ()
 let inline right f = Inline.instance (AcRight, f) ()
 let inline app() = Inline.instance Apply ()
+let inline zeroArrow() = Inline.instance ZeroArrow ()
+let inline (<+>) f g = Inline.instance (Plus, f) g
 let runKleisli (Kleisli f) = f
 
 // Test Arrows
@@ -403,7 +407,9 @@ let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2 ; y * 3]) +++ Kleis
 let res7      = app() ( (+) 3 , 4)
 let res4n8n12 = runKleisli (app()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
 
-
+// Test Arrow Plus
+let resSomeX = Kleisli(fun x -> Some x)
+let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 // Applicative functors
 open FsControl.Core.TypeMethods.Applicative

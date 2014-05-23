@@ -11,6 +11,7 @@ open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods.Monad
 open FsControl.Core.TypeMethods.Functor
 open FsControl.Core.Types
+open FsControl.Core.TypeMethods.MonadPlus
 
 module Category =
 
@@ -83,3 +84,17 @@ module ArrowApply =
     type Apply = Apply with
         static member instance (Apply, _: ('a -> 'b) * 'a -> 'b          ) = fun () ->          fun (f,x)          -> f x
         static member instance (Apply, _: Kleisli<Kleisli<'a,'b> * 'a,'b>) = fun () -> Kleisli (fun (Kleisli f, x) -> f x)
+        
+module ArrowZero =
+
+    type ZeroArrow = ZeroArrow with
+        static member inline instance (ZeroArrow, _) = fun () -> Kleisli (fun _ -> mzero ()) 
+ 
+    let inline internal zeroArrow() = Inline.instance ZeroArrow ()
+ 
+module ArrowPlus =
+
+    type Plus = Plus with
+        static member inline instance (Plus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> mplus (f x) (g x))
+ 
+    let inline internal (<+>) f g = Inline.instance(Plus, f) g
