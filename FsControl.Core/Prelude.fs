@@ -24,21 +24,20 @@ module internal Seq =
             notFirst := true}
 
     let inline splitBy projection (source : _ seq) = seq {
-        let rec loop (e : IEnumerator<_>) g (members : List<_>) = seq {        
-            members.Add(e.Current)
-            if e.MoveNext() then
-                let key = projection e.Current
-                if key = g then
-                    yield! loop e key members
-                else
-                    yield g, seq members
-                    yield! loop e key (List())
-            else
-                yield g, seq members
-        }
         use e = source.GetEnumerator()
         if e.MoveNext() then
-            yield! loop e (projection e.Current) (List())
+            let g = ref (projection e.Current)
+            let members = ref (List())
+            (!members).Add(e.Current)
+            while (e.MoveNext()) do
+                let key = projection e.Current
+                if !g = key then (!members).Add(e.Current)
+                else
+                    yield (!g, !members)
+                    g := key
+                    members := List()
+                    (!members).Add(e.Current)
+            yield (!g, !members)
     }
 
 [<RequireQualifiedAccess>]

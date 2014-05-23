@@ -30,6 +30,8 @@ let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]
 let listGroup  = groupBy ((%)/> 2) [ 11;2;3;9;5;6;7;8;9;10 ]
 let seqGroup   = groupBy ((%)/> 2) (seq [11;2;3;9;5;6;7;8;9;10])
 
+let arrayGroupAdj   = splitBy ((%)/> 2) [11;2;3;9;5;6;7;8;9;10]
+
 let sortedList = sortBy string     [ 11;2;3;9;5;6;7;8;9;10 ]
 let sortedSeq  = sortBy string (seq [11;2;3;9;5;6;7;8;9;10])
 
