@@ -23,7 +23,7 @@ module internal Seq =
             yield element
             notFirst := true}
 
-    let inline splitBy projection (source : _ seq) = seq {
+    let inline groupAdjBy projection (source : _ seq) = seq {
         use e = source.GetEnumerator()
         if e.MoveNext() then
             let g = ref (projection e.Current)

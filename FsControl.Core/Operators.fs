@@ -159,9 +159,9 @@ module Operators =
     let inline skip (n:int) x = Inline.instance (Collection.Skip, x) n
     let inline take (n:int) x = Inline.instance (Collection.Take, x) n
     let inline fromList (value :list<'t>) = Inline.instance  Collection.FromList value
-    let inline groupBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupBy, x) f)
-    let inline splitBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.SplitBy, x) f)
-    let inline sortBy  (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy , x) f)
+    let inline groupBy    (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupBy   , x) f)
+    let inline groupAdjBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupAdjBy, x) f)
+    let inline sortBy     (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy    , x) f)
    
 
 
