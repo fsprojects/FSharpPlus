@@ -90,15 +90,11 @@ type Dummy<'a, 'm> = Dummy of ('a -> 'm)
 module ArrowZero =
 
     type ZeroArrow = ZeroArrow with
-        static member inline instance (ZeroArrow, _:Dummy<_,_>)   = fun () -> Dummy   (fun _ -> mzero ())
+        static member inline instance (ZeroArrow, _:Dummy<_,_>  ) = fun () -> Dummy   (fun _ -> mzero ())
         static member inline instance (ZeroArrow, _:Kleisli<_,_>) = fun () -> Kleisli (fun _ -> mzero ())
- 
-    let inline internal zeroArrow() = Inline.instance ZeroArrow ()
  
 module ArrowPlus =
     
     type Plus = Plus with
         static member inline instance (Plus, Dummy   f, _) = fun (Dummy   g) -> Dummy  (fun x -> mplus (f x) (g x))
         static member inline instance (Plus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> mplus (f x) (g x))
- 
-    let inline internal (<+>) f g = Inline.instance(Plus, f) g
