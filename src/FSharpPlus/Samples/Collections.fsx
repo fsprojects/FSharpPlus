@@ -32,3 +32,12 @@ let (seq1, seq2) = seq ["1";"2";"3"], seq [10;20;30;40]
 let arr = myQuery arr1 arr2
 let lst = myQuery lst1 lst2
 let sq  = myQuery seq1 seq2
+
+
+let inline myQuery2 x = linq {
+    for e in x do
+    groupAdjBy (parse e %  2) into g
+    select  (toString (fst g), snd g )} 
+
+let lst3 = myQuery2 [ "1";"2";"4";"3" ]
+let seq3 = myQuery2 (Seq.initInfinite string)
