@@ -15,7 +15,7 @@ module Extensions =
     [<AutoOpen>]
     module Seq =
         
-        let splitBy keyMapper (source:_ seq) = seq {
+        let groupAdjBy keyMapper (source:_ seq) = seq {
             use e = source.GetEnumerator()
             if (e.MoveNext()) then
                 let groupKey = ref (keyMapper e.Current)
