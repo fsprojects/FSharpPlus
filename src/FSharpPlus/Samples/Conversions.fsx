@@ -1,4 +1,4 @@
-#r @"..\..\FSharpPlus\bin\Release\FsControl.Core.dll"
+#r @"..\..\build\FsControl.Core.dll"
 #load @"..\Operators.fs"
 open FSharpPlus
 
