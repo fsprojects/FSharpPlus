@@ -5,13 +5,20 @@ open FsControl.Core.TypeMethods
 [<AutoOpenAttribute>]
 module Operators =
 
+    // Common combinators
     let inline flip f x y = f y x
     let inline konst k _ = k
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
     let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
     let inline option n f = function None -> n | Some x -> f x
-
+    let inline tuple2 a b             = a,b
+    let inline tuple3 a b c           = a,b,c
+    let inline tuple4 a b c d         = a,b,c,d
+    let inline tuple5 a b c d e       = a,b,c,d,e
+    let inline tuple6 a b c d e f     = a,b,c,d,e,f
+    let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
+    let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
     // Functor ----------------------------------------------------------------
     let inline map (f:'a->'b) (x:'Functor'a) :'Functor'b = Inline.instance (Functor.Map, x) f
@@ -49,33 +56,22 @@ module Operators =
         let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (List.Cons(x,xs))
         List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
 
-    let inline mapM   (f:'a->'Monad'b) (xs:List<'a>) :'Monad'List'b = sequence (List.map f xs)
+    let inline mapM (f:'a->'Monad'b) (xs:List<'a>) :'Monad'List'b = sequence (List.map f xs)
     
     let inline foldM (f:'a->'b->'Monad'a) (a:'a) (bx:List<'b>) : 'Monad'a =
-        let rec loopM (f:'a->'b->'Monad'a) (a:'a) (bx:List<'b>) : 'Monad'a =
-            match bx with
-            | x::xs -> (f a x) >>= fun fax -> loopM f fax xs 
+        let rec loopM a = function
+            | x::xs -> (f a x) >>= fun fax -> loopM fax xs 
             | [] -> result a
-        loopM f a bx
+        loopM a bx
 
-
-    type InternalMonadBuilder() =
-        member inline b.Return(x)    = result x
-        member inline b.Bind(p,rest) = p >>= rest
-        member        b.Let (p,rest) = rest p
-        member    b.ReturnFrom(expr) = expr
-        
-    let inline filterM (f : 'a -> 'Monad'Bool) (xs : List<'a>) : 'Monad'List'a =
-        let monad = new InternalMonadBuilder()
-        let rec loopM (f : 'a -> 'Monad'Bool) (xs : List<'a>) : 'Monad'List'a =
-            monad {
-                match xs with
-                | h::t -> let! flg = f h
-                          let! ys = loopM f t
-                          return if flg then (h::ys) else ys 
-                | [] -> return []
-            }
-        loopM f xs    
+    let inline filterM (f: 'a -> 'Monad'Bool) (xs: List<'a>) : 'Monad'List'a =
+        let rec loopM = function
+            | []   -> result []
+            | h::t -> 
+                f h >>= (fun flg ->
+                    loopM t >>= (fun ys ->
+                        result (if flg then (h::ys) else ys)))
+        loopM xs
     
     let inline liftM  (f:'a->'b) (m1:'Monad'a) :'Monad'b = m1 >>= (result << f)
     let inline liftM2 (f:'a1->'a2->'r) (m1:'Monad'a1) (m2:'Monad'a2) :'Monad'r = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
