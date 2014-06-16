@@ -40,33 +40,22 @@ module Operators =
         let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (List.Cons(x,xs))
         List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
 
-    let inline mapM   (f:'a->'Monad'b) (xs:List<'a>) :'Monad'List'b = sequence (List.map f xs)
-   
+    let inline mapM (f:'a->'Monad'b) (xs:List<'a>) :'Monad'List'b = sequence (List.map f xs)
+    
     let inline foldM (f:'a->'b->'Monad'a) (a:'a) (bx:List<'b>) : 'Monad'a =
-        let rec loopM (f:'a->'b->'Monad'a) (a:'a) (bx:List<'b>) : 'Monad'a =
-            match bx with
-            | x::xs -> (f a x) >>= fun fax -> loopM f fax xs
+        let rec loopM a = function
+            | x::xs -> (f a x) >>= fun fax -> loopM fax xs 
             | [] -> result a
-        loopM f a bx
+        loopM a bx
 
-
-    type InternalMonadBuilder() =
-        member inline b.Return(x)    = result x
-        member inline b.Bind(p,rest) = p >>= rest
-        member        b.Let (p,rest) = rest p
-        member    b.ReturnFrom(expr) = expr
-       
-    let inline filterM (f : 'a -> 'Monad'Bool) (xs : List<'a>) : 'Monad'List'a =
-        let monad = new InternalMonadBuilder()
-        let rec loopM (f : 'a -> 'Monad'Bool) (xs : List<'a>) : 'Monad'List'a =
-            monad {
-                match xs with
-                | h::t -> let! flg = f h
-                          let! ys = loopM f t
-                          return if flg then (h::ys) else ys
-                | [] -> return []
-            }
-        loopM f xs   
+    let inline filterM (f: 'a -> 'Monad'Bool) (xs: List<'a>) : 'Monad'List'a =
+        let rec loopM = function
+            | []   -> result []
+            | h::t -> 
+                f h >>= (fun flg ->
+                    loopM t >>= (fun ys ->
+                        result (if flg then (h::ys) else ys)))
+        loopM xs
    
     let inline liftM  (f:'a->'b) (m1:'Monad'a) :'Monad'b = m1 >>= (result << f)
     let inline liftM2 (f:'a1->'a2->'r) (m1:'Monad'a1) (m2:'Monad'a2) :'Monad'r = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
