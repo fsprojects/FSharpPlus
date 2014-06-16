@@ -181,30 +181,34 @@ module Operators =
     let inline parse    (value:string) = Inline.instance  Converter.Parse     value
     let inline convert   value:'T      = Inline.instance  Converter.Convert   value
 
+    /// <summary>Math Operators ready to use over Applicative Functors.</summary>
+    module ApplicativeMath =
 
-    // Applicative Operators
+        let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
+        let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
+        let inline ( |+| ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
 
-    let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
-    let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
-    let inline ( |+| ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
+        let inline ( |-  ) (x :'Functor't)     (y :'t)             = map ((-)/> y) x :'Functor't
+        let inline (  -| ) (x :'t)             (y :'Functor't)     = map ((-)   x) y :'Functor't
+        let inline ( |-| ) (x :'Applicative't) (y :'Applicative't) = (-) <!> x <*> y :'Applicative't
 
-    let inline ( |-  ) (x :'Functor't)     (y :'t)             = map ((-)/> y) x :'Functor't
-    let inline (  -| ) (x :'t)             (y :'Functor't)     = map ((-)   x) y :'Functor't
-    let inline ( |-| ) (x :'Applicative't) (y :'Applicative't) = (-) <!> x <*> y :'Applicative't
+        let inline ( |*  ) (x :'Functor't)     (y :'t)             = map ((*)/> y) x :'Functor't
+        let inline (  *| ) (x :'t)             (y :'Functor't)     = map ((*)   x) y :'Functor't
+        let inline ( |*| ) (x :'Applicative't) (y :'Applicative't) = (*) <!> x <*> y :'Applicative't
 
-    let inline ( |*  ) (x :'Functor't)     (y :'t)             = map ((*)/> y) x :'Functor't
-    let inline (  *| ) (x :'t)             (y :'Functor't)     = map ((*)   x) y :'Functor't
-    let inline ( |*| ) (x :'Applicative't) (y :'Applicative't) = (*) <!> x <*> y :'Applicative't
+        let inline ( |%  ) (x :'Functor't)     (y :'t)             = map ((%)/> y) x :'Functor't
+        let inline (  %| ) (x :'t)             (y :'Functor't)     = map ((%)   x) y :'Functor't
+        let inline ( |%| ) (x :'Applicative't) (y :'Applicative't) = (%) <!> x <*> y :'Applicative't
 
-    let inline ( |%  ) (x :'Functor't)     (y :'t)             = map ((%)/> y) x :'Functor't
-    let inline (  %| ) (x :'t)             (y :'Functor't)     = map ((%)   x) y :'Functor't
-    let inline ( |%| ) (x :'Applicative't) (y :'Applicative't) = (%) <!> x <*> y :'Applicative't
-
-    let inline ( |/  ) (x :'Functor't)     (y :'t)             = map ((/)/> y) x :'Functor't
-    let inline (  /| ) (x :'t)             (y :'Functor't)     = map ((/)   x) y :'Functor't
-    let inline ( |/| ) (x :'Applicative't) (y :'Applicative't) = (/) <!> x <*> y :'Applicative't
+        let inline ( |/  ) (x :'Functor't)     (y :'t)             = map ((/)/> y) x :'Functor't
+        let inline (  /| ) (x :'t)             (y :'Functor't)     = map ((/)   x) y :'Functor't
+        let inline ( |/| ) (x :'Applicative't) (y :'Applicative't) = (/) <!> x <*> y :'Applicative't
 
 
+    /// <summary>
+    /// Generic numbers, functions and operators.
+    /// By opening this module some common operators become restricted, like (+) to 'a->'a->'a 
+    /// </summary>
     module GenericMath =
 
         open System.Numerics
