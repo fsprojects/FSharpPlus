@@ -1,4 +1,4 @@
-FSharpPlus
+FSharpPlus [![Build Status](https://api.travis-ci.org/gmpl/FSharpPlus.svg?branch=master)](https://travis-ci.org/gmpl/FSharpPlus)
 ==========
 
 This project contains some extensions for F#.
