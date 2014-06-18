@@ -16,7 +16,7 @@ type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
 // Monad class ------------------------------------------------------------
 module Monad =
     type Bind = Bind with
-
+        static member        instance (Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> f x.Value
         static member        instance (Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.collect   f x
         static member        instance (Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> Id(f x)
 
@@ -48,6 +48,8 @@ module Monad =
 
     type Join() =
         inherit JoinDefault()
+        // this causes "let inline internal join" below to be constrained to Lazy<'a> (?)
+        //static member        instance (_:Join, x:Lazy<Lazy<'a>>    , _:Lazy<'a>  ) = fun () -> x.Value
         static member        instance (_:Join, x:option<option<'a>>, _:option<'a>) = fun () -> Option.bind   id x
         static member        instance (_:Join, x:List<_>           , _:List<'b>  ) = fun () -> List.collect  id x
         static member        instance (_:Join, x:'b [] []          , _:'b []     ) = fun () -> Array.collect id x
@@ -62,7 +64,7 @@ open Monad
 
 module Applicative =
     type Pure = Pure with
-
+        static member        instance (Pure, _:Lazy<'a>      ) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
         static member        instance (Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
         static member        instance (Pure, _:Id<'a>        ) = fun x -> Id x :Id<'a>
 
@@ -71,8 +73,7 @@ module Applicative =
             let s = TaskCompletionSource()
             s.SetResult x
             s.Task
-#endif
-
+#endif        
         static member        instance (Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
         static member        instance (Pure, _:List<'a>      ) = fun x -> [ x ]       :List<'a>
         static member        instance (Pure, _:'a []         ) = fun x -> [|x|]       :'a []
@@ -101,7 +102,7 @@ module Applicative =
 
     type Apply() =
         inherit ApplyDefault()
-
+        static member        instance (_:Apply, f:Lazy<'a->'b>, x:Lazy<'a>     , _:Lazy<'b>     ) = fun () -> Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
         static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> DefaultImpl.ApplyFromMonad f x :seq<'b>
         static member        instance (_:Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
         static member        instance (_:Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
@@ -164,6 +165,7 @@ module Functor =
 
     type Map() =
         inherit MapDefault()
+        static member instance (_:Map, x:Lazy<_>      , _:Lazy<'b>) = fun f -> Lazy.Create (fun () -> f x.Value) : Lazy<'b>
         static member instance (_:Map, x:seq<_>       , _:seq<'b>) = fun f -> Seq.map f x :seq<'b>
         static member instance (_:Map, x:option<_>    , _) = fun f -> Option.map  f x
         static member instance (_:Map, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
@@ -223,6 +225,7 @@ open Functor
 module Comonad =
 
     type Extract = Extract with
+        static member        instance (Extract, x:'t Lazy,_:'t) = fun () -> x.Value
         static member        instance (Extract, (w:'w,a:'a) ,_) = fun () -> a
         static member inline instance (Extract, f:'m->'t ,_:'t) = fun () -> f (mempty())
         static member        instance (Extract, f:'t Id  ,_:'t) = fun () -> f
@@ -242,6 +245,7 @@ module Comonad =
 
 
     type Extend = Extend with
+        static member        instance (Extend, (g:'a Lazy), _:'b Lazy) = fun (f:Lazy<'a>->'b) -> Lazy.Create (fun () -> f g) : Lazy<'b>
         static member        instance (Extend, (w:'w, a:'a), _:'w *'b) = fun (f:_->'b) -> (w, f (w,a))        
         static member inline instance (Extend, (g:'m -> 'a), _:'m->'b) = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
         static member        instance (Extend, (g:'a Id   ), _:'b Id ) = fun (f:Id<'a>->'b) -> f g
@@ -271,6 +275,7 @@ module Comonad =
 
     type Duplicate() =
         inherit DuplicateDefault()
+        static member        instance (_:Duplicate, s:Lazy<'a>, _:Lazy<Lazy<'a>>) = fun () -> Lazy.CreateFromValue s : Lazy<Lazy<'a>>
         static member        instance (_:Duplicate, (w:'w, a:'a), _:'w * ('w*'a)) = fun ()     -> (w, (w, a))
         static member inline instance (_:Duplicate,  f:'m -> 'a , _:'m->'m->'a  ) = fun () a b -> f (mappend a b)
 

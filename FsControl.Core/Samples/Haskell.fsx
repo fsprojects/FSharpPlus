@@ -179,6 +179,7 @@ let do' = new DoNotationBuilder()
 // Test return
 let resSome2 :option<_> = return' 2
 let resSing2 :list<_>   = return' 2
+let resLazy2 :Lazy<_>   = return' 2
 
 
 // Test List Monad
