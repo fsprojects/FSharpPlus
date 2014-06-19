@@ -48,11 +48,12 @@ module Monad =
 
     type Join() =
         inherit JoinDefault()
-        // this causes "let inline internal join" below to be constrained to Lazy<'a> (?)
-        //static member        instance (_:Join, x:Lazy<Lazy<'a>>    , _:Lazy<'a>  ) = fun () -> x.Value
+
+        static member        instance (_:Join, x:Lazy<Lazy<'a>>    , _:Lazy<'a>  ) = fun () -> x.Value
         static member        instance (_:Join, x:option<option<'a>>, _:option<'a>) = fun () -> Option.bind   id x
         static member        instance (_:Join, x:List<_>           , _:List<'b>  ) = fun () -> List.collect  id x
         static member        instance (_:Join, x:'b [] []          , _:'b []     ) = fun () -> Array.collect id x
+        static member        instance (_:Join, x:Id<Id<'a>>        , _:Id<'a>    ) = fun () -> x.getValue
 
     let Join = Join()
 
