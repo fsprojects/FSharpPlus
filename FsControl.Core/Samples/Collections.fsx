@@ -59,6 +59,9 @@ let quot13      = mappend    (mempty())            <@ ("1","3") @>
 
 let lzy1 = mappend (lazy [1]) (lazy [2;3])
 let lzy2 = mappend (mempty()) lzy1
+let asy1 = mappend (async.Return [1]) (async.Return [2;3])
+let asy2 = mappend (mempty()) asy1
+
 
 let inline map   f x = Inline.instance (Map, x) f
 let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f

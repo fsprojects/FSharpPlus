@@ -28,6 +28,7 @@ module Monoid =
                         (mempty(),mempty(),mempty(),mempty(),mempty()): 'a*'b*'c*'d*'e
 
     type Mempty with
+        static member inline instance (Mempty, _:Async<'a>      ) = fun () -> let (v:'a) = mempty() in async.Return v
         static member inline instance (Mempty, _:Expr<'a>       ) = fun () -> let (v:'a) = mempty() in Expr.Cast<'a>(Expr.Value(v))
         static member inline instance (Mempty, _:Lazy<'a>       ) = fun () -> let (v:'a) = mempty() in lazy v
         static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> ResizeArray() : ResizeArray<'a>
@@ -69,10 +70,15 @@ module Monoid =
                         (mappend x1 y1,mappend x2 y2,mappend x3 y3,mappend x4 y4,mappend x5 y5) :'a*'b*'c*'d*'e
 
     type Mappend with
-        static member inline instance (Mappend, x:'a Expr      , _) = fun (y:'a Expr) -> 
+        static member inline instance (Mappend, x:'a Async     , _) = fun (y:'a Async) -> async {
+            let! a = x
+            let! b = y
+            return mappend a b}
+
+        static member inline instance (Mappend, x:'a Expr      , _) = fun (y:'a Expr)  -> 
             let (f:'a->'a->'a) = mappend
             Expr.Cast<'a>(Expr.Application(Expr.Application(Expr.Value(f), x), y))
-        static member inline instance (Mappend, x:'a Lazy      , _) = fun (y:'a Lazy) -> lazy mappend (x.Value) (y.Value)
+        static member inline instance (Mappend, x:'a Lazy      , _) = fun (y:'a Lazy)       -> lazy mappend (x.Value) (y.Value)
         static member        instance (Mappend, x:_ ResizeArray, _) = fun (y:_ ResizeArray) -> ResizeArray (Seq.append x y)
         static member        instance (Mappend, x:_ IObservable, _) = fun  y                -> Observable.merge x y
         static member        instance (Mappend, x:_ seq        , _) = fun  y                -> Seq.append x y
