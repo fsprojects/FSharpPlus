@@ -29,8 +29,9 @@ module Monoid =
 
     type Mempty with
         static member inline instance (Mempty, _:Expr<'a>       ) = fun () -> let (v:'a) = mempty() in Expr.Cast<'a>(Expr.Value(v))
+        static member inline instance (Mempty, _:Lazy<'a>       ) = fun () -> let (v:'a) = mempty() in lazy v
         static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> ResizeArray() : ResizeArray<'a>
-        static member        instance (Mempty, _:seq<'a>  ) = fun () -> Seq.empty   :  seq<'a>
+        static member        instance (Mempty, _:seq<'a>        ) = fun () -> Seq.empty   :  seq<'a>
         
 
 
@@ -71,6 +72,7 @@ module Monoid =
         static member inline instance (Mappend, x:'a Expr      , _) = fun (y:'a Expr) -> 
             let (f:'a->'a->'a) = mappend
             Expr.Cast<'a>(Expr.Application(Expr.Application(Expr.Value(f), x), y))
+        static member inline instance (Mappend, x:'a Lazy      , _) = fun (y:'a Lazy) -> lazy mappend (x.Value) (y.Value)
         static member        instance (Mappend, x:_ ResizeArray, _) = fun (y:_ ResizeArray) -> ResizeArray (Seq.append x y)
         static member        instance (Mappend, x:_ IObservable, _) = fun  y                -> Observable.merge x y
         static member        instance (Mappend, x:_ seq        , _) = fun  y                -> Seq.append x y

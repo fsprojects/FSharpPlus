@@ -57,6 +57,9 @@ let quot1       = mappend <@ ResizeArray([1])   @>      (mempty())
 let quot23      = mappend    (mempty())            <@ ResizeArray([2;3])   @>
 let quot13      = mappend    (mempty())            <@ ("1","3") @>
 
+let lzy1 = mappend (lazy [1]) (lazy [2;3])
+let lzy2 = mappend (mempty()) lzy1
+
 let inline map   f x = Inline.instance (Map, x) f
 let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
 
