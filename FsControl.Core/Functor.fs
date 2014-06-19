@@ -226,10 +226,11 @@ open Functor
 module Comonad =
 
     type Extract = Extract with
-        static member        instance (Extract, x:'t Lazy,_:'t) = fun () -> x.Value
-        static member        instance (Extract, (w:'w,a:'a) ,_) = fun () -> a
-        static member inline instance (Extract, f:'m->'t ,_:'t) = fun () -> f (mempty())
-        static member        instance (Extract, f:'t Id  ,_:'t) = fun () -> f
+        static member        instance (Extract, x:'t Async,_:'t) = fun () -> Async.RunSynchronously x
+        static member        instance (Extract, x:'t Lazy, _:'t) = fun () -> x.Value
+        static member        instance (Extract, (w:'w,a:'a) , _) = fun () -> a
+        static member inline instance (Extract, f:'m->'t , _:'t) = fun () -> f (mempty())
+        static member        instance (Extract, f:'t Id  , _:'t) = fun () -> f
 
 #if NOTNET35
         static member        instance (Extract, f:'t Task,_:'t) = fun () -> f.Result
@@ -246,10 +247,11 @@ module Comonad =
 
 
     type Extend = Extend with
-        static member        instance (Extend, (g:'a Lazy), _:'b Lazy) = fun (f:Lazy<'a>->'b) -> Lazy.Create (fun () -> f g) : Lazy<'b>
-        static member        instance (Extend, (w:'w, a:'a), _:'w *'b) = fun (f:_->'b) -> (w, f (w,a))        
-        static member inline instance (Extend, (g:'m -> 'a), _:'m->'b) = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
-        static member        instance (Extend, (g:'a Id   ), _:'b Id ) = fun (f:Id<'a>->'b) -> f g
+        static member        instance (Extend, (g:'a Async), _:'b Async) = fun (f:Async<'a>->'b) -> async.Return (f g) : Async<'b>
+        static member        instance (Extend, (g:'a Lazy ), _:'b Lazy ) = fun (f:Lazy<'a> ->'b) -> Lazy.Create  (fun () -> f g) : Lazy<'b>
+        static member        instance (Extend, (w:'w, a:'a), _:'w *'b)   = fun (f:_->'b) -> (w, f (w,a))        
+        static member inline instance (Extend, (g:'m -> 'a), _:'m->'b)   = fun (f:_->'b) a -> f (fun b -> g (mappend a b))
+        static member        instance (Extend, (g:'a Id   ), _:'b Id )   = fun (f:Id<'a>->'b) -> f g
 
 #if NOTNET35
         static member        instance (Extend, (g:'a Task), _:'b Task) = fun (f:Task<'a>->'b) -> g.ContinueWith(f)
@@ -276,7 +278,8 @@ module Comonad =
 
     type Duplicate() =
         inherit DuplicateDefault()
-        static member        instance (_:Duplicate, s:Lazy<'a>, _:Lazy<Lazy<'a>>) = fun () -> Lazy.CreateFromValue s : Lazy<Lazy<'a>>
+        static member        instance (_:Duplicate, s:Async<'a>, _:Async<Async<'a>>) = fun () -> async.Return s : Async<Async<'a>>
+        static member        instance (_:Duplicate, s:Lazy<'a> , _:Lazy<Lazy<'a>>  ) = fun () -> Lazy.CreateFromValue s : Lazy<Lazy<'a>>
         static member        instance (_:Duplicate, (w:'w, a:'a), _:'w * ('w*'a)) = fun ()     -> (w, (w, a))
         static member inline instance (_:Duplicate,  f:'m -> 'a , _:'m->'m->'a  ) = fun () a b -> f (mappend a b)
 
