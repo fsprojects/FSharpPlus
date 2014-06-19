@@ -156,6 +156,7 @@ open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
 let inline return' x = Inline.instance Pure x
 let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
+let inline join (x:'Monad'Monad'a) : 'Monad'a = Inline.instance (Join, x) ()
 
 let inline sequence ms =
     let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (return' :list<'a> -> 'M) (List.Cons(x,xs))
@@ -181,6 +182,15 @@ let resSome2 :option<_> = return' 2
 let resSing2 :list<_>   = return' 2
 let resLazy2 :Lazy<_>   = return' 2
 
+// test lazy
+let v5: Lazy<_> = lazy (printfn "5 !!! "; 5)
+let fPlus10 x   = lazy  (printfn "add 10 !!! ";x + 10)
+let v5plus10    = v5 >>= fPlus10
+let v15 = v5plus10.Force()
+
+let v4ll: Lazy<_> = lazy (printfn "outer !!! ";lazy (printfn "inner !!! "; 4))
+let v4l = join v4ll
+let v4  = v4l.Force()
 
 // Test List Monad
 // F#                           // Haskell
