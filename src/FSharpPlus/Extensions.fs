@@ -77,3 +77,34 @@ module Extensions =
 
         [<Runtime.CompilerServices.Extension>]
         let Exception :Choice<_,exn>   -> _ = function Choice2Of2 e -> e | _ -> new Exception()
+
+    // http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.whenall.aspx 
+
+    open System.Threading
+    open System.Threading.Tasks
+
+    let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
+        if t.IsCanceled then Canceled
+        else if t.IsFaulted then Faulted(t.Exception)
+        else Completed(t.Result)
+
+    type Task<'t> with
+        static member WhenAll(tasks : Task<'a>[], ?cancellationToken : CancellationToken) =
+            let tcs = TaskCompletionSource<'a[]>()
+            let cancellationToken = defaultArg cancellationToken CancellationToken.None
+            cancellationToken.Register((fun () -> tcs.TrySetCanceled() |> ignore)) |> ignore
+            let results = Array.zeroCreate<'a>(tasks.Length)
+            let pending = ref results.Length
+            tasks 
+            |> Seq.iteri (fun i t ->
+                let continuation = function
+                | Canceled -> tcs.TrySetCanceled() |> ignore
+                | Faulted(e) -> tcs.TrySetException(e) |> ignore
+                | Completed(r) -> 
+                    results.[i] <- r
+                    if Interlocked.Decrement(pending) = 0 then 
+                        tcs.SetResult(results)
+                t.ContinueWith(continuation, cancellationToken,
+                               TaskContinuationOptions.ExecuteSynchronously,
+                               TaskScheduler.Default) |> ignore)
+            tcs.Task
