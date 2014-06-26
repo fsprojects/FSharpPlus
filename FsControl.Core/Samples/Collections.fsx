@@ -125,7 +125,10 @@ let elem1 = extract   lst
 let tails = duplicate lst
 let lst'  = extend extract lst
 
-// This should not compile (but it does)
+
+// Some problems associated to use this approach in a language with inheritance.
+
+// This should ideally not compile (but it does, because stack is also a seq)
 let elem3  = extract   stack
 let tails' = duplicate stack
 
@@ -184,15 +187,15 @@ let doPlus = new DoPlusNotationBuilder()
 // Test MonadPlus
 let nameAndAddress = mapM (fun x -> putStrLn x >>= fun _ -> getLine) (seq ["name";"address"])
 
-// this should compile (but it doesn't)
-(*
+// this compiles but it requires a type annotation to tell between
+// seq and other monadplus #seq types
 let pythags = monad {
   let! z = seq [1..50]
   let! x = seq [1..z]
   let! y = seq [x..z]
-  do! (guard (x*x + y*y = z*z) )
+  do! (guard (x*x + y*y = z*z) : _ seq)
   return (x, y, z)}
-*)
+
 
 let pythags' = doPlus{
   let! z = seq [1..50]
