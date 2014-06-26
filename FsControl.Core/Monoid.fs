@@ -4,6 +4,9 @@ open System
 open System.Text
 open FsControl.Core.Prelude
 open Microsoft.FSharp.Quotations
+#if NOTNET35
+open System.Threading.Tasks
+#endif
 
 module Monoid =
     type Mempty = Mempty with           
@@ -28,12 +31,21 @@ module Monoid =
                         (mempty(),mempty(),mempty(),mempty(),mempty()): 'a*'b*'c*'d*'e
 
     type Mempty with
+
+#if NOTNET35        
+
+        static member inline instance (Mempty, _:Task<'a>       ) = fun () -> 
+            let (v:'a) = mempty()
+            let s = TaskCompletionSource()
+            s.SetResult v
+            s.Task
+#endif
         static member inline instance (Mempty, _:Async<'a>      ) = fun () -> let (v:'a) = mempty() in async.Return v
         static member inline instance (Mempty, _:Expr<'a>       ) = fun () -> let (v:'a) = mempty() in Expr.Cast<'a>(Expr.Value(v))
         static member inline instance (Mempty, _:Lazy<'a>       ) = fun () -> let (v:'a) = mempty() in lazy v
         static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> ResizeArray() : ResizeArray<'a>
         static member        instance (Mempty, _:seq<'a>        ) = fun () -> Seq.empty   :  seq<'a>
-        
+
 
 
     type Mappend = Mappend with       
@@ -70,6 +82,15 @@ module Monoid =
                         (mappend x1 y1,mappend x2 y2,mappend x3 y3,mappend x4 y4,mappend x5 y5) :'a*'b*'c*'d*'e
 
     type Mappend with
+
+#if NOTNET35
+        static member inline instance (Mappend, x:'a Task     , _) = fun (y:'a Task) ->
+            x.ContinueWith(fun (t: Task<_>) -> 
+                (fun a -> 
+                    y.ContinueWith(fun (u: Task<_>) -> 
+                        mappend a u.Result)) t.Result).Unwrap()
+#endif
+
         static member inline instance (Mappend, x:'a Async     , _) = fun (y:'a Async) -> async {
             let! a = x
             let! b = y
