@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>FsControl</id>
     <version>$version$</version>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>FsControl is an overload library for F#.</description>
     <releaseNotes>
-	Version 1.0.8
+	Version 1.0.9
     </releaseNotes>
     <copyright>Copyright 2012-2014</copyright>
     <tags> FSharp Applicative Monad MonadTransformer Arrow Overloading </tags>
