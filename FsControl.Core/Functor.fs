@@ -55,6 +55,10 @@ module Monad =
         static member        instance (_:Join, x:'b [] []          , _:'b []     ) = fun () -> Array.collect id x
         static member        instance (_:Join, x:Id<Id<'a>>        , _:Id<'a>    ) = fun () -> x.getValue
 
+#if NOTNET35        
+        static member        instance (_:Join, x:Task<Task<'a>>    , _:Task<'a>  ) = fun () -> x.Unwrap()
+#endif
+
     let Join = Join()
 
     let inline internal join (x:'Monad'Monad'a) : 'Monad'a = Inline.instance (Join, x) ()
