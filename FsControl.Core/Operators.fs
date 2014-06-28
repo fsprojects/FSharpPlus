@@ -30,25 +30,25 @@ module Operators =
     // Monoid -----------------------------------------------------------------
     let inline mempty() :'Monoid = Inline.instance Monoid.Mempty ()
     let inline mappend (x:'Monoid) (y:'Monoid) :'Monoid = Inline.instance (Monoid.Mappend, x) y
-    let inline mconcat (x:List<'Monoid>) :'Monoid  =
+    let inline mconcat (x:list<'Monoid>) :'Monoid  =
         let foldR f s lst = List.foldBack f lst s
         foldR mappend (mempty()) x
 
 
     // Monad plus -------------------------------------------------------------
-    let inline sequence (ms:List<'Monad'a>) =
+    let inline sequence (ms:list<'Monad'a>) =
         let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (List.Cons(x,xs))
         List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
 
-    let inline mapM (f:'a->'Monad'b) (xs:List<'a>) :'Monad'List'b = sequence (List.map f xs)
+    let inline mapM (f:'a->'Monad'b) (xs:list<'a>) :'Monad'List'b = sequence (List.map f xs)
     
-    let inline foldM (f:'a->'b->'Monad'a) (a:'a) (bx:List<'b>) : 'Monad'a =
+    let inline foldM (f:'a->'b->'Monad'a) (a:'a) (bx:list<'b>) : 'Monad'a =
         let rec loopM a = function
             | x::xs -> (f a x) >>= fun fax -> loopM fax xs 
             | [] -> result a
         loopM a bx
 
-    let inline filterM (f: 'a -> 'Monad'Bool) (xs: List<'a>) : 'Monad'List'a =
+    let inline filterM (f: 'a -> 'Monad'Bool) (xs: list<'a>) : 'Monad'List'a =
         let rec loopM = function
             | []   -> result []
             | h::t -> 

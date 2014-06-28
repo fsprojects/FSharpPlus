@@ -10,7 +10,7 @@ open System.Threading.Tasks
 
 module Monoid =
     type Mempty = Mempty with           
-        static member        instance (Mempty, _:List<'a>  ) = fun () -> []   :  List<'a>
+        static member        instance (Mempty, _:list<'a>  ) = fun () -> []   :  list<'a>
         static member        instance (Mempty, _:option<'a>) = fun () -> None :option<'a>
         static member        instance (Mempty, _:array<'a> ) = fun () -> [||] : array<'a>
         static member        instance (Mempty, _:string    ) = fun () -> ""
@@ -49,7 +49,7 @@ module Monoid =
 
 
     type Mappend = Mappend with       
-        static member        instance (Mappend, x:List<_>      , _) = fun y -> x @ y       
+        static member        instance (Mappend, x:list<_>      , _) = fun y -> x @ y       
         static member        instance (Mappend, x:array<_>     , _) = fun y -> Array.append x y
         static member        instance (Mappend, ()             , _) = fun () -> ()
         static member        instance (Mappend, x:Set<_>       , _) = fun y -> Set.union x y

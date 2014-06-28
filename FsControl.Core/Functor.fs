@@ -25,7 +25,7 @@ module Monad =
 #endif
 
         static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
-        static member        instance (Bind, x:List<_>      , _:List<'b>     ) = fun (f:_->List<'b>  ) -> List.collect  f x
+        static member        instance (Bind, x:list<_>      , _:list<'b>     ) = fun (f:_->list<'b>  ) -> List.collect  f x
         static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
         static member        instance (Bind, f:'r->'a       , _:'r->'b       ) = fun (k:_->_->'b) r    -> k (f r) r
         static member inline instance (Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let m, b = k a in (mappend w m, b)
@@ -51,7 +51,7 @@ module Monad =
 
         static member        instance (_:Join, x:Lazy<Lazy<'a>>    , _:Lazy<'a>  ) = fun () -> lazy x.Value.Value
         static member        instance (_:Join, x:option<option<'a>>, _:option<'a>) = fun () -> Option.bind   id x
-        static member        instance (_:Join, x:List<_>           , _:List<'b>  ) = fun () -> List.collect  id x
+        static member        instance (_:Join, x:list<_>           , _:list<'b>  ) = fun () -> List.collect  id x
         static member        instance (_:Join, x:'b [] []          , _:'b []     ) = fun () -> Array.collect id x
         static member        instance (_:Join, x:Id<Id<'a>>        , _:Id<'a>    ) = fun () -> x.getValue
 
@@ -80,7 +80,7 @@ module Applicative =
             s.Task
 #endif        
         static member        instance (Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
-        static member        instance (Pure, _:List<'a>      ) = fun x -> [ x ]       :List<'a>
+        static member        instance (Pure, _:list<'a>      ) = fun x -> [ x ]       :list<'a>
         static member        instance (Pure, _:'a []         ) = fun x -> [|x|]       :'a []
         static member        instance (Pure, _:'r -> 'a      ) = const':'a  -> 'r -> _
         static member inline instance (Pure, _: 'm * 'a      ) = fun (x:'a) -> (mempty(), x)
@@ -109,7 +109,7 @@ module Applicative =
         inherit ApplyDefault()
         static member        instance (_:Apply, f:Lazy<'a->'b>, x:Lazy<'a>     , _:Lazy<'b>     ) = fun () -> Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
         static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> DefaultImpl.ApplyFromMonad f x :seq<'b>
-        static member        instance (_:Apply, f:List<_>     , x:List<'a>     , _:List<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :List<'b>
+        static member        instance (_:Apply, f:list<_>     , x:list<'a>     , _:list<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :list<'b>
         static member        instance (_:Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
         static member        instance (_:Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
         static member inline instance (_:Apply, (a:'m, f)     , (b:'m, x:'a)   , _:'m * 'b      ) = fun () -> (mappend a b, f x) :'m *'b
@@ -148,12 +148,12 @@ open Applicative
 module Alternative =
     type Empty = Empty with
         static member instance (Empty, _:option<'a>) = fun () -> None
-        static member instance (Empty, _:List<'a>  ) = fun () -> [  ]
+        static member instance (Empty, _:list<'a>  ) = fun () -> [  ]
         static member instance (Empty, _:'a []     ) = fun () -> [||]
 
     type Append = Append with  
         static member instance (Append, x:option<_>, _) = fun y -> match x with None -> y | xs -> xs
-        static member instance (Append, x:List<_>  , _) = fun y -> x @ y
+        static member instance (Append, x:list<_>  , _) = fun y -> x @ y
         static member instance (Append, x:_ []     , _) = fun y -> Array.append x y
 
 
@@ -173,7 +173,7 @@ module Functor =
         static member instance (_:Map, x:Lazy<_>      , _:Lazy<'b>) = fun f -> Lazy.Create (fun () -> f x.Value) : Lazy<'b>
         static member instance (_:Map, x:seq<_>       , _:seq<'b>) = fun f -> Seq.map f x :seq<'b>
         static member instance (_:Map, x:option<_>    , _) = fun f -> Option.map  f x
-        static member instance (_:Map, x:List<_>      , _:List<'b>) = fun f -> List.map f x :List<'b>
+        static member instance (_:Map, x:list<_>      , _:list<'b>) = fun f -> List.map f x :list<'b>
         static member instance (_:Map, g:_->_         , _) = (>>) g
         static member instance (_:Map, (m,a)          , _) = fun f -> (m, f a)
         static member instance (_:Map, x:_ []         , _) = fun f -> Array.map   f x
@@ -262,9 +262,9 @@ module Comonad =
 #endif
 
         // Restricted
-        static member        instance (Extend, s:List<'a>, _:List<'b>) = fun g -> 
+        static member        instance (Extend, s:list<'a>, _:list<'b>) = fun g -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-            List.map g (tails s) :List<'b>
+            List.map g (tails s) :list<'b>
 
         static member        instance (Extend, s:'a [], _:'b []) = fun g -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
@@ -288,7 +288,7 @@ module Comonad =
         static member inline instance (_:Duplicate,  f:'m -> 'a , _:'m->'m->'a  ) = fun () a b -> f (mappend a b)
 
         // Restricted
-        static member        instance (_:Duplicate, s:List<'a>, _:List<List<'a>>) = fun () -> 
+        static member        instance (_:Duplicate, s:list<'a>, _:list<list<'a>>) = fun () -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
             tails s
 
@@ -306,7 +306,7 @@ module Comonad =
 module MonadPlus =
     type Mzero = Mzero with
         static member        instance (Mzero, _:option<'a>) = fun () -> None        :option<'a>
-        static member        instance (Mzero, _:List<'a>  ) = fun () -> [  ]        :List<'a>  
+        static member        instance (Mzero, _:list<'a>  ) = fun () -> [  ]        :list<'a>  
         static member        instance (Mzero, _:'a []     ) = fun () -> [||]        :'a []     
         static member        instance (Mzero, _:seq<'a>   ) = fun () -> Seq.empty   :seq<'a>
         static member inline instance (Mzero, _:Id<'a>    ) = fun () -> Id (mempty()) :Id<'a>

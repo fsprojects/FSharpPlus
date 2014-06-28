@@ -35,7 +35,7 @@ module Traversable =
   
         static member inline instance (_:Traverse, t:option<_>, _) = fun f -> match t with Some x -> fmap Some (f x) | _ -> pure' None        
 
-        static member inline instance (_:Traverse, t:List<_>  , _) = fun f ->            
+        static member inline instance (_:Traverse, t:list<_>  , _) = fun f ->            
             let cons_f x ys = fmap List.cons (f x) <*> ys
             foldr cons_f (pure' []) t
 
@@ -57,7 +57,7 @@ module Traversable =
 
         static member inline instance (_:SequenceA, t:option<_>, _) = fun () -> match t with Some x -> fmap Some x | _ -> pure' None
         
-        static member inline instance (_:SequenceA, t:List<_>  , _) = fun () ->            
+        static member inline instance (_:SequenceA, t:list<_>  , _) = fun () ->            
             let cons_f x ys = fmap List.cons x <*> ys
             foldr cons_f (pure' []) t
 

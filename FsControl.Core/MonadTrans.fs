@@ -138,7 +138,7 @@ module MonadError =
 module MonadCont =
     type CallCC = CallCC with
         static member instance (CallCC, _:OptionT<Cont<'r,option<'a>>>) = fun (f:((_ -> OptionT<Cont<_,'b>>) -> _)) -> OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))     :OptionT<Cont<'r,option<'a>>>
-        static member instance (CallCC, _:ListT<Cont<'r ,  List<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))):ListT<Cont<'r, List<'a>>>
+        static member instance (CallCC, _:ListT<Cont<'r ,  list<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))):ListT<Cont<'r, list<'a>>>
         static member instance (CallCC, _: SeqT<Cont<'r ,  seq<'a>>>  ) = fun (f:((_ -> SeqT<Cont<_,'b>>   ) -> _)) -> SeqT   (Cont.callCC <| fun c ->   SeqT.run (f (SeqT  << c << Seq.singleton ))):SeqT<Cont<'r ,  seq<'a>>>
         static member instance (CallCC, _:Cont<'r,'a>) = Cont.callCC : (('a -> Cont<'r,'b>) -> _) -> _
 
@@ -165,7 +165,7 @@ module MonadState =
 module MonadReader =
     type Ask = Ask with
         static member instance (Ask, _:OptionT<Reader<'a,option<'a>>>) = fun () -> lift (Reader.ask()) :OptionT<Reader<'a,option<'a>>>
-        static member instance (Ask, _:ListT<Reader< 'a, List<  'a>>>) = fun () -> lift (Reader.ask()) :  ListT<Reader<'a,  List<'a>>>
+        static member instance (Ask, _:ListT<Reader< 'a, list<  'a>>>) = fun () -> lift (Reader.ask()) :  ListT<Reader<'a,  list<'a>>>
         static member instance (Ask, _: SeqT<Reader< 'a,  seq<  'a>>>) = fun () -> lift (Reader.ask()) :   SeqT<Reader<'a,   seq<'a>>>
         static member instance (Ask, _:Reader<'r,'r>                 ) = fun () ->      (Reader.ask()) :Reader<'r,'r>
 

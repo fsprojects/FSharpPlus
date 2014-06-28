@@ -14,7 +14,7 @@ module Foldable =
 
     type Foldr = Foldr with
         static member instance (Foldr, x:option<_>    , _) = fun (f,z) -> match x with Some t -> f t z | _ -> z
-        static member instance (Foldr, x:List<_>      , _) = fun (f,z) -> List.foldBack          f x z
+        static member instance (Foldr, x:list<_>      , _) = fun (f,z) -> List.foldBack          f x z
         static member instance (Foldr, x:Set<_>       , _) = fun (f,z) -> Set.foldBack           f x z
         static member instance (Foldr, x:string       , _) = fun (f,z) -> Array.foldBack f (x.ToCharArray()) z
         static member instance (Foldr, x:StringBuilder, _) = fun (f,z) -> Array.foldBack f (x.ToString().ToCharArray()) z
@@ -31,7 +31,7 @@ module Foldable =
     type FoldMap() =
         inherit FoldMapDefault()
         static member inline instance (_:FoldMap, x:option<_>, _) = fun f -> DefaultImpl.FoldMapFromFoldr f x
-        static member inline instance (_:FoldMap, x:List<_>  , _) = fun f -> DefaultImpl.FoldMapFromFoldr f x
+        static member inline instance (_:FoldMap, x:list<_>  , _) = fun f -> DefaultImpl.FoldMapFromFoldr f x
         static member inline instance (_:FoldMap, x:Set<_>   , _) = fun f -> DefaultImpl.FoldMapFromFoldr f x
         static member inline instance (_:FoldMap, x:array<_> , _) = fun f -> Array.foldBack (mappend << f) x (mempty())
 
@@ -59,7 +59,7 @@ module Foldable =
     type Foldl() =
         inherit FoldlDefault()
         static member instance (_:Foldl, x:option<_>, _) = fun (f,z) -> match x with Some t ->       f z t | _ -> z
-        static member instance (_:Foldl, x:List<_>  , _) = fun (f,z) -> List.fold                    f z x
+        static member instance (_:Foldl, x:list<_>  , _) = fun (f,z) -> List.fold                    f z x
         static member instance (_:Foldl, x:Set<_>   , _) = fun (f,z) -> Set.fold                     f z x
         static member instance (_:Foldl, x:array<_> , _) = fun (f,z) -> DefaultImpl.FoldlFromFoldMap f z x
 
@@ -75,7 +75,7 @@ module Foldable =
         static member instance (_:ToList, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray() |> Array.toList
         static member instance (_:ToList, x:'a []         , _) = fun () -> Array.toList x
         static member instance (_:ToList, x:'a ResizeArray, _) = fun () -> Seq.toList x
-        static member instance (_:ToList, x:List<'a>      , _) = fun () -> x
+        static member instance (_:ToList, x:list<'a>      , _) = fun () -> x
 
     let ToList = ToList()
 
