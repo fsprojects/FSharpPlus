@@ -182,15 +182,6 @@ let resSome2 :option<_> = return' 2
 let resSing2 :list<_>   = return' 2
 let resLazy2 :Lazy<_>   = return' 2
 
-// test lazy
-let v5: Lazy<_> = lazy (printfn "5 !!! "; 5)
-let fPlus10 x   = lazy  (printfn "add 10 !!! ";x + 10)
-let v5plus10    = v5 >>= fPlus10
-let v15 = v5plus10.Force()
-
-let v4ll: Lazy<_> = lazy (printfn "outer !!! ";lazy (printfn "inner !!! "; 4))
-let v4l = join v4ll
-let v4  = v4l.Force()
 
 // Test List Monad
 // F#                           // Haskell
@@ -477,7 +468,6 @@ let res18n24' = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
 let res6n7n8' = iI (+) (pure' 5G          ) (ZipList [1;2;3]     ) Ii
 let res18n14' = iI (+) (ZipList(seq [8;4])) (pure' 10            ) Ii
 
-let inline join x =  x >>= id
 type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
 
 let safeDiv x y = if y == 0 then Nothing else Just (x </div/> y)

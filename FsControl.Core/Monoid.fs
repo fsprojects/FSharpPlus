@@ -2,6 +2,7 @@ namespace FsControl.Core.TypeMethods
 
 open System
 open System.Text
+open System.Collections.Generic
 open FsControl.Core.Prelude
 open Microsoft.FSharp.Quotations
 #if NOTNET35
@@ -40,11 +41,12 @@ module Monoid =
             s.SetResult v
             s.Task
 #endif
-        static member inline instance (Mempty, _:Async<'a>      ) = fun () -> let (v:'a) = mempty() in async.Return v
-        static member inline instance (Mempty, _:Expr<'a>       ) = fun () -> let (v:'a) = mempty() in Expr.Cast<'a>(Expr.Value(v))
-        static member inline instance (Mempty, _:Lazy<'a>       ) = fun () -> let (v:'a) = mempty() in lazy v
-        static member        instance (Mempty, _:ResizeArray<'a>) = fun () -> ResizeArray() : ResizeArray<'a>
-        static member        instance (Mempty, _:seq<'a>        ) = fun () -> Seq.empty   :  seq<'a>
+
+        static member inline instance (Mempty, _:Async<'a>        ) = fun () -> let (v:'a) = mempty() in async.Return v
+        static member inline instance (Mempty, _:Expr<'a>         ) = fun () -> let (v:'a) = mempty() in Expr.Cast<'a>(Expr.Value(v))
+        static member inline instance (Mempty, _:Lazy<'a>         ) = fun () -> let (v:'a) = mempty() in lazy v
+        static member        instance (Mempty, _:ResizeArray<'a>  ) = fun () -> ResizeArray() : ResizeArray<'a>
+        static member        instance (Mempty, _:seq<'a>          ) = fun () -> Seq.empty   :  seq<'a>
 
 
 
@@ -83,14 +85,14 @@ module Monoid =
     type Mappend with
 
 #if NOTNET35
-        static member inline instance (Mappend, x:'a Task     , _) = fun (y:'a Task) ->
+        static member inline instance (Mappend, x:'a Task, _) = fun (y:'a Task) ->
             x.ContinueWith(fun (t: Task<_>) -> 
                 (fun a -> 
                     y.ContinueWith(fun (u: Task<_>) -> 
                         mappend a u.Result)) t.Result).Unwrap()
 #endif
 
-        static member inline instance (Mappend, x:Map<'a,'b>   , _) = fun y ->
+        static member inline instance (Mappend, x:Map<'a,'b>, _) = fun y ->
             Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> mappend v v' | None -> v') m) x y
 
         static member inline instance (Mappend, x:'a Async     , _) = fun (y:'a Async) -> async {
@@ -101,6 +103,7 @@ module Monoid =
         static member inline instance (Mappend, x:'a Expr      , _) = fun (y:'a Expr)  -> 
             let (f:'a->'a->'a) = mappend
             Expr.Cast<'a>(Expr.Application(Expr.Application(Expr.Value(f), x), y))
+
         static member inline instance (Mappend, x:'a Lazy      , _) = fun (y:'a Lazy)       -> lazy mappend (x.Value) (y.Value)
         static member        instance (Mappend, x:_ ResizeArray, _) = fun (y:_ ResizeArray) -> ResizeArray (Seq.append x y)
         static member        instance (Mappend, x:_ IObservable, _) = fun  y                -> Observable.merge x y

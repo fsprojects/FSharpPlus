@@ -22,3 +22,14 @@ let lstTimes2     = map times2 [1;2;3;4]
 let fTimes2minus3 = map minus3 times2
 let res39         = fTimes2minus3 21
 let res3n4   = result ((+) 2) <*> [1;2]
+
+
+// test lazy
+let v5: Lazy<_> = lazy (printfn "5 !!! "; 5)
+let fPlus10 x   = lazy (printfn "add 10 !!! ";x + 10)
+let v5plus10    = v5 >>= fPlus10
+let v15 = v5plus10.Force()
+
+let v4ll: Lazy<_> = lazy (printfn "outer !!! ";lazy (printfn "inner !!! "; 4))
+let v4l = join v4ll
+let v4  = v4l.Force()

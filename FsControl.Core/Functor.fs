@@ -2,6 +2,7 @@ namespace FsControl.Core.TypeMethods
 
 open System
 open System.Text
+open System.Collections.Generic
 #if NOTNET35
 open System.Threading.Tasks
 #endif
@@ -10,8 +11,6 @@ open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.Types
 open Monoid
-
-type internal keyValue<'a,'b> = System.Collections.Generic.KeyValuePair<'a,'b>
 
 // Monad class ------------------------------------------------------------
 module Monad =
@@ -31,6 +30,7 @@ module Monad =
         static member inline instance (Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let m, b = k a in (mappend w m, b)
         static member        instance (Bind, x:Async<'a>    , _:'b Async     ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
         static member        instance (Bind, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun (k:'a->Choice<'b,'e>) -> Error.bind k x
+
         static member        instance (Bind, x:Map<'k,'a>   , _:Map<'k,'b>   ) = fun (f:'a->Map<'k,'b>) -> Map (seq {
             for KeyValue(k, v) in x do
                 match Map.tryFind k (f v) with
@@ -126,8 +126,9 @@ module Applicative =
             | (Choice2Of2 a, _)            -> Choice2Of2 a
             | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
 
-        static member        instance (_:Apply, KeyValue(k:'k,f), KeyValue(k:'k,x:'a), _:keyValue<'k,'b>) :unit->keyValue<'k,'b> = fun () -> keyValue(k, f x)
-        static member        instance (_:Apply, f:Map<'k,_>     , x:Map<'k,'a>       , _:Map<'k,'b>     ) :unit->Map<'k,'b>      = fun () -> Map (seq {
+        static member        instance (_:Apply, KeyValue(k:'k,f)  , KeyValue(k:'k,x:'a), _:KeyValuePair<'k,'b>) :unit->KeyValuePair<'k,'b> = fun () -> KeyValuePair(k, f x)
+
+        static member        instance (_:Apply, f:Map<'k,_>       , x:Map<'k,'a>       , _:Map<'k,'b>         ) :unit->Map<'k,'b>          = fun () -> Map (seq {
             for KeyValue(k, vf) in f do
                 match Map.tryFind k x with
                 | Some vx -> yield k, vf vx
@@ -170,30 +171,30 @@ module Functor =
 
     type Map() =
         inherit MapDefault()
-        static member instance (_:Map, x:Lazy<_>      , _:Lazy<'b>) = fun f -> Lazy.Create (fun () -> f x.Value) : Lazy<'b>
-        static member instance (_:Map, x:seq<_>       , _:seq<'b>) = fun f -> Seq.map f x :seq<'b>
-        static member instance (_:Map, x:option<_>    , _) = fun f -> Option.map  f x
-        static member instance (_:Map, x:list<_>      , _:list<'b>) = fun f -> List.map f x :list<'b>
-        static member instance (_:Map, g:_->_         , _) = (>>) g
-        static member instance (_:Map, (m,a)          , _) = fun f -> (m, f a)
-        static member instance (_:Map, x:_ []         , _) = fun f -> Array.map   f x
-        static member instance (_:Map, x:_ [,]        , _) = fun f -> Array2D.map f x
-        static member instance (_:Map, x:_ [,,]       , _) = fun f -> Array3D.map f x
-        static member instance (_:Map, x:_ [,,,]      , _) = fun f ->
+        static member instance (_:Map, x:Lazy<_>        , _:Lazy<'b>) = fun f -> Lazy.Create (fun () -> f x.Value) : Lazy<'b>
+        static member instance (_:Map, x:seq<_>         , _:seq<'b> ) = fun f -> Seq.map f x :seq<'b>
+        static member instance (_:Map, x:option<_>      , _) = fun f -> Option.map  f x
+        static member instance (_:Map, x:list<_>        , _:list<'b>) = fun f -> List.map f x :list<'b>
+        static member instance (_:Map, g:_->_           , _) = (>>) g
+        static member instance (_:Map, (m,a)            , _) = fun f -> (m, f a)
+        static member instance (_:Map, x:_ []           , _) = fun f -> Array.map   f x
+        static member instance (_:Map, x:_ [,]          , _) = fun f -> Array2D.map f x
+        static member instance (_:Map, x:_ [,,]         , _) = fun f -> Array3D.map f x
+        static member instance (_:Map, x:_ [,,,]        , _) = fun f ->
             Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-        static member instance (_:Map, x:Async<_>     , _) = fun f -> DefaultImpl.MapFromMonad f x
-        static member instance (_:Map, x:Choice<_,_>  , _) = fun f -> Error.map f x
-        static member instance (_:Map, KeyValue(k, x) , _) = fun (f:'b->'c) -> keyValue(k, f x)
-        static member instance (_:Map, x:Map<'a,'b>   , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
-        static member instance (_:Map, x:Expr<'a>     , _) = fun (f:'a->'b) -> Expr.Cast<'b>(Expr.Application(Expr.Value(f),x))
-        static member instance (_:Map, x:_ ResizeArray, _) = fun f -> ResizeArray(Seq.map f x) : ResizeArray<'b>
-        static member instance (_:Map, x:_ IObservable, _) = fun f -> Observable.map f x
+        static member instance (_:Map, x:Async<_>       , _) = fun f -> DefaultImpl.MapFromMonad f x
+        static member instance (_:Map, x:Choice<_,_>    , _) = fun f -> Error.map f x
+        static member instance (_:Map, KeyValue(k, x)   , _) = fun (f:'b->'c) -> KeyValuePair(k, f x)
+        static member instance (_:Map, x:Map<'a,'b>     , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
+        static member instance (_:Map, x:Expr<'a>       , _) = fun (f:'a->'b) -> Expr.Cast<'b>(Expr.Application(Expr.Value(f),x))
+        static member instance (_:Map, x:_ ResizeArray  , _) = fun f -> ResizeArray(Seq.map f x) : ResizeArray<'b>
+        static member instance (_:Map, x:_ IObservable  , _) = fun f -> Observable.map f x
 
         // Restricted
-        static member instance (_:Map, x:Nullable<_>  , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
-        static member instance (_:Map, x:string       , _) = fun f -> String.map f x
-        static member instance (_:Map, x:StringBuilder, _) = fun f -> new StringBuilder(String.map f (x.ToString()))
-        static member instance (_:Map, x:Set<_>       , _) = fun f -> Set.map f x
+        static member instance (_:Map, x:Nullable<_>    , _) = fun f -> if x.HasValue then Nullable(f x.Value) else Nullable()
+        static member instance (_:Map, x:string         , _) = fun f -> String.map f x
+        static member instance (_:Map, x:StringBuilder  , _) = fun f -> new StringBuilder(String.map f (x.ToString()))
+        static member instance (_:Map, x:Set<_>         , _) = fun f -> Set.map f x
         
 
     let Map = Map()
