@@ -53,7 +53,6 @@ module Monoid =
         static member        instance (Mappend, x:array<_>     , _) = fun y -> Array.append x y
         static member        instance (Mappend, ()             , _) = fun () -> ()
         static member        instance (Mappend, x:Set<_>       , _) = fun y -> Set.union x y
-        static member        instance (Mappend, x:Map<'a,'b>   , _) = fun (y:Map<'a,'b>) -> Seq.fold (fun m (KeyValue(k,v)) -> Map.add k v m) x y
         static member        instance (Mappend, x:string       , _) = fun y -> x + y
         static member        instance (Mappend, x:StringBuilder, _) = fun (y:StringBuilder) -> 
             let sb = new StringBuilder()
@@ -90,6 +89,9 @@ module Monoid =
                     y.ContinueWith(fun (u: Task<_>) -> 
                         mappend a u.Result)) t.Result).Unwrap()
 #endif
+
+        static member inline instance (Mappend, x:Map<'a,'b>   , _) = fun y ->
+            Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> mappend v v' | None -> v') m) x y
 
         static member inline instance (Mappend, x:'a Async     , _) = fun (y:'a Async) -> async {
             let! a = x

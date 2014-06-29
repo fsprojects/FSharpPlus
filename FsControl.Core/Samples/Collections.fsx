@@ -3,7 +3,6 @@
 open System
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Collection
-open FsControl.Core.TypeMethods.Functor
 open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Comonad
 open FsControl.Core.TypeMethods.Foldable
@@ -16,8 +15,8 @@ let (</) = (|>)
 let (/>) = flip
 
 type ZipList<'s> = ZipList of 's seq with
-    static member instance (_:Map,   ZipList x  , _:ZipList<'b>) = fun (f:'a->'b) -> ZipList (Seq.map f x)
-    static member instance (_:Pure, _:ZipList<'a>  ) = fun (x:'a)     -> ZipList (Seq.initInfinite (konst x))
+    static member instance (_:Functor.Map, ZipList x, _:ZipList<'b>) = fun (f:'a->'b) -> ZipList (Seq.map f x)
+    static member instance (_:Pure, _:ZipList<'a>  ) = fun (x:'a) -> ZipList (Seq.initInfinite (konst x))
     static member instance (_:Apply  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
         ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
 
@@ -51,6 +50,9 @@ let d = skip 1000 bigMut
 let e = "hello world" |> skip 6 |> toList
 let h = fromList ['h';'e';'l';'l';'o';' '] + "world"
 
+
+// Monoids
+
 let asQuotation = mappend <@ ResizeArray(["1"]) @> <@ ResizeArray(["2;3"]) @>
 let quot123     = mappend <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>
 let quot1       = mappend <@ ResizeArray([1])   @>      (mempty())
@@ -62,8 +64,21 @@ let lzy2 = mappend (mempty()) lzy1
 let asy1 = mappend (async.Return [1]) (async.Return [2;3])
 let asy2 = mappend (mempty()) asy1
 
+let mapA = Map.empty 
+            |> Map.add 1 (async.Return "Hey")
+            |> Map.add 2 (async.Return "Hello")
 
-let inline map   f x = Inline.instance (Map, x) f
+let mapB = Map.empty 
+            |> Map.add 3 (async.Return " You")
+            |> Map.add 2 (async.Return " World")
+
+let mapAB = mappend mapA mapB
+let greeting1 = Async.RunSynchronously mapAB.[2]
+let greeting2 = Async.RunSynchronously (mconcat [mapA; mempty(); mapB]).[2]
+
+
+// Functors, Monads
+let inline map   f x = Inline.instance (Functor.Map, x) f
 let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
 
 let quot7 = map ((+)2) <@ 5 @>
