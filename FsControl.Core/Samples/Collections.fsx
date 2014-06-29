@@ -76,6 +76,22 @@ let mapAB = mappend mapA mapB
 let greeting1 = Async.RunSynchronously mapAB.[2]
 let greeting2 = Async.RunSynchronously (mconcat [mapA; mempty(); mapB]).[2]
 
+open System.Collections.Generic
+open System.Threading.Tasks
+
+let dicA = new Dictionary<string,Task<string>>()
+dicA.["keya"] <- (result "Hey"  : Task<_>)
+dicA.["keyb"] <- (result "Hello": Task<_>)
+
+let dicB = new Dictionary<string,Task<string>>()
+dicB.["keyc"] <- (result " You"  : Task<_>)
+dicB.["keyb"] <- (result " World": Task<_>)
+
+let dicAB = mappend dicA dicB
+
+let greeting3 = extract dicAB.["keyb"]
+let greeting4 = extract (mconcat [dicA; mempty(); dicB]).["keyb"]
+
 
 // Functors, Monads
 let inline map   f x = Inline.instance (Functor.Map, x) f

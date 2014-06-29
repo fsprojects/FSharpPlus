@@ -37,6 +37,14 @@ module Monad =
                 | Some v -> yield k, v
                 | _      -> () })
 
+        static member        instance (Bind, x:Dictionary<'k,'a>   , _:Dictionary<'k,'b>   ) = fun (f:'a->Dictionary<'k,'b>) -> 
+            let d = Dictionary()
+            for KeyValue(k, v) in x do
+                match (f v).TryGetValue(k)  with
+                | true, v -> d.Add(k, v)
+                | _       -> ()
+            d
+
         //Restricted Monad
         static member instance (Bind, x:Nullable<_> , _:'b Nullable) = fun f -> if x.HasValue then f x.Value else Nullable() : Nullable<'b>
 
@@ -134,6 +142,14 @@ module Applicative =
                 | Some vx -> yield k, vf vx
                 | _       -> () })
 
+        static member        instance (_:Apply, f:Dictionary<'k,_>, x:Dictionary<'k,'a>, _:Dictionary<'k,'b>  ) :unit->Dictionary<'k,'b>          = fun () ->
+            let d = Dictionary()
+            for KeyValue(k, vf) in f do
+                match x.TryGetValue k with
+                | true, vx -> d.Add(k, vf vx)
+                | _        -> ()
+            d
+
         static member        instance (_:Apply, f:Expr<'a->'b>, x:Expr<'a>, _:Expr<'b>) = fun () -> Expr.Cast<'b>(Expr.Application(f,x))
 
         static member        instance (_:Apply, f:('a->'b) ResizeArray, x:'a ResizeArray, _:'b ResizeArray) = fun () ->
@@ -186,6 +202,7 @@ module Functor =
         static member instance (_:Map, x:Choice<_,_>    , _) = fun f -> Error.map f x
         static member instance (_:Map, KeyValue(k, x)   , _) = fun (f:'b->'c) -> KeyValuePair(k, f x)
         static member instance (_:Map, x:Map<'a,'b>     , _) = fun (f:'b->'c) -> Map.map (const' f) x : Map<'a,'c>
+        static member instance (_:Map, x:Dictionary<_,_>, _) = fun (f:'b->'c) -> let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d: Dictionary<'a,'c>
         static member instance (_:Map, x:Expr<'a>       , _) = fun (f:'a->'b) -> Expr.Cast<'b>(Expr.Application(Expr.Value(f),x))
         static member instance (_:Map, x:_ ResizeArray  , _) = fun f -> ResizeArray(Seq.map f x) : ResizeArray<'b>
         static member instance (_:Map, x:_ IObservable  , _) = fun f -> Observable.map f x

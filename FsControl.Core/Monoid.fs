@@ -45,6 +45,7 @@ module Monoid =
         static member inline instance (Mempty, _:Async<'a>        ) = fun () -> let (v:'a) = mempty() in async.Return v
         static member inline instance (Mempty, _:Expr<'a>         ) = fun () -> let (v:'a) = mempty() in Expr.Cast<'a>(Expr.Value(v))
         static member inline instance (Mempty, _:Lazy<'a>         ) = fun () -> let (v:'a) = mempty() in lazy v
+        static member        instance (Mempty, _:Dictionary<'a,'b>) = fun () -> Dictionary<'a,'b>()
         static member        instance (Mempty, _:ResizeArray<'a>  ) = fun () -> ResizeArray() : ResizeArray<'a>
         static member        instance (Mempty, _:seq<'a>          ) = fun () -> Seq.empty   :  seq<'a>
 
@@ -94,6 +95,12 @@ module Monoid =
 
         static member inline instance (Mappend, x:Map<'a,'b>, _) = fun y ->
             Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> mappend v v' | None -> v') m) x y
+
+        static member inline instance (Mappend, x:Dictionary<'a,'b>, _) = fun (y:Dictionary<'a,'b>) ->
+            let d = Dictionary<'a,'b>()
+            for KeyValue(k, v ) in x do d.[k] <- v
+            for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue(k) with true, v -> mappend v v' | _ -> v'
+            d
 
         static member inline instance (Mappend, x:'a Async     , _) = fun (y:'a Async) -> async {
             let! a = x
