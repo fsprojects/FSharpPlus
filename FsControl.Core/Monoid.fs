@@ -117,9 +117,10 @@ module Monoid =
         static member        instance (Mappend, x:_ seq        , _) = fun  y                -> Seq.append x y
 
 
-    type MconcatDefault() = class end
+    type MconcatDefaultNS() = class end
+    type MconcatDefaultS()  = inherit MconcatDefaultNS()
     type Mconcat() =
-        inherit MconcatDefault()
+        inherit MconcatDefaultS()
 
         static member inline instance (_:Mconcat ,x:list<Dictionary<'a,'b>>,  _:Dictionary<'a,'b>) = fun () ->
             let r = Dictionary<'a,'b>()
@@ -140,9 +141,13 @@ module Monoid =
     let Mconcat = Mconcat()
     let inline internal mconcat (x:list<'a>) : 'a = Inline.instance (Mconcat, x) ()
 
-    type MconcatDefault with
-        static member inline instance (_:MconcatDefault, x:list< 'a>, _:'a) = fun () ->
-            List.foldBack mappend x (mempty()) : 'a
+    type MconcatDefaultS with
+        static member inline instance (_:MconcatDefaultNS, x:list< ^a>, _:^a when ^a: not struct) = fun () ->
+            List.foldBack mappend x (mempty()) : ^a
+
+    type MconcatDefaultNS with
+        static member inline instance (_:MconcatDefaultNS, x:list< ^a>, _:^a when ^a: struct) = fun () ->
+            List.foldBack mappend x (mempty()) : ^a
 
     type Mconcat with
         static member inline instance (_:Mconcat , x:list<'a * 'b>, _:'a * 'b   ) = fun () ->
