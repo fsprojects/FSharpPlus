@@ -29,10 +29,8 @@ module Operators =
 
     // Monoid -----------------------------------------------------------------
     let inline mempty() :'Monoid = Inline.instance Monoid.Mempty ()
-    let inline mappend (x:'Monoid) (y:'Monoid) :'Monoid = Inline.instance (Monoid.Mappend, x) y
-    let inline mconcat (x:list<'Monoid>) :'Monoid  =
-        let foldR f s lst = List.foldBack f lst s
-        foldR mappend (mempty()) x
+    let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid = Inline.instance (Monoid.Mappend, x) y
+    let inline mconcat (x:list<'Monoid>)      : 'Monoid = Inline.instance (Monoid.Mconcat, x) ()
 
 
     // Monad plus -------------------------------------------------------------

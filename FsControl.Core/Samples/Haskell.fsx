@@ -293,8 +293,8 @@ type Product<'a> = Product of 'a with
     static member inline instance (Mappend,  Product (x:'n), _) = fun (Product(y:'n)) -> Product (x * y):Product<'n>
 
 let inline mempty() = Inline.instance Mempty ()
-let inline mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
-let inline mconcat x = List.foldBack mappend x (mempty())
+let inline mappend (x:'a) (y:'a): 'a = Inline.instance (Mappend, x) y
+let inline mconcat (x:list<'a>) : 'a = Inline.instance (Mconcat, x) ()
 
 
 // Test Monoids

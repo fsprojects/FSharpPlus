@@ -117,6 +117,52 @@ module Monoid =
         static member        instance (Mappend, x:_ seq        , _) = fun  y                -> Seq.append x y
 
 
+    type MconcatDefault() = class end
+    type Mconcat() =
+        inherit MconcatDefault()
+
+        static member inline instance (_:Mconcat ,x:list<Dictionary<'a,'b>>,  _:Dictionary<'a,'b>) = fun () ->
+            let r = Dictionary<'a,'b>()
+            for d in x do
+                for KeyValue(k, u) in d do
+                    r.[k] <- match r.TryGetValue(k) with true, v -> mappend v u | _ -> u
+            r
+
+        static member inline instance (_:Mconcat ,x:list<ResizeArray<'a>>, _:'a ResizeArray) = fun () -> ResizeArray(Seq.concat x)
+        static member        instance (_:Mconcat ,x:list<list<'a>>       , _:list<'a>      ) = fun () -> List.concat x
+        static member        instance (_:Mconcat ,x:list<array<'a>>      , _:array<'a>     ) = fun () -> Array.concat x
+        static member        instance (_:Mconcat ,x:list<string>         , _:string        ) = fun () -> String.Concat x
+        static member        instance (_:Mconcat ,x:list<StringBuilder>  , _:StringBuilder ) = fun () ->
+            let sb = new StringBuilder()
+            List.iter (fun s -> sb.Append(s.ToString()) |> ignore) x
+            sb
+
+    let Mconcat = Mconcat()
+    let inline internal mconcat (x:list<'a>) : 'a = Inline.instance (Mconcat, x) ()
+
+    type MconcatDefault with
+        static member inline instance (_:MconcatDefault, x:list< 'a>, _:'a) = fun () ->
+            List.foldBack mappend x (mempty()) : 'a
+
+    type Mconcat with
+        static member inline instance (_:Mconcat , x:list<'a * 'b>, _:'a * 'b   ) = fun () ->
+            mconcat (List.map fst x), 
+            mconcat (List.map snd x)
+
+    type Mconcat with
+        static member inline instance (_:Mconcat ,x:list<'a * 'b * 'c>, _:'a * 'b * 'c) = fun () ->
+            mconcat (List.map (fun (x,_,_) -> x) x), 
+            mconcat (List.map (fun (_,x,_) -> x) x), 
+            mconcat (List.map (fun (_,_,x) -> x) x)
+
+    type Mconcat with
+        static member inline instance (_:Mconcat ,x:list<'a * 'b * 'c * 'd>, _:'a * 'b * 'c * 'd) = fun () ->
+            mconcat (List.map (fun (x,_,_,_) -> x) x), 
+            mconcat (List.map (fun (_,x,_,_) -> x) x), 
+            mconcat (List.map (fun (_,_,x,_) -> x) x),
+            mconcat (List.map (fun (_,_,_,x) -> x) x)
+
+
 namespace FsControl.Core.Types
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
