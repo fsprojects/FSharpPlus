@@ -19,6 +19,7 @@ module Monoid =
         static member        instance (Mempty, _:unit      ) = fun () -> ()
         static member        instance (Mempty, _:Set<'a>   ) = fun () -> Set.empty : Set<'a>
         static member        instance (Mempty, _:Map<'a,'b>) = fun () -> Map.empty : Map<'a,'b>
+        static member        instance (Mempty, _:'a->'a    ) = fun () -> id :'a->'a 
 
     let inline internal mempty() = Inline.instance Mempty ()
 
@@ -62,6 +63,7 @@ module Monoid =
             sb.Append(x.ToString()) |> ignore
             sb.Append(y.ToString()) |> ignore
             y
+        static member        instance (Mappend, x:'a->'a       , _) = fun y -> x << y
 
     let inline internal mappend (x:'a) (y:'a) :'a = Inline.instance (Mappend, x) y
 
