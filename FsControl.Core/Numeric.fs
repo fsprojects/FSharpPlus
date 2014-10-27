@@ -251,3 +251,69 @@ module Floating =
 #if NOTNET35
         static member instance (Pi, _:Complex) = fun () -> Complex(System.Math.PI, 0.0)
 #endif
+
+
+
+// Bounded class ----------------------------------------------------------
+
+open System
+
+module Bounded =
+    type MinValue = MinValue with
+        static member instance (MinValue, _:unit          ) = fun () -> ()
+        static member instance (MinValue, _:bool          ) = fun () -> false
+        static member instance (MinValue, _:char          ) = fun () -> Char.MinValue
+        static member instance (MinValue, _:byte          ) = fun () -> Byte.MinValue
+        static member instance (MinValue, _:sbyte         ) = fun () -> SByte.MinValue
+        static member instance (MinValue, _:float         ) = fun () -> Double.MinValue
+        static member instance (MinValue, _:int16         ) = fun () -> Int16.MinValue
+        static member instance (MinValue, _:int           ) = fun () -> Int32.MinValue
+        static member instance (MinValue, _:int64         ) = fun () -> Int64.MinValue
+        static member instance (MinValue, _:float32       ) = fun () -> Single.MinValue
+        static member instance (MinValue, _:uint16        ) = fun () -> UInt16.MinValue
+        static member instance (MinValue, _:uint32        ) = fun () -> UInt32.MinValue
+        static member instance (MinValue, _:uint64        ) = fun () -> UInt64.MinValue
+        static member instance (MinValue, _:decimal       ) = fun () -> Decimal.MinValue
+        static member instance (MinValue, _:DateTime      ) = fun () -> DateTime.MinValue
+        static member instance (MinValue, _:DateTimeOffset) = fun () -> DateTimeOffset.MinValue
+
+    let inline internal minValue() = Inline.instance MinValue ()
+
+    type MinValue with
+        static member inline instance (MinValue, (_:'a*'b                  )) = fun () -> (minValue(), minValue())
+        static member inline instance (MinValue, (_:'a*'b*'c               )) = fun () -> (minValue(), minValue(), minValue())
+        static member inline instance (MinValue, (_:'a*'b*'c*'d            )) = fun () -> (minValue(), minValue(), minValue(), minValue())
+        static member inline instance (MinValue, (_:'a*'b*'c*'d*'e         )) = fun () -> (minValue(), minValue(), minValue(), minValue(), minValue())
+        static member inline instance (MinValue, (_:'a*'b*'c*'d*'e*'f      )) = fun () -> (minValue(), minValue(), minValue(), minValue(), minValue(), minValue())
+        static member inline instance (MinValue, (_:'a*'b*'c*'d*'e*'f*'g   )) = fun () -> (minValue(), minValue(), minValue(), minValue(), minValue(), minValue(), minValue())
+        static member inline instance (MinValue, (_:'a*'b*'c*'d*'e*'f*'g*'h)) = fun () -> (minValue(), minValue(), minValue(), minValue(), minValue(), minValue(), minValue(), minValue())
+
+    type MaxValue = MaxValue with
+        static member instance (MaxValue, _:unit          ) = fun () -> ()
+        static member instance (MaxValue, _:bool          ) = fun () -> true
+        static member instance (MaxValue, _:char          ) = fun () -> Char.MaxValue
+        static member instance (MaxValue, _:byte          ) = fun () -> Byte.MaxValue
+        static member instance (MaxValue, _:sbyte         ) = fun () -> SByte.MaxValue
+        static member instance (MaxValue, _:float         ) = fun () -> Double.MaxValue
+        static member instance (MaxValue, _:int16         ) = fun () -> Int16.MaxValue
+        static member instance (MaxValue, _:int           ) = fun () -> Int32.MaxValue
+        static member instance (MaxValue, _:int64         ) = fun () -> Int64.MaxValue
+        static member instance (MaxValue, _:float32       ) = fun () -> Single.MaxValue
+        static member instance (MaxValue, _:uint16        ) = fun () -> UInt16.MaxValue
+        static member instance (MaxValue, _:uint32        ) = fun () -> UInt32.MaxValue
+        static member instance (MaxValue, _:uint64        ) = fun () -> UInt64.MaxValue
+        static member instance (MaxValue, _:decimal       ) = fun () -> Decimal.MaxValue
+        static member instance (MaxValue, _:DateTime      ) = fun () -> DateTime.MaxValue
+        static member instance (MaxValue, _:DateTimeOffset) = fun () -> DateTimeOffset.MaxValue
+
+
+    let inline internal maxValue() = Inline.instance MaxValue ()
+
+    type MaxValue with
+        static member inline instance (MaxValue, (_:'a*'b                  )) = fun () -> (maxValue(), maxValue())
+        static member inline instance (MaxValue, (_:'a*'b*'c               )) = fun () -> (maxValue(), maxValue(), maxValue())
+        static member inline instance (MaxValue, (_:'a*'b*'c*'d            )) = fun () -> (maxValue(), maxValue(), maxValue(), maxValue())
+        static member inline instance (MaxValue, (_:'a*'b*'c*'d*'e         )) = fun () -> (maxValue(), maxValue(), maxValue(), maxValue(), maxValue())
+        static member inline instance (MaxValue, (_:'a*'b*'c*'d*'e*'f      )) = fun () -> (maxValue(), maxValue(), maxValue(), maxValue(), maxValue(), maxValue())
+        static member inline instance (MaxValue, (_:'a*'b*'c*'d*'e*'f*'g   )) = fun () -> (maxValue(), maxValue(), maxValue(), maxValue(), maxValue(), maxValue(), maxValue())
+        static member inline instance (MaxValue, (_:'a*'b*'c*'d*'e*'f*'g*'h)) = fun () -> (maxValue(), maxValue(), maxValue(), maxValue(), maxValue(), maxValue(), maxValue(), maxValue())

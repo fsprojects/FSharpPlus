@@ -163,4 +163,10 @@ module Operators =
     let inline toString  value:string  = Inline.instance (Converter.ToString, value) System.Globalization.CultureInfo.InvariantCulture   
     let inline tryParse (value:string) = Inline.instance  Converter.TryParse  value
     let inline parse    (value:string) = Inline.instance  Converter.Parse     value
-    let inline convert   value:'T      = Inline.instance  Converter.Convert   value 
+    let inline convert   value:'T      = Inline.instance  Converter.Convert   value
+
+
+    // Misc
+
+    let inline minValue() = Inline.instance Bounded.MinValue ()
+    let inline maxValue() = Inline.instance Bounded.MaxValue ()
