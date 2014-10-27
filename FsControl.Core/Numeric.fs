@@ -276,6 +276,7 @@ module Bounded =
         static member instance (MinValue, _:decimal       ) = fun () -> Decimal.MinValue
         static member instance (MinValue, _:DateTime      ) = fun () -> DateTime.MinValue
         static member instance (MinValue, _:DateTimeOffset) = fun () -> DateTimeOffset.MinValue
+        static member instance (MinValue, _:TimeSpan      ) = fun () -> TimeSpan.MinValue
 
     let inline internal minValue() = Inline.instance MinValue ()
 
@@ -305,7 +306,7 @@ module Bounded =
         static member instance (MaxValue, _:decimal       ) = fun () -> Decimal.MaxValue
         static member instance (MaxValue, _:DateTime      ) = fun () -> DateTime.MaxValue
         static member instance (MaxValue, _:DateTimeOffset) = fun () -> DateTimeOffset.MaxValue
-
+        static member instance (MaxValue, _:TimeSpan      ) = fun () -> TimeSpan.MaxValue
 
     let inline internal maxValue() = Inline.instance MaxValue ()
 
