@@ -92,6 +92,8 @@ let dicAB = mappend dicA dicB
 let greeting3 = extract dicAB.["keyb"]
 let greeting4 = extract (mconcat [dicA; mempty(); dicB]).["keyb"]
 
+let res2 = mconcat [ async {return (+) 2 } ; async {return (*) 10 } ; async {return id } ;  async {return (%) 3 } ; async {return mempty() } ] </Async.RunSynchronously/> 3
+
 
 // Functors, Monads
 let inline map   f x = Inline.instance (Functor.Map, x) f
