@@ -32,7 +32,7 @@ This is the most complex scenario, to define a new Type Method is not straightfo
 
 In the type definition we will add a static member called instance, which will follow this convention:
 
-    static member [inline] instance (_AbstractionName:TypeMethodName, arg1:Type, [more polymorphic args], _[:ReturnType]) = 
+    static member [inline] instance (_:[module.]TypeMethodName, arg1:Type, [more polymorphic args], _[:ReturnType]) = 
         fun [non-polymorphic args in curried form, if none then a unit () arg] -> 
             Implementation
 
@@ -56,7 +56,7 @@ So you can create a Type <code>Tree</code> and add an instance for the existing 
             | Tree(x,t1,t2) -> Tree(f x, Tree.map f t1, Tree.map f t2)
 
     // add an ìnstance for Map (Functor)
-        static member instance (_Functor:Map, x:Tree<_>, _) = fun f -> Tree.map f x
+        static member instance (_:Functor.Map, x:Tree<_>, _) = fun f -> Tree.map f x
 
 
 
