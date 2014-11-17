@@ -37,11 +37,12 @@ let v4  = v4l.Force()
 
 // test numbers
 let inline findMin (lst: 'a list) =
+    let minValue, maxValue = minValue(), maxValue()
     let rec loop acc = function
-    | [] -> acc
-    | x::_ when x = minValue() -> x
-    | x::xs -> loop (if x < acc then x else acc) xs
-    loop (maxValue()) lst
+        | [] -> acc
+        | x::_ when x = minValue -> x
+        | x::xs -> loop (if x < acc then x else acc) xs
+    loop maxValue lst
     
 let minInt  = findMin [1;0;12;2]
 let minUInt = findMin [1u;0u;12u;2u]  // loops only twice
