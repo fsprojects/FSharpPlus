@@ -33,3 +33,15 @@ let v15 = v5plus10.Force()
 let v4ll: Lazy<_> = lazy (printfn "outer !!! ";lazy (printfn "inner !!! "; 4))
 let v4l = join v4ll
 let v4  = v4l.Force()
+
+
+// test numbers
+let inline findMin (lst: 'a list) =
+    let rec loop acc = function
+    | [] -> acc
+    | x::_ when x = minValue() -> x
+    | x::xs -> loop (if x < acc then x else acc) xs
+    loop (maxValue()) lst
+    
+let minInt  = findMin [1;0;12;2]
+let minUInt = findMin [1u;0u;12u;2u]  // loops only twice
