@@ -17,7 +17,7 @@ module Monad =
     type Bind = Bind with
         static member        instance (Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> lazy (f x.Value).Value
         static member        instance (Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.collect   f x
-        static member        instance (Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> Id(f x)
+        static member        instance (Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> f x.getValue
 
 #if NOTNET35
         static member        instance (Bind, x:Task<'a>     , _:'b Task      ) = fun (f:_->Task<'b>  ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
