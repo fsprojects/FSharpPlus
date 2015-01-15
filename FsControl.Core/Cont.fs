@@ -9,6 +9,7 @@ type Cont<'R,'A> = Cont of (('A->'R)->'R)
 module Cont =
     let run (Cont x) = x
     let callCC (f:(_->Cont<'r,'b>)->_) = Cont <| fun k -> run (f (fun a -> Cont(fun _ -> k a))) k
+    let map f (Cont x) = Cont(fun c -> x (c << f))
 
 type Cont<'R,'A> with
     static member instance (_:Functor.Map, Cont m:Cont<'r,'a>, _) = fun (f:_->'b) -> Cont(fun c -> m (c << f))
