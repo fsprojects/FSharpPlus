@@ -15,7 +15,7 @@ module ContT =
     let inline map f (ContT m) = ContT(fmap (Cont.map f) m)
 
 type ContT<'Mr,'A> with
-    static member instance (_:Functor.Map, ContT m, _) = fun f -> ContT(fun c -> m (c << f))
+    static member instance (_:Functor.Map, x, _) = fun f -> ContT.map f x
 
     static member instance (Applicative.Pure, _:ContT<'mr,'a>           ) = fun a -> ContT((|>) a) :ContT<'mr,'a>
     static member instance (Monad.Bind  ,   ContT m, _:ContT<'mr,'b>) = fun k -> ContT(fun c -> m (fun a -> ContT.run(k a) c)) :ContT<'mr,'b>

@@ -17,9 +17,7 @@ module ReaderT =
     let inline map f (ReaderT m) = ReaderT(fmap (Reader.map f) m)
 
 type ReaderT<'R,'Ma> with
-    static member inline instance (_:Functor.Map  , ReaderT m    , _) = fun f -> ReaderT <| fun r -> do'(){
-        let! a = m r
-        return (f a)}
+    static member inline instance (_:Functor.Map  , x, _) = fun f -> ReaderT.map f x
 
     static member inline instance (Applicative.Pure, _:ReaderT<'r,'ma>            ) :'a  -> ReaderT<'r,'ma> = fun a -> ReaderT <| fun _ -> return' a
     static member inline instance (Monad.Bind  ,   ReaderT m, _:ReaderT<'r,'m>) :('b -> ReaderT<'r,'m>) -> ReaderT<'r,'m> = 

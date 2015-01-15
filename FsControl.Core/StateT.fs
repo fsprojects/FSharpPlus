@@ -17,9 +17,7 @@ module StateT =
     let inline map f (StateT m) = StateT(fmap (State.map f) m)
 
 type StateT<'S,'MaS> with
-    static member inline instance (_:Functor.Map, StateT m, _) = fun f -> StateT <| fun s -> do'(){
-        let! (x, s') = m s
-        return (f x, s')}
+    static member inline instance (_:Functor.Map, x, _) = fun f -> StateT.map f x
 
     static member inline instance (Applicative.Pure, _:StateT<'s,'ma>                        ) : 'a -> StateT<'s,'ma> = fun a -> StateT <| fun s -> return' (a, s)
     static member inline instance (Monad.Bind  ,   StateT (m:'s->'mas), _:StateT<'s,'mbs>) :('a -> StateT<'s,'mbs>) -> StateT<'s,'mbs> = 

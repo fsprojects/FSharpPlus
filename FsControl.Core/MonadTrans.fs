@@ -15,7 +15,7 @@ module OptionT =
     let inline map f (OptionT m) = OptionT (fmap (Option.map f) m)
 
 type OptionT<'Ma> with
-    static member inline instance (_:Functor.Map  , OptionT x :OptionT<'ma>, _) = fun (f:'a->'b) -> OptionT (fmap (Option.map f) x) :OptionT<'mb>
+    static member inline instance (_:Functor.Map  , x :OptionT<'ma>, _) = fun (f:'a->'b) -> OptionT.map f x :OptionT<'mb>
     static member inline instance (Applicative.Pure,            _:OptionT<'ma>) = OptionT << return' << Some :'a -> OptionT<'ma>
     static member inline instance (_:Applicative.Apply, OptionT(f), OptionT(x),  _:OptionT<'r>) = fun () ->
         OptionT(fmap (<*>) f <*> x) :OptionT<'r>
@@ -38,7 +38,7 @@ module ListT =
     let inline map f (ListT m) = ListT (fmap (List.map f) m)
 
 type ListT<'Ma> with
-    static member inline instance (_:Functor.Map   ,  ListT x:ListT<'ma>, _) = fun (f:'a->'b) -> ListT (fmap (List.map f) x):ListT<'mb>
+    static member inline instance (_:Functor.Map   , x:ListT<'ma>, _) = fun (f:'a->'b) -> ListT.map f x :ListT<'mb>
     static member inline instance (Applicative.Pure,           _:ListT<'ma>) = ListT << return' << List.singleton :'a -> ListT<'ma>
     static member inline instance (_:Applicative.Apply, ListT(f), ListT(x),  _:ListT<'r>) = fun () ->
         ListT(fmap (<*>) f <*> x) :ListT<'r>
@@ -68,7 +68,7 @@ module SeqT =
     let inline internal mapM f as' = sequence (Seq.map f as')
 
 type SeqT<'Ma> with
-    static member inline instance (_:Functor.Map   ,  SeqT x:SeqT<'ma>, _) = fun (f:'a->'b) -> SeqT (fmap (Seq.map f) x):SeqT<'mb>
+    static member inline instance (_:Functor.Map   , x:SeqT<'ma>, _) = fun (f:'a->'b) -> SeqT.map f x :SeqT<'mb>
     static member inline instance (Applicative.Pure,           _:SeqT<'ma>) = SeqT << return' << Seq.singleton :'a -> SeqT<'ma>
     static member inline instance (_:Applicative.Apply, SeqT(f), SeqT(x),  _:SeqT<'r>) = fun () ->
         SeqT(fmap (<*>) f <*> x) :SeqT<'r>
