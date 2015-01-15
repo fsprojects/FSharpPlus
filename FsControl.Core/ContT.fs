@@ -12,7 +12,7 @@ type ContT<'Mr,'A> = ContT of  (('A -> 'Mr) -> 'Mr)
 [<RequireQualifiedAccess>]
 module ContT =
     let run   (ContT x) = x
-    let map f (ContT m) = ContT(f << m)
+    let inline map f (ContT m) = ContT(fmap (Cont.map f) m)
 
 type ContT<'Mr,'A> with
     static member instance (_:Functor.Map, ContT m, _) = fun f -> ContT(fun c -> m (c << f))

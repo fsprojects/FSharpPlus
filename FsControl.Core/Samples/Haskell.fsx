@@ -646,7 +646,7 @@ open FsControl.Core.TypeMethods.MonadWriter
 type MaybeT<'T> = OptionT<'T>
 let MaybeT  x = OptionT x
 let runMaybeT = OptionT.run
-let mapMaybeT = OptionT.map
+let inline mapMaybeT f x = OptionT.map f x
 let runListT  = ListT.run
 
 let inline lift (x:'ma) = Inline.instance Lift x

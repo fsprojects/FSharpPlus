@@ -15,7 +15,7 @@ type ErrorT<'R> = ErrorT of 'R
 [<RequireQualifiedAccess>]
 module ErrorT =
     let run   (ErrorT x) = x
-    let map f (ErrorT m) = ErrorT(f m)
+    let inline map f (ErrorT m) = ErrorT(fmap (Error.map f) m)
 
 type ErrorT<'R> with
     static member inline instance (_:Functor.Map, ErrorT x :ErrorT<'ma>, _) = fun (f) -> ErrorT (Functor.fmap (Error.map f) x) :ErrorT<'mb>

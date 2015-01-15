@@ -10,7 +10,7 @@ type Writer<'W,'A> = Writer of ('A * 'W)
 [<RequireQualifiedAccess>]
 module Writer =
     let run (Writer x) = x :_*'w
-    let map f (Writer m:Writer<'w1,_>)   = Writer(f m) :Writer<'w2,_>
+    let map f (Writer(a, w)) = Writer(f a, w)
     let exec  (Writer m:Writer<'w,_> ) s = snd m    
     let tell              w       = Writer((),     w)        :Writer<'w,_>
     let listen(Writer (a, w))     = Writer((a, w), w)        :Writer<'w,_>

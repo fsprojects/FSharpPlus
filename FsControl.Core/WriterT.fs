@@ -16,7 +16,7 @@ type WriterT<'WMa> = WriterT of 'WMa
 [<RequireQualifiedAccess>]
 module WriterT =
     let run   (WriterT x) = x
-    let map f (WriterT m) = WriterT(f m)
+    let inline map f (WriterT m) = WriterT(fmap (Writer.map f) m)
     let inline internal execWriter   (WriterT m) = do'(){
         let! (_, w) = m
         return w}

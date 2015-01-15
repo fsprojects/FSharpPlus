@@ -12,7 +12,7 @@ type OptionT<'Ma> = OptionT of 'Ma
 [<RequireQualifiedAccess>]
 module OptionT =
     let run   (OptionT m) = m
-    let map f (OptionT m) = OptionT (f m)
+    let inline map f (OptionT m) = OptionT (fmap (Option.map f) m)
 
 type OptionT<'Ma> with
     static member inline instance (_:Functor.Map  , OptionT x :OptionT<'ma>, _) = fun (f:'a->'b) -> OptionT (fmap (Option.map f) x) :OptionT<'mb>
@@ -35,7 +35,7 @@ type ListT<'Ma> = ListT of 'Ma
 [<RequireQualifiedAccess>]
 module ListT =
     let run   (ListT m) = m
-    let map f (ListT m) = ListT (f m)
+    let inline map f (ListT m) = ListT (fmap (List.map f) m)
 
 type ListT<'Ma> with
     static member inline instance (_:Functor.Map   ,  ListT x:ListT<'ma>, _) = fun (f:'a->'b) -> ListT (fmap (List.map f) x):ListT<'mb>
@@ -58,7 +58,7 @@ type SeqT<'Ma> = SeqT of 'Ma
 [<RequireQualifiedAccess>]
 module SeqT =
     let run   (SeqT m) = m
-    let map f (SeqT m) = SeqT (f m)
+    let inline map f (SeqT m) = SeqT (fmap (Seq.map f) m)
 
     let inline internal sequence (ms:seq<_>) =
         let ms = Seq.toList ms
