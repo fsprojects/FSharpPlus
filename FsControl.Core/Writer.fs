@@ -11,6 +11,7 @@ type Writer<'W,'A> = Writer of ('A * 'W)
 module Writer =
     let run (Writer x) = x :_*'w
     let map f (Writer(a, w)) = Writer(f a, w)
+    let inline bind f (Writer(a, w)) = Writer(let (b, w') = run (f a) in (b, mappend w w')) :Writer<'w,'b>
     let exec  (Writer m:Writer<'w,_> ) s = snd m    
     let tell              w       = Writer((),     w)        :Writer<'w,_>
     let listen(Writer (a, w))     = Writer((a, w), w)        :Writer<'w,_>

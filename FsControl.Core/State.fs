@@ -9,6 +9,7 @@ type State<'S,'A> = State of ('S->('A * 'S))
 module State =
     let run (State x) = x :'s->_
     let map  f (State m)  = State(f << m) :State<'s,_>
+    let bind f (State m) = State(fun s -> let (a, s') = m s in run (f a) s') :State<'s,'b>
     let eval (State sa) (s:'s) = fst(sa s)
     let exec (State sa) (s:'s) = snd(sa s)
     let get() = State (fun s -> (s , s))  :State<'s,_>
