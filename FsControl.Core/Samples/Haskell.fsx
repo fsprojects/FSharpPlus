@@ -839,6 +839,7 @@ let runErrorT = ErrorT.run
 let errorT4x6xN = fmap ((+) 2) (ErrorT [Right 2; Right 4; Left "Error"])
 let errorT = ErrorT [Right 2; Right 4] >>= fun x -> ErrorT [Right x; Right (x+10)] : ErrorT<List<Either<string,_>>>
 let apErrorT = ap (ErrorT [Right ((+) 3)] ) ( ErrorT [Right  3 ] ) : ErrorT<List<Either<string,_>>>
+let applyErrorT = ErrorT.apply (ErrorT [Right ((+) 3)] ) ( ErrorT [Right  3 ] ) : ErrorT<List<Either<string,_>>>
 
 let decodeError = function
     | -1 -> "Password not valid"

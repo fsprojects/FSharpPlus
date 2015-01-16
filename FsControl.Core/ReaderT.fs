@@ -19,13 +19,13 @@ module ReaderT =
     let inline bind f (ReaderT m) = ReaderT <| fun r -> do'(){
             let! a = m r
             return! run (f a) r}
-    let inline apply f x = ReaderT(fmap (<*>) f <*> x) :ReaderT<'r,'ma>
+    let inline apply (ReaderT f) (ReaderT x) = ReaderT(fmap (<*>) f <*> x) :ReaderT<'r,'ma>
 
 type ReaderT<'R,'Ma> with
     static member inline instance (_:Functor.Map  , x, _) = fun f -> ReaderT.map f x
 
     static member inline instance (Applicative.Pure, _:ReaderT<'r,'ma>            ) :'a  -> ReaderT<'r,'ma> = fun a -> ReaderT <| fun _ -> return' a
-    static member inline instance (_:Applicative.Apply, ReaderT f, ReaderT x, _:ReaderT<'r,'mb>) = fun () -> ReaderT.apply f x :ReaderT<'r,'mb>
+    static member inline instance (_:Applicative.Apply, f, x, _:ReaderT<'r,'mb>) = fun () -> ReaderT.apply f x :ReaderT<'r,'mb>
     static member inline instance (Monad.Bind  , x, _:ReaderT<'r,'m>) :('b -> ReaderT<'r,'m>) -> ReaderT<'r,'m> = fun f -> ReaderT.bind f x
 
     static member inline instance (MonadPlus.Mzero, _:ReaderT<_,_>        ) = fun ()          -> ReaderT <| fun _ -> mzero()

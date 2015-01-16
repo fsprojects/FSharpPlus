@@ -15,13 +15,13 @@ module ContT =
     let run   (ContT x) = x
     let inline map f (ContT m) = ContT(fmap (Cont.map f) m)
     let bind f (ContT m) = ContT(fun c -> m (fun a -> run (f a) c)) :ContT<'mr,'b>
-    let inline apply f x = ContT(fmap (<*>) f <*> x) :ContT<'mr,'a>
+    let inline apply (ContT f) (ContT x) = ContT(fmap (<*>) f <*> x) :ContT<'mr,'a>
 
 type ContT<'Mr,'A> with
     static member instance (_:Functor.Map, x, _) = fun f -> ContT.map f x
 
     static member instance (Applicative.Pure, _:ContT<'mr,'a>           ) = fun a -> ContT((|>) a) :ContT<'mr,'a>
-    static member inline instance (_:Applicative.Apply, ContT f, ContT x, _:ContT<'mr,'b>) = fun () -> ContT.apply f x :ContT<'mr,'b>
+    static member inline instance (_:Applicative.Apply, f, x, _:ContT<'mr,'b>) = fun () -> ContT.apply f x :ContT<'mr,'b>
     static member instance (Monad.Bind  , x, _:ContT<'mr,'b>) = fun f -> ContT.bind f x :ContT<'mr,'b>
 
     static member inline instance (MonadTrans.Lift  , _:ContT<'mr,'a>) = fun (m:'ma) -> ContT((>>=) m) : ContT<'mr,'a>    
