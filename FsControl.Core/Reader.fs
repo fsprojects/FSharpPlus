@@ -10,6 +10,10 @@ module Reader =
     let run (Reader x) = x
     let map   f (Reader m) = Reader(f << m) :Reader<'r,_>
     let bind  f (Reader m) = Reader(fun r -> run (f (m r)) r) :Reader<'r,'b>
+    let apply f x =
+        let pure' a = Reader(fun _ -> a)
+        let (>>=) x f = bind f x
+        f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
     let local f (Reader m) = Reader(m << f) :Reader<'r,_>
     let ask() = Reader id
 

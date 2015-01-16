@@ -3,6 +3,7 @@
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
 open FsControl.Core.TypeMethods.MonadPlus
 open FsControl.Core.TypeMethods.MonadTrans
@@ -18,6 +19,7 @@ module StateT =
     let inline bind f (StateT m) = StateT <| fun s -> do'(){
             let! (a, s') = m s
             return! run (f a) s'}
+    let inline apply f x = StateT(fmap (<*>) f <*> x) :StateT<'s,'mas>
 
 type StateT<'S,'MaS> with
     static member inline instance (_:Functor.Map, x, _) = fun f -> StateT.map f x

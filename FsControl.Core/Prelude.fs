@@ -43,6 +43,11 @@ module internal Seq =
 [<RequireQualifiedAccess>]
 module internal Error =
     let inline map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
+    let inline apply f x =
+        match (f,x) with
+        | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
+        | (Choice2Of2 a, _)            -> Choice2Of2 a
+        | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
     let inline result x = Choice1Of2 x
     let inline throw  x = Choice2Of2 x
     let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e

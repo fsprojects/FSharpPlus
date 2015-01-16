@@ -2,8 +2,9 @@
 
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Monad
 open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Applicative
+open FsControl.Core.TypeMethods.Monad
 open FsControl.Core.TypeMethods.MonadTrans
 open FsControl.Core.TypeMethods.MonadAsync
 
@@ -14,6 +15,7 @@ module ContT =
     let run   (ContT x) = x
     let inline map f (ContT m) = ContT(fmap (Cont.map f) m)
     let bind f (ContT m) = ContT(fun c -> m (fun a -> run (f a) c)) :ContT<'mr,'b>
+    let inline apply f x = ContT(fmap (<*>) f <*> x) :ContT<'mr,'a>
 
 type ContT<'Mr,'A> with
     static member instance (_:Functor.Map, x, _) = fun f -> ContT.map f x

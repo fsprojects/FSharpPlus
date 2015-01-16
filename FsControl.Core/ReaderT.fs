@@ -3,6 +3,7 @@
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
 open FsControl.Core.TypeMethods.MonadPlus
 open FsControl.Core.TypeMethods.MonadTrans
@@ -18,6 +19,7 @@ module ReaderT =
     let inline bind f (ReaderT m) = ReaderT <| fun r -> do'(){
             let! a = m r
             return! run (f a) r}
+    let inline apply f x = ReaderT(fmap (<*>) f <*> x) :ReaderT<'r,'ma>
 
 type ReaderT<'R,'Ma> with
     static member inline instance (_:Functor.Map  , x, _) = fun f -> ReaderT.map f x
