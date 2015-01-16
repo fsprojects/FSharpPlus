@@ -19,7 +19,7 @@ type ContT<'Mr,'A> with
     static member instance (_:Functor.Map, x, _) = fun f -> ContT.map f x
 
     static member instance (Applicative.Pure, _:ContT<'mr,'a>           ) = fun a -> ContT((|>) a) :ContT<'mr,'a>
-    static member instance (Monad.Bind  ,   ContT m, _:ContT<'mr,'b>) = fun k -> ContT(fun c -> m (fun a -> ContT.run(k a) c)) :ContT<'mr,'b>
+    static member instance (Monad.Bind  , x, _:ContT<'mr,'b>) = fun f -> ContT.bind f x :ContT<'mr,'b>
 
     static member inline instance (MonadTrans.Lift  , _:ContT<'mr,'a>) = fun (m:'ma) -> ContT((>>=) m) : ContT<'mr,'a>    
 

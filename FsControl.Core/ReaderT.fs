@@ -23,10 +23,7 @@ type ReaderT<'R,'Ma> with
     static member inline instance (_:Functor.Map  , x, _) = fun f -> ReaderT.map f x
 
     static member inline instance (Applicative.Pure, _:ReaderT<'r,'ma>            ) :'a  -> ReaderT<'r,'ma> = fun a -> ReaderT <| fun _ -> return' a
-    static member inline instance (Monad.Bind  ,   ReaderT m, _:ReaderT<'r,'m>) :('b -> ReaderT<'r,'m>) -> ReaderT<'r,'m> = 
-        fun k -> ReaderT <| fun r -> do'(){
-            let! a = m r
-            return! ReaderT.run (k a) r}
+    static member inline instance (Monad.Bind  , x, _:ReaderT<'r,'m>) :('b -> ReaderT<'r,'m>) -> ReaderT<'r,'m> = fun f -> ReaderT.bind f x
 
     static member inline instance (MonadPlus.Mzero, _:ReaderT<_,_>        ) = fun ()          -> ReaderT <| fun _ -> mzero()
     static member inline instance (MonadPlus.Mplus,   ReaderT m   ,      _) = fun (ReaderT n) -> ReaderT <| fun r -> mplus (m r) (n r)

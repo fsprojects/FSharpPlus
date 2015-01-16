@@ -31,11 +31,7 @@ type WriterT<'WMa> with
     static member inline instance (Applicative.Pure   , _:WriterT<'wma>     ) :'a -> WriterT<'wma> = fun a  -> WriterT (return' (a, mempty()))
     static member inline instance (_:Applicative.Apply,   WriterT(f), WriterT(x),  _:WriterT<'r> ) = fun () ->
         WriterT(fmap (<*>) f <*> x) :WriterT<'r>
-    static member inline instance (Monad.Bind, WriterT (m:'wma), _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> =
-        fun k -> WriterT <| do'(){
-            let! (a, w ) = m
-            let! (b, w') = WriterT.run (k a)
-            return (b, mappend w w')}
+    static member inline instance (Monad.Bind, x:WriterT<'wma>, _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> = fun f -> WriterT.bind f x
 
     static member inline instance (MonadPlus.Mzero, _:WriterT<_>  ) = fun ()          -> WriterT(mzero())
     static member inline instance (MonadPlus.Mplus,   WriterT m, _) = fun (WriterT n) -> WriterT(mplus m n)

@@ -28,12 +28,7 @@ type ErrorT<'R> with
     static member inline instance (Applicative.Pure, _:ErrorT<'ma>) = ErrorT << return' << Choice1Of2 :'a -> ErrorT<'ma>
     static member inline instance (_:Applicative.Apply, ErrorT(f:'ma_b), ErrorT(x:'ma),  _:ErrorT<'mb>) = fun () ->
         ErrorT(fmap (<*>) f <*> x) :ErrorT<'mb>
-    static member inline instance (Monad.Bind  , ErrorT x :ErrorT<'ma>, _:ErrorT<'mb>) = 
-        fun (f: 'a -> ErrorT<'mb>) -> (ErrorT <| do'() {
-            let! a = x
-            match a with
-            | Choice2Of2 l -> return (Choice2Of2 l)
-            | Choice1Of2 r -> return! ErrorT.run (f r)}) :ErrorT<'mb>
+    static member inline instance (Monad.Bind, x :ErrorT<'ma>, _:ErrorT<'mb>) = fun (f:'a -> ErrorT<'mb>) -> ErrorT.bind f x :ErrorT<'mb>
 
     static member inline instance (MonadTrans.Lift, _:ErrorT<'m_a>) = ErrorT << (liftM Choice1Of2)      :'ma -> ErrorT<'m_a>
 

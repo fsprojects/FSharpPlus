@@ -22,10 +22,8 @@ type OptionT<'Ma> with
     static member inline instance (Applicative.Pure,            _:OptionT<'ma>) = OptionT << return' << Some :'a -> OptionT<'ma>
     static member inline instance (_:Applicative.Apply, OptionT(f), OptionT(x),  _:OptionT<'r>) = fun () ->
         OptionT(fmap (<*>) f <*> x) :OptionT<'r>
-    static member inline instance (Monad.Bind  , OptionT x :OptionT<'ma>, _:OptionT<'mb>) = 
-        fun (f: 'a -> OptionT<'mb>) -> (OptionT <| do'() {
-            let! maybe_value = x
-            return! match maybe_value with Some value -> OptionT.run (f value) | _ -> return' None}) :OptionT<'mb>
+    static member inline instance (Monad.Bind  , x :OptionT<'ma>, _:OptionT<'mb>) = 
+        fun (f: 'a -> OptionT<'mb>) -> OptionT.bind f x :OptionT<'mb>
 
     static member inline instance (MonadPlus.Mzero, _:OptionT<_>) = fun ()          -> OptionT (return' None)
     static member inline instance (MonadPlus.Mplus, OptionT x, _) = fun (OptionT y) -> OptionT <| do'() {
@@ -46,9 +44,7 @@ type ListT<'Ma> with
     static member inline instance (Applicative.Pure,           _:ListT<'ma>) = ListT << return' << List.singleton :'a -> ListT<'ma>
     static member inline instance (_:Applicative.Apply, ListT(f), ListT(x),  _:ListT<'r>) = fun () ->
         ListT(fmap (<*>) f <*> x) :ListT<'r>
-    static member inline instance (Monad.Bind  , ListT x:ListT<'ma>, _:ListT<'mb>) =
-        fun (k: 'a -> ListT<'mb>) -> 
-            (ListT (x >>= mapM(ListT.run << k) >>= (List.concat >> return'))) :ListT<'mb>
+    static member inline instance (Monad.Bind, x:ListT<'ma>, _:ListT<'mb>) = fun (f:'a -> ListT<'mb>) -> ListT.bind f x :ListT<'mb>
 
     static member inline instance (MonadPlus.Mzero, _:ListT<_>) = fun ()        -> ListT (return' [])
     static member inline instance (MonadPlus.Mplus, ListT x, _) = fun (ListT y) -> ListT <| do'() {
@@ -77,9 +73,7 @@ type SeqT<'Ma> with
     static member inline instance (Applicative.Pure,           _:SeqT<'ma>) = SeqT << return' << Seq.singleton :'a -> SeqT<'ma>
     static member inline instance (_:Applicative.Apply, SeqT(f), SeqT(x),  _:SeqT<'r>) = fun () ->
         SeqT(fmap (<*>) f <*> x) :SeqT<'r>
-    static member inline instance (Monad.Bind  , SeqT x:SeqT<'ma>, _:SeqT<'mb>) =
-        fun (k: 'a -> SeqT<'mb>) -> 
-            (SeqT (x >>= SeqT.mapM(SeqT.run << k) >>= (Seq.concat >> return'))) :SeqT<'mb>
+    static member inline instance (Monad.Bind, x:SeqT<'ma>, _:SeqT<'mb>) = fun (f: 'a -> SeqT<'mb>) -> SeqT.bind f x :SeqT<'mb>
 
     static member inline instance (MonadPlus.Mzero, _:SeqT<_>) = fun ()       -> SeqT (return' Seq.empty)
     static member inline instance (MonadPlus.Mplus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
