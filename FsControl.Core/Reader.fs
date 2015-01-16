@@ -21,4 +21,4 @@ type Reader<'R,'A> with
     static member instance (_:Functor.Map, x:Reader<'r,'a>, _) = fun (f:_->'b) -> Reader.map f x
     static member instance (Applicative.Pure, _:Reader<'r,'a>       ) = fun a -> Reader(fun _ -> a)                     :Reader<'r,'a>
     static member instance (Monad.Bind ,   x, _:Reader<'r,'b>) = fun f -> Reader.bind f x :Reader<'r,'b>
-    static member instance (_:Applicative.Apply, f:Reader<'r,_>, x:Reader<'r,'a>, _:Reader<'r,'b>) = fun () -> DefaultImpl.ApplyFromMonad f x :Reader<'r,'b>
+    static member instance (_:Applicative.Apply, f:Reader<'r,_>, x:Reader<'r,'a>, _:Reader<'r,'b>) = fun () -> Reader.apply f x :Reader<'r,'b>

@@ -128,11 +128,7 @@ module Applicative =
             | Some f, Some x -> Some (f x) 
             | _              -> None :option<'b>
         
-        static member        instance (_:Apply, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () ->
-            match (f,x) with
-            | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
-            | (Choice2Of2 a, _)            -> Choice2Of2 a
-            | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
+        static member        instance (_:Apply, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () -> Error.apply f x :Choice<'b,'e>
 
         static member        instance (_:Apply, KeyValue(k:'k,f)  , KeyValue(k:'k,x:'a), _:KeyValuePair<'k,'b>) :unit->KeyValuePair<'k,'b> = fun () -> KeyValuePair(k, f x)
 
