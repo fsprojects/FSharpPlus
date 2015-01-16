@@ -15,6 +15,9 @@ type ReaderT<'R,'Ma> = ReaderT of ('R -> 'Ma)
 module ReaderT =
     let  run   (ReaderT x) = x
     let inline map f (ReaderT m) = ReaderT(fmap (Reader.map f) m)
+    let inline bind f (ReaderT m) = ReaderT <| fun r -> do'(){
+            let! a = m r
+            return! run (f a) r}
 
 type ReaderT<'R,'Ma> with
     static member inline instance (_:Functor.Map  , x, _) = fun f -> ReaderT.map f x

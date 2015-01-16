@@ -16,6 +16,11 @@ type ErrorT<'R> = ErrorT of 'R
 module ErrorT =
     let run   (ErrorT x) = x
     let inline map f (ErrorT m) = ErrorT(fmap (Error.map f) m)
+    let inline bind f (ErrorT m) = (ErrorT <| do'() {
+        let! a = m
+        match a with
+        | Choice2Of2 l -> return (Choice2Of2 l)
+        | Choice1Of2 r -> return! run (f r)}) :ErrorT<'mb>
 
 type ErrorT<'R> with
     static member inline instance (_:Functor.Map, x :ErrorT<'ma>, _) = fun f -> ErrorT.map f x :ErrorT<'mb>

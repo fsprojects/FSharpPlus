@@ -15,6 +15,9 @@ type StateT<'S,'MaS> = StateT of ('S -> 'MaS)
 module StateT =
     let  run   (StateT x) = x
     let inline map f (StateT m) = StateT(fmap (State.map f) m)
+    let inline bind f (StateT m) = StateT <| fun s -> do'(){
+            let! (a, s') = m s
+            return! run (f a) s'}
 
 type StateT<'S,'MaS> with
     static member inline instance (_:Functor.Map, x, _) = fun f -> StateT.map f x

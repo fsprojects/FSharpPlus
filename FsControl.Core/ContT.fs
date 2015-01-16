@@ -13,6 +13,7 @@ type ContT<'Mr,'A> = ContT of  (('A -> 'Mr) -> 'Mr)
 module ContT =
     let run   (ContT x) = x
     let inline map f (ContT m) = ContT(fmap (Cont.map f) m)
+    let bind f (ContT m) = ContT(fun c -> m (fun a -> run (f a) c)) :ContT<'mr,'b>
 
 type ContT<'Mr,'A> with
     static member instance (_:Functor.Map, x, _) = fun f -> ContT.map f x

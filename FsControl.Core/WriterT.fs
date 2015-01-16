@@ -17,6 +17,10 @@ type WriterT<'WMa> = WriterT of 'WMa
 module WriterT =
     let run   (WriterT x) = x
     let inline map f (WriterT m) = WriterT(fmap (Writer.map f) m)
+    let inline bind f (WriterT m) = WriterT <| do'(){
+            let! (a, w ) = m
+            let! (b, w') = run (f a)
+            return (b, mappend w w')}
     let inline internal execWriter   (WriterT m) = do'(){
         let! (_, w) = m
         return w}
