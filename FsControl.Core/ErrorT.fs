@@ -21,7 +21,7 @@ module ErrorT =
         match a with
         | Choice2Of2 l -> return (Choice2Of2 l)
         | Choice1Of2 r -> return! run (f r)}) :ErrorT<'mb>
-    let inline apply (ErrorT f) (ErrorT x) = ErrorT(fmap (<*>) f <*> x) :ErrorT<'mb>
+    let inline apply (ErrorT f) (ErrorT x) = ErrorT(fmap Error.apply f <*> x) :ErrorT<'mb>
 
 type ErrorT<'R> with
     static member inline instance (_:Functor.Map, x :ErrorT<'ma>, _) = fun f -> ErrorT.map f x :ErrorT<'mb>

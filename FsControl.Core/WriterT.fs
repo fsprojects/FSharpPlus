@@ -21,7 +21,7 @@ module WriterT =
             let! (a, w ) = m
             let! (b, w') = run (f a)
             return (b, mappend w w')}
-    let inline apply (WriterT f) (WriterT x) = WriterT(fmap (<*>) f <*> x) :WriterT<'r>
+    let inline apply (WriterT f) (WriterT x) = WriterT(fmap Writer.apply f <*> x) :WriterT<'r>
     let inline internal execWriter   (WriterT m) = do'(){
         let! (_, w) = m
         return w}

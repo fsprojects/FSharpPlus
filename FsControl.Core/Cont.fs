@@ -12,10 +12,12 @@ module Cont =
     let map f (Cont x) = Cont(fun c -> x (c << f))
     
     let bind f (Cont x) = Cont(fun k -> x (fun a -> run(f a) k)) :Cont<'r,'b>
-    let apply f x =
+    let apply' f x =
         let pure' n = Cont(fun k -> k n)
         let (>>=) x f = bind f x
-        f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
+        f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2) :Cont<'r,'b>
+    let apply (Cont f) (Cont x) = Cont (fun k -> f (fun f' -> x (k << f'))) :Cont<'r,'b>
+
 
 type Cont<'R,'A> with
     static member instance (_:Functor.Map, x:Cont<'r,'a>, _) = fun (f:_->'b) -> Cont.map f x
