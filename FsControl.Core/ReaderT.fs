@@ -15,11 +15,11 @@ type ReaderT<'R,'Ma> = ReaderT of ('R -> 'Ma)
 [<RequireQualifiedAccess>]
 module ReaderT =
     let  run   (ReaderT x) = x
-    let inline map f (ReaderT m) = ReaderT(fmap (Reader.map f) m)
+    let inline map f (ReaderT m) = ReaderT (fmap f << m)
     let inline bind f (ReaderT m) = ReaderT <| fun r -> do'(){
             let! a = m r
             return! run (f a) r}
-    let inline apply (ReaderT f) (ReaderT x) = ReaderT(fmap Reader.apply f <*> x) :ReaderT<'r,'ma>
+    let inline apply (ReaderT f) (ReaderT x) = (ReaderT <| fun r -> f r <*> x r) :ReaderT<'r,'ma>
 
 type ReaderT<'R,'Ma> with
     static member inline instance (_:Functor.Map  , x, _) = fun f -> ReaderT.map f x

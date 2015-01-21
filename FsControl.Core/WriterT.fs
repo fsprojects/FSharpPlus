@@ -16,12 +16,16 @@ type WriterT<'WMa> = WriterT of 'WMa
 [<RequireQualifiedAccess>]
 module WriterT =
     let run   (WriterT x) = x
-    let inline map f (WriterT m) = WriterT(fmap (Writer.map f) m)
+    let inline map f (WriterT m) =
+        let mapWriter f (a, m) = (f a, m)
+        WriterT <| fmap (mapWriter f) m
     let inline bind f (WriterT m) = WriterT <| do'(){
             let! (a, w ) = m
             let! (b, w') = run (f a)
             return (b, mappend w w')}
-    let inline apply (WriterT f) (WriterT x) = WriterT(fmap Writer.apply f <*> x) :WriterT<'r>
+    let inline apply  (WriterT f) (WriterT x) =
+        let applyWriter (a, w) (b, w') = (a b, mappend w w')
+        WriterT (pure' applyWriter <*> f <*> x)
     let inline internal execWriter   (WriterT m) = do'(){
         let! (_, w) = m
         return w}

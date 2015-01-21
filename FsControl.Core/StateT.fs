@@ -15,11 +15,11 @@ type StateT<'S,'MaS> = StateT of ('S -> 'MaS)
 [<RequireQualifiedAccess>]
 module StateT =
     let  run   (StateT x) = x
-    let inline map f (StateT m) = StateT(fmap (State.map f) m)
+    let inline map f (StateT m) = StateT (m >> fmap (fun (a, s') -> (f a, s')))
     let inline bind f (StateT m) = StateT <| fun s -> do'(){
             let! (a, s') = m s
             return! run (f a) s'}
-    let apply (StateT f) (StateT x) = StateT (fmap State.apply f <*> x) 
+    let apply (StateT f) (StateT x) = StateT (fun s -> f s >>= (fun (g, t) -> fmap (fun (z, u) -> (g z, u)) (a t)))
 
 type StateT<'S,'MaS> with
     static member inline instance (_:Functor.Map, x, _) = fun f -> StateT.map f x
