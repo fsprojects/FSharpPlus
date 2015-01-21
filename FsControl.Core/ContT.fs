@@ -12,15 +12,15 @@ type ContT<'Mr,'A> = ContT of  (('A -> 'Mr) -> 'Mr)
 
 [<RequireQualifiedAccess>]
 module ContT =
-    let run   (ContT x) = x
-    let map f (ContT m) = ContT(fun k -> m (k << f))
-    let bind f (ContT m) = ContT(fun k -> m (fun a -> run (f a) k)) :ContT<'mr,'b>
-    let apply (ContT f) (ContT x) = ContT (fun k -> f (fun f' -> x (k << f')))  :ContT<'mr,'a>
+    let run (ContT m) = m
+    let map  f (ContT m) = ContT (fun k -> m (k << f))
+    let bind f (ContT m) = ContT (fun k -> m (fun a -> run (f a) k)) :ContT<'mr,'b>
+    let apply  (ContT f) (ContT x) = ContT (fun k -> f (fun f' -> x (k << f')))  :ContT<'mr,'a>
 
 type ContT<'Mr,'A> with
     static member instance (_:Functor.Map, x, _) = fun f -> ContT.map f x
 
-    static member instance (Applicative.Pure, _:ContT<'mr,'a>           ) = fun a -> ContT((|>) a) :ContT<'mr,'a>
+    static member instance (Applicative.Pure, _:ContT<'mr,'a>         ) = fun a  -> ContT ((|>) a)  :ContT<'mr,'a>
     static member instance (_:Applicative.Apply, f, x, _:ContT<'mr,'b>) = fun () -> ContT.apply f x :ContT<'mr,'b>
     static member instance (Monad.Bind  , x, _:ContT<'mr,'b>) = fun f -> ContT.bind f x :ContT<'mr,'b>
 
@@ -28,7 +28,8 @@ type ContT<'Mr,'A> with
 
     static member inline instance (MonadAsync.LiftAsync   , _:ContT<_,_>   ) = fun (x: Async<_>) -> lift (liftAsync x)
 
-    static member        instance (MonadCont .CallCC, _:ContT<'mr,'b>) = fun f -> ContT(fun k -> ContT.run(f (fun a -> ContT(fun _ -> k a))) k) : ContT<'mr,'b>
+    static member        instance (MonadCont .CallCC, _:ContT<'mr,'b>) = fun f -> 
+        ContT (fun k -> ContT.run (f (fun a -> ContT (fun _ -> k a))) k) : ContT<'mr,'b>
 
     static member instance (MonadReader.Ask, _:ContT<Reader<'a,'b>,'a>) = fun () -> lift (Reader.ask())  :ContT<Reader<'a,'b>,'a>
     static member instance (MonadReader.Local, ContT m, _:ContT<Reader<'a,'b>,'t>) : ('a -> 'b) -> ContT<Reader<'a,'b>,'t> =

@@ -12,20 +12,19 @@ type OptionT<'Ma> = OptionT of 'Ma
 [<RequireQualifiedAccess>]
 module OptionT =
     let run   (OptionT m) = m
-    let inline map f (OptionT m) = OptionT (fmap (Option.map f) m)
+    let inline map  f (OptionT m) =  OptionT <| fmap (Option.map f) m
     let inline bind f (OptionT m) = (OptionT <| do'() {
         let! maybe_value = m
         return! match maybe_value with Some value -> run (f value) | _ -> return' None}) :OptionT<'mb>
-    let inline apply (OptionT f) (OptionT x) = OptionT(fmap (<*>) f <*> x) :OptionT<'r>
+    let inline apply  (OptionT f) (OptionT x) = OptionT(fmap (<*>) f <*> x) :OptionT<'r>
 
 type OptionT<'Ma> with
-    static member inline instance (_:Functor.Map  , x :OptionT<'ma>, _) = fun (f:'a->'b) -> OptionT.map f x :OptionT<'mb>
-    static member inline instance (Applicative.Pure,            _:OptionT<'ma>) = OptionT << return' << Some :'a -> OptionT<'ma>
-    static member inline instance (_:Applicative.Apply, f, x,  _:OptionT<'r>) = fun () -> OptionT.apply f x :OptionT<'r>
-    static member inline instance (Monad.Bind  , x :OptionT<'ma>, _:OptionT<'mb>) = 
-        fun (f: 'a -> OptionT<'mb>) -> OptionT.bind f x :OptionT<'mb>
+    static member inline instance (_:Functor.Map  , x :OptionT<'ma>, _      ) = fun (f:'a->'b) -> OptionT.map f x :OptionT<'mb>
+    static member inline instance (Applicative.Pure,          _:OptionT<'ma>) = OptionT << return' << Some :'a -> OptionT<'ma>
+    static member inline instance (_:Applicative.Apply, f, x, _:OptionT<'r> ) = fun () -> OptionT.apply f x :OptionT<'r>
+    static member inline instance (Monad.Bind  , x :OptionT<'ma>, _:OptionT<'mb>) = fun (f: 'a -> OptionT<'mb>) -> OptionT.bind f x :OptionT<'mb>
 
-    static member inline instance (MonadPlus.Mzero, _:OptionT<_>) = fun ()          -> OptionT (return' None)
+    static member inline instance (MonadPlus.Mzero, _:OptionT<_>) = fun ()          -> OptionT <| return' None
     static member inline instance (MonadPlus.Mplus, OptionT x, _) = fun (OptionT y) -> OptionT <| do'() {
             let! maybe_value = x
             return! match maybe_value with Some value -> x | _ -> y}
@@ -35,18 +34,18 @@ type ListT<'Ma> = ListT of 'Ma
 
 [<RequireQualifiedAccess>]
 module ListT =
-    let run   (ListT m) = m
-    let inline map f (ListT m) = ListT (fmap (List.map f) m)
+    let run (ListT m) = m
+    let inline map  f (ListT m) =  ListT <| fmap (List.map f) m
     let inline bind f (ListT m) = (ListT (m >>= mapM (run << f) >>= (List.concat >> return'))) :ListT<'mb>
-    let inline apply (ListT f) (ListT x) = ListT(fmap (<*>) f <*> x) :ListT<'r>
+    let inline apply  (ListT f) (ListT x) = ListT(fmap (<*>) f <*> x) :ListT<'r>
 
 type ListT<'Ma> with
-    static member inline instance (_:Functor.Map   , x:ListT<'ma>, _) = fun (f:'a->'b) -> ListT.map f x :ListT<'mb>
-    static member inline instance (Applicative.Pure,           _:ListT<'ma>) = ListT << return' << List.singleton :'a -> ListT<'ma>
-    static member inline instance (_:Applicative.Apply, f, x,  _:ListT<'r>) = fun () -> ListT.apply f x :ListT<'r>
-    static member inline instance (Monad.Bind, x:ListT<'ma>, _:ListT<'mb>) = fun (f:'a -> ListT<'mb>) -> ListT.bind f x :ListT<'mb>
+    static member inline instance (_:Functor.Map   , x:ListT<'ma>, _      ) = fun (f:'a->'b) -> ListT.map f x :ListT<'mb>
+    static member inline instance (Applicative.Pure,          _:ListT<'ma>) = ListT << return' << List.singleton :'a -> ListT<'ma>
+    static member inline instance (_:Applicative.Apply, f, x, _:ListT<'r> ) = fun () -> ListT.apply f x :ListT<'r>
+    static member inline instance (Monad.Bind, x:ListT<'ma>,  _:ListT<'mb>) = fun (f:'a -> ListT<'mb>) -> ListT.bind f x :ListT<'mb>
 
-    static member inline instance (MonadPlus.Mzero, _:ListT<_>) = fun ()        -> ListT (return' [])
+    static member inline instance (MonadPlus.Mzero, _:ListT<_>) = fun ()        -> ListT <| return' []
     static member inline instance (MonadPlus.Mplus, ListT x, _) = fun (ListT y) -> ListT <| do'() {
         let! a = x
         let! b = y
@@ -57,25 +56,25 @@ type SeqT<'Ma> = SeqT of 'Ma
 
 [<RequireQualifiedAccess>]
 module SeqT =
-    let run   (SeqT m) = m
-    let inline map f (SeqT m) = SeqT (fmap (Seq.map f) m)
+    let run (SeqT m) = m
+    let inline map f (SeqT m) = SeqT <| fmap (Seq.map f) m
 
     let inline internal sequence (ms:seq<_>) =
         let ms = Seq.toList ms
-        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (pure' :list<'a> -> 'M) (List.Cons(x,xs))
+        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (pure' :list<'a> -> 'M) (List.Cons (x,xs))
         List.foldBack k ms ((pure' :list<'a> -> 'M) [])
 
     let inline internal mapM f as' = sequence (Seq.map f as')
-    let inline bind (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= mapM (run << f) >>= (Seq.concat >> return')) :SeqT<'mb>
+    let inline bind  (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= mapM (run << f) >>= (Seq.concat >> return')) :SeqT<'mb>
     let inline apply (SeqT f) (SeqT x) = SeqT(fmap (<*>) f <*> x) :SeqT<'r>
 
 type SeqT<'Ma> with
-    static member inline instance (_:Functor.Map   , x:SeqT<'ma>, _) = fun (f:'a->'b) -> SeqT.map f x :SeqT<'mb>
-    static member inline instance (Applicative.Pure,           _:SeqT<'ma>) = SeqT << return' << Seq.singleton :'a -> SeqT<'ma>
-    static member inline instance (_:Applicative.Apply, f, x,  _:SeqT<'r>) = fun () -> SeqT.apply f x :SeqT<'r>
-    static member inline instance (Monad.Bind, x:SeqT<'ma>, _:SeqT<'mb>) = fun (f: 'a -> SeqT<'mb>) -> SeqT.bind f x :SeqT<'mb>
+    static member inline instance (_:Functor.Map   , x:SeqT<'ma>, _      ) = fun (f:'a->'b) -> SeqT.map f x :SeqT<'mb>
+    static member inline instance (Applicative.Pure,          _:SeqT<'ma>) = SeqT << return' << Seq.singleton :'a -> SeqT<'ma>
+    static member inline instance (_:Applicative.Apply, f, x, _:SeqT<'r> ) = fun () -> SeqT.apply f x :SeqT<'r>
+    static member inline instance (Monad.Bind, x:SeqT<'ma>,   _:SeqT<'mb>) = fun (f: 'a -> SeqT<'mb>) -> SeqT.bind f x :SeqT<'mb>
 
-    static member inline instance (MonadPlus.Mzero, _:SeqT<_>) = fun ()       -> SeqT (return' Seq.empty)
+    static member inline instance (MonadPlus.Mzero, _:SeqT<_>) = fun ()       -> SeqT <| return' Seq.empty
     static member inline instance (MonadPlus.Mplus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
         let! a = x
         let! b = y

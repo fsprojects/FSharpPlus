@@ -14,19 +14,19 @@ type StateT<'S,'MaS> = StateT of ('S -> 'MaS)
 
 [<RequireQualifiedAccess>]
 module StateT =
-    let  run   (StateT x) = x
-    let inline map f (StateT m) = StateT (m >> fmap (fun (a, s') -> (f a, s')))
-    let inline bind f (StateT m) = StateT <| fun s -> do'(){
-            let! (a, s') = m s
-            return! run (f a) s'}
-    let apply (StateT f) (StateT x) = StateT (fun s -> f s >>= (fun (g, t) -> fmap (fun (z, u) -> (g z, u)) (a t)))
+    let run (StateT x) = x
+    let inline map  f (StateT m) = StateT (m >> fmap (fun (a, s') -> (f a, s')))
+    let inline apply  (StateT f) (StateT a) = StateT (fun s -> f s >>= fun (g, t) -> fmap (fun (z, u) -> (g z, u)) (a t))
+    let inline bind f (StateT m) = StateT <| fun s -> do'() {
+        let! (a, s') = m s
+        return! run (f a) s'}
 
 type StateT<'S,'MaS> with
     static member inline instance (_:Functor.Map, x, _) = fun f -> StateT.map f x
-
-    static member inline instance (Applicative.Pure, _:StateT<'s,'ma>                        ) : 'a -> StateT<'s,'ma> = fun a -> StateT <| fun s -> return' (a, s)
-    static member        instance (_:Applicative.Apply, f, x, _:StateT<'s,'mb>) = fun () -> StateT.apply f x
-    static member inline instance (Monad.Bind  , x:StateT<'s,'mas>, _:StateT<'s,'mbs>) :('a -> StateT<'s,'mbs>) -> StateT<'s,'mbs> = fun f -> StateT.bind f x
+    static member inline instance (Applicative.Pure, _:StateT<'s,'ma>) : 'a -> StateT<'s,'ma> = fun a -> StateT <| fun s -> return' (a, s)
+    static member inline instance (_:Applicative.Apply, f, x, _:StateT<'s,'mb>) = fun () -> StateT.apply f x
+    static member inline instance (Monad.Bind  , x:StateT<'s,'mas>, _:StateT<'s,'mbs>) :('a -> StateT<'s,'mbs>) -> StateT<'s,'mbs> = fun f -> 
+        StateT.bind f x
 
     static member inline instance (MonadPlus.Mzero, _:StateT<_,_>    ) = fun ()         -> StateT <| fun _ -> mzero()
     static member inline instance (MonadPlus.Mplus,   StateT m,     _) = fun (StateT n) -> StateT <| fun s -> mplus (m s) (n s)
