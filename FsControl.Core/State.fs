@@ -8,7 +8,7 @@ type State<'S,'A> = State of ('S->('A * 'S))
 [<RequireQualifiedAccess>]
 module State =
     let run (State x) = x :'s->_
-    let map  f (State m)  = State(f << m) :State<'s,_>
+    let map  f (State m)  = State (fun s -> let (a, s') = m s in ( f a, s')) :State<'s,_>
     let bind f (State m) = State(fun s -> let (a, s') = m s in run (f a) s') :State<'s,'b>
     let apply f x = State (fun s -> let f, s1 = run f s in let x, s2 = run x s1 in f x, s2)
 
