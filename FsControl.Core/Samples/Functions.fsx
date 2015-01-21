@@ -46,3 +46,33 @@ let inline findMin (lst: 'a list) =
     
 let minInt  = findMin [1;0;12;2]
 let minUInt = findMin [1u;0u;12u;2u]  // loops only twice
+
+
+open FsControl.Core.Types
+
+// Test functor and applicatives for ReaderT
+
+let readerTf = ReaderT (fun x -> [(+)x])
+let readerTx = ReaderT (fun x -> [x;2*x])
+let readerTr = ReaderT.run (readerTf <*> readerTx) 7
+let readerTm = ReaderT.run (map ((+) 100) readerTx) 7
+
+
+// Test functor and applicatives for WriterT
+
+let writerTf = WriterT [(+) 5, "Function"]
+let writerTx = WriterT [10   , "Argument"]
+let writerTr = writerTf <*> writerTx
+let writerTm = map ((+) 100) writerTx
+
+// Test functor and applicatives for StateT
+
+let stateTf = StateT (fun s -> [(+)10, s; (-) 10, s])
+let stateTx = StateT (fun s -> [4, s; 3, s])
+let stateTr = StateT.run (stateTf <*> stateTx) "state"
+let stateTm = StateT.run (map ((+) 100) stateTx) "state"
+
+let d = System.Collections.Generic.Dictionary()
+d.Add("first", Choice1Of2 1)
+d.Add("second", Choice2Of2 "Error")
+let errorT4x6xN = map ((+) 2) (ErrorT d)
