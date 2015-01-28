@@ -57,6 +57,12 @@ let readerTx = ReaderT (fun x -> [x;2*x])
 let readerTr = ReaderT.run (readerTf <*> readerTx) 7
 let readerTm = ReaderT.run (map ((+) 100) readerTx) 7
 
+(* Why these lines work (after 30 secs) ONLY if run line by line?
+let readerTf' = ReaderT (fun x -> Cont (fun k -> k ((+)x))) 
+let readerTx' = ReaderT (fun x -> Cont (fun k -> k (2*x)))
+let readerTm' = Cont.run (ReaderT.run (map ((+) 100) readerTx') 7) id
+let readerTr' = Cont.run (ReaderT.run (readerTf' <*> readerTx') 7) id
+*)
 
 // Test functor and applicatives for WriterT
 

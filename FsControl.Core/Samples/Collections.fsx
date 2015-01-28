@@ -96,8 +96,6 @@ let res2 = mconcat [ async {return (+) 2 } ; async {return (*) 10 } ; async {ret
 
 
 // Functors, Monads
-let inline map   f x = Inline.instance (Functor.Map, x) f
-let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Monad.Bind, x) f
 
 let quot7 = map ((+)2) <@ 5 @>
 let (quot5:Microsoft.FSharp.Quotations.Expr<int>) = result 5
@@ -122,19 +120,20 @@ let sameSeq = mappend (mempty()) (seq [4;5;6])
 
 let (seqFromLst:_ seq) = fromList [1;2;3;4]
 
-// This should not compile
-// twoStacks = mappend stack stack
-// let twoSeqs'  = mappend (seq [1;2;3]) [4;5;6]
-// let twoSeqs'' = mappend [1;2;3] (seq [4;5;6])
-// let sortedStack = sortBy  string    stack
-// let (stackFromLst:_ Collections.Generic.Stack) = fromList [1;2;3;4]
-
+// This should not compile 
+(*
+let twoStacks = mappend stack stack
+let twoSeqs'  = mappend (seq [1;2;3]) [4;5;6]
+let twoSeqs'' = mappend [1;2;3] (seq [4;5;6])
+let (stackFromLst:_ Collections.Generic.Stack) = fromList [1;2;3;4]
+*)
 
 let singletonList: _ list = result 1
 let singletonSeq : _ seq  = result 1
 
 
 // This should not compile (but it does)
+let sortedStack = sortBy  string    stack
 let mappedstack = map string stack
 let stackGroup  = groupBy ((%)/> 2) stack
 
@@ -149,9 +148,6 @@ let rseq =
 
 
 // Test Seq Comonad
-let inline duplicate (x)                = Inline.instance (Comonad.Duplicate, x) ()
-let inline extend  (g:'Comonad'a->'b) (s:'Comonad'a): 'Comonad'b = Inline.instance (Comonad.Extend, s) g
-let inline (=>>)   (s:'Comonad'a) (g:'Comonad'a->'b): 'Comonad'b = extend g s
 
 let lst   = seq [1;2;3;4;5]
 let elem1 = extract   lst
@@ -184,7 +180,6 @@ let r123 = toList stack
 
 
 // Test traversable
-let inline sequenceA  t = Inline.instance (Traversable.SequenceA, t) ()
 
 let resNone  = sequenceA (seq [Some 3;None ;Some 1])
 
@@ -204,9 +199,6 @@ let inline sequence ms =
     List.foldBack k (Seq.toList ms) ((result :seq<'a> -> 'M) (Seq.empty))
 
 let inline mapM f as' = sequence (Seq.map f as')
-let inline mzero () = Inline.instance Mzero ()
-let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
-let inline guard x = if x then result () else mzero()
 
 type DoPlusNotationBuilder() =
     member inline b.Return(x) = result x
@@ -248,3 +240,4 @@ open FsControl.Core.Types
 let listT  = ListT (Some [2;4]      ) >>= fun x -> ListT (Some [x; x+10]      )
 let seqT   = SeqT  (Some (seq [2;4])) >>= fun x -> SeqT  (Some (seq [x; x+10]))
 let resListTSome2547 = (SeqT (Some (seq [2;4]) )) >>=  (fun x -> SeqT ( Some (seq [x;x+3])) )
+let apSeqT  = SeqT.run ((SeqT  (Some [(+) 3]) ) <*> ( SeqT  (Some [3]) ))

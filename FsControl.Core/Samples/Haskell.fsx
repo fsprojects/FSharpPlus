@@ -662,10 +662,10 @@ let inline pass   m = Inline.instance (Pass  , m) ()
 
 // Test Monad Transformers
 let maybeT4x6xN = fmap ((+) 2) (MaybeT [Just 2; Just 4; Nothing])
-let maybeT = MaybeT [Some 2; Some 4] >>= fun x -> MaybeT [Some x; Some (x+10)]
+let maybeT2x12x4x14 = MaybeT [Some 2; Some 4] >>= fun x -> MaybeT [Some x; Some (x+10)]
 
-let listT2x4x6  = fmap ((+) 2) (ListT (Just [2; 4; 6]))
-let listT  = ListT  (Some [2;4]    ) >>= fun x -> ListT  (Some [x; x+10]     )
+let listT4x6x8  = fmap ((+) 2) (ListT (Just [2; 4; 6]))
+let listT2x12x4x14  = ListT  (Some [2;4]    ) >>= fun x -> ListT  (Some [x; x+10]     )
 
 let apMaybeT = ap (MaybeT [Just ((+) 3)] ) ( MaybeT [Just  3 ] )
 let apListT  = ap (ListT  (Just [(+) 3]) ) ( ListT  (Just [3]) )
