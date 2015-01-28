@@ -16,7 +16,7 @@ open Monoid
 module Monad =
     type Bind = Bind with
         static member        instance (Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> lazy (f x.Value).Value
-        static member        instance (Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.collect   f x
+        static member        instance (Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.bind   f x
         static member        instance (Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> f x.getValue
 
 #if NOTNET35

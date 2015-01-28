@@ -36,7 +36,7 @@ type ListT<'Ma> = ListT of 'Ma
 module ListT =
     let run (ListT m) = m
     let inline map  f (ListT m) =  ListT <| fmap (List.map f) m
-    let inline bind f (ListT m) = (ListT (m >>= mapM (run << f) >>= (List.concat >> return'))) :ListT<'mb>
+    let inline bind f (ListT m) = (ListT (m >>= mapM (run << f) >>= ((List.concat:list<_>->_) >> return'))) :ListT<'mb>
     let inline apply  (ListT f) (ListT x) = ListT (fmap List.apply f <*> x) :ListT<'r>
 
 type ListT<'Ma> with
@@ -58,14 +58,8 @@ type SeqT<'Ma> = SeqT of 'Ma
 module SeqT =
     let run (SeqT m) = m
     let inline map f (SeqT m) = SeqT <| fmap (Seq.map f) m
-
-    let inline internal sequence (ms:seq<_>) =
-        let ms = Seq.toList ms
-        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (pure' :list<'a> -> 'M) (List.Cons (x,xs))
-        List.foldBack k ms ((pure' :list<'a> -> 'M) [])
-
-    let inline internal mapM f as' = sequence (Seq.map f as')
-    let inline bind  (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= mapM (run << f) >>= (Seq.concat >> return')) :SeqT<'mb>
+    let inline internal mapM f as' = as' |> Seq.toList |> List.map f |> sequence |> fmap List.toSeq
+    let inline bind  (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= mapM (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> return')) :SeqT<'mb>
     let inline apply (SeqT f) (SeqT x) = SeqT (fmap Seq.apply f <*> x) :SeqT<'r>
 
 type SeqT<'Ma> with

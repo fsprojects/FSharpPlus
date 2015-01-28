@@ -23,8 +23,8 @@ module internal List =
 
 [<RequireQualifiedAccess>]
 module internal Seq =
-
-    let inline apply f x = Seq.collect (fun f -> Seq.map ((<|) f) x) f
+    let inline bind (f:'a->seq<'b>) x = Seq.collect f x
+    let inline apply f x = bind (fun f -> Seq.map ((<|) f) x) f
 
     // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
     let inline intersperse sep list = seq {
