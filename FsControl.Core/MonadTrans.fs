@@ -16,7 +16,7 @@ module OptionT =
     let inline bind f (OptionT m) = (OptionT <| do'() {
         let! maybe_value = m
         return! match maybe_value with Some value -> run (f value) | _ -> return' None}) :OptionT<'mb>
-    let inline apply  (OptionT f) (OptionT x) = OptionT(fmap (<*>) f <*> x) :OptionT<'r>
+    let inline apply  (OptionT f) (OptionT x) = OptionT (fmap Option.apply f <*> x) :OptionT<'r>
 
 type OptionT<'Ma> with
     static member inline instance (_:Functor.Map  , x :OptionT<'ma>, _      ) = fun (f:'a->'b) -> OptionT.map f x :OptionT<'mb>
@@ -37,7 +37,7 @@ module ListT =
     let run (ListT m) = m
     let inline map  f (ListT m) =  ListT <| fmap (List.map f) m
     let inline bind f (ListT m) = (ListT (m >>= mapM (run << f) >>= (List.concat >> return'))) :ListT<'mb>
-    let inline apply  (ListT f) (ListT x) = ListT(fmap (<*>) f <*> x) :ListT<'r>
+    let inline apply  (ListT f) (ListT x) = ListT (fmap List.apply f <*> x) :ListT<'r>
 
 type ListT<'Ma> with
     static member inline instance (_:Functor.Map   , x:ListT<'ma>, _      ) = fun (f:'a->'b) -> ListT.map f x :ListT<'mb>
@@ -66,7 +66,7 @@ module SeqT =
 
     let inline internal mapM f as' = sequence (Seq.map f as')
     let inline bind  (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= mapM (run << f) >>= (Seq.concat >> return')) :SeqT<'mb>
-    let inline apply (SeqT f) (SeqT x) = SeqT(fmap (<*>) f <*> x) :SeqT<'r>
+    let inline apply (SeqT f) (SeqT x) = SeqT (fmap Seq.apply f <*> x) :SeqT<'r>
 
 type SeqT<'Ma> with
     static member inline instance (_:Functor.Map   , x:SeqT<'ma>, _      ) = fun (f:'a->'b) -> SeqT.map f x :SeqT<'mb>

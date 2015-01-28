@@ -9,12 +9,23 @@ module internal Prelude =
     let inline option n f = function None -> n | Some x -> f x
 
 [<RequireQualifiedAccess>]
+module internal Option =
+    let inline apply f x =
+        match (f,x) with 
+        | Some f, Some x -> Some (f x) 
+        | _              -> None
+
+[<RequireQualifiedAccess>]
 module internal List =
     let inline singleton x = [x]
     let inline cons x y = x :: y
+    let inline apply f x = List.collect (fun f -> List.map ((<|) f) x) f
 
 [<RequireQualifiedAccess>]
 module internal Seq =
+
+    let inline apply f x = Seq.collect (fun f -> Seq.map ((<|) f) x) f
+
     // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
     let inline intersperse sep list = seq {
         let notFirst = ref false

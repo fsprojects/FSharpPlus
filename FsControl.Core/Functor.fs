@@ -116,18 +116,13 @@ module Applicative =
     type Apply() =
         inherit ApplyDefault()
         static member        instance (_:Apply, f:Lazy<'a->'b>, x:Lazy<'a>     , _:Lazy<'b>     ) = fun () -> Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
-        static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> DefaultImpl.ApplyFromMonad f x :seq<'b>
-        static member        instance (_:Apply, f:list<_>     , x:list<'a>     , _:list<'b>     ) = fun () -> DefaultImpl.ApplyFromMonad f x :list<'b>
+        static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> Seq.apply  f x :seq<'b>
+        static member        instance (_:Apply, f:list<_>     , x:list<'a>     , _:list<'b>     ) = fun () -> List.apply f x :list<'b>
         static member        instance (_:Apply, f:_ []        , x:'a []        , _:'b []        ) = fun () -> DefaultImpl.ApplyFromMonad f x :'b []
         static member        instance (_:Apply, f:'r -> _     , g: _ -> 'a     , _: 'r -> 'b    ) = fun () -> fun x -> f x (g x) :'b
         static member inline instance (_:Apply, (a:'m, f)     , (b:'m, x:'a)   , _:'m * 'b      ) = fun () -> (mappend a b, f x) :'m *'b
         static member        instance (_:Apply, f:Async<_>    , x:Async<'a>    , _:Async<'b>    ) = fun () -> DefaultImpl.ApplyFromMonad f x :Async<'b>
-
-        static member        instance (_:Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> 
-            match (f,x) with 
-            | Some f, Some x -> Some (f x) 
-            | _              -> None :option<'b>
-        
+        static member        instance (_:Apply, f:option<_>   , x:option<'a>   , _:option<'b>   ) = fun () -> Option.apply f x
         static member        instance (_:Apply, f:Choice<_,'e>, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun () -> Error.apply f x :Choice<'b,'e>
 
         static member        instance (_:Apply, KeyValue(k:'k,f)  , KeyValue(k:'k,x:'a), _:KeyValuePair<'k,'b>) :unit->KeyValuePair<'k,'b> = fun () -> KeyValuePair(k, f x)
