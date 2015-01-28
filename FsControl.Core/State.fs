@@ -14,12 +14,12 @@ module State =
 
     let eval (State sa) (s:'s) = fst (sa s)
     let exec (State sa) (s:'s) = snd (sa s)
-    let get() = State (fun s -> (s , s))  :State<'s,_>
-    let put x = State (fun _ -> ((), x))  :State<'s,_>
+    let get() = State (fun s -> (s , s)) :State<'s,_>
+    let put x = State (fun _ -> ((), x)) :State<'s,_>
 
 type State<'S,'A> with
-    static member instance (_:Functor.Map   , x, _           ) = fun f -> State.map f x :State<'s,_>
-    static member instance (Applicative.Pure, _:State<'s,'a> ) = fun a -> State (fun s -> (a, s))                                 :State<'s,'a>
-    static member instance (Monad.Bind  ,   x, _:State<'s,'b>) = fun f -> State.bind f x  :State<'s,'b>
+    static member instance (_:Functor.Map     , x, _           ) = fun f -> State.map f x :State<'s,_>
+    static member instance (_:Applicative.Pure, _:State<'s,'a> ) = fun a -> State (fun s -> (a, s))                                 :State<'s,'a>
+    static member instance (_:Monad.Bind  ,   x, _:State<'s,'b>) = fun f -> State.bind f x  :State<'s,'b>
     static member instance (_:Applicative.Apply, f:State<'s,_>, x:State<'s,'a>, _:State<'s,'b>) = fun () ->
         State.apply f x :State<'s,'b>

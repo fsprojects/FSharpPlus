@@ -14,30 +14,30 @@ open Monoid
 
 // Monad class ------------------------------------------------------------
 module Monad =
-    type Bind = Bind with
-        static member        instance (Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> lazy (f x.Value).Value
-        static member        instance (Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.bind   f x
-        static member        instance (Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> f x.getValue
+    type Bind() =
+        static member        instance (_:Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> lazy (f x.Value).Value
+        static member        instance (_:Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.bind f x
+        static member        instance (_:Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> f x.getValue
 
 #if NOTNET35
-        static member        instance (Bind, x:Task<'a>     , _:'b Task      ) = fun (f:_->Task<'b>  ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
+        static member        instance (_:Bind, x:Task<'a>     , _:'b Task      ) = fun (f:_->Task<'b>  ) -> x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
 #endif
 
-        static member        instance (Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
-        static member        instance (Bind, x:list<_>      , _:list<'b>     ) = fun (f:_->list<'b>  ) -> List.collect  f x
-        static member        instance (Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
-        static member        instance (Bind, f:'r->'a       , _:'r->'b       ) = fun (k:_->_->'b) r    -> k (f r) r
-        static member inline instance (Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let m, b = k a in (mappend w m, b)
-        static member        instance (Bind, x:Async<'a>    , _:'b Async     ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
-        static member        instance (Bind, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun (k:'a->Choice<'b,'e>) -> Error.bind k x
+        static member        instance (_:Bind, x:option<_>    , _:option<'b>   ) = fun (f:_->option<'b>) -> Option.bind   f x
+        static member        instance (_:Bind, x:list<_>      , _:list<'b>     ) = fun (f:_->list<'b>  ) -> List.collect  f x
+        static member        instance (_:Bind, x:_ []         , _:'b []        ) = fun (f:_->'b []     ) -> Array.collect f x
+        static member        instance (_:Bind, f:'r->'a       , _:'r->'b       ) = fun (k:_->_->'b) r    -> k (f r) r
+        static member inline instance (_:Bind, (w, a):'m * 'a , _:'m * 'b      ) = fun (k:_->'m * 'b   ) -> let m, b = k a in (mappend w m, b)
+        static member        instance (_:Bind, x:Async<'a>    , _:'b Async     ) = fun (f:_->Async<'b> ) -> async.Bind(x,f)
+        static member        instance (_:Bind, x:Choice<'a,'e>, _:Choice<'b,'e>) = fun (k:'a->Choice<'b,'e>) -> Error.bind k x
 
-        static member        instance (Bind, x:Map<'k,'a>   , _:Map<'k,'b>   ) = fun (f:'a->Map<'k,'b>) -> Map (seq {
+        static member        instance (_:Bind, x:Map<'k,'a>   , _:Map<'k,'b>   ) = fun (f:'a->Map<'k,'b>) -> Map (seq {
             for KeyValue(k, v) in x do
                 match Map.tryFind k (f v) with
                 | Some v -> yield k, v
                 | _      -> () })
 
-        static member        instance (Bind, x:Dictionary<'k,'a>   , _:Dictionary<'k,'b>   ) = fun (f:'a->Dictionary<'k,'b>) -> 
+        static member        instance (_:Bind, x:Dictionary<'k,'a>   , _:Dictionary<'k,'b>   ) = fun (f:'a->Dictionary<'k,'b>) -> 
             let d = Dictionary()
             for KeyValue(k, v) in x do
                 match (f v).TryGetValue(k)  with
@@ -46,8 +46,9 @@ module Monad =
             d
 
         //Restricted Monad
-        static member instance (Bind, x:Nullable<_> , _:'b Nullable) = fun f -> if x.HasValue then f x.Value else Nullable() : Nullable<'b>
+        static member instance (_:Bind, x:Nullable<_> , _:'b Nullable) = fun f -> if x.HasValue then f x.Value else Nullable() : Nullable<'b>
 
+    let Bind = Bind()
     let inline internal (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
 
 
@@ -76,34 +77,34 @@ module Monad =
 open Monad
 
 module Applicative =
-    type Pure = Pure with
-        static member        instance (Pure, _:Lazy<'a>      ) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
-        static member        instance (Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
-        static member        instance (Pure, _:Id<'a>        ) = fun x -> Id x :Id<'a>
+    type Pure() =
+        static member        instance (_:Pure, _:Lazy<'a>      ) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
+        static member        instance (_:Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
+        static member        instance (_:Pure, _:Id<'a>        ) = fun x -> Id x :Id<'a>
 
 #if NOTNET35        
-        static member        instance (Pure, _:'a Task       ) = fun x -> 
+        static member        instance (_:Pure, _:'a Task       ) = fun x -> 
             let s = TaskCompletionSource()
             s.SetResult x
             s.Task
 #endif        
-        static member        instance (Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
-        static member        instance (Pure, _:list<'a>      ) = fun x -> [ x ]       :list<'a>
-        static member        instance (Pure, _:'a []         ) = fun x -> [|x|]       :'a []
-        static member        instance (Pure, _:'r -> 'a      ) = const':'a  -> 'r -> _
-        static member inline instance (Pure, _: 'm * 'a      ) = fun (x:'a) -> (mempty(), x)
-        static member        instance (Pure, _:'a Async      ) = fun (x:'a) -> async.Return x
-        static member        instance (Pure, _:Choice<'a,'e> ) = fun x -> Choice1Of2 x :Choice<'a,'e>
-        static member        instance (Pure, _:Expr<'a>      ) = fun x -> Expr.Cast<'a>(Expr.Value(x))
-        static member        instance (Pure, _:'a ResizeArray) = fun x -> ResizeArray<'a>(Seq.singleton x)
+        static member        instance (_:Pure, _:option<'a>    ) = fun x -> Some x      :option<'a>
+        static member        instance (_:Pure, _:list<'a>      ) = fun x -> [ x ]       :list<'a>
+        static member        instance (_:Pure, _:'a []         ) = fun x -> [|x|]       :'a []
+        static member        instance (_:Pure, _:'r -> 'a      ) = const':'a  -> 'r -> _
+        static member inline instance (_:Pure, _: 'm * 'a      ) = fun (x:'a) -> (mempty(), x)
+        static member        instance (_:Pure, _:'a Async      ) = fun (x:'a) -> async.Return x
+        static member        instance (_:Pure, _:Choice<'a,'e> ) = fun x -> Choice1Of2 x :Choice<'a,'e>
+        static member        instance (_:Pure, _:Expr<'a>      ) = fun x -> Expr.Cast<'a>(Expr.Value(x))
+        static member        instance (_:Pure, _:'a ResizeArray) = fun x -> ResizeArray<'a>(Seq.singleton x)
 
         //Restricted
-        static member instance (Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
-        static member instance (Pure, _:string       ) = fun (x:char) -> string x : string
-        static member instance (Pure, _:StringBuilder) = fun (x:char) -> new StringBuilder(string x):StringBuilder
-        static member instance (Pure, _:'a Set       ) = fun (x:'a  ) -> Set.singleton x
-        
+        static member instance (_:Pure, _:'a Nullable  ) = fun (x:'a  ) -> Nullable x:'a Nullable
+        static member instance (_:Pure, _:string       ) = fun (x:char) -> string x : string
+        static member instance (_:Pure, _:StringBuilder) = fun (x:char) -> new StringBuilder(string x):StringBuilder
+        static member instance (_:Pure, _:'a Set       ) = fun (x:'a  ) -> Set.singleton x
 
+    let Pure = Pure()
     let inline internal pure' x   = Inline.instance Pure x
 
 

@@ -14,8 +14,8 @@ type ErrorT<'R> = ErrorT of 'R
 
 [<RequireQualifiedAccess>]
 module ErrorT =
-    let run   (ErrorT x) = x
-    let inline map f (ErrorT m) = ErrorT(fmap (Error.map f) m)
+    let run (ErrorT x) = x
+    let inline map  f (ErrorT m) = ErrorT (fmap (Error.map f) m)
     let inline bind f (ErrorT m) = (ErrorT <| do'() {
         let! a = m
         match a with
@@ -24,11 +24,10 @@ module ErrorT =
     let inline apply (ErrorT f) (ErrorT x) = ErrorT(fmap Error.apply f <*> x) :ErrorT<'mb>
 
 type ErrorT<'R> with
-    static member inline instance (_:Functor.Map, x :ErrorT<'ma>, _) = fun f -> ErrorT.map f x :ErrorT<'mb>
-
-    static member inline instance (Applicative.Pure, _:ErrorT<'ma>) = ErrorT << return' << Choice1Of2 :'a -> ErrorT<'ma>
-    static member inline instance (_:Applicative.Apply, f, x,  _:ErrorT<'mb>) = fun () -> ErrorT.apply f x :ErrorT<'mb>
-    static member inline instance (Monad.Bind, x :ErrorT<'ma>, _:ErrorT<'mb>) = fun (f:'a -> ErrorT<'mb>) -> ErrorT.bind f x :ErrorT<'mb>
+    static member inline instance (_:Functor.Map ,x :ErrorT<'ma>, _ ) = fun f -> ErrorT.map f x :ErrorT<'mb>
+    static member inline instance (_:Applicative.Pure ,_:ErrorT<'ma>) = ErrorT << return' << Choice1Of2 :'a -> ErrorT<'ma>
+    static member inline instance (_:Applicative.Apply, f, x,   _:ErrorT<'mb>) = fun () -> ErrorT.apply f x :ErrorT<'mb>
+    static member inline instance (_:Monad.Bind, x:ErrorT<'ma>, _:ErrorT<'mb>) = fun (f:'a -> ErrorT<'mb>) -> ErrorT.bind f x :ErrorT<'mb>
 
     static member inline instance (MonadTrans.Lift, _:ErrorT<'m_a>) = ErrorT << (liftM Choice1Of2)      :'ma -> ErrorT<'m_a>
 

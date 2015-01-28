@@ -16,7 +16,7 @@ type WriterT<'WMa> = WriterT of 'WMa
 [<RequireQualifiedAccess>]
 module WriterT =
 
-    let run  (WriterT x) = x
+    let run (WriterT x) = x
 
     let inline map  f (WriterT m) =
         let mapWriter f (a, m) = (f a, m)
@@ -39,13 +39,13 @@ type WriterT<'WMa> with
 
     static member inline instance (_:Functor.Map, x, _) = fun f -> WriterT.map f x
 
-    static member inline instance (Applicative.Pure, _:WriterT<'wma>) :'a -> WriterT<'wma> = fun a  -> 
+    static member inline instance (_:Applicative.Pure, _:WriterT<'wma>) :'a -> WriterT<'wma> = fun a  -> 
         WriterT (return' (a, mempty()))
 
     static member inline instance (_:Applicative.Apply, f, x, _:WriterT<'r>) = fun () -> 
         WriterT.apply f x :WriterT<'r>
 
-    static member inline instance (Monad.Bind, x:WriterT<'wma>, _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> = fun f -> 
+    static member inline instance (_:Monad.Bind, x:WriterT<'wma>, _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> = fun f -> 
         WriterT.bind f x
 
     static member inline instance (MonadPlus.Mzero, _:WriterT<_>  ) = fun ()          -> WriterT (mzero())
@@ -63,9 +63,9 @@ type WriterT<'WMa> with
         let! a = m
         return (a, mempty())}
     
-    static member inline instance (MonadAsync.LiftAsync    , _:WriterT<_>   ) = fun (x: Async<_>) -> lift (liftAsync x)
+    static member inline instance (MonadAsync.LiftAsync , _:WriterT<_> ) = fun (x: Async<_>) -> lift (liftAsync x)
 
-    static member inline instance (MonadError.ThrowError, _:WriterT<'U>    ) = lift << throwError
+    static member inline instance (MonadError.ThrowError, _:WriterT<'U>) = lift << throwError
     static member inline instance (MonadError.CatchError, m:WriterT<'U> , _:WriterT<'U>) = fun (h:'e -> WriterT<'U>) -> 
             WriterT <| catchError (WriterT.run m) (WriterT.run << h) :WriterT<'U>
 
