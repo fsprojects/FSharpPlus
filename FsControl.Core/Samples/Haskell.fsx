@@ -431,10 +431,9 @@ let inline (<**>)   x   = x |> liftA2 (|>)
 let inline optional v = Just <<|> v <|> pure' Nothing
 
 type ZipList<'s> = ZipList of 's seq with
-    static member instance (_Functor    :Map,   ZipList x  , _) = fun (f:'a->'b) -> ZipList (Seq.map f x)
-    static member instance (_Applicative:Pure, _:ZipList<'a>  ) = fun (x:'a)     -> ZipList (Seq.initInfinite (const' x))
-    static member instance (_Applicative:Apply  ,   ZipList (f:seq<'a->'b>), ZipList x ,_:ZipList<'b>) = fun () ->
-        ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
+    static member (<!>) (f:'a->'b,  ZipList x)               = ZipList (Seq.map f x)
+    static member Return (x:'a)                              = ZipList (Seq.initInfinite (const' x))
+    static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList<'b>
 
 // Test Applicative (lists)
 let res3n4   = pure' ((+) 2) <*> [1;2]
