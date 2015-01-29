@@ -18,8 +18,7 @@ module State =
     let put x = State (fun _ -> ((), x)) :State<'s,_>
 
 type State<'S,'A> with
-    static member instance (_:Functor.Map     , x, _           ) = fun f -> State.map f x :State<'s,_>
-    static member instance (_:Applicative.Pure, _:State<'s,'a> ) = fun a -> State (fun s -> (a, s))                                 :State<'s,'a>
-    static member instance (_:Monad.Bind  ,   x, _:State<'s,'b>) = fun f -> State.bind f x  :State<'s,'b>
-    static member instance (_:Applicative.Apply, f:State<'s,_>, x:State<'s,'a>, _:State<'s,'b>) = fun () ->
-        State.apply f x :State<'s,'b>
+    static member (<!>) (f, x) = State.map f x                :State<'s,_>
+    static member Return a = State (fun s -> (a, s))          :State<'s,'a>
+    static member Bind   x = fun f -> State.bind f x          :State<'s,'b>
+    static member (<*>) (f, x:State<'s,'a>) = State.apply f x :State<'s,'b>

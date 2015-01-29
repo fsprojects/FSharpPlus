@@ -19,8 +19,7 @@ module Writer =
     let pass   (Writer((a, f), w)) = Writer( a,   f w) :Writer<'w,_>
 
 type Writer<'W,'A> with
-    static member        instance (_:Functor.Map     , x,            _) = fun f -> Writer.map f x :Writer<'w,_>
-    static member inline instance (_:Applicative.Pure, _:Writer<'w,'a>) = fun a -> Writer(a, mempty())                                        :Writer<'w,'a>
-    static member inline instance (_:Monad.Bind  , x, _:Writer<'w,'b> ) = fun f -> Writer.bind f x :Writer<'w,'b>
-    static member inline instance (_:Applicative.Apply, f:Writer<'w,_>, x:Writer<'w,'a>, _:Writer<'w,'b>) = fun () -> 
-        Writer.apply f x :Writer<'w,'b>
+    static member        (<!>) (f, x) = Writer.map f x                 :Writer<'w,_>
+    static member inline Return a = Writer (a, mempty())               :Writer<'w,'a>
+    static member inline Bind   x = fun f -> Writer.bind f x           :Writer<'w,'b>
+    static member inline (<*>) (f, x:Writer<'w,'a>) = Writer.apply f x :Writer<'w,'b>

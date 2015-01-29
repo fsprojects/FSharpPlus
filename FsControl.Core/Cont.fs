@@ -14,8 +14,7 @@ module Cont =
     let apply  (Cont f) (Cont x) = Cont (fun k -> f (fun f' -> x (k << f'))) :Cont<'r,'b>
 
 type Cont<'R,'A> with
-    static member instance (_:Functor.Map, x:Cont<'r,'a>,   _) = fun (f:_->'b) -> Cont.map f x
-    static member instance (_:Applicative.Pure, _:Cont<'r,'a>) = fun n -> Cont(fun k -> k n)  :Cont<'r,'a>
-    static member instance (_:Monad.Bind ,   x, _:Cont<'r,'b>) = fun f -> Cont.bind f x       :Cont<'r,'b>
-    static member instance (_:Applicative.Apply, f:Cont<'r,_>, x:Cont<'r,'a>, _:Cont<'r,'b>) = fun () -> 
-        Cont.apply f x :Cont<'r,'b>
+    static member (<!>) (f, x:Cont<'r,'a>) = Cont.map f x   :Cont<'r,'b>
+    static member Return n = Cont (fun k -> k n)
+    static member Bind x = fun f -> Cont.bind f x
+    static member (<*>) (f, x:Cont<'r,'a>) = Cont.apply f x :Cont<'r,'b>
