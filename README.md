@@ -13,7 +13,7 @@ There are basically two Types involved in these overloads:
 
 2) The type that represent the abstraction: This will be a "dummy" type implemented as an empty Type or a single case DU with a single method which will be overloaded. Examples of these types are Functor, Monad, Monoid, etc. From now on and in order to differentiate from (1) we will call this Type the Type Method.
 
-As you can see Type Methods are similar to Haskell's Type Classes but with a single method.
+As you can see this 'Type Methods' abstraction is similar to Haskell's Type Classes but with a single method.
 
 
 How to use FsControl
@@ -29,6 +29,12 @@ FsControl contains overloads, the purpose of these overloads is to associate Typ
 This is the most complex scenario, to define a new Type Method is not straightforward, there will be some guidelines but at the moment the best is to have a look at the source code.
 
  2) Add a new Type and make it an instance of an existing Type Method.
+ 
+At the moment there are 2 ways:
+
+The easy way is to look at the signature of the method you want to implement, see below the section "How can I make my classes FsControl-ready?"
+
+The old way is:
 
 In the type definition we will add a static member called instance, which will follow this convention:
 
@@ -68,6 +74,25 @@ The association must be done either in the Type (2) or in the Type Method (1) du
  - It may lead to a bad design practice, something similar happens in Haskell with Type Classes (see [orphan instances](http://www.haskell.org/haskellwiki/Orphan_instance)).
 
 
+How can I make my classes FsControl-ready?
+------------------------------------------
+
+An easy way to make classes in your project callable from FsControl without referencing FsControl dlls at all is to use standard signatures for your methods. Here's a list of the standard signatures available at the moment:
+
+ Functors:
+ 
+     static member (<!>) (f:'T->'U) (x:MyFunctor<'T>) = {your map impl.} : MyFunctor<'U>
+     
+ Applicatives:
+ 
+     static member Return (x:'T) = {your Return implementation} : MyApplicative<'T>
+     static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'U>) = {your Apply impl.} : MyApplicative<'U>
+     
+ Monads:
+ 
+     static member Return // as defined in Applicatives
+     static member Bind (x:MyMonad<'T>) = fun (f:'T->MyMonad<'U>) -> {your Bind impl.} : MyMonad<'U>
+   
 
 
 
