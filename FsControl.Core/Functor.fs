@@ -14,7 +14,13 @@ open Monoid
 
 // Monad class ------------------------------------------------------------
 module Monad =
+
+    type BindOp() =
+        static member inline instance (_:BindOp, x:'M, r:'R) = fun (f:'t->'R) -> 
+            ((^M or ^R) : (static member Bind: ^M -> (('t->'R) -> 'R)) (x)) f
+
     type Bind() =
+        inherit BindOp()
         static member        instance (_:Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> lazy (f x.Value).Value
         static member        instance (_:Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.bind f x
         static member        instance (_:Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> f x.getValue
@@ -77,7 +83,12 @@ module Monad =
 open Monad
 
 module Applicative =
+    type PureOp() =
+        static member inline instance (_:PureOp, r:'R) = fun (x:'T) -> 
+            ((^R) : (static member Return: ^T -> ^R) (x))
+
     type Pure() =
+        inherit PureOp()
         static member        instance (_:Pure, _:Lazy<'a>      ) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
         static member        instance (_:Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
         static member        instance (_:Pure, _:Id<'a>        ) = fun x -> Id x :Id<'a>
@@ -105,17 +116,22 @@ module Applicative =
         static member instance (_:Pure, _:'a Set       ) = fun (x:'a  ) -> Set.singleton x
 
     let Pure = Pure()
-    let inline internal pure' x   = Inline.instance Pure x
+    let inline internal pure' x = Inline.instance Pure x
 
 
     type DefaultImpl =        
         static member inline ApplyFromMonad f x = f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
 
-    type ApplyDefault() =
-        static member inline instance (_:ApplyDefault, f:#obj , x, _:#obj) = fun () -> (f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)) 
+    type ApplyFromMonad() =
+        static member inline instance (_:ApplyFromMonad, f:#obj , x, _:#obj) = fun () -> (f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)) 
+
+    type ApplyOp() =
+        inherit ApplyFromMonad()
+        static member inline instance (_:ApplyOp, f:'F , x:'X, _:'R) = fun () -> 
+            ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
 
     type Apply() =
-        inherit ApplyDefault()
+        inherit ApplyOp()
         static member        instance (_:Apply, f:Lazy<'a->'b>, x:Lazy<'a>     , _:Lazy<'b>     ) = fun () -> Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
         static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> Seq.apply  f x :seq<'b>
         static member        instance (_:Apply, f:list<_>     , x:list<'a>     , _:list<'b>     ) = fun () -> List.apply f x :list<'b>
@@ -148,7 +164,6 @@ module Applicative =
             ResizeArray(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
 
     let Apply = Apply()
-   
     let inline internal (<*>) x y = Inline.instance (Apply, x, y) ()
 
 open Applicative
@@ -174,11 +189,16 @@ module Functor =
         static member inline MapFromApplicative f x = pure' f <*> x
         static member inline MapFromMonad f x = x >>= (pure' << f)
 
-    type MapDefault() =
-        static member inline instance (_:MapDefault, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> pure' f <*> x :'r
+    type MapFromApplicative() =
+        static member inline instance (_:MapFromApplicative, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> pure' f <*> x :'r
+
+    type MapOp() =
+        inherit MapFromApplicative()
+        static member inline instance (_:MapOp, x:'F, _:'R) =
+            fun (f:'a->'b) -> ((^F) : (static member (<!>): ('a->'b) -> ^F -> ^R) (f, x))
 
     type Map() =
-        inherit MapDefault()
+        inherit MapOp()
         static member instance (_:Map, x:Lazy<_>        , _:Lazy<'b>) = fun f -> Lazy.Create (fun () -> f x.Value) : Lazy<'b>
         static member instance (_:Map, x:seq<_>         , _:seq<'b> ) = fun f -> Seq.map f x :seq<'b>
         static member instance (_:Map, x:option<_>      , _) = fun f -> Option.map  f x
@@ -207,8 +227,7 @@ module Functor =
         
 
     let Map = Map()
-
-    let inline internal fmap   f x = Inline.instance (Map, x) f
+    let inline internal fmap f x = Inline.instance (Map, x) f
 
    
     let inline internal sequence ms =
