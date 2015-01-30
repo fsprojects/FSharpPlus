@@ -1,6 +1,16 @@
 [<AutoOpen>]
 module InlineHelper
 
+type Typ5() = class end
+type Typ4() =
+    inherit Typ5()
+type Typ3() =
+    inherit Typ4()
+type Typ2() =
+    inherit Typ3()
+type Typ1() =
+    inherit Typ2()
+
 module Overloads =
     let inline instance_1 (a:^a                         ) = 
         ( ^a                                : (static member instance: ^a                     -> _) (a          ))

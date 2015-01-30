@@ -15,12 +15,12 @@ open Monoid
 // Monad class ------------------------------------------------------------
 module Monad =
 
-    type BindOp() =
-        static member inline instance (_:BindOp, x:'M, r:'R) = fun (f:'t->'R) -> 
-            ((^M or ^R) : (static member Bind: ^M -> (('t->'R) -> 'R)) (x)) f
-
     type Bind() =
-        inherit BindOp()
+        inherit Typ1()
+
+        static member inline instance (_:Typ1, x:'M, r:'R) = fun (f:'t->'R) -> 
+            ((^M or ^R) : (static member Bind: ^M -> (('t->'R) -> 'R)) x) f
+
         static member        instance (_:Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> lazy (f x.Value).Value
         static member        instance (_:Bind, x:seq<_>       , _:seq<'b>      ) = fun (f:_->seq<'b>   ) -> Seq.bind f x
         static member        instance (_:Bind, x:Id<'a>       , _:'b Id        ) = fun (f:_->Id<'b>    ) -> f x.getValue
@@ -58,12 +58,10 @@ module Monad =
     let inline internal (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
 
 
-    type JoinDefault() =
-        static member inline instance (_:JoinDefault, x:#obj, _:#obj) = fun () -> x >>= id :#obj
-
     type Join() =
-        inherit JoinDefault()
+        inherit Typ1()
 
+        static member inline instance (_:Typ1, x:#obj, _:#obj) = fun () -> x >>= id :#obj
         static member        instance (_:Join, x:Lazy<Lazy<'a>>    , _:Lazy<'a>  ) = fun () -> lazy x.Value.Value
         static member        instance (_:Join, x:option<option<'a>>, _:option<'a>) = fun () -> Option.bind   id x
         static member        instance (_:Join, x:list<_>           , _:list<'b>  ) = fun () -> List.collect  id x
@@ -75,7 +73,6 @@ module Monad =
 #endif
 
     let Join = Join()
-
     let inline internal join (x:'Monad'Monad'a) : 'Monad'a = Inline.instance (Join, x) ()
 
 
@@ -83,12 +80,13 @@ module Monad =
 open Monad
 
 module Applicative =
-    type PureOp() =
-        static member inline instance (_:PureOp, r:'R) = fun (x:'T) -> 
-            ((^R) : (static member Return: ^T -> ^R) (x))
 
     type Pure() =
-        inherit PureOp()
+        inherit Typ1()
+
+        static member inline instance (_:Typ1, r:'R) = fun (x:'T) -> 
+            ((^R) : (static member Return: ^T -> ^R) x)
+
         static member        instance (_:Pure, _:Lazy<'a>      ) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
         static member        instance (_:Pure, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
         static member        instance (_:Pure, _:Id<'a>        ) = fun x -> Id x :Id<'a>
@@ -122,16 +120,13 @@ module Applicative =
     type DefaultImpl =        
         static member inline ApplyFromMonad f x = f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)
 
-    type ApplyFromMonad() =
-        static member inline instance (_:ApplyFromMonad, f:#obj , x, _:#obj) = fun () -> (f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2)) 
+    type Apply() =
+        inherit Typ1()
 
-    type ApplyOp() =
-        inherit ApplyFromMonad()
-        static member inline instance (_:ApplyOp, f:'F , x:'X, _:'R) = fun () -> 
+        static member inline instance (_:Typ2, f:#obj , x, _:#obj) = fun () -> (f >>= fun x1 -> x >>= fun x2 -> pure'(x1 x2))
+        static member inline instance (_:Typ1, f:'F , x:'X, _:'R) = fun () -> 
             ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
 
-    type Apply() =
-        inherit ApplyOp()
         static member        instance (_:Apply, f:Lazy<'a->'b>, x:Lazy<'a>     , _:Lazy<'b>     ) = fun () -> Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
         static member        instance (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> Seq.apply  f x :seq<'b>
         static member        instance (_:Apply, f:list<_>     , x:list<'a>     , _:list<'b>     ) = fun () -> List.apply f x :list<'b>
@@ -170,6 +165,7 @@ open Applicative
 
 
 module Alternative =
+
     type Empty = Empty with
         static member instance (Empty, _:option<'a>) = fun () -> None
         static member instance (Empty, _:list<'a>  ) = fun () -> [  ]
@@ -189,16 +185,13 @@ module Functor =
         static member inline MapFromApplicative f x = pure' f <*> x
         static member inline MapFromMonad f x = x >>= (pure' << f)
 
-    type MapFromApplicative() =
-        static member inline instance (_:MapFromApplicative, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> pure' f <*> x :'r
+    type Map() =
+        inherit Typ1()
 
-    type MapOp() =
-        inherit MapFromApplicative()
-        static member inline instance (_:MapOp, x:'F, _:'R) =
+        static member inline instance (_:Typ2, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> pure' f <*> x :'r
+        static member inline instance (_:Typ1, x:'F, _:'R) =
             fun (f:'a->'b) -> ((^F) : (static member (<!>): ('a->'b) -> ^F -> ^R) (f, x))
 
-    type Map() =
-        inherit MapOp()
         static member instance (_:Map, x:Lazy<_>        , _:Lazy<'b>) = fun f -> Lazy.Create (fun () -> f x.Value) : Lazy<'b>
         static member instance (_:Map, x:seq<_>         , _:seq<'b> ) = fun f -> Seq.map f x :seq<'b>
         static member instance (_:Map, x:option<_>      , _) = fun f -> Option.map  f x
@@ -306,11 +299,10 @@ module Comonad =
     let inline internal extend g s = Inline.instance (Extend, s) g
     let inline internal (=>>)  s g = extend g s
 
-    type DuplicateDefault() =
-        static member inline instance (_:DuplicateDefault, x:#obj, _:#obj) = fun () -> extend id x :#obj
 
     type Duplicate() =
-        inherit DuplicateDefault()
+        inherit Typ1()
+        static member inline instance (_:Typ1, x:#obj, _:#obj) = fun () -> extend id x :#obj
         static member        instance (_:Duplicate, s:Async<'a>, _:Async<Async<'a>>) = fun () -> async.Return s : Async<Async<'a>>
         static member        instance (_:Duplicate, s:Lazy<'a> , _:Lazy<Lazy<'a>>  ) = fun () -> Lazy.CreateFromValue s : Lazy<Lazy<'a>>
         static member        instance (_:Duplicate, (w:'w, a:'a), _:'w * ('w*'a)) = fun ()     -> (w, (w, a))
