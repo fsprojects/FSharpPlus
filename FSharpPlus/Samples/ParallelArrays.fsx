@@ -1,6 +1,5 @@
 #r @"..\..\build\FsControl.Core.dll"
-#load @"..\Operators.fs"
-#load @"..\ParallelArray.fs"
+#r @"..\..\build\FSharpPlus.dll"
 
 open FSharpPlus
 
