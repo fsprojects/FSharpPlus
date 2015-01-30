@@ -232,3 +232,36 @@ module Operators =
 
         let inline negate (x:'Num) :'Num = Inline.instance (Num.Negate, x) ()
         let inline (~-)   (x:'Num) :'Num = Inline.instance (Num.Negate, x) ()
+
+
+        let inline internal whenIntegral a = let _ = if false then toBigInteger a else 0I in ()
+ 
+        let inline div (a:'Integral) b :'Integral =
+            whenIntegral a
+            let (a,b) = if b < 0G then (-a,-b) else (a,b)
+            (if a < 0G then (a - b + 1G) else a) / b
+ 
+        let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
+        let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
+ 
+        let inline internal G0() = fromIntegral 0
+        let inline internal G1() = fromIntegral 1
+ 
+        let inline gcd x y :'Integral =
+            let zero = G0()
+            let rec loop a = function
+                | b when b = zero -> a
+                | b -> loop b (rem a b)
+            match(x,y) with
+            | t when t = (zero,zero) -> failwith "gcd 0 0 is undefined"
+            | _                      -> loop (abs x) (abs y)
+ 
+        let inline ratio (a:'Integral) (b:'Integral) :Ratio.Ratio<'Integral> =
+            whenIntegral a
+            let zero = G0()
+            if b = zero then failwith "Ratio.%: zero denominator"
+            let (a,b) = if b < zero then (negate a, negate b) else (a, b)
+            let gcd = gcd a b
+            Ratio.Ratio (quot a gcd, quot b gcd)
+ 
+        let inline fromRational (x:Rational) :'Fractional = Inline.instance FsControl.Core.TypeMethods.Fractional.FromRational x
