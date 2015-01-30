@@ -1,8 +1,5 @@
 #r @"..\..\build\FsControl.Core.dll"
-#load @"..\Operators.fs"
-#load @"..\Builders.fs"
-#load @"..\Extensions.fs"
-#load @"..\ZipList.fs"
+#r @"..\..\build\FSharpPlus.dll"
 
 open System
 open FSharpPlus

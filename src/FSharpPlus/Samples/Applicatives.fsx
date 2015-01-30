@@ -1,5 +1,5 @@
 #r @"..\..\build\FsControl.Core.dll"
-#load @"..\Operators.fs"
+#r @"..\..\build\FSharpPlus.dll"
 open FSharpPlus
 
 let lst5n6  = map ((+) 4) [ 1;2 ]
