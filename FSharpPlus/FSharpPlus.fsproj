@@ -62,6 +62,7 @@
     <None Include="Samples\ParallelArrays.fsx" />
     <None Include="Samples\ZipLists.fsx" />
     <None Include="Samples\Learn You a Haskell.fsx" />
+    <None Include="Samples\GenericMath.fsx" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
