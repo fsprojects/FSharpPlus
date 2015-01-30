@@ -285,12 +285,12 @@ let inline compare' x y =
     | _            -> EQ
 
 type Sum<'a> = Sum of 'a with
-    static member inline instance (Mempty, _:Sum<'n>      ) = fun ()          -> Sum 0G     :Sum<'n>
-    static member inline instance (Mappend,  Sum (x:'n), _) = fun (Sum(y:'n)) -> Sum (x + y):Sum<'n>
+    static member inline Mempty() = Sum 0G
+    static member inline Mappend (Sum (x:'n), Sum(y:'n)) = Sum (x + y):Sum<'n>
 
 type Product<'a> = Product of 'a with
-    static member inline instance (Mempty, _:Product<'n>      ) = fun ()              -> Product 1G     :Product<'n>
-    static member inline instance (Mappend,  Product (x:'n), _) = fun (Product(y:'n)) -> Product (x * y):Product<'n>
+    static member inline Mempty() = Product 1G
+    static member inline Mappend (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
 
 let inline mempty() = Inline.instance Mempty ()
 let inline mappend (x:'a) (y:'a): 'a = Inline.instance (Mappend, x) y

@@ -15,9 +15,14 @@ let (</) = (|>)
 let (/>) = flip
 
 type ZipList<'s> = ZipList of 's seq with
-    static member (<!>) (f:'a->'b,  ZipList x)               = ZipList (Seq.map f x)
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
+    static member (<!>) (f:'a->'b,  ZipList x)               = ZipList (Seq.map f x)
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
+    static member inline Mempty() = result (mempty())                                :ZipList<'a>
+    static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
+
+    // try also uncommenting the following method.
+    static member inline Mconcat (x:list<ZipList<'a>>) = printfn "ZipList optimized"; List.foldBack mappend x (mempty()):ZipList<'a>
 
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
@@ -57,6 +62,8 @@ let quot123     = mappend <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>
 let quot1       = mappend <@ ResizeArray([1])   @>      (mempty())
 let quot23      = mappend    (mempty())            <@ ResizeArray([2;3])   @>
 let quot13      = mappend    (mempty())            <@ ("1","3") @>
+let quotLst123  = mappend    (mempty())            (ZipList [ [1];[2];[3] ])
+let quotLst123' = mconcat    [mempty();  mempty();  ZipList [ [1];[2];[3] ]]
 
 let lzy1 = mappend (lazy [1]) (lazy [2;3])
 let lzy2 = mappend (mempty()) lzy1

@@ -85,7 +85,7 @@ An easy way to make classes in your project callable from FsControl without refe
      
  Applicatives:
  
-     static member Return (x:'T) = {your Return implementation} : MyApplicative<'T>
+     static member Return (x:'T) = {your Return impl.} : MyApplicative<'T>
      static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'U>) = {your Apply impl.} : MyApplicative<'U>
      
  Monads:
@@ -93,6 +93,12 @@ An easy way to make classes in your project callable from FsControl without refe
      static member Return // as defined in Applicatives
      static member Bind (x:MyMonad<'T>) = fun (f:'T->MyMonad<'U>) -> {your Bind impl.} : MyMonad<'U>
    
+Monoids:
+
+	static member Mempty() = {your Mempty impl.} : MyMonoid
+	static member Mappend (x:MyMonoid, y:MyMonoid) = {your Mappend impl.} : MyMonoid
+	static member Mconcat (x:list<MyMonoid>) = {your Mconcat impl.} : MyMonoid // optional: can be automatically derived from Mappend
+
 
 
 
