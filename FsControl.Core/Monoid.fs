@@ -184,20 +184,20 @@ open FsControl.Core.TypeMethods.Monoid
 
 
 type Dual<'a> = Dual of 'a with
-    static member inline instance (Monoid.Mempty , _:Dual<'m>   ) = fun () -> Dual (mempty()) :Dual<'m>
-    static member inline instance (Monoid.Mappend,   Dual x  , _) = fun (Dual y) -> Dual (mappend y x)
+    static member inline instance (_:Monoid.Mempty , _:Dual<'m>   ) = fun () -> Dual (mempty()) :Dual<'m>
+    static member inline instance (_:Monoid.Mappend,   Dual x  , _) = fun (Dual y) -> Dual (mappend y x)
 module Dual = let inline  internal getDual (Dual x) = x
 
 type Endo<'a> = Endo of ('a -> 'a) with
-    static member        instance (Monoid.Mempty , _:Endo<'m>   ) = fun () -> Endo id  :Endo<'m>
-    static member        instance (Monoid.Mappend,   Endo f  , _) = fun (Endo g) -> Endo (f << g)
+    static member        instance (_:Monoid.Mempty , _:Endo<'m>   ) = fun () -> Endo id  :Endo<'m>
+    static member        instance (_:Monoid.Mappend,   Endo f  , _) = fun (Endo g) -> Endo (f << g)
 module Endo = let inline  internal appEndo (Endo f) = f
 
 
 type All = All of bool with
-    static member instance (Monoid.Mempty, _:All     ) = fun () -> All true
-    static member instance (Monoid.Mappend,  All x, _) = fun (All y) -> All (x && y)
+    static member instance (_:Monoid.Mempty, _:All     ) = fun () -> All true
+    static member instance (_:Monoid.Mappend,  All x, _) = fun (All y) -> All (x && y)
 
 type Any = Any of bool with
-    static member instance (Monoid.Mempty, _:Any     ) = fun () -> Any false
-    static member instance (Monoid.Mappend,  Any x, _) = fun (Any y) -> Any (x || y)
+    static member instance (_:Monoid.Mempty, _:Any     ) = fun () -> Any false
+    static member instance (_:Monoid.Mappend,  Any x, _) = fun (Any y) -> Any (x || y)
