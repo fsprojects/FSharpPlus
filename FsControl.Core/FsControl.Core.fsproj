@@ -63,7 +63,6 @@
     <Compile Include="Numeric.fs" />
     <Compile Include="Monoid.fs" />
     <Compile Include="Functor.fs" />
-    <Compile Include="Arrow.fs" />
     <Compile Include="Foldable.fs" />
     <Compile Include="Traversable.fs" />
     <Compile Include="Cont.fs" />
