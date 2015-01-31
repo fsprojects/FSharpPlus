@@ -365,8 +365,6 @@ open FsControl.Core.TypeMethods.Category
 open FsControl.Core.TypeMethods.Arrow
 open FsControl.Core.TypeMethods.ArrowChoice
 open FsControl.Core.TypeMethods.ArrowApply
-open FsControl.Core.TypeMethods.ArrowZero
-open FsControl.Core.TypeMethods.ArrowPlus
 
 let inline id'() = Inline.instance Id ()
 let inline (<<<) f g = Inline.instance (Comp, f) g
@@ -381,8 +379,8 @@ let inline (+++) f g = Inline.instance AcMerge (f, g)
 let inline left f = Inline.instance (AcLeft, f) ()
 let inline right f = Inline.instance (AcRight, f) ()
 let inline app() = Inline.instance Apply ()
-let inline zeroArrow() = Inline.instance ZeroArrow ()
-let inline (<+>) f g = Inline.instance (Plus, f) g
+let inline zeroArrow() = Inline.instance  MonadPlus.Mzero ()
+let inline (<+>)   f g = Inline.instance (MonadPlus.Mplus, f) g
 let runKleisli (Kleisli f) = f
 
 // Test Arrows

@@ -12,6 +12,13 @@ open FsControl.Core.Prelude
 open FsControl.Core.Types
 open Monoid
 
+
+type Kleisli<'a, 'm> = Kleisli of ('a -> 'm)
+
+[<RequireQualifiedAccess>]
+module Kleisli = let run (Kleisli f) = f
+
+
 // Monad class ------------------------------------------------------------
 module Monad =
 
@@ -343,19 +350,13 @@ module MonadPlus =
     let inline internal mzero () = Inline.instance Mzero ()
     let inline internal mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
 
+    type Mzero with
+        static member inline instance (Mzero, _:Kleisli<_,_>) = fun () -> Kleisli (fun _ -> mzero ())
+    
+    type Mplus with
+        static member inline instance (Mplus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> mplus (f x) (g x))
 
-type Kleisli<'a, 'm> = Kleisli of ('a -> 'm)
 
-[<RequireQualifiedAccess>]
-module Kleisli = let run (Kleisli f) = f
-
-namespace FsControl.Core.TypeMethods
-
-open FsControl.Core.Prelude
-open FsControl.Core.TypeMethods.Monad
-open FsControl.Core.TypeMethods.Functor
-open FsControl.Core.Types
-open FsControl.Core.TypeMethods.MonadPlus
 
 module Category =
 
@@ -428,17 +429,3 @@ module ArrowApply =
     type Apply = Apply with
         static member instance (Apply, _: ('a -> 'b) * 'a -> 'b          ) = fun () ->          fun (f,x)          -> f x
         static member instance (Apply, _: Kleisli<Kleisli<'a,'b> * 'a,'b>) = fun () -> Kleisli (fun (Kleisli f, x) -> f x)
-        
-type Dummy<'a, 'm> = Dummy of ('a -> 'm)
-
-module ArrowZero =
-
-    type ZeroArrow = ZeroArrow with
-        static member inline instance (ZeroArrow, _:Dummy<_,_>  ) = fun () -> Dummy   (fun _ -> mzero ())
-        static member inline instance (ZeroArrow, _:Kleisli<_,_>) = fun () -> Kleisli (fun _ -> mzero ())
- 
-module ArrowPlus =
-    
-    type Plus = Plus with
-        static member inline instance (Plus, Dummy   f, _) = fun (Dummy   g) -> Dummy  (fun x -> mplus (f x) (g x))
-        static member inline instance (Plus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> mplus (f x) (g x))
