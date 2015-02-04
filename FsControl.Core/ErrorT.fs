@@ -6,7 +6,6 @@ open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
 open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
-open FsControl.Core.TypeMethods.MonadPlus
 open FsControl.Core.TypeMethods.MonadTrans
 open FsControl.Core.TypeMethods.MonadAsync
 

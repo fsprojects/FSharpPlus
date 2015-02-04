@@ -171,19 +171,6 @@ module Applicative =
 open Applicative
 
 
-module Alternative =
-
-    type Empty = Empty with
-        static member instance (Empty, _:option<'a>) = fun () -> None
-        static member instance (Empty, _:list<'a>  ) = fun () -> [  ]
-        static member instance (Empty, _:'a []     ) = fun () -> [||]
-
-    type Append = Append with  
-        static member instance (Append, x:option<_>, _) = fun y -> match x with None -> y | xs -> xs
-        static member instance (Append, x:list<_>  , _) = fun y -> x @ y
-        static member instance (Append, x:_ []     , _) = fun y -> Array.append x y
-
-
 // Functor class ----------------------------------------------------------
 
 module Functor =
@@ -228,6 +215,31 @@ module Functor =
 
     let Map = Map()
     let inline internal fmap f x = Inline.instance (Map, x) f
+
+
+    type Zero() =
+        static member        instance (_:Zero, _:option<'a>) = fun () -> None        :option<'a>
+        static member        instance (_:Zero, _:list<'a>  ) = fun () -> [  ]        :list<'a>  
+        static member        instance (_:Zero, _:'a []     ) = fun () -> [||]        :'a []     
+        static member        instance (_:Zero, _:seq<'a>   ) = fun () -> Seq.empty   :seq<'a>
+        static member inline instance (_:Zero, _:Id<'a>    ) = fun () -> Id (mempty()) :Id<'a>
+
+    type Plus() =
+        static member        instance (_:Plus, x:_ option, _) = fun y -> match x with None -> y | xs -> xs
+        static member        instance (_:Plus, x:_ list  , _) = fun y -> x @ y
+        static member        instance (_:Plus, x:_ []    , _) = fun y -> Array.append x y
+        static member        instance (_:Plus, x:_ seq   , _) = fun y -> Seq.append   x y
+        static member inline instance (_:Plus, x:_ Id    , _) = fun y -> Id (mappend (Id.run x) (Id.run y))
+        
+    let Zero, Plus = Zero(), Plus()
+    let inline internal zero () = Inline.instance Zero ()
+    let inline internal plus (x:'a) (y:'a) : 'a = Inline.instance (Plus, x) y
+
+    type Zero with
+        static member inline instance (_:Zero, _:Kleisli<_,_>) = fun () -> Kleisli (fun _ -> zero ())
+    
+    type Plus with
+        static member inline instance (_:Plus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> plus (f x) (g x))
 
    
     let inline internal sequence ms =
@@ -329,32 +341,7 @@ module Comonad =
     let inline internal duplicate x = Inline.instance (Duplicate, x) ()
 
 
-// MonadPlus class ------------------------------------------------------------
 
-module MonadPlus =
-    type Mzero = Mzero with
-        static member        instance (Mzero, _:option<'a>) = fun () -> None        :option<'a>
-        static member        instance (Mzero, _:list<'a>  ) = fun () -> [  ]        :list<'a>  
-        static member        instance (Mzero, _:'a []     ) = fun () -> [||]        :'a []     
-        static member        instance (Mzero, _:seq<'a>   ) = fun () -> Seq.empty   :seq<'a>
-        static member inline instance (Mzero, _:Id<'a>    ) = fun () -> Id (mempty()) :Id<'a>
-
-    type Mplus = Mplus with
-        static member        instance (Mplus, x:_ option, _) = fun y -> match x with None -> y | xs -> xs
-        static member        instance (Mplus, x:_ list  , _) = fun y -> x @ y
-        static member        instance (Mplus, x:_ []    , _) = fun y -> Array.append x y
-        static member        instance (Mplus, x:_ seq   , _) = fun y -> Seq.append   x y
-        static member inline instance (Mplus, x:_ Id    , _) = fun y -> Id (mappend (Id.run x) (Id.run y))
-        
-
-    let inline internal mzero () = Inline.instance Mzero ()
-    let inline internal mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
-
-    type Mzero with
-        static member inline instance (Mzero, _:Kleisli<_,_>) = fun () -> Kleisli (fun _ -> mzero ())
-    
-    type Mplus with
-        static member inline instance (Mplus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> mplus (f x) (g x))
 
 
 

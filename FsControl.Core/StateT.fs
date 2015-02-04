@@ -5,7 +5,6 @@ open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
 open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
-open FsControl.Core.TypeMethods.MonadPlus
 open FsControl.Core.TypeMethods.MonadTrans
 open FsControl.Core.TypeMethods.MonadAsync
 open FsControl.Core.TypeMethods.MonadError
@@ -28,8 +27,8 @@ type StateT<'S,'MaS> with
     static member inline instance (_:Monad.Bind, x:StateT<'s,'mas>, _:StateT<'s,'mbs>) :('a -> StateT<'s,'mbs>) -> StateT<'s,'mbs> = fun f -> 
         StateT.bind f x
 
-    static member inline instance (MonadPlus.Mzero, _:StateT<_,_>    ) = fun ()         -> StateT <| fun _ -> mzero()
-    static member inline instance (MonadPlus.Mplus,   StateT m,     _) = fun (StateT n) -> StateT <| fun s -> mplus (m s) (n s)
+    static member inline instance (_:Functor.Zero, _:StateT<_,_>    ) = fun ()         -> StateT <| fun _ -> zero()
+    static member inline instance (_:Functor.Plus,   StateT m,     _) = fun (StateT n) -> StateT <| fun s -> plus (m s) (n s)
 
     static member inline instance (MonadTrans.Lift, _:StateT<'s,'mas>) = fun (m:'ma) -> (StateT <| fun s -> m >>= fun a -> return' (a,s)):StateT<'s,'mas>
 

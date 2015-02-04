@@ -5,7 +5,6 @@ open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
 open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
-open FsControl.Core.TypeMethods.MonadPlus
 open FsControl.Core.TypeMethods.Monoid
 open FsControl.Core.TypeMethods.MonadTrans
 open FsControl.Core.TypeMethods.MonadAsync
@@ -48,8 +47,8 @@ type WriterT<'WMa> with
     static member inline instance (_:Monad.Bind, x:WriterT<'wma>, _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> = fun f -> 
         WriterT.bind f x
 
-    static member inline instance (MonadPlus.Mzero, _:WriterT<_>  ) = fun ()          -> WriterT (mzero())
-    static member inline instance (MonadPlus.Mplus,   WriterT m, _) = fun (WriterT n) -> WriterT (mplus m n)
+    static member inline instance (_:Functor.Zero, _:WriterT<_>  ) = fun ()          -> WriterT (zero())
+    static member inline instance (_:Functor.Plus,   WriterT m, _) = fun (WriterT n) -> WriterT (plus m n)
 
     static member inline instance (MonadWriter.Tell, _:WriterT<_> ) = fun w -> WriterT (return' ((), w))
     static member inline instance (MonadWriter.Listen, WriterT m, _:WriterT<_>) = WriterT <| do'() {

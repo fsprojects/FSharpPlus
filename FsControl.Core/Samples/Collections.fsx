@@ -194,9 +194,6 @@ let resNone' = sequenceA (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1
 
 
 
-
-open FsControl.Core.TypeMethods.MonadPlus
-
 let getLine    = async { return System.Console.ReadLine() }
 let putStrLn x = async { printfn "%s" x}
 
@@ -211,8 +208,8 @@ type DoPlusNotationBuilder() =
     member inline b.Bind(p,rest) = p >>= rest
     member b.Let(p,rest) = rest p
     member b.ReturnFrom(expr) = expr
-    member inline x.Zero() = mzero()
-    member inline x.Combine(a, b) = mplus a b
+    member inline x.Zero() = zero()
+    member inline x.Combine(a, b) = a <|> b
 let doPlus = new DoPlusNotationBuilder()
 
 // Test MonadPlus
@@ -234,7 +231,7 @@ let pythags' = doPlus{
   let! y = seq [x..z]
   if (x*x + y*y = z*z) then return (x, y, z)}
 
-let res123123 = mplus (seq [1;2;3]) (seq [1;2;3])
+let res123123 = (seq [1;2;3]) <|> (seq [1;2;3])
 let allCombinations = sequence (seq [seq ['a';'b';'c']; seq ['1';'2']]) //|> Seq.map Seq.toList |> Seq.toList 
 
 

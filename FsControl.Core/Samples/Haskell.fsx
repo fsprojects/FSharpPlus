@@ -324,9 +324,9 @@ let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
 
 // Monad Plus
-open FsControl.Core.TypeMethods.MonadPlus
-let inline mzero () = Inline.instance Mzero ()
-let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (Mplus, x) y
+
+let inline mzero () = Inline.instance Zero ()
+let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (Plus, x) y
 let inline guard x = if x then return' () else mzero()
 type DoPlusNotationBuilder() =
     member inline b.Return(x) = return' x
@@ -379,8 +379,8 @@ let inline (+++) f g = Inline.instance AcMerge (f, g)
 let inline left f = Inline.instance (AcLeft, f) ()
 let inline right f = Inline.instance (AcRight, f) ()
 let inline app() = Inline.instance Apply ()
-let inline zeroArrow() = Inline.instance  MonadPlus.Mzero ()
-let inline (<+>)   f g = Inline.instance (MonadPlus.Mplus, f) g
+let inline zeroArrow() = Inline.instance  Functor.Zero ()
+let inline (<+>)   f g = Inline.instance (Functor.Plus, f) g
 let runKleisli (Kleisli f) = f
 
 // Test Arrows
@@ -413,11 +413,11 @@ let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 // Applicative functors
 open FsControl.Core.TypeMethods.Applicative
-open FsControl.Core.TypeMethods.Alternative
+
 let inline pure' x   = Inline.instance Pure x
 let inline (<*>) x y = Inline.instance (Apply, x, y) ()
-let inline empty() = Inline.instance Empty ()
-let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Append, x) y
+let inline empty()   = Inline.instance Functor.Zero ()
+let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Functor.Plus, x) y
 
 
 let inline (<<|>) f a   = fmap f a

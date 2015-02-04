@@ -5,7 +5,6 @@ open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Functor
 open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
-open FsControl.Core.TypeMethods.MonadPlus
 open FsControl.Core.TypeMethods.MonadTrans
 open FsControl.Core.TypeMethods.MonadAsync
 open FsControl.Core.TypeMethods.MonadError
@@ -33,8 +32,8 @@ type ReaderT<'R,'Ma> with
     static member inline instance (_:Monad.Bind  , x, _:ReaderT<'r,'m>) :('b -> ReaderT<'r,'m>) -> ReaderT<'r,'m> = fun f -> 
         ReaderT.bind f x
 
-    static member inline instance (MonadPlus.Mzero, _:ReaderT<_,_>   ) = fun ()          -> ReaderT <| fun _ -> mzero()
-    static member inline instance (MonadPlus.Mplus,   ReaderT m   ,_ ) = fun (ReaderT n) -> ReaderT <| fun r -> mplus (m r) (n r)
+    static member inline instance (_:Functor.Zero, _:ReaderT<_,_>   ) = fun ()          -> ReaderT <| fun _ -> zero()
+    static member inline instance (_:Functor.Plus,   ReaderT m   ,_ ) = fun (ReaderT n) -> ReaderT <| fun r -> plus (m r) (n r)
 
     static member inline instance (MonadTrans.Lift, _:ReaderT<'r,'ma>) = fun m -> (ReaderT <| fun _ -> m) : ReaderT<'r,'ma>
 

@@ -5,15 +5,14 @@ open FsControl.Core.TypeMethods
 module Operators =
 
     // Functor ----------------------------------------------------------------
-    let inline map (f:'a->'b) (x:'Functor'a) :'Functor'b = Inline.instance (Functor.Map, x) f
+    let inline map    (f:'a->'b) (x:'Functor'a) :'Functor'b = Inline.instance (Functor.Map, x) f
+    let inline (<!>)  (f:'a->'b) (x:'Functor'a) :'Functor'b = Inline.instance (Functor.Map, x) f
+    let inline (|>>)  (x:'Functor'a) (f:'a->'b) :'Functor'b = Inline.instance (Functor.Map, x) f
    
 
     // Applicative ------------------------------------------------------------
     let inline result (x:'a): 'Functor'a = Inline.instance Applicative.Pure x
     let inline (<*>) (x:'Applicative'a_'b) (y:'Applicative'a): 'Applicative'b = Inline.instance (Applicative.Apply, x, y) ()
-    let inline empty() :'Alternative'a = Inline.instance Alternative.Empty ()
-    let inline (<|>) (x:'Alternative'a) (y:'Alternative'a) :'Alternative'a = Inline.instance (Alternative.Append, x) y
-    let inline (<!>)  (f:'a->'b) (x:'Functor'a) :'Functor'b   = map f x
     let inline liftA2 (f:'a->'b->'c) (a:'Applicative'a) (b:'Applicative'b) :'Applicative'c = f <!> a <*> b
     let inline (  *>) (x:'Applicative'a) :'Applicative'b->'Applicative'b = x |> liftA2 (fun   _ -> id)
     let inline (<*  ) (x:'Applicative'a) :'Applicative'b->'Applicative'a = x |> liftA2 (fun k _ -> k )
@@ -33,7 +32,11 @@ module Operators =
     let inline mconcat (x:list<'Monoid>)      : 'Monoid = Inline.instance (Monoid.Mconcat, x) ()
 
 
-    // Monad plus -------------------------------------------------------------
+    // Alternative/Monadplus/Arrowplus ----------------------------------------
+    let inline zero() :'Functor'a = Inline.instance Functor.Zero ()
+    let inline (<|>) (x:'Functor'a) (y:'Functor'a) :'Functor'a = Inline.instance (Functor.Plus, x) y
+
+    // M's --------------------------------------------------------------------
     let inline sequence (ms:list<'Monad'a>) =
         let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (List.Cons(x,xs))
         List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
@@ -62,9 +65,7 @@ module Operators =
     let inline (>=>)  (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
     let inline (<=<)  (g:'b->'Monad'c) (f:'a->'Monad'b) (x:'a) :'Monad'c = f x >>= g
 
-    let inline mzero() :'MonadPlus'a = Inline.instance MonadPlus.Mzero ()
-    let inline mplus (x:'MonadPlus'a) (y:'MonadPlus'a) :'MonadPlus'a = Inline.instance (MonadPlus.Mplus, x) y
-    let inline guard x: 'MonadPlus'unit = if x then result () else mzero()
+    let inline guard x: 'MonadPlus'unit = if x then result () else zero()
 
    
     // Arrows -----------------------------------------------------------------
@@ -81,8 +82,6 @@ module Operators =
     let inline left    f   = Inline.instance (ArrowChoice.AcLeft , f) ()
     let inline right   f   = Inline.instance (ArrowChoice.AcRight, f) ()
     let inline arrAp()     = Inline.instance  ArrowApply.Apply ()
-    let inline zeroArrow() = Inline.instance MonadPlus.Mzero ()
-    let inline (<+>)   f g = Inline.instance (MonadPlus.Mplus, f) g
 
 
     // Foldable

@@ -24,8 +24,8 @@ type OptionT<'Ma> with
     static member inline instance (_:Applicative.Apply, f, x, _:OptionT<'r>) = fun () -> OptionT.apply f x :OptionT<'r>
     static member inline instance (_:Monad.Bind  , x :OptionT<'ma>, _:OptionT<'mb>) = fun (f: 'a -> OptionT<'mb>) -> OptionT.bind f x :OptionT<'mb>
 
-    static member inline instance (MonadPlus.Mzero, _:OptionT<_>) = fun ()          -> OptionT <| return' None
-    static member inline instance (MonadPlus.Mplus, OptionT x, _) = fun (OptionT y) -> OptionT <| do'() {
+    static member inline instance (_:Functor.Zero, _:OptionT<_>) = fun ()          -> OptionT <| return' None
+    static member inline instance (_:Functor.Plus, OptionT x, _) = fun (OptionT y) -> OptionT <| do'() {
             let! maybe_value = x
             return! match maybe_value with Some value -> x | _ -> y}
 
@@ -45,8 +45,8 @@ type ListT<'Ma> with
     static member inline instance (_:Applicative.Apply, f, x,  _:ListT<'r> ) = fun () -> ListT.apply f x :ListT<'r>
     static member inline instance (_:Monad.Bind, x:ListT<'ma>, _:ListT<'mb>) = fun (f:'a -> ListT<'mb>) -> ListT.bind f x :ListT<'mb>
 
-    static member inline instance (MonadPlus.Mzero, _:ListT<_>) = fun ()        -> ListT <| return' []
-    static member inline instance (MonadPlus.Mplus, ListT x, _) = fun (ListT y) -> ListT <| do'() {
+    static member inline instance (_:Functor.Zero, _:ListT<_>) = fun ()        -> ListT <| return' []
+    static member inline instance (_:Functor.Plus, ListT x, _) = fun (ListT y) -> ListT <| do'() {
         let! a = x
         let! b = y
         return (a @ b)}
@@ -68,8 +68,8 @@ type SeqT<'Ma> with
     static member inline instance (_:Applicative.Apply, f, x, _:SeqT<'r> ) = fun () -> SeqT.apply f x :SeqT<'r>
     static member inline instance (_:Monad.Bind, x:SeqT<'ma>, _:SeqT<'mb>) = fun (f: 'a -> SeqT<'mb>) -> SeqT.bind f x :SeqT<'mb>
 
-    static member inline instance (MonadPlus.Mzero, _:SeqT<_>) = fun ()       -> SeqT <| return' Seq.empty
-    static member inline instance (MonadPlus.Mplus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
+    static member inline instance (_:Functor.Zero, _:SeqT<_>) = fun ()       -> SeqT <| return' Seq.empty
+    static member inline instance (_:Functor.Plus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
         let! a = x
         let! b = y
         return (Seq.append a b)}
