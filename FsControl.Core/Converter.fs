@@ -54,16 +54,16 @@ module Converter =
 
     type ToBytes = ToBytes with
         static member instance (ToBytes, x:bool   , _) = fun _ -> BitConverter.GetBytes(x)
-        static member instance (ToBytes, x:char   , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
-        static member instance (ToBytes, x:float  , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
-        static member instance (ToBytes, x: int16 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
-        static member instance (ToBytes, x: int   , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
-        static member instance (ToBytes, x:int64  , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
-        static member instance (ToBytes, x:float32, _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:char   , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+        static member instance (ToBytes, x:float  , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+        static member instance (ToBytes, x: int16 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+        static member instance (ToBytes, x: int   , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+        static member instance (ToBytes, x:int64  , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+        static member instance (ToBytes, x:float32, _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
         static member instance (ToBytes, x:string , _) = fun e -> Array.map byte (x.ToCharArray())
-        static member instance (ToBytes, x:uint16 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
-        static member instance (ToBytes, x:uint32 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
-        static member instance (ToBytes, x:uint64 , _) = fun e -> if e = BitConverter.IsLittleEndian then BitConverter.GetBytes(x) else Array.rev (BitConverter.GetBytes(x))
+        static member instance (ToBytes, x:uint16 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+        static member instance (ToBytes, x:uint32 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+        static member instance (ToBytes, x:uint64 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
 
     let inline internal toBytes (isLittleEndian:bool) value :byte[] = Inline.instance (ToBytes, value) isLittleEndian    
 
