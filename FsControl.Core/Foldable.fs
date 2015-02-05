@@ -71,6 +71,8 @@ module Foldable =
 
     type ToList() =
         inherit ToListDefault()
+        static member instance (_:ToList, x:seq<'a>       , _) = fun () -> Seq.toList x
+        static member instance (_:ToList, x:Set<'a>       , _) = fun () -> Set.toList x
         static member instance (_:ToList, x:string        , _) = fun () -> x.ToCharArray() |> Array.toList
         static member instance (_:ToList, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray() |> Array.toList
         static member instance (_:ToList, x:'a []         , _) = fun () -> Array.toList x
@@ -88,6 +90,8 @@ module Foldable =
     type Filter() =
         inherit FilterDefault()
 
+        static member instance (_:Filter, x:'t seq, _:'t seq) = fun p -> Seq.filter p x
+        static member instance (_:Filter, x:'t Set, _:'t Set) = fun p -> Set.filter p x
         static member instance (_:Filter, x:'t option, _:'t option) = fun p -> match x with None -> None | Some a -> if p a then x else None
         static member instance (_:Filter, x:'t list, _:'t list) = fun p -> List.filter  p x
         static member instance (_:Filter, x:'t []  , _:'t []  ) = fun p -> Array.filter p x

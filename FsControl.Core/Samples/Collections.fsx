@@ -21,12 +21,20 @@ type ZipList<'s> = ZipList of 's seq with
     static member inline Mempty() = result (mempty())                                :ZipList<'a>
     static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
 
-    // try also uncommenting the following method.
+    // try also commenting/uncommenting the following method.
     static member inline Mconcat (x:list<ZipList<'a>>) = printfn "ZipList optimized"; List.foldBack mappend x (mempty()):ZipList<'a>
+
+type WrappedList<'s> = WrappedList of 's list with
+    static member instance (_:Applicative.Pure, _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
+    static member instance (_:Monoid.Mappend, WrappedList l, _) = fun (WrappedList x) -> WrappedList (l @ x)
+    static member instance (_:Monoid.Mempty  , _:WrappedList<'a>   ) = fun () -> WrappedList List.empty
+    static member instance (_:Foldable.Foldr, WrappedList x, _) = fun (f,z) -> List.foldBack f x z
+
+let wl = WrappedList  [2..10]
 
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
-// let five   = filter ((=) 5) (set [1;2;3;4;5;6])             // <- Uses the default method.
+let five   = filter ((=) 5) (WrappedList [1;2;3;4;5;6])   // <- Uses the default method for filter.
 let optionFilter = filter ((=) 3) (Some 4)
 
 let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]

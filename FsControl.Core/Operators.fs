@@ -89,7 +89,7 @@ module Operators =
     let inline foldl (f:'a->'b->'a) (z:'a) foldable'b : 'a = Inline.instance (Foldable.Foldl, foldable'b) (f,z)
     let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
     let inline toList value :'t list = Inline.instance (Foldable.ToList, value) ()
-    let inline filter predicate x    = Inline.instance (Foldable.Filter, x) predicate
+    let inline filter (predicate:_->bool) (x:'Foldable'a) :'Foldable'a = Inline.instance (Foldable.Filter, x) predicate
 
 
     // Traversable
