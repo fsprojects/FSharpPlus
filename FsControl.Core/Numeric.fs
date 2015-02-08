@@ -146,10 +146,13 @@ module Ratio =
     let inline internal (</) x = (|>) x
     let inline internal (/>) x = flip x
 
-    type Ratio<'Integral> = Ratio of 'Integral * 'Integral with
-        override this.ToString() =
-            let (Ratio(n,d)) = this
-            n.ToString() + " % " + d.ToString()
+    type Ratio<'Integral> = //Ratio of 'Integral * 'Integral with
+        struct
+            val Numerator   :'Integral
+            val Denominator :'Integral
+            new (numerator: 'Integral, denominator: 'Integral) = {Numerator = numerator; Denominator = denominator}
+        end
+        override this.ToString() = this.Numerator.ToString() + " % " + this.Denominator.ToString()
 
     let inline internal ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
         whenIntegral a
@@ -161,20 +164,21 @@ module Ratio =
 
     let inline internal Ratio (x,y) = x </ratio/> y
 
-    let inline  internal numerator   (Ratio(x,_)) = x
-    let inline  internal denominator (Ratio(_,x)) = x
+    let inline internal numerator   (r:Ratio<_>) = r.Numerator
+    let inline internal denominator (r:Ratio<_>) = r.Denominator
 
     type Ratio<'Integral> with
-        static member inline (/) (Ratio(a,b), Ratio(c,d)) = (a *. d) </ratio/> (b *. c)
-                                              
-        static member inline (+) (Ratio(a,b), Ratio(c,d)) = (a *. d +. c *. b) </ratio/> (b *. d)
-        static member inline (-) (Ratio(a,b), Ratio(c,d)) = (a *. d -. c *. b) </ratio/> (b *. d)
-        static member inline (*) (Ratio(a,b), Ratio(c,d)) = (a *. c) </ratio/> (b *. d)
+        static member inline (/) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator) </ratio/> (a.Numerator *. b.Numerator)                                              
+        static member inline (+) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator +. b.Numerator *. a.Numerator) </ratio/> (a.Numerator *. b.Denominator)
+        static member inline (-) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator -. b.Numerator *. a.Numerator) </ratio/> (a.Numerator *. b.Denominator)
+        static member inline (*) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Numerator) </ratio/> (a.Numerator *. b.Denominator)
 
     type Ratio<'RA> with static member inline instance (_:Num.Abs           , r:Ratio<_>, _) = fun () -> (abs    (numerator r)) </ratio/> (denominator r)
     type Ratio<'RA> with static member inline instance (_:Num.Signum        , r:Ratio<_>, _) = fun () -> (signum (numerator r)) </ratio/> G1()
     type Ratio<'RA> with static member inline instance (_:Num.FromBigInteger, _:Ratio<_>) = fun (x:bigint) -> Inline.instance Num.FromBigInteger x </ratio/> G1()
     type Ratio<'RA> with static member inline instance (_:Num.Negate        , r:Ratio<_>, _) = fun () -> -(numerator r) </ratio/> (denominator r)
+
+    let (|Ratio|) (ratio:Ratio<_>) = (ratio.Numerator, ratio.Denominator)
 
 type Rational = Ratio.Ratio<bigint>
 
