@@ -36,6 +36,11 @@ let v4  = v4l.Force()
 
 
 // test numbers
+
+let qr0  = divRem 7  3  //val qr0 : int * int = (2, 1)
+let qr1  = divRem 7I 3I //val qr1 : System.Numerics.BigInteger * System.Numerics.BigInteger = (2, 1)
+let qr2  = divRem 7. 3. //val qr2 : float * float = (2.333333333, 0.0) -> using default method.
+
 let inline findMin (lst: 'a list) =
     let minValue, maxValue = minValue(), maxValue()
     let rec loop acc = function

@@ -75,9 +75,14 @@ let inline div (a:'Integral) b :'Integral =
 
 let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
 let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
-let inline quotRem a b :'Integral * 'Integral = (quot a b, rem a b)
+let inline quotRem a b :'Integral * 'Integral = whenIntegral a; Inline.instance (DivRem, a, b) ()
 let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
-let inline divMod a b :'Integral * 'Integral = (div a b, mod' a b)
+let inline divMod D d :'Integral * 'Integral =
+    let q, r = quotRem D d
+    if (r < 0G) then
+        if (d > 0G) then (q - 1G, r + d)
+        else             (q + 1G, r - d)
+    else (q, r)
 
 type Rational = Ratio<Integer>
 

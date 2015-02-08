@@ -56,7 +56,7 @@ module Num =
 #if NOTNET35
         static member        instance (Signum, x:Complex   , _) = fun () -> 
             if x.Magnitude = 0.0 then Complex.Zero
-            else Complex(x.Real / x.Magnitude, x.Imaginary / x.Magnitude)
+            else Complex (x.Real / x.Magnitude, x.Imaginary / x.Magnitude)
 #endif
 
     type Negate = Negate with
@@ -67,6 +67,17 @@ module Num =
         static member        instance (Negate, x:uint32    , _) = fun () -> 0u  - x
         static member        instance (Negate, x:uint64    , _) = fun () -> 0UL - x
         static member        instance (Negate, x:unativeint, _) = fun () -> 0un - x
+
+    type DivRem() =
+        inherit Typ1()
+        static member inline instance (_:DivRem, x:^t when ^t: null and ^t: struct, y:^t, _) = fun () -> (x, y)
+        static member inline instance (_:Typ1  , D:'T, d:'T, _:'T*'T) = fun () -> let q = D / d in q,  D - q * d
+        static member inline instance (_:DivRem, D:'T, d:'T, r:'T*'T) = fun () ->
+            let mutable r = Unchecked.defaultof<'T>
+            (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
+    
+    let DivRem = DivRem()
+    let inline internal divRem (x:'T) (y:'T) :'T*'T = Inline.instance (DivRem, x, y) ()
 
     // Strict version of math operators
     let inline internal ( +.) (a:'Num) (b:'Num) :'Num = a + b
@@ -111,23 +122,16 @@ module internal Numerics =
 
     let inline internal whenIntegral a = let _ = if false then toBigInteger a else 0I in ()
 
-    let inline internal quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
-    let inline internal rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
-    let inline internal quotRem a b :'Integral * 'Integral = (quot a b, rem a b)
-
-
-
 
     // Numeric Functions ------------------------------------------------------
 
     let inline internal gcd x y :'Integral =
         let zero = G0()
-        let rec gcd' a = function
-            | b when b = zero -> a
-            | b -> gcd' b (rem a b)
-        match(x,y) with
-        | t when t = (zero,zero) -> failwith "Prelude.gcd: gcd 0 0 is undefined"
-        | _                      -> gcd' (abs x) (abs y)
+        let rec loop a b =
+            if b = zero then a
+            else loop b (a % b)
+        if (x, y) = (zero, zero) then failwith "gcd 0 0 is undefined"
+        else loop (abs x) (abs y)
 
 
 // Ratio ------------------------------------------------------------------
@@ -151,9 +155,9 @@ module Ratio =
         whenIntegral a
         let zero = G0()
         if b = zero then failwith "Ratio.%: zero denominator"
-        let (a,b) = if b < zero then (negate a, negate b) else (a, b)
+        let (a, b) = if b < zero then (negate a, negate b) else (a, b)
         let gcd = gcd a b
-        Ratio (quot a gcd, quot b gcd)
+        Ratio (a / gcd, b / gcd)
 
     let inline internal Ratio (x,y) = x </ratio/> y
 
@@ -219,7 +223,7 @@ module RealFrac =
 
         static member inline instance (ProperFraction, r:Ratio<_>, _) = fun () -> 
             let (a,b) = (numerator r, denominator r)
-            let (i,f) = quotRem a b
+            let (i,f) = divRem a b
             (i, ratio f b)
 
 

@@ -192,5 +192,6 @@ module Operators =
 
     // Misc
 
+    let inline divRem (D:'T) (d:'T) :'T*'T = Inline.instance (Num.DivRem, D, d) ()
     let inline minValue() = Inline.instance Bounded.MinValue ()
     let inline maxValue() = Inline.instance Bounded.MaxValue ()
