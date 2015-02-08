@@ -49,6 +49,11 @@ module Collection =
 
     let inline internal fromList (value:list<'t>)  = Inline.instance FromList value
 
+    type ToSeq = ToSeq with
+        static member instance (_:ToSeq, x:#seq<'T>  , _:seq<'T>) = fun () -> x :> seq<_>
+        static member instance (_:ToSeq, x:Id<'T>    , _:seq<'T>) = fun () -> Seq.singleton x.getValue
+        static member instance (_:ToSeq, x:option<'T>, _:seq<'T>) = fun () -> match x with Some x -> Seq.singleton x | None -> Seq.empty
+
 
     type Choose = Choose with
         static member instance (_:Choose, x:Id<'T>  , _:Id<'U>  ) = fun (f:_->'U option) -> invalidOp "Choose on ID" :Id<'U> 

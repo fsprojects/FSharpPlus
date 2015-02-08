@@ -22,7 +22,7 @@ type ZipList<'s> = ZipList of 's seq with
     static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
 
     // try also commenting/uncommenting the following method.
-    static member inline Mconcat (x:list<ZipList<'a>>) = printfn "ZipList optimized"; List.foldBack mappend x (mempty()):ZipList<'a>
+    static member inline Mconcat (x:list<ZipList<'a>>) = printfn "ZipList mconcat optimized"; List.foldBack mappend x (mempty()):ZipList<'a>
 
 type WrappedList<'s> = WrappedList of 's list with
     static member instance (_:Applicative.Pure, _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
@@ -132,7 +132,9 @@ let stack = new Collections.Generic.Stack<_>([1;2;3])
 let twoSeqs = mappend (seq [1;2;3]) (seq [4;5;6])
 let sameSeq = mappend (mempty()) (seq [4;5;6])
 
-let (seqFromLst:_ seq) = fromList [1;2;3;4]
+let seqFromLst:_ seq = fromList [1;2;3;4]
+let seqFromLst' = toSeq [1;2;3;4]
+let seqFromOpt  = toSeq (Some 1)
 
 // This should not compile 
 (*
@@ -169,7 +171,7 @@ let tails = duplicate lst
 let lst'  = extend extract lst
 
 
-// Some problems associated to use this approach in a language with inheritance.
+// Some problems associated with this approach in a language with inheritance.
 
 // This should ideally not compile (but it does, because stack is also a seq)
 let elem3  = extract   stack
