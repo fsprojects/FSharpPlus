@@ -3,7 +3,7 @@ FsControl
 
 This is basically an overload library.
 
-The goal is to create overloads of standard F# types, organized into 'Type Methods' to be used from other projects/libraries.
+The goal is to create overloads of standard F# types, organized into 'Type-Methods' to be used from other projects/libraries.
 
 It's also possible to create libraries (like [FSharpPlus](https://github.com/gmpl/FSharpPlus)) that define their own custom types and add overloads for those types, making them instances of the Type Methods defined in FsControl.
 
@@ -24,17 +24,17 @@ You may find hard to understand how to use FsControl, the documentation is not c
 
 FsControl contains overloads, the purpose of these overloads is to associate Types with Type Methods, here we can have three different scenarios:
 
- 1) Add a new Type Method and instances for existing Type.
+ 1) Add a new Type-Method and instances for existing Type.
 
 This is the most complex scenario, to define a new Type Method is not straightforward, there will be some guidelines but at the moment the best is to have a look at the source code.
 
- 2) Add a new Type and make it an instance of an existing Type Method.
+ 2) Add a new Type and make it an instance of an existing Type-Method.
  
 At the moment there are 2 ways:
 
 The easy way is to look at the signature of the method you want to implement, see below the section "How can I make my classes FsControl-ready?"
 
-The old way is:
+The old way is to use the same kind of signature used within the Type-Method definition:
 
 In the type definition we will add a static member called instance, which will follow this convention:
 
@@ -42,7 +42,7 @@ In the type definition we will add a static member called instance, which will f
         fun [non-polymorphic args in curried form, if none then a unit () arg] -> 
             Implementation
 
-To find the exact signature you need to look at the source code of the Type Method.
+To find the exact signature you need to look at the source code of the Type-Method.
 
 Here's an example:
 
@@ -66,9 +66,9 @@ So you can create a Type <code>Tree</code> and add an instance for the existing 
 
 
 
- 3) Add an instance for an existing Type of an existing Type Method:
+ 3) Add an instance for an existing Type of an existing Type-Method:
 
-We can’t do this. This is only possible if we have control over the source code of either the Type or the Type Method.
+We can’t do this. This is only possible if we have control over the source code of either the Type or the Type-Method.
 The association must be done either in the Type (2) or in the Type Method (1) due to both a technical limitation and a conceptual reason:
  - Extensions methods are not taken into account in overload resolution.
  - It may lead to a bad design practice, something similar happens in Haskell with Type Classes (see [orphan instances](http://www.haskell.org/haskellwiki/Orphan_instance)).
@@ -77,7 +77,9 @@ The association must be done either in the Type (2) or in the Type Method (1) du
 How can I make my classes FsControl-ready?
 ------------------------------------------
 
-An easy way to make classes in your project callable from FsControl without referencing FsControl dlls at all is to use standard signatures for your methods. Here's a list of the standard signatures available at the moment:
+Note: this feature is not 100% tested at the moment. If you find problems you can still define it as described in 2).
+
+An easy way to make classes in your project callable from FsControl without referencing FsControl DLLs at all is to use standard signatures for your methods. Here's a list of the standard signatures available at the moment:
 
  Functors:
  
