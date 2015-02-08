@@ -175,6 +175,39 @@ open Applicative
 
 module Functor =
 
+
+    type Map_() =
+
+        static member instance (_:Map_, x:Lazy<_>        , _:unit) = fun f -> f x.Value :unit
+        static member instance (_:Map_, x:seq<_>         , _:unit) = fun f -> Seq.iter f x
+        static member instance (_:Map_, x:option<_>      , _:unit) = fun f -> match x with Some x -> f x | _ -> ()
+        static member instance (_:Map_, x:list<_>        , _:unit) = fun f -> List.iter f x
+        static member instance (_:Map_, (m,a)            , _:unit) = fun f -> f a :unit
+        static member instance (_:Map_, x:_ []           , _:unit) = fun f -> Array.iter   f x
+        static member instance (_:Map_, x:_ [,]          , _:unit) = fun f -> Array2D.iter f x
+        static member instance (_:Map_, x:_ [,,]         , _:unit) = fun f -> Array3D.iter f x
+        static member instance (_:Map_, x:_ [,,,]        , _:unit) = fun f ->
+            for i = 0 to Array4D.length1 x - 1 do
+                for j = 0 to Array4D.length2 x - 1 do
+                    for k = 0 to Array4D.length3 x - 1 do
+                        for l = 0 to Array4D.length4 x - 1 do
+                            f x.[i,j,k,l]
+        static member instance (_:Map_, x:Async<_>       , _:unit) = fun f -> f (Async.RunSynchronously x) : unit
+        static member instance (_:Map_, x:Choice<_,_>    , _:unit) = fun f -> match x with Choice1Of2 x -> f x | _ -> ()
+        static member instance (_:Map_, KeyValue(k, x)   , _:unit) = fun f -> f x :unit
+        static member instance (_:Map_, x:Map<'a,'b>     , _:unit) = fun f -> Map.iter (const' f) x 
+        static member instance (_:Map_, x:Dictionary<_,_>, _:unit) = fun f -> Seq.iter f x.Values
+        static member instance (_:Map_, x:_ ResizeArray  , _:unit) = fun f -> Seq.iter f x
+
+        // Restricted
+        static member instance (_:Map_, x:Nullable<_>    , _:unit) = fun f -> if x.HasValue then f x.Value else ()
+        static member instance (_:Map_, x:string         , _:unit) = fun f -> String.iter f x
+        static member instance (_:Map_, x:StringBuilder  , _:unit) = fun f -> String.iter f (x.ToString())
+        static member instance (_:Map_, x:Set<_>         , _:unit) = fun f -> Set.iter f x
+        
+
+    let Map_ = Map_()
+
     type DefaultImpl =        
         static member inline MapFromApplicative f x = pure' f <*> x
         static member inline MapFromMonad f x = x >>= (pure' << f)
@@ -215,6 +248,11 @@ module Functor =
 
     let Map = Map()
     let inline internal fmap f x = Inline.instance (Map, x) f
+
+
+
+    //let inline internal map_ f x = Inline.instance (Map_, x) f
+
 
 
     type Zero() =

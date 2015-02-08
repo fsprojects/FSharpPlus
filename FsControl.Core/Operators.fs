@@ -8,6 +8,8 @@ module Operators =
     let inline map    (f:'a->'b) (x:'Functor'a) :'Functor'b = Inline.instance (Functor.Map, x) f
     let inline (<!>)  (f:'a->'b) (x:'Functor'a) :'Functor'b = Inline.instance (Functor.Map, x) f
     let inline (|>>)  (x:'Functor'a) (f:'a->'b) :'Functor'b = Inline.instance (Functor.Map, x) f
+
+    let inline map_   (action:'T->unit) (source:'Functor'T) = Inline.instance (Functor.Map_, source) action :unit
    
 
     // Applicative ------------------------------------------------------------
@@ -156,7 +158,7 @@ module Operators =
     let inline distinctBy (projection:'T->'Key) (source:'Collection'T)        = Inline.instance (Collection.DistinctBy, source) projection      :'Collection'T
     let inline exists     (predicate :'T->bool) (source:'Collection'T)        = Inline.instance (Collection.Exists, source) predicate           :bool
     let inline find       (predicate :'T->bool) (source:'Collection'T)        = Inline.instance (Collection.Find,   source) predicate           :'T
-    let inline iter       (action:'T->unit)     (source:'Collection'T)        = Inline.instance (Collection.Iter,   source) action              :unit
+    let inline iter       (action:'T->unit)     (source:'Collection'T)        = map_ action source
     let inline iteri (action:int->'T->unit)     (source:'Collection'T)        = Inline.instance (Collection.Iteri,  source) action              :unit
     let inline length (source:'Collection'T)                                  = Inline.instance (Collection.Length, source) ()                  :int
     let inline mapi    (mapping:int->'T->'U)    (source:'Collection'T)        = Inline.instance (Collection.Mapi,   source) mapping             :'Collection'U

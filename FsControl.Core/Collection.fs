@@ -92,12 +92,6 @@ module Collection =
         static member instance (GroupAdjBy, x:list<'a>, _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
         static member instance (GroupAdjBy, x:'a []   , _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
-    type Iter = Iter with
-        static member instance (_:Iter, x:Id<'T>   , _:unit) = fun (f:'T->unit) -> f x.getValue
-        static member instance (_:Iter, x:seq<'T>  , _:unit) = fun f -> Seq.iter   f x
-        static member instance (_:Iter, x:list<'T> , _:unit) = fun f -> List.iter  f x
-        static member instance (_:Iter, x:'T []    , _:unit) = fun f -> Array.iter f x
-
     type Iteri = Iteri with
         static member instance (_:Iteri, x:Id<'T>   , _:unit) = fun (f:int->'T->unit) -> f 0 x.getValue
         static member instance (_:Iteri, x:seq<'T>  , _:unit) = fun f -> Seq.iteri   f x
