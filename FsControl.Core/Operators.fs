@@ -88,7 +88,8 @@ module Operators =
     let inline foldr (f:'a->'b->'b) (z:'b) foldable'a : 'b = Inline.instance (Foldable.Foldr, foldable'a) (f,z)
     let inline foldl (f:'a->'b->'a) (z:'a) foldable'b : 'a = Inline.instance (Foldable.Foldl, foldable'b) (f,z)
     let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
-    let inline toList value :'t list = Inline.instance (Foldable.ToList, value) ()
+    let inline toList  value :'t list = Inline.instance (Foldable.ToList , value) ()
+    let inline toArray value :'t []   = Inline.instance (Foldable.ToArray, value) ()
     let inline filter (predicate:_->bool) (x:'Foldable'a) :'Foldable'a = Inline.instance (Foldable.Filter, x) predicate
 
 
@@ -148,7 +149,31 @@ module Operators =
     let inline groupBy    (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupBy   , x) f)
     let inline groupAdjBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupAdjBy, x) f)
     let inline sortBy     (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy    , x) f)
-   
+
+
+    let inline choose (chooser:'T->'U option)   (source:'Collection'T)        = Inline.instance (Collection.Choose    , source) chooser         :'Collection'U
+    let inline distinct                         (source:'Collection'T)        = Inline.instance (Collection.Distinct  , source) ()              :'Collection'T
+    let inline distinctBy (projection:'T->'Key) (source:'Collection'T)        = Inline.instance (Collection.DistinctBy, source) projection      :'Collection'T
+    let inline exists     (predicate :'T->bool) (source:'Collection'T)        = Inline.instance (Collection.Exists, source) predicate           :bool
+    let inline find       (predicate :'T->bool) (source:'Collection'T)        = Inline.instance (Collection.Find,   source) predicate           :'T
+    let inline iter       (action:'T->unit)     (source:'Collection'T)        = Inline.instance (Collection.Iter,   source) action              :unit
+    let inline iteri (action:int->'T->unit)     (source:'Collection'T)        = Inline.instance (Collection.Iteri,  source) action              :unit
+    let inline length (source:'Collection'T)                                  = Inline.instance (Collection.Length, source) ()                  :int
+    let inline mapi    (mapping:int->'T->'U)    (source:'Collection'T)        = Inline.instance (Collection.Mapi,   source) mapping             :'Collection'U
+    
+    // collides with min 'T->'T'->'T --> let inline max            (source:'Ct)  = Inline.instance (Collection.Max  , source) ()  :'t
+    let inline maxBy (projection:'T->'U) (source:'Collection'T)               = Inline.instance (Collection.MaxBy, source) projection           :'T
+    // collides with max 'T->'T'->'T --> let inline min            (source:'Ct)  = Inline.instance (Collection.Min  , source) ()  :'t
+    let inline minBy (projection:'T->'U) (source:'Collection'T)               = Inline.instance (Collection.MinBy, source) projection           :'T
+    let inline pick (chooser:'T->'U option) (source:'Collection'T)            = Inline.instance (Collection.Pick , source) chooser              :'U
+    let inline rev  (source:'Collection'T)                                    = Inline.instance (Collection.Rev  , source) ()                   :'Collection'T
+    let inline scan (folder:'State'->'T->'State) state (source:'Collection'T) = Inline.instance (Collection.Scan, source) folder (state:'State) :'Collection'State
+    let inline sort (source:'Collection'T)                                    = Inline.instance (Collection.Sort   , source) ()                 :'Collection'T
+    let inline tryFind (predicate :'T->bool) (source:'Collection'T)           = Inline.instance (Collection.TryFind, source) predicate          :'T option
+    let inline tryPick (chooser:'T->'U option) (x:'Collection'T)              = Inline.instance (Collection.TryPick    , x) chooser             :'U option
+    let inline zip (source1:'Collection'T1) (source2:'Collection'T2)          = Inline.instance (Collection.Zip, source1, source2) ()           :'Collection'T1'T2
+
+
 
 
     // Converter

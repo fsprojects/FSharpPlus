@@ -81,6 +81,21 @@ module Foldable =
 
     let ToList = ToList()
 
+    type ToArrayDefault() =
+        static member inline instance (_:ToArrayDefault, x:#obj , _) = fun () -> foldr (fun x y -> Array.concat [[|x|];y]) [||] x
+
+    type ToArray() =
+        inherit ToArrayDefault()
+        static member instance (_:ToArray, x:seq<'a>       , _) = fun () -> Seq.toArray x
+        static member instance (_:ToArray, x:Set<'a>       , _) = fun () -> Set.toArray x
+        static member instance (_:ToArray, x:string        , _) = fun () -> x.ToCharArray()
+        static member instance (_:ToArray, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray()
+        static member instance (_:ToArray, x:'a []         , _) = fun () -> x
+        static member instance (_:ToArray, x:'a ResizeArray, _) = fun () -> Seq.toArray x
+        static member instance (_:ToArray, x:list<'a>      , _) = fun () -> List.toArray x
+
+    let ToArray = ToArray()
+
 
     type FilterDefault() =
         static member inline instance (_:FilterDefault, x:'t when 't :> obj, _:'t) = fun p ->
