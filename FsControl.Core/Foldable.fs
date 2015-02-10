@@ -12,14 +12,20 @@ open System.Text
 
 module Foldable =
 
-    type Foldr = Foldr with
-        static member instance (Foldr, x:option<_>    , _) = fun (f,z) -> match x with Some t -> f t z | _ -> z
-        static member instance (Foldr, x:list<_>      , _) = fun (f,z) -> List.foldBack          f x z
-        static member instance (Foldr, x:Set<_>       , _) = fun (f,z) -> Set.foldBack           f x z
-        static member instance (Foldr, x:string       , _) = fun (f,z) -> Array.foldBack f (x.ToCharArray()) z
-        static member instance (Foldr, x:StringBuilder, _) = fun (f,z) -> Array.foldBack f (x.ToString().ToCharArray()) z
-        static member instance (Foldr, x:seq<_>       , _) = fun (f,z) -> List.foldBack  f (Seq.toList x) z
-        static member instance (Foldr, x:Id<'a>       , _) = fun (f,z) -> f (Id.run x) z
+    type Foldr() =
+        inherit Typ1()
+        static member inline instance (_:Typ1, x:'F, _:'b) =
+            fun (f:'a->'b->'b,z:'b) -> ((^F) : (static member FoldBack: _ -> ^F -> _-> ^b) (f, x, z))
+
+        static member instance (_:Foldr, x:option<_>    , _) = fun (f,z) -> match x with Some t -> f t z | _ -> z
+        static member instance (_:Foldr, x:list<_>      , _) = fun (f,z) -> List.foldBack          f x z
+        static member instance (_:Foldr, x:Set<_>       , _) = fun (f,z) -> Set.foldBack           f x z
+        static member instance (_:Foldr, x:string       , _) = fun (f,z) -> Array.foldBack f (x.ToCharArray()) z
+        static member instance (_:Foldr, x:StringBuilder, _) = fun (f,z) -> Array.foldBack f (x.ToString().ToCharArray()) z
+        static member instance (_:Foldr, x:seq<_>       , _) = fun (f,z) -> List.foldBack  f (Seq.toList x) z
+        static member instance (_:Foldr, x:Id<'a>       , _) = fun (f,z) -> f (Id.run x) z
+    
+    let Foldr = Foldr()
 
     type DefaultImpl =
         static member inline FoldMapFromFoldr f x = Inline.instance (Foldr, x) (mappend << f, mempty())
@@ -48,7 +54,7 @@ module Foldable =
 
 
     type Foldr with
-        static member inline instance (Foldr, x:array<_>, _) = fun (f,z) -> DefaultImpl.FoldrFromFoldMap f z x
+        static member inline instance (_:Foldr, x:array<_>, _) = fun (f,z) -> DefaultImpl.FoldrFromFoldMap f z x
 
     let inline internal foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
 
@@ -66,11 +72,9 @@ module Foldable =
     let Foldl = Foldl()
 
 
-    type ToListDefault() =
-        static member inline instance (_:ToListDefault, x:#obj , _) = fun () -> foldr List.cons [] x
-
     type ToList() =
-        inherit ToListDefault()
+        inherit Typ1()
+        static member inline instance (_:Typ1, x , _) = fun () -> foldr List.cons [] x
         static member instance (_:ToList, x:seq<'a>       , _) = fun () -> Seq.toList x
         static member instance (_:ToList, x:Set<'a>       , _) = fun () -> Set.toList x
         static member instance (_:ToList, x:string        , _) = fun () -> x.ToCharArray() |> Array.toList
@@ -80,12 +84,11 @@ module Foldable =
         static member instance (_:ToList, x:list<'a>      , _) = fun () -> x
 
     let ToList = ToList()
-
-    type ToArrayDefault() =
-        static member inline instance (_:ToArrayDefault, x:#obj , _) = fun () -> foldr (fun x y -> Array.concat [[|x|];y]) [||] x
+    let inline toList  value :'t list = Inline.instance (ToList , value) ()
 
     type ToArray() =
-        inherit ToArrayDefault()
+        inherit Typ1()
+        static member inline instance (_:Typ1, x , _) = fun () -> foldr (fun x y -> Array.concat [[|x|];y]) [||] x
         static member instance (_:ToArray, x:seq<'a>       , _) = fun () -> Seq.toArray x
         static member instance (_:ToArray, x:Set<'a>       , _) = fun () -> Set.toArray x
         static member instance (_:ToArray, x:string        , _) = fun () -> x.ToCharArray()
