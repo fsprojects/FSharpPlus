@@ -98,6 +98,73 @@ module Foldable =
         static member instance (_:ToArray, x:list<'a>      , _) = fun () -> List.toArray x
 
     let ToArray = ToArray()
+    
+    type Exists() =
+        inherit Typ1()
+        static member inline instance (_:Typ1, x     , _:bool) = fun f -> foldr (fun x b -> f x || b) false x :bool
+        static member instance (_:Exists, x:Id<'T>   , _:bool) = fun f -> f x.getValue :bool
+        static member instance (_:Exists, x:seq<'a>       , _) = fun f -> Seq.exists    f x
+        static member instance (_:Exists, x:list<'a>      , _) = fun f -> List.exists   f x
+        static member instance (_:Exists, x:'a []         , _) = fun f -> Array.exists  f x
+        static member instance (_:Exists, x:Set<'a>       , _) = fun f -> Set.exists    f x
+        static member instance (_:Exists, x:string        , _) = fun f -> String.exists f x
+        static member instance (_:Exists, x:'a ResizeArray, _) = fun f -> Seq.exists    f x
+        static member instance (_:Exists, x:StringBuilder , _) = fun f -> x.ToString() |> String.exists f
+        
+    let Exists = Exists()
+
+
+    type Find() =
+        inherit Typ1()
+        static member inline instance (_:Typ1, x   , _:'T) = fun f ->
+            let (<|>) a b = Functor.plus a b 
+            let r = foldr (fun x b -> (let r = f x in if r then Some x else None) <|> b) None x
+            (match r with Some r -> r | _ -> raise (Collections.Generic.KeyNotFoundException())) :'T
+        static member instance (_:Find, x:Id<'T>   , _:'T) = fun f -> List.find  f [x.getValue]
+        static member instance (_:Find, x:seq<'T>  , _:'T) = fun f -> Seq.find   f x
+        static member instance (_:Find, x:list<'T> , _:'T) = fun f -> List.find  f x
+        static member instance (_:Find, x:'T []    , _:'T) = fun f -> Array.find f x
+
+    let Find = Find()
+
+    type TryFind() =
+        inherit Typ1()
+        static member inline instance (_:Typ1, x   , _:'T option) = fun f ->
+            let (<|>) a b = Functor.plus a b 
+            foldr (fun x b -> (let r = f x in if r then Some x else None) <|> b) None x  :'T option
+        static member instance (_:TryFind, x:Id<'T>  , _:'T option) = fun f -> List.tryFind  f [x.getValue]
+        static member instance (_:TryFind, x:seq<'T> , _:'T option) = fun f -> Seq.tryFind   f x
+        static member instance (_:TryFind, x:list<'T>, _:'T option) = fun f -> List.tryFind  f x
+        static member instance (_:TryFind, x:'T []   , _:'T option) = fun f -> Array.tryFind f x
+
+    let TryFind = TryFind()
+
+
+    type Pick() =
+        inherit Typ1()
+        static member inline instance (_:Typ1, x  , _:'U) = fun (f:_->'U option) ->
+            let (<|>) a b = Functor.plus a b 
+            let r = foldr (fun x b -> f x <|> b) None x
+            (match r with Some r -> r | _ -> raise (Collections.Generic.KeyNotFoundException())) :'U
+        static member instance (_:Pick, x:Id<'T>  , _:'U) = fun (f:_->'U option) -> List.pick  f [x.getValue]
+        static member instance (_:Pick, x:seq<'T> , _:'U) = fun (f:_->'U option) -> Seq.pick   f x
+        static member instance (_:Pick, x:list<'T>, _:'U) = fun (f:_->'U option) -> List.pick  f x
+        static member instance (_:Pick, x:'T []   , _:'U) = fun (f:_->'U option) -> Array.pick f x
+
+    let Pick = Pick()
+
+
+    type TryPick() =
+        inherit Typ1()
+        static member inline instance (_:Typ1, x     , _:'U option) = fun (f:_->'U option) ->
+            let (<|>) a b = Functor.plus a b 
+            foldr (fun x b -> f x <|> b) None x  :'U option
+        static member instance (_:TryPick, x:Id<'T>  , _:'U option) = fun (f:_->'U option) -> invalidOp "TryPick on ID" :'U option
+        static member instance (_:TryPick, x:seq<'T> , _:'U option) = fun (f:_->'U option) -> Seq.tryPick   f x
+        static member instance (_:TryPick, x:list<'T>, _:'U option) = fun (f:_->'U option) -> List.tryPick  f x
+        static member instance (_:TryPick, x:'T []   , _:'U option) = fun (f:_->'U option) -> Array.tryPick f x
+
+    let TryPick = TryPick()
 
 
     type FilterDefault() =

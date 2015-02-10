@@ -1,6 +1,7 @@
 ﻿#r @"..\bin\Release\FsControl.Core.dll"
 
 open System
+open FsControl.Core.Types
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Collection
 open FsControl.Core.TypeMethods.Applicative
@@ -13,6 +14,29 @@ let flip f x y = f y x
 let konst k _ = k
 let (</) = (|>)
 let (/>) = flip
+
+type Tree<'a> =
+    | Empty 
+    | Leaf of 'a 
+    | Node of (Tree<'a>) * 'a * (Tree<'a>)
+
+    // add instance for Foldable abstraction (FoldBack is the minimal definition).
+    static member inline FoldBack (f, x, z) = 
+        let rec _foldMap x f =
+            match x with
+            | Empty        -> mempty()
+            | Leaf n       -> f n
+            | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f))
+        let appEndo (Endo f) = f
+        appEndo (_foldMap x (Endo << f )) z
+
+    
+let tree = Node (Node (Leaf 1, 6, Leaf 3), 2 , Leaf 9)
+let res21  = foldr   (+) 0   tree
+// Uses the default method:
+let res21' = foldl   (+) 0   tree      
+let resTr  = exists ((=) 3) tree
+let resS3  = tryPick (fun x -> if x = 3 then Some x else None) tree
 
 type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
@@ -28,7 +52,7 @@ type WrappedList<'s> = WrappedList of 's list with
     static member instance (_:Applicative.Pure, _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
     static member instance (_:Monoid.Mappend, WrappedList l, _) = fun (WrappedList x) -> WrappedList (l @ x)
     static member instance (_:Monoid.Mempty  , _:WrappedList<'a>   ) = fun () -> WrappedList List.empty
-    static member instance (_:Foldable.Foldr, WrappedList x, _) = fun (f,z) -> List.foldBack f x z
+    static member FoldBack (f, WrappedList x, z) = List.foldBack f x z
 
 let wl = WrappedList  [2..10]
 

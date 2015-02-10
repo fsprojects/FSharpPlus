@@ -71,19 +71,7 @@ module Collection =
         static member instance (_:DistinctBy, x:Id<'T>   , _:Id<'T>  ) = fun f -> x
         static member instance (_:DistinctBy, x:seq<'T>  , _:seq<'T> ) = fun f -> Seq.distinctBy f x
         static member instance (_:DistinctBy, x:list<'T> , _:list<'T>) = fun f -> Seq.distinctBy f x |> Seq.toList
-        static member instance (_:DistinctBy, x:'T []    , _:'T []   ) = fun f -> Seq.distinctBy f x |> Seq.toArray
-
-    type Exists = Exists with
-        static member instance (_:Exists, x:Id<'T>   , _:bool) = fun f -> f x.getValue :bool
-        static member instance (_:Exists, x:seq<'T>  , _:bool) = fun f -> Seq.exists   f x
-        static member instance (_:Exists, x:list<'T> , _:bool) = fun f -> List.exists  f x
-        static member instance (_:Exists, x:'T []    , _:bool) = fun f -> Array.exists f x
-
-    type Find = Find with
-        static member instance (_:Find, x:Id<'T>   , _:'T) = fun f -> List.find  f [x.getValue]
-        static member instance (_:Find, x:seq<'T>  , _:'T) = fun f -> Seq.find   f x
-        static member instance (_:Find, x:list<'T> , _:'T) = fun f -> List.find  f x
-        static member instance (_:Find, x:'T []    , _:'T) = fun f -> Array.find f x
+        static member instance (_:DistinctBy, x:'T []    , _:'T []   ) = fun f -> Seq.distinctBy f x |> Seq.toArray 
 
     type GroupBy = GroupBy with
         static member instance (GroupBy, x:Id<'a>  , _) = fun f -> let a = Id.run x in Id (f a, x)
@@ -139,12 +127,6 @@ module Collection =
         static member instance (_:MinBy, x:list<'T>, _:'T) = fun f -> List.minBy  f x
         static member instance (_:MinBy, x:'T []   , _:'T) = fun f -> Array.minBy f x
 
-    type Pick = Pick with
-        static member instance (_:Pick, x:Id<'T>  , _:'U) = fun (f:_->'U option) -> List.pick  f [x.getValue]
-        static member instance (_:Pick, x:seq<'T> , _:'U) = fun (f:_->'U option) -> Seq.pick   f x
-        static member instance (_:Pick, x:list<'T>, _:'U) = fun (f:_->'U option) -> List.pick  f x
-        static member instance (_:Pick, x:'T []   , _:'U) = fun (f:_->'U option) -> Array.pick f x
-
     type Rev = Rev with
         static member instance (_:Rev, x:Id<'a>  , _:Id<'a>  ) = fun () -> x
         static member instance (_:Rev, x:seq<'a> , _:seq<'a> ) = fun () -> x |> Seq.toArray |> Array.rev |> Array.toSeq
@@ -168,18 +150,6 @@ module Collection =
         static member instance (SortBy, x:seq<'a> , _) = fun f -> Seq.sortBy   f x
         static member instance (SortBy, x:list<'a>, _) = fun f -> List.sortBy  f x
         static member instance (SortBy, x:'a []   , _) = fun f -> Array.sortBy f x
-
-    type TryFind = TryFind with
-        static member instance (_:TryFind, x:Id<'T>  , _:'T option) = fun f -> List.tryFind  f [x.getValue]
-        static member instance (_:TryFind, x:seq<'T> , _:'T option) = fun f -> Seq.tryFind   f x
-        static member instance (_:TryFind, x:list<'T>, _:'T option) = fun f -> List.tryFind  f x
-        static member instance (_:TryFind, x:'T []   , _:'T option) = fun f -> Array.tryFind f x
-
-    type TryPick = TryPick with
-        static member instance (_:TryPick, x:Id<'T>  , _:'U option) = fun (f:_->'U option) -> invalidOp "TryPick on ID" :'U option
-        static member instance (_:TryPick, x:seq<'T> , _:'U option) = fun (f:_->'U option) -> Seq.tryPick   f x
-        static member instance (_:TryPick, x:list<'T>, _:'U option) = fun (f:_->'U option) -> List.tryPick  f x
-        static member instance (_:TryPick, x:'T []   , _:'U option) = fun (f:_->'U option) -> Array.tryPick f x
         
     type Zip = Zip with
         static member instance (_:Zip, x:Id<'T>  , y:Id<'U>  , _:Id<'T*'U>  ) = fun () -> Id.create(x.getValue,y.getValue)
