@@ -78,20 +78,23 @@ module Converter =
     let inline tryParse (value:string) = Inline.instance TryParse value
 
 
-    type Parse = Parse with
-        static member inline instance (Parse, _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
+    type Parse() =
+        inherit Typ1()
+        static member inline instance (_:Typ1 , _:^R) = fun (x:string) -> (^R: (static member Parse: _ -> ^R) x)
+        static member inline instance (_:Parse, _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
 #if NOTNET35
-        static member        instance (Parse, _:'T when 'T : enum<_>) = fun x ->
+        static member        instance (_:Parse, _:'T when 'T : enum<_>) = fun x ->
             (match Enum.TryParse(x) with
              | (true, v) -> v
              | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")
             ):'enum
 #endif
-        static member instance (Parse, _:bool         ) = fun x -> Boolean.Parse(x)
-        static member instance (Parse, _:char         ) = fun x -> Char   .Parse(x)
-        static member instance (Parse, _:string       ) = id :string->_
-        static member instance (Parse, _:StringBuilder) = fun x -> new StringBuilder(x:string)
+        static member instance (_:Parse, _:bool         ) = fun x -> Boolean.Parse(x)
+        static member instance (_:Parse, _:char         ) = fun x -> Char   .Parse(x)
+        static member instance (_:Parse, _:string       ) = id :string->_
+        static member instance (_:Parse, _:StringBuilder) = fun x -> new StringBuilder(x:string)
 
+    let Parse = Parse()
     let inline internal parse (value:string) = Inline.instance Parse value
 
 
@@ -131,7 +134,7 @@ module Converter =
     let inline internal seqToString (k:Globalization.CultureInfo) sepOpen sepClose x (b: StringBuilder) =
         let inline append (s:string) = b.Append s |> ignore
         append sepOpen
-        let withSemiColons = Seq.intersperse "; " (Seq.map (toString k) x)
+        let withSemiColons = Collection.intersperse "; " (Seq.map (toString k) x)
         Seq.iter append withSemiColons
         append sepClose
         toString k b

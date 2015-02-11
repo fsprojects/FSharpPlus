@@ -9,6 +9,7 @@ let r102 = tryParse "102" : string option
 let rMTS = [tryParse "Monday" ; Some DayOfWeek.Thursday; Some DayOfWeek.Saturday]
 let r103 = tryParse "103" : Text.StringBuilder option
 
+let r109 = parse "10.0.9.1" : Net.IPAddress
 let r111 = parse "true" && true
 let rMTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
 let r110 = parse "10" + fromBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
