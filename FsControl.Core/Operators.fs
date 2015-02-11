@@ -155,6 +155,7 @@ module Operators =
     let inline skip (n:int) x = Inline.instance (Collection.Skip, x) n
     let inline take (n:int) x = Inline.instance (Collection.Take, x) n
     let inline fromList (value :list<'t>) = Inline.instance  Collection.FromList value
+    let inline fromSeq  (value :seq<'t> ) = Inline.instance  Collection.FromSeq  value
     let inline groupBy    (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupBy   , x) f)
     let inline groupAdjBy (f:'a->'b) (x:'t) = (Inline.instance (Collection.GroupAdjBy, x) f)
     let inline sortBy     (f:'a->'b) (x:'t) = (Inline.instance (Collection.SortBy    , x) f)
@@ -165,6 +166,7 @@ module Operators =
     let inline distinctBy (projection:'T->'Key) (source:'Collection'T)        = Inline.instance (Collection.DistinctBy, source) projection      :'Collection'T
     
     let inline head                             (source:'Collection'T)        = extract source                                                  :'T
+    let inline intersperse      (sep:'T)        (source:'Collection'T)        = Inline.instance (Collection.Intersperse, source) sep            :'Collection'T
     let inline iter       (action:'T->unit)     (source:'Collection'T)        = map_ action source
     let inline iteri (action:int->'T->unit)     (source:'Collection'T)        = Inline.instance (Collection.Iteri,  source) action              :unit
     let inline length (source:'Collection'T)                                  = Inline.instance (Collection.Length, source) ()                  :int

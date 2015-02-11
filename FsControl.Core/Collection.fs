@@ -49,6 +49,28 @@ module Collection =
 
     let inline internal fromList (value:list<'t>)  = Inline.instance FromList value
 
+    type FromSeq() =
+        inherit Typ1()
+
+#if NOTNET35
+        static member instance (_:FromSeq, _:string        ) = fun (x:seq<char>) -> String.Join("", Array.ofSeq x)
+        static member instance (_:FromSeq, _:StringBuilder ) = fun (x:seq<char>) -> new StringBuilder(String.Join("", Array.ofSeq x))
+#else
+        static member instance (_:FromSeq, _:string        ) = fun (x:seq<char>) -> String.Join("",  x |> Array.ofSeq |> Array.map string)
+        static member instance (_:FromSeq, _:StringBuilder ) = fun (x:seq<char>) -> new StringBuilder(String.Join("", x |> Array.ofSeq |> Array.map string))
+#endif
+        static member instance (_:FromSeq, _:'a []         ) = Array.ofSeq<'a>
+        static member instance (_:FromSeq, _:'a ResizeArray) = fun (x:seq<'a>)   -> ResizeArray x
+        static member instance (_:FromSeq, _:list<'a>      ) = List.ofSeq<'a>
+        static member instance (_:FromSeq, _:Set<'a>       ) = Set.ofSeq<'a>
+        static member instance (_:FromSeq, _:seq<'a>       ) = id<seq<'a>>
+        static member instance (_:FromSeq, _:'a Id         ) = fun (x:seq<'a>)   -> Id.create (Seq.head x)
+
+    let FromSeq = FromSeq()
+    let inline internal fromSeq (value:seq<'t>)  = Inline.instance FromSeq value
+
+
+
     type ToSeq = ToSeq with
         static member instance (_:ToSeq, x:#seq<'T>  , _:seq<'T>) = fun () -> x :> seq<_>
         static member instance (_:ToSeq, x:Id<'T>    , _:seq<'T>) = fun () -> Seq.singleton x.getValue
@@ -84,6 +106,24 @@ module Collection =
         static member instance (GroupAdjBy, x:seq<'a> , _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
         static member instance (GroupAdjBy, x:list<'a>, _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
         static member instance (GroupAdjBy, x:'a []   , _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
+
+
+    // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
+    let inline internal intersperse sep list = seq {
+        let notFirst = ref false
+        for element in list do 
+            if !notFirst then yield sep
+            yield element
+            notFirst := true}
+
+    type Intersperse() =
+        static member instance (_:Intersperse, x:Id<'T>  , _:Id<'T>  ) = fun (e:'T) -> x
+        static member instance (_:Intersperse, x:seq<'T> , _:seq<'T> ) = fun (e:'T) -> intersperse e x
+        static member instance (_:Intersperse, x:list<'T>, _:list<'T>) = fun (e:'T) -> x |> List.toSeq  |> intersperse e |> Seq.toList
+        static member instance (_:Intersperse, x:'T []   , _:'T []   ) = fun (e:'T) -> x |> Array.toSeq |> intersperse e |> Seq.toArray
+    
+    let Intersperse = Intersperse()
+    
 
     type Iteri = Iteri with
         static member instance (_:Iteri, x:Id<'T>   , _:unit) = fun (f:int->'T->unit) -> f 0 x.getValue

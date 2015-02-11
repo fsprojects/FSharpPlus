@@ -75,8 +75,8 @@
     <Compile Include="WriterT.fs" />
     <Compile Include="StateT.fs" />
     <Compile Include="ErrorT.fs" />
-    <Compile Include="Converter.fs" />
     <Compile Include="Collection.fs" />
+    <Compile Include="Converter.fs" />
     <Compile Include="Operators.fs" />
     <None Include="Samples\Functions.fsx" />
     <None Include="Samples\Haskell.fsx" />
