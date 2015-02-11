@@ -59,11 +59,9 @@ module Foldable =
     let inline internal foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
 
 
-    type FoldlDefault() =
-        static member inline instance (_:FoldlDefault, x:#obj , _) = fun (f,z) -> DefaultImpl.FoldlFromFoldMap f z x
-
     type Foldl() =
-        inherit FoldlDefault()
+        inherit Typ1()
+        static member inline instance (_:Typ1, x    , _) = fun (f,z) -> DefaultImpl.FoldlFromFoldMap f z x
         static member instance (_:Foldl, x:option<_>, _) = fun (f,z) -> match x with Some t ->       f z t | _ -> z
         static member instance (_:Foldl, x:list<_>  , _) = fun (f,z) -> List.fold                    f z x
         static member instance (_:Foldl, x:Set<_>   , _) = fun (f,z) -> Set.fold                     f z x
