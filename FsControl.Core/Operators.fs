@@ -87,8 +87,8 @@ module Operators =
 
 
     // Foldable
-    let inline foldr (f:'a->'b->'b) (z:'b) foldable'a : 'b = Inline.instance (Foldable.Foldr, foldable'a) (f,z)
-    let inline foldl (f:'a->'b->'a) (z:'a) foldable'b : 'a = Inline.instance (Foldable.Foldl, foldable'b) (f,z)
+    let inline foldBack (folder:'T->'State->'T) (foldable:'Foldable'T) (state:'State) :'State = Inline.instance (Foldable.Foldr, foldable) (folder, state)
+    let inline fold     (folder:'T->'State->'T) (state:'State) (foldable:'Foldable'T) :'State = Inline.instance (Foldable.Foldl, foldable) (folder, state)
     let inline foldMap (f:'a->'Monoid) (x:'Foldable'a) :'Monoid = Inline.instance (Foldable.FoldMap, x) f
     let inline toList  value :'t list = Inline.instance (Foldable.ToList , value) ()
     let inline toArray value :'t []   = Inline.instance (Foldable.ToArray, value) ()

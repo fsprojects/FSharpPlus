@@ -32,9 +32,9 @@ type Tree<'a> =
 
     
 let tree = Node (Node (Leaf 1, 6, Leaf 3), 2 , Leaf 9)
-let res21  = foldr   (+) 0   tree
+let res21  = foldBack   (+) tree 0
 // Uses the default method:
-let res21' = foldl   (+) 0   tree      
+let res21' = fold   (+) 0   tree      
 let resTr  = exists ((=) 3) tree
 let resS3  = tryPick (fun x -> if x = 3 then Some x else None) tree
 
@@ -207,12 +207,12 @@ let tails' = duplicate stack
 
 // Test foldable
 
-let r10  = foldr (+) 0 (seq [1;2;3;4])
+let r10  = foldBack (+) (seq [1;2;3;4]) 0
 let r323 = toList (seq [3;2;3])
 let r03  = filter ((=) 3) (seq [1;2;3])
 
 // This should not compile ??? (but it does)
-let r10' = foldr (+) 0 stack
+let r10' = foldBack (+) stack 0
 let r123 = toList stack
 
 // This should not compile
