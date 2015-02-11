@@ -107,4 +107,4 @@ Monoids:
 
 Foldables:
 
-    static member FoldBack (folder:'T->'State->'T, source:MyFoldable<'T>, state:'State) = {your FoldBack impl.} : 'State
+    static member FoldBack (folder:'T->'State->'State, source:MyFoldable<'T>, state:'State) = {your FoldBack impl.} : 'State
