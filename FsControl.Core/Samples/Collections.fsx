@@ -49,9 +49,9 @@ type ZipList<'s> = ZipList of 's seq with
     static member inline Mconcat (x:list<ZipList<'a>>) = printfn "ZipList mconcat optimized"; List.foldBack mappend x (mempty()):ZipList<'a>
 
 type WrappedList<'s> = WrappedList of 's list with
-    static member instance (_:Applicative.Pure, _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
-    static member instance (_:Monoid.Mappend, WrappedList l, _) = fun (WrappedList x) -> WrappedList (l @ x)
-    static member instance (_:Monoid.Mempty  , _:WrappedList<'a>   ) = fun () -> WrappedList List.empty
+    static member Return   (_:Applicative.Return, _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
+    static member Mappend  (_:Monoid.Mappend, WrappedList l, _) = fun (WrappedList x) -> WrappedList (l @ x)
+    static member Mempty   (_:Monoid.Mempty  , _:WrappedList<'a>   ) = fun () -> WrappedList List.empty
     static member FoldBack (f, WrappedList x, z) = List.foldBack f x z
 
 let wl = WrappedList  [2..10]
@@ -173,7 +173,7 @@ let singletonSeq : _ seq  = result 1
 
 
 // This should not compile (but it does)
-let sortedStack = sortBy  string    stack
+//let sortedStack = sortBy  string    stack  <- cool, now it fails
 let mappedstack = map string stack
 let stackGroup  = groupBy ((%)/> 2) stack
 
@@ -199,7 +199,7 @@ let lst'  = extend extract lst
 
 // This should ideally not compile (but it does, because stack is also a seq)
 let elem3  = extract   stack
-let tails' = duplicate stack
+// let tails' = duplicate stack  <- cool, now it fails
 
 // This should not compile
 // let stk'  = extend extract stack

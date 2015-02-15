@@ -45,8 +45,8 @@ open FsControl.Core.TypeMethods.Real
 open FsControl.Core.TypeMethods.RealFrac
 open FsControl.Core.Types.Ratio
 
-let inline fromInteger  (x:Integer)   :'Num    = Inline.instance FromBigInteger x
-let inline toInteger    (x:'Integral) :Integer = Inline.instance (ToBigInteger, x) ()
+let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInteger x
+let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInteger   x
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
@@ -56,15 +56,15 @@ module NumericLiteralG =
     let inline FromInt64  (i:int64 ) = fromIntegral i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
 
-let inline abs    (x:'Num) :'Num = Inline.instance (Abs   , x) ()
-let inline signum (x:'Num) :'Num = Inline.instance (Signum, x) ()
+let inline abs    (x:'Num) :'Num = FsControl.Operators.abs    x
+let inline signum (x:'Num) :'Num = FsControl.Operators.signum x
 
 let inline (+) (a:'Num) (b:'Num) :'Num = a + b
 let inline (-) (a:'Num) (b:'Num) :'Num = a - b
 let inline (*) (a:'Num) (b:'Num) :'Num = a * b
 
-let inline negate (x:'Num) :'Num = Inline.instance (Negate, x) ()
-let inline (~-)   (x:'Num) :'Num = Inline.instance (Negate, x) ()
+let inline negate (x:'Num) :'Num = FsControl.Operators.negate x
+let inline (~-)   (x:'Num) :'Num = FsControl.Operators.negate x
 
 let inline whenIntegral a = let _ = if false then toInteger a else 0I in ()
 
@@ -75,7 +75,7 @@ let inline div (a:'Integral) b :'Integral =
 
 let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
 let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
-let inline quotRem a b :'Integral * 'Integral = whenIntegral a; Inline.instance (DivRem, a, b) ()
+let inline quotRem a b :'Integral * 'Integral = whenIntegral a; FsControl.Operators.divRem a b
 let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
 let inline divMod D d :'Integral * 'Integral =
     let q, r = quotRem D d
@@ -108,7 +108,7 @@ let inline ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
     Ratio (quot a gcd, quot b gcd)
 
 let inline (%) (a:'Integral) (b:'Integral) :Ratio<'Integral> = a </ratio/> b
-let inline fromRational (x:Rational) :'Fractional = Inline.instance FromRational x
+let inline fromRational (x:Rational) :'Fractional = FsControl.Operators.fromRational x
 let inline whenFractional a = let _ = if false then fromRational (1I % 1I) else a in ()
 let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = whenFractional a; a / b
 let inline recip x :'Fractional = 1G / x
@@ -121,12 +121,12 @@ let inline ( **^ ) (x:'Num) (n:'Integral)  =
 let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
 
 let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
-    let (a, b:'RealFrac) = Inline.instance (ProperFraction, x) ()
+    let (a, b:'RealFrac) = FsControl.Operators.properFraction x
     (fromIntegral a, b)
 
 let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
-let inline toRational (x:'Real) :Rational = Inline.instance (ToRational, x) ()
-let inline pi() :'Floating = Inline.instance Pi ()
+let inline toRational (x:'Real) :Rational = FsControl.Operators.toRational x
+let inline pi() :'Floating = FsControl.Operators.pi ()
 
 let inline ( **) a (b:'Floating) :'Floating = a ** b
 let inline sqrt    (x:'Floating) :'Floating = sqrt x
@@ -159,9 +159,9 @@ let resCmplx:System.Numerics.Complex * _ = quadratic 2G -3G 9G
 // Monads
 open FsControl.Core.TypeMethods.Applicative
 open FsControl.Core.TypeMethods.Monad
-let inline return' x = Inline.instance Pure x
-let inline (>>=) x (f:_->'R) : 'R = Inline.instance (Bind, x) f
-let inline join (x:'Monad'Monad'a) : 'Monad'a = Inline.instance (Join, x) ()
+let inline return' x = FsControl.Operators.result x
+let inline (>>=) x (f:_->'R) : 'R = FsControl.Operators.(>>=) x f
+let inline join (x:'Monad'Monad'a) : 'Monad'a = FsControl.Operators.join x
 
 let inline sequence ms =
     let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (return' :list<'a> -> 'M) (List.Cons(x,xs))
@@ -222,7 +222,7 @@ let action = do' {
 
 // Functors
 open FsControl.Core.TypeMethods.Functor
-let inline fmap   f x = Inline.instance (Map, x) f
+let inline fmap   f x = FsControl.Operators.map f x
 
 // Test Functors
 let times2,minus3 = (*) 2, (-)/> 3
@@ -244,18 +244,18 @@ type Tree<'a> =
         | Tree(x,t1,t2) -> Tree(f x, Tree.map f t1, Tree.map f t2)
 
 // add ìnstance for Functor class
-    static member instance (_Functor:Map, x:Tree<_>, _) = fun f -> Tree.map f x
+    static member Map (_:Map, x:Tree<_>, _) = fun f -> Tree.map f x
 
-let myTree = Tree(6, Tree(2, Leaf(1), Leaf(3)), Leaf(9))
+let myTree = Tree(6, Tree(2, Leaf 1, Leaf 3), Leaf 9)
 let mappedTree = fmap fTimes2minus3 myTree
 
 
 // Comonads
 open FsControl.Core.TypeMethods.Comonad
 
-let inline internal extend g s = Inline.instance (Extend, s) g
-let inline internal duplicate x = Inline.instance (Duplicate, x) ()
-let inline internal (=>>)  s g = fmap g (duplicate s)
+let inline internal extend g s  = FsControl.Operators.extend g s
+let inline internal duplicate x = FsControl.Operators.duplicate x
+let inline internal (=>>)  s g  = fmap g (duplicate s)
 
 let ct1 = duplicate [1;2;3;4] // val it : List<List<int>> = [[1; 2; 3; 4]; [2; 3; 4]; [3; 4]; [4]]
 let ct2 = duplicate ("a", 10) // val it : string * (string * int) = ("a", ("a", 10))
@@ -276,8 +276,8 @@ open FsControl.Core.Types.Dual
 open FsControl.Core.Types.Endo
 
 type Ordering = LT|EQ|GT with
-    static member        instance (_Monoid:Mempty, _:Ordering ) = fun () -> EQ
-    static member        instance (_Monoid:Mappend, x:Ordering , _) = fun y -> 
+    static member        Mempty  (_:Mempty , _:Ordering) = fun () -> EQ
+    static member        Mappend (_:Mappend, x:Ordering, _) = fun y -> 
         match (x,y) with
         | (LT,_) -> LT
         | (EQ,a) -> a
@@ -297,9 +297,9 @@ type Product<'a> = Product of 'a with
     static member inline Mempty() = Product 1G
     static member inline Mappend (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
 
-let inline mempty() = Inline.instance Mempty ()
-let inline mappend (x:'a) (y:'a): 'a = Inline.instance (Mappend, x) y
-let inline mconcat (x:list<'a>) : 'a = Inline.instance (Mconcat, x) ()
+let inline mempty() = FsControl.Operators.mempty ()
+let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.mappend x y
+let inline mconcat (x:list<'a>) : 'a = FsControl.Operators.mconcat x
 
 
 // Test Monoids
@@ -330,8 +330,8 @@ let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
 // Monad Plus
 
-let inline mzero () = Inline.instance Zero ()
-let inline mplus (x:'a) (y:'a) : 'a = Inline.instance (Plus, x) y
+let inline mzero () = FsControl.Operators.zero ()
+let inline mplus (x:'a) (y:'a) : 'a = FsControl.Operators.(<|>) x y
 let inline guard x = if x then return' () else mzero()
 type DoPlusNotationBuilder() =
     member inline b.Return(x) = return' x
@@ -371,21 +371,21 @@ open FsControl.Core.TypeMethods.Arrow
 open FsControl.Core.TypeMethods.ArrowChoice
 open FsControl.Core.TypeMethods.ArrowApply
 
-let inline id'() = Inline.instance Id ()
-let inline (<<<) f g = Inline.instance (Comp, f) g
-let inline (>>>) g f = Inline.instance (Comp, f) g
-let inline arr   f = Inline.instance  Arr    f
-let inline first f = Inline.instance (First, f) ()
-let inline second f = Inline.instance (Second, f) ()
+let inline id'() = FsControl.Operators.catId ()
+let inline (<<<) f g = FsControl.Operators.(<<<<) f g
+let inline (>>>) f g = FsControl.Operators.(>>>>) f g
+let inline arr   f = FsControl.Operators.arr    f
+let inline first  f = FsControl.Operators.first f
+let inline second f = FsControl.Operators.second f
 let inline ( *** ) f g = first f >>> second g
-let inline ( &&& ) f g = arr (fun b -> (b,b)) >>> f *** g
-let inline (|||) f g = Inline.instance AcEither (f, g)
-let inline (+++) f g = Inline.instance AcMerge (f, g)
-let inline left f = Inline.instance (AcLeft, f) ()
-let inline right f = Inline.instance (AcRight, f) ()
-let inline app() = Inline.instance Apply ()
-let inline zeroArrow() = Inline.instance  Functor.Zero ()
-let inline (<+>)   f g = Inline.instance (Functor.Plus, f) g
+let inline ( &&& ) f g = arr (fun b -> (b, b)) >>> f *** g
+let inline (|||) f g = FsControl.Operators.(||||) f g
+let inline (+++) f g = FsControl.Operators.(++++) f g
+let inline left  f = FsControl.Operators.left  f
+let inline right f = FsControl.Operators.right f
+let inline app() = FsControl.Operators.arrAp ()
+let inline zeroArrow() = FsControl.Operators.zero ()
+let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 let runKleisli (Kleisli f) = f
 
 // Test Arrows
@@ -419,8 +419,8 @@ let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 // Applicative functors
 open FsControl.Core.TypeMethods.Applicative
 
-let inline pure' x   = Inline.instance Pure x
-let inline (<*>) x y = Inline.instance (Apply, x, y) ()
+let inline pure' x   = FsControl.Operators.result x
+let inline (<*>) x y = FsControl.Operators.(<*>) x y
 let inline empty()   = Inline.instance Functor.Zero ()
 let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Functor.Plus, x) y
 
@@ -491,9 +491,9 @@ let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.Foldable
 
-let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldr, x) (f,z)
-let inline foldl (f: 'a -> 'b -> 'b) (z:'b) x :'b = Inline.instance (Foldl, x) (f,z)
-let inline foldMap f x = Inline.instance (FoldMap, x) f
+let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = FsControl.Operators.foldBack f x z
+let inline foldl (f: 'b -> 'a -> 'b) (z:'b) x :'b = FsControl.Operators.fold     f z x
+let inline foldMap (f:'T->'Monoid) (x:'Foldable'T) :'Monoid = FsControl.Operators.foldMap f x
 
 // Test Foldable
 let resGt = foldMap (compare' 2) [1;2;3]
@@ -506,14 +506,14 @@ module FoldableTree =
         | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
         // add instance for Foldable class
-        static member inline instance (_:Foldable.FoldMap, t:Tree<_>, _) =
+        static member inline FoldMap (_:Foldable.FoldMap, t:Tree<_>, _) =
             let rec _foldMap x f =
                 match x with
                 | Empty        -> mempty()
                 | Leaf n       -> f n
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
             _foldMap t
-        static member inline instance (_:Foldr, x:Tree<_>, _) = fun (f,z) -> DefaultImpl.FoldrFromFoldMap f z x
+        static member inline Foldr (_:Foldr, x:Tree<_>, _) = fun (f,z) -> DefaultImpl.FoldrFromFoldMap f z x
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree
@@ -524,8 +524,8 @@ module FoldableTree =
 
 // Traversable
 open FsControl.Core.TypeMethods.Traversable
-let inline traverse f t = Inline.instance (Traverse , t) f
-let inline sequenceA  t = Inline.instance (SequenceA, t) ()
+let inline traverse f t = FsControl.Operators.traverse f t
+let inline sequenceA  t = FsControl.Operators.sequenceA t
 
 // Test Traversable
 let f x = if x < 200 then [3 - x] else []
@@ -651,16 +651,16 @@ let runMaybeT = OptionT.run
 let inline mapMaybeT f x = OptionT.map f x
 let runListT  = ListT.run
 
-let inline lift (x:'ma) = Inline.instance Lift x
-let inline liftIO (x: Async<'a>) = Inline.instance LiftAsync x
-let inline callCC f = Inline.instance CallCC f
-let inline get() = Inline.instance Get ()
-let inline put x = Inline.instance Put x
-let inline ask()     = Inline.instance  Ask ()
-let inline local f m = Inline.instance (Local, m) f
-let inline tell   x = Inline.instance  Tell x
-let inline listen m = Inline.instance (Listen, m) ()
-let inline pass   m = Inline.instance (Pass  , m) ()
+let inline lift (x:'ma) = FsControl.Operators.lift x
+let inline liftIO (x: Async<'a>) = FsControl.Operators.liftAsync x
+let inline callCC f = FsControl.Operators.callCC f
+let inline get() = FsControl.Operators.get()
+let inline put x = FsControl.Operators.put x
+let inline ask()     = FsControl.Operators.ask ()
+let inline local f m = FsControl.Operators.local f m
+let inline tell   x = FsControl.Operators.tell x
+let inline listen m = FsControl.Operators.listen m
+let inline pass   m = FsControl.Operators.pass   m
 
 // Test Monad Transformers
 let maybeT4x6xN = fmap ((+) 2) (MaybeT [Just 2; Just 4; Nothing])
@@ -816,8 +816,8 @@ let res4Layers'  = liftIO                 getLine : ListT<MaybeT<WriterT<IO<_ * 
 
 // MonadError
 open FsControl.Core.TypeMethods.MonadError
-let inline throwError x   = Inline.instance  ThrowError x
-let inline catchError v h = Inline.instance (CatchError, v) h
+let inline throwError x   = FsControl.Operators.throw x
+let inline catchError v h = FsControl.Operators.catch v h
 
 // Test MonadError
 let err          = throwError "Invalid Value" : MaybeT<Either<_,Maybe<int>>>
