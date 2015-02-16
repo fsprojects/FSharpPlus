@@ -287,7 +287,7 @@ module Functor =
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
         instance Zero ()
 
-    let inline internal plus (x:'Functor'T) (y:'Functor'T) :'Functor'T =
+    let inline internal (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Plus: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r        
         instance (Plus, x) y
@@ -296,7 +296,7 @@ module Functor =
         static member inline Zero (_:Zero, _:Kleisli<_,_>) = fun () -> Kleisli (fun _ -> zero ())
     
     type Plus with
-        static member inline Plus (_:Plus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> plus (f x) (g x))
+        static member inline Plus (_:Plus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> f x <|> g x)
 
    
     let inline internal sequence ms =

@@ -11,8 +11,8 @@ module Operators =
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a ,b , Unchecked.defaultof<'r>) x :'r
         instance (Functor.Map, x) f
 
-    let inline (<!>)  (f:'a->'b) (x:'Functor'a) :'Functor'b = map f x
-    let inline (|>>)  (x:'Functor'a) (f:'a->'b) :'Functor'b = map f x
+    let inline (<!>)  (f:'T->'U) (x:'Functor'T) :'Functor'U = map f x
+    let inline (|>>)  (x:'Functor'T) (f:'T->'U) :'Functor'U = map f x
 
     let inline map_   (action :'T->unit) (source :'Functor'T) =
         let inline instance_3 (a:^a,b:^b,c:^c) =  ((^a or ^b or ^c) : (static member Map: _*_*_ -> _) a, b, c)
@@ -32,7 +32,7 @@ module Operators =
         let inline instance (a:'a, b:'b, c:'c) = fun (x:'x) -> instance_4(a,b,c, Unchecked.defaultof<'r>) x : 'r
         instance (Applicative.Apply, x, y) () : 'Applicative'U
 
-    let inline liftA2 (f:'a->'b->'c) (a:'Applicative'a) (b:'Applicative'b) :'Applicative'c = f <!> a <*> b
+    let inline liftA2 (f:'T->'U->'V) (a:'Applicative'T) (b:'Applicative'U) :'Applicative'V = f <!> a <*> b
     let inline (  *>) (x:'Applicative'a) :'Applicative'b->'Applicative'b = x |> liftA2 (fun   _ -> id)
     let inline (<*  ) (x:'Applicative'a) :'Applicative'b->'Applicative'a = x |> liftA2 (fun k _ -> k )
     let inline (<**>) (x:'Applicative'a): 'Applicative'a_'b->'Applicative'b = x |> liftA2 (|>)
@@ -49,7 +49,9 @@ module Operators =
         let inline instance_3 (a:^a,b:^b,c:^c) = ((^a or ^b or ^c) : (static member Bind: ^a* ^b* ^c -> _) (a,b,c))
         instance_3 (Monad.Bind, x, Unchecked.defaultof<'Monad'U>) f
 
-    let inline join (x:'Monad'Monad'a) :'Monad'a =  x >>= id // should rather invoke Join?
+    let inline join (x:'Monad'Monad'T) :'Monad'T =
+        let inline instance_3 (a:^a,b:^b,c:^c) = ((^a or ^b or ^c) : (static member Join: ^a* ^b* ^c -> _) (a,b,c))
+        instance_3 (Monad.Join, x, Unchecked.defaultof<'Monad'T>) ()
 
 
     // Monoid -----------------------------------------------------------------

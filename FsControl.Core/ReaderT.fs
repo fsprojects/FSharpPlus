@@ -33,7 +33,7 @@ type ReaderT<'R,'Ma> with
         ReaderT.bind f x
 
     static member inline Zero (_:Functor.Zero, _:ReaderT<_,_>   ) = fun ()          -> ReaderT <| fun _ -> zero()
-    static member inline Plus (_:Functor.Plus,   ReaderT m   ,_ ) = fun (ReaderT n) -> ReaderT <| fun r -> plus (m r) (n r)
+    static member inline Plus (_:Functor.Plus,   ReaderT m   ,_ ) = fun (ReaderT n) -> ReaderT <| fun r -> m r <|> n r
 
     static member inline Lift (_:MonadTrans.Lift, _:ReaderT<'r,'ma>) = fun m -> (ReaderT <| fun _ -> m) : ReaderT<'r,'ma>
 

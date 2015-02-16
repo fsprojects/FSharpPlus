@@ -131,10 +131,11 @@ module Foldable =
     let Exists = Exists()
 
 
+    open Functor
+
     type Find() =
         inherit Typ1()
         static member inline Find (_:Typ1, x   , _:'T) = fun f ->
-            let (<|>) a b = Functor.plus a b 
             let r = foldr (fun x b -> (let r = f x in if r then Some x else None) <|> b) None x
             (match r with Some r -> r | _ -> raise (Collections.Generic.KeyNotFoundException())) :'T
         static member Find (_:Find, x:Id<'T>   , _:'T) = fun f -> List.find  f [x.getValue]
@@ -144,10 +145,10 @@ module Foldable =
 
     let Find = Find()
 
+
     type TryFind() =
         inherit Typ1()
         static member inline TryFind (_:Typ1, x   , _:'T option) = fun f ->
-            let (<|>) a b = Functor.plus a b
             foldr (fun x b -> (let r = f x in if r then Some x else None) <|> b) None x  :'T option
         static member TryFind (_:TryFind, x:Id<'T>  , _:'T option) = fun f -> List.tryFind  f [x.getValue]
         static member TryFind (_:TryFind, x:seq<'T> , _:'T option) = fun f -> Seq.tryFind   f x
@@ -160,7 +161,6 @@ module Foldable =
     type Pick() =
         inherit Typ1()
         static member inline Pick (_:Typ1, x  , _:'U) = fun (f:_->'U option) ->
-            let (<|>) a b = Functor.plus a b 
             let r = foldr (fun x b -> f x <|> b) None x
             (match r with Some r -> r | _ -> raise (Collections.Generic.KeyNotFoundException())) :'U
         static member Pick (_:Pick, x:Id<'T>  , _:'U) = fun (f:_->'U option) -> List.pick  f [x.getValue]
@@ -173,9 +173,7 @@ module Foldable =
 
     type TryPick() =
         inherit Typ1()
-        static member inline TryPick (_:Typ1, x     , _:'U option) = fun (f:_->'U option) ->
-            let (<|>) a b = Functor.plus a b 
-            foldr (fun x b -> f x <|> b) None x  :'U option
+        static member inline TryPick (_:Typ1, x     , _:'U option) = fun (f:_->'U option) -> foldr (fun x b -> f x <|> b) None x  :'U option
         static member TryPick (_:TryPick, x:Id<'T>  , _:'U option) = fun (f:_->'U option) -> invalidOp "TryPick on ID" :'U option
         static member TryPick (_:TryPick, x:seq<'T> , _:'U option) = fun (f:_->'U option) -> Seq.tryPick   f x
         static member TryPick (_:TryPick, x:list<'T>, _:'U option) = fun (f:_->'U option) -> List.tryPick  f x

@@ -28,7 +28,7 @@ type StateT<'S,'MaS> with
         StateT.bind f x
 
     static member inline Zero (_:Functor.Zero, _:StateT<_,_>    ) = fun ()         -> StateT <| fun _ -> zero()
-    static member inline Plus (_:Functor.Plus,   StateT m,     _) = fun (StateT n) -> StateT <| fun s -> plus (m s) (n s)
+    static member inline Plus (_:Functor.Plus,   StateT m,     _) = fun (StateT n) -> StateT <| fun s -> m s <|> n s
 
     static member inline Lift (_:MonadTrans.Lift, _:StateT<'s,'mas>) = fun (m:'ma) -> (StateT <| fun s -> m >>= fun a -> result (a,s)):StateT<'s,'mas>
 

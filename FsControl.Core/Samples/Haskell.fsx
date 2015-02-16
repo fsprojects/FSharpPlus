@@ -421,8 +421,8 @@ open FsControl.Core.TypeMethods.Applicative
 
 let inline pure' x   = FsControl.Operators.result x
 let inline (<*>) x y = FsControl.Operators.(<*>) x y
-let inline empty()   = Inline.instance Functor.Zero ()
-let inline (<|>) (x:'a) (y:'a) :'a = Inline.instance (Functor.Plus, x) y
+let inline empty()   = FsControl.Operators.zero ()   // todo: add an example.
+let inline (<|>) x y = FsControl.Operators.(<|>) x y // todo: add an example.
 
 
 let inline (<<|>) f a   = fmap f a

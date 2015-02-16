@@ -48,7 +48,7 @@ type WriterT<'WMa> with
         WriterT.bind f x
 
     static member inline Zero (_:Functor.Zero, _:WriterT<_>  ) = fun ()          -> WriterT (zero())
-    static member inline Plus (_:Functor.Plus,   WriterT m, _) = fun (WriterT n) -> WriterT (plus m n)
+    static member inline Plus (_:Functor.Plus,   WriterT m, _) = fun (WriterT n) -> WriterT (m <|> n)
 
     static member inline Tell   (_:MonadWriter.Tell, _:WriterT<_> ) = fun w -> WriterT (result ((), w))
     static member inline Listen (_:MonadWriter.Listen, WriterT m, _:WriterT<_>) = WriterT <| do'() {
