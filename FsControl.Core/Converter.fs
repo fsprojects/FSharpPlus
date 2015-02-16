@@ -13,6 +13,7 @@ open System.Numerics
 module Converter =
 
     type Convert() =
+        static member val Instance = Convert()
         static member inline Convert (_:Convert, _:sbyte     ) = fun x -> sbyte           x
         static member inline Convert (_:Convert, _:int16     ) = fun x -> int16           x
         static member inline Convert (_:Convert, _:int32     ) = fun x -> int             x
@@ -32,10 +33,9 @@ module Converter =
         static member inline Convert (_:Convert, _:char      ) = fun x -> char x
         static member inline Convert (_:Convert, _:string    ) = fun x -> string x  // better use our ToString
 
-    let Convert = Convert()
-
 
     type FromBytes() =
+        static member val Instance = FromBytes()
         static member FromBytes (_:FromBytes, _:bool   ) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
         static member FromBytes (_:FromBytes, _:char   ) = fun (x, i, e) -> BitConverter.ToChar   (x, i, e)
         static member FromBytes (_:FromBytes, _:float  ) = fun (x, i, e) -> BitConverter.ToDouble (x, i, e)
@@ -47,11 +47,10 @@ module Converter =
         static member FromBytes (_:FromBytes, _:uint16 ) = fun (x, i, e) -> BitConverter.ToUInt16 (x, i, e)
         static member FromBytes (_:FromBytes, _:uint32 ) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
         static member FromBytes (_:FromBytes, _:uint64 ) = fun (x, i, e) -> BitConverter.ToUInt64 (x, i, e)
-        
-    let FromBytes = FromBytes()
 
 
     type ToBytes() =
+        static member val Instance = ToBytes()
         static member ToBytes (_:ToBytes, x:bool   , _) = fun _ -> BitConverter.GetBytes(x)
         static member ToBytes (_:ToBytes, x:char   , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
         static member ToBytes (_:ToBytes, x:float  , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
@@ -64,22 +63,20 @@ module Converter =
         static member ToBytes (_:ToBytes, x:uint32 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
         static member ToBytes (_:ToBytes, x:uint64 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
 
-    let ToBytes = ToBytes()
-
 
     type TryParse() =
+        static member val Instance = TryParse()
         static member inline TryParse (_:TryParse, _:'t     option) = fun x -> 
             let mutable r = Unchecked.defaultof< ^R>
             if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
 
         static member TryParse (_:TryParse, _:string        option) = fun x -> Some x                             :option<string>
         static member TryParse (_:TryParse, _:StringBuilder option) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
- 
-    let TryParse = TryParse()
 
 
     type Parse() =
         inherit Typ1()
+        static member val Instance = Parse()
         static member inline Parse (_:Typ1 , _:^R) = fun (x:string) -> (^R: (static member Parse: _ -> ^R) x)
         static member inline Parse (_:Parse, _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
 #if NOTNET35
@@ -94,10 +91,9 @@ module Converter =
         static member Parse (_:Parse, _:string       ) = id :string->_
         static member Parse (_:Parse, _:StringBuilder) = fun x -> new StringBuilder(x:string)
 
-    let Parse = Parse()
-
 
     type ToString() =
+        static member val Instance = ToString()
         static member ToString (_:ToString, x:bool,          _) = fun (k:Globalization.CultureInfo) -> x.ToString k
         static member ToString (_:ToString, x:char,          _) = fun (k:Globalization.CultureInfo) -> x.ToString k
         static member ToString (_:ToString, x:byte,          _) = fun (k:Globalization.CultureInfo) -> x.ToString k
@@ -116,11 +112,10 @@ module Converter =
         static member ToString (_:ToString, x:DateTimeOffset,_) = fun (k:Globalization.CultureInfo) -> x.ToString k
         static member ToString (_:ToString, x:StringBuilder, _) = fun (_:Globalization.CultureInfo) -> if x = null then "null" else x.ToString()
 
-    let ToString = ToString()
     let inline internal toString (culture:Globalization.CultureInfo) value : string =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToString: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (ToString, value) culture
+        instance (ToString.Instance, value) culture
 
     type ToString with static member inline ToString (_:ToString, KeyValue(a,b), _) = fun (k:Globalization.CultureInfo) ->
                         "(" + toString k a + ", " + toString k b + ")"

@@ -8,6 +8,7 @@ open System.Text
 module Collection =
 
     type Skip() =
+        static member val Instance = Skip()
         static member Skip (_:Skip, x:string        , _:string        ) = fun n -> x.[n..]
         static member Skip (_:Skip, x:StringBuilder , _:StringBuilder ) = fun n -> new StringBuilder(x.ToString().[n..])
         static member Skip (_:Skip, x:'a []         , _:'a []         ) = fun n -> x.[n..] : 'a []
@@ -17,10 +18,9 @@ module Collection =
             listSkip x
         static member Skip (_:Skip, x:seq<'a>       , _:seq<'a>       ) = fun n -> Seq.skip n x
 
-    let Skip = Skip()
-
 
     type Take() =
+        static member val Instance = Take()
         static member Take (_:Take, x:string        , _:string        ) = fun n -> x.[..n-1]
         static member Take (_:Take, x:StringBuilder , _:StringBuilder ) = fun n -> new StringBuilder(x.ToString().[..n-1])
         static member Take (_:Take, x:'a []         , _:'a []         ) = fun n -> x.[n..] : 'a []
@@ -28,10 +28,9 @@ module Collection =
         static member Take (_:Take, x:list<'a>      , _:list<'a>      ) = fun n -> Seq.take n x |> Seq.toList
         static member Take (_:Take, x:seq<'a>       , _:seq<'a>       ) = fun n -> Seq.take n x
 
-    let Take = Take()
-
 
     type FromList() =
+        static member val Instance = FromList()
 
 #if NOTNET35
         static member FromList (_:FromList, _:string        ) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList)
@@ -46,11 +45,10 @@ module Collection =
         static member FromList (_:FromList, _:Set<'a>       ) = Set.ofList<'a>
         static member FromList (_:FromList, _:seq<'a>       ) = Seq.ofList<'a>
 
-    let FromList = FromList()
-
 
     type FromSeq() =
         inherit Typ1()
+        static member val Instance = FromSeq()
 
 #if NOTNET35
         static member FromSeq (_:FromSeq, _:string        ) = fun (x:seq<char>) -> String.Join("", Array.ofSeq x)
@@ -66,60 +64,52 @@ module Collection =
         static member FromSeq (_:FromSeq, _:seq<'a>       ) = id<seq<'a>>
         static member FromSeq (_:FromSeq, _:'a Id         ) = fun (x:seq<'a>)   -> Id.create (Seq.head x)
 
-    let FromSeq = FromSeq()
-
 
     type ToSeq() =
+        static member val Instance = ToSeq()
         static member ToSeq (_:ToSeq, x:#seq<'T>  , _:seq<'T>) = fun () -> x :> seq<_>
         static member ToSeq (_:ToSeq, x:Id<'T>    , _:seq<'T>) = fun () -> Seq.singleton x.getValue
         static member ToSeq (_:ToSeq, x:option<'T>, _:seq<'T>) = fun () -> match x with Some x -> Seq.singleton x | None -> Seq.empty
 
-    let ToSeq = ToSeq()
-
 
     type Choose() =
+        static member val Instance = Choose()
         static member Choose (_:Choose, x:Id<'T>  , _:Id<'U>  ) = fun (f:_->'U option) -> invalidOp "Choose on ID" :Id<'U> 
         static member Choose (_:Choose, x:seq<'T> , _:seq<'U> ) = fun (f:_->'U option) -> Seq.choose   f x
         static member Choose (_:Choose, x:list<'T>, _:list<'U>) = fun (f:_->'U option) -> List.choose  f x
         static member Choose (_:Choose, x:'T []   , _:'U []   ) = fun (f:_->'U option) -> Array.choose f x
 
-    let Choose = Choose()
-
 
     type Distinct() =
+        static member val Instance = Distinct()
         static member Distinct (_:Distinct, x:Id<'T>   , _:Id<'T>  ) = fun () -> x
         static member Distinct (_:Distinct, x:seq<'T>  , _:seq<'T> ) = fun () -> Seq.distinct x
         static member Distinct (_:Distinct, x:list<'T> , _:list<'T>) = fun () -> Seq.distinct x |> Seq.toList
         static member Distinct (_:Distinct, x:'T []    , _:'T []   ) = fun () -> Seq.distinct x |> Seq.toArray
 
-    let Distinct = Distinct()
-
 
     type DistinctBy() =
+        static member val Instance = DistinctBy()
         static member DistinctBy (_:DistinctBy, x:Id<'T>   , _:Id<'T>  ) = fun f -> x
         static member DistinctBy (_:DistinctBy, x:seq<'T>  , _:seq<'T> ) = fun f -> Seq.distinctBy f x
         static member DistinctBy (_:DistinctBy, x:list<'T> , _:list<'T>) = fun f -> Seq.distinctBy f x |> Seq.toList
-        static member DistinctBy (_:DistinctBy, x:'T []    , _:'T []   ) = fun f -> Seq.distinctBy f x |> Seq.toArray 
-
-    let DistinctBy = DistinctBy()
+        static member DistinctBy (_:DistinctBy, x:'T []    , _:'T []   ) = fun f -> Seq.distinctBy f x |> Seq.toArray
 
 
     type GroupBy() =
+        static member val Instance = GroupBy()
         static member GroupBy (_:GroupBy, x:Id<'T>  , _:Id<'Key*Id<'T>>    ) = fun (f:'T->'Key) -> let a = Id.run x in Id (f a, x)
         static member GroupBy (_:GroupBy, x:seq<'T> , _:seq<'Key*seq<'T>>  ) = fun (f:'T->'Key) -> Seq.groupBy f x
         static member GroupBy (_:GroupBy, x:list<'T>, _:list<'Key*list<'T>>) = fun (f:'T->'Key) -> Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
         static member GroupBy (_:GroupBy, x:'T []   , _:('Key*('T [])) []  ) = fun (f:'T->'Key) -> Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
-    let GroupBy = GroupBy()
-
 
     type GroupAdjBy() =
+        static member val Instance = GroupAdjBy()
         static member GroupAdjBy (_:GroupAdjBy, x:Id<'a>  , _) = fun f -> let a = Id.run x in Id (f a, x)
         static member GroupAdjBy (_:GroupAdjBy, x:seq<'a> , _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
         static member GroupAdjBy (_:GroupAdjBy, x:list<'a>, _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
         static member GroupAdjBy (_:GroupAdjBy, x:'a []   , _) = fun f -> Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
-
-    let GroupAdjBy = GroupAdjBy()
 
 
     // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
@@ -131,117 +121,104 @@ module Collection =
             notFirst := true}
 
     type Intersperse() =
+        static member val Instance = Intersperse()
         static member Intersperse (_:Intersperse, x:Id<'T>  , _:Id<'T>  ) = fun (e:'T) -> x
         static member Intersperse (_:Intersperse, x:seq<'T> , _:seq<'T> ) = fun (e:'T) -> intersperse e x
         static member Intersperse (_:Intersperse, x:list<'T>, _:list<'T>) = fun (e:'T) -> x |> List.toSeq  |> intersperse e |> Seq.toList
-        static member Intersperse (_:Intersperse, x:'T []   , _:'T []   ) = fun (e:'T) -> x |> Array.toSeq |> intersperse e |> Seq.toArray    
-
-    let Intersperse = Intersperse()
+        static member Intersperse (_:Intersperse, x:'T []   , _:'T []   ) = fun (e:'T) -> x |> Array.toSeq |> intersperse e |> Seq.toArray
     
 
     type Iteri() =
+        static member val Instance = Iteri()
         static member Iteri (_:Iteri, x:Id<'T>   , _:unit) = fun (f:int->'T->unit) -> f 0 x.getValue
         static member Iteri (_:Iteri, x:seq<'T>  , _:unit) = fun f -> Seq.iteri   f x
         static member Iteri (_:Iteri, x:list<'T> , _:unit) = fun f -> List.iteri  f x
         static member Iteri (_:Iteri, x:'T []    , _:unit) = fun f -> Array.iteri f x
 
-    let Iteri = Iteri()
-
 
     type Length() =
+        static member val Instance = Length()
         static member Length (_:Length, x:Id<'T>   , _:int) = fun () -> 1
         static member Length (_:Length, x:seq<'T>  , _:int) = fun () -> Seq.length   x
         static member Length (_:Length, x:list<'T> , _:int) = fun () -> List.length  x
         static member Length (_:Length, x:'T []    , _:int) = fun () -> Array.length x
 
-    let Length = Length()
-
 
     type Mapi() =
+        static member val Instance = Mapi()
         static member Mapi (_:Mapi, x:Id<'T>   , _:Id<'U>  ) = fun (f:int->'T->'U) -> f 0 x.getValue
         static member Mapi (_:Mapi, x:seq<'T>  , _:seq<'U> ) = fun f -> Seq.mapi   f x
         static member Mapi (_:Mapi, x:list<'T> , _:list<'U>) = fun f -> List.mapi  f x
         static member Mapi (_:Mapi, x:'T []    , _:'U []   ) = fun f -> Array.mapi f x
 
-    let Mapi = Mapi()
-
 
     type Max() =
+        static member val Instance = Max()
         static member Max (_:Max, x:Id<'T>  , _:'T) = fun () -> x.getValue
         static member Max (_:Max, x:seq<'T> , _:'T) = fun () -> Seq.max   x
         static member Max (_:Max, x:list<'T>, _:'T) = fun () -> List.max  x
         static member Max (_:Max, x:'T []   , _:'T) = fun () -> Array.max x
 
-    let Max = Max()
-
 
     type MaxBy() =
+        static member val Instance = MaxBy()
         static member MaxBy (_:MaxBy, x:Id<'T>  , _:'T) = fun (f:'T->'U) -> x.getValue
         static member MaxBy (_:MaxBy, x:seq<'T> , _:'T) = fun f -> Seq.maxBy   f x
         static member MaxBy (_:MaxBy, x:list<'T>, _:'T) = fun f -> List.maxBy  f x
         static member MaxBy (_:MaxBy, x:'T []   , _:'T) = fun f -> Array.maxBy f x
 
-    let MaxBy = MaxBy()
-
 
     type Min() =
+        static member val Instance = Min()
         static member Min (_:Min, x:Id<'T>  , _:'T) = fun () -> x.getValue
         static member Min (_:Min, x:seq<'T> , _:'T) = fun () -> Seq.min   x
         static member Min (_:Min, x:list<'T>, _:'T) = fun () -> List.min  x
         static member Min (_:Min, x:'T []   , _:'T) = fun () -> Array.min x
 
-    let Min = Min()
-
 
     type MinBy() =
+        static member val Instance = MinBy()
         static member MinBy (_:MinBy, x:Id<'T>  , _:'T) = fun f -> x.getValue
         static member MinBy (_:MinBy, x:seq<'T> , _:'T) = fun f -> Seq.minBy   f x
         static member MinBy (_:MinBy, x:list<'T>, _:'T) = fun f -> List.minBy  f x
         static member MinBy (_:MinBy, x:'T []   , _:'T) = fun f -> Array.minBy f x
 
-    let MinBy = MinBy()
-
 
     type Rev() =
+        static member val Instance = Rev()
         static member Rev (_:Rev, x:Id<'a>  , _:Id<'a>  ) = fun () -> x
         static member Rev (_:Rev, x:seq<'a> , _:seq<'a> ) = fun () -> x |> Seq.toArray |> Array.rev |> Array.toSeq
         static member Rev (_:Rev, x:list<'a>, _:list<'a>) = fun () -> List.rev  x
         static member Rev (_:Rev, x:'a []   , _:'a []   ) = fun () -> Array.rev x
 
-    let Rev = Rev()
-
 
     type Scan() =
+        static member val Instance = Scan()
         static member Scan (_:Scan, x:Id<'T>  , _:Id<'S>  ) = fun f (z:'S) -> Id.create (f z x.getValue)
         static member Scan (_:Scan, x:seq<'T> , _:seq<'S> ) = fun f (z:'S) -> Seq.scan   f z x
         static member Scan (_:Scan, x:list<'T>, _:list<'S>) = fun f (z:'S) -> List.scan  f z x
         static member Scan (_:Scan, x:'T []   , _:'S []   ) = fun f (z:'S) -> Array.scan f z x
 
-    let Scan = Scan()
-
 
     type Sort() =
+        static member val Instance = Sort()
         static member Sort (_:Sort, x:Id<'a>  , _:Id<'a>  ) = fun () -> x
         static member Sort (_:Sort, x:seq<'a> , _:seq<'a> ) = fun () -> Seq.sort   x
         static member Sort (_:Sort, x:list<'a>, _:list<'a>) = fun () -> List.sort  x
         static member Sort (_:Sort, x:'a []   , _:'a []   ) = fun () -> Array.sort x
 
-    let Sort = Sort()
-
 
     type SortBy() =
+        static member val Instance = SortBy()
         static member SortBy (_:SortBy, x:Id<'a>  , _) = fun (f:'a->_) -> x
         static member SortBy (_:SortBy, x:seq<'a> , _) = fun f -> Seq.sortBy   f x
         static member SortBy (_:SortBy, x:list<'a>, _) = fun f -> List.sortBy  f x
         static member SortBy (_:SortBy, x:'a []   , _) = fun f -> Array.sortBy f x
 
-    let SortBy = SortBy() 
-
 
     type Zip() =
+        static member val Instance = Zip()
         static member Zip (_:Zip, x:Id<'T>  , y:Id<'U>  , _:Id<'T*'U>  ) = fun () -> Id.create(x.getValue,y.getValue)
         static member Zip (_:Zip, x:seq<'T> , y:seq<'U> , _:seq<'T*'U> ) = fun () -> Seq.zip   x y
         static member Zip (_:Zip, x:list<'T>, y:list<'U>, _:list<'T*'U>) = fun () -> List.zip  x y
         static member Zip (_:Zip, x:'T []   , y:'U []   , _:('T*'U) [] ) = fun () -> Array.zip x y
-
-    let Zip = Zip()

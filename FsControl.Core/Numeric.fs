@@ -5,7 +5,7 @@ open FsControl.Core.Prelude
 
 module Num =
     type FromBigInteger() =
-
+        static member val Instance = FromBigInteger()
         static member        FromBigInteger (_:FromBigInteger, _:int32     ) = fun (x:bigint) -> int             x
         static member        FromBigInteger (_:FromBigInteger, _:int64     ) = fun (x:bigint) -> int64           x
         static member        FromBigInteger (_:FromBigInteger, _:nativeint ) = fun (x:bigint) -> nativeint  (int x)
@@ -32,9 +32,10 @@ module Num =
         static member        FromBigInteger (_:FromBigInteger, _:float32   ) = fun (x:bigint) -> float32    (int x)
         static member        FromBigInteger (_:FromBigInteger, _:decimal   ) = fun (x:bigint) -> decimal    (int x)
 #endif
-    let FromBigInteger = FromBigInteger()
+
 
     type Abs() =
+        static member val Instance = Abs()
         static member inline Abs (_:Abs, _:^t when ^t: null and ^t: struct, _) = fun () -> id
         static member inline Abs (_:Abs, x:'t        , _) = fun () -> abs x
         static member        Abs (_:Abs, x:byte      , _) = fun () ->     x
@@ -45,14 +46,14 @@ module Num =
 #if NOTNET35
         static member        Abs (_:Abs, x:Complex   , _) = fun () -> Complex(x.Magnitude, 0.0)
 #endif
-    let Abs = Abs()
 
     type Signum() =
+        static member val Instance = Signum()
         static member inline Signum (_:Signum, _:^t when ^t: null and ^t: struct, _) = fun () -> id
         static member inline Signum (_:Signum, x:'t        , _) = fun () ->
             let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBigInteger: _*_ -> _) a, b)
             let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-            instance FromBigInteger (bigint (sign x)) :'t
+            instance FromBigInteger.Instance (bigint (sign x)) :'t
 
         static member        Signum (_:Signum, x:byte      , _) = fun () -> if x = 0uy then 0uy else 1uy
         static member        Signum (_:Signum, x:uint16    , _) = fun () -> if x = 0us then 0us else 1us
@@ -64,10 +65,10 @@ module Num =
             if x.Magnitude = 0.0 then Complex.Zero
             else Complex (x.Real / x.Magnitude, x.Imaginary / x.Magnitude)
 #endif
-    let Signum = Signum()
 
 
     type Negate() =
+        static member val Instance = Negate()
         static member inline Negate (_:Negate, _:^t when ^t: null and ^t: struct, _) = fun () -> id
         static member inline Negate (_:Negate, x:'t        , _) = fun () -> -x
         static member        Negate (_:Negate, x:byte      , _) = fun () -> 0uy - x
@@ -75,22 +76,21 @@ module Num =
         static member        Negate (_:Negate, x:uint32    , _) = fun () -> 0u  - x
         static member        Negate (_:Negate, x:uint64    , _) = fun () -> 0UL - x
         static member        Negate (_:Negate, x:unativeint, _) = fun () -> 0un - x
-    let Negate = Negate()
 
 
     type DivRem() =
         inherit Typ1()
+        static member val Instance = DivRem()
         static member inline DivRem (_:DivRem, x:^t when ^t: null and ^t: struct, y:^t, _) = fun () -> (x, y)
         static member inline DivRem (_:Typ1  , D:'T, d:'T, _:'T*'T) = fun () -> let q = D / d in q,  D - q * d
         static member inline DivRem (_:DivRem, D:'T, d:'T, r:'T*'T) = fun () ->
             let mutable r = Unchecked.defaultof<'T>
             (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
     
-    let DivRem = DivRem()
     let inline internal divRem (x:'T) (y:'T) :'T*'T =
         let inline instance_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member DivRem: _*_*_*_ -> _) a, b, c, d)
         let inline instance (a:'a, b:'b, c:'c) = fun (x:'x) -> instance_4 (a, b, c, Unchecked.defaultof<'r>) x :'r
-        instance (DivRem, x, y) ()
+        instance (DivRem.Instance, x, y) ()
 
     // Strict version of math operators
     let inline internal ( +.) (a:'Num) (b:'Num) :'Num = a + b
@@ -101,6 +101,7 @@ module Num =
 // Integral class ---------------------------------------------------------
 module Integral =
     type ToBigInteger() =
+        static member val Instance = ToBigInteger()
         static member        ToBigInteger (_:ToBigInteger, x:sbyte     , _) = fun () -> bigint (int x)
         static member        ToBigInteger (_:ToBigInteger, x:int16     , _) = fun () -> bigint (int x)
         static member        ToBigInteger (_:ToBigInteger, x:int32     , _) = fun () -> bigint      x
@@ -117,7 +118,7 @@ module Integral =
         static member        ToBigInteger (_:ToBigInteger, x:uint32    , _) = fun () -> bigint (int x)
         static member        ToBigInteger (_:ToBigInteger, x:uint64    , _) = fun () -> bigint (int64 x)
 #endif
-    let ToBigInteger = ToBigInteger()
+
 
 open System.Numerics
 
@@ -125,27 +126,27 @@ module internal Numerics =
     let inline internal fromBigInteger (x:bigint) :'Num =
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBigInteger: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance Num.FromBigInteger x
+        instance Num.FromBigInteger.Instance x
 
     let inline internal abs    (x:'Num) :'Num =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Abs: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Num.Abs   , x) ()
+        instance (Num.Abs.Instance, x) ()
 
     let inline internal signum (x:'Num) :'Num =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Signum: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Num.Signum, x) ()
+        instance (Num.Signum.Instance, x) ()
 
     let inline internal negate (x:'Num) :'Num =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Negate: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Num.Negate, x) ()
+        instance (Num.Negate.Instance, x) ()
 
     let inline internal toBigInteger (x:'Integral) :bigint =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToBigInteger: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Integral.ToBigInteger, x) ()
+        instance (Integral.ToBigInteger.Instance, x) ()
 
     let inline internal fromIntegral (x:'Integral) :'Num = (fromBigInteger << toBigInteger) x
 
@@ -210,7 +211,7 @@ module Ratio =
     type Ratio<'RA> with static member inline FromBigInteger (_:Num.FromBigInteger, _:Ratio<_>) = fun (x:bigint) ->
                             let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBigInteger: _*_ -> _) a, b)
                             let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-                            instance Num.FromBigInteger x </ratio/> G1()
+                            instance Num.FromBigInteger.Instance x </ratio/> G1()
     type Ratio<'RA> with static member inline Negate (_:Num.Negate        , r:Ratio<_>, _) = fun () -> -(numerator r) </ratio/> (denominator r)
 
     let (|Ratio|) (ratio:Ratio<_>) = (ratio.Numerator, ratio.Denominator)
@@ -235,6 +236,7 @@ open System.Numerics
 // Fractional class -------------------------------------------------------
 module Fractional =
     type FromRational() =
+        static member val Instance = FromRational()
         static member        FromRational (_:FromRational, _:float   ) = fun (r:Rational) -> float   (numerator r) / float   (denominator r)
         static member inline FromRational (_:FromRational, _:Ratio<_>) = fun (r:Rational) -> ratio (fromIntegral  (numerator r))  (fromIntegral (denominator r))
 #if NOTNET35
@@ -245,10 +247,13 @@ module Fractional =
         static member        FromRational (_:FromRational, _:float32 ) = fun (r:Rational) -> float32 (int (numerator r)) / float32 (int (denominator r))    
         static member        FromRational (_:FromRational, _:decimal ) = fun (r:Rational) -> decimal (int (numerator r)) / decimal (int (denominator r))
 #endif
-    let FromRational = FromRational()
+
+
 // RealFrac class ---------------------------------------------------------
+
 module RealFrac =
     type ProperFraction() =
+        static member val Instance = ProperFraction()
 
 #if NOTNET35
         static member        ProperFraction (_:ProperFraction, x:float   , _) = fun () -> let t = truncate x in (bigint (decimal t), x -. t)
@@ -265,44 +270,45 @@ module RealFrac =
             let (i,f) = divRem a b
             (i, ratio f b)
 
-    let ProperFraction = ProperFraction()
 
 // Real class -------------------------------------------------------------
+
 module Real =
     let inline internal (</) x = (|>) x
     let inline internal (/>) x = flip x
     type ToRational() =
+        static member val Instance = ToRational()
         static member inline ToRational (_:ToRational, r:Ratio<_>, _) = fun () -> toBigInteger (numerator r) </ratio/> toBigInteger (denominator r) :Rational
         static member inline ToRational (_:ToRational, x:'t      , _) = fun () ->
             let inline fromRational (x:Rational) :'Fractional =
                 let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromRational: _*_ -> _) a, b)
                 let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-                instance Fractional.FromRational x
+                instance Fractional.FromRational.Instance x
             let inline whenFractional a = let _ = if false then fromRational (1I </ratio/> 1I) else a in () 
             whenFractional x
             let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
                 let (a, b:'RealFrac) =
                     let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ProperFraction: _*_*_ -> _) a, b, c)
                     let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-                    instance (RealFrac.ProperFraction, x) ()
+                    instance (RealFrac.ProperFraction.Instance, x) ()
                 (fromIntegral a, b)        
             let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
             let (i:bigint,d) = properFraction x
             (i </ratio/> 1I) + (truncate (decimal d *. 1000000000000000000000000000M) </ratio/> 1000000000000000000000000000I) :Rational
         static member inline ToRational (_:ToRational, x:'t, _) = fun () -> (toBigInteger x) </ratio/> 1I
 
-    let ToRational = ToRational()
 
 // Floating class ---------------------------------------------------------
+
 module Floating =
     type Pi() =
+        static member val Instance = Pi()
         static member Pi (_:Pi, _:float32) = fun () -> 3.14159274f
         static member Pi (_:Pi, _:float  ) = fun () -> System.Math.PI
 
 #if NOTNET35
         static member Pi (_:Pi, _:Complex) = fun () -> Complex(System.Math.PI, 0.0)
 #endif
-    let Pi = Pi()
 
 
 // Bounded class ----------------------------------------------------------
@@ -311,6 +317,7 @@ open System
 
 module Bounded =
     type MinValue() =
+        static member val Instance = MinValue()
         static member MinValue (_:MinValue, _:unit          ) = fun () -> ()
         static member MinValue (_:MinValue, _:bool          ) = fun () -> false
         static member MinValue (_:MinValue, _:char          ) = fun () -> Char.MinValue
@@ -329,11 +336,10 @@ module Bounded =
         static member MinValue (_:MinValue, _:DateTimeOffset) = fun () -> DateTimeOffset.MinValue
         static member MinValue (_:MinValue, _:TimeSpan      ) = fun () -> TimeSpan.MinValue
 
-    let MinValue = MinValue()
     let inline internal minValue() =
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member MinValue: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance MinValue ()
+        instance MinValue.Instance ()
 
     type MinValue with
         static member inline MinValue (_:MinValue, (_:'a*'b                  )) = fun () -> (minValue(), minValue())
@@ -345,6 +351,7 @@ module Bounded =
         static member inline MinValue (_:MinValue, (_:'a*'b*'c*'d*'e*'f*'g*'h)) = fun () -> (minValue(), minValue(), minValue(), minValue(), minValue(), minValue(), minValue(), minValue())
 
     type MaxValue() =
+        static member val Instance = MaxValue()
         static member MaxValue (_:MaxValue, _:unit          ) = fun () -> ()
         static member MaxValue (_:MaxValue, _:bool          ) = fun () -> true
         static member MaxValue (_:MaxValue, _:char          ) = fun () -> Char.MaxValue
@@ -363,11 +370,10 @@ module Bounded =
         static member MaxValue (_:MaxValue, _:DateTimeOffset) = fun () -> DateTimeOffset.MaxValue
         static member MaxValue (_:MaxValue, _:TimeSpan      ) = fun () -> TimeSpan.MaxValue
 
-    let MaxValue = MaxValue()
     let inline internal maxValue() =
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member MaxValue: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance MaxValue ()
+        instance MaxValue.Instance ()
 
     type MaxValue with
         static member inline MaxValue (_:MaxValue, (_:'a*'b                  )) = fun () -> (maxValue(), maxValue())

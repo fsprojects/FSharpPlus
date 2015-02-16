@@ -20,6 +20,7 @@ module Traversable =
 
     type Traverse() =
         inherit TraverseDefault()
+        static member val Instance = Traverse()
 
         static member Traverse (_:Traverse, t:_ seq , _:option<seq<_>>) = fun f ->
             let ok = ref true
@@ -44,12 +45,10 @@ module Traversable =
             let cons_f x ys = fmap cons (f x) <*> ys
             foldr cons_f (result [||]) t
 
-    let Traverse = Traverse()
-
     let inline internal traverse f t =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Traverse: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Traverse, t) f
+        instance (Traverse.Instance, t) f
     
 
     type SequenceADefault() =
@@ -57,6 +56,7 @@ module Traversable =
 
     type SequenceA() =
         inherit SequenceADefault()
+        static member val Instance = SequenceA()
 
         static member inline SequenceA (_:SequenceA, t:option<_>, _) = fun () -> match t with Some x -> fmap Some x | _ -> result None
         
@@ -67,9 +67,7 @@ module Traversable =
         static member inline SequenceA (_:SequenceA, t:seq<_>  , _) = fun () -> traverse id t
         static member inline SequenceA (_:SequenceA, t:Id<_>   , _) = fun () -> traverse id t
 
-    let SequenceA = SequenceA()
-
     let inline sequenceA (t:'Traversable'Applicative'T) :'Applicative'Traversable'T =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member SequenceA: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (SequenceA, t) ()
+        instance (SequenceA.Instance, t) ()

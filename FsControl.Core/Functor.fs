@@ -24,6 +24,7 @@ module Monad =
 
     type Bind() =
         inherit Typ1()
+        static member val Instance = Bind()
 
         static member inline Bind (_:Typ1, x:'M, r:'R) = fun (f:'t->'R) -> 
             ((^M or ^R) : (static member Bind: ^M -> (('t->'R) -> 'R)) x) f
@@ -61,14 +62,14 @@ module Monad =
         //Restricted Monad
         static member Bind (_:Bind, x:Nullable<_> , _:'b Nullable) = fun f -> if x.HasValue then f x.Value else Nullable() : Nullable<'b>
 
-    let Bind = Bind()  
     let inline internal (>>=) x (f:_->'R) : 'R =
         let inline instance_3 (a:^a,b:^b,c:^c) = ((^a or ^b or ^c) : (static member Bind: ^a* ^b* ^c -> _) (a,b,c))
-        instance_3 (Bind, x, Unchecked.defaultof<'R>) f :'R
+        instance_3 (Bind.Instance, x, Unchecked.defaultof<'R>) f :'R
 
 
     type Join() =
         inherit Typ1()
+        static member val Instance = Join()
 
         static member inline Join (_:Typ1, x:#obj, _:#obj) = fun () -> x >>= id :#obj
         static member        Join (_:Join, x:Lazy<Lazy<'a>>    , _:Lazy<'a>  ) = fun () -> lazy x.Value.Value
@@ -81,12 +82,10 @@ module Monad =
         static member        Join (_:Join, x:Task<Task<'a>>    , _:Task<'a>  ) = fun () -> x.Unwrap()
 #endif
 
-    let Join = Join()
     let inline internal join (x:'Monad'Monad'a) : 'Monad'a =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Join: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Join, x) ()
-
+        instance (Join.Instance, x) ()
 
 
 open Monad
@@ -95,6 +94,7 @@ module Applicative =
 
     type Return() =
         inherit Typ1()
+        static member val Instance = Return()
 
         static member inline Return (_:Typ1, r:'R) = fun (x:'T) -> 
             ((^R) : (static member Return: ^T -> ^R) x)
@@ -125,10 +125,9 @@ module Applicative =
         static member Return (_:Return, _:StringBuilder) = fun (x:char) -> new StringBuilder(string x):StringBuilder
         static member Return (_:Return, _:'a Set       ) = fun (x:'a  ) -> Set.singleton x
 
-    let Return = Return()
     let inline internal result x = 
         let inline instance_2 (a:^a,b:^b) = ((^a or ^b) : (static member Return: ^a* ^b -> _) (a,b))
-        instance_2 (Return, Unchecked.defaultof<'r>) x :'r 
+        instance_2 (Return.Instance, Unchecked.defaultof<'r>) x :'r 
 
 
     type DefaultImpl =        
@@ -136,6 +135,7 @@ module Applicative =
 
     type Apply() =
         inherit Typ1()
+        static member val Instance = Apply()
 
         static member inline Apply (_:Typ2, f:#obj , x, _:#obj) = fun () -> (f >>= fun x1 -> x >>= fun x2 -> result(x1 x2))
         static member inline Apply (_:Typ1, f:'F , x:'X, _:'R) = fun () -> 
@@ -172,13 +172,12 @@ module Applicative =
         static member        Apply (_:Apply, f:('a->'b) ResizeArray, x:'a ResizeArray, _:'b ResizeArray) = fun () ->
             ResizeArray(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
 
-    let Apply = Apply()
     let inline internal (<*>) x y =
-        let inline instance_4 (a:^a,b:^b,c:^c,d:^d          ) =                                                          
+        let inline instance_4 (a:^a,b:^b,c:^c,d:^d) =                                                          
             ((^a or ^b or ^c or ^d            ) : (static member Apply: ^a* ^b* ^c* ^d         -> _) (a,b,c,d    ))
         let inline instance (a:'a, b:'b, c:'c            ) = fun (x:'x) -> instance_4(a,b,c    ,Unchecked.defaultof<'r>) x :'r
     
-        instance (Apply, x, y) ()
+        instance (Apply.Instance, x, y) ()
 
 open Applicative
 
@@ -187,9 +186,8 @@ open Applicative
 
 module Functor =
 
-
     type Map_() =
-
+        static member val Instance = Map_()
         static member Map_ (_:Map_, x:Lazy<_>        , _:unit) = fun f -> f x.Value :unit
         static member Map_ (_:Map_, x:seq<_>         , _:unit) = fun f -> Seq.iter f x
         static member Map_ (_:Map_, x:option<_>      , _:unit) = fun f -> match x with Some x -> f x | _ -> ()
@@ -215,10 +213,8 @@ module Functor =
         static member Map_ (_:Map_, x:Nullable<_>    , _:unit) = fun f -> if x.HasValue then f x.Value else ()
         static member Map_ (_:Map_, x:string         , _:unit) = fun f -> String.iter f x
         static member Map_ (_:Map_, x:StringBuilder  , _:unit) = fun f -> String.iter f (x.ToString())
-        static member Map_ (_:Map_, x:Set<_>         , _:unit) = fun f -> Set.iter f x
-        
+        static member Map_ (_:Map_, x:Set<_>         , _:unit) = fun f -> Set.iter f x        
 
-    let Map_ = Map_()
 
     type DefaultImpl =        
         static member inline MapFromApplicative f x = result f <*> x
@@ -226,7 +222,7 @@ module Functor =
 
     type Map() =
         inherit Typ1()
-
+        static member val Instance = Map()
         static member inline Map (_:Typ2, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> result f <*> x :'r
         static member inline Map (_:Typ1, x:'F, _:'R) =
             fun (f:'a->'b) -> ((^F) : (static member (<!>): ('a->'b) -> ^F -> ^R) (f, x))
@@ -257,16 +253,14 @@ module Functor =
         static member Map (_:Map, x:StringBuilder  , _) = fun f -> new StringBuilder(String.map f (x.ToString()))
         static member Map (_:Map, x:Set<_>         , _) = fun f -> Set.map f x
         
-
-    let Map = Map()
     let inline internal fmap f x = 
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Map: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Map, x) f
-
+        instance (Map.Instance, x) f
 
 
     type Zero() =
+        static member val Instance = Zero()
         static member        Zero (_:Zero, _:option<'a>) = fun () -> None        :option<'a>
         static member        Zero (_:Zero, _:list<'a>  ) = fun () -> [  ]        :list<'a>  
         static member        Zero (_:Zero, _:'a []     ) = fun () -> [||]        :'a []     
@@ -274,23 +268,22 @@ module Functor =
         static member inline Zero (_:Zero, _:Id<'a>    ) = fun () -> Id (mempty()) :Id<'a>
 
     type Plus() =
+        static member val Instance = Plus()
         static member        Plus (_:Plus, x:_ option, _) = fun y -> match x with None -> y | xs -> xs
         static member        Plus (_:Plus, x:_ list  , _) = fun y -> x @ y
         static member        Plus (_:Plus, x:_ []    , _) = fun y -> Array.append x y
         static member        Plus (_:Plus, x:_ seq   , _) = fun y -> Seq.append   x y
         static member inline Plus (_:Plus, x:_ Id    , _) = fun y -> Id (mappend (Id.run x) (Id.run y))
-        
-    let Zero, Plus = Zero(), Plus()
 
     let inline internal zero () :'Functor'T =
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance Zero ()
+        instance Zero.Instance ()
 
     let inline internal (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Plus: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r        
-        instance (Plus, x) y
+        instance (Plus.Instance, x) y
 
     type Zero with
         static member inline Zero (_:Zero, _:Kleisli<_,_>) = fun () -> Kleisli (fun _ -> zero ())
@@ -326,6 +319,7 @@ open Functor
 module Comonad =
 
     type Extract() =
+        static member val Instance = Extract()
         static member        Extract (_:Extract, x:'t Async,_:'t) = fun () -> Async.RunSynchronously x
         static member        Extract (_:Extract, x:'t Lazy, _:'t) = fun () -> x.Value
         static member        Extract (_:Extract, (w:'w,a:'a) , _) = fun () -> a
@@ -343,14 +337,13 @@ module Comonad =
         static member        Extract (_:Extract, x:StringBuilder   , _   ) = fun () -> x.ToString().[0]
         static member        Extract (_:Extract, x:'t seq          , _:'t) = fun () -> Seq.head x
 
-    let Extract = Extract()
     let inline internal extract (x:'Comonad'T): 'T =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extract: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Extract, x) ()
-
+        instance (Extract.Instance, x) ()
 
     type Extend() =
+        static member val Instance = Extend()
         static member        Extend (_:Extend, (g:'a Async), _:'b Async) = fun (f:Async<'a>->'b) -> async.Return (f g) : Async<'b>
         static member        Extend (_:Extend, (g:'a Lazy ), _:'b Lazy ) = fun (f:Lazy<'a> ->'b) -> Lazy.Create  (fun () -> f g) : Lazy<'b>
         static member        Extend (_:Extend, (w:'w, a:'a), _:'w *'b)   = fun (f:_->'b) -> (w, f (w,a))        
@@ -374,15 +367,15 @@ module Comonad =
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
             Seq.map g (s |> Seq.toList |> tails |> List.toSeq |> Seq.map List.toSeq) :'b seq
 
-    let Extend = Extend()
     let inline internal extend (g:'Comonad'T->'U) (s:'Comonad'T): 'Comonad'U =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extend: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Extend, s) g
+        instance (Extend.Instance, s) g
 
 
     type Duplicate() =
         inherit Typ1()
+        static member val Instance = Duplicate()
         static member inline Duplicate (_:Typ1, x:#obj, _:#obj) = fun () -> extend id x :#obj
         static member        Duplicate (_:Duplicate, s:Async<'a>, _:Async<Async<'a>>) = fun () -> async.Return s : Async<Async<'a>>
         static member        Duplicate (_:Duplicate, s:Lazy<'a> , _:Lazy<Lazy<'a>>  ) = fun () -> Lazy.CreateFromValue s : Lazy<Lazy<'a>>
@@ -397,62 +390,59 @@ module Comonad =
         static member        Duplicate (_:Duplicate, s: array<'a>, _: array<array<'a>>) = fun () -> 
             let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
             s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray
-
-    let Duplicate = Duplicate()
     
     let inline internal duplicate x =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Duplicate: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Duplicate, x) ()
-
+        instance (Duplicate.Instance, x) ()
 
 
 
 module Category =
 
     type Id() =
+        static member val Instance = Id()
         static member        Id (_:Id, _: 'r -> 'r     ) = fun () -> id              : 'r -> 'r
         static member inline Id (_:Id, _:Kleisli<'a,'b>) = fun () -> Kleisli result :Kleisli<'a,'b>
 
     type Comp() =
+        static member val Instance = Comp()
         static member        Comp (_:Comp,         f, _) = fun (g: _ -> _) ->          g >>  f
         static member inline Comp (_:Comp, Kleisli f, _) = fun (Kleisli g) -> Kleisli (g >=> f)
-
-    let Id, Comp = Id(), Comp()
 
     let inline internal catId() =
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member Id: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance Id ()
+        instance Id.Instance ()
 
     let inline internal (<<<) f g =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Comp: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Comp, f) g
+        instance (Comp.Instance, f) g
 
 open Category
 
 module Arrow =
 
     type Arr() =
+        static member val Instance = Arr()
         static member        Arr (_:Arr, _: _ -> _     ) = fun (f:_->_) -> f
         static member inline Arr (_:Arr, _:Kleisli<_,_>) = fun  f       -> Kleisli (result <<< f)
 
     type First() =
+        static member val Instance = First()
         static member        First (_:First, f        , _: 'a -> 'b   ) = fun () -> fun (x,y) -> (f x, y)
         static member inline First (_:First, Kleisli f, _:Kleisli<_,_>) = fun () -> Kleisli (fun (b,d) -> f b >>= fun c -> result (c,d))
-
-    let Arr, First = Arr(), First()
 
     let inline internal arr   f = 
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member Arr: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance Arr    f
+        instance Arr.Instance    f
 
     let inline internal first f =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member First: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (First, f) ()
+        instance (First.Instance, f) ()
 
     type SecondDefault() =
         static member inline Second (_:SecondDefault, f:#obj, _:#obj) = fun () ->
@@ -461,50 +451,49 @@ module Arrow =
 
     type Second() =
         inherit SecondDefault()
+        static member val Instance = Second()
         static member        Second (_:Second, f        , _: 'a -> 'b   ) = fun () -> fun (x,y) -> (x, f y)
         static member inline Second (_:Second, Kleisli f, _:Kleisli<_,_>) = fun () -> Kleisli (fun (d,b) -> f b >>= fun c -> result (d,c))
-    
-    let Second = Second()
 
 open Arrow
 
 module ArrowChoice =
 
     type AcEither() =
+        static member val Instance = AcEither()
         static member inline AcEither (_:AcEither, _:Choice<_,_>->_) = fun (         f ,          g ) ->          choice f g
         static member inline AcEither (_:AcEither, _:Kleisli<_,_>  ) = fun ((Kleisli f), (Kleisli g)) -> Kleisli (choice f g)
 
-    let AcEither = AcEither()
     let inline internal (|||) f g =
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcEither: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance AcEither (f, g)
+        instance AcEither.Instance (f, g)
 
     type AcMerge() =
+        static member val Instance = AcMerge()
         static member inline AcMerge (_:AcMerge, _: _->    Choice<_,_>      ) = fun (f, g)  ->  (Choice2Of2 << f) ||| (Choice1Of2 << g)
         static member inline AcMerge (_:AcMerge, _:Kleisli<Choice<'v,'t>,'z>) = fun ((Kleisli (f:'t->'u)), (Kleisli (g:'v->'w))) ->
             Kleisli (f >=> (result <<< Choice2Of2)) ||| Kleisli (g >=> (result <<< Choice1Of2)) :Kleisli<Choice<'v,'t>,'z>
 
-    let AcMerge = AcMerge()
     let inline internal (+++) f g =
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcMerge: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance AcMerge (f, g)
+        instance AcMerge.Instance (f, g)
 
     type AcLeft() =
+        static member val Instance = AcLeft()
         static member inline AcLeft (_:AcLeft, f:_->_   , _) = fun () ->          f  +++      id
         static member inline AcLeft (_:AcLeft, Kleisli f, _) = fun () -> (Kleisli f) +++ arr (catId())
 
     type AcRight() =
+        static member val Instance = AcRight()
         static member inline AcRight (_:AcRight, f:_->_   , _) = fun () -> id          +++ f
         static member inline AcRight (_:AcRight, Kleisli f, _) = fun () -> arr (catId()) +++ Kleisli f
-    
-    let AcLeft, AcRight = AcLeft(), AcRight()
+
 
 module ArrowApply =
 
     type Apply() =
+        static member val Instance = Apply()
         static member Apply (_:Apply, _: ('a -> 'b) * 'a -> 'b          ) = fun () ->          fun (f,x)          -> f x
         static member Apply (_:Apply, _: Kleisli<Kleisli<'a,'b> * 'a,'b>) = fun () -> Kleisli (fun (Kleisli f, x) -> f x)
-
-    let Apply = Apply()

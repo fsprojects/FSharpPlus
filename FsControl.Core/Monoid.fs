@@ -13,6 +13,7 @@ module Monoid =
 
     type Mempty() =
         inherit Typ1()
+        static member val Instance = Mempty()
         
         static member        Mempty (_:Mempty, _:list<'a>  ) = fun () -> []   :  list<'a>
         static member        Mempty (_:Mempty, _:option<'a>) = fun () -> None :option<'a>
@@ -24,11 +25,10 @@ module Monoid =
         static member        Mempty (_:Mempty, _:Map<'a,'b>) = fun () -> Map.empty : Map<'a,'b>
         static member        Mempty (_:Mempty, _:'a->'a    ) = fun () -> id :'a->'a 
 
-    let Mempty = Mempty()
     let inline internal mempty() = 
         let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mempty: _*_ -> _) a, b)
         let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance Mempty ()
+        instance Mempty.Instance ()
 
     type Mempty with static member inline Mempty (_:Mempty, _ : 'a*'b         ) = fun () ->
                         (mempty(),mempty()                           ): 'a*'b
@@ -62,6 +62,7 @@ module Monoid =
 
     type Mappend() =
         inherit Typ1()
+        static member val Instance = Mappend()
            
         static member        Mappend (_:Mappend, x:list<_>      , _) = fun y -> x @ y       
         static member        Mappend (_:Mappend, x:array<_>     , _) = fun y -> Array.append x y
@@ -75,11 +76,10 @@ module Monoid =
             y
         static member        Mappend (_:Mappend, x:'a->'a       , _) = fun y -> x << y
 
-    let Mappend = Mappend()
     let inline internal mappend (x:'T) (y:'T) :'T =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mappend: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        instance (Mappend, x) y
+        instance (Mappend.Instance, x) y
 
     type Mappend with
         static member inline Mappend (_:Mappend, x:option<_> , _) = fun y ->
@@ -137,6 +137,7 @@ module Monoid =
 
     type Mconcat() =
         inherit Typ1()
+        static member val Instance = Mconcat()
 
         static member inline Mconcat (_:Mconcat ,x:list<Dictionary<'a,'b>>,  _:Dictionary<'a,'b>) = fun () ->
             let dct = Dictionary<'a,'b>()
@@ -154,11 +155,10 @@ module Monoid =
             List.iter (fun s -> sb.Append(s.ToString()) |> ignore) x
             sb
 
-    let Mconcat = Mconcat()
     let inline internal mconcat (x:list<'T>) : 'T =
         let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mconcat: _*_*_ -> _) a, b, c)
         let inline instance (a:'a, b:'b) = fun (x:'x) -> instance_3 (a, b, Unchecked.defaultof<'r>) x :'r      
-        instance (Mconcat, x) ()
+        instance (Mconcat.Instance, x) ()
 
     type Mconcat with
         static member inline Mconcat (_:Mconcat , x:list<'a * 'b>, _:'a * 'b   ) = fun () ->
