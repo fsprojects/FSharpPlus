@@ -1,7 +1,6 @@
 ﻿#r @"..\bin\Release\FsControl.Core.dll"
 
 open System
-open FsControl.Core.TypeMethods.Converter
 open FsControl.Operators
 
 let r101 = tryParse "10.1.0.1" : Net.IPAddress option

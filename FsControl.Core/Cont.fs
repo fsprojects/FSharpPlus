@@ -1,8 +1,5 @@
 ﻿namespace FsControl.Core.Types
 
-open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Applicative
-
 type Cont<'R,'A> = Cont of (('A->'R)->'R)
 
 [<RequireQualifiedAccess>]

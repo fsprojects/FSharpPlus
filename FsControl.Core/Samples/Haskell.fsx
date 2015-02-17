@@ -37,12 +37,6 @@ let either f g = function Left x -> f x | Right y -> g y
 type Integer = bigint
 open System.Numerics
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Num
-open FsControl.Core.TypeMethods.Integral
-open FsControl.Core.TypeMethods.Floating
-open FsControl.Core.TypeMethods.Fractional
-open FsControl.Core.TypeMethods.Real
-open FsControl.Core.TypeMethods.RealFrac
 open FsControl.Core.Types.Ratio
 
 let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInteger x
@@ -157,8 +151,7 @@ let resCmplx:System.Numerics.Complex * _ = quadratic 2G -3G 9G
 
 
 // Monads
-open FsControl.Core.TypeMethods.Applicative
-open FsControl.Core.TypeMethods.Monad
+
 let inline return' x = FsControl.Operators.result x
 let inline (>>=) x (f:_->'R) : 'R = FsControl.Operators.(>>=) x f
 let inline join (x:'Monad'Monad'a) : 'Monad'a = FsControl.Operators.join x
@@ -221,7 +214,7 @@ let action = do' {
 
 
 // Functors
-open FsControl.Core.TypeMethods.Functor
+
 let inline fmap   f x = FsControl.Operators.map f x
 
 // Test Functors
@@ -251,7 +244,6 @@ let mappedTree = fmap fTimes2minus3 myTree
 
 
 // Comonads
-open FsControl.Core.TypeMethods.Comonad
 
 let inline internal extend g s  = FsControl.Operators.extend g s
 let inline internal duplicate x = FsControl.Operators.duplicate x
@@ -271,7 +263,7 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 
 
 // Monoids
-open FsControl.Core.TypeMethods.Monoid
+
 open FsControl.Core.Types.Dual
 open FsControl.Core.Types.Endo
 
@@ -366,10 +358,6 @@ let allCombinations = sequence [!"abc"; !"12"]
 
 
 // Arrows
-open FsControl.Core.TypeMethods.Category
-open FsControl.Core.TypeMethods.Arrow
-open FsControl.Core.TypeMethods.ArrowChoice
-open FsControl.Core.TypeMethods.ArrowApply
 
 let inline id'() = FsControl.Operators.catId ()
 let inline (<<<) f g = FsControl.Operators.(<<<<) f g
@@ -383,7 +371,7 @@ let inline (|||) f g = FsControl.Operators.(||||) f g
 let inline (+++) f g = FsControl.Operators.(++++) f g
 let inline left  f = FsControl.Operators.left  f
 let inline right f = FsControl.Operators.right f
-let inline app() = FsControl.Operators.arrAp ()
+let inline app() = FsControl.Operators.arrApply ()
 let inline zeroArrow() = FsControl.Operators.zero ()
 let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 let runKleisli (Kleisli f) = f
@@ -417,7 +405,6 @@ let resSomeX = Kleisli(fun x -> Some x)
 let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 // Applicative functors
-open FsControl.Core.TypeMethods.Applicative
 
 let inline pure' x   = FsControl.Operators.result x
 let inline (<*>) x y = FsControl.Operators.(<*>) x y
@@ -488,8 +475,6 @@ let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii
 
 
 // Foldable
-open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Foldable
 
 let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = FsControl.Operators.foldBack f x z
 let inline foldl (f: 'b -> 'a -> 'b) (z:'b) x :'b = FsControl.Operators.fold     f z x
@@ -506,14 +491,14 @@ module FoldableTree =
         | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
         // add instance for Foldable class
-        static member inline FoldMap (_:Foldable.FoldMap, t:Tree<_>, _) =
+        static member inline FoldMap (_:FoldMap, t:Tree<_>, _) =
             let rec _foldMap x f =
                 match x with
                 | Empty        -> mempty()
                 | Leaf n       -> f n
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
             _foldMap t
-        static member inline Foldr (_:Foldr, x:Tree<_>, _) = fun (f,z) -> DefaultImpl.FoldrFromFoldMap f z x
+        static member inline Foldr (_:Foldr, x:Tree<_>, _) = fun (f,z) -> Foldr.FromFoldMap f z x
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree
@@ -523,7 +508,7 @@ module FoldableTree =
 
 
 // Traversable
-open FsControl.Core.TypeMethods.Traversable
+
 let inline traverse f t = FsControl.Operators.traverse f t
 let inline sequenceA  t = FsControl.Operators.sequenceA t
 
@@ -638,12 +623,6 @@ let plus  n x = execState (sequence <| List.replicate n tick) x
 
 
 // Monad Transformers
-open FsControl.Core.TypeMethods.MonadTrans
-open FsControl.Core.TypeMethods.MonadAsync
-open FsControl.Core.TypeMethods.MonadCont
-open FsControl.Core.TypeMethods.MonadState
-open FsControl.Core.TypeMethods.MonadReader
-open FsControl.Core.TypeMethods.MonadWriter
 
 type MaybeT<'T> = OptionT<'T>
 let MaybeT  x = OptionT x
@@ -815,7 +794,6 @@ let res4Layers'  = liftIO                 getLine : ListT<MaybeT<WriterT<IO<_ * 
 
 
 // MonadError
-open FsControl.Core.TypeMethods.MonadError
 let inline throwError x   = FsControl.Operators.throw x
 let inline catchError v h = FsControl.Operators.catch v h
 

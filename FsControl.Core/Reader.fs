@@ -1,8 +1,5 @@
 ﻿namespace FsControl.Core.Types
 
-open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Applicative
-
 type Reader<'R,'A> = Reader of ('R->'A)
 
 [<RequireQualifiedAccess>]

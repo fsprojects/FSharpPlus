@@ -3,11 +3,6 @@
 open System
 open FsControl.Core.Types
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Collection
-open FsControl.Core.TypeMethods.Applicative
-open FsControl.Core.TypeMethods.Comonad
-open FsControl.Core.TypeMethods.Foldable
-open FsControl.Core.TypeMethods.Monoid
 open FsControl.Operators
 
 let flip f x y = f y x
@@ -49,9 +44,9 @@ type ZipList<'s> = ZipList of 's seq with
     static member inline Mconcat (x:list<ZipList<'a>>) = printfn "ZipList mconcat optimized"; List.foldBack mappend x (mempty()):ZipList<'a>
 
 type WrappedList<'s> = WrappedList of 's list with
-    static member Return   (_:Applicative.Return, _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
-    static member Mappend  (_:Monoid.Mappend, WrappedList l, _) = fun (WrappedList x) -> WrappedList (l @ x)
-    static member Mempty   (_:Monoid.Mempty  , _:WrappedList<'a>   ) = fun () -> WrappedList List.empty
+    static member Return   (_:Return , _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
+    static member Mappend  (_:Mappend, WrappedList l, _ ) = fun (WrappedList x) -> WrappedList (l @ x)
+    static member Mempty   (_:Mempty , _:WrappedList<'a>) = fun () -> WrappedList List.empty
     static member FoldBack (f, WrappedList x, z) = List.foldBack f x z
 
 let wl = WrappedList  [2..10]

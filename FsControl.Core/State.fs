@@ -1,8 +1,5 @@
 ﻿namespace FsControl.Core.Types
 
-open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Applicative
-
 type State<'S,'A> = State of ('S->('A * 'S))
 
 [<RequireQualifiedAccess>]
