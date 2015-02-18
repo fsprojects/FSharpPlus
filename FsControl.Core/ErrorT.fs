@@ -21,7 +21,7 @@ module ErrorT =
 type ErrorT<'R> with
     static member inline Map    (_:Map   , x :ErrorT<'ma>, _ ) = fun f -> ErrorT.map f x :ErrorT<'mb>
     static member inline Return (_:Return,_:ErrorT<'ma>) = ErrorT << result << Choice1Of2 :'a -> ErrorT<'ma>
-    static member inline Apply  (_:Apply , f, x,   _:ErrorT<'mb>) = fun () -> ErrorT.apply f x :ErrorT<'mb>
+    static member inline Apply  (_:Apply , f, x,   _:ErrorT<'mb>) = ErrorT.apply f x :ErrorT<'mb>
     static member inline Bind   (_:Bind  , x:ErrorT<'ma>, _:ErrorT<'mb>) = fun (f:'a -> ErrorT<'mb>) -> ErrorT.bind f x :ErrorT<'mb>
 
     static member inline Lift (_:Lift, _:ErrorT<'m_a>) = ErrorT << (liftM Choice1Of2)      :'ma -> ErrorT<'m_a>
@@ -38,14 +38,14 @@ type ErrorT<'R> with
 
     static member CallCC (_:CallCC, _:ErrorT<Cont<'r,Choice<'aa,'bb>>>) = fun (f:((_ -> ErrorT<Cont<_,'b>>) -> _)) -> ErrorT(Cont.callCC <| fun c -> ErrorT.run(f (ErrorT << c << Choice1Of2)))     :ErrorT<Cont<'r,Choice<'aa,'bb>>>
 
-    static member        Ask   (_:Ask, _: ErrorT<Reader<'a,Choice<'a,'b>>>) = fun () -> (ErrorT << (liftM Choice1Of2)) (Reader.ask()) : ErrorT<Reader<'a,Choice<'a,'b>>>
+    static member        Ask   (_:Ask, _: ErrorT<Reader<'a,Choice<'a,'b>>>) = (ErrorT << (liftM Choice1Of2)) (Reader.ask()) : ErrorT<Reader<'a,Choice<'a,'b>>>
     static member inline Local (_:Local, ErrorT m, _:ErrorT<_> ) = fun f -> ErrorT <| Reader.local f m
 
     static member inline Tell   (_:Tell, _:ErrorT<_> ) = Lift.Invoke << Writer.tell
     static member inline Listen (_:Listen, m, _:ErrorT<_> ) = fun () ->
         let liftError (m,w) = Error.map (fun x -> (x,w)) m
         ErrorT (Writer.listen (ErrorT.run m) >>= (result << liftError))
-    static member inline Pass (_:Pass, m, _:ErrorT<_> ) = fun () -> ErrorT (ErrorT.run m >>= option (result None) (liftM Some << Writer.pass << result))
+    static member inline Pass (_:Pass, m, _:ErrorT<_> ) = ErrorT (ErrorT.run m >>= option (result None) (liftM Some << Writer.pass << result))
 
-    static member inline Get (_:Get, _:ErrorT<_>) = fun () -> Lift.Invoke (State.get())
+    static member inline Get (_:Get, _:ErrorT<_>) = Lift.Invoke (State.get())
     static member inline Put (_:Put, _:ErrorT<_>) = Lift.Invoke << State.put

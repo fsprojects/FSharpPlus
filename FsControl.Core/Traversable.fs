@@ -48,13 +48,13 @@ type Traverse() =
 type SequenceA() =
     inherit Default1()
     static member val Instance = SequenceA()
-    static member inline SequenceA (_:Default1 , t          , _) = fun () -> Traverse.Invoke id t
-    static member inline SequenceA (_:SequenceA, t:option<_>, _) = fun () -> match t with Some x -> Map.Invoke Some x | _ -> result None       
-    static member inline SequenceA (_:SequenceA, t:list<_>  , _) = fun () -> let cons_f x ys = Map.Invoke List.cons x <*> ys in Foldr.Invoke cons_f (result []) t
-    static member inline SequenceA (_:SequenceA, t:seq<_>   , _) = fun () -> Traverse.Invoke id t
-    static member inline SequenceA (_:SequenceA, t:Id<_>    , _) = fun () -> Traverse.Invoke id t
+    static member inline SequenceA (_:Default1 , t          , _) = Traverse.Invoke id t
+    static member inline SequenceA (_:SequenceA, t:option<_>, _) = match t with Some x -> Map.Invoke Some x | _ -> result None       
+    static member inline SequenceA (_:SequenceA, t:list<_>  , _) = let cons_f x ys = Map.Invoke List.cons x <*> ys in Foldr.Invoke cons_f (result []) t
+    static member inline SequenceA (_:SequenceA, t:seq<_>   , _) = Traverse.Invoke id t
+    static member inline SequenceA (_:SequenceA, t:Id<_>    , _) = Traverse.Invoke id t
 
     static member inline Invoke (t:'Traversable'Applicative'T) :'Applicative'Traversable'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member SequenceA: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (SequenceA.Instance, t) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (SequenceA.Instance, t)

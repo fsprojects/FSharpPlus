@@ -268,12 +268,12 @@ open FsControl.Core.Types.Dual
 open FsControl.Core.Types.Endo
 
 type Ordering = LT|EQ|GT with
-    static member        Mempty  (_:Mempty , _:Ordering) = fun () -> EQ
+    static member        Mempty  (_:Mempty , _:Ordering) = EQ
     static member        Mappend (_:Mappend, x:Ordering, _) = fun y -> 
-        match (x,y) with
-        | (LT,_) -> LT
-        | (EQ,a) -> a
-        | (GT,_) -> GT
+        match x, y with
+        | LT, _ -> LT
+        | EQ, a -> a
+        | GT, _ -> GT
 
 let inline compare' x y =
     match compare x y with

@@ -66,9 +66,9 @@ type FromSeq() =
 
 type ToSeq() =
     static member val Instance = ToSeq()
-    static member ToSeq (_:ToSeq, x:#seq<'T>  , _:seq<'T>) = fun () -> x :> seq<_>
-    static member ToSeq (_:ToSeq, x:Id<'T>    , _:seq<'T>) = fun () -> Seq.singleton x.getValue
-    static member ToSeq (_:ToSeq, x:option<'T>, _:seq<'T>) = fun () -> match x with Some x -> Seq.singleton x | None -> Seq.empty
+    static member ToSeq (_:ToSeq, x:#seq<'T>  , _:seq<'T>) = x :> seq<_>
+    static member ToSeq (_:ToSeq, x:Id<'T>    , _:seq<'T>) = Seq.singleton x.getValue
+    static member ToSeq (_:ToSeq, x:option<'T>, _:seq<'T>) = match x with Some x -> Seq.singleton x | None -> Seq.empty
 
 
 type Choose() =
@@ -81,10 +81,10 @@ type Choose() =
 
 type Distinct() =
     static member val Instance = Distinct()
-    static member Distinct (_:Distinct, x:Id<'T>   , _:Id<'T>  ) = fun () -> x
-    static member Distinct (_:Distinct, x:seq<'T>  , _:seq<'T> ) = fun () -> Seq.distinct x
-    static member Distinct (_:Distinct, x:list<'T> , _:list<'T>) = fun () -> Seq.distinct x |> Seq.toList
-    static member Distinct (_:Distinct, x:'T []    , _:'T []   ) = fun () -> Seq.distinct x |> Seq.toArray
+    static member Distinct (_:Distinct, x:Id<'T>   , _:Id<'T>  ) = x
+    static member Distinct (_:Distinct, x:seq<'T>  , _:seq<'T> ) = Seq.distinct x
+    static member Distinct (_:Distinct, x:list<'T> , _:list<'T>) = Seq.distinct x |> Seq.toList
+    static member Distinct (_:Distinct, x:'T []    , _:'T []   ) = Seq.distinct x |> Seq.toArray
 
 
 type DistinctBy() =
@@ -138,10 +138,10 @@ type Iteri() =
 
 type Length() =
     static member val Instance = Length()
-    static member Length (_:Length, x:Id<'T>   , _:int) = fun () -> 1
-    static member Length (_:Length, x:seq<'T>  , _:int) = fun () -> Seq.length   x
-    static member Length (_:Length, x:list<'T> , _:int) = fun () -> List.length  x
-    static member Length (_:Length, x:'T []    , _:int) = fun () -> Array.length x
+    static member Length (_:Length, x:Id<'T>   , _:int) = 1
+    static member Length (_:Length, x:seq<'T>  , _:int) = Seq.length   x
+    static member Length (_:Length, x:list<'T> , _:int) = List.length  x
+    static member Length (_:Length, x:'T []    , _:int) = Array.length x
 
 
 type Mapi() =
@@ -154,10 +154,10 @@ type Mapi() =
 
 type Max() =
     static member val Instance = Max()
-    static member Max (_:Max, x:Id<'T>  , _:'T) = fun () -> x.getValue
-    static member Max (_:Max, x:seq<'T> , _:'T) = fun () -> Seq.max   x
-    static member Max (_:Max, x:list<'T>, _:'T) = fun () -> List.max  x
-    static member Max (_:Max, x:'T []   , _:'T) = fun () -> Array.max x
+    static member Max (_:Max, x:Id<'T>  , _:'T) = x.getValue
+    static member Max (_:Max, x:seq<'T> , _:'T) = Seq.max   x
+    static member Max (_:Max, x:list<'T>, _:'T) = List.max  x
+    static member Max (_:Max, x:'T []   , _:'T) = Array.max x
 
 
 type MaxBy() =
@@ -170,10 +170,10 @@ type MaxBy() =
 
 type Min() =
     static member val Instance = Min()
-    static member Min (_:Min, x:Id<'T>  , _:'T) = fun () -> x.getValue
-    static member Min (_:Min, x:seq<'T> , _:'T) = fun () -> Seq.min   x
-    static member Min (_:Min, x:list<'T>, _:'T) = fun () -> List.min  x
-    static member Min (_:Min, x:'T []   , _:'T) = fun () -> Array.min x
+    static member Min (_:Min, x:Id<'T>  , _:'T) = x.getValue
+    static member Min (_:Min, x:seq<'T> , _:'T) = Seq.min   x
+    static member Min (_:Min, x:list<'T>, _:'T) = List.min  x
+    static member Min (_:Min, x:'T []   , _:'T) = Array.min x
 
 
 type MinBy() =
@@ -186,10 +186,10 @@ type MinBy() =
 
 type Rev() =
     static member val Instance = Rev()
-    static member Rev (_:Rev, x:Id<'a>  , _:Id<'a>  ) = fun () -> x
-    static member Rev (_:Rev, x:seq<'a> , _:seq<'a> ) = fun () -> x |> Seq.toArray |> Array.rev |> Array.toSeq
-    static member Rev (_:Rev, x:list<'a>, _:list<'a>) = fun () -> List.rev  x
-    static member Rev (_:Rev, x:'a []   , _:'a []   ) = fun () -> Array.rev x
+    static member Rev (_:Rev, x:Id<'a>  , _:Id<'a>  ) = x
+    static member Rev (_:Rev, x:seq<'a> , _:seq<'a> ) = x |> Seq.toArray |> Array.rev |> Array.toSeq
+    static member Rev (_:Rev, x:list<'a>, _:list<'a>) = List.rev  x
+    static member Rev (_:Rev, x:'a []   , _:'a []   ) = Array.rev x
 
 
 type Scan() =
@@ -202,10 +202,10 @@ type Scan() =
 
 type Sort() =
     static member val Instance = Sort()
-    static member Sort (_:Sort, x:Id<'a>  , _:Id<'a>  ) = fun () -> x
-    static member Sort (_:Sort, x:seq<'a> , _:seq<'a> ) = fun () -> Seq.sort   x
-    static member Sort (_:Sort, x:list<'a>, _:list<'a>) = fun () -> List.sort  x
-    static member Sort (_:Sort, x:'a []   , _:'a []   ) = fun () -> Array.sort x
+    static member Sort (_:Sort, x:Id<'a>  , _:Id<'a>  ) = x
+    static member Sort (_:Sort, x:seq<'a> , _:seq<'a> ) = Seq.sort   x
+    static member Sort (_:Sort, x:list<'a>, _:list<'a>) = List.sort  x
+    static member Sort (_:Sort, x:'a []   , _:'a []   ) = Array.sort x
 
 
 type SortBy() =
@@ -218,7 +218,7 @@ type SortBy() =
 
 type Zip() =
     static member val Instance = Zip()
-    static member Zip (_:Zip, x:Id<'T>  , y:Id<'U>  , _:Id<'T*'U>  ) = fun () -> Id.create(x.getValue,y.getValue)
-    static member Zip (_:Zip, x:seq<'T> , y:seq<'U> , _:seq<'T*'U> ) = fun () -> Seq.zip   x y
-    static member Zip (_:Zip, x:list<'T>, y:list<'U>, _:list<'T*'U>) = fun () -> List.zip  x y
-    static member Zip (_:Zip, x:'T []   , y:'U []   , _:('T*'U) [] ) = fun () -> Array.zip x y
+    static member Zip (_:Zip, x:Id<'T>  , y:Id<'U>  , _:Id<'T*'U>  ) = Id.create(x.getValue,y.getValue)
+    static member Zip (_:Zip, x:seq<'T> , y:seq<'U> , _:seq<'T*'U> ) = Seq.zip   x y
+    static member Zip (_:Zip, x:list<'T>, y:list<'U>, _:list<'T*'U>) = List.zip  x y
+    static member Zip (_:Zip, x:'T []   , y:'U []   , _:('T*'U) [] ) = Array.zip x y

@@ -32,10 +32,10 @@ type WriterT<'WMa> with
 
     static member inline Map      (_:Map   , x, _) = fun f -> WriterT.map f x
     static member inline Return   (_:Return, _:WriterT<'wma>) :'a -> WriterT<'wma> = fun a -> WriterT (result (a, Mempty.Invoke()))
-    static member inline Apply    (_:Apply , f, x, _:WriterT<'r>) = fun () -> WriterT.apply f x :WriterT<'r>
+    static member inline Apply    (_:Apply , f, x, _:WriterT<'r>) = WriterT.apply f x :WriterT<'r>
     static member inline Bind     (_:Bind  , x:WriterT<'wma>, _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> = fun f -> WriterT.bind f x
 
-    static member inline Zero (_:Zero, _:WriterT<_>  ) = fun ()          -> WriterT (Zero.Invoke())
+    static member inline Zero (_:Zero, _:WriterT<_>  ) =                    WriterT (Zero.Invoke())
     static member inline Plus (_:Plus,   WriterT m, _) = fun (WriterT n) -> WriterT (m <|> n)
 
     static member inline Tell   (_:Tell, _:WriterT<_> ) = fun w -> WriterT (result ((), w))
@@ -59,9 +59,9 @@ type WriterT<'WMa> with
     static member inline CallCC (_:CallCC  , _:WriterT<Cont<'r,'a*'b>>) : (('a->WriterT<Cont<'r,'t>>)->_) -> WriterT<Cont<'r,'a*'b>>= 
         fun f -> WriterT (Cont.callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, Mempty.Invoke()))))
     
-    static member inline Ask   (_:Ask, _:WriterT<Reader<'a,'a*'b>> ) = fun () -> Lift.Invoke (Reader.ask()):WriterT<Reader<'a,'a*'b>>
+    static member inline Ask   (_:Ask, _:WriterT<Reader<'a,'a*'b>> ) = Lift.Invoke (Reader.ask()):WriterT<Reader<'a,'a*'b>>
     static member        Local (_:Local, WriterT m, _:WriterT<Reader<'a,'b>>) :('a->'t) -> WriterT<Reader<'a,'b>> = fun f -> 
         WriterT (Reader.local f m)
 
-    static member inline Get (_:Get , _:WriterT<State<'a,'a*'b>>  ) : unit -> WriterT<State<'a,'a*'b>>   = fun () -> Lift.Invoke (State.get())
+    static member inline Get (_:Get , _:WriterT<State<'a,'a*'b>>  ) :         WriterT<State<'a,'a*'b>>   = Lift.Invoke (State.get())
     static member inline Put (_:Put , _:WriterT<State<'a,unit*'b>>) :'a    -> WriterT<State<'a,unit*'b>> = Lift.Invoke << State.put

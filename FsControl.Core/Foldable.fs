@@ -80,32 +80,32 @@ type Foldl() =
 type ToList() =
     inherit Default1()
     static member val Instance = ToList()
-    static member inline ToList (_:Default1, x      , _) = fun () -> Foldr.Invoke List.cons [] x
-    static member ToList (_:ToList, x:seq<'a>       , _) = fun () -> Seq.toList x
-    static member ToList (_:ToList, x:Set<'a>       , _) = fun () -> Set.toList x
-    static member ToList (_:ToList, x:string        , _) = fun () -> x.ToCharArray() |> Array.toList
-    static member ToList (_:ToList, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray() |> Array.toList
-    static member ToList (_:ToList, x:'a []         , _) = fun () -> Array.toList x
-    static member ToList (_:ToList, x:'a ResizeArray, _) = fun () -> Seq.toList x
-    static member ToList (_:ToList, x:list<'a>      , _) = fun () -> x
+    static member inline ToList (_:Default1, x      , _) = Foldr.Invoke List.cons [] x
+    static member ToList (_:ToList, x:seq<'a>       , _) = Seq.toList x
+    static member ToList (_:ToList, x:Set<'a>       , _) = Set.toList x
+    static member ToList (_:ToList, x:string        , _) = x.ToCharArray() |> Array.toList
+    static member ToList (_:ToList, x:StringBuilder , _) = x.ToString().ToCharArray() |> Array.toList
+    static member ToList (_:ToList, x:'a []         , _) = Array.toList x
+    static member ToList (_:ToList, x:'a ResizeArray, _) = Seq.toList x
+    static member ToList (_:ToList, x:list<'a>      , _) = x
 
     static member inline Invoke  value :'t list = 
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToList: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (ToList.Instance , value) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ToList.Instance , value)
 
  
 type ToArray() =
     inherit Default1()
     static member val Instance = ToArray()
-    static member inline ToArray (_:Default1, x       , _) = fun () -> Foldr.Invoke (fun x y -> Array.concat [[|x|];y]) [||] x
-    static member ToArray (_:ToArray, x:seq<'a>       , _) = fun () -> Seq.toArray x
-    static member ToArray (_:ToArray, x:Set<'a>       , _) = fun () -> Set.toArray x
-    static member ToArray (_:ToArray, x:string        , _) = fun () -> x.ToCharArray()
-    static member ToArray (_:ToArray, x:StringBuilder , _) = fun () -> x.ToString().ToCharArray()
-    static member ToArray (_:ToArray, x:'a []         , _) = fun () -> x
-    static member ToArray (_:ToArray, x:'a ResizeArray, _) = fun () -> Seq.toArray x
-    static member ToArray (_:ToArray, x:list<'a>      , _) = fun () -> List.toArray x
+    static member inline ToArray (_:Default1, x       , _) = Foldr.Invoke (fun x y -> Array.concat [[|x|];y]) [||] x
+    static member ToArray (_:ToArray, x:seq<'a>       , _) = Seq.toArray x
+    static member ToArray (_:ToArray, x:Set<'a>       , _) = Set.toArray x
+    static member ToArray (_:ToArray, x:string        , _) = x.ToCharArray()
+    static member ToArray (_:ToArray, x:StringBuilder , _) = x.ToString().ToCharArray()
+    static member ToArray (_:ToArray, x:'a []         , _) = x
+    static member ToArray (_:ToArray, x:'a ResizeArray, _) = Seq.toArray x
+    static member ToArray (_:ToArray, x:list<'a>      , _) = List.toArray x
     
  
 type Exists() =

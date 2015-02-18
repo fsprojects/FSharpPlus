@@ -19,10 +19,10 @@ module OptionT =
 type OptionT<'Ma> with
     static member inline Map    (_:Map   ,x :OptionT<'ma>, _  ) = fun (f:'a->'b) -> OptionT.map f x :OptionT<'mb>
     static member inline Return (_:Return, _:OptionT<'ma>     ) = OptionT << result << Some :'a -> OptionT<'ma>
-    static member inline Apply  (_:Apply , f, x, _:OptionT<'r>) = fun () -> OptionT.apply f x :OptionT<'r>
+    static member inline Apply  (_:Apply , f, x, _:OptionT<'r>) = OptionT.apply f x :OptionT<'r>
     static member inline Bind   (_:Bind  , x :OptionT<'ma>, _:OptionT<'mb>) = fun (f: 'a -> OptionT<'mb>) -> OptionT.bind f x :OptionT<'mb>
 
-    static member inline Zero (_:Zero, _:OptionT<_>) = fun ()          -> OptionT <| result None
+    static member inline Zero (_:Zero, _:OptionT<_>) =                    OptionT <| result None
     static member inline Plus (_:Plus, OptionT x, _) = fun (OptionT y) -> OptionT <| do'() {
             let! maybe_value = x
             return! match maybe_value with Some value -> x | _ -> y}
@@ -40,10 +40,10 @@ module ListT =
 type ListT<'Ma> with
     static member inline Map    (_:Map      , x:ListT<'ma>, _    ) = fun (f:'a->'b) -> ListT.map f x :ListT<'mb>
     static member inline Return (_:Return ,        _:ListT<'ma>) = ListT << result << List.singleton :'a -> ListT<'ma>
-    static member inline Apply  (_:Apply, f, x,  _:ListT<'r> ) = fun () -> ListT.apply f x :ListT<'r>
+    static member inline Apply  (_:Apply, f, x,  _:ListT<'r> ) = ListT.apply f x :ListT<'r>
     static member inline Bind   (_:Bind, x:ListT<'ma>, _:ListT<'mb>) = fun (f:'a -> ListT<'mb>) -> ListT.bind f x :ListT<'mb>
 
-    static member inline Zero (_:Zero, _:ListT<_>) = fun ()        -> ListT <| result []
+    static member inline Zero (_:Zero, _:ListT<_>) =                  ListT <| result []
     static member inline Plus (_:Plus, ListT x, _) = fun (ListT y) -> ListT <| do'() {
         let! a = x
         let! b = y
@@ -63,10 +63,10 @@ module SeqT =
 type SeqT<'Ma> with
     static member inline Map    (_:Map   , x:SeqT<'ma>, _   ) = fun (f:'a->'b) -> SeqT.map f x :SeqT<'mb>
     static member inline Return (_:Return,       _:SeqT<'ma>) = SeqT << result << Seq.singleton :'a -> SeqT<'ma>
-    static member inline Apply  (_:Apply , f, x, _:SeqT<'r> ) = fun () -> SeqT.apply f x :SeqT<'r>
+    static member inline Apply  (_:Apply , f, x, _:SeqT<'r> ) = SeqT.apply f x :SeqT<'r>
     static member inline Bind   (_:Bind  , x:SeqT<'ma>, _:SeqT<'mb>) = fun (f: 'a -> SeqT<'mb>) -> SeqT.bind f x :SeqT<'mb>
 
-    static member inline Zero (_:Zero, _:SeqT<_>) = fun ()       -> SeqT <| result Seq.empty
+    static member inline Zero (_:Zero, _:SeqT<_>) =                 SeqT <| result Seq.empty
     static member inline Plus (_:Plus, SeqT x, _) = fun (SeqT y) -> SeqT <| do'() {
         let! a = x
         let! b = y
@@ -162,10 +162,10 @@ type CallCC() =
 // MonadState =
 type Get() =
     static member val Instance = Get()
-    static member inline Get (_:Get, _:OptionT<_>) = fun () -> Lift.Invoke (State.get())
-    static member inline Get (_:Get, _:ListT<_>  ) = fun () -> Lift.Invoke (State.get())
-    static member inline Get (_:Get, _: SeqT<_>  ) = fun () -> Lift.Invoke (State.get())
-    static member        Get (_:Get, _:State<_,_>) = fun () ->      (State.get())
+    static member inline Get (_:Get, _:OptionT<_>) = Lift.Invoke (State.get())
+    static member inline Get (_:Get, _:ListT<_>  ) = Lift.Invoke (State.get())
+    static member inline Get (_:Get, _: SeqT<_>  ) = Lift.Invoke (State.get())
+    static member        Get (_:Get, _:State<_,_>) =      (State.get())
 
 type Put() =
     static member val Instance = Put()
@@ -178,10 +178,10 @@ type Put() =
 // MonadReader =
 type Ask() =
     static member val Instance = Ask()
-    static member Ask (_:Ask, _:OptionT<Reader<'a,option<'a>>>) = fun () -> Lift.Invoke (Reader.ask()) :OptionT<Reader<'a,option<'a>>>
-    static member Ask (_:Ask, _:ListT<Reader< 'a, list<  'a>>>) = fun () -> Lift.Invoke (Reader.ask()) :  ListT<Reader<'a,  list<'a>>>
-    static member Ask (_:Ask, _: SeqT<Reader< 'a,  seq<  'a>>>) = fun () -> Lift.Invoke (Reader.ask()) :   SeqT<Reader<'a,   seq<'a>>>
-    static member Ask (_:Ask, _:Reader<'r,'r>                 ) = fun () ->      (Reader.ask()) :Reader<'r,'r>
+    static member Ask (_:Ask, _:OptionT<Reader<'a,option<'a>>>) = Lift.Invoke (Reader.ask()) :OptionT<Reader<'a,option<'a>>>
+    static member Ask (_:Ask, _:ListT<Reader< 'a, list<  'a>>>) = Lift.Invoke (Reader.ask()) :  ListT<Reader<'a,  list<'a>>>
+    static member Ask (_:Ask, _: SeqT<Reader< 'a,  seq<  'a>>>) = Lift.Invoke (Reader.ask()) :   SeqT<Reader<'a,   seq<'a>>>
+    static member Ask (_:Ask, _:Reader<'r,'r>                 ) =      (Reader.ask()) :Reader<'r,'r>
 
 type Local() =
     static member val Instance = Local()
@@ -199,12 +199,12 @@ type Tell() =
 
 type Listen() =
     static member val Instance = Listen()
-    static member inline Listen (_:Listen, m, _:OptionT<_> ) = fun () ->
+    static member inline Listen (_:Listen, m, _:OptionT<_> ) =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
         OptionT (Writer.listen (OptionT.run m) >>= (result << liftMaybe))
-    static member        Listen (_:Listen, m, _:Writer<_,_>) = fun () -> Writer.listen m
+    static member        Listen (_:Listen, m, _:Writer<_,_>) = Writer.listen m
 
 type Pass() =
     static member val Instance = Pass()
-    static member inline Pass (_:Pass, m, _:OptionT<_> ) = fun () -> OptionT (OptionT.run m >>= option (result None) (liftM Some << Writer.pass << result))
-    static member        Pass (_:Pass, m, _:Writer<_,_>) = fun () -> Writer.pass m
+    static member inline Pass (_:Pass, m, _:OptionT<_> ) = OptionT (OptionT.run m >>= option (result None) (liftM Some << Writer.pass << result))
+    static member        Pass (_:Pass, m, _:Writer<_,_>) = Writer.pass m

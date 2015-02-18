@@ -27,10 +27,10 @@ module Operators =
         call_2 (Return.Instance, Unchecked.defaultof<'Functor'T>) x
 
     let inline (<*>) (x:'Applicative'T_'U) (y:'Applicative'T): 'Applicative'U = 
-        let inline call_4 (a:^a,b:^b,c:^c,d:^d          ) =                                                          
+        let inline call_4 (a:^a,b:^b,c:^c,d:^d) =                                                          
             ((^a or ^b or ^c or ^d) : (static member Apply: ^a* ^b* ^c* ^d -> _) (a,b,c,d))
-        let inline call (a:'a, b:'b, c:'c) = fun (x:'x) -> call_4(a,b,c, Unchecked.defaultof<'r>) x : 'r
-        call (Apply.Instance, x, y) () : 'Applicative'U
+        let inline call (a:'a, b:'b, c:'c) = call_4(a,b,c, Unchecked.defaultof<'r>) : 'r
+        call (Apply.Instance, x, y) : 'Applicative'U
 
     let inline liftA2 (f:'T->'U->'V) (a:'Applicative'T) (b:'Applicative'U) :'Applicative'V = f <!> a <*> b
     let inline (  *>) (x:'Applicative'a) :'Applicative'b->'Applicative'b = x |> liftA2 (fun   _ -> id)
@@ -51,15 +51,15 @@ module Operators =
 
     let inline join (x:'Monad'Monad'T) :'Monad'T =
         let inline call_3 (a:^a,b:^b,c:^c) = ((^a or ^b or ^c) : (static member Join: ^a* ^b* ^c -> _) (a,b,c))
-        call_3 (Join.Instance, x, Unchecked.defaultof<'Monad'T>) ()
+        call_3 (Join.Instance, x, Unchecked.defaultof<'Monad'T>)
 
 
     // Monoid -----------------------------------------------------------------
 
     let inline mempty() :'Monoid =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mempty: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Mempty.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Mempty.Instance
 
     let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mappend: _*_*_ -> _) a, b, c)
@@ -68,16 +68,16 @@ module Operators =
 
     let inline mconcat (x:list<'Monoid>)      : 'Monoid =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mconcat: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r       
-        call (Mconcat.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Mconcat.Instance, x)
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
     let inline zero() :'Functor'T =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Zero.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Zero.Instance
 
     let inline (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Plus: _*_*_ -> _) a, b, c)
@@ -122,8 +122,8 @@ module Operators =
 
     let inline catId()     =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Id: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Id.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Id.Instance
 
     let inline (<<<<)  f g = 
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Comp: _*_*_ -> _) a, b, c)
@@ -142,13 +142,13 @@ module Operators =
 
     let inline first   f   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member First: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (First.Instance, f) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (First.Instance, f)
 
     let inline second  f   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Second: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Second.Instance, f) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Second.Instance, f)
 
     let inline ( ****) f g = first f >>>> second g
 
@@ -166,18 +166,18 @@ module Operators =
 
     let inline left    f   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcLeft: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (AcLeft.Instance, f) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (AcLeft.Instance, f)
 
     let inline right   f   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcRight: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (AcRight.Instance, f) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (AcRight.Instance, f)
 
     let inline arrApply()     =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ArrApply: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call ArrApply.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call ArrApply.Instance
 
 
     // Foldable
@@ -199,13 +199,13 @@ module Operators =
 
     let inline toList  value :'t list =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToList: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (ToList.Instance, value) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ToList.Instance, value)
 
     let inline toArray value :'t []   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToArray: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (ToArray.Instance, value) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ToArray.Instance, value)
 
     let inline exists     (predicate :'T->bool) (source:'Foldable'T)        =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Exists: _*_*_ -> _) a, b, c)
@@ -247,16 +247,16 @@ module Operators =
 
     let inline sequenceA (t:'Traversable'Applicative'T) :'Applicative'Traversable'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member SequenceA: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (SequenceA.Instance, t) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (SequenceA.Instance, t)
 
 
     // Comonads
 
     let inline extract (x:'Comonad'T): 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extract: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Extract.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Extract.Instance, x)
 
     let inline extend (g:'Comonad'T->'U) (s:'Comonad'T): 'Comonad'U =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extend: _*_*_ -> _) a, b, c)
@@ -266,8 +266,8 @@ module Operators =
 
     let inline duplicate x = //'Comonad'T -> :'Comonad'Comonad'T 
        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Duplicate: _*_*_ -> _) a, b, c)
-       let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-       call (Duplicate.Instance, x) ()
+       let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+       call (Duplicate.Instance, x)
 
 
 
@@ -293,8 +293,8 @@ module Operators =
     /// <summary>get    :: MonadState  s m => m s</summary>
     let inline get() :'ms =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Get: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Get.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Get.Instance
 
     /// <summary>put    :: MonadState  s m => s -> m ()</summary>
     let inline put (x:'s) :'m =
@@ -305,8 +305,8 @@ module Operators =
     /// <summary>ask    :: MonadReader r m => m r</summary>
     let inline ask() :'mr =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Ask: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Ask.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Ask.Instance
    
     /// <summary>local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
     let inline local (f:'rr) (m:'ma) :'ma =
@@ -323,14 +323,14 @@ module Operators =
     /// <summary>listen :: MonadWriter w m => m a -> m (a,w)</summary>
     let inline listen (m:'ma) :'maw =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Listen: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call (Listen.Instance, m) ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call (Listen.Instance, m)
 
     /// <summary>pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
     let inline pass (m:'maww) :'ma =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Pass: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call (Pass.Instance, m) ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call (Pass.Instance, m)
 
     /// <summary>throw :: MonadError e m => e -> m a</summary>
     let inline throw (x:'e) :'ma =
@@ -390,8 +390,8 @@ module Operators =
 
     let inline distinct                         (source:'Collection'T)        =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Distinct: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Distinct.Instance, source) ()              :'Collection'T
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Distinct.Instance, source)              :'Collection'T
 
     let inline distinctBy (projection:'T->'Key) (source:'Collection'T)        =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member DistinctBy: _*_*_ -> _) a, b, c)
@@ -414,8 +414,8 @@ module Operators =
 
     let inline length (source:'Collection'T)                                  =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Length: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Length.Instance, source) ()                  :int
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Length.Instance, source)                  :int
 
     let inline mapi    (mapping:int->'T->'U)    (source:'Collection'T)        =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mapi: _*_*_ -> _) a, b, c)
@@ -434,8 +434,8 @@ module Operators =
 
     let inline rev  (source:'Collection'T)                                    =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Rev: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Rev.Instance, source) ()                   :'Collection'T
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Rev.Instance, source)                   :'Collection'T
 
     let inline scan (folder:'State'->'T->'State) state (source:'Collection'T) =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Scan: _*_*_ -> _) a, b, c)
@@ -444,18 +444,18 @@ module Operators =
 
     let inline sort (source:'Collection'T)                                    =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Sort: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Sort.Instance, source) ()                 :'Collection'T
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Sort.Instance, source)                 :'Collection'T
 
     let inline toSeq (source:'Collection'T)                                   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToSeq: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (ToSeq.Instance, source) ()                   :seq<'T>
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ToSeq.Instance, source)                   :seq<'T>
 
     let inline zip (source1:'Collection'T1) (source2:'Collection'T2)          =
         let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member Zip: _*_*_*_ -> _) a, b, c, d)
-        let inline call (a:'a, b:'b, c:'c) = fun (x:'x) -> call_4 (a, b, c, Unchecked.defaultof<'r>) x :'r
-        call (Zip.Instance, source1, source2) ()           :'Collection'T1'T2
+        let inline call (a:'a, b:'b, c:'c) = call_4 (a, b, c, Unchecked.defaultof<'r>) :'r
+        call (Zip.Instance, source1, source2)           :'Collection'T1'T2
 
 
 
@@ -517,18 +517,18 @@ module Operators =
 
     let inline divRem (D:'T) (d:'T) :'T*'T =
         let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member DivRem: _*_*_*_ -> _) a, b, c, d)
-        let inline call (a:'a, b:'b, c:'c) = fun (x:'x) -> call_4 (a, b, c, Unchecked.defaultof<'r>) x :'r
-        call (DivRem.Instance, D, d) ()
+        let inline call (a:'a, b:'b, c:'c) = call_4 (a, b, c, Unchecked.defaultof<'r>) :'r
+        call (DivRem.Instance, D, d)
 
     let inline minValue() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MinValue: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call MinValue.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call MinValue.Instance
 
     let inline maxValue() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MaxValue: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call MaxValue.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call MaxValue.Instance
 
 
     let inline fromBigInteger  (x:bigint)   :'Num    =
@@ -538,28 +538,28 @@ module Operators =
 
     let inline toBigInteger    (x:'Integral) :bigint =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToBigInteger: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (ToBigInteger.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ToBigInteger.Instance, x)
 
     let inline abs    (x:'Num) :'Num =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Abs: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Abs.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Abs.Instance, x)
 
     let inline signum (x:'Num) :'Num =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Signum: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Signum.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Signum.Instance, x)
 
     let inline negate (x:'Num) :'Num =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Negate: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Negate.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Negate.Instance, x)
 
     let inline (~-)   (x:'Num) :'Num =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Negate: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Negate.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Negate.Instance, x) 
 
     let inline fromRational (x:Rational) :'Fractional =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromRational: _*_ -> _) a, b)
@@ -568,15 +568,15 @@ module Operators =
 
     let inline properFraction x =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ProperFraction: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (ProperFraction.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ProperFraction.Instance, x)
 
     let inline toRational (x:'Real) :Rational =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToRational: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (ToRational.Instance, x) ()
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ToRational.Instance, x)
 
     let inline pi() :'Floating =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Pi: _*_ -> _) a, b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Pi.Instance ()
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Pi.Instance

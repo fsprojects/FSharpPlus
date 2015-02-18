@@ -46,7 +46,7 @@ type ZipList<'s> = ZipList of 's seq with
 type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:Return , _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
     static member Mappend  (_:Mappend, WrappedList l, _ ) = fun (WrappedList x) -> WrappedList (l @ x)
-    static member Mempty   (_:Mempty , _:WrappedList<'a>) = fun () -> WrappedList List.empty
+    static member Mempty   (_:Mempty , _:WrappedList<'a>) = WrappedList List.empty
     static member FoldBack (f, WrappedList x, z) = List.foldBack f x z
 
 let wl = WrappedList  [2..10]
@@ -149,7 +149,7 @@ let monad     = new MonadBuilder()
 let stack = new Collections.Generic.Stack<_>([1;2;3])
 
 let twoSeqs = mappend (seq [1;2;3]) (seq [4;5;6])
-let sameSeq = mappend (mempty()) (seq [4;5;6])
+let sameSeq = mappend (mempty()   ) (seq [4;5;6])
 
 let seqFromLst:_ seq = fromList [1;2;3;4]
 let seqFromLst' = toSeq [1;2;3;4]
@@ -216,10 +216,11 @@ let r123 = toList stack
 
 // Test traversable
 
-let resNone  = sequenceA (seq [Some 3;None ;Some 1])
+let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
+let resNone'  = sequenceA (seq [Some 3;None ;Some 1])
 
 // This should not compile (but it does)
-let resNone' = sequenceA (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
+let resNone'' = sequenceA (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
 
 
 
