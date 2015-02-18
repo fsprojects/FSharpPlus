@@ -22,10 +22,10 @@ open FsControl.Core.Types
 // Monad class ------------------------------------------------------------
 
 type Bind() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Bind()
 
-    static member inline Bind (_:Typ1, x:'M, r:'R) = fun (f:'t->'R) -> 
+    static member inline Bind (_:Default1, x:'M, r:'R) = fun (f:'t->'R) -> 
         ((^M or ^R) : (static member Bind: ^M -> (('t->'R) -> 'R)) x) f
 
     static member        Bind (_:Bind, x:Lazy<'a>     , _:Lazy<'b>     ) = fun (f:_->Lazy<'b>  ) -> lazy (f x.Value).Value
@@ -67,10 +67,10 @@ type Bind() =
 
 
 type Join() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Join()
 
-    static member inline Join (_:Typ1, x:#obj, _:#obj) = fun () -> Bind.Invoke x id :#obj
+    static member inline Join (_:Default1, x               , _           ) = fun () -> Bind.Invoke x id 
     static member        Join (_:Join, x:Lazy<Lazy<'a>>    , _:Lazy<'a>  ) = fun () -> lazy x.Value.Value
     static member        Join (_:Join, x:option<option<'a>>, _:option<'a>) = fun () -> Option.bind   id x
     static member        Join (_:Join, x:list<_>           , _:list<'b>  ) = fun () -> List.collect  id x
@@ -88,9 +88,9 @@ type Join() =
 
 
 type Return() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Return()
-    static member inline Return (_:Typ1, r:'R) = fun (x:'T) -> ((^R) : (static member Return: ^T -> ^R) x)
+    static member inline Return (_:Default1, r:'R) = fun (x:'T) -> ((^R) : (static member Return: ^T -> ^R) x)
 
     static member        Return (_:Return, _:Lazy<'a>      ) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
     static member        Return (_:Return, _:seq<'a>       ) = fun x -> Seq.singleton x :seq<'a>
@@ -124,14 +124,13 @@ type Return() =
  
 
 type Apply() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Apply()
     static member inline FromMonad f x = Bind.Invoke f (fun x1 -> Bind.Invoke x (fun x2 -> Return.Invoke(x1 x2)))
 
 
-    static member inline Apply (_:Typ2, f:#obj , x, _:#obj) = fun () -> Bind.Invoke f (fun x1 -> Bind.Invoke x (fun x2 -> Return.Invoke(x1 x2)))
-    static member inline Apply (_:Typ1, f:'F , x:'X, _:'R) = fun () -> 
-        ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
+    static member inline Apply (_:Default2, f , x, _) = fun () -> Bind.Invoke f (fun x1 -> Bind.Invoke x (fun x2 -> Return.Invoke(x1 x2)))
+    static member inline Apply (_:Default1, f:'F , x:'X, _:'R) = fun () -> ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
 
     static member        Apply (_:Apply, f:Lazy<'a->'b>, x:Lazy<'a>     , _:Lazy<'b>     ) = fun () -> Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
     static member        Apply (_:Apply, f:seq<_>      , x:seq<'a>      , _:seq<'b>      ) = fun () -> Seq.apply  f x :seq<'b>
@@ -204,14 +203,14 @@ type Map_() =
 
 
 type Map() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Map()
          
     static member inline FromApplicative f x = Return.Invoke (Apply.Invoke f x)
     static member inline FromMonad       f x = Bind.Invoke x (Return.Invoke << f)
 
-    static member inline Map (_:Typ2, x:'f when 'f :> obj, _:'r when 'r :> obj) = fun (f:'a->'b) -> Return.Invoke (Apply.Invoke f x) :'r
-    static member inline Map (_:Typ1, x:'F, _:'R) = fun (f:'a->'b) -> ((^F) : (static member (<!>): ('a->'b) -> ^F -> ^R) (f, x))
+    static member inline Map (_:Default2, x:'f, _:'r) = fun (f:'a->'b) -> Return.Invoke (Apply.Invoke f x) :'r
+    static member inline Map (_:Default1, x:'F, _:'R) = fun (f:'a->'b) -> ((^F) : (static member (<!>): ('a->'b) -> ^F -> ^R) (f, x))
 
     static member Map (_:Map, x:Lazy<_>        , _:Lazy<'b>) = fun f -> Lazy.Create (fun () -> f x.Value) : Lazy<'b>
     static member Map (_:Map, x:seq<_>         , _:seq<'b> ) = fun f -> Seq.map f x :seq<'b>
@@ -365,13 +364,13 @@ type Extend() =
 
 
 type Duplicate() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Duplicate()
-    static member inline Duplicate (_:Typ1, x:#obj, _:#obj) = fun () -> Extend.Invoke id x :#obj
-    static member        Duplicate (_:Duplicate, s:Async<'a>, _:Async<Async<'a>>) = fun () -> async.Return s : Async<Async<'a>>
-    static member        Duplicate (_:Duplicate, s:Lazy<'a> , _:Lazy<Lazy<'a>>  ) = fun () -> Lazy.CreateFromValue s : Lazy<Lazy<'a>>
-    static member        Duplicate (_:Duplicate, (w:'w, a:'a), _:'w * ('w*'a)) = fun ()     -> (w, (w, a))
-    static member inline Duplicate (_:Duplicate,  f:'m -> 'a , _:'m->'m->'a  ) = fun () a b -> f (Mappend.Invoke a b)
+    static member inline Duplicate (_:Default1 , x           , _                 ) = fun () -> Extend.Invoke id x
+    static member        Duplicate (_:Duplicate, s:Async<'a> , _:Async<Async<'a>>) = fun () -> async.Return s : Async<Async<'a>>
+    static member        Duplicate (_:Duplicate, s:Lazy<'a>  , _:Lazy<Lazy<'a>>  ) = fun () -> Lazy.CreateFromValue s : Lazy<Lazy<'a>>
+    static member        Duplicate (_:Duplicate, (w:'w, a:'a), _:'w * ('w*'a)    ) = fun () -> (w, (w, a))
+    static member inline Duplicate (_:Duplicate,  f:'m -> 'a , _:'m->'m->'a      ) = fun () a b -> f (Mappend.Invoke a b)
 
     // Restricted
     static member        Duplicate (_:Duplicate, s:list<'a>, _:list<list<'a>>) = fun () -> 
@@ -434,14 +433,10 @@ type First() =
         call (First.Instance, f) ()
 
 
-type SecondDefault() =
-    static member inline Second (_:SecondDefault, f:#obj, _:#obj) = fun () ->
-        let aswap = Arr.Invoke (fun (x,y) -> (y,x))
-        Comp.Invoke aswap (Comp.Invoke (First.Invoke f) aswap)
-
 type Second() =
-    inherit SecondDefault()
+    inherit Default1()
     static member val Instance = Second()
+    static member inline Second (_:Default1  , f        , _             ) = fun () -> let aswap = Arr.Invoke (fun (x,y) -> (y,x)) in Comp.Invoke aswap (Comp.Invoke (First.Invoke f) aswap)
     static member        Second (_:Second, f        , _: 'a -> 'b   ) = fun () -> fun (x,y) -> (x, f y)
     static member inline Second (_:Second, Kleisli f, _:Kleisli<_,_>) = fun () -> Kleisli (fun (d,b) -> f b >>= fun c -> result (d,c))
 

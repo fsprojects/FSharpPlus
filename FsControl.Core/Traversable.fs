@@ -6,18 +6,15 @@ open FsControl.Core.Types
 open FsControl.Core.TypeMethods.Monad
 
 
-type TraverseDefault() =
+type Traverse() =
+    inherit Default1()
+    static member val Instance = Traverse()
 
-    static member inline Traverse (_:TraverseDefault, t:Id<_>, _) = fun f -> Map.Invoke Id.create (f (Id.run t))
-
-    static member inline Traverse (_:TraverseDefault, t:_ seq, _) = fun f ->
+    static member inline Traverse (_:Default1, t:Id<_>, _) = fun f -> Map.Invoke Id.create (f (Id.run t))
+    static member inline Traverse (_:Default1, t:_ seq, _) = fun f ->
         let cons x y = Seq.append (Seq.singleton x) y            
         let cons_f x ys = Map.Invoke cons (f x) <*> ys
         Foldr.Invoke cons_f (result (Seq.empty)) t
-
-type Traverse() =
-    inherit TraverseDefault()
-    static member val Instance = Traverse()
 
     static member Traverse (_:Traverse, t:_ seq , _:option<seq<_>>) = fun f ->
         let ok = ref true
@@ -48,21 +45,14 @@ type Traverse() =
         call (Traverse.Instance, t) f
     
 
-type SequenceADefault() =
-    static member inline SequenceA (_:SequenceADefault, t:#obj, _) = fun () -> Traverse.Invoke id t
-
 type SequenceA() =
-    inherit SequenceADefault()
+    inherit Default1()
     static member val Instance = SequenceA()
-
-    static member inline SequenceA (_:SequenceA, t:option<_>, _) = fun () -> match t with Some x -> Map.Invoke Some x | _ -> result None
-        
-    static member inline SequenceA (_:SequenceA, t:list<_>  , _) = fun () ->            
-        let cons_f x ys = Map.Invoke List.cons x <*> ys
-        Foldr.Invoke cons_f (result []) t
-
-    static member inline SequenceA (_:SequenceA, t:seq<_>  , _) = fun () -> Traverse.Invoke id t
-    static member inline SequenceA (_:SequenceA, t:Id<_>   , _) = fun () -> Traverse.Invoke id t
+    static member inline SequenceA (_:Default1 , t          , _) = fun () -> Traverse.Invoke id t
+    static member inline SequenceA (_:SequenceA, t:option<_>, _) = fun () -> match t with Some x -> Map.Invoke Some x | _ -> result None       
+    static member inline SequenceA (_:SequenceA, t:list<_>  , _) = fun () -> let cons_f x ys = Map.Invoke List.cons x <*> ys in Foldr.Invoke cons_f (result []) t
+    static member inline SequenceA (_:SequenceA, t:seq<_>   , _) = fun () -> Traverse.Invoke id t
+    static member inline SequenceA (_:SequenceA, t:Id<_>    , _) = fun () -> Traverse.Invoke id t
 
     static member inline Invoke (t:'Traversable'Applicative'T) :'Applicative'Traversable'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member SequenceA: _*_*_ -> _) a, b, c)

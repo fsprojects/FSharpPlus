@@ -74,12 +74,12 @@ type TryParse() =
 
 
 type Parse() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Parse()
-    static member inline Parse (_:Typ1 , _:^R) = fun (x:string) -> (^R: (static member Parse: _ -> ^R) x)
-    static member inline Parse (_:Parse, _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
+    static member inline Parse (_:Default1, _:^R) = fun (x:string) -> (^R: (static member Parse: _ -> ^R) x)
+    static member inline Parse (_:Parse   , _:^R) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, Globalization.CultureInfo.InvariantCulture))
 #if NOTNET35
-    static member        Parse (_:Parse, _:'T when 'T : enum<_>) = fun x ->
+    static member        Parse (_:Parse   , _:'T when 'T : enum<_>) = fun x ->
         (match Enum.TryParse(x) with
             | (true, v) -> v
             | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")

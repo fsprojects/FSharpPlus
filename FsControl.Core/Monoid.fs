@@ -11,7 +11,7 @@ open System.Threading.Tasks
 
 
 type Mempty() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Mempty()
         
     static member        Mempty (_:Mempty, _:list<'a>  ) = fun () -> []   :  list<'a>
@@ -35,7 +35,7 @@ type Mempty with static member inline Mempty (_:Mempty, _ : 'a*'b*'c*'d   ) = fu
 type Mempty with static member inline Mempty (_:Mempty, _ : 'a*'b*'c*'d*'e) = fun () -> (Mempty.Invoke(), Mempty.Invoke(), Mempty.Invoke(), Mempty.Invoke(), Mempty.Invoke()): 'a*'b*'c*'d*'e
 
 type Mempty with
-    static member inline Mempty (_:Typ1, _:'R) = fun () -> ((^R) : (static member Mempty: unit -> ^R) ()):'R
+    static member inline Mempty (_:Default1, _:'R) = fun () -> ((^R) : (static member Mempty: unit -> ^R) ()):'R
 
 #if NOTNET35        
 
@@ -56,7 +56,7 @@ type Mempty with
 
 
 type Mappend() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Mappend()
            
     static member        Mappend (_:Mappend, x:list<_>      , _) = fun y -> x @ y       
@@ -124,10 +124,10 @@ type Mappend with
     static member        Mappend (_:Mappend, x:_ seq        , _) = fun  y                -> Seq.append x y
 
 type Mappend with
-    static member inline Mappend (_:Typ1, x, r:^T) = fun y -> ((^T) : (static member Mappend: 'T->'T->'T) (x, y))
+    static member inline Mappend (_:Default1, x, r:^T) = fun y -> ((^T) : (static member Mappend: 'T->'T->'T) (x, y))
 
 type Mconcat() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = Mconcat()
 
     static member inline Mconcat (_:Mconcat ,x:list<Dictionary<'a,'b>>,  _:Dictionary<'a,'b>) = fun () ->
@@ -170,12 +170,12 @@ type Mconcat with
         Mconcat.Invoke (List.map (fun (_,_,_,x) -> x) x)
 
 type Mconcat with
-    static member inline Mconcat (_:Typ2, x:list< 'a>, _:'a) = fun () -> 
+    static member inline Mconcat (_:Default2, x:list< 'a>, _:'a) = fun () -> 
         List.foldBack Mappend.Invoke x (Mempty.Invoke()) :'a
     
 type Mconcat with
-    static member inline Mconcat (_:Typ1, x:list< ^R>, r:^R) = fun () -> ((^R) : (static member Mconcat: 'R list -> ^R) x)
-    static member inline Mconcat (_:Typ1, x:list< ^R>, _:^t when ^t: null and ^t: struct) = fun () -> id
+    static member inline Mconcat (_:Default1, x:list< ^R>, r:^R) = fun () -> ((^R) : (static member Mconcat: 'R list -> ^R) x)
+    static member inline Mconcat (_:Default1, x:list< ^R>, _:^t when ^t: null and ^t: struct) = fun () -> id
 
 
 namespace FsControl.Core.Types

@@ -46,7 +46,7 @@ type FromList() =
 
 
 type FromSeq() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = FromSeq()
 
 #if NOTNET35

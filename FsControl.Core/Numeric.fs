@@ -79,11 +79,11 @@ type Negate() =
 
 
 type DivRem() =
-    inherit Typ1()
+    inherit Default1()
     static member val Instance = DivRem()
-    static member inline DivRem (_:DivRem, x:^t when ^t: null and ^t: struct, y:^t, _) = fun () -> (x, y)
-    static member inline DivRem (_:Typ1  , D:'T, d:'T, _:'T*'T) = fun () -> let q = D / d in q,  D - q * d
-    static member inline DivRem (_:DivRem, D:'T, d:'T, r:'T*'T) = fun () ->
+    static member inline DivRem (_:DivRem  , x:^t when ^t: null and ^t: struct, y:^t, _) = fun () -> (x, y)
+    static member inline DivRem (_:Default1, D:'T, d:'T, _:'T*'T) = fun () -> let q = D / d in q,  D - q * d
+    static member inline DivRem (_:DivRem  , D:'T, d:'T, r:'T*'T) = fun () ->
         let mutable r = Unchecked.defaultof<'T>
         (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
 
