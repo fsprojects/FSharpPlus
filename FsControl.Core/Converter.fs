@@ -32,6 +32,10 @@ type Convert() =
     static member inline Convert (_:Convert, _:char      ) = fun x -> char x
     static member inline Convert (_:Convert, _:string    ) = fun x -> string x  // better use our ToString
 
+    static member inline Invoke   value:'T      =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Convert: _*_ -> _) a, b)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call Convert.Instance value
 
 type FromBytes() =
     static member val Instance = FromBytes()
@@ -47,6 +51,10 @@ type FromBytes() =
     static member FromBytes (_:FromBytes, _:uint32 ) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
     static member FromBytes (_:FromBytes, _:uint64 ) = fun (x, i, e) -> BitConverter.ToUInt64 (x, i, e)
 
+    static member inline Invoke (isLtEndian:bool) (startIndex:int) (value:byte[]) =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBytes: _*_ -> _) a, b)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call FromBytes.Instance (value, startIndex, isLtEndian)
 
 type ToBytes() =
     static member val Instance = ToBytes()
@@ -62,6 +70,10 @@ type ToBytes() =
     static member ToBytes (_:ToBytes, x:uint32 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
     static member ToBytes (_:ToBytes, x:uint64 , _) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
 
+    static member inline Invoke (isLittleEndian:bool) value :byte[] =
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToBytes: _*_*_ -> _) a, b, c)
+        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
+        call (ToBytes.Instance, value) isLittleEndian
 
 type TryParse() =
     static member val Instance = TryParse()
@@ -71,6 +83,11 @@ type TryParse() =
 
     static member TryParse (_:TryParse, _:string        option) = fun x -> Some x                             :option<string>
     static member TryParse (_:TryParse, _:StringBuilder option) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
+
+    static member inline Invoke (value:string) =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryParse: _*_ -> _) a, b)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call TryParse.Instance value
 
 
 type Parse() =
@@ -90,6 +107,10 @@ type Parse() =
     static member Parse (_:Parse, _:string       ) = id :string->_
     static member Parse (_:Parse, _:StringBuilder) = fun x -> new StringBuilder(x:string)
 
+    static member inline Invoke    (value:string) =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Parse: _*_ -> _) a, b)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call Parse.Instance value
 
 type ToString() =
     static member val Instance = ToString()
@@ -111,7 +132,7 @@ type ToString() =
     static member ToString (_:ToString, x:DateTimeOffset,_) = fun (k:Globalization.CultureInfo) -> x.ToString k
     static member ToString (_:ToString, x:StringBuilder, _) = fun (_:Globalization.CultureInfo) -> if x = null then "null" else x.ToString()
 
-    static member inline internal Invoke (culture:Globalization.CultureInfo) value : string =
+    static member inline Invoke (culture:Globalization.CultureInfo) value : string =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToString: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
         call (ToString.Instance, value) culture

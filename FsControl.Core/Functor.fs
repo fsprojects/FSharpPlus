@@ -61,7 +61,7 @@ type Bind() =
     //Restricted Monad
     static member Bind (_:Bind, x:Nullable<_> , _:'b Nullable) = fun f -> if x.HasValue then f x.Value else Nullable() : Nullable<'b>
 
-    static member inline internal Invoke x (f:_->'R) : 'R =
+    static member inline Invoke x (f:_->'R) : 'R =
         let inline call_3 (a:^a,b:^b,c:^c) = ((^a or ^b or ^c) : (static member Bind: ^a* ^b* ^c -> _) (a,b,c))
         call_3 (Bind.Instance, x, Unchecked.defaultof<'R>) f :'R
 
@@ -81,7 +81,7 @@ type Join() =
     static member        Join (_:Join, x:Task<Task<'a>>    , _:Task<'a>  ) = x.Unwrap()
 #endif
 
-    static member inline internal Invoke (x:'Monad'Monad'a) : 'Monad'a =
+    static member inline Invoke (x:'Monad'Monad'a) : 'Monad'a =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Join: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>):'r
         call (Join.Instance, x)
@@ -118,7 +118,7 @@ type Return() =
     static member Return (_:Return, _:StringBuilder) = fun (x:char) -> new StringBuilder(string x):StringBuilder
     static member Return (_:Return, _:'a Set       ) = fun (x:'a  ) -> Set.singleton x
 
-    static member inline internal Invoke x = 
+    static member inline Invoke x = 
         let inline call_2 (a:^a,b:^b) = ((^a or ^b) : (static member Return: ^a* ^b -> _) (a,b))
         call_2 (Return.Instance, Unchecked.defaultof<'r>) x :'r 
  
@@ -201,6 +201,10 @@ type Map_() =
     static member Map_ (_:Map_, x:StringBuilder  , _:unit) = fun f -> String.iter f (x.ToString())
     static member Map_ (_:Map_, x:Set<_>         , _:unit) = fun f -> Set.iter f x        
 
+    static member inline Invoke (action :'T->unit) (source :'Functor'T) =
+        let inline call_3 (a:^a,b:^b,c:^c) =  ((^a or ^b or ^c) : (static member Map: _*_*_ -> _) a, b, c)
+        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a ,b , Unchecked.defaultof<'r>) x :'r
+        call (Map_.Instance, source) action :unit
 
 type Map() =
     inherit Default1()
@@ -237,7 +241,7 @@ type Map() =
     static member Map (_:Map, x:StringBuilder  , _) = fun f -> new StringBuilder(String.map f (x.ToString()))
     static member Map (_:Map, x:Set<_>         , _) = fun f -> Set.map f x
         
-    static member inline internal Invoke f x = 
+    static member inline Invoke f x = 
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Map: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
         call (Map.Instance, x) f
@@ -251,7 +255,7 @@ type Zero() =
     static member        Zero (_:Zero, _:seq<'a>   ) = Seq.empty   :seq<'a>
     static member inline Zero (_:Zero, _:Id<'a>    ) = Id (Mempty.Invoke()) :Id<'a>
 
-    static member inline internal Invoke () :'Functor'T =
+    static member inline Invoke () :'Functor'T =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) a, b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Zero.Instance
@@ -265,7 +269,7 @@ type Plus() =
     static member        Plus (_:Plus, x:_ seq   , _) = fun y -> Seq.append   x y
     static member inline Plus (_:Plus, x:_ Id    , _) = fun y -> Id (Mappend.Invoke (Id.run x) (Id.run y))
 
-    static member inline internal Invoke (x:'Functor'T) (y:'Functor'T) :'Functor'T =
+    static member inline Invoke (x:'Functor'T) (y:'Functor'T) :'Functor'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Plus: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r        
         call (Plus.Instance, x) y
@@ -327,7 +331,7 @@ type Extract() =
     static member        Extract (_:Extract, x:StringBuilder   , _   ) = x.ToString().[0]
     static member        Extract (_:Extract, x:'t seq          , _:'t) = Seq.head x
 
-    static member inline internal Invoke (x:'Comonad'T): 'T =
+    static member inline Invoke (x:'Comonad'T): 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extract: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (Extract.Instance, x)
@@ -357,7 +361,7 @@ type Extend() =
         let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
         Seq.map g (s |> Seq.toList |> tails |> List.toSeq |> Seq.map List.toSeq) :'b seq
 
-    static member inline internal Invoke (g:'Comonad'T->'U) (s:'Comonad'T): 'Comonad'U =
+    static member inline Invoke (g:'Comonad'T->'U) (s:'Comonad'T): 'Comonad'U =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extend: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
         call (Extend.Instance, s) g
@@ -381,7 +385,7 @@ type Duplicate() =
         let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
         s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray
     
-    static member inline internal Invoke x =
+    static member inline Invoke x =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Duplicate: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (Duplicate.Instance, x)
@@ -394,7 +398,7 @@ type Id() =
     static member        Id (_:Id, _: 'r -> 'r     ) = id              : 'r -> 'r
     static member inline Id (_:Id, _:Kleisli<'a,'b>) = Kleisli result :Kleisli<'a,'b>
 
-    static member inline internal Invoke() =
+    static member inline Invoke() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Id: _*_ -> _) a, b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Id.Instance
@@ -405,7 +409,7 @@ type Comp() =
     static member        Comp (_:Comp,         f, _) = fun (g: _ -> _) ->          g >>  f
     static member inline Comp (_:Comp, Kleisli f, _) = fun (Kleisli g) -> Kleisli (g >=> f)
 
-    static member inline internal Invoke f g =
+    static member inline Invoke f g =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Comp: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
         call (Comp.Instance, f) g
@@ -416,7 +420,7 @@ type Arr() =
     static member        Arr (_:Arr, _: _ -> _     ) = fun (f:_->_) -> f
     static member inline Arr (_:Arr, _:Kleisli<_,_>) = fun  f       -> Kleisli (Comp.Invoke result f)
 
-    static member inline internal Invoke f = 
+    static member inline Invoke f = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Arr: _*_ -> _) a, b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Arr.Instance f
@@ -427,7 +431,7 @@ type First() =
     static member        First (_:First, f        , _: 'a -> 'b   ) = fun (x,y) -> (f x, y)
     static member inline First (_:First, Kleisli f, _:Kleisli<_,_>) = Kleisli (fun (b,d) -> f b >>= fun c -> result (c,d))
 
-    static member inline internal Invoke f =
+    static member inline Invoke f =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member First: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (First.Instance, f)
@@ -440,13 +444,17 @@ type Second() =
     static member        Second (_:Second, f        , _: 'a -> 'b   ) = fun (x,y) -> (x, f y)
     static member inline Second (_:Second, Kleisli f, _:Kleisli<_,_>) = Kleisli (fun (d,b) -> f b >>= fun c -> result (d,c))
 
+    static member inline Invoke  f   =
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Second: _*_*_ -> _) a, b, c)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Second.Instance, f)
 
 type AcEither() =
     static member val Instance = AcEither()
     static member inline AcEither (_:AcEither, _:Choice<_,_>->_) = fun (         f ,          g ) ->          choice f g
     static member inline AcEither (_:AcEither, _:Kleisli<_,_>  ) = fun ((Kleisli f), (Kleisli g)) -> Kleisli (choice f g)
 
-    static member inline internal Invoke f g =
+    static member inline Invoke f g =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcEither: _*_ -> _) a, b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call AcEither.Instance (f, g)
@@ -456,10 +464,9 @@ type AcMerge() =
     static member val Instance = AcMerge()
     static member inline AcMerge (_:AcMerge, _: _->    Choice<_,_>      ) = fun (f, g)  -> AcEither.Invoke (Choice2Of2 << f) (Choice1Of2 << g)
     static member inline AcMerge (_:AcMerge, _:Kleisli<Choice<'v,'t>,'z>) = fun ((Kleisli (f:'t->'u)), (Kleisli (g:'v->'w))) ->
-        AcEither.Invoke (Kleisli (f >=> (Comp.Invoke result Choice2Of2))) (Kleisli (g >=> (Comp.Invoke result Choice1Of2))) :Kleisli<Choice<'v,'t>,'z>
-        
+        AcEither.Invoke (Kleisli (f >=> (Comp.Invoke result Choice2Of2))) (Kleisli (g >=> (Comp.Invoke result Choice1Of2))) :Kleisli<Choice<'v,'t>,'z>     
 
-    static member inline internal Invoke f g =
+    static member inline Invoke f g =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcMerge: _*_ -> _) a, b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call AcMerge.Instance (f, g)
@@ -472,6 +479,11 @@ type AcLeft() =
         let inline (+++) a b = AcMerge.Invoke a b
         (+++) (Kleisli f) (Arr.Invoke (Id.Invoke()))
 
+    static member inline Invoke    f   =
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcLeft: _*_*_ -> _) a, b, c)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (AcLeft.Instance, f)
+
 
 type AcRight() =
     static member val Instance = AcRight()
@@ -480,8 +492,18 @@ type AcRight() =
         let inline (+++) a b = AcMerge.Invoke a b
         (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
 
+    static member inline Invoke   f   =
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcRight: _*_*_ -> _) a, b, c)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (AcRight.Instance, f)
+
 
 type ArrApply() =
     static member val Instance = ArrApply()
     static member ArrApply (_:ArrApply, _: ('a -> 'b) * 'a -> 'b          ) =          fun (f, x)         -> f x
     static member ArrApply (_:ArrApply, _: Kleisli<Kleisli<'a,'b> * 'a,'b>) = Kleisli (fun (Kleisli f, x) -> f x)
+
+    static member inline Invoke()     =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ArrApply: _*_ -> _) a, b)
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call ArrApply.Instance

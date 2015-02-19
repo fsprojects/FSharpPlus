@@ -39,7 +39,7 @@ type Traverse() =
         let cons_f x ys = Map.Invoke cons (f x) <*> ys
         Foldr.Invoke cons_f (result [||]) t
 
-    static member inline internal Invoke f t =
+    static member inline Invoke f t =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Traverse: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
         call (Traverse.Instance, t) f

@@ -59,11 +59,7 @@ type Abs() =
 type Signum() =
     static member val Instance = Signum()
     static member inline Signum (_:Signum, _:^t when ^t: null and ^t: struct, _) = id
-    static member inline Signum (_:Signum, x:'t        , _) =
-        let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBigInteger: _*_ -> _) a, b)
-        let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-        instance FromBigInteger.Instance (bigint (sign x)) :'t
-
+    static member inline Signum (_:Signum, x:'t        , _) = FromBigInteger.Invoke (bigint (sign x)) :'t
     static member        Signum (_:Signum, x:byte      , _) = if x = 0uy then 0uy else 1uy
     static member        Signum (_:Signum, x:uint16    , _) = if x = 0us then 0us else 1us
     static member        Signum (_:Signum, x:uint32    , _) = if x = 0u  then 0u  else 1u
@@ -244,7 +240,10 @@ type FromRational() =
     static member        FromRational (_:FromRational, _:float32 ) = fun (r:Rational) -> float32 (int (numerator r)) / float32 (int (denominator r))    
     static member        FromRational (_:FromRational, _:decimal ) = fun (r:Rational) -> decimal (int (numerator r)) / decimal (int (denominator r))
 #endif
-
+    static member inline Invoke (x:Rational) :'Fractional =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromRational: _*_ -> _) a, b)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call FromRational.Instance x
 
 // RealFrac class ---------------------------------------------------------
 
@@ -285,16 +284,17 @@ type ToRational() =
         let inline whenFractional a = let _ = if false then fromRational (1I </ratio/> 1I) else a in () 
         whenFractional x
         let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
-            let (a, b:'RealFrac) =
-                let inline instance_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ProperFraction: _*_*_ -> _) a, b, c)
-                let inline instance (a:'a, b:'b) = instance_3 (a, b, Unchecked.defaultof<'r>):'r
-                instance (ProperFraction.Instance, x)
+            let (a, b:'RealFrac) = ProperFraction.Invoke x
             (fromIntegral a, b)        
         let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
         let (i:bigint,d) = ProperFraction.Invoke x
         (i </ratio/> 1I) + (truncate (decimal d *. 1000000000000000000000000000M) </ratio/> 1000000000000000000000000000I) :Rational
     static member inline ToRational (_:ToRational, x:'t, _) = (ToBigInteger.Invoke x) </ratio/> 1I
 
+    static member inline Invoke (x:'Real) :Rational =
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToRational: _*_*_ -> _) a, b, c)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (ToRational.Instance, x)
 
 // Floating class ---------------------------------------------------------
 
@@ -307,6 +307,10 @@ type Pi() =
 #if NOTNET35
     static member Pi (_:Pi, _:Complex) = Complex(System.Math.PI, 0.0)
 #endif
+    static member inline Invoke() :'Floating =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Pi: _*_ -> _) a, b)
+        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Pi.Instance
 
 
 // Bounded class ----------------------------------------------------------
@@ -333,7 +337,7 @@ type MinValue() =
     static member MinValue (_:MinValue, _:DateTimeOffset) = DateTimeOffset.MinValue
     static member MinValue (_:MinValue, _:TimeSpan      ) = TimeSpan.MinValue
 
-    static member inline internal Invoke() =
+    static member inline Invoke() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MinValue: _*_ -> _) a, b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call MinValue.Instance
@@ -366,7 +370,7 @@ type MaxValue() =
     static member MaxValue (_:MaxValue, _:DateTimeOffset) = DateTimeOffset.MaxValue
     static member MaxValue (_:MaxValue, _:TimeSpan      ) = TimeSpan.MaxValue
 
-    static member inline internal Invoke() =
+    static member inline Invoke() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MaxValue: _*_ -> _) a, b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call MaxValue.Instance

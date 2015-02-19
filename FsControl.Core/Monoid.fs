@@ -24,7 +24,7 @@ type Mempty() =
     static member        Mempty (_:Mempty, _:Map<'a,'b>   ) = Map.empty : Map<'a,'b>
     static member        Mempty (_:Mempty, _:'a->'a       ) = id :'a->'a 
 
-    static member inline internal Invoke() = 
+    static member inline Invoke() = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mempty: _*_ -> _) a, b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Mempty.Instance
@@ -71,7 +71,7 @@ type Mappend() =
         y
     static member        Mappend (_:Mappend, x:'a->'a       , _) = fun y -> x << y
 
-    static member inline internal Invoke (x:'T) (y:'T) :'T =
+    static member inline Invoke (x:'T) (y:'T) :'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mappend: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
         call (Mappend.Instance, x) y
@@ -146,7 +146,7 @@ type Mconcat() =
         List.iter (fun s -> sb.Append(s.ToString()) |> ignore) x
         sb
 
-    static member inline internal Invoke (x:list<'T>) : 'T =
+    static member inline Invoke (x:list<'T>) : 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mconcat: _*_*_ -> _) a, b, c)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (Mconcat.Instance, x)
