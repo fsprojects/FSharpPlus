@@ -59,25 +59,24 @@ type Mappend() =
     inherit Default1()
     static member val Instance = Mappend()
            
-    static member        Mappend (_:Mappend, x:list<_>      ) = fun y -> x @ y       
-    static member        Mappend (_:Mappend, x:array<_>     ) = fun y -> Array.append x y
-    static member        Mappend (_:Mappend, ()             ) = fun () -> ()
-    static member        Mappend (_:Mappend, x:Set<_>       ) = fun y -> Set.union x y
-    static member        Mappend (_:Mappend, x:string       ) = fun y -> x + y
-    static member        Mappend (_:Mappend, x:StringBuilder) = fun (y:StringBuilder) -> 
+    static member        Mappend (_:Mappend, x:list<_>      , y ) = x @ y       
+    static member        Mappend (_:Mappend, x:array<_>     , y ) = Array.append x y
+    static member        Mappend (_:Mappend, ()             , ()) =  ()
+    static member        Mappend (_:Mappend, x:Set<_>       , y ) = Set.union x y
+    static member        Mappend (_:Mappend, x:string       , y ) = x + y
+    static member        Mappend (_:Mappend, x:StringBuilder, y:StringBuilder) =
         let sb = new StringBuilder()
         sb.Append(x.ToString()) |> ignore
         sb.Append(y.ToString()) |> ignore
         y
-    static member        Mappend (_:Mappend, x:'a->'a       ) = fun y -> x << y
+    static member        Mappend (_:Mappend, x:'a->'a       , y ) = x << y
 
     static member inline Invoke (x:'T) (y:'T) :'T =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mappend: _*_ -> _) a, b)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_2 (a, b) x
-        call (Mappend.Instance, x) y
+        let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Mappend: _*_*_ -> _) m, a, b)
+        call_3 (Mappend.Instance, x, y)
 
 type Mappend with
-    static member inline Mappend (_:Mappend, x:option<_>) = fun y ->
+    static member inline Mappend (_:Mappend, x:option<_>,y ) =
         match (x,y) with
         | (Some a , Some b) -> Some (Mappend.Invoke a b)
         | (Some a , None  ) -> Some a
@@ -85,46 +84,49 @@ type Mappend with
         | _                 -> None
 
 
-type Mappend with static member inline Mappend (_:Mappend, (x1,x2         )) = fun (y1,y2         ) -> (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2                                                                  ) :'a*'b
-type Mappend with static member inline Mappend (_:Mappend, (x1,x2,x3      )) = fun (y1,y2,y3      ) -> (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2, Mappend.Invoke x3 y3                                            ) :'a*'b*'c
-type Mappend with static member inline Mappend (_:Mappend, (x1,x2,x3,x4   )) = fun (y1,y2,y3,y4   ) -> (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2, Mappend.Invoke x3 y3, Mappend.Invoke x4 y4                      ) :'a*'b*'c*'d
-type Mappend with static member inline Mappend (_:Mappend, (x1,x2,x3,x4,x5)) = fun (y1,y2,y3,y4,y5) -> (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2, Mappend.Invoke x3 y3, Mappend.Invoke x4 y4, Mappend.Invoke x5 y5) :'a*'b*'c*'d*'e
-
-type Mappend with
-
+type Mappend with static member inline Mappend (_:Mappend, (x1,x2         ), (y1,y2         )) = (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2                                                                  ) :'a*'b
+type Mappend with static member inline Mappend (_:Mappend, (x1,x2,x3      ), (y1,y2,y3      )) = (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2, Mappend.Invoke x3 y3                                            ) :'a*'b*'c
+type Mappend with static member inline Mappend (_:Mappend, (x1,x2,x3,x4   ), (y1,y2,y3,y4   )) = (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2, Mappend.Invoke x3 y3, Mappend.Invoke x4 y4                      ) :'a*'b*'c*'d
+type Mappend with static member inline Mappend (_:Mappend, (x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5)) = (Mappend.Invoke x1 y1, Mappend.Invoke x2 y2, Mappend.Invoke x3 y3, Mappend.Invoke x4 y4, Mappend.Invoke x5 y5) :'a*'b*'c*'d*'e
+    
+type Mappend with    
+    
 #if NOTNET35
-    static member inline Mappend (_:Mappend, x:'a Task) = fun (y:'a Task) ->
+    static member inline Mappend (_:Mappend, x:'a Task, y:'a Task) =
         x.ContinueWith(fun (t: Task<_>) -> 
             (fun a -> 
                 y.ContinueWith(fun (u: Task<_>) -> 
                     Mappend.Invoke a u.Result)) t.Result).Unwrap()
 #endif
 
-    static member inline Mappend (_:Mappend, x:Map<'a,'b>) = fun y ->
+    static member inline Mappend (_:Mappend, x:Map<'a,'b>, y) =
         Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> Mappend.Invoke v v' | None -> v') m) x y
 
-    static member inline Mappend (_:Mappend, x:Dictionary<'a,'b>) = fun (y:Dictionary<'a,'b>) ->
-        let d = Dictionary<'a,'b>()
+    static member inline Mappend (_:Mappend, x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>) =
+        let d = Dictionary<'Key,'Value>()
         for KeyValue(k, v ) in x do d.[k] <- v
-        for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue(k) with true, v -> Mappend.Invoke v v' | _ -> v'
+        for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Mappend.Invoke v v' | _ -> v'
         d
 
-    static member inline Mappend (_:Mappend, x:'a Async     ) = fun (y:'a Async) -> async {
+    static member inline Mappend (_:Mappend, x:'S Async, y:'S Async) = async {
         let! a = x
         let! b = y
         return Mappend.Invoke a b}
 
-    static member inline Mappend (_:Mappend, x:'a Expr      ) = fun (y:'a Expr)  -> 
-        let (f:'a->'a->'a) = Mappend.Invoke
+    static member inline Mappend (_:Mappend, x:'a Expr, y:'a Expr) :'a Expr =
+        let inline f (x:'a)  :'a -> 'a = Mappend.Invoke x
         Expr.Cast<'a>(Expr.Application(Expr.Application(Expr.Value(f), x), y))
+   
 
-    static member inline Mappend (_:Mappend, x:'a Lazy      ) = fun (y:'a Lazy)       -> lazy Mappend.Invoke (x.Value) (y.Value)
-    static member        Mappend (_:Mappend, x:_ ResizeArray) = fun (y:_ ResizeArray) -> ResizeArray (Seq.append x y)
-    static member        Mappend (_:Mappend, x:_ IObservable) = fun  y                -> Observable.merge x y
-    static member        Mappend (_:Mappend, x:_ seq        ) = fun  y                -> Seq.append x y
+    static member inline Mappend (_:Mappend, x:'a Lazy      , y:'a Lazy)       = lazy Mappend.Invoke (x.Value) (y.Value)
+    static member        Mappend (_:Mappend, x:_ ResizeArray, y:_ ResizeArray) = ResizeArray (Seq.append x y)
+    static member        Mappend (_:Mappend, x:_ IObservable, y              ) = Observable.merge x y
+    static member        Mappend (_:Mappend, x:_ seq        , y              ) = Seq.append x y
+
 
 type Mappend with
-    static member inline Mappend (_:Default1, x) = fun y -> ((^T) : (static member Mappend: 'T->'T->'T) (x, y))
+    static member inline Mappend (_:Default1, x, y) = ((^T) : (static member Mappend: 'T->'T->'T) (x, y))
+
 
 type Mconcat() =
     inherit Default1()
@@ -178,25 +180,27 @@ type Mconcat with
     static member inline Mconcat (_:Default1, x:list< ^R>, _:^t when ^t: null and ^t: struct) = fun () -> id
 
 
+
+
 namespace FsControl.Core.Types
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 
 type Dual<'a> = Dual of 'a with
-    static member inline Mempty  (_:Mempty , _:Dual<'m>) = Dual (Mempty.Invoke()) :Dual<'m>
-    static member inline Mappend (_:Mappend,   Dual x  ) = fun (Dual y) -> Dual (Mappend.Invoke y x)
+    static member inline Mempty  (_:Mempty , _:Dual<'m>    ) = Dual (Mempty.Invoke()) :Dual<'m>
+    static member inline Mappend (_:Mappend, Dual x, Dual y) = Dual (Mappend.Invoke y x)
 module Dual = let inline  internal getDual (Dual x) = x
 
 type Endo<'a> = Endo of ('a -> 'a) with
-    static member        Mempty  (_:Mempty , _:Endo<'m>) = Endo id  :Endo<'m>
-    static member        Mappend (_:Mappend,   Endo f  ) = fun (Endo g) -> Endo (f << g)
+    static member        Mempty  (_:Mempty , _:Endo<'m>    ) = Endo id  :Endo<'m>
+    static member        Mappend (_:Mappend, Endo f, Endo g) = Endo (f << g)
 module Endo = let inline  internal appEndo (Endo f) = f
 
 
 type All = All of bool with
-    static member Mempty  (_:Mempty, _:All  ) = All true
-    static member Mappend (_:Mappend,  All x) = fun (All y) -> All (x && y)
+    static member Mempty  (_:Mempty , _:All        ) = All true
+    static member Mappend (_:Mappend,  All x, All y) = All (x && y)
 
 type Any = Any of bool with
-    static member Mempty  (_:Mempty, _:Any  ) = Any false
-    static member Mappend (_:Mappend,  Any x) = fun (Any y) -> Any (x || y)
+    static member Mempty  (_:Mempty , _:Any        ) = Any false
+    static member Mappend (_:Mappend,  Any x, Any y) = Any (x || y)

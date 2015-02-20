@@ -269,7 +269,7 @@ open FsControl.Core.Types.Endo
 
 type Ordering = LT|EQ|GT with
     static member        Mempty  (_:Mempty , _:Ordering) = EQ
-    static member        Mappend (_:Mappend, x:Ordering) = fun y -> 
+    static member        Mappend (_:Mappend, x:Ordering, y) = 
         match x, y with
         | LT, _ -> LT
         | EQ, a -> a

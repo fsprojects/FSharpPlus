@@ -22,8 +22,8 @@ type OptionT<'Ma> with
     static member inline Apply  (_:Apply , f, x, _:OptionT<'r>) = OptionT.apply f x :OptionT<'r>
     static member inline Bind   (_:Bind  , x :OptionT<'ma>, _:OptionT<'mb>) = fun (f: 'a -> OptionT<'mb>) -> OptionT.bind f x :OptionT<'mb>
 
-    static member inline Zero (_:Zero, _:OptionT<_>) =                    OptionT <| result None
-    static member inline Plus (_:Plus, OptionT x   ) = fun (OptionT y) -> OptionT <| do'() {
+    static member inline Zero (_:Zero, _:OptionT<_>        ) = OptionT <| result None
+    static member inline Plus (_:Plus, OptionT x, OptionT y) = OptionT <| do'() {
             let! maybe_value = x
             return! match maybe_value with Some value -> x | _ -> y}
 
@@ -43,8 +43,8 @@ type ListT<'Ma> with
     static member inline Apply  (_:Apply, f, x,  _:ListT<'r> ) = ListT.apply f x :ListT<'r>
     static member inline Bind   (_:Bind, x:ListT<'ma>, _:ListT<'mb>) = fun (f:'a -> ListT<'mb>) -> ListT.bind f x :ListT<'mb>
 
-    static member inline Zero (_:Zero, _:ListT<_>) =                  ListT <| result []
-    static member inline Plus (_:Plus, ListT x   ) = fun (ListT y) -> ListT <| do'() {
+    static member inline Zero (_:Zero, _:ListT<_>      ) = ListT <| result []
+    static member inline Plus (_:Plus, ListT x, ListT y) = ListT <| do'() {
         let! a = x
         let! b = y
         return (a @ b)}
@@ -66,8 +66,8 @@ type SeqT<'Ma> with
     static member inline Apply  (_:Apply , f, x, _:SeqT<'r> ) = SeqT.apply f x :SeqT<'r>
     static member inline Bind   (_:Bind  , x:SeqT<'ma>, _:SeqT<'mb>) = fun (f: 'a -> SeqT<'mb>) -> SeqT.bind f x :SeqT<'mb>
 
-    static member inline Zero (_:Zero, _:SeqT<_>) =                 SeqT <| result Seq.empty
-    static member inline Plus (_:Plus, SeqT x   ) = fun (SeqT y) -> SeqT <| do'() {
+    static member inline Zero (_:Zero, _:SeqT<_>     ) = SeqT <| result Seq.empty
+    static member inline Plus (_:Plus, SeqT x, SeqT y) = SeqT <| do'() {
         let! a = x
         let! b = y
         return (Seq.append a b)}

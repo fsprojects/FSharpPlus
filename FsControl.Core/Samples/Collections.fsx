@@ -45,7 +45,7 @@ type ZipList<'s> = ZipList of 's seq with
 
 type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:Return , _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
-    static member Mappend  (_:Mappend, WrappedList l) = fun (WrappedList x) -> WrappedList (l @ x)
+    static member Mappend  (_:Mappend, WrappedList l, WrappedList x) = WrappedList (l @ x)
     static member Mempty   (_:Mempty , _:WrappedList<'a>) = WrappedList List.empty
     static member FoldBack (f, WrappedList x, z) = List.foldBack f x z
 

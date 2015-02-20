@@ -263,22 +263,21 @@ type Zero() =
 
 type Plus() =
     static member val Instance = Plus()
-    static member        Plus (_:Plus, x:_ option) = fun y -> match x with None -> y | xs -> xs
-    static member        Plus (_:Plus, x:_ list  ) = fun y -> x @ y
-    static member        Plus (_:Plus, x:_ []    ) = fun y -> Array.append x y
-    static member        Plus (_:Plus, x:_ seq   ) = fun y -> Seq.append   x y
-    static member inline Plus (_:Plus, x:_ Id    ) = fun y -> Id (Mappend.Invoke (Id.run x) (Id.run y))
+    static member        Plus (_:Plus, x:_ option, y) = match x with None -> y | xs -> xs
+    static member        Plus (_:Plus, x:_ list  , y) = x @ y
+    static member        Plus (_:Plus, x:_ []    , y) = Array.append x y
+    static member        Plus (_:Plus, x:_ seq   , y) = Seq.append   x y
+    static member inline Plus (_:Plus, x:_ Id    , y) = Id (Mappend.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'Functor'T) (y:'Functor'T) :'Functor'T =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Plus: _*_ -> _) a, b)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_2 (a, b) x
-        call (Plus.Instance, x) y
+        let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Plus: _*_*_ -> _) m, a, b)
+        call_3 (Plus.Instance, x, y)
 
 type Zero with
     static member inline Zero (_:Zero, _:Kleisli<_,_>) = Kleisli (fun _ -> Zero.Invoke ())
     
 type Plus with
-    static member inline Plus (_:Plus, Kleisli f) = fun (Kleisli g) -> Kleisli(fun x -> Plus.Invoke (f x) (g x))
+    static member inline Plus (_:Plus, Kleisli f, Kleisli g) = Kleisli(fun x -> Plus.Invoke (f x) (g x))
 
 
 module Monad =

@@ -22,8 +22,8 @@ type StateT<'S,'MaS> with
     static member inline Bind   (_:Bind  , x:StateT<'s,'mas>, _:StateT<'s,'mbs>) :('a -> StateT<'s,'mbs>) -> StateT<'s,'mbs> = fun f -> 
         StateT.bind f x
 
-    static member inline Zero (_:Zero, _:StateT<_,_>) =                   StateT <| fun _ -> Zero.Invoke()
-    static member inline Plus (_:Plus,   StateT m   ) = fun (StateT n) -> StateT <| fun s -> m s <|> n s
+    static member inline Zero (_:Zero, _:StateT<_,_>)        = StateT <| fun _ -> Zero.Invoke()
+    static member inline Plus (_:Plus,   StateT m, StateT n) = StateT <| fun s -> m s <|> n s
 
     static member inline Lift (_:Lift, _:StateT<'s,'mas>) = fun (m:'ma) -> (StateT <| fun s -> m >>= fun a -> result (a,s)):StateT<'s,'mas>
 

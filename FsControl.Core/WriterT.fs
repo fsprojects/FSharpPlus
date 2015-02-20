@@ -35,8 +35,8 @@ type WriterT<'WMa> with
     static member inline Apply    (_:Apply , f, x, _:WriterT<'r>) = WriterT.apply f x :WriterT<'r>
     static member inline Bind     (_:Bind  , x:WriterT<'wma>, _:WriterT<'wmb>) :('a -> WriterT<'wmb>) -> WriterT<'wmb> = fun f -> WriterT.bind f x
 
-    static member inline Zero (_:Zero, _:WriterT<_>) =                    WriterT (Zero.Invoke())
-    static member inline Plus (_:Plus,   WriterT m ) = fun (WriterT n) -> WriterT (m <|> n)
+    static member inline Zero (_:Zero, _:WriterT<_>          ) = WriterT (Zero.Invoke())
+    static member inline Plus (_:Plus,   WriterT m, WriterT n) = WriterT (m <|> n)
 
     static member inline Tell   (_:Tell, _:WriterT<_> ) = fun w -> WriterT (result ((), w))
     static member inline Listen (_:Listen, WriterT m, _:WriterT<_>) = WriterT <| do'() {
