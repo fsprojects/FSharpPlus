@@ -40,71 +40,71 @@ type FromBigInteger() =
 
 type Abs() =
     static member val Instance = Abs()
-    static member inline Abs (_:Abs, _:^t when ^t: null and ^t: struct, _) = id
-    static member inline Abs (_:Abs, x:'t        , _) = abs x
-    static member        Abs (_:Abs, x:byte      , _) =     x
-    static member        Abs (_:Abs, x:uint16    , _) =     x
-    static member        Abs (_:Abs, x:uint32    , _) =     x
-    static member        Abs (_:Abs, x:uint64    , _) =     x
-    static member        Abs (_:Abs, x:unativeint, _) =     x
+    static member inline Abs (_:Abs, _:^t when ^t: null and ^t: struct) = id
+    static member inline Abs (_:Abs, x:'t        ) = abs x
+    static member        Abs (_:Abs, x:byte      ) =     x
+    static member        Abs (_:Abs, x:uint16    ) =     x
+    static member        Abs (_:Abs, x:uint32    ) =     x
+    static member        Abs (_:Abs, x:uint64    ) =     x
+    static member        Abs (_:Abs, x:unativeint) =     x
 #if NOTNET35
-    static member        Abs (_:Abs, x:Complex   , _) = Complex(x.Magnitude, 0.0)
+    static member        Abs (_:Abs, x:Complex   ) = Complex(x.Magnitude, 0.0)
 #endif
 
     static member inline Invoke (x:'Num) :'Num =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Abs: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Abs: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Abs.Instance, x)
 
 type Signum() =
     static member val Instance = Signum()
-    static member inline Signum (_:Signum, _:^t when ^t: null and ^t: struct, _) = id
-    static member inline Signum (_:Signum, x:'t        , _) = FromBigInteger.Invoke (bigint (sign x)) :'t
-    static member        Signum (_:Signum, x:byte      , _) = if x = 0uy then 0uy else 1uy
-    static member        Signum (_:Signum, x:uint16    , _) = if x = 0us then 0us else 1us
-    static member        Signum (_:Signum, x:uint32    , _) = if x = 0u  then 0u  else 1u
-    static member        Signum (_:Signum, x:uint64    , _) = if x = 0UL then 0UL else 1UL
-    static member        Signum (_:Signum, x:unativeint, _) = if x = 0un then 0un else 1un
+    static member inline Signum (_:Signum, _:^t when ^t: null and ^t: struct) = id
+    static member inline Signum (_:Signum, x:'t        ) = FromBigInteger.Invoke (bigint (sign x)) :'t
+    static member        Signum (_:Signum, x:byte      ) = if x = 0uy then 0uy else 1uy
+    static member        Signum (_:Signum, x:uint16    ) = if x = 0us then 0us else 1us
+    static member        Signum (_:Signum, x:uint32    ) = if x = 0u  then 0u  else 1u
+    static member        Signum (_:Signum, x:uint64    ) = if x = 0UL then 0UL else 1UL
+    static member        Signum (_:Signum, x:unativeint) = if x = 0un then 0un else 1un
 #if NOTNET35
-    static member        Signum (_:Signum, x:Complex   , _) =
+    static member        Signum (_:Signum, x:Complex   ) =
         if x.Magnitude = 0.0 then Complex.Zero
         else Complex (x.Real / x.Magnitude, x.Imaginary / x.Magnitude)
 #endif
 
     static member inline Invoke (x:'Num) :'Num =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Signum: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Signum: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Signum.Instance, x)
 
 
 type Negate() =
     static member val Instance = Negate()
-    static member inline Negate (_:Negate, _:^t when ^t: null and ^t: struct, _) = id
-    static member inline Negate (_:Negate, x:'t        , _) = -x
-    static member        Negate (_:Negate, x:byte      , _) = 0uy - x
-    static member        Negate (_:Negate, x:uint16    , _) = 0us - x
-    static member        Negate (_:Negate, x:uint32    , _) = 0u  - x
-    static member        Negate (_:Negate, x:uint64    , _) = 0UL - x
-    static member        Negate (_:Negate, x:unativeint, _) = 0un - x
+    static member inline Negate (_:Negate, _:^t when ^t: null and ^t: struct) = id
+    static member inline Negate (_:Negate, x:'t        ) = -x
+    static member        Negate (_:Negate, x:byte      ) = 0uy - x
+    static member        Negate (_:Negate, x:uint16    ) = 0us - x
+    static member        Negate (_:Negate, x:uint32    ) = 0u  - x
+    static member        Negate (_:Negate, x:uint64    ) = 0UL - x
+    static member        Negate (_:Negate, x:unativeint) = 0un - x
 
     static member inline Invoke (x:'Num) :'Num =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Negate: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Negate: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Negate.Instance, x)
 
 
 type DivRem() =
     inherit Default1()
     static member val Instance = DivRem()
-    static member inline DivRem (_:DivRem  , x:^t when ^t: null and ^t: struct, y:^t, _) = (x, y)
-    static member inline DivRem (_:Default1, D:'T, d:'T, _:'T*'T) = let q = D / d in q,  D - q * d
-    static member inline DivRem (_:DivRem  , D:'T, d:'T, r:'T*'T) =
+    static member inline DivRem (_:DivRem  , x:^t when ^t: null and ^t: struct, y:^t) = (x, y)
+    static member inline DivRem (_:Default1, D:'T, d:'T) = let q = D / d in q,  D - q * d
+    static member inline DivRem (_:DivRem  , D:'T, d:'T) =
         let mutable r = Unchecked.defaultof<'T>
         (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
 
     static member inline Invoke (D:'T) (d:'T) :'T*'T =
-        let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member DivRem: _*_*_*_ -> _) a, b, c, d)
-        let inline call (a:'a, b:'b, c:'c) = call_4 (a, b, c, Unchecked.defaultof<'r>) :'r
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member DivRem: _*_*_ -> _) a, b, c)
+        let inline call (a:'a, b:'b, c:'c) = call_3 (a, b, c)
         call (DivRem.Instance, D, d)    
 
 
@@ -113,26 +113,26 @@ type DivRem() =
 
 type ToBigInteger() =
     static member val Instance = ToBigInteger()
-    static member        ToBigInteger (_:ToBigInteger, x:sbyte     , _) = bigint (int x)
-    static member        ToBigInteger (_:ToBigInteger, x:int16     , _) = bigint (int x)
-    static member        ToBigInteger (_:ToBigInteger, x:int32     , _) = bigint      x
-    static member        ToBigInteger (_:ToBigInteger, x:int64     , _) = bigint      x
-    static member        ToBigInteger (_:ToBigInteger, x:nativeint , _) = bigint (int x)
-    static member        ToBigInteger (_:ToBigInteger, x:byte      , _) = bigint (int x)
-    static member        ToBigInteger (_:ToBigInteger, x:uint16    , _) = bigint (int x)
-    static member        ToBigInteger (_:ToBigInteger, x:unativeint, _) = bigint (int x)
-    static member        ToBigInteger (_:ToBigInteger, x:bigint    , _) =             x
+    static member        ToBigInteger (_:ToBigInteger, x:sbyte     ) = bigint (int x)
+    static member        ToBigInteger (_:ToBigInteger, x:int16     ) = bigint (int x)
+    static member        ToBigInteger (_:ToBigInteger, x:int32     ) = bigint      x
+    static member        ToBigInteger (_:ToBigInteger, x:int64     ) = bigint      x
+    static member        ToBigInteger (_:ToBigInteger, x:nativeint ) = bigint (int x)
+    static member        ToBigInteger (_:ToBigInteger, x:byte      ) = bigint (int x)
+    static member        ToBigInteger (_:ToBigInteger, x:uint16    ) = bigint (int x)
+    static member        ToBigInteger (_:ToBigInteger, x:unativeint) = bigint (int x)
+    static member        ToBigInteger (_:ToBigInteger, x:bigint    ) =             x
 #if NOTNET35
-    static member        ToBigInteger (_:ToBigInteger, x:uint32    , _) = bigint      x
-    static member        ToBigInteger (_:ToBigInteger, x:uint64    , _) = bigint      x
+    static member        ToBigInteger (_:ToBigInteger, x:uint32    ) = bigint      x
+    static member        ToBigInteger (_:ToBigInteger, x:uint64    ) = bigint      x
 #else
-    static member        ToBigInteger (_:ToBigInteger, x:uint32    , _) = bigint (int x)
-    static member        ToBigInteger (_:ToBigInteger, x:uint64    , _) = bigint (int64 x)
+    static member        ToBigInteger (_:ToBigInteger, x:uint32    ) = bigint (int x)
+    static member        ToBigInteger (_:ToBigInteger, x:uint64    ) = bigint (int64 x)
 #endif
 
     static member inline Invoke    (x:'Integral) :bigint =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToBigInteger: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToBigInteger: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
         call (ToBigInteger.Instance, x)
 
 open System.Numerics
@@ -201,13 +201,10 @@ module Ratio =
         static member inline (-) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator -. b.Numerator *. a.Numerator) </ratio/> (a.Numerator *. b.Denominator)
         static member inline (*) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Numerator) </ratio/> (a.Numerator *. b.Denominator)
 
-    type Ratio<'RA> with static member inline Abs            (_:Abs           , r:Ratio<_>, _) = (Abs.Invoke    (numerator r)) </ratio/> (denominator r)
-    type Ratio<'RA> with static member inline Signum         (_:Signum        , r:Ratio<_>, _) = (Signum.Invoke (numerator r)) </ratio/> G1()
-    type Ratio<'RA> with static member inline FromBigInteger (_:FromBigInteger, _:Ratio<_>) = fun (x:bigint) ->
-                            let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBigInteger: _*_ -> _) a, b)
-                            let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-                            instance FromBigInteger.Instance x </ratio/> G1()
-    type Ratio<'RA> with static member inline Negate (_:Negate        , r:Ratio<_>, _) = -(numerator r) </ratio/> (denominator r)
+    type Ratio<'RA> with static member inline Abs            (_:Abs           , r:Ratio<_>) = (Abs.Invoke    (numerator r)) </ratio/> (denominator r)
+    type Ratio<'RA> with static member inline Signum         (_:Signum        , r:Ratio<_>) = (Signum.Invoke (numerator r)) </ratio/> G1()
+    type Ratio<'RA> with static member inline FromBigInteger (_:FromBigInteger, _:Ratio<_>) = fun (x:bigint) -> FromBigInteger.Invoke x </ratio/> G1()
+    type Ratio<'RA> with static member inline Negate (_:Negate        , r:Ratio<_>) = -(numerator r) </ratio/> (denominator r)
 
     let (|Ratio|) (ratio:Ratio<_>) = (ratio.Numerator, ratio.Denominator)
 
@@ -275,12 +272,9 @@ type ProperFraction() =
 
 type ToRational() =
     static member val Instance = ToRational()
-    static member inline ToRational (_:ToRational, r:Ratio<_>, _) = ToBigInteger.Invoke (numerator r) </ratio/> ToBigInteger.Invoke (denominator r) :Rational
-    static member inline ToRational (_:ToRational, x:'t      , _) = 
-        let inline fromRational (x:Rational) :'Fractional =
-            let inline instance_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromRational: _*_ -> _) a, b)
-            let inline instance (a:'a) = fun (x:'x) -> instance_2 (a, Unchecked.defaultof<'r>) x :'r
-            instance FromRational.Instance x
+    static member inline ToRational (_:ToRational, r:Ratio<_>) = ToBigInteger.Invoke (numerator r) </ratio/> ToBigInteger.Invoke (denominator r) :Rational
+    static member inline ToRational (_:ToRational, x:'t      ) = 
+        let inline fromRational (x:Rational) :'Fractional = FromRational.Invoke x
         let inline whenFractional a = let _ = if false then fromRational (1I </ratio/> 1I) else a in () 
         whenFractional x
         let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
@@ -289,11 +283,11 @@ type ToRational() =
         let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
         let (i:bigint,d) = ProperFraction.Invoke x
         (i </ratio/> 1I) + (truncate (decimal d *. 1000000000000000000000000000M) </ratio/> 1000000000000000000000000000I) :Rational
-    static member inline ToRational (_:ToRational, x:'t, _) = (ToBigInteger.Invoke x) </ratio/> 1I
+    static member inline ToRational (_:ToRational, x:'t) = (ToBigInteger.Invoke x) </ratio/> 1I
 
     static member inline Invoke (x:'Real) :Rational =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ToRational: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToRational: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
         call (ToRational.Instance, x)
 
 // Floating class ---------------------------------------------------------

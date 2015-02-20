@@ -174,36 +174,36 @@ type Apply() =
 
 type Map_() =
     static member val Instance = Map_()
-    static member Map_ (_:Map_, x:Lazy<_>        , _:unit) = fun f -> f x.Value :unit
-    static member Map_ (_:Map_, x:seq<_>         , _:unit) = fun f -> Seq.iter f x
-    static member Map_ (_:Map_, x:option<_>      , _:unit) = fun f -> match x with Some x -> f x | _ -> ()
-    static member Map_ (_:Map_, x:list<_>        , _:unit) = fun f -> List.iter f x
-    static member Map_ (_:Map_, (m,a)            , _:unit) = fun f -> f a :unit
-    static member Map_ (_:Map_, x:_ []           , _:unit) = fun f -> Array.iter   f x
-    static member Map_ (_:Map_, x:_ [,]          , _:unit) = fun f -> Array2D.iter f x
-    static member Map_ (_:Map_, x:_ [,,]         , _:unit) = fun f -> Array3D.iter f x
-    static member Map_ (_:Map_, x:_ [,,,]        , _:unit) = fun f ->
+    static member Map_ (_:Map_, x:Lazy<_>        ) = fun f -> f x.Value :unit
+    static member Map_ (_:Map_, x:seq<_>         ) = fun f -> Seq.iter f x
+    static member Map_ (_:Map_, x:option<_>      ) = fun f -> match x with Some x -> f x | _ -> ()
+    static member Map_ (_:Map_, x:list<_>        ) = fun f -> List.iter f x
+    static member Map_ (_:Map_, (m,a)            ) = fun f -> f a :unit
+    static member Map_ (_:Map_, x:_ []           ) = fun f -> Array.iter   f x
+    static member Map_ (_:Map_, x:_ [,]          ) = fun f -> Array2D.iter f x
+    static member Map_ (_:Map_, x:_ [,,]         ) = fun f -> Array3D.iter f x
+    static member Map_ (_:Map_, x:_ [,,,]        ) = fun f ->
         for i = 0 to Array4D.length1 x - 1 do
             for j = 0 to Array4D.length2 x - 1 do
                 for k = 0 to Array4D.length3 x - 1 do
                     for l = 0 to Array4D.length4 x - 1 do
                         f x.[i,j,k,l]
-    static member Map_ (_:Map_, x:Async<_>       , _:unit) = fun f -> f (Async.RunSynchronously x) : unit
-    static member Map_ (_:Map_, x:Choice<_,_>    , _:unit) = fun f -> match x with Choice1Of2 x -> f x | _ -> ()
-    static member Map_ (_:Map_, KeyValue(k, x)   , _:unit) = fun f -> f x :unit
-    static member Map_ (_:Map_, x:Map<'a,'b>     , _:unit) = fun f -> Map.iter (const' f) x 
-    static member Map_ (_:Map_, x:Dictionary<_,_>, _:unit) = fun f -> Seq.iter f x.Values
-    static member Map_ (_:Map_, x:_ ResizeArray  , _:unit) = fun f -> Seq.iter f x
+    static member Map_ (_:Map_, x:Async<_>       ) = fun f -> f (Async.RunSynchronously x) : unit
+    static member Map_ (_:Map_, x:Choice<_,_>    ) = fun f -> match x with Choice1Of2 x -> f x | _ -> ()
+    static member Map_ (_:Map_, KeyValue(k, x)   ) = fun f -> f x :unit
+    static member Map_ (_:Map_, x:Map<'a,'b>     ) = fun f -> Map.iter (const' f) x 
+    static member Map_ (_:Map_, x:Dictionary<_,_>) = fun f -> Seq.iter f x.Values
+    static member Map_ (_:Map_, x:_ ResizeArray  ) = fun f -> Seq.iter f x
 
     // Restricted
-    static member Map_ (_:Map_, x:Nullable<_>    , _:unit) = fun f -> if x.HasValue then f x.Value else ()
-    static member Map_ (_:Map_, x:string         , _:unit) = fun f -> String.iter f x
-    static member Map_ (_:Map_, x:StringBuilder  , _:unit) = fun f -> String.iter f (x.ToString())
-    static member Map_ (_:Map_, x:Set<_>         , _:unit) = fun f -> Set.iter f x        
+    static member Map_ (_:Map_, x:Nullable<_>    ) = fun f -> if x.HasValue then f x.Value else ()
+    static member Map_ (_:Map_, x:string         ) = fun f -> String.iter f x
+    static member Map_ (_:Map_, x:StringBuilder  ) = fun f -> String.iter f (x.ToString())
+    static member Map_ (_:Map_, x:Set<_>         ) = fun f -> Set.iter f x        
 
     static member inline Invoke (action :'T->unit) (source :'Functor'T) =
-        let inline call_3 (a:^a,b:^b,c:^c) =  ((^a or ^b or ^c) : (static member Map: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a ,b , Unchecked.defaultof<'r>) x :'r
+        let inline call_2 (a:^a, b:^b) =  ((^a or ^b) : (static member Map: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = fun (x:'x) -> call_2 (a ,b) x :'r
         call (Map_.Instance, source) action :unit
 
 type Map() =
@@ -263,22 +263,22 @@ type Zero() =
 
 type Plus() =
     static member val Instance = Plus()
-    static member        Plus (_:Plus, x:_ option, _) = fun y -> match x with None -> y | xs -> xs
-    static member        Plus (_:Plus, x:_ list  , _) = fun y -> x @ y
-    static member        Plus (_:Plus, x:_ []    , _) = fun y -> Array.append x y
-    static member        Plus (_:Plus, x:_ seq   , _) = fun y -> Seq.append   x y
-    static member inline Plus (_:Plus, x:_ Id    , _) = fun y -> Id (Mappend.Invoke (Id.run x) (Id.run y))
+    static member        Plus (_:Plus, x:_ option) = fun y -> match x with None -> y | xs -> xs
+    static member        Plus (_:Plus, x:_ list  ) = fun y -> x @ y
+    static member        Plus (_:Plus, x:_ []    ) = fun y -> Array.append x y
+    static member        Plus (_:Plus, x:_ seq   ) = fun y -> Seq.append   x y
+    static member inline Plus (_:Plus, x:_ Id    ) = fun y -> Id (Mappend.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'Functor'T) (y:'Functor'T) :'Functor'T =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Plus: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r        
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Plus: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = fun (x:'x) -> call_2 (a, b) x
         call (Plus.Instance, x) y
 
 type Zero with
     static member inline Zero (_:Zero, _:Kleisli<_,_>) = Kleisli (fun _ -> Zero.Invoke ())
     
 type Plus with
-    static member inline Plus (_:Plus, Kleisli f, _) = fun (Kleisli g) -> Kleisli(fun x -> Plus.Invoke (f x) (g x))
+    static member inline Plus (_:Plus, Kleisli f) = fun (Kleisli g) -> Kleisli(fun x -> Plus.Invoke (f x) (g x))
 
 
 module Monad =
@@ -314,26 +314,26 @@ open Monad
 
 type Extract() =
     static member val Instance = Extract()
-    static member        Extract (_:Extract, x:'t Async,_:'t) = Async.RunSynchronously x
-    static member        Extract (_:Extract, x:'t Lazy, _:'t) = x.Value
-    static member        Extract (_:Extract, (w:'w,a:'a) , _) = a
-    static member inline Extract (_:Extract, f:'m->'t , _:'t) = f (Mempty.Invoke())
-    static member        Extract (_:Extract, f:'t Id  , _:'t) = f
+    static member        Extract (_:Extract, x:'t Async ) = Async.RunSynchronously x
+    static member        Extract (_:Extract, x:'t Lazy  ) = x.Value
+    static member        Extract (_:Extract, (w:'w,a:'a)) = a
+    static member inline Extract (_:Extract, f:'m->'t   ) = f (Mempty.Invoke())
+    static member        Extract (_:Extract, f:'t Id    ) = f
 
 #if NOTNET35
-    static member        Extract (_:Extract, f:'t Task,_:'t) = f.Result
+    static member        Extract (_:Extract, f:'t Task  ) = f.Result
 #endif
 
     // Restricted        
-    static member        Extract (_:Extract, x:'t list         , _:'t) = List.head x
-    static member        Extract (_:Extract, x:'t []           , _:'t) = x.[0]
-    static member        Extract (_:Extract, x:string          , _   ) = x.[0]
-    static member        Extract (_:Extract, x:StringBuilder   , _   ) = x.ToString().[0]
-    static member        Extract (_:Extract, x:'t seq          , _:'t) = Seq.head x
+    static member        Extract (_:Extract, x:'t list      ) = List.head x
+    static member        Extract (_:Extract, x:'t []        ) = x.[0]
+    static member        Extract (_:Extract, x:string       ) = x.[0]
+    static member        Extract (_:Extract, x:StringBuilder) = x.ToString().[0]
+    static member        Extract (_:Extract, x:'t seq       ) = Seq.head x
 
     static member inline Invoke (x:'Comonad'T): 'T =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extract: _*_*_ -> _) a, b, c)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Extract: _*_ -> _) a, b)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Extract.Instance, x)
 
 type Extend() =

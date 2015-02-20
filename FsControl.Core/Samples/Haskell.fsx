@@ -269,7 +269,7 @@ open FsControl.Core.Types.Endo
 
 type Ordering = LT|EQ|GT with
     static member        Mempty  (_:Mempty , _:Ordering) = EQ
-    static member        Mappend (_:Mappend, x:Ordering, _) = fun y -> 
+    static member        Mappend (_:Mappend, x:Ordering) = fun y -> 
         match x, y with
         | LT, _ -> LT
         | EQ, a -> a
@@ -491,14 +491,14 @@ module FoldableTree =
         | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
         // add instance for Foldable class
-        static member inline FoldMap (_:FoldMap, t:Tree<_>, _) =
+        static member inline FoldMap (_:FoldMap, t:Tree<_>) =
             let rec _foldMap x f =
                 match x with
                 | Empty        -> mempty()
                 | Leaf n       -> f n
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
             _foldMap t
-        static member inline Foldr (_:Foldr, x:Tree<_>, _) = fun (f,z) -> Foldr.FromFoldMap f z x
+        static member inline Foldr (_:Foldr, x:Tree<_>) = fun (f,z) -> Foldr.FromFoldMap f z x
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree

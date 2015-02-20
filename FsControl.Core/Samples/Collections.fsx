@@ -45,7 +45,7 @@ type ZipList<'s> = ZipList of 's seq with
 
 type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:Return , _:WrappedList<'a>) = fun (x:'a)     -> WrappedList [x]
-    static member Mappend  (_:Mappend, WrappedList l, _ ) = fun (WrappedList x) -> WrappedList (l @ x)
+    static member Mappend  (_:Mappend, WrappedList l) = fun (WrappedList x) -> WrappedList (l @ x)
     static member Mempty   (_:Mempty , _:WrappedList<'a>) = WrappedList List.empty
     static member FoldBack (f, WrappedList x, z) = List.foldBack f x z
 
@@ -168,7 +168,9 @@ let singletonSeq : _ seq  = result 1
 
 
 // This should not compile (but it does)
-//let sortedStack = sortBy  string    stack  <- cool, now it fails
+(*
+let sortedStack = sortBy  string    stack  // <- cool, now it fails
+*)
 let mappedstack = map string stack
 let stackGroup  = groupBy ((%)/> 2) stack
 
@@ -194,11 +196,14 @@ let lst'  = extend extract lst
 
 // This should ideally not compile (but it does, because stack is also a seq)
 let elem3  = extract   stack
-// let tails' = duplicate stack  <- cool, now it fails
+(*
+let tails' = duplicate stack  // <- cool, now it fails
+*)
 
 // This should not compile
-// let stk'  = extend extract stack
-
+(*
+let stk'  = extend extract stack
+*)
 
 // Test foldable
 
@@ -211,8 +216,9 @@ let r10' = foldBack (+) stack 0
 let r123 = toList stack
 
 // This should not compile
-// let r03' = filter ((=) 3) stack
-
+(*
+let r03' = filter ((=) 3) stack
+*)
 
 // Test traversable
 
