@@ -237,7 +237,7 @@ type Tree<'a> =
         | Tree(x,t1,t2) -> Tree(f x, Tree.map f t1, Tree.map f t2)
 
 // add ìnstance for Functor class
-    static member Map (_:Map, x:Tree<_>, _) = fun f -> Tree.map f x
+    static member Map (x:Tree<_>, _, _:Map) = fun f -> Tree.map f x
 
 let myTree = Tree(6, Tree(2, Leaf 1, Leaf 3), Leaf 9)
 let mappedTree = fmap fTimes2minus3 myTree
@@ -268,8 +268,8 @@ open FsControl.Core.Types.Dual
 open FsControl.Core.Types.Endo
 
 type Ordering = LT|EQ|GT with
-    static member        Mempty  (_:Mempty , _:Ordering) = EQ
-    static member        Mappend (_:Mappend, x:Ordering, y) = 
+    static member        Mempty  (_:Ordering, _:Mempty) = EQ
+    static member        Mappend (x:Ordering, y) = 
         match x, y with
         | LT, _ -> LT
         | EQ, a -> a
@@ -491,14 +491,14 @@ module FoldableTree =
         | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
         // add instance for Foldable class
-        static member inline FoldMap (_:FoldMap, t:Tree<_>) =
+        static member inline FoldMap (t:Tree<_>, _:FoldMap) =
             let rec _foldMap x f =
                 match x with
                 | Empty        -> mempty()
                 | Leaf n       -> f n
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
             _foldMap t
-        static member inline Foldr (_:Foldr, x:Tree<_>) = fun (f,z) -> Foldr.FromFoldMap f z x
+        static member inline Foldr (x:Tree<_>, _:Foldr) = fun (f,z) -> Foldr.FromFoldMap f z x
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree
