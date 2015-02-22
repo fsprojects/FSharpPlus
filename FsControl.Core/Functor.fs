@@ -59,7 +59,7 @@ type Bind() =
     static member Bind (x:Nullable<_> , f ) = if x.HasValue then f x.Value else Nullable() : Nullable<'b>
 
     static member inline Invoke x (f:_->'R) : 'R =
-        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member Bind: _*_ -> _) b, f)
+        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b) : (static member Bind: _*_ -> _) b, f)
         call_3 (Bind.Instance, x, Unchecked.defaultof<'R>, f) :'R
 
 
