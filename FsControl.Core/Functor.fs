@@ -59,9 +59,12 @@ type Bind() =
     static member Bind (x:Nullable<_> , f ) = if x.HasValue then f x.Value else Nullable() : Nullable<'b>
 
     static member inline Invoke x (f:_->'R) : 'R =
-        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b) : (static member Bind: _*_ -> _) b, f)
+        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member Bind: _*_ -> _) b, f)
         call_3 (Bind.Instance, x, Unchecked.defaultof<'R>, f) :'R
 
+    static member inline InvokeOnNonPrimitiveTypes x (f:_->'R) : 'R =
+        let inline call_3 (b:^b,c:^c,f:^f) = ((^b or ^c) : (static member Bind: _*_ -> _) b, f)
+        call_3 (x, Unchecked.defaultof<'R>, f) :'R
 
 type Join() =
     inherit Default1()
@@ -126,7 +129,7 @@ type Apply() =
     static member inline FromMonad f x = Bind.Invoke f (fun x1 -> Bind.Invoke x (fun x2 -> Return.Invoke(x1 x2)))
 
 
-    static member inline Apply (f   , x   , _   , _:Default2) = Bind.Invoke f (fun x1 -> Bind.Invoke x (fun x2 -> Return.Invoke(x1 x2)))
+    static member inline Apply (f:'Atu, x:'At, _, _:Default2) :^Au = Bind.InvokeOnNonPrimitiveTypes f (fun x1 -> Bind.InvokeOnNonPrimitiveTypes x (fun x2 -> Return.Invoke(x1 x2)))
     static member inline Apply (f:'F, x:'X, _:'R, _:Default1) = ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
 
     static member        Apply (f:Lazy<'a->'b>, x:Lazy<'a>     , _:Lazy<'b>     , _:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
@@ -162,7 +165,7 @@ type Apply() =
 
     static member inline Invoke x y : 'Applicative'U =
         let inline call_4 (a:^a,b:^b,c:^c,d:^d) =                                                          
-            ((^a or ^b or ^c) : (static member Apply: _*_*_*_ -> _) b, c, d, a)
+            ((^a or ^b or ^c or ^d) : (static member Apply: _*_*_*_ -> _) b, c, d, a)
         call_4(Apply.Instance,x,y, Unchecked.defaultof<'Applicative'U>)
 
 

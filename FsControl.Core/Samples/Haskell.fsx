@@ -452,9 +452,9 @@ let inline idiomatic a b = (Idiomatic $ b) a
 let inline iI x = (idiomatic << pure') x
 
 let res3n4''  = iI ((+) 2) [1;2] Ii
-let res3n4''' = iI (+) (pure' 2) [1;2] Ii
+let res3n4''' = iI (+) (pure' 2) [1;2] Ii                               // *1
 let res18n24' = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
-let res6n7n8' = iI (+) (pure' 5G          ) (ZipList [1;2;3]     ) Ii
+let res6n7n8' = iI (+) (pure' 5G          ) (ZipList [1;2;3]     ) Ii   // *1
 let res18n14' = iI (+) (ZipList(seq [8;4])) (pure' 10            ) Ii
 
 type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
@@ -471,7 +471,9 @@ type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idi
 
 let resJust2'' = iI safeDivBy (Just 4G) J (Just 8G) Ii
 let resNothing = iI safeDivBy (Just 0G) J (Just 8G) Ii
-let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii
+let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii   // *1
+
+// *1 These lines fails when Apply.Invoke has no 'or ^d' constraint.
 
 
 // Foldable
