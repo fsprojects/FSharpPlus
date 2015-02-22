@@ -179,7 +179,7 @@ let stackGroup  = groupBy ((%)/> 2) stack
                         
 let rseq =
     monad {
-        let! x1 =  [1;2]
+        let! x1 = seq [1;2]     // Cool, now it fails if this value is a list instead of a seq.
         let! x2 = seq [10;20]
         return ((+) x1 x2) }
 

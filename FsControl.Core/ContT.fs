@@ -14,10 +14,10 @@ module ContT =
     let apply  (ContT f) (ContT x) = ContT (fun k -> f (fun f' -> x (k << f')))  :ContT<'mr,'a>
 
 type ContT<'Mr,'A> with
-    static member Map    (x, _, _:Map) = fun f -> ContT.map f x
+    static member Map    (x, f, _:Map) = ContT.map f x
     static member Return (_:ContT<'mr,'a>      , _:Return) = fun a  -> ContT ((|>) a)  :ContT<'mr,'a>
     static member Apply  (f, x, _:ContT<'mr,'b>, _:Apply ) = ContT.apply f x :ContT<'mr,'b>
-    static member Bind   (x, _:ContT<'mr,'b>, _:Bind) = fun f -> ContT.bind f x :ContT<'mr,'b>
+    static member Bind (x, f) = ContT.bind f x :ContT<'mr,'b>
 
     static member inline Lift (_:ContT<'mr,'a>) = fun (m:'ma) -> ContT((>>=) m) : ContT<'mr,'a>    
 

@@ -30,10 +30,10 @@ module WriterT =
 
 type WriterT<'WMa> with
 
-    static member inline Map      (x, _               , _:Map   ) = fun f -> WriterT.map f x
+    static member inline Map      (x, f               , _:Map   ) = WriterT.map f x
     static member inline Return   (_:WriterT<'wma>    , _:Return) :'a -> WriterT<'wma> = fun a -> WriterT (result (a, Mempty.Invoke()))
     static member inline Apply    (f, x, _:WriterT<'r>, _:Apply ) = WriterT.apply f x :WriterT<'r>
-    static member inline Bind     (x:WriterT<'wma>, _:WriterT<'wmb>, _:Bind) :('a -> WriterT<'wmb>) -> WriterT<'wmb> = fun f -> WriterT.bind f x
+    static member inline Bind     (x:WriterT<'wma>, f :'a -> WriterT<'wmb>) : WriterT<'wmb> = WriterT.bind f x
 
     static member inline Zero (_:WriterT<_>          , _:Zero) = WriterT (Zero.Invoke())
     static member inline Plus (  WriterT m, WriterT n, _:Plus) = WriterT (m <|> n)

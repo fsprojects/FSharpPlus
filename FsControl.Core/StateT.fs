@@ -16,11 +16,10 @@ module StateT =
         return! run (f a) s'}
 
 type StateT<'S,'MaS> with
-    static member inline Map    (x, _                  , _:Map   ) = fun f -> StateT.map f x
+    static member inline Map    (x, f                  , _:Map   ) = StateT.map f x
     static member inline Return (_:StateT<'s,'ma>      , _:Return) : 'a -> StateT<'s,'ma> = fun a -> StateT <| fun s -> result (a, s)
     static member inline Apply  (f, x, _:StateT<'s,'mb>, _:Apply ) = StateT.apply f x
-    static member inline Bind   (x:StateT<'s,'mas>, _:StateT<'s,'mbs>, _:Bind) :('a -> StateT<'s,'mbs>) -> StateT<'s,'mbs> = fun f -> 
-        StateT.bind f x
+    static member inline Bind   (x:StateT<'s,'mas>, f :'a -> StateT<'s,'mbs>) : StateT<'s,'mbs> = StateT.bind f x
 
     static member inline Zero (_:StateT<_,_>       , _:Zero) = StateT <| fun _ -> Zero.Invoke()
     static member inline Plus (  StateT m, StateT n, _:Plus) = StateT <| fun s -> m s <|> n s

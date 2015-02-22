@@ -19,10 +19,10 @@ module ErrorT =
     let inline apply (ErrorT f) (ErrorT x) = ErrorT(Map.Invoke Error.apply f <*> x) :ErrorT<'mb>
 
 type ErrorT<'R> with
-    static member inline Map    ( x :ErrorT<'ma>, _    , _:Map   ) = fun f -> ErrorT.map f x :ErrorT<'mb>
+    static member inline Map    ( x :ErrorT<'ma>, f    , _:Map   ) = ErrorT.map f x :ErrorT<'mb>
     static member inline Return (_:ErrorT<'ma>         , _:Return) = ErrorT << result << Choice1Of2 :'a -> ErrorT<'ma>
     static member inline Apply  ( f, x,   _:ErrorT<'mb>, _:Apply ) = ErrorT.apply f x :ErrorT<'mb>
-    static member inline Bind   (x:ErrorT<'ma>, _:ErrorT<'mb>, _:Bind) = fun (f:'a -> ErrorT<'mb>) -> ErrorT.bind f x :ErrorT<'mb>
+    static member inline Bind   (x:ErrorT<'ma>, f:'a -> ErrorT<'mb>) = ErrorT.bind f x :ErrorT<'mb>
 
     static member inline Lift (_:ErrorT<'m_a>) = ErrorT << (liftM Choice1Of2)      :'ma -> ErrorT<'m_a>
 

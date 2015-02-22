@@ -18,5 +18,5 @@ module Writer =
 type Writer<'W,'A> with
     static member        (<!>) (f, x) = Writer.map f x                 :Writer<'w,_>
     static member inline Return a = Writer (a, Mempty.Invoke())        :Writer<'w,'a>
-    static member inline Bind   x = fun f -> Writer.bind f x           :Writer<'w,'b>
+    static member inline Bind (x, f) = Writer.bind f x           :Writer<'w,'b>
     static member inline (<*>) (f, x:Writer<'w,'a>) = Writer.apply f x :Writer<'w,'b>

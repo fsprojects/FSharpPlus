@@ -13,5 +13,5 @@ module Cont =
 type Cont<'R,'A> with
     static member (<!>) (f, x:Cont<'r,'a>) = Cont.map f x   :Cont<'r,'b>
     static member Return n = Cont (fun k -> k n)
-    static member Bind x = fun f -> Cont.bind f x
+    static member Bind (x, f) = Cont.bind f x
     static member (<*>) (f, x:Cont<'r,'a>) = Cont.apply f x :Cont<'r,'b>

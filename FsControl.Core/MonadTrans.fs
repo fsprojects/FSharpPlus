@@ -17,10 +17,10 @@ module OptionT =
     let inline apply  (OptionT f) (OptionT x) = OptionT (Map.Invoke Option.apply f <*> x) :OptionT<'r>
 
 type OptionT<'Ma> with
-    static member inline Map    (x :OptionT<'ma>, _  , _:Map   ) = fun (f:'a->'b) -> OptionT.map f x :OptionT<'mb>
+    static member inline Map    (x :OptionT<'ma>, (f:'a->'b)  , _:Map   ) = OptionT.map f x :OptionT<'mb>
     static member inline Return ( _:OptionT<'ma>     , _:Return) = OptionT << result << Some :'a -> OptionT<'ma>
     static member inline Apply  (f , x, _:OptionT<'r>, _:Apply ) = OptionT.apply f x :OptionT<'r>
-    static member inline Bind   (x :OptionT<'ma>, _:OptionT<'mb>, _:Bind) = fun (f: 'a -> OptionT<'mb>) -> OptionT.bind f x :OptionT<'mb>
+    static member inline Bind   (x :OptionT<'ma>, f: 'a -> OptionT<'mb>) = OptionT.bind f x :OptionT<'mb>
 
     static member inline Zero (_:OptionT<_>        , _:Zero) = OptionT <| result None
     static member inline Plus (OptionT x, OptionT y, _:Plus) = OptionT <| do'() {
@@ -38,10 +38,10 @@ module ListT =
     let inline apply  (ListT f) (ListT x) = ListT (Map.Invoke List.apply f <*> x) :ListT<'r>
 
 type ListT<'Ma> with
-    static member inline Map    (x:ListT<'ma>, _    , _:Map   ) = fun (f:'a->'b) -> ListT.map f x :ListT<'mb>
+    static member inline Map    (x:ListT<'ma>, (f:'a->'b)    , _:Map   ) = ListT.map f x :ListT<'mb>
     static member inline Return (       _:ListT<'ma>, _:Return) = ListT << result << List.singleton :'a -> ListT<'ma>
     static member inline Apply  (f, x,  _:ListT<'r> , _:Apply ) = ListT.apply f x :ListT<'r>
-    static member inline Bind   (x:ListT<'ma>, _:ListT<'mb>, _:Bind) = fun (f:'a -> ListT<'mb>) -> ListT.bind f x :ListT<'mb>
+    static member inline Bind   (x:ListT<'ma>, f:'a -> ListT<'mb>) = ListT.bind f x :ListT<'mb>
 
     static member inline Zero (_:ListT<_>      , _:Zero) = ListT <| result []
     static member inline Plus (ListT x, ListT y, _:Plus) = ListT <| do'() {
@@ -61,10 +61,10 @@ module SeqT =
     let inline apply (SeqT f) (SeqT x) = SeqT (Map.Invoke Seq.apply f <*> x) :SeqT<'r>
 
 type SeqT<'Ma> with
-    static member inline Map    (x:SeqT<'ma>, _   , _:Map   ) = fun (f:'a->'b) -> SeqT.map f x :SeqT<'mb>
+    static member inline Map    (x:SeqT<'ma>, (f:'a->'b)   , _:Map   ) =  SeqT.map f x :SeqT<'mb>
     static member inline Return (      _:SeqT<'ma>, _:Return) = SeqT << result << Seq.singleton :'a -> SeqT<'ma>
     static member inline Apply  (f, x, _:SeqT<'r> , _:Apply ) = SeqT.apply f x :SeqT<'r>
-    static member inline Bind   (x:SeqT<'ma>, _:SeqT<'mb>, _:Bind) = fun (f: 'a -> SeqT<'mb>) -> SeqT.bind f x :SeqT<'mb>
+    static member inline Bind   (x:SeqT<'ma>, f: 'a -> SeqT<'mb>) = SeqT.bind f x :SeqT<'mb>
 
     static member inline Zero (_:Zero, _:SeqT<_>     ) = SeqT <| result Seq.empty
     static member inline Plus (_:Plus, SeqT x, SeqT y) = SeqT <| do'() {

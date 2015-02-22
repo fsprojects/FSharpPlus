@@ -17,5 +17,5 @@ module State =
 type State<'S,'A> with
     static member (<!>) (f, x) = State.map f x                :State<'s,_>
     static member Return a = State (fun s -> (a, s))          :State<'s,'a>
-    static member Bind   x = fun f -> State.bind f x          :State<'s,'b>
+    static member Bind (x, f) = State.bind f x          :State<'s,'b>
     static member (<*>) (f, x:State<'s,'a>) = State.apply f x :State<'s,'b>

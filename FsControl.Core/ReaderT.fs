@@ -16,10 +16,10 @@ module ReaderT =
         return! run (f a) r}    
 
 type ReaderT<'R,'Ma> with
-    static member inline Map    (x, _, _:Map) = fun f -> ReaderT.map f x
+    static member inline Map    (x, f, _:Map) = ReaderT.map f x
     static member inline Return (_:ReaderT<'r,'ma>      , _:Return) :'a  -> ReaderT<'r,'ma> = fun a -> ReaderT <| fun _ -> result a
     static member inline Apply  (f, x, _:ReaderT<'r,'mb>, _:Apply ) = ReaderT.apply f x :ReaderT<'r,'mb>
-    static member inline Bind   (x, _:ReaderT<'r,'m>, _:Bind) :('b -> ReaderT<'r,'m>) -> ReaderT<'r,'m> = fun f -> ReaderT.bind f x
+    static member inline Bind (x, f :'b -> ReaderT<'r,'m>) : ReaderT<'r,'m> = ReaderT.bind f x
 
     static member inline Zero (_:ReaderT<_,_>        , _:Zero) = ReaderT <| fun _ -> Zero.Invoke()
     static member inline Plus (  ReaderT m, ReaderT n, _:Plus) = ReaderT <| fun r -> m r <|> n r
