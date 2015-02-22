@@ -12,7 +12,7 @@ module Reader =
     let ask() = Reader id
 
 type Reader<'R,'A> with
-    static member (<!>) (f, x:Reader<'r,'a>) = Reader.map f x   :Reader<'r,'b>
+    static member Map   (x:Reader<'r,'a>, f) = Reader.map f x   :Reader<'r,'b>
     static member Return a = Reader (fun _ -> a)                :Reader<'r,'a>
-    static member Bind (x, f) = Reader.bind f x           :Reader<'r,'b>
+    static member Bind  (x, f) = Reader.bind f x           :Reader<'r,'b>
     static member (<*>) (f, x:Reader<'r,'a>) = Reader.apply f x :Reader<'r,'b>

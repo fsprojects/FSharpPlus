@@ -35,7 +35,7 @@ let resS3  = tryPick (fun x -> if x = 3 then Some x else None) tree
 
 type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
-    static member (<!>) (f:'a->'b,  ZipList x)               = ZipList (Seq.map f x)
+    static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
     static member inline Mempty() = result (mempty())                                :ZipList<'a>
     static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>

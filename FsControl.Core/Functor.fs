@@ -213,7 +213,7 @@ type Map() =
     static member inline FromMonad       f x = Bind.Invoke x (Return.Invoke << f)
 
     static member inline Map (x:'f, (f:'a->'b), _:Default2) = Return.Invoke (Apply.Invoke f x) :'r
-    static member inline Map (x:'F, (f:'a->'b), _:Default1) = ((^F) : (static member (<!>): ('a->'b) -> ^F -> ^R) (f, x))
+    static member inline Map (x:'F, (f:'a->'b), _:Default1) = ((^F) : (static member Map: ^F * ('a->'b) -> ^R) (x, f))
 
     static member Map (x:Lazy<_>        , f, _:Map) = Lazy.Create (fun () -> f x.Value) : Lazy<'b>
     static member Map (x:seq<_>         , f, _:Map) = Seq.map f x :seq<'b>
@@ -281,7 +281,7 @@ type Plus with
 
 module Monad =
 
-    let inline (>>=) f x = Bind.Invoke f x
+    let inline (>>=) x f = Bind.Invoke x f
     let inline result  x = Return.Invoke x
     let inline (<*>) f x = Apply.Invoke f x
     let inline (<|>) x y = Plus.Invoke x y

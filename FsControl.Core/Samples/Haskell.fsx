@@ -421,7 +421,7 @@ let inline (<**>)   x   = x |> liftA2 (|>)
 let inline optional v = Just <<|> v <|> pure' Nothing
 
 type ZipList<'s> = ZipList of 's seq with
-    static member (<!>) (f:'a->'b,  ZipList x)               = ZipList (Seq.map f x)
+    static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (const' x))
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList<'b>
 
