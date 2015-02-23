@@ -1,6 +1,8 @@
 ﻿namespace FsControl.Core.TypeMethods
 
 open System
+open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
 open System.Collections.Generic
 open System.Text
 open Microsoft.FSharp.Quotations
@@ -56,24 +58,26 @@ type FromBytes() =
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call FromBytes.Instance (value, startIndex, isLtEndian)
 
+
+[<Extension;Sealed>]
 type ToBytes() =
     static member val Instance = ToBytes()
-    static member ToBytes (x:bool   , _:ToBytes) = fun _ -> BitConverter.GetBytes(x)
-    static member ToBytes (x:char   , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x:float  , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x: int16 , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x: int   , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x:int64  , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x:float32, _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x:string , _:ToBytes) = fun e -> Array.map byte (x.ToCharArray())
-    static member ToBytes (x:uint16 , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x:uint32 , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    static member ToBytes (x:uint64 , _:ToBytes) = fun e -> BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:bool   , e, _:ToBytes) = BitConverter.GetBytes(x)
+    [<Extension>]static member ToBytes (x:char   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:float  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x: int16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x: int   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:int64  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:float32, e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:string , e, _:ToBytes) = Array.map byte (x.ToCharArray())
+    [<Extension>]static member ToBytes (x:uint16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:uint32 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:uint64 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
 
     static member inline Invoke (isLittleEndian:bool) value :byte[] =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToBytes: _*_ -> _) b, a)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_2 (a, b) x
-        call (ToBytes.Instance, value) isLittleEndian
+        let inline call_2 (a:^a, b:^b, e) = ((^a or ^b) : (static member ToBytes: _*_*_ -> _) b, e, a)
+        let inline call (a:'a, b:'b, e) = call_2 (a, b, e)
+        call (ToBytes.Instance, value, isLittleEndian)
 
 
 open System.Globalization
@@ -114,6 +118,7 @@ type Parse() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Parse: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Parse.Instance value
+
 
 type ToString() =
     static member val Instance = ToString()

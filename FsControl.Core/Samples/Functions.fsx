@@ -53,19 +53,32 @@ let minInt  = findMin [1;0;12;2]
 let minUInt = findMin [1u;0u;12u;2u]  // loops only twice
 
 
-open FsControl.Core.Types
+
+
+// Test Extension Methods
+open FsControl.Core.TypeMethods
+let lst11n21n12n22  = [1;2]  >>=  (fun x1 -> [10;20]  >>=  (fun x2 -> result((+) x1 x2 )))
+let lst11n21n12n22' = [1;2] .Bind (fun x1 -> [10;20] .Bind (fun x2 -> result((+) x1 x2 )))
+
+let mapp1 = [1..3] </mappend/> [4..8]
+let mapp2 = [1..3]  .Mappend   [4..8]
+let mcon1 = [|[|1..3|];[|4..5|]|] |> join
+let mcon2 = [|[|1..3|];[|4..5|]|] .Join(null, Join.Instance) // optional arguments don't work from F#
+// but in C# you can write (new[] {new[] {1, 2, 3}, new[] {4, 5, 6}}).Join();
+
 
 // Test functor and applicatives for ReaderT
+open FsControl.Core.Types
 
 let readerTf = ReaderT (fun x -> [(+)x])
 let readerTx = ReaderT (fun x -> [x;2*x])
 let readerTr = ReaderT.run (readerTf <*> readerTx) 7
 let readerTm = ReaderT.run (map ((+) 100) readerTx) 7
 
-(* Why these lines work (after 30 secs) ONLY if run line by line?
 let readerTf' = ReaderT (fun x -> Cont (fun k -> k ((+)x))) 
 let readerTx' = ReaderT (fun x -> Cont (fun k -> k (2*x)))
 let readerTm' = Cont.run (ReaderT.run (map ((+) 100) readerTx') 7) id
+(* takes minutes to compile
 let readerTr' = Cont.run (ReaderT.run (readerTf' <*> readerTx') 7) id
 *)
 
@@ -80,7 +93,9 @@ let writerTm = map ((+) 100) writerTx
 
 let stateTf = StateT (fun s -> [(+)10, s; (-) 10, s])
 let stateTx = StateT (fun s -> [4, s; 3, s])
+(* Since the tupled Bind this one takes minutes to compile
 let stateTr = StateT.run (stateTf <*> stateTx) "state"
+*)
 let stateTm = StateT.run (map ((+) 100) stateTx) "state"
 
 let d = System.Collections.Generic.Dictionary()

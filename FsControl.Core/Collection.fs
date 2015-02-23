@@ -4,17 +4,20 @@ open FsControl.Core
 open FsControl.Core.Types
 open System
 open System.Text
+open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
 
 
+[<Extension;Sealed>]
 type Skip() =
     static member val Instance = Skip()
-    static member Skip (x:string        , n, _:Skip) = x.[n..]
-    static member Skip (x:StringBuilder , n, _:Skip) = new StringBuilder(x.ToString().[n..])
-    static member Skip (x:'a []         , n, _:Skip) = x.[n..] : 'a []
-    static member Skip (x:'a ResizeArray, n, _:Skip) = ResizeArray<'a> (Seq.skip n x)
-    static member Skip (x:list<'a>      , n, _:Skip) = n |> let rec listSkip lst = function 0 -> lst | n -> listSkip (List.tail lst) (n-1) in listSkip x
-    static member Skip (x:seq<'a>       , n, _:Skip) = Seq.skip n x
-    static member Skip (x:'a Id         , n, _:Skip) = x
+    [<Extension>]static member Skip (x:string        , n, [<Optional>]impl:Skip) = x.[n..]
+    [<Extension>]static member Skip (x:StringBuilder , n, [<Optional>]impl:Skip) = new StringBuilder(x.ToString().[n..])
+    [<Extension>]static member Skip (x:'a []         , n, [<Optional>]impl:Skip) = x.[n..] : 'a []
+    [<Extension>]static member Skip (x:'a ResizeArray, n, [<Optional>]impl:Skip) = ResizeArray<'a> (Seq.skip n x)
+    [<Extension>]static member Skip (x:list<'a>      , n, [<Optional>]impl:Skip) = n |> let rec listSkip lst = function 0 -> lst | n -> listSkip (List.tail lst) (n-1) in listSkip x
+    [<Extension>]static member Skip (x:seq<'a>       , n, [<Optional>]impl:Skip) = Seq.skip n x
+    [<Extension>]static member Skip (x:'a Id         , n, [<Optional>]impl:Skip) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Skip: _*_*_ -> _) b, n, a)
@@ -22,15 +25,16 @@ type Skip() =
         call (Skip.Instance, source, n)
 
 
+[<Extension;Sealed>]
 type Take() =
     static member val Instance = Take()
-    static member Take (x:string        , n, _:Take) = x.[..n-1]
-    static member Take (x:StringBuilder , n, _:Take) = new StringBuilder(x.ToString().[..n-1])
-    static member Take (x:'a []         , n, _:Take) = x.[n..] : 'a []
-    static member Take (x:'a ResizeArray, n, _:Take) = ResizeArray<'a> (Seq.take n x)
-    static member Take (x:list<'a>      , n, _:Take) = Seq.take n x |> Seq.toList
-    static member Take (x:seq<'a>       , n, _:Take) = Seq.take n x
-    static member Take (x:'a Id         , n, _:Take) = x
+    [<Extension>]static member Take (x:string        , n, [<Optional>]impl:Take) = x.[..n-1]
+    [<Extension>]static member Take (x:StringBuilder , n, [<Optional>]impl:Take) = new StringBuilder(x.ToString().[..n-1])
+    [<Extension>]static member Take (x:'a []         , n, [<Optional>]impl:Take) = x.[n..] : 'a []
+    [<Extension>]static member Take (x:'a ResizeArray, n, [<Optional>]impl:Take) = ResizeArray<'a> (Seq.take n x)
+    [<Extension>]static member Take (x:list<'a>      , n, [<Optional>]impl:Take) = Seq.take n x |> Seq.toList
+    [<Extension>]static member Take (x:seq<'a>       , n, [<Optional>]impl:Take) = Seq.take n x
+    [<Extension>]static member Take (x:'a Id         , n, [<Optional>]impl:Take) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Take: _*_*_ -> _) b, n, a)
@@ -84,11 +88,12 @@ type FromSeq() =
         call FromSeq.Instance value
 
 
+[<Extension;Sealed>]
 type ToSeq() =
     static member val Instance = ToSeq()
-    static member ToSeq (x:#seq<'T>  , _:ToSeq) = x :> seq<_>
-    static member ToSeq (x:Id<'T>    , _:ToSeq) = Seq.singleton x.getValue
-    static member ToSeq (x:option<'T>, _:ToSeq) = match x with Some x -> Seq.singleton x | None -> Seq.empty
+    [<Extension>]static member ToSeq (x:#seq<'T>  , [<Optional>]impl:ToSeq) = x :> seq<_>
+    [<Extension>]static member ToSeq (x:Id<'T>    , [<Optional>]impl:ToSeq) = Seq.singleton x.getValue
+    [<Extension>]static member ToSeq (x:option<'T>, [<Optional>]impl:ToSeq) = match x with Some x -> Seq.singleton x | None -> Seq.empty
 
     static member inline Invoke (source:'Collection'T)  : seq<'T>  =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToSeq: _*_ -> _) b, a)
@@ -96,12 +101,13 @@ type ToSeq() =
         call (ToSeq.Instance, source)   
 
 
+[<Extension;Sealed>]
 type Choose() =
     static member val Instance = Choose()
-    static member Choose (x:Id<'T>  , f:_->'U option, _:Id<'U>  , _:Choose) = invalidOp "Choose on ID" :Id<'U> 
-    static member Choose (x:seq<'T> , f:_->'U option, _:seq<'U> , _:Choose) = Seq.choose   f x
-    static member Choose (x:list<'T>, f:_->'U option, _:list<'U>, _:Choose) = List.choose  f x
-    static member Choose (x:'T []   , f:_->'U option, _:'U []   , _:Choose) = Array.choose f x
+    [<Extension>]static member Choose (x:Id<'T>  , f:_->'U option, _:Id<'U>  , [<Optional>]impl:Choose) = invalidOp "Choose on ID" :Id<'U> 
+    [<Extension>]static member Choose (x:seq<'T> , f:_->'U option, _:seq<'U> , [<Optional>]impl:Choose) = Seq.choose   f x
+    [<Extension>]static member Choose (x:list<'T>, f:_->'U option, _:list<'U>, [<Optional>]impl:Choose) = List.choose  f x
+    [<Extension>]static member Choose (x:'T []   , f:_->'U option, _:'U []   , [<Optional>]impl:Choose) = Array.choose f x
 
     static member inline Invoke (chooser:'T->'U option)   (source:'Collection'T)        =
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Choose: _*_*_*_ -> _) b, f, c, a)
@@ -109,12 +115,13 @@ type Choose() =
         call (Choose.Instance, source, chooser)  :'Collection'U
 
 
+[<Extension;Sealed>]
 type Distinct() =
     static member val Instance = Distinct()
-    static member Distinct (x:Id<'T>  , _:Distinct) = x
-    static member Distinct (x:seq<'T> , _:Distinct) = Seq.distinct x
-    static member Distinct (x:list<'T>, _:Distinct) = Seq.distinct x |> Seq.toList
-    static member Distinct (x:'T []   , _:Distinct) = Seq.distinct x |> Seq.toArray
+    [<Extension>]static member Distinct (x:Id<'T>  , [<Optional>]impl:Distinct) = x
+    [<Extension>]static member Distinct (x:seq<'T> , [<Optional>]impl:Distinct) = Seq.distinct x
+    [<Extension>]static member Distinct (x:list<'T>, [<Optional>]impl:Distinct) = Seq.distinct x |> Seq.toList
+    [<Extension>]static member Distinct (x:'T []   , [<Optional>]impl:Distinct) = Seq.distinct x |> Seq.toArray
 
     static member inline Invoke                         (source:'Collection'T)        =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Distinct: _*_ -> _) b, a)
@@ -122,12 +129,13 @@ type Distinct() =
         call (Distinct.Instance, source)  :'Collection'T
 
 
+[<Extension;Sealed>]
 type DistinctBy() =
     static member val Instance = DistinctBy()
-    static member DistinctBy (x:Id<'T>  , f, _:DistinctBy) = x
-    static member DistinctBy (x:seq<'T> , f, _:DistinctBy) = Seq.distinctBy f x
-    static member DistinctBy (x:list<'T>, f, _:DistinctBy) = Seq.distinctBy f x |> Seq.toList
-    static member DistinctBy (x:'T []   , f, _:DistinctBy) = Seq.distinctBy f x |> Seq.toArray
+    [<Extension>]static member DistinctBy (x:Id<'T>  , f, [<Optional>]impl:DistinctBy) = x
+    [<Extension>]static member DistinctBy (x:seq<'T> , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x
+    [<Extension>]static member DistinctBy (x:list<'T>, f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toList
+    [<Extension>]static member DistinctBy (x:'T []   , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toArray
 
     static member inline Invoke (projection:'T->'Key) (source:'Collection'T)        =
         let inline call_2 (a:^a, b:^b, p) = ((^a or ^b) : (static member DistinctBy: _*_*_ -> _) b, p, a)
@@ -135,12 +143,13 @@ type DistinctBy() =
         call (DistinctBy.Instance, source, projection)    :'Collection'T
 
 
+[<Extension;Sealed>]
 type GroupBy() =
     static member val Instance = GroupBy()
-    static member GroupBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , _:GroupBy) = let a = Id.run x in Id.create (f a, x)
-    static member GroupBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , _:GroupBy) = Seq.groupBy f x
-    static member GroupBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, _:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
-    static member GroupBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , _:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
+    [<Extension>]static member GroupBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:GroupBy) = let a = Id.run x in Id.create (f a, x)
+    [<Extension>]static member GroupBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:GroupBy) = Seq.groupBy f x
+    [<Extension>]static member GroupBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
+    [<Extension>]static member GroupBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     static member inline Invoke    (projection:'T->'Key) (source:'Collection'T) : 'Collection'KeyX'Collection'T = 
         let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member GroupBy: _*_*_*_ -> _) b, p, c, a)
@@ -148,12 +157,13 @@ type GroupBy() =
         call (GroupBy.Instance, source, projection)
 
 
+[<Extension;Sealed>]
 type GroupAdjBy() =
     static member val Instance = GroupAdjBy()
-    static member GroupAdjBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , _:GroupAdjBy) = let a = Id.run x in Id.create (f a, x)
-    static member GroupAdjBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , _:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
-    static member GroupAdjBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, _:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
-    static member GroupAdjBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , _:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
+    [<Extension>]static member GroupAdjBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:GroupAdjBy) = let a = Id.run x in Id.create (f a, x)
+    [<Extension>]static member GroupAdjBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
+    [<Extension>]static member GroupAdjBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
+    [<Extension>]static member GroupAdjBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     static member inline Invoke (projection:'T->'Key) (source:'Collection'T) : 'Collection'KeyX'Collection'T = 
         let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member GroupAdjBy: _*_*_*_ -> _) b, p, c, a)
@@ -161,6 +171,7 @@ type GroupAdjBy() =
         call (GroupAdjBy.Instance, source, projection)
 
 
+[<Extension;Sealed>]
 type Intersperse() =
     static member val Instance = Intersperse()
 
@@ -172,10 +183,10 @@ type Intersperse() =
             yield element
             notFirst := true}
 
-    static member Intersperse (x:Id<'T>  , e:'T, _:Intersperse) = x
-    static member Intersperse (x:seq<'T> , e:'T, _:Intersperse) = Intersperse.intersperse e x
-    static member Intersperse (x:list<'T>, e:'T, _:Intersperse) = x |> List.toSeq  |> Intersperse.intersperse e |> Seq.toList
-    static member Intersperse (x:'T []   , e:'T, _:Intersperse) = x |> Array.toSeq |> Intersperse.intersperse e |> Seq.toArray
+    [<Extension>]static member Intersperse (x:Id<'T>  , e:'T, [<Optional>]impl:Intersperse) = x
+    [<Extension>]static member Intersperse (x:seq<'T> , e:'T, [<Optional>]impl:Intersperse) = Intersperse.intersperse e x
+    [<Extension>]static member Intersperse (x:list<'T>, e:'T, [<Optional>]impl:Intersperse) = x |> List.toSeq  |> Intersperse.intersperse e |> Seq.toList
+    [<Extension>]static member Intersperse (x:'T []   , e:'T, [<Optional>]impl:Intersperse) = x |> Array.toSeq |> Intersperse.intersperse e |> Seq.toArray
  
     static member inline Invoke      (sep:'T)        (source:'Collection'T)        =
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)
@@ -183,12 +194,13 @@ type Intersperse() =
         call (Intersperse.Instance, source,sep) :'Collection'T
     
 
+[<Extension;Sealed>]
 type Iteri() =
     static member val Instance = Iteri()
-    static member Iteri (x:Id<'T>  , f:int->'T->unit, _:Iteri) = f 0 x.getValue
-    static member Iteri (x:seq<'T> , f              , _:Iteri) = Seq.iteri   f x
-    static member Iteri (x:list<'T>, f              , _:Iteri) = List.iteri  f x
-    static member Iteri (x:'T []   , f              , _:Iteri) = Array.iteri f x
+    [<Extension>]static member Iteri (x:Id<'T>  , f:int->'T->unit, [<Optional>]impl:Iteri) = f 0 x.getValue
+    [<Extension>]static member Iteri (x:seq<'T> , f              , [<Optional>]impl:Iteri) = Seq.iteri   f x
+    [<Extension>]static member Iteri (x:list<'T>, f              , [<Optional>]impl:Iteri) = List.iteri  f x
+    [<Extension>]static member Iteri (x:'T []   , f              , [<Optional>]impl:Iteri) = Array.iteri f x
 
     static member inline Invoke (action:int->'T->unit)     (source:'Collection'T)        =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member Iteri: _*_*_ -> _) b, f, a)
@@ -196,12 +208,13 @@ type Iteri() =
         call (Iteri.Instance,  source, action)    :unit
 
 
+[<Extension;Sealed>]
 type Length() =
     static member val Instance = Length()
-    static member Length (x:Id<'T>  , _:Length) = 1
-    static member Length (x:seq<'T> , _:Length) = Seq.length   x
-    static member Length (x:list<'T>, _:Length) = List.length  x
-    static member Length (x:'T []   , _:Length) = Array.length x
+    [<Extension>]static member Length (x:Id<'T>  , [<Optional>]impl:Length) = 1
+    [<Extension>]static member Length (x:seq<'T> , [<Optional>]impl:Length) = Seq.length   x
+    [<Extension>]static member Length (x:list<'T>, [<Optional>]impl:Length) = List.length  x
+    [<Extension>]static member Length (x:'T []   , [<Optional>]impl:Length) = Array.length x
 
     static member inline Invoke (source:'Collection'T)                                  =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Length: _*_ -> _) b, a)
@@ -209,25 +222,27 @@ type Length() =
         call (Length.Instance, source)            :int
 
 
+[<Extension;Sealed>]
 type Mapi() =
     static member val Instance = Mapi()
-    static member Mapi (_:Id<'U>  , f:int->'T->'U, _:Mapi, x:Id<'T>  ) = f 0 x.getValue
-    static member Mapi (_:seq<'U> , f            , _:Mapi, x:seq<'T> ) = Seq.mapi   f x
-    static member Mapi (_:list<'U>, f            , _:Mapi, x:list<'T>) = List.mapi  f x
-    static member Mapi (_:'U []   , f            , _:Mapi, x:'T []   ) = Array.mapi f x
+    [<Extension>]static member Mapi (x:Id<'T>  , f:int->'T->'U, [<Optional>]impl:Mapi) = f 0 x.getValue
+    [<Extension>]static member Mapi (x:seq<'T> , f            , [<Optional>]impl:Mapi) = Seq.mapi   f x
+    [<Extension>]static member Mapi (x:list<'T>, f            , [<Optional>]impl:Mapi) = List.mapi  f x
+    [<Extension>]static member Mapi (x:'T []   , f            , [<Optional>]impl:Mapi) = Array.mapi f x
 
     static member inline Invoke    (mapping:int->'T->'U)    (source:'Collection'T)        =
-        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Mapi: _*_*_*_ -> _) b, f, c, a)
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Mapi: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
         call (Mapi.Instance,   source, mapping)     :'Collection'U
 
 
+[<Extension;Sealed>]
 type Max() =
     static member val Instance = Max()
-    static member Max (x:Id<'T>  , _:Max) = x.getValue
-    static member Max (x:seq<'T> , _:Max) = Seq.max   x
-    static member Max (x:list<'T>, _:Max) = List.max  x
-    static member Max (x:'T []   , _:Max) = Array.max x
+    [<Extension>]static member Max (x:Id<'T>  , [<Optional>]impl:Max) = x.getValue
+    [<Extension>]static member Max (x:seq<'T> , [<Optional>]impl:Max) = Seq.max   x
+    [<Extension>]static member Max (x:list<'T>, [<Optional>]impl:Max) = List.max  x
+    [<Extension>]static member Max (x:'T []   , [<Optional>]impl:Max) = Array.max x
 
     static member inline Invoke (source:'Collection'T)                                  =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Max: _*_ -> _) b, a)
@@ -235,12 +250,13 @@ type Max() =
         call (Max.Instance, source)                  :'T
 
 
+[<Extension;Sealed>]
 type MaxBy() =
     static member val Instance = MaxBy()
-    static member MaxBy (x:Id<'T>  , f:'T->'U, _:MaxBy) = x.getValue
-    static member MaxBy (x:seq<'T> , f       , _:MaxBy) = Seq.maxBy   f x
-    static member MaxBy (x:list<'T>, f       , _:MaxBy) = List.maxBy  f x
-    static member MaxBy (x:'T []   , f       , _:MaxBy) = Array.maxBy f x
+    [<Extension>]static member MaxBy (x:Id<'T>  , f:'T->'U, [<Optional>]impl:MaxBy) = x.getValue
+    [<Extension>]static member MaxBy (x:seq<'T> , f       , [<Optional>]impl:MaxBy) = Seq.maxBy   f x
+    [<Extension>]static member MaxBy (x:list<'T>, f       , [<Optional>]impl:MaxBy) = List.maxBy  f x
+    [<Extension>]static member MaxBy (x:'T []   , f       , [<Optional>]impl:MaxBy) = Array.maxBy f x
 
     static member inline Invoke (projection:'T->'U) (source:'Collection'T)               =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member MaxBy: _*_*_ -> _) b, f, a)
@@ -248,12 +264,13 @@ type MaxBy() =
         call (MaxBy.Instance, source, projection)      :'T
 
 
+[<Extension;Sealed>]
 type Min() =
     static member val Instance = Min()
-    static member Min (x:Id<'T>  , _:Min) = x.getValue
-    static member Min (x:seq<'T> , _:Min) = Seq.min   x
-    static member Min (x:list<'T>, _:Min) = List.min  x
-    static member Min (x:'T []   , _:Min) = Array.min x
+    [<Extension>]static member Min (x:Id<'T>  , [<Optional>]impl:Min) = x.getValue
+    [<Extension>]static member Min (x:seq<'T> , [<Optional>]impl:Min) = Seq.min   x
+    [<Extension>]static member Min (x:list<'T>, [<Optional>]impl:Min) = List.min  x
+    [<Extension>]static member Min (x:'T []   , [<Optional>]impl:Min) = Array.min x
 
     static member inline Invoke (source:'Collection'T)                                  =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Min: _*_ -> _) b, a)
@@ -261,24 +278,27 @@ type Min() =
         call (Min.Instance, source)                  :'T
 
 
+[<Extension;Sealed>]
 type MinBy() =
     static member val Instance = MinBy()
-    static member MinBy (x:Id<'T>  , f:'T->'U, _:MinBy) = x.getValue
-    static member MinBy (x:seq<'T> , f       , _:MinBy) = Seq.minBy   f x
-    static member MinBy (x:list<'T>, f       , _:MinBy) = List.minBy  f x
-    static member MinBy (x:'T []   , f       , _:MinBy) = Array.minBy f x
+    [<Extension>]static member MinBy (x:Id<'T>  , f:'T->'U, [<Optional>]impl:MinBy) = x.getValue
+    [<Extension>]static member MinBy (x:seq<'T> , f       , [<Optional>]impl:MinBy) = Seq.minBy   f x
+    [<Extension>]static member MinBy (x:list<'T>, f       , [<Optional>]impl:MinBy) = List.minBy  f x
+    [<Extension>]static member MinBy (x:'T []   , f       , [<Optional>]impl:MinBy) = Array.minBy f x
 
     static member inline Invoke (projection:'T->'U) (source:'Collection'T)               =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member MinBy: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (MinBy.Instance, source, projection)      :'T
 
+
+[<Extension;Sealed>]
 type Rev() =
     static member val Instance = Rev()
-    static member Rev (x:Id<'a>  , _:Rev) = x
-    static member Rev (x:seq<'a> , _:Rev) = x |> Seq.toArray |> Array.rev |> Array.toSeq
-    static member Rev (x:list<'a>, _:Rev) = List.rev  x
-    static member Rev (x:'a []   , _:Rev) = Array.rev x
+    [<Extension>]static member Rev (x:Id<'a>  , [<Optional>]impl:Rev) = x
+    [<Extension>]static member Rev (x:seq<'a> , [<Optional>]impl:Rev) = x |> Seq.toArray |> Array.rev |> Array.toSeq
+    [<Extension>]static member Rev (x:list<'a>, [<Optional>]impl:Rev) = List.rev  x
+    [<Extension>]static member Rev (x:'a []   , [<Optional>]impl:Rev) = Array.rev x
 
     static member inline Invoke  (source:'Collection'T)                                    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Rev: _*_ -> _) b, a)
@@ -286,12 +306,13 @@ type Rev() =
         call (Rev.Instance, source)                   :'Collection'T
 
 
+[<Extension;Sealed>]
 type Scan() =
     static member val Instance = Scan()
-    static member Scan (x:Id<'T>  , f ,z:'S, _:Id<'S>  , _:Scan) = Id.create (f z x.getValue)
-    static member Scan (x:seq<'T> , f ,z:'S, _:seq<'S> , _:Scan) = Seq.scan   f z x
-    static member Scan (x:list<'T>, f ,z:'S, _:list<'S>, _:Scan) = List.scan  f z x
-    static member Scan (x:'T []   , f ,z:'S, _:'S []   , _:Scan) = Array.scan f z x
+    [<Extension>]static member Scan (x:Id<'T>  , f ,z:'S, [<Optional>]output:Id<'S>  , [<Optional>]impl:Scan) = Id.create (f z x.getValue)
+    [<Extension>]static member Scan (x:seq<'T> , f ,z:'S, [<Optional>]output:seq<'S> , [<Optional>]impl:Scan) = Seq.scan   f z x
+    [<Extension>]static member Scan (x:list<'T>, f ,z:'S, [<Optional>]output:list<'S>, [<Optional>]impl:Scan) = List.scan  f z x
+    [<Extension>]static member Scan (x:'T []   , f ,z:'S, [<Optional>]output:'S []   , [<Optional>]impl:Scan) = Array.scan f z x
 
     static member inline Invoke (folder:'State'->'T->'State) (state:'State) (source:'Collection'T) =
         let inline call_3 (a:^a, b:^b, c:^c, f, z) = ((^a or ^b or ^c) : (static member Scan: _*_*_*_*_ -> _) b, f, z, c, a)
@@ -299,12 +320,13 @@ type Scan() =
         call (Scan.Instance, source, folder, state) :'Collection'State
 
 
+[<Extension;Sealed>]
 type Sort() =
     static member val Instance = Sort()
-    static member Sort (x:Id<'a>  , _:Sort) = x
-    static member Sort (x:seq<'a> , _:Sort) = Seq.sort   x
-    static member Sort (x:list<'a>, _:Sort) = List.sort  x
-    static member Sort (x:'a []   , _:Sort) = Array.sort x
+    [<Extension>]static member Sort (x:Id<'a>  , [<Optional>]impl:Sort) = x
+    [<Extension>]static member Sort (x:seq<'a> , [<Optional>]impl:Sort) = Seq.sort   x
+    [<Extension>]static member Sort (x:list<'a>, [<Optional>]impl:Sort) = List.sort  x
+    [<Extension>]static member Sort (x:'a []   , [<Optional>]impl:Sort) = Array.sort x
 
     static member inline Invoke (source:'Collection'T)                                    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Sort: _*_ -> _) b, a)
@@ -312,12 +334,13 @@ type Sort() =
         call (Sort.Instance, source)                 :'Collection'T
 
 
+[<Extension;Sealed>]
 type SortBy() =
     static member val Instance = SortBy()
-    static member SortBy (x:Id<'a>  , f:'a->_, _:SortBy) = x
-    static member SortBy (x:seq<'a> , f      , _:SortBy) = Seq.sortBy   f x
-    static member SortBy (x:list<'a>, f      , _:SortBy) = List.sortBy  f x
-    static member SortBy (x:'a []   , f      , _:SortBy) = Array.sortBy f x
+    [<Extension>]static member SortBy (x:Id<'a>  , f:'a->_, [<Optional>]impl:SortBy) = x
+    [<Extension>]static member SortBy (x:seq<'a> , f      , [<Optional>]impl:SortBy) = Seq.sortBy   f x
+    [<Extension>]static member SortBy (x:list<'a>, f      , [<Optional>]impl:SortBy) = List.sortBy  f x
+    [<Extension>]static member SortBy (x:'a []   , f      , [<Optional>]impl:SortBy) = Array.sortBy f x
 
     static member inline Invoke (projection:'T->'Key) (source:'Collection'T) : 'Collection'T =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member SortBy: _*_*_ -> _) b, f, a)
@@ -325,12 +348,13 @@ type SortBy() =
         call (SortBy.Instance, source, projection)
 
 
+[<Extension;Sealed>]
 type Zip() =
     static member val Instance = Zip()
-    static member Zip (x:Id<'T>  , y:Id<'U>  , _:Id<'T*'U>  , _:Zip) = Id.create(x.getValue,y.getValue)
-    static member Zip (x:seq<'T> , y:seq<'U> , _:seq<'T*'U> , _:Zip) = Seq.zip   x y
-    static member Zip (x:list<'T>, y:list<'U>, _:list<'T*'U>, _:Zip) = List.zip  x y
-    static member Zip (x:'T []   , y:'U []   , _:('T*'U) [] , _:Zip) = Array.zip x y
+    [<Extension>]static member Zip (x:Id<'T>  , y:Id<'U>  , [<Optional>]output:Id<'T*'U>  , [<Optional>]impl:Zip) = Id.create(x.getValue,y.getValue)
+    [<Extension>]static member Zip (x:seq<'T> , y:seq<'U> , [<Optional>]output:seq<'T*'U> , [<Optional>]impl:Zip) = Seq.zip   x y
+    [<Extension>]static member Zip (x:list<'T>, y:list<'U>, [<Optional>]output:list<'T*'U>, [<Optional>]impl:Zip) = List.zip  x y
+    [<Extension>]static member Zip (x:'T []   , y:'U []   , [<Optional>]output:('T*'U) [] , [<Optional>]impl:Zip) = Array.zip x y
 
     static member inline Invoke (source1:'Collection'T1) (source2:'Collection'T2)          =
         let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member Zip: _*_*_*_ -> _) b, c, d, a)

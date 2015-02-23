@@ -2,6 +2,8 @@ namespace FsControl.Core.TypeMethods
 
 open System.Numerics
 open FsControl.Core.Prelude
+open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
 
 
 type FromBigInteger() =
@@ -41,14 +43,14 @@ type FromBigInteger() =
 type Abs() =
     static member val Instance = Abs()
     static member inline Abs (_:^t when ^t: null and ^t: struct, _:Abs) = id
-    static member inline Abs (x:'t                             , _:Abs) = abs x
-    static member        Abs (x:byte                           , _:Abs) =     x
-    static member        Abs (x:uint16                         , _:Abs) =     x
-    static member        Abs (x:uint32                         , _:Abs) =     x
-    static member        Abs (x:uint64                         , _:Abs) =     x
-    static member        Abs (x:unativeint                     , _:Abs) =     x
+    static member inline Abs (x:'t        , [<Optional>]impl :Abs) = abs x
+    static member        Abs (x:byte      , [<Optional>]impl :Abs) =     x
+    static member        Abs (x:uint16    , [<Optional>]impl :Abs) =     x
+    static member        Abs (x:uint32    , [<Optional>]impl :Abs) =     x
+    static member        Abs (x:uint64    , [<Optional>]impl :Abs) =     x
+    static member        Abs (x:unativeint, [<Optional>]impl :Abs) =     x
 #if NOTNET35
-    static member        Abs (x:Complex                        , _:Abs) = Complex(x.Magnitude, 0.0)
+    static member        Abs (x:Complex   , [<Optional>]impl:Abs ) = Complex(x.Magnitude, 0.0)
 #endif
 
     static member inline Invoke (x:'Num) :'Num =
@@ -88,14 +90,15 @@ type Negate() =
         call_2 (Negate.Instance, x)
 
 
+[<Extension; Sealed>]
 type DivRem() =
     inherit Default1()
     static member val Instance = DivRem()
     static member inline DivRem (x:^t when ^t: null and ^t: struct, y:^t, thisclass:DivRem) = (x, y)
-    static member inline DivRem (D:'T, d:'T, _:Default1) = let q = D / d in q,  D - q * d
-    static member inline DivRem (D:'T, d:'T, _:DivRem  ) =
-        let mutable r = Unchecked.defaultof<'T>
-        (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
+    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]impl:Default1) = let q = D / d in q,  D - q * d
+    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]impl:DivRem  ) =
+                    let mutable r = Unchecked.defaultof<'T>
+                    (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
 
     static member inline Invoke (D:'T) (d:'T) :'T*'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member DivRem: _*_*_ -> _) b, c, a)
@@ -106,23 +109,24 @@ type DivRem() =
 
 // Integral class ---------------------------------------------------------
 
+[<Extension; Sealed>]
 type ToBigInteger() =
     static member val Instance = ToBigInteger()
-    static member        ToBigInteger (x:sbyte     ) = bigint (int x)
-    static member        ToBigInteger (x:int16     ) = bigint (int x)
-    static member        ToBigInteger (x:int32     ) = bigint      x
-    static member        ToBigInteger (x:int64     ) = bigint      x
-    static member        ToBigInteger (x:nativeint ) = bigint (int x)
-    static member        ToBigInteger (x:byte      ) = bigint (int x)
-    static member        ToBigInteger (x:uint16    ) = bigint (int x)
-    static member        ToBigInteger (x:unativeint) = bigint (int x)
-    static member        ToBigInteger (x:bigint    ) =             x
+    [<Extension>]static member        ToBigInteger (x:sbyte     ) = bigint (int x)
+    [<Extension>]static member        ToBigInteger (x:int16     ) = bigint (int x)
+    [<Extension>]static member        ToBigInteger (x:int32     ) = bigint      x
+    [<Extension>]static member        ToBigInteger (x:int64     ) = bigint      x
+    [<Extension>]static member        ToBigInteger (x:nativeint ) = bigint (int x)
+    [<Extension>]static member        ToBigInteger (x:byte      ) = bigint (int x)
+    [<Extension>]static member        ToBigInteger (x:uint16    ) = bigint (int x)
+    [<Extension>]static member        ToBigInteger (x:unativeint) = bigint (int x)
+    [<Extension>]static member        ToBigInteger (x:bigint    ) =             x
 #if NOTNET35
-    static member        ToBigInteger (x:uint32    ) = bigint      x
-    static member        ToBigInteger (x:uint64    ) = bigint      x
+    [<Extension>]static member        ToBigInteger (x:uint32    ) = bigint      x
+    [<Extension>]static member        ToBigInteger (x:uint64    ) = bigint      x
 #else
-    static member        ToBigInteger (x:uint32    ) = bigint (int x)
-    static member        ToBigInteger (x:uint64    ) = bigint (int64 x)
+    [<Extension>]static member        ToBigInteger (x:uint32    ) = bigint (int x)
+    [<Extension>]static member        ToBigInteger (x:uint64    ) = bigint (int64 x)
 #endif
 
     static member inline Invoke    (x:'Integral) :bigint =
@@ -217,6 +221,8 @@ open FsControl.Core.Types
 open FsControl.Core.TypeMethods
 open Ratio
 
+open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
 open System.Numerics
 
 // Fractional class -------------------------------------------------------
@@ -268,20 +274,21 @@ type ProperFraction() =
 
 // Real class -------------------------------------------------------------
 
+[<Extension; Sealed>]
 type ToRational() =
     static member val Instance = ToRational()
-    static member inline ToRational (r:Ratio<_>, _:ToRational) = ToBigInteger.Invoke (numerator r) </ratio/> ToBigInteger.Invoke (denominator r) :Rational
-    static member inline ToRational (x:'t      , _:ToRational) = 
-        let inline fromRational (x:Rational) :'Fractional = FromRational.Invoke x
-        let inline whenFractional a = let _ = if false then fromRational (1I </ratio/> 1I) else a in () 
-        whenFractional x
-        let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
-            let (a, b:'RealFrac) = ProperFraction.Invoke x
-            (fromIntegral a, b)        
-        let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
-        let (i:bigint,d) = ProperFraction.Invoke x
-        (i </ratio/> 1I) + (truncate (decimal d *. 1000000000000000000000000000M) </ratio/> 1000000000000000000000000000I) :Rational
-    static member inline ToRational (x:'t, _:ToRational) = (ToBigInteger.Invoke x) </ratio/> 1I
+    [<Extension>]static member inline ToRational (r:Ratio<_>, [<Optional>]impl:ToRational) = ToBigInteger.Invoke (numerator r) </ratio/> ToBigInteger.Invoke (denominator r) :Rational
+    [<Extension>]static member inline ToRational (x:'t      , [<Optional>]impl:ToRational) = 
+                    let inline fromRational (x:Rational) :'Fractional = FromRational.Invoke x
+                    let inline whenFractional a = let _ = if false then fromRational (1I </ratio/> 1I) else a in () 
+                    whenFractional x
+                    let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
+                        let (a, b:'RealFrac) = ProperFraction.Invoke x
+                        (fromIntegral a, b)        
+                    let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
+                    let (i:bigint,d) = ProperFraction.Invoke x
+                    (i </ratio/> 1I) + (truncate (decimal d *. 1000000000000000000000000000M) </ratio/> 1000000000000000000000000000I) :Rational
+    [<Extension>]static member inline ToRational (x:'t, [<Optional>]impl:ToRational) = (ToBigInteger.Invoke x) </ratio/> 1I
 
     static member inline Invoke (x:'Real) :Rational =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToRational: _*_ -> _) b, a)
