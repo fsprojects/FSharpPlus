@@ -16,7 +16,7 @@ type Tree<'a> =
     | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
     // add instance for Foldable abstraction (FoldBack is the minimal definition).
-    static member inline FoldBack (f, x, z) = 
+    static member inline FoldBack (x, f, z) = 
         let rec _foldMap x f =
             match x with
             | Empty        -> mempty()
@@ -47,7 +47,7 @@ type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:WrappedList<'a>, _:Return ) = fun (x:'a)     -> WrappedList [x]
     static member Mappend  (WrappedList l, WrappedList x) = WrappedList (l @ x)
     static member Mempty   (_:WrappedList<'a>, _:Mempty) = WrappedList List.empty
-    static member FoldBack (f, WrappedList x, z) = List.foldBack f x z
+    static member FoldBack (WrappedList x, f, z) = List.foldBack f x z
 
 let wl = WrappedList  [2..10]
 

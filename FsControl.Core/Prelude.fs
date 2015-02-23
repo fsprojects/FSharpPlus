@@ -20,6 +20,7 @@ module internal List =
     let inline singleton x = [x]
     let inline cons x y = x :: y
     let inline apply f x = List.collect (fun f -> List.map ((<|) f) x) f
+    let inline tails x = let rec loop = function [] -> [] | x::xs as s -> s::(loop xs) in loop x
 
 [<RequireQualifiedAccess>]
 module internal Seq =

@@ -10,13 +10,13 @@ type Traverse() =
     inherit Default1()
     static member val Instance = Traverse()
 
-    static member inline Traverse (t:Id<_>, _, _:Default1) = fun f -> Map.Invoke Id.create (f (Id.run t))
-    static member inline Traverse (t:_ seq, _, _:Default1) = fun f ->
+    static member inline Traverse (t:Id<_>, f, _, _:Default1) = Map.Invoke Id.create (f (Id.run t))
+    static member inline Traverse (t:_ seq, f, _, _:Default1) = 
         let cons x y = Seq.append (Seq.singleton x) y            
         let cons_f x ys = Map.Invoke cons (f x) <*> ys
         Foldr.Invoke cons_f (result (Seq.empty)) t
 
-    static member Traverse (t:_ seq , _:option<seq<_>>, _:Traverse) = fun f ->
+    static member Traverse (t:_ seq ,f , _:option<seq<_>>, _:Traverse) =
         let ok = ref true
         let res = Seq.toArray (seq {
                 use e = t.GetEnumerator()
@@ -26,23 +26,23 @@ type Traverse() =
                     | None   -> ok.Value <- false})
         if ok.Value then Some (Array.toSeq res) else None
 
-    static member Traverse (t:Id<_>    , _:option<Id<_>>, _:Traverse) = fun f -> Option.map Id.create (f (Id.run t))
+    static member Traverse (t:Id<_>    ,f , _:option<Id<_>>, _:Traverse) = Option.map Id.create (f (Id.run t))
   
-    static member inline Traverse (t:option<_>, _, _:Traverse) = fun f -> match t with Some x -> Map.Invoke Some (f x) | _ -> result None        
+    static member inline Traverse (t:option<_>,f , _, _:Traverse) = match t with Some x -> Map.Invoke Some (f x) | _ -> result None        
 
-    static member inline Traverse (t:list<_>  , _, _:Traverse) = fun f ->            
+    static member inline Traverse (t:list<_>  ,f , _, _:Traverse) =         
         let cons_f x ys = Map.Invoke List.cons (f x) <*> ys
         Foldr.Invoke cons_f (result []) t
 
-    static member inline Traverse (t:_ []  , _, _:Traverse) = fun f ->
+    static member inline Traverse (t:_ []  ,f , _, _:Traverse) =
         let cons x y = Array.append [|x|] y            
         let cons_f x ys = Map.Invoke cons (f x) <*> ys
         Foldr.Invoke cons_f (result [||]) t
 
     static member inline Invoke f t =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Traverse: _*_*_ -> _) b, c, a)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Traverse.Instance, t) f
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Traverse: _*_*_*_ -> _) b, f, c, a)
+        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
+        call (Traverse.Instance, t, f)
     
 
 type SequenceA() =

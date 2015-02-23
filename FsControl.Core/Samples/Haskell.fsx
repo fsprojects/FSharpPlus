@@ -493,14 +493,14 @@ module FoldableTree =
         | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
         // add instance for Foldable class
-        static member inline FoldMap (t:Tree<_>, _:FoldMap) =
+        static member inline FoldMap (t:Tree<_>, f, _:FoldMap) =
             let rec _foldMap x f =
                 match x with
                 | Empty        -> mempty()
                 | Leaf n       -> f n
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
-            _foldMap t
-        static member inline Foldr (x:Tree<_>, _:Foldr) = fun (f,z) -> Foldr.FromFoldMap f z x
+            _foldMap t f
+        static member inline Foldr (x:Tree<_>, f, z, _:Foldr) = Foldr.FromFoldMap f z x
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree

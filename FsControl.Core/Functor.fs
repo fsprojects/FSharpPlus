@@ -336,58 +336,44 @@ type Extract() =
 
 type Extend() =
     static member val Instance = Extend()
-    static member        Extend ((g:'a Async), _:'b Async) = fun (f:Async<'a>->'b) -> async.Return (f g) : Async<'b>
-    static member        Extend ((g:'a Lazy ), _:'b Lazy ) = fun (f:Lazy<'a> ->'b) -> Lazy.Create  (fun () -> f g) : Lazy<'b>
-    static member        Extend ((w:'w, a:'a), _:'w *'b)   = fun (f:_->'b) -> (w, f (w,a))        
-    static member inline Extend ((g:'m -> 'a), _:'m->'b)   = fun (f:_->'b) a -> f (fun b -> g (Mappend.Invoke a b))
-    static member        Extend ((g:'a Id   ), _:'b Id )   = fun (f:Id<'a>->'b) -> f g
+    static member        Extend ((g:'a Async), f:Async<'a>->'b) = async.Return (f g) : Async<'b>
+    static member        Extend ((g:'a Lazy ), f:Lazy<'a> ->'b) = Lazy.Create  (fun () -> f g) : Lazy<'b>
+    static member        Extend ((w:'w, a:'a), f:_->'b) = (w, f (w,a))        
+    static member inline Extend ((g:'m -> 'a), f:_->'b) = fun a -> f (fun b -> g (Mappend.Invoke a b))
+    static member        Extend ((g:'a Id   ), f:Id<'a>->'b) = f g
 
 #if NOTNET35
-    static member        Extend ((g:'a Task), _:'b Task) = fun (f:Task<'a>->'b) -> g.ContinueWith(f)
+    static member        Extend ((g:'a Task), f:Task<'a>->'b) = g.ContinueWith(f)
 #endif
 
     // Restricted
-    static member        Extend (s:list<'a>, _:list<'b>) = fun g -> 
-        let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-        List.map g (tails s) :list<'b>
-
-    static member        Extend (s:'a [], _:'b []) = fun g -> 
-        let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-        Array.map g (s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray) :'b []
-
-    static member        Extend (s:'a seq, _:'b seq) = fun g -> 
-        let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-        Seq.map g (s |> Seq.toList |> tails |> List.toSeq |> Seq.map List.toSeq) :'b seq
+    static member        Extend (s:list<'a>, g) = List.map g (List.tails s) :list<'b>
+    static member        Extend (s:'a [] , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray) :'b []
+    static member        Extend (s:'a seq, g) = Seq.map g (s |> Seq.toList |> List.tails |> List.toSeq |> Seq.map List.toSeq) :'b seq
 
     static member inline Invoke (g:'Comonad'T->'U) (s:'Comonad'T): 'Comonad'U =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Extend: _*_ -> _) b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Extend.Instance, s) g
+        let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c) : (static member Extend: _*_ -> _) b, d)
+        let inline call (a:'a, b:'b, x) = call_4 (a, b, Unchecked.defaultof<'r>, x) :'r
+        call (Extend.Instance, s, g)
 
 
 type Duplicate() =
     inherit Default1()
     static member val Instance = Duplicate()
-    static member inline Duplicate (x           , _                 , _:Default1 ) = Extend.Invoke id x
-    static member        Duplicate (s:Async<'a> , _:Async<Async<'a>>, _:Duplicate) = async.Return s : Async<Async<'a>>
-    static member        Duplicate (s:Lazy<'a>  , _:Lazy<Lazy<'a>>  , _:Duplicate) = Lazy.CreateFromValue s : Lazy<Lazy<'a>>
-    static member        Duplicate ((w:'w, a:'a), _:'w * ('w*'a)    , _:Duplicate) = (w, (w, a))
-    static member inline Duplicate ( f:'m -> 'a , _:'m->'m->'a      , _:Duplicate) = fun a b -> f (Mappend.Invoke a b)
+    static member inline Duplicate (x           , _:Default1 ) = Extend.Invoke id x
+    static member        Duplicate (s:Async<'a> , _:Duplicate) = async.Return s : Async<Async<'a>>
+    static member        Duplicate (s:Lazy<'a>  , _:Duplicate) = Lazy.CreateFromValue s : Lazy<Lazy<'a>>
+    static member        Duplicate ((w:'w, a:'a), _:Duplicate) = (w, (w, a))
+    static member inline Duplicate ( f:'m -> 'a , _:Duplicate) = fun a b -> f (Mappend.Invoke a b)
 
     // Restricted
-    static member        Duplicate (s:list<'a>, _:list<list<'a>>, _:Duplicate) =
-        let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-        tails s
-
-    static member        Duplicate (s: array<'a>, _: array<array<'a>>, _:Duplicate) =
-        let rec tails = function [] -> [] | x::xs as s -> s::(tails xs)
-        s |> Array.toList |> tails |> List.toArray |> Array.map List.toArray
+    static member        Duplicate (s: list<'a>, _:Duplicate) = List.tails s
+    static member        Duplicate (s:array<'a>, _:Duplicate) = s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray
     
     static member inline Invoke x =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Duplicate: _*_*_ -> _) b, c, a)
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Duplicate: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (Duplicate.Instance, x)
-
 
 
 
