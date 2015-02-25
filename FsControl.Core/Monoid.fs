@@ -135,52 +135,51 @@ type Mconcat() =
     inherit Default1()
     static member val Instance = Mconcat()
 
-    [<Extension>]static member inline Mconcat (x:list<Dictionary<'a,'b>>, [<Optional>]output:Dictionary<'a,'b>, [<Optional>]impl:Mconcat) =
+    [<Extension>]static member inline Mconcat (x:seq<Dictionary<'a,'b>>, [<Optional>]output:Dictionary<'a,'b>, [<Optional>]impl:Mconcat) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
                             dct.[k] <- match dct.TryGetValue k with true, v -> Mappend.Invoke v u | _ -> u
                     dct
 
-    [<Extension>]static member inline Mconcat (x:list<ResizeArray<'a>>, [<Optional>]output:'a ResizeArray, [<Optional>]impl:Mconcat) = ResizeArray(Seq.concat x)
-    [<Extension>]static member        Mconcat (x:list<list<'a>>       , [<Optional>]output:list<'a>      , [<Optional>]impl:Mconcat) = List.concat x
-    [<Extension>]static member        Mconcat (x:list<array<'a>>      , [<Optional>]output:array<'a>     , [<Optional>]impl:Mconcat) = Array.concat x
-    [<Extension>]static member        Mconcat (x:list<string>         , [<Optional>]output:string        , [<Optional>]impl:Mconcat) = String.Concat x
-    [<Extension>]static member        Mconcat (x:list<StringBuilder>  , [<Optional>]output:StringBuilder , [<Optional>]impl:Mconcat) =
+    [<Extension>]static member inline Mconcat (x:seq<ResizeArray<'a>>, [<Optional>]output:'a ResizeArray, [<Optional>]impl:Mconcat) = ResizeArray(Seq.concat x)
+    [<Extension>]static member        Mconcat (x:seq<list<'a>>       , [<Optional>]output:list<'a>      , [<Optional>]impl:Mconcat) = List.concat x
+    [<Extension>]static member        Mconcat (x:seq<array<'a>>      , [<Optional>]output:array<'a>     , [<Optional>]impl:Mconcat) = Array.concat x
+    [<Extension>]static member        Mconcat (x:seq<string>         , [<Optional>]output:string        , [<Optional>]impl:Mconcat) = String.Concat x
+    [<Extension>]static member        Mconcat (x:seq<StringBuilder>  , [<Optional>]output:StringBuilder , [<Optional>]impl:Mconcat) =
                     let sb = new StringBuilder()
-                    List.iter (fun s -> sb.Append(s.ToString()) |> ignore) x
+                    Seq.iter (fun s -> sb.Append(s.ToString()) |> ignore) x
                     sb
 
-    static member inline Invoke (x:list<'T>) : 'T =
+    static member inline Invoke (x:seq<'T>) : 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mconcat: _*_*_ -> _) b, c, a)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (Mconcat.Instance, x)
 
 type Mconcat with
-    [<Extension>]static member inline Mconcat (x:list<'a * 'b>, [<Optional>]output:'a * 'b, [<Optional>]impl:Mconcat) =
-                    Mconcat.Invoke (List.map fst x), 
-                    Mconcat.Invoke (List.map snd x)
+    [<Extension>]static member inline Mconcat (x:seq<'a * 'b>, [<Optional>]output:'a * 'b, [<Optional>]impl:Mconcat) =
+                    Mconcat.Invoke (Seq.map fst x), 
+                    Mconcat.Invoke (Seq.map snd x)
     
 type Mconcat with
-    [<Extension>]static member inline Mconcat (x:list<'a * 'b * 'c>, [<Optional>]output:'a * 'b * 'c, [<Optional>]impl:Mconcat) =
-                    Mconcat.Invoke (List.map (fun (x,_,_) -> x) x), 
-                    Mconcat.Invoke (List.map (fun (_,x,_) -> x) x), 
-                    Mconcat.Invoke (List.map (fun (_,_,x) -> x) x)
+    [<Extension>]static member inline Mconcat (x:seq<'a * 'b * 'c>, [<Optional>]output:'a * 'b * 'c, [<Optional>]impl:Mconcat) =
+                    Mconcat.Invoke (Seq.map (fun (x,_,_) -> x) x), 
+                    Mconcat.Invoke (Seq.map (fun (_,x,_) -> x) x), 
+                    Mconcat.Invoke (Seq.map (fun (_,_,x) -> x) x)
     
 type Mconcat with
-    [<Extension>]static member inline Mconcat (x:list<'a * 'b * 'c * 'd>, [<Optional>]output:'a * 'b * 'c * 'd, [<Optional>]impl:Mconcat) =
-                    Mconcat.Invoke (List.map (fun (x,_,_,_) -> x) x), 
-                    Mconcat.Invoke (List.map (fun (_,x,_,_) -> x) x), 
-                    Mconcat.Invoke (List.map (fun (_,_,x,_) -> x) x),
-                    Mconcat.Invoke (List.map (fun (_,_,_,x) -> x) x)
+    [<Extension>]static member inline Mconcat (x:seq<'a * 'b * 'c * 'd>, [<Optional>]output:'a * 'b * 'c * 'd, [<Optional>]impl:Mconcat) =
+                    Mconcat.Invoke (Seq.map (fun (x,_,_,_) -> x) x), 
+                    Mconcat.Invoke (Seq.map (fun (_,x,_,_) -> x) x), 
+                    Mconcat.Invoke (Seq.map (fun (_,_,x,_) -> x) x),
+                    Mconcat.Invoke (Seq.map (fun (_,_,_,x) -> x) x)
 
 type Mconcat with
-    [<Extension>]static member inline Mconcat (x:list< 'a>, [<Optional>]output:'a, _:Default2) =
-                    List.foldBack Mappend.Invoke x (Mempty.Invoke()) :'a
+    [<Extension>]static member inline Mconcat (x:seq< 'a>, [<Optional>]output:'a, _:Default2) = Seq.fold Mappend.Invoke (Mempty.Invoke()) x:'a
     
 type Mconcat with
-    [<Extension>]static member inline Mconcat (x:list< ^R>, [<Optional>]output:^R, _:Default1) = ((^R) : (static member Mconcat: 'R list -> ^R) x)
-                 static member inline Mconcat (x:list< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
+    [<Extension>]static member inline Mconcat (x:seq< ^R>, [<Optional>]output:^R, _:Default1) = ((^R) : (static member Mconcat: 'R seq -> ^R) x)
+                 static member inline Mconcat (x:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
 
 
 

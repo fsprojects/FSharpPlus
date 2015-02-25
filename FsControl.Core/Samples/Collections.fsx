@@ -15,7 +15,15 @@ type Tree<'a> =
     | Leaf of 'a 
     | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
-    // add instance for Foldable abstraction (FoldBack is the minimal definition).
+    // add instance for Foldable abstraction (ToSeq is the minimal definition).
+    static member ToSeq x =        
+        let rec loop t = seq {
+            match t with
+            | Empty        -> ()
+            | Leaf n       -> yield n
+            | Node (l,k,r) -> yield k; yield! loop l; yield! loop r}
+        loop x
+       
     static member inline FoldBack (x, f, z) = 
         let rec _foldMap x f =
             match x with
@@ -39,14 +47,14 @@ type ZipList<'s> = ZipList of 's seq with
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
     static member inline Mempty() = result (mempty())                                :ZipList<'a>
     static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
-
     // try also commenting/uncommenting the following method.
-    static member inline Mconcat (x:list<ZipList<'a>>) = printfn "ZipList mconcat optimized"; List.foldBack mappend x (mempty()):ZipList<'a>
+    static member inline Mconcat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack mappend (Seq.toList x) (mempty()):ZipList<'a>
 
 type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:WrappedList<'a>, _:Return ) = fun (x:'a)     -> WrappedList [x]
     static member Mappend  (WrappedList l, WrappedList x) = WrappedList (l @ x)
     static member Mempty   (_:WrappedList<'a>, _:Mempty) = WrappedList List.empty
+    static member ToSeq    (WrappedList lst)     = List.toSeq lst
     static member FoldBack (WrappedList x, f, z) = List.foldBack f x z
 
 let wl = WrappedList  [2..10]
@@ -54,6 +62,7 @@ let wl = WrappedList  [2..10]
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
 let five   = filter ((=) 5) (WrappedList [1;2;3;4;5;6])   // <- Uses the default method for filter.
+let sorted = sortBy (~-)    (WrappedList [1;2;3;4;5;6])
 let optionFilter = filter ((=) 3) (Some 4)
 
 let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]

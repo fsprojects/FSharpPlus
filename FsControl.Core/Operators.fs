@@ -37,7 +37,7 @@ module Operators =
 
     let inline mempty() :'Monoid = Mempty.Invoke()
     let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid = Mappend.Invoke x y
-    let inline mconcat (x:list<'Monoid>)      : 'Monoid = Mconcat.Invoke x
+    let inline mconcat (x:seq<'Monoid>)       : 'Monoid = Mconcat.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
@@ -98,8 +98,8 @@ module Operators =
 
     // Foldable
 
-    let inline foldBack (folder:'T->'State->'State) (foldable:'Foldable'T) (state:'State) :'State = Foldr.Invoke folder state foldable
-    let inline fold     (folder:'State->'T->'State) (state:'State) (foldable:'Foldable'T) :'State = Foldl.Invoke folder state foldable
+    let inline foldBack (folder:'T->'State->'State) (foldable:'Foldable'T) (state:'State) :'State = FoldBack.Invoke folder state foldable
+    let inline fold     (folder:'State->'T->'State) (state:'State) (foldable:'Foldable'T) :'State = Fold.Invoke folder state foldable
     let inline foldMap (f:'T->'Monoid) (x:'Foldable'T) :'Monoid = FoldMap.Invoke f x
     let inline toList  value :'t list = ToList.Invoke  value
     let inline toArray value :'t []   = ToArray.Invoke value

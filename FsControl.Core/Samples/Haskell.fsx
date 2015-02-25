@@ -291,7 +291,7 @@ type Product<'a> = Product of 'a with
 
 let inline mempty() = FsControl.Operators.mempty ()
 let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.mappend x y
-let inline mconcat (x:list<'a>) : 'a = FsControl.Operators.mconcat x
+let inline mconcat (x:seq<'a>) : 'a = FsControl.Operators.mconcat x
 
 
 // Test Monoids
@@ -339,6 +339,12 @@ let nameAndAddress = mapM (fun x -> putStrLn x >>= fun _ -> getLine) ["name";"ad
 
 let a:list<int> = mzero()
 let res123      = mplus (mempty()) ([1;2;3])
+
+let inline mfilter p ma = do' {
+  let! a = ma
+  if p a then return a else return! mzero()}
+
+let mfilterRes2 = mfilter ((=)2) (Just 2)
 
 // sample code from http://en.wikibooks.org/wiki/Haskell/MonadPlus
 let pythags = do'{
@@ -408,8 +414,8 @@ let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 let inline pure' x   = FsControl.Operators.result x
 let inline (<*>) x y = FsControl.Operators.(<*>) x y
-let inline empty()   = FsControl.Operators.zero ()   // todo: add an example.
-let inline (<|>) x y = FsControl.Operators.(<|>) x y // todo: add an example.
+let inline empty()   = FsControl.Operators.zero ()
+let inline (<|>) x y = FsControl.Operators.(<|>) x y
 
 
 let inline (<<|>) f a   = fmap f a
@@ -500,7 +506,8 @@ module FoldableTree =
                 | Leaf n       -> f n
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
             _foldMap t f
-        static member inline Foldr (x:Tree<_>, f, z, _:Foldr) = Foldr.FromFoldMap f z x
+        static member inline FoldBack (x:Tree<_>, f, z, _:FoldBack) = FoldBack.FromFoldMap f z x
+        static member inline ToSeq    (x:Tree<_>) = Tree.FoldBack (x, (fun x y -> seq {yield x; yield! y}), Seq.empty, FoldBack.Instance)
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree
