@@ -49,6 +49,7 @@ type ZipList<'s> = ZipList of 's seq with
     static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
     // try also commenting/uncommenting the following method.
     static member inline Mconcat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack mappend (Seq.toList x) (mempty()):ZipList<'a>
+    static member ToSeq    (ZipList lst)     = lst
 
 type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:WrappedList<'a>, _:Return ) = fun (x:'a)     -> WrappedList [x]
@@ -61,6 +62,7 @@ let wl = WrappedList  [2..10]
 
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
+let twos   = filter ((=) (box 2)) (([1;2;3;4;3;2;1;2;3] |> fromSeq) : Collections.ArrayList)
 let five   = filter ((=) 5) (WrappedList [1;2;3;4;5;6])   // <- Uses the default method for filter.
 let sorted = sortBy (~-)    (WrappedList [1;2;3;4;5;6])
 let optionFilter = filter ((=) 3) (Some 4)

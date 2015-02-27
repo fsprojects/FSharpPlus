@@ -38,10 +38,11 @@ let r304:char   = convert "F"
 // From sequence
 open System.Collections
 open System.Collections.Concurrent
+open System.Collections.Generic
 
 let sk :Generic.Stack<_>          = fromSeq { 1 .. 3 }
-let sg :string                    = fromSeq {'1'..'3'}
-let sb :Text.StringBuilder        = fromSeq {'1'..'3'}
+let sg :string                    = fromSeq {'1'..'3'}  // but it will come back as seq<char>
+let sb :Text.StringBuilder        = fromSeq {'1'..'3'}  // but it will come back as seq<char>
 let sq1:_ seq                     = fromSeq { 1 .. 3 }
 let sq2:_ seq                     = fromSeq (seq [(1, "One"); (2, "Two")])
 let sq3:_ seq                     = fromSeq (seq [(1, "One", '1'); (2, "Two", '2')])
@@ -52,13 +53,52 @@ let st1:_ Set                     = fromSeq {'1'..'3'}
 let st2:_ Set                     = fromSeq (seq [(1, "One", '1'); (2, "Two", '2')])
 let ss :Generic.SortedSet<_>      = fromSeq (seq [3..6])
 let ra :Generic.List<_>           = fromSeq (seq [1..3])
-let sl :Generic.SortedList<_,_>   = fromSeq (seq [(1, "One"); (2, "Two")])
-let dc :Generic.Dictionary<_,_>   = fromSeq (seq [(1, "One"); (2, "Two")])
-let mp :Map<_,_>                  = fromSeq (seq [(1, "One"); (2, "Two")])
-let d  :Generic.IDictionary<_,_>  = fromSeq (seq [("One", 1)])
-let ut :Hashtable                 = fromSeq (seq [1,'1';2, '2';3,'3'])
-let al :ArrayList                 = fromSeq (seq ["1";"2";"3"])
-let us :SortedList                = fromSeq (seq [4,'2';3,'4'])
-let cc :BlockingCollection<_>     = fromSeq {'1'..'3'}
-let cd :ConcurrentDictionary<_,_> = fromSeq (seq [(1, "One"); (2, "Two")])
+let sl :Generic.SortedList<_,_>   = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+let sl2:Generic.SortedList<_,_>   = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let dc :Generic.Dictionary<_,_>   = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+let dc2:Generic.Dictionary<_,_>   = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let mp :Map<_,_>                  = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+let mp2:Map<_,_>                  = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let d  :Generic.IDictionary<_,_>  = fromSeq (seq [("One", 1)])             // but it will come back as ...
+let d2 :Generic.IDictionary<_,_>  = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let ut :Hashtable                 = fromSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+let al :ArrayList                 = fromSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
+let us :SortedList                = fromSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
+let cc :BlockingCollection<_>     = fromSeq {'1'..'3'}                     // but it will come back as seq<obj>
+let cd :ConcurrentDictionary<_,_> = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+let cd2:ConcurrentDictionary<_,_> = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
 let cb :ConcurrentBag<_>          = fromSeq {'1'..'3'}
+
+// now go back
+let sk'  = toSeq sk
+let sg'  = toSeq sg
+let sb'  = toSeq sb
+let sq1' = toSeq sq1
+let sq2' = toSeq sq2
+let sq3' = toSeq sq3
+let sq4' = toSeq sq4
+let ls1' = toSeq ls1
+let ls2' = toSeq ls2
+let st1' = toSeq st1
+let st2' = toSeq st2
+let ss'  = toSeq ss 
+let ra'  = toSeq ra 
+let sl'  = toSeq sl 
+let dc'  = toSeq dc 
+let mp'  = toSeq mp 
+let d'   = toSeq d  
+let ut'  = toSeq ut 
+let al'  = toSeq al 
+let us'  = toSeq us 
+let cc'  = toSeq cc 
+let cd'  = toSeq cd 
+let cb'  = toSeq cb 
+
+// there are some 'one-way' collections that can only be converted toSeq
+
+let columns = 
+    let d = new Data.DataTable() 
+    [|new Data.DataColumn "id";new Data.DataColumn "column1";new Data.DataColumn "column2"|] |> d.Columns.AddRange
+    d.Columns
+let col1 = columns |> find (fun x -> x.ColumnName = "column1")
+let cols = columns |> toList |> map  (fun x -> x.ColumnName)

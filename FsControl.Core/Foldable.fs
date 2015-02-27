@@ -15,15 +15,20 @@ open System.Collections.Generic
 
 [<Extension;Sealed>]
 type ToSeq() =
+    inherit Default1()
     static member val Instance = ToSeq()
-    [<Extension>]static member ToSeq (x:#seq<'T>  ) = x :> seq<_>
-    [<Extension>]static member ToSeq (x:Id<'T>    ) = Seq.singleton x.getValue
-    [<Extension>]static member ToSeq (x:option<'T>) = match x with Some x -> Seq.singleton x | None -> Seq.empty
+    [<Extension>]static member inline ToSeq (x:'S when 'S :> Collections.IEnumerable, [<Optional>]impl:Default2) = let f i x :'T = ( ^S : (member get_Item : int -> 'T) x, i) in Seq.cast<'T> x : seq<'T>
+    [<Extension>]static member inline ToSeq (x:'Foldable, [<Optional>]impl:Default1) = ((^Foldable) : (static member ToSeq: ^Foldable -> seq<'t>) x)
+                 static member inline ToSeq (x:'T when 'T : null and 'T :struct     ,             _   :ToSeq   ) = ()
+    [<Extension>]static member        ToSeq (x:seq<'T>   , [<Optional>]impl:ToSeq) = x
+    [<Extension>]static member        ToSeq (x:Text.StringBuilder,  _:ToSeq) = x.ToString() :> seq<char>
+    [<Extension>]static member        ToSeq (x:string            ,  _:ToSeq) = x            :> seq<char>
+    [<Extension>]static member        ToSeq (x:option<'T>, [<Optional>]impl:ToSeq) = match x with Some x -> Seq.singleton x | None -> Seq.empty
 
     static member inline Invoke (source:'Collection'T)  : seq<'T>  =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToSeq: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToSeq: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (ToSeq.Instance, source)
+        call (ToSeq.Instance , source)
 
 
 [<Extension;Sealed>]
@@ -74,14 +79,21 @@ type FromSeq() =
     static member        FromSeq (x:seq<'a>                 , _:seq<'a>                         , _:Default4) = x
     static member inline FromSeq (x:seq<'t>                 , _:'F                              , _:Default3) = let c = new 'F() in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
     static member        FromSeq (x:seq<KeyValuePair<'k,'v>>, _:ICollection<KeyValuePair<'k,'v>>, _:Default3) = let d = Dictionary() :> ICollection<KeyValuePair<'k,'v>> in Seq.iter d.Add x; d
-    static member        FromSeq (x:seq<'k*'v>              , _:IDictionary<'k,'v>              , _:Default3) = dict x  
-    static member        FromSeq (x:seq<'k*'v>              , _:Collections.IDictionary         , _:Default3) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
-    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary       , _:Default2) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        FromSeq (x:seq<'K*'V>              , _:IDictionary<'k,'v>              , _:Default3) = dict x
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:IDictionary<'K,'V>              , _:Default3) = x |> Seq.map (function (KeyValue x) -> x) |> dict
+    static member        FromSeq (x:seq<'K*'V>              , _:Collections.IDictionary         , _:Default3) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Collections.IDictionary         , _:Default3) = let d = Hashtable() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> Collections.IDictionary, _:Default2) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> Collections.IDictionary, _:Default2) = let d = new 'T() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d
     static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary<'K,'V>, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> IDictionary<'K,'V>, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
     static member inline FromSeq (x:seq<'a>                 , _:'UserType                       , _:FromSeq ) = ((^UserType) : (static member FromSeq: seq<'a> -> ^F) x)     
-    static member        FromSeq (x:seq<'k*'v>              , _:Dictionary<'k,'v>               , _:FromSeq ) = Dictionary (dict x)
-    static member        FromSeq (x:seq<'k*'v>              , _:SortedList<'k,'v>               , _:FromSeq ) = Generic.SortedList (dict x)
-    static member        FromSeq (x:seq<'k*'v>              , _:Map<'k,'v>                      , _:FromSeq ) = Collections.Map x
+    static member        FromSeq (x:seq<'K*'V>              , _:Dictionary<'K,'V>               , _:FromSeq ) = Dictionary (dict x)
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Dictionary<'K,'V>               , _:FromSeq ) = Dictionary (dict (Seq.map (function (KeyValue x) -> x) x))
+    static member        FromSeq (x:seq<'K*'V>              , _:SortedList<'K,'V>               , _:FromSeq ) = Generic.SortedList (dict x)
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:SortedList<'K,'V>               , _:FromSeq ) = Generic.SortedList (dict (Seq.map (function (KeyValue x) -> x) x))
+    static member        FromSeq (x:seq<'K*'V>              , _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map x
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map (Seq.map (function (KeyValue x) -> x) x)
     static member        FromSeq (x                         , _:'a []                           , _:FromSeq ) = Array.ofSeq<'a> x
     static member        FromSeq (x                         , _:list<'a>                        , _:FromSeq ) = List.ofSeq<'a> x
     static member        FromSeq (x                         , _:Set<'a>                         , _:FromSeq ) = Set.ofSeq<'a> x
@@ -251,8 +263,8 @@ type TryPick() =
 type Filter() =
     inherit Default1()
     static member val Instance = Filter()
-    [<Extension>]static member inline Filter (x:'Foldable'T   , p, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.filter p |> FromSeq.Invoke
-    [<Extension>]static member        Filter (x:'t seq        , p, [<Optional>]impl:Filter  ) = Seq.filter p x
+    [<Extension>]static member        Filter (x:'t seq        , p, [<Optional>]impl:Default2) = Seq.filter p x
+    [<Extension>]static member inline Filter (x:'Foldable'T   , p, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.filter p |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        Filter (x:'t Set        , p, [<Optional>]impl:Filter  ) = Set.filter p x
     [<Extension>]static member        Filter (x:'t option     , p, [<Optional>]impl:Filter  ) = match x with None -> None | Some a -> if p a then x else None
     [<Extension>]static member        Filter (x:'t list       , p, [<Optional>]impl:Filter  ) = List.filter  p x
@@ -261,6 +273,6 @@ type Filter() =
     [<Extension>]static member        Filter (x:'t ResizeArray, p, [<Optional>]impl:Filter  ) = ResizeArray(Seq.filter p x)
 
     static member inline Invoke (predicate:_->bool) (x:'Foldable'a) :'Foldable'a =
-        let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member Filter: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, x:'x) = call_2 (a, b, x)
+        let inline call_2 (i:^i, b:^b, f) = ((^i or ^b) : (static member Filter: _*_*_ -> ^b) b, f, i)
+        let inline call (i:'i, b:'b, f:'f) = call_2 (i, b, f)
         call (Filter.Instance, x, predicate)
