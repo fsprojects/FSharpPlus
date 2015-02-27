@@ -9,6 +9,8 @@ open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
+open System.Collections
+open System.Collections.Generic
 
 
 [<Extension;Sealed>]
@@ -64,31 +66,34 @@ type ToArray() =
         call (ToArray.Instance , value)
 
 
-
 type FromSeq() =
     inherit Default1()
     static member val Instance = FromSeq()
-    static member inline FromSeq (x:seq<'a>  , _:'Foldable'T   , _:Default3) = x |> Seq.map Return.Invoke |> Mconcat.Invoke :'Foldable'T
-    //static member inline FromSeq (x:seq<'a>  , _:^F            , _:Default2) = ((^F) : (static member op_Explicit : seq<_> -> ^F) x) 
-    static member inline FromSeq (x:seq<'a>  , _:^F            , _:Default1) = ((^F) : (static member FromSeq: seq<'a> -> ^F) x)
-#if NOTNET35
-    static member        FromSeq (x:seq<char>, _:string        , _:FromSeq) = String.Join("", Array.ofSeq x)
-    static member        FromSeq (x:seq<char>, _:StringBuilder , _:FromSeq) = new StringBuilder(String.Join("", Array.ofSeq x))
-#else                                                              
-    static member        FromSeq (x:seq<char>, _:string        , _:FromSeq) = String.Join("",  x |> Array.ofSeq |> Array.map string)
-    static member        FromSeq (x:seq<char>, _:StringBuilder , _:FromSeq) = new StringBuilder(String.Join("", x |> Array.ofSeq |> Array.map string))
-#endif                                                             
-    static member        FromSeq (x          , _:'a []         , _:FromSeq) = Array.ofSeq<'a> x
-    static member        FromSeq (x:seq<'a>  , _:'a ResizeArray, _:FromSeq) = ResizeArray x
-    static member        FromSeq (x          , _:list<'a>      , _:FromSeq) = List.ofSeq<'a> x
-    static member        FromSeq (x          , _:Set<'a>       , _:FromSeq) = Set.ofSeq<'a> x
-    static member        FromSeq (x          , _:seq<'a>       , _:FromSeq) = x
-    static member        FromSeq (x:seq<'a>  , _:'a Id         , _:FromSeq) = Id.create (Seq.head x)
+
+    static member inline FromSeq (x:seq<'a>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> Mconcat.Invoke :'Foldable'T
+    static member        FromSeq (x:seq<'a>                 , _:seq<'a>                         , _:Default4) = x
+    static member inline FromSeq (x:seq<'t>                 , _:'F                              , _:Default3) = let c = new 'F() in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
+    static member        FromSeq (x:seq<KeyValuePair<'k,'v>>, _:ICollection<KeyValuePair<'k,'v>>, _:Default3) = let d = Dictionary() :> ICollection<KeyValuePair<'k,'v>> in Seq.iter d.Add x; d
+    static member        FromSeq (x:seq<'k*'v>              , _:IDictionary<'k,'v>              , _:Default3) = dict x  
+    static member        FromSeq (x:seq<'k*'v>              , _:Collections.IDictionary         , _:Default3) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
+    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary       , _:Default2) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary<'K,'V>, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member inline FromSeq (x:seq<'a>                 , _:'UserType                       , _:FromSeq ) = ((^UserType) : (static member FromSeq: seq<'a> -> ^F) x)     
+    static member        FromSeq (x:seq<'k*'v>              , _:Dictionary<'k,'v>               , _:FromSeq ) = Dictionary (dict x)
+    static member        FromSeq (x:seq<'k*'v>              , _:SortedList<'k,'v>               , _:FromSeq ) = Generic.SortedList (dict x)
+    static member        FromSeq (x:seq<'k*'v>              , _:Map<'k,'v>                      , _:FromSeq ) = Collections.Map x
+    static member        FromSeq (x                         , _:'a []                           , _:FromSeq ) = Array.ofSeq<'a> x
+    static member        FromSeq (x                         , _:list<'a>                        , _:FromSeq ) = List.ofSeq<'a> x
+    static member        FromSeq (x                         , _:Set<'a>                         , _:FromSeq ) = Set.ofSeq<'a> x
+    static member        FromSeq (x:seq<char>               , _:string                          , _:FromSeq ) = String.Join ("", Array.ofSeq x)
+    static member        FromSeq (x:seq<char>               , _:Text.StringBuilder              , _:FromSeq ) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    static member        FromSeq (x:seq<'a>                 , _:Generic.Stack<'a>               , _:FromSeq ) = Generic.Stack x                                                                                               
 
     static member inline Invoke  (value :seq<'t>) = 
-        let inline call_2 (a:^a, b:^b, x:^c) = ((^a or ^b or ^c) : (static member FromSeq: _*_*_ -> _) x, b, a)
-        let inline call (a:'a, x) = call_2 (a, Unchecked.defaultof<'r>, x) :'r
+        let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member FromSeq: _*_*_ -> _) s, b, a)
+        let inline call (a:'a, s) = call_2 (a, Unchecked.defaultof<'r>, s) :'r
         call (FromSeq.Instance, value)
+
 
 [<Extension;Sealed>]
 type FoldBack() =

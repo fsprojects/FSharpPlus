@@ -66,11 +66,7 @@ type Mappend() =
     [<Extension>]static member        Mappend (()             , ()) =  ()
     [<Extension>]static member        Mappend (x:Set<_>       , y ) = Set.union x y
     [<Extension>]static member        Mappend (x:string       , y ) = x + y
-    [<Extension>]static member        Mappend (x:StringBuilder, y:StringBuilder) =
-                    let sb = new StringBuilder()
-                    sb.Append(x.ToString()) |> ignore
-                    sb.Append(y.ToString()) |> ignore
-                    y
+    [<Extension>]static member        Mappend (x:StringBuilder, y:StringBuilder) = StringBuilder().Append(x).Append(y)
     [<Extension>]static member        Mappend (x:'a->'a       , y ) = x << y
 
     static member inline Invoke (x:'T) (y:'T) :'T =
@@ -142,14 +138,11 @@ type Mconcat() =
                             dct.[k] <- match dct.TryGetValue k with true, v -> Mappend.Invoke v u | _ -> u
                     dct
 
-    [<Extension>]static member inline Mconcat (x:seq<ResizeArray<'a>>, [<Optional>]output:'a ResizeArray, [<Optional>]impl:Mconcat) = ResizeArray(Seq.concat x)
-    [<Extension>]static member        Mconcat (x:seq<list<'a>>       , [<Optional>]output:list<'a>      , [<Optional>]impl:Mconcat) = List.concat x
-    [<Extension>]static member        Mconcat (x:seq<array<'a>>      , [<Optional>]output:array<'a>     , [<Optional>]impl:Mconcat) = Array.concat x
+    [<Extension>]static member inline Mconcat (x:seq<ResizeArray<'a>>, [<Optional>]output:'a ResizeArray, [<Optional>]impl:Mconcat) = ResizeArray (Seq.concat x)
+    [<Extension>]static member        Mconcat (x:seq<list<'a>>       , [<Optional>]output:list<'a>      , [<Optional>]impl:Mconcat) = List.concat   x
+    [<Extension>]static member        Mconcat (x:seq<array<'a>>      , [<Optional>]output:array<'a>     , [<Optional>]impl:Mconcat) = Array.concat  x
     [<Extension>]static member        Mconcat (x:seq<string>         , [<Optional>]output:string        , [<Optional>]impl:Mconcat) = String.Concat x
-    [<Extension>]static member        Mconcat (x:seq<StringBuilder>  , [<Optional>]output:StringBuilder , [<Optional>]impl:Mconcat) =
-                    let sb = new StringBuilder()
-                    Seq.iter (fun s -> sb.Append(s.ToString()) |> ignore) x
-                    sb
+    [<Extension>]static member        Mconcat (x:seq<StringBuilder>  , [<Optional>]output:StringBuilder , [<Optional>]impl:Mconcat) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
 
     static member inline Invoke (x:seq<'T>) : 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mconcat: _*_*_ -> _) b, c, a)
