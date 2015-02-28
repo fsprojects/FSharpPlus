@@ -207,7 +207,7 @@ type Map_() =
     [<Extension>]static member Map_ (x:Set<_>         , f) = Set.iter f x        
 
     static member inline Invoke (action :'T->unit) (source :'Functor'T) =
-        let inline call_3 (a:^a, b:^b, c:^c) =  ((^a or ^b) : (static member Map: _*_ -> _) b, c)
+        let inline call_3 (a:^a, b:^b, c:^c) =  ((^a or ^b) : (static member Map_: _*_ -> _) b, c)
         let inline call (a:'a, b:'b, c:'c) = call_3 (a ,b, c)
         call (Map_.Instance, source, action) :unit
 
