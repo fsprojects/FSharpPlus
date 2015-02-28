@@ -55,8 +55,6 @@ type SequenceA() =
     [<Extension>]static member inline SequenceA (t          , _, [<Optional>]impl:Default1 ) = Traverse.Invoke id t
     [<Extension>]static member inline SequenceA (t:option<_>, _, [<Optional>]impl:SequenceA) = match t with Some x -> Map.Invoke Some x | _ -> result None       
     [<Extension>]static member inline SequenceA (t:list<_>  , _, [<Optional>]impl:SequenceA) = let cons_f x ys = Map.Invoke List.cons x <*> ys in FoldBack.Invoke cons_f (result []) t
-    [<Extension>]static member inline SequenceA (t:seq<_>   , _, [<Optional>]impl:SequenceA) = Traverse.Invoke id t
-    [<Extension>]static member inline SequenceA (t:Id<_>    , _, [<Optional>]impl:SequenceA) = Traverse.Invoke id t
 
     static member inline Invoke (t:'Traversable'Applicative'T) :'Applicative'Traversable'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member SequenceA: _*_*_ -> _) b, c, a)
