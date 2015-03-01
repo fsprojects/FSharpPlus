@@ -12,7 +12,6 @@ open System.Runtime.InteropServices
 type Skip() =
     inherit Default1()
     static member val Instance = Skip()
-    [<Extension>]static member        Skip (x:seq<'a>       , n, [<Optional>]impl:Default2) = Seq.skip n x
     [<Extension>]static member inline Skip (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        Skip (x:string        , n, [<Optional>]impl:Skip    ) = x.[n..]
     [<Extension>]static member        Skip (x:StringBuilder , n, [<Optional>]impl:Skip    ) = new StringBuilder(x.ToString().[n..])
@@ -30,7 +29,6 @@ type Skip() =
 [<Extension;Sealed>]
 type Take() =
     static member val Instance = Take()
-    [<Extension>]static member        Take (x:seq<'a>       , n, [<Optional>]impl:Default2) = Seq.take n x
     [<Extension>]static member inline Take (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.take n |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        Take (x:string        , n, [<Optional>]impl:Take    ) = x.[..n-1]
     [<Extension>]static member        Take (x:StringBuilder , n, [<Optional>]impl:Take    ) = new StringBuilder(x.ToString().[..n-1])
@@ -88,7 +86,6 @@ type Choose() =
 type Distinct() =
     inherit Default1()
     static member val Instance = Distinct()
-    [<Extension>]static member        Distinct (x:seq<'T>    , [<Optional>]impl:Default2) = Seq.distinct x
     [<Extension>]static member inline Distinct (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.distinct |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        Distinct (x:list<'T>   , [<Optional>]impl:Distinct) = Seq.distinct x |> Seq.toList
     [<Extension>]static member        Distinct (x:'T []      , [<Optional>]impl:Distinct) = Seq.distinct x |> Seq.toArray
@@ -103,7 +100,6 @@ type Distinct() =
 type DistinctBy() =
     inherit Default1()
     static member val Instance = DistinctBy()
-    [<Extension>]static member        DistinctBy (x:seq<'T>    , f, [<Optional>]impl:Default2  ) = Seq.distinctBy f x
     [<Extension>]static member inline DistinctBy (x:'Foldable'T, f, [<Optional>]impl:Default1  ) = x |> ToSeq.Invoke |> Seq.distinctBy f |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        DistinctBy (x:list<'T>   , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toList
     [<Extension>]static member        DistinctBy (x:'T []      , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toArray
@@ -155,10 +151,9 @@ type Intersperse() =
             yield element
             notFirst := true}
 
-    [<Extension>]static member        Intersperse (x:seq<'T>    , e:'T, [<Optional>]impl:Default2   ) = Intersperse.intersperse e x
     [<Extension>]static member inline Intersperse (x:'Foldable'T, e:'T, [<Optional>]impl:Default1   ) = x |> ToSeq.Invoke |> Intersperse.intersperse e |> FromSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Intersperse (x:list<'T>   , e:'T, [<Optional>]impl:Intersperse) = x |> List.toSeq  |> Intersperse.intersperse e |> Seq.toList
-    [<Extension>]static member        Intersperse (x:'T []      , e:'T, [<Optional>]impl:Intersperse) = x |> Array.toSeq |> Intersperse.intersperse e |> Seq.toArray
+    [<Extension>]static member        Intersperse (x:list<'T>   , e:'T, [<Optional>]impl:Intersperse) = x |> List.toSeq   |> Intersperse.intersperse e |> Seq.toList
+    [<Extension>]static member        Intersperse (x:'T []      , e:'T, [<Optional>]impl:Intersperse) = x |> Array.toSeq  |> Intersperse.intersperse e |> Seq.toArray
  
     static member inline Invoke      (sep:'T)        (source:'Collection'T)        =
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)
@@ -278,7 +273,6 @@ type MinBy() =
 type Rev() =
     inherit Default1()
     static member val Instance = Rev()
-    [<Extension>]static member        Rev (x:seq<'a>    , [<Optional>]impl:Default2) = x |> Seq.toArray |> Array.rev |> Array.toSeq
     [<Extension>]static member inline Rev (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray |> Array.rev |> Array.toSeq |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        Rev (x:list<'a>   , [<Optional>]impl:Rev     ) = List.rev  x
     [<Extension>]static member        Rev (x:'a []      , [<Optional>]impl:Rev     ) = Array.rev x
@@ -307,7 +301,6 @@ type Scan() =
 type Sort() =
     inherit Default1()
     static member val Instance = Sort()
-    [<Extension>]static member        Sort (x:seq<'a>    , [<Optional>]impl:Default2) = Seq.sort   x
     [<Extension>]static member inline Sort (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sort |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        Sort (x:list<'a>   , [<Optional>]impl:Sort    ) = List.sort  x
     [<Extension>]static member        Sort (x:'a []      , [<Optional>]impl:Sort    ) = Array.sort x
@@ -322,7 +315,6 @@ type Sort() =
 type SortBy() =
     inherit Default1()
     static member val Instance = SortBy()
-    [<Extension>]static member        SortBy (x:seq<'a>    , f      , [<Optional>]impl:Default2) = Seq.sortBy   f x
     [<Extension>]static member inline SortBy (x:'Foldable'T, f      , [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sortBy f |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        SortBy (x:list<'a>   , f      , [<Optional>]impl:SortBy  ) = List.sortBy  f x
     [<Extension>]static member        SortBy (x:'a []      , f      , [<Optional>]impl:SortBy  ) = Array.sortBy f x
