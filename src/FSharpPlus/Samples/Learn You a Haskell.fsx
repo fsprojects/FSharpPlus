@@ -35,13 +35,13 @@ let res18 = sequence [Some 3; Some 2; Some 1]                         // Some [3
     Monoid    
    --------------------------------------------------*)
 
-open FsControl.Core.TypeMethods.Functor
+open FsControl.Core.TypeMethods
 
 type Pair<'a, 'b> = Pair of ('a * 'b)
 type Pair with
     static member runPair (Pair tuple : Pair<'a, 'b>) : ('a * 'b) = tuple
     static member map f (Pair (a, b) : Pair<'a, 'a>) : Pair<'b, 'b> = Pair ((f a), (f b))
-    static member instance (_Functor:Map, x:Pair<'a,'a>, _) = fun f -> Pair.map f x
+    static member Map (x:Pair<'a,'a>, f) = Pair.map f x
 
 let res19 = Pair (10, "hello")
 let res20 = map ((*) 100) (Pair (2, 3))                               // Pair (200, 300)
@@ -58,17 +58,15 @@ let res26 = [false; false; false; true] |> List.map Any |> mconcat
 let res27 = mappend (mempty ()) (All false)                           // All false
 let res28 = mappend (Some "some") None                                // Some "some"
 
-let res29 = foldr (*) 1 [1;2;3]
-let res30 = foldl (+) 2 (Some 9)
-let res31 = foldr (||) false (Some true)                              // true
+let res29 = foldBack (*) [1;2;3] 1
+let res30 = fold     (+) 2 (Some 9)
+let res31 = foldBack (||) (Some true) false                              // true
 
 
 (* --------------------------------------------------
     Foldable    
    --------------------------------------------------*)
 
-open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Foldable
 
 type Tree<'a> =
     | Empty
@@ -79,7 +77,8 @@ type Tree with
         match tree with
         | Empty -> z
         | Node (x, left, right) -> Tree<_>.treeFold f right (Tree<_>.treeFold f left (f x z))
-    static member inline instance (_:Foldr, x:Tree<'a>, _) = fun (f, z) -> Tree<'a>.treeFold f x z
+    static member inline FoldBack (x:Tree<'a>, f, z) = Tree<'a>.treeFold f x z
+    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, Mappend.Invoke << f, mempty())
 
 let testTree =
     let one = Node (1, Empty, Empty)
@@ -91,8 +90,8 @@ let testTree =
     let five = Node (5, three, nine)
     five
 
-let res32 = foldr (+) 0 testTree
-let res33 = foldr (*) 1 testTree
+let res32 = foldBack (+) testTree 0
+let res33 = foldBack (*) testTree 1
 let res34 = foldMap (fun x -> Any (x > 15)) testTree                            // Any false
 
 
@@ -535,11 +534,11 @@ module Probability =
         static member flatten (Prob xs : Prob<Prob<'a>>) : Prob<'a> =
             let multAll (Prob innerxs, p) = List.map (fun (x, r) -> (x, p * r)) innerxs
             Prob (List.map multAll xs |> List.concat)
-        static member instance (_:Functor.Map, prob:Prob<'a>, _:Prob<'b>) = fun f ->
+        static member Map (prob:Prob<'a>, f) =
             Prob.probMap f prob : Prob<'b>
-        static member instance (_:Applicative.Pure, _:Prob<'a>) = fun x ->
+        static member Return (x) =
             Prob [(x, 1.0)] : Prob<'a>
-        static member instance (_:Monad.Bind, prob:Prob<'a>, _:Prob<'b>) = fun (f:'a -> Prob<'b>) ->
+        static member Bind (prob:Prob<'a>, f:'a -> Prob<'b>) =
             Prob.flatten (map f prob) : Prob<'b>
 
 open Probability
