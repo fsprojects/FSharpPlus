@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>F#+ is a library with extensions for F# based on FsControl.</description>
     <releaseNotes>
-	Version 0.0.4
+      Version 1 (Pre Release)
     </releaseNotes>
     <copyright>Copyright 2013-2014</copyright>
     <tags> FSharp Applicative Monad MonadTransformer Arrow Overloading </tags>

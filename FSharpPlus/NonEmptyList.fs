@@ -1,6 +1,7 @@
 ﻿namespace FSharpPlus
 
 open System.Text
+open System.Runtime.InteropServices
 open FSharpPlus
 open FSharpPlus.Extensions
 open FsControl.Core.TypeMethods
@@ -31,28 +32,29 @@ module NonEmptyList =
         | h::t -> cons s (tails {Head = h; Tail = t})
          
 type NonEmptyList with
-    static member instance (_:Functor.Map      , x:NonEmptyList<'a>, _:NonEmptyList<'b>) = fun (f:'a->'b) -> NonEmptyList.map f x
+    static member Map (x:NonEmptyList<'a>, f:'a->'b) = NonEmptyList.map f x
         
-    static member instance (_:Monad.Bind, {Head = x; Tail = xs}, _:NonEmptyList<'b>   ) = fun (f:_->NonEmptyList<'b>  ) ->
+    static member Bind ({Head = x; Tail = xs}, f:_->NonEmptyList<'b>  ) =
         let {Head = y; Tail = ys} = f x
         let ys' = List.collect (NonEmptyList.toList << f) xs
         {Head = y; Tail = (ys @ ys')}
 
-    static member instance (_:Applicative.Pure, _:NonEmptyList<'a>) = fun (x:'a)     -> {Head = x; Tail = []}
-    static member instance (_:Applicative.Apply  , f:NonEmptyList<'a->'b>, x:NonEmptyList<'a> ,_:NonEmptyList<'b>) = fun () ->
-            Applicative.DefaultImpl.ApplyFromMonad f x :NonEmptyList<'b>
+    static member Return (x:'a) = {Head = x; Tail = []}
+    static member (<*>)  (f:NonEmptyList<'a->'b>, x:NonEmptyList<'a>) = 
+            Apply.FromMonad f x :NonEmptyList<'b>
 
-    static member instance (_:Comonad.Extract  , {Head = h; Tail = _} ,_:'t) = fun () -> h : 't
-    static member instance (_:Comonad.Duplicate, s:NonEmptyList<'a>, _:NonEmptyList<NonEmptyList<'a>>) = fun () -> NonEmptyList.tails s
-    static member instance (_:Comonad.Extend, s, _:NonEmptyList<'b>) = fun g -> NonEmptyList.map g (NonEmptyList.tails s) :NonEmptyList<'b>
+    static member Extract    {Head = h; Tail = _} = h : 't
+    static member Duplicate (s:NonEmptyList<'a>, [<Optional>]impl:Duplicate) = NonEmptyList.tails s
+    static member Extend    (s, g) = NonEmptyList.map g (NonEmptyList.tails s) :NonEmptyList<'b>
     
 
-    static member instance (_:Monoid.Mappend, {Head = h; Tail = t}, _) = fun x -> {Head = h; Tail = t @ NonEmptyList.toList x}
+    static member Mappend ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
-    static member instance (_:Foldable.Foldr, {Head = x; Tail = xs}, _) = fun (f,z) -> List.foldBack f (x::xs) z
-    static member instance (_:Foldable.ToList, s:NonEmptyList<'a>, _) = fun () -> NonEmptyList.toList s
+    static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
+    static member ToList   (s:NonEmptyList<'a>, [<Optional>]impl:ToList) = NonEmptyList.toList s
+    static member ToSeq    (s:NonEmptyList<'a>, [<Optional>]impl:ToSeq ) = NonEmptyList.toList s |> List.toSeq
 
-    static member inline instance (_:Converter.ToString, s:NonEmptyList<'a>, _) = fun (k:System.Globalization.CultureInfo) ->
+    static member inline ToString (s:NonEmptyList<'a>, [<Optional>]impl:ToString) = fun (k:System.Globalization.CultureInfo) ->
             let b = StringBuilder()
             let inline append (s:string) = b.Append s |> ignore
             append "NonEmptyList ["
