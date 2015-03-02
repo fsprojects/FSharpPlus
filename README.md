@@ -36,14 +36,13 @@ This is the most complex scenario, to define a new Type Method is not straightfo
  
 At the moment there are 2 ways:
 
-The easy way is to look at the signature of the method you want to implement, see below the section "How can I make my classes FsControl-ready?"
+ a) The easy way is to look at the signature of the method you want to implement
 
 The old way is to use the same kind of signature used within the Type-Method definition:
 
-In the type definition we will add a static member called instance, which will follow this convention:
+In the type definition we will add a static member, which will follow this convention:
 
-    static member [inline] instance (_:[module.]TypeMethodName, arg1:Type, [more polymorphic args], _[:ReturnType]) = 
-        fun [non-polymorphic args in curried form, if none then a unit () arg] -> 
+    static member [inline] [TypeMethodName] (arg1:Type, [more args], _[:ReturnType], _:[TypeMethodName]) =
             Implementation
 
 To find the exact signature you need to look at the source code of the Type-Method.
@@ -52,7 +51,7 @@ Here's an example:
 
 In the source code for <code>Map</code> (in Functor.fs) the <code>option</code> instance is defined like this:
 
-    static member instance (_:Map, x:option<_>, _) = fun f -> Option.map f x
+    [<Extension>]static member Map (x:option<_>      , f, [<Optional>]impl:Map) = Option.map  f x
 
 So you can create a type <code>Tree</code> and add an instance for the existing Type Method <code>Map</code> this way:
 
@@ -60,15 +59,19 @@ So you can create a type <code>Tree</code> and add an instance for the existing 
     type Tree<'a> =
         | Tree of 'a * Tree<'a> * Tree<'a>
         | Leaf of 'a
-        static member map f (t:Tree<'a>)  =
-            match t with
-            | Leaf x -> Leaf (f x)
-            | Tree(x,t1,t2) -> Tree(f x, Tree.map f t1, Tree.map f t2)
+        static member 
 
     // add an ìnstance for Map (Functor)
-        static member instance (_:Functor.Map, x:Tree<_>, _) = fun f -> Tree.map f x
+        static member Map (x:Tree<_>, f, _) = 
+		    let rec loop f (t:Tree<'a>)  =
+                match t with
+                | Leaf x -> Leaf (f x)
+                | Tree (x, t1, t2) -> Tree (f x, loop f t1, loop f t2)
+		    loop f x
 
-
+ b) Some methods accept also a 'clean signature' without the last parameters.
+ 
+See below the section "How can I make my classes FsControl-ready?"
 
  3) Add an instance for an existing type of an existing Type-Method:
 
@@ -87,7 +90,7 @@ An easy way to make classes in your project callable from FsControl without refe
 
  Functors:
  
-     static member (<!>) (f:'T->'U) (x:MyFunctor<'T>) = {your map impl.} : MyFunctor<'U>
+     static member Map (x:MyFunctor<'T>, f:'T->'U) = {your map impl.} : MyFunctor<'U>
      
  Applicatives:
  
@@ -97,7 +100,7 @@ An easy way to make classes in your project callable from FsControl without refe
  Monads:
  
      static member Return // as defined in Applicatives
-     static member Bind (x:MyMonad<'T>) = fun (f:'T->MyMonad<'U>) -> {your Bind impl.} : MyMonad<'U>
+     static member Bind (x:MyMonad<'T>, f:'T->MyMonad<'U>) -> {your Bind impl.} : MyMonad<'U>
    
 Monoids:
 
