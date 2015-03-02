@@ -248,7 +248,7 @@ type Map() =
     [<Extension>]static member Map (x:Set<_>         , f, [<Optional>]impl:Map) = Set.map f x
         
     static member inline Invoke (f:_->_) x = 
-        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b) : (static member Map: _*_*_ -> _) b, f, a)
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Map: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
         call (Map.Instance, x, f)
 
