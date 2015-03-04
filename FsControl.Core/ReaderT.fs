@@ -2,7 +2,7 @@
 
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadOps
 
 type ReaderT<'R,'Ma> = ReaderT of ('R -> 'Ma)
 
@@ -11,9 +11,7 @@ module ReaderT =
     let  run (ReaderT x) = x
     let inline map (f:'a->'b) (ReaderT m) = ReaderT (Map.Invoke f << m)
     let inline apply (ReaderT f) (ReaderT x) = (ReaderT <| fun r -> f r <*> x r) :ReaderT<'r,'ma>
-    let inline bind f (ReaderT m) = ReaderT <| fun r -> do'() {
-        let! a = m r
-        return! run (f a) r}    
+    let inline bind f (ReaderT m) = ReaderT <| fun r -> m r >>= (fun a -> run (f a) r)
 
 type ReaderT<'R,'Ma> with
     static member inline Map    (x, f, _:Map) = ReaderT.map f x

@@ -5,7 +5,7 @@ open System.Runtime.InteropServices
 open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.Types
-open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadOps
 
 
 [<Extension;Sealed>]

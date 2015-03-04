@@ -14,18 +14,7 @@ module Combinators =
 
 open Combinators
 
-[<TestClass>]
-type Applicative() = 
-    [<TestMethod>]
-    member x.ApplicativeMath() = 
-        let inline (+) (a:'T) (b:'T) :'T = a + b
-        let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
-        let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
-        let inline ( |+| ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
 
-        let testVal = [1;2] |+| [10;20] |+| [100;200] |+  2
-        Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
-        Assert.IsInstanceOfType (Some testVal, typeof<Option<list<int>>>)
 
 
 
@@ -42,6 +31,14 @@ type Foldable() =
         Assert.AreEqual (testVal, WrappedListA [2])
         Assert.IsInstanceOfType(Some testVal, typeof<Option<WrappedListA<int>>>)
 
+    [<TestMethod>]
+    member x.FromToSeq() =
+        let s = (seq [Collections.Generic.KeyValuePair(1, "One"); Collections.Generic.KeyValuePair(2, "Two")])
+        let dc2:Collections.Generic.Dictionary<_,_>   = fromSeq s
+        let s' = toSeq s
+        Assert.AreEqual (s, s')
+        Assert.IsInstanceOfType(Some s, (Some s').GetType())
+
 [<TestClass>]
 type Traversable() = 
     [<TestMethod>]
@@ -51,3 +48,63 @@ type Traversable() =
         Assert.IsInstanceOfType (testVal, typeof<Option<array<int>>>)
 
         
+type ZipList<'s> = ZipList of 's seq with
+    static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
+    static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
+    static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList<'b>
+    
+
+
+[<TestClass>]
+type Applicative() = 
+    [<TestMethod>]
+    member x.ApplicativeMath() = 
+        let inline (+) (a:'T) (b:'T) :'T = a + b
+        let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
+        let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
+        let inline ( |+| ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
+
+        let testVal = [1;2] |+| [10;20] |+| [100;200] |+  2
+        Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
+        Assert.IsInstanceOfType (Some testVal, typeof<Option<list<int>>>)
+
+
+    [<TestMethod>]
+    member x.Applicatives() = 
+
+        let run (ZipList x) = x
+
+        // Test Applicative (functions)
+        let res607 = map (+) ( (*) 100 ) 6 7
+        let res606 = ( (+) <*>  (*) 100 ) 6
+        let res508 = (map (+) ((+) 3 ) <*> (*) 100) 5
+
+        // Test Applicative (ZipList)
+        let res9n5   = map ((+) 1) (ZipList [8;4])
+        let res20n30 = result (+) <*> result 10 <*> ZipList [10;20]
+        let res18n14 = result (+) <*> ZipList [8;4] <*> result 10
+
+        Assert.AreEqual (607, res607)
+        Assert.AreEqual (606, res606)
+        Assert.AreEqual (508, res508)
+
+
+    // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
+    type Ii = Ii
+    type Ji = Ji
+    type J = J
+    type Idiomatic = Idiomatic with
+        static member inline ($) (Idiomatic, si) = fun sfi x -> (Idiomatic $ x) (sfi <*> si)
+        static member        ($) (Idiomatic, Ii) = id
+
+type Applicative with
+    [<TestMethod>]
+    member x.IdiomBrackets() =    
+        let inline idiomatic a b = (Idiomatic $ b) a
+        let inline iI x = (idiomatic << result) x
+
+        let res3n4''  = iI ((+) 2) [1;2] Ii
+        let res3n4''' = iI (+) (result 2) [1;2] Ii   // fails to compile when constraints are not properly defined
+        Assert.AreEqual ([3;4], res3n4'' )
+        Assert.AreEqual ([3;4], res3n4''')
+

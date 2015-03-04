@@ -26,6 +26,7 @@ module internal List =
 module internal Seq =
     let inline bind (f:'a->seq<'b>) x = Seq.collect f x
     let inline apply f x = bind (fun f -> Seq.map ((<|) f) x) f
+    let inline foldBack f x z = Array.foldBack f (Seq.toArray x) z
 
     let inline groupAdjBy projection (source : _ seq) = seq {
         use e = source.GetEnumerator()

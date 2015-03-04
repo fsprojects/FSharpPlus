@@ -93,9 +93,9 @@ let writerTm = map ((+) 100) writerTx
 
 let stateTf = StateT (fun s -> [(+)10, s; (-) 10, s])
 let stateTx = StateT (fun s -> [4, s; 3, s])
-(* Since the tupled Bind this one takes minutes to compile
+// Since the tupled Bind this one takes minutes to compile -> After prev commit, works fine again.
 let stateTr = StateT.run (stateTf <*> stateTx) "state"
-*)
+//
 let stateTm = StateT.run (map ((+) 100) stateTx) "state"
 
 let d = System.Collections.Generic.Dictionary()

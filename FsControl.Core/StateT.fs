@@ -2,7 +2,7 @@
 
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadOps
 
 type StateT<'S,'MaS> = StateT of ('S -> 'MaS)
 
@@ -11,9 +11,7 @@ module StateT =
     let run (StateT x) = x
     let inline map  f (StateT m) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s')))
     let inline apply  (StateT f) (StateT a) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z, u) -> (g z, u)) (a t))
-    let inline bind f (StateT m) = StateT <| fun s -> do'() {
-        let! (a, s') = m s
-        return! run (f a) s'}
+    let inline bind f (StateT m) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
 
 type StateT<'S,'MaS> with
     static member inline Map    (x, f                  , _:Map   ) = StateT.map f x

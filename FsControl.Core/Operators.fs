@@ -30,7 +30,12 @@ module Operators =
     
     let inline (>>=) (x:'Monad'T) (f:'T->'Monad'U) :'Monad'U = Bind.Invoke x f
     let inline (=<<) (f:'T->'Monad'U) (x:'Monad'T) :'Monad'U = Bind.Invoke x f
+    let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = Bind.Invoke (f x) g
+    let inline (<=<) (g:'b->'Monad'c) (f:'a->'Monad'b) (x:'a) :'Monad'c = Bind.Invoke (f x) g
     let inline join (x:'Monad'Monad'T) :'Monad'T = Join.Invoke x
+    let inline liftM  (f:'a->'b) (m1:'Monad'a) :'Monad'b = m1 >>= (result << f)
+    let inline liftM2 (f:'a1->'a2->'r) (m1:'Monad'a1) (m2:'Monad'a2) :'Monad'r = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
+    let inline ap (x:'Monad'a_'b) (y:'Monad'a): 'Monad'b = liftM2 id x y
 
 
     // Monoid -----------------------------------------------------------------
@@ -44,39 +49,7 @@ module Operators =
 
     let inline zero() :'Functor'T = Zero.Invoke()
     let inline (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T = Plus.Invoke x y
-
-
-    // M's --------------------------------------------------------------------
-
-    let inline sequence (ms:list<'Monad'a>) =
-        let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (List.Cons(x,xs))
-        List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
-
-    let inline mapM (f:'a->'Monad'b) (xs:list<'a>) :'Monad'List'b = sequence (List.map f xs)
-    
-    let inline foldM (f:'a->'b->'Monad'a) (a:'a) (bx:list<'b>) : 'Monad'a =
-        let rec loopM a = function
-            | x::xs -> (f a x) >>= fun fax -> loopM fax xs 
-            | [] -> result a
-        loopM a bx
-
-    let inline filterM (f: 'a -> 'Monad'Bool) (xs: list<'a>) : 'Monad'List'a =
-        let rec loopM = function
-            | []   -> result []
-            | h::t -> 
-                f h >>= (fun flg ->
-                    loopM t >>= (fun ys ->
-                        result (if flg then (h::ys) else ys)))
-        loopM xs
-   
-    let inline liftM  (f:'a->'b) (m1:'Monad'a) :'Monad'b = m1 >>= (result << f)
-    let inline liftM2 (f:'a1->'a2->'r) (m1:'Monad'a1) (m2:'Monad'a2) :'Monad'r = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
-    let inline ap (x:'Monad'a_'b) (y:'Monad'a): 'Monad'b = liftM2 id x y
-
-    let inline (>=>)  (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
-    let inline (<=<)  (g:'b->'Monad'c) (f:'a->'Monad'b) (x:'a) :'Monad'c = f x >>= g
-
-    let inline guard x: 'MonadPlus'unit = if x then result () else zero()
+    let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Zero.Invoke()
 
    
     // Arrows -----------------------------------------------------------------

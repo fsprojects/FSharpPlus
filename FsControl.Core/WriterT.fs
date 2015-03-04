@@ -2,7 +2,7 @@
 
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadOps
 
 type WriterT<'WMa> = WriterT of 'WMa
 
@@ -19,14 +19,7 @@ module WriterT =
         let applyWriter (a, w) (b, w') = (a b, Mappend.Invoke w w')
         WriterT (result applyWriter <*> f <*> x)
         
-    let inline bind f (WriterT m) = WriterT <| do'() {
-        let! (a, w ) = m
-        let! (b, w') = run (f a)
-        return (b, Mappend.Invoke w w')}
-
-    let inline internal execWriter   (WriterT m) = do'() {
-        let! (_, w) = m
-        return w}
+    let inline bind f (WriterT m) = WriterT (m >>= (fun (a, w) -> run (f a) >>= (fun (b, w') -> result (b, Mappend.Invoke w w'))))
 
 type WriterT<'WMa> with
 
@@ -39,16 +32,10 @@ type WriterT<'WMa> with
     static member inline Plus (  WriterT m, WriterT n, _:Plus) = WriterT (m <|> n)
 
     static member inline Tell   (_:WriterT<_> ) = fun w -> WriterT (result ((), w))
-    static member inline Listen (WriterT m, _:WriterT<_>) = WriterT <| do'() {
-        let! (a, w) = m
-        return ((a, w), w)}
-    static member inline Pass (WriterT m, _:WriterT<_>) = WriterT <| do'() {
-        let! ((a, f), w) = m
-        return (a, f w)}
+    static member inline Listen (WriterT m, _:WriterT<_>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w)))
+    static member inline Pass (WriterT m, _:WriterT<_>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))
 
-    static member inline Lift (_:WriterT<'wma>) : 'ma -> WriterT<'wma> = fun m -> WriterT <| do'() {
-        let! a = m
-        return (a, Mempty.Invoke())}
+    static member inline Lift (_:WriterT<'wma>) : 'ma -> WriterT<'wma> = fun m -> WriterT (m >>= (fun a -> result (a, Mempty.Invoke())))
     
     static member inline LiftAsync (_:WriterT<_> ) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
 
@@ -60,8 +47,7 @@ type WriterT<'WMa> with
         fun f -> WriterT (Cont.callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, Mempty.Invoke()))))
     
     static member inline Ask   (_:WriterT<Reader<'a,'a*'b>> ) = Lift.Invoke (Reader.ask()):WriterT<Reader<'a,'a*'b>>
-    static member        Local (WriterT m, _:WriterT<Reader<'a,'b>>) :('a->'t) -> WriterT<Reader<'a,'b>> = fun f -> 
-        WriterT (Reader.local f m)
+    static member        Local (WriterT m, _:WriterT<Reader<'a,'b>>) :('a->'t) -> WriterT<Reader<'a,'b>> = fun f -> WriterT (Reader.local f m)
 
     static member inline Get (_:WriterT<State<'a,'a*'b>>  ) :         WriterT<State<'a,'a*'b>>   = Lift.Invoke (State.get())
     static member inline Put (_:WriterT<State<'a,unit*'b>>) :'a    -> WriterT<State<'a,unit*'b>> = Lift.Invoke << State.put

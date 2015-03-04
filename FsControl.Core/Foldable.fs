@@ -193,7 +193,6 @@ type Exists() =
         let inline call (a:'a, b:'b, f) = call_3 (a, b, f)
         call (Exists.Instance,  source, predicate)        :bool
  
-open Monad
 
 [<Extension;Sealed>]
 type Find() =

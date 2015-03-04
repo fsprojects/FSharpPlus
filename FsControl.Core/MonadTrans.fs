@@ -3,7 +3,7 @@
 open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadOps
 
 type OptionT<'Ma> = OptionT of 'Ma
 
@@ -11,9 +11,7 @@ type OptionT<'Ma> = OptionT of 'Ma
 module OptionT =
     let run   (OptionT m) = m
     let inline map  f (OptionT m) =  OptionT <| Map.Invoke (Option.map f) m
-    let inline bind f (OptionT m) = (OptionT <| do'() {
-        let! maybe_value = m
-        return! match maybe_value with Some value -> run (f value) | _ -> result None}) :OptionT<'mb>
+    let inline bind f (OptionT m) = (OptionT <| (m  >>= (fun maybe_value -> match maybe_value with Some value -> run (f value) | _ -> result None))) :OptionT<'mb>
     let inline apply  (OptionT f) (OptionT x) = OptionT (Map.Invoke Option.apply f <*> x) :OptionT<'r>
 
 type OptionT<'Ma> with
@@ -23,9 +21,7 @@ type OptionT<'Ma> with
     static member inline Bind   (x :OptionT<'ma>, f: 'a -> OptionT<'mb>) = OptionT.bind f x :OptionT<'mb>
 
     static member inline Zero (_:OptionT<_>        , _:Zero) = OptionT <| result None
-    static member inline Plus (OptionT x, OptionT y, _:Plus) = OptionT <| do'() {
-            let! maybe_value = x
-            return! match maybe_value with Some value -> x | _ -> y}
+    static member inline Plus (OptionT x, OptionT y, _:Plus) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> x | _ -> y))
 
 
 type ListT<'Ma> = ListT of 'Ma
@@ -33,6 +29,13 @@ type ListT<'Ma> = ListT of 'Ma
 [<RequireQualifiedAccess>]
 module ListT =
     let run (ListT m) = m
+
+    let inline internal sequence ms =
+        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (result :list<'a> -> 'M) (x::xs)
+        List.foldBack k ms ((result :list<'a> -> 'M) [])
+    
+    let inline internal mapM f as' = sequence (List.map f as')
+
     let inline map  f (ListT m) =  ListT <| Map.Invoke (List.map f) m
     let inline bind f (ListT m) = (ListT (m >>= mapM (run << f) >>= ((List.concat:list<_>->_) >> result))) :ListT<'mb>
     let inline apply  (ListT f) (ListT x) = ListT (Map.Invoke List.apply f <*> x) :ListT<'r>
@@ -44,10 +47,7 @@ type ListT<'Ma> with
     static member inline Bind   (x:ListT<'ma>, f:'a -> ListT<'mb>) = ListT.bind f x :ListT<'mb>
 
     static member inline Zero (_:ListT<_>      , _:Zero) = ListT <| result []
-    static member inline Plus (ListT x, ListT y, _:Plus) = ListT <| do'() {
-        let! a = x
-        let! b = y
-        return (a @ b)}
+    static member inline Plus (ListT x, ListT y, _:Plus) = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))
 
 
 type SeqT<'Ma> = SeqT of 'Ma
@@ -55,8 +55,14 @@ type SeqT<'Ma> = SeqT of 'Ma
 [<RequireQualifiedAccess>]
 module SeqT =
     let run (SeqT m) = m
+
+    let inline internal sequence ms =
+        let k m m' = m >>= fun (x:'a) -> m' >>= fun (xs:seq<'a>) -> (result :seq<'a> -> 'M) (seq {yield x; yield! xs})
+        Seq.foldBack k ms ((result :seq<'a> -> 'M) Seq.empty)
+
+    let inline internal mapM f as' = sequence (Seq.map f as')
+
     let inline map f (SeqT m) = SeqT <| Map.Invoke (Seq.map f) m
-    let inline internal mapM f as' = as' |> Seq.toList |> List.map f |> sequence |> Map.Invoke List.toSeq
     let inline bind  (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= mapM (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> result)) :SeqT<'mb>
     let inline apply (SeqT f) (SeqT x) = SeqT (Map.Invoke Seq.apply f <*> x) :SeqT<'r>
 
@@ -67,11 +73,7 @@ type SeqT<'Ma> with
     static member inline Bind   (x:SeqT<'ma>, f: 'a -> SeqT<'mb>) = SeqT.bind f x :SeqT<'mb>
 
     static member inline Zero (_:Zero, _:SeqT<_>     ) = SeqT <| result Seq.empty
-    static member inline Plus (_:Plus, SeqT x, SeqT y) = SeqT <| do'() {
-        let! a = x
-        let! b = y
-        return (Seq.append a b)}
-
+    static member inline Plus (_:Plus, SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result (Seq.append a b))))
 
 
 namespace FsControl.Core.TypeMethods
@@ -80,16 +82,16 @@ open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 open FsControl.Core.Types
-open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadOps
 
 
 // MonadTrans
 
 type Lift() =
     static member val Instance = Lift()
-    static member inline Lift (_:OptionT<'m_a>) = OptionT << (liftM Some)          :'ma -> OptionT<'m_a>
-    static member inline Lift (_: ListT<'m_a> ) = ListT   << (liftM List.singleton):'ma ->  ListT<'m_a> 
-    static member inline Lift (_: SeqT<'m_a>  ) = SeqT    << (liftM Seq.singleton ):'ma ->  SeqT<'m_a> 
+    static member inline Lift (_:OptionT<'m_a>) = OptionT << (Map.FromMonad Some)          :'ma -> OptionT<'m_a>
+    static member inline Lift (_: ListT<'m_a> ) = ListT   << (Map.FromMonad List.singleton):'ma ->  ListT<'m_a> 
+    static member inline Lift (_: SeqT<'m_a>  ) = SeqT    << (Map.FromMonad Seq.singleton ):'ma ->  SeqT<'m_a> 
 
     static member inline Invoke (x:'ma) = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Lift: _ -> _) b)
@@ -237,7 +239,7 @@ type Listen() =
 
 type Pass() =
     static member val Instance = Pass()
-    static member inline Pass (m, _:OptionT<_> ) = OptionT (OptionT.run m >>= option (result None) (liftM Some << Writer.pass << result))
+    static member inline Pass (m, _:OptionT<_> ) = OptionT (OptionT.run m >>= option (result None) (Map.Invoke Some << Writer.pass << result))
     static member        Pass (m, _:Writer<_,_>) = Writer.pass m
 
     static member inline Invoke (m:'maww) :'ma =

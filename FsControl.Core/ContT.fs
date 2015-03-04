@@ -2,7 +2,7 @@
 
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
-open FsControl.Core.TypeMethods.Monad
+open FsControl.Core.TypeMethods.MonadOps
 
 type ContT<'Mr,'A> = ContT of  (('A -> 'Mr) -> 'Mr)    
 
@@ -28,9 +28,7 @@ type ContT<'Mr,'A> with
 
     static member Ask   (_:ContT<Reader<'a,'b>,'a>) = Lift.Invoke (Reader.ask())  :ContT<Reader<'a,'b>,'a>
     static member Local (ContT m, _:ContT<Reader<'a,'b>,'t>) : ('a -> 'b) -> ContT<Reader<'a,'b>,'t> =
-        fun f -> ContT <| fun c -> do'(){     
-            let! r = Reader.ask()
-            return! Reader.local f (m (Reader.local (const' r) << c))}
+        fun f -> ContT <| fun c -> (Reader.ask() >>= (fun r -> Reader.local f (m (Reader.local (const' r) << c))))
     
     static member Get (_:ContT<State<'s,'a>,'s>  ) = Lift.Invoke (State.get()):ContT<State<'s,'a>,'s>
     static member Put (_:ContT<State<'s,'a>,unit>) = Lift.Invoke << State.put :'s ->     ContT<State<'s,'a>,unit>

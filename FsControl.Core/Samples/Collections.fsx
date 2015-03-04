@@ -245,8 +245,8 @@ let getLine    = async { return System.Console.ReadLine() }
 let putStrLn x = async { printfn "%s" x}
 
 let inline sequence ms =
-    let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (result :seq<'a> -> 'M) (Seq.append (Seq.singleton x) xs)
-    List.foldBack k (Seq.toList ms) ((result :seq<'a> -> 'M) (Seq.empty))
+    let k m m' = m >>= fun (x:'a) -> m' >>= fun (xs:seq<'a>) -> (result :seq<'a> -> 'M) (seq {yield x; yield! xs})
+    Array.foldBack k (Seq.toArray ms) ((result :seq<'a> -> 'M) (Seq.empty))
 
 let inline mapM f as' = sequence (Seq.map f as')
 

@@ -287,36 +287,15 @@ type Plus with
     static member inline Plus (Kleisli f, Kleisli g, _:Plus) = Kleisli (fun x -> Plus.Invoke (f x) (g x))
 
 
-module Monad =
+module internal MonadOps =
 
     let inline (>>=) x f = Bind.Invoke x f
     let inline result  x = Return.Invoke x
     let inline (<*>) f x = Apply.Invoke f x
     let inline (<|>) x y = Plus.Invoke x y
+    let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
 
-    let inline internal sequence ms =
-        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (result :list<'a> -> 'M) (List.Cons(x,xs))
-        List.foldBack k ms ((result :list<'a> -> 'M) [])
-
-    let inline internal mapM f as' = sequence (List.map f as')
-
-    let inline internal liftM  f m1    = m1 >>= (result << f)
-    let inline internal liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
-    let inline internal ap     x y     = liftM2 id x y
-
-    let inline internal (>=>)  (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
-
-    // Do notation ------------------------------------------------------------
-
-    type DoNotationBuilder() =
-        member inline b.Return(x)    = result x
-        member inline b.Bind(p,rest) = p >>= rest
-        member        b.Let (p,rest) = rest p
-        member    b.ReturnFrom(expr) = expr
-    let inline  internal do'() = new DoNotationBuilder()
-
-
-open Monad
+open MonadOps
 
 [<Extension;Sealed>]
 type Extract() =
