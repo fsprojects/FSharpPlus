@@ -227,6 +227,42 @@ type TryFind() =
 
 
 [<Extension;Sealed>]
+type Head() =
+    inherit Default1()
+    static member val Instance = Head()
+    [<Extension>]static member inline Head (x              , [<Optional>]impl:Default1) = Seq.head (ToSeq.Invoke x) :'T      
+    [<Extension>]static member        Head (x:'t list      , [<Optional>]impl:Head    ) = List.head x
+    [<Extension>]static member        Head (x:'t []        , [<Optional>]impl:Head    ) = x.[0]
+    [<Extension>]static member        Head (x:Id<'T>       , [<Optional>]impl:Head ) = x.getValue
+    [<Extension>]static member        Head (x:string       , [<Optional>]impl:Head    ) = x.[0]
+    [<Extension>]static member        Head (x:StringBuilder, [<Optional>]impl:Head    ) = x.ToString().[0]
+    [<Extension>]static member        Head (x:'t seq       , [<Optional>]impl:Head    ) = Seq.head x
+
+    static member inline Invoke (source:'Foldable'T)        =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Head: _*_ -> _) b, a)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
+        call (Head.Instance,    source)  :'T
+
+
+[<Extension;Sealed>]
+type TryHead() =
+    inherit Default1()
+    static member val Instance = TryHead()
+    [<Extension>]static member inline TryHead (x              , [<Optional>]impl:Default1) = let x = ToSeq.Invoke x in if Seq.isEmpty x then None else Some (Seq.head x) :'T option  
+    [<Extension>]static member        TryHead (x:'t list      , [<Optional>]impl:TryHead ) = match x with [] -> None | _ -> Some (List.head x)
+    [<Extension>]static member        TryHead (x:'t []        , [<Optional>]impl:TryHead ) = if Array.length x = 0 then None else Some x.[0]
+    [<Extension>]static member        TryHead (x:Id<'T>       , [<Optional>]impl:TryHead ) = Some x.getValue
+    [<Extension>]static member        TryHead (x:string       , [<Optional>]impl:TryHead ) = if String.length x = 0 then None else Some x.[0]   
+    [<Extension>]static member        TryHead (x:StringBuilder, [<Optional>]impl:TryHead ) = if x.Length = 0 then None else Some (x.ToString().[0])
+    [<Extension>]static member        TryHead (x:'t seq       , [<Optional>]impl:TryHead ) = if Seq.isEmpty x then None else Some (Seq.head x)
+
+    static member inline Invoke (source:'Foldable'T)        =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryHead: _*_ -> _) b, a)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
+        call (TryHead.Instance,    source)  :'T option
+
+
+[<Extension;Sealed>]
 type Pick() =
     inherit Default1()
     static member val Instance = Pick()

@@ -81,9 +81,9 @@ let bigLst = [ 1..10000000 ]
 let bigArr = [|1..10000000|]
 let bigMut = ResizeArray(seq {1..10000000})
 
-let x = extract bigSeq
-let y = extract bigLst
-let z = extract bigArr
+let x = head bigSeq
+let y = head bigLst
+let z = head bigArr
 
 let a = skip 1000 bigSeq
 let b = skip 1000 bigLst
@@ -190,7 +190,7 @@ let stackGroup  = groupBy ((%)/> 2) stack
                         
 let rseq =
     monad {
-        let! x1 = seq [1;2]     // Cool, now it fails if this value is a list instead of a seq.
+        let! x1 = seq [1;2]
         let! x2 = seq [10;20]
         return ((+) x1 x2) }
 
@@ -198,22 +198,13 @@ let rseq =
 // Test Seq Comonad
 
 let lst   = seq [1;2;3;4;5]
-let elem1 = extract   lst
-let tails = duplicate lst
-let lst'  = extend extract lst
+let elem1 = head        lst
+let tails = duplicate   lst
+let lst'  = extend head lst
 
-
-// Some problems associated with this approach in a language with inheritance.
-
-// This should ideally not compile (but it does, because stack is also a seq)
-let elem3  = extract   stack
-(*
-let tails' = duplicate stack  // <- cool, now it fails
-*)
-
-// This should not compile
-(*
-let stk'  = extend extract stack
+(* Should fail
+let tails' = duplicate stack
+let stk'  = extend head stack
 *)
 
 // Test foldable
@@ -226,10 +217,7 @@ let r03  = filter ((=) 3) (seq [1;2;3])
 let r10' = foldBack (+) stack 0
 let r123 = toList stack
 
-// This should not compile
-(*
 let r03' = filter ((=) 3) stack
-*)
 
 // Test traversable
 

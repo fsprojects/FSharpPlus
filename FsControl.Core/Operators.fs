@@ -153,7 +153,8 @@ module Operators =
     let inline distinct                         (source:'Collection'T)        = Distinct.Invoke              source  :'Collection'T
     let inline distinctBy (projection:'T->'Key) (source:'Collection'T)        = DistinctBy.Invoke projection source  :'Collection'T
     
-    let inline head                             (source:'Collection'T)        = extract source
+    let inline head                             (source:'Collection'T)        = Head.Invoke source    :'T
+    let inline tryHead                          (source:'Collection'T)        = TryHead.Invoke source :'T option
 
     let inline intersperse      (sep:'T)        (source:'Collection'T)        = Intersperse.Invoke sep source        :'Collection'T
 

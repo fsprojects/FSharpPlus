@@ -310,13 +310,6 @@ type Extract() =
     [<Extension>]static member        Extract (f:'t Task  ) = f.Result
 #endif
 
-    // Restricted        
-    [<Extension>]static member        Extract (x:'t list      ) = List.head x
-    [<Extension>]static member        Extract (x:'t []        ) = x.[0]
-    [<Extension>]static member        Extract (x:string       ) = x.[0]
-    [<Extension>]static member        Extract (x:StringBuilder) = x.ToString().[0]
-    [<Extension>]static member        Extract (x:'t seq       ) = Seq.head x
-
     static member inline Invoke (x:'Comonad'T): 'T =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Extract: _ -> _) b)
         let inline call (a:'a, b:'b) = call_2 (a, b)
@@ -335,7 +328,7 @@ type Extend() =
     [<Extension>]static member        Extend ((g:'a Task), f:Task<'a>->'b) = g.ContinueWith(f)
 #endif
 
-    // Restricted
+    // Restricted Comonads
     [<Extension>]static member        Extend (s:list<'a>, g) = List.map g (List.tails s) :list<'b>
     [<Extension>]static member        Extend (s:'a [] , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray) :'b []
     [<Extension>]static member        Extend (s:'a seq, g) = Seq.map g (s |> Seq.toList |> List.tails |> List.toSeq |> Seq.map List.toSeq) :'b seq
@@ -355,7 +348,7 @@ type Duplicate() =
     [<Extension>]static member        Duplicate ((w:'w, a:'a), [<Optional>]impl:Duplicate) = (w, (w, a))
     [<Extension>]static member inline Duplicate ( f:'m -> 'a , [<Optional>]impl:Duplicate) = fun a b -> f (Mappend.Invoke a b)
 
-    // Restricted
+    // Restricted Comonads
     [<Extension>]static member        Duplicate (s: list<'a>, [<Optional>]impl:Duplicate) = List.tails s
     [<Extension>]static member        Duplicate (s:array<'a>, [<Optional>]impl:Duplicate) = s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray
     
