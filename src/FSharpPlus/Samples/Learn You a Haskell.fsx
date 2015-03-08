@@ -3,6 +3,7 @@
 
 open System
 open FSharpPlus
+open FSharpPlus.Extensions
 
 (* --------------------------------------------------
     Functors and applicative functors
@@ -28,7 +29,7 @@ let res15 = (+) <!> (ZipList <| seq { 1..3 } ) <*> (ZipList <| Seq.init 3 (fun _
 let res16 = (fun x -> [x]) <!> (Some 4)                               // Some [4]
 let res17 = liftA2 (fun x xs -> x::xs) (Some 3) (Some [4])            // [3; 4]
 
-let res18 = sequence [Some 3; Some 2; Some 1]                         // Some [3; 2; 1]
+let res18 = List.sequence [Some 3; Some 2; Some 1]                    // Some [3; 2; 1]
 
 
 (* --------------------------------------------------
@@ -60,7 +61,7 @@ let res28 = mappend (Some "some") None                                // Some "s
 
 let res29 = foldBack (*) [1;2;3] 1
 let res30 = fold     (+) 2 (Some 9)
-let res31 = foldBack (||) (Some true) false                              // true
+let res31 = foldBack (||) (Some true) false                           // true
 
 
 (* --------------------------------------------------
