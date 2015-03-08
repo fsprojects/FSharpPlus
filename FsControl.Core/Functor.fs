@@ -58,9 +58,6 @@ type Bind() =
                         | _       -> ()
                     d
 
-    //Restricted Monad
-    [<Extension>]static member Bind (x:Nullable<_> , f ) = if x.HasValue then f x.Value else Nullable() : Nullable<'b>
-
     static member inline Invoke x (f:_->'R) : 'R =
         let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member Bind: _*_ -> _) b, f)
         call_3 (Bind.Instance, x, Unchecked.defaultof<'R>, f) :'R
@@ -68,6 +65,7 @@ type Bind() =
     static member inline InvokeOnNonPrimitiveTypes x (f:_->'R) : 'R =
         let inline call_3 (b:^b,c:^c,f:^f) = ((^b or ^c) : (static member Bind: _*_ -> _) b, f)
         call_3 (x, Unchecked.defaultof<'R>, f) :'R
+
 
 [<Extension;Sealed>]
 type Join() =
@@ -117,7 +115,6 @@ type Return() =
     static member        Return (_:'a ResizeArray, _:Return) = fun x -> ResizeArray<'a>(Seq.singleton x)
 
     //Restricted
-    static member Return (_:'a Nullable  , _:Return) = fun (x:'a  ) -> Nullable x:'a Nullable
     static member Return (_:string       , _:Return) = fun (x:char) -> string x : string
     static member Return (_:StringBuilder, _:Return) = fun (x:char) -> new StringBuilder(string x):StringBuilder
     static member Return (_:'a Set       , _:Return) = fun (x:'a  ) -> Set.singleton x
@@ -201,7 +198,6 @@ type Map_() =
     [<Extension>]static member Map_ (x:_ ResizeArray  , f) = Seq.iter f x
 
     // Restricted
-    [<Extension>]static member Map_ (x:Nullable<_>    , f) = if x.HasValue then f x.Value else ()
     [<Extension>]static member Map_ (x:string         , f) = String.iter f x
     [<Extension>]static member Map_ (x:StringBuilder  , f) = String.iter f (x.ToString())
     [<Extension>]static member Map_ (x:Set<_>         , f) = Set.iter f x        
@@ -242,7 +238,6 @@ type Map() =
     [<Extension>]static member Map (x:_ IObservable  , f, [<Optional>]impl:Map) = Observable.map f x
 
     // Restricted
-    [<Extension>]static member Map (x:Nullable<_>    , f, [<Optional>]impl:Map) = if x.HasValue then Nullable(f x.Value) else Nullable()
     [<Extension>]static member Map (x:string         , f, [<Optional>]impl:Map) = String.map f x
     [<Extension>]static member Map (x:StringBuilder  , f, [<Optional>]impl:Map) = new StringBuilder(String.map f (x.ToString()))
     [<Extension>]static member Map (x:Set<_>         , f, [<Optional>]impl:Map) = Set.map f x
