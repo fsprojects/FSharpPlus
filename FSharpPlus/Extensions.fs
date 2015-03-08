@@ -14,7 +14,12 @@ module Extensions =
 
     [<AutoOpen>]
     module Seq =
-        
+        let inline internal sequence ms =
+            let k m m' = m >>= fun (x:'a) -> m' >>= fun (xs:seq<'a>) -> (result :seq<'a> -> 'M) (seq {yield x; yield! xs})
+            Seq.foldBack k ms ((result :seq<'a> -> 'M) Seq.empty)
+
+        let inline internal mapM f as' = sequence (Seq.map f as')
+              
         let groupAdjBy keyMapper (source:_ seq) = seq {
             use e = source.GetEnumerator()
             if (e.MoveNext()) then
@@ -54,6 +59,28 @@ module Extensions =
                 let f i = if i < 0 then l + i else i
                 let a = f a
                 this |> skip a |> take (f b - a + 1)
+
+    module List =
+        let inline sequence (ms:list<'Monad'a>) =
+            let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (x::xs)
+            List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
+
+        let inline mapM (f:'a->'Monad'b) (xs:list<'a>) :'Monad'List'b = sequence (List.map f xs)
+    
+        let inline foldM (f:'a->'b->'Monad'a) (a:'a) (bx:list<'b>) : 'Monad'a =
+            let rec loopM a = function
+                | x::xs -> (f a x) >>= fun fax -> loopM fax xs 
+                | [] -> result a
+            loopM a bx
+
+        let inline filterM (f: 'a -> 'Monad'Bool) (xs: list<'a>) : 'Monad'List'a =
+            let rec loopM = function
+                | []   -> result []
+                | h::t -> 
+                    f h >>= (fun flg ->
+                        loopM t >>= (fun ys ->
+                            result (if flg then (h::ys) else ys)))
+            loopM xs
 
 
     [<RequireQualifiedAccess>]

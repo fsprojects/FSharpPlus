@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FsControl.Core">
-      <HintPath>..\packages\FsControl.2.0.0-CI00001\lib\net40\FsControl.Core.dll</HintPath>
+      <HintPath>..\packages\FsControl.2.0.0-CI00005\lib\net40\FsControl.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
