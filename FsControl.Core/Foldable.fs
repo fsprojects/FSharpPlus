@@ -160,7 +160,8 @@ type Fold() =
 
     static member inline FromFoldMap f z t = appEndo (getDual (FoldMap.Invoke (Dual << Endo << flip f) t)) z
 
-    [<Extension>]static member inline Fold (x          , f, z, [<Optional>]impl:Default1) = Seq.fold f z (ToSeq.Invoke x)
+    [<Extension>]static member inline Fold (x          , f, z, [<Optional>]impl:Default2) = Seq.fold f z (ToSeq.Invoke x)
+    [<Extension>]static member inline Fold (x:'F       , f:'b->'a->'b, z:'b , [<Optional>]impl:Default1) = ((^F) : (static member Fold: ^F -> _ -> _-> ^b) x, f, z)
     [<Extension>]static member        Fold (x:option<_>, f, z, [<Optional>]impl:Fold    ) = match x with Some x -> f z x | _ -> z
     [<Extension>]static member        Fold (x:Id<_>    , f, z, [<Optional>]impl:Fold    ) = f z x.getValue
     [<Extension>]static member        Fold (x:seq<_>   , f, z, [<Optional>]impl:Fold    ) = Seq.fold               f z x

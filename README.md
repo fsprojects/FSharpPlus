@@ -110,4 +110,6 @@ Monoids:
 
 Foldables:
 
-    static member FoldBack (folder:'T->'State->'State, source:MyFoldable<'T>, state:'State) = {your FoldBack impl.} : 'State
+    static member FoldBack (source:MyFoldable<'T>, folder:'T->'State->'State, state:'State) = {your FoldBack impl.} : 'State
+	static member ToSeq (source:MyFoldable<'T>) = {your ToSeq impl.} : seq<'T>
+	static memner FromSeq (source: seq<'T>) = {your FromSeq impl.} : MyFoldable<'T>
