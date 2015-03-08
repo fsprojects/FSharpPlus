@@ -21,18 +21,8 @@ let noValue       = map minus3 None
 let lstTimes2     = map times2 [1;2;3;4]
 let fTimes2minus3 = map minus3 times2
 let res39         = fTimes2minus3 21
-let res3n4   = result ((+) 2) <*> [1;2]
+let res3n4        = result ((+) 2) <*> [1;2]
 
-
-// test lazy
-let v5: Lazy<_> = lazy (printfn "5 !!! "; 5)
-let fPlus10 x   = lazy (printfn "add 10 !!! ";x + 10)
-let v5plus10    = v5 >>= fPlus10
-let v15 = v5plus10.Force()
-
-let v4ll: Lazy<_> = lazy (printfn "outer !!! ";lazy (printfn "inner !!! "; 4))
-let v4l = join v4ll
-let v4  = v4l.Force()
 
 
 // test numbers
@@ -93,9 +83,7 @@ let writerTm = map ((+) 100) writerTx
 
 let stateTf = StateT (fun s -> [(+)10, s; (-) 10, s])
 let stateTx = StateT (fun s -> [4, s; 3, s])
-// Since the tupled Bind this one takes minutes to compile -> After prev commit, works fine again.
 let stateTr = StateT.run (stateTf <*> stateTx) "state"
-//
 let stateTm = StateT.run (map ((+) 100) stateTx) "state"
 
 let d = System.Collections.Generic.Dictionary()

@@ -13,6 +13,6 @@ open System.Reflection
 [<assembly: AssemblyCulture("")>]
 
 [<assembly: AssemblyVersion("2.0.0.0")>]
-[<assembly: AssemblyFileVersion("2.0.0.4")>]
-[<assembly: AssemblyInformationalVersion("2.0.0-CI00004")>]
+[<assembly: AssemblyFileVersion("2.0.0.5")>]
+[<assembly: AssemblyInformationalVersion("2.0.0-CI00005")>]
 do()

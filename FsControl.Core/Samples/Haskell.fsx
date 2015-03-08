@@ -794,14 +794,6 @@ let main = runStateT code [1..10] >>= fun _ -> return' ()
 let resLiftIOStateT = liftIO getLine : StateT<string,IO<_>>
 
 
-// Test N-layers Monad Transformer
-let res3Layers   = (lift << lift)         getLine : MaybeT<ReaderT<string,_>>
-let res3Layers'  = (lift << lift)         getLine : MaybeT<WriterT<IO<_ * string>>>
-let res3Layers'' = liftIO                 getLine : MaybeT<WriterT<IO<_ * string>>>
-let res4Layers   = (lift << lift << lift) getLine : ListT<MaybeT<WriterT<IO<_ * string>>>>
-let res4Layers'  = liftIO                 getLine : ListT<MaybeT<WriterT<IO<_ * string>>>>
-
-
 // MonadError
 let inline throwError x   = FsControl.Operators.throw x
 let inline catchError v h = FsControl.Operators.catch v h
@@ -850,5 +842,3 @@ let askPassword' = do' {
 
 let askPass' = runErrorT askPassword'
 //try -> runIO askPass'
-
-let resLiftIOErrorT = liftIO getLine : ErrorT<IO<Either<string,_>>>
