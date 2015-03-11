@@ -14,6 +14,22 @@ async {
 } |> Async.RunSynchronously
 
 
+let inline myQuery (x1: _ []) x2 = linq {
+    for e1 in x1 do
+    for e2 in x2 do
+    where   (parse e1 + e2 < 23)
+    groupBy (parse e1 + e2 %  2) into g
+    sortBy  (-(fst g))
+    select  (toString (fst g), snd g )}
+
+let (arr1, arr2) = [|"1";"2";"3"|], [|10;20;30;40|]
+
+let arr = myQuery arr1 arr2
+
+(*
+
+Without type annotations it can be defined as generic, but will take several minutes to compile.
+
 let inline myQuery x1 x2 = linq {
     for e1 in x1 do
     for e2 in x2 do
@@ -29,7 +45,7 @@ let (seq1, seq2) = seq ["1";"2";"3"], seq [10;20;30;40]
 let arr = myQuery arr1 arr2
 let lst = myQuery lst1 lst2
 let sq  = myQuery seq1 seq2
-
+*)
 
 let inline myQuery2 x = linq {
     for e in x do
