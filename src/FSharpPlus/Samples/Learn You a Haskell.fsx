@@ -4,6 +4,7 @@
 open System
 open FSharpPlus
 open FSharpPlus.Extensions
+open FSharpPlus.Operators
 
 (* --------------------------------------------------
     Functors and applicative functors
