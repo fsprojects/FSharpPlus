@@ -131,15 +131,15 @@ type ToString() =
     static member ToString (x:int           , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:int64         , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:float32       , _:ToString) = fun (k:CultureInfo) -> x.ToString k
-    static member ToString (x:string        , _:ToString) = fun (_:CultureInfo) -> if x = null then "null" else x
-    static member ToString (x:Uri           , _:ToString) = fun (_:CultureInfo) -> if x = null then "null" else x.ToString()
+    static member ToString (x:string        , _:ToString) = fun (_:CultureInfo) -> if isNull x then "null" else x
+    static member ToString (x:Uri           , _:ToString) = fun (_:CultureInfo) -> if isNull x then "null" else x.ToString()
     static member ToString (x:uint16        , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:uint32        , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:uint64        , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:decimal       , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:DateTime      , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:DateTimeOffset, _:ToString) = fun (k:CultureInfo) -> x.ToString k
-    static member ToString (x:StringBuilder , _:ToString) = fun (_:CultureInfo) -> if x = null then "null" else x.ToString()
+    static member ToString (x:StringBuilder , _:ToString) = fun (_:CultureInfo) -> if isNull x then "null" else x.ToString()
 
     static member inline Invoke (culture:CultureInfo) value : string =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToString: _*_ -> _) b, a)

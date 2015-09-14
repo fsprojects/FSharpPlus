@@ -7,6 +7,7 @@ module internal Prelude =
     let inline const' k _ = k
     let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
     let inline option n f = function None -> n | Some x -> f x
+    let inline isNull (value : 'T) =  match value with null -> true | _ -> false
 
 [<RequireQualifiedAccess>]
 module internal Option =
