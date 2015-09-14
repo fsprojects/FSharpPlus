@@ -196,6 +196,26 @@ type Exists() =
  
 
 [<Extension;Sealed>]
+type Forall() =
+    inherit Default1()
+    static member val Instance = Forall()
+    [<Extension>]static member inline Forall (x               , f, [<Optional>]impl:Default1) = Seq.forall    f (ToSeq.Invoke x) :bool
+    [<Extension>]static member        Forall (x:Id<'T>        , f, [<Optional>]impl:Forall  ) = f x.getValue :bool
+    [<Extension>]static member        Forall (x:seq<'a>       , f, [<Optional>]impl:Forall  ) = Seq.forall    f x
+    [<Extension>]static member        Forall (x:list<'a>      , f, [<Optional>]impl:Forall  ) = List.forall   f x
+    [<Extension>]static member        Forall (x:'a []         , f, [<Optional>]impl:Forall  ) = Array.forall  f x
+    [<Extension>]static member        Forall (x:Set<'a>       , f, [<Optional>]impl:Forall  ) = Set.forall    f x
+    [<Extension>]static member        Forall (x:string        , f, [<Optional>]impl:Forall  ) = String.forall f x
+    [<Extension>]static member        Forall (x:'a ResizeArray, f, [<Optional>]impl:Forall  ) = Seq.forall    f x
+    [<Extension>]static member        Forall (x:StringBuilder , f, [<Optional>]impl:Forall  ) = x.ToString() |> String.forall f
+
+    static member inline Invoke (predicate :'T->bool) (source:'Foldable'T)        =
+        let inline call_3 (a:^a, b:^b, f) = ((^a or ^b) : (static member Forall: _*_*_ -> _) b, f, a)
+        let inline call (a:'a, b:'b, f) = call_3 (a, b, f)
+        call (Forall.Instance,  source, predicate)        :bool
+
+
+[<Extension;Sealed>]
 type Find() =
     inherit Default1()
     static member val Instance = Find()

@@ -77,6 +77,7 @@ module Operators =
     let inline toList  value :'t list = ToList.Invoke  value
     let inline toArray value :'t []   = ToArray.Invoke value
     let inline exists     (predicate :'T->bool) (source:'Foldable'T)   = Exists.Invoke  predicate source  :bool
+    let inline forall     (predicate :'T->bool) (source:'Foldable'T)   = Forall.Invoke  predicate source  :bool
     let inline find       (predicate :'T->bool) (source:'Foldable'T)   = Find.Invoke    predicate source  :'T
     let inline tryFind    (predicate :'T->bool) (source:'Foldable'T)   = TryFind.Invoke predicate source  :'T option
     let inline pick     (chooser:'T->'U option) (source:'Foldable'T)   = Pick.Invoke    chooser   source  :'U
