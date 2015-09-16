@@ -91,6 +91,8 @@ let c = skip 1000 bigArr
 let d = skip 1000 bigMut
 let e = "hello world" |> skip 6 |> toList
 let h = fromList ['h';'e';'l';'l';'o';' '] + "world"
+let i = item 2 bigSeq
+let j = item 2 "hello"
 
 
 // Monoids

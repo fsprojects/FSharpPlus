@@ -139,6 +139,7 @@ module Operators =
 
     // Collection
 
+    let inline item (n:int) (source:'Collection'T) : 'T            = Item.Invoke n source
     let inline skip (n:int) (source:'Collection'T) : 'Collection'T = Skip.Invoke n source
     let inline take (n:int) (source:'Collection'T) : 'Collection'T = Take.Invoke n source
 

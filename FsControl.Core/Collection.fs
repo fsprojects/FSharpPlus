@@ -9,6 +9,23 @@ open System.Runtime.InteropServices
 
 
 [<Extension;Sealed>]
+type Item() =
+    inherit Default1()
+    static member val Instance = Item()
+    [<Extension>]static member inline Item (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head :'T
+    [<Extension>]static member        Item (x:string        , n, [<Optional>]impl:Item    ) = x.[n]
+    [<Extension>]static member        Item (x:StringBuilder , n, [<Optional>]impl:Item    ) = x.ToString().[n]
+    [<Extension>]static member        Item (x:'a []         , n, [<Optional>]impl:Item    ) = x.[n] : 'a
+    [<Extension>]static member        Item (x:'a ResizeArray, n, [<Optional>]impl:Item    ) = x.[n]
+    [<Extension>]static member        Item (x:list<'a>      , n, [<Optional>]impl:Item    ) = x.[n]
+    [<Extension>]static member        Item (x:'a Id         , n, [<Optional>]impl:Item    ) = x.getValue
+
+    static member inline Invoke (n:int) (source:'Collection'T)  :'T =
+        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)
+        let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
+        call (Item.Instance, source, n)
+
+[<Extension;Sealed>]
 type Skip() =
     inherit Default1()
     static member val Instance = Skip()
