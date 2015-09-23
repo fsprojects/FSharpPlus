@@ -182,6 +182,28 @@ module Operators =
 
 
 
+    // Tuple
+    
+    let inline item1 tuple = Item1.Invoke tuple
+    let inline item2 tuple = Item2.Invoke tuple
+    let inline item3 tuple = Item3.Invoke tuple
+    let inline item4 tuple = Item4.Invoke tuple
+    let inline item5 tuple = Item5.Invoke tuple
+    let inline item6 tuple = Item6.Invoke tuple
+    let inline item7 tuple = Item7.Invoke tuple
+    let inline item8 tuple = Item8.Invoke tuple
+
+    let inline mapItem1 mapping tuple = MapItem1.Invoke mapping tuple
+    let inline mapItem2 mapping tuple = MapItem2.Invoke mapping tuple
+    let inline mapItem3 mapping tuple = MapItem3.Invoke mapping tuple
+    let inline mapItem4 mapping tuple = MapItem4.Invoke mapping tuple
+    let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
+    let inline mapItem6 mapping tuple = MapItem6.Invoke mapping tuple
+    let inline mapItem7 mapping tuple = MapItem7.Invoke mapping tuple
+    let        mapItem8 mapping tuple = tuple.MapItem8(mapping)
+    
+    
+    
     // Converter
 
     let inline convert   (value:'T) :'U      = Convert.Invoke value
