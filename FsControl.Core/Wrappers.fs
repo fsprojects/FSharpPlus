@@ -20,3 +20,11 @@ type All = All of bool with
 type Any = Any of bool with
     static member Mempty  (_:Any, _:Mempty) = Any false
     static member Mappend (  Any x, Any y ) = Any (x || y)
+
+type Identity<'t> = Identity of 't
+module Identity = 
+    let run (Identity x) = x
+
+type Const<'t,'u> = Const of 't with static member Map (Const t, _) = Const t
+module Const =
+    let run (Const t) = t

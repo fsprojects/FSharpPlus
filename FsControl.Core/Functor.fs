@@ -230,6 +230,8 @@ type Map() =
     [<Extension>]static member Map (x:_ [,,,]        , f, [<Optional>]impl:Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
     [<Extension>]static member Map (x:Async<_>       , f, [<Optional>]impl:Map) = Map.FromMonad f x
     [<Extension>]static member Map (x:Choice<_,_>    , f, [<Optional>]impl:Map) = Error.map f x
+    [<Extension>]static member Map (Identity x       , f, [<Optional>]impl:Map) = Identity (f x)
+    [<Extension>]static member Map (Const x:Const<_,'u>, f:'u->'v, [<Optional>]impl:Map) = Const x : Const<'t,'v>
     [<Extension>]static member Map (KeyValue(k, x)   , (f:'b->'c), [<Optional>]impl:Map) = KeyValuePair(k, f x)
     [<Extension>]static member Map (x:Map<'a,'b>     , (f:'b->'c), [<Optional>]impl:Map) = Map.map (const' f) x : Map<'a,'c>
     [<Extension>]static member Map (x:Dictionary<_,_>, (f:'b->'c), [<Optional>]impl:Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d: Dictionary<'a,'c>
