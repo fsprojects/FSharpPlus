@@ -71,15 +71,26 @@ module Operators =
     let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Zero.Invoke()
 
    
+    // Contravariant/Bifunctor/Profunctor -------------------------------------
+
+    let inline contramap (f:'T->'U) (x:'Contravariant'U) :'Contravariant'T = Contramap.Invoke f x
+    let inline bimap f g x = Bimap.Invoke x f g
+    let inline first   f x = First.Invoke f x
+    let inline second  f x = Second.Invoke f x
+    let inline dimap f g x = Dimap.Invoke x f g
+    let inline lmap f x = Lmap.Invoke f x
+    let inline rmap f x = Rmap.Invoke f x
+
+
     // Arrows -----------------------------------------------------------------
 
     let inline catId()     = Id.Invoke()
     let inline (<<<<)  f g = Comp.Invoke f g
     let inline (>>>>)  g f = Comp.Invoke f g
     let inline arr     f   = Arr.Invoke f
-    let inline first   f   = First.Invoke f
-    let inline second  f   = Second.Invoke f
-    let inline ( ****) f g = first f >>>> second g
+    let inline arrFirst  f = ArrFirst.Invoke f
+    let inline arrSecond f = ArrSecond.Invoke f
+    let inline ( ****) f g = arrFirst f >>>> arrSecond g
     let inline (&&&&)  f g = arr (fun b -> (b,b)) >>>> f **** g
     let inline (||||)  f g = AcEither.Invoke f g
     let inline (++++)  f g = AcMerge.Invoke  f g
@@ -199,6 +210,28 @@ module Operators =
 
 
 
+    // Tuple
+    
+    let inline item1 tuple = Item1.Invoke tuple
+    let inline item2 tuple = Item2.Invoke tuple
+    let inline item3 tuple = Item3.Invoke tuple
+    let inline item4 tuple = Item4.Invoke tuple
+    let inline item5 tuple = Item5.Invoke tuple
+    let inline item6 tuple = Item6.Invoke tuple
+    let inline item7 tuple = Item7.Invoke tuple
+    let inline item8 tuple = Item8.Invoke tuple
+
+    let inline mapItem1 mapping tuple = MapItem1.Invoke mapping tuple
+    let inline mapItem2 mapping tuple = MapItem2.Invoke mapping tuple
+    let inline mapItem3 mapping tuple = MapItem3.Invoke mapping tuple
+    let inline mapItem4 mapping tuple = MapItem4.Invoke mapping tuple
+    let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
+    let inline mapItem6 mapping tuple = MapItem6.Invoke mapping tuple
+    let inline mapItem7 mapping tuple = MapItem7.Invoke mapping tuple
+    let        mapItem8 mapping tuple = tuple.MapItem8(mapping)
+    
+    
+    
     // Converter
 
     let inline convert   (value:'T) :'U      = Convert.Invoke value
