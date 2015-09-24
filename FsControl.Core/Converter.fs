@@ -81,6 +81,7 @@ type ToBytes() =
 
 
 open System.Globalization
+open FsControl.Core.Types
 
 type TryParse() =
     static member val Instance = TryParse()
