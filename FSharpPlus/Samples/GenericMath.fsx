@@ -1,4 +1,5 @@
-﻿#r @"..\..\build\FsControl.Core.dll"
+﻿#nowarn "3186"
+#r @"..\..\build\FsControl.Core.dll"
 #r @"..\..\build\FSharpPlus.dll"
 
 open FSharpPlus
