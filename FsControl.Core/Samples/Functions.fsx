@@ -1,4 +1,5 @@
-﻿#r @"..\bin\Release\FsControl.Core.dll"
+﻿#nowarn "3186"
+#r @"..\bin\Release\FsControl.Core.dll"
 
 // FsControl does not automatically export any function, just the 'Type Methods'.
 // However in the FsControl.Operators module there are some function and operator definitions.
