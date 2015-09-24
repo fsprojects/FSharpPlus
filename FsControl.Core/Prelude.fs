@@ -69,3 +69,7 @@ module Id =
     let run   (x:Id<_>) = x.getValue
     let map f (x:Id<_>) = Id (f x.getValue)
     let create x = Id (x)
+
+type Id0(v:string) =
+   let value = v
+   member this.getValue = value
