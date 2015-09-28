@@ -31,8 +31,7 @@ type Tree<'a> =
             | Empty        -> mempty()
             | Leaf n       -> f n
             | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f))
-        let appEndo (Endo f) = f
-        appEndo (_foldMap x (Endo << f )) z
+        Endo.run (_foldMap x (Endo << f )) z
 
     
 let tree = Node (Node (Leaf 1, 6, Leaf 3), 2 , Leaf 9)

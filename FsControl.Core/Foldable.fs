@@ -3,8 +3,6 @@
 open FsControl.Core
 open FsControl.Core.Prelude
 open FsControl.Core.Types
-open Dual
-open Endo
 open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
@@ -150,7 +148,7 @@ type FoldMap() =
 
 
 type FoldBack with
-    static member inline FromFoldMap f z x = appEndo (FoldMap.Invoke (Endo << f ) x) z
+    static member inline FromFoldMap f z x = Endo.run (FoldMap.Invoke (Endo << f ) x) z
 
 
 [<Extension;Sealed>]
@@ -158,7 +156,7 @@ type Fold() =
     inherit Default1()
     static member val Instance = Fold()
 
-    static member inline FromFoldMap f z t = appEndo (getDual (FoldMap.Invoke (Dual << Endo << flip f) t)) z
+    static member inline FromFoldMap f z t = Endo.run (Dual.run (FoldMap.Invoke (Dual << Endo << flip f) t)) z
 
     [<Extension>]static member inline Fold (x          , f, z, [<Optional>]impl:Default2) = Seq.fold f z (ToSeq.Invoke x)
     [<Extension>]static member inline Fold (x:'F       , f:'b->'a->'b, z:'b , [<Optional>]impl:Default1) = ((^F) : (static member Fold: ^F -> _ -> _-> ^b) x, f, z)

@@ -5,12 +5,12 @@ open FsControl.Core.TypeMethods
 type Dual<'T> = Dual of 'T with
     static member inline Mempty  (_:Dual<'m>, _:Mempty) = Dual (Mempty.Invoke()) :Dual<'m>
     static member inline Mappend (  Dual x  ,   Dual y) = Dual (Mappend.Invoke y x)
-module Dual = let inline  internal getDual (Dual x) = x
+[<RequireQualifiedAccess>]module Dual = let run (Dual x) = x
 
 type Endo<'T> = Endo of ('T -> 'T) with
     static member        Mempty  (_:Endo<'m>, _:Mempty) = Endo id  :Endo<'m>
     static member        Mappend (  Endo f  ,   Endo g) = Endo (f << g)
-module Endo = let inline  internal appEndo (Endo f) = f
+[<RequireQualifiedAccess>]module Endo = let run (Endo f) = f
 
 
 type All = All of bool with
@@ -23,21 +23,21 @@ type Any = Any of bool with
 
 
 type Identity<'T> = Identity of 'T
-module Identity = let run (Identity x) = x
+[<RequireQualifiedAccess>]module Identity = let run (Identity x) = x
 
 type Const<'T,'U> = Const of 'T with
     static member inline Mempty  (_: Const<'t,'u>      , _:Mempty             ) = Const (Mempty.Invoke())    : Const<'t,'u>
     static member inline Mappend (Const x: Const<'t,'u>, Const y: Const<'t,'u>) = Const (Mappend.Invoke x y) : Const<'t,'u>
     static member inline Return  (_:'u) = Const (Mempty.Invoke()) : Const<'t,'u>
-module Const = let run (Const t) = t
+[<RequireQualifiedAccess>]module Const = let run (Const t) = t
 
 
 type First<'T> = First of Option<'T> with
     static member Mempty  (_:First<'t>, _:Mempty   ) = First None :First<'t>
     static member Mappend (x:First<'t>, y:First<'t>) = match x, y with First None, r -> r | l, _ -> l
-module First = let run (First a) = a
+[<RequireQualifiedAccess>]module First = let run (First a) = a
 
 type Last<'T> = Last of Option<'T> with
     static member Mempty  (_:Last<'t>, _:Mempty   ) = Last None :Last<'t>
     static member Mappend (x:Last<'t>, y:Last<'t>) = match x, y with l, Last None -> l | _, r -> r
-module Last = let run (Last a) = a
+[<RequireQualifiedAccess>]module Last = let run (Last a) = a
