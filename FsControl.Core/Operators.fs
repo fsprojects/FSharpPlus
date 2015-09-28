@@ -52,15 +52,26 @@ module Operators =
     let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Zero.Invoke()
 
    
+    // Contravariant/Bifunctor/Profunctor -------------------------------------
+
+    let inline contramap (f:'T->'U) (x:'Contravariant'U) :'Contravariant'T = Contramap.Invoke f x
+    let inline bimap f g x = Bimap.Invoke x f g
+    let inline first   f x = First.Invoke f x
+    let inline second  f x = Second.Invoke f x
+    let inline dimap f g x = Dimap.Invoke x f g
+    let inline lmap f x = Lmap.Invoke f x
+    let inline rmap f x = Rmap.Invoke f x
+
+
     // Arrows -----------------------------------------------------------------
 
     let inline catId()     = Id.Invoke()
     let inline (<<<<)  f g = Comp.Invoke f g
     let inline (>>>>)  g f = Comp.Invoke f g
     let inline arr     f   = Arr.Invoke f
-    let inline first   f   = First.Invoke f
-    let inline second  f   = Second.Invoke f
-    let inline ( ****) f g = first f >>>> second g
+    let inline arrFirst  f = ArrFirst.Invoke f
+    let inline arrSecond f = ArrSecond.Invoke f
+    let inline ( ****) f g = arrFirst f >>>> arrSecond g
     let inline (&&&&)  f g = arr (fun b -> (b,b)) >>>> f **** g
     let inline (||||)  f g = AcEither.Invoke f g
     let inline (++++)  f g = AcMerge.Invoke  f g

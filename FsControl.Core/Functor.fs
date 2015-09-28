@@ -356,6 +356,94 @@ type Duplicate() =
         call (Duplicate.Instance, x)
 
 
+[<Extension;Sealed>]
+type Contramap() =
+    static member val Instance = Contramap()
+    [<Extension>]static member Contramap (g:_->_           , f) = (<<) g f
+    [<Extension>]static member Contramap (p:Predicate<_>   , f) = Predicate(fun x -> p.Invoke(f x))
+
+    static member inline Invoke (f:_->_) x = 
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Contramap: _*_ -> _) b, f)
+        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
+        call (Contramap.Instance, x, f)
+
+
+[<Extension;Sealed>]
+type Bimap() =
+    static member val Instance = Bimap()
+    [<Extension>]static member Bimap ((x, y)              ) = fun f g          -> (f x, g y)
+    [<Extension>]static member Bimap (x:Choice<_,_>       ) = fun f g          -> choice (Choice2Of2 << f) (Choice1Of2 << g) x
+    [<Extension>]static member Bimap (Const x:Const<'t,'u>) = fun f (_:'v->'w) -> Const (f x): Const<'v,'w>
+    [<Extension>]static member Bimap (KeyValue(k, x)      ) = fun f g          -> KeyValuePair(f k, g x)
+    
+    static member inline Invoke x =
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Bimap: _ -> _) b)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Bimap.Instance, x)
+
+type First() =
+    inherit Default1()
+    static member val Instance = First()
+    static member inline       First (x                   , f       , [<Optional>]impl:Default1) = Bimap.Invoke x f id
+    [<Extension>]static member First ((x, y)              , f       , [<Optional>]impl:First   ) = (f x, y)
+    [<Extension>]static member First (x:Choice<_,_>       , f       , [<Optional>]impl:First   ) = choice (Choice2Of2 << f) Choice1Of2 x
+    [<Extension>]static member First (Const x:Const<'t,'u>, f       , [<Optional>]impl:First   ) = Const (f x): Const<'v,'u>
+    [<Extension>]static member First (KeyValue(k, x)      , f:'b->'c, [<Optional>]impl:First   ) = KeyValuePair(f k, x)
+    
+    static member inline Invoke f x =
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member First: _*_*_ -> _) b, f, a)
+        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
+        call (First.Instance, x, f)
+
+type Second() =
+    inherit Default1()
+    static member val Instance = Second()
+    static member inline       Second (x                   , f       , [<Optional>]impl:Default1) = Bimap.Invoke x id f
+    [<Extension>]static member Second ((x, y)              , f       , [<Optional>]impl:Second  ) = (x, f y)
+    [<Extension>]static member Second (x:Choice<_,_>       , f       , [<Optional>]impl:Second  ) = choice Choice2Of2 (Choice1Of2 << f) x
+    [<Extension>]static member Second (Const x:Const<'t,'u>, _:'u->'v, [<Optional>]impl:Second  ) = Const x: Const<'t,'v>
+    [<Extension>]static member Second (KeyValue(k, x)      , f:'b->'c, [<Optional>]impl:Second  ) = KeyValuePair(k, f x)
+    
+    static member inline Invoke f x =
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Second: _*_*_ -> _) b, f, a)
+        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
+        call (Second.Instance, x, f)
+
+
+[<Extension;Sealed>]
+type Dimap() =
+    static member val Instance = Dimap()
+    [<Extension>]static member inline Dimap (Kleisli bmc) = fun ab cd -> let cmd = Map.Invoke cd in Kleisli (cmd << bmc << ab)
+    [<Extension>]static member        Dimap (f          ) = fun g h -> g >> f >> h
+    
+    static member inline Invoke x =
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Dimap: _ -> _) b)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Dimap.Instance, x)
+
+type Lmap() =
+    inherit Default1()
+    static member val Instance = Lmap()
+    static member inline       Lmap (x             , f       , [<Optional>]impl:Default1) = Dimap.Invoke x f id
+    [<Extension>]static member Lmap (f             , k       , [<Optional>]impl:Lmap    ) = k >> f
+    [<Extension>]static member Lmap (Kleisli f     , k       , [<Optional>]impl:Lmap    ) = Kleisli (k >> f)
+    
+    static member inline Invoke f x =
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Lmap: _*_*_ -> _) b, f, a)
+        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
+        call (Lmap.Instance, x, f)
+
+type Rmap() =
+    inherit Default1()
+    static member val Instance = Rmap()
+    static member inline       Rmap (x             , f       , [<Optional>]impl:Default1) = Dimap.Invoke x id f
+    [<Extension>]static member Rmap (f             , k       , [<Optional>]impl:Rmap    ) = f >> k
+    [<Extension>]static member Rmap (Kleisli f     , k       , [<Optional>]impl:Rmap    ) = Kleisli (f >> k)
+    
+    static member inline Invoke f x =
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Rmap: _*_*_ -> _) b, f, a)
+        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
+        call (Rmap.Instance, x, f)
 
 
 type Id() =
@@ -391,28 +479,28 @@ type Arr() =
         call Arr.Instance f
 
 
-type First() =
-    static member val Instance = First()
-    static member        First (f        , _: 'a -> 'b   , _:First) = fun (x,y) -> (f x, y)
-    static member inline First (Kleisli f, _:Kleisli<_,_>, _:First) = Kleisli (fun (b,d) -> f b >>= fun c -> result (c,d))
+type ArrFirst() =
+    static member val Instance = ArrFirst()
+    static member        ArrFirst (f        , _: 'a -> 'b   , _:ArrFirst) = fun (x,y) -> (f x, y)
+    static member inline ArrFirst (Kleisli f, _:Kleisli<_,_>, _:ArrFirst) = Kleisli (fun (b,d) -> f b >>= fun c -> result (c,d))
 
     static member inline Invoke f =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member First: _*_*_ -> _) b, c, a)
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ArrFirst: _*_*_ -> _) b, c, a)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (First.Instance, f)
+        call (ArrFirst.Instance, f)
 
 
-type Second() =
+type ArrSecond() =
     inherit Default1()
-    static member val Instance = Second()
-    static member inline Second (f      , _               , _:Default1) = let aswap = Arr.Invoke (fun (x,y) -> (y,x)) in Comp.Invoke aswap (Comp.Invoke (First.Invoke f) aswap)
-    static member        Second (f        , _: 'a -> 'b   , _:Second  ) = fun (x,y) -> (x, f y)
-    static member inline Second (Kleisli f, _:Kleisli<_,_>, _:Second  ) = Kleisli (fun (d,b) -> f b >>= fun c -> result (d,c))
+    static member val Instance = ArrSecond()
+    static member inline ArrSecond (f      , _               , _:Default1) = let aswap = Arr.Invoke (fun (x,y) -> (y,x)) in Comp.Invoke aswap (Comp.Invoke (ArrFirst.Invoke f) aswap)
+    static member        ArrSecond (f        , _: 'a -> 'b   , _:ArrSecond  ) = fun (x,y) -> (x, f y)
+    static member inline ArrSecond (Kleisli f, _:Kleisli<_,_>, _:ArrSecond  ) = Kleisli (fun (d,b) -> f b >>= fun c -> result (d,c))
 
     static member inline Invoke  f   =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Second: _*_*_ -> _) b, c, a)
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ArrSecond: _*_*_ -> _) b, c, a)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Second.Instance, f)
+        call (ArrSecond.Instance, f)
 
 type AcEither() =
     static member val Instance = AcEither()

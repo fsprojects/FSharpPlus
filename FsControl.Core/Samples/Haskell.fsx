@@ -364,15 +364,49 @@ let pythags' = doPlus{
 let allCombinations = sequence [!"abc"; !"12"]
 
 
+
+// Contravariants
+
+module Predicate = let run (p:System.Predicate<_>) x = p.Invoke(x)
+
+let inline contramap (f:'T->'U) (x:'Contravariant'U) :'Contravariant'T = Contramap.Invoke f x
+
+let intToString (x:int) = string x
+let resStr54 = contramap (fun (x:float) -> int x) intToString <| 54.
+let isEven      = System.Predicate(fun x -> x </mod'/> 2 = 0)
+let fstIsEven   = contramap List.head isEven
+let resBoolTrue = Predicate.run fstIsEven [0..10]
+
+
+// BiFunctors
+
+let runKleisli (Kleisli f) = f
+let inline bimap f g x = Bimap.Invoke x f g
+let inline first   f x = First.Invoke f x
+let inline second  f x = Second.Invoke f x
+
+let rInt10Str10 = bimap  int string (10.0, 10)
+let resR11      = bimap  string ((+) 1) (Right 10)
+let rStrTrue    = first  string (true, 10)
+let rStr10      = second string (true, 10)
+
+// Profunctors
+
+let inline dimap f g x = Dimap.Invoke x f g
+let inline lmap f x = Lmap.Invoke f x
+let inline rmap f x = Rmap.Invoke f x
+
+let resStrFalse     = dimap int string (Predicate.run isEven) 99.0
+
 // Arrows
 
 let inline id'() = FsControl.Operators.catId ()
 let inline (<<<) f g = FsControl.Operators.(<<<<) f g
 let inline (>>>) f g = FsControl.Operators.(>>>>) f g
 let inline arr   f = FsControl.Operators.arr    f
-let inline first  f = FsControl.Operators.first f
-let inline second f = FsControl.Operators.second f
-let inline ( *** ) f g = first f >>> second g
+let inline arrFirst  f = FsControl.Operators.arrFirst f
+let inline arrSecond f = FsControl.Operators.arrSecond f
+let inline ( *** ) f g = arrFirst f >>> arrSecond g
 let inline ( &&& ) f g = arr (fun b -> (b, b)) >>> f *** g
 let inline (|||) f g = FsControl.Operators.(||||) f g
 let inline (+++) f g = FsControl.Operators.(++++) f g
@@ -381,14 +415,13 @@ let inline right f = FsControl.Operators.right f
 let inline app() = FsControl.Operators.arrApply ()
 let inline zeroArrow() = FsControl.Operators.zero ()
 let inline (<+>)   f g = FsControl.Operators.(<|>) f g
-let runKleisli (Kleisli f) = f
 
 // Test Arrows
 let r5:List<_>  = (runKleisli (id'())) 5
 let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
 let r8n16n24n10n20n30 = runKleisli k  <| 5
-let r20n5n30n5   = runKleisli (first  <| Kleisli (fun y -> [y * 2; y * 3])) (10,5) 
-let r10n10n10n15 = runKleisli (second <| Kleisli (fun y -> [y * 2; y * 3])) (10,5)
+let r20n5n30n5   = runKleisli (arrFirst  <| Kleisli (fun y -> [y * 2; y * 3])) (10,5) 
+let r10n10n10n15 = runKleisli (arrSecond <| Kleisli (fun y -> [y * 2; y * 3])) (10,5)
 
 let res3n6n9 = (arr (fun y -> [y; y * 2 ; y * 3])) 3
 let resSome2n4n6:option<_> = runKleisli (arr (fun y -> [y; y * 2 ; y * 3])) 2
