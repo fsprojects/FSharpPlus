@@ -21,10 +21,23 @@ type Any = Any of bool with
     static member Mempty  (_:Any, _:Mempty) = Any false
     static member Mappend (  Any x, Any y ) = Any (x || y)
 
-type Identity<'t> = Identity of 't
-module Identity = 
-    let run (Identity x) = x
+type Identity<'T> = Identity of 'T
+module Identity = let run (Identity x) = x
 
-type Const<'t,'u> = Const of 't with static member Map (Const t, _) = Const t
-module Const =
-    let run (Const t) = t
+type Const<'T,'U> = Const of 'T with
+    static member inline Mempty  (_: Const<'t,'u>      , _:Mempty             ) = Const (Mempty.Invoke())    : Const<'t,'u>
+    static member inline Mappend (Const x: Const<'t,'u>, Const y: Const<'t,'u>) = Const (Mappend.Invoke x y) : Const<'t,'u>
+
+    static member inline Return (_:'u) = Const (Mempty.Invoke()) : Const<'t,'u>
+    //static member inline (<*>) (Const f:Const<'a,'t->'u>, Const x:Const<'a,'t>) = Const (Mappend.Invoke f x) : Const<'a,'u>
+module Const = let run (Const t) = t
+
+type First<'T> = First of Option<'T> with
+    static member Mempty  (_:First<'t>, _:Mempty   ) = First None :First<'t>
+    static member Mappend (x:First<'t>, y:First<'t>) = match x, y with First None, r -> r | l, _ -> l
+module First = let run (First a) = a
+
+type Last<'T> = Last of Option<'T> with
+    static member Mempty  (_:Last<'t>, _:Mempty   ) = Last None :Last<'t>
+    static member Mappend (x:Last<'t>, y:Last<'t>) = match x, y with l, Last None -> l | _, r -> r
+module Last = let run (Last a) = a

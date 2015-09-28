@@ -97,18 +97,19 @@ type Return() =
     static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
     static member        Return (_:seq<'a> , _:Return) = fun x -> Seq.singleton x :seq<'a>
     static member        Return (_:Id<'a>  , _:Return) = fun x -> Id x :Id<'a>
-
 #if NOTNET35        
     static member        Return (_:'a Task, _:Return) = fun x -> 
         let s = TaskCompletionSource()
         s.SetResult x
         s.Task
 #endif        
+    static member        Return (_:Identity<'t>  , _:Return) = fun x -> Identity x :Identity<'t>
     static member        Return (_:option<'a>    , _:Return) = fun x -> Some x      :option<'a>
     static member        Return (_:list<'a>      , _:Return) = fun x -> [ x ]       :list<'a>
     static member        Return (_:'a []         , _:Return) = fun x -> [|x|]       :'a []
     static member        Return (_:'r -> 'a      , _:Return) = const':'a  -> 'r -> _
     static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (Mempty.Invoke(), x)
+    //static member inline Return (_:'u            , _:Return) = fun _ -> Const (Mempty.Invoke()) : Const<'t,'u>
     static member        Return (_:'a Async      , _:Return) = fun (x:'a) -> async.Return x
     static member        Return (_:Choice<'a,'e> , _:Return) = fun x -> Choice1Of2 x :Choice<'a,'e>
     static member        Return (_:Expr<'a>      , _:Return) = fun x -> Expr.Cast<'a>(Expr.Value(x))
@@ -143,7 +144,6 @@ type Apply() =
     [<Extension>]static member        Apply (f:Async<_>    , x:Async<'a>    , [<Optional>]output:Async<'b>    , [<Optional>]impl:Apply) = Apply.FromMonad f x :Async<'b>
     [<Extension>]static member        Apply (f:option<_>   , x:option<'a>   , [<Optional>]output:option<'b>   , [<Optional>]impl:Apply) = Option.apply f x
     [<Extension>]static member        Apply (f:Choice<_,'e>, x:Choice<'a,'e>, [<Optional>]output:Choice<'b,'e>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'b,'e>
-
     [<Extension>]static member        Apply (KeyValue(k:'k,f)  , KeyValue(k:'k,x:'a), [<Optional>]output:KeyValuePair<'k,'b>, [<Optional>]impl:Apply) :KeyValuePair<'k,'b> = KeyValuePair(k, f x)
 
     [<Extension>]static member        Apply (f:Map<'k,_>       , x:Map<'k,'a>       , [<Optional>]output:Map<'k,'b>, [<Optional>]impl:Apply) :Map<'k,'b>          = Map (seq {
@@ -159,6 +159,8 @@ type Apply() =
                         | true, vx -> d.Add(k, vf vx)
                         | _        -> ()
                     d
+    [<Extension>]static member        Apply (Identity (f:'t->'u)     , Identity (x: 't)     , [<Optional>]output:Identity<'u> , [<Optional>]impl:Apply) = Identity (f x)      : Identity<'u>
+    [<Extension>]static member inline Apply (Const f:Const<'a,'t->'u>, Const x: Const<'a,'t>, [<Optional>]output:Const<'a,'u> , [<Optional>]impl:Apply) = Const (Mappend.Invoke f x) : Const<'a,'u>
 
     [<Extension>]static member        Apply (f:Expr<'a->'b>, x:Expr<'a>, [<Optional>]output:Expr<'b>, [<Optional>]impl:Apply) = Expr.Cast<'b>(Expr.Application(f,x))
 
