@@ -2,12 +2,12 @@
 open FsControl.Core.Prelude
 open FsControl.Core.TypeMethods
 
-type Dual<'a> = Dual of 'a with
+type Dual<'T> = Dual of 'T with
     static member inline Mempty  (_:Dual<'m>, _:Mempty) = Dual (Mempty.Invoke()) :Dual<'m>
     static member inline Mappend (  Dual x  ,   Dual y) = Dual (Mappend.Invoke y x)
 module Dual = let inline  internal getDual (Dual x) = x
 
-type Endo<'a> = Endo of ('a -> 'a) with
+type Endo<'T> = Endo of ('T -> 'T) with
     static member        Mempty  (_:Endo<'m>, _:Mempty) = Endo id  :Endo<'m>
     static member        Mappend (  Endo f  ,   Endo g) = Endo (f << g)
 module Endo = let inline  internal appEndo (Endo f) = f
@@ -21,16 +21,16 @@ type Any = Any of bool with
     static member Mempty  (_:Any, _:Mempty) = Any false
     static member Mappend (  Any x, Any y ) = Any (x || y)
 
+
 type Identity<'T> = Identity of 'T
 module Identity = let run (Identity x) = x
 
 type Const<'T,'U> = Const of 'T with
     static member inline Mempty  (_: Const<'t,'u>      , _:Mempty             ) = Const (Mempty.Invoke())    : Const<'t,'u>
     static member inline Mappend (Const x: Const<'t,'u>, Const y: Const<'t,'u>) = Const (Mappend.Invoke x y) : Const<'t,'u>
-
-    static member inline Return (_:'u) = Const (Mempty.Invoke()) : Const<'t,'u>
-    //static member inline (<*>) (Const f:Const<'a,'t->'u>, Const x:Const<'a,'t>) = Const (Mappend.Invoke f x) : Const<'a,'u>
+    static member inline Return  (_:'u) = Const (Mempty.Invoke()) : Const<'t,'u>
 module Const = let run (Const t) = t
+
 
 type First<'T> = First of Option<'T> with
     static member Mempty  (_:First<'t>, _:Mempty   ) = First None :First<'t>

@@ -109,7 +109,6 @@ type Return() =
     static member        Return (_:'a []         , _:Return) = fun x -> [|x|]       :'a []
     static member        Return (_:'r -> 'a      , _:Return) = const':'a  -> 'r -> _
     static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (Mempty.Invoke(), x)
-    //static member inline Return (_:'u            , _:Return) = fun _ -> Const (Mempty.Invoke()) : Const<'t,'u>
     static member        Return (_:'a Async      , _:Return) = fun (x:'a) -> async.Return x
     static member        Return (_:Choice<'a,'e> , _:Return) = fun x -> Choice1Of2 x :Choice<'a,'e>
     static member        Return (_:Expr<'a>      , _:Return) = fun x -> Expr.Cast<'a>(Expr.Value(x))
