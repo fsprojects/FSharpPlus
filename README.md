@@ -3,7 +3,7 @@ FsControl
 
 This is basically an overload library.
 
-The goal is to create overloads of standard F# types, organized into 'Type-Methods' to be used from other projects/libraries.
+The goal is to create overloads of standard F# types, organized into types with a single method (Type-Method) to be used from other projects/libraries.
 
 It's also possible to create libraries like [FSharpPlus](https://github.com/gmpl/FSharpPlus) that define their own custom types and add overloads for those types, making them instances of the Type-Methods defined in FsControl.
 
@@ -95,7 +95,7 @@ An easy way to make classes in your project callable from FsControl without refe
  Applicatives:
  
      static member Return (x:'T) = {your Return impl.} : MyApplicative<'T>
-     static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'U>) = {your Apply impl.} : MyApplicative<'U>
+     static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'T>) = {your Apply impl.} : MyApplicative<'U>
      
  Monads:
  
@@ -106,10 +106,35 @@ Monoids:
 
 	static member Mempty() = {your Mempty impl.} : MyMonoid
 	static member Mappend (x:MyMonoid, y:MyMonoid) = {your Mappend impl.} : MyMonoid
-	static member Mconcat (x:list<MyMonoid>) = {your Mconcat impl.} : MyMonoid // optional: can be automatically derived from Mappend
+	static member Mconcat (x:list<MyMonoid>) = {your Mconcat impl.} : MyMonoid // optional: it can be automatically derived from Mappend
 
 Foldables:
 
     static member FoldBack (source:MyFoldable<'T>, folder:'T->'State->'State, state:'State) = {your FoldBack impl.} : 'State
 	static member ToSeq (source:MyFoldable<'T>) = {your ToSeq impl.} : seq<'T>
-	static memner FromSeq (source: seq<'T>) = {your FromSeq impl.} : MyFoldable<'T>
+	static member FromSeq (source: seq<'T>) = {your FromSeq impl.} : MyFoldable<'T>
+	
+	
+FAQ
+---
+
+Q: Is there a performance penalty in using this library?
+
+A: Normally not, because all these constraints are resolved at compile time and code is inlined so on the contrary there might be eventually some speed up at run-time. On the other hand, the more overloads the more pressure on the compiler, this project will take several minutes to compile but this doesn't mean that by linking the FsControl dll to an application the compile time of the application will slow down. It will slow down depending on how much generic code (inlined) uses.
+
+Q: What about the generic abstractions? Do they mean that by having a generic solution the code will be less efficient?
+
+A: In many cases yes, but in FsControl the most generic code is in 'default methods' and normally the overloads define specialized methods which are optimized for specific instances.
+
+Q: Where can I find more information about the abstractions provided?
+
+A: There are many posts on Haskell everywhere, of those some are very formal and other are more intuitive. Apart from that in the last years there were some F# intuitive explanations in different blogs about the same abstractions implemented in F# in a non-generic way.
+
+Q: Is this a Haskell emulator?
+
+A: No, there some abstractions specifics to F#, however is true that this library (as many others F# libs) is heavily inspired mainly in concepts coming from Haskell but as F# is another language with another type system, strict evaluation and some different conventions there are many differences in names, types and implementations. Also there are some specific F# abstractions. Anyway by knowing those differences you may be able to translate Haskell code to F#. There is a sample file which mimics basic haskell functions and types.
+
+Q: How can I contribute to this library?
+
+A: You can review the code, find better implementations of specific instances, add missing instances for primitive types, add/propose new type-methods, add sample files an so on. Finding issues, making suggestions, giving feedback, discussion in general is also welcome.
+
