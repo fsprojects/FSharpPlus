@@ -45,6 +45,7 @@ type Skip() =
 
 [<Extension;Sealed>]
 type Take() =
+    inherit Default1()
     static member val Instance = Take()
     [<Extension>]static member inline Take (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.take n |> FromSeq.Invoke :'Foldable'T
     [<Extension>]static member        Take (x:string        , n, [<Optional>]impl:Take    ) = x.[..n-1]
