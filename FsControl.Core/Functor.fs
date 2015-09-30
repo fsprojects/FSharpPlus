@@ -359,8 +359,9 @@ type Duplicate() =
 [<Extension;Sealed>]
 type Contramap() =
     static member val Instance = Contramap()
-    [<Extension>]static member Contramap (g:_->_           , f) = (<<) g f
-    [<Extension>]static member Contramap (p:Predicate<_>   , f) = Predicate(fun x -> p.Invoke(f x))
+    [<Extension>]static member Contramap (g:_->_              , f       ) = (<<) g f
+    [<Extension>]static member Contramap (p:Predicate<_>      , f       ) = Predicate(fun x -> p.Invoke(f x))
+    [<Extension>]static member Contramap (Const x:Const<'t,'u>, _:'v->'u) = Const x:Const<'t,'v>
 
     static member inline Invoke (f:_->_) x = 
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Contramap: _*_ -> _) b, f)
