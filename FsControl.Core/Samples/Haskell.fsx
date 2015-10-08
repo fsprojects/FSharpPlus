@@ -265,9 +265,6 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 
 // Monoids
 
-open FsControl.Core.Types.Dual
-open FsControl.Core.Types.Endo
-
 type Ordering = LT|EQ|GT with
     static member        Mempty  (_:Ordering, _:Mempty) = EQ
     static member        Mappend (x:Ordering, y) = 
