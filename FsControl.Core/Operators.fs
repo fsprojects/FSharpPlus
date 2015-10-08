@@ -217,6 +217,7 @@ module Operators =
     
     // Converter
 
+    /// This is a generic op_Explicit.
     let inline convert   (value:'T) :'U      = Convert.Invoke value
 
     let inline fromBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = FromBytes.Invoke isLtEndian startIndex value
@@ -238,13 +239,14 @@ module Operators =
     let inline divRem (D:'T) (d:'T) :'T*'T = DivRem.Invoke D d
     let inline minValue() = MinValue.Invoke()
     let inline maxValue() = MaxValue.Invoke()
-    let inline fromBigInteger  (x:bigint)    :'Num   = FromBigInteger.Invoke x
-    let inline toBigInteger    (x:'Integral) :bigint = ToBigInteger.Invoke x
-    let inline abs    (x:'Num) :'Num = Abs.Invoke x
-    let inline signum (x:'Num) :'Num = Signum.Invoke x
-    let inline negate (x:'Num) :'Num = Negate.Invoke x
-    let inline (~-)   (x:'Num) :'Num = Negate.Invoke x
-    let inline fromRational (x:Rational) :'Fractional = FromRational.Invoke x
-    let inline properFraction x = ProperFraction.Invoke x
-    let inline toRational (x:'Real) :Rational = ToRational.Invoke x
+    let inline fromBigInt  (x:bigint)    :'Num   = FromBigInt.Invoke x
+    let inline toBigInt    (x:'Integral) :bigint = ToBigInt.Invoke x
+
     let inline pi() :'Floating = Pi.Invoke()
+    let inline negate  (x:'Num): 'Num = -x
+    let inline sqrt    (x:'Num): 'Num = sqrt x
+
+    // Unrestricted version (')
+    let inline signum' (x:'Num): 'Num = Signum.Invoke x
+    let inline abs'    (x:'Num): 'Num = Abs.Invoke x
+    let inline negate' (x:'Num): 'Num = Negate.Invoke x

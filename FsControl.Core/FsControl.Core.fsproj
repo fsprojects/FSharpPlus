@@ -84,6 +84,7 @@
     <None Include="Samples\Haskell.fsx" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Converter.fsx" />
+    <None Include="Samples\Numerics.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core" Condition="$(TargetFrameworkVersion) == 'v3.5'">

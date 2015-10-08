@@ -38,10 +38,10 @@ let either f g = function Left x -> f x | Right y -> g y
 type Integer = bigint
 open System.Numerics
 open FsControl.Core.TypeMethods
-open FsControl.Core.Types.Ratio
+// open FsControl.Core.Types.Ratio
 
-let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInteger x
-let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInteger   x
+let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInt x
+let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInt   x
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
@@ -79,7 +79,7 @@ let inline divMod D d :'Integral * 'Integral =
         else             (q + 1G, r - d)
     else (q, r)
 
-type Rational = Ratio<Integer>
+// type Rational = Ratio<Integer>
 
 let inline G0() = fromIntegral 0
 let inline G1() = fromIntegral 1
@@ -94,18 +94,18 @@ let inline gcd x y :'Integral =
     | _                      -> gcd' (abs x) (abs y)
 
 
-let inline ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
-    whenIntegral a
-    let zero = G0()
-    if b = zero then failwith "Ratio.%: zero denominator"
-    let (a,b) = if b < zero then (negate a, negate b) else (a, b)
-    let gcd = gcd a b
-    Ratio (quot a gcd, quot b gcd)
-
-let inline (%) (a:'Integral) (b:'Integral) :Ratio<'Integral> = a </ratio/> b
-let inline fromRational (x:Rational) :'Fractional = FsControl.Operators.fromRational x
-let inline whenFractional a = let _ = if false then fromRational (1I % 1I) else a in ()
-let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = whenFractional a; a / b
+// let inline ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
+//     whenIntegral a
+//     let zero = G0()
+//     if b = zero then failwith "Ratio.%: zero denominator"
+//     let (a,b) = if b < zero then (negate a, negate b) else (a, b)
+//     let gcd = gcd a b
+//     Ratio (quot a gcd, quot b gcd)
+// 
+// let inline (%) (a:'Integral) (b:'Integral) :Ratio<'Integral> = a </ratio/> b
+// let inline fromRational (x:Rational) :'Fractional = FsControl.Operators.fromRational x
+// let inline whenFractional a = let _ = if false then fromRational (1I % 1I) else a in ()
+let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = (* whenFractional a;*) a / b
 let inline recip x :'Fractional = 1G / x
 
 // Exp functions
@@ -115,12 +115,12 @@ let inline ( **^ ) (x:'Num) (n:'Integral)  =
     if (n < 0G) then failwith "Negative exponent" else f 1G x n
 let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
 
-let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
-    let (a, b:'RealFrac) = FsControl.Operators.properFraction x
-    (fromIntegral a, b)
+// let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
+//     let (a, b:'RealFrac) = FsControl.Operators.properFraction x
+//     (fromIntegral a, b)
 
-let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
-let inline toRational (x:'Real) :Rational = FsControl.Operators.toRational x
+// let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
+// let inline toRational (x:'Real) :Rational = FsControl.Operators.toRational x
 let inline pi() :'Floating = FsControl.Operators.pi ()
 
 let inline ( **) a (b:'Floating) :'Floating = a ** b
@@ -134,10 +134,10 @@ let inline logBase x y  :'Floating =  log y / log x
 
 
 // Test Numerics
-let res5_55:Integer * _ = properFraction 5.55M
-let res111_20 = toRational 5.55
-let res4_3    = toRational (12 % 9)
-let res17_1   = toRational 17uy
+// let res5_55:Integer * _ = properFraction 5.55M
+// let res111_20 = toRational 5.55
+// let res4_3    = toRational (12 % 9)
+// let res17_1   = toRational 17uy
 let divisions = List.map ( quot/> 5G) [5;8;10;15;20]
 
 let inline quadratic a b c =
