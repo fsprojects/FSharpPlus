@@ -15,21 +15,21 @@ open System.Numerics
 
 type Convert() =
     static member val Instance = Convert()
-    // todo: add generic (op_Explicit) case, but make sure all F# implicity augmented cases are covered
+    static member inline Convert (_:'R        , _:Default1) = fun (x : ^t) -> ((^R or ^t) : (static member op_Explicit : ^t -> ^R) x)
+    static member inline Convert (_:byte      , _:Convert) = fun x -> byte            x
     static member inline Convert (_:sbyte     , _:Convert) = fun x -> sbyte           x
     static member inline Convert (_:int16     , _:Convert) = fun x -> int16           x
-    static member inline Convert (_:int32     , _:Convert) = fun x -> int             x
-    static member inline Convert (_:int64     , _:Convert) = fun x -> int64           x
-    static member inline Convert (_:nativeint , _:Convert) = fun x -> nativeint  (int x)
-    static member inline Convert (_:byte      , _:Convert) = fun x -> byte            x
     static member inline Convert (_:uint16    , _:Convert) = fun x -> uint16          x
+    static member inline Convert (_:int32     , _:Convert) = fun x -> int             x
     static member inline Convert (_:uint32    , _:Convert) = fun x -> uint32          x
+    static member inline Convert (_:int64     , _:Convert) = fun x -> int64           x
     static member inline Convert (_:uint64    , _:Convert) = fun x -> uint64          x
+    static member inline Convert (_:nativeint , _:Convert) = fun x -> nativeint  (int x)
     static member inline Convert (_:unativeint, _:Convert) = fun x -> unativeint (int x)
     static member inline Convert (_:float     , _:Convert) = fun x -> float           x
     static member inline Convert (_:float32   , _:Convert) = fun x -> float32         x    
     static member inline Convert (_:decimal   , _:Convert) = fun x -> decimal         x
-    static member inline Convert (_:char      , _:Convert) = fun x -> char x
+    static member inline Convert (_:char      , _:Convert) = fun x -> char            x
     static member inline Convert (_:string    , _:Convert) = fun x -> string x  // better use our ToString
 
     static member inline Invoke   value:'T      =
