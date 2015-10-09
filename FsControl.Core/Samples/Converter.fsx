@@ -30,9 +30,9 @@ let r220 = toString (dict ['a',2; 'b',2; 'c',0])
 
 
 // Generic op_Explicit
-let r302:float  = convert 302
-let r303:float  = convert "303"
-let r304:char   = convert "F"
+let r302:float  = explicit 302
+let r303:float  = explicit "303"
+let r304:char   = explicit "F"
 
 
 // From sequence

@@ -13,28 +13,29 @@ open FsControl.Core.Prelude
 open System.Numerics
 
 
-type Convert() =
-    static member val Instance = Convert()
-    static member inline Convert (_:'R        , _:Default1) = fun (x : ^t) -> ((^R or ^t) : (static member op_Explicit : ^t -> ^R) x)
-    static member inline Convert (_:byte      , _:Convert) = fun x -> byte            x
-    static member inline Convert (_:sbyte     , _:Convert) = fun x -> sbyte           x
-    static member inline Convert (_:int16     , _:Convert) = fun x -> int16           x
-    static member inline Convert (_:uint16    , _:Convert) = fun x -> uint16          x
-    static member inline Convert (_:int32     , _:Convert) = fun x -> int             x
-    static member inline Convert (_:uint32    , _:Convert) = fun x -> uint32          x
-    static member inline Convert (_:int64     , _:Convert) = fun x -> int64           x
-    static member inline Convert (_:uint64    , _:Convert) = fun x -> uint64          x
-    static member inline Convert (_:nativeint , _:Convert) = fun x -> nativeint  (int x)
-    static member inline Convert (_:unativeint, _:Convert) = fun x -> unativeint (int x)
-    static member inline Convert (_:float     , _:Convert) = fun x -> float           x
-    static member inline Convert (_:float32   , _:Convert) = fun x -> float32         x    
-    static member inline Convert (_:decimal   , _:Convert) = fun x -> decimal         x
-    static member inline Convert (_:char      , _:Convert) = fun x -> char            x
+type Explicit() =
+    inherit Default1()
+    static member val Instance = Explicit()
+    static member inline Explicit (_:'R        , _:Default1) = fun (x : ^t) -> ((^R or ^t) : (static member op_Explicit : ^t -> ^R) x)
+    static member inline Explicit (_:byte      , _:Explicit) = fun x -> byte            x
+    static member inline Explicit (_:sbyte     , _:Explicit) = fun x -> sbyte           x
+    static member inline Explicit (_:int16     , _:Explicit) = fun x -> int16           x
+    static member inline Explicit (_:uint16    , _:Explicit) = fun x -> uint16          x
+    static member inline Explicit (_:int32     , _:Explicit) = fun x -> int             x
+    static member inline Explicit (_:uint32    , _:Explicit) = fun x -> uint32          x
+    static member inline Explicit (_:int64     , _:Explicit) = fun x -> int64           x
+    static member inline Explicit (_:uint64    , _:Explicit) = fun x -> uint64          x
+    static member inline Explicit (_:nativeint , _:Explicit) = fun x -> nativeint  (int x)
+    static member inline Explicit (_:unativeint, _:Explicit) = fun x -> unativeint (int x)
+    static member inline Explicit (_:float     , _:Explicit) = fun x -> float           x
+    static member inline Explicit (_:float32   , _:Explicit) = fun x -> float32         x    
+    static member inline Explicit (_:decimal   , _:Explicit) = fun x -> decimal         x
+    static member inline Explicit (_:char      , _:Explicit) = fun x -> char            x
 
     static member inline Invoke   value:'T      =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Convert: _*_ -> _) b, a)
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Explicit: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Convert.Instance value
+        call Explicit.Instance value
 
 type FromBytes() =
     static member val Instance = FromBytes()

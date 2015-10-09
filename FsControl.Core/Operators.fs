@@ -217,8 +217,7 @@ module Operators =
     
     // Converter
 
-    /// This is a generic op_Explicit.
-    let inline convert   (value:'T) :'U      = Convert.Invoke value
+    let inline explicit    (value:'T) :'U = Explicit.Invoke value
 
     let inline fromBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = FromBytes.Invoke isLtEndian startIndex value
     let inline fromBytes   (value:byte[]) = FromBytes.Invoke true 0 value
