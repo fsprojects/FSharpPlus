@@ -30,7 +30,6 @@ type Convert() =
     static member inline Convert (_:float32   , _:Convert) = fun x -> float32         x    
     static member inline Convert (_:decimal   , _:Convert) = fun x -> decimal         x
     static member inline Convert (_:char      , _:Convert) = fun x -> char            x
-    static member inline Convert (_:string    , _:Convert) = fun x -> string x  // better use our ToString
 
     static member inline Invoke   value:'T      =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Convert: _*_ -> _) b, a)
