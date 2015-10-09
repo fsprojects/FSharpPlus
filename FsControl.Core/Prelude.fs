@@ -43,8 +43,15 @@ module internal Seq =
                     g := key
                     members := List()
                     (!members).Add(e.Current)
-            yield (!g, !members)
-    }
+            yield (!g, !members)}
+
+    // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
+    let inline intersperse sep list = seq {
+        let notFirst = ref false
+        for element in list do 
+            if !notFirst then yield sep
+            yield element
+            notFirst := true}
 
 [<RequireQualifiedAccess>]
 module internal Error =

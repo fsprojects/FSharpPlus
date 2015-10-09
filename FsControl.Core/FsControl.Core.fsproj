@@ -60,6 +60,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="InlineHelper.fs" />
     <Compile Include="Prelude.fs" />
+    <Compile Include="Converter.fs" />
     <Compile Include="Numeric.fs" />
     <Compile Include="Monoid.fs" />
     <Compile Include="Wrappers.fs" />
@@ -77,7 +78,6 @@
     <Compile Include="StateT.fs" />
     <Compile Include="ErrorT.fs" />
     <Compile Include="Collection.fs" />
-    <Compile Include="Converter.fs" />
     <Compile Include="Tuple.fs" />
     <Compile Include="Operators.fs" />
     <None Include="Samples\Functions.fsx" />

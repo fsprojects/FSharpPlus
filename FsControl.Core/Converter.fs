@@ -15,6 +15,7 @@ open System.Numerics
 
 type Convert() =
     static member val Instance = Convert()
+    // todo: add generic (op_Explicit) case, but make sure all F# implicity augmented cases are covered
     static member inline Convert (_:sbyte     , _:Convert) = fun x -> sbyte           x
     static member inline Convert (_:int16     , _:Convert) = fun x -> int16           x
     static member inline Convert (_:int32     , _:Convert) = fun x -> int             x
@@ -28,9 +29,6 @@ type Convert() =
     static member inline Convert (_:float     , _:Convert) = fun x -> float           x
     static member inline Convert (_:float32   , _:Convert) = fun x -> float32         x    
     static member inline Convert (_:decimal   , _:Convert) = fun x -> decimal         x
-#if NOTNET35
-    static member inline Convert (_:Complex   , _:Convert) = fun x -> Complex (float  x, 0.0)
-#endif
     static member inline Convert (_:char      , _:Convert) = fun x -> char x
     static member inline Convert (_:string    , _:Convert) = fun x -> string x  // better use our ToString
 
@@ -161,7 +159,7 @@ type ToString with
     static member inline internal seqToString (k:CultureInfo) sepOpen sepClose x (b: StringBuilder) =
         let inline append (s:string) = b.Append s |> ignore
         append sepOpen
-        let withSemiColons = Intersperse.intersperse "; " (Seq.map (ToString.Invoke k) x)
+        let withSemiColons = Seq.intersperse "; " (Seq.map (ToString.Invoke k) x)
         Seq.iter append withSemiColons
         append sepClose
         ToString.Invoke k b

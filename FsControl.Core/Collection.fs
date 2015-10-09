@@ -160,18 +160,9 @@ type GroupAdjBy() =
 type Intersperse() =
     inherit Default1()
     static member val Instance = Intersperse()
-
-    // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
-    static member inline internal intersperse sep list = seq {
-        let notFirst = ref false
-        for element in list do 
-            if !notFirst then yield sep
-            yield element
-            notFirst := true}
-
-    [<Extension>]static member inline Intersperse (x:'Foldable'T, e:'T, [<Optional>]impl:Default1   ) = x |> ToSeq.Invoke |> Intersperse.intersperse e |> FromSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Intersperse (x:list<'T>   , e:'T, [<Optional>]impl:Intersperse) = x |> List.toSeq   |> Intersperse.intersperse e |> Seq.toList
-    [<Extension>]static member        Intersperse (x:'T []      , e:'T, [<Optional>]impl:Intersperse) = x |> Array.toSeq  |> Intersperse.intersperse e |> Seq.toArray
+    [<Extension>]static member inline Intersperse (x:'Foldable'T, e:'T, [<Optional>]impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member        Intersperse (x:list<'T>   , e:'T, [<Optional>]impl:Intersperse) = x |> List.toSeq   |> Seq.intersperse e |> Seq.toList
+    [<Extension>]static member        Intersperse (x:'T []      , e:'T, [<Optional>]impl:Intersperse) = x |> Array.toSeq  |> Seq.intersperse e |> Seq.toArray
  
     static member inline Invoke      (sep:'T)        (source:'Collection'T)        =
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)
