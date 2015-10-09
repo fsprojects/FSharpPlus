@@ -66,6 +66,9 @@ module internal Error =
     let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
     let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
 
+[<RequireQualifiedAccess>]
+module internal Implicit = let inline Invoke (x : ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) :^R
+
 namespace FsControl.Core.Types
 type Id<'t>(v:'t) =
    let value = v

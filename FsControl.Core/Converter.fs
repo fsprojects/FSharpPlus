@@ -17,6 +17,7 @@ type Explicit() =
     inherit Default1()
     static member val Instance = Explicit()
     static member inline Explicit (_:'R        , _:Default1) = fun (x : ^t) -> ((^R or ^t) : (static member op_Explicit : ^t -> ^R) x)
+    static member inline Explicit (_:^t when ^t: null and ^t: struct, _:Default1) = ()
     static member inline Explicit (_:byte      , _:Explicit) = fun x -> byte            x
     static member inline Explicit (_:sbyte     , _:Explicit) = fun x -> sbyte           x
     static member inline Explicit (_:int16     , _:Explicit) = fun x -> int16           x
