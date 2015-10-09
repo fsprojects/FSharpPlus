@@ -156,3 +156,49 @@ type MonadTransformers() =
         Assert.IsInstanceOfType (Some res3Layers'', typeof<Option<OptionT<WriterT<Async<string option * string>>>>>)
         Assert.IsInstanceOfType (Some res4Layers' , typeof<Option<ListT<OptionT<WriterT<Async<string list option * string>>>>>>)
         Assert.IsInstanceOfType (Some res4Layers  , typeof<Option<ListT<OptionT<WriterT<Async<string list option * string>>>>>>)
+
+module NumericLiteralG =
+    open FsControl.Core.TypeMethods
+    let inline FromZero() = GenericZero.Invoke()
+    let inline FromOne () = GenericOne.Invoke()
+    let inline FromInt32  (i:int   ) = FromInt32.Invoke i
+    let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
+    let inline FromString (i:string) = fromBigInt <| System.Numerics.BigInteger.Parse i
+
+open MathNet.Numerics
+
+[<TestClass>]
+type Numerics() = 
+    [<TestMethod>]
+    member x.GenericMath() = 
+        let argUint        :uint32       =              42G
+        let argInt         :    int      =         -424242G
+        let argBigInt      : bigint      = -42424242424242G
+        let argFloat       : float       = -(42G + (42G/100G))  // -42.42
+        let argFloat32     : float32     = -(42G + (42G/100G))  // -42.4199982f
+        let argDecimal     : decimal     = -(42G + (42G/100G))
+        let argComplex                   = Complex.mkRect(-42.42, 24.24)
+        let argComplex32                 = Complex32.mkRect(-42.42f, 24.24f)
+        let argBigRational : BigRational = -42424242424242G / 42424G
+
+        let res01 = signum' argUint       
+        let res02 = signum' argInt        
+        let res03 = signum' argBigInt     
+        let res04 = signum' argFloat      
+        let res05 = signum' argFloat32    
+        let res06 = signum' argDecimal    
+        let res07 = signum' argComplex    
+        let res08 = signum' argComplex32  
+        let res09 = signum' argBigRational
+
+        let res11 = abs' argUint       
+        let res12 = abs' argInt        
+        let res13 = abs' argBigInt     
+        let res14 = abs' argFloat      
+        let res15 = abs' argFloat32    
+        let res16 = abs' argDecimal    
+        let res17 = abs' argComplex    
+        let res18 = abs' argComplex32  
+        let res19 = abs' argBigRational
+
+        Assert.AreEqual(res09 * res19, argBigRational)

@@ -8,9 +8,11 @@ open System.Runtime.InteropServices
 type FromBigInt() =
     inherit Default1()
     static member val Instance = FromBigInt()
+    static member inline FromBigInt (_:^b        ,_:Default4  ) = fun (x:bigint) -> ((^a or ^b) : (static member op_Explicit : ^a -> ^b) x)
+    static member inline FromBigInt (_:^b        ,_:Default3  ) = fun (x:bigint) -> ((^a or ^b) : (static member op_Implicit : ^a -> ^b) (int64 x))
     static member inline FromBigInt (_:^b        ,_:Default2  ) = fun (x:bigint) -> ((^a or ^b) : (static member op_Implicit : ^a -> ^b) x)
     static member inline FromBigInt (_:^R        ,_:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)
-    static member inline FromBigInt (_:Default1  ,_:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)    
+    static member inline FromBigInt (_:Default1  ,_:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)
     static member        FromBigInt (_:int32     ,_:FromBigInt) = fun (x:bigint) -> int             x
     static member        FromBigInt (_:int64     ,_:FromBigInt) = fun (x:bigint) -> int64           x
     static member        FromBigInt (_:nativeint ,_:FromBigInt) = fun (x:bigint) -> nativeint  (int x)
@@ -45,6 +47,8 @@ type FromBigInt() =
 type FromInt64() =
     inherit  Default1()
     static member val Instance = FromInt64()
+    static member inline FromInt64 (_:^R        ,_:Default4  ) = fun (x:int64) -> ((^t or ^R) : (static member op_Explicit : ^t -> ^R) x)
+    static member inline FromInt64 (_:^R        ,_:Default3  ) = fun (x:int64) -> FromBigInt.Invoke (bigint x) : ^R
     static member inline FromInt64 (_:^R        ,_:Default2  ) = fun (x:int64) -> ((^t or ^R) : (static member op_Implicit : ^t -> ^R) x)
     static member inline FromInt64 (_:^R        ,_:Default1  ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
     static member inline FromInt64 (_:Default1  ,_:Default1  ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
@@ -83,6 +87,8 @@ type FromInt64() =
 type FromInt32() =
     inherit  Default1()
     static member val Instance = FromInt32()
+    static member inline FromInt32 (_:^R        ,_:Default4  ) = fun (x:int32) -> ((^a or ^R) : (static member op_Explicit : ^a -> ^R) x)
+    static member inline FromInt32 (_:^R        ,_:Default3  ) = fun (x:int32) -> FromInt64.Invoke (int64 x) : ^R
     static member inline FromInt32 (_:^R        ,_:Default2  ) = fun (x:int32) -> ((^a or ^R) : (static member op_Implicit : ^a -> ^R) x)
     static member inline FromInt32 (_:^R        ,_:Default1  ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
     static member inline FromInt32 (_:Default1  ,_:Default1  ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
@@ -149,6 +155,9 @@ type GenericZero() =
 type Abs() =
     inherit Default1()
     static member val Instance = Abs()
+    static member inline Abs (x:'t        , _:Default2) = 
+        let inline convert (x:^a) : ^b = ((^a or ^b) : (static member op_Explicit : ^a -> ^b) x)
+        (convert ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
     static member inline Abs (x:'t        , _:Default1) = 
         let inline convert (x:^a) : ^b = ((^a or ^b) : (static member op_Implicit : ^a -> ^b) x)
         (convert ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
