@@ -24,8 +24,8 @@ let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 module NumericLiteralG =
     let inline FromZero() = GenericZero.Invoke()
     let inline FromOne () = GenericOne.Invoke()
-    let inline FromInt32  (i:int   ) = fromIntegral i
-    let inline FromInt64  (i:int64 ) = fromIntegral i
+    let inline FromInt32  (i:int   ) = FromInt32.Invoke i
+    let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
 
 let inline abs    (x:'Num) :'Num = FsControl.Operators.abs    x
@@ -93,6 +93,25 @@ let inline logBase x y  :'Floating =  log y / log x
 
 
 // Test Numerics
+
+let piComplex:System.Numerics.Complex = pi()
+
+let c2 = System.Numerics.Complex(25.2, 3.1)
+
+let a = abs' 2u
+let b = abs' -2
+let c = abs' -2.f
+let d = abs' -2.M
+let e = abs' c2
+let f = abs' (System.Numerics.Complex(32. , 2.))
+
+let a' = signum' 2u
+let b' = signum' -2
+let c' = signum' -2.f
+let d' = signum' -2.M
+let e' = signum' c2
+let f' = signum' (System.Numerics.Complex(32. , 2.))
+
 
 let divisions = List.map ( quot /> 5G) [5;8;10;15;20]
 

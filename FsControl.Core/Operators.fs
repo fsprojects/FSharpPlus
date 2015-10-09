@@ -243,10 +243,12 @@ module Operators =
     let inline toBigInt    (x:'Integral) :bigint = ToBigInt.Invoke x
 
     let inline pi() :'Floating = Pi.Invoke()
+    let inline signum  (x:'Num): 'Num = Signum.Invoke x
+    let inline abs     (x:'Num): 'Num = Abs.Invoke x
     let inline negate  (x:'Num): 'Num = -x
     let inline sqrt    (x:'Num): 'Num = sqrt x
 
     // Unrestricted version (')
-    let inline signum' (x:'Num): 'Num = Signum.Invoke x
-    let inline abs'    (x:'Num): 'Num = Abs.Invoke x
-    let inline negate' (x:'Num): 'Num = Negate.Invoke x
+    let inline signum' (x:'Num): 'Num = Signum'.Invoke x
+    let inline abs'    (x:'Num): 'Num = Abs'.Invoke x
+    let inline negate' (x:'Num): 'Num = Negate'.Invoke x

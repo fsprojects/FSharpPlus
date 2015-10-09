@@ -1,13 +1,16 @@
 namespace FsControl.Core.TypeMethods
 
-open System.Numerics
 open FsControl.Core.Prelude
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
 
 type FromBigInt() =
+    inherit Default1()
     static member val Instance = FromBigInt()
+    static member inline FromBigInt (_:^b        ,_:Default2  ) = fun (x:bigint) -> ((^a or ^b) : (static member op_Implicit : ^a -> ^b) x)
+    static member inline FromBigInt (_:^R        ,_:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)
+    static member inline FromBigInt (_:Default1  ,_:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)    
     static member        FromBigInt (_:int32     ,_:FromBigInt) = fun (x:bigint) -> int             x
     static member        FromBigInt (_:int64     ,_:FromBigInt) = fun (x:bigint) -> int64           x
     static member        FromBigInt (_:nativeint ,_:FromBigInt) = fun (x:bigint) -> nativeint  (int x)
@@ -23,16 +26,15 @@ type FromBigInt() =
     static member        FromBigInt (_:uint64    ,_:FromBigInt) = fun (x:bigint) -> uint64          x
     static member        FromBigInt (_:float32   ,_:FromBigInt) = fun (x:bigint) -> float32         x
     static member        FromBigInt (_:decimal   ,_:FromBigInt) = fun (x:bigint) -> decimal         x
-    static member        FromBigInt (_:Complex   ,_:FromBigInt) = fun (x:bigint) -> Complex (float  x, 0.0)
 #else
-    static member        FromBigInt (_:sbyte     ) = fun (x:bigint) -> sbyte      (int x)
-    static member        FromBigInt (_:int16     ) = fun (x:bigint) -> int16      (int x)
-    static member        FromBigInt (_:byte      ) = fun (x:bigint) -> byte       (int x)
-    static member        FromBigInt (_:uint16    ) = fun (x:bigint) -> uint16     (int x)
-    static member        FromBigInt (_:uint32    ) = fun (x:bigint) -> uint32     (int x)
-    static member        FromBigInt (_:uint64    ) = fun (x:bigint) -> uint64     (int64 x)
-    static member        FromBigInt (_:float32   ) = fun (x:bigint) -> float32    (int x)
-    static member        FromBigInt (_:decimal   ) = fun (x:bigint) -> decimal    (int x)
+    static member        FromBigInt (_:sbyte     ,_:FromBigInt) = fun (x:bigint) -> sbyte      (int x)
+    static member        FromBigInt (_:int16     ,_:FromBigInt) = fun (x:bigint) -> int16      (int x)
+    static member        FromBigInt (_:byte      ,_:FromBigInt) = fun (x:bigint) -> byte       (int x)
+    static member        FromBigInt (_:uint16    ,_:FromBigInt) = fun (x:bigint) -> uint16     (int x)
+    static member        FromBigInt (_:uint32    ,_:FromBigInt) = fun (x:bigint) -> uint32     (int x)
+    static member        FromBigInt (_:uint64    ,_:FromBigInt) = fun (x:bigint) -> uint64     (int64 x)
+    static member        FromBigInt (_:float32   ,_:FromBigInt) = fun (x:bigint) -> float32    (int x)
+    static member        FromBigInt (_:decimal   ,_:FromBigInt) = fun (x:bigint) -> decimal    (int x)
 #endif
 
     static member inline Invoke (x:bigint)   :'Num    =
@@ -41,7 +43,11 @@ type FromBigInt() =
         call FromBigInt.Instance x
 
 type FromInt64() =
+    inherit  Default1()
     static member val Instance = FromInt64()
+    static member inline FromInt64 (_:^R        ,_:Default2  ) = fun (x:int64) -> ((^t or ^R) : (static member op_Implicit : ^t -> ^R) x)
+    static member inline FromInt64 (_:^R        ,_:Default1  ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
+    static member inline FromInt64 (_:Default1  ,_:Default1  ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
     static member        FromInt64 (_:int32     , _:FromInt64) = fun (x:int64) -> int32           x
     static member        FromInt64 (_:int64     , _:FromInt64) = fun (x:int64) ->                 x
     static member        FromInt64 (_:nativeint , _:FromInt64) = fun (x:int64) -> nativeint  (int x)
@@ -77,6 +83,9 @@ type FromInt64() =
 type FromInt32() =
     inherit  Default1()
     static member val Instance = FromInt32()
+    static member inline FromInt32 (_:^R        ,_:Default2  ) = fun (x:int32) -> ((^a or ^R) : (static member op_Implicit : ^a -> ^R) x)
+    static member inline FromInt32 (_:^R        ,_:Default1  ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
+    static member inline FromInt32 (_:Default1  ,_:Default1  ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
     static member        FromInt32 (_:int32     , _:FromInt32) = fun (x:int32) ->                 x
     static member        FromInt32 (_:int64     , _:FromInt32) = fun (x:int32) -> int64           x
     static member        FromInt32 (_:nativeint , _:FromInt32) = fun (x:int32) -> nativeint  (int x)
@@ -136,44 +145,66 @@ type GenericZero() =
         call GenericZero.Instance
 
 
+
 type Abs() =
+    inherit Default1()
     static member val Instance = Abs()
-    static member inline Abs (_:^t when ^t: null and ^t: struct, _:Abs) = id
-    static member inline Abs (x:'t        , [<Optional>]impl) = abs x
-    static member        Abs (x:byte      , [<Optional>]impl) =     x
-    static member        Abs (x:uint16    , [<Optional>]impl) =     x
-    static member        Abs (x:uint32    , [<Optional>]impl) =     x
-    static member        Abs (x:uint64    , [<Optional>]impl) =     x
-    static member        Abs (x:unativeint, [<Optional>]impl) =     x
-#if NOTNET35
-    static member        Abs (x:Complex   , [<Optional>]impl :Abs ) = Complex(x.Magnitude, 0.0)
-#endif
+    static member inline Abs (x:'t        , _:Default1) = 
+        let inline convert (x:^a) : ^b = ((^a or ^b) : (static member op_Implicit : ^a -> ^b) x)
+        (convert ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
+    static member inline Abs (x:'t        , _:Abs) = abs x :'t
+    static member inline Abs (x:Default1  , _:Abs) = fun (x) -> (^R: (static member Abs: _ -> ^R) x)
 
     static member inline Invoke (x:'Num) :'Num =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b ) : (static member Abs: _*_ -> _) b, a)
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b ) : (static member Abs: ^b*_ -> ^t) b, a)
         call_2 (Abs.Instance, x)
 
-// TODO add a default, review the existing one
-type Signum() =
-    static member val Instance = Signum()
-    static member inline Signum (_:^t when ^t: null and ^t: struct) = id
-    static member inline Signum (x:'t        ) = FromBigInt.Invoke (bigint (sign x)) :'t
-    static member        Signum (x:byte      ) = if x = 0uy then 0uy else 1uy
-    static member        Signum (x:uint16    ) = if x = 0us then 0us else 1us
-    static member        Signum (x:uint32    ) = if x = 0u  then 0u  else 1u
-    static member        Signum (x:uint64    ) = if x = 0UL then 0UL else 1UL
-    static member        Signum (x:unativeint) = if x = 0un then 0un else 1un
-#if NOTNET35
-    static member        Signum (x:Complex   ) = if x.Magnitude = 0. then Complex.Zero else Complex (x.Real / x.Magnitude, x.Imaginary / x.Magnitude)
-#endif
+type Abs'() =
+    inherit Abs()
+    static member val Instance = Abs'()
+    static member        Abs (x:byte      , _:Abs') =     x
+    static member        Abs (x:uint16    , _:Abs') =     x
+    static member        Abs (x:uint32    , _:Abs') =     x
+    static member        Abs (x:uint64    , _:Abs') =     x
+    static member        Abs (x:unativeint, _:Abs') =     x
 
     static member inline Invoke (x:'Num) :'Num =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Signum: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b ) : (static member Abs: ^b*_ -> ^t) b, a)
+        call_2 (Abs'.Instance, x)
+
+
+
+type Signum() =
+    inherit Default1()
+    static member val Instance = Signum()
+    static member inline Signum (x:'t        , _:Default2) =
+        let zero = GenericZero.Invoke()
+        if x = zero then zero
+        else x / Abs.Invoke x :'t
+    static member inline Signum (_:^t when ^t: null and ^t: struct, _:Default1) = id
+    static member inline Signum (x:'t        , _:Default1) = FromInt32.Invoke (sign x) :'t
+
+    static member inline Invoke (x:'Num) :'Num =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Signum: _*_ -> _) b, a)
         call_2 (Signum.Instance, x)
 
+type Signum'() =
+    inherit Signum()
+    static member val Instance = Signum'()
+    static member        Signum (x:byte      , _:Signum') = if x = 0uy then 0uy else 1uy
+    static member        Signum (x:uint16    , _:Signum') = if x = 0us then 0us else 1us
+    static member        Signum (x:uint32    , _:Signum') = if x = 0u  then 0u  else 1u
+    static member        Signum (x:uint64    , _:Signum') = if x = 0UL then 0UL else 1UL
+    static member        Signum (x:unativeint, _:Signum') = if x = 0un then 0un else 1un
 
-type Negate() =
-    static member val Instance = Negate()
+    static member inline Invoke (x:'Num) :'Num =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Signum: _*_ -> _) b, a)
+        call_2 (Signum'.Instance, x)
+
+
+
+type Negate'() =
+    static member val Instance = Negate'()
     static member inline Negate (_:^t when ^t: null and ^t: struct) = id
     static member inline Negate (x:'t        ) = -x
     static member        Negate (x:byte      ) = 0uy - x
@@ -184,7 +215,7 @@ type Negate() =
 
     static member inline Invoke (x:'Num) :'Num =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Negate: _ -> _) b)
-        call_2 (Negate.Instance, x)
+        call_2 (Negate'.Instance, x)
 
 
 [<Extension; Sealed>]
@@ -230,7 +261,6 @@ type ToBigInt() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToBigInt: _ -> _) b)
         call_2 (ToBigInt.Instance, x)
 
-open System.Numerics
 
 module internal Numerics =
 
@@ -258,7 +288,6 @@ open FsControl.Core.TypeMethods
 
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
-open System.Numerics
 
 // Fractional class -------------------------------------------------------
 (* Code removed. May be it can be defined by using the methods .Numerator and .Denominator *)
@@ -276,13 +305,14 @@ open System.Numerics
 
 
 type Pi() =
+    inherit Default1()
     static member val Instance = Pi()
+    static member inline Pi (_:^R      , _:Default3) = ((^t or ^R) : (static member op_Implicit : ^t -> ^R) 3.14159274f   )
+    static member inline Pi (_:^R      , _:Default2) = ((^t or ^R) : (static member op_Implicit : ^t -> ^R) System.Math.PI)
+    static member inline Pi (_:^R      , _:Default1) = (^R: (static member PI:  ^R) ())
+    static member inline Pi (_:Default1, _:Default1) = (^R: (static member PI:  ^R) ())
     static member        Pi (_:float32 , _:Pi      ) = 3.14159274f
     static member        Pi (_:float   , _:Pi      ) = System.Math.PI
-
-#if NOTNET35
-    static member Pi (_:Complex, _:Pi) = Complex(System.Math.PI, 0.0)
-#endif
 
     static member inline Invoke() :'Floating =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Pi: _*_ -> _) b, a)
@@ -293,6 +323,7 @@ type Pi() =
 // Bounded class ----------------------------------------------------------
 
 open System
+// TODO: can we have a (working) default ? It's a field, maybe we should call to a property.
 
 type MinValue() =
     static member val Instance = MinValue()

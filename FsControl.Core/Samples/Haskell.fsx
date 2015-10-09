@@ -45,10 +45,10 @@ let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInt   
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
-    let inline FromZero() = fromIntegral 0
-    let inline FromOne () = fromIntegral 1
-    let inline FromInt32  (i:int   ) = fromIntegral i
-    let inline FromInt64  (i:int64 ) = fromIntegral i
+    let inline FromZero() = GenericZero.Invoke()
+    let inline FromOne () = GenericOne.Invoke()
+    let inline FromInt32  (i:int   ) = FromInt32.Invoke i
+    let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
 
 let inline abs    (x:'Num) :'Num = FsControl.Operators.abs    x
@@ -141,8 +141,8 @@ let inline logBase x y  :'Floating =  log y / log x
 let divisions = List.map ( quot/> 5G) [5;8;10;15;20]
 
 let inline quadratic a b c =
-    let root1 = ( -b + sqrt (  b **^ 2 - 4G * a * c) )  / (2G * a)
-    let root2 = ( -b - sqrt (  b **^ 2 - 4G * a * c) )  / (2G * a)
+    let root1 = ( -b + sqrt (  b ** 2G - 4G * a * c) )  / (2G * a)
+    let root2 = ( -b - sqrt (  b ** 2G - 4G * a * c) )  / (2G * a)
     (root1,root2)
 
 let res30_15  = quadratic 2.0  -3G -9G
