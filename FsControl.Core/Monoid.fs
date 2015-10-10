@@ -12,9 +12,8 @@ open System.Threading.Tasks
 #endif
 
 
-type Mempty() =
-    inherit Default1()
-    static member val Instance = Mempty()
+type Mempty =
+    inherit Default1
         
     static member        Mempty (_:list<'a>     , _:Mempty) = []   :  list<'a>
     static member        Mempty (_:option<'a>   , _:Mempty) = None :option<'a>
@@ -29,7 +28,7 @@ type Mempty() =
     static member inline Invoke() = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mempty: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Mempty.Instance
+        call Unchecked.defaultof<Mempty>
 
 type Mempty with static member inline Mempty (_ : 'a*'b         , _:Mempty) = (Mempty.Invoke(), Mempty.Invoke()                                                   ): 'a*'b
 type Mempty with static member inline Mempty (_ : 'a*'b*'c      , _:Mempty) = (Mempty.Invoke(), Mempty.Invoke(), Mempty.Invoke()                                  ): 'a*'b*'c
@@ -57,10 +56,7 @@ type Mempty with
 
 
 [<Extension; Sealed>]
-type Mappend() =
-
-    static member val Instance = Mappend()
-           
+type Mappend =       
     [<Extension>]static member        Mappend (x:list<_>      , y ) = x @ y       
     [<Extension>]static member        Mappend (x:array<_>     , y ) = Array.append x y
     [<Extension>]static member        Mappend (()             , ()) =  ()
@@ -71,7 +67,7 @@ type Mappend() =
 
     static member inline Invoke (x:'T) (y:'T) :'T =
         let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Mappend: _*_ -> _) a, b)
-        call_3 (Mappend.Instance, x, y)
+        call_3 (Unchecked.defaultof<Mappend>, x, y)
 
 type Mappend with
     [<Extension>]static member inline Mappend (x:option<_>,y ) =
@@ -127,10 +123,8 @@ type Mappend with
 
 
 [<Extension; Sealed>]
-type Mconcat() =
-    inherit Default1()
-    static member val Instance = Mconcat()
-
+type Mconcat =
+    inherit Default1
     [<Extension>]static member inline Mconcat (x:seq<Dictionary<'a,'b>>, [<Optional>]output:Dictionary<'a,'b>, [<Optional>]impl:Mconcat) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
@@ -147,7 +141,7 @@ type Mconcat() =
     static member inline Invoke (x:seq<'T>) : 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Mconcat: _*_*_ -> _) b, c, a)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Mconcat.Instance, x)
+        call (Unchecked.defaultof<Mconcat>, x)
 
 type Mconcat with
     [<Extension>]static member inline Mconcat (x:seq<'a * 'b>, [<Optional>]output:'a * 'b, [<Optional>]impl:Mconcat) =

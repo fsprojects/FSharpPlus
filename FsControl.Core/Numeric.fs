@@ -6,9 +6,8 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
 
-type FromBigInt() =
-    inherit Default1()
-    static member val Instance = FromBigInt()
+type FromBigInt =
+    inherit Default1
     static member inline FromBigInt (_:^R        ,_:Default4  ) = fun (x:bigint) -> Explicit.Invoke x         :^R
     static member inline FromBigInt (_:^R        ,_:Default3  ) = fun (x:bigint) -> Implicit.Invoke (int64 x) :^R
     static member inline FromBigInt (_:^R        ,_:Default2  ) = fun (x:bigint) -> Implicit.Invoke x         :^R
@@ -43,11 +42,10 @@ type FromBigInt() =
     static member inline Invoke (x:bigint)   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBigInt: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call FromBigInt.Instance x
+        call Unchecked.defaultof<FromBigInt> x
 
-type FromInt64() =
-    inherit  Default1()
-    static member val Instance = FromInt64()
+type FromInt64 =
+    inherit Default1
     static member inline FromInt64 (_:^R        ,_:Default4  ) = fun (x:int64) -> Explicit.Invoke x            : ^R
     static member inline FromInt64 (_:^R        ,_:Default3  ) = fun (x:int64) -> FromBigInt.Invoke (bigint x) : ^R
     static member inline FromInt64 (_:^R        ,_:Default2  ) = fun (x:int64) -> Implicit.Invoke x            : ^R
@@ -82,12 +80,11 @@ type FromInt64() =
     static member inline Invoke (x:int64)   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromInt64: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call FromInt64.Instance x
+        call Unchecked.defaultof<FromInt64> x
 
 
-type FromInt32() =
-    inherit  Default1()
-    static member val Instance = FromInt32()
+type FromInt32 =
+    inherit Default1
     static member inline FromInt32 (_:^R        ,_:Default4  ) = fun (x:int32) -> Explicit.Invoke x          : ^R
     static member inline FromInt32 (_:^R        ,_:Default3  ) = fun (x:int32) -> FromInt64.Invoke (int64 x) : ^R
     static member inline FromInt32 (_:^R        ,_:Default2  ) = fun (x:int32) -> Implicit.Invoke x          : ^R
@@ -122,14 +119,13 @@ type FromInt32() =
     static member inline Invoke (x:int32)   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromInt32: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call FromInt32.Instance x
+        call Unchecked.defaultof<FromInt32> x
 
 
 
 
-type GenericOne() =
-    inherit Default1()
-    static member val Instance = GenericOne()
+type GenericOne =
+    inherit Default1
     static member inline One (_:'t             ,_:Default1  ) = FromInt32.Invoke 1 :'t
     static member inline One (_:'t             ,_:GenericOne) = LanguagePrimitives.GenericOne :'t
     static member inline One (_:^t when ^t: null and ^t: struct, _:GenericOne) = id
@@ -137,11 +133,10 @@ type GenericOne() =
     static member inline Invoke ()   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member One: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call GenericOne.Instance
+        call Unchecked.defaultof<GenericOne>
 
-type GenericZero() =
-    inherit Default1()
-    static member val Instance = GenericZero()
+type GenericZero =
+    inherit Default1
     static member inline Zero (_:'t             ,_:Default1)    = FromInt32.Invoke 0 :'t
     static member inline Zero (_:'t             ,_:GenericZero) = LanguagePrimitives.GenericZero :'t
     static member inline Zero (_:^t when ^t: null and ^t: struct, _:GenericZero) = id
@@ -149,13 +144,12 @@ type GenericZero() =
     static member inline Invoke ()   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call GenericZero.Instance
+        call Unchecked.defaultof<GenericZero>
 
 
 
-type Abs() =
-    inherit Default1()
-    static member val Instance = Abs()
+type Abs =
+    inherit Default1
     static member inline Abs (x:'t        , _:Default2) = (Explicit.Invoke ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
     static member inline Abs (x:'t        , _:Default1) = (Implicit.Invoke ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
     static member inline Abs (x:'t        , _:Abs) = abs x :'t
@@ -163,11 +157,10 @@ type Abs() =
 
     static member inline Invoke (x:'Num) :'Num =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b ) : (static member Abs: ^b*_ -> ^t) b, a)
-        call_2 (Abs.Instance, x)
+        call_2 (Unchecked.defaultof<Abs>, x)
 
-type Abs'() =
-    inherit Abs()
-    static member val Instance = Abs'()
+type Abs' =
+    inherit Abs
     static member        Abs (x:byte      , _:Abs') =     x
     static member        Abs (x:uint16    , _:Abs') =     x
     static member        Abs (x:uint32    , _:Abs') =     x
@@ -176,13 +169,12 @@ type Abs'() =
 
     static member inline Invoke (x:'Num) :'Num =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b ) : (static member Abs: ^b*_ -> ^t) b, a)
-        call_2 (Abs'.Instance, x)
+        call_2 (Unchecked.defaultof<Abs'>, x)
 
 
 
-type Signum() =
-    inherit Default1()
-    static member val Instance = Signum()
+type Signum =
+    inherit Default1
     static member inline Signum (x:'t        , _:Default2) =
         let zero = GenericZero.Invoke()
         if x = zero then zero
@@ -192,11 +184,10 @@ type Signum() =
 
     static member inline Invoke (x:'Num) :'Num =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Signum: _*_ -> _) b, a)
-        call_2 (Signum.Instance, x)
+        call_2 (Unchecked.defaultof<Signum>, x)
 
-type Signum'() =
-    inherit Signum()
-    static member val Instance = Signum'()
+type Signum' =
+    inherit Signum
     static member        Signum (x:byte      , _:Signum') = if x = 0uy then 0uy else 1uy
     static member        Signum (x:uint16    , _:Signum') = if x = 0us then 0us else 1us
     static member        Signum (x:uint32    , _:Signum') = if x = 0u  then 0u  else 1u
@@ -205,12 +196,11 @@ type Signum'() =
 
     static member inline Invoke (x:'Num) :'Num =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Signum: _*_ -> _) b, a)
-        call_2 (Signum'.Instance, x)
+        call_2 (Unchecked.defaultof<Signum'>, x)
 
 
 
-type Negate'() =
-    static member val Instance = Negate'()
+type Negate' =
     static member inline Negate (_:^t when ^t: null and ^t: struct) = id
     static member inline Negate (x:'t        ) = -x
     static member        Negate (x:byte      ) = 0uy - x
@@ -221,13 +211,12 @@ type Negate'() =
 
     static member inline Invoke (x:'Num) :'Num =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Negate: _ -> _) b)
-        call_2 (Negate'.Instance, x)
+        call_2 (Unchecked.defaultof<Negate'>, x)
 
 
 [<Extension; Sealed>]
-type DivRem() =
-    inherit Default1()
-    static member val Instance = DivRem()
+type DivRem =
+    inherit Default1
     static member inline DivRem (x:^t when ^t: null and ^t: struct, y:^t, thisclass:DivRem) = (x, y)
     [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]impl:Default1) = let q = D / d in q,  D - q * d
     [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]impl:DivRem  ) =
@@ -237,15 +226,14 @@ type DivRem() =
     static member inline Invoke (D:'T) (d:'T) :'T*'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member DivRem: _*_*_ -> _) b, c, a)
         let inline call (a:'a, b:'b, c:'c) = call_3 (a, b, c)
-        call (DivRem.Instance, D, d)    
+        call (Unchecked.defaultof<DivRem>, D, d)    
 
 
 
 // Integral class ---------------------------------------------------------
 
 [<Extension; Sealed>]
-type ToBigInt() =
-    static member val Instance = ToBigInt()
+type ToBigInt =
     [<Extension>]static member        ToBigInt (x:sbyte     ) = bigint (int x)
     [<Extension>]static member        ToBigInt (x:int16     ) = bigint (int x)
     [<Extension>]static member        ToBigInt (x:int32     ) = bigint      x
@@ -265,7 +253,7 @@ type ToBigInt() =
 
     static member inline Invoke    (x:'Integral) :bigint =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToBigInt: _ -> _) b)
-        call_2 (ToBigInt.Instance, x)
+        call_2 (Unchecked.defaultof<ToBigInt>, x)
 
 
 module internal Numerics =
@@ -310,9 +298,8 @@ open System.Runtime.InteropServices
 // Floating class ---------------------------------------------------------
 
 
-type Pi() =
-    inherit Default1()
-    static member val Instance = Pi()
+type Pi =
+    inherit Default1
     static member inline Pi (_:^R      , _:Default3) = Implicit.Invoke 3.14159274f    :^R
     static member inline Pi (_:^R      , _:Default2) = Implicit.Invoke System.Math.PI :^R
     static member inline Pi (_:^R      , _:Default1) = (^R: (static member PI:  ^R) ())
@@ -323,7 +310,7 @@ type Pi() =
     static member inline Invoke() :'Floating =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Pi: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Pi.Instance
+        call Unchecked.defaultof<Pi>
 
 
 // Bounded class ----------------------------------------------------------
@@ -331,8 +318,7 @@ type Pi() =
 open System
 // TODO: can we have a (working) default ? It's a field, maybe we should call to a property.
 
-type MinValue() =
-    static member val Instance = MinValue()
+type MinValue =
     static member MinValue (_:unit          , _:MinValue) = ()
     static member MinValue (_:bool          , _:MinValue) = false
     static member MinValue (_:char          , _:MinValue) = Char.MinValue
@@ -354,7 +340,7 @@ type MinValue() =
     static member inline Invoke() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MinValue: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call MinValue.Instance
+        call Unchecked.defaultof<MinValue>
 
     static member inline MinValue ((_:'a*'b                  ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke())
     static member inline MinValue ((_:'a*'b*'c               ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
@@ -364,8 +350,7 @@ type MinValue() =
     static member inline MinValue ((_:'a*'b*'c*'d*'e*'f*'g   ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
     static member inline MinValue ((_:'a*'b*'c*'d*'e*'f*'g*'h), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
 
-type MaxValue() =
-    static member val Instance = MaxValue()
+type MaxValue =
     static member MaxValue (_:unit          , _:MaxValue) = ()
     static member MaxValue (_:bool          , _:MaxValue) = true
     static member MaxValue (_:char          , _:MaxValue) = Char.MaxValue
@@ -387,7 +372,7 @@ type MaxValue() =
     static member inline Invoke() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MaxValue: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call MaxValue.Instance
+        call Unchecked.defaultof<MaxValue>
 
     static member inline MaxValue ((_:'a*'b                  ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke())
     static member inline MaxValue ((_:'a*'b*'c               ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke())

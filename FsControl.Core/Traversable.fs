@@ -9,9 +9,8 @@ open FsControl.Core.TypeMethods.MonadOps
 
 
 [<Extension;Sealed>]
-type Traverse() =
-    inherit Default1()
-    static member val Instance = Traverse()
+type Traverse =
+    inherit Default1
 
     [<Extension>]static member inline Traverse (t:Id<_>, f, _, [<Optional>]impl:Default1) = Map.Invoke Id.create (f (Id.run t))
     [<Extension>]static member inline Traverse (t:_ seq, f, _, [<Optional>]impl:Default1) = 
@@ -45,13 +44,12 @@ type Traverse() =
     static member inline Invoke f t =
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Traverse: _*_*_*_ -> _) b, f, c, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
-        call (Traverse.Instance, t, f)
+        call (Unchecked.defaultof<Traverse>, t, f)
     
 
 [<Extension;Sealed>]
-type SequenceA() =
-    inherit Default1()
-    static member val Instance = SequenceA()
+type SequenceA =
+    inherit Default1
     [<Extension>]static member inline SequenceA (t               , [<Optional>]output, [<Optional>]impl:Default1 ) = Traverse.Invoke id t
     [<Extension>]static member inline SequenceA (t:option<_>     , [<Optional>]output, [<Optional>]impl:SequenceA) = match t with Some x -> Map.Invoke Some x | _ -> result None       
     [<Extension>]static member inline SequenceA (t:list<_>       , [<Optional>]output, [<Optional>]impl:SequenceA) = let cons_f x ys = Map.Invoke List.cons x <*> ys in FoldBack.Invoke cons_f (result []) t
@@ -61,4 +59,4 @@ type SequenceA() =
     static member inline Invoke (t:'Traversable'Applicative'T) :'Applicative'Traversable'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member SequenceA: _*_*_ -> _) b, c, a)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (SequenceA.Instance, t)
+        call (Unchecked.defaultof<SequenceA>, t)

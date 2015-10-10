@@ -538,7 +538,7 @@ module FoldableTree =
                 | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
             _foldMap t f
         static member inline FoldBack (x:Tree<_>, f, z, _:FoldBack) = FoldBack.FromFoldMap f z x
-        static member inline ToSeq    (x:Tree<_>) = Tree.FoldBack (x, (fun x y -> seq {yield x; yield! y}), Seq.empty, FoldBack.Instance)
+        static member inline ToSeq    (x:Tree<_>) = Tree.FoldBack (x, (fun x y -> seq {yield x; yield! y}), Seq.empty, Unchecked.defaultof<FoldBack>)
     
     let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
     let resSum21      = foldMap Sum     myTree

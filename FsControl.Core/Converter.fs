@@ -13,9 +13,8 @@ open FsControl.Core.Prelude
 open System.Numerics
 
 
-type Explicit() =
-    inherit Default1()
-    static member val Instance = Explicit()
+type Explicit =
+    inherit Default1
     static member inline Explicit (_:'R        , _:Default1) = fun (x : ^t) -> ((^R or ^t) : (static member op_Explicit : ^t -> ^R) x)
     static member inline Explicit (_:^t when ^t: null and ^t: struct, _:Default1) = ()
     static member inline Explicit (_:byte      , _:Explicit) = fun x -> byte            x
@@ -36,10 +35,9 @@ type Explicit() =
     static member inline Invoke   value:'T      =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Explicit: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Explicit.Instance value
+        call Unchecked.defaultof<Explicit> value
 
-type FromBytes() =
-    static member val Instance = FromBytes()
+type FromBytes =
     static member FromBytes (_:bool   , _:FromBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
     static member FromBytes (_:char   , _:FromBytes) = fun (x, i, e) -> BitConverter.ToChar   (x, i, e)
     static member FromBytes (_:float  , _:FromBytes) = fun (x, i, e) -> BitConverter.ToDouble (x, i, e)
@@ -55,12 +53,11 @@ type FromBytes() =
     static member inline Invoke (isLtEndian:bool) (startIndex:int) (value:byte[]) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBytes: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call FromBytes.Instance (value, startIndex, isLtEndian)
+        call Unchecked.defaultof<FromBytes> (value, startIndex, isLtEndian)
 
 
 [<Extension;Sealed>]
-type ToBytes() =
-    static member val Instance = ToBytes()
+type ToBytes =
     [<Extension>]static member ToBytes (x:bool   , e, _:ToBytes) = BitConverter.GetBytes(x)
     [<Extension>]static member ToBytes (x:char   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
     [<Extension>]static member ToBytes (x:float  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
@@ -76,14 +73,13 @@ type ToBytes() =
     static member inline Invoke (isLittleEndian:bool) value :byte[] =
         let inline call_2 (a:^a, b:^b, e) = ((^a or ^b) : (static member ToBytes: _*_*_ -> _) b, e, a)
         let inline call (a:'a, b:'b, e) = call_2 (a, b, e)
-        call (ToBytes.Instance, value, isLittleEndian)
+        call (Unchecked.defaultof<ToBytes>, value, isLittleEndian)
 
 
 open System.Globalization
 open FsControl.Core.Types
 
-type TryParse() =
-    static member val Instance = TryParse()
+type TryParse =
     static member inline TryParse (_:'t     option, _:TryParse) = fun x -> 
         let mutable r = Unchecked.defaultof< ^R>
         if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
@@ -94,12 +90,11 @@ type TryParse() =
     static member inline Invoke (value:string) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryParse: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call TryParse.Instance value
+        call Unchecked.defaultof<TryParse> value
 
 
-type Parse() =
-    inherit Default1()
-    static member val Instance = Parse()
+type Parse =
+    inherit Default1
     static member inline Parse (_:^R                  , _:Default1) = fun (x:string) -> (^R: (static member Parse: _ -> ^R) x)
     static member inline Parse (_:^R                  , _:Parse   ) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, CultureInfo.InvariantCulture))
 #if NOTNET35
@@ -117,11 +112,10 @@ type Parse() =
     static member inline Invoke    (value:string) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Parse: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Parse.Instance value
+        call Unchecked.defaultof<Parse> value
 
 
-type ToString() =
-    static member val Instance = ToString()
+type ToString =
     static member ToString (x:bool          , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:char          , _:ToString) = fun (k:CultureInfo) -> x.ToString k
     static member ToString (x:byte          , _:ToString) = fun (k:CultureInfo) -> x.ToString k
@@ -145,7 +139,7 @@ type ToString() =
     static member inline Invoke (culture:CultureInfo) value : string =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToString: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = fun (x:'x) -> call_2 (a, b) x
-        call (ToString.Instance, value) culture
+        call (Unchecked.defaultof<ToString>, value) culture
 
 
 type ToString with 

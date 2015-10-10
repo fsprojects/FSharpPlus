@@ -1,15 +1,11 @@
 [<AutoOpen>]
 module InlineHelper
 
-type Default5() = class end
-type Default4() =
-    inherit Default5()
-type Default3() =
-    inherit Default4()
-type Default2() =
-    inherit Default3()
-type Default1() =
-    inherit Default2()
+type Default5 = class end
+type Default4 = class inherit Default5 end
+type Default3 = class inherit Default4 end
+type Default2 = class inherit Default3 end
+type Default1 = class inherit Default2 end
 
 module Overloads =
     let inline instance_1 (a:^a                         ) = 
