@@ -8,8 +8,8 @@ open System.Text
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Core.Printf
 open FsControl.BaseLib
-open FsControl.Core
-open FsControl.Core.Prelude
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
 open System.Numerics
 
 

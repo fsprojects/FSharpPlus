@@ -1,14 +1,14 @@
 ﻿namespace FsControl.Core.TypeMethods
 
-open FsControl.Core
-open FsControl.Core.Prelude
-open FsControl.Core.Types
 open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
 open System.Collections
 open System.Collections.Generic
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
+open FsControl.Core.Types
 
 
 [<Extension;Sealed>]

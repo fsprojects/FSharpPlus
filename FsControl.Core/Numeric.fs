@@ -1,7 +1,7 @@
 namespace FsControl.Core.TypeMethods
 
-open FsControl.Core
-open FsControl.Core.Prelude
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
@@ -274,9 +274,9 @@ module internal Numerics =
 
 namespace FsControl.Core.TypeMethods
 
-open FsControl.Core.Prelude
 open Numerics
-open FsControl.Core
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
 open FsControl.Core.Types
 open FsControl.Core.TypeMethods
 

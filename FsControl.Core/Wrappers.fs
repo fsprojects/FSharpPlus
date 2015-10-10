@@ -1,5 +1,5 @@
 ﻿namespace FsControl.Core.Types
-open FsControl.Core.Prelude
+open FsControl.Core.Internals.Prelude
 open FsControl.Core.TypeMethods
 
 type Dual<'T> = Dual of 'T with

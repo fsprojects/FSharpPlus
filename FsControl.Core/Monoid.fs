@@ -5,11 +5,12 @@ open System.Text
 open System.Collections.Generic
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
-open FsControl.Core.Prelude
 open Microsoft.FSharp.Quotations
 #if NOTNET35
 open System.Threading.Tasks
 #endif
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
 
 
 type Mempty =

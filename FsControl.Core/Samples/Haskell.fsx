@@ -16,11 +16,11 @@ let (==) = (=)
 let (=/) x y = not (x = y)
 
 type DeReference = DeReference with
-    static member instance (DeReference, a:'a ref     , _) = fun () -> !a
-    static member instance (DeReference, a:string     , _) = fun () -> a.ToCharArray() |> Array.toList
-    static member instance (DeReference, a:DeReference, _) = fun () -> DeReference
+    static member ($) (DeReference, a:'a ref     ) = !a
+    static member ($) (DeReference, a:string     ) = a.ToCharArray() |> Array.toList
+    static member ($) (DeReference, a:DeReference) = DeReference
 
-let inline (!) a = Inline.instance (DeReference, a) ()
+let inline (!) a = DeReference $ a
 
 type Maybe<'t> = Option<'t>
 let  Just x :Maybe<'t> = Some x

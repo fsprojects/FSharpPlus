@@ -1,7 +1,7 @@
 ﻿namespace FsControl.Core.Types
 
-open FsControl.Core
-open FsControl.Core.Prelude
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
 open FsControl.Core.TypeMethods
 open FsControl.Core.TypeMethods.MonadOps
 

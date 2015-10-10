@@ -17,8 +17,8 @@ open System.Threading.Tasks
 #endif
 open Microsoft.FSharp.Quotations
 
-open FsControl.Core
-open FsControl.Core.Prelude
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
 open FsControl.Core.Types
 
 
