@@ -1,3 +1,7 @@
+#nowarn "77" 
+// Warn FS0077 -> Member constraints with the name 'Abs' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
+// But the first Abs overload relies in the standard abs function which handle all those simulated cases.
+
 namespace FsControl.Core.TypeMethods
 
 open FsControl.Core.Internals
