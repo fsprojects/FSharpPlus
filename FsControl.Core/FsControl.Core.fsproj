@@ -58,7 +58,7 @@
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Prelude.fs" />
+    <Compile Include="Internals.fs" />
     <Compile Include="Converter.fs" />
     <Compile Include="Numeric.fs" />
     <Compile Include="Monoid.fs" />
