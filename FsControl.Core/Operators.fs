@@ -6,20 +6,30 @@ module Operators =
 
     // Functor ----------------------------------------------------------------
 
+    /// Lift a function into a Functor.
     let inline map    (f:'T->'U) (x:'Functor'T) :'Functor'U = Map.Invoke f x
+
+    /// Lift a function into a Functor. Same as map.
     let inline (<!>)  (f:'T->'U) (x:'Functor'T) :'Functor'U = Map.Invoke f x
+
+    /// Lift a function into a Functor. Same as map but with flipped arguments.
     let inline (|>>)  (x:'Functor'T) (f:'T->'U) :'Functor'U = Map.Invoke f x
 
+    /// Lift an action into a Functor.
     let inline map_   (action :'T->unit) (source :'Functor'T) = Map_.Invoke action source :unit
    
 
     // Applicative ------------------------------------------------------------
 
+    /// Lift a value into a Functor. Same as return in Computation Expressions.
     let inline result (x:'T): 'Functor'T = Return.Invoke x
 
+    /// Apply a lifted argument to a lifted function.
     let inline (<*>) (x:'Applicative'T_'U) (y:'Applicative'T): 'Applicative'U = Apply.Invoke x y : 'Applicative'U
 
+    /// Apply 2 lifted arguments to a lifted function.
     let inline liftA2 (f:'T->'U->'V) (a:'Applicative'T) (b:'Applicative'U) :'Applicative'V = f <!> a <*> b
+
     let inline (  *>) (x:'Applicative'a) :'Applicative'b->'Applicative'b = x |> liftA2 (fun   _ -> id)
     let inline (<*  ) (x:'Applicative'a) :'Applicative'b->'Applicative'a = x |> liftA2 (fun k _ -> k )
     let inline (<**>) (x:'Applicative'a): 'Applicative'a_'b->'Applicative'b = x |> liftA2 (|>)
@@ -117,31 +127,32 @@ module Operators =
 
     let inline callCC (f:('T->'MonadCont'U)->'MonadCont'T): 'MonadCont'T = CallCC.Invoke f
    
-    /// <summary>get    :: MonadState  s m => m s</summary>
+    /// <summary>Haskell signature: get    :: MonadState  s m => m s</summary>
     let inline get() :'ms = Get.Invoke()
 
-    /// <summary>put    :: MonadState  s m => s -> m ()</summary>
+    /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
     let inline put (x:'s) :'m = Put.Invoke x
 
-    /// <summary>ask    :: MonadReader r m => m r</summary>
+    /// <summary>Haskell signature: ask    :: MonadReader r m => m r</summary>
     let inline ask() :'mr = Ask.Invoke()
    
-    /// <summary>local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
+    /// <summary>Haskell signature: local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
     let inline local (f:'rr) (m:'ma) :'ma = Local.Invoke f m
 
-    /// <summary>tell   :: MonadWriter w m => w   -> m ()</summary>
+    /// <summary>Haskell signature: tell   :: MonadWriter w m => w   -> m ()</summary>
     let inline tell (x:'w) :'m = Tell.Invoke x
 
-    /// <summary>listen :: MonadWriter w m => m a -> m (a,w)</summary>
+    /// <summary>Haskell signature: listen :: MonadWriter w m => m a -> m (a,w)</summary>
     let inline listen (m:'ma) :'maw = Listen.Invoke m
 
-    /// <summary>pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
+    /// <summary>Haskell signature: pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
     let inline pass (m:'maww) :'ma = Pass.Invoke m
 
-    /// <summary>throw :: MonadError e m => e -> m a</summary>
+    /// <summary>Haskell signature: throw :: MonadError e m => e -> m a</summary>
     let inline throw (x:'e) :'ma = ThrowError.Invoke x
 
-    /// <summary>catch :: MonadError e m => m a -> (e -> m b) -> m b</summary>
+    /// <summary> Pure version of catch. Executes a function when the value represents an exception.
+    /// <para/>   Haskell signature: catch :: MonadError e m => m a -> (e -> m b) -> m b </summary>
     let inline catch (v:'ma) (h:'e->'mb) :'mb = CatchError.Invoke v h
 
 
@@ -214,6 +225,7 @@ module Operators =
     
     // Converter
 
+    /// Convert using the explicit operator.
     let inline explicit    (value:'T) :'U = Explicit.Invoke value
 
     let inline fromBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = FromBytes.Invoke isLtEndian startIndex value
