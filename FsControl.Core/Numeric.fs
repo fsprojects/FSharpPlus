@@ -62,24 +62,23 @@ type FromInt64 =
     static member        FromInt64 (_:bigint    , _:FromInt64) = fun (x:int64) -> bigint          x
     static member        FromInt64 (_:float     , _:FromInt64) = fun (x:int64) -> float           x
 #if NOTNET35
+    static member        FromInt64 (_:float32   , _:FromInt64) = fun (x:int64) -> float32         x
+    static member        FromInt64 (_:decimal   , _:FromInt64) = fun (x:int64) -> decimal         x
     static member        FromInt64 (_:sbyte     , _:FromInt64) = fun (x:int64) -> sbyte           x
     static member        FromInt64 (_:int16     , _:FromInt64) = fun (x:int64) -> int16           x
     static member        FromInt64 (_:byte      , _:FromInt64) = fun (x:int64) -> byte            x
     static member        FromInt64 (_:uint16    , _:FromInt64) = fun (x:int64) -> uint16          x
     static member        FromInt64 (_:uint32    , _:FromInt64) = fun (x:int64) -> uint32          x
-    static member        FromInt64 (_:uint64    , _:FromInt64) = fun (x:int64) -> uint64          x
-    static member        FromInt64 (_:float32   , _:FromInt64) = fun (x:int64) -> float32         x
-    static member        FromInt64 (_:decimal   , _:FromInt64) = fun (x:int64) -> decimal         x
 #else
+    static member        FromInt64 (_:float32   , _:FromInt64) = fun (x:int64) -> float32    (int x)
+    static member        FromInt64 (_:decimal   , _:FromInt64) = fun (x:int64) -> decimal    (int x)
     static member        FromInt64 (_:sbyte     , _:FromInt64) = fun (x:int64) -> sbyte      (int x)
     static member        FromInt64 (_:int16     , _:FromInt64) = fun (x:int64) -> int16      (int x)
     static member        FromInt64 (_:byte      , _:FromInt64) = fun (x:int64) -> byte       (int x)
     static member        FromInt64 (_:uint16    , _:FromInt64) = fun (x:int64) -> uint16     (int x)
     static member        FromInt64 (_:uint32    , _:FromInt64) = fun (x:int64) -> uint32     (int x)
-    static member        FromInt64 (_:uint64    , _:FromInt64) = fun (x:int64) -> uint64          x
-    static member        FromInt64 (_:float32   , _:FromInt64) = fun (x:int64) -> float32    (int x)
-    static member        FromInt64 (_:decimal   , _:FromInt64) = fun (x:int64) -> decimal    (int x)
 #endif
+    static member        FromInt64 (_:uint64    , _:FromInt64) = fun (x:int64) -> uint64          x
 
     static member inline Invoke (x:int64)   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromInt64: _*_ -> _) b, a)
@@ -100,7 +99,6 @@ type FromInt32 =
     static member        FromInt32 (_:unativeint, _:FromInt32) = fun (x:int32) -> unativeint (int x)
     static member        FromInt32 (_:bigint    , _:FromInt32) = fun (x:int32) -> bigint          x
     static member        FromInt32 (_:float     , _:FromInt32) = fun (x:int32) -> float           x
-#if NOTNET35
     static member        FromInt32 (_:sbyte     , _:FromInt32) = fun (x:int32) -> sbyte           x
     static member        FromInt32 (_:int16     , _:FromInt32) = fun (x:int32) -> int16           x
     static member        FromInt32 (_:byte      , _:FromInt32) = fun (x:int32) -> byte            x
@@ -109,16 +107,6 @@ type FromInt32 =
     static member        FromInt32 (_:uint64    , _:FromInt32) = fun (x:int32) -> uint64          x
     static member        FromInt32 (_:float32   , _:FromInt32) = fun (x:int32) -> float32         x
     static member        FromInt32 (_:decimal   , _:FromInt32) = fun (x:int32) -> decimal         x
-#else
-    static member        FromInt32 (_:sbyte     , _:FromInt32) = fun (x:int32) -> sbyte      (int x)
-    static member        FromInt32 (_:int16     , _:FromInt32) = fun (x:int32) -> int16      (int x)
-    static member        FromInt32 (_:byte      , _:FromInt32) = fun (x:int32) -> byte       (int x)
-    static member        FromInt32 (_:uint16    , _:FromInt32) = fun (x:int32) -> uint16     (int x)
-    static member        FromInt32 (_:uint32    , _:FromInt32) = fun (x:int32) -> uint32     (int x)
-    static member        FromInt32 (_:uint64    , _:FromInt32) = fun (x:int32) -> uint64          x
-    static member        FromInt32 (_:float32   , _:FromInt32) = fun (x:int32) -> float32    (int x)
-    static member        FromInt32 (_:decimal   , _:FromInt32) = fun (x:int32) -> decimal    (int x)
-#endif
 
     static member inline Invoke (x:int32)   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromInt32: _*_ -> _) b, a)
