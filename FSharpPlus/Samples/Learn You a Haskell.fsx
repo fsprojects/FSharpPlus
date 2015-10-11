@@ -381,6 +381,9 @@ let res78 : Choice<int, string> = Choice1Of2 100 >>= (fun x -> Choice2Of2 "no wa
     Monad functions    
    --------------------------------------------------*)
 
+let inline liftM x = map x
+let inline ap x = (<*>) x
+
 let res79 = liftM ((*)3) (Some 8)                                                     // Some 24
 let res80 = map ((*)3) (Some 8)                                                       // Some 24
 let res81 = ((*)3) <!> (Some 8)                                                       // Some 24
@@ -570,26 +573,26 @@ let flipThree : Prob<bool> =
 
 module MathLibTypeClasses =
     (* One way to define custom type class *)
-    type Plus = Plus with
-        static member instance (Plus, x:int, _:int) = fun y -> x + y
-        static member instance (Plus, x:float, _:float) = fun y -> x + y 
+    type PlusClass =
+        static member Plus (x:int) = fun y -> x + y
+        static member Plus (x:float) = fun y -> x + y 
         
-    type Minus = Minus with
-        static member instance (Minus, x:int, _:int) = fun y -> x - y
-        static member instance (Minus, x:float, _:float) = fun y -> x - y 
+    type MinusClass =
+        static member Minus (x:int) = fun y -> x - y
+        static member Minus (x:float) = fun y -> x - y 
       
-    type Divide = Divide with
-        static member instance (Divide, x:int, _:int) = fun y -> x / y
-        static member instance (Divide, x:float, _:float) = fun y -> x / y
+    type DivideClass =
+        static member Divide (x:int) = fun y -> x / y
+        static member Divide (x:float) = fun y -> x / y
 
-    type Length = Length with
-        static member instance (Length, xs: List<int>, _: int) = fun () -> xs.Length
-        static member instance (Length, xs: List<float>, _:float) = fun () -> xs.Length |> float
+    type LengthClass =
+        static member Length (xs: List<int>  , _:int)   = xs.Length
+        static member Length (xs: List<float>, _:float) = xs.Length |> float
     
-    let inline internal plus x y = Inline.instance (Plus, x) y
-    let inline internal minus x y = Inline.instance (Minus, x) y
-    let inline internal divide x y = Inline.instance (Divide, x) y
-    let inline internal length xs = Inline.instance (Length, xs) ()   
+    let inline internal plus   x y = let inline Invoke (a: ^a, b: ^b) = ((^a or ^b) : (static member Plus  : ^b -> _) b) in Invoke (Unchecked.defaultof<PlusClass>  , x) y
+    let inline internal minus  x y = let inline Invoke (a: ^a, b: ^b) = ((^a or ^b) : (static member Minus : ^b -> _) b) in Invoke (Unchecked.defaultof<MinusClass> , x) y
+    let inline internal divide x y = let inline Invoke (a: ^a, b: ^b) = ((^a or ^b) : (static member Divide: ^b -> _) b) in Invoke (Unchecked.defaultof<DivideClass>, x) y
+    let inline internal length xs :^R  = let inline Invoke (a: ^a, b: ^b, r:^r) = ((^a or ^b or ^r) : (static member Length: _*_ -> _) b, r) in Invoke (Unchecked.defaultof<LengthClass>, xs, Unchecked.defaultof<'R>) 
 
 open MathLibTypeClasses
 
@@ -600,7 +603,7 @@ let res124 = divide 12.0 34.0
 
 module StatisticsLib =
     let inline mean (xs : 'Math'a list) =
-        let sum = xs |> List.reduce (plus) in divide sum (length xs)
+        let sum = xs |> List.reduce plus in divide sum (length xs)
 
 open StatisticsLib
 
@@ -608,10 +611,10 @@ let res125 = mean [13.; 23.; 42.; 45.; 61.; 73.; 96.; 100.; 199.; 420.; 900.; 38
 let res126 = mean [13; 23; 42; 45; 61; 73; 96; 100; 199; 420; 900; 3839]
     
 type Tree with
-    static member inline instance (_:Plus, x:Tree<'a>, _:Tree<'a>) = fun (_ : Tree<'a>) -> x
-    static member inline instance (_:Minus, x:Tree<'a>, _:Tree<'a>) = fun (_ : Tree<'a>) -> x
-    static member inline instance (_:Divide, x:Tree<'a>, _:Tree<'a>) = fun (_ : Tree<'a>) -> x
-    static member inline instance (_:Length, x:List<Tree<'a>>, _:Tree<'a>) = fun () -> Empty : Tree<'a>
+    static member inline Plus   (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
+    static member inline Minus  (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
+    static member inline Divide (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
+    static member inline Length (x:List<Tree<'a>>, _:Tree<'a>) = Empty : Tree<'a>
 
 (* defined above
 let testTree =
@@ -654,10 +657,10 @@ module YesNoTypeClass =
             | None -> false
 
     module internal YesNoOverloads =
-        let inline instance (a: ^a, b: ^b) =
+        let inline Invoke (a: ^a, b: ^b) =
             ( (^a or ^b) : (static member YesNo: ^b -> bool) b )
 
-    let inline yesno (x) : bool = YesNoOverloads.instance (YesNoClass, x)
+    let inline yesno (x) : bool = YesNoOverloads.Invoke (YesNoClass, x)
 
 open YesNoTypeClass
 

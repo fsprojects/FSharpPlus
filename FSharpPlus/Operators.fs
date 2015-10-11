@@ -26,20 +26,30 @@ module Operators =
 
     // Functor ----------------------------------------------------------------
 
+    /// Lift a function into a Functor.
     let inline map    (f:'T->'U) (x:'Functor'T) :'Functor'U = Map.Invoke f x
+
+    /// Lift a function into a Functor. Same as map.
     let inline (<!>)  (f:'T->'U) (x:'Functor'T) :'Functor'U = Map.Invoke f x
+
+    /// Lift a function into a Functor. Same as map but with flipped arguments.
     let inline (|>>)  (x:'Functor'T) (f:'T->'U) :'Functor'U = Map.Invoke f x
 
+    /// Lift an action into a Functor.
     let inline map_   (action :'T->unit) (source :'Functor'T) = Map_.Invoke action source :unit
    
 
     // Applicative ------------------------------------------------------------
 
+    /// Lift a value into a Functor. Same as return in Computation Expressions.
     let inline result (x:'T): 'Functor'T = Return.Invoke x
 
+    /// Apply a lifted argument to a lifted function.
     let inline (<*>) (x:'Applicative'T_'U) (y:'Applicative'T): 'Applicative'U = Apply.Invoke x y : 'Applicative'U
 
+    /// Apply 2 lifted arguments to a lifted function.
     let inline liftA2 (f:'T->'U->'V) (a:'Applicative'T) (b:'Applicative'U) :'Applicative'V = f <!> a <*> b
+
     let inline (  *>) (x:'Applicative'a) :'Applicative'b->'Applicative'b = x |> liftA2 (fun   _ -> id)
     let inline (<*  ) (x:'Applicative'a) :'Applicative'b->'Applicative'a = x |> liftA2 (fun k _ -> k )
     let inline (<**>) (x:'Applicative'a): 'Applicative'a_'b->'Applicative'b = x |> liftA2 (|>)
@@ -53,9 +63,6 @@ module Operators =
     let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = Bind.Invoke (f x) g
     let inline (<=<) (g:'b->'Monad'c) (f:'a->'Monad'b) (x:'a) :'Monad'c = Bind.Invoke (f x) g
     let inline join (x:'Monad'Monad'T) :'Monad'T = Join.Invoke x
-    let inline liftM  (f:'a->'b) (m1:'Monad'a) :'Monad'b = m1 >>= (result << f)
-    let inline liftM2 (f:'a1->'a2->'r) (m1:'Monad'a1) (m2:'Monad'a2) :'Monad'r = m1 >>= fun x1 -> m2 >>= fun x2 -> result (f x1 x2)
-    let inline ap (x:'Monad'a_'b) (y:'Monad'a): 'Monad'b = liftM2 id x y
 
 
     // Monoid -----------------------------------------------------------------
@@ -67,9 +74,9 @@ module Operators =
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
-    let inline zero() :'Functor'T = Zero.Invoke()
-    let inline (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T = Plus.Invoke x y
-    let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Zero.Invoke()
+    let inline mzero() :'Functor'T = Mzero.Invoke()
+    let inline (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T = Mplus.Invoke x y
+    let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Mzero.Invoke()
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
@@ -108,6 +115,7 @@ module Operators =
     let inline toList  value :'t list = ToList.Invoke  value
     let inline toArray value :'t []   = ToArray.Invoke value
     let inline exists     (predicate :'T->bool) (source:'Foldable'T)   = Exists.Invoke  predicate source  :bool
+    let inline forall     (predicate :'T->bool) (source:'Foldable'T)   = Forall.Invoke  predicate source  :bool
     let inline find       (predicate :'T->bool) (source:'Foldable'T)   = Find.Invoke    predicate source  :'T
     let inline tryFind    (predicate :'T->bool) (source:'Foldable'T)   = TryFind.Invoke predicate source  :'T option
     let inline pick     (chooser:'T->'U option) (source:'Foldable'T)   = Pick.Invoke    chooser   source  :'U
@@ -139,31 +147,32 @@ module Operators =
 
     let inline callCC (f:('T->'MonadCont'U)->'MonadCont'T): 'MonadCont'T = CallCC.Invoke f
    
-    /// <summary>get    :: MonadState  s m => m s</summary>
+    /// <summary>Haskell signature: get    :: MonadState  s m => m s</summary>
     let inline get() :'ms = Get.Invoke()
 
-    /// <summary>put    :: MonadState  s m => s -> m ()</summary>
+    /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
     let inline put (x:'s) :'m = Put.Invoke x
 
-    /// <summary>ask    :: MonadReader r m => m r</summary>
+    /// <summary>Haskell signature: ask    :: MonadReader r m => m r</summary>
     let inline ask() :'mr = Ask.Invoke()
    
-    /// <summary>local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
+    /// <summary>Haskell signature: local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
     let inline local (f:'rr) (m:'ma) :'ma = Local.Invoke f m
 
-    /// <summary>tell   :: MonadWriter w m => w   -> m ()</summary>
+    /// <summary>Haskell signature: tell   :: MonadWriter w m => w   -> m ()</summary>
     let inline tell (x:'w) :'m = Tell.Invoke x
 
-    /// <summary>listen :: MonadWriter w m => m a -> m (a,w)</summary>
+    /// <summary>Haskell signature: listen :: MonadWriter w m => m a -> m (a,w)</summary>
     let inline listen (m:'ma) :'maw = Listen.Invoke m
 
-    /// <summary>pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
+    /// <summary>Haskell signature: pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
     let inline pass (m:'maww) :'ma = Pass.Invoke m
 
-    /// <summary>throw :: MonadError e m => e -> m a</summary>
+    /// <summary>Haskell signature: throw :: MonadError e m => e -> m a</summary>
     let inline throw (x:'e) :'ma = ThrowError.Invoke x
 
-    /// <summary>catch :: MonadError e m => m a -> (e -> m b) -> m b</summary>
+    /// <summary> Pure version of catch. Executes a function when the value represents an exception.
+    /// <para/>   Haskell signature: catch :: MonadError e m => m a -> (e -> m b) -> m b </summary>
     let inline catch (v:'ma) (h:'e->'mb) :'mb = CatchError.Invoke v h
 
 
@@ -236,7 +245,8 @@ module Operators =
     
     // Converter
 
-    let inline convert   (value:'T) :'U      = Convert.Invoke value
+    /// Converts using the explicit operator.
+    let inline explicit    (value:'T) :'U = Explicit.Invoke value
 
     let inline fromBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = FromBytes.Invoke isLtEndian startIndex value
     let inline fromBytes   (value:byte[]) = FromBytes.Invoke true 0 value
@@ -247,18 +257,60 @@ module Operators =
 
     let inline toStringWithCulture (cultureInfo:System.Globalization.CultureInfo) value:string = ToString.Invoke cultureInfo value
     let inline toString  value:string  = ToString.Invoke System.Globalization.CultureInfo.InvariantCulture value  
-         
+     
+    /// Converts to a value from its string representation.
     let inline parse    (value:string) = Parse.Invoke    value
+
+    /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     let inline tryParse (value:string) = TryParse.Invoke value
 
 
     // Numerics
 
+    /// Gets a value that represents the number 0 (zero).
+    let inline zero() = Zero.Invoke()
+
+    /// Gets a value that represents the number 1 (one).
+    let inline one()  = One.Invoke()
+
+    /// Divides one number by another, returns a tuple with the result and the remainder.
     let inline divRem (D:'T) (d:'T) :'T*'T = DivRem.Invoke D d
+
+    /// Returns the smallest possible value.
     let inline minValue() = MinValue.Invoke()
+
+    /// Returns the largest possible value.
     let inline maxValue() = MaxValue.Invoke()
-    let inline fromBigInteger  (x:bigint)    :'Num   = FromBigInteger.Invoke x
-    let inline toBigInteger    (x:'Integral) :bigint = ToBigInteger.Invoke x
+
+    let inline fromBigInt  (x:bigint)    :'Num   = FromBigInt.Invoke x
+
+    let inline toBigInt    (x:'Integral) :bigint = ToBigInt.Invoke x
+
+    let inline pi() :'Floating = Pi.Invoke()
+
+    /// Returns a number which represents the sign.
+    /// Rule: signum x * abs x = x
+    let inline signum  (x:'Num): 'Num = Signum.Invoke x
+
+    /// Gets the absolute value of a number.
+    let inline abs     (x:'Num): 'Num = Abs.Invoke x
+
+
+    let inline negate  (x:'Num): 'Num = -x
+
+    /// Returns the square root of a real number.
+    let inline sqrt    (x:'Num): 'Num = sqrt x
+
+    /// Returns a number which represents the sign.
+    /// Works also for non-negatives number types. 
+    /// Rule: signum x * abs x = x
+    let inline signum' (x:'Num): 'Num = Signum'.Invoke x
+
+    /// Gets the absolute value of a number.
+    /// Works also for non-negatives number types.
+    let inline abs'    (x:'Num): 'Num = Abs'.Invoke x
+
+    let inline negate' (x:'Num): 'Num = Negate'.Invoke x
 
     // END region copied from FsControl.
 
@@ -296,29 +348,20 @@ module Operators =
 
         open System.Numerics
 
-        let inline abs    (x:'Num) :'Num = Abs.Invoke x
-        let inline signum (x:'Num) :'Num = Signum.Invoke x
-        let inline negate (x:'Num) :'Num = Negate.Invoke x
-        let inline (~-)   (x:'Num) :'Num = Negate.Invoke x
-        let inline fromRational (x:Rational) :'Fractional = FromRational.Invoke x
-        let inline properFraction x = ProperFraction.Invoke x
-        let inline toRational (x:'Real) :Rational = ToRational.Invoke x
-        let inline pi() :'Floating = Pi.Invoke()
-
-        let inline fromIntegral   (x:'Integral) :'Num   = (fromBigInteger << toBigInteger) x
+        let inline fromIntegral   (x:'Integral) :'Num   = (fromBigInt << toBigInt) x
 
         module NumericLiteralG =
-            let inline FromZero() = fromIntegral 0
-            let inline FromOne () = fromIntegral 1
-            let inline FromInt32  (i:int   ) = fromIntegral i
-            let inline FromInt64  (i:int64 ) = fromIntegral i
-            let inline FromString (i:string) = fromBigInteger <| BigInteger.Parse i
+            let inline FromZero() = zero()
+            let inline FromOne () = one()
+            let inline FromInt32  (i:int   ) = FromInt32.Invoke i
+            let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
+            let inline FromString (i:string) = fromBigInt <| BigInteger.Parse i
 
         let inline (+) (a:'Num) (b:'Num) :'Num = a + b
         let inline (-) (a:'Num) (b:'Num) :'Num = a - b
         let inline (*) (a:'Num) (b:'Num) :'Num = a * b
 
-        let inline internal whenIntegral a = let _ = if false then toBigInteger a else 0I in ()
+        let inline internal whenIntegral a = let _ = if false then toBigInt a else 0I in ()
  
         let inline div (a:'Integral) b :'Integral =
             whenIntegral a
@@ -328,22 +371,11 @@ module Operators =
         let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
         let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
  
-        let inline internal G0() = fromIntegral 0
-        let inline internal G1() = fromIntegral 1
- 
         let inline gcd x y :'Integral =
-            let zero = G0()
+            let zero = zero()
             let rec loop a = function
                 | b when b = zero -> a
                 | b -> loop b (rem a b)
             match(x,y) with
             | t when t = (zero,zero) -> failwith "gcd 0 0 is undefined"
             | _                      -> loop (abs x) (abs y)
- 
-        let inline ratio (a:'Integral) (b:'Integral) :Ratio.Ratio<'Integral> =
-            whenIntegral a
-            let zero = G0()
-            if b = zero then failwith "Ratio.%: zero denominator"
-            let (a,b) = if b < zero then (negate a, negate b) else (a, b)
-            let gcd = gcd a b
-            Ratio.Ratio (quot a gcd, quot b gcd)
