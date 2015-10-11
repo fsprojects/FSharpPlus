@@ -30,7 +30,7 @@ module Builders =
         member inline b.Bind(p,rest) = p >>= rest
         member b.Let(p,rest) = rest p
         member b.ReturnFrom(expr) = expr
-        member inline x.Zero() = zero()
+        member inline x.Zero() = mzero()
         member inline x.Combine(a, b) = a <|> b
     
     let monad     = new MonadBuilder()
@@ -45,7 +45,7 @@ module Builders =
         member    __.ReturnFrom(expr)  = expr
         member inline __.For(p, rest)  = p >>= rest
         member inline __.Yield(x)      = result x
-        member inline __.Zero()        = zero()
+        member inline __.Zero()        = mzero()
         member inline __.Combine(a, b) = a <|> b
 
         [<CustomOperation("select", MaintainsVariableSpace=true)>]
