@@ -84,24 +84,36 @@ module Extensions =
             loopM xs
 
 
+    /// A convenient alias for Choice<_,_>
+    type Result<'TSuccess,'TFailure> = Choice<'TSuccess,'TFailure>
+    let (|Success|Failure|) = function
+        | Choice1Of2 x -> Success x
+        | Choice2Of2 x -> Failure x
+
+    let inline Success x = Choice1Of2 x
+    let inline Failure x = Choice2Of2 x
+
+
+
     [<RequireQualifiedAccess>]
     module Error =
         let inline map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
         let inline result x = Choice1Of2 x
         let inline throw  x = Choice2Of2 x
-        let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
-        let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
+        let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v -> f v | Choice2Of2 e -> Choice2Of2 e
+        let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> f e
 
+    /// Choice<'TSuccess,'TFailure> specialized in 'TFailure = Exception 
     [<Runtime.CompilerServices.Extension>]
-    module ValueOrException =
+    module ResultOrException =
         [<Runtime.CompilerServices.Extension>]
-        let IsValue     :Choice<_,exn> -> _ = function Choice1Of2 _ -> true | _ -> false
+        let IsResult  :Choice<_,exn>   -> _ = function Choice1Of2 _ -> true | _ -> false
 
         [<Runtime.CompilerServices.Extension>]
         let IsException :Choice<_,exn> -> _ = function Choice2Of2 _ -> true | _ -> false
 
         [<Runtime.CompilerServices.Extension>]
-        let Value :Choice<_,exn>       -> _ = function Choice1Of2 v -> v | Choice2Of2 e -> raise e
+        let Result :Choice<_,exn>      -> _ = function Choice1Of2 v -> v | Choice2Of2 e -> raise e
 
         [<Runtime.CompilerServices.Extension>]
         let Exception :Choice<_,exn>   -> _ = function Choice2Of2 e -> e | _ -> new Exception()
