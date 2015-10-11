@@ -191,19 +191,24 @@ type Signum' =
         call_2 (Unchecked.defaultof<Signum'>, x)
 
 
+open FsControl.Core.Types
 
-type Negate' =
-    static member inline Negate (_:^t when ^t: null and ^t: struct) = id
-    static member inline Negate (x:'t        ) = -x
-    static member        Negate (x:byte      ) = 0uy - x
-    static member        Negate (x:uint16    ) = 0us - x
-    static member        Negate (x:uint32    ) = 0u  - x
-    static member        Negate (x:uint64    ) = 0UL - x
-    static member        Negate (x:unativeint) = 0un - x
+type TryNegate =
+    static member inline TryNegate (_:^t when ^t: null and ^t: struct) = ()
+    static member inline TryNegate (x:'t        ) = Choice1Of2 -x
+    static member inline Invoke (x:'Num) :Choice<'Num,exn> =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryNegate: _ -> _) b)
+        call_2 (Unchecked.defaultof<TryNegate>, x)
 
-    static member inline Invoke (x:'Num) :'Num =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Negate: _ -> _) b)
-        call_2 (Unchecked.defaultof<Negate'>, x)
+type TryNegate' =
+    static member        TryNegate (x:byte      ) = if x = 0uy then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
+    static member        TryNegate (x:uint16    ) = if x = 0us then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
+    static member        TryNegate (x:uint32    ) = if x = 0u  then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
+    static member        TryNegate (x:uint64    ) = if x = 0UL then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
+    static member        TryNegate (x:unativeint) = if x = 0un then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
+    static member inline Invoke (x:'Num) :Choice<'Num,exn> =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryNegate: _ -> _) b)
+        call_2 (Unchecked.defaultof<TryNegate'>, x)
 
 
 [<Extension; Sealed>]
@@ -275,19 +280,7 @@ open FsControl.Core.TypeMethods
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
-// Fractional class -------------------------------------------------------
-(* Code removed. May be it can be defined by using the methods .Numerator and .Denominator *)
 
-
-// RealFrac class ---------------------------------------------------------
-(* Code removed. Will see later if we need those methods *)
-
-
-// Real class -------------------------------------------------------------
-(* Code removed. May be it can be defined by using the methods FromIntFraction , FromBigIntFraction *)
-
-
-// Floating class ---------------------------------------------------------
 
 
 type Pi =
@@ -298,11 +291,153 @@ type Pi =
     static member inline Pi (_:Default1, _:Default1) = (^R: (static member PI:  ^R) ())
     static member        Pi (_:float32 , _:Pi      ) = 3.14159274f
     static member        Pi (_:float   , _:Pi      ) = System.Math.PI
+    static member        Pi (_:decimal , _:Pi      ) = 3.1415926535897932384626433833M
 
     static member inline Invoke() :'Floating =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Pi: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<Pi>
+
+type Minus =
+    static member inline Minus (x, y) = x - y
+    static member inline Minus (x, y) =
+            match ((^Num) : (static member TryMinus: ^Num * ^Num -> Choice< ^Num, exn>) (x, y)) with
+            | Choice1Of2 x -> x
+            | Choice2Of2 e -> raise e
+
+    static member        Minus (x:byte      , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
+    static member        Minus (x:uint16    , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
+    static member        Minus (x:uint32    , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
+    static member        Minus (x:uint64    , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
+    static member        Minus (x:unativeint, y) = if y > x then raise Errors.exnNoMinus else (x-y) 
+
+    static member inline Invoke    (x:'Num) (y:'Num)  : 'Num =
+        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member Minus: _*_ -> _) b, c)
+        call_2 (Unchecked.defaultof<Minus>, x, y)
+
+type TryMinus =
+    static member inline TryMinus (x:'t  , y) = Choice1Of2 (x - y)
+    static member inline TryMinus (_:^t when ^t: null and ^t: struct, _:TryMinus) = id
+
+    static member        TryMinus (x:byte      , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
+    static member        TryMinus (x:uint16    , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
+    static member        TryMinus (x:uint32    , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
+    static member        TryMinus (x:uint64    , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
+    static member        TryMinus (x:unativeint, y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
+
+    static member inline Invoke    (x:'Num) (y:'Num)  : Choice<'Num, exn> =
+        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member TryMinus: _*_ -> _) b, c)
+        call_2 (Unchecked.defaultof<TryMinus>, x, y)
+
+
+
+
+type Divide =
+    static member inline Divide (x, y) = let c = x / y in if c * y = x then c else raise Errors.exnNoDivision
+    static member inline Divide (x, y) =
+            match ((^Num) : (static member TryDivide: ^Num * ^Num -> Choice< ^Num, exn>) (x, y)) with
+            | Choice1Of2 x -> x
+            | Choice2Of2 e -> raise e
+    static member        Divide (x:float  , y) = (/) x y
+    static member        Divide (x:float32, y) = (/) x y
+    static member inline Invoke    (x:'Num) (y:'Num) : 'Num =
+        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member Divide: _*_ -> _) b, c)
+        call_2 (Unchecked.defaultof<Divide>, x, y)
+
+type TryDivide =
+    static member inline TryDivide (x, y) =
+        if y = zero() then Choice2Of2 Errors.exnDivByZero
+        else
+            let c = x / y :'t
+            if c * y = x then Choice1Of2 c
+            else Choice2Of2 Errors.exnNoDivision
+    static member inline TryDivide (_:^t when ^t: null and ^t: struct, _:Default1) = fun y -> Choice2Of2 null
+    static member        TryDivide (x:float  , y) = Choice1Of2 (x / y)
+    static member        TryDivide (x:float32, y) = Choice1Of2 (x / y)
+    static member inline Invoke    (x:'Num) (y:'Num)  : Choice<'Num, exn> =
+        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member TryDivide: _*_ -> _) b, c)
+        call_2 (Unchecked.defaultof<TryDivide>, x, y)
+
+
+
+type TrySqrtRem =
+    static member        TrySqrtRem (x:bigint    ) = x |> BigInteger.trySqrtRem
+    static member        TrySqrtRem (x:int16     ) = if x < 0s then Choice2Of2 Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int16 in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:int32     ) = if x < 0  then Choice2Of2 Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int   in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:int64     ) = if x < 0L then Choice2Of2 Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int64 in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:sbyte     ) = if x < 0y then Choice2Of2 Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> sbyte in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:uint16    ) = let c = x |> float |> sqrt |> uint16     in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:uint32    ) = let c = x |> float |> sqrt |> uint32     in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:uint64    ) = let c = x |> float |> sqrt |> uint64     in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:nativeint ) = let c = x |> float |> sqrt |> nativeint  in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:byte      ) = let c = x |> float |> sqrt |> byte       in Choice1Of2 (c, x - c*c)
+    static member        TrySqrtRem (x:unativeint) = let c = x |> float |> sqrt |> unativeint in c, x - c*c
+
+    static member inline Invoke    (x:'Integral) : Choice<'Integral*'Integral, exn> =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TrySqrtRem: _ -> _) b)
+        call_2 (Unchecked.defaultof<TrySqrtRem>, x)
+
+
+type TrySqrt =
+    static member inline Invoke    (x:'Integral) : Choice<'Integral, exn> =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TrySqrt: _ -> _) b)
+        call_2 (Unchecked.defaultof<TrySqrt>, x)
+
+    static member inline TrySqrt (x:'T) = 
+        try Choice1Of2 (sqrt x)
+        with e -> Choice2Of2 e
+
+    static member inline TrySqrt (x:'Z) = 
+        if x < zero() then Choice2Of2 Errors.exnSqrtOfNegative 
+        else 
+            match TrySqrtRem.Invoke x with 
+            | Choice1Of2 (c, r) -> if r = zero() then Choice1Of2 c else Choice2Of2 Errors.exnNoSqrt
+            | Choice2Of2 x      -> Choice2Of2 x
+
+    static member inline TrySqrt (x:'Rational) =
+        if x < zero() then Choice2Of2 Errors.exnSqrtOfNegative else 
+            let (n:'i, d:'i) = Rational.numerator x, Rational.denominator x
+            let toRational (x:'i) = (ToBigInt.Invoke >> FromBigInt.Invoke) x  : 'Rational
+            match TrySqrt.Invoke n, TrySqrt.Invoke d with
+            | Choice1Of2 n, Choice1Of2 d -> Choice1Of2 (toRational n / toRational d)
+            | _                          -> Choice2Of2  Errors.exnNoSqrt
+
+    static member inline TrySqrt (x:float    ) = if x < 0.     then Choice2Of2 Errors.exnSqrtOfNegative else let c = sqrt x in         Choice1Of2 c //if Double.IsNaN c then Choice2Of2 exnNoSqrt else Choice1Of2 c
+    static member inline TrySqrt (x:float32  ) = if x < 0.f    then Choice2Of2 Errors.exnSqrtOfNegative else let c = sqrt x in         Choice1Of2 c //if Single.IsNaN c then Choice2Of2 exnNoSqrt else Choice1Of2 c
+    static member inline TrySqrt (x:decimal  ) = Decimal.trySqrt x
+
+type Sqrt =
+    inherit Default1
+    static member inline Sqrt (x:^Num, _:Default2) =
+            match ((^Num) : (static     member TrySqrt: ^Num -> Choice< ^Num, exn>) (x)) with
+            | Choice1Of2 x -> x
+            | Choice2Of2 e -> raise e
+
+    static member inline Sqrt (x:'T, _:Default1) = sqrt x
+    static member inline Sqrt (x:'Z, _:Default1) = 
+        if x < Zero.Invoke() then raise Errors.exnSqrtOfNegative 
+        else 
+            match TrySqrtRem.Invoke x with 
+            | Choice1Of2 (c, r) -> if r = Zero.Invoke() then c else raise Errors.exnNoSqrt
+            | Choice2Of2 x      -> raise x
+
+    static member inline Sqrt (x:float32, _:Sqrt) = sqrt x
+    static member inline Sqrt (x:decimal, _:Sqrt) = x |> Decimal.trySqrt |> function Choice1Of2 x -> x | Choice2Of2 e ->  raise e
+
+    static member inline Invoke    (x:'Integral) : 'Integral =
+        let inline call_2 (t:^t, a:^a) = ((^t or ^a) : (static member Sqrt: _*_ -> _) a, t)
+        call_2 (Unchecked.defaultof<Sqrt>, x)
+
+type Sqrt with
+    static member inline Sqrt (x:'Rational, _:Sqrt) =
+        if x < Zero.Invoke() then raise Errors.exnSqrtOfNegative
+        else 
+            let (n:'i, d:'i) = Rational.numerator x, Rational.denominator x
+            let toRational (x:'i) = (ToBigInt.Invoke >> FromBigInt.Invoke) x  : 'Rational
+            let n, d =  Sqrt.Invoke n, Sqrt.Invoke d
+            (toRational n / toRational d)
+
+
 
 
 // Bounded class ----------------------------------------------------------
