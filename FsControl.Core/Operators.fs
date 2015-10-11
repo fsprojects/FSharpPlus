@@ -237,28 +237,57 @@ module Operators =
 
     let inline toStringWithCulture (cultureInfo:System.Globalization.CultureInfo) value:string = ToString.Invoke cultureInfo value
     let inline toString  value:string  = ToString.Invoke System.Globalization.CultureInfo.InvariantCulture value  
-         
+     
+    /// Converts to a value from its string representation.
     let inline parse    (value:string) = Parse.Invoke    value
+
+    /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     let inline tryParse (value:string) = TryParse.Invoke value
 
 
     // Numerics
 
+    /// Gets a value that represents the number 0 (zero).
     let inline zero() = Zero.Invoke()
+
+    /// Gets a value that represents the number 1 (one).
     let inline one()  = One.Invoke()
+
+    /// Divides one number by another, returns a tuple with the result and the remainder.
     let inline divRem (D:'T) (d:'T) :'T*'T = DivRem.Invoke D d
+
+    /// Returns the smallest possible value.
     let inline minValue() = MinValue.Invoke()
+
+    /// Returns the largest possible value.
     let inline maxValue() = MaxValue.Invoke()
+
     let inline fromBigInt  (x:bigint)    :'Num   = FromBigInt.Invoke x
+
     let inline toBigInt    (x:'Integral) :bigint = ToBigInt.Invoke x
 
     let inline pi() :'Floating = Pi.Invoke()
+
+    /// Returns a number which represents the sign.
+    /// Rule: signum x * abs x = x
     let inline signum  (x:'Num): 'Num = Signum.Invoke x
+
+    /// Gets the absolute value of a number.
     let inline abs     (x:'Num): 'Num = Abs.Invoke x
+
+
     let inline negate  (x:'Num): 'Num = -x
+
+    /// Returns the square root of a real number.
     let inline sqrt    (x:'Num): 'Num = sqrt x
 
-    // Unrestricted version (')
+    /// Returns a number which represents the sign.
+    /// Works also for non-negatives number types. 
+    /// Rule: signum x * abs x = x
     let inline signum' (x:'Num): 'Num = Signum'.Invoke x
+
+    /// Gets the absolute value of a number.
+    /// Works also for non-negatives number types.
     let inline abs'    (x:'Num): 'Num = Abs'.Invoke x
+
     let inline negate' (x:'Num): 'Num = Negate'.Invoke x
