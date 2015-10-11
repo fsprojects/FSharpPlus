@@ -315,6 +315,20 @@ module Operators =
     // END region copied from FsControl.
 
 
+
+    // Additional functions
+
+    /// Folds a Foldable of a Monoid, using mempty as initial state and mappend as folder.
+    let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x
+
+    /// Returns the sum of the elements in the Foldable.
+    let inline sum (x:'Foldable'Num) : 'Num = fold (+) (LanguagePrimitives.GenericZero: 'Num) x
+
+    /// Converts using the implicit operator. 
+    let inline implicit (x : ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) :^R
+
+
+
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
     module ApplicativeMath =
 
