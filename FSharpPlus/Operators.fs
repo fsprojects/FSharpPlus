@@ -377,14 +377,19 @@ module Operators =
 
         let inline internal whenIntegral a = let _ = if false then toBigInt a else 0I in ()
  
-        let inline div (a:'Integral) b :'Integral =
+        /// Integer division following the mathematical convention where the mod is always positive.
+        let inline div' (a:'Integral) b :'Integral =
             whenIntegral a
             let (a, b) = if b < 0G then (-a, -b) else (a, b)
             (if a < 0G then (a - b + 1G) else a) / b
  
-        let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
-        let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
+        /// Integer division. Same as (/) for Integral types.
+        let inline div (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
+
+        /// Remainder of Integer division. Same as (%).
+        let inline rem (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
  
+        /// Greatest Common Divisor
         let inline gcd x y :'Integral =
             let zero = zero()
             let rec loop a = function
