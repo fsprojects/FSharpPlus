@@ -45,8 +45,8 @@ let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInt   
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
-    let inline FromZero() = GenericZero.Invoke()
-    let inline FromOne () = GenericOne.Invoke()
+    let inline FromZero() = Zero.Invoke()
+    let inline FromOne () = One.Invoke()
     let inline FromInt32  (i:int   ) = FromInt32.Invoke i
     let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
@@ -320,7 +320,7 @@ let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
 // Monad Plus
 
-let inline mzero () = FsControl.Operators.zero ()
+let inline mzero () = FsControl.Operators.mzero ()
 let inline mplus (x:'a) (y:'a) : 'a = FsControl.Operators.(<|>) x y
 let inline guard x = if x then return' () else mzero()
 type DoPlusNotationBuilder() =
@@ -410,7 +410,7 @@ let inline (+++) f g = FsControl.Operators.(++++) f g
 let inline left  f = FsControl.Operators.left  f
 let inline right f = FsControl.Operators.right f
 let inline app() = FsControl.Operators.arrApply ()
-let inline zeroArrow() = FsControl.Operators.zero ()
+let inline zeroArrow() = FsControl.Operators.mzero ()
 let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 
 // Test Arrows
@@ -445,7 +445,7 @@ let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 let inline pure' x   = FsControl.Operators.result x
 let inline (<*>) x y = FsControl.Operators.(<*>) x y
-let inline empty()   = FsControl.Operators.zero ()
+let inline empty()   = FsControl.Operators.mzero ()
 let inline (<|>) x y = FsControl.Operators.(<|>) x y
 
 

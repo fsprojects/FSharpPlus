@@ -22,8 +22,8 @@ let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInt   
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
-    let inline FromZero() = GenericZero.Invoke()
-    let inline FromOne () = GenericOne.Invoke()
+    let inline FromZero() = Zero.Invoke()
+    let inline FromOne () = One.Invoke()
     let inline FromInt32  (i:int   ) = FromInt32.Invoke i
     let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
@@ -58,8 +58,8 @@ let inline divMod D d :'Integral * 'Integral =
 
 // type Rational = Ratio<Integer>
 
-let inline G0() = GenericZero.Invoke()
-let inline G1() = GenericZero.Invoke()
+let inline G0() = Zero.Invoke()
+let inline G1() = Zero.Invoke()
 
 let inline gcd x y :'Integral =
     let zero = G0()

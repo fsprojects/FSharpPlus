@@ -242,36 +242,36 @@ type Map =
         call (Unchecked.defaultof<Map>, x, f)
 
 
-type Zero =
-    static member        Zero (_:option<'a>, _:Zero) = None        :option<'a>
-    static member        Zero (_:list<'a>  , _:Zero) = [  ]        :list<'a>  
-    static member        Zero (_:'a []     , _:Zero) = [||]        :'a []     
-    static member        Zero (_:seq<'a>   , _:Zero) = Seq.empty   :seq<'a>
-    static member inline Zero (_:Id<'a>    , _:Zero) = Id (Mempty.Invoke()) :Id<'a>
+type Mzero =
+    static member        Mzero (_:option<'a>, _:Mzero) = None        :option<'a>
+    static member        Mzero (_:list<'a>  , _:Mzero) = [  ]        :list<'a>  
+    static member        Mzero (_:'a []     , _:Mzero) = [||]        :'a []     
+    static member        Mzero (_:seq<'a>   , _:Mzero) = Seq.empty   :seq<'a>
+    static member inline Mzero (_:Id<'a>    , _:Mzero) = Id (Mempty.Invoke()) :Id<'a>
 
     static member inline Invoke () :'Functor'T =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) b, a)
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mzero: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Unchecked.defaultof<Zero>
+        call Unchecked.defaultof<Mzero>
 
 
 [<Extension;Sealed>]
-type Plus =
-    [<Extension>]static member        Plus (x:_ option, y, [<Optional>]impl:Plus) = match x with None -> y | xs -> xs
-    [<Extension>]static member        Plus (x:_ list  , y, [<Optional>]impl:Plus) = x @ y
-    [<Extension>]static member        Plus (x:_ []    , y, [<Optional>]impl:Plus) = Array.append x y
-    [<Extension>]static member        Plus (x:_ seq   , y, [<Optional>]impl:Plus) = Seq.append   x y
-    [<Extension>]static member inline Plus (x:_ Id    , y, [<Optional>]impl:Plus) = Id (Mappend.Invoke (Id.run x) (Id.run y))
+type Mplus =
+    [<Extension>]static member        Mplus (x:_ option, y, [<Optional>]impl:Mplus) = match x with None -> y | xs -> xs
+    [<Extension>]static member        Mplus (x:_ list  , y, [<Optional>]impl:Mplus) = x @ y
+    [<Extension>]static member        Mplus (x:_ []    , y, [<Optional>]impl:Mplus) = Array.append x y
+    [<Extension>]static member        Mplus (x:_ seq   , y, [<Optional>]impl:Mplus) = Seq.append   x y
+    [<Extension>]static member inline Mplus (x:_ Id    , y, [<Optional>]impl:Mplus) = Id (Mappend.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'Functor'T) (y:'Functor'T) :'Functor'T =
-        let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Plus: _*_*_ -> _) a, b, m)
-        call_3 (Unchecked.defaultof<Plus>, x, y)
+        let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Mplus: _*_*_ -> _) a, b, m)
+        call_3 (Unchecked.defaultof<Mplus>, x, y)
 
-type Zero with
-    static member inline Zero (_:Kleisli<_,_>, _:Zero) = Kleisli (fun _ -> Zero.Invoke ())
+type Mzero with
+    static member inline Mzero (_:Kleisli<_,_>, _:Mzero) = Kleisli (fun _ -> Mzero.Invoke ())
     
-type Plus with
-    static member inline Plus (Kleisli f, Kleisli g, _:Plus) = Kleisli (fun x -> Plus.Invoke (f x) (g x))
+type Mplus with
+    static member inline Mplus (Kleisli f, Kleisli g, _:Mplus) = Kleisli (fun x -> Mplus.Invoke (f x) (g x))
 
 
 module internal MonadOps =
@@ -279,7 +279,7 @@ module internal MonadOps =
     let inline (>>=) x f = Bind.Invoke x f
     let inline result  x = Return.Invoke x
     let inline (<*>) f x = Apply.Invoke f x
-    let inline (<|>) x y = Plus.Invoke x y
+    let inline (<|>) x y = Mplus.Invoke x y
     let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
 
 open MonadOps

@@ -54,9 +54,9 @@ module Operators =
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
-    let inline zero() :'Functor'T = Zero.Invoke()
-    let inline (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T = Plus.Invoke x y
-    let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Zero.Invoke()
+    let inline mzero() :'Functor'T = Mzero.Invoke()
+    let inline (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T = Mplus.Invoke x y
+    let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Mzero.Invoke()
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
@@ -244,6 +244,8 @@ module Operators =
 
     // Numerics
 
+    let inline zero() = Zero.Invoke()
+    let inline one()  = One.Invoke()
     let inline divRem (D:'T) (d:'T) :'T*'T = DivRem.Invoke D d
     let inline minValue() = MinValue.Invoke()
     let inline maxValue() = MaxValue.Invoke()

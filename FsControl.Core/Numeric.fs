@@ -116,27 +116,27 @@ type FromInt32 =
 
 
 
-type GenericOne =
+type One =
     inherit Default1
-    static member inline One (_:'t             ,_:Default1  ) = FromInt32.Invoke 1 :'t
-    static member inline One (_:'t             ,_:GenericOne) = LanguagePrimitives.GenericOne :'t
-    static member inline One (_:^t when ^t: null and ^t: struct, _:GenericOne) = id
+    static member inline One (_:'t             ,_:Default1) = FromInt32.Invoke 1            :'t
+    static member inline One (_:'t             ,_:One     ) = LanguagePrimitives.GenericOne :'t
+    static member inline One (_:^t when ^t: null and ^t: struct, _:One) = id
 
     static member inline Invoke ()   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member One: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Unchecked.defaultof<GenericOne>
+        call Unchecked.defaultof<One>
 
-type GenericZero =
+type Zero =
     inherit Default1
-    static member inline Zero (_:'t             ,_:Default1)    = FromInt32.Invoke 0 :'t
-    static member inline Zero (_:'t             ,_:GenericZero) = LanguagePrimitives.GenericZero :'t
-    static member inline Zero (_:^t when ^t: null and ^t: struct, _:GenericZero) = id
+    static member inline Zero (_:'t             ,_:Default1) = FromInt32.Invoke 0             :'t
+    static member inline Zero (_:'t             ,_:Zero    ) = LanguagePrimitives.GenericZero :'t
+    static member inline Zero (_:^t when ^t: null and ^t: struct, _:Zero) = id
 
     static member inline Invoke ()   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Unchecked.defaultof<GenericZero>
+        call Unchecked.defaultof<Zero>
 
 
 
@@ -168,7 +168,7 @@ type Abs' =
 type Signum =
     inherit Default1
     static member inline Signum (x:'t        , _:Default2) =
-        let zero = GenericZero.Invoke()
+        let zero = Zero.Invoke()
         if x = zero then zero
         else x / Abs.Invoke x :'t
     static member inline Signum (_:^t when ^t: null and ^t: struct, _:Default1) = id
@@ -257,8 +257,8 @@ module internal Numerics =
 
     let inline internal fromIntegral (x:'Integral) :'Num = (FromBigInt.Invoke << ToBigInt.Invoke) x
 
-    let inline internal zero() = GenericZero.Invoke()
-    let inline internal one()  = GenericOne.Invoke()
+    let inline internal zero() = Zero.Invoke()
+    let inline internal one()  = One.Invoke()
 
 
 

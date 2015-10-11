@@ -20,8 +20,8 @@ type OptionT<'Ma> with
     static member inline Apply  (f , x, _:OptionT<'r>, _:Apply ) = OptionT.apply f x :OptionT<'r>
     static member inline Bind   (x :OptionT<'ma>, f: 'a -> OptionT<'mb>) = OptionT.bind f x :OptionT<'mb>
 
-    static member inline Zero (_:OptionT<_>        , _:Zero) = OptionT <| result None
-    static member inline Plus (OptionT x, OptionT y, _:Plus) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> x | _ -> y))
+    static member inline Mzero (_:OptionT<_>        , _:Mzero) = OptionT <| result None
+    static member inline Mplus (OptionT x, OptionT y, _:Mplus) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> x | _ -> y))
 
 
 type ListT<'Ma> = ListT of 'Ma
@@ -46,8 +46,8 @@ type ListT<'Ma> with
     static member inline Apply  (f, x,  _:ListT<'r> , _:Apply ) = ListT.apply f x :ListT<'r>
     static member inline Bind   (x:ListT<'ma>, f:'a -> ListT<'mb>) = ListT.bind f x :ListT<'mb>
 
-    static member inline Zero (_:ListT<_>      , _:Zero) = ListT <| result []
-    static member inline Plus (ListT x, ListT y, _:Plus) = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))
+    static member inline Mzero (_:ListT<_>      , _:Mzero) = ListT <| result []
+    static member inline Mplus (ListT x, ListT y, _:Mplus) = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))
 
 
 type SeqT<'Ma> = SeqT of 'Ma
@@ -72,8 +72,8 @@ type SeqT<'Ma> with
     static member inline Apply  (f, x, _:SeqT<'r> , _:Apply ) = SeqT.apply f x :SeqT<'r>
     static member inline Bind   (x:SeqT<'ma>, f: 'a -> SeqT<'mb>) = SeqT.bind f x :SeqT<'mb>
 
-    static member inline Zero (_:Zero, _:SeqT<_>     ) = SeqT <| result Seq.empty
-    static member inline Plus (_:Plus, SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result (Seq.append a b))))
+    static member inline Mzero (_:Mzero, _:SeqT<_>     ) = SeqT <| result Seq.empty
+    static member inline Mplus (_:Mplus, SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result (Seq.append a b))))
 
 
 namespace FsControl.Core.TypeMethods

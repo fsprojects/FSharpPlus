@@ -159,8 +159,8 @@ type MonadTransformers() =
 
 module NumericLiteralG =
     open FsControl.Core.TypeMethods
-    let inline FromZero() = GenericZero.Invoke()
-    let inline FromOne () = GenericOne.Invoke()
+    let inline FromZero() = Zero.Invoke()
+    let inline FromOne () = One.Invoke()
     let inline FromInt32  (i:int   ) = FromInt32.Invoke i
     let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
     let inline FromString (i:string) = fromBigInt <| System.Numerics.BigInteger.Parse i
