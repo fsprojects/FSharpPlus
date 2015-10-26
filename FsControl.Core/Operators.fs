@@ -280,7 +280,7 @@ module Operators =
 
     /// Returns the additive inverse of the number.
     /// Works also for unsigned types (Returns none if there is no inverse).
-    let inline tryNegate'  (x:'Num): Choice<'Num, exn> = TryNegate'.Invoke x
+    let inline tryNegate'  (x:'Num): 'Num option = TryNegate'.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
 
     /// Returns the subtraction between two numbers. Throws an error if the result is negative on unsigned types.
     let inline minus (x:'Num) (y:'Num): 'Num = Minus.Invoke x y
