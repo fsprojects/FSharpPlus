@@ -201,11 +201,11 @@ type TryNegate =
         call_2 (Unchecked.defaultof<TryNegate>, x)
 
 type TryNegate' =
-    static member        TryNegate (x:byte      ) = if x = 0uy then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
-    static member        TryNegate (x:uint16    ) = if x = 0us then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
-    static member        TryNegate (x:uint32    ) = if x = 0u  then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
-    static member        TryNegate (x:uint64    ) = if x = 0UL then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
-    static member        TryNegate (x:unativeint) = if x = 0un then Choice1Of2 x else Choice2Of2 Errors.exnNoMinus
+    static member        TryNegate (x:byte      ) = if x = 0uy then Choice1Of2 x else Choice2Of2 Errors.exnNoSubtraction
+    static member        TryNegate (x:uint16    ) = if x = 0us then Choice1Of2 x else Choice2Of2 Errors.exnNoSubtraction
+    static member        TryNegate (x:uint32    ) = if x = 0u  then Choice1Of2 x else Choice2Of2 Errors.exnNoSubtraction
+    static member        TryNegate (x:uint64    ) = if x = 0UL then Choice1Of2 x else Choice2Of2 Errors.exnNoSubtraction
+    static member        TryNegate (x:unativeint) = if x = 0un then Choice1Of2 x else Choice2Of2 Errors.exnNoSubtraction
     static member inline Invoke (x:'Num) :Choice<'Num,exn> =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryNegate: _ -> _) b)
         call_2 (Unchecked.defaultof<TryNegate'>, x)
@@ -298,36 +298,36 @@ type Pi =
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<Pi>
 
-type Minus =
-    static member inline Minus (x, y) = x - y
-    static member inline Minus (x, y) =
-            match ((^Num) : (static member TryMinus: ^Num * ^Num -> Choice< ^Num, exn>) (x, y)) with
+type Subtract =
+    static member inline Subtract (x, y) = x - y
+    static member inline Subtract (x, y) =
+            match ((^Num) : (static member TrySubtract: ^Num * ^Num -> Choice< ^Num, exn>) (x, y)) with
             | Choice1Of2 x -> x
             | Choice2Of2 e -> raise e
 
-    static member        Minus (x:byte      , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
-    static member        Minus (x:uint16    , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
-    static member        Minus (x:uint32    , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
-    static member        Minus (x:uint64    , y) = if y > x then raise Errors.exnNoMinus else (x-y) 
-    static member        Minus (x:unativeint, y) = if y > x then raise Errors.exnNoMinus else (x-y) 
+    static member        Subtract (x:byte      , y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
+    static member        Subtract (x:uint16    , y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
+    static member        Subtract (x:uint32    , y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
+    static member        Subtract (x:uint64    , y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
+    static member        Subtract (x:unativeint, y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
 
     static member inline Invoke    (x:'Num) (y:'Num)  : 'Num =
-        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member Minus: _*_ -> _) b, c)
-        call_2 (Unchecked.defaultof<Minus>, x, y)
+        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member Subtract: _*_ -> _) b, c)
+        call_2 (Unchecked.defaultof<Subtract>, x, y)
 
-type TryMinus =
-    static member inline TryMinus (x:'t  , y) = Choice1Of2 (x - y)
-    static member inline TryMinus (_:^t when ^t: null and ^t: struct, _:TryMinus) = id
+type TrySubtract =
+    static member inline TrySubtract (x:'t  , y) = Choice1Of2 (x - y)
+    static member inline TrySubtract (_:^t when ^t: null and ^t: struct, _:TrySubtract) = id
 
-    static member        TryMinus (x:byte      , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
-    static member        TryMinus (x:uint16    , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
-    static member        TryMinus (x:uint32    , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
-    static member        TryMinus (x:uint64    , y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
-    static member        TryMinus (x:unativeint, y) = if y > x then Choice2Of2 Errors.exnNoMinus else Choice1Of2 (x-y) 
+    static member        TrySubtract (x:byte      , y) = if y > x then Choice2Of2 Errors.exnNoSubtraction else Choice1Of2 (x-y) 
+    static member        TrySubtract (x:uint16    , y) = if y > x then Choice2Of2 Errors.exnNoSubtraction else Choice1Of2 (x-y) 
+    static member        TrySubtract (x:uint32    , y) = if y > x then Choice2Of2 Errors.exnNoSubtraction else Choice1Of2 (x-y) 
+    static member        TrySubtract (x:uint64    , y) = if y > x then Choice2Of2 Errors.exnNoSubtraction else Choice1Of2 (x-y) 
+    static member        TrySubtract (x:unativeint, y) = if y > x then Choice2Of2 Errors.exnNoSubtraction else Choice1Of2 (x-y) 
 
     static member inline Invoke    (x:'Num) (y:'Num)  : Choice<'Num, exn> =
-        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member TryMinus: _*_ -> _) b, c)
-        call_2 (Unchecked.defaultof<TryMinus>, x, y)
+        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member TrySubtract: _*_ -> _) b, c)
+        call_2 (Unchecked.defaultof<TrySubtract>, x, y)
 
 
 

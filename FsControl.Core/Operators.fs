@@ -283,10 +283,10 @@ module Operators =
     let inline tryNegate'  (x:'Num): 'Num option = TryNegate'.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
 
     /// Returns the subtraction between two numbers. Throws an error if the result is negative on unsigned types.
-    let inline minus (x:'Num) (y:'Num): 'Num = Minus.Invoke x y
+    let inline subtract (x:'Num) (y:'Num): 'Num = Subtract.Invoke x y
 
     /// Returns the subtraction between two numbers. Returns None if the result is negative on unsigned types.
-    let inline tryMinus (x:'Num) (y:'Num): 'Num option = y |> TryMinus.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
+    let inline trySubtract (x:'Num) (y:'Num): 'Num option = y |> TrySubtract.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
 
     /// Returns the division between two numbers. If the numbers are not divisible throws an error.
     let inline div (dividend:'Num) (divisor:'Num): 'Num = Divide.Invoke dividend divisor

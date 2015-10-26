@@ -80,7 +80,7 @@ module Errors =
     let exnNoDivision     = new System.Exception "These numbers are not divisible in this domain."
     let exnSqrtOfNegative = new System.Exception "Cannot calculate square root of a negative number"
     let exnNoSqrt         = new System.Exception "No square root defined for this value in this domain."
-    let exnNoMinus        = new System.Exception "No subtraction defined for these values in this domain."
+    let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
 
 module Decimal =
     let inline trySqrt x =
