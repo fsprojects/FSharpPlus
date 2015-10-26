@@ -10,3 +10,4 @@ let opt120  = (+) <!> Some 20 <*> tryParse "100"
 
 open FSharpPlus.Builders
 let opt121  = iI (+) (Some 21) (tryParse "100") Ii
+let opt122  = iI tryDiv (tryParse "488") (trySqrt 16) Ji
