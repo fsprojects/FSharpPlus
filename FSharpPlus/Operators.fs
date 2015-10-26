@@ -245,7 +245,7 @@ module Operators =
     
     // Converter
 
-    /// Converts using the explicit operator.
+    /// Convert using the explicit operator.
     let inline explicit    (value:'T) :'U = Explicit.Invoke value
 
     let inline fromBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = FromBytes.Invoke isLtEndian startIndex value
@@ -282,35 +282,67 @@ module Operators =
     /// Returns the largest possible value.
     let inline maxValue() = MaxValue.Invoke()
 
+    /// Converts from BigInteger to the inferred destination type.
     let inline fromBigInt  (x:bigint)    :'Num   = FromBigInt.Invoke x
 
+    /// Converts to BigInteger.
     let inline toBigInt    (x:'Integral) :bigint = ToBigInt.Invoke x
 
+    /// Gets the pi number.
     let inline pi() :'Floating = Pi.Invoke()
 
-    /// Returns a number which represents the sign.
-    /// Rule: signum x * abs x = x
-    let inline signum  (x:'Num): 'Num = Signum.Invoke x
+    /// Returns the additive inverse of the number.
+    let inline negate  (x:'Num): 'Num = x |> TryNegate.Invoke |> function Choice1Of2 x -> x | Choice2Of2 e -> raise e
 
-    /// Gets the absolute value of a number.
-    let inline abs     (x:'Num): 'Num = Abs.Invoke x
+    /// Returns the additive inverse of the number.
+    /// Works also for unsigned types (Throws an exception if there is no inverse).
+    let inline negate'  (x:'Num): 'Num = x |> TryNegate'.Invoke |> function Choice1Of2 x -> x | Choice2Of2 e -> raise e
 
+    /// Returns the additive inverse of the number.
+    /// Works also for unsigned types (Returns none if there is no inverse).
+    let inline tryNegate'  (x:'Num): 'Num option = TryNegate'.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
 
-    let inline negate  (x:'Num): 'Num = -x
+    /// Returns the subtraction between two numbers. Throws an error if the result is negative on unsigned types.
+    let inline subtract (x:'Num) (y:'Num): 'Num = Subtract.Invoke x y
 
-    /// Returns the square root of a real number.
-    let inline sqrt    (x:'Num): 'Num = sqrt x
+    /// Returns the subtraction between two numbers. Returns None if the result is negative on unsigned types.
+    let inline trySubtract (x:'Num) (y:'Num): 'Num option = y |> TrySubtract.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
 
-    /// Returns a number which represents the sign.
-    /// Works also for non-negatives number types. 
-    /// Rule: signum x * abs x = x
+    /// Returns the division between two numbers. If the numbers are not divisible throws an error.
+    let inline div (dividend:'Num) (divisor:'Num): 'Num = Divide.Invoke dividend divisor
+
+    /// Returns the division between two numbers. Returns None if the numbers are not divisible.
+    let inline tryDiv (dividend:'Num) (divisor:'Num): 'Num option = divisor |> TryDivide.Invoke dividend |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
+
+    /// Returns the square root of a number of any type. Throws an exception if there is no square root.
+    let inline sqrt x = x |> Sqrt.Invoke
+
+    /// Returns the square root of a number of any type. Returns None if there is no square root.
+    let inline trySqrt x = x |> TrySqrt.Invoke |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
+
+    /// Returns the square root of an integral number.
+    let inline isqrt   (x:'Integral): 'Integral = x |> TrySqrtRem.Invoke |> function Choice1Of2 (x, _) -> x | Choice2Of2 e -> raise e
+
+    /// Returns the square root of an integral number.
+    let inline sqrtRem   (x:'Integral): 'Integral*'Integral = x |> TrySqrtRem.Invoke |> function Choice1Of2 x -> x | Choice2Of2 e -> raise e
+
+    /// <summary> Returns a number which represents the sign.
+    /// <para/>   Rule: signum x * abs x = x        </summary>
+    let inline signum (x:'Num): 'Num = Signum.Invoke x
+
+    /// <summary> Returns a number which represents the sign.
+    ///           Works also for unsigned types. 
+    /// <para/>   Rule: signum x * abs x = x        </summary>
     let inline signum' (x:'Num): 'Num = Signum'.Invoke x
 
-    /// Gets the absolute value of a number.
-    /// Works also for non-negatives number types.
-    let inline abs'    (x:'Num): 'Num = Abs'.Invoke x
+    /// <summary> Gets the absolute value of a number.
+    /// <para/>   Rule: signum x * abs x = x        </summary>
+    let inline abs    (x:'Num): 'Num = Abs.Invoke x
 
-    let inline negate' (x:'Num): 'Num = Negate'.Invoke x
+    /// <summary> Gets the absolute value of a number.
+    ///           Works also for unsigned types. 
+    /// <para/>   Rule: signum x * abs x = x        </summary>
+    let inline abs'   (x:'Num): 'Num = Abs'.Invoke x
 
     // END region copied from FsControl.
 
