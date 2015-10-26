@@ -7,8 +7,8 @@ open GenericMath
 
 // 1. Generic functions
 
-// Often you need to define generic constants when defining generic function.
-// Since there is no way to define generic decimal literals in F# at the moment of writing this, we use ratio:
+// Often you need to define generic constants when defining generic functions.
+// Since there is no way to define generic decimal literals in F# at the moment of writing this, we use divisions:
 
 let inline areaOfCircle radio =
     let pi = 
@@ -57,3 +57,40 @@ let x2' = 7G + Vector2d (32,5)
 open FSharpPlus.Operators.ApplicativeMath
 let x3 = Vector2d (32,5) |+ 7
 let x3' = 7 +| Vector2d (32,5)
+
+
+
+// 3. Integrate with 3rd party libraries
+
+// We may use types defined in other libraries, let's suppose we have this type Ratio defined somewhere.
+
+type Ratio =
+    struct
+        val Numerator   :bigint
+        val Denominator :bigint
+        new (numerator: bigint, denominator: bigint) = {Numerator = numerator; Denominator = denominator}
+    end
+    override this.ToString() = this.Numerator.ToString() + " % " + this.Denominator.ToString()
+
+let ratio (a:bigint) (b:bigint) :Ratio =
+    if b = 0I then failwith "Ratio.%: zero denominator"
+    let a, b = if b < 0I then (-a, -b) else (a, b)
+    let gcd = gcd a b
+    Ratio (a / gcd, b / gcd)
+
+let Ratio (x,y) = x </ratio/> y
+
+type Ratio with
+    static member inline (/) (a:Ratio, b:Ratio) = (a.Numerator * b.Denominator) </ratio/> (a.Denominator * b.Numerator)                                              
+    static member inline (+) (a:Ratio, b:Ratio) = (a.Numerator * b.Denominator + b.Numerator * a.Denominator) </ratio/> (a.Denominator * b.Denominator)
+    static member inline (-) (a:Ratio, b:Ratio) = (a.Numerator * b.Denominator - b.Numerator * a.Denominator) </ratio/> (a.Denominator * b.Denominator)
+    static member inline (*) (a:Ratio, b:Ratio) = (a.Numerator * b.Numerator) </ratio/> (a.Denominator * b.Denominator)
+
+    static member inline Abs        (r:Ratio) = (abs    r.Numerator) </ratio/> r.Denominator
+    static member inline Signum     (r:Ratio) = (signum r.Numerator) </ratio/> 1I
+    static member inline FromBigInt (x:bigint) = fromBigInt x </ratio/> 1I
+    static member inline (~-)       (r:Ratio) = -(r.Numerator) </ratio/> r.Denominator
+
+// Since most Rational implementations have Numerator and Denominator defined we can just use our generic functions on it:
+
+let some3_2 = trySqrt (Ratio(9I, 4I))
