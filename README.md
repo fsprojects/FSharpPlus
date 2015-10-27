@@ -4,11 +4,12 @@ FSharpPlus [![Build Status](https://api.travis-ci.org/gmpl/FSharpPlus.svg?branch
 This project contains some extensions for F#.
 
  - Extension methods for existing types.
- - New types.
+ - Collections.
  - Generic Computation Expressions and Linq Builders.
  - Common combinators, generic functions and operators.
  - A generic Math module.
  - A Lens module.
+ - A Haskell compatibility module.
 
 F#+ types contains methods which are added as extensions and at the same time are made instances of the existing TypeMethods defined in [FsControl](https://github.com/gmpl/FsControl) integrating them with existing .NET types.
 
