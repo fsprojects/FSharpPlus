@@ -436,21 +436,22 @@ module Compatibility =
     module Haskell =
 
         // Types
+        open FsControl.Core.Types
 
+        let getDual (Dual x) = x
         type Dual<'t> = FsControl.Core.Types.Dual<'t>
-        let getDual (FsControl.Core.Types.Dual x) = x
         let Dual = Dual.Dual 
 
-        type All  = FsControl.Core.Types.All
-        let getAll (FsControl.Core.Types.All x) = x
+        let getAll (All x) = x
+        type All  = All
         let All = All.All
 
-        type Any  = FsControl.Core.Types.Any
-        let getAny (FsControl.Core.Types.Any x) = x
+        let getAny (Any x) = x
+        type Any  = Any
         let Any = Any.Any
 
-        type Kleisli<'t,'u> = FsControl.Core.Types.Kleisli<'t,'u>
         let runKleisli (Kleisli f) = f
+        type Kleisli<'t,'u> = FsControl.Core.Types.Kleisli<'t,'u>
         let Kleisli = Kleisli.Kleisli
 
         // Operatots
@@ -596,7 +597,6 @@ module Compatibility =
             if p a then return a else return! mzero()}
 
 
-        open FsControl.Core.Types
 
 
         // Arrow
@@ -613,21 +613,36 @@ module Compatibility =
             
 
         // Cont
-        let runCont = Cont.run
+
         let callCC' = Cont.callCC
         let inline when'  p s = if p then s else return' ()
         let inline unless p s = when' (not p) s
+
+        let runCont = Cont.run
+        type Cont = Cont
+        let Cont = Cont.Cont
             
+
         // Reader
+
         let ask'      = Reader.ask
         let local'    = Reader.local
+
         let runReader = Reader.run
+        type Reader = Reader
+        let Reader = Reader.Reader
             
+
         // State
-        let runState  = State.run
+
         let get'      = State.get
         let put'      = State.put
         let execState = State.exec
+
+        let runState  = State.run
+        type State = State
+        let State = State.State
+
             
         // Monad Transformers
         type MaybeT<'T> = OptionT<'T>
@@ -636,15 +651,22 @@ module Compatibility =
         let inline mapMaybeT f x = OptionT.map f x
         let runListT  = ListT.run
         let inline liftIO (x: IO<'a>) = liftAsync x
+
             
         // ContT
         let runContT  = ContT.run
+        type ContT = ContT
+        let ContT = ContT.ContT
             
         // ReaderT
         let runReaderT = ReaderT.run
+        type ReaderT = ReaderT
+        let ReaderT = ReaderT.ReaderT
             
         // StateT
         let runStateT = StateT.run
+        type StateT = StateT
+        let StateT = StateT.StateT
             
         // MonadError
         let inline throwError x   = throw x
@@ -652,3 +674,5 @@ module Compatibility =
             
         // ErrorT
         let runErrorT = ErrorT.run
+        type ErrorT = ErrorT
+        let ErrorT = ErrorT.ErrorT
