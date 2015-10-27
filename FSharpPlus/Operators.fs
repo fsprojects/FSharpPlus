@@ -430,3 +430,225 @@ module Operators =
             match(x,y) with
             | t when t = (zero,zero) -> failwith "gcd 0 0 is undefined"
             | _                      -> loop (abs x) (abs y)
+
+
+module Compatibility =
+    module Haskell =
+
+        // Types
+
+        type Dual<'t> = FsControl.Core.Types.Dual<'t>
+        let getDual (FsControl.Core.Types.Dual x) = x
+        let Dual = Dual.Dual 
+
+        type All  = FsControl.Core.Types.All
+        let getAll (FsControl.Core.Types.All x) = x
+        let All = All.All
+
+        type Any  = FsControl.Core.Types.Any
+        let getAny (FsControl.Core.Types.Any x) = x
+        let Any = Any.Any
+
+        type Kleisli<'t,'u> = FsControl.Core.Types.Kleisli<'t,'u>
+        let runKleisli (Kleisli f) = f
+        let Kleisli = Kleisli.Kleisli
+
+        // Operatots
+        let ($)   x y = x y
+        let (.()) x y = x << y
+        let const' k _ = k
+        let (++) = (@)
+        let (==) = (=)
+        let (=/) x y = not (x = y)
+
+        type DeReference_op = DeReference_op with
+            static member (=>) (DeReference_op, a:'a ref        ) = !a
+            static member (=>) (DeReference_op, a:string        ) = a.ToCharArray() |> Array.toList
+            static member (=>) (DeReference_op, a:DeReference_op) = DeReference_op
+
+        /// converts a string to list<char> otherwise still works as dereference operator.
+        let inline (!) a = DeReference_op => a
+
+        let show x = '\"' :: x ++ !"\""
+
+        type Maybe<'t> = Option<'t>
+        let  Just x :Maybe<'t> = Some x
+        let  Nothing:Maybe<'t> = None
+        let  (|Just|Nothing|) = function Some x -> Just x | _ -> Nothing
+        let maybe  n f = function | Nothing -> n | Just x -> f x
+
+        type Either<'a,'b> = Choice<'b,'a>
+        let  Right x :Either<'a,'b> = Choice1Of2 x
+        let  Left  x :Either<'a,'b> = Choice2Of2 x
+        let  (|Right|Left|) = function Choice1Of2 x -> Right x | Choice2Of2 x -> Left x
+        let either f g = function Left x -> f x | Right y -> g y
+
+        // IO
+        type IO<'a> = Async<'a>
+        let runIO (f:IO<'a>) = Async.RunSynchronously f
+        let getLine    = async { return System.Console.ReadLine() } :IO<string>
+        let putStrLn x = async { printfn "%s" x}                    :IO<unit>
+        let print    x = async { printfn "%A" x}                    :IO<unit>
+
+        // Functors
+
+        let inline fmap f x = map f x
+
+        // Applicative functors
+            
+        let inline pure' x   = result x
+        let inline empty()   = mzero ()    
+        let inline optional v = Just <!> v <|> pure' Nothing
+
+        // Monoids
+        type Ordering = LT|EQ|GT with
+            static member        Mempty  (_:Ordering, _:Mempty) = EQ
+            static member        Mappend (x:Ordering, y) = 
+                match x, y with
+                | LT, _ -> LT
+                | EQ, a -> a
+                | GT, _ -> GT
+
+        let inline compare' x y =
+            match compare x y with
+            | a when a > 0 -> GT
+            | a when a < 0 -> LT
+            | _            -> EQ
+
+
+        // Foldable
+        let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = foldBack f x z
+        let inline foldl (f: 'b -> 'a -> 'b) (z:'b) x :'b = fold     f z x
+
+
+        // Numerics
+        open GenericMath
+
+        type Integer = bigint
+
+
+        let inline fromInteger  (x:Integer)   :'Num    = fromBigInt x
+        let inline toInteger    (x:'Integral) :Integer = toBigInt   x
+        let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
+
+        let inline div (a:'Integral) b :'Integral =
+            whenIntegral a
+            let (a,b) = if b < 0G then (-a,-b) else (a,b)
+            (if a < 0G then (a - b + 1G) else a) / b
+            
+        let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
+        let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
+        let inline quotRem a b :'Integral * 'Integral = whenIntegral a; divRem a b
+        let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
+        let inline divMod D d :'Integral * 'Integral =
+            let q, r = quotRem D d
+            if (r < 0G) then
+                if (d > 0G) then (q - 1G, r + d)
+                else             (q + 1G, r - d)
+            else (q, r)
+
+
+        let inline ( **) a (b:'Floating) :'Floating = a ** b
+        let inline sqrt    (x:'Floating) :'Floating = Microsoft.FSharp.Core.Operators.sqrt x
+            
+        let inline asinh x :'Floating = log (x + sqrt (1G+x*x))
+        let inline acosh x :'Floating = log (x + (x+1G) * sqrt ((x-1G)/(x+1G)))
+        let inline atanh x :'Floating = (1G/2G) * log ((1G+x) / (1G-x))
+            
+        let inline logBase x y  :'Floating =  log y / log x
+
+
+        /// Monad
+
+        let inline return' x = result x
+
+        let inline sequence ms =
+            let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (return' :list<'a> -> 'M) (List.Cons(x,xs))
+            List.foldBack k ms ((return' :list<'a> -> 'M) [])
+            
+        let inline mapM f as' = sequence (List.map f as')
+        let inline liftM  f m1    = m1 >>= (return' << f)
+        let inline liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
+        let inline ap     x y     = liftM2 id x y
+            
+        type DoNotationBuilder() =
+            member inline b.Return(x)    = return' x
+            member inline b.Bind(p,rest) = p >>= rest
+            member        b.Let (p,rest) = rest p
+            member    b.ReturnFrom(expr) = expr
+        let do' = new DoNotationBuilder()
+
+
+        // Monad Plus
+        let inline mplus (x:'a) (y:'a) : 'a = (<|>) x y
+        let inline guard x = if x then return' () else mzero()
+        type DoPlusNotationBuilder() =
+            member inline b.Return(x) = return' x
+            member inline b.Bind(p,rest) = p >>= rest
+            member b.Let(p,rest) = rest p
+            member b.ReturnFrom(expr) = expr
+            member inline x.Zero() = mzero()
+            member inline x.Combine(a, b) = mplus a b
+        let doPlus = new DoPlusNotationBuilder()
+
+        let inline mfilter p ma = do' {
+            let! a = ma
+            if p a then return a else return! mzero()}
+
+
+        open FsControl.Core.Types
+
+
+        // Arrow
+        let inline id'() = catId ()
+        let inline (<<<) f g = (<<<<) f g
+        let inline (>>>) f g = (>>>>) f g
+        let inline ( *** ) f g = arrFirst f >>> arrSecond g
+        let inline ( &&& ) f g = arr (fun b -> (b, b)) >>> f *** g
+        let inline (|||) f g = (||||) f g
+        let inline (+++) f g = (++++) f g
+        let inline app() = arrApply ()
+        let inline zeroArrow() = mzero ()
+        let inline (<+>)   f g = (<|>) f g
+            
+
+        // Cont
+        let runCont = Cont.run
+        let callCC' = Cont.callCC
+        let inline when'  p s = if p then s else return' ()
+        let inline unless p s = when' (not p) s
+            
+        // Reader
+        let ask'      = Reader.ask
+        let local'    = Reader.local
+        let runReader = Reader.run
+            
+        // State
+        let runState  = State.run
+        let get'      = State.get
+        let put'      = State.put
+        let execState = State.exec
+            
+        // Monad Transformers
+        type MaybeT<'T> = OptionT<'T>
+        let MaybeT  x = OptionT x
+        let runMaybeT = OptionT.run
+        let inline mapMaybeT f x = OptionT.map f x
+        let runListT  = ListT.run
+        let inline liftIO (x: IO<'a>) = liftAsync x
+            
+        // ContT
+        let runContT  = ContT.run
+            
+        // ReaderT
+        let runReaderT = ReaderT.run
+            
+        // StateT
+        let runStateT = StateT.run
+            
+        // MonadError
+        let inline throwError x   = throw x
+        let inline catchError v h = catch v h
+            
+        // ErrorT
+        let runErrorT = ErrorT.run
