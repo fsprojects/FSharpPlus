@@ -56,6 +56,7 @@
     <Compile Include="NonEmptyList.fs" />
     <Compile Include="ZipList.fs" />
     <Compile Include="ParallelArray.fs" />
+    <Compile Include="Compatibility.fs" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Conversions.fsx" />
     <None Include="Samples\Applicatives.fsx" />

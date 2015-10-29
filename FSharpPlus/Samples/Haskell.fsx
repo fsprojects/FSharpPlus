@@ -18,23 +18,34 @@ let halfThenSqrt = sqrt . (flip (/) 2.0)
 // IO
 
 let main = print (halfThenSqrt 32.0)
-runIO main
-let get3strings  = sequenceA [getLine;getLine;getLine]
+runIO main                                                  // prints 4.0
+let get3strings  = sequenceA [getLine;getLine;getLine]      // try runIO get3strings
 
 
 // Applicatives
 
 let just3 :Maybe<_> = return' 3
-let just4 :Maybe<_> = Just 4
+let just4           = Just 4
 let just7 = Just (+) <*> just3 <*> just4
 
 
 // Monoids
 
-let res9823 = mconcat (fmap Dual [mempty();"3";"2";"8";"9"])
-let resLtDualGt  = mappend  (LT, Dual GT) (mempty())
+let res9823 = mconcat (fmap Dual [mempty();"3";"2";"8";"9"])    // Dual "9823"
+let resLtDualGt= mappend  (LT, Dual GT) (mempty())              // (LT, Dual GT)
+
 
 // Monad
+
+// F#                           // Haskell
+let result = 
+    do' {                       // do {
+        let! x1 = [ 1;  2]      //   x1 <- [ 1;  2]
+        let! x2 = [10; 20]      //   x2 <- [10; 20]
+        return ((+) x1 x2) }    //   return ((+) x1 x2) }
+
+// desugared version
+let lst11n21n12n22 = [1; 2]  >>= (fun x1 -> [10; 20] >>= (fun x2 ->  return' ((+) x1 x2)))
 
 let just2 = mfilter ((==) 2) (Just 2)
 
@@ -61,5 +72,4 @@ let askString next = do' {
 let reportResult s = do' {
   return! putStrLn ("You entered: " + s) }
   
-let mainAction = runContT (callCC askString) reportResult
-//try -> runIO mainAction
+let mainAction = runContT (callCC askString) reportResult       //try -> runIO mainAction
