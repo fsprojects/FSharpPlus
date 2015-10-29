@@ -354,7 +354,7 @@ module Operators =
     let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x
 
     /// Returns the sum of the elements in the Foldable.
-    let inline sum (x:'Foldable'Num) : 'Num = fold (+) (LanguagePrimitives.GenericZero: 'Num) x
+    let inline sum (x:'Foldable'Num) : 'Num = fold (+) (zero(): 'Num) x
 
     /// Converts using the implicit operator. 
     let inline implicit (x : ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) :^R
