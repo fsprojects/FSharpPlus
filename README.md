@@ -107,7 +107,7 @@ There are 2 ways:
 
  a) You can have a look at the signature of the method you want to implement in the source code, which will follow this convention:
 
-    static member [inline] [TypeMethodName] (arg1:Type, [more args], output[:ReturnType], impl:[TypeMethodName]) =
+    static member [inline] [MethodName] (arg1:Type, [more args], output[:ReturnType], impl:[TypeMethodName]) =
             Implementation
 
 To find the exact signature you need to look at the source code of the Type-Method you are interested.
@@ -116,7 +116,7 @@ Here's an example:
 
 In the source code for <code>Map</code> (in Functor.fs) the <code>option</code> instance is defined like this:
 
-    [<Extension>]static member Map (x:option<_>      , f, [<Optional>]impl:Map) = Option.map  f x
+    [<Extension>]static member Map (x:option<_>, f, [<Optional>]impl:Map) = Option.map f x
 
 So you can create a type <code>Tree</code> and add an instance for the existing Type Method <code>Map</code> this way:
 
