@@ -138,7 +138,7 @@ So you can create a type <code>Tree</code> and add an instance for the existing 
  3) Add an instance for an existing Type of an existing Type-Method:
 
 We can’t do this. This is only possible if we have control over the source code of either the Type-Instance or the Type-Method.
-The association must be done either in the Type-Instance (2) or in the Type-Method (1) due to both a technical limitation <code>(*)</code> and a conceptual reason <code>(**)</code>.
+The association must be done either in the Type-Instance (2) or in the Type-Method (1) due to both a technical limitation <code>*</code> and a conceptual reason <code>**</code>.
 
  - <code>(*)</code> Extensions methods are not taken into account in overload resolution.
  - <code>(**)</code> It may lead to a bad design practice, something similar happens in Haskell with Type Classes (see [orphan instances](http://www.haskell.org/haskellwiki/Orphan_instance)).
