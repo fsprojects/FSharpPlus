@@ -70,7 +70,7 @@ Of course they are already defined in the FsControl.Operators module and they wo
  - Have a look at the [sample files](https://github.com/gmpl/FsControl/blob/master/FsControl.Core/Samples/) adjust the path of the binaries and run the .fsx scripts.
  - Before creating your own library of generic functions be aware that [FsControl.Operators](https://github.com/gmpl/FsControl/blob/master/FsControl.Core/Operators.fs) is a lightweight module with some operators and functions used mainly to test the project. Also take the time to visit [F#+](https://github.com/gmpl/FSharpPlus) which is a library which re-export all those functions but apart from that provides more derived operators, builders and other interesting stuff.
  - In the rare case that you are not interested in the generic stuff but want to re-use specific implementations many methods in FsControl are defined as extension methods and some have a C# friendly signature.
- - Keep reading the doc 
+ - Keep reading the doc.
 
 How does it works
 -----------------
@@ -83,9 +83,9 @@ There are basically two types involved in these overloads:
 
 For Haskellers this 'Type-Methods' abstraction is similar to Haskell's Type-Classes but with a single method.
 
-For OOP-ers it may be similar to interfaces or abstract classes but with a single method, early binding (compile-time) and without dependencies on the assembly where the interface is defined.
+For OOP-ers it may compare to interfaces or abstract classes but with a single method, early binding (compile-time) and without dependencies on the assembly where the interface is defined.
 
-FsControl contains overloads mainly for primitive types, but the generic functions will resolve to any member of a type (a custom type) having a matching signature. This makes possible to use some libraries that don't depend on FsControl, as long as the signature is the right one it will work.
+FsControl contains overloads mainly for primitive types, but the generic functions will resolve to any member of a type (a user-defined type) having a matching signature. This makes possible to use some libraries that don't depend on FsControl, as long as the signature is the right one it will work.
 
 
 
@@ -97,9 +97,9 @@ You may find hard to understand how to use FsControl, the best is to have a look
 
 The purpose of the overloads is to associate types with Type-Methods, here we can have three different scenarios:
 
- 1) Add a new Type-Method and instances for existing types.
+ 1) Add a new Type-Method and Type-Instances for existing types.
 
-This is the most complex scenario, to define a new Type Method is not straightforward, there will be some guidelines but at the moment the best is to have a look at the source code.
+This is the most complex scenario, to define a new Type-Method is not straightforward, there will be some guidelines but at the moment the best is to have a look at the source code.
 
  2) Add a new type and make it an instance of an existing Type-Method.
  
@@ -133,14 +133,15 @@ So you can create a type <code>Tree</code> and add an instance for the existing 
                 | Tree (x, t1, t2) -> Tree (f x, loop f t1, loop f t2)
             loop f x
 
- b) Some methods accept also a 'clean signature' without the unused parameters output and impl. You can find a list of these methods below the section "How can I make my classes FsControl-ready?". This method doesn't require to reference FsControl binaries.
+ b) Some methods accept also a 'clean signature' without the unused parameters <code>output</code> and <code>impl</code>. You can find a list of these methods below, in the section "How can I make my classes FsControl-ready?". This way it doesn't require to reference FsControl binaries.
 
- 3) Add an instance for an existing type of an existing Type-Method:
+ 3) Add an instance for an existing Type of an existing Type-Method:
 
 We can’t do this. This is only possible if we have control over the source code of either the Type-Instance or the Type-Method.
-The association must be done either in the Type-Instance (2) or in the Type-Method (1) due to both a technical limitation (*) and a conceptual reason (**)
- - (*) Extensions methods are not taken into account in overload resolution.
- - (**) It may lead to a bad design practice, something similar happens in Haskell with Type Classes (see [orphan instances](http://www.haskell.org/haskellwiki/Orphan_instance)).
+The association must be done either in the Type-Instance (2) or in the Type-Method (1) due to both a technical limitation <code>(*)</code> and a conceptual reason <code>(**)</code>.
+
+ - <code>(*)</code> Extensions methods are not taken into account in overload resolution.
+ - <code>(**)</code> It may lead to a bad design practice, something similar happens in Haskell with Type Classes (see [orphan instances](http://www.haskell.org/haskellwiki/Orphan_instance)).
 
 
 How can I make my classes FsControl-ready?
