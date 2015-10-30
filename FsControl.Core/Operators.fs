@@ -158,9 +158,56 @@ module Operators =
 
     // Collection
 
-    let inline item (n:int) (source:'Collection'T) : 'T            = Item.Invoke n source
-    let inline skip (n:int) (source:'Collection'T) : 'Collection'T = Skip.Invoke n source
-    let inline take (n:int) (source:'Collection'T) : 'Collection'T = Take.Invoke n source
+    let inline item (n:int) (source:'Collection'T) : 'T = Item.Invoke n source
+
+    /// <summary>Returns a collection that skips N elements of the original collection and then yields the
+    /// remaining elements of the collection.</summary>
+    /// <remarks>Throws <c>InvalidOperationException</c>
+    /// when count exceeds the number of elements in the collection. <c>drop</c>
+    /// returns an empty collection instead of throwing an exception.</remarks>
+    /// <param name="count">The number of items to skip.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    ///
+    /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
+    /// <exception cref="System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// in the collection.</exception>
+    let inline skip  (count:int) (source:'Collection'T) : 'Collection'T = Skip.Invoke count source
+
+    /// <summary>Returns the first N elements of the collection.</summary>
+    /// <remarks>Throws <c>InvalidOperationException</c>
+    /// if the count exceeds the number of elements in the collection. <c>limit</c>
+    /// returns as many items as the collection contains instead of throwing an exception.</remarks>
+    ///
+    /// <param name="count">The number of items to take.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    ///
+    /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
+    /// <exception cref="System.ArgumentException">Thrown when the input collection is empty.</exception>
+    /// <exception cref="System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// in the collection.</exception>
+    let inline take  (count:int) (source:'Collection'T) : 'Collection'T = Take.Invoke count source
+
+    /// <summary>Returns a collection that drops N elements of the original collection and then yields the
+    /// remaining elements of the collection.</summary>
+    /// <param name="count">The number of items to drop.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    let inline drop  (count:int) (source:'Collection'T) : 'Collection'T = Drop.Invoke count source
+
+    /// <summary>Returns a collection with at most N elements.</summary>
+    ///
+    /// <param name="count">The maximum number of items to return.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    ///
+    /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
+    let inline limit (count:int) (source:'Collection'T) : 'Collection'T = Limit.Invoke count source
 
     let inline fromList (source :list<'t>) = FromList.Invoke source
     let inline fromSeq  (source :seq<'t> ) = FromSeq.Invoke  source

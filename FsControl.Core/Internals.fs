@@ -28,6 +28,12 @@ module internal List =
     let inline cons x y = x :: y
     let inline apply f x = List.collect (fun f -> List.map ((<|) f) x) f
     let inline tails x = let rec loop = function [] -> [] | x::xs as s -> s::(loop xs) in loop x
+    let inline drop i list = 
+        let rec loop i lst = 
+            match (lst, i) with
+            | ([] as x, _) | (x, 0) -> x
+            | x, n -> loop (n-1) (List.tail x)
+        if i > 0 then loop i list else list
 
 [<RequireQualifiedAccess>]
 module internal Seq =
@@ -58,6 +64,12 @@ module internal Seq =
             if !notFirst then yield sep
             yield element
             notFirst := true}
+
+    let inline drop i (source:seq<_>) =
+        let mutable count = i
+        use e = source.GetEnumerator()
+        while (count > 0 && e.MoveNext()) do count <- count-1
+        seq {while (e.MoveNext()) do yield e.Current}
 
 [<RequireQualifiedAccess>]
 module internal Error =

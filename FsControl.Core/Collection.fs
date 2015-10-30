@@ -58,6 +58,42 @@ type Take =
         call (Unchecked.defaultof<Take>, source, n)
 
 
+[<Extension;Sealed>]
+type Drop =
+    inherit Default1
+    [<Extension>]static member inline Drop (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.drop n |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member        Drop (x:string        , n, [<Optional>]impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else "") else x
+    [<Extension>]static member        Drop (x:StringBuilder , n, [<Optional>]impl:Drop) = if n > 0 then (if x.Length > n then new StringBuilder(x.ToString().[n..]) else new StringBuilder()) else new StringBuilder(x.ToString())
+    [<Extension>]static member        Drop (x:'a []         , n, [<Optional>]impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else [||]) else x : 'a []
+    [<Extension>]static member        Drop (x:'a ResizeArray, n, [<Optional>]impl:Drop) = ResizeArray<'a> (Seq.drop n x)
+    [<Extension>]static member        Drop (x:list<'a>      , n, [<Optional>]impl:Drop) = List.drop n x
+    [<Extension>]static member        Drop (x:'a Id         , n, [<Optional>]impl:Drop) = x
+
+    static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
+        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Drop: _*_*_ -> _) b, n, a)
+        let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<Drop>, source, n)
+
+
+
+[<Extension;Sealed>]
+type Limit =
+    inherit Default1
+    [<Extension>]static member inline Limit (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.truncate n |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member        Limit (x:string        , n, [<Optional>]impl:Limit) = if n < 1 then "" elif n < x.Length then x.[..n-1] else x
+    [<Extension>]static member        Limit (x:StringBuilder , n, [<Optional>]impl:Limit) = new StringBuilder(x.ToString().[..n-1])
+    [<Extension>]static member        Limit (x:'a []         , n, [<Optional>]impl:Limit) = if n < 1 then [||] elif n < x.Length then x.[..n-1] else x : 'a []
+    [<Extension>]static member        Limit (x:'a ResizeArray, n, [<Optional>]impl:Limit) = ResizeArray<'a> (Seq.truncate n x)
+    [<Extension>]static member        Limit (x:list<'a>      , n, [<Optional>]impl:Limit) = Seq.truncate n x |> Seq.toList
+    [<Extension>]static member        Limit (x:'a Id         , n, [<Optional>]impl:Limit) = x
+
+    static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
+        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Limit: _*_*_ -> _) b, n, a)
+        let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<Limit>, source, n)
+
+
+
 type FromList =
 
 #if NOTNET35
