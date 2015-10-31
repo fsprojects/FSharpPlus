@@ -7,10 +7,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>92eb1018-06de-4300-8daa-047f4f53c2b9</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FsControl.Core</RootNamespace>
-    <AssemblyName>FsControl.Core</AssemblyName>
+    <RootNamespace>FsControl</RootNamespace>
+    <AssemblyName>FsControl</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Name>FsControl.Core</Name>
+    <Name>FsControl</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -21,7 +21,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\FsControl.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\FsControl.XML</DocumentationFile>
     <OtherFlags>--staticlink:FsControl.BaseLib</OtherFlags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -31,7 +31,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\FsControl.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\FsControl.XML</DocumentationFile>
     <OtherFlags>--staticlink:FsControl.BaseLib</OtherFlags>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFrameworkVersion) == 'v3.5'">

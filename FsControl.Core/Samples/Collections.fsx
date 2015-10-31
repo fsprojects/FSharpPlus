@@ -1,5 +1,5 @@
 ﻿#nowarn "3186"
-#r @"..\bin\Release\FsControl.Core.dll"
+#r @"..\bin\Release\FsControl.dll"
 
 open System
 open FsControl.Core.Types

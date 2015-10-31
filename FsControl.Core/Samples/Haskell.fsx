@@ -1,5 +1,5 @@
 ﻿#nowarn "3186"
-#r @"..\bin\Release\FsControl.Core.dll"
+#r @"..\bin\Release\FsControl.dll"
 
 // This sample code mimics Haskell functions.
 // It is based in an initial exploratory project  at http://code.google.com/p/fsharp-typeclasses/ no longer maintained.
