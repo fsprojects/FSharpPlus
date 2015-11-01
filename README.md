@@ -3,9 +3,9 @@ FsControl
 
 A library that enhances the F# coding experience by providing the following two innovations:
 
-1. A mechanism for defining standalone generic functions within F# similar to Haskell (once their defining module is in scope). These generic functions are resolved at compile time to an implementation type using .Net's static class method overloading mechanism, .Net type extension facillity, and F#'s type inferencing. For example, a generic definition of Map may be made so as to automatically resolve to List.map, Array.map, Seq.map, or whatever the provided mappable (Functor) value's  implementation of Map resolves to at compile time.
+1. A mechanism for defining standalone generic functions within F# similar to Haskell's typeclasses (once their defining module is in scope). These generic functions are resolved at compile time to an implementation type using .Net's static class method overloading mechanism, .Net type extension facility, and F#'s type inferencing. For example, a generic definition of <code>Map</code> may be made so as to automatically resolve to <code>List.map</code>, <code>Array.map</code>, <code>Seq.map</code>, or whatever the provided mappable (Functor) value's  implementation of <code>Map</code> resolves to at compile time.
 
-2. The provision of a set of Haskell inspired generic standalone function definitions together with their implementation over a set of .NET and F# core types.
+2. The provision of a set of generic standalone function definitions together with their implementation over a set of .NET and F# core types. Some of these functions are abstractions ported from Haskell but adapted to the F#/.NET world. Other functions offer a solution to normalize common function calls over different Types which represent the same abstraction but mainly due to historical reasons have different names and signatures.
 
 ### Getting Started
 
@@ -72,14 +72,16 @@ Of course they are already defined in the FsControl.Operators module and they wo
 
 ### Next steps:
  - Have a look at the [sample files](https://github.com/gmpl/FsControl/blob/master/FsControl.Core/Samples/) adjust the path of the binaries and run the .fsx scripts.
- - Before creating your own library of generic functions be aware that [FsControl.Operators](https://github.com/gmpl/FsControl/blob/master/FsControl.Core/Operators.fs) is a lightweight module with some operators and functions used mainly to test the project. Also take the time to visit [F#+](https://github.com/gmpl/FSharpPlus) which is a library which re-export all those functions but apart from that provides more derived operators, builders and other interesting stuff.
+ - Before creating your own library of generic functions be aware that [FsControl.Operators](https://github.com/gmpl/FsControl/blob/master/FsControl.Core/Operators.fs) is a lightweight module with some operators and functions used mainly to test the project. Also take the time to visit [F#+](https://github.com/gmpl/FSharpPlus) which is a library that re-export all those functions and also provides more derived operators, builders and other interesting stuff.
  - In the rare case that you are not interested in the generic stuff but want to re-use specific implementations many methods in FsControl are defined as extension methods and some have a C# friendly signature.
  - Keep reading the doc.
 
 How does it works
 -----------------
 
-There are basically two types involved in these overloads:
+Technically this is a base library with a collection of generic methods overloaded for .NET and F# core types but extensible to other types at the same time.
+
+There are basically two Types involved in these overloads:
 
  - The type that will implement the abstraction. This will be a “real” type, for example <code>List</code> or <code>Tree</code>. We may refer to this type as the the type or as the instance, since it represents an instance of the abstraction. At the same time we can classify these types in primitive types and custom types. By primitive types we refer to existing types in the .NET framework.
 
@@ -199,7 +201,7 @@ A: There are many posts on Haskell everywhere, of those some are very formal and
 
 Q: Is this a Haskell emulator?
 
-A: No, there some abstractions specifics to F#, however it's true that this library (as many others F# libs) is heavily inspired in concepts coming from Haskell but as F# is another language with another type system, strict evaluation and some different conventions there are many differences in names, types and implementations. Also there are some specific F# abstractions. Anyway by knowing those differences you may be able to translate Haskell code to F#. There is a sample file which mimics basic haskell functions and types.
+A: No, there some abstractions specifics to F#, however it's true that this library (as many others F# libs) is heavily inspired in concepts coming from Haskell but as F# is another language with another type system, strict evaluation and some different conventions there are many differences in names, types and implementations. Also there are some specific F# abstractions. Anyway by knowing those differences you may be able to translate Haskell code to F#. There is a [Haskell Compatibility module in F#+](https://github.com/gmpl/FSharpPlus/blob/master/FSharpPlus/Compatibility.fs#L4) which is another project based in FsControl, and it contains binds to mimic Haskell functions, operator and types.
 
 Q: How can I contribute to this library?
 
