@@ -1,7 +1,6 @@
-﻿namespace FsControl.Core.Types
+﻿namespace FsControl
 
 open FsControl.Core.Internals.Prelude
-open FsControl
 open FsControl.MonadOps
 
 type ContT<'Mr,'A> = ContT of  (('A -> 'Mr) -> 'Mr)    

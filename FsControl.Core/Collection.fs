@@ -4,7 +4,6 @@ open System
 open System.Text
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
-open FsControl.Core.Types
 open FsControl.Core.Internals
 
 

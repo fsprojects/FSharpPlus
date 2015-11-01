@@ -1,7 +1,5 @@
-﻿namespace FsControl.Core.Types
-
+﻿namespace FsControl
 open FsControl.Core.Internals.Prelude
-open FsControl
 open FsControl.MonadOps
 
 type ReaderT<'R,'Ma> = ReaderT of ('R -> 'Ma)

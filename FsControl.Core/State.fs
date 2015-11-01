@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.Types
+﻿namespace FsControl
 
 type State<'S,'A> = State of ('S->('A * 'S))
 

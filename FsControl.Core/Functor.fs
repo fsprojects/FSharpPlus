@@ -1,11 +1,9 @@
-namespace FsControl.Core.Types
+namespace FsControl
 
 type Kleisli<'a, 'm> = Kleisli of ('a -> 'm)
 
 [<RequireQualifiedAccess>]
 module Kleisli = let run (Kleisli f) = f
-
-namespace FsControl
 
 open System
 open System.Runtime.CompilerServices
@@ -19,7 +17,6 @@ open Microsoft.FSharp.Quotations
 
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
-open FsControl.Core.Types
 
 
 // Monad class ------------------------------------------------------------

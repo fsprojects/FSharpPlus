@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.Types
+﻿namespace FsControl
 
 type Cont<'R,'A> = Cont of (('A->'R)->'R)
 

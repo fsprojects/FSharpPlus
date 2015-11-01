@@ -5,7 +5,6 @@ open System.Text
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open FsControl.Core.Internals
-open FsControl.Core.Types
 
 
 [<Extension;Sealed>]

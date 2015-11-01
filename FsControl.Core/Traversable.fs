@@ -4,7 +4,6 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
-open FsControl.Core.Types
 open FsControl.MonadOps
 
 

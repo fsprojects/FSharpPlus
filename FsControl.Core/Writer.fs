@@ -1,6 +1,4 @@
-﻿namespace FsControl.Core.Types
-
-open FsControl
+﻿namespace FsControl
 
 type Writer<'W,'A> = Writer of ('A * 'W)
 

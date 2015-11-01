@@ -65,7 +65,6 @@ let mcon2 = [|[|1..3|];[|4..5|]|] .Join(null, Unchecked.defaultof<Join>) // opti
 
 
 // Test functor and applicatives for ReaderT
-open FsControl.Core.Types
 
 let readerTf = ReaderT (fun x -> [(+)x])
 let readerTx = ReaderT (fun x -> [x;2*x])

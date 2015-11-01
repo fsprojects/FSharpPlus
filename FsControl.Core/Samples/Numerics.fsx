@@ -2,7 +2,6 @@
 #r @"..\bin\Release\FsControl.dll"
 
 open FsControl.Operators
-open FsControl.Core.Types
 
 let flip f x y = f y x
 let const' k _ = k

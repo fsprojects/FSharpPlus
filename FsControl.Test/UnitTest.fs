@@ -135,7 +135,7 @@ type Applicative with
         Assert.AreEqual (4, v4)
  
 
-open FsControl.Core.Types
+open FsControl
         
 [<TestClass>]
 type MonadTransformers() = 

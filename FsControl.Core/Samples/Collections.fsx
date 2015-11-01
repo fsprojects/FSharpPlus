@@ -2,7 +2,6 @@
 #r @"..\bin\Release\FsControl.dll"
 
 open System
-open FsControl.Core.Types
 open FsControl
 open FsControl.Operators
 
@@ -274,8 +273,6 @@ let allCombinations = sequence (seq [seq ['a';'b';'c']; seq ['1';'2']]) //|> Seq
 
 
 // Test SeqT Monad Transformer
-
-open FsControl.Core.Types
 
 let listT  = ListT (Some [2;4]      ) >>= fun x -> ListT (Some [x; x+10]      )
 let seqT   = SeqT  (Some (seq [2;4])) >>= fun x -> SeqT  (Some (seq [x; x+10]))

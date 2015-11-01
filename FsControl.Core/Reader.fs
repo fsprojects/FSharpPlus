@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.Types
+﻿namespace FsControl
 
 type Reader<'R,'A> = Reader of ('R->'A)
 

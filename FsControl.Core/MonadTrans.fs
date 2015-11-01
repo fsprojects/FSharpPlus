@@ -1,8 +1,7 @@
-﻿namespace FsControl.Core.Types
+﻿namespace FsControl
 
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
-open FsControl
 open FsControl.MonadOps
 
 type OptionT<'Ma> = OptionT of 'Ma
@@ -76,13 +75,6 @@ type SeqT<'Ma> with
     static member inline Mplus (_:Mplus, SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result (Seq.append a b))))
 
 
-namespace FsControl
-
-open FsControl.Core.Internals
-open FsControl.Core.Internals.Prelude
-open FsControl
-open FsControl.Core.Types
-open FsControl.MonadOps
 
 
 // MonadTrans

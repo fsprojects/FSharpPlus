@@ -1,6 +1,5 @@
-﻿namespace FsControl.Core.Types
+﻿namespace FsControl
 open FsControl.Core.Internals.Prelude
-open FsControl
 
 type Dual<'T> = Dual of 'T with
     static member inline Mempty  (_:Dual<'m>, _:Mempty) = Dual (Mempty.Invoke()) :Dual<'m>
@@ -35,7 +34,7 @@ type Const<'T,'U> = Const of 'T with
 type First<'T> = First of Option<'T> with
     static member Mempty  (_:First<'t>, _:Mempty   ) = First None :First<'t>
     static member Mappend (x:First<'t>, y:First<'t>) = match x, y with First None, r -> r | l, _ -> l
-[<RequireQualifiedAccess>]module First = let run (First a) = a
+    static member run (First a) = a
 
 type Last<'T> = Last of Option<'T> with
     static member Mempty  (_:Last<'t>, _:Mempty   ) = Last None :Last<'t>

@@ -119,8 +119,6 @@ module Operators =
 
     // Monad Transformers
 
-    open FsControl.Core.Types
-
     let inline lift      (x:'Monad'T ) :'MonadTrans'Monad'T = Lift.Invoke x
 
     let inline liftAsync (x:Async<'T>) :'MonadAsync'T       = LiftAsync.Invoke x
