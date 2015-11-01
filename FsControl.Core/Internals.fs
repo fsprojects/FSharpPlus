@@ -126,7 +126,6 @@ module BigInteger =
             | _ -> Choice1Of2 (r, x - r2)
 
 
-namespace FsControl.Core.Types
 type Id<'t>(v:'t) =
    let value = v
    member this.getValue = value

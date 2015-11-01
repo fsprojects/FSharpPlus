@@ -81,7 +81,6 @@ type ToBytes =
 
 
 open System.Globalization
-open FsControl.Core.Types
 
 type TryParse =
     static member inline TryParse (_:'t     option, _:TryParse) = fun x -> 

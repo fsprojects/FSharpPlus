@@ -191,8 +191,6 @@ type Signum' =
         call_2 (Unchecked.defaultof<Signum'>, x)
 
 
-open FsControl.Core.Types
-
 type TryNegate =
     static member inline TryNegate (_:^t when ^t: null and ^t: struct) = ()
     static member inline TryNegate (x:'t        ) = Choice1Of2 -x
@@ -274,7 +272,6 @@ namespace FsControl
 open Numerics
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
-open FsControl.Core.Types
 open FsControl
 
 open System.Runtime.CompilerServices
