@@ -1,7 +1,7 @@
 ﻿namespace FsControl
 
 open FsControl.Core.Internals.Prelude
-open FsControl.MonadOps
+open FsControl.Core.Internals.MonadOps
 
 type StateT<'S,'MaS> = StateT of ('S -> 'MaS)
 

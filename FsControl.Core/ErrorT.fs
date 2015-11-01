@@ -2,7 +2,7 @@
 
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
-open FsControl.MonadOps
+open FsControl.Core.Internals.MonadOps
 
 type ErrorT<'R> = ErrorT of 'R
 

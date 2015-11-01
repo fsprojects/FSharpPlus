@@ -271,15 +271,28 @@ type Mplus with
     static member inline Mplus (Kleisli f, Kleisli g, _:Mplus) = Kleisli (fun x -> Mplus.Invoke (f x) (g x))
 
 
+namespace FsControl.Core.Internals
 module internal MonadOps =
 
-    let inline (>>=) x f = Bind.Invoke x f
-    let inline result  x = Return.Invoke x
-    let inline (<*>) f x = Apply.Invoke f x
-    let inline (<|>) x y = Mplus.Invoke x y
+    let inline (>>=) x f = FsControl.Bind.Invoke x f
+    let inline result  x = FsControl.Return.Invoke x
+    let inline (<*>) f x = FsControl.Apply.Invoke f x
+    let inline (<|>) x y = FsControl.Mplus.Invoke x y
     let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
 
-open MonadOps
+
+namespace FsControl
+
+open System
+open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
+open System.Collections.Generic
+#if NOTNET35
+open System.Threading.Tasks
+#endif
+open FsControl.Core.Internals
+open FsControl.Core.Internals.Prelude
+open FsControl.Core.Internals.MonadOps
 
 [<Extension;Sealed>]
 type Extract =
