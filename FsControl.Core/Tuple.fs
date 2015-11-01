@@ -1,4 +1,4 @@
-﻿namespace FsControl.Core.TypeMethods
+﻿namespace FsControl
 
 open System
 open System.Text

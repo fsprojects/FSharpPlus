@@ -1,11 +1,11 @@
-﻿namespace FsControl.Core.TypeMethods
+﻿namespace FsControl
 
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
 open FsControl.Core.Types
-open FsControl.Core.TypeMethods.MonadOps
+open FsControl.MonadOps
 
 
 [<Extension;Sealed>]

@@ -37,7 +37,7 @@ let either f g = function Left x -> f x | Right y -> g y
 // Numerics
 type Integer = bigint
 open System.Numerics
-open FsControl.Core.TypeMethods
+open FsControl
 // open FsControl.Core.Types.Ratio
 
 let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInt x

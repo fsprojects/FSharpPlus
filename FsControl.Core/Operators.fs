@@ -1,6 +1,6 @@
 ﻿namespace FsControl
 
-open FsControl.Core.TypeMethods
+open FsControl
 
 module Operators =
 

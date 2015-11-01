@@ -5,7 +5,7 @@ type Kleisli<'a, 'm> = Kleisli of ('a -> 'm)
 [<RequireQualifiedAccess>]
 module Kleisli = let run (Kleisli f) = f
 
-namespace FsControl.Core.TypeMethods
+namespace FsControl
 
 open System
 open System.Runtime.CompilerServices

@@ -158,7 +158,7 @@ type MonadTransformers() =
         Assert.IsInstanceOfType (Some res4Layers  , typeof<Option<ListT<OptionT<WriterT<Async<string list option * string>>>>>>)
 
 module NumericLiteralG =
-    open FsControl.Core.TypeMethods
+    open FsControl
     let inline FromZero() = Zero.Invoke()
     let inline FromOne () = One.Invoke()
     let inline FromInt32  (i:int   ) = FromInt32.Invoke i

@@ -3,7 +3,7 @@
 
 open System
 open FsControl.Core.Types
-open FsControl.Core.TypeMethods
+open FsControl
 open FsControl.Operators
 
 let flip f x y = f y x

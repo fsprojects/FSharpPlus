@@ -15,7 +15,7 @@ let (/>) = flip
 // Numerics
 type Integer = bigint
 open System.Numerics
-open FsControl.Core.TypeMethods
+open FsControl
 
 let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInt x
 let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInt   x

@@ -2,7 +2,7 @@
 // Warn FS0077 -> Member constraints with the name 'op_Explicit' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // But all simulated types are being handled so here Explicit is SAFE from runtime errors.
 
-namespace FsControl.Core.TypeMethods
+namespace FsControl
 
 open System
 open System.Runtime.CompilerServices

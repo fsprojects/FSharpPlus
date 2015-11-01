@@ -1,6 +1,6 @@
 ﻿namespace FsControl.Core.Types
 open FsControl.Core.Internals.Prelude
-open FsControl.Core.TypeMethods
+open FsControl
 
 type Dual<'T> = Dual of 'T with
     static member inline Mempty  (_:Dual<'m>, _:Mempty) = Dual (Mempty.Invoke()) :Dual<'m>
