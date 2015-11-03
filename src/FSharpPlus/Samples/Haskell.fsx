@@ -49,6 +49,8 @@ let lst11n21n12n22 = [1; 2]  >>= (fun x1 -> [10; 20] >>= (fun x2 ->  return' ((+
 
 let just2 = mfilter ((==) 2) (Just 2)
 
+let someListOf42 = replicateM 5 (Some 42)
+
 
 // Arrow
 
