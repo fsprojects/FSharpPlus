@@ -59,6 +59,13 @@ module Compatibility =
         let putStrLn x = async {printfn "%s" x}                   :IO<unit>
         let print    x = async {printfn "%A" x}                   :IO<unit>
 
+        // List
+
+        open FSharpPlus.Extensions
+        let map f x = List.map f x
+        let replicate  n x = List.replicate  n x
+
+
         // Functors
 
         let inline fmap f x = map f x
@@ -130,11 +137,10 @@ module Compatibility =
 
         let inline return' x = result x
 
-        let inline sequence ms =
-            let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (return' :list<'a> -> 'M) (List.Cons(x,xs))
-            List.foldBack k ms ((return' :list<'a> -> 'M) [])
-            
-        let inline mapM f as' = sequence (List.map f as')
+        let inline sequence ms = List.sequence ms
+        let inline replicateM n x = List.replicateM n x            
+        let inline mapM f as' = List.mapM f as'
+        let inline filterM p x = List.filterM p x
         let inline liftM  f m1    = m1 >>= (return' << f)
         let inline liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
         let inline ap     x y     = liftM2 id x y
