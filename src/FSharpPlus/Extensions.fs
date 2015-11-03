@@ -15,11 +15,11 @@ module Extensions =
     [<AutoOpen>]
     module Seq =
         let foldBack f (s:seq<_>) z = Array.foldBack f (Seq.toArray s) z
-        let inline internal sequence ms =
+        let inline sequence ms =
             let k m m' = m >>= fun (x:'a) -> m' >>= fun (xs:seq<'a>) -> (result :seq<'a> -> 'M) (seq {yield x; yield! xs})
             foldBack k ms ((result :seq<'a> -> 'M) Seq.empty)
 
-        let inline internal mapM f as' = sequence (Seq.map f as')
+        let inline mapM f as' = sequence (Seq.map f as')
               
         let groupAdjBy keyMapper (source:_ seq) = seq {
             use e = source.GetEnumerator()
