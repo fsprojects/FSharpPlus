@@ -9,6 +9,8 @@ module Operators =
     // Common combinators
     let inline flip f x y = f y x
     let inline konst k _ = k
+    let inline curry f x y = f (x, y)
+    let inline uncurry f (x, y) = f x y
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
     let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
