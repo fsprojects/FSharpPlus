@@ -46,6 +46,11 @@ module Extensions =
                     yield element
                     notFirst := true}
 
+        let replicate count initial = System.Linq.Enumerable.Repeat(initial, count)
+
+        let inline replicateM count (initial:'Monad'T) : 'Monad'Seq'T = sequence (replicate count initial)
+
+
     type List<'T> with
         static member singleton x = [x]
         member this.GetSlice = function
@@ -82,6 +87,8 @@ module Extensions =
                         loopM t >>= (fun ys ->
                             result (if flg then (h::ys) else ys)))
             loopM xs
+
+        let inline replicateM count (initial:'Monad'T) : 'Monad'List'T = sequence (List.replicate count initial)
 
 
     /// A convenient alias for Choice<_,_>
