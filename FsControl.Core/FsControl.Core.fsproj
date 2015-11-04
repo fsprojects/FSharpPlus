@@ -66,6 +66,7 @@
     <Compile Include="Functor.fs" />
     <Compile Include="Foldable.fs" />
     <Compile Include="Traversable.fs" />
+    <Compile Include="Indexable.fs" />
     <Compile Include="Cont.fs" />
     <Compile Include="Reader.fs" />
     <Compile Include="Writer.fs" />

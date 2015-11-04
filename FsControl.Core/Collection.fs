@@ -193,19 +193,6 @@ type Intersperse =
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)
         let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
         call (Unchecked.defaultof<Intersperse>, source,sep) :'Collection'T
-    
-
-[<Extension;Sealed>]
-type Iteri =
-    [<Extension>]static member Iteri (x:Id<'T>  , f:int->'T->unit, [<Optional>]impl:Iteri) = f 0 x.getValue
-    [<Extension>]static member Iteri (x:seq<'T> , f              , [<Optional>]impl:Iteri) = Seq.iteri   f x
-    [<Extension>]static member Iteri (x:list<'T>, f              , [<Optional>]impl:Iteri) = List.iteri  f x
-    [<Extension>]static member Iteri (x:'T []   , f              , [<Optional>]impl:Iteri) = Array.iteri f x
-
-    static member inline Invoke (action:int->'T->unit)     (source:'Collection'T)        =
-        let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member Iteri: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
-        call (Unchecked.defaultof<Iteri>,  source, action)    :unit
 
 
 [<Extension;Sealed>]
@@ -222,18 +209,6 @@ type Length =
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Length>, source)            :int
 
-
-[<Extension;Sealed>]
-type Mapi =
-    [<Extension>]static member Mapi (x:Id<'T>  , f:int->'T->'U, [<Optional>]impl:Mapi) = f 0 x.getValue
-    [<Extension>]static member Mapi (x:seq<'T> , f            , [<Optional>]impl:Mapi) = Seq.mapi   f x
-    [<Extension>]static member Mapi (x:list<'T>, f            , [<Optional>]impl:Mapi) = List.mapi  f x
-    [<Extension>]static member Mapi (x:'T []   , f            , [<Optional>]impl:Mapi) = Array.mapi f x
-
-    static member inline Invoke    (mapping:int->'T->'U)    (source:'Collection'T)        =
-        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Mapi: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
-        call (Unchecked.defaultof<Mapi>,   source, mapping)     :'Collection'U
 
 
 [<Extension;Sealed>]

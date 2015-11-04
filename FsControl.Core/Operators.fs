@@ -109,6 +109,14 @@ module Operators =
     let inline sequenceA (t:'Traversable'Applicative'T) :'Applicative'Traversable'T = SequenceA.Invoke t
 
 
+    // Indexable
+
+    let inline mapi (mapping:'K->'T->'U) (source:'FunctorWithIndex'T) = Mapi.Invoke mapping source  :'FunctorWithIndex'U
+    let inline iteri (action:'K->'T->unit)     (source:'FunctorWithIndex'T)        = Iteri.Invoke action source   :unit
+    let inline foldi (folder:'State->'K->'T->'State) (state:'State) (source:'FoldableWithIndex'T) = Foldi.Invoke folder state source :'State
+    let inline traversei (f:'K->'T->'Applicative'U) (t:'Traversable'T) :'Applicative'Traversable'U = Traversei.Invoke f t  
+
+
     // Comonads
 
     let inline extract (x:'Comonad'T): 'T = Extract.Invoke x
@@ -225,12 +233,9 @@ module Operators =
     let inline intersperse      (sep:'T)        (source:'Collection'T)        = Intersperse.Invoke sep source        :'Collection'T
 
     let inline iter       (action:'T->unit)     (source:'Collection'T)        = map_ action         source   :unit
-    let inline iteri (action:int->'T->unit)     (source:'Collection'T)        = Iteri.Invoke action source   :unit
 
     let inline length (source:'Collection'T)                                  = Length.Invoke source      :int
 
-    let inline mapi    (mapping:int->'T->'U)    (source:'Collection'T)        = Mapi.Invoke mapping source             :'Collection'U
-    
     let inline maxBy (projection:'T->'U) (source:'Collection'T)               = MaxBy.Invoke projection  source    :'T
     let inline minBy (projection:'T->'U) (source:'Collection'T)               = MinBy.Invoke projection  source    :'T
 
