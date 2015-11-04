@@ -277,4 +277,7 @@ let allCombinations = sequence (seq [seq ['a';'b';'c']; seq ['1';'2']]) //|> Seq
 let listT  = ListT (Some [2;4]      ) >>= fun x -> ListT (Some [x; x+10]      )
 let seqT   = SeqT  (Some (seq [2;4])) >>= fun x -> SeqT  (Some (seq [x; x+10]))
 let resListTSome2547 = (SeqT (Some (seq [2;4]) )) >>=  (fun x -> SeqT ( Some (seq [x;x+3])) )
-let apSeqT  = SeqT.run ((SeqT  (Some [(+) 3]) ) <*> ( SeqT  (Some [3]) ))
+// this doesn't compile now:
+// let apSeqT  = SeqT.run ((SeqT  (Some [(+) 3]) ) <*> ( SeqT  (Some [3]) ))
+// Instead an explicit seq must by passed inside SeqT:
+let apSeqT  = SeqT.run ((SeqT (Some (seq [(+) 3])) ) <*> (SeqT (Some (seq [3])) ))

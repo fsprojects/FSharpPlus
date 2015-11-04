@@ -14,7 +14,7 @@ type Traverse =
     [<Extension>]static member inline Traverse (t:Id<_>, f, _, [<Optional>]impl:Default1) = Map.Invoke Id.create (f (Id.run t))
     [<Extension>]static member inline Traverse (t:_ seq, f, _, [<Optional>]impl:Default1) = 
                     let cons x y = seq {yield x; yield! y}
-                    let cons_f x ys = Map.Invoke cons (f x) <*> ys
+                    let cons_f x ys = Map.Invoke (cons:'a->seq<_>->seq<_>) (f x) <*> ys
                     FoldBack.Invoke cons_f (result (Seq.empty)) t
 
     [<Extension>]static member Traverse (t:_ seq ,f , _:option<seq<_>>, [<Optional>]impl:Traverse) =

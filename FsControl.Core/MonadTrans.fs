@@ -61,9 +61,9 @@ module SeqT =
 
     let inline internal mapM f as' = sequence (Seq.map f as')
 
-    let inline map f (SeqT m) = SeqT <| Map.Invoke (Seq.map f) m
-    let inline bind  (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= mapM (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> result)) :SeqT<'mb>
-    let inline apply (SeqT f) (SeqT x) = SeqT (Map.Invoke Seq.apply f <*> x) :SeqT<'r>
+    let inline map f (SeqT m) = SeqT <| Map.Invoke (Seq.map f: (seq<_>->_)) m
+    let inline bind  (f:'a -> SeqT<'mb>) (SeqT m:SeqT<'ma>) = SeqT (m >>= (mapM:_->seq<_>->_) (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> result)) :SeqT<'mb>
+    let inline apply (SeqT f) (SeqT x) = SeqT (Map.Invoke (Seq.apply:seq<_->_>->seq<_>->seq<_>) f <*> x) :SeqT<'r>
 
 type SeqT<'Ma> with
     static member inline Map    (x:SeqT<'ma>, (f:'a->'b)   , _:Map   ) =  SeqT.map f x :SeqT<'mb>
