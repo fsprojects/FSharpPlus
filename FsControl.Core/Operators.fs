@@ -105,15 +105,25 @@ module Operators =
 
     // Traversable
 
+    /// Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
     let inline traverse (f:'T->'Applicative'U) (t:'Traversable'T) :'Applicative'Traversable'U = Traverse.Invoke f t
+
+    /// Evaluate each action in the structure from left to right, and and collect the results.
     let inline sequenceA (t:'Traversable'Applicative'T) :'Applicative'Traversable'T = SequenceA.Invoke t
 
 
     // Indexable
 
+    /// Map with access to the index.
     let inline mapi (mapping:'K->'T->'U) (source:'FunctorWithIndex'T) = Mapi.Invoke mapping source  :'FunctorWithIndex'U
+
+    /// Map an action with access to an index.
     let inline iteri (action:'K->'T->unit)     (source:'FunctorWithIndex'T)        = Iteri.Invoke action source   :unit
+
+    /// Left-associative fold of an indexed container with access to the index i.
     let inline foldi (folder:'State->'K->'T->'State) (state:'State) (source:'FoldableWithIndex'T) = Foldi.Invoke folder state source :'State
+    
+    /// Traverse an indexed container. Behaves exactly like a regular traverse except that the traversing function also has access to the key associated with a value.
     let inline traversei (f:'K->'T->'Applicative'U) (t:'Traversable'T) :'Applicative'Traversable'U = Traversei.Invoke f t  
 
 
