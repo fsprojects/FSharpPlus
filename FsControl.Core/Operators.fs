@@ -15,8 +15,8 @@ module Operators =
     /// Lift a function into a Functor. Same as map but with flipped arguments.
     let inline (|>>)  (x:'Functor'T) (f:'T->'U) :'Functor'U = Map.Invoke f x
 
-    /// Lift an action into a Functor.
-    let inline map_   (action :'T->unit) (source :'Functor'T) = Map_.Invoke action source :unit
+    /// Like map but ignoring the results.
+    let inline iter   (action :'T->unit) (source :'Functor'T) = Iterate.Invoke action source :unit
    
 
     // Applicative ------------------------------------------------------------
@@ -115,16 +115,16 @@ module Operators =
     // Indexable
 
     /// Map with access to the index.
-    let inline mapi (mapping:'K->'T->'U) (source:'FunctorWithIndex'T) = Mapi.Invoke mapping source  :'FunctorWithIndex'U
+    let inline mapi (mapping:'K->'T->'U) (source:'FunctorWithIndex'T) = MapIndexed.Invoke mapping source  :'FunctorWithIndex'U
 
     /// Map an action with access to an index.
-    let inline iteri (action:'K->'T->unit)     (source:'FunctorWithIndex'T)        = Iteri.Invoke action source   :unit
+    let inline iteri (action:'K->'T->unit) (source:'FunctorWithIndex'T) = IterateIndexed.Invoke action source   :unit
 
     /// Left-associative fold of an indexed container with access to the index i.
-    let inline foldi (folder:'State->'K->'T->'State) (state:'State) (source:'FoldableWithIndex'T) = Foldi.Invoke folder state source :'State
+    let inline foldi (folder:'State->'K->'T->'State) (state:'State) (source:'FoldableWithIndex'T) = FoldIndexed.Invoke folder state source :'State
     
     /// Traverse an indexed container. Behaves exactly like a regular traverse except that the traversing function also has access to the key associated with a value.
-    let inline traversei (f:'K->'T->'Applicative'U) (t:'Traversable'T) :'Applicative'Traversable'U = Traversei.Invoke f t  
+    let inline traversei (f:'K->'T->'Applicative'U) (t:'Traversable'T) :'Applicative'Traversable'U = TraverseIndexed.Invoke f t  
 
 
     // Comonads
@@ -241,8 +241,6 @@ module Operators =
     let inline tryHead                          (source:'Collection'T)        = TryHead.Invoke source :'T option
 
     let inline intersperse      (sep:'T)        (source:'Collection'T)        = Intersperse.Invoke sep source        :'Collection'T
-
-    let inline iter       (action:'T->unit)     (source:'Collection'T)        = map_ action         source   :unit
 
     let inline length (source:'Collection'T)                                  = Length.Invoke source      :int
 

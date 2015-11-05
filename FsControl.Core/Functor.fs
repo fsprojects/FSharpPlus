@@ -166,37 +166,37 @@ type Apply =
 // Functor class ----------------------------------------------------------
 
 [<Extension;Sealed>]
-type Map_ =
-    [<Extension>]static member Map_ (x:Lazy<_>  , f) = f x.Value :unit
-    [<Extension>]static member Map_ (x:seq<_>   , f) = Seq.iter f x
-    [<Extension>]static member Map_ (x:option<_>, f) = match x with Some x -> f x | _ -> ()
-    [<Extension>]static member Map_ (x:list<_>  , f) = List.iter f x
-    [<Extension>]static member Map_ ((m,a)      , f) = f a :unit
-    [<Extension>]static member Map_ (x:_ []     , f) = Array.iter   f x
-    [<Extension>]static member Map_ (x:_ [,]    , f) = Array2D.iter f x
-    [<Extension>]static member Map_ (x:_ [,,]   , f) = Array3D.iter f x
-    [<Extension>]static member Map_ (x:_ [,,,]  , f) =
+type Iterate =
+    [<Extension>]static member Iterate (x:Lazy<_>  , f) = f x.Value :unit
+    [<Extension>]static member Iterate (x:seq<_>   , f) = Seq.iter f x
+    [<Extension>]static member Iterate (x:option<_>, f) = match x with Some x -> f x | _ -> ()
+    [<Extension>]static member Iterate (x:list<_>  , f) = List.iter f x
+    [<Extension>]static member Iterate ((m,a)      , f) = f a :unit
+    [<Extension>]static member Iterate (x:_ []     , f) = Array.iter   f x
+    [<Extension>]static member Iterate (x:_ [,]    , f) = Array2D.iter f x
+    [<Extension>]static member Iterate (x:_ [,,]   , f) = Array3D.iter f x
+    [<Extension>]static member Iterate (x:_ [,,,]  , f) =
                     for i = 0 to Array4D.length1 x - 1 do
                         for j = 0 to Array4D.length2 x - 1 do
                             for k = 0 to Array4D.length3 x - 1 do
                                 for l = 0 to Array4D.length4 x - 1 do
                                     f x.[i,j,k,l]
-    [<Extension>]static member Map_ (x:Async<_>       , f) = f (Async.RunSynchronously x) : unit
-    [<Extension>]static member Map_ (x:Choice<_,_>    , f) = match x with Choice1Of2 x -> f x | _ -> ()
-    [<Extension>]static member Map_ (KeyValue(k, x)   , f) = f x :unit
-    [<Extension>]static member Map_ (x:Map<'a,'b>     , f) = Map.iter (const' f) x 
-    [<Extension>]static member Map_ (x:Dictionary<_,_>, f) = Seq.iter f x.Values
-    [<Extension>]static member Map_ (x:_ ResizeArray  , f) = Seq.iter f x
+    [<Extension>]static member Iterate (x:Async<_>       , f) = f (Async.RunSynchronously x) : unit
+    [<Extension>]static member Iterate (x:Choice<_,_>    , f) = match x with Choice1Of2 x -> f x | _ -> ()
+    [<Extension>]static member Iterate (KeyValue(k, x)   , f) = f x :unit
+    [<Extension>]static member Iterate (x:Map<'a,'b>     , f) = Map.iter (const' f) x 
+    [<Extension>]static member Iterate (x:Dictionary<_,_>, f) = Seq.iter f x.Values
+    [<Extension>]static member Iterate (x:_ ResizeArray  , f) = Seq.iter f x
 
     // Restricted
-    [<Extension>]static member Map_ (x:string         , f) = String.iter f x
-    [<Extension>]static member Map_ (x:StringBuilder  , f) = String.iter f (x.ToString())
-    [<Extension>]static member Map_ (x:Set<_>         , f) = Set.iter f x        
+    [<Extension>]static member Iterate (x:string         , f) = String.iter f x
+    [<Extension>]static member Iterate (x:StringBuilder  , f) = String.iter f (x.ToString())
+    [<Extension>]static member Iterate (x:Set<_>         , f) = Set.iter f x        
 
     static member inline Invoke (action :'T->unit) (source :'Functor'T) =
-        let inline call_3 (a:^a, b:^b, c:^c) =  ((^a or ^b) : (static member Map_: _*_ -> _) b, c)
+        let inline call_3 (a:^a, b:^b, c:^c) =  ((^a or ^b) : (static member Iterate: _*_ -> _) b, c)
         let inline call (a:'a, b:'b, c:'c) = call_3 (a ,b, c)
-        call (Unchecked.defaultof<Map_>, source, action) :unit
+        call (Unchecked.defaultof<Iterate>, source, action) :unit
 
 [<Extension;Sealed>]
 type Map =
