@@ -7,42 +7,42 @@ module Operators =
     // Functor ----------------------------------------------------------------
 
     /// Lift a function into a Functor.
-    let inline map    (f:'T->'U) (x:'Functor'T) :'Functor'U = Map.Invoke f x
+    let inline map    (f:'T->'U) (x:'``Functor<'T>``) :'``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map.
-    let inline (<!>)  (f:'T->'U) (x:'Functor'T) :'Functor'U = Map.Invoke f x
+    let inline (<!>)  (f:'T->'U) (x:'``Functor<'T>``) :'``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map but with flipped arguments.
-    let inline (|>>)  (x:'Functor'T) (f:'T->'U) :'Functor'U = Map.Invoke f x
+    let inline (|>>)  (x:'``Functor<'T>``) (f:'T->'U) :'``Functor<'U>`` = Map.Invoke f x
 
     /// Like map but ignoring the results.
-    let inline iter   (action :'T->unit) (source :'Functor'T) = Iterate.Invoke action source :unit
+    let inline iter   (action :'T->unit) (source :'``Functor<'T>``) :unit = Iterate.Invoke action source
    
 
     // Applicative ------------------------------------------------------------
 
     /// Lift a value into a Functor. Same as return in Computation Expressions.
-    let inline result (x:'T): 'Functor'T = Return.Invoke x
+    let inline result (x:'T): '``Functor<'T>`` = Return.Invoke x
 
     /// Apply a lifted argument to a lifted function.
-    let inline (<*>) (x:'Applicative'T_'U) (y:'Applicative'T): 'Applicative'U = Apply.Invoke x y : 'Applicative'U
+    let inline (<*>) (x:'``Applicative<'T -> 'U>``) (y:'``Applicative<'T>``): '``Applicative<'U>`` = Apply.Invoke x y : '``Applicative<'U>``
 
     /// Apply 2 lifted arguments to a lifted function.
-    let inline liftA2 (f:'T->'U->'V) (a:'Applicative'T) (b:'Applicative'U) :'Applicative'V = f <!> a <*> b
+    let inline liftA2 (f:'T->'U->'V) (a:'``Applicative<'T>``) (b:'``Applicative<'U>``) : '``Applicative<'V>`` = f <!> a <*> b
 
-    let inline (  *>) (x:'Applicative'a) :'Applicative'b->'Applicative'b = x |> liftA2 (fun   _ -> id)
-    let inline (<*  ) (x:'Applicative'a) :'Applicative'b->'Applicative'a = x |> liftA2 (fun k _ -> k )
-    let inline (<**>) (x:'Applicative'a): 'Applicative'a_'b->'Applicative'b = x |> liftA2 (|>)
-    let inline optional (v:'Alternative'a) :'Alternative'Option'a = Some <!> v <|> result None
+    let inline (  *>)   (x:'``Applicative<'T>``) : '``Applicative<'U>``->'``Applicative<'U>`` = x |> liftA2 (fun   _ -> id)
+    let inline (<*  )   (x:'``Applicative<'T>``) : '``Applicative<'U>``->'``Applicative<'T>`` = x |> liftA2 (fun k _ -> k )
+    let inline (<**>)   (x:'``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = x |> liftA2 (|>)
+    let inline optional (v:'``Applicative<'T>``) : '``Applicative<Option'T>`` = Some <!> v <|> result None
 
 
     // Monad -----------------------------------------------------------
     
-    let inline (>>=) (x:'Monad'T) (f:'T->'Monad'U) :'Monad'U = Bind.Invoke x f
-    let inline (=<<) (f:'T->'Monad'U) (x:'Monad'T) :'Monad'U = Bind.Invoke x f
-    let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = Bind.Invoke (f x) g
-    let inline (<=<) (g:'b->'Monad'c) (f:'a->'Monad'b) (x:'a) :'Monad'c = Bind.Invoke (f x) g
-    let inline join (x:'Monad'Monad'T) :'Monad'T = Join.Invoke x
+    let inline (>>=) (x:'``Monad<'T>``) (f:'T->'``Monad<'U>``) :'``Monad<'U>`` = Bind.Invoke x f
+    let inline (=<<) (f:'T->'``Monad<'U>``) (x:'``Monad<'T>``) :'``Monad<'U>`` = Bind.Invoke x f
+    let inline (>=>) (f:'T->'``Monad<'U>``) (g:'U->'``Monad<'V>``) (x:'T) : '``Monad<'V>`` = Bind.Invoke (f x) g
+    let inline (<=<) (g:'b->'``Monad<'V>``) (f:'T->'``Monad<'U>``) (x:'T) : '``Monad<'V>`` = Bind.Invoke (f x) g
+    let inline join  (x:'``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
 
 
     // Monoid -----------------------------------------------------------------
@@ -54,14 +54,14 @@ module Operators =
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
-    let inline mzero() :'Functor'T = Mzero.Invoke()
-    let inline (<|>) (x:'Functor'T) (y:'Functor'T) :'Functor'T = Mplus.Invoke x y
-    let inline guard x: 'MonadPlus'unit = if x then Return.Invoke () else Mzero.Invoke()
+    let inline mzero() :'``Functor<'T>`` = Mzero.Invoke()
+    let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = Mplus.Invoke x y
+    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Mzero.Invoke()
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
 
-    let inline contramap (f:'T->'U) (x:'Contravariant'U) :'Contravariant'T = Contramap.Invoke f x
+    let inline contramap (f:'T->'U) (x:'``Contravariant<'U>``) :'``Contravariant<'T>`` = Contramap.Invoke f x
     let inline bimap f g x = Bimap.Invoke x f g
     let inline first   f x = First.Invoke f x
     let inline second  f x = Second.Invoke f x
@@ -89,92 +89,94 @@ module Operators =
 
     // Foldable
 
-    let inline foldBack (folder:'T->'State->'State) (foldable:'Foldable'T) (state:'State) :'State = FoldBack.Invoke folder state foldable
-    let inline fold     (folder:'State->'T->'State) (state:'State) (foldable:'Foldable'T) :'State = Fold.Invoke folder state foldable
-    let inline foldMap (f:'T->'Monoid) (x:'Foldable'T) :'Monoid = FoldMap.Invoke f x
-    let inline toList  value :'t list = ToList.Invoke  value
-    let inline toArray value :'t []   = ToArray.Invoke value
-    let inline exists     (predicate :'T->bool) (source:'Foldable'T)   = Exists.Invoke  predicate source  :bool
-    let inline forall     (predicate :'T->bool) (source:'Foldable'T)   = Forall.Invoke  predicate source  :bool
-    let inline find       (predicate :'T->bool) (source:'Foldable'T)   = Find.Invoke    predicate source  :'T
-    let inline tryFind    (predicate :'T->bool) (source:'Foldable'T)   = TryFind.Invoke predicate source  :'T option
-    let inline pick     (chooser:'T->'U option) (source:'Foldable'T)   = Pick.Invoke    chooser   source  :'U
-    let inline tryPick  (chooser:'T->'U option) (source:'Foldable'T)   = TryPick.Invoke chooser   source  :'U option
-    let inline filter (predicate:_->bool) (x:'Foldable'a) :'Foldable'a =  Filter.Invoke predicate x
+    let inline foldBack (folder:'T->'State->'State) (foldable:'``Foldable<'T>``) (state:'State) : 'State = FoldBack.Invoke folder state foldable
+    let inline fold     (folder:'State->'T->'State) (state:'State) (foldable:'``Foldable<'T>``) : 'State = Fold.Invoke folder state foldable
+    let inline foldMap (f:'T->'Monoid) (x:'``Foldable<'T>``) : 'Monoid = FoldMap.Invoke f x
+    let inline toList  value :'T list = ToList.Invoke  value
+    let inline toArray value :'T []   = ToArray.Invoke value
+    let inline exists     (predicate :'T->bool) (source:'``Foldable<'T>``)   = Exists.Invoke  predicate source  :bool
+    let inline forall     (predicate :'T->bool) (source:'``Foldable<'T>``)   = Forall.Invoke  predicate source  :bool
+    let inline find       (predicate :'T->bool) (source:'``Foldable<'T>``)   = Find.Invoke    predicate source  :'T
+    let inline tryFind    (predicate :'T->bool) (source:'``Foldable<'T>``)   = TryFind.Invoke predicate source  :'T option
+    let inline pick     (chooser:'T->'U option) (source:'``Foldable<'T>``)   = Pick.Invoke    chooser   source  :'U
+    let inline tryPick  (chooser:'T->'U option) (source:'``Foldable<'T>``)   = TryPick.Invoke chooser   source  :'U option
+    let inline filter (predicate:_->bool) (x:'``Foldable<'a>``) :'``Foldable<'a>`` =  Filter.Invoke predicate x
 
 
     // Traversable
 
     /// Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
-    let inline traverse (f:'T->'Applicative'U) (t:'Traversable'T) :'Applicative'Traversable'U = Traverse.Invoke f t
+    let inline traverse (f:'T->'``Applicative<'U>``) (t:'``Traversable<'T>>``) : '``Applicative<'Traversable<'U>>`` = Traverse.Invoke f t
 
     /// Evaluate each action in the structure from left to right, and and collect the results.
-    let inline sequenceA (t:'Traversable'Applicative'T) :'Applicative'Traversable'T = SequenceA.Invoke t
+    let inline sequenceA (t:'``Traversable<'Applicative<'T>>``) :'``Applicative<'Traversable<'T>>`` = SequenceA.Invoke t
 
 
     // Indexable
 
     /// Map with access to the index.
-    let inline mapi (mapping:'K->'T->'U) (source:'FunctorWithIndex'T) = MapIndexed.Invoke mapping source  :'FunctorWithIndex'U
+    let inline mapi (mapping:'K->'T->'U) (source:'``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = MapIndexed.Invoke mapping source
 
     /// Map an action with access to an index.
-    let inline iteri (action:'K->'T->unit) (source:'FunctorWithIndex'T) = IterateIndexed.Invoke action source   :unit
+    let inline iteri (action:'K->'T->unit) (source:'``FunctorWithIndex<'T>``) : unit = IterateIndexed.Invoke action source
 
     /// Left-associative fold of an indexed container with access to the index i.
-    let inline foldi (folder:'State->'K->'T->'State) (state:'State) (source:'FoldableWithIndex'T) = FoldIndexed.Invoke folder state source :'State
+    let inline foldi (folder:'State->'K->'T->'State) (state:'State) (source:'``FoldableWithIndex<'T>``) : 'State = FoldIndexed.Invoke folder state source
     
     /// Traverse an indexed container. Behaves exactly like a regular traverse except that the traversing function also has access to the key associated with a value.
-    let inline traversei (f:'K->'T->'Applicative'U) (t:'Traversable'T) :'Applicative'Traversable'U = TraverseIndexed.Invoke f t  
+    let inline traversei (f:'K->'T->'``Applicative<'U>``) (t:'``Traversable<'T>>``) : '``Applicative<'Traversable<'U>>`` = TraverseIndexed.Invoke f t  
 
 
     // Comonads
 
-    let inline extract (x:'Comonad'T): 'T = Extract.Invoke x
-    let inline extend (g:'Comonad'T->'U) (s:'Comonad'T): 'Comonad'U = Extend.Invoke g s
-    let inline (=>>)  (s:'Comonad'T) (g:'Comonad'T->'U): 'Comonad'U = Extend.Invoke g s
-    let inline duplicate x = Duplicate.Invoke x //'Comonad'T -> :'Comonad'Comonad'T  
+    let inline extract (x:'``Comonad<'T>``): 'T = Extract.Invoke x
+    let inline extend (g:'``Comonad<'T -> 'U>``) (s:'``Comonad<'T>``): '``Comonad<'U>`` = Extend.Invoke g s
+    let inline (=>>)  (s:'``Comonad<'T>``) (g:'``Comonad<'T -> 'U>``): '``Comonad<'U>`` = Extend.Invoke g s
+
+    /// 'Comonad<'T> -> 'Comonad<'Comonad<'T>>
+    let inline duplicate x = Duplicate.Invoke x  
 
 
     // Monad Transformers
 
-    let inline lift      (x:'Monad'T ) :'MonadTrans'Monad'T = Lift.Invoke x
+    let inline lift      (x:'``Monad<'T>`` ) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
 
-    let inline liftAsync (x:Async<'T>) :'MonadAsync'T       = LiftAsync.Invoke x
+    let inline liftAsync (x:Async<'T>) : '``MonadAsync<'T>``       = LiftAsync.Invoke x
 
-    let inline callCC (f:('T->'MonadCont'U)->'MonadCont'T): 'MonadCont'T = CallCC.Invoke f
+    let inline callCC (f:('T->'``MonadCont<'U>``)->'``MonadCont<'T>``) : '``MonadCont<'T>`` = CallCC.Invoke f
    
     /// <summary>Haskell signature: get    :: MonadState  s m => m s</summary>
-    let inline get() :'ms = Get.Invoke()
+    let inline get() : '``m<'s>`` = Get.Invoke()
 
     /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
     let inline put (x:'s) :'m = Put.Invoke x
 
     /// <summary>Haskell signature: ask    :: MonadReader r m => m r</summary>
-    let inline ask() :'mr = Ask.Invoke()
+    let inline ask() :'``m<'r>`` = Ask.Invoke()
    
     /// <summary>Haskell signature: local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
-    let inline local (f:'rr) (m:'ma) :'ma = Local.Invoke f m
+    let inline local (f:'rr) (m:'``m<'a>``) : '``m<'a>`` = Local.Invoke f m
 
     /// <summary>Haskell signature: tell   :: MonadWriter w m => w   -> m ()</summary>
-    let inline tell (x:'w) :'m = Tell.Invoke x
+    let inline tell (x:'w) : '``m<unit>`` = Tell.Invoke x
 
     /// <summary>Haskell signature: listen :: MonadWriter w m => m a -> m (a,w)</summary>
-    let inline listen (m:'ma) :'maw = Listen.Invoke m
+    let inline listen (m:'``m<'a>``) : '``m<'a * 'w>`` = Listen.Invoke m
 
     /// <summary>Haskell signature: pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
-    let inline pass (m:'maww) :'ma = Pass.Invoke m
+    let inline pass (m:'maww) : '``m<'a>`` = Pass.Invoke m
 
     /// <summary>Haskell signature: throw :: MonadError e m => e -> m a</summary>
-    let inline throw (x:'e) :'ma = ThrowError.Invoke x
+    let inline throw (x:'e) : '``m<'a>`` = ThrowError.Invoke x
 
     /// <summary> Pure version of catch. Executes a function when the value represents an exception.
     /// <para/>   Haskell signature: catch :: MonadError e m => m a -> (e -> m b) -> m b </summary>
-    let inline catch (v:'ma) (h:'e->'mb) :'mb = CatchError.Invoke v h
+    let inline catch (v:'``m<'a>``) (h:'e->'``m<'b>``) : '``m<'b>`` = CatchError.Invoke v h
 
 
     // Collection
 
-    let inline item (n:int) (source:'Collection'T) : 'T = Item.Invoke n source
+    let inline item (n:int) (source:'``Collection<'T>``) : 'T = Item.Invoke n source
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
@@ -189,7 +191,7 @@ module Operators =
     /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
     /// <exception cref="System.InvalidOperationException">Thrown when count exceeds the number of elements
     /// in the collection.</exception>
-    let inline skip  (count:int) (source:'Collection'T) : 'Collection'T = Skip.Invoke count source
+    let inline skip  (count:int) (source:'``Collection<'T>``) : '``Collection<'T>`` = Skip.Invoke count source
 
     /// <summary>Returns the first N elements of the collection.</summary>
     /// <remarks>Throws <c>InvalidOperationException</c>
@@ -205,7 +207,7 @@ module Operators =
     /// <exception cref="System.ArgumentException">Thrown when the input collection is empty.</exception>
     /// <exception cref="System.InvalidOperationException">Thrown when count exceeds the number of elements
     /// in the collection.</exception>
-    let inline take  (count:int) (source:'Collection'T) : 'Collection'T = Take.Invoke count source
+    let inline take  (count:int) (source:'``Collection<'T>``) : '``Collection<'T>`` = Take.Invoke count source
 
     /// <summary>Returns a collection that drops N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
@@ -213,7 +215,7 @@ module Operators =
     /// <param name="source">The input collection.</param>
     ///
     /// <returns>The result collection.</returns>
-    let inline drop  (count:int) (source:'Collection'T) : 'Collection'T = Drop.Invoke count source
+    let inline drop  (count:int) (source:'``Collection<'T>``) : '``Collection<'T>`` = Drop.Invoke count source
 
     /// <summary>Returns a collection with at most N elements.</summary>
     ///
@@ -223,38 +225,38 @@ module Operators =
     /// <returns>The result sequence.</returns>
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
-    let inline limit (count:int) (source:'Collection'T) : 'Collection'T = Limit.Invoke count source
+    let inline limit (count:int) (source:'``Collection<'T>``) : '``Collection<'T>`` = Limit.Invoke count source
 
-    let inline fromList (source :list<'t>) = FromList.Invoke source
-    let inline fromSeq  (source :seq<'t> ) = FromSeq.Invoke  source
+    let inline fromList (source :list<'T>) = FromList.Invoke source
+    let inline fromSeq  (source :seq<'T> ) = FromSeq.Invoke  source
 
-    let inline groupBy    (projection:'T->'Key) (source:'Collection'T) : 'Collection'KeyX'Collection'T = GroupBy.Invoke projection source
-    let inline groupAdjBy (projection:'T->'Key) (source:'Collection'T) : 'Collection'KeyX'Collection'T = GroupAdjBy.Invoke projection source
+    let inline groupBy    (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupBy.Invoke projection source
+    let inline groupAdjBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupAdjBy.Invoke projection source
 
 
-    let inline choose (chooser:'T->'U option)   (source:'Collection'T)        = Choose.Invoke chooser source    :'Collection'U
+    let inline choose (chooser:'T->'U option)   (source:'``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source        
 
-    let inline distinct                         (source:'Collection'T)        = Distinct.Invoke              source  :'Collection'T
-    let inline distinctBy (projection:'T->'Key) (source:'Collection'T)        = DistinctBy.Invoke projection source  :'Collection'T
+    let inline distinct                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Distinct.Invoke              source 
+    let inline distinctBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = DistinctBy.Invoke projection source 
     
-    let inline head                             (source:'Collection'T)        = Head.Invoke source    :'T
-    let inline tryHead                          (source:'Collection'T)        = TryHead.Invoke source :'T option
+    let inline head                             (source:'``Collection<'T>``)        = Head.Invoke source    :'T
+    let inline tryHead                          (source:'``Collection<'T>``)        = TryHead.Invoke source :'T option
 
-    let inline intersperse      (sep:'T)        (source:'Collection'T)        = Intersperse.Invoke sep source        :'Collection'T
+    let inline intersperse      (sep:'T)        (source:'``Collection<'T>``)        = Intersperse.Invoke sep source        : '``Collection<'T>``
 
-    let inline length (source:'Collection'T)                                  = Length.Invoke source      :int
+    let inline length (source:'``Collection<'T>``) :int                             = Length.Invoke source
 
-    let inline maxBy (projection:'T->'U) (source:'Collection'T)               = MaxBy.Invoke projection  source    :'T
-    let inline minBy (projection:'T->'U) (source:'Collection'T)               = MinBy.Invoke projection  source    :'T
+    let inline maxBy (projection:'T->'U) (source:'``Collection<'T>``)               = MaxBy.Invoke projection  source    : 'T
+    let inline minBy (projection:'T->'U) (source:'``Collection<'T>``)               = MinBy.Invoke projection  source    : 'T
 
-    let inline rev  (source:'Collection'T)                                    = Rev.Invoke source :'Collection'T
-    let inline scan (folder:'State'->'T->'State) state (source:'Collection'T) = Scan.Invoke folder (state:'State) source :'Collection'State
+    let inline rev  (source:'``Collection<'T>``)                                    = Rev.Invoke source :'``Collection<'T>``
+    let inline scan (folder:'State'->'T->'State) state (source:'``Collection<'T>``) = Scan.Invoke folder (state:'State) source : '``Collection<'State>``
 
-    let inline sort                         (source:'Collection'T) :'Collection'T = Sort.Invoke source 
-    let inline sortBy (projection:'T->'Key) (source:'Collection'T) :'Collection'T = SortBy.Invoke projection source
-    let inline toSeq (source:'Collection'T) = ToSeq.Invoke source  :seq<'T>
+    let inline sort                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Sort.Invoke source 
+    let inline sortBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
+    let inline toSeq (source:'``Collection<'T>``) = ToSeq.Invoke source  :seq<'T>
 
-    let inline zip (source1:'Collection'T1) (source2:'Collection'T2)          = Zip.Invoke source1 source2     :'Collection'T1'T2
+    let inline zip (source1:'``Collection<'T1>``) (source2:'``Collection<'T2>``) : '``Collection<'T1 * 'T2>`` = Zip.Invoke source1 source2    
 
 
 
