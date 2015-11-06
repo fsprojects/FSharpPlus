@@ -47,8 +47,8 @@ type FoldIndexed =
         call (Unchecked.defaultof<FoldIndexed>, foldable, folder, state)
 
 type TraverseIndexed =
-    [<Extension>]static member inline TraverseIndexed ((k:'K, a:'T),f , [<Optional>]output, [<Optional>]impl:TraverseIndexed) = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
-    [<Extension>]static member inline TraverseIndexed (Identity a  ,f , [<Optional>]output, [<Optional>]impl:TraverseIndexed) = Map.Invoke Identity (f () a)
+    [<Extension>]static member inline TraverseIndexed ((k:'K, a:'T),f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
+    [<Extension>]static member inline TraverseIndexed (Identity a  ,f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke Identity (f () a)
 
     static member inline Invoke f t =
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed: _*_*_*_ -> _) b, f, c, a)

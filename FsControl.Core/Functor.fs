@@ -65,7 +65,7 @@ type Bind =
 [<Extension;Sealed>]
 type Join =
     inherit Default1
-    [<Extension>]static member inline Join (x                   , [<Optional>]output, [<Optional>]impl:Default1) = Bind.Invoke x id 
+    [<Extension>]static member inline Join (x                   , [<Optional>]output:'R        , [<Optional>]impl:Default1) = Bind.Invoke x id :'R
     [<Extension>]static member        Join (x:Lazy<Lazy<'a>>    , [<Optional>]output:Lazy<'a>  , [<Optional>]impl:Join) = lazy x.Value.Value
     [<Extension>]static member        Join (x:option<option<'a>>, [<Optional>]output:option<'a>, [<Optional>]impl:Join) = Option.bind   id x
     [<Extension>]static member        Join (x:list<_>           , [<Optional>]output:list<'b>  , [<Optional>]impl:Join) = List.collect  id x
@@ -90,20 +90,20 @@ type Return =
     static member        Return (_:seq<'a> , _:Return) = fun x -> Seq.singleton x :seq<'a>
     static member        Return (_:Id<'a>  , _:Return) = fun x -> Id x :Id<'a>
 #if NOTNET35        
-    static member        Return (_:'a Task, _:Return) = fun x -> 
+    static member        Return (_:'a Task , _:Return) = fun x -> 
         let s = TaskCompletionSource()
         s.SetResult x
-        s.Task
+        s.Task :'a Task
 #endif        
     static member        Return (_:Identity<'t>  , _:Return) = fun x -> Identity x :Identity<'t>
     static member        Return (_:option<'a>    , _:Return) = fun x -> Some x      :option<'a>
     static member        Return (_:list<'a>      , _:Return) = fun x -> [ x ]       :list<'a>
     static member        Return (_:'a []         , _:Return) = fun x -> [|x|]       :'a []
     static member        Return (_:'r -> 'a      , _:Return) = const':'a  -> 'r -> _
-    static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (Mempty.Invoke(), x)
+    static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (Mempty.Invoke():'m), x
     static member        Return (_:'a Async      , _:Return) = fun (x:'a) -> async.Return x
     static member        Return (_:Choice<'a,'e> , _:Return) = fun x -> Choice1Of2 x :Choice<'a,'e>
-    static member        Return (_:Expr<'a>      , _:Return) = fun x -> Expr.Cast<'a>(Expr.Value(x))
+    static member        Return (_:Expr<'a>      , _:Return) = fun x -> Expr.Cast<'a>(Expr.Value(x:'a))
     static member        Return (_:'a ResizeArray, _:Return) = fun x -> ResizeArray<'a>(Seq.singleton x)
 
     //Restricted
@@ -132,7 +132,7 @@ type Apply =
     [<Extension>]static member        Apply (f:'r -> _     , g: _ -> 'a     , [<Optional>]output: 'r -> 'b    , [<Optional>]impl:Apply) = fun x -> f x (g x) :'b
     [<Extension>]static member inline Apply ((a:'m, f)     , (b:'m, x:'a)   , [<Optional>]output:'m * 'b      , [<Optional>]impl:Apply) = (Mappend.Invoke a b, f x) :'m *'b
     [<Extension>]static member        Apply (f:Async<_>    , x:Async<'a>    , [<Optional>]output:Async<'b>    , [<Optional>]impl:Apply) = Apply.FromMonad f x :Async<'b>
-    [<Extension>]static member        Apply (f:option<_>   , x:option<'a>   , [<Optional>]output:option<'b>   , [<Optional>]impl:Apply) = Option.apply f x
+    [<Extension>]static member        Apply (f:option<_>   , x:option<'a>   , [<Optional>]output:option<'b>   , [<Optional>]impl:Apply) = Option.apply f x    :option<'b>
     [<Extension>]static member        Apply (f:Choice<_,'e>, x:Choice<'a,'e>, [<Optional>]output:Choice<'b,'e>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'b,'e>
     [<Extension>]static member        Apply (KeyValue(k:'k,f)  , KeyValue(k:'k,x:'a), [<Optional>]output:KeyValuePair<'k,'b>, [<Optional>]impl:Apply) :KeyValuePair<'k,'b> = KeyValuePair(k, f x)
 
@@ -240,11 +240,11 @@ type Map =
 
 
 type Mzero =
-    static member        Mzero (_:option<'a>, _:Mzero) = None        :option<'a>
-    static member        Mzero (_:list<'a>  , _:Mzero) = [  ]        :list<'a>  
-    static member        Mzero (_:'a []     , _:Mzero) = [||]        :'a []     
-    static member        Mzero (_:seq<'a>   , _:Mzero) = Seq.empty   :seq<'a>
-    static member inline Mzero (_:Id<'a>    , _:Mzero) = Id (Mempty.Invoke()) :Id<'a>
+    static member        Mzero (output :option<'a>, _:Mzero) = None        :option<'a>
+    static member        Mzero (output :list<'a>  , _:Mzero) = [  ]        :list<'a>  
+    static member        Mzero (output :'a []     , _:Mzero) = [||]        :'a []     
+    static member        Mzero (output :seq<'a>   , _:Mzero) = Seq.empty   :seq<'a>
+    static member inline Mzero (output :Id<'a>    , _:Mzero) = Id (Mempty.Invoke()) :Id<'a>
 
     static member inline Invoke () :'Functor'T =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mzero: _*_ -> _) b, a)
@@ -265,10 +265,10 @@ type Mplus =
         call_3 (Unchecked.defaultof<Mplus>, x, y)
 
 type Mzero with
-    static member inline Mzero (_:Kleisli<_,_>, _:Mzero) = Kleisli (fun _ -> Mzero.Invoke ())
+    static member inline Mzero (_:Kleisli<_,_>, impl:Mzero) = Kleisli (fun _ -> Mzero.Invoke ())
     
 type Mplus with
-    static member inline Mplus (Kleisli f, Kleisli g, _:Mplus) = Kleisli (fun x -> Mplus.Invoke (f x) (g x))
+    static member inline Mplus (Kleisli f, Kleisli g, impl:Mplus) = Kleisli (fun x -> Mplus.Invoke (f x) (g x))
 
 
 namespace FsControl.Core.Internals
