@@ -47,6 +47,21 @@ type Traversable() =
         Assert.AreEqual (Some [|1;2|], testVal)
         Assert.IsInstanceOfType (testVal, typeof<Option<array<int>>>)
 
+    member x.sequenceA_Specialization() =
+        let inline seqSeq (x:_ seq ) = sequenceA x
+        let inline seqArr (x:_ []  ) = sequenceA x  // FSC crash here !
+        let inline seqLst (x:_ list) = sequenceA x
+
+        let a = seqSeq (seq [[1];[3]])
+        Assert.AreEqual ([seq [1; 3]], a)
+        Assert.IsInstanceOfType (a, typeof<list<seq<int>>>)
+        let b = seqArr ( [|[1];[3]|])
+        Assert.AreEqual ([[|1; 3|]], b)
+        Assert.IsInstanceOfType (b, typeof<list<array<int>>>)
+        let c = seqLst ( [ [1];[3] ])
+        Assert.AreEqual ([[1; 3]], c)
+        Assert.IsInstanceOfType (c, typeof<list<list<int>>>)
+
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
