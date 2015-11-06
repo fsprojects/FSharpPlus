@@ -49,7 +49,7 @@ type Traversable() =
 
     member x.sequenceA_Specialization() =
         let inline seqSeq (x:_ seq ) = sequenceA x
-        let inline seqArr (x:_ []  ) = sequenceA x  // FSC crash here !
+        let inline seqArr (x:_ []  ) = sequenceA x
         let inline seqLst (x:_ list) = sequenceA x
 
         let a = seqSeq (seq [[1];[3]])

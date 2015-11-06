@@ -54,7 +54,7 @@ type SequenceA =
     [<Extension>]static member inline SequenceA (t:^a            , [<Optional>]output:'r, [<Optional>]impl:Default1 ) =  ((^a) : (static member SequenceA: _ -> 'r) t)
     [<Extension>]static member inline SequenceA (t:option<_>     , [<Optional>]output   , [<Optional>]impl:SequenceA) = match t with Some x -> Map.Invoke Some x | _ -> result None       
     [<Extension>]static member inline SequenceA (t:list<_>       , [<Optional>]output   , [<Optional>]impl:SequenceA) = let cons_f x ys = Map.Invoke List.cons x <*> ys in List.foldBack cons_f t (result [])
-    [<Extension>]static member inline SequenceA (t:_ []          , [<Optional>]output   , [<Optional>]impl:SequenceA) = Traverse.Invoke id t
+    [<Extension>]static member inline SequenceA (t:_ []          , [<Optional>]output   , [<Optional>]impl:SequenceA) = let cons x y = Array.append [|x|] y in let cons_f x ys = Map.Invoke cons x <*> ys in Array.foldBack cons_f t (result [||])
     [<Extension>]static member inline SequenceA (t:Id<_>         , [<Optional>]output   , [<Optional>]impl:SequenceA) = Traverse.Invoke id t
     [<Extension>]static member inline SequenceA (t: _ ResizeArray, [<Optional>]output   , [<Optional>]impl:SequenceA) = Traverse.Invoke id t
     [<Extension>]static member inline SequenceA (t:_ seq         , [<Optional>]output   , [<Optional>]impl:SequenceA) =
