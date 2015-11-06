@@ -17,8 +17,8 @@ type ReaderT<'R,'Ma> with
     static member inline Apply  (f, x, _:ReaderT<'r,'mb>, _:Apply ) = ReaderT.apply f x :ReaderT<'r,'mb>
     static member inline Bind (x, f :'b -> ReaderT<'r,'m>) : ReaderT<'r,'m> = ReaderT.bind f x
 
-    static member inline Mzero (_:ReaderT<_,_>        , _:Mzero) = ReaderT <| fun _ -> Mzero.Invoke()
-    static member inline Mplus (  ReaderT m, ReaderT n, _:Mplus) = ReaderT <| fun r -> m r <|> n r
+    static member inline MZero (_:ReaderT<_,_>        , _:MZero) = ReaderT <| fun _ -> MZero.Invoke()
+    static member inline MPlus (  ReaderT m, ReaderT n, _:MPlus) = ReaderT <| fun r -> m r <|> n r
 
     static member inline Lift (_:ReaderT<'r,'ma>) = fun m -> (ReaderT <| fun _ -> m) : ReaderT<'r,'ma>
 

@@ -35,7 +35,7 @@ type Bind =
     [<Extension>]static member        Bind (x:list<_>      , f:_->list<'b>  ) = List.collect  f x
     [<Extension>]static member        Bind (x:_ []         , f:_->'b []     ) = Array.collect f x
     [<Extension>]static member        Bind (f:'r->'a       , k:_->_->'b)      = fun r -> k (f r) r
-    [<Extension>]static member inline Bind ((w, a):'m * 'a , k:_->'m * 'b   ) = let m, b = k a in (Mappend.Invoke w m, b)
+    [<Extension>]static member inline Bind ((w, a):'m * 'a , k:_->'m * 'b   ) = let m, b = k a in (MAppend.Invoke w m, b)
     [<Extension>]static member        Bind (x:Async<'a>    , f:_->Async<'b> ) = async.Bind(x,f)
     [<Extension>]static member        Bind (x:Choice<'a,'e>, k:'a->Choice<'b,'e>) = Error.bind k x
 
@@ -100,7 +100,7 @@ type Return =
     static member        Return (_:list<'a>      , _:Return) = fun x -> [ x ]       :list<'a>
     static member        Return (_:'a []         , _:Return) = fun x -> [|x|]       :'a []
     static member        Return (_:'r -> 'a      , _:Return) = const':'a  -> 'r -> _
-    static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (Mempty.Invoke():'m), x
+    static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (MEmpty.Invoke():'m), x
     static member        Return (_:'a Async      , _:Return) = fun (x:'a) -> async.Return x
     static member        Return (_:Choice<'a,'e> , _:Return) = fun x -> Choice1Of2 x :Choice<'a,'e>
     static member        Return (_:Expr<'a>      , _:Return) = fun x -> Expr.Cast<'a>(Expr.Value(x:'a))
@@ -130,7 +130,7 @@ type Apply =
     [<Extension>]static member        Apply (f:list<_>     , x:list<'a>     , [<Optional>]output:list<'b>     , [<Optional>]impl:Apply) = List.apply f x :list<'b>
     [<Extension>]static member        Apply (f:_ []        , x:'a []        , [<Optional>]output:'b []        , [<Optional>]impl:Apply) = Apply.FromMonad f x :'b []
     [<Extension>]static member        Apply (f:'r -> _     , g: _ -> 'a     , [<Optional>]output: 'r -> 'b    , [<Optional>]impl:Apply) = fun x -> f x (g x) :'b
-    [<Extension>]static member inline Apply ((a:'m, f)     , (b:'m, x:'a)   , [<Optional>]output:'m * 'b      , [<Optional>]impl:Apply) = (Mappend.Invoke a b, f x) :'m *'b
+    [<Extension>]static member inline Apply ((a:'m, f)     , (b:'m, x:'a)   , [<Optional>]output:'m * 'b      , [<Optional>]impl:Apply) = (MAppend.Invoke a b, f x) :'m *'b
     [<Extension>]static member        Apply (f:Async<_>    , x:Async<'a>    , [<Optional>]output:Async<'b>    , [<Optional>]impl:Apply) = Apply.FromMonad f x :Async<'b>
     [<Extension>]static member        Apply (f:option<_>   , x:option<'a>   , [<Optional>]output:option<'b>   , [<Optional>]impl:Apply) = Option.apply f x    :option<'b>
     [<Extension>]static member        Apply (f:Choice<_,'e>, x:Choice<'a,'e>, [<Optional>]output:Choice<'b,'e>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'b,'e>
@@ -150,7 +150,7 @@ type Apply =
                         | _        -> ()
                     d
     [<Extension>]static member        Apply (Identity (f:'t->'u)     , Identity (x: 't)     , [<Optional>]output:Identity<'u> , [<Optional>]impl:Apply) = Identity (f x)      : Identity<'u>
-    [<Extension>]static member inline Apply (Const f:Const<'a,'t->'u>, Const x: Const<'a,'t>, [<Optional>]output:Const<'a,'u> , [<Optional>]impl:Apply) = Const (Mappend.Invoke f x) : Const<'a,'u>
+    [<Extension>]static member inline Apply (Const f:Const<'a,'t->'u>, Const x: Const<'a,'t>, [<Optional>]output:Const<'a,'u> , [<Optional>]impl:Apply) = Const (MAppend.Invoke f x) : Const<'a,'u>
 
     [<Extension>]static member        Apply (f:Expr<'a->'b>, x:Expr<'a>, [<Optional>]output:Expr<'b>, [<Optional>]impl:Apply) = Expr.Cast<'b>(Expr.Application(f,x))
 
@@ -239,36 +239,36 @@ type Map =
         call (Unchecked.defaultof<Map>, x, f)
 
 
-type Mzero =
-    static member        Mzero (output :option<'a>, _:Mzero) = None        :option<'a>
-    static member        Mzero (output :list<'a>  , _:Mzero) = [  ]        :list<'a>  
-    static member        Mzero (output :'a []     , _:Mzero) = [||]        :'a []     
-    static member        Mzero (output :seq<'a>   , _:Mzero) = Seq.empty   :seq<'a>
-    static member inline Mzero (output :Id<'a>    , _:Mzero) = Id (Mempty.Invoke()) :Id<'a>
+type MZero =
+    static member        MZero (output :option<'a>, _:MZero) = None        :option<'a>
+    static member        MZero (output :list<'a>  , _:MZero) = [  ]        :list<'a>  
+    static member        MZero (output :'a []     , _:MZero) = [||]        :'a []     
+    static member        MZero (output :seq<'a>   , _:MZero) = Seq.empty   :seq<'a>
+    static member inline MZero (output :Id<'a>    , _:MZero) = Id (MEmpty.Invoke()) :Id<'a>
 
     static member inline Invoke () :'Functor'T =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Mzero: _*_ -> _) b, a)
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MZero: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Unchecked.defaultof<Mzero>
+        call Unchecked.defaultof<MZero>
 
 
 [<Extension;Sealed>]
-type Mplus =
-    [<Extension>]static member        Mplus (x:_ option, y, [<Optional>]impl:Mplus) = match x with None -> y | xs -> xs
-    [<Extension>]static member        Mplus (x:_ list  , y, [<Optional>]impl:Mplus) = x @ y
-    [<Extension>]static member        Mplus (x:_ []    , y, [<Optional>]impl:Mplus) = Array.append x y
-    [<Extension>]static member        Mplus (x:_ seq   , y, [<Optional>]impl:Mplus) = Seq.append   x y
-    [<Extension>]static member inline Mplus (x:_ Id    , y, [<Optional>]impl:Mplus) = Id (Mappend.Invoke (Id.run x) (Id.run y))
+type MPlus =
+    [<Extension>]static member        MPlus (x:_ option, y, [<Optional>]impl:MPlus) = match x with None -> y | xs -> xs
+    [<Extension>]static member        MPlus (x:_ list  , y, [<Optional>]impl:MPlus) = x @ y
+    [<Extension>]static member        MPlus (x:_ []    , y, [<Optional>]impl:MPlus) = Array.append x y
+    [<Extension>]static member        MPlus (x:_ seq   , y, [<Optional>]impl:MPlus) = Seq.append   x y
+    [<Extension>]static member inline MPlus (x:_ Id    , y, [<Optional>]impl:MPlus) = Id (MAppend.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'Functor'T) (y:'Functor'T) :'Functor'T =
-        let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Mplus: _*_*_ -> _) a, b, m)
-        call_3 (Unchecked.defaultof<Mplus>, x, y)
+        let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member MPlus: _*_*_ -> _) a, b, m)
+        call_3 (Unchecked.defaultof<MPlus>, x, y)
 
-type Mzero with
-    static member inline Mzero (_:Kleisli<_,_>, impl:Mzero) = Kleisli (fun _ -> Mzero.Invoke ())
+type MZero with
+    static member inline MZero (_:Kleisli<_,_>, impl:MZero) = Kleisli (fun _ -> MZero.Invoke ())
     
-type Mplus with
-    static member inline Mplus (Kleisli f, Kleisli g, impl:Mplus) = Kleisli (fun x -> Mplus.Invoke (f x) (g x))
+type MPlus with
+    static member inline MPlus (Kleisli f, Kleisli g, impl:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
 
 
 namespace FsControl.Core.Internals
@@ -277,7 +277,7 @@ module internal MonadOps =
     let inline (>>=) x f = FsControl.Bind.Invoke x f
     let inline result  x = FsControl.Return.Invoke x
     let inline (<*>) f x = FsControl.Apply.Invoke f x
-    let inline (<|>) x y = FsControl.Mplus.Invoke x y
+    let inline (<|>) x y = FsControl.MPlus.Invoke x y
     let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
 
 
@@ -299,7 +299,7 @@ type Extract =
     [<Extension>]static member        Extract (x:'t Async ) = Async.RunSynchronously x
     [<Extension>]static member        Extract (x:'t Lazy  ) = x.Value
     [<Extension>]static member        Extract ((w:'w,a:'a)) = a
-    [<Extension>]static member inline Extract (f:'m->'t   ) = f (Mempty.Invoke())
+    [<Extension>]static member inline Extract (f:'m->'t   ) = f (MEmpty.Invoke())
     [<Extension>]static member        Extract (f:'t Id    ) = f
 
 #if NOTNET35
@@ -316,7 +316,7 @@ type Extend =
     [<Extension>]static member        Extend ((g:'a Async), f:Async<'a>->'b) = async.Return (f g) : Async<'b>
     [<Extension>]static member        Extend ((g:'a Lazy ), f:Lazy<'a> ->'b) = Lazy.Create  (fun () -> f g) : Lazy<'b>
     [<Extension>]static member        Extend ((w:'w, a:'a), f:_->'b) = (w, f (w,a))        
-    [<Extension>]static member inline Extend ((g:'m -> 'a), f:_->'b) = fun a -> f (fun b -> g (Mappend.Invoke a b))
+    [<Extension>]static member inline Extend ((g:'m -> 'a), f:_->'b) = fun a -> f (fun b -> g (MAppend.Invoke a b))
     [<Extension>]static member        Extend ((g:'a Id   ), f:Id<'a>->'b) = f g
 
 #if NOTNET35
@@ -340,7 +340,7 @@ type Duplicate =
     [<Extension>]static member        Duplicate (s:Async<'a> , [<Optional>]impl:Duplicate) = async.Return s : Async<Async<'a>>
     [<Extension>]static member        Duplicate (s:Lazy<'a>  , [<Optional>]impl:Duplicate) = Lazy.CreateFromValue s : Lazy<Lazy<'a>>
     [<Extension>]static member        Duplicate ((w:'w, a:'a), [<Optional>]impl:Duplicate) = (w, (w, a))
-    [<Extension>]static member inline Duplicate ( f:'m -> 'a , [<Optional>]impl:Duplicate) = fun a b -> f (Mappend.Invoke a b)
+    [<Extension>]static member inline Duplicate ( f:'m -> 'a , [<Optional>]impl:Duplicate) = fun a b -> f (MAppend.Invoke a b)
 
     // Restricted Comonads
     [<Extension>]static member        Duplicate (s: list<'a>, [<Optional>]impl:Duplicate) = List.tails s
@@ -413,27 +413,27 @@ type Dimap =
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (Unchecked.defaultof<Dimap>, x)
 
-type Lmap =
+type LMap =
     inherit Default1
-    static member inline       Lmap (x             , f       , [<Optional>]impl:Default1) = Dimap.Invoke x f id
-    [<Extension>]static member Lmap (f             , k       , [<Optional>]impl:Lmap    ) = k >> f
-    [<Extension>]static member Lmap (Kleisli f     , k       , [<Optional>]impl:Lmap    ) = Kleisli (k >> f)
+    static member inline       LMap (x             , f       , [<Optional>]impl:Default1) = Dimap.Invoke x f id
+    [<Extension>]static member LMap (f             , k       , [<Optional>]impl:LMap    ) = k >> f
+    [<Extension>]static member LMap (Kleisli f     , k       , [<Optional>]impl:LMap    ) = Kleisli (k >> f)
     
     static member inline Invoke f x =
-        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Lmap: _*_*_ -> _) b, f, a)
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member LMap: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
-        call (Unchecked.defaultof<Lmap>, x, f)
+        call (Unchecked.defaultof<LMap>, x, f)
 
-type Rmap =
+type RMap =
     inherit Default1
-    static member inline       Rmap (x             , f       , [<Optional>]impl:Default1) = Dimap.Invoke x id f
-    [<Extension>]static member Rmap (f             , k       , [<Optional>]impl:Rmap    ) = f >> k
-    [<Extension>]static member Rmap (Kleisli f     , k       , [<Optional>]impl:Rmap    ) = Kleisli (f >> k)
+    static member inline       RMap (x             , f       , [<Optional>]impl:Default1) = Dimap.Invoke x id f
+    [<Extension>]static member RMap (f             , k       , [<Optional>]impl:RMap    ) = f >> k
+    [<Extension>]static member RMap (Kleisli f     , k       , [<Optional>]impl:RMap    ) = Kleisli (f >> k)
     
     static member inline Invoke f x =
-        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Rmap: _*_*_ -> _) b, f, a)
+        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member RMap: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
-        call (Unchecked.defaultof<Rmap>, x, f)
+        call (Unchecked.defaultof<RMap>, x, f)
 
 
 type Id =

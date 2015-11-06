@@ -265,8 +265,8 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 // Monoids
 
 type Ordering = LT|EQ|GT with
-    static member        Mempty  (_:Ordering, _:Mempty) = EQ
-    static member        Mappend (x:Ordering, y) = 
+    static member        MEmpty  (_:Ordering, _:MEmpty) = EQ
+    static member        MAppend (x:Ordering, y) = 
         match x, y with
         | LT, _ -> LT
         | EQ, a -> a
@@ -279,12 +279,12 @@ let inline compare' x y =
     | _            -> EQ
 
 type Sum<'a> = Sum of 'a with
-    static member inline Mempty() = Sum 0G
-    static member inline Mappend (Sum (x:'n), Sum(y:'n)) = Sum (x + y):Sum<'n>
+    static member inline MEmpty() = Sum 0G
+    static member inline MAppend (Sum (x:'n), Sum(y:'n)) = Sum (x + y):Sum<'n>
 
 type Product<'a> = Product of 'a with
-    static member inline Mempty() = Product 1G
-    static member inline Mappend (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
+    static member inline MEmpty() = Product 1G
+    static member inline MAppend (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
 
 let inline mempty() = FsControl.Operators.mempty ()
 let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.mappend x y
@@ -389,8 +389,8 @@ let rStr10      = second string (true, 10)
 // Profunctors
 
 let inline dimap f g x = Dimap.Invoke x f g
-let inline lmap f x = Lmap.Invoke f x
-let inline rmap f x = Rmap.Invoke f x
+let inline lmap f x = LMap.Invoke f x
+let inline rmap f x = RMap.Invoke f x
 
 let resStrFalse     = dimap int string (Predicate.run isEven) 99.0
 

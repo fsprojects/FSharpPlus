@@ -67,7 +67,7 @@ type ToArray =
 
 type FromSeq =
     inherit Default1
-    static member inline FromSeq (x:seq<'a>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> Mconcat.Invoke :'Foldable'T
+    static member inline FromSeq (x:seq<'a>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> MConcat.Invoke :'Foldable'T
     static member        FromSeq (x:seq<'a>                 , _:seq<'a>                         , _:Default4) = x
     static member inline FromSeq (x:seq<'t>                 , _:'F                              , _:Default3) = let c = new 'F() in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
     static member        FromSeq (x:seq<KeyValuePair<'k,'v>>, _:ICollection<KeyValuePair<'k,'v>>, _:Default3) = let d = Dictionary() :> ICollection<KeyValuePair<'k,'v>> in Seq.iter d.Add x; d
@@ -123,15 +123,15 @@ type FoldBack =
 [<Extension;Sealed>]
 type FoldMap =
     inherit Default1
-    static member inline FromFoldFoldBack f x = FoldBack.Invoke (Mappend.Invoke << f) (Mempty.Invoke()) x  
+    static member inline FromFoldFoldBack f x = FoldBack.Invoke (MAppend.Invoke << f) (MEmpty.Invoke()) x  
     
-    [<Extension>]static member inline FoldMap (x          , f, [<Optional>]impl:Default1) = Seq.fold   (fun x y -> Mappend.Invoke x (f y)) (Mempty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:option<_>, f, [<Optional>]impl:FoldMap ) = match x with Some x -> f x | _ -> Mempty.Invoke()
+    [<Extension>]static member inline FoldMap (x          , f, [<Optional>]impl:Default1) = Seq.fold   (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:option<_>, f, [<Optional>]impl:FoldMap ) = match x with Some x -> f x | _ -> MEmpty.Invoke()
     [<Extension>]static member        FoldMap (x:Id<_>    , f, [<Optional>]impl:FoldMap ) = f x.getValue
-    [<Extension>]static member inline FoldMap (x:seq<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> Mappend.Invoke x (f y)) (Mempty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:list<_>  , f, [<Optional>]impl:FoldMap ) = List.fold  (fun x y -> Mappend.Invoke x (f y)) (Mempty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:Set<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> Mappend.Invoke x (f y)) (Mempty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:_ []     , f, [<Optional>]impl:FoldMap ) = Array.fold (fun x y -> Mappend.Invoke x (f y)) (Mempty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:seq<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:list<_>  , f, [<Optional>]impl:FoldMap ) = List.fold  (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:Set<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:_ []     , f, [<Optional>]impl:FoldMap ) = Array.fold (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
 
     static member inline Invoke (f:'T->'Monoid) (x:'Foldable'T) :'Monoid =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member FoldMap: _*_*_ -> _) b, f, a)
@@ -184,22 +184,22 @@ type Exists =
  
 
 [<Extension;Sealed>]
-type Forall =
+type ForAll =
     inherit Default1
-    [<Extension>]static member inline Forall (x               , f, [<Optional>]impl:Default1) = Seq.forall    f (ToSeq.Invoke x) :bool
-    [<Extension>]static member        Forall (x:Id<'T>        , f, [<Optional>]impl:Forall  ) = f x.getValue :bool
-    [<Extension>]static member        Forall (x:seq<'a>       , f, [<Optional>]impl:Forall  ) = Seq.forall    f x
-    [<Extension>]static member        Forall (x:list<'a>      , f, [<Optional>]impl:Forall  ) = List.forall   f x
-    [<Extension>]static member        Forall (x:'a []         , f, [<Optional>]impl:Forall  ) = Array.forall  f x
-    [<Extension>]static member        Forall (x:Set<'a>       , f, [<Optional>]impl:Forall  ) = Set.forall    f x
-    [<Extension>]static member        Forall (x:string        , f, [<Optional>]impl:Forall  ) = String.forall f x
-    [<Extension>]static member        Forall (x:'a ResizeArray, f, [<Optional>]impl:Forall  ) = Seq.forall    f x
-    [<Extension>]static member        Forall (x:StringBuilder , f, [<Optional>]impl:Forall  ) = x.ToString() |> String.forall f
+    [<Extension>]static member inline ForAll (x               , f, [<Optional>]impl:Default1) = Seq.forall    f (ToSeq.Invoke x) :bool
+    [<Extension>]static member        ForAll (x:Id<'T>        , f, [<Optional>]impl:ForAll  ) = f x.getValue :bool
+    [<Extension>]static member        ForAll (x:seq<'a>       , f, [<Optional>]impl:ForAll  ) = Seq.forall    f x
+    [<Extension>]static member        ForAll (x:list<'a>      , f, [<Optional>]impl:ForAll  ) = List.forall   f x
+    [<Extension>]static member        ForAll (x:'a []         , f, [<Optional>]impl:ForAll  ) = Array.forall  f x
+    [<Extension>]static member        ForAll (x:Set<'a>       , f, [<Optional>]impl:ForAll  ) = Set.forall    f x
+    [<Extension>]static member        ForAll (x:string        , f, [<Optional>]impl:ForAll  ) = String.forall f x
+    [<Extension>]static member        ForAll (x:'a ResizeArray, f, [<Optional>]impl:ForAll  ) = Seq.forall    f x
+    [<Extension>]static member        ForAll (x:StringBuilder , f, [<Optional>]impl:ForAll  ) = x.ToString() |> String.forall f
 
     static member inline Invoke (predicate :'T->bool) (source:'Foldable'T)        =
-        let inline call_3 (a:^a, b:^b, f) = ((^a or ^b) : (static member Forall: _*_*_ -> _) b, f, a)
+        let inline call_3 (a:^a, b:^b, f) = ((^a or ^b) : (static member ForAll: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, f)
-        call (Unchecked.defaultof<Forall>,  source, predicate)        :bool
+        call (Unchecked.defaultof<ForAll>,  source, predicate)        :bool
 
 
 [<Extension;Sealed>]

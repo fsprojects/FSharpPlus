@@ -44,16 +44,16 @@ type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
     static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-    static member inline Mempty() = result (mempty())                                :ZipList<'a>
-    static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
+    static member inline MEmpty() = result (mempty())                                :ZipList<'a>
+    static member inline MAppend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
     // try also commenting/uncommenting the following method.
-    static member inline Mconcat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack mappend (Seq.toList x) (mempty()):ZipList<'a>
+    static member inline MConcat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack mappend (Seq.toList x) (mempty()):ZipList<'a>
     static member ToSeq    (ZipList lst)     = lst
 
 type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:WrappedList<'a>, _:Return ) = fun (x:'a)     -> WrappedList [x]
-    static member Mappend  (WrappedList l, WrappedList x) = WrappedList (l @ x)
-    static member Mempty   (_:WrappedList<'a>, _:Mempty) = WrappedList List.empty
+    static member MAppend  (WrappedList l, WrappedList x) = WrappedList (l @ x)
+    static member MEmpty   (_:WrappedList<'a>, _:MEmpty) = WrappedList List.empty
     static member ToSeq    (WrappedList lst)     = List.toSeq lst
     static member FoldBack (WrappedList x, f, z) = List.foldBack f x z
 

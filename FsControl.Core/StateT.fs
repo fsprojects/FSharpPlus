@@ -18,8 +18,8 @@ type StateT<'S,'MaS> with
     static member inline Apply  (f, x, _:StateT<'s,'mb>, _:Apply ) = StateT.apply f x
     static member inline Bind   (x:StateT<'s,'mas>, f :'a -> StateT<'s,'mbs>) : StateT<'s,'mbs> = StateT.bind f x
 
-    static member inline Mzero (_:StateT<_,_>       , _:Mzero) = StateT <| fun _ -> Mzero.Invoke()
-    static member inline Mplus (  StateT m, StateT n, _:Mplus) = StateT <| fun s -> m s <|> n s
+    static member inline MZero (_:StateT<_,_>       , _:MZero) = StateT <| fun _ -> MZero.Invoke()
+    static member inline MPlus (  StateT m, StateT n, _:MPlus) = StateT <| fun s -> m s <|> n s
 
     static member inline Lift (_:StateT<'s,'mas>) = fun (m:'ma) -> (StateT <| fun s -> m >>= fun a -> result (a,s)):StateT<'s,'mas>
 

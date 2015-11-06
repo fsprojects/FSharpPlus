@@ -47,16 +47,16 @@ module Operators =
 
     // Monoid -----------------------------------------------------------------
 
-    let inline mempty() :'Monoid = Mempty.Invoke()
-    let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid = Mappend.Invoke x y
-    let inline mconcat (x:seq<'Monoid>)       : 'Monoid = Mconcat.Invoke x
+    let inline mempty() :'Monoid = MEmpty.Invoke()
+    let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid = MAppend.Invoke x y
+    let inline mconcat (x:seq<'Monoid>)       : 'Monoid = MConcat.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
-    let inline mzero() :'``Functor<'T>`` = Mzero.Invoke()
-    let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = Mplus.Invoke x y
-    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Mzero.Invoke()
+    let inline mzero() :'``Functor<'T>`` = MZero.Invoke()
+    let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = MPlus.Invoke x y
+    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else MZero.Invoke()
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
@@ -66,8 +66,8 @@ module Operators =
     let inline first   f x = First.Invoke f x
     let inline second  f x = Second.Invoke f x
     let inline dimap f g x = Dimap.Invoke x f g
-    let inline lmap f x = Lmap.Invoke f x
-    let inline rmap f x = Rmap.Invoke f x
+    let inline lmap f x = LMap.Invoke f x
+    let inline rmap f x = RMap.Invoke f x
 
 
     // Arrows -----------------------------------------------------------------
@@ -95,7 +95,7 @@ module Operators =
     let inline toList  value :'T list = ToList.Invoke  value
     let inline toArray value :'T []   = ToArray.Invoke value
     let inline exists     (predicate :'T->bool) (source:'``Foldable<'T>``)   = Exists.Invoke  predicate source  :bool
-    let inline forall     (predicate :'T->bool) (source:'``Foldable<'T>``)   = Forall.Invoke  predicate source  :bool
+    let inline forall     (predicate :'T->bool) (source:'``Foldable<'T>``)   = ForAll.Invoke  predicate source  :bool
     let inline find       (predicate :'T->bool) (source:'``Foldable<'T>``)   = Find.Invoke    predicate source  :'T
     let inline tryFind    (predicate :'T->bool) (source:'``Foldable<'T>``)   = TryFind.Invoke predicate source  :'T option
     let inline pick     (chooser:'T->'U option) (source:'``Foldable<'T>``)   = Pick.Invoke    chooser   source  :'U
