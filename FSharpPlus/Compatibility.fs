@@ -59,11 +59,38 @@ module Compatibility =
         let putStrLn x = async {printfn "%s" x}                   :IO<unit>
         let print    x = async {printfn "%A" x}                   :IO<unit>
 
+
         // List
 
-        open FSharpPlus.Extensions
         let map f x = List.map f x
+
+        open FSharpPlus.Extensions
         let replicate  n x = List.replicate  n x
+
+        open System.Reflection
+        let cycle lst =
+            let mutable last = lst
+            let rec copy = function
+                | [] -> failwith "empty list"
+                | [z] -> 
+                    let v = [z]
+                    last <- v
+                    v
+                | x::xs ->  x::copy xs
+            let cycled = copy lst
+            let strs = last.GetType().GetFields(BindingFlags.NonPublic ||| BindingFlags.Instance) |> Array.map (fun field -> field.Name)
+            let tailField = last.GetType().GetField(Array.find(fun (s:string) -> s.ToLower().Contains("tail")) strs, BindingFlags.NonPublic ||| BindingFlags.Instance)
+            tailField.SetValue(last, cycled)
+            cycled
+
+        let drop i list = 
+            let rec loop i lst = 
+                match (lst, i) with
+                | ([] as x, _) | (x, 0) -> x
+                | x, n -> loop (n-1) (List.tail x)
+            if i > 0 then loop i list else list
+
+        let take i (list:_ list) = Seq.truncate i list |> Seq.toList
 
 
         // Functors

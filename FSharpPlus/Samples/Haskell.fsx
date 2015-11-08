@@ -22,11 +22,17 @@ runIO main                                                  // prints 4.0
 let get3strings  = sequenceA [getLine;getLine;getLine]      // try runIO get3strings
 
 
+// List
+
+let lstOf20Elements = map ((+) 100) (take 20 (cycle [1;2;3]))
+
+
 // Applicatives
 
 let just3 :Maybe<_> = return' 3
 let just4           = Just 4
 let just7 = Just (+) <*> just3 <*> just4
+let lst1625 =  (+) <!> [11;20] <*> [5]
 
 
 // Monoids
