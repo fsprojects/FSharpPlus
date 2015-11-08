@@ -26,7 +26,6 @@ module Compatibility =
         let ($)   x y = x y
         let (.()) x y = x << y
         let const' k _ = k
-        let (++) = (@)
         let (==) = (=)
         let (=/) x y = not (x = y)
 
