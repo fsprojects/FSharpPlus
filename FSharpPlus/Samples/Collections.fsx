@@ -5,7 +5,7 @@
 open FSharpPlus
 
 let inline print x = async { System.Console.WriteLine(toString x) }
-let inline (++) a b = mappend a b
+
 async {
     let arr = [|1;2;3;4|]
     let skip2 = skip 2 arr

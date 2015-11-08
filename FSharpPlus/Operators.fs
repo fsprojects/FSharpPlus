@@ -361,6 +361,8 @@ module Operators =
     /// Converts using the implicit operator. 
     let inline implicit (x : ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) :^R
 
+    /// Operator as alias for mappend.
+    let inline (++) a b = mappend a b
 
 
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
