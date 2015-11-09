@@ -99,6 +99,27 @@ type FromSeq =
         call (Unchecked.defaultof<FromSeq>, value)
 
 
+type FromList =
+
+#if NOTNET35
+    static member FromList (_:string        , _:FromList) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList)
+    static member FromList (_:StringBuilder , _:FromList) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList))
+#else
+    static member FromList (_:string        , _:FromList) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList |> Array.map string)
+    static member FromList (_:StringBuilder , _:FromList) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList |> Array.map string))
+#endif
+    static member FromList (_:'a []         , _:FromList) = Array.ofList<'a>
+    static member FromList (_:'a ResizeArray, _:FromList) = fun (x:list<'a>)   -> ResizeArray x
+    static member FromList (_:list<'a>      , _:FromList) = id<list<'a>>
+    static member FromList (_:Set<'a>       , _:FromList) = Set.ofList<'a>
+    static member FromList (_:seq<'a>       , _:FromList) = Seq.ofList<'a>
+
+    static member inline Invoke (value :list<'t>) = 
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromList: _*_ -> _) b, a)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call Unchecked.defaultof<FromList> value
+
+
 [<Extension;Sealed>]
 type FoldBack =
     inherit Default1

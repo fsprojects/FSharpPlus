@@ -89,6 +89,8 @@ module Operators =
 
     // Foldable
 
+    let inline fromList (source :list<'T>) = FromList.Invoke source
+    let inline fromSeq  (source :seq<'T> ) = FromSeq.Invoke  source
     let inline foldBack (folder:'T->'State->'State) (foldable:'``Foldable<'T>``) (state:'State) : 'State = FoldBack.Invoke folder state foldable
     let inline fold     (folder:'State->'T->'State) (state:'State) (foldable:'``Foldable<'T>``) : 'State = Fold.Invoke folder state foldable
     let inline foldMap (f:'T->'Monoid) (x:'``Foldable<'T>``) : 'Monoid = FoldMap.Invoke f x
@@ -226,9 +228,6 @@ module Operators =
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
     let inline limit (count:int) (source:'``Collection<'T>``) : '``Collection<'T>`` = Limit.Invoke count source
-
-    let inline fromList (source :list<'T>) = FromList.Invoke source
-    let inline fromSeq  (source :seq<'T> ) = FromSeq.Invoke  source
 
     let inline groupBy    (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupBy.Invoke projection source
     let inline groupAdjBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupAdjBy.Invoke projection source
