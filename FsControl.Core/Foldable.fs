@@ -80,10 +80,6 @@ type FromSeq =
     static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary<'K,'V>, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
     static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> IDictionary<'K,'V>, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
     static member inline FromSeq (x:seq<'a>                 , _:'UserType                       , _:FromSeq ) = ((^UserType) : (static member FromSeq: seq<'a> -> ^F) x)     
-    static member        FromSeq (x:seq<'K*'V>              , _:Dictionary<'K,'V>               , _:FromSeq ) = Dictionary (dict x)
-    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Dictionary<'K,'V>               , _:FromSeq ) = Dictionary (dict (Seq.map (function (KeyValue x) -> x) x))
-    static member        FromSeq (x:seq<'K*'V>              , _:SortedList<'K,'V>               , _:FromSeq ) = Generic.SortedList (dict x)
-    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:SortedList<'K,'V>               , _:FromSeq ) = Generic.SortedList (dict (Seq.map (function (KeyValue x) -> x) x))
     static member        FromSeq (x:seq<'K*'V>              , _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map x
     static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map (Seq.map (function (KeyValue x) -> x) x)
     static member        FromSeq (x                         , _:'a []                           , _:FromSeq ) = Array.ofSeq<'a> x
