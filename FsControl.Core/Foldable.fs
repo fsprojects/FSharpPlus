@@ -70,16 +70,17 @@ type FromSeq =
     static member inline FromSeq (x:seq<'a>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> MConcat.Invoke :'Foldable'T
     static member        FromSeq (x:seq<'a>                 , _:seq<'a>                         , _:Default4) = x
     static member inline FromSeq (x:seq<'t>                 , _:'F                              , _:Default3) = let c = new 'F() in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
-    static member        FromSeq (x:seq<KeyValuePair<'k,'v>>, _:ICollection<KeyValuePair<'k,'v>>, _:Default3) = let d = Dictionary() :> ICollection<KeyValuePair<'k,'v>> in Seq.iter d.Add x; d
+    static member        FromSeq (x:seq<'t>                 , _:ICollection<'t>                 , _:Default3) = let d = ResizeArray() :> Generic.List<'t> in Seq.iter d.Add x; d:> ICollection<'t>
     static member        FromSeq (x:seq<'K*'V>              , _:IDictionary<'k,'v>              , _:Default3) = dict x
     static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:IDictionary<'K,'V>              , _:Default3) = x |> Seq.map (function (KeyValue x) -> x) |> dict
-    static member        FromSeq (x:seq<'K*'V>              , _:Collections.IDictionary         , _:Default3) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
-    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Collections.IDictionary         , _:Default3) = let d = Hashtable() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
-    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> Collections.IDictionary, _:Default2) = let d = new 'T() in x |> Seq.iter d.Add; d
-    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> Collections.IDictionary, _:Default2) = let d = new 'T() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d
-    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary<'K,'V>, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
-    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> IDictionary<'K,'V>, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
-    static member inline FromSeq (x:seq<'a>                 , _:'UserType                       , _:FromSeq ) = ((^UserType) : (static member FromSeq: seq<'a> -> ^F) x)     
+    static member        FromSeq (x:seq<'K*'V>              , _:Collections.IDictionary         , _:Default2) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Collections.IDictionary         , _:Default2) = let d = Hashtable() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    static member        FromSeq (x:seq<'t>                 , _:'T when 'T :> ICollection<'t>   , _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> Collections.IDictionary, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> Collections.IDictionary, _:Default1) = let d = new 'T() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d
+    static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary<'K,'V>, _:FromSeq ) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> IDictionary<'K,'V>, _:FromSeq ) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member inline FromSeq (x:seq<'a>                 , _:'UserType                       , _:FromSeq ) = ((^UserType) : (static member FromSeq: seq<'a> -> ^UserType) x)
     static member        FromSeq (x:seq<'K*'V>              , _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map x
     static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map (Seq.map (function (KeyValue x) -> x) x)
     static member        FromSeq (x                         , _:'a []                           , _:FromSeq ) = Array.ofSeq<'a> x
@@ -87,7 +88,7 @@ type FromSeq =
     static member        FromSeq (x                         , _:Set<'a>                         , _:FromSeq ) = Set.ofSeq<'a> x
     static member        FromSeq (x:seq<char>               , _:string                          , _:FromSeq ) = String.Join ("", Array.ofSeq x)
     static member        FromSeq (x:seq<char>               , _:Text.StringBuilder              , _:FromSeq ) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
-    static member        FromSeq (x:seq<'a>                 , _:Generic.Stack<'a>               , _:FromSeq ) = Generic.Stack x                                                                                               
+    static member        FromSeq (x:seq<'a>                 , _:Generic.Stack<'a>               , _:FromSeq ) = Generic.Stack x
 
     static member inline Invoke  (value :seq<'t>) = 
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member FromSeq: _*_*_ -> _) s, b, a)
