@@ -75,6 +75,7 @@ type FromSeq =
     static member        FromSeq (x:seq<'K*'V>              , _:Collections.IDictionary         , _:Default4) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
     static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Collections.IDictionary         , _:Default4) = let d = Hashtable() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
     static member inline FromSeq (x:seq<'t>                 , _:'R                              , _:Default3) = (^R : (new : seq<'t> -> ^R) x) : 'R
+    static member inline FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'R                              , _:Default3) = (^R : (new : seq<'K*'V> -> ^R) (Seq.map (function (KeyValue x) -> x) x)) : 'R
     static member inline FromSeq (x:seq<'t>                 , _:'F                              , _:Default2) = let c = new 'F() in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
     static member        FromSeq (x:seq<'t>                 , _:'T when 'T :> ICollection<'t>   , _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
     static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> Collections.IDictionary, _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
@@ -82,8 +83,6 @@ type FromSeq =
     static member        FromSeq (x:seq<'K*'V>              , _:'T when 'T :> IDictionary<'K,'V>, _:FromSeq ) = let d = new 'T() in x |> Seq.iter d.Add; d
     static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:'T when 'T :> IDictionary<'K,'V>, _:FromSeq ) = let d = new 'T() in x |> Seq.iter d.Add; d
     static member inline FromSeq (x:seq<'a>                 , _:'UserType                       , _:FromSeq ) = ((^UserType) : (static member FromSeq: seq<'a> -> ^UserType) x)
-    static member        FromSeq (x:seq<'K*'V>              , _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map x
-    static member        FromSeq (x:seq<KeyValuePair<'K,'V>>, _:Map<'K,'V>                      , _:FromSeq ) = Collections.Map (Seq.map (function (KeyValue x) -> x) x)
     static member        FromSeq (x                         , _:'a []                           , _:FromSeq ) = Array.ofSeq<'a> x
     static member        FromSeq (x                         , _:list<'a>                        , _:FromSeq ) = List.ofSeq<'a> x
     static member        FromSeq (x:seq<char>               , _:string                          , _:FromSeq ) = String.Join ("", Array.ofSeq x)
