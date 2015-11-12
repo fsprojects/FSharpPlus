@@ -89,6 +89,7 @@ type FromSeq =
     static member        FromSeq (x                         , _:'t list                         , _:FromSeq ) = List.ofSeq<'t> x
     static member        FromSeq (x:seq<char>               , _:string                          , _:FromSeq ) = String.Join ("", Array.ofSeq x)
     static member        FromSeq (x:seq<char>               , _:Text.StringBuilder              , _:FromSeq ) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    static member        FromSeq (x:seq<'t>                 , _:Stack<'t>                       , _:FromSeq ) = Generic.Stack x
 
     static member inline Invoke  (value :seq<'t>) = 
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member FromSeq: _*_*_ -> _) s, b, a)

@@ -22,6 +22,13 @@ type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq    (WrappedListA lst) = List.toSeq lst
     static member FromSeq  lst = WrappedListA (Seq.toList lst)
 
+type WrappedListB<'s> = WrappedListB of 's list with
+    static member Return   (x) = WrappedListB [x]
+    static member MAppend  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
+    static member MEmpty   () = WrappedListB List.empty
+    static member ToSeq    (WrappedListB lst)     = List.toSeq lst
+    static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
+
 [<TestClass>]
 type Foldable() = 
     [<TestMethod>]
@@ -38,6 +45,16 @@ type Foldable() =
         let s' = toSeq s
         Assert.AreEqual (s, s')
         Assert.IsInstanceOfType(Some s, (Some s').GetType())
+
+    [<TestMethod>]
+    member x.SortBy() =
+        let l  = [10;4;6;89]
+        let l' = sortBy id l
+        let s  = WrappedListB [10;4;6;89]
+        let s' = sortBy id s
+        Assert.AreEqual (l', [4;6;10;89])
+        Assert.AreEqual (s', WrappedListB [4;6;10;89])
+
 
 [<TestClass>]
 type Traversable() = 
