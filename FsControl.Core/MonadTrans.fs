@@ -79,13 +79,13 @@ type SeqT<'Ma> with
 
 // MonadTrans
 
-type Lift =
-    static member inline Lift (_:OptionT<'m_a>) = OptionT << (Map.FromMonad Some)          :'ma -> OptionT<'m_a>
-    static member inline Lift (_: ListT<'m_a> ) = ListT   << (Map.FromMonad List.singleton):'ma ->  ListT<'m_a> 
-    static member inline Lift (_: SeqT<'m_a>  ) = SeqT    << (Map.FromMonad Seq.singleton ):'ma ->  SeqT<'m_a> 
+type OptionT<'Ma> with static member inline Lift (_:OptionT<'m_a>) = OptionT << (Map.FromMonad Some)          :'ma -> OptionT<'m_a>
+type ListT<'Ma>   with static member inline Lift (_: ListT<'m_a> ) = ListT   << (Map.FromMonad List.singleton):'ma ->  ListT<'m_a> 
+type SeqT<'Ma>    with static member inline Lift (_: SeqT<'m_a>  ) = SeqT    << (Map.FromMonad Seq.singleton ):'ma ->  SeqT<'m_a> 
 
+type Lift =
     static member inline Invoke (x:'ma) = 
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Lift: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = ((^b) : (static member Lift: _ -> _) b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Unchecked.defaultof<Lift> x
 
