@@ -133,96 +133,89 @@ type CatchError =
 
 
 // MonadCont =
-type CallCC =
-    static member CallCC (_:OptionT<Cont<'r,option<'a>>>) = fun (f:((_ -> OptionT<Cont<_,'b>>) -> _)) -> OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))     :OptionT<Cont<'r,option<'a>>>
-    static member CallCC (_:ListT<Cont<'r ,  list<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))):ListT<Cont<'r, list<'a>>>
-    static member CallCC (_: SeqT<Cont<'r ,  seq<'a>>>  ) = fun (f:((_ -> SeqT<Cont<_,'b>>   ) -> _)) -> SeqT   (Cont.callCC <| fun c ->   SeqT.run (f (SeqT  << c << Seq.singleton ))):SeqT<Cont<'r ,  seq<'a>>>
-    static member CallCC (_:Cont<'r,'a>                 ) = Cont.callCC : (('a -> Cont<'r,'b>) -> _) -> _
+type OptionT<'Ma> with static member CallCC (_:OptionT<Cont<'r,option<'a>>>) = fun (f:((_ -> OptionT<Cont<_,'b>>) -> _)) -> OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))     :OptionT<Cont<'r,option<'a>>>
+type ListT<'Ma>   with static member CallCC (_:ListT<Cont<'r ,  list<'a>>> ) = fun (f:((_ -> ListT<Cont<_,'b>>  ) -> _)) -> ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))):ListT<Cont<'r, list<'a>>>
+type SeqT<'Ma>    with static member CallCC (_: SeqT<Cont<'r ,  seq<'a>>>  ) = fun (f:((_ -> SeqT<Cont<_,'b>>   ) -> _)) -> SeqT   (Cont.callCC <| fun c ->   SeqT.run (f (SeqT  << c << Seq.singleton ))):SeqT<Cont<'r ,  seq<'a>>>
 
+type CallCC =
     static member inline Invoke f =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member CallCC: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member CallCC: _ -> _) b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Unchecked.defaultof<CallCC> f
 
 
 // MonadState =
-type Get =
-    static member inline Get (_:OptionT<_>) = Lift.Invoke (State.get())
-    static member inline Get (_:ListT<_>  ) = Lift.Invoke (State.get())
-    static member inline Get (_: SeqT<_>  ) = Lift.Invoke (State.get())
-    static member        Get (_:State<_,_>) =             (State.get())
+type OptionT<'Ma> with static member inline Get (_:OptionT<_>) = Lift.Invoke (State.get())
+type ListT<'Ma>   with static member inline Get (_:ListT<_>  ) = Lift.Invoke (State.get())
+type SeqT<'Ma>    with static member inline Get (_: SeqT<_>  ) = Lift.Invoke (State.get())
 
+type Get =
     static member inline Invoke() :'ms =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Get: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member Get: _ -> _) b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<Get>
 
 
+type OptionT<'Ma> with static member inline Put (_:OptionT<_>) = Lift.Invoke << State.put
+type ListT<'Ma>   with static member inline Put (_:ListT<_>  ) = Lift.Invoke << State.put
+type SeqT<'Ma>    with static member inline Put (_: SeqT<_>  ) = Lift.Invoke << State.put
+   
 type Put =
-    static member inline Put (_:OptionT<_>) = Lift.Invoke << State.put
-    static member inline Put (_:ListT<_>  ) = Lift.Invoke << State.put
-    static member inline Put (_: SeqT<_>  ) = Lift.Invoke << State.put
-    static member        Put (_:State<_,_>) =                State.put
-
     static member inline Invoke (x:'s) :'m =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Put: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member Put: _ -> _) b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Unchecked.defaultof<Put> x
 
 
 // MonadReader =
-type Ask =
-    static member Ask (_:OptionT<Reader<'a,option<'a>>>) = Lift.Invoke (Reader.ask()) :OptionT<Reader<'a,option<'a>>>
-    static member Ask (_:ListT<Reader< 'a, list<  'a>>>) = Lift.Invoke (Reader.ask()) :  ListT<Reader<'a,  list<'a>>>
-    static member Ask (_: SeqT<Reader< 'a,  seq<  'a>>>) = Lift.Invoke (Reader.ask()) :   SeqT<Reader<'a,   seq<'a>>>
-    static member Ask (_:Reader<'r,'r>                 ) =             (Reader.ask()) :Reader<'r,'r>
+type OptionT<'Ma> with static member Ask (_:OptionT<Reader<'a,option<'a>>>) = Lift.Invoke (Reader.ask()) :OptionT<Reader<'a,option<'a>>>
+type ListT<'Ma>   with static member Ask (_:ListT<Reader< 'a, list<  'a>>>) = Lift.Invoke (Reader.ask()) :  ListT<Reader<'a,  list<'a>>>
+type SeqT<'Ma>    with static member Ask (_: SeqT<Reader< 'a,  seq<  'a>>>) = Lift.Invoke (Reader.ask()) :   SeqT<Reader<'a,   seq<'a>>>
 
+type Ask =
     static member inline Invoke() :'mr =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Ask: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member Ask: _ -> _) b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<Ask>
 
 
-type Local =
-    static member inline Local (OptionT m, _:OptionT<_> ) = fun f -> OptionT <| Reader.local f m
-    static member inline Local ( ListT  m, _: ListT<_>  ) = fun f ->  ListT  <| Reader.local f m
-    static member inline Local (  SeqT  m, _:  SeqT<_>  ) = fun f ->   SeqT  <| Reader.local f m
-    static member        Local (        m, _:Reader<_,_>) = fun f ->            Reader.local f m
+type OptionT<'Ma> with static member inline Local (OptionT m, _:OptionT<_> ) = fun f -> OptionT <| Reader.local f m
+type ListT<'Ma>   with static member inline Local ( ListT  m, _: ListT<_>  ) = fun f ->  ListT  <| Reader.local f m
+type SeqT<'Ma>    with static member inline Local (  SeqT  m, _:  SeqT<_>  ) = fun f ->   SeqT  <| Reader.local f m   
 
+type Local =
     static member inline Invoke (f:'rr) (m:'ma) :'ma =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Local: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member Local: _ -> _) b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call (Unchecked.defaultof<Local>, m) f
 
 
 // MonadWriter =
+type OptionT<'Ma> with static member inline Tell (_:OptionT<_> ) = Lift.Invoke << Writer.tell
+    
 type Tell =
-    static member inline Tell (_:OptionT<_> ) = Lift.Invoke << Writer.tell
-    static member        Tell (_:Writer<_,_>) =                Writer.tell
-
     static member inline Invoke (x:'w) :'m =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Tell: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member Tell: _ -> _) b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Unchecked.defaultof<Tell> x
 
 
-type Listen =
+type OptionT<'Ma> with
     static member inline Listen (m, _:OptionT<_> ) =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
         OptionT (Writer.listen (OptionT.run m) >>= (result << liftMaybe))
-    static member        Listen (m, _:Writer<_,_>) = Writer.listen m
 
+type Listen =
     static member inline Invoke (m:'ma) :'maw =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Listen: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member Listen: _ -> _) b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call (Unchecked.defaultof<Listen>, m)
 
 
-type Pass =
-    static member inline Pass (m, _:OptionT<_> ) = OptionT (OptionT.run m >>= option (result None) (Map.Invoke Some << Writer.pass << result))
-    static member        Pass (m, _:Writer<_,_>) = Writer.pass m
+type OptionT<'Ma> with static member inline Pass (m, _:OptionT<_> ) = OptionT (OptionT.run m >>= option (result None) (Map.Invoke Some << Writer.pass << result))
 
+type Pass =
     static member inline Invoke (m:'maww) :'ma =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Pass: _ -> _) b)
+        let inline call_2 (a:^a, b:^b) = (^b : (static member Pass: _ -> _) b)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call (Unchecked.defaultof<Pass>, m)
