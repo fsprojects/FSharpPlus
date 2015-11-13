@@ -18,6 +18,6 @@ type Writer<'W,'A> with
     static member inline Return a = Writer (a, MEmpty.Invoke())        :Writer<'w,'a>
     static member inline Bind  (x, f) = Writer.bind f x                :Writer<'w,'b>
     static member inline (<*>) (f, x:Writer<'w,'a>) = Writer.apply f x :Writer<'w,'b>
-    static member        Tell   (   _:Writer<_,_>) = Writer.tell
-    static member        Listen (m, _:Writer<_,_>) = Writer.listen m
-    static member        Pass   (m, _:Writer<_,_>) = Writer.pass m
+    static member        Tell   (w) = Writer.tell w
+    static member        Listen (m) = Writer.listen m
+    static member        Pass   (m) = Writer.pass m

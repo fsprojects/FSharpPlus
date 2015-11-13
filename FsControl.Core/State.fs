@@ -19,5 +19,5 @@ type State<'S,'A> with
     static member Return a = State (fun s -> (a, s))          :State<'s,'a>
     static member Bind  (x, f) = State.bind f x               :State<'s,'b>
     static member (<*>) (f, x:State<'s,'a>) = State.apply f x :State<'s,'b>
-    static member Get (_:State<_,_>) = State.get()
-    static member Put (_:State<_,_>) = State.put
+    static member Get ()  = State.get() :State<'s,_>
+    static member Put (x) = State.put x :State<'s,_>

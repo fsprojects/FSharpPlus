@@ -20,13 +20,13 @@ type ReaderT<'R,'Ma> with
     static member inline MZero (_:ReaderT<_,_>        , _:MZero) = ReaderT <| fun _ -> MZero.Invoke()
     static member inline MPlus (  ReaderT m, ReaderT n, _:MPlus) = ReaderT <| fun r -> m r <|> n r
 
-    static member inline Lift (_:ReaderT<'r,'ma>) = fun m -> (ReaderT <| fun _ -> m) : ReaderT<'r,'ma>
+    static member inline Lift (m) : ReaderT<'r,'ma> = ReaderT (fun _ -> m)
 
-    static member CallCC (_:ReaderT<'r,Cont<'c,'a>> ) : (('a -> ReaderT<'t,Cont<'c,'u>>) -> ReaderT<'r,Cont<'c,'a>>) -> ReaderT<'r,Cont<'c,'a>> =
-        fun f -> ReaderT (fun r -> Cont.callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
-
-    static member inline Ask   (_:ReaderT<'r,'a>      ) = ReaderT result :ReaderT<'r,'a>
-    static member inline Local (ReaderT m, _:ReaderT<_,_>) = fun f  -> ReaderT(fun r -> m (f r))
+    static member CallCC (f : ('a -> ReaderT<'t,Cont<'c,'u>>) -> ReaderT<'r,Cont<'c,'a>>) : ReaderT<'r,Cont<'c,'a>> =
+        ReaderT (fun r -> Cont.callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
+            
+    static member inline Ask () = ReaderT result :ReaderT<'r,'a>
+    static member inline Local (ReaderT m, f) = ReaderT(fun r -> m (f r))
 
     static member inline LiftAsync (_:ReaderT<_,_>) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
 
@@ -34,9 +34,9 @@ type ReaderT<'R,'Ma> with
     static member inline CatchError ( m:ReaderT<'T,'U> , _:ReaderT<'T,'U>) = fun (h:'e -> ReaderT<'T,'U>) -> 
         ReaderT (fun s -> CatchError.Invoke (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s)):ReaderT<'T,'U>
 
-    static member Tell   (_:ReaderT<'t,'a->Writer<'a,unit>>          ) :ReaderT<'t,'a->Writer<'a,unit>> = Lift.Invoke Writer.tell
-    static member Listen (  ReaderT m, _:ReaderT<'t,Writer<'a,'b*'a>>) :ReaderT<'t,Writer<'a,'b*'a>> = ReaderT <| fun w -> Writer.listen (m w)  
-    static member Pass   (  ReaderT m, _:ReaderT<'t,Writer<'a,'b>>   ) :ReaderT<'t,Writer<'a,'b>>    = ReaderT <| fun w -> Writer.pass   (m w)
+    static member Tell   (x)         :ReaderT<'t,Writer<'a,unit>>  = x |> Writer.tell |> Lift.Invoke
+    static member Listen (ReaderT m) :ReaderT<'t,Writer<'a,'b*'a>> = ReaderT <| fun w -> Writer.listen (m w)  
+    static member Pass   (ReaderT m) :ReaderT<'t,Writer<'a,'b>>    = ReaderT <| fun w -> Writer.pass   (m w)
 
-    static member Get (_:ReaderT<'s,State<'a,'a>>  ) = Lift.Invoke (State.get()) :ReaderT<'s,State<'a,'a>>
-    static member Put (_:ReaderT<'s,State<'a,unit>>) = Lift.Invoke << State.put : 'a -> ReaderT<'s,State<'a,unit>>
+    static member Get ()     = Lift.Invoke (State.get())     :ReaderT<'s, State<'a, 'a>>
+    static member Put (x:'a) = x |> State.put |> Lift.Invoke :ReaderT<'s, State<'a, unit>>
