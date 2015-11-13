@@ -755,7 +755,6 @@ let resLiftIOContT = liftIO getLine : ContT<IO<string>,_>
 // ReaderT
 let runReaderT = ReaderT.run
 
-
 let res15'' = runCont (runReaderT (bar 'h' !"ello") "anything") id
 
 // from http://www.haskell.org/ghc/docs/6.10.4/html/libraries/mtl/Control-Monad-Reader.html
@@ -771,6 +770,8 @@ let _ = runIO readerTMain
 
 
 // WriterT
+let runWriterT = WriterT.run
+
 let toLower (s:char) = s.ToString().ToLower().Chars(0)
 let toUpper (s:char) = s.ToString().ToUpper().Chars(0)
 
@@ -792,11 +793,11 @@ let logstatecase3 x y z : WriterT<_> =  do' {
     let! u = logstatecase x
     let! v = logstatecase y
     let! w = logstatecase z
-    do! tell "thats all"
+    do! tell "that's all"
     return [u,v,w]}
 
-//runState (runWriterT (logstatecase3 'a' 'b' 'c')) true  -> ((char * char * char) list * string) * bool = (([('a', 'B', 'c')], "Low Up Low "), false)
-//runState (runWriterT (logstatecase3 'a' 'b' 'c')) false -> ((char * char * char) list * string) * bool = (([('A', 'b', 'C')], "Up Low Up "), true)
+//runState (runWriterT (logstatecase3 'a' 'b' 'c')) true  -> ((char * char * char) list * string) * bool = (([('a', 'B', 'c')], "Low Up Low that's all"), false)
+//runState (runWriterT (logstatecase3 'a' 'b' 'c')) false -> ((char * char * char) list * string) * bool = (([('A', 'b', 'C')], "Up Low Up that's all"), true)
 
 let resLiftIOWriterT = liftIO getLine : WriterT<IO<_ * string>>
 
