@@ -20,13 +20,13 @@ type ReaderT<'R,'Ma> with
     static member inline MZero (_:ReaderT<_,_>        , _:MZero) = ReaderT <| fun _ -> MZero.Invoke()
     static member inline MPlus (  ReaderT m, ReaderT n, _:MPlus) = ReaderT <| fun r -> m r <|> n r
 
-    static member inline Lift (m) : ReaderT<'r,'ma> = ReaderT (fun _ -> m)
+    static member Lift (m) : ReaderT<'r,'ma> = ReaderT (fun _ -> m)
 
     static member CallCC (f : ('a -> ReaderT<'t,Cont<'c,'u>>) -> ReaderT<'r,Cont<'c,'a>>) : ReaderT<'r,Cont<'c,'a>> =
         ReaderT (fun r -> Cont.callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
             
     static member inline Ask () = ReaderT result :ReaderT<'r,'a>
-    static member inline Local (ReaderT m, f) = ReaderT(fun r -> m (f r))
+    static member        Local (ReaderT m, f) = ReaderT(fun r -> m (f r))
 
     static member inline LiftAsync (_:ReaderT<_,_>) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
 
