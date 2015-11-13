@@ -45,8 +45,8 @@ type WriterT<'WMa> with
     static member inline CallCC (f : ('a->WriterT<Cont<'r,'t>>)->_)  :WriterT<Cont<'r,'a*'b>> = 
         WriterT (Cont.callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, MEmpty.Invoke()))))
        
-    static member inline Ask () = Lift.Invoke (Reader.ask()) :WriterT<Reader<'a,'a*'b>>
+    static member inline get_Ask() = Lift.Invoke Reader.ask :WriterT<Reader<'a,'a*'b>>
     static member        Local (WriterT m, f:'a->'t) : WriterT<Reader<'a,'b>> = WriterT (Reader.local f m)
 
-    static member inline Get ()     : WriterT<State<'a,'a*'b>>   = Lift.Invoke (State.get())
+    static member inline get_Get()  : WriterT<State<'a,'a*'b>>   = Lift.Invoke State.get
     static member inline Put (x:'a) : WriterT<State<'a,unit*'b>> = x |> State.put |> Lift.Invoke

@@ -11,7 +11,7 @@ module State =
 
     let eval (State sa) (s:'s) = fst (sa s)
     let exec (State sa) (s:'s) = snd (sa s)
-    let get() = State (fun s -> (s , s)) :State<'s,_>
+    let get = State (fun s -> (s , s)) :State<'s,_>
     let put x = State (fun _ -> ((), x)) :State<'s,_>
 
 type State<'S,'A> with
@@ -19,5 +19,5 @@ type State<'S,'A> with
     static member Return a = State (fun s -> (a, s))          :State<'s,'a>
     static member Bind  (x, f) = State.bind f x               :State<'s,'b>
     static member (<*>) (f, x:State<'s,'a>) = State.apply f x :State<'s,'b>
-    static member Get ()  = State.get() :State<'s,_>
+    static member get_Get() = State.get :State<'s,_>
     static member Put (x) = State.put x :State<'s,_>

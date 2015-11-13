@@ -25,9 +25,9 @@ type ContT<'Mr,'A> with
     static member        CallCC (f) =
         ContT (fun k -> ContT.run (f (fun a -> ContT (fun _ -> k a))) k) : ContT<'mr,'b>
 
-    static member Ask   () = Lift.Invoke (Reader.ask())  :ContT<Reader<'a,'b>,'a>
+    static member get_Ask() = Lift.Invoke Reader.ask : ContT<Reader<'a,'b>,'a>
     static member Local (ContT m, f : 'a -> 'b)          :ContT<Reader<'a,'b>,'t> =
-        ContT <| fun c -> (Reader.ask() >>= (fun r -> Reader.local f (m (Reader.local (const' r) << c))))
+        ContT <| fun c -> (Reader.ask >>= (fun r -> Reader.local f (m (Reader.local (const' r) << c))))
     
-    static member Get () = Lift.Invoke (State.get())         :ContT<State<'s, 'a>, 's>
+    static member get_Get() = Lift.Invoke State.get : ContT<State<'s, 'a>, 's>
     static member Put (x:'s) = x |> State.put |> Lift.Invoke :ContT<State<'s, 'a>, unit>

@@ -610,7 +610,7 @@ let runReader = Reader.run
 
 // Test Reader
 let calculateContentLen = do' {
-    let! content = ask'()
+    let! content = ask'
     return (String.length content)}
 
 let calculateModifiedContentLen = local' ( (+) "Prefix ") calculateContentLen
@@ -638,7 +638,7 @@ let execState = State.exec
 // from http://www.haskell.org/haskellwiki/State_Monad
 let x1 = runState (return' 'X') 1
 let xf:State<int,_> = return' 'X'
-let r11    = runState (get'()) 1
+let r11    = runState (get'  ) 1
 let rUnit5 = runState (put' 5) 1
 
 let rX5    = runState (do' { 
@@ -646,14 +646,14 @@ let rX5    = runState (do' {
     return 'X' }) 1
 
 let postincrement = do' {
-    let! x = get'()
+    let! x = get'
     do! put' (x+1)
     return x }
 
 let r12 = runState postincrement 1
 
 let tick :State<_,_> = do'{
-    let! n = get'()
+    let! n = get'
     do! put' (n+1)
     return n}
 
@@ -672,9 +672,9 @@ let runListT  = ListT.run
 let inline lift (x:'ma) = FsControl.Operators.lift x
 let inline liftIO (x: Async<'a>) = FsControl.Operators.liftAsync x
 let inline callCC f = FsControl.Operators.callCC f
-let inline get() = FsControl.Operators.get()
+let inline get< ^T when ^T : (static member Get : ^T)> : ^T = FsControl.Operators.get
 let inline put x = FsControl.Operators.put x
-let inline ask()     = FsControl.Operators.ask ()
+let inline ask< ^T when ^T : (static member Ask : ^T)> : ^T = FsControl.Operators.ask
 let inline local f m = FsControl.Operators.local f m
 let inline tell   x = FsControl.Operators.tell x
 let inline listen m = FsControl.Operators.listen m
@@ -759,7 +759,7 @@ let res15'' = runCont (runReaderT (bar 'h' !"ello") "anything") id
 
 // from http://www.haskell.org/ghc/docs/6.10.4/html/libraries/mtl/Control-Monad-Reader.html
 let printReaderContent = do' {
-    let! content = ask()
+    let! content = ask
     return! (liftIO <| putStrLn ("The Reader Content: " + content)) }
 
 let readerTMain = do'{
@@ -810,7 +810,7 @@ let runStateT = StateT.run
 let code  =
     let inline io (x: IO<_>)  : StateT<_,IO<_>> = liftIO x
     let pop  = do' {
-        let! (x::xs) = get()
+        let! (x::xs) = get
         do! put xs
         return x}
     do' {

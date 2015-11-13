@@ -25,7 +25,7 @@ type ReaderT<'R,'Ma> with
     static member CallCC (f : ('a -> ReaderT<'t,Cont<'c,'u>>) -> ReaderT<'r,Cont<'c,'a>>) : ReaderT<'r,Cont<'c,'a>> =
         ReaderT (fun r -> Cont.callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
             
-    static member inline Ask () = ReaderT result :ReaderT<'r,'a>
+    static member inline get_Ask() = ReaderT result :ReaderT<'r,'a>
     static member        Local (ReaderT m, f) = ReaderT(fun r -> m (f r))
 
     static member inline LiftAsync (_:ReaderT<_,_>) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
@@ -38,5 +38,5 @@ type ReaderT<'R,'Ma> with
     static member Listen (ReaderT m) :ReaderT<'t,Writer<'a,'b*'a>> = ReaderT <| fun w -> Writer.listen (m w)  
     static member Pass   (ReaderT m) :ReaderT<'t,Writer<'a,'b>>    = ReaderT <| fun w -> Writer.pass   (m w)
 
-    static member Get ()     = Lift.Invoke (State.get())     :ReaderT<'s, State<'a, 'a>>
+    static member get_Get()  = Lift.Invoke State.get         :ReaderT<'s, State<'a, 'a>>
     static member Put (x:'a) = x |> State.put |> Lift.Invoke :ReaderT<'s, State<'a, unit>>

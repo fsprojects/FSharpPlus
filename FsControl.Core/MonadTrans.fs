@@ -139,12 +139,12 @@ type CallCC =
 
 
 // MonadState =
-type OptionT<'Ma> with static member inline Get () = Lift.Invoke (State.get()):OptionT<_>
-type ListT<'Ma>   with static member inline Get () = Lift.Invoke (State.get()):ListT<_>  
-type SeqT<'Ma>    with static member inline Get () = Lift.Invoke (State.get()): SeqT<_>  
+type OptionT<'Ma> with static member inline get_Get() = Lift.Invoke State.get :OptionT<_>
+type ListT<'Ma>   with static member inline get_Get() = Lift.Invoke State.get :ListT<_>  
+type SeqT<'Ma>    with static member inline get_Get() = Lift.Invoke State.get : SeqT<_>  
 
 type Get =
-    static member inline Invoke() :^R = (^R : (static member Get: unit -> ^R) ())
+    static member inline Invoke() :^R = (^R : (static member Get: ^R) ())
 
 
 type OptionT<'Ma> with static member inline Put (x) = x |> State.put |> Lift.Invoke :OptionT<_>
@@ -156,12 +156,12 @@ type Put =
 
 
 // MonadReader =
-type OptionT<'Ma> with static member Ask () = Lift.Invoke (Reader.ask()) :OptionT<Reader<'a,option<'a>>>
-type ListT<'Ma>   with static member Ask () = Lift.Invoke (Reader.ask()) :  ListT<Reader<'a,  list<'a>>>
-type SeqT<'Ma>    with static member Ask () = Lift.Invoke (Reader.ask()) :   SeqT<Reader<'a,   seq<'a>>>
+type OptionT<'Ma> with static member get_Ask () = Lift.Invoke Reader.ask :OptionT<Reader<'a,option<'a>>>
+type ListT<'Ma>   with static member get_Ask () = Lift.Invoke Reader.ask :  ListT<Reader<'a,  list<'a>>>
+type SeqT<'Ma>    with static member get_Ask () = Lift.Invoke Reader.ask :   SeqT<Reader<'a,   seq<'a>>>
 
 type Ask =
-    static member inline Invoke() :^R = (^R : (static member Ask: unit -> ^R) ())
+    static member inline Invoke() :^R = (^R : (static member Ask: ^R) ())
 
 
 type OptionT<'Ma> with static member inline Local (OptionT m, f) = OptionT <| Reader.local f m

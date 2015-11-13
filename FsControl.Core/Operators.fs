@@ -148,13 +148,13 @@ module Operators =
     let inline callCC (f:('T->'``MonadCont<'U>``)->'``MonadCont<'T>``) : '``MonadCont<'T>`` = CallCC.Invoke f
    
     /// <summary>Haskell signature: get    :: MonadState  s m => m s</summary>
-    let inline get() : '``m<'s>`` = Get.Invoke()
+    let inline get< ^``m<'s>`` when ^``m<'s>`` : (static member Get : ^``m<'s>``)> : ^``m<'s>`` = (^``m<'s>`` : (static member Get : ^``m<'s>``) ())
 
     /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
     let inline put (x:'s) :'m = Put.Invoke x
 
     /// <summary>Haskell signature: ask    :: MonadReader r m => m r</summary>
-    let inline ask() :'``m<'r>`` = Ask.Invoke()
+    let inline ask< ^``m<'r>`` when ^``m<'r>`` : (static member Ask : ^``m<'r>``)> : ^``m<'r>`` = (^``m<'r>`` : (static member Ask : ^``m<'r>``) ())
    
     /// <summary>Haskell signature: local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
     let inline local (f:'rr) (m:'``m<'a>``) : '``m<'a>`` = Local.Invoke f m
