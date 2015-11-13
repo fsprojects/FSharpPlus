@@ -29,14 +29,14 @@ type ErrorT<'R> with
 
     static member CallCC (f:(_ -> ErrorT<Cont<_,'b>>) -> _) :ErrorT<Cont<'r,Choice<'aa,'bb>>> = ErrorT(Cont.callCC <| fun c -> ErrorT.run(f (ErrorT << c << Choice1Of2)))
 
-    static member        get_Ask() = (ErrorT << (Map.FromMonad Choice1Of2)) Reader.ask : ErrorT<Reader<'a,Choice<'a,'b>>>
-    static member        Local (ErrorT m, f) = ErrorT (Reader.local f m)
+    static member get_Ask() = (ErrorT << (Map.FromMonad Choice1Of2)) Reader.ask : ErrorT<Reader<'a,Choice<'a,'b>>>
+    static member Local (ErrorT m, f) = ErrorT (Reader.local f m)
 
-    static member inline Tell   (x) = x |> Writer.tell |> Lift.Invoke
-    static member inline Listen (m) =
+    static member inline Tell   x = x |> Writer.tell |> Lift.Invoke
+    static member inline Listen m =
         let liftError (m, w) = Error.map (fun x -> (x, w)) m
         ErrorT (Writer.listen (ErrorT.run m) >>= (result << liftError))
     static member inline Pass (m) = ErrorT (ErrorT.run m >>= option (result None) (Map.FromMonad Some << Writer.pass << result))
 
-    static member        get_Get() = Lift.Invoke State.get       :ErrorT<_>
-    static member        Put (x) = x |> State.put |> Lift.Invoke :ErrorT<_>
+    static member get_Get() = Lift.Invoke State.get     : ErrorT<_>
+    static member Put x = x |> State.put |> Lift.Invoke : ErrorT<_>

@@ -147,18 +147,18 @@ type Get =
     static member inline Invoke() :^R = (^R : (static member Get: ^R) ())
 
 
-type OptionT<'Ma> with static member inline Put (x) = x |> State.put |> Lift.Invoke :OptionT<_>
-type ListT<'Ma>   with static member inline Put (x) = x |> State.put |> Lift.Invoke :ListT<_>  
-type SeqT<'Ma>    with static member inline Put (x) = x |> State.put |> Lift.Invoke : SeqT<_>  
+type OptionT<'Ma> with static member inline Put x = x |> State.put |> Lift.Invoke :OptionT<_>
+type ListT<'Ma>   with static member inline Put x = x |> State.put |> Lift.Invoke :ListT<_>  
+type SeqT<'Ma>    with static member inline Put x = x |> State.put |> Lift.Invoke : SeqT<_>  
    
 type Put =
     static member inline Invoke (x:'s) :^R = (^R : (static member Put: _ -> ^R) x)
 
 
 // MonadReader =
-type OptionT<'Ma> with static member get_Ask () = Lift.Invoke Reader.ask :OptionT<Reader<'a,option<'a>>>
-type ListT<'Ma>   with static member get_Ask () = Lift.Invoke Reader.ask :  ListT<Reader<'a,  list<'a>>>
-type SeqT<'Ma>    with static member get_Ask () = Lift.Invoke Reader.ask :   SeqT<Reader<'a,   seq<'a>>>
+type OptionT<'Ma> with static member get_Ask() = Lift.Invoke Reader.ask :OptionT<Reader<'a,option<'a>>>
+type ListT<'Ma>   with static member get_Ask() = Lift.Invoke Reader.ask :  ListT<Reader<'a,  list<'a>>>
+type SeqT<'Ma>    with static member get_Ask() = Lift.Invoke Reader.ask :   SeqT<Reader<'a,   seq<'a>>>
 
 type Ask =
     static member inline Invoke() :^R = (^R : (static member Ask: ^R) ())
@@ -173,14 +173,14 @@ type Local =
 
 
 // MonadWriter =
-type OptionT<'Ma> with static member inline Tell (x) =  x |> Writer.tell |> Lift.Invoke :OptionT<_>
+type OptionT<'Ma> with static member inline Tell x = x |> Writer.tell |> Lift.Invoke :OptionT<_>
     
 type Tell =
     static member inline Invoke (x:'w) :^R = (^R : (static member Tell: _ -> ^R) x)
 
 
 type OptionT<'Ma> with
-    static member inline Listen (m) =
+    static member inline Listen m =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
         OptionT (Writer.listen (OptionT.run m) >>= (result << liftMaybe))
 
@@ -188,7 +188,7 @@ type Listen =
     static member inline Invoke (m:'ma) :^R = (^R : (static member Listen: _ -> ^R) m)
 
 
-type OptionT<'Ma> with static member inline Pass (m) = OptionT (OptionT.run m >>= option (result None) (Map.Invoke Some << Writer.pass << result))
+type OptionT<'Ma> with static member inline Pass m = OptionT (OptionT.run m >>= option (result None) (Map.Invoke Some << Writer.pass << result))
 
 type Pass =
     static member inline Invoke (m:'maww) :^R = (^R : (static member Pass: _ -> ^R) m)

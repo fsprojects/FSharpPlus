@@ -30,11 +30,11 @@ type ReaderT<'R,'Ma> with
 
     static member inline LiftAsync (_:ReaderT<_,_>) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
 
-    static member inline ThrowError (_:ReaderT<_,_>    ) = Lift.Invoke << ThrowError.Invoke
+    static member inline ThrowError (_:ReaderT<_,_>) = Lift.Invoke << ThrowError.Invoke
     static member inline CatchError ( m:ReaderT<'T,'U> , _:ReaderT<'T,'U>) = fun (h:'e -> ReaderT<'T,'U>) -> 
         ReaderT (fun s -> CatchError.Invoke (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s)):ReaderT<'T,'U>
 
-    static member Tell   (x)         :ReaderT<'t,Writer<'a,unit>>  = x |> Writer.tell |> Lift.Invoke
+    static member Tell   x           :ReaderT<'t,Writer<'a,unit>>  = x |> Writer.tell |> Lift.Invoke
     static member Listen (ReaderT m) :ReaderT<'t,Writer<'a,'b*'a>> = ReaderT <| fun w -> Writer.listen (m w)  
     static member Pass   (ReaderT m) :ReaderT<'t,Writer<'a,'b>>    = ReaderT <| fun w -> Writer.pass   (m w)
 

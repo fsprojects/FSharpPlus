@@ -15,9 +15,9 @@ module State =
     let put x = State (fun _ -> ((), x)) :State<'s,_>
 
 type State<'S,'A> with
-    static member Map   (x, f) = State.map f x                :State<'s,_>
-    static member Return a = State (fun s -> (a, s))          :State<'s,'a>
-    static member Bind  (x, f) = State.bind f x               :State<'s,'b>
-    static member (<*>) (f, x:State<'s,'a>) = State.apply f x :State<'s,'b>
-    static member get_Get() = State.get :State<'s,_>
-    static member Put (x) = State.put x :State<'s,_>
+    static member Map   (x, f) = State.map f x                : State<'s, _>
+    static member Return a = State (fun s -> (a, s))          : State<'s, 'a>
+    static member Bind  (x, f) = State.bind f x               : State<'s, 'b>
+    static member (<*>) (f, x:State<'s,'a>) = State.apply f x : State<'s, 'b>
+    static member get_Get() = State.get                       : State<'s, _>
+    static member Put x     = State.put x                     : State<'s, _>

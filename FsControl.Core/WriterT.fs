@@ -30,7 +30,7 @@ type WriterT<'WMa> with
     static member inline MZero (_:WriterT<_>          , _:MZero) = WriterT (MZero.Invoke())
     static member inline MPlus (  WriterT m, WriterT n, _:MPlus) = WriterT (m <|> n)
 
-    static member inline Tell   (w) = WriterT (result ((), w))
+    static member inline Tell   w = WriterT (result ((), w))
     static member inline Listen (WriterT m) = WriterT (m >>= (fun (a, w) -> result ((a, w), w)))
     static member inline Pass   (WriterT m) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))
 

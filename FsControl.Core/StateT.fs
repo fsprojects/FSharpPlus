@@ -26,8 +26,8 @@ type StateT<'S,'MaS> with
     static member inline LiftAsync (_:StateT<_,_>) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
     
     static member inline get_Get() = StateT (fun s -> result (s , s))
-    static member inline Put (x) = StateT (fun _ -> result ((), x))    
+    static member inline Put x     = StateT (fun _ -> result ((), x))    
 
-    static member inline ThrowError (_:StateT<_,_>    ) = Lift.Invoke << ThrowError.Invoke
-    static member inline CatchError ( m:StateT<'T,'U> , _:StateT<'T,'U>) = fun (h:'e -> StateT<'T,'U>) -> 
+    static member inline ThrowError (_:StateT<_,_>) = Lift.Invoke << ThrowError.Invoke
+    static member inline CatchError ( m:StateT<'T,'U>, _:StateT<'T,'U>) = fun (h:'e -> StateT<'T,'U>) -> 
         StateT (fun s -> CatchError.Invoke (StateT.run m s)   (fun e -> StateT.run (h e) s)):StateT<'T,'U>
