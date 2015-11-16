@@ -11,7 +11,7 @@ module Writer =
     let exec (Writer m:Writer<'w,_> ) s = snd m    
     let tell               w       = Writer((),     w) :Writer<'w,_>
     let listen (Writer (a, w))     = Writer((a, w), w) :Writer<'w,_>
-    let pass   (Writer((a, f), w)) = Writer( a,   f w) :Writer<'w,_>
+    let pass   (Writer((a, f:'w->'w), w)) = Writer( a, f w) :Writer<'w,_>
 
 type Writer<'W,'A> with
     static member        Map   (x, f) = Writer.map f x                 :Writer<'w,_>
