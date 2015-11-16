@@ -36,7 +36,7 @@ type ErrorT<'R> with
     static member inline Listen m =
         let liftError (m, w) = Error.map (fun x -> (x, w)) m
         ErrorT (Writer.listen (ErrorT.run m) >>= (result << liftError))
-    static member inline Pass (m) = ErrorT (ErrorT.run m >>= option (result None) (Map.FromMonad Some << Writer.pass << result))
+    static member inline Pass m = ErrorT (ErrorT.run m >>= choice (result << Choice2Of2) (Map.Invoke Choice1Of2 << Writer.pass << result))
 
     static member get_Get() = Lift.Invoke State.get     : ErrorT<_>
     static member Put x = x |> State.put |> Lift.Invoke : ErrorT<_>
