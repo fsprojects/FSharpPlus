@@ -72,7 +72,7 @@ type SeqT<'Ma> with
     static member inline Bind   (x:SeqT<'ma>, f: 'a -> SeqT<'mb>) = SeqT.bind f x :SeqT<'mb>
 
     static member inline MZero (_:MZero, _:SeqT<_>     ) = SeqT <| result Seq.empty
-    static member inline MPlus (_:MPlus, SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result (Seq.append a b))))
+    static member inline MPlus (_:MPlus, SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b))))
 
 
 
