@@ -8,7 +8,7 @@ module Writer =
     let map f (Writer (a, w)) = Writer (f a, w)
     let inline bind  f (Writer (a, w)) = Writer (let (b, w') = run (f a) in (b, MAppend.Invoke w w')) :Writer<'w,'b>
     let inline apply   (Writer (f, a)) (Writer (x, b)) = Writer (f x, MAppend.Invoke a b)
-    let exec (Writer m:Writer<'w,_> ) s = snd m    
+    let exec (Writer m:Writer<'w,_>) = snd m    
     let tell               w       = Writer((),     w) :Writer<'w,_>
     let listen (Writer (a, w))     = Writer((a, w), w) :Writer<'w,_>
     let pass   (Writer((a, f:'w->'w), w)) = Writer( a, f w) :Writer<'w,_>
