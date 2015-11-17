@@ -1,5 +1,8 @@
 ﻿namespace FsControl
 
+/// <summary> Computation type: Computations which maintain state.
+/// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
+/// <para/>   Useful for: Building computations from sequences of operations that require a shared state. </summary>
 type State<'s,'t> = State of ('s->('t * 's))
 
 [<RequireQualifiedAccess>]
@@ -11,7 +14,11 @@ module State =
 
     let eval (State sa) (s:'s)           = fst (sa s)                                                               : 'T
     let exec (State sa : State<'S,'A>) s = snd (sa s)                                                               : 'S
+
+    /// Return the state from the internals of the monad.
     let get   = State (fun s -> (s, s))                                                                             : State<'S,'S>
+
+    /// Replace the state inside the monad.
     let put x = State (fun _ -> ((), x))                                                                            : State<'S,unit>
 
 type State with
