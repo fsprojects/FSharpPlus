@@ -2,41 +2,41 @@
 open FsControl.Core.Internals.Prelude
 open FsControl.Core.Internals.MonadOps
 
-type ReaderT<'R,'Ma> = ReaderT of ('R -> 'Ma)
+type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
 
 [<RequireQualifiedAccess>]
 module ReaderT =
-    let  run (ReaderT x) = x
-    let inline map (f:'a->'b) (ReaderT m) = ReaderT (Map.Invoke f << m)
-    let inline apply (ReaderT f) (ReaderT x) = (ReaderT <| fun r -> f r <*> x r) :ReaderT<'r,'ma>
-    let inline bind f (ReaderT m) = ReaderT <| fun r -> m r >>= (fun a -> run (f a) r)
+    let  run (ReaderT x) = x    : 'R -> '``Monad<'T>``
+    let inline map   (f:'T->'U) (ReaderT m : ReaderT<'R, '``Monad<'T>``>) = ReaderT (Map.Invoke f << m)                                                                 : ReaderT<'R, '``Monad<'U>``>
+    let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x:_->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r)                                          : ReaderT<'R, '``Monad<'U>``>
+    let inline bind  (f:'T->_) (ReaderT (m:_->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))                                                      : ReaderT<'R, '``Monad<'U>``>
 
-type ReaderT<'R,'Ma> with
-    static member inline Map    (x, f, _:Map) = ReaderT.map f x
-    static member inline Return (_:ReaderT<'r,'ma>      , _:Return) :'a  -> ReaderT<'r,'ma> = fun a -> ReaderT <| fun _ -> result a
-    static member inline Apply  (f, x, _:ReaderT<'r,'mb>, _:Apply ) = ReaderT.apply f x :ReaderT<'r,'mb>
-    static member inline Bind (x, f :'b -> ReaderT<'r,'m>) : ReaderT<'r,'m> = ReaderT.bind f x
+type ReaderT with
+    static member inline Map    (x : ReaderT<'R, '``Monad<'T>``>, f:'T->'U, _:Map) = ReaderT.map f x                                                                    : ReaderT<'R, '``Monad<'U>``>
+    static member inline Return (output : ReaderT<'R, '``Monad<'T>``>, _:Return) = fun (x:'T) -> ReaderT (fun _ -> result x)                                            : ReaderT<'R, '``Monad<'T>``> 
+    static member inline Apply  (f:ReaderT<_,'``Monad<'T -> 'U>``>, x:ReaderT<_,'``Monad<'T>``>, output: ReaderT<'R, '``Monad<'U>``>, impl:Apply) = ReaderT.apply f x   : ReaderT<'R, '``Monad<'U>``>
+    static member inline Bind   (x:ReaderT<_,'``Monad<'T>``>, f :'T->ReaderT<'R,'``Monad<'U>``>) = ReaderT.bind f x                                                     : ReaderT<'R, '``Monad<'U>``>
+    
+    static member inline MZero (output: ReaderT<'R, '``MonadPlus<'T>``>, impl:MZero) = ReaderT (fun _ -> MZero.Invoke())                                                : ReaderT<'R, '``MonadPlus<'T>``>
+    static member inline MPlus (ReaderT m, ReaderT n, impl:MPlus)                    = ReaderT (fun r -> m r <|> n r)                                                   : ReaderT<'R, '``MonadPlus<'T>``>
 
-    static member inline MZero (_:ReaderT<_,_>        , _:MZero) = ReaderT <| fun _ -> MZero.Invoke()
-    static member inline MPlus (  ReaderT m, ReaderT n, _:MPlus) = ReaderT <| fun r -> m r <|> n r
+    static member Lift m = ReaderT (fun _ -> m)                                             : ReaderT<'R, '``Monad<'T>``>
 
-    static member Lift (m) : ReaderT<'r,'ma> = ReaderT (fun _ -> m)
-
-    static member CallCC (f : ('a -> ReaderT<'t,Cont<'c,'u>>) -> ReaderT<'r,Cont<'c,'a>>) : ReaderT<'r,Cont<'c,'a>> =
+    static member CallCC (f : ('T -> ReaderT<'R, Cont<_,'U>>) -> _)                         : ReaderT<'R, Cont<'C,'T>> =
         ReaderT (fun r -> Cont.callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
             
-    static member inline get_Ask() = ReaderT result :ReaderT<'r,'a>
-    static member        Local (ReaderT m, f) = ReaderT(fun r -> m (f r))
+    static member inline get_Ask() = ReaderT result                                         : ReaderT<'R, '``MonadReader<'T>``>
+    static member        Local (ReaderT m, f:_->'R2) = ReaderT(fun r -> m (f r))            : ReaderT<'R1, '``MonadReader<'T>``>
 
-    static member inline LiftAsync (_:ReaderT<_,_>) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
+    static member inline LiftAsync (output:ReaderT<'R, '``MonadAsync<'T>``>) = fun (x: Async<'T>) -> (Lift.Invoke (LiftAsync.Invoke x) : ReaderT<'R,'``MonadAsync<'T>``>)
 
-    static member inline ThrowError (_:ReaderT<_,_>) = Lift.Invoke << ThrowError.Invoke
-    static member inline CatchError ( m:ReaderT<'T,'U> , _:ReaderT<'T,'U>) = fun (h:'e -> ReaderT<'T,'U>) -> 
-        ReaderT (fun s -> CatchError.Invoke (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s)):ReaderT<'T,'U>
+    static member inline ThrowError (output:ReaderT<'R,'``MonadError<'E,'T>``>) = fun (x:'E) -> (x |> ThrowError.Invoke |> Lift.Invoke : ReaderT<'R,'``MonadError<'E,'T>``>)
+    static member inline CatchError (m:ReaderT<'R,'``MonadError<'E,'T>``>, output:ReaderT<'R,'``MonadError<'E,'T>``>) = fun (h:'E -> _) -> 
+        ReaderT (fun s -> CatchError.Invoke (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s)) : ReaderT<'R,'``MonadError<'E,'T>``>
 
-    static member Tell   x           :ReaderT<'t,Writer<'a,unit>>  = x |> Writer.tell |> Lift.Invoke
-    static member Listen (ReaderT m) :ReaderT<'t,Writer<'a,'b*'a>> = ReaderT <| fun w -> Writer.listen (m w)  
-    static member Pass   (ReaderT m) :ReaderT<'t,Writer<'a,'b>>    = ReaderT <| fun w -> Writer.pass   (m w)
+    static member Tell   w           = w |> Writer.tell |> Lift.Invoke         : ReaderT<'R, Writer<'Monoid, unit>>
+    static member Listen (ReaderT m) = ReaderT (fun w -> Writer.listen (m w))  : ReaderT<'R, Writer<'Monoid,'T*'Monoid>>
+    static member Pass   (ReaderT m) = ReaderT (fun w -> Writer.pass   (m w))  : ReaderT<'R, Writer<'Monoid,'T>>   
 
-    static member get_Get()  = Lift.Invoke State.get         :ReaderT<'s, State<'a, 'a>>
-    static member Put (x:'a) = x |> State.put |> Lift.Invoke :ReaderT<'s, State<'a, unit>>
+    static member get_Get() = Lift.Invoke State.get         :ReaderT<'R, State<'S, 'S>>
+    static member Put x     = x |> State.put |> Lift.Invoke :ReaderT<'R, State<'S, unit>>

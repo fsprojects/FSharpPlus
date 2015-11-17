@@ -3,30 +3,30 @@
 open FsControl.Core.Internals.Prelude
 open FsControl.Core.Internals.MonadOps
 
-type ContT<'Mr,'A> = ContT of  (('A -> 'Mr) -> 'Mr)    
+type ContT<'``monad<'r>``,'t> = ContT of  (('t -> '``monad<'r>``) -> '``monad<'r>``)    
 
 [<RequireQualifiedAccess>]
 module ContT =
-    let run (ContT m) = m
-    let map  f (ContT m) = ContT (fun k -> m (k << f))
-    let bind f (ContT m) = ContT (fun k -> m (fun a -> run (f a) k)) :ContT<'mr,'b>
-    let apply  (ContT f) (ContT x) = ContT (fun k -> f (fun f' -> x (k << f')))  :ContT<'mr,'a>
+    let run   (ContT m) = m                                                                 : ('T -> '``Monad<'R>``) ->_
+    let map   (f:'T->_) (ContT m) = ContT (fun k -> m (k << f))                             : ContT<'``Monad<'R>``,'U>
+    let bind  (f:'T->_) (ContT m) = ContT (fun k -> m (fun a -> run (f a) k))               : ContT<'``Monad<'R>``,'U>
+    let apply (ContT f) (ContT x) = ContT (fun k -> f (fun (f':'T->'U) -> x (k << f')))     : ContT<'``Monad<'R>``,'U>
 
-type ContT<'Mr,'A> with
-    static member Map    (x, f, _:Map) = ContT.map f x
-    static member Return (_:ContT<'mr,'a>      , _:Return) = fun a  -> ContT ((|>) a)  :ContT<'mr,'a>
-    static member Apply  (f, x, _:ContT<'mr,'b>, _:Apply ) = ContT.apply f x :ContT<'mr,'b>
-    static member Bind (x, f) = ContT.bind f x :ContT<'mr,'b>
+type ContT with
+    static member Map    (x, f:'T->'U, _:Map) = ContT.map f x                               : ContT<'``Monad<'R>``,'U>
+    static member Return (_: ContT<'``Monad<'R>``,'T>, _:Return) = fun a  -> ContT ((|>) a) : ContT<'``Monad<'R>``,'T>
+    static member Apply  (f, x, _:ContT<'``Monad<'R>``,'U>, _:Apply) = ContT.apply f x: ContT<'``Monad<'R>``,'U>
+    static member Bind   (x, f:'T->_) = ContT.bind f x                                      : ContT<'``Monad<'R>``,'U>
 
-    static member inline Lift (m:'ma) = ContT((>>=) m) : ContT<'mr,'a>    
+    static member inline Lift (m:'``Monad<'T>``) = ContT((>>=) m) : ContT<'``Monad<'R>``,'T>    
 
-    static member inline LiftAsync (_:ContT<_,_>   ) = fun (x: Async<_>) -> Lift.Invoke (LiftAsync.Invoke x)
+    static member inline LiftAsync (output:ContT<Async<'R>,'T>) = fun (x: Async<'T>) -> Lift.Invoke (LiftAsync.Invoke x) : ContT<Async<'R>,'T>
 
-    static member CallCC f = ContT (fun k -> ContT.run (f (fun a -> ContT (fun _ -> k a))) k) : ContT<'mr,'b>
+    static member CallCC (f:(_->ContT<_,'T>)->_) = ContT (fun k -> ContT.run (f (fun a -> ContT (fun _ -> k a))) k) : ContT<'``Monad<'R>``,'U>
 
-    static member get_Ask() = Lift.Invoke Reader.ask : ContT<Reader<'a,'b>,'a>
-    static member Local (ContT m, f : 'a -> 'b)      : ContT<Reader<'a,'b>,'t> =
+    static member get_Ask() = Lift.Invoke Reader.ask : ContT<Reader<'R,'T>,'R>
+    static member Local (ContT m, f : 'R1 -> 'R2)    : ContT<Reader<_ ,'T>,'U> =
         ContT <| fun c -> (Reader.ask >>= (fun r -> Reader.local f (m (Reader.local (const' r) << c))))
     
-    static member get_Get()  = Lift.Invoke State.get         : ContT<State<'s, 'a>, 's>
-    static member Put (x:'s) = x |> State.put |> Lift.Invoke : ContT<State<'s, 'a>, unit>
+    static member get_Get()  = Lift.Invoke State.get         : ContT<State<'S, 'T>, 'S>
+    static member Put (x:'S) = x |> State.put |> Lift.Invoke : ContT<State<'S, 'T>, unit>
