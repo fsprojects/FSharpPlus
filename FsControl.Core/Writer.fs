@@ -1,23 +1,23 @@
 ﻿namespace FsControl
 
-type Writer<'W,'A> = Writer of ('A * 'W)
+type Writer<'monoid,'t> = Writer of ('t * 'monoid)
 
 [<RequireQualifiedAccess>]
 module Writer =
-    let run (Writer x) = x :_*'w
-    let map f (Writer (a, w)) = Writer (f a, w)
-    let inline bind  f (Writer (a, w)) = Writer (let (b, w') = run (f a) in (b, MAppend.Invoke w w')) :Writer<'w,'b>
-    let inline apply   (Writer (f, a)) (Writer (x, b)) = Writer (f x, MAppend.Invoke a b)
-    let exec (Writer m:Writer<'w,_>) = snd m    
-    let tell               w       = Writer((),     w) :Writer<'w,_>
-    let listen (Writer (a, w))     = Writer((a, w), w) :Writer<'w,_>
-    let pass   (Writer((a, f:'w->'w), w)) = Writer( a, f w) :Writer<'w,_>
+    let run (Writer x) = x                                                                                  : 'T * 'Monoid
+    let map f (Writer (a:'T, w)) = Writer (f a, w)                                                          : Writer<'Monoid,'U>
+    let inline bind  f (Writer (a:'T, w)) = Writer (let (b, w') = run (f a) in (b, MAppend.Invoke w w'))    : Writer<'Monoid,'U>
+    let inline apply   (Writer (f, a)) (Writer (x:'T, b))       = Writer (f x, MAppend.Invoke a b)          : Writer<'Monoid,'U>
+    let exec (Writer m:Writer<_,'T>) = snd m                                                                : Writer<'Monoid,'U>
+    let tell               w         = Writer((),     w)                                                    : Writer<'Monoid,unit>
+    let listen (Writer (a, w))       = Writer((a, w), w)                                                    : Writer<'Monoid,('T * 'Monoid)>
+    let pass   (Writer((a, f), w:'Monoid)) = Writer(a, f w)                                                 : Writer<'Monoid,'T>
 
-type Writer<'W,'A> with
-    static member        Map   (x, f) = Writer.map f x                 :Writer<'w,_>
-    static member inline Return a = Writer (a, MEmpty.Invoke())        :Writer<'w,'a>
-    static member inline Bind  (x, f) = Writer.bind f x                :Writer<'w,'b>
-    static member inline (<*>) (f, x:Writer<'w,'a>) = Writer.apply f x :Writer<'w,'b>
-    static member        Tell   w = Writer.tell w
-    static member        Listen m = Writer.listen m
-    static member        Pass   m = Writer.pass m
+type Writer with
+    static member        Map   (x, f:'T->_) = Writer.map f x            : Writer<'Monoid,'U>
+    static member inline Return x = Writer (x, MEmpty.Invoke())         : Writer<'Monoid,'T>
+    static member inline Bind  (x, f:'T->_) = Writer.bind f x           : Writer<'Monoid,'U>
+    static member inline (<*>) (f, x:Writer<_,'T>) = Writer.apply f x   : Writer<'Monoid,'U>
+    static member        Tell   w = Writer.tell w                       : Writer<'Monoid,unit>
+    static member        Listen m = Writer.listen m                     : Writer<'Monoid,('T * 'Monoid)>
+    static member        Pass   m = Writer.pass m                       : Writer<'Monoid,'T>
