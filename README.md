@@ -157,29 +157,29 @@ An easy way to make classes in your project callable from FsControl without refe
 
  Functors:
  
-     static member Map (x:MyFunctor<'T>, f:'T->'U) : MyFunctor<'U> = {your map impl.}
+     static member Map (x:MyFunctor<'T>, f:'T->'U) : MyFunctor<'U> = {my map impl.}
      
  Applicatives:
  
-     static member Return (x:'T) : MyApplicative<'T> = {your Return impl.}
-     static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'T>) : MyApplicative<'U> = {your Apply impl.}
+     static member Return (x:'T) : MyApplicative<'T> = {my Return impl.}
+     static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'T>) : MyApplicative<'U> = {my Apply impl.}
      
  Monads:
  
-     static member Return (x:'T) : MyMonad<'T> = {your Return impl.} // similar to Applicatives
-     static member Bind (x:MyMonad<'T>, f:'T->MyMonad<'U>) : MyMonad<'U> = {your Bind impl.}
+     static member Return (x:'T) : MyMonad<'T> = {my Return impl.} // similar to Applicatives
+     static member Bind (x:MyMonad<'T>, f:'T->MyMonad<'U>) : MyMonad<'U> = {my Bind impl.}
    
 Monoids:
 
-     static member MEmpty() : MyMonoid = {your MEmpty impl.}
-     static member MAppend (x:MyMonoid, y:MyMonoid) : MyMonoid = {your MAppend impl.}
-     static member MConcat (x:list<MyMonoid>) : MyMonoid  = {your MConcat impl.}// optional: it can be automatically derived from MAppend
+     static member MEmpty() : MyMonoid = {my MEmpty impl.}
+     static member MAppend (x:MyMonoid, y:MyMonoid) : MyMonoid = {my MAppend impl.}
+     static member MConcat (x:seq<MyMonoid>) : MyMonoid  = {my MConcat impl.} // optional: it can be automatically derived from MAppend
 
 Foldables:
 
-     static member FoldBack (source:MyFoldable<'T>, folder:'T->'State->'State, state:'State) : 'State = {your FoldBack impl.}
-     static member ToSeq (source:MyFoldable<'T>) : seq<'T> = {your ToSeq impl.}
-     static member FromSeq (source: seq<'T>) : MyFoldable<'T> = {your FromSeq impl.}
+     static member FoldBack (source:MyFoldable<'T>, folder:'T->'State->'State, state:'State) : 'State = {my FoldBack impl.}
+     static member ToSeq (source:MyFoldable<'T>) : seq<'T> = {my ToSeq impl.}
+     static member FromSeq (source: seq<'T>) : MyFoldable<'T> = {my FromSeq impl.}
 	
 
 If you find problems (typically insane compile times) you can still define it as described in 2).

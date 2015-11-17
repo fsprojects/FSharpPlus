@@ -29,6 +29,21 @@ type WrappedListB<'s> = WrappedListB of 's list with
     static member ToSeq    (WrappedListB lst)     = List.toSeq lst
     static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
 
+type WrappedListC<'s> = WrappedListC of 's list with
+    static member MAppend  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
+    static member MEmpty   () = WrappedListC List.empty
+    static member MConcat  (lst: seq<WrappedListC<_>>)  = Seq.head lst
+
+[<TestClass>]
+type Monoid() =
+    [<TestMethod>]
+    member x.mconcat_Default_Custom() = 
+        let (WrappedListB x) = mconcat [WrappedListB [10] ;WrappedListB [15]]
+        let (WrappedListC y) = mconcat [WrappedListC [10] ;WrappedListC [15]]
+        Assert.AreEqual (x, [10;15])
+        Assert.AreEqual (y, [10])
+
+
 [<TestClass>]
 type Foldable() = 
     [<TestMethod>]
