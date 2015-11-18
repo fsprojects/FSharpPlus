@@ -25,7 +25,7 @@ type ErrorT with
     static member inline CatchError (ErrorT x :ErrorT<'``MonadError<'E1,'T>``>, output:ErrorT<'``MonadError<'E2,'T>``>) = 
         fun (f: 'E1 -> _) -> (ErrorT (x >>= (fun a -> match a with Choice2Of2 l -> ErrorT.run (f l) | Choice1Of2 r -> result (Choice1Of2 r)))) : ErrorT<'``MonadError<'E2,'T>``>
 
-    static member inline LiftAsync (_:ErrorT<Async<Choice<'T,'E>>>) = fun (x :Async<'T>) -> Lift.Invoke (LiftAsync.Invoke x) :ErrorT<Async<Choice<'T,'E>>>
+    static member inline LiftAsync (x :Async<'T>) = Lift.Invoke (LiftAsync.Invoke x) :ErrorT<Async<Choice<'T,'E>>>
 
     static member CallCC (f:('T -> ErrorT<Cont<'R,Choice<'U,'E>>>) -> _) :ErrorT<Cont<'R, Choice<'T,'E>>> = ErrorT(Cont.callCC <| fun c -> ErrorT.run(f (ErrorT << c << Choice1Of2)))
 

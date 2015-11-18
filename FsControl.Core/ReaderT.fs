@@ -28,7 +28,7 @@ type ReaderT with
     static member inline get_Ask() = ReaderT result                                         : ReaderT<'R, '``MonadReader<'T>``>
     static member        Local (ReaderT m, f:_->'R2) = ReaderT(fun r -> m (f r))            : ReaderT<'R1, '``MonadReader<'T>``>
 
-    static member inline LiftAsync (output:ReaderT<'R, '``MonadAsync<'T>``>) = fun (x: Async<'T>) -> (Lift.Invoke (LiftAsync.Invoke x) : ReaderT<'R,'``MonadAsync<'T>``>)
+    static member inline LiftAsync (x: Async<'T>) = (Lift.Invoke (LiftAsync.Invoke x) : ReaderT<'R,'``MonadAsync<'T>``>)
 
     static member inline ThrowError (output:ReaderT<'R,'``MonadError<'E,'T>``>) = fun (x:'E) -> (x |> ThrowError.Invoke |> Lift.Invoke : ReaderT<'R,'``MonadError<'E,'T>``>)
     static member inline CatchError (m:ReaderT<'R,'``MonadError<'E,'T>``>, output:ReaderT<'R,'``MonadError<'E,'T>``>) = fun (h:'E -> _) -> 

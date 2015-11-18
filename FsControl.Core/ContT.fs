@@ -20,7 +20,7 @@ type ContT with
 
     static member inline Lift (m:'``Monad<'T>``) = ContT((>>=) m) : ContT<'``Monad<'R>``,'T>    
 
-    static member inline LiftAsync (output:ContT<Async<'R>,'T>) = fun (x: Async<'T>) -> Lift.Invoke (LiftAsync.Invoke x) : ContT<Async<'R>,'T>
+    static member inline LiftAsync (x: Async<'T>) = Lift.Invoke (LiftAsync.Invoke x) : ContT<Async<'R>,'T>
 
     static member CallCC (f:(_->ContT<_,'T>)->_) = ContT (fun k -> ContT.run (f (fun a -> ContT (fun _ -> k a))) k) : ContT<'``Monad<'R>``,'U>
 

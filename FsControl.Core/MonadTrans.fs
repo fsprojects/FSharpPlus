@@ -96,10 +96,13 @@ type LiftAsync =
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Unchecked.defaultof<LiftAsync> x
 
-    static member inline LiftAsync (_:OptionT<'``MonadAsync<'T>``>) = fun (x :Async<'T>) -> Lift.Invoke (LiftAsync.Invoke x)
-    static member inline LiftAsync (_:ListT<'``MonadAsync<'T>``>  ) = fun (x :Async<'T>) -> Lift.Invoke (LiftAsync.Invoke x)
-    static member inline LiftAsync (_:SeqT<'``MonadAsync<'T>``>   ) = fun (x :Async<'T>) -> Lift.Invoke (LiftAsync.Invoke x)
+    static member inline LiftAsync (_:'R         ) = fun (x :Async<'T>) -> (^R : (static member LiftAsync: _ -> ^R) x)
+    static member inline LiftAsync (_:^t when ^t: null and ^t: struct) = ()
     static member        LiftAsync (_:Async<'T>  ) = fun (x :Async<'T>) -> x
+
+type OptionT with static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
+type ListT   with static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
+type SeqT    with static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
 
 
 type ThrowError =
