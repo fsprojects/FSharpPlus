@@ -40,7 +40,7 @@ type WriterT with
     
     static member inline LiftAsync (x: Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
 
-    static member inline ThrowError (output:WriterT<Choice<'T * 'Monoid, 'E>>) = Lift.Invoke << ThrowError.Invoke
+    static member inline ThrowError (x: 'E) = x |> ThrowError.Invoke |> Lift.Invoke
     static member inline CatchError (m:WriterT<Choice<'T * 'Monoid, 'E2>> , output:WriterT<Choice<'T * 'Monoid, 'E2>>) = fun (h:'E2 -> _) -> 
             WriterT (CatchError.Invoke (WriterT.run m) (WriterT.run << h)) : WriterT<Choice<'T * 'Monoid, 'E2>>
 

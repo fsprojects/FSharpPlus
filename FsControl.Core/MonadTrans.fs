@@ -108,14 +108,17 @@ type SeqT    with static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (
 type ThrowError =
 
     static member inline Invoke (x:'e) :'ma =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ThrowError: _ -> _) b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Unchecked.defaultof<ThrowError> x
+        let inline call_2 (a:^a, b:^R, x) = ((^a or ^R) : (static member ThrowError: _*_->'R) (b,x))
+        let inline call (a:'a, x:'x) = call_2 (a, Unchecked.defaultof<'r>, x) :'r
+        call (Unchecked.defaultof<ThrowError>, x)
 
-    static member inline ThrowError (_:OptionT<'``MonadError<'E,'T>``>) = Lift.Invoke << ThrowError.Invoke
-    static member inline ThrowError (_:ListT<'``MonadError<'E,'T>``>  ) = Lift.Invoke << ThrowError.Invoke
-    static member inline ThrowError (_:SeqT<'``MonadError<'E,'T>``>   ) = Lift.Invoke << ThrowError.Invoke
-    static member        ThrowError (_:Choice<'T,'E>) = Error.throw
+    static member inline ThrowError (_:'R        ,x :'E) = (^R : (static member ThrowError: _ -> ^R) x)
+    static member inline ThrowError (_:^t when ^t: null and ^t: struct, _) = id
+    static member        ThrowError (_:Choice<'T,'E>, x:'E) = Error.throw x: Choice<'T,'E>
+
+type OptionT with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
+type ListT   with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
+type SeqT    with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
 
 
 type CatchError =

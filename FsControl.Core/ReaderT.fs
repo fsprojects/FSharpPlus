@@ -30,7 +30,7 @@ type ReaderT with
 
     static member inline LiftAsync (x: Async<'T>) = (Lift.Invoke (LiftAsync.Invoke x) : ReaderT<'R,'``MonadAsync<'T>``>)
 
-    static member inline ThrowError (output:ReaderT<'R,'``MonadError<'E,'T>``>) = fun (x:'E) -> (x |> ThrowError.Invoke |> Lift.Invoke : ReaderT<'R,'``MonadError<'E,'T>``>)
+    static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke : ReaderT<'R,'``MonadError<'E,'T>``>
     static member inline CatchError (m:ReaderT<'R,'``MonadError<'E,'T>``>, output:ReaderT<'R,'``MonadError<'E,'T>``>) = fun (h:'E -> _) -> 
         ReaderT (fun s -> CatchError.Invoke (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s)) : ReaderT<'R,'``MonadError<'E,'T>``>
 

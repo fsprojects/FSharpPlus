@@ -21,7 +21,7 @@ type ErrorT with
 
     static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad Choice1Of2 |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
 
-    static member inline ThrowError (_:ErrorT<'``MonadError<'E,'T>``>) = ErrorT << result << Choice2Of2 :'E -> ErrorT<'``MonadError<'E,'T>``>
+    static member inline ThrowError (x:'E) =  x |> Choice2Of2 |> result |> ErrorT : ErrorT<'``MonadError<'E,'T>``>
     static member inline CatchError (ErrorT x :ErrorT<'``MonadError<'E1,'T>``>, output:ErrorT<'``MonadError<'E2,'T>``>) = 
         fun (f: 'E1 -> _) -> (ErrorT (x >>= (fun a -> match a with Choice2Of2 l -> ErrorT.run (f l) | Choice1Of2 r -> result (Choice1Of2 r)))) : ErrorT<'``MonadError<'E2,'T>``>
 
