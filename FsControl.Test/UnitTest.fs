@@ -191,16 +191,22 @@ type MonadTransformers() =
         let getLine    = async { return System.Console.ReadLine() }
 
         let resLiftIOErrorT = liftAsync getLine : ErrorT<Async<Choice<_,string>>>
-        let res3Layers   = (lift << lift)         getLine : OptionT<ReaderT<string,_>>
-        let res3Layers'  = (lift << lift)         getLine : OptionT<WriterT<Async<_ * string>>>
-        let res3Layers'' = liftAsync              getLine : OptionT<WriterT<Async<_ * string>>>
+        let res3LayersA  = (lift << lift)         getLine : OptionT<ReaderT<string,_>>
+        let res3LayersB  = (lift << lift)         getLine : OptionT<WriterT<Async<_ * string>>>
+        let res3LayersB' = liftAsync              getLine : OptionT<WriterT<Async<_ * string>>>
+        let res3LayersC' = liftAsync              getLine : WriterT<OptionT<Async<option<_ * string>>>>
+        let res3LayersD' = liftAsync              getLine : StateT<int, OptionT<Async<option<_>>>>
+        let res3LayersE' = liftAsync              getLine : ErrorT<OptionT<Async<option<Choice<_, bool>>>>>
         let res4Layers'  = liftAsync              getLine : ListT<OptionT<WriterT<Async<_ * string>>>>
         let res4Layers   = (lift << lift << lift) getLine : ListT<OptionT<WriterT<Async<_ * string>>>>
 
         Assert.IsInstanceOfType (Some resLiftIOErrorT, typeof<Option<ErrorT<Async<Choice<string,string>>>>>)
-        Assert.IsInstanceOfType (Some res3Layers  , typeof<Option<OptionT<ReaderT<string, Async<string option>>>>>)
-        Assert.IsInstanceOfType (Some res3Layers' , typeof<Option<OptionT<WriterT<Async<string option * string>>>>>)
-        Assert.IsInstanceOfType (Some res3Layers'', typeof<Option<OptionT<WriterT<Async<string option * string>>>>>)
+        Assert.IsInstanceOfType (Some res3LayersA , typeof<Option<OptionT<ReaderT<string, Async<string option>>>>>)
+        Assert.IsInstanceOfType (Some res3LayersB , typeof<Option<OptionT<WriterT<Async<string option * string>>>>>)
+        Assert.IsInstanceOfType (Some res3LayersB', typeof<Option<OptionT<WriterT<Async<string option * string>>>>>)
+        Assert.IsInstanceOfType (Some res3LayersC', typeof<Option<WriterT<OptionT<Async<option<string * string>>>>>>)
+        Assert.IsInstanceOfType (Some res3LayersD', typeof<Option<StateT<int,OptionT<Async<(string * int) option>>>>>)
+        Assert.IsInstanceOfType (Some res3LayersE', typeof<Option<ErrorT<OptionT<Async<Choice<string,bool> option>>>>>)
         Assert.IsInstanceOfType (Some res4Layers' , typeof<Option<ListT<OptionT<WriterT<Async<string list option * string>>>>>>)
         Assert.IsInstanceOfType (Some res4Layers  , typeof<Option<ListT<OptionT<WriterT<Async<string list option * string>>>>>>)
 

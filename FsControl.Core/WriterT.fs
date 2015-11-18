@@ -38,7 +38,7 @@ type WriterT with
 
     static member inline Lift (m:'``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT (m >>= (fun a -> result (a, MEmpty.Invoke())))
     
-    static member inline LiftAsync (x: Async<'T>) = Lift.Invoke (LiftAsync.Invoke x) : WriterT<Async<'T * 'Monoid>>
+    static member inline LiftAsync (x: Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
 
     static member inline ThrowError (output:WriterT<Choice<'T * 'Monoid, 'E>>) = Lift.Invoke << ThrowError.Invoke
     static member inline CatchError (m:WriterT<Choice<'T * 'Monoid, 'E2>> , output:WriterT<Choice<'T * 'Monoid, 'E2>>) = fun (h:'E2 -> _) -> 

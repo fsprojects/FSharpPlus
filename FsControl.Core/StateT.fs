@@ -23,7 +23,7 @@ type StateT with
 
     static member inline Lift (m:'``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> = StateT <| fun s -> m >>= fun a -> result (a, s)
 
-    static member inline LiftAsync (x: Async<'T>) = Lift.Invoke (LiftAsync.Invoke x) : StateT<'S,Async<'T * 'S>>
+    static member inline LiftAsync (x: Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
     
     static member inline get_Get()  = StateT (fun s -> result (s , s))  : StateT<'S, '``MonadState<'S * 'S>``>
     static member inline Put (x:'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``MonadState<unit * 'S>``>
