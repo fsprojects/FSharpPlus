@@ -141,39 +141,42 @@ module Operators =
 
     // Monad Transformers
 
-    let inline lift      (x:'``Monad<'T>`` ) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
+    /// Lift a computation from the inner monad to the constructed monad.
+    let inline lift      (x:'``Monad<'T>``) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
 
+    /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of layers.
     let inline liftAsync (x:Async<'T>) : '``MonadAsync<'T>``       = LiftAsync.Invoke x
 
+    /// (call-with-current-continuation) calls a function with the current continuation as its argument.
     let inline callCC (f:('T->'``MonadCont<'U>``)->'``MonadCont<'T>``) : '``MonadCont<'T>`` = CallCC.Invoke f
    
     /// <summary>Haskell signature: get    :: MonadState  s m => m s</summary>
-    let inline get< ^``m<'s>`` when ^``m<'s>`` : (static member Get : ^``m<'s>``)> : ^``m<'s>`` = (^``m<'s>`` : (static member Get : ^``m<'s>``) ())
+    let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
 
     /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
-    let inline put (x:'s) :'m = Put.Invoke x
+    let inline put (x:'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
 
     /// <summary>Haskell signature: ask    :: MonadReader r m => m r</summary>
-    let inline ask< ^``m<'r>`` when ^``m<'r>`` : (static member Ask : ^``m<'r>``)> : ^``m<'r>`` = (^``m<'r>`` : (static member Ask : ^``m<'r>``) ())
+    let inline ask< ^``MonadReader<'R,'T>`` when ^``MonadReader<'R,'T>`` : (static member Ask : ^``MonadReader<'R,'T>``)> = (^``MonadReader<'R,'T>`` : (static member Ask : _) ())
    
     /// <summary>Haskell signature: local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
-    let inline local (f:'rr) (m:'``m<'a>``) : '``m<'a>`` = Local.Invoke f m
+    let inline local (f:'R1->'R2) (m:'``MonadReader<'R2,'T>``) : '``MonadReader<'R1,'T>`` = Local.Invoke f m
 
     /// <summary>Haskell signature: tell   :: MonadWriter w m => w   -> m ()</summary>
-    let inline tell (x:'w) : '``m<unit>`` = Tell.Invoke x
+    let inline tell (w:'Monoid) : '``MonadWriter<'Monoid,unit>`` = Tell.Invoke w
 
     /// <summary>Haskell signature: listen :: MonadWriter w m => m a -> m (a,w)</summary>
-    let inline listen (m:'``m<'a>``) : '``m<'a * 'w>`` = Listen.Invoke m
+    let inline listen (m:'``MonadWriter<'Monoid,'T>``) : '``MonadWriter<'Monoid,('T * 'Monoid)>`` = Listen.Invoke m
 
     /// <summary>Haskell signature: pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
-    let inline pass (m:'maww) : '``m<'a>`` = Pass.Invoke m
+    let inline pass (m:'``MonadWriter<'Monoid,('T * ('Monoid -> 'Monoid))>``) : '``MonadWriter<'Monoid,'T>`` = Pass.Invoke m
 
     /// <summary>Haskell signature: throw :: MonadError e m => e -> m a</summary>
-    let inline throw (x:'e) : '``m<'a>`` = ThrowError.Invoke x
+    let inline throw (x:'E) : '``'MonadError<'E,'T>`` = ThrowError.Invoke x          
 
     /// <summary> Pure version of catch. Executes a function when the value represents an exception.
     /// <para/>   Haskell signature: catch :: MonadError e m => m a -> (e -> m b) -> m b </summary>
-    let inline catch (v:'``m<'a>``) (h:'e->'``m<'b>``) : '``m<'b>`` = CatchError.Invoke v h
+    let inline catch (v:'``'MonadError<'E1,'T>``) (h:'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = CatchError.Invoke v h
 
 
     // Collection

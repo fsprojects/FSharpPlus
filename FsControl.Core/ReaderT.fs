@@ -20,13 +20,13 @@ type ReaderT with
     static member inline MZero (output: ReaderT<'R, '``MonadPlus<'T>``>, impl:MZero) = ReaderT (fun _ -> MZero.Invoke())                                                : ReaderT<'R, '``MonadPlus<'T>``>
     static member inline MPlus (ReaderT m, ReaderT n, impl:MPlus)                    = ReaderT (fun r -> m r <|> n r)                                                   : ReaderT<'R, '``MonadPlus<'T>``>
 
-    static member Lift m = ReaderT (fun _ -> m)                                             : ReaderT<'R, '``Monad<'T>``>
+    static member Lift m = ReaderT (fun _ -> m)                                             : ReaderT<'R,'``Monad<'T>``>
 
-    static member CallCC (f : ('T -> ReaderT<'R, Cont<_,'U>>) -> _)                         : ReaderT<'R, Cont<'C,'T>> =
+    static member CallCC (f : ('T -> ReaderT<'R, Cont<_,'U>>) -> _)                         : ReaderT<'R,Cont<'C,'T>> =
         ReaderT (fun r -> Cont.callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
             
-    static member inline get_Ask() = ReaderT result                                         : ReaderT<'R, '``MonadReader<'T>``>
-    static member        Local (ReaderT m, f:_->'R2) = ReaderT(fun r -> m (f r))            : ReaderT<'R1, '``MonadReader<'T>``>
+    static member inline get_Ask() = ReaderT result                                         : ReaderT<'R,'``MonadReader<'R,'T>``>
+    static member        Local (ReaderT m, f:_->'R2) = ReaderT(fun r -> m (f r))            : ReaderT<'R1,'``MonadReader<'R1,'T>``>
 
     static member inline LiftAsync (x: Async<'T>) = (Lift.Invoke (LiftAsync.Invoke x) : ReaderT<'R,'``MonadAsync<'T>``>)
 
@@ -34,7 +34,7 @@ type ReaderT with
     static member inline CatchError (m:ReaderT<'R,'``MonadError<'E1,'T>``>, h:'E1 -> _) = 
         ReaderT (fun s -> CatchError.Invoke (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s)) : ReaderT<'R,'``MonadError<'E2,'T>``>
 
-    static member Tell   w           = w |> Writer.tell |> Lift.Invoke         : ReaderT<'R, Writer<'Monoid, unit>>
+    static member Tell   w           = w |> Writer.tell |> Lift.Invoke         : ReaderT<'R, Writer<'Monoid,unit>>
     static member Listen (ReaderT m) = ReaderT (fun w -> Writer.listen (m w))  : ReaderT<'R, Writer<'Monoid,'T*'Monoid>>
     static member Pass   (ReaderT m) = ReaderT (fun w -> Writer.pass   (m w))  : ReaderT<'R, Writer<'Monoid,'T>>   
 
