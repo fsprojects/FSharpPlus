@@ -4,6 +4,73 @@ open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
 open FsControl.Core.Internals.MonadOps
 
+// MonadTrans
+
+type Lift = static member inline Invoke (x:'``Monad<'T>``) = (^R : (static member Lift: _ -> ^R) x)
+
+
+// MonadAsync
+
+type LiftAsync =
+    static member inline Invoke (x:Async<'T>) :'``MonadAsync<'T>`` =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member LiftAsync: _ -> _) b)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call Unchecked.defaultof<LiftAsync> x
+
+    static member inline LiftAsync (_:'R         ) = fun (x :Async<'T>) -> (^R : (static member LiftAsync: _ -> ^R) x)
+    static member inline LiftAsync (_:^t when ^t: null and ^t: struct) = ()
+    static member        LiftAsync (_:Async<'T>  ) = fun (x :Async<'T>) -> x
+
+
+// MonadError
+
+type ThrowError =
+    static member inline Invoke (x:'e) :'ma =
+        let inline call_2 (a:^a, b:^R, x) = ((^a or ^R) : (static member ThrowError: _*_->'R) (b,x))
+        let inline call (a:'a, x:'x) = call_2 (a, Unchecked.defaultof<'r>, x) :'r
+        call (Unchecked.defaultof<ThrowError>, x)
+
+    static member inline ThrowError (_:'R        ,x :'E) = (^R : (static member ThrowError: _ -> ^R) x)
+    static member inline ThrowError (_:^t when ^t: null and ^t: struct, _) = id
+    static member        ThrowError (_:Choice<'T,'E>, x:'E) = Error.throw x: Choice<'T,'E>
+
+type CatchError =
+    static member        CatchError (x:Either<'a,'e1>, k:'e1->Either<'a,'e2>) = match x with L v -> L v | R e -> k e
+    static member        CatchError (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Error.catch k x
+
+    static member inline Invoke x (f:_->'R) : 'R =
+        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member CatchError: _*_ -> _) b, f)
+        call_3 (Unchecked.defaultof<CatchError>, x, Unchecked.defaultof<'R>, f) :'R
+
+
+// MonadCont
+
+type CallCC = static member inline Invoke f = (^R : (static member CallCC: _ -> ^R) f)
+
+
+// MonadState
+
+type Get = static member inline Invoke()      :^R = (^R : (static member Get: ^R) ())
+type Put = static member inline Invoke (x:'s) :^R = (^R : (static member Put: _ -> ^R) x)
+
+
+// MonadReader
+
+type Ask   = static member inline Invoke()                   :^R = (^R : (static member Ask  : ^R) ())
+type Local = static member inline Invoke (f:'R1->'R2) (m:^R) :^R = (^R : (static member Local: _*_ -> ^R) m, f)
+
+
+// MonadWriter
+    
+type Tell   = static member inline Invoke (w:'Monoid) :^R = (^R : (static member Tell  : _ -> ^R) w)
+type Listen = static member inline Invoke (m:'ma)     :^R = (^R : (static member Listen: _ -> ^R) m)
+type Pass   = static member inline Invoke (m:'maww)   :^R = (^R : (static member Pass  : _ -> ^R) m)
+
+
+
+
+
+
 type OptionT<'``monad<option<'t>>``> = OptionT of '``monad<option<'t>>``
 
 [<RequireQualifiedAccess>]
@@ -21,6 +88,28 @@ type OptionT with
 
     static member inline MZero (output: OptionT<'``MonadPlus<option<'T>``>, impl:MZero)                                                           = OptionT <| result None                                                                      : OptionT<'``MonadPlus<option<'T>``>
     static member inline MPlus (OptionT x, OptionT y, impl:MPlus)                                                                                 = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> x | _ -> y))    : OptionT<'``MonadPlus<option<'T>``>
+
+    static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad Some)           |> OptionT : OptionT<'``Monad<option<'T>>``>
+
+    static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
+
+    static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
+    static member inline CatchError (m:OptionT<'``MonadError<'E1,'T>``>, h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> CatchError.Invoke v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
+
+    static member CallCC (f:(('T -> OptionT<Cont<'R,'U>>) -> _)) = OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))      :OptionT<Cont<'R,option<'T>>>
+
+    static member get_Get() = Lift.Invoke State.get :OptionT<State<'S,_>>
+    static member Put (x:'T) = x |> State.put |> Lift.Invoke :OptionT<_>
+
+    static member get_Ask() = Lift.Invoke Reader.ask :OptionT<Reader<'R,option<'R>>>
+    static member Local (OptionT (m:Reader<'R2,'T>), f:'R1->'R2) = OptionT <| Reader.local f m
+
+    static member inline Tell (w:'Monoid) = w |> Writer.tell |> Lift.Invoke :OptionT<_>
+    static member inline Listen (m : OptionT<Writer<'Monoid, option<'T>>>) =
+        let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
+        OptionT (Writer.listen (OptionT.run m) >>= (result << liftMaybe))
+    static member inline Pass m : OptionT<Writer<'Monoid, option<'T>>> = OptionT (OptionT.run m >>= option (result None) (Map.Invoke Some << Writer.pass << result))
+
 
 
 type ListT<'``monad<list<'t>>``> = ListT of '``monad<list<'t>>``
@@ -46,7 +135,23 @@ type ListT with
     static member inline Bind   (x  : ListT<'``Monad<list<'T>``>, f: 'T -> ListT<'``Monad<list<'U>``>)                                    = ListT.bind f x
 
     static member inline MZero (output: ListT<'``MonadPlus<list<'T>``>, impl:MZero)                                                           = ListT <| result []                                              : ListT<'``MonadPlus<list<'T>``>
-    static member inline MPlus (ListT x, ListT y, impl:MPlus)                                                                                 = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))   : ListT<'``MonadPlus<list<'T>``>
+    static member inline MPlus (ListT x, ListT y, impl:MPlus)  
+                                                                                   = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))   : ListT<'``MonadPlus<list<'T>``>
+    static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad List.singleton) |> ListT   :  ListT<'``Monad<list<'T>>``> 
+    
+    static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
+    
+    static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
+    static member inline CatchError (m:ListT<'``MonadError<'E1,'T>``>  , h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   = ListT   ((fun v h -> CatchError.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
+    
+    static member CallCC (f:(('T -> ListT<Cont<'R,'U>>  ) -> _)) = ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))) :ListT<Cont<'R, list<'T>>>
+    
+    static member get_Get() = Lift.Invoke State.get :  ListT<State<'S,_>>  
+    static member Put (x:'T) = x |> State.put |> Lift.Invoke :  ListT<_>  
+    
+    static member get_Ask() = Lift.Invoke Reader.ask :  ListT<Reader<'R,  list<'R>>>
+    static member Local ( ListT  (m:Reader<'R2,'T>), f:'R1->'R2) =  ListT  <| Reader.local f m
+
 
 
 type SeqT<'``monad<seq<'t>>``> = SeqT of '``monad<seq<'t>>``
@@ -74,126 +179,17 @@ type SeqT with
     static member inline MZero (output: SeqT<'``MonadPlus<seq<'T>``>, impl:MZero)                                                           = SeqT <| result Seq.empty                                             : SeqT<'``MonadPlus<seq<'T>``>
     static member inline MPlus (SeqT x, SeqT y, impl:MPlus)                                                                                 = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>
 
-
-
-
-// MonadTrans
-
-type OptionT with static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad Some)           |> OptionT : OptionT<'``Monad<option<'T>>``>
-type ListT   with static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad List.singleton) |> ListT   :  ListT<'``Monad<list<'T>>``> 
-type SeqT    with static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad Seq.singleton ) |> SeqT    :  SeqT<'``Monad<seq<'T>>``>
-
-type Lift =
-    static member inline Invoke (x:'``Monad<'T>``) = (^R : (static member Lift: _ -> ^R) x)
-
-
-// MonadAsync
-
-type LiftAsync =
-
-    static member inline Invoke (x:Async<'T>) :'``MonadAsync<'T>`` =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member LiftAsync: _ -> _) b)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Unchecked.defaultof<LiftAsync> x
-
-    static member inline LiftAsync (_:'R         ) = fun (x :Async<'T>) -> (^R : (static member LiftAsync: _ -> ^R) x)
-    static member inline LiftAsync (_:^t when ^t: null and ^t: struct) = ()
-    static member        LiftAsync (_:Async<'T>  ) = fun (x :Async<'T>) -> x
-
-type OptionT with static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
-type ListT   with static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
-type SeqT    with static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
-
-
-type ThrowError =
-
-    static member inline Invoke (x:'e) :'ma =
-        let inline call_2 (a:^a, b:^R, x) = ((^a or ^R) : (static member ThrowError: _*_->'R) (b,x))
-        let inline call (a:'a, x:'x) = call_2 (a, Unchecked.defaultof<'r>, x) :'r
-        call (Unchecked.defaultof<ThrowError>, x)
-
-    static member inline ThrowError (_:'R        ,x :'E) = (^R : (static member ThrowError: _ -> ^R) x)
-    static member inline ThrowError (_:^t when ^t: null and ^t: struct, _) = id
-    static member        ThrowError (_:Choice<'T,'E>, x:'E) = Error.throw x: Choice<'T,'E>
-
-type OptionT with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
-type ListT   with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
-type SeqT    with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
-
-type CatchError =
-    static member        CatchError (x:Either<'a,'e1>, k:'e1->Either<'a,'e2>) = match x with L v -> L v | R e -> k e
-    static member        CatchError (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Error.catch k x
-
-    static member inline Invoke x (f:_->'R) : 'R =
-        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member CatchError: _*_ -> _) b, f)
-        call_3 (Unchecked.defaultof<CatchError>, x, Unchecked.defaultof<'R>, f) :'R
-
-type OptionT with static member inline CatchError (m:OptionT<'``MonadError<'E1,'T>``>, h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> CatchError.Invoke v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
-type ListT   with static member inline CatchError (m:ListT<'``MonadError<'E1,'T>``>  , h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   = ListT   ((fun v h -> CatchError.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
-type SeqT    with static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>   , h:'E1 -> SeqT<'``MonadError<'E2,'T>``>)    = SeqT    ((fun v h -> CatchError.Invoke v h) (SeqT.run    m) (SeqT.run    << h)) : SeqT<'``MonadError<'E2,'T>``>
-
-
-// MonadCont =
-type OptionT with static member CallCC (f:(('T -> OptionT<Cont<'R,'U>>) -> _)) = OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))      :OptionT<Cont<'R,option<'T>>>
-type ListT   with static member CallCC (f:(('T -> ListT<Cont<'R,'U>>  ) -> _)) = ListT  (Cont.callCC <| fun c ->   ListT.run(f (ListT << c << List.singleton))) :ListT<Cont<'R, list<'T>>>
-type SeqT    with static member CallCC (f:(('T -> SeqT<Cont<'R,'U>>   ) -> _)) = SeqT   (Cont.callCC <| fun c ->   SeqT.run (f (SeqT  << c << Seq.singleton ))) :SeqT<Cont< 'R,  seq<'T>>>
-
-type CallCC =
-    static member inline Invoke f = (^R : (static member CallCC: _ -> ^R) f)
-
-
-// MonadState =
-type OptionT with static member get_Get() = Lift.Invoke State.get :OptionT<State<'S,_>>
-type ListT   with static member get_Get() = Lift.Invoke State.get :  ListT<State<'S,_>>  
-type SeqT    with static member get_Get() = Lift.Invoke State.get :   SeqT<State<'S,_>>  
-
-type Get =
-    static member inline Invoke() :^R = (^R : (static member Get: ^R) ())
-
-
-type OptionT with static member Put (x:'T) = x |> State.put |> Lift.Invoke :OptionT<_>
-type ListT   with static member Put (x:'T) = x |> State.put |> Lift.Invoke :  ListT<_>  
-type SeqT    with static member Put (x:'T) = x |> State.put |> Lift.Invoke :   SeqT<_>  
-   
-type Put =
-    static member inline Invoke (x:'s) :^R = (^R : (static member Put: _ -> ^R) x)
-
-
-// MonadReader =
-type OptionT with static member get_Ask() = Lift.Invoke Reader.ask :OptionT<Reader<'R,option<'R>>>
-type ListT   with static member get_Ask() = Lift.Invoke Reader.ask :  ListT<Reader<'R,  list<'R>>>
-type SeqT    with static member get_Ask() = Lift.Invoke Reader.ask :   SeqT<Reader<'R,   seq<'R>>>
-
-type Ask =
-    static member inline Invoke() :^R = (^R : (static member Ask: ^R) ())
-
-
-type OptionT with static member Local (OptionT (m:Reader<'R2,'T>), f:'R1->'R2) = OptionT <| Reader.local f m
-type ListT   with static member Local ( ListT  (m:Reader<'R2,'T>), f:'R1->'R2) =  ListT  <| Reader.local f m
-type SeqT    with static member Local (  SeqT  (m:Reader<'R2,'T>), f:'R1->'R2) =   SeqT  <| Reader.local f m   
-
-type Local =
-    static member inline Invoke (f:'R1->'R2) (m:^R) :^R = (^R : (static member Local: _*_ -> ^R) m, f)
-
-
-// MonadWriter =
-type OptionT with static member inline Tell (w:'Monoid) = w |> Writer.tell |> Lift.Invoke :OptionT<_>
+    static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad Seq.singleton ) |> SeqT    :  SeqT<'``Monad<seq<'T>>``>
     
-type Tell =
-    static member inline Invoke (w:'Monoid) :^R = (^R : (static member Tell: _ -> ^R) w)
-
-
-type OptionT with
-    static member inline Listen (m : OptionT<Writer<'Monoid, option<'T>>>) =
-        let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
-        OptionT (Writer.listen (OptionT.run m) >>= (result << liftMaybe))
-
-type Listen =
-    static member inline Invoke (m:'ma) :^R = (^R : (static member Listen: _ -> ^R) m)
-
-
-type OptionT with static member inline Pass m : OptionT<Writer<'Monoid, option<'T>>> = 
-                    OptionT (OptionT.run m >>= option (result None) (Map.Invoke Some << Writer.pass << result))
-
-type Pass =
-    static member inline Invoke (m:'maww) :^R = (^R : (static member Pass: _ -> ^R) m)
+    static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
+    
+    static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
+    static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>   , h:'E1 -> SeqT<'``MonadError<'E2,'T>``>)    = SeqT    ((fun v h -> CatchError.Invoke v h) (SeqT.run    m) (SeqT.run    << h)) : SeqT<'``MonadError<'E2,'T>``>
+    
+    static member CallCC (f:(('T -> SeqT<Cont<'R,'U>>   ) -> _)) = SeqT   (Cont.callCC <| fun c ->   SeqT.run (f (SeqT  << c << Seq.singleton ))) :SeqT<Cont< 'R,  seq<'T>>>
+    
+    static member get_Get() = Lift.Invoke State.get :   SeqT<State<'S,_>>  
+    static member Put (x:'T) = x |> State.put |> Lift.Invoke :   SeqT<_>  
+    
+    static member get_Ask() = Lift.Invoke Reader.ask :   SeqT<Reader<'R,   seq<'R>>>
+    static member Local (  SeqT  (m:Reader<'R2,'T>), f:'R1->'R2) =   SeqT  <| Reader.local f m
