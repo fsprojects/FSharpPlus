@@ -126,6 +126,8 @@ module BigInteger =
             | _ -> Choice1Of2 (r, x - r2)
 
 
+// Dummy types
+
 type Id<'t>(v:'t) =
    let value = v
    member this.getValue = value
@@ -139,6 +141,8 @@ module Id =
 type Id0(v:string) =
    let value = v
    member this.getValue = value
+
+type Either<'L,'R> = L of 'L | R of 'R
 
 
 

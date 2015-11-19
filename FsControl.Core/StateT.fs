@@ -29,5 +29,5 @@ type StateT with
     static member inline Put (x:'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``MonadState<unit * 'S>``>
 
     static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
-    static member inline CatchError (m:StateT<'S,Choice<'T * 'S, 'E2>>, output:StateT<'S,Choice<'T * 'S, 'E2>>) = fun (h:'E2 -> _) -> 
+    static member inline CatchError (m:StateT<'S,Choice<'T * 'S, 'E1>>, h:'E1 -> _) = 
         StateT (fun s -> CatchError.Invoke (StateT.run m s)   (fun e -> StateT.run (h e) s)) : StateT<'S,Choice<'T * 'S, 'E2>>

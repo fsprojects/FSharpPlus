@@ -120,19 +120,17 @@ type OptionT with static member inline ThrowError (x:'E) = x |> ThrowError.Invok
 type ListT   with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
 type SeqT    with static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
 
-
 type CatchError =
-    static member inline Invoke (v:'ma) (h:'e->'mb) :'mb =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member CatchError: _*_ -> _) b, c)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Unchecked.defaultof<CatchError>, v) h
+    static member        CatchError (x:Either<'a,'e1>, k:'e1->Either<'a,'e2>) = match x with L v -> L v | R e -> k e
+    static member        CatchError (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Error.catch k x
 
-    static member inline CatchError (m:OptionT<'``MonadError<'E1,'T>``>, output:OptionT<'``MonadError<'E2,'T>``>) = fun (h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) -> OptionT ((fun v h -> CatchError.Invoke v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
-    static member inline CatchError (m:ListT<'``MonadError<'E1,'T>``>  , output:ListT<'``MonadError<'E2,'T>``>  ) = fun (h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   -> ListT   ((fun v h -> CatchError.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
-    static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>   , output:SeqT<'``MonadError<'E2,'T>``>   ) = fun (h:'E1 -> SeqT<'``MonadError<'E2,'T>``>)    -> SeqT    ((fun v h -> CatchError.Invoke v h) (SeqT.run    m) (SeqT.run    << h)) : SeqT<'``MonadError<'E2,'T>``>
-    static member        CatchError (m:Choice<'T,'E1>, output:Choice<'T,'E2>) = fun (h:'E1 -> Choice<'T,'E2>) -> Error.catch h m
-    static member        CatchError (m:'E1 * 'T      , output:'E2 * 'T      ) = fun (h:'E1 -> 'E2 * 'T) -> h (fst m)
+    static member inline Invoke x (f:_->'R) : 'R =
+        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member CatchError: _*_ -> _) b, f)
+        call_3 (Unchecked.defaultof<CatchError>, x, Unchecked.defaultof<'R>, f) :'R
 
+type OptionT with static member inline CatchError (m:OptionT<'``MonadError<'E1,'T>``>, h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> CatchError.Invoke v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
+type ListT   with static member inline CatchError (m:ListT<'``MonadError<'E1,'T>``>  , h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   = ListT   ((fun v h -> CatchError.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
+type SeqT    with static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>   , h:'E1 -> SeqT<'``MonadError<'E2,'T>``>)    = SeqT    ((fun v h -> CatchError.Invoke v h) (SeqT.run    m) (SeqT.run    << h)) : SeqT<'``MonadError<'E2,'T>``>
 
 
 // MonadCont =

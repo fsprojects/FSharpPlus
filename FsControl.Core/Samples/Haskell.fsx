@@ -831,17 +831,17 @@ let inline catchError v h = FsControl.Operators.catch v h
 
 // Test MonadError
 let err          = throwError "Invalid Value" : MaybeT<Either<_,Maybe<int>>>
-let err1Layers   = catchError (Left "Invalid Value") (fun s -> Left ("the error was: " + s) ) : Either<string,int>
-let err2Layers   = catchError (MaybeT (Left "Invalid Value")) (fun s -> MaybeT (Left ("the error was: " + s))) : MaybeT<Either<string,Maybe<int>>>
-let err3Layers   = catchError (MaybeT(ListT (Left "Invalid Value"))) (fun s -> MaybeT (ListT (Left ("the error was: " + s)))) : MaybeT<ListT<Either<string,List<int>>>>
+let err1Layers   = catchError (Left "Invalid Value") (fun s -> Left ["the error was: " + s]) : Either<_,int>
+let err2Layers   = catchError (MaybeT (Left "Invalid Value")) (fun s -> MaybeT (Left ["the error was: " + s])) : MaybeT<Either<_,Maybe<int>>>
+let err3Layers   = catchError (MaybeT(ListT (Left "Invalid Value"))) (fun s -> MaybeT (ListT (Left ["the error was: " + s]))) : MaybeT<ListT<Either<_,List<int>>>>
 
 let err'         = throwError "Invalid Value" : ReaderT<int,Either<_,int>>
 let inv = runReaderT err' 5
-let err2Layers'   = catchError err' (fun s -> ReaderT (fun x-> Left ("the error was: " + s))) : ReaderT<_,_>
+let err2Layers'   = catchError err' (fun s -> ReaderT (fun x-> Left ["the error was: " + s])) : ReaderT<_,_>
 let errWasInv  = runReaderT err2Layers' 5
 
-let err3Layers'  = catchError (MaybeT (throwError "Invalid Value" )) (fun s -> MaybeT(ReaderT (fun x-> Left ("the error was: " + s)))) : OptionT<ReaderT<int,Either<_,Maybe<int>>>>
-let err3Layers'' = catchError (ReaderT (fun x -> throwError "Invalid Value" )) (fun s -> ReaderT(fun x-> MaybeT (Left ("the error was: " + s)))) : ReaderT<int,MaybeT<Either<_,Maybe<int>>>>
+let err3Layers'  = catchError (MaybeT (throwError "Invalid Value" : ReaderT<_,_>)) (fun s -> MaybeT(ReaderT (fun x-> Left ["the error was: " + s]))) : MaybeT<ReaderT<int,Either<_,Maybe<int>>>>
+let err3Layers'' = catchError (ReaderT (fun x -> throwError "Invalid Value" : MaybeT<_>)) (fun s -> ReaderT(fun x-> MaybeT (Left ["the error was: " + s]))) : ReaderT<int,MaybeT<Either<_,Maybe<int>>>>
 
 
 // ErrorT
