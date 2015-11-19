@@ -145,7 +145,7 @@ module Operators =
     let inline lift      (x:'``Monad<'T>``) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
 
     /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of layers.
-    let inline liftAsync (x:Async<'T>) : '``MonadAsync<'T>``       = LiftAsync.Invoke x
+    let inline liftAsync (x:Async<'T>) : '``MonadAsync<'T>`` = LiftAsync.Invoke x
 
     /// (call-with-current-continuation) calls a function with the current continuation as its argument.
     let inline callCC (f:('T->'``MonadCont<'U>``)->'``MonadCont<'T>``) : '``MonadCont<'T>`` = CallCC.Invoke f
@@ -156,27 +156,29 @@ module Operators =
     /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
     let inline put (x:'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
 
-    /// <summary>Haskell signature: ask    :: MonadReader r m => m r</summary>
+    /// Retrieves the monad environment.
     let inline ask< ^``MonadReader<'R,'T>`` when ^``MonadReader<'R,'T>`` : (static member Ask : ^``MonadReader<'R,'T>``)> = (^``MonadReader<'R,'T>`` : (static member Ask : _) ())
    
-    /// <summary>Haskell signature: local  :: MonadReader r m => (r -> r) -> m a -> m a</summary>
+    /// <summary> Executes a computation in a modified environment. </summary>
+    /// <param name="f"> The function to modify the environment.    </param>
+    /// <param name="m"> Reader to run in the modified environment. </param>
     let inline local (f:'R1->'R2) (m:'``MonadReader<'R2,'T>``) : '``MonadReader<'R1,'T>`` = Local.Invoke f m
 
-    /// <summary>Haskell signature: tell   :: MonadWriter w m => w   -> m ()</summary>
+    /// Embeds a simple writer action.
     let inline tell (w:'Monoid) : '``MonadWriter<'Monoid,unit>`` = Tell.Invoke w
 
-    /// <summary>Haskell signature: listen :: MonadWriter w m => m a -> m (a,w)</summary>
+    /// <summary> An action that executes the action <paramref name="m"/> and adds its output to the value of the computation. </summary>
+    /// <param name="m">The action to be executed.</param>
     let inline listen (m:'``MonadWriter<'Monoid,'T>``) : '``MonadWriter<'Monoid,('T * 'Monoid)>`` = Listen.Invoke m
 
-    /// <summary>Haskell signature: pass   :: MonadWriter w m => m (a, w -> w) -> m a</summary>
+    /// Action that executes the action m, which returns a value and a function, and returns the value, applying the function to the output.
     let inline pass (m:'``MonadWriter<'Monoid,('T * ('Monoid -> 'Monoid))>``) : '``MonadWriter<'Monoid,'T>`` = Pass.Invoke m
 
-    /// <summary>Haskell signature: throw :: MonadError e m => e -> m a</summary>
-    let inline throw (x:'E) : '``'MonadError<'E,'T>`` = ThrowError.Invoke x          
+    /// Throws an error value inside the Error monad.
+    let inline throw (error:'E) : '``'MonadError<'E,'T>`` = ThrowError.Invoke error
 
-    /// <summary> Pure version of catch. Executes a function when the value represents an exception.
-    /// <para/>   Haskell signature: catch :: MonadError e m => m a -> (e -> m b) -> m b </summary>
-    let inline catch (v:'``'MonadError<'E1,'T>``) (h:'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = CatchError.Invoke v h
+    /// <summary> Executes a handler when the value contained in the Error monad represents an error.  </summary>
+    let inline catch (value:'``'MonadError<'E1,'T>``) (handler:'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = CatchError.Invoke value handler
 
 
     // Collection
