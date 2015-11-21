@@ -53,13 +53,29 @@ type Foldable() =
         Assert.AreEqual (testVal, WrappedListA [2])
         Assert.IsInstanceOfType(Some testVal, typeof<Option<WrappedListA<int>>>)
 
+
     [<TestMethod>]
     member x.FromToSeq() =
         let s = (seq [Collections.Generic.KeyValuePair(1, "One"); Collections.Generic.KeyValuePair(2, "Two")])
-        let dc2:Collections.Generic.Dictionary<_,_>   = fromSeq s
-        let s' = toSeq s
-        Assert.AreEqual (s, s')
+        let t = {'a'..'d'}
+
+        let dc2:Collections.Generic.Dictionary<_,_> = fromSeq s
+        let s' = toSeq dc2
+
+        let arr:_ [] = fromSeq s
+        let s'' = toSeq arr
+
+        let str:string = fromSeq t
+        let t' = toSeq str 
+
+        Assert.AreEqual (toList s, toList s')
+        Assert.AreEqual (toList s , toList s'')
+        Assert.AreEqual (toList t , toList t')
+
         Assert.IsInstanceOfType(Some s, (Some s').GetType())
+        Assert.IsInstanceOfType(Some s, (Some s'').GetType())
+        Assert.IsInstanceOfType(Some t, (Some t'  ).GetType())
+
 
     [<TestMethod>]
     member x.SortBy() =
