@@ -67,16 +67,7 @@
     <Compile Include="Foldable.fs" />
     <Compile Include="Traversable.fs" />
     <Compile Include="Indexable.fs" />
-    <Compile Include="Cont.fs" />
-    <Compile Include="Reader.fs" />
-    <Compile Include="Writer.fs" />
-    <Compile Include="State.fs" />
     <Compile Include="MonadTrans.fs" />
-    <Compile Include="ContT.fs" />
-    <Compile Include="ReaderT.fs" />
-    <Compile Include="WriterT.fs" />
-    <Compile Include="StateT.fs" />
-    <Compile Include="ErrorT.fs" />
     <Compile Include="Collection.fs" />
     <Compile Include="Tuple.fs" />
     <Compile Include="Operators.fs" />

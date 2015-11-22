@@ -62,37 +62,3 @@ let mapp2 = [1..3]  .MAppend   [4..8]
 let mcon1 = [|[|1..3|];[|4..5|]|] |> join
 let mcon2 = [|[|1..3|];[|4..5|]|] .Join(null, Unchecked.defaultof<Join>) // optional arguments don't work from F#
 // but in C# you can write (new[] {new[] {1, 2, 3}, new[] {4, 5, 6}}).Join();
-
-
-// Test functor and applicatives for ReaderT
-
-let readerTf = ReaderT (fun x -> [(+)x])
-let readerTx = ReaderT (fun x -> [x;2*x])
-let readerTr = ReaderT.run (readerTf <*> readerTx) 7
-let readerTm = ReaderT.run (map ((+) 100) readerTx) 7
-
-let readerTf' = ReaderT (fun x -> Cont (fun k -> k ((+)x))) 
-let readerTx' = ReaderT (fun x -> Cont (fun k -> k (2*x)))
-let readerTm' = Cont.run (ReaderT.run (map ((+) 100) readerTx') 7) id
-(* takes minutes to compile
-let readerTr' = Cont.run (ReaderT.run (readerTf' <*> readerTx') 7) id
-*)
-
-// Test functor and applicatives for WriterT
-
-let writerTf = WriterT [(+) 5, "Function"]
-let writerTx = WriterT [10   , "Argument"]
-let writerTr = writerTf <*> writerTx
-let writerTm = map ((+) 100) writerTx
-
-// Test functor and applicatives for StateT
-
-let stateTf = StateT (fun s -> [(+)10, s; (-) 10, s])
-let stateTx = StateT (fun s -> [4, s; 3, s])
-let stateTr = StateT.run (stateTf <*> stateTx) "state"
-let stateTm = StateT.run (map ((+) 100) stateTx) "state"
-
-let d = System.Collections.Generic.Dictionary()
-d.Add("first", Choice1Of2 1)
-d.Add("second", Choice2Of2 "Error")
-let errorT4x6xN = map ((+) 2) (ErrorT d)
