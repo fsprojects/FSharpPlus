@@ -1,5 +1,5 @@
 #nowarn "3186"
-#r @"..\..\build\FsControl.Core.dll"
+#r @"..\..\build\FsControl.dll"
 #r @"..\..\build\FSharpPlus.dll"
 
 open System
@@ -38,7 +38,7 @@ let res18 = List.sequence [Some 3; Some 2; Some 1]                    // Some [3
     Monoid    
    --------------------------------------------------*)
 
-open FsControl.Core.TypeMethods
+open FsControl
 
 type Pair<'a, 'b> = Pair of ('a * 'b)
 type Pair with
@@ -49,17 +49,15 @@ type Pair with
 let res19 = Pair (10, "hello")
 let res20 = map ((*) 100) (Pair (2, 3))                               // Pair (200, 300)
 
-let res21 = mappend [1;4] [3;6]
-let res22 = mappend "Hello " "World"
-let res23 = mappend "pang"  (mempty ())                               // "pang"
-let res24 = mconcat [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
+let res21 = append [1;4] [3;6]
+let res22 = append "Hello " "World"
+let res23 = append "pang"  (getMempty ())                               // "pang"
+let res24 = concat [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
 
-open FsControl.Core.Types
-
-let res25 = mappend (Any true) (Any false)                            // Any true
-let res26 = [false; false; false; true] |> List.map Any |> mconcat
-let res27 = mappend (mempty ()) (All false)                           // All false
-let res28 = mappend (Some "some") None                                // Some "some"
+let res25 = append (Any true) (Any false)                            // Any true
+let res26 = [false; false; false; true] |> List.map Any |> concat
+let res27 = append (mempty ()) (All false)                           // All false
+let res28 = append (Some "some") None                                // Some "some"
 
 let res29 = foldBack (*) [1;2;3] 1
 let res30 = fold     (+) 2 (Some 9)
@@ -81,7 +79,7 @@ type Tree with
         | Empty -> z
         | Node (x, left, right) -> Tree<_>.treeFold f right (Tree<_>.treeFold f left (f x z))
     static member inline FoldBack (x:Tree<'a>, f, z) = Tree<'a>.treeFold f x z
-    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, Mappend.Invoke << f, mempty())
+    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, Append.Invoke << f, getEmpty())
 
 let testTree =
     let one = Node (1, Empty, Empty)

@@ -4,10 +4,10 @@ module Compatibility =
     module Haskell =
 
         // Types
-        open FsControl.Core.Types
+        open FsControl
 
         let getDual (Dual x) = x
-        type Dual<'t> = FsControl.Core.Types.Dual<'t>
+        type Dual<'t> = FsControl.Dual<'t>
         let Dual = Dual.Dual 
 
         let getAll (All x) = x
@@ -19,7 +19,7 @@ module Compatibility =
         let Any = Any.Any
 
         let runKleisli (Kleisli f) = f
-        type Kleisli<'t,'u> = FsControl.Core.Types.Kleisli<'t,'u>
+        type Kleisli<'t,'u> = FsControl.Kleisli<'t,'u>
         let Kleisli = Kleisli.Kleisli
 
         // Operatots
@@ -99,13 +99,18 @@ module Compatibility =
         // Applicative functors
             
         let inline pure' x   = result x
-        let inline empty()   = mzero ()    
+        let inline empty()   = getMZero()    
         let inline optional v = Just <!> v <|> pure' Nothing
 
         // Monoids
+
+        let inline mempty() = getEmpty()
+        let inline mappend a b = append a b
+        let inline mconcat s = concat s
+
         type Ordering = LT|EQ|GT with
-            static member        Mempty  () = EQ
-            static member        Mappend (x:Ordering, y) = 
+            static member        Empty = EQ
+            static member        Append (x:Ordering, y) = 
                 match x, y with
                 | LT, _ -> LT
                 | EQ, a -> a
@@ -175,6 +180,7 @@ module Compatibility =
 
 
         // Monad Plus
+        let inline mzero() = getMZero()
         let inline mplus (x:'a) (y:'a) : 'a = (<|>) x y
         let inline guard x = if x then return' () else mzero()
 
@@ -188,7 +194,7 @@ module Compatibility =
 
 
         // Arrow
-        let inline id'() = catId ()
+        let inline id'() = getCatId ()
         let inline (<<<) f g = (<<<<) f g
         let inline (>>>) f g = (>>>>) f g
         let inline ( *** ) f g = arrFirst f >>> arrSecond g
@@ -198,69 +204,3 @@ module Compatibility =
         let inline app() = arrApply ()
         let inline zeroArrow() = mzero ()
         let inline (<+>)   f g = (<|>) f g
-            
-
-        // Cont
-
-        let callCC' = Cont.callCC
-        let inline when'  p s = if p then s else return' ()
-        let inline unless p s = when' (not p) s
-
-        let runCont = Cont.run
-        type Cont = Cont
-        let Cont = Cont.Cont
-            
-
-        // Reader
-
-        let ask'      = Reader.ask
-        let local'    = Reader.local
-
-        let runReader = Reader.run
-        type Reader = Reader
-        let Reader = Reader.Reader
-            
-
-        // State
-
-        let get'      = State.get
-        let put'      = State.put
-        let execState = State.exec
-
-        let runState  = State.run
-        type State = State
-        let State = State.State
-
-            
-        // Monad Transformers
-        type MaybeT<'T> = OptionT<'T>
-        let MaybeT  x = OptionT x
-        let runMaybeT = OptionT.run
-        let inline mapMaybeT f x = OptionT.map f x
-        let runListT  = ListT.run
-        let inline liftIO (x: IO<'a>) = liftAsync x
-
-            
-        // ContT
-        let runContT  = ContT.run
-        type ContT = ContT
-        let ContT = ContT.ContT
-            
-        // ReaderT
-        let runReaderT = ReaderT.run
-        type ReaderT = ReaderT
-        let ReaderT = ReaderT.ReaderT
-            
-        // StateT
-        let runStateT = StateT.run
-        type StateT = StateT
-        let StateT = StateT.StateT
-            
-        // MonadError
-        let inline throwError x   = throw x
-        let inline catchError v h = catch v h
-            
-        // ErrorT
-        let runErrorT = ErrorT.run
-        type ErrorT = ErrorT
-        let ErrorT = ErrorT.ErrorT

@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-open FsControl.Core.TypeMethods
+open FsControl
 open FSharpPlus.Operators
 
 type ParallelArray<'t> =
@@ -38,5 +38,5 @@ type ParallelArray with
     static member Map (x:parray<_>, f) = ParallelArray.map f x
     static member Return (x:'a) = Const x
     static member (<*>) (f:parray<'a->'b>, x:parray<_>) = ParallelArray.ap f x :parray<'b>
-    static member inline Mempty  () = Bounded (mempty()) : parray<'m>
-    static member inline Mappend (x:parray<'m>, y:parray<'m>) = liftA2 mappend x y:parray<'m>
+    static member inline get_Empty() = Bounded (getEmpty()) : parray<'m>
+    static member inline Append (x:parray<'m>, y:parray<'m>) = liftA2 append x y:parray<'m>

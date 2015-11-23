@@ -1,10 +1,10 @@
 #nowarn "3186"
-#r @"..\..\build\FsControl.Core.dll"
+#r @"..\..\build\FsControl.dll"
 #r @"..\..\build\FSharpPlus.dll"
 open FSharpPlus
 
 let r23asBytes = parse "12" + 11 |> toBytes |> toList
-let ipAddress:System.Net.IPAddress = [192;168;0;1] |>> string |> intersperse "." |> mconcat |> parse
+let ipAddress:System.Net.IPAddress = [192;168;0;1] |>> string |> intersperse "." |> concat |> parse
 let r10:float  = explicit 10
 let r11:System.Nullable<_> = implicit 11
 
