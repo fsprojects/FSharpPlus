@@ -25,13 +25,13 @@ type WrappedListA<'s> = WrappedListA of 's list with
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return   (x) = WrappedListB [x]
     static member Append  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
-    static member Empty   () = WrappedListB List.empty
+    static member Empty   = WrappedListB List.empty
     static member ToSeq    (WrappedListB lst)     = List.toSeq lst
     static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
 
 type WrappedListC<'s> = WrappedListC of 's list with
     static member Append  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
-    static member Empty   () = WrappedListC List.empty
+    static member Empty   = WrappedListC List.empty
     static member Concat  (lst: seq<WrappedListC<_>>)  = Seq.head lst
 
 [<TestClass>]

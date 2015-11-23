@@ -171,7 +171,7 @@ An easy way to make classes in your project callable from FsControl without refe
    
 Monoids:
 
-     static member Empty() : MyMonoid = {my Empty impl.}
+     static member Empty : MyMonoid = {my Empty impl.}         // get_Empty() = ... may be used alternatively.
      static member Append (x:MyMonoid, y:MyMonoid) : MyMonoid = {my Append impl.}
      static member Concat (x:seq<MyMonoid>) : MyMonoid  = {my Concat impl.} // optional: it can be automatically derived from Append
 

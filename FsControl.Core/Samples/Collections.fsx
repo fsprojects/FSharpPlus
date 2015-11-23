@@ -44,7 +44,7 @@ type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
     static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-    static member inline Empty() = result (getEmpty())                                :ZipList<'a>
+    static member inline get_Empty() = result (getEmpty())                                :ZipList<'a>
     static member inline Append (x:ZipList<'a>, y:ZipList<'a>) = liftA2 append x y :ZipList<'a>
     // try also commenting/uncommenting the following method.
     static member inline Concat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack append (Seq.toList x) (getEmpty()):ZipList<'a>
@@ -177,9 +177,9 @@ let seqFromOpt  = toSeq (Some 1)
 
 // This should not compile 
 (*
-let twoStacks = mappend stack stack
-let twoSeqs'  = mappend (seq [1;2;3]) [4;5;6]
-let twoSeqs'' = mappend [1;2;3] (seq [4;5;6])
+let twoStacks = append stack stack
+let twoSeqs'  = append (seq [1;2;3]) [4;5;6]
+let twoSeqs'' = append [1;2;3] (seq [4;5;6])
 let (stackFromLst:_ Collections.Generic.Stack) = fromList [1;2;3;4]
 *)
 

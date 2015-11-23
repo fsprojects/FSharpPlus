@@ -37,7 +37,7 @@ type Empty with static member inline Empty (_ : 'a*'b*'c*'d   , _:Empty) = (Empt
 type Empty with static member inline Empty (_ : 'a*'b*'c*'d*'e, _:Empty) = (Empty.Invoke(), Empty.Invoke(), Empty.Invoke(), Empty.Invoke(), Empty.Invoke()): 'a*'b*'c*'d*'e
 
 type Empty with
-    static member inline Empty (_:'R, _:Default1) = ((^R) : (static member Empty: unit -> ^R) ()):'R
+    static member inline Empty (_:'R, _:Default1) = ((^R) : (static member Empty: ^R) ()):'R
 
 #if NOTNET35        
 

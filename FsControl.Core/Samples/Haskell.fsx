@@ -265,7 +265,7 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 // Monoids
 
 type Ordering = LT|EQ|GT with
-    static member        Empty  (_:Ordering, _:Empty) = EQ
+    static member        Empty = EQ
     static member        Append (x:Ordering, y) = 
         match x, y with
         | LT, _ -> LT
@@ -279,11 +279,11 @@ let inline compare' x y =
     | _            -> EQ
 
 type Sum<'a> = Sum of 'a with
-    static member inline Empty() = Sum 0G
+    static member inline get_Empty() = Sum 0G
     static member inline Append (Sum (x:'n), Sum(y:'n)) = Sum (x + y):Sum<'n>
 
 type Product<'a> = Product of 'a with
-    static member inline Empty() = Product 1G
+    static member inline get_Empty() = Product 1G
     static member inline Append (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
 
 let inline mempty() = FsControl.Operators.getEmpty ()
