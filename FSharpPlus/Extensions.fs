@@ -12,44 +12,6 @@ module Extensions =
             | None  , Some b -> this |> Seq.take b
             | Some a, Some b -> this |> Seq.skip a |> Seq.take (b-a+1)
 
-    [<AutoOpen>]
-    module Seq =
-        let foldBack f (s:seq<_>) z = Array.foldBack f (Seq.toArray s) z
-        let inline sequence ms =
-            let k m m' = m >>= fun (x:'a) -> m' >>= fun (xs:seq<'a>) -> (result :seq<'a> -> 'M) (seq {yield x; yield! xs})
-            foldBack k ms ((result :seq<'a> -> 'M) Seq.empty)
-
-        let inline mapM f as' = sequence (Seq.map f as')
-              
-        let groupAdjBy keyMapper (source:_ seq) = seq {
-            use e = source.GetEnumerator()
-            if (e.MoveNext()) then
-                let groupKey = ref (keyMapper e.Current)
-                let values   = ref (new ResizeArray<_>())
-                (!values).Add(e.Current)
-                while (e.MoveNext()) do
-                    let key = keyMapper e.Current
-                    if !groupKey = key then (!values).Add(e.Current)
-                    else
-                        yield (!groupKey, !values :> seq<_>)
-                        groupKey := key
-                        values   := new ResizeArray<_>()
-                        (!values).Add(e.Current)
-                yield (!groupKey, !values :> seq<_>)}
-
-        // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
-        let intersperse sep list =
-            seq {
-                let notFirst = ref false
-                for element in list do 
-                    if !notFirst then yield sep
-                    yield element
-                    notFirst := true}
-
-        let replicate count initial = System.Linq.Enumerable.Repeat(initial, count)
-
-        let inline replicateM count (initial:'Monad'T) : 'Monad'Seq'T = sequence (replicate count initial)
-
 
     type List<'T> with
         static member singleton x = [x]
@@ -66,64 +28,6 @@ module Extensions =
                 let a = f a
                 this |> skip a |> take (f b - a + 1)
 
-    module List =
-        let inline sequence (ms:list<'Monad'a>) =
-            let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> 'Monad'List'a) (x::xs)
-            List.foldBack k ms ((result :list<'t> -> 'Monad'List'a) [])
-
-        let inline mapM (f:'a->'Monad'b) (xs:list<'a>) :'Monad'List'b = sequence (List.map f xs)
-    
-        let inline foldM (f:'a->'b->'Monad'a) (a:'a) (bx:list<'b>) : 'Monad'a =
-            let rec loopM a = function
-                | x::xs -> (f a x) >>= fun fax -> loopM fax xs 
-                | [] -> result a
-            loopM a bx
-
-        let inline filterM (f: 'a -> 'Monad'Bool) (xs: list<'a>) : 'Monad'List'a =
-            let rec loopM = function
-                | []   -> result []
-                | h::t -> 
-                    f h >>= (fun flg ->
-                        loopM t >>= (fun ys ->
-                            result (if flg then (h::ys) else ys)))
-            loopM xs
-
-        let inline replicateM count (initial:'Monad'T) : 'Monad'List'T = sequence (List.replicate count initial)
-
-
-    /// A convenient alias for Choice<_,_>
-    type Result<'TSuccess,'TFailure> = Choice<'TSuccess,'TFailure>
-    let (|Success|Failure|) = function
-        | Choice1Of2 x -> Success x
-        | Choice2Of2 x -> Failure x
-
-    let inline Success x = Choice1Of2 x
-    let inline Failure x = Choice2Of2 x
-
-
-
-    [<RequireQualifiedAccess>]
-    module Error =
-        let inline map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
-        let inline result x = Choice1Of2 x
-        let inline throw  x = Choice2Of2 x
-        let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v -> f v | Choice2Of2 e -> Choice2Of2 e
-        let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> f e
-
-    /// Choice<'TSuccess,'TFailure> specialized in 'TFailure = Exception 
-    [<Runtime.CompilerServices.Extension>]
-    module ResultOrException =
-        [<Runtime.CompilerServices.Extension>]
-        let IsResult  :Choice<_,exn>   -> _ = function Choice1Of2 _ -> true | _ -> false
-
-        [<Runtime.CompilerServices.Extension>]
-        let IsException :Choice<_,exn> -> _ = function Choice2Of2 _ -> true | _ -> false
-
-        [<Runtime.CompilerServices.Extension>]
-        let Result :Choice<_,exn>      -> _ = function Choice1Of2 v -> v | Choice2Of2 e -> raise e
-
-        [<Runtime.CompilerServices.Extension>]
-        let Exception :Choice<_,exn>   -> _ = function Choice2Of2 e -> e | _ -> new Exception()
 
     // http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.whenall.aspx 
 

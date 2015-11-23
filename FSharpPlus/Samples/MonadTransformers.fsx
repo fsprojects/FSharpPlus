@@ -3,8 +3,8 @@
 #r @"..\..\build\FSharpPlus.dll"
 
 open System
+open FsControl
 open FSharpPlus
-open FsControl.Core.Types
 
 let getLine    = async { return System.Console.ReadLine()}
 let putStrLn x = async { printfn "%s" x}

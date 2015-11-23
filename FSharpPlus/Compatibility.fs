@@ -204,3 +204,69 @@ module Compatibility =
         let inline app() = arrApply ()
         let inline zeroArrow() = mzero ()
         let inline (<+>)   f g = (<|>) f g
+
+
+        // Cont
+
+        let callCC' = Cont.callCC
+        let inline when'  p s = if p then s else return' ()
+        let inline unless p s = when' (not p) s
+
+        let runCont = Cont.run
+        type Cont = Cont
+        let Cont = Cont.Cont
+            
+
+        // Reader
+
+        let ask'      = Reader.ask
+        let local'    = Reader.local
+
+        let runReader = Reader.run
+        type Reader = Reader
+        let Reader = Reader.Reader
+            
+
+        // State
+
+        let get'      = State.get
+        let put'      = State.put
+        let execState = State.exec
+
+        let runState  = State.run
+        type State = State
+        let State = State.State
+
+            
+        // Monad Transformers
+        type MaybeT<'T> = OptionT<'T>
+        let MaybeT  x = OptionT x
+        let runMaybeT = OptionT.run
+        let inline mapMaybeT f x = OptionT.map f x
+        let runListT  = ListT.run
+        let inline liftIO (x: IO<'a>) = liftAsync x
+
+            
+        // ContT
+        let runContT  = ContT.run
+        type ContT = ContT
+        let ContT = ContT.ContT
+            
+        // ReaderT
+        let runReaderT = ReaderT.run
+        type ReaderT = ReaderT
+        let ReaderT = ReaderT.ReaderT
+            
+        // StateT
+        let runStateT = StateT.run
+        type StateT = StateT
+        let StateT = StateT.StateT
+            
+        // MonadError
+        let inline throwError x   = throw x
+        let inline catchError v h = catch v h
+            
+        // ErrorT
+        let runErrorT = ErrorT.run
+        type ErrorT = ErrorT
+        let ErrorT = ErrorT.ErrorT

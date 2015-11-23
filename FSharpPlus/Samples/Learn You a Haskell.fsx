@@ -51,12 +51,12 @@ let res20 = map ((*) 100) (Pair (2, 3))                               // Pair (2
 
 let res21 = append [1;4] [3;6]
 let res22 = append "Hello " "World"
-let res23 = append "pang"  (getMempty ())                               // "pang"
+let res23 = append "pang"  (getEmpty())                              // "pang"
 let res24 = concat [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
 
 let res25 = append (Any true) (Any false)                            // Any true
 let res26 = [false; false; false; true] |> List.map Any |> concat
-let res27 = append (mempty ()) (All false)                           // All false
+let res27 = append (getEmpty()) (All false)                          // All false
 let res28 = append (Some "some") None                                // Some "some"
 
 let res29 = foldBack (*) [1;2;3] 1
@@ -356,7 +356,7 @@ let res75 = stackStuff |> State.run <| [9;0;2;1;0]                              
 
 let stackyStack =
     monad {  
-        let! stackNow = State.get ()
+        let! stackNow = State.get
         if stackNow = [1;2;3] then
             do! State.put [8;3;1]  
         else

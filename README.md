@@ -5,6 +5,7 @@ This project contains some extensions for F#.
 
  - Extension methods for existing types.
  - Collections.
+ - Common FP abstrations: Cont, Reader, Writer, State and Monad Transformers.
  - Generic Computation Expressions and Linq Builders.
  - Common combinators, generic functions and operators.
  - A generic Math module.
