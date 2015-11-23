@@ -71,7 +71,7 @@ type ToArray =
 
 type FromSeq =
     inherit Default1
-    static member inline FromSeq (x:seq<'t>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> MConcat.Invoke :'Foldable'T
+    static member inline FromSeq (x:seq<'t>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> Concat.Invoke :'Foldable'T
     static member        FromSeq (x:seq<'t>                 , _:seq<'t>                         , _:Default4) = x
     static member        FromSeq (x:seq<'t>                 , _:ICollection<'t>                 , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> ICollection<'t>
     static member        FromSeq (x:seq<'t>                 , _:IList<'t>                       , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> IList<'t>
@@ -146,15 +146,15 @@ type FoldBack =
 [<Extension;Sealed>]
 type FoldMap =
     inherit Default1
-    static member inline FromFoldFoldBack f x = FoldBack.Invoke (MAppend.Invoke << f) (MEmpty.Invoke()) x  
+    static member inline FromFoldFoldBack f x = FoldBack.Invoke (Append.Invoke << f) (Empty.Invoke()) x  
     
-    [<Extension>]static member inline FoldMap (x          , f, [<Optional>]impl:Default1) = Seq.fold   (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:option<_>, f, [<Optional>]impl:FoldMap ) = match x with Some x -> f x | _ -> MEmpty.Invoke()
+    [<Extension>]static member inline FoldMap (x          , f, [<Optional>]impl:Default1) = Seq.fold   (fun x y -> Append.Invoke x (f y)) (Empty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:option<_>, f, [<Optional>]impl:FoldMap ) = match x with Some x -> f x | _ -> Empty.Invoke()
     [<Extension>]static member        FoldMap (x:Id<_>    , f, [<Optional>]impl:FoldMap ) = f x.getValue
-    [<Extension>]static member inline FoldMap (x:seq<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:list<_>  , f, [<Optional>]impl:FoldMap ) = List.fold  (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:Set<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
-    [<Extension>]static member inline FoldMap (x:_ []     , f, [<Optional>]impl:FoldMap ) = Array.fold (fun x y -> MAppend.Invoke x (f y)) (MEmpty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:seq<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> Append.Invoke x (f y)) (Empty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:list<_>  , f, [<Optional>]impl:FoldMap ) = List.fold  (fun x y -> Append.Invoke x (f y)) (Empty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:Set<_>   , f, [<Optional>]impl:FoldMap ) = Seq.fold   (fun x y -> Append.Invoke x (f y)) (Empty.Invoke()) x
+    [<Extension>]static member inline FoldMap (x:_ []     , f, [<Optional>]impl:FoldMap ) = Array.fold (fun x y -> Append.Invoke x (f y)) (Empty.Invoke()) x
 
     static member inline Invoke (f:'T->'Monoid) (x:'Foldable'T) :'Monoid =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member FoldMap: _*_*_ -> _) b, f, a)

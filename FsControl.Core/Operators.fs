@@ -47,9 +47,9 @@ module Operators =
 
     // Monoid -----------------------------------------------------------------
 
-    let inline mempty() :'Monoid = MEmpty.Invoke()
-    let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid = MAppend.Invoke x y
-    let inline mconcat (x:seq<'Monoid>)       : 'Monoid = MConcat.Invoke x
+    let inline getEmpty() :'Monoid = Empty.Invoke()
+    let inline append (x:'Monoid) (y:'Monoid): 'Monoid = Append.Invoke x y
+    let inline concat (x:seq<'Monoid>)       : 'Monoid = Concat.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------

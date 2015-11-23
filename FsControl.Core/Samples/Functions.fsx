@@ -57,8 +57,8 @@ let lst5' = (true, 2, "3", '4', [5], 6.0).Item5()
 let str3  = mapItem3 string (true, ['s'], 3)
 let str3' = (true, ['s'], 3).MapItem3(string)
 
-let mapp1 = [1..3] </mappend/> [4..8]
-let mapp2 = [1..3]  .MAppend   [4..8]
+let mapp1 = [1..3] </append/> [4..8]
+let mapp2 = [1..3]  .Append   [4..8]
 let mcon1 = [|[|1..3|];[|4..5|]|] |> join
 let mcon2 = [|[|1..3|];[|4..5|]|] .Join(null, Unchecked.defaultof<Join>) // optional arguments don't work from F#
 // but in C# you can write (new[] {new[] {1, 2, 3}, new[] {4, 5, 6}}).Join();

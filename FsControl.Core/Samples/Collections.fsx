@@ -27,9 +27,9 @@ type Tree<'a> =
     static member inline FoldBack (x, f, z) = 
         let rec _foldMap x f =
             match x with
-            | Empty        -> mempty()
+            | Empty        -> getEmpty()
             | Leaf n       -> f n
-            | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f))
+            | Node (l,k,r) -> append (_foldMap l f) (append (f k) (_foldMap r f))
         Endo.run (_foldMap x (Endo << f )) z
 
     
@@ -44,16 +44,16 @@ type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
     static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-    static member inline MEmpty() = result (mempty())                                :ZipList<'a>
-    static member inline MAppend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
+    static member inline Empty() = result (getEmpty())                                :ZipList<'a>
+    static member inline Append (x:ZipList<'a>, y:ZipList<'a>) = liftA2 append x y :ZipList<'a>
     // try also commenting/uncommenting the following method.
-    static member inline MConcat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack mappend (Seq.toList x) (mempty()):ZipList<'a>
+    static member inline Concat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack append (Seq.toList x) (getEmpty()):ZipList<'a>
     static member ToSeq    (ZipList lst)     = lst
 
 type WrappedList<'s> = WrappedList of 's list with
     static member Return   (_:WrappedList<'a>, _:Return ) = fun (x:'a)     -> WrappedList [x]
-    static member MAppend  (WrappedList l, WrappedList x) = WrappedList (l @ x)
-    static member MEmpty   (_:WrappedList<'a>, _:MEmpty) = WrappedList List.empty
+    static member Append  (WrappedList l, WrappedList x) = WrappedList (l @ x)
+    static member Empty   (_:WrappedList<'a>, _:Empty) = WrappedList List.empty
     static member ToSeq    (WrappedList lst)     = List.toSeq lst
     static member FoldBack (WrappedList x, f, z) = List.foldBack f x z
 
@@ -96,18 +96,18 @@ let j = item 2 "hello"
 
 // Monoids
 
-let asQuotation = mappend <@ ResizeArray(["1"]) @> <@ ResizeArray(["2;3"]) @>
-let quot123     = mappend <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>
-let quot1       = mappend <@ ResizeArray([1])   @>      (mempty())
-let quot23      = mappend    (mempty())            <@ ResizeArray([2;3])   @>
-let quot13      = mappend    (mempty())            <@ ("1","3") @>
-let quotLst123  = mappend    (mempty())            (ZipList [ [1];[2];[3] ])
-let quotLst123' = mconcat    [mempty();  mempty();  ZipList [ [1];[2];[3] ]]
+let asQuotation = append <@ ResizeArray(["1"]) @> <@ ResizeArray(["2;3"]) @>
+let quot123     = append <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>
+let quot1       = append <@ ResizeArray([1])   @>      (getEmpty())
+let quot23      = append    (getEmpty())          <@ ResizeArray([2;3])   @>
+let quot13      = append    (getEmpty())          <@ ("1","3") @>
+let quotLst123  = append    (getEmpty())            (ZipList [ [1];[2];[3] ])
+let quotLst123' = concat    [getEmpty(); getEmpty(); ZipList [ [1];[2];[3] ]]
 
-let lzy1 = mappend (lazy [1]) (lazy [2;3])
-let lzy2 = mappend (mempty()) lzy1
-let asy1 = mappend (async.Return [1]) (async.Return [2;3])
-let asy2 = mappend (mempty()) asy1
+let lzy1 = append (lazy [1]) (lazy [2;3])
+let lzy2 = append (getEmpty()) lzy1
+let asy1 = append (async.Return [1]) (async.Return [2;3])
+let asy2 = append (getEmpty()) asy1
 
 let mapA = Map.empty 
             |> Map.add 1 (async.Return "Hey")
@@ -117,9 +117,9 @@ let mapB = Map.empty
             |> Map.add 3 (async.Return " You")
             |> Map.add 2 (async.Return " World")
 
-let mapAB = mappend mapA mapB
+let mapAB = append mapA mapB
 let greeting1 = Async.RunSynchronously mapAB.[2]
-let greeting2 = Async.RunSynchronously (mconcat [mapA; mempty(); mapB]).[2]
+let greeting2 = Async.RunSynchronously (concat [mapA; getEmpty(); mapB]).[2]
 
 open System.Collections.Generic
 open System.Threading.Tasks
@@ -132,12 +132,12 @@ let dicB = new Dictionary<string,Task<string>>()
 dicB.["keyc"] <- (result " You"  : Task<_>)
 dicB.["keyb"] <- (result " World": Task<_>)
 
-let dicAB = mappend dicA dicB
+let dicAB = append dicA dicB
 
 let greeting3 = extract dicAB.["keyb"]
-let greeting4 = extract (mconcat [dicA; mempty(); dicB]).["keyb"]
+let greeting4 = extract (concat [dicA; getEmpty(); dicB]).["keyb"]
 
-let res2 = mconcat [ async {return (+) 2 } ; async {return (*) 10 } ; async {return id } ;  async {return (%) 3 } ; async {return mempty() } ] </Async.RunSynchronously/> 3
+let res2 = concat [ async {return (+) 2 } ; async {return (*) 10 } ; async {return id } ;  async {return (%) 3 } ; async {return getEmpty() } ] </Async.RunSynchronously/> 3
 
 
 // Functors, Monads
@@ -168,8 +168,8 @@ let resSomeId20 = traversei (fun k t -> Some (10 + t)) (Identity 10)
 
 let stack = new Collections.Generic.Stack<_>([1;2;3])
 
-let twoSeqs = mappend (seq [1;2;3]) (seq [4;5;6])
-let sameSeq = mappend (mempty()   ) (seq [4;5;6])
+let twoSeqs = append (seq [1;2;3]) (seq [4;5;6])
+let sameSeq = append (getEmpty()   ) (seq [4;5;6])
 
 let seqFromLst:_ seq = fromList [1;2;3;4]
 let seqFromLst' = toSeq [1;2;3;4]

@@ -85,7 +85,7 @@ There are basically two Types involved in these overloads:
 
  - The type that will implement the abstraction. This will be a “real” type, for example <code>List</code> or <code>Tree</code>. We may refer to this type as the the type or as the instance, since it represents an instance of the abstraction. At the same time we can classify these types in primitive types and custom types. By primitive types we refer to existing types in the .NET framework.
 
- - The type that represent the abstraction: Examples of these types are <code>Map</code>, <code>Bind</code>, <code>MAppend</code>, etc. This will be a "dummy" type implemented as a static type with a single method  (usually with the same name as the type) which will be overloaded and an entry point method called 'Invoke'. From now on and in order to differentiate from the type-instance we will call this type the type-method.
+ - The type that represent the abstraction: Examples of these types are <code>Map</code>, <code>Bind</code>, <code>Append</code>, etc. This will be a "dummy" type implemented as a static type with a single method  (usually with the same name as the type) which will be overloaded and an entry point method called 'Invoke'. From now on and in order to differentiate from the type-instance we will call this type the type-method.
 
 For Haskellers this 'Type-Methods' abstraction is similar to Haskell's Type-Classes but with a single method.
 
@@ -171,9 +171,9 @@ An easy way to make classes in your project callable from FsControl without refe
    
 Monoids:
 
-     static member MEmpty() : MyMonoid = {my MEmpty impl.}
-     static member MAppend (x:MyMonoid, y:MyMonoid) : MyMonoid = {my MAppend impl.}
-     static member MConcat (x:seq<MyMonoid>) : MyMonoid  = {my MConcat impl.} // optional: it can be automatically derived from MAppend
+     static member Empty() : MyMonoid = {my Empty impl.}
+     static member Append (x:MyMonoid, y:MyMonoid) : MyMonoid = {my Append impl.}
+     static member Concat (x:seq<MyMonoid>) : MyMonoid  = {my Concat impl.} // optional: it can be automatically derived from Append
 
 Foldables:
 

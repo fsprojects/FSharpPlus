@@ -265,8 +265,8 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 // Monoids
 
 type Ordering = LT|EQ|GT with
-    static member        MEmpty  (_:Ordering, _:MEmpty) = EQ
-    static member        MAppend (x:Ordering, y) = 
+    static member        Empty  (_:Ordering, _:Empty) = EQ
+    static member        Append (x:Ordering, y) = 
         match x, y with
         | LT, _ -> LT
         | EQ, a -> a
@@ -279,16 +279,16 @@ let inline compare' x y =
     | _            -> EQ
 
 type Sum<'a> = Sum of 'a with
-    static member inline MEmpty() = Sum 0G
-    static member inline MAppend (Sum (x:'n), Sum(y:'n)) = Sum (x + y):Sum<'n>
+    static member inline Empty() = Sum 0G
+    static member inline Append (Sum (x:'n), Sum(y:'n)) = Sum (x + y):Sum<'n>
 
 type Product<'a> = Product of 'a with
-    static member inline MEmpty() = Product 1G
-    static member inline MAppend (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
+    static member inline Empty() = Product 1G
+    static member inline Append (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
 
-let inline mempty() = FsControl.Operators.mempty ()
-let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.mappend x y
-let inline mconcat (x:seq<'a>) : 'a = FsControl.Operators.mconcat x
+let inline mempty() = FsControl.Operators.getEmpty ()
+let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.append x y
+let inline mconcat (x:seq<'a>) : 'a = FsControl.Operators.concat x
 
 
 // Test Monoids
