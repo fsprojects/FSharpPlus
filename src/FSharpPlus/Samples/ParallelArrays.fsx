@@ -1,5 +1,5 @@
 #nowarn "3186"
-#r @"..\..\build\FsControl.Core.dll"
+#r @"..\..\build\FsControl.dll"
 #r @"..\..\build\FSharpPlus.dll"
 
 open FSharpPlus
@@ -13,4 +13,4 @@ open ApplicativeMath
 
 let arr1_plus_arr2' = parray arr1 |+| parray arr2
 let arrCombined     = 10 *| parray arr1 |+| parray arr2 |- 5
-let asMonoid        = Const "Hello " </mappend/> parray [|"City"; "World"; "Sun"|]
+let asMonoid        = Const "Hello " </append/> parray [|"City"; "World"; "Sun"|]

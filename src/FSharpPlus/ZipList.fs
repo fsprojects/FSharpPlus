@@ -2,7 +2,7 @@
 
 open System.Text
 open System.Runtime.InteropServices
-open FsControl.Core.TypeMethods
+open FsControl
 open FSharpPlus.Operators
 open FSharpPlus.Extensions
 
@@ -19,8 +19,8 @@ type ZipList with
     static member Map (ZipList x, f:'a->'b) = ZipList (Seq.map f x)
     static member Return (x:'a)     = ZipList (Seq.initInfinite (konst x))
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
-    static member inline Mempty () = result (mempty()) :ZipList<'a>
-    static member inline Mappend (x:ZipList<'a>, y:ZipList<'a>) = liftA2 mappend x y :ZipList<'a>
+    static member inline get_Empty() = result (getEmpty()) :ZipList<'a>
+    static member inline Append (x:ZipList<'a>, y:ZipList<'a>) = liftA2 append x y :ZipList<'a>
 
     static member inline ToString (s:ZipList<'a>, [<Optional>]impl:ToList) = fun (k:System.Globalization.CultureInfo) ->
             let b = StringBuilder()

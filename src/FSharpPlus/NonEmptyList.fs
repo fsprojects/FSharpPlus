@@ -2,9 +2,9 @@
 
 open System.Text
 open System.Runtime.InteropServices
+open FsControl
 open FSharpPlus
 open FSharpPlus.Extensions
-open FsControl.Core.TypeMethods
 
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     member this.head = let {Head = a; Tail = _} = this in a
@@ -48,7 +48,7 @@ type NonEmptyList with
     static member Extend    (s, g) = NonEmptyList.map g (NonEmptyList.tails s) :NonEmptyList<'b>
     
 
-    static member Mappend ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
+    static member Append ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
     static member ToList   (s:NonEmptyList<'a>, [<Optional>]impl:ToList) = NonEmptyList.toList s

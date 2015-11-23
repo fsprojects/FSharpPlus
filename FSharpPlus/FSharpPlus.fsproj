@@ -37,8 +37,8 @@
     <DocumentationFile>bin\Release\FSharpPlus.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FsControl.Core">
-      <HintPath>..\packages\FsControl.2.0.0-CI00024\lib\net40\FsControl.Core.dll</HintPath>
+    <Reference Include="FsControl">
+      <HintPath>..\packages\FsControl.2.0.0-CI00073\lib\net40\FsControl.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
