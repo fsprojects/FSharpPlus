@@ -6,11 +6,9 @@ module Seq =
 
     let foldBack f (s:seq<_>) z = Array.foldBack f (Seq.toArray s) z
 
-    let inline sequence ms =
-        let k m m' = m >>= fun (x:'a) -> m' >>= fun (xs:seq<'a>) -> (result :seq<'a> -> 'M) (seq {yield x; yield! xs})
-        foldBack k ms ((result :seq<'a> -> 'M) Seq.empty)
+    let inline sequence (ms:seq<'``Applicative<'T>``>) : '``Applicative<seq<'T>>`` = sequenceA ms
 
-    let inline mapM f as' = sequence (Seq.map f as')
+    let inline traverse (f:'T->'``Applicative<'U>``) (xs:seq<'T>) :'``Applicative<seq<'U>>`` = traverse f xs
               
     let groupAdjBy keyMapper (source:_ seq) = seq {
         use e = source.GetEnumerator()
@@ -39,4 +37,4 @@ module Seq =
 
     let replicate count initial = System.Linq.Enumerable.Repeat(initial, count)
 
-    let inline replicateM count  (initial:'``Monad<'T>``) : '``Monad<seq<'T>>`` = sequence (replicate count initial)
+    let inline replicateM count (initial:'``Applicative<'T>``) = sequence (replicate count initial)
