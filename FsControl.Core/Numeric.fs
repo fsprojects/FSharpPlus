@@ -260,9 +260,6 @@ module internal Numerics =
 
     let inline internal fromIntegral (x:'Integral) :'Num = (FromBigInt.Invoke << ToBigInt.Invoke) x
 
-    let inline internal zero() = Zero.Invoke()
-    let inline internal one()  = One.Invoke()
-
 
 
 
@@ -343,7 +340,7 @@ type Divide =
 
 type TryDivide =
     static member inline TryDivide (x, y) =
-        if y = zero() then Choice2Of2 Errors.exnDivByZero
+        if y = Zero.Invoke() then Choice2Of2 Errors.exnDivByZero
         else
             let c = x / y :'t
             if c * y = x then Choice1Of2 c
@@ -385,14 +382,14 @@ type TrySqrt =
         with e -> Choice2Of2 e
 
     static member inline TrySqrt (x:'Z) = 
-        if x < zero() then Choice2Of2 Errors.exnSqrtOfNegative 
+        if x < Zero.Invoke() then Choice2Of2 Errors.exnSqrtOfNegative 
         else 
             match TrySqrtRem.Invoke x with 
-            | Choice1Of2 (c, r) -> if r = zero() then Choice1Of2 c else Choice2Of2 Errors.exnNoSqrt
+            | Choice1Of2 (c, r) -> if r = Zero.Invoke() then Choice1Of2 c else Choice2Of2 Errors.exnNoSqrt
             | Choice2Of2 x      -> Choice2Of2 x
 
     static member inline TrySqrt (x:'Rational) =
-        if x < zero() then Choice2Of2 Errors.exnSqrtOfNegative else 
+        if x < Zero.Invoke() then Choice2Of2 Errors.exnSqrtOfNegative else 
             let (n:'i, d:'i) = Rational.numerator x, Rational.denominator x
             let toRational (x:'i) = (ToBigInt.Invoke >> FromBigInt.Invoke) x  : 'Rational
             match TrySqrt.Invoke n, TrySqrt.Invoke d with

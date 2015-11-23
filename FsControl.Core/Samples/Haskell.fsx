@@ -120,7 +120,7 @@ let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else r
 
 // let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
 // let inline toRational (x:'Real) :Rational = FsControl.Operators.toRational x
-let inline pi() :'Floating = FsControl.Operators.pi ()
+let inline pi() :'Floating = FsControl.Operators.getPi()
 
 let inline ( **) a (b:'Floating) :'Floating = a ** b
 let inline sqrt    (x:'Floating) :'Floating = sqrt x
@@ -319,7 +319,7 @@ let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
 // Monad Plus
 
-let inline mzero () = FsControl.Operators.mzero ()
+let inline mzero () = FsControl.Operators.getMZero ()
 let inline mplus (x:'a) (y:'a) : 'a = FsControl.Operators.(<|>) x y
 let inline guard x = if x then return' () else mzero()
 type DoPlusNotationBuilder() =
@@ -396,7 +396,7 @@ let resStrFalse     = dimap int string (Predicate.run isEven) 99.0
 
 // Arrows
 
-let inline id'() = FsControl.Operators.catId ()
+let inline id'() = FsControl.Operators.getCatId()
 let inline (<<<) f g = FsControl.Operators.(<<<<) f g
 let inline (>>>) f g = FsControl.Operators.(>>>>) f g
 let inline arr   f = FsControl.Operators.arr    f
@@ -409,7 +409,7 @@ let inline (+++) f g = FsControl.Operators.(++++) f g
 let inline left  f = FsControl.Operators.left  f
 let inline right f = FsControl.Operators.right f
 let inline app() = FsControl.Operators.arrApply ()
-let inline zeroArrow() = FsControl.Operators.mzero ()
+let inline zeroArrow() = FsControl.Operators.getMZero()
 let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 
 // Test Arrows
@@ -444,7 +444,7 @@ let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 let inline pure' x   = FsControl.Operators.result x
 let inline (<*>) x y = FsControl.Operators.(<*>) x y
-let inline empty()   = FsControl.Operators.mzero ()
+let inline empty()   = FsControl.Operators.getMZero()
 let inline (<|>) x y = FsControl.Operators.(<|>) x y
 
 

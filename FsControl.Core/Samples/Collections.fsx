@@ -252,7 +252,7 @@ type DoPlusNotationBuilder() =
     member inline b.Bind(p,rest) = p >>= rest
     member b.Let(p,rest) = rest p
     member b.ReturnFrom(expr) = expr
-    member inline x.Zero() = mzero()
+    member inline x.Zero() = getMZero()
     member inline x.Combine(a, b) = a <|> b
 let doPlus = new DoPlusNotationBuilder()
 

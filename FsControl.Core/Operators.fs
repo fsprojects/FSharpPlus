@@ -54,7 +54,7 @@ module Operators =
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
-    let inline mzero() :'``Functor<'T>`` = MZero.Invoke()
+    let inline getMZero() :'``Functor<'T>`` = MZero.Invoke()
     let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = MPlus.Invoke x y
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else MZero.Invoke()
 
@@ -72,7 +72,7 @@ module Operators =
 
     // Arrows -----------------------------------------------------------------
 
-    let inline catId()     = Id.Invoke()
+    let inline getCatId()  = Id.Invoke()
     let inline (<<<<)  f g = Comp.Invoke f g
     let inline (>>>>)  g f = Comp.Invoke f g
     let inline arr     f   = Arr.Invoke f
@@ -312,10 +312,10 @@ module Operators =
     // Numerics
 
     /// Gets a value that represents the number 0 (zero).
-    let inline zero() = Zero.Invoke()
+    let inline getZero() = Zero.Invoke()
 
     /// Gets a value that represents the number 1 (one).
-    let inline one()  = One.Invoke()
+    let inline getOne()  = One.Invoke()
 
     /// Divides one number by another, returns a tuple with the result and the remainder.
     let inline divRem (D:'T) (d:'T) :'T*'T = DivRem.Invoke D d
@@ -333,7 +333,7 @@ module Operators =
     let inline toBigInt    (x:'Integral) :bigint = ToBigInt.Invoke x
 
     /// Gets the pi number.
-    let inline pi() :'Floating = Pi.Invoke()
+    let inline getPi() :'Floating = Pi.Invoke()
 
     /// Returns the additive inverse of the number.
     let inline negate  (x:'Num): 'Num = x |> TryNegate.Invoke |> function Choice1Of2 x -> x | Choice2Of2 e -> raise e

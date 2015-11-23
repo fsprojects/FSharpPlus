@@ -40,7 +40,7 @@ module Ratio =
     let inline internal ( *.) (a:'Num) (b:'Num) :'Num = a * b
 
     let inline internal gcd x y :'Integral =
-        let zero = zero()
+        let zero = getZero()
         let rec loop a b =
             if b = zero then a
             else loop b (a % b)
@@ -57,7 +57,7 @@ module Ratio =
 
     let inline internal ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
         whenIntegral a
-        let zero = zero()
+        let zero = getZero()
         if b = zero then failwith "Ratio.%: zero denominator"
         let (a, b) = if b < zero then (-a, -b) else (a, b)
         let gcd = gcd a b
@@ -75,8 +75,8 @@ module Ratio =
         static member inline (*) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Numerator) </ratio/> (a.Denominator *. b.Denominator)
 
         static member inline Abs        (r:Ratio<_>) = (Abs.Invoke    (numerator r)) </ratio/> (denominator r)
-        static member inline Signum     (r:Ratio<_>) = (Signum.Invoke (numerator r)) </ratio/> (one())
-        static member inline FromBigInt (x:bigint) = FromBigInt.Invoke x </ratio/> (one())
+        static member inline Signum     (r:Ratio<_>) = (Signum.Invoke (numerator r)) </ratio/> (One.Invoke())
+        static member inline FromBigInt (x:bigint) = FromBigInt.Invoke x </ratio/> (One.Invoke())
         static member inline (~-)       (r:Ratio<_>) = -(numerator r) </ratio/> (denominator r)
 
 
@@ -128,7 +128,7 @@ let inline ( **^ ) (x:'Num) (n:'Integral)  =
     if (n < 0G) then failwith "Negative exponent" else f 1G x n
 let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
 
-let inline pi() :'Floating = FsControl.Operators.pi ()
+let inline pi() :'Floating = FsControl.Operators.getPi ()
 
 let inline ( **) a (b:'Floating) :'Floating = a ** b
 
