@@ -20,7 +20,7 @@ open Combinators
 
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq    (WrappedListA lst) = List.toSeq lst
-    static member FromSeq  lst = WrappedListA (Seq.toList lst)
+    static member OfSeq  lst = WrappedListA (Seq.toList lst)
 
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return   (x) = WrappedListB [x]
@@ -59,13 +59,13 @@ type Foldable() =
         let s = (seq [Collections.Generic.KeyValuePair(1, "One"); Collections.Generic.KeyValuePair(2, "Two")])
         let t = {'a'..'d'}
 
-        let dc2:Collections.Generic.Dictionary<_,_> = fromSeq s
+        let dc2:Collections.Generic.Dictionary<_,_> = ofSeq s
         let s' = toSeq dc2
 
-        let arr:_ [] = fromSeq s
+        let arr:_ [] = ofSeq s
         let s'' = toSeq arr
 
-        let str:string = fromSeq t
+        let str:string = ofSeq t
         let t' = toSeq str 
 
         Assert.AreEqual (toList s, toList s')

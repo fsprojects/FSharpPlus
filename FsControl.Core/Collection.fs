@@ -30,7 +30,7 @@ type Item =
 [<Extension;Sealed>]
 type Skip =
     inherit Default1
-    [<Extension>]static member inline Skip (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Skip (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Skip (x:string        , n, [<Optional>]impl:Skip    ) = x.[n..]
     [<Extension>]static member        Skip (x:StringBuilder , n, [<Optional>]impl:Skip    ) = new StringBuilder(x.ToString().[n..])
     [<Extension>]static member        Skip (x:'a []         , n, [<Optional>]impl:Skip    ) = x.[n..] : 'a []
@@ -47,7 +47,7 @@ type Skip =
 [<Extension;Sealed>]
 type Take =
     inherit Default1
-    [<Extension>]static member inline Take (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.take n |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Take (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.take n |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Take (x:string        , n, [<Optional>]impl:Take    ) = x.[..n-1]
     [<Extension>]static member        Take (x:StringBuilder , n, [<Optional>]impl:Take    ) = new StringBuilder(x.ToString().[..n-1])
     [<Extension>]static member        Take (x:'a []         , n, [<Optional>]impl:Take    ) = x.[..n-1] : 'a []
@@ -64,7 +64,7 @@ type Take =
 [<Extension;Sealed>]
 type Drop =
     inherit Default1
-    [<Extension>]static member inline Drop (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.drop n |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Drop (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.drop n |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Drop (x:string        , n, [<Optional>]impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else "") else x
     [<Extension>]static member        Drop (x:StringBuilder , n, [<Optional>]impl:Drop) = if n > 0 then (if x.Length > n then new StringBuilder(x.ToString().[n..]) else new StringBuilder()) else new StringBuilder(x.ToString())
     [<Extension>]static member        Drop (x:'a []         , n, [<Optional>]impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else [||]) else x : 'a []
@@ -82,7 +82,7 @@ type Drop =
 [<Extension;Sealed>]
 type Limit =
     inherit Default1
-    [<Extension>]static member inline Limit (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.truncate n |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Limit (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.truncate n |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Limit (x:string        , n, [<Optional>]impl:Limit) = if n < 1 then "" elif n < x.Length then x.[..n-1] else x
     [<Extension>]static member        Limit (x:StringBuilder , n, [<Optional>]impl:Limit) = new StringBuilder(x.ToString().[..n-1])
     [<Extension>]static member        Limit (x:'a []         , n, [<Optional>]impl:Limit) = if n < 1 then [||] elif n < x.Length then x.[..n-1] else x : 'a []
@@ -113,7 +113,7 @@ type Choose =
 [<Extension;Sealed>]
 type Distinct =
     inherit Default1
-    [<Extension>]static member inline Distinct (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.distinct |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Distinct (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.distinct |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Distinct (x:list<'T>   , [<Optional>]impl:Distinct) = Seq.distinct x |> Seq.toList
     [<Extension>]static member        Distinct (x:'T []      , [<Optional>]impl:Distinct) = Seq.distinct x |> Seq.toArray
 
@@ -126,7 +126,7 @@ type Distinct =
 [<Extension;Sealed>]
 type DistinctBy =
     inherit Default1
-    [<Extension>]static member inline DistinctBy (x:'Foldable'T, f, [<Optional>]impl:Default1  ) = x |> ToSeq.Invoke |> Seq.distinctBy f |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline DistinctBy (x:'Foldable'T, f, [<Optional>]impl:Default1  ) = x |> ToSeq.Invoke |> Seq.distinctBy f |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        DistinctBy (x:list<'T>   , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toList
     [<Extension>]static member        DistinctBy (x:'T []      , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toArray
 
@@ -165,7 +165,7 @@ type GroupAdjBy =
 [<Extension;Sealed>]
 type Intersperse =
     inherit Default1
-    [<Extension>]static member inline Intersperse (x:'Foldable'T, e:'T, [<Optional>]impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Intersperse (x:'Foldable'T, e:'T, [<Optional>]impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Intersperse (x:list<'T>   , e:'T, [<Optional>]impl:Intersperse) = x |> List.toSeq   |> Seq.intersperse e |> Seq.toList
     [<Extension>]static member        Intersperse (x:'T []      , e:'T, [<Optional>]impl:Intersperse) = x |> Array.toSeq  |> Seq.intersperse e |> Seq.toArray
  
@@ -254,7 +254,7 @@ type MinBy =
 [<Extension;Sealed>]
 type Rev =
     inherit Default1
-    [<Extension>]static member inline Rev (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray |> Array.rev |> Array.toSeq |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Rev (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray |> Array.rev |> Array.toSeq |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Rev (x:list<'a>   , [<Optional>]impl:Rev     ) = List.rev  x
     [<Extension>]static member        Rev (x:'a []      , [<Optional>]impl:Rev     ) = Array.rev x
 
@@ -280,7 +280,7 @@ type Scan =
 [<Extension;Sealed>]
 type Sort =
     inherit Default1
-    [<Extension>]static member inline Sort (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sort |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Sort (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        Sort (x:list<'a>   , [<Optional>]impl:Sort    ) = List.sort  x
     [<Extension>]static member        Sort (x:'a []      , [<Optional>]impl:Sort    ) = Array.sort x
 
@@ -293,7 +293,7 @@ type Sort =
 [<Extension;Sealed>]
 type SortBy =
     inherit Default1
-    [<Extension>]static member inline SortBy (x:'Foldable'T, f      , [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sortBy f |> FromSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline SortBy (x:'Foldable'T, f      , [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sortBy f |> OfSeq.Invoke :'Foldable'T
     [<Extension>]static member        SortBy (x:list<'a>   , f      , [<Optional>]impl:SortBy  ) = List.sortBy  f x
     [<Extension>]static member        SortBy (x:'a []      , f      , [<Optional>]impl:SortBy  ) = Array.sortBy f x
 

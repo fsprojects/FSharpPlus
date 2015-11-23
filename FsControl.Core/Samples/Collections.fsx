@@ -61,7 +61,7 @@ let wl = WrappedList  [2..10]
 
 let threes = filter ((=) 3) [ 1;2;3;4;5;6;1;2;3;4;5;6 ]
 let fours  = filter ((=) 4) [|1;2;3;4;5;6;1;2;3;4;5;6|]
-let twos   = filter ((=) (box 2)) (([1;2;3;4;3;2;1;2;3] |> fromSeq) : Collections.ArrayList)
+let twos   = filter ((=) (box 2)) (([1;2;3;4;3;2;1;2;3] |> ofSeq) : Collections.ArrayList)
 let five   = filter ((=) 5) (WrappedList [1;2;3;4;5;6])   // <- Uses the default method for filter.
 let sorted = sortBy (~-)    (WrappedList [1;2;3;4;5;6])
 let optionFilter = filter ((=) 3) (Some 4)
@@ -89,7 +89,7 @@ let b = skip 1000 bigLst
 let c = skip 1000 bigArr
 let d = skip 1000 bigMut
 let e = "hello world" |> skip 6 |> toList
-let h = fromList ['h';'e';'l';'l';'o';' '] + "world"
+let h = ofList ['h';'e';'l';'l';'o';' '] + "world"
 let i = item 2 bigSeq
 let j = item 2 "hello"
 
@@ -171,7 +171,7 @@ let stack = new Collections.Generic.Stack<_>([1;2;3])
 let twoSeqs = append (seq [1;2;3]) (seq [4;5;6])
 let sameSeq = append (getEmpty()   ) (seq [4;5;6])
 
-let seqFromLst:_ seq = fromList [1;2;3;4]
+let seqFromLst:_ seq = ofList [1;2;3;4]
 let seqFromLst' = toSeq [1;2;3;4]
 let seqFromOpt  = toSeq (Some 1)
 
@@ -180,7 +180,7 @@ let seqFromOpt  = toSeq (Some 1)
 let twoStacks = append stack stack
 let twoSeqs'  = append (seq [1;2;3]) [4;5;6]
 let twoSeqs'' = append [1;2;3] (seq [4;5;6])
-let (stackFromLst:_ Collections.Generic.Stack) = fromList [1;2;3;4]
+let (stackFromLst:_ Collections.Generic.Stack) = ofList [1;2;3;4]
 *)
 
 let singletonList: _ list = result 1

@@ -12,8 +12,8 @@ let r103 = tryParse "103" : Text.StringBuilder option
 let r109 = parse "10.0.9.1" : Net.IPAddress
 let r111 = parse "true" && true
 let rMTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
-let r110 = parse "10" + fromBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
-let r120 = parse "10" + fromBytes [|10uy;0uy;0uy;0uy;|]                + 100
+let r110 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
+let r120 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;|]                + 100
 let r121 = parse "121" : string
 let r122 = parse "122" : Text.StringBuilder
 
@@ -40,33 +40,33 @@ open System.Collections
 open System.Collections.Concurrent
 open System.Collections.Generic
 
-let sk :Generic.Stack<_>          = fromSeq { 1 .. 3 }
-let sg :string                    = fromSeq {'1'..'3'}  // but it will come back as seq<char>
-let sb :Text.StringBuilder        = fromSeq {'1'..'3'}  // but it will come back as seq<char>
-let sq1:_ seq                     = fromSeq { 1 .. 3 }
-let sq2:_ seq                     = fromSeq (seq [(1, "One"); (2, "Two")])
-let sq3:_ seq                     = fromSeq (seq [(1, "One", '1'); (2, "Two", '2')])
-let sq4:_ seq                     = fromSeq (seq [(1, "One", '1', 1M); (2, "Two", '2', 2M)])
-let ls1:_ list                    = fromSeq {'1'..'3'}
-let ls2:_ list                    = fromSeq (seq [(1, "One", '1'); (2, "Two", '2')])
-let st1:_ Set                     = fromSeq {'1'..'3'}
-let st2:_ Set                     = fromSeq (seq [(1, "One", '1'); (2, "Two", '2')])
-let ss :Generic.SortedSet<_>      = fromSeq (seq [3..6])
-let ra :Generic.List<_>           = fromSeq (seq [1..3])
-let sl :Generic.SortedList<_,_>   = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
-let sl2:Generic.SortedList<_,_>   = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-let dc :Generic.Dictionary<_,_>   = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as kKeyValuePair
-let mp :Map<_,_>                  = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
-let mp2:Map<_,_>                  = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-let d  :Generic.IDictionary<_,_>  = fromSeq (seq [("One", 1)])             // but it will come back as ...
-let d2 :Generic.IDictionary<_,_>  = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-let ut :Hashtable                 = fromSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
-let al :ArrayList                 = fromSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
-let us :SortedList                = fromSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
-let cc :BlockingCollection<_>     = fromSeq {'1'..'3'}                     // but it will come back as seq<obj>
-let cd :ConcurrentDictionary<_,_> = fromSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
-let cd2:ConcurrentDictionary<_,_> = fromSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-let cb :ConcurrentBag<_>          = fromSeq {'1'..'3'}
+let sk :Generic.Stack<_>          = ofSeq { 1 .. 3 }
+let sg :string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
+let sb :Text.StringBuilder        = ofSeq {'1'..'3'}  // but it will come back as seq<char>
+let sq1:_ seq                     = ofSeq { 1 .. 3 }
+let sq2:_ seq                     = ofSeq (seq [(1, "One"); (2, "Two")])
+let sq3:_ seq                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+let sq4:_ seq                     = ofSeq (seq [(1, "One", '1', 1M); (2, "Two", '2', 2M)])
+let ls1:_ list                    = ofSeq {'1'..'3'}
+let ls2:_ list                    = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+let st1:_ Set                     = ofSeq {'1'..'3'}
+let st2:_ Set                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+let ss :Generic.SortedSet<_>      = ofSeq (seq [3..6])
+let ra :Generic.List<_>           = ofSeq (seq [1..3])
+let sl :Generic.SortedList<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+let sl2:Generic.SortedList<_,_>   = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let dc :Generic.Dictionary<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as kKeyValuePair
+let mp :Map<_,_>                  = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+let mp2:Map<_,_>                  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let d  :Generic.IDictionary<_,_>  = ofSeq (seq [("One", 1)])             // but it will come back as ...
+let d2 :Generic.IDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let ut :Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+let al :ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
+let us :SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
+let cc :BlockingCollection<_>     = ofSeq {'1'..'3'}                     // but it will come back as seq<obj>
+let cd :ConcurrentDictionary<_,_> = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+let cd2:ConcurrentDictionary<_,_> = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+let cb :ConcurrentBag<_>          = ofSeq {'1'..'3'}
 
 // now go back
 let sk'  = toSeq sk

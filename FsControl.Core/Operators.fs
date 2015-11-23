@@ -93,8 +93,8 @@ module Operators =
 
     // Foldable
 
-    let inline fromList (source :list<'T>) = FromList.Invoke source
-    let inline fromSeq  (source :seq<'T> ) = FromSeq.Invoke  source
+    let inline ofList (source :list<'T>) = OfList.Invoke source
+    let inline ofSeq  (source :seq<'T> ) = OfSeq.Invoke  source
     let inline foldBack (folder:'T->'State->'State) (foldable:'``Foldable<'T>``) (state:'State) : 'State = FoldBack.Invoke folder state foldable
     let inline fold     (folder:'State->'T->'State) (state:'State) (foldable:'``Foldable<'T>``) : 'State = Fold.Invoke folder state foldable
     let inline foldMap (f:'T->'Monoid) (x:'``Foldable<'T>``) : 'Monoid = FoldMap.Invoke f x
@@ -296,9 +296,9 @@ module Operators =
     /// Convert using the explicit operator.
     let inline explicit    (value:'T) :'U = Explicit.Invoke value
 
-    let inline fromBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = FromBytes.Invoke isLtEndian startIndex value
-    let inline fromBytes   (value:byte[]) = FromBytes.Invoke true 0 value
-    let inline fromBytesBE (value:byte[]) = FromBytes.Invoke false 0 value
+    let inline ofBytesWithOptions (isLtEndian:bool) (startIndex:int) (value:byte[]) = OfBytes.Invoke isLtEndian startIndex value
+    let inline ofBytes   (value:byte[]) = OfBytes.Invoke true 0 value
+    let inline ofBytesBE (value:byte[]) = OfBytes.Invoke false 0 value
 
     let inline toBytes   value :byte[] = ToBytes.Invoke true value
     let inline toBytesBE value :byte[] = ToBytes.Invoke false value

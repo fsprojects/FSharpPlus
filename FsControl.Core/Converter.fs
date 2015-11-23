@@ -41,23 +41,23 @@ type Explicit =
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Unchecked.defaultof<Explicit> value
 
-type FromBytes =
-    static member FromBytes (_:bool   , _:FromBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
-    static member FromBytes (_:char   , _:FromBytes) = fun (x, i, e) -> BitConverter.ToChar   (x, i, e)
-    static member FromBytes (_:float  , _:FromBytes) = fun (x, i, e) -> BitConverter.ToDouble (x, i, e)
-    static member FromBytes (_: int16 , _:FromBytes) = fun (x, i, e) -> BitConverter.ToInt16  (x, i, e)
-    static member FromBytes (_: int   , _:FromBytes) = fun (x, i, e) -> BitConverter.ToInt32  (x, i, e)
-    static member FromBytes (_:int64  , _:FromBytes) = fun (x, i, e) -> BitConverter.ToInt64  (x, i, e)
-    static member FromBytes (_:float32, _:FromBytes) = fun (x, i, e) -> BitConverter.ToSingle (x, i, e)
-    static member FromBytes (_:string , _:FromBytes) = fun (x, i, _) -> BitConverter.ToString (x, i)
-    static member FromBytes (_:uint16 , _:FromBytes) = fun (x, i, e) -> BitConverter.ToUInt16 (x, i, e)
-    static member FromBytes (_:uint32 , _:FromBytes) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
-    static member FromBytes (_:uint64 , _:FromBytes) = fun (x, i, e) -> BitConverter.ToUInt64 (x, i, e)
+type OfBytes =
+    static member OfBytes (_:bool   , _:OfBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
+    static member OfBytes (_:char   , _:OfBytes) = fun (x, i, e) -> BitConverter.ToChar   (x, i, e)
+    static member OfBytes (_:float  , _:OfBytes) = fun (x, i, e) -> BitConverter.ToDouble (x, i, e)
+    static member OfBytes (_: int16 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToInt16  (x, i, e)
+    static member OfBytes (_: int   , _:OfBytes) = fun (x, i, e) -> BitConverter.ToInt32  (x, i, e)
+    static member OfBytes (_:int64  , _:OfBytes) = fun (x, i, e) -> BitConverter.ToInt64  (x, i, e)
+    static member OfBytes (_:float32, _:OfBytes) = fun (x, i, e) -> BitConverter.ToSingle (x, i, e)
+    static member OfBytes (_:string , _:OfBytes) = fun (x, i, _) -> BitConverter.ToString (x, i)
+    static member OfBytes (_:uint16 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToUInt16 (x, i, e)
+    static member OfBytes (_:uint32 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
+    static member OfBytes (_:uint64 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToUInt64 (x, i, e)
 
     static member inline Invoke (isLtEndian:bool) (startIndex:int) (value:byte[]) =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member FromBytes: _*_ -> _) b, a)
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member OfBytes: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Unchecked.defaultof<FromBytes> (value, startIndex, isLtEndian)
+        call Unchecked.defaultof<OfBytes> (value, startIndex, isLtEndian)
 
 
 [<Extension;Sealed>]
