@@ -24,7 +24,6 @@ type Empty =
     static member        Empty (_:unit         , _:Empty) = ()
     static member        Empty (_:Set<'a>      , _:Empty) = Set.empty : Set<'a>
     static member        Empty (_:Map<'a,'b>   , _:Empty) = Map.empty : Map<'a,'b>
-    static member        Empty (_:'a->'a       , _:Empty) = id :'a->'a 
 
     static member inline Invoke() = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Empty: _*_ -> _) b, a)
@@ -48,6 +47,7 @@ type Empty with
         s.Task
 #endif
 
+    static member inline Empty (_:'T->'Monoid      , _:Empty) = (fun _ -> Empty.Invoke()) :'T->'Monoid
     static member inline Empty (_:Async<'a>        , _:Empty) = let (v:'a) = Empty.Invoke() in async.Return v
     static member inline Empty (_:Expr<'a>         , _:Empty) = let (v:'a) = Empty.Invoke() in Expr.Cast<'a>(Expr.Value(v))
     static member inline Empty (_:Lazy<'a>         , _:Empty) = let (v:'a) = Empty.Invoke() in lazy v
@@ -64,7 +64,6 @@ type Append =
     [<Extension>]static member        Append (x:Set<_>       , y ) = Set.union x y
     [<Extension>]static member        Append (x:string       , y ) = x + y
     [<Extension>]static member        Append (x:StringBuilder, y:StringBuilder) = StringBuilder().Append(x).Append(y)
-    [<Extension>]static member        Append (x:'a->'a       , y ) = x << y
 
     static member inline Invoke (x:'T) (y:'T) :'T =
         let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Append: _*_ -> _) a, b)
@@ -106,6 +105,8 @@ type Append with
                     for KeyValue(k, v ) in x do d.[k] <- v
                     for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Append.Invoke v v' | _ -> v'
                     d
+
+    [<Extension>]static member inline Append (f:'T->'Monoid, g:'T->'Monoid) = (fun x -> Append.Invoke (f x) (g x)) :'T->'Monoid
 
     [<Extension>]static member inline Append (x:'S Async, y:'S Async) = async {
                     let! a = x

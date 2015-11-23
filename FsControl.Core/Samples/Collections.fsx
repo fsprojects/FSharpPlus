@@ -137,8 +137,8 @@ let dicAB = append dicA dicB
 let greeting3 = extract dicAB.["keyb"]
 let greeting4 = extract (concat [dicA; getEmpty(); dicB]).["keyb"]
 
-let res2 = concat [ async {return (+) 2 } ; async {return (*) 10 } ; async {return id } ;  async {return (%) 3 } ; async {return getEmpty() } ] </Async.RunSynchronously/> 3
-
+let res2   = concat [ async {return Endo ((+) 2)} ; async {return Endo ((*) 10)} ; async {return Endo id } ;  async {return Endo ((%) 3)} ; async {return getEmpty() } ] |> Async.RunSynchronously |> Endo.run <| 3
+let res330 = concat [ async {return (fun (x:int) -> string x)} ; async {return (fun (x:int) -> string (x*10))} ; async {return getEmpty() } ] </Async.RunSynchronously/>  3
 
 // Functors, Monads
 
