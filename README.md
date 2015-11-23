@@ -20,7 +20,7 @@ A library that enhances the F# coding experience by providing the following two 
 
  - Now you can create generic functions, here's an example with <code>map</code> ([fmap](https://wiki.haskell.org/Functor) for Haskellers, [Select](http://www.dotnetperls.com/select) for C-sharpers):
 
-        let inline map f x = FsControl.Core.TypeMethods.Map.Invoke f x;;
+        let inline map f x = FsControl.Map.Invoke f x;;
 
  Static constraints will be inferred automatically.
     
@@ -45,7 +45,7 @@ A library that enhances the F# coding experience by providing the following two 
             
  By adding the static member <code>Map</code> we say that we're making <code>Tree</code> an instance of <code>Map</code>.
 
- - Try to map over your new type:
+ - Try mapping over your new type:
 
         let myTree = Tree(6, Tree(2, Leaf 1, Leaf 3), Leaf 9);;
         map ((*) 10) myTree;;
@@ -132,7 +132,7 @@ So you can create a type <code>Tree</code> and add an instance for the existing 
         | Leaf of 'a
 
     // add an instance for Map (Functor)
-        static member Map (x:Tree<_>, f, _) = 
+        static member Map (x:Tree<_>, f, impl) = 
             let rec loop f (t:Tree<'a>)  =
                 match t with
                 | Leaf x -> Leaf (f x)
