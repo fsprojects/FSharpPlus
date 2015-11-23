@@ -6,11 +6,9 @@ module List =
 
     let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
 
-    let inline sequence (ms:list<'``Monad<'T>``>) =
-        let k m m' = m >>= fun (x:'t) -> m' >>= fun xs -> (result :list<'t> -> '``Monad<list<'T>>``) (x::xs)
-        List.foldBack k ms ((result :list<'t> -> '``Monad<list<'T>>``) [])
+    let inline sequence (ms:list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequenceA ms
 
-    let inline mapM (f:'a->'Monad'b) (xs:list<'a>) :'Monad'List'b = sequence (List.map f xs)
+    let inline traverse (f:'T->'``Applicative<'U>``) (xs:list<'T>) :'``Applicative<list<'U>>`` = traverse f xs
     
     let inline foldM (f:'T->'U->'``Monad<'T>``) (a:'T) (bx:list<'U>) : '``Monad<'T>`` =
         let rec loopM a = function
@@ -27,4 +25,4 @@ module List =
                         result (if flg then (h::ys) else ys)))
         loopM xs
 
-    let inline replicateM count (initial:'``Monad<'T>``) : '``Monad<list<'T>>`` = sequence (List.replicate count initial)
+    let inline replicateM count (initial:'``Applicative<'T>``)  = sequence (List.replicate count initial)

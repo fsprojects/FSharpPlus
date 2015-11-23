@@ -170,7 +170,7 @@ module Compatibility =
 
         let inline sequence ms = List.sequence ms
         let inline replicateM n x = List.replicateM n x            
-        let inline mapM f as' = List.mapM f as'
+        let inline mapM f as' = List.traverse f as'
         let inline filterM p x = List.filterM p x
         let inline liftM  f m1    = m1 >>= (return' << f)
         let inline liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
