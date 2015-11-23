@@ -41,10 +41,16 @@ module Operators =
 
     // Monad -----------------------------------------------------------
     
+    /// Takes a monadic value and a function from a plain type to a monadic value, and returns a new monadic value.
     let inline (>>=) (x:'``Monad<'T>``) (f:'T->'``Monad<'U>``) :'``Monad<'U>`` = Bind.Invoke x f
+
+    /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
     let inline (=<<) (f:'T->'``Monad<'U>``) (x:'``Monad<'T>``) :'``Monad<'U>`` = Bind.Invoke x f
+
     let inline (>=>) (f:'T->'``Monad<'U>``) (g:'U->'``Monad<'V>``) (x:'T) : '``Monad<'V>`` = Bind.Invoke (f x) g
     let inline (<=<) (g:'b->'``Monad<'V>``) (f:'T->'``Monad<'U>``) (x:'T) : '``Monad<'V>`` = Bind.Invoke (f x) g
+
+    /// Flattens two layers of monadic information into one.
     let inline join  (x:'``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
 
 
@@ -271,13 +277,28 @@ module Operators =
 
     // Tuple
     
+    /// Gets the value of the first component of a tuple.
     let inline item1 tuple = Item1.Invoke tuple
+
+    /// Gets the value of the second component of a tuple.
     let inline item2 tuple = Item2.Invoke tuple
+
+    /// Gets the value of the third component of a tuple.
     let inline item3 tuple = Item3.Invoke tuple
+
+    /// Gets the value of the fourth component of a tuple.
     let inline item4 tuple = Item4.Invoke tuple
+
+    /// Gets the value of the fifth component of a tuple.
     let inline item5 tuple = Item5.Invoke tuple
+
+    /// Gets the value of the sixth component of a tuple.
     let inline item6 tuple = Item6.Invoke tuple
+
+    /// Gets the value of the seventh component of a tuple.
     let inline item7 tuple = Item7.Invoke tuple
+
+    /// Gets the value of the eighth component of a tuple.
     let inline item8 tuple = Item8.Invoke tuple
 
     let inline mapItem1 mapping tuple = MapItem1.Invoke mapping tuple
