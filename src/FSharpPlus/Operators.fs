@@ -450,6 +450,8 @@ module Operators =
     /// Converts using the implicit operator. 
     let inline implicit (x : ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) :^R
 
+    /// An active recognizer for a generic value parser.
+    let inline (|Parse|_|) str : 'T option = tryParse str
 
     /// A convenient alias for Choice<_,_>
     type Result<'Success,'Failure> = Choice<'Success,'Failure>
