@@ -39,4 +39,4 @@ module Seq =
 
     let replicate count initial = System.Linq.Enumerable.Repeat(initial, count)
 
-    let inline replicateM count (initial:'Monad'T) : 'Monad'Seq'T = sequence (replicate count initial)
+    let inline replicateM count  (initial:'``Monad<'T>``) : '``Monad<seq<'T>>`` = sequence (replicate count initial)
