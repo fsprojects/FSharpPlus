@@ -451,6 +451,15 @@ module Operators =
     let inline implicit (x : ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) :^R
 
 
+    /// A convenient alias for Choice<_,_>
+    type Result<'Success,'Failure> = Choice<'Success,'Failure>
+    let (|Success|Failure|) = function
+        | Choice1Of2 x -> Success x
+        | Choice2Of2 x -> Failure x
+
+    let inline Success x = Choice1Of2 x
+    let inline Failure x = Choice2Of2 x
+
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
     module ApplicativeMath =
 
