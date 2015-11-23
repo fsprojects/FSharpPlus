@@ -441,7 +441,7 @@ module Operators =
 
     // Additional functions
 
-    /// Folds a Foldable of a Monoid, using mempty as initial state and mappend as folder.
+    /// Folds a Foldable of a Monoid, using its empty as initial state and append as folder.
     let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x
 
     /// Returns the sum of the elements in the Foldable.
@@ -453,7 +453,7 @@ module Operators =
     /// An active recognizer for a generic value parser.
     let inline (|Parse|_|) str : 'T option = tryParse str
 
-    /// A convenient alias for Choice<_,_>
+    /// A convenient alias for Choice<'T1,'T2>
     type Result<'Success,'Failure> = Choice<'Success,'Failure>
     let (|Success|Failure|) = function
         | Choice1Of2 x -> Success x
@@ -465,25 +465,25 @@ module Operators =
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
     module ApplicativeMath =
 
-        let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
-        let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
-        let inline ( |+| ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
+        let inline ( |+  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((+)/> y) x :'``Functor<'T>``
+        let inline (  +| ) (x :'T)                   (y :'``Functor<'T>``)     = map ((+)   x) y :'``Functor<'T>``
+        let inline ( |+| ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (+) <!> x <*> y :'``Applicative<'T>``
 
-        let inline ( |-  ) (x :'Functor't)     (y :'t)             = map ((-)/> y) x :'Functor't
-        let inline (  -| ) (x :'t)             (y :'Functor't)     = map ((-)   x) y :'Functor't
-        let inline ( |-| ) (x :'Applicative't) (y :'Applicative't) = (-) <!> x <*> y :'Applicative't
+        let inline ( |-  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((-)/> y) x :'``Functor<'T>``
+        let inline (  -| ) (x :'T)                   (y :'``Functor<'T>``)     = map ((-)   x) y :'``Functor<'T>``
+        let inline ( |-| ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (-) <!> x <*> y :'``Applicative<'T>``
 
-        let inline ( |*  ) (x :'Functor't)     (y :'t)             = map ((*)/> y) x :'Functor't
-        let inline (  *| ) (x :'t)             (y :'Functor't)     = map ((*)   x) y :'Functor't
-        let inline ( |*| ) (x :'Applicative't) (y :'Applicative't) = (*) <!> x <*> y :'Applicative't
+        let inline ( |*  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((*)/> y) x :'``Functor<'T>``
+        let inline (  *| ) (x :'T)                   (y :'``Functor<'T>``)     = map ((*)   x) y :'``Functor<'T>``
+        let inline ( |*| ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (*) <!> x <*> y :'``Applicative<'T>``
 
-        let inline ( |%  ) (x :'Functor't)     (y :'t)             = map ((%)/> y) x :'Functor't
-        let inline (  %| ) (x :'t)             (y :'Functor't)     = map ((%)   x) y :'Functor't
-        let inline ( |%| ) (x :'Applicative't) (y :'Applicative't) = (%) <!> x <*> y :'Applicative't
+        let inline ( |%  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((%)/> y) x :'``Functor<'T>``
+        let inline (  %| ) (x :'T)                   (y :'``Functor<'T>``)     = map ((%)   x) y :'``Functor<'T>``
+        let inline ( |%| ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (%) <!> x <*> y :'``Applicative<'T>``
 
-        let inline ( |/  ) (x :'Functor't)     (y :'t)             = map ((/)/> y) x :'Functor't
-        let inline (  /| ) (x :'t)             (y :'Functor't)     = map ((/)   x) y :'Functor't
-        let inline ( |/| ) (x :'Applicative't) (y :'Applicative't) = (/) <!> x <*> y :'Applicative't
+        let inline ( |/  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((/)/> y) x :'``Functor<'T>``
+        let inline (  /| ) (x :'T)                   (y :'``Functor<'T>``)     = map ((/)   x) y :'``Functor<'T>``
+        let inline ( |/| ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (/) <!> x <*> y :'``Applicative<'T>``
 
     
 
