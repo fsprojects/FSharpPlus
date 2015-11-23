@@ -12,6 +12,9 @@ module Operators =
     /// Lift a function into a Functor. Same as map.
     let inline (<!>)  (f:'T->'U) (x:'``Functor<'T>``) :'``Functor<'U>`` = Map.Invoke f x
 
+    /// Lift a function into a Functor. Same as map.
+    let inline (<<|)  (f:'T->'U) (x:'``Functor<'T>``) :'``Functor<'U>`` = Map.Invoke f x
+
     /// Lift a function into a Functor. Same as map but with flipped arguments.
     let inline (|>>)  (x:'``Functor<'T>``) (f:'T->'U) :'``Functor<'U>`` = Map.Invoke f x
 
@@ -48,6 +51,7 @@ module Operators =
     // Monoid -----------------------------------------------------------------
 
     let inline getEmpty() :'Monoid = Empty.Invoke()
+    let inline (++)   (x:'Monoid) (y:'Monoid): 'Monoid = Append.Invoke x y
     let inline append (x:'Monoid) (y:'Monoid): 'Monoid = Append.Invoke x y
     let inline concat (x:seq<'Monoid>)       : 'Monoid = Concat.Invoke x
 
