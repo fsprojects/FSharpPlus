@@ -14,7 +14,7 @@ module SeqT =
 
     let inline internal mapM f as' = sequence (Seq.map f as')
 
-    let inline map  (f:'T->'U) (SeqT m : SeqT<'``Monad<seq<'T>``>)                                            = SeqT <| Map.Invoke (Seq.map f: (seq<_>->_)) m      : SeqT<'``Monad<seq<'U>``>
+    let inline map  (f:'T->'U) (SeqT m : SeqT<'``Monad<seq<'T>``>)                                            = SeqT <| map (Seq.map f: (seq<_>->_)) m      : SeqT<'``Monad<seq<'U>``>
     let inline bind (f:'T-> SeqT<'``Monad<seq<'U>``>) (SeqT m : SeqT<'``Monad<seq<'T>``>)               = SeqT (m >>= (mapM:_->seq<_>->_) (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> result)) 
     let inline apply (SeqT f : SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x : SeqT<'``Monad<seq<'T>``>) = SeqT (Map.Invoke (Seq.apply:seq<_->_>->seq<_>->seq<_>) f <*> x)          : SeqT<'``Monad<seq<'U>``>       
 
@@ -29,15 +29,15 @@ type SeqT with
 
     static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad Seq.singleton ) |> SeqT    :  SeqT<'``Monad<seq<'T>>``>
     
-    static member inline LiftAsync (x : Async<'T>) = Lift.Invoke (LiftAsync.Invoke x)
+    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
     
-    static member inline ThrowError (x:'E) = x |> ThrowError.Invoke |> Lift.Invoke
-    static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>   , h:'E1 -> SeqT<'``MonadError<'E2,'T>``>)    = SeqT    ((fun v h -> CatchError.Invoke v h) (SeqT.run    m) (SeqT.run    << h)) : SeqT<'``MonadError<'E2,'T>``>
+    static member inline ThrowError (x:'E) = x |> throw |> lift
+    static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>   , h:'E1 -> SeqT<'``MonadError<'E2,'T>``>)    = SeqT    ((fun v h -> catch v h) (SeqT.run    m) (SeqT.run    << h)) : SeqT<'``MonadError<'E2,'T>``>
     
     static member CallCC (f:(('T -> SeqT<Cont<'R,'U>>   ) -> _)) = SeqT   (Cont.callCC <| fun c ->   SeqT.run (f (SeqT  << c << Seq.singleton ))) :SeqT<Cont< 'R,  seq<'T>>>
     
-    static member get_Get() = Lift.Invoke State.get :   SeqT<State<'S,_>>  
-    static member Put (x:'T) = x |> State.put |> Lift.Invoke :   SeqT<_>  
+    static member get_Get() = lift State.get :   SeqT<State<'S,_>>  
+    static member Put (x:'T) = x |> State.put |> lift :   SeqT<_>  
     
-    static member get_Ask() = Lift.Invoke Reader.ask :   SeqT<Reader<'R,   seq<'R>>>
+    static member get_Ask() = lift Reader.ask :   SeqT<Reader<'R,   seq<'R>>>
     static member Local (  SeqT  (m:Reader<'R2,'T>), f:'R1->'R2) =   SeqT  <| Reader.local f m

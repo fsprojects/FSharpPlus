@@ -19,13 +19,13 @@ type ContT with
 
     static member inline Lift (m:'``Monad<'T>``) = ContT((>>=) m) : ContT<'``Monad<'R>``,'T>    
 
-    static member inline LiftAsync (x: Async<'T>) = Lift.Invoke (LiftAsync.Invoke x) : ContT<Async<'R>,'T>
+    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
 
     static member CallCC (f:(_->ContT<_,'T>)->_) = ContT (fun k -> ContT.run (f (fun a -> ContT (fun _ -> k a))) k) : ContT<'``Monad<'R>``,'U>
 
-    static member get_Ask() = Lift.Invoke Reader.ask : ContT<Reader<'R,'T>,'R>
+    static member get_Ask() = lift Reader.ask : ContT<Reader<'R,'T>,'R>
     static member Local (ContT m, f : 'R1 -> 'R2)    : ContT<Reader<_ ,'T>,'U> =
         ContT <| fun c -> (Reader.ask >>= (fun r -> Reader.local f (m (Reader.local (konst r) << c))))
     
-    static member get_Get()  = Lift.Invoke State.get         : ContT<State<'S, 'T>, 'S>
-    static member Put (x:'S) = x |> State.put |> Lift.Invoke : ContT<State<'S, 'T>, unit>
+    static member get_Get()  = lift State.get         : ContT<State<'S, 'T>, 'S>
+    static member Put (x:'S) = x |> State.put |> lift : ContT<State<'S, 'T>, unit>
