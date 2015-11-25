@@ -60,14 +60,6 @@
     <Compile Include="Reader.fs" />
     <Compile Include="Writer.fs" />
     <Compile Include="State.fs" />
-    <Compile Include="ListT.fs" />
-    <Compile Include="SeqT.fs" />
-    <Compile Include="OptionT.fs" />
-    <Compile Include="ErrorT.fs" />
-    <Compile Include="ContT.fs" />
-    <Compile Include="ReaderT.fs" />
-    <Compile Include="WriterT.fs" />
-    <Compile Include="StateT.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="NonEmptyList.fs" />
     <Compile Include="ZipList.fs" />

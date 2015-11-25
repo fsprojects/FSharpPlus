@@ -26,3 +26,45 @@ module List =
         loopM xs
 
     let inline replicateM count (initial:'``Applicative<'T>``)  = sequence (List.replicate count initial)
+
+
+open FsControl
+
+type ListT<'``monad<list<'t>>``> = ListT of '``monad<list<'t>>``
+
+[<RequireQualifiedAccess>]
+module ListT =
+    let run (ListT m) = m : '``Monad<list<'T>>``
+
+    let inline internal sequence ms =
+        let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (result :list<'a> -> 'M) (x::xs)
+        List.foldBack k ms ((result :list<'a> -> 'M) [])
+    
+    let inline internal mapM f as' = sequence (List.map f as')
+
+    let inline map  (f:'T->'U) (ListT m: ListT<'``Monad<list<'T>``>) =  ListT (map (List.map f) m) : ListT<'``Monad<list<'U>``>
+    let inline bind (f:'T-> ListT<'``Monad<list<'U>``>) (ListT m : ListT<'``Monad<list<'T>``>) = (ListT (m >>= mapM (run << f) >>= ((List.concat:list<_>->_) >> result)))
+    let inline apply  (ListT f : ListT<'``Monad<list<('T -> 'U)>``>) (ListT x : ListT<'``Monad<list<'T>``>) = ListT (Map.Invoke List.apply f <*> x)  : ListT<'``Monad<list<'U>``>
+
+type ListT with
+    static member inline Map    (x : ListT<'``Monad<list<'T>``>, f : 'T->'U , impl:Map)                                                       = ListT.map f x                                         : ListT<'``Monad<list<'U>``>
+    static member inline Return (output : ListT<'``Monad<list<'T>``>, impl:Return)                                                            = ListT << result << List.singleton                     : 'T -> ListT<'``Monad<list<'T>``>
+    static member inline Apply  (f : ListT<'``Monad<list<('T -> 'U)>``>, x : ListT<'``Monad<list<'T>``>, output:ListT<'r>, impl:Apply ) = ListT.apply f x                                             : ListT<'``Monad<list<'U>``>
+    static member inline Bind   (x  : ListT<'``Monad<list<'T>``>, f: 'T -> ListT<'``Monad<list<'U>``>)                                    = ListT.bind f x
+
+    static member inline MZero (output: ListT<'``MonadPlus<list<'T>``>, impl:MZero)                                                           = ListT <| result []                                    : ListT<'``MonadPlus<list<'T>``>
+    static member inline MPlus (ListT x, ListT y, impl:MPlus) = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))   : ListT<'``MonadPlus<list<'T>``>
+    static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad List.singleton) |> ListT   :  ListT<'``Monad<list<'T>>``> 
+    
+    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
+    
+    static member inline ThrowError (x:'E) = x |> throw |> lift
+    static member inline CatchError (m:ListT<'``MonadError<'E1,'T>``>  , h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   = ListT   ((fun v h -> CatchError.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
+    
+    static member inline CallCC (f:(('T -> ListT<'``MonadCont<'R,list<'U>>``>) -> _)) = ListT (callCC <| fun c -> ListT.run(f (ListT << c << List.singleton))) : ListT<'``MonadCont<'R, list<'T>>``>
+    
+    static member inline get_Get()  = lift get           : '``ListT<'MonadState<'S,'S>>``
+    static member inline Put (x:'T) = x |> put |> lift   : '``ListT<'MonadState<unit,'S>>``
+    
+    static member inline get_Ask() = lift ask            : '``ListT<'MonadReader<'R,  list<'R>>>``
+    static member inline Local (ListT  (m:'``MonadReader<'R2,'T>``), f:'R1->'R2) = ListT (local f m)
