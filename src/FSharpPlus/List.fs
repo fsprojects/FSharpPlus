@@ -47,14 +47,14 @@ module ListT =
     let inline apply  (ListT f : ListT<'``Monad<list<('T -> 'U)>``>) (ListT x : ListT<'``Monad<list<'T>``>) = ListT (Map.Invoke List.apply f <*> x)  : ListT<'``Monad<list<'U>``>
 
 type ListT with
-    static member inline Map    (x : ListT<'``Monad<list<'T>``>, f : 'T->'U , impl:Map)                                                       = ListT.map f x                                         : ListT<'``Monad<list<'U>``>
-    static member inline Return (output : ListT<'``Monad<list<'T>``>, impl:Return)                                                            = ListT << result << List.singleton                     : 'T -> ListT<'``Monad<list<'T>``>
+    static member inline Map    (x : ListT<'``Monad<list<'T>``>, f : 'T->'U , impl:Map)                                                 = ListT.map f x                                         : ListT<'``Monad<list<'U>``>
+    static member inline Return (output : ListT<'``Monad<list<'T>``>, impl:Return)                                                      = ListT << result << List.singleton                     : 'T -> ListT<'``Monad<list<'T>``>
     static member inline Apply  (f : ListT<'``Monad<list<('T -> 'U)>``>, x : ListT<'``Monad<list<'T>``>, output:ListT<'r>, impl:Apply ) = ListT.apply f x                                             : ListT<'``Monad<list<'U>``>
-    static member inline Bind   (x  : ListT<'``Monad<list<'T>``>, f: 'T -> ListT<'``Monad<list<'U>``>)                                    = ListT.bind f x
+    static member inline Bind   (x  : ListT<'``Monad<list<'T>``>, f: 'T -> ListT<'``Monad<list<'U>``>)                                  = ListT.bind  f x
 
-    static member inline MZero (output: ListT<'``MonadPlus<list<'T>``>, impl:MZero)                                                           = ListT <| result []                                    : ListT<'``MonadPlus<list<'T>``>
+    static member inline MZero (output: ListT<'``MonadPlus<list<'T>``>, impl:MZero)                                                     = ListT <| result []                                    : ListT<'``MonadPlus<list<'T>``>
     static member inline MPlus (ListT x, ListT y, impl:MPlus) = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))   : ListT<'``MonadPlus<list<'T>``>
-    static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad List.singleton) |> ListT   :  ListT<'``Monad<list<'T>>``> 
+    static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad List.singleton |> ListT                                   : ListT<'``Monad<list<'T>>``> 
     
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
     
