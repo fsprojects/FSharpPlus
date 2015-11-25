@@ -41,13 +41,13 @@ type WriterT with
 
     static member inline ThrowError (x: 'E) = x |> throw |> lift
     static member inline CatchError (m:WriterT<Choice<'T * 'Monoid, 'E2>> , h:'E2 -> _) = 
-            WriterT (catch (WriterT.run m) (WriterT.run << h)) : WriterT<Choice<'T * 'Monoid, 'E2>>
+            WriterT (catch (WriterT.run m) (WriterT.run << h)) : WriterT<'``MonadChoice<'T * 'Monoid, 'E2>``>
 
-    static member inline CallCC (f : ('a->WriterT<Cont<'r,'t>>)->_)  :WriterT<Cont<'r,'a*'b>> = 
-        WriterT (Cont.callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, getEmpty()))))
+    static member inline CallCC (f : ('a->WriterT<Cont<'r,'t>>)->_)  : WriterT<'``MonadCont<'r,'a*'b>``> = 
+        WriterT (callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, getEmpty()))))
        
-    static member inline get_Ask()                     = lift Reader.ask               : WriterT<Reader<'R,'R*'Monoid>>
-    static member        Local (WriterT m, f:'R1->'R2) = WriterT (Reader.local f m)           : WriterT<Reader<'R1,'T*'Monoid>>
+    static member inline get_Ask()                     = lift ask
+    static member inline Local (WriterT m, f:'R1->'R2) = WriterT (local f m)    : WriterT<'``MonadReader<'R1,'T*'Monoid>``>
 
-    static member inline get_Get()  = lift State.get                 : WriterT<State<'S,'S*'Monoid>>  
-    static member inline Put (x:'S) = x |> State.put |> lift         : WriterT<State<'S,unit*'Monoid>>
+    static member inline get_Get()  = lift get
+    static member inline Put (x:'S) = x |> put |> lift
