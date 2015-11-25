@@ -154,16 +154,16 @@ module Operators =
     /// Lift a computation from the inner monad to the constructed monad.
     let inline lift      (x:'``Monad<'T>``) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
 
-    /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of layers.
+    /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of monad-layers.
     let inline liftAsync (x:Async<'T>) : '``MonadAsync<'T>`` = LiftAsync.Invoke x
 
     /// (call-with-current-continuation) calls a function with the current continuation as its argument.
-    let inline callCC (f:('T->'``MonadCont<'U>``)->'``MonadCont<'T>``) : '``MonadCont<'T>`` = CallCC.Invoke f
+    let inline callCC (f:('T->'``MonadCont<'R,'U>``)->'``MonadCont<'R,'T>``) : '``MonadCont<'R,'T>`` = CallCC.Invoke f
    
-    /// <summary>Haskell signature: get    :: MonadState  s m => m s</summary>
+    /// Return the state from the internals of the monad.
     let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
 
-    /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
+    /// Replace the state inside the monad.
     let inline put (x:'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
 
     /// Retrieves the monad environment.
