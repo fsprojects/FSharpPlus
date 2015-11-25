@@ -21,15 +21,15 @@ module OptionT =
     let inline apply (OptionT f : OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x : OptionT<'``Monad<option<'T>``>) = OptionT (Map.Invoke Option.apply f <*> x)  : OptionT<'``Monad<option<'U>``>
 
 type OptionT with
-    static member inline Map    (x : OptionT<'``Monad<option<'T>``>, f : 'T->'U , impl:Map)                                                       = OptionT.map f x                                                                             : OptionT<'``Monad<option<'U>``>
-    static member inline Return (output : OptionT<'``Monad<option<'T>``>, impl:Return)                                                            = OptionT << result << Some                                                                   : 'T -> OptionT<'``Monad<option<'T>``>
-    static member inline Apply  (f : OptionT<'``Monad<option<('T -> 'U)>``>, x : OptionT<'``Monad<option<'T>``>, output:OptionT<'r>, impl:Apply ) = OptionT.apply f x                                                                           : OptionT<'``Monad<option<'U>``>
+    static member inline Map    (x : OptionT<'``Monad<option<'T>``>, f : 'T->'U , impl:Map)                                                       = OptionT.map f x           : OptionT<'``Monad<option<'U>``>
+    static member inline Return (output : OptionT<'``Monad<option<'T>``>, impl:Return)                                                            = OptionT << result << Some : 'T -> OptionT<'``Monad<option<'T>``>
+    static member inline Apply  (f : OptionT<'``Monad<option<('T -> 'U)>``>, x : OptionT<'``Monad<option<'T>``>, output:OptionT<'r>, impl:Apply ) = OptionT.apply f x         : OptionT<'``Monad<option<'U>``>
     static member inline Bind   (x  : OptionT<'``Monad<option<'T>``>, f: 'T -> OptionT<'``Monad<option<'U>``>)                                    = OptionT.bind f x
 
-    static member inline MZero (output: OptionT<'``MonadPlus<option<'T>``>, impl:MZero)                                                           = OptionT <| result None                                                                      : OptionT<'``MonadPlus<option<'T>``>
-    static member inline MPlus (OptionT x, OptionT y, impl:MPlus)                                                                                 = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> x | _ -> y))    : OptionT<'``MonadPlus<option<'T>``>
+    static member inline MZero (output: OptionT<'``MonadPlus<option<'T>``>, impl:MZero) = OptionT <| result None                                                                   : OptionT<'``MonadPlus<option<'T>``>
+    static member inline MPlus (OptionT x, OptionT y, impl:MPlus)                       = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> x | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>
 
-    static member inline Lift (x:'``Monad<'T>``) = x |> (Map.FromMonad Some)           |> OptionT : OptionT<'``Monad<option<'T>>``>
+    static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad Some |> OptionT : OptionT<'``Monad<option<'T>>``>
 
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
 

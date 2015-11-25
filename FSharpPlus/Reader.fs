@@ -1,7 +1,5 @@
 ﻿namespace FSharpPlus
 
-open FsControl
-
 /// <summary> Computation type: Computations which read values from a shared environment.
 /// <para/>   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
 /// <para/>   Useful for: Maintaining variable bindings, or other shared environment.</summary>
@@ -30,6 +28,7 @@ type Reader with
     static member get_Ask()    = Reader.ask                     : Reader<'R,'R>
     static member Local (m, f:'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
+open FsControl
 
 type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
 
