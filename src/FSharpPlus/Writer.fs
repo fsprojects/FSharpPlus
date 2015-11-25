@@ -49,20 +49,20 @@ module WriterT =
 
     let inline map (f:'T->'U) (WriterT m:WriterT<'``Monad<'T * 'Monoid>``>) =
         let mapWriter f (a, m) = (f a, m)
-        WriterT (Map.Invoke (mapWriter f) m) : WriterT<'``Monad<'U * 'Monoid>``>
+        WriterT (map (mapWriter f) m) : WriterT<'``Monad<'U * 'Monoid>``>
 
     let inline apply (WriterT f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) (WriterT x : WriterT<'``Monad<'T * 'Monoid>``>) =
-        let applyWriter (a, w) (b, w') = (a b, Append.Invoke w w')
+        let applyWriter (a, w) (b, w') = (a b, append w w')
         WriterT (result applyWriter <*> f <*> x) : WriterT<'``Monad<'U * 'Monoid>``>
         
     let inline bind (f:'T->WriterT<'``Monad<'U * 'Monoid>``>) (WriterT (m:'``Monad<'T * 'Monoid>``)) = 
-        WriterT (m >>= (fun (a, w) -> run (f a) >>= (fun (b, w') -> result (b, Append.Invoke w w'))))  : WriterT<'``Monad<'U * 'Monoid>``>
+        WriterT (m >>= (fun (a, w) -> run (f a) >>= (fun (b, w') -> result (b, append w w'))))  : WriterT<'``Monad<'U * 'Monoid>``>
     
 
 type WriterT with
 
     static member inline Map    (x :WriterT<'``Monad<'T * 'Monoid>``>, f:'T->'U, _:Map) = WriterT.map f x
-    static member inline Return (_ :WriterT<'``Monad<'T * 'Monoid>``>, _:Return) :'T -> WriterT<'``Monad<'T * 'Monoid>``> = fun a -> WriterT (result (a, getEmpty))
+    static member inline Return (_ :WriterT<'``Monad<'T * 'Monoid>``>, _:Return) :'T -> WriterT<'``Monad<'T * 'Monoid>``> = fun a -> WriterT (result (a, getEmpty()))
     static member inline Apply  (f :WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x: WriterT<'``Monad<'T * 'Monoid>``>, output: WriterT<'``Monad<'U * 'Monoid>``>, impl:Apply ) = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline Bind   (x :WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)  = WriterT.bind f x             : WriterT<'``Monad<'U * 'Monoid>``>
 
