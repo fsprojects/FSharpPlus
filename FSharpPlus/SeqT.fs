@@ -34,10 +34,10 @@ type SeqT with
     static member inline ThrowError (x:'E) = x |> throw |> lift
     static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>   , h:'E1 -> SeqT<'``MonadError<'E2,'T>``>)    = SeqT    ((fun v h -> catch v h) (SeqT.run    m) (SeqT.run    << h)) : SeqT<'``MonadError<'E2,'T>``>
     
-    static member inline CallCC (f:(('T -> SeqT<Cont<'R,'U>>   ) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
+    static member inline CallCC (f:(('T -> SeqT<'``MonadCont<'R,seq<'U>>``>) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
     
-    static member inline get_Get()  = lift get
-    static member inline Put (x:'T) = x |> put |> lift
+    static member inline get_Get()  = lift get                                          : '``SeqT<'MonadState<'S,'S>>``
+    static member inline Put (x:'T) = x |> put |> lift                                  : '``SeqT<'MonadState<unit,'S>>``
     
-    static member inline get_Ask() = lift ask
-    static member inline Local (SeqT (m:Reader<'R2,'T>), f:'R1->'R2) = SeqT (local f m)
+    static member inline get_Ask() = lift ask                                           : '``SeqT<'MonadReader<'R,seq<'R>>>``
+    static member inline Local (SeqT (m:'``MonadReader<'R2,'T>``), f:'R1->'R2) = SeqT (local f m)

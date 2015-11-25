@@ -19,8 +19,8 @@ type ErrorT with
 
     static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad Choice1Of2 |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
 
-    static member inline ThrowError (x:'E) =  x |> Choice2Of2 |> result |> ErrorT : ErrorT<'``Monad<'Choice<'T,'E>>``>
-    static member inline CatchError (ErrorT x :ErrorT<'``MonadError<'E1,'T>``>, f: 'E1 -> _) = (ErrorT (x >>= (fun a -> match a with Choice2Of2 l -> ErrorT.run (f l) | Choice1Of2 r -> result (Choice1Of2 r)))) : ErrorT<'``Monad<'Choice<'T,'E2>>``>
+    static member inline ThrowError (x:'E) =  x |> Choice2Of2 |> result |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
+    static member inline CatchError (ErrorT x :ErrorT<'``MonadError<'E1,'T>``>, f: 'E1 -> _) = (ErrorT (x >>= (fun a -> match a with Choice2Of2 l -> ErrorT.run (f l) | Choice1Of2 r -> result (Choice1Of2 r)))) : ErrorT<'``Monad<Choice<'T,'E2>>``>
 
     static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x)
 
@@ -29,12 +29,12 @@ type ErrorT with
     static member inline get_Ask() = (ErrorT << (Map.FromMonad Choice1Of2)) ask : ErrorT<'``MonadReader<'R,Choice<'R,'E>>``>
     static member inline Local (ErrorT m : ErrorT<'``MonadReader<'R2,Choice<'R2,'E>>``>, f:'R1->'R2) = ErrorT (local f m)
 
-    static member inline Tell (w:'Monoid) = w |> tell |> lift
+    static member inline Tell (w:'Monoid) = w |> tell |> lift :   '``ErrorT<Writer<'Monoid,Choice<unit,'E>>*)>``
     static member inline Listen m : ErrorT<'``MonadWriter<'Monoid,Choice<'T*'Monoid,'E>>``> =
         let liftError (m, w) = Error.map (fun x -> (x, w)) m
         ErrorT (listen (ErrorT.run m) >>= (result << liftError))
 
     static member inline Pass m = ErrorT (ErrorT.run m >>= choice (result << Choice2Of2) (map Choice1Of2 << pass << result)) : ErrorT<'``MonadWriter<'Monoid,Choice<'T,'E>>``>
 
-    static member inline get_Get()  = lift get
-    static member inline Put (x:'S) = x |> put |> lift
+    static member inline get_Get()  = lift get         : '``ErrorT<'MonadState<'S,Choice<_,'E>>>``
+    static member inline Put (x:'S) = x |> put |> lift : '``ErrorT<'MonadState<'S,Choice<_,'E>>>``
