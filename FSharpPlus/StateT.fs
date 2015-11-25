@@ -28,5 +28,5 @@ type StateT with
     static member inline Put (x:'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``Monad<unit * 'S>``>
 
     static member inline ThrowError (x:'E) = x |> throw |> lift
-    static member inline CatchError (m:StateT<'S,Choice<'T * 'S, 'E1>>, h:'E1 -> _) = 
+    static member inline CatchError (m:StateT<'S,'``MonadError<'E1,'T * 'S>``>, h:'E1 -> _) = 
         StateT (fun s -> catch (StateT.run m s) (fun e -> StateT.run (h e) s)) : StateT<'S,'``MonadError<'E2, 'T * 'S>``>

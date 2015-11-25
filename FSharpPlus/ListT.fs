@@ -33,10 +33,10 @@ type ListT with
     static member inline ThrowError (x:'E) = x |> throw |> lift
     static member inline CatchError (m:ListT<'``MonadError<'E1,'T>``>  , h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   = ListT   ((fun v h -> CatchError.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
     
-    static member inline CallCC (f:(('T -> ListT<Cont<'R,'U>>  ) -> _)) = ListT (callCC <| fun c -> ListT.run(f (ListT << c << List.singleton))) : ListT<'``MonadCont<'R, list<'T>>``>
+    static member inline CallCC (f:(('T -> ListT<'``MonadCont<'R,list<'U>>``>) -> _)) = ListT (callCC <| fun c -> ListT.run(f (ListT << c << List.singleton))) : ListT<'``MonadCont<'R, list<'T>>``>
     
-    static member inline get_Get()  = lift get
-    static member inline Put (x:'T) = x |> put |> lift
+    static member inline get_Get()  = lift get           : '``ListT<'MonadState<'S,'S>>``
+    static member inline Put (x:'T) = x |> put |> lift   : '``ListT<'MonadState<unit,'S>>``
     
-    static member inline get_Ask() = lift ask
-    static member inline Local ( ListT  (m:Reader<'R2,'T>), f:'R1->'R2) = ListT (local f m)
+    static member inline get_Ask() = lift ask            : '``ListT<'MonadReader<'R,  list<'R>>>``
+    static member inline Local (ListT  (m:'``MonadReader<'R2,'T>``), f:'R1->'R2) = ListT (local f m)
