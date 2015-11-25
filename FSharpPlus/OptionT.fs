@@ -27,17 +27,17 @@ type OptionT with
     static member inline ThrowError (x:'E) = x |> throw |> lift
     static member inline CatchError (m:OptionT<'``MonadError<'E1,'T>``>, h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> catch v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
 
-    static member CallCC (f:(('T -> OptionT<Cont<'R,'U>>) -> _)) = OptionT(Cont.callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))      :OptionT<Cont<'R,option<'T>>>
+    static member inline CallCC (f:(('T -> OptionT<Cont<'R,'U>>) -> _)) = OptionT(callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))      : OptionT<'``MonadCont<'R,option<'T>>``>
 
-    static member get_Get() = lift State.get :OptionT<State<'S,_>>
-    static member Put (x:'T) = x |> State.put |> lift :OptionT<_>
+    static member inline get_Get() = lift get
+    static member inline Put (x:'T) = x |> put |> lift
 
-    static member get_Ask() = lift Reader.ask :OptionT<Reader<'R,option<'R>>>
-    static member Local (OptionT (m:Reader<'R2,'T>), f:'R1->'R2) = OptionT <| Reader.local f m
+    static member inline get_Ask() = lift ask
+    static member inline Local (OptionT (m:Reader<'R2,'T>), f:'R1->'R2) = OptionT (local f m)
 
-    static member inline Tell (w:'Monoid) = w |> Writer.tell |> lift :OptionT<_>
-    static member inline Listen (m : OptionT<Writer<'Monoid, option<'T>>>) =
+    static member inline Tell (w:'Monoid) = w |> tell |> lift
+    static member inline Listen (m ) =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
-        OptionT (Writer.listen (OptionT.run m) >>= (result << liftMaybe))
-    static member inline Pass m : OptionT<Writer<'Monoid, option<'T>>> = OptionT (OptionT.run m >>= option (result None) (map Some << Writer.pass << result))
+        OptionT (listen (OptionT.run m) >>= (result << liftMaybe))
+    static member inline Pass m : OptionT<'``MonadWriter<'Monoid, option<'T>>``> = OptionT (OptionT.run m >>= option (result None) (map Some << pass << result))
 
