@@ -185,10 +185,10 @@ module Operators =
     let inline pass (m:'``MonadWriter<'Monoid,('T * ('Monoid -> 'Monoid))>``) : '``MonadWriter<'Monoid,'T>`` = Pass.Invoke m
 
     /// Throws an error value inside the Error monad.
-    let inline throw (error:'E) : '``'MonadError<'E,'T>`` = ThrowError.Invoke error
+    let inline throw (error:'E) : '``'MonadError<'E,'T>`` = Throw.Invoke error
 
     /// <summary> Executes a handler when the value contained in the Error monad represents an error.  </summary>
-    let inline catch (value:'``'MonadError<'E1,'T>``) (handler:'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = CatchError.Invoke value handler
+    let inline catch (value:'``'MonadError<'E1,'T>``) (handler:'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = Catch.Invoke value handler
 
 
     // Collection

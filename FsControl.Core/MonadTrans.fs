@@ -24,23 +24,23 @@ type LiftAsync =
 
 // MonadError
 
-type ThrowError =
+type Throw =
     static member inline Invoke (x:'E) : '``'MonadError<'E,'T>`` =
-        let inline call_2 (a:^a, b:^R, x) = ((^a or ^R) : (static member ThrowError: _*_->'R) (b,x))
+        let inline call_2 (a:^a, b:^R, x) = ((^a or ^R) : (static member Throw: _*_->'R) (b,x))
         let inline call (a:'a, x:'x) = call_2 (a, Unchecked.defaultof<'r>, x) :'r
-        call (Unchecked.defaultof<ThrowError>, x)
+        call (Unchecked.defaultof<Throw>, x)
 
-    static member inline ThrowError (_:'R        ,x :'E) = (^R : (static member ThrowError: _ -> ^R) x)
-    static member inline ThrowError (_:^t when ^t: null and ^t: struct, _) = id
-    static member        ThrowError (_:Choice<'T,'E>, x:'E) = Choice2Of2 x: Choice<'T,'E>
+    static member inline Throw (_:'R        ,x :'E) = (^R : (static member Throw: _ -> ^R) x)
+    static member inline Throw (_:^t when ^t: null and ^t: struct, _) = id
+    static member        Throw (_:Choice<'T,'E>, x:'E) = Choice2Of2 x: Choice<'T,'E>
 
-type CatchError =
-    static member        CatchError (x:Either<'a,'e1>, k:'e1->Either<'a,'e2>) = match x with L v -> L v | R e -> k e
-    static member        CatchError (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Error.catch k x
+type Catch =
+    static member        Catch (x:Either<'a,'e1>, k:'e1->Either<'a,'e2>) = match x with L v -> L v | R e -> k e
+    static member        Catch (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Error.catch k x
 
     static member inline Invoke (x:'``MonadError<'E1,'T>``) (f:'E1->'``MonadError<'E2,'T>``) : '``MonadError<'E2,'T>`` =
-        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member CatchError: _*_ -> _) b, f)
-        call_3 (Unchecked.defaultof<CatchError>, x, Unchecked.defaultof<'``MonadError<'E2,'T>``>, f)
+        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member Catch: _*_ -> _) b, f)
+        call_3 (Unchecked.defaultof<Catch>, x, Unchecked.defaultof<'``MonadError<'E2,'T>``>, f)
 
 
 // MonadCont
