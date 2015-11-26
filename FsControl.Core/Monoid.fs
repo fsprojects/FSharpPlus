@@ -9,8 +9,8 @@ open Microsoft.FSharp.Quotations
 #if NOTNET35
 open System.Threading.Tasks
 #endif
-open FsControl.Core.Internals
-open FsControl.Core.Internals.Prelude
+open FsControl.Internals
+open FsControl.Internals.Prelude
 
 
 type Empty =

@@ -3,7 +3,7 @@
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
-open FsControl.Core.Internals
+open FsControl.Internals
 
 
 [<Extension;Sealed>]

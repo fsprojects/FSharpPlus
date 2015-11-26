@@ -12,8 +12,8 @@ open System.Text
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Core.Printf
 open FsControl.BaseLib
-open FsControl.Core.Internals
-open FsControl.Core.Internals.Prelude
+open FsControl.Internals
+open FsControl.Internals.Prelude
 open System.Numerics
 
 

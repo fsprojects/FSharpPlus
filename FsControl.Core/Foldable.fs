@@ -10,8 +10,8 @@ open System.Runtime.InteropServices
 open System.Text
 open System.Collections
 open System.Collections.Generic
-open FsControl.Core.Internals
-open FsControl.Core.Internals.Prelude
+open FsControl.Internals
+open FsControl.Internals.Prelude
 
 
 [<Extension;Sealed>]

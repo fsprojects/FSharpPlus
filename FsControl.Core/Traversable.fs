@@ -2,9 +2,9 @@
 
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
-open FsControl.Core.Internals
-open FsControl.Core.Internals.Prelude
-open FsControl.Core.Internals.MonadOps
+open FsControl.Internals
+open FsControl.Internals.Prelude
+open FsControl.Internals.MonadOps
 
 
 [<Extension;Sealed>]

@@ -1,7 +1,7 @@
 ﻿namespace FsControl.Data
 
 open FsControl
-open FsControl.Core.Internals.Prelude
+open FsControl.Internals.Prelude
 
 type Dual<'T> = Dual of 'T with
     static member inline Empty  (_:Dual<'m>, _:Empty ) = Dual (Empty.Invoke()) :Dual<'m>

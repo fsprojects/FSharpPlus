@@ -11,8 +11,8 @@ open System.Threading.Tasks
 open Microsoft.FSharp.Quotations
 
 open FsControl.Data
-open FsControl.Core.Internals
-open FsControl.Core.Internals.Prelude
+open FsControl.Internals
+open FsControl.Internals.Prelude
 
 
 // Monad class ------------------------------------------------------------
@@ -267,7 +267,7 @@ type MPlus with
     static member inline MPlus (Kleisli f, Kleisli g, impl:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
 
 
-namespace FsControl.Core.Internals
+namespace FsControl.Internals
 module internal MonadOps =
 
     let inline (>>=) x f = FsControl.Bind.Invoke x f
@@ -287,9 +287,9 @@ open System.Collections.Generic
 open System.Threading.Tasks
 #endif
 open FsControl.Data
-open FsControl.Core.Internals
-open FsControl.Core.Internals.Prelude
-open FsControl.Core.Internals.MonadOps
+open FsControl.Internals
+open FsControl.Internals.Prelude
+open FsControl.Internals.MonadOps
 
 [<Extension;Sealed>]
 type Extract =
