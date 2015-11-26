@@ -1,10 +1,5 @@
 namespace FsControl
 
-type Kleisli<'a, 'm> = Kleisli of ('a -> 'm)
-
-[<RequireQualifiedAccess>]
-module Kleisli = let run (Kleisli f) = f
-
 open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
@@ -15,6 +10,7 @@ open System.Threading.Tasks
 #endif
 open Microsoft.FSharp.Quotations
 
+open FsControl.Data
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
 
@@ -290,6 +286,7 @@ open System.Collections.Generic
 #if NOTNET35
 open System.Threading.Tasks
 #endif
+open FsControl.Data
 open FsControl.Core.Internals
 open FsControl.Core.Internals.Prelude
 open FsControl.Core.Internals.MonadOps

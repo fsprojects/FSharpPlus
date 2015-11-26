@@ -3,6 +3,7 @@
 
 open System
 open FsControl
+open FsControl.Data
 open FsControl.Operators
 
 let flip f x y = f y x

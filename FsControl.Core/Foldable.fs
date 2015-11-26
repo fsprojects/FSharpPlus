@@ -161,6 +161,7 @@ type FoldMap =
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<FoldMap>, x, f)
 
+open FsControl.Data
 
 type FoldBack with
     static member inline FromFoldMap f z x = Endo.run (FoldMap.Invoke (Endo << f ) x) z

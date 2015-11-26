@@ -291,6 +291,8 @@ let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.append x y
 let inline mconcat (x:seq<'a>) : 'a = FsControl.Operators.concat x
 
 
+open FsControl.Data
+
 // Test Monoids
 let emptyLst:list<int> = mempty()
 let zeroInt:Sum<int>   = mempty()
