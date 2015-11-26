@@ -246,7 +246,7 @@ module Compatibility =
         let runListT  = ListT.run
         let inline liftIO (x: IO<'a>) = liftAsync x
 
-            
+        
         // ContT
         let runContT  = ContT.run
         type ContT = ContT
