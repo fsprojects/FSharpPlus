@@ -70,8 +70,8 @@ type SeqT with
     
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
     
-    static member inline ThrowError (x:'E) = x |> throw |> lift
-    static member inline CatchError (m:SeqT<'``MonadError<'E1,'T>``>, h:'E1 -> SeqT<'``MonadError<'E2,'T>``>) = SeqT ((fun v h -> catch v h) (SeqT.run m) (SeqT.run << h)) : SeqT<'``MonadError<'E2,'T>``>
+    static member inline Throw (x:'E) = x |> throw |> lift
+    static member inline Catch (m:SeqT<'``MonadError<'E1,'T>``>, h:'E1 -> SeqT<'``MonadError<'E2,'T>``>) = SeqT ((fun v h -> catch v h) (SeqT.run m) (SeqT.run << h)) : SeqT<'``MonadError<'E2,'T>``>
     
     static member inline CallCC (f:(('T -> SeqT<'``MonadCont<'R,seq<'U>>``>) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
     

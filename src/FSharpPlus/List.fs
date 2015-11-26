@@ -58,8 +58,8 @@ type ListT with
     
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
     
-    static member inline ThrowError (x:'E) = x |> throw |> lift
-    static member inline CatchError (m:ListT<'``MonadError<'E1,'T>``>  , h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   = ListT   ((fun v h -> CatchError.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
+    static member inline Throw (x:'E) = x |> throw |> lift
+    static member inline Catch (m:ListT<'``MonadError<'E1,'T>``>  , h:'E1 -> ListT<'``MonadError<'E2,'T>``>)   = ListT   ((fun v h -> Catch.Invoke v h) (ListT.run   m) (ListT.run   << h)) : ListT<'``MonadError<'E2,'T>``>
     
     static member inline CallCC (f:(('T -> ListT<'``MonadCont<'R,list<'U>>``>) -> _)) = ListT (callCC <| fun c -> ListT.run(f (ListT << c << List.singleton))) : ListT<'``MonadCont<'R, list<'T>>``>
     

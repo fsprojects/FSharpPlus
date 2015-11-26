@@ -58,8 +58,8 @@ type ReaderT with
 
     static member inline LiftAsync (x: Async<'T>) = (lift (liftAsync x) : ReaderT<'R,'``MonadAsync<'T>``>)
 
-    static member inline ThrowError (x:'E) = x |> throw |> lift : ReaderT<'R,'``MonadError<'E,'T>``>
-    static member inline CatchError (m:ReaderT<'R,'``MonadError<'E1,'T>``>, h:'E1 -> _) = 
+    static member inline Throw (x:'E) = x |> throw |> lift : ReaderT<'R,'``MonadError<'E,'T>``>
+    static member inline Catch (m:ReaderT<'R,'``MonadError<'E1,'T>``>, h:'E1 -> _) = 
         ReaderT (fun s -> catch (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s)) : ReaderT<'R,'``MonadError<'E2,'T>``>
 
     static member inline Tell   w           = w |> tell |> lift         : ReaderT<'R, '``MonadWriter<'Monoid,unit>``>
