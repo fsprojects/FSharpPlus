@@ -2,7 +2,26 @@
 
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
+open System.Text
 open FsControl.Core.Internals
+
+
+[<Extension;Sealed>]
+type Item =
+    inherit Default1
+    [<Extension>]static member inline Item (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head :'T
+    [<Extension>]static member        Item (x:string        , n, [<Optional>]impl:Item    ) = x.[n]
+    [<Extension>]static member        Item (x:StringBuilder , n, [<Optional>]impl:Item    ) = x.ToString().[n]
+    [<Extension>]static member        Item (x:'a []         , n, [<Optional>]impl:Item    ) = x.[n] : 'a
+    [<Extension>]static member        Item (x:'a [,]        , (i,j), [<Optional>]impl:Item) = x.[i,j] : 'a
+    [<Extension>]static member        Item (x:'a ResizeArray, n, [<Optional>]impl:Item    ) = x.[n]
+    [<Extension>]static member        Item (x:list<'a>      , n, [<Optional>]impl:Item    ) = x.[n]
+    [<Extension>]static member        Item (x:Map<'K,'T>    , k, [<Optional>]impl:Item) = x.[k] : 'T
+
+    static member inline Invoke (n:'K) (source:'``Indexed<'T>``)  :'T =
+        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)
+        let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<Item>, source, n)
 
 [<Extension;Sealed>]
 type MapIndexed =

@@ -126,6 +126,9 @@ module Operators =
 
     // Indexable
 
+    /// Get an item from the given index.
+    let inline item (n:'K) (source:'``Indexed<'T>``) : 'T = Item.Invoke n source
+
     /// Map with access to the index.
     let inline mapi (mapping:'K->'T->'U) (source:'``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = MapIndexed.Invoke mapping source
 
@@ -193,7 +196,7 @@ module Operators =
 
     // Collection
 
-    let inline item (n:int) (source:'``Collection<'T>``) : 'T = Item.Invoke n source
+    let inline nth (n:int) (source:'``Collection<'T>``) : 'T = Nth.Invoke n source
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>

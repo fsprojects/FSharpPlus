@@ -12,20 +12,20 @@ open FsControl.Core.Internals
 
 
 [<Extension;Sealed>]
-type Item =
+type Nth =
     inherit Default1
-    [<Extension>]static member inline Item (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head :'T
-    [<Extension>]static member        Item (x:string        , n, [<Optional>]impl:Item    ) = x.[n]
-    [<Extension>]static member        Item (x:StringBuilder , n, [<Optional>]impl:Item    ) = x.ToString().[n]
-    [<Extension>]static member        Item (x:'a []         , n, [<Optional>]impl:Item    ) = x.[n] : 'a
-    [<Extension>]static member        Item (x:'a ResizeArray, n, [<Optional>]impl:Item    ) = x.[n]
-    [<Extension>]static member        Item (x:list<'a>      , n, [<Optional>]impl:Item    ) = x.[n]
-    [<Extension>]static member        Item (x:'a Id         , n, [<Optional>]impl:Item    ) = x.getValue
+    [<Extension>]static member inline Nth (x:'Foldable'T   , n, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head :'T
+    [<Extension>]static member        Nth (x:string        , n, [<Optional>]impl:Nth     ) = x.[n]
+    [<Extension>]static member        Nth (x:StringBuilder , n, [<Optional>]impl:Nth     ) = x.ToString().[n]
+    [<Extension>]static member        Nth (x:'a []         , n, [<Optional>]impl:Nth     ) = x.[n] : 'a
+    [<Extension>]static member        Nth (x:'a ResizeArray, n, [<Optional>]impl:Nth     ) = x.[n]
+    [<Extension>]static member        Nth (x:list<'a>      , n, [<Optional>]impl:Nth     ) = x.[n]
+    [<Extension>]static member        Nth (x:'a Id         , n, [<Optional>]impl:Nth     ) = x.getValue
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'T =
-        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)
+        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Nth: _*_*_ -> _) b, n, a)
         let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
-        call (Unchecked.defaultof<Item>, source, n)
+        call (Unchecked.defaultof<Nth>, source, n)
 
 [<Extension;Sealed>]
 type Skip =
