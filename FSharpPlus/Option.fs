@@ -33,8 +33,8 @@ type OptionT with
 
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
 
-    static member inline ThrowError (x:'E) = x |> throw |> lift
-    static member inline CatchError (m:OptionT<'``MonadError<'E1,'T>``>, h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> catch v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
+    static member inline Throw (x:'E) = x |> throw |> lift
+    static member inline Catch (m:OptionT<'``MonadError<'E1,'T>``>, h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> catch v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
 
     static member inline CallCC (f:(('T -> OptionT<'``MonadCont<'R,option<'U>>``>) -> _)) = OptionT(callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))  : OptionT<'``MonadCont<'R,option<'T>>``>
 

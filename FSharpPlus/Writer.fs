@@ -77,8 +77,8 @@ type WriterT with
     
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x)
 
-    static member inline ThrowError (x: 'E) = x |> throw |> lift
-    static member inline CatchError (m:WriterT<'``MonadError<'E2, 'T * 'Monoid>``> , h:'E2 -> _) = 
+    static member inline Throw (x: 'E) = x |> throw |> lift
+    static member inline Catch (m:WriterT<'``MonadError<'E2, 'T * 'Monoid>``> , h:'E2 -> _) = 
             WriterT (catch (WriterT.run m) (WriterT.run << h)) : WriterT<'``MonadChoice<'T * 'Monoid, 'E2>``>
 
     static member inline CallCC (f : ('a->WriterT<Cont<'r,'t>>)->_)  : WriterT<'``MonadCont<'r,'a*'b>``> = 
