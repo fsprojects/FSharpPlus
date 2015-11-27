@@ -68,7 +68,7 @@ type SeqT with
 
     static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad Seq.singleton |> SeqT : SeqT<'``Monad<seq<'T>>``>
     
-    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
+    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x) : '``SeqT<'MonadAsync<'T>>``
     
     static member inline Throw (x:'E) = x |> throw |> lift
     static member inline Catch (m:SeqT<'``MonadError<'E1,'T>``>, h:'E1 -> SeqT<'``MonadError<'E2,'T>``>) = SeqT ((fun v h -> catch v h) (SeqT.run m) (SeqT.run << h)) : SeqT<'``MonadError<'E2,'T>``>

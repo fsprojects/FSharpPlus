@@ -75,7 +75,7 @@ type WriterT with
 
     static member inline Lift (m:'``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT (m >>= (fun a -> result (a, getEmpty())))
     
-    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x)
+    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``WriterT<'MonadAsync<'T>>``
 
     static member inline Throw (x: 'E) = x |> throw |> lift
     static member inline Catch (m:WriterT<'``MonadError<'E2, 'T * 'Monoid>``> , h:'E2 -> _) = 

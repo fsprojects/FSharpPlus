@@ -48,15 +48,15 @@ type ReaderT with
     static member inline MZero (output: ReaderT<'R, '``MonadPlus<'T>``>, impl:MZero) = ReaderT (fun _ -> getMZero())                                                : ReaderT<'R, '``MonadPlus<'T>``>
     static member inline MPlus (ReaderT m, ReaderT n, impl:MPlus)                    = ReaderT (fun r -> m r <|> n r)                                                   : ReaderT<'R, '``MonadPlus<'T>``>
 
-    static member Lift m = ReaderT (fun _ -> m)                                             : ReaderT<'R,'``Monad<'T>``>
+    static member        Lift m = ReaderT (fun _ -> m)                                      : ReaderT<'R,'``Monad<'T>``>
+
+    static member inline LiftAsync (x: Async<'T>) = (lift (liftAsync x)                     : ReaderT<'R,'``MonadAsync<'T>``>)
 
     static member inline CallCC (f : ('T -> ReaderT<'R, Cont<_,'U>>) -> _)                  : ReaderT<'R,'``MonadCont<'C,'T>``> =
         ReaderT (fun r -> callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
             
     static member inline get_Ask() = ReaderT result                                         : ReaderT<'R,'``Monad<'T>``>
     static member        Local (ReaderT m, f:_->'R2) = ReaderT(fun r -> m (f r))            : ReaderT<'R1,'``Monad<'T>``>
-
-    static member inline LiftAsync (x: Async<'T>) = (lift (liftAsync x) : ReaderT<'R,'``MonadAsync<'T>``>)
 
     static member inline Throw (x:'E) = x |> throw |> lift : ReaderT<'R,'``MonadError<'E,'T>``>
     static member inline Catch (m:ReaderT<'R,'``MonadError<'E1,'T>``>, h:'E1 -> _) = 
