@@ -48,7 +48,7 @@ type ErrorT with
     static member inline Apply  (f:ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>, x:ErrorT<'``Monad<'Choice<'T,'E>>``>, output:ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>, impl:Apply) = ErrorT.apply f x : ErrorT<'``Monad<'Choice<'U,'E>>``>
     static member inline Bind   (x:ErrorT<'``Monad<'Choice<'T,'E>>``>, f:'T->ErrorT<'``Monad<'Choice<'U,'E>>``>) = ErrorT.bind f x
 
-    static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad Choice1Of2 |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
+    static member inline Lift (x:'``Monad<'T>``) = x |> liftM Choice1Of2 |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
 
     static member inline Throw (x:'E) =  x |> Choice2Of2 |> result |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
     static member inline Catch (ErrorT x :ErrorT<'``MonadError<'E1,'T>``>, f: 'E1 -> _) = (ErrorT (x >>= (fun a -> match a with Choice2Of2 l -> ErrorT.run (f l) | Choice1Of2 r -> result (Choice1Of2 r)))) : ErrorT<'``Monad<Choice<'T,'E2>>``>
@@ -57,7 +57,7 @@ type ErrorT with
 
     static member inline CallCC (f:('T -> ErrorT<'``MonadCont<'R,Choice<'U,'E>>``>) -> _) :ErrorT<'``MonadCont<'R, Choice<'T,'E>>``> = ErrorT(callCC <| fun c -> ErrorT.run(f (ErrorT << c << Choice1Of2)))
 
-    static member inline get_Ask() = (ErrorT << (Map.FromMonad Choice1Of2)) ask : ErrorT<'``MonadReader<'R,Choice<'R,'E>>``>
+    static member inline get_Ask() = (ErrorT << (liftM Choice1Of2)) ask : ErrorT<'``MonadReader<'R,Choice<'R,'E>>``>
     static member inline Local (ErrorT m : ErrorT<'``MonadReader<'R2,Choice<'R2,'E>>``>, f:'R1->'R2) = ErrorT (local f m)
 
     static member inline Tell (w:'Monoid) = w |> tell |> lift :   '``ErrorT<Writer<'Monoid,Choice<unit,'E>>>``
