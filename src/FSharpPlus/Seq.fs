@@ -53,9 +53,9 @@ module SeqT =
 
     let inline internal mapM f as' = sequence (Seq.map f as')
 
-    let inline map  (f:'T->'U) (SeqT m : SeqT<'``Monad<seq<'T>``>)                                   = SeqT <| map (Seq.map f: (seq<_>->_)) m      : SeqT<'``Monad<seq<'U>``>
     let inline bind (f:'T-> SeqT<'``Monad<seq<'U>``>) (SeqT m : SeqT<'``Monad<seq<'T>``>)            = SeqT (m >>= (mapM:_->seq<_>->_) (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> result)) 
-    let inline apply (SeqT f : SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x : SeqT<'``Monad<seq<'T>``>) = SeqT (Map.Invoke (Seq.apply:seq<_->_>->seq<_>->seq<_>) f <*> x)          : SeqT<'``Monad<seq<'U>``>       
+    let inline apply (SeqT f : SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x : SeqT<'``Monad<seq<'T>``>) = SeqT (map (Seq.apply:seq<_->_>->seq<_>->seq<_>) f <*> x)          : SeqT<'``Monad<seq<'U>``>       
+    let inline map  (f:'T->'U) (SeqT m : SeqT<'``Monad<seq<'T>``>)                                   = SeqT <| map (Seq.map f: (seq<_>->_)) m      : SeqT<'``Monad<seq<'U>``>
 
 type SeqT with
     static member inline Map    (x : SeqT<'``Monad<seq<'T>``>, f : 'T->'U , impl:Map)                                              = SeqT.map f x                      : SeqT<'``Monad<seq<'U>``>

@@ -38,9 +38,9 @@ type ErrorT<'``monad<'choice<'t,'e>>``> = ErrorT of '``monad<'choice<'t,'e>>``
 [<RequireQualifiedAccess>]
 module ErrorT =
     let run (ErrorT x) = x : '``Monad<'Choice<'T,'E>>``
-    let inline map  (f:'T->'U) (ErrorT m:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT (map (Error.map f) m) :ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>
     let inline bind (f:'T->ErrorT<'``Monad<'Choice<'U,'E>>``>) (ErrorT m:ErrorT<'``Monad<'Choice<'T,'E>>``>) = (ErrorT (m >>= (fun a -> match a with Choice2Of2 l -> result (Choice2Of2 l) | Choice1Of2 r -> run (f r))))
-    let inline apply  (ErrorT f:ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>) (ErrorT x:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT(Map.Invoke Error.apply f <*> x) : ErrorT<'``Monad<'Choice<'U,'E>>``>
+    let inline apply  (ErrorT f:ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>) (ErrorT x:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT(map Error.apply f <*> x) : ErrorT<'``Monad<'Choice<'U,'E>>``>
+    let inline map  (f:'T->'U) (ErrorT m:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT (map (Error.map f) m) :ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>
 
 type ErrorT with
     static member inline Map    (x:ErrorT<'``Monad<'Choice<'T,'E>>``>, f:'T->'U, impl:Map) = ErrorT.map f x :ErrorT<'``Monad<'Choice<'U,'E>>``>

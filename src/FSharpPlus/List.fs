@@ -42,9 +42,9 @@ module ListT =
     
     let inline internal mapM f as' = sequence (List.map f as')
 
-    let inline map  (f:'T->'U) (ListT m: ListT<'``Monad<list<'T>``>) =  ListT (map (List.map f) m) : ListT<'``Monad<list<'U>``>
     let inline bind (f:'T-> ListT<'``Monad<list<'U>``>) (ListT m : ListT<'``Monad<list<'T>``>) = (ListT (m >>= mapM (run << f) >>= ((List.concat:list<_>->_) >> result)))
-    let inline apply  (ListT f : ListT<'``Monad<list<('T -> 'U)>``>) (ListT x : ListT<'``Monad<list<'T>``>) = ListT (Map.Invoke List.apply f <*> x)  : ListT<'``Monad<list<'U>``>
+    let inline apply  (ListT f : ListT<'``Monad<list<('T -> 'U)>``>) (ListT x : ListT<'``Monad<list<'T>``>) = ListT (map List.apply f <*> x)  : ListT<'``Monad<list<'U>``>
+    let inline map  (f:'T->'U) (ListT m: ListT<'``Monad<list<'T>``>) =  ListT (map (List.map f) m) : ListT<'``Monad<list<'U>``>
 
 type ListT with
     static member inline Map    (x : ListT<'``Monad<list<'T>``>, f : 'T->'U , impl:Map)                                                 = ListT.map f x                                         : ListT<'``Monad<list<'U>``>
