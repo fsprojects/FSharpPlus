@@ -80,8 +80,14 @@ type Join =
 
 type Return =
     inherit Default1
-    static member inline Return (r:'R, _:Default1) = fun (x:'T) -> ((^R) : (static member Return: ^T -> ^R) x)
 
+    static member inline Invoke x = 
+        let inline call_2 (a:^a,b:^b) = ((^a or ^b) : (static member Return: _*_ -> _) b, a)
+        call_2 (Unchecked.defaultof<Return>, Unchecked.defaultof<'r>) x :'r 
+
+    static member inline InvokeOnInstance (x:'T) = ((^R) : (static member Return: ^T -> ^R) x)
+
+    static member inline Return (r:'R    , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
     static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
     static member        Return (_:seq<'a> , _:Return) = fun x -> Seq.singleton x :seq<'a>
     static member        Return (_:Id<'a>  , _:Return) = fun x -> Id x :Id<'a>
@@ -107,16 +113,13 @@ type Return =
     static member Return (_:StringBuilder, _:Return) = fun (x:char) -> new StringBuilder(string x):StringBuilder
     static member Return (_:'a Set       , _:Return) = fun (x:'a  ) -> Set.singleton x
 
-    static member inline Invoke x = 
-        let inline call_2 (a:^a,b:^b) = ((^a or ^b) : (static member Return: _*_ -> _) b, a)
-        call_2 (Unchecked.defaultof<Return>, Unchecked.defaultof<'r>) x :'r 
  
 
 [<Extension;Sealed>]
 type Apply =
     inherit Default1
 
-    [<Extension>]static member inline Apply (f:'Atu, x:'At, [<Optional>]output   , [<Optional>]impl:Default2) :^Au = Bind.InvokeOnInstance f (fun x1 -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
+    [<Extension>]static member inline Apply (f:'Atu, x:'At, [<Optional>]output   , [<Optional>]impl:Default2) :^Au = Bind.InvokeOnInstance f (fun x1 -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance(x1 x2)))
     [<Extension>]static member inline Apply (f:'F  , x:'X , [<Optional>]output:'R, [<Optional>]impl:Default1) = ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
 
     [<Extension>]static member        Apply (f:Lazy<'a->'b>, x:Lazy<'a>     , [<Optional>]output:Lazy<'b>     , [<Optional>]impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
