@@ -53,7 +53,7 @@ type Bind =
         let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member Bind: _*_ -> _) b, f)
         call_3 (Unchecked.defaultof<Bind>, x, Unchecked.defaultof<'R>, f) :'R
 
-    static member inline InvokeOnNonPrimitiveTypes x (f:_->'R) : 'R =
+    static member inline InvokeOnInstance x (f:_->'R) : 'R =
         let inline call_3 (b:^b,c:^c,f:^f) = ((^b or ^c) : (static member Bind: _*_ -> _) b, f)
         call_3 (x, Unchecked.defaultof<'R>, f) :'R
 
@@ -118,7 +118,7 @@ type Apply =
     static member inline FromMonad f x = Bind.Invoke f (fun x1 -> Bind.Invoke x (fun x2 -> Return.Invoke(x1 x2)))
 
 
-    [<Extension>]static member inline Apply (f:'Atu, x:'At, [<Optional>]output   , [<Optional>]impl:Default2) :^Au = Bind.InvokeOnNonPrimitiveTypes f (fun x1 -> Bind.InvokeOnNonPrimitiveTypes x (fun x2 -> Return.Invoke(x1 x2)))
+    [<Extension>]static member inline Apply (f:'Atu, x:'At, [<Optional>]output   , [<Optional>]impl:Default2) :^Au = Bind.InvokeOnInstance f (fun x1 -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
     [<Extension>]static member inline Apply (f:'F  , x:'X , [<Optional>]output:'R, [<Optional>]impl:Default1) = ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
 
     [<Extension>]static member        Apply (f:Lazy<'a->'b>, x:Lazy<'a>     , [<Optional>]output:Lazy<'b>     , [<Optional>]impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
