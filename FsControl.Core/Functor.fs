@@ -49,13 +49,12 @@ type Bind =
                         | _       -> ()
                     d
 
-    static member inline Invoke x (f:_->'R) : 'R =
-        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member Bind: _*_ -> _) b, f)
-        call_3 (Unchecked.defaultof<Bind>, x, Unchecked.defaultof<'R>, f) :'R
+    static member inline Invoke (source:'``Monad<'T>``) (binder:'T->'``Monad<'U>``) : '``Monad<'U>`` =
+        let inline call (mthd : 'M, input : 'I, output : 'R, f) = ((^M or ^I or ^R) : (static member Bind: _*_ -> _) input, f)
+        call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
 
-    static member inline InvokeOnInstance x (f:_->'R) : 'R =
-        let inline call_3 (b:^b,c:^c,f:^f) = ((^b or ^c) : (static member Bind: _*_ -> _) b, f)
-        call_3 (x, Unchecked.defaultof<'R>, f) :'R
+    static member inline InvokeOnInstance (source:'``Monad<'T>``) (binder:'T->'``Monad<'U>``) : '``Monad<'U>`` =
+        ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member Bind: _*_ -> _) source, binder)
 
 
 [<Extension;Sealed>]
@@ -72,22 +71,22 @@ type Join =
     [<Extension>]static member        Join (x:Task<Task<'a>>    , [<Optional>]output:Task<'a>  , [<Optional>]impl:Join) = x.Unwrap()
 #endif
 
-    static member inline Invoke (x:'Monad'Monad'a) : 'Monad'a =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Join: _*_*_ -> _) b, c, a)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>):'r
-        call (Unchecked.defaultof<Join>, x)
+    static member inline Invoke (x:'``Monad<Monad<'T>>``) : '``Monad<'T>`` =
+        let inline call (mthd : 'M, input : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Join: _*_*_ -> _) input, output, mthd)
+        call (Unchecked.defaultof<Join>, x, Unchecked.defaultof<'``Monad<'T>``>)
 
 
 type Return =
     inherit Default1
 
-    static member inline Invoke x = 
-        let inline call_2 (a:^a,b:^b) = ((^a or ^b) : (static member Return: _*_ -> _) b, a)
-        call_2 (Unchecked.defaultof<Return>, Unchecked.defaultof<'r>) x :'r 
+    static member inline Invoke (x:'T) : '``Applicative<'T>`` =
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Return: _*_ -> _) output, mthd)
+        call (Unchecked.defaultof<Return>, Unchecked.defaultof<'``Applicative<'T>``>) x
+ 
+    static member inline InvokeOnInstance (x:'T) = (^``Applicative<'T>`` : (static member Return: ^T -> ^``Applicative<'T>``) x)
 
-    static member inline InvokeOnInstance (x:'T) = ((^R) : (static member Return: ^T -> ^R) x)
+    static member inline Return (r:'R, _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
 
-    static member inline Return (r:'R    , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
     static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
     static member        Return (_:seq<'a> , _:Return) = fun x -> Seq.singleton x :seq<'a>
     static member        Return (_:Id<'a>  , _:Return) = fun x -> Id x :Id<'a>
@@ -113,14 +112,12 @@ type Return =
     static member Return (_:StringBuilder, _:Return) = fun (x:char) -> new StringBuilder(string x):StringBuilder
     static member Return (_:'a Set       , _:Return) = fun (x:'a  ) -> Set.singleton x
 
- 
-
 [<Extension;Sealed>]
 type Apply =
     inherit Default1
-
-    [<Extension>]static member inline Apply (f:'Atu, x:'At, [<Optional>]output   , [<Optional>]impl:Default2) :^Au = Bind.InvokeOnInstance f (fun x1 -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance(x1 x2)))
-    [<Extension>]static member inline Apply (f:'F  , x:'X , [<Optional>]output:'R, [<Optional>]impl:Default1) = ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
+    
+    [<Extension>]static member inline Apply (f:'``Monad<'T->'U>``  , x:'``Monad<'T>``  , [<Optional>]output:'``Monad<'U>``  , [<Optional>]impl:Default2) : '``Monad<'U>``   = Bind.InvokeOnInstance f (fun (x1:'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
+    [<Extension>]static member inline Apply (f:'``Applicative<'T->'U>``, x:'``Applicative<'T>``, [<Optional>]output:'``Applicative<'U>``, [<Optional>]impl:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) f, x)
 
     [<Extension>]static member        Apply (f:Lazy<'a->'b>, x:Lazy<'a>     , [<Optional>]output:Lazy<'b>     , [<Optional>]impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
     [<Extension>]static member        Apply (f:seq<_>      , x:seq<'a>      , [<Optional>]output:seq<'b>      , [<Optional>]impl:Apply) = Seq.apply  f x :seq<'b>
@@ -154,11 +151,13 @@ type Apply =
     [<Extension>]static member        Apply (f:('a->'b) ResizeArray, x:'a ResizeArray, [<Optional>]output:'b ResizeArray, [<Optional>]impl:Apply) =
                     ResizeArray(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'b ResizeArray
 
-    static member inline Invoke x y : 'Applicative'U =
-        let inline call_4 (a:^a,b:^b,c:^c,d:^d) =                                                          
-            ((^a or ^b or ^c or ^d) : (static member Apply: _*_*_*_ -> _) b, c, d, a)
-        call_4(Unchecked.defaultof<Apply>,x,y, Unchecked.defaultof<'Applicative'U>)
+    static member inline Invoke (f:'``Applicative<'T -> 'U>``) (x:'``Applicative<'T>``) : '``Applicative<'U>`` =
+        let inline call (mthd : ^M, input1 : ^I1, input2 : ^I2, output : ^R) =                                                          
+            ((^M or ^I1 or ^I2 or ^R) : (static member Apply: _*_*_*_ -> _) input1, input2, output, mthd)
+        call(Unchecked.defaultof<Apply>, f, x, Unchecked.defaultof<'``Applicative<'U>``>)
 
+    static member inline InvokeOnInstance (f:'``Applicative<'T->'U>``) (x:'``Applicative<'T>``) : '``Applicative<'U>`` =
+        ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) (f, x))
 
 // Functor class ----------------------------------------------------------
 
@@ -201,8 +200,15 @@ type Map =
     static member inline FromApplicative f x = Return.Invoke (Apply.Invoke f x)
     static member inline FromMonad       f x = Bind.Invoke x (Return.Invoke << f)
 
-    [<Extension>]static member inline Map (x:'f, (f:'a->'b), [<Optional>]impl:Default2) = Return.Invoke (Apply.Invoke f x) :'r
-    [<Extension>]static member inline Map (x:'F, (f:'a->'b), [<Optional>]impl:Default1) = ((^F) : (static member Map: ^F * ('a->'b) -> ^R) (x, f))
+    static member inline Invoke (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
+        let inline call (mthd : ^M, source : ^I1, output : ^R) = ((^M or ^I1 or ^R) : (static member Map: _*_*_ -> _) source, mapping, mthd)
+        call (Unchecked.defaultof<Map>, source, Unchecked.defaultof<'``Functor<'U>``>)
+
+    static member inline InvokeOnInstance (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
+        (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
+
+    [<Extension>]static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]impl:Default2) = Return.Invoke (Apply.Invoke f x) : '``Applicative<'U>``
+    [<Extension>]static member inline Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
 
     [<Extension>]static member Map (x:Lazy<_>        , f, [<Optional>]impl:Map) = Lazy.Create (fun () -> f x.Value) : Lazy<'b>
     [<Extension>]static member Map (x:seq<_>         , f, [<Optional>]impl:Map) = Seq.map f x :seq<'b>
@@ -230,10 +236,6 @@ type Map =
     [<Extension>]static member Map (x:StringBuilder  , f, [<Optional>]impl:Map) = new StringBuilder(String.map f (x.ToString()))
     [<Extension>]static member Map (x:Set<_>         , f, [<Optional>]impl:Map) = Set.map f x
         
-    static member inline Invoke (f:_->_) x = 
-        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Map: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
-        call (Unchecked.defaultof<Map>, x, f)
 
 
 type MZero =
