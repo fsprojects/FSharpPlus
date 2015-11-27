@@ -115,8 +115,6 @@ type Return =
 [<Extension;Sealed>]
 type Apply =
     inherit Default1
-    static member inline FromMonad f x = Bind.Invoke f (fun x1 -> Bind.Invoke x (fun x2 -> Return.Invoke(x1 x2)))
-
 
     [<Extension>]static member inline Apply (f:'Atu, x:'At, [<Optional>]output   , [<Optional>]impl:Default2) :^Au = Bind.InvokeOnInstance f (fun x1 -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
     [<Extension>]static member inline Apply (f:'F  , x:'X , [<Optional>]output:'R, [<Optional>]impl:Default1) = ((^F or ^X or ^R) : (static member (<*>): ^F -> ^X -> 'R) (f, x))
@@ -124,10 +122,10 @@ type Apply =
     [<Extension>]static member        Apply (f:Lazy<'a->'b>, x:Lazy<'a>     , [<Optional>]output:Lazy<'b>     , [<Optional>]impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'b>
     [<Extension>]static member        Apply (f:seq<_>      , x:seq<'a>      , [<Optional>]output:seq<'b>      , [<Optional>]impl:Apply) = Seq.apply  f x :seq<'b>
     [<Extension>]static member        Apply (f:list<_>     , x:list<'a>     , [<Optional>]output:list<'b>     , [<Optional>]impl:Apply) = List.apply f x :list<'b>
-    [<Extension>]static member        Apply (f:_ []        , x:'a []        , [<Optional>]output:'b []        , [<Optional>]impl:Apply) = Apply.FromMonad f x :'b []
+    [<Extension>]static member        Apply (f:_ []        , x:'a []        , [<Optional>]output:'b []        , [<Optional>]impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f
     [<Extension>]static member        Apply (f:'r -> _     , g: _ -> 'a     , [<Optional>]output: 'r -> 'b    , [<Optional>]impl:Apply) = fun x -> f x (g x) :'b
     [<Extension>]static member inline Apply ((a:'m, f)     , (b:'m, x:'a)   , [<Optional>]output:'m * 'b      , [<Optional>]impl:Apply) = (Append.Invoke a b, f x) :'m *'b
-    [<Extension>]static member        Apply (f:Async<_>    , x:Async<'a>    , [<Optional>]output:Async<'b>    , [<Optional>]impl:Apply) = Apply.FromMonad f x :Async<'b>
+    [<Extension>]static member        Apply (f:Async<_>    , x:Async<'a>    , [<Optional>]output:Async<'b>    , [<Optional>]impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'b>
     [<Extension>]static member        Apply (f:option<_>   , x:option<'a>   , [<Optional>]output:option<'b>   , [<Optional>]impl:Apply) = Option.apply f x    :option<'b>
     [<Extension>]static member        Apply (f:Choice<_,'e>, x:Choice<'a,'e>, [<Optional>]output:Choice<'b,'e>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'b,'e>
     [<Extension>]static member        Apply (KeyValue(k:'k,f)  , KeyValue(k:'k,x:'a), [<Optional>]output:KeyValuePair<'k,'b>, [<Optional>]impl:Apply) :KeyValuePair<'k,'b> = KeyValuePair(k, f x)
