@@ -66,7 +66,7 @@ type SeqT with
     static member inline MZero (output: SeqT<'``MonadPlus<seq<'T>``>, impl:MZero) = SeqT <| result Seq.empty                                                                 : SeqT<'``MonadPlus<seq<'T>``>
     static member inline MPlus (SeqT x, SeqT y, impl:MPlus)                       = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>
 
-    static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad Seq.singleton |> SeqT : SeqT<'``Monad<seq<'T>>``>
+    static member inline Lift (x:'``Monad<'T>``) = x |> liftM Seq.singleton |> SeqT : SeqT<'``Monad<seq<'T>>``>
     
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x) : '``SeqT<'MonadAsync<'T>>``
     
