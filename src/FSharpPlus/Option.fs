@@ -31,7 +31,7 @@ type OptionT with
 
     static member inline Lift (x:'``Monad<'T>``) = x |> Map.FromMonad Some |> OptionT : OptionT<'``Monad<option<'T>>``>
 
-    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)
+    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)  : '``OptionT<'MonadAsync<'T>>``
 
     static member inline Throw (x:'E) = x |> throw |> lift
     static member inline Catch (m:OptionT<'``MonadError<'E1,'T>``>, h:'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> catch v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>

@@ -51,7 +51,7 @@ type StateT with
 
     static member inline Lift (m:'``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> = StateT <| fun s -> m >>= fun a -> result (a, s)
 
-    static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x)
+    static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x) : '``StateT<'S,'MonadAsync<'T>>``
     
     static member inline get_Get()  = StateT (fun s -> result (s , s))  : StateT<'S, '``Monad<'S * 'S>``>
     static member inline Put (x:'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``Monad<unit * 'S>``>
