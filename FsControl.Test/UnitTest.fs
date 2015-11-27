@@ -116,7 +116,9 @@ type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList<'b>
     
-
+type ZipList'<'s> = ZipList' of 's seq with
+    static member Return (x:'a)                                = ZipList' (Seq.initInfinite (konst x))
+    static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList'<'b>
 
 [<TestClass>]
 type Applicative() = 
@@ -136,6 +138,7 @@ type Applicative() =
     member x.Applicatives() = 
 
         let run (ZipList x) = x
+        let run' (ZipList' x) = x
 
         // Test Applicative (functions)
         let res607 = map (+) ( (*) 100 ) 6 7
@@ -146,10 +149,12 @@ type Applicative() =
         let res9n5   = map ((+) 1) (ZipList [8;4])
         let res20n30 = result (+) <*> result 10 <*> ZipList [10;20]
         let res18n14 = result (+) <*> ZipList [8;4] <*> result 10
+        let res9n5'  = map ((+) 1) (ZipList' [8;4])
 
         Assert.AreEqual (607, res607)
         Assert.AreEqual (606, res606)
         Assert.AreEqual (508, res508)
+        Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
 
 
     // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets

@@ -197,7 +197,7 @@ type Iterate =
 [<Extension;Sealed>]
 type Map =
     inherit Default1
-    static member inline FromApplicative f x = Return.Invoke (Apply.Invoke f x)
+    static member inline FromApplicative f x = Apply.Invoke (Return.Invoke f) x
     static member inline FromMonad       f x = Bind.Invoke x (Return.Invoke << f)
 
     static member inline Invoke (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
@@ -207,7 +207,7 @@ type Map =
     static member inline InvokeOnInstance (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
 
-    [<Extension>]static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]impl:Default2) = Return.Invoke (Apply.Invoke f x) : '``Applicative<'U>``
+    [<Extension>]static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]impl:Default2) = Apply.Invoke (Return.Invoke f) x : '``Applicative<'U>``
     [<Extension>]static member inline Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
 
     [<Extension>]static member Map (x:Lazy<_>        , f, [<Optional>]impl:Map) = Lazy.Create (fun () -> f x.Value) : Lazy<'b>
