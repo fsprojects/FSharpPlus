@@ -43,5 +43,5 @@ type Last<'T> = Last of Option<'T> with
     static member Append (x:Last<'t>, y:Last<'t>) = match x, y with l, Last None -> l | _, r -> r
 [<RequireQualifiedAccess>]module Last = let run (Last a) = a
 
-type Kleisli<'a, 'm> = Kleisli of ('a -> 'm)
+type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``)
 [<RequireQualifiedAccess>]module Kleisli = let run (Kleisli f) = f

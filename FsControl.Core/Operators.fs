@@ -71,7 +71,7 @@ module Operators =
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
 
-    let inline contramap (f:'T->'U) (x:'``Contravariant<'U>``) :'``Contravariant<'T>`` = Contramap.Invoke f x
+    let inline contramap (f:'U->'T) (x:'``Contravariant<'T>``) :'``Contravariant<'U>`` = Contramap.Invoke f x
     let inline bimap f g x = Bimap.Invoke x f g
     let inline first   f x = First.Invoke f x
     let inline second  f x = Second.Invoke f x
