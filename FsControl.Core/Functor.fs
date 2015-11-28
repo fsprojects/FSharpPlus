@@ -397,32 +397,32 @@ type Second =
 
 [<Extension;Sealed>]
 type Dimap =
-    [<Extension>]static member inline Dimap (Kleisli bmc) = fun ab cd -> let cmd = Map.Invoke cd in Kleisli (cmd << bmc << ab)
-    [<Extension>]static member        Dimap (f          ) = fun g h -> g >> f >> h
+    [<Extension>]static member inline Dimap (Kleisli bmc :Kleisli<'B,'``Monad<'C>``>) = fun (ab:'A->'B) (cd:'C->'D) -> let cmd = Map.Invoke cd in Kleisli (ab >> bmc >> cmd) : Kleisli<'A,'``Monad<'D>``>
+    [<Extension>]static member        Dimap (f                                      ) = fun (g :'A->'B) (h :'C->'D) -> g >> f >> h
     
-    static member inline Invoke (x : '``Profunctor<'L,'R>``) :'r =
+    static member inline Invoke (x : '``Profunctor<'B,'C>``) :'r =
         let inline call (mthd : ^M, source : ^I, c:^c) = ((^M or ^I or ^c) : (static member Dimap: _ -> _) source)
         call (Unchecked.defaultof<Dimap>, x, Unchecked.defaultof<'r>)
 
 type LMap =
     inherit Default1
-    static member inline       LMap (x :'``Profunctor<'L,'R>``            , f       , [<Optional>]mthd :Default1) = Dimap.Invoke x f id
-    [<Extension>]static member LMap (f :'R->'T                            , k       , [<Optional>]mthd :LMap    ) = k >> f
-    [<Extension>]static member LMap (Kleisli f                            , k       , [<Optional>]mthd :LMap    ) = Kleisli (k >> f)
+    static member inline       LMap (x :'``Profunctor<'B,'C>``            , f:'A->'B, [<Optional>]mthd :Default1) = Dimap.Invoke x f id : '``Profunctor<'A,'C>``
+    [<Extension>]static member LMap (f :'B->'C                            , k:'A->'B, [<Optional>]mthd :LMap    ) = k >> f              : 'A->'C
+    [<Extension>]static member LMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, k:'A->'B, [<Optional>]mthd :LMap    ) = Kleisli (k >> f)    : Kleisli<'A,'``Monad<'C>``>
     
-    static member inline Invoke f x :'r =
-        let inline call (mthd : ^M, source : ^I, c:^c, f) = ((^M or ^I or ^c) : (static member LMap: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<LMap>, x, Unchecked.defaultof<'r>, f)
+    static member inline Invoke (f:'A->'B) (x :'``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R, f) = ((^M or ^I or ^R) : (static member LMap: _*_*_ -> _) source, f, mthd)
+        call (Unchecked.defaultof<LMap>, x, Unchecked.defaultof<'``Profunctor<'A,'C>``>, f)
 
 type RMap =
     inherit Default1
-    static member inline       RMap (x :'``Profunctor<'L,'R>``            , f       , [<Optional>]mthd :Default1) = Dimap.Invoke x id f
-    [<Extension>]static member RMap (f :'R->'T                            , k:'T->'U, [<Optional>]mthd :RMap    ) = f >> k
-    [<Extension>]static member inline RMap (Kleisli f                     , k       , [<Optional>]mthd :RMap    ) = Kleisli (Map.Invoke k << f)
+    static member inline              RMap (x :'``Profunctor<'B,'C>``            , f:'C->'D, [<Optional>]mthd :Default1) = Dimap.Invoke x id f          : '``Profunctor<'B,'D>``
+    [<Extension>]static member        RMap (f :'B->'C                            , k:'C->'D, [<Optional>]mthd :RMap    ) = f >> k                       : 'B->'D
+    [<Extension>]static member inline RMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, k:'C->'D, [<Optional>]mthd :RMap    ) = Kleisli (Map.Invoke k << f)  : Kleisli<'B,'``Monad<'D>``>
     
-    static member inline Invoke f x :'r =
-        let inline call (mthd : ^M, source : ^I, c:^c, f) = ((^M or ^I or ^c) : (static member RMap: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<RMap>, x, Unchecked.defaultof<'r>, f)
+    static member inline Invoke (f:'C->'D) (x :'``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R, f) = ((^M or ^I or ^R) : (static member RMap: _*_*_ -> _) source, f, mthd)
+        call (Unchecked.defaultof<RMap>, x, Unchecked.defaultof<'``Profunctor<'B,'D>``>, f)
 
 
 type Id =

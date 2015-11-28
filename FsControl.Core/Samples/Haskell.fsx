@@ -397,7 +397,7 @@ let inline rmap f x = RMap.Invoke f x
 let resStrFalse  = dimap int string (Predicate.run isEven) 99.0
 
 let lx x = System.Char.GetNumericValue x + 100.
-let rx x = string (x + 100) 
+let rx x = string (x + 100)
 let kl = Kleisli (fun (y:float) -> [int y; int y * 2 ; int y * 3])
 
 let resl = lmap lx kl
