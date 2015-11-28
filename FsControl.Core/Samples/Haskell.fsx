@@ -394,7 +394,18 @@ let inline dimap f g x = Dimap.Invoke x f g
 let inline lmap f x = LMap.Invoke f x
 let inline rmap f x = RMap.Invoke f x
 
-let resStrFalse     = dimap int string (Predicate.run isEven) 99.0
+let resStrFalse  = dimap int string (Predicate.run isEven) 99.0
+
+let lx x = System.Char.GetNumericValue x + 100.
+let rx x = string (x + 100) 
+let kl = Kleisli (fun (y:float) -> [int y; int y * 2 ; int y * 3])
+
+let resl = lmap lx kl
+let r105n210n315 = runKleisli resl '5'
+let resr = rmap rx kl
+let r105n110n115 = runKleisli resr 5.0
+let resd = dimap lx rx kl
+let r205n310n415 = runKleisli resd '5'
 
 // Arrows
 

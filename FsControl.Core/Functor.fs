@@ -418,7 +418,7 @@ type RMap =
     inherit Default1
     static member inline       RMap (x :'``Profunctor<'L,'R>``            , f       , [<Optional>]mthd :Default1) = Dimap.Invoke x id f
     [<Extension>]static member RMap (f :'R->'T                            , k:'T->'U, [<Optional>]mthd :RMap    ) = f >> k
-    [<Extension>]static member RMap (Kleisli f                            , k       , [<Optional>]mthd :RMap    ) = Kleisli (f >> k) : Kleisli<'L,'``Monad<'U>``>
+    [<Extension>]static member inline RMap (Kleisli f                     , k       , [<Optional>]mthd :RMap    ) = Kleisli (Map.Invoke k << f)
     
     static member inline Invoke f x :'r =
         let inline call (mthd : ^M, source : ^I, c:^c, f) = ((^M or ^I or ^c) : (static member RMap: _*_*_ -> _) source, f, mthd)
