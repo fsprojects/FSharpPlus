@@ -10,7 +10,6 @@ open System.Threading.Tasks
 #endif
 open Microsoft.FSharp.Quotations
 
-open FsControl.Data
 open FsControl.Internals
 open FsControl.Internals.Prelude
 
@@ -95,7 +94,6 @@ type Return =
         s.SetResult x
         s.Task :'a Task
 #endif        
-    static member        Return (_:Identity<'t>  , _:Return) = fun x -> Identity x :Identity<'t>
     static member        Return (_:option<'a>    , _:Return) = fun x -> Some x      :option<'a>
     static member        Return (_:list<'a>      , _:Return) = fun x -> [ x ]       :list<'a>
     static member        Return (_:'a []         , _:Return) = fun x -> [|x|]       :'a []
@@ -141,9 +139,7 @@ type Apply =
            | true, vx -> d.Add(k, vf vx)
            | _        -> ()
        d
-    static member        Apply (Identity (f:'T->'U)     , Identity (x: 'T)     , [<Optional>]output:Identity<'U> , [<Optional>]impl:Apply) = Identity (f x)      : Identity<'U>
-    static member inline Apply (Const f:Const<'C,'T->'U>, Const x: Const<'C,'T>, [<Optional>]output:Const<'C,'U> , [<Optional>]impl:Apply) = Const (Append.Invoke f x) : Const<'C,'U>
-
+    
     static member        Apply (f:Expr<'T->'U>, x:Expr<'T>, [<Optional>]output:Expr<'U>, [<Optional>]impl:Apply) = Expr.Cast<'U>(Expr.Application(f,x))
 
     static member        Apply (f:('T->'U) ResizeArray, x:'T ResizeArray, [<Optional>]output:'U ResizeArray, [<Optional>]impl:Apply) =
@@ -215,8 +211,6 @@ type Map =
     static member Map (x:_ [,,,]          , f:'T->'U, [<Optional>]impl:Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
     static member Map (x:Async<_>         , f:'T->'U, [<Optional>]impl:Map) = async.Bind(x, async.Return << f)
     static member Map (x:Choice<_,'E>     , f:'T->'U, [<Optional>]impl:Map) = Error.map f x
-    static member Map (Identity x         , f:'T->'U, [<Optional>]impl:Map) = Identity (f x)
-    static member Map (Const x:Const<_,'T>, f:'T->'U, [<Optional>]impl:Map) = Const x : Const<'C,'U>
     static member Map (KeyValue(k, x)     , f:'T->'U, [<Optional>]impl:Map) = KeyValuePair(k, f x)
     static member Map (x:Map<'Key,'T>     , f:'T->'U, [<Optional>]impl:Map) = Map.map (const' f) x : Map<'Key,'U>
     static member Map (x:Dictionary<_,_>  , f:'T->'U, [<Optional>]impl:Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d: Dictionary<'Key,'U>
@@ -276,7 +270,6 @@ open System.Collections.Generic
 #if NOTNET35
 open System.Threading.Tasks
 #endif
-open FsControl.Data
 open FsControl.Internals
 open FsControl.Internals.Prelude
 open FsControl.Internals.MonadOps
@@ -344,8 +337,7 @@ type Duplicate =
 type Contramap =
     static member Contramap (g:_->'R             , f:'U->'T) = (<<) g f
     static member Contramap (p:Predicate<_>      , f:'U->'T) = Predicate(fun x -> p.Invoke(f x))
-    static member Contramap (Const x:Const<'C,'T>, _:'U->'T) = Const x :Const<'C,'U>
-
+    
     static member inline Invoke (f:'U->'T) (x:'``Contravariant<'T>``) : '``Contravariant<'U>`` = 
         let inline call (mthd : ^M, source : ^I, c:^c, f) = ((^M or ^I or ^c) : (static member Contramap: _*_ -> _) source, f)
         call (Unchecked.defaultof<Contramap>, x, Unchecked.defaultof<'``Contravariant<'U>``>, f)
@@ -358,7 +350,6 @@ type Bimap =
        
     static member        Bimap ((x, y)                 , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = (f x, g y)
     static member        Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = choice (Choice2Of2 << f) (Choice1Of2 << g) x
-    static member        Bimap (Const x : Const<'T,'V> , f:'T->'U, _:'V->'W , [<Optional>]mthd :Bimap   ) = Const (f x)                                     : Const<'U,'W>
     static member        Bimap (KeyValue(k, x)         , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = KeyValuePair(f k, g x)
 
     static member inline Invoke (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
@@ -374,7 +365,6 @@ type First =
 
     static member        First ((x, y)                , f:'T->'U, [<Optional>]mthd :First   ) = (f x, y)
     static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]mthd :First   ) = choice (Choice2Of2 << f) Choice1Of2 x
-    static member        First (Const x : Const<'T,'V>, f:'T->'U, [<Optional>]mthd :First   ) = Const (f x): Const<'U,'V>
     static member        First (KeyValue(k, x)        , f:'T->'U, [<Optional>]mthd :First   ) = KeyValuePair(f k, x)
 
     static member inline Invoke (f : 'T->'U) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
@@ -394,7 +384,6 @@ type Second =
 
     static member        Second ((x, y)                , f:'V->'W, [<Optional>]mthd :Second  ) = (x, f y)
     static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]mthd :Second  ) = choice Choice2Of2 (Choice1Of2 << f) x
-    static member        Second (Const x : Const<'T,'V>, _:'V->'W, [<Optional>]mthd :Second  ) = Const x: Const<'T,'W>
     static member        Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]mthd :Second  ) = KeyValuePair(k, f x)
 
     static member inline Invoke (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` =

@@ -1,5 +1,6 @@
 ﻿namespace FsControl
 
+open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
@@ -64,8 +65,8 @@ type FoldIndexed =
         call (Unchecked.defaultof<FoldIndexed>, foldable, folder, state)
 
 type TraverseIndexed =
-    static member inline TraverseIndexed ((k:'K, a:'T)   , f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
-    static member inline TraverseIndexed (Data.Identity a, f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke Data.Identity (f () a)
+    static member inline TraverseIndexed ((k:'K, a:'T), f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
+    static member inline TraverseIndexed (a:Tuple<_>  , f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke Tuple (f () a.Item1)
 
     static member inline Invoke f t =
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed: _*_*_*_ -> _) b, f, c, a)

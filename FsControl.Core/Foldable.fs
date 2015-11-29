@@ -2,6 +2,18 @@
 // Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // Those .NET types are string and array. String is explicitely handled here and array through the seq overload.
 
+namespace FsControl.Internals
+
+open FsControl
+
+type Dual<'T> = Dual of 'T with
+    static member inline Empty  (_:Dual<'m>, _:Empty ) = Dual (Empty.Invoke()) :Dual<'m>
+    static member inline Append (  Dual x  ,   Dual y) = Dual (Append.Invoke y x)
+
+type Endo<'T> = Endo of ('T -> 'T) with
+    static member Empty  (_:Endo<'m>, _:Empty ) = Endo id  :Endo<'m>
+    static member Append (  Endo f  ,   Endo g) = Endo (f << g)
+
 namespace FsControl
 
 open System
@@ -12,6 +24,7 @@ open System.Collections
 open System.Collections.Generic
 open FsControl.Internals
 open FsControl.Internals.Prelude
+
 
 
 [<Extension;Sealed>]
@@ -159,16 +172,14 @@ type FoldMap =
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<FoldMap>, x, f)
 
-open FsControl.Data
-
 type FoldBack with
-    static member inline FromFoldMap f z x = Endo.run (FoldMap.Invoke (Endo << f ) x) z
+    static member inline FromFoldMap f z x = let (Endo f) = FoldMap.Invoke (Endo << f) x in f z
 
 
 type Fold =
     inherit Default1
 
-    static member inline FromFoldMap f z t = Endo.run (Dual.run (FoldMap.Invoke (Dual << Endo << flip f) t)) z
+    static member inline FromFoldMap f z t = let (Dual (Endo f)) = FoldMap.Invoke (Dual << Endo << flip f) t in f z
 
     static member inline Fold (x          , f, z, [<Optional>]impl:Default2) = Seq.fold f z (ToSeq.Invoke x)
     static member inline Fold (x:'F       , f:'b->'a->'b, z:'b , [<Optional>]impl:Default1) = ((^F) : (static member Fold: ^F -> _ -> _-> ^b) x, f, z)

@@ -264,6 +264,10 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 
 // Monoids
 
+let inline mempty() = FsControl.Operators.getEmpty ()
+let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.append x y
+let inline mconcat (x:seq<'a>) : 'a = FsControl.Operators.concat x
+
 type Ordering = LT|EQ|GT with
     static member        Empty = EQ
     static member        Append (x:Ordering, y) = 
@@ -280,18 +284,28 @@ let inline compare' x y =
 
 type Sum<'a> = Sum of 'a with
     static member inline get_Empty() = Sum 0G
-    static member inline Append (Sum (x:'n), Sum(y:'n)) = Sum (x + y):Sum<'n>
+    static member inline Append (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
 
 type Product<'a> = Product of 'a with
     static member inline get_Empty() = Product 1G
-    static member inline Append (Product (x:'n), Product(y:'n)) = Product (x * y):Product<'n>
+    static member inline Append (Product (x:'n), Product(y:'n)) = Product (x * y)
 
-let inline mempty() = FsControl.Operators.getEmpty ()
-let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.append x y
-let inline mconcat (x:seq<'a>) : 'a = FsControl.Operators.concat x
+type Dual<'T> = Dual of 'T with
+    static member inline get_Empty() = Dual (mempty())
+    static member inline Append (Dual x, Dual y) = Dual (mappend y x)
 
+type Endo<'T> = Endo of ('T -> 'T) with
+    static member get_Empty() = Endo id
+    static member Append (Endo f, Endo g) = Endo (f << g)
 
-open FsControl.Data
+type All = All of bool with
+    static member Empty = All true
+    static member Append (All x, All y) = All (x && y)
+
+type Any = Any of bool with
+    static member Empty = Any false
+    static member Append (Any x, Any y ) = Any (x || y)
+
 
 // Test Monoids
 let emptyLst:list<int> = mempty()
@@ -557,7 +571,7 @@ let resJust2'' = iI safeDivBy (Just 4G) J (Just 8G) Ii
 let resNothing = iI safeDivBy (Just 0G) J (Just 8G) Ii
 let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii   // *1
 
-// *1 These lines fails when Apply.Invoke has no 'or ^d' constraint.
+// *1 These lines fails when Apply.Invoke has no 'or ^'``Applicative<'U>`` ' (output) constraint.
 
 
 // Foldable

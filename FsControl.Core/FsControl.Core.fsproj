@@ -62,7 +62,6 @@
     <Compile Include="Converter.fs" />
     <Compile Include="Numeric.fs" />
     <Compile Include="Monoid.fs" />
-    <Compile Include="Data.fs" />
     <Compile Include="Functor.fs" />
     <Compile Include="Foldable.fs" />
     <Compile Include="Traversable.fs" />

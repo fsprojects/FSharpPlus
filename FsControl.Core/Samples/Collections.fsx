@@ -3,13 +3,18 @@
 
 open System
 open FsControl
-open FsControl.Data
 open FsControl.Operators
 
 let flip f x y = f y x
 let konst k _ = k
 let (</) = (|>)
 let (/>) = flip
+
+type Endo<'T> = Endo of ('T -> 'T) with
+    static member get_Empty() = Endo id
+    static member Append (Endo f, Endo g) = Endo (f << g)
+
+module Endo = let run (Endo x) = x
 
 type Tree<'a> =
     | Empty 
@@ -162,7 +167,7 @@ let namesWithNdx = mapi (fun k v -> "(" + string k + ")" + v ) (Map.ofSeq ['f',"
 let namesAction = iteri (printfn "(%A)%s") (Map.ofSeq ['f',"Fred";'p',"Paul"])
 let res119 = foldi (fun s i t-> t * s - i) 10 [3;4]
 let res113 = foldi (fun s i t-> t * s - i) 2 [|3;4;5|]
-let resSomeId20 = traversei (fun k t -> Some (10 + t)) (Identity 10)
+let resSomeId20 = traversei (fun k t -> Some (10 + t)) (Tuple 10)
 
 
 // Seq

@@ -48,14 +48,6 @@ let minUInt = findMin [1u;0u;12u;2u]  // loops only twice
 
 // Test Extension Methods
 open FsControl
-let lst11n21n12n22  = [1;2]  >>=  (fun x1 -> [10;20]  >>=  (fun x2 -> result((+) x1 x2 )))
-let lst11n21n12n22' = [1;2] .Bind (fun x1 -> [10;20] .Bind (fun x2 -> result((+) x1 x2 )))
-
-let lst5  = item5 (true, 2, "3", '4', [5], 6.0)
-let lst5' = (true, 2, "3", '4', [5], 6.0).Item5()
-
-let str3  = mapItem3 string (true, ['s'], 3)
-let str3' = (true, ['s'], 3).MapItem3(string)
 
 let mapp1 = [1..3] </append/> [4..8]
 let mapp2 = [1..3]  .Append   [4..8]
