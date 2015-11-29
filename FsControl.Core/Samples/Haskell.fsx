@@ -379,7 +379,7 @@ let resBoolTrue = Predicate.run fstIsEven [0..10]
 // BiFunctors
 
 let runKleisli (Kleisli f) = f
-let inline bimap f g x = Bimap.Invoke x f g
+let inline bimap f g x = Bimap.Invoke f g x
 let inline first   f x = First.Invoke f x
 let inline second  f x = Second.Invoke f x
 
@@ -390,7 +390,7 @@ let rStr10      = second string (true, 10)
 
 // Profunctors
 
-let inline dimap f g x = Dimap.Invoke x f g
+let inline dimap f g x = Dimap.Invoke f g x
 let inline lmap f x = LMap.Invoke f x
 let inline rmap f x = RMap.Invoke f x
 
@@ -406,6 +406,7 @@ let resr = rmap rx kl
 let r105n110n115 = runKleisli resr 5.0
 let resd = dimap lx rx kl
 let r205n310n415 = runKleisli resd '5'
+
 
 // Arrows
 

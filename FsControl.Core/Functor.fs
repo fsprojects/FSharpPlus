@@ -286,6 +286,9 @@ open FsControl.Internals
 open FsControl.Internals.Prelude
 open FsControl.Internals.MonadOps
 
+
+// Comonad class ----------------------------------------------------------
+
 [<Extension;Sealed>]
 type Extract =
     [<Extension>]static member        Extract (x:'t Async ) = Async.RunSynchronously x
@@ -353,68 +356,124 @@ type Contramap =
         call (Unchecked.defaultof<Contramap>, x, Unchecked.defaultof<'``Contravariant<'U>``>, f)
 
 
+// Bifunctor class --------------------------------------------------------
+
 type Bimap =
-    static member Bimap ((x, y)              ) = fun f g          -> (f x, g y)
-    static member Bimap (x:Choice<_,_>       ) = fun f g          -> choice (Choice2Of2 << f) (Choice1Of2 << g) x
-    static member Bimap (Const x:Const<'t,'u>) = fun f (_:'v->'w) -> Const (f x): Const<'v,'w>
-    static member Bimap (KeyValue(k, x)      ) = fun f g          -> KeyValuePair(f k, g x)
-    
-    static member inline Invoke (x:'``Bifunctor<'T,'U>``) :'r =
-        let inline call (mthd : ^M, source : ^I, c : ^c) = ((^M or ^I or ^c) : (static member Bimap: _ -> _) source)
-        call (Unchecked.defaultof<Bimap>, x, Unchecked.defaultof<'r>)
+    inherit Default1
+       
+    static member        Bimap ((x, y)                 , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = (f x, g y)
+    static member        Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = choice (Choice2Of2 << f) (Choice1Of2 << g) x
+    static member        Bimap (Const x : Const<'T,'V> , f:'T->'U, _:'V->'W , [<Optional>]mthd :Bimap   ) = Const (f x)                                     : Const<'U,'W>
+    static member        Bimap (KeyValue(k, x)         , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = KeyValuePair(f k, g x)
+
+    static member inline Invoke (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Bimap: _*_*_*_ -> _) source, f, g, mthd)
+        call (Unchecked.defaultof<Bimap>, source, Unchecked.defaultof<'``Bifunctor<'U,'W>``>)
+
+    static member inline InvokeOnInstance (f : 'T->'U) (g : 'V->'W) (source :'``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
+        (^``Bifunctor<'T,'V>``: (static member Bimap: _*_*_ -> _) source, f, g)
+
 
 type First =
     inherit Default1
-    static member inline       First (x                   , f       , [<Optional>]mthd :Default1) = Bimap.Invoke x f id
-    static member First ((x, y)              , f       , [<Optional>]mthd :First   ) = (f x, y)
-    static member First (x:Choice<_,_>       , f       , [<Optional>]mthd :First   ) = choice (Choice2Of2 << f) Choice1Of2 x
-    static member First (Const x:Const<'t,'u>, f       , [<Optional>]mthd :First   ) = Const (f x): Const<'v,'u>
-    static member First (KeyValue(k, x)      , f:'b->'c, [<Optional>]mthd :First   ) = KeyValuePair(f k, x)
-    
-    static member inline Invoke f x :'r =
-        let inline call (mthd : ^M, source : ^I, c:^c, f) = ((^M or ^I or ^c) : (static member First: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<First>, x, Unchecked.defaultof<'r>, f)
+
+    static member        First ((x, y)                , f:'T->'U, [<Optional>]mthd :First   ) = (f x, y)
+    static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]mthd :First   ) = choice (Choice2Of2 << f) Choice1Of2 x
+    static member        First (Const x : Const<'T,'V>, f:'T->'U, [<Optional>]mthd :First   ) = Const (f x): Const<'U,'V>
+    static member        First (KeyValue(k, x)        , f:'T->'U, [<Optional>]mthd :First   ) = KeyValuePair(f k, x)
+
+    static member inline Invoke (f : 'T->'U) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member First: _*_*_ -> _) source, f, mthd)
+        call (Unchecked.defaultof<First>, source, Unchecked.defaultof<'``Bifunctor<'U,'V>``>)
+
+    static member inline InvokeOnInstance (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
+        (^``Bifunctor<'T,'V>`` : (static member First: _*_ -> _) source, f)
+
+type First with
+    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance f id x  : '``Bifunctor<'U,'V>``
+    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default1) = First.InvokeOnInstance f x     : '``Bifunctor<'U,'V>``
+
 
 type Second =
     inherit Default1
-    static member inline       Second (x                   , f       , [<Optional>]mthd :Default1) = Bimap.Invoke x id f
-    static member Second ((x, y)              , f       , [<Optional>]mthd :Second  ) = (x, f y)
-    static member Second (x:Choice<_,_>       , f       , [<Optional>]mthd :Second  ) = choice Choice2Of2 (Choice1Of2 << f) x
-    static member Second (Const x:Const<'t,'u>, _:'u->'v, [<Optional>]mthd :Second  ) = Const x: Const<'t,'v>
-    static member Second (KeyValue(k, x)      , f:'b->'c, [<Optional>]mthd :Second  ) = KeyValuePair(k, f x)
-    
-    static member inline Invoke f x :'r =
-        let inline call (mthd : ^M, source : ^I, c:^c, f) = ((^M or ^I or ^c) : (static member Second: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<Second>, x, Unchecked.defaultof<'r>, f)
 
+    static member        Second ((x, y)                , f:'V->'W, [<Optional>]mthd :Second  ) = (x, f y)
+    static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]mthd :Second  ) = choice Choice2Of2 (Choice1Of2 << f) x
+    static member        Second (Const x : Const<'T,'V>, _:'V->'W, [<Optional>]mthd :Second  ) = Const x: Const<'T,'W>
+    static member        Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]mthd :Second  ) = KeyValuePair(k, f x)
+
+    static member inline Invoke (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Second: _*_*_ -> _) source, f, mthd)
+        call (Unchecked.defaultof<Second>, source, Unchecked.defaultof<'``Bifunctor<'T,'W>``>)
+
+    static member inline InvokeOnInstance (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = 
+        (^``Bifunctor<'T,'V>`` : (static member Second: _*_ -> _) source, f) 
+
+type Second with
+    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance id f x
+    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default1) = Second.InvokeOnInstance f x
+
+
+type Bimap with
+    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default2) = x |> First.InvokeOnInstance f |> Second.InvokeOnInstance g  : '``Bifunctor<'U,'W>``
+    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default1) = Bimap.InvokeOnInstance f g x                                : '``Bifunctor<'U,'W>``
+
+
+// Profunctor class -------------------------------------------------------
 
 type Dimap =
-    static member inline Dimap (Kleisli bmc :Kleisli<'B,'``Monad<'C>``>) = fun (ab:'A->'B) (cd:'C->'D) -> let cmd = Map.Invoke cd in Kleisli (ab >> bmc >> cmd) : Kleisli<'A,'``Monad<'D>``>
-    static member        Dimap (f                                      ) = fun (g :'A->'B) (h :'C->'D) -> g >> f >> h
+    inherit Default1
+
+    static member        Dimap (f                                      , g :'A->'B, h :'C->'D, [<Optional>]mthd: Dimap) = g >> f >> h                                                     : 'A->'D
+    static member inline Dimap (Kleisli bmc :Kleisli<'B,'``Monad<'C>``>, ab:'A->'B, cd:'C->'D, [<Optional>]mthd: Dimap) = let cmd = FsControl.Map.Invoke cd in Kleisli (ab >> bmc >> cmd) : Kleisli<'A,'``Monad<'D>``>
     
-    static member inline Invoke (x : '``Profunctor<'B,'C>``) :'r =
-        let inline call (mthd : ^M, source : ^I, c:^c) = ((^M or ^I or ^c) : (static member Dimap: _ -> _) source)
-        call (Unchecked.defaultof<Dimap>, x, Unchecked.defaultof<'r>)
+    static member inline Invoke (ab:'A->'B) (cd:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Dimap: _*_*_*_ -> _) source, ab, cd, mthd)
+        call (Unchecked.defaultof<Dimap>, source, Unchecked.defaultof<'``Profunctor<'A,'D>``>)
+
+    static member inline InvokeOnInstance (ab:'A->'B) (cd:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` =
+        (^``Profunctor<'B,'C>`` : (static member Dimap: _*_*_ -> _) source, ab, cd)
+
 
 type LMap =
     inherit Default1
-    static member inline       LMap (x :'``Profunctor<'B,'C>``            , f:'A->'B, [<Optional>]mthd :Default1) = Dimap.Invoke x f id : '``Profunctor<'A,'C>``
-    static member LMap (f :'B->'C                            , k:'A->'B, [<Optional>]mthd :LMap    ) = k >> f              : 'A->'C
-    static member LMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, k:'A->'B, [<Optional>]mthd :LMap    ) = Kleisli (k >> f)    : Kleisli<'A,'``Monad<'C>``>
+
+    static member inline Invoke (ab : 'A->'B) (source :'``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member LMap: _*_*_ -> _) source, ab, mthd)
+        call (Unchecked.defaultof<LMap>, source, Unchecked.defaultof<'``Profunctor<'A,'C>``>)
+
+    static member inline InvokeOnInstance (ab : 'A->'B) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
+        (^``Profunctor<'B,'C>`` : (static member LMap: _*_ -> _) source, ab)
+
+    static member LMap (f :'B->'C                            , k:'A->'B, [<Optional>]mthd :LMap) = k >> f              : 'A->'C
+    static member LMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, k:'A->'B, [<Optional>]mthd :LMap) = Kleisli (k >> f)    : Kleisli<'A,'``Monad<'C>``>
     
-    static member inline Invoke (f:'A->'B) (x :'``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R, f) = ((^M or ^I or ^R) : (static member LMap: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<LMap>, x, Unchecked.defaultof<'``Profunctor<'A,'C>``>, f)
+type LMap with
+    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
+    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]mthd :Default1) = LMap.InvokeOnInstance f x     : '``Profunctor<'A,'C>``
+
 
 type RMap =
     inherit Default1
-    static member inline              RMap (x :'``Profunctor<'B,'C>``            , f:'C->'D, [<Optional>]mthd :Default1) = Dimap.Invoke x id f          : '``Profunctor<'B,'D>``
-    static member        RMap (f :'B->'C                            , k:'C->'D, [<Optional>]mthd :RMap    ) = f >> k                       : 'B->'D
-    static member inline RMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, k:'C->'D, [<Optional>]mthd :RMap    ) = Kleisli (Map.Invoke k << f)  : Kleisli<'B,'``Monad<'D>``>
+
+    static member inline Invoke (cd : 'C->'D) (source :'``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member RMap: _*_*_ -> _) source, cd, mthd)
+        call (Unchecked.defaultof<RMap>, source, Unchecked.defaultof<'``Profunctor<'B,'D>``>)
+
+    static member inline InvokeOnInstance (cd : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
+        (^``Profunctor<'B,'C>`` : (static member RMap: _*_ -> _) source, cd)
+
+    static member        RMap (f :'B->'C                            , cd:'C->'D, [<Optional>]mthd :RMap) = f >> cd                                  : 'B->'D
+    static member inline RMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, cd:'C->'D, [<Optional>]mthd :RMap) = Kleisli (FsControl.Map.Invoke cd << f)   : Kleisli<'B,'``Monad<'D>``>
     
-    static member inline Invoke (f:'C->'D) (x :'``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R, f) = ((^M or ^I or ^R) : (static member RMap: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<RMap>, x, Unchecked.defaultof<'``Profunctor<'B,'D>``>, f)
+type RMap with
+    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
+    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]mthd :Default1) = RMap.InvokeOnInstance  cd x    : '``Profunctor<'B,'D>``
+
+
+type Dimap with
+    static member inline Dimap (x :'``Profunctor<'B,'C>``           , ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default2) = x |> RMap.InvokeOnInstance cd |> LMap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
+    static member inline Dimap (x :'``Profunctor<'B,'C>``           , ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default1) = Dimap.InvokeOnInstance ab cd x                            : '``Profunctor<'A,'D>``
 
 
 type Id =

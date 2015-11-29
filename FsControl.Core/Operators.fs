@@ -72,12 +72,12 @@ module Operators =
     // Contravariant/Bifunctor/Profunctor -------------------------------------
 
     let inline contramap (f:'U->'T) (x:'``Contravariant<'T>``) :'``Contravariant<'U>`` = Contramap.Invoke f x
-    let inline bimap f g x = Bimap.Invoke x f g
-    let inline first   f x = First.Invoke f x
-    let inline second  f x = Second.Invoke f x
-    let inline dimap f g x = Dimap.Invoke x f g
-    // let inline lmap f x = LMap.Invoke f x
-    // let inline rmap f x = RMap.Invoke f x
+    let inline bimap  (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` = Bimap.Invoke  f g source
+    let inline first  (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = First.Invoke  f source
+    let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = Second.Invoke f source
+    let inline dimap  (f : 'A->'B) (g:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
+    let inline lmap   (f : 'A->'B) (source : ^``Profunctor<'B,'C>``) : ^``Profunctor<'A,'C>`` = LMap.Invoke f source
+    let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = RMap.Invoke f source
 
 
     // Arrows -----------------------------------------------------------------
@@ -311,7 +311,7 @@ module Operators =
     let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
     let inline mapItem6 mapping tuple = MapItem6.Invoke mapping tuple
     let inline mapItem7 mapping tuple = MapItem7.Invoke mapping tuple
-    let        mapItem8 mapping tuple = MapItem8.MapItem8(mapping)
+    let        mapItem8 mapping tuple = MapItem8.MapItem8(tuple, mapping)
     
     
     
