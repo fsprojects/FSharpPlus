@@ -76,8 +76,8 @@ module Operators =
     let inline first   f x = First.Invoke f x
     let inline second  f x = Second.Invoke f x
     let inline dimap f g x = Dimap.Invoke x f g
-    let inline lmap f x = LMap.Invoke f x
-    let inline rmap f x = RMap.Invoke f x
+    // let inline lmap f x = LMap.Invoke f x
+    // let inline rmap f x = RMap.Invoke f x
 
 
     // Arrows -----------------------------------------------------------------
@@ -311,7 +311,7 @@ module Operators =
     let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
     let inline mapItem6 mapping tuple = MapItem6.Invoke mapping tuple
     let inline mapItem7 mapping tuple = MapItem7.Invoke mapping tuple
-    let        mapItem8 mapping tuple = tuple.MapItem8(mapping)
+    let        mapItem8 mapping tuple = MapItem8.MapItem8(mapping)
     
     
     

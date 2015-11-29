@@ -114,15 +114,15 @@ type Item8 =
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Item8> , value)
 
-[<Extension;Sealed>]
+
 type MapItem1 =
-    [<Extension>]static member MapItem1 ((a, b, c, d, e, f, g, h), fn) = (fn a, b, c, d, e, f, g, h)
-    [<Extension>]static member MapItem1 ((a, b, c, d, e, f, g)   , fn) = (fn a, b, c, d, e, f, g)
-    [<Extension>]static member MapItem1 ((a, b, c, d, e, f)      , fn) = (fn a, b, c, d, e, f)   
-    [<Extension>]static member MapItem1 ((a, b, c, d, e)         , fn) = (fn a, b, c, d, e)      
-    [<Extension>]static member MapItem1 ((a, b, c, d)            , fn) = (fn a, b, c, d)         
-    [<Extension>]static member MapItem1 ((a, b, c)               , fn) = (fn a, b, c)            
-    [<Extension>]static member MapItem1 ((a, b)                  , fn) = (fn a, b)
+    static member MapItem1 ((a, b, c, d, e, f, g, h), fn) = (fn a, b, c, d, e, f, g, h)
+    static member MapItem1 ((a, b, c, d, e, f, g)   , fn) = (fn a, b, c, d, e, f, g)
+    static member MapItem1 ((a, b, c, d, e, f)      , fn) = (fn a, b, c, d, e, f)   
+    static member MapItem1 ((a, b, c, d, e)         , fn) = (fn a, b, c, d, e)      
+    static member MapItem1 ((a, b, c, d)            , fn) = (fn a, b, c, d)         
+    static member MapItem1 ((a, b, c)               , fn) = (fn a, b, c)            
+    static member MapItem1 ((a, b)                  , fn) = (fn a, b)
 
     static member inline Invoke f value = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MapItem1: _ * _ -> _) b, f)
@@ -131,79 +131,73 @@ type MapItem1 =
 
 [<Extension;Sealed>]
 type MapItem2 =
-    [<Extension>]static member MapItem2 ((a, b, c, d, e, f, g, h), fn) = (a, fn b, c, d, e, f, g, h)
-    [<Extension>]static member MapItem2 ((a, b, c, d, e, f, g)   , fn) = (a, fn b, c, d, e, f, g)
-    [<Extension>]static member MapItem2 ((a, b, c, d, e, f)      , fn) = (a, fn b, c, d, e, f)   
-    [<Extension>]static member MapItem2 ((a, b, c, d, e)         , fn) = (a, fn b, c, d, e)      
-    [<Extension>]static member MapItem2 ((a, b, c, d)            , fn) = (a, fn b, c, d)         
-    [<Extension>]static member MapItem2 ((a, b, c)               , fn) = (a, fn b, c)            
-    [<Extension>]static member MapItem2 ((a, b)                  , fn) = (a, fn b)               
+    static member MapItem2 ((a, b, c, d, e, f, g, h), fn) = (a, fn b, c, d, e, f, g, h)
+    static member MapItem2 ((a, b, c, d, e, f, g)   , fn) = (a, fn b, c, d, e, f, g)
+    static member MapItem2 ((a, b, c, d, e, f)      , fn) = (a, fn b, c, d, e, f)   
+    static member MapItem2 ((a, b, c, d, e)         , fn) = (a, fn b, c, d, e)      
+    static member MapItem2 ((a, b, c, d)            , fn) = (a, fn b, c, d)         
+    static member MapItem2 ((a, b, c)               , fn) = (a, fn b, c)            
+    static member MapItem2 ((a, b)                  , fn) = (a, fn b)               
 
     static member inline Invoke f value = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MapItem2: _ * _ -> _) b, f)
         let inline call   (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem2> , value)
 
-[<Extension;Sealed>]
 type MapItem3 =
-    [<Extension>]static member MapItem3 ((a, b, c, d, e, f, g, h), fn) = (a, b, fn c, d, e, f, g, h)
-    [<Extension>]static member MapItem3 ((a, b, c, d, e, f, g)   , fn) = (a, b, fn c, d, e, f, g)
-    [<Extension>]static member MapItem3 ((a, b, c, d, e, f)      , fn) = (a, b, fn c, d, e, f)   
-    [<Extension>]static member MapItem3 ((a, b, c, d, e)         , fn) = (a, b, fn c, d, e)      
-    [<Extension>]static member MapItem3 ((a, b, c, d)            , fn) = (a, b, fn c, d)         
-    [<Extension>]static member MapItem3 ((a, b, c)               , fn) = (a, b, fn c)   
+    static member MapItem3 ((a, b, c, d, e, f, g, h), fn) = (a, b, fn c, d, e, f, g, h)
+    static member MapItem3 ((a, b, c, d, e, f, g)   , fn) = (a, b, fn c, d, e, f, g)
+    static member MapItem3 ((a, b, c, d, e, f)      , fn) = (a, b, fn c, d, e, f)   
+    static member MapItem3 ((a, b, c, d, e)         , fn) = (a, b, fn c, d, e)      
+    static member MapItem3 ((a, b, c, d)            , fn) = (a, b, fn c, d)         
+    static member MapItem3 ((a, b, c)               , fn) = (a, b, fn c)   
 
     static member inline Invoke f value = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MapItem3: _ * _ -> _) b, f)
         let inline call   (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem3> , value)
 
-[<Extension;Sealed>]
 type MapItem4 =
-    [<Extension>]static member MapItem4 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, fn d, e, f, g, h)
-    [<Extension>]static member MapItem4 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, fn d, e, f, g)
-    [<Extension>]static member MapItem4 ((a, b, c, d, e, f)      , fn) = (a, b, c, fn d, e, f)   
-    [<Extension>]static member MapItem4 ((a, b, c, d, e)         , fn) = (a, b, c, fn d, e)      
-    [<Extension>]static member MapItem4 ((a, b, c, d)            , fn) = (a, b, c, fn d)
+    static member MapItem4 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, fn d, e, f, g, h)
+    static member MapItem4 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, fn d, e, f, g)
+    static member MapItem4 ((a, b, c, d, e, f)      , fn) = (a, b, c, fn d, e, f)   
+    static member MapItem4 ((a, b, c, d, e)         , fn) = (a, b, c, fn d, e)      
+    static member MapItem4 ((a, b, c, d)            , fn) = (a, b, c, fn d)
 
     static member inline Invoke f value = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MapItem4: _ * _ -> _) b, f)
         let inline call   (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem4> , value)
 
-[<Extension;Sealed>]
 type MapItem5 =
-    [<Extension>]static member MapItem5 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, fn e, f, g, h)
-    [<Extension>]static member MapItem5 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, d, fn e, f, g)
-    [<Extension>]static member MapItem5 ((a, b, c, d, e, f)      , fn) = (a, b, c, d, fn e, f)   
-    [<Extension>]static member MapItem5 ((a, b, c, d, e)         , fn) = (a, b, c, d, fn e)
+    static member MapItem5 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, fn e, f, g, h)
+    static member MapItem5 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, d, fn e, f, g)
+    static member MapItem5 ((a, b, c, d, e, f)      , fn) = (a, b, c, d, fn e, f)   
+    static member MapItem5 ((a, b, c, d, e)         , fn) = (a, b, c, d, fn e)
 
     static member inline Invoke f value = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MapItem5: _ * _ -> _) b, f)
         let inline call   (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem5> , value)
 
-[<Extension;Sealed>]
 type MapItem6 =
-    [<Extension>]static member MapItem6 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, e, fn f, g, h)
-    [<Extension>]static member MapItem6 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, d, e, fn f, g)
-    [<Extension>]static member MapItem6 ((a, b, c, d, e, f)      , fn) = (a, b, c, d, e, fn f)
+    static member MapItem6 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, e, fn f, g, h)
+    static member MapItem6 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, d, e, fn f, g)
+    static member MapItem6 ((a, b, c, d, e, f)      , fn) = (a, b, c, d, e, fn f)
 
     static member inline Invoke f value = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MapItem6: _ * _ -> _) b, f)
         let inline call   (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem6> , value)
 
-[<Extension;Sealed>]
 type MapItem7 =
-    [<Extension>]static member MapItem7 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, e, f, fn g, h)
-    [<Extension>]static member MapItem7 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, d, e, f, fn g)
+    static member MapItem7 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, e, f, fn g, h)
+    static member MapItem7 ((a, b, c, d, e, f, g)   , fn) = (a, b, c, d, e, f, fn g)
     
     static member inline Invoke f value = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MapItem7: _ * _ -> _) b, f)
         let inline call   (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem7> , value)
 
-[<Extension;Sealed>]
 type MapItem8 =
-    [<Extension>]static member MapItem8 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, e, f, g, fn h)
+    static member MapItem8 ((a, b, c, d, e, f, g, h), fn) = (a, b, c, d, e, f, g, fn h)

@@ -23,15 +23,14 @@ type Item =
         let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
         call (Unchecked.defaultof<Item>, source, n)
 
-[<Extension;Sealed>]
 type MapIndexed =
-    [<Extension>]static member MapIndexed (x:Id<'T>    , f:_->'T->'U , [<Optional>]impl:MapIndexed) = f () x.getValue
-    [<Extension>]static member MapIndexed (x:seq<'T>   , f           , [<Optional>]impl:MapIndexed) = Seq.mapi   f x
-    [<Extension>]static member MapIndexed (x:list<'T>  , f           , [<Optional>]impl:MapIndexed) = List.mapi  f x
-    [<Extension>]static member MapIndexed (x:'T []     , f           , [<Optional>]impl:MapIndexed) = Array.mapi f x
-    [<Extension>]static member MapIndexed ((k:'K, a:'T), f           , [<Optional>]impl:MapIndexed) = (k, ((f k a):'U))
-    [<Extension>]static member MapIndexed (g           , f:'K->'T->'U, [<Optional>]impl:MapIndexed) = fun x -> f x (g x)
-    [<Extension>]static member MapIndexed (x:Map<'K,'T>, f           , [<Optional>]impl:MapIndexed) = Map.map f x :Map<'K,'U>
+    static member MapIndexed (x:Id<'T>    , f:_->'T->'U , [<Optional>]impl:MapIndexed) = f () x.getValue
+    static member MapIndexed (x:seq<'T>   , f           , [<Optional>]impl:MapIndexed) = Seq.mapi   f x
+    static member MapIndexed (x:list<'T>  , f           , [<Optional>]impl:MapIndexed) = List.mapi  f x
+    static member MapIndexed (x:'T []     , f           , [<Optional>]impl:MapIndexed) = Array.mapi f x
+    static member MapIndexed ((k:'K, a:'T), f           , [<Optional>]impl:MapIndexed) = (k, ((f k a):'U))
+    static member MapIndexed (g           , f:'K->'T->'U, [<Optional>]impl:MapIndexed) = fun x -> f x (g x)
+    static member MapIndexed (x:Map<'K,'T>, f           , [<Optional>]impl:MapIndexed) = Map.map f x :Map<'K,'U>
 
     static member inline Invoke    (mapping:'K->'T->'U)    (source:'Indexable'T)        =
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member MapIndexed: _*_*_ -> _) b, f, a)
@@ -39,13 +38,12 @@ type MapIndexed =
         call (Unchecked.defaultof<MapIndexed>,   source, mapping)     :'Indexable'U
 
 
-[<Extension;Sealed>]
 type IterateIndexed =
-    [<Extension>]static member IterateIndexed (x:Id<'T>  , f:_->'T->unit, [<Optional>]impl:IterateIndexed) = f () x.getValue
-    [<Extension>]static member IterateIndexed (x:seq<'T> , f            , [<Optional>]impl:IterateIndexed) = Seq.iteri   f x
-    [<Extension>]static member IterateIndexed (x:list<'T>, f            , [<Optional>]impl:IterateIndexed) = List.iteri  f x
-    [<Extension>]static member IterateIndexed (x:'T []   , f            , [<Optional>]impl:IterateIndexed) = Array.iteri f x
-    [<Extension>]static member IterateIndexed (x:Map<'K,'T>, f          , [<Optional>]impl:IterateIndexed) = Map.iter f x
+    static member IterateIndexed (x:Id<'T>  , f:_->'T->unit, [<Optional>]impl:IterateIndexed) = f () x.getValue
+    static member IterateIndexed (x:seq<'T> , f            , [<Optional>]impl:IterateIndexed) = Seq.iteri   f x
+    static member IterateIndexed (x:list<'T>, f            , [<Optional>]impl:IterateIndexed) = List.iteri  f x
+    static member IterateIndexed (x:'T []   , f            , [<Optional>]impl:IterateIndexed) = Array.iteri f x
+    static member IterateIndexed (x:Map<'K,'T>, f          , [<Optional>]impl:IterateIndexed) = Map.iter f x
 
     static member inline Invoke (action:'K->'T->unit)     (source:'Indexable'T)        =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member IterateIndexed: _*_*_ -> _) b, f, a)
@@ -66,8 +64,8 @@ type FoldIndexed =
         call (Unchecked.defaultof<FoldIndexed>, foldable, folder, state)
 
 type TraverseIndexed =
-    [<Extension>]static member inline TraverseIndexed ((k:'K, a:'T)   ,f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
-    [<Extension>]static member inline TraverseIndexed (Data.Identity a,f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke Data.Identity (f () a)
+    static member inline TraverseIndexed ((k:'K, a:'T)   , f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
+    static member inline TraverseIndexed (Data.Identity a, f , [<Optional>]output:'R, [<Optional>]impl:TraverseIndexed) :'R = Map.Invoke Data.Identity (f () a)
 
     static member inline Invoke f t =
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed: _*_*_*_ -> _) b, f, c, a)

@@ -97,12 +97,11 @@ type Limit =
  
 
 
-[<Extension;Sealed>]
 type Choose =
-    [<Extension>]static member Choose (x:Id<'T>  , f:_->'U option, [<Optional>]impl:Choose) = invalidOp "Choose on ID" :Id<'U>
-    [<Extension>]static member Choose (x:seq<'T> , f:_->'U option, [<Optional>]impl:Choose) = Seq.choose   f x
-    [<Extension>]static member Choose (x:list<'T>, f:_->'U option, [<Optional>]impl:Choose) = List.choose  f x
-    [<Extension>]static member Choose (x:'T []   , f:_->'U option, [<Optional>]impl:Choose) = Array.choose f x
+    static member Choose (x:Id<'T>  , f:_->'U option, [<Optional>]impl:Choose) = invalidOp "Choose on ID" :Id<'U>
+    static member Choose (x:seq<'T> , f:_->'U option, [<Optional>]impl:Choose) = Seq.choose   f x
+    static member Choose (x:list<'T>, f:_->'U option, [<Optional>]impl:Choose) = List.choose  f x
+    static member Choose (x:'T []   , f:_->'U option, [<Optional>]impl:Choose) = Array.choose f x
 
     static member inline Invoke (chooser:'T->'U option)   (source:'Collection'T)        =
         let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member Choose: _*_*_ -> _) b, f, a)
@@ -123,12 +122,11 @@ type Distinct =
         call (Unchecked.defaultof<Distinct>, source)  :'Collection'T
 
 
-[<Extension;Sealed>]
 type DistinctBy =
     inherit Default1
-    [<Extension>]static member inline DistinctBy (x:'Foldable'T, f, [<Optional>]impl:Default1  ) = x |> ToSeq.Invoke |> Seq.distinctBy f |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        DistinctBy (x:list<'T>   , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toList
-    [<Extension>]static member        DistinctBy (x:'T []      , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toArray
+    static member inline DistinctBy (x:'Foldable'T, f, [<Optional>]impl:Default1  ) = x |> ToSeq.Invoke |> Seq.distinctBy f |> OfSeq.Invoke :'Foldable'T
+    static member        DistinctBy (x:list<'T>   , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toList
+    static member        DistinctBy (x:'T []      , f, [<Optional>]impl:DistinctBy) = Seq.distinctBy f x |> Seq.toArray
 
     static member inline Invoke (projection:'T->'Key) (source:'Collection'T)        =
         let inline call_2 (a:^a, b:^b, p) = ((^a or ^b) : (static member DistinctBy: _*_*_ -> _) b, p, a)
@@ -136,12 +134,11 @@ type DistinctBy =
         call (Unchecked.defaultof<DistinctBy>, source, projection)    :'Collection'T
 
 
-[<Extension;Sealed>]
 type GroupBy =
-    [<Extension>]static member GroupBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:GroupBy) = let a = Id.run x in Id.create (f a, x)
-    [<Extension>]static member GroupBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:GroupBy) = Seq.groupBy f x
-    [<Extension>]static member GroupBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
-    [<Extension>]static member GroupBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
+    static member GroupBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:GroupBy) = let a = Id.run x in Id.create (f a, x)
+    static member GroupBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:GroupBy) = Seq.groupBy f x
+    static member GroupBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
+    static member GroupBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     static member inline Invoke    (projection:'T->'Key) (source:'Collection'T) : 'Collection'KeyX'Collection'T = 
         let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member GroupBy: _*_*_*_ -> _) b, p, c, a)
@@ -149,12 +146,11 @@ type GroupBy =
         call (Unchecked.defaultof<GroupBy>, source, projection)
 
 
-[<Extension;Sealed>]
 type GroupAdjBy =
-    [<Extension>]static member GroupAdjBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:GroupAdjBy) = let a = Id.run x in Id.create (f a, x)
-    [<Extension>]static member GroupAdjBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
-    [<Extension>]static member GroupAdjBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
-    [<Extension>]static member GroupAdjBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
+    static member GroupAdjBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:GroupAdjBy) = let a = Id.run x in Id.create (f a, x)
+    static member GroupAdjBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
+    static member GroupAdjBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
+    static member GroupAdjBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     static member inline Invoke (projection:'T->'Key) (source:'Collection'T) : 'Collection'KeyX'Collection'T = 
         let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member GroupAdjBy: _*_*_*_ -> _) b, p, c, a)
@@ -206,14 +202,13 @@ type Max =
         call (Unchecked.defaultof<Max>, source)                  :'T
 
 
-[<Extension;Sealed>]
 type MaxBy =
     inherit Default1
-    [<Extension>]static member inline MaxBy (x:'Foldable'T, f, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.maxBy f :'T
-    [<Extension>]static member MaxBy (x:Id<'T>  , f:'T->'U, [<Optional>]impl:MaxBy) = x.getValue
-    [<Extension>]static member MaxBy (x:seq<'T> , f       , [<Optional>]impl:MaxBy) = Seq.maxBy   f x
-    [<Extension>]static member MaxBy (x:list<'T>, f       , [<Optional>]impl:MaxBy) = List.maxBy  f x
-    [<Extension>]static member MaxBy (x:'T []   , f       , [<Optional>]impl:MaxBy) = Array.maxBy f x
+    static member inline MaxBy (x:'Foldable'T, f, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.maxBy f :'T
+    static member MaxBy (x:Id<'T>  , f:'T->'U, [<Optional>]impl:MaxBy) = x.getValue
+    static member MaxBy (x:seq<'T> , f       , [<Optional>]impl:MaxBy) = Seq.maxBy   f x
+    static member MaxBy (x:list<'T>, f       , [<Optional>]impl:MaxBy) = List.maxBy  f x
+    static member MaxBy (x:'T []   , f       , [<Optional>]impl:MaxBy) = Array.maxBy f x
 
     static member inline Invoke (projection:'T->'U) (source:'Collection'T)               =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member MaxBy: _*_*_ -> _) b, f, a)
@@ -236,14 +231,13 @@ type Min =
         call (Unchecked.defaultof<Min>, source)                  :'T
 
 
-[<Extension;Sealed>]
 type MinBy =
     inherit Default1
-    [<Extension>]static member inline MinBy (x:'Foldable'T, f, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.minBy f :'T
-    [<Extension>]static member MinBy (x:Id<'T>  , f:'T->'U, [<Optional>]impl:MinBy) = x.getValue
-    [<Extension>]static member MinBy (x:seq<'T> , f       , [<Optional>]impl:MinBy) = Seq.minBy   f x
-    [<Extension>]static member MinBy (x:list<'T>, f       , [<Optional>]impl:MinBy) = List.minBy  f x
-    [<Extension>]static member MinBy (x:'T []   , f       , [<Optional>]impl:MinBy) = Array.minBy f x
+    static member inline MinBy (x:'Foldable'T, f, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.minBy f :'T
+    static member MinBy (x:Id<'T>  , f:'T->'U, [<Optional>]impl:MinBy) = x.getValue
+    static member MinBy (x:seq<'T> , f       , [<Optional>]impl:MinBy) = Seq.minBy   f x
+    static member MinBy (x:list<'T>, f       , [<Optional>]impl:MinBy) = List.minBy  f x
+    static member MinBy (x:'T []   , f       , [<Optional>]impl:MinBy) = Array.minBy f x
 
     static member inline Invoke (projection:'T->'U) (source:'Collection'T)               =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member MinBy: _*_*_ -> _) b, f, a)
@@ -264,12 +258,11 @@ type Rev =
         call (Unchecked.defaultof<Rev>, source)                   :'Collection'T
 
 
-[<Extension;Sealed>]
 type Scan =
-    [<Extension>]static member Scan (x:Id<'T>  , f ,z:'S, [<Optional>]output:Id<'S>  , [<Optional>]impl:Scan) = Id.create (f z x.getValue)
-    [<Extension>]static member Scan (x:seq<'T> , f ,z:'S, [<Optional>]output:seq<'S> , [<Optional>]impl:Scan) = Seq.scan   f z x
-    [<Extension>]static member Scan (x:list<'T>, f ,z:'S, [<Optional>]output:list<'S>, [<Optional>]impl:Scan) = List.scan  f z x
-    [<Extension>]static member Scan (x:'T []   , f ,z:'S, [<Optional>]output:'S []   , [<Optional>]impl:Scan) = Array.scan f z x
+    static member Scan (x:Id<'T>  , f ,z:'S, [<Optional>]output:Id<'S>  , [<Optional>]impl:Scan) = Id.create (f z x.getValue)
+    static member Scan (x:seq<'T> , f ,z:'S, [<Optional>]output:seq<'S> , [<Optional>]impl:Scan) = Seq.scan   f z x
+    static member Scan (x:list<'T>, f ,z:'S, [<Optional>]output:list<'S>, [<Optional>]impl:Scan) = List.scan  f z x
+    static member Scan (x:'T []   , f ,z:'S, [<Optional>]output:'S []   , [<Optional>]impl:Scan) = Array.scan f z x
 
     static member inline Invoke (folder:'State'->'T->'State) (state:'State) (source:'Collection'T) =
         let inline call_3 (a:^a, b:^b, c:^c, f, z) = ((^a or ^b or ^c) : (static member Scan: _*_*_*_*_ -> _) b, f, z, c, a)
@@ -290,12 +283,11 @@ type Sort =
         call (Unchecked.defaultof<Sort>, source)                 :'Collection'T
 
 
-[<Extension;Sealed>]
 type SortBy =
     inherit Default1
-    [<Extension>]static member inline SortBy (x:'Foldable'T, f      , [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sortBy f |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        SortBy (x:list<'a>   , f      , [<Optional>]impl:SortBy  ) = List.sortBy  f x
-    [<Extension>]static member        SortBy (x:'a []      , f      , [<Optional>]impl:SortBy  ) = Array.sortBy f x
+    static member inline SortBy (x:'Foldable'T, f      , [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sortBy f |> OfSeq.Invoke :'Foldable'T
+    static member        SortBy (x:list<'a>   , f      , [<Optional>]impl:SortBy  ) = List.sortBy  f x
+    static member        SortBy (x:'a []      , f      , [<Optional>]impl:SortBy  ) = Array.sortBy f x
 
     static member inline Invoke (projection:'T->'Key) (source:'Collection'T) : 'Collection'T =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member SortBy: _*_*_ -> _) b, f, a)
