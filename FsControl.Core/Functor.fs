@@ -255,11 +255,6 @@ type MPlus =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member MPlus: _*_*_ -> _) input1, input2, mthd)
         call (Unchecked.defaultof<MPlus>, x, y)
 
-type MZero with
-    static member inline MZero (output :Kleisli<'T,'``Monad<'U>``>, mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
-    
-type MPlus with
-    static member inline MPlus (Kleisli f, Kleisli g, mthd:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
 
 
 namespace FsControl.Internals
@@ -424,8 +419,8 @@ type Bimap with
 type Dimap =
     inherit Default1
 
-    static member        Dimap (f                                      , g :'A->'B, h :'C->'D, [<Optional>]mthd: Dimap) = g >> f >> h                                                     : 'A->'D
-    static member inline Dimap (Kleisli bmc :Kleisli<'B,'``Monad<'C>``>, ab:'A->'B, cd:'C->'D, [<Optional>]mthd: Dimap) = let cmd = FsControl.Map.Invoke cd in Kleisli (ab >> bmc >> cmd) : Kleisli<'A,'``Monad<'D>``>
+    static member Dimap (f            , g :'A->'B, h :'C->'D, [<Optional>]mthd: Dimap) = g >> f >> h   : 'A->'D
+    static member Dimap (f:Func<'B,'C>, g :'A->'B, h :'C->'D, [<Optional>]mthd: Dimap) = Func<'A,'D>(g >> f.Invoke >> h)
     
     static member inline Invoke (ab:'A->'B) (cd:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Dimap: _*_*_*_ -> _) source, ab, cd, mthd)
@@ -445,8 +440,8 @@ type LMap =
     static member inline InvokeOnInstance (ab : 'A->'B) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
         (^``Profunctor<'B,'C>`` : (static member LMap: _*_ -> _) source, ab)
 
-    static member LMap (f :'B->'C                            , k:'A->'B, [<Optional>]mthd :LMap) = k >> f              : 'A->'C
-    static member LMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, k:'A->'B, [<Optional>]mthd :LMap) = Kleisli (k >> f)    : Kleisli<'A,'``Monad<'C>``>
+    static member LMap (f : 'B->'C     , k:'A->'B, [<Optional>]mthd :LMap) = k >> f     : 'A->'C
+    static member LMap (f : Func<'B,'C>, k:'A->'B, [<Optional>]mthd :LMap) = Func<'A,'C>(k >> f.Invoke)
     
 type LMap with
     static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
@@ -463,8 +458,8 @@ type RMap =
     static member inline InvokeOnInstance (cd : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
         (^``Profunctor<'B,'C>`` : (static member RMap: _*_ -> _) source, cd)
 
-    static member        RMap (f :'B->'C                            , cd:'C->'D, [<Optional>]mthd :RMap) = f >> cd                                  : 'B->'D
-    static member inline RMap (Kleisli f :Kleisli<'B,'``Monad<'C>``>, cd:'C->'D, [<Optional>]mthd :RMap) = Kleisli (FsControl.Map.Invoke cd << f)   : Kleisli<'B,'``Monad<'D>``>
+    static member RMap (f : 'B->'C     , cd:'C->'D, [<Optional>]mthd :RMap) = f >> cd   : 'B->'D
+    static member RMap (f : Func<'B,'C>, cd:'C->'D, [<Optional>]mthd :RMap) = Func<'B,'D>(f.Invoke >> cd)
     
 type RMap with
     static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
@@ -477,8 +472,8 @@ type Dimap with
 
 
 type Id =
-    static member        Id (_: 'r -> 'r     , _:Id) = id              : 'r -> 'r
-    static member inline Id (_:Kleisli<'a,'b>, _:Id) = Kleisli result :Kleisli<'a,'b>
+    static member Id (_: 'r -> 'r   , _:Id) = id                : 'r -> 'r
+    static member Id (_:Func<'r, 'r>, _:Id) = Func<'r, 'r>(id)  : Func<'r, 'r>
 
     static member inline Invoke() =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Id: _*_ -> _) b, a)
@@ -487,8 +482,8 @@ type Id =
 
 
 type Comp =
-    static member        Comp (        f, _, _:Comp) = fun (g: _ -> _) ->          g >>  f
-    static member inline Comp (Kleisli f, _, _:Comp) = fun (Kleisli g) -> Kleisli (g >=> f)
+    static member Comp (f          , _, _:Comp) = fun (g: _ -> _)           ->                  g >> f
+    static member Comp (f:Func<_,_>, _, _:Comp) = fun (g:System.Func<_, _>) -> Func<_,_>(g.Invoke >> f.Invoke)
 
     static member inline Invoke f g =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Comp: _*_*_ -> _) b, c, a)
@@ -497,8 +492,8 @@ type Comp =
 
 
 type Arr =
-    static member        Arr (_: _ -> _     , _:Arr) = fun (f:_->_) -> f
-    static member inline Arr (_:Kleisli<_,_>, _:Arr) = fun  f       -> Kleisli (Comp.Invoke result f)
+    static member Arr (_: _ -> _  , _:Arr) = fun (f:_->_) -> f
+    static member Arr (_:Func<_,_>, _:Arr) = fun (f:_->_) -> Func<_, _>(f)
 
     static member inline Invoke f = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Arr: _*_ -> _) b, a)
@@ -507,8 +502,8 @@ type Arr =
 
 
 type ArrFirst =
-    static member        ArrFirst (f        , _: 'a -> 'b   , _:ArrFirst) = fun (x,y) -> (f x, y)
-    static member inline ArrFirst (Kleisli f, _:Kleisli<_,_>, _:ArrFirst) = Kleisli (fun (b,d) -> f b >>= fun c -> result (c,d))
+    static member ArrFirst (f          , _:  'a -> 'b   , _:ArrFirst) = fun (x,y)            -> (f x       , y)
+    static member ArrFirst (f:Func<_,_>, _: Func<'a,'b> , _:ArrFirst) = Func<_, _>(fun (x,y) -> (f.Invoke x, y))
 
     static member inline Invoke f =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ArrFirst: _*_*_ -> _) b, c, a)
@@ -518,9 +513,9 @@ type ArrFirst =
 
 type ArrSecond =
     inherit Default1
-    static member inline ArrSecond (f      , _               , _:Default1) = let aswap = Arr.Invoke (fun (x,y) -> (y,x)) in Comp.Invoke aswap (Comp.Invoke (ArrFirst.Invoke f) aswap)
-    static member        ArrSecond (f        , _: 'a -> 'b   , _:ArrSecond  ) = fun (x,y) -> (x, f y)
-    static member inline ArrSecond (Kleisli f, _:Kleisli<_,_>, _:ArrSecond  ) = Kleisli (fun (d,b) -> f b >>= fun c -> result (d,c))
+    static member inline ArrSecond (f           , _             , _:Default1 ) = let aswap = Arr.Invoke (fun (x,y) -> (y,x)) in Comp.Invoke aswap (Comp.Invoke (ArrFirst.Invoke f) aswap)
+    static member        ArrSecond (f           , _: 'a -> 'b   , _:ArrSecond) = fun (x,y) -> (x, f y)
+    static member        ArrSecond (f :Func<_,_>, _:Func<'a, 'b>, _:ArrSecond) = Func<_,_>(fun (x,y) -> (x, f.Invoke y))
 
     static member inline Invoke  f   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ArrSecond: _*_*_ -> _) b, c, a)
@@ -528,8 +523,8 @@ type ArrSecond =
         call (Unchecked.defaultof<ArrSecond>, f)
 
 type AcEither =
-    static member inline AcEither (_:Choice<_,_>->_, _:AcEither) = fun (         f ,          g ) ->          choice f g
-    static member inline AcEither (_:Kleisli<_,_>  , _:AcEither) = fun ((Kleisli f), (Kleisli g)) -> Kleisli (choice f g)
+    static member AcEither (_:Choice<_,_> -> _   , _:AcEither) = fun (f          , g          ) -> choice f g
+    static member AcEither (_:Func<Choice<_,_>,_>, _:AcEither) = fun (f:Func<_,_>, g:Func<_,_>) -> Func<_,_>(choice f.Invoke g.Invoke)
 
     static member inline Invoke f g =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcEither: _*_ -> _) b, a)
@@ -538,9 +533,8 @@ type AcEither =
 
 
 type AcMerge =
-    static member inline AcMerge (_: _->    Choice<_,_>      , _:AcMerge) = fun (f, g)  -> AcEither.Invoke (Choice2Of2 << f) (Choice1Of2 << g)
-    static member inline AcMerge (_:Kleisli<Choice<'v,'t>,'z>, _:AcMerge) = fun ((Kleisli (f:'t->'u)), (Kleisli (g:'v->'w))) ->
-        AcEither.Invoke (Kleisli (f >=> (Comp.Invoke result Choice2Of2))) (Kleisli (g >=> (Comp.Invoke result Choice1Of2))) :Kleisli<Choice<'v,'t>,'z>     
+    static member AcMerge (_: _ ->  Choice<_,_> , _:AcMerge) = fun (f          , g          ) -> AcEither.Invoke (Choice2Of2 << f) (Choice1Of2 << g)
+    static member AcMerge (_:Func<_,Choice<_,_>>, _:AcMerge) = fun (f:Func<_,_>, g:Func<_,_>) -> AcEither.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke)) :Func<_,Choice<_,_>>
 
     static member inline Invoke f g =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcMerge: _*_ -> _) b, a)
@@ -549,10 +543,8 @@ type AcMerge =
 
 
 type AcLeft =
-    static member inline AcLeft (f:_->_   , _, _:AcLeft) = AcMerge.Invoke f id
-    static member inline AcLeft (Kleisli f, _, _:AcLeft) =
-        let inline (+++) a b = AcMerge.Invoke a b
-        (+++) (Kleisli f) (Arr.Invoke (Id.Invoke()))
+    static member inline AcLeft (f: _ -> _    , _, _:AcLeft) = AcMerge.Invoke f id
+    static member inline AcLeft (f:Func<_, _> , _, _:AcLeft) = AcMerge.Invoke f (Func<_,_>(id))
 
     static member inline Invoke    f   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcLeft: _*_*_ -> _) b, c, a)
@@ -561,10 +553,8 @@ type AcLeft =
 
 
 type AcRight =
-    static member inline AcRight (f:_->_   , _, _:AcRight) = AcMerge.Invoke id f
-    static member inline AcRight (Kleisli f, _, _:AcRight) =
-        let inline (+++) a b = AcMerge.Invoke a b
-        (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
+    static member inline AcRight (f: _ -> _    , _, _:AcRight) = AcMerge.Invoke id f
+    static member inline AcRight (f:Func<_, _> , _, _:AcRight) = AcMerge.Invoke (Func<_,_>(id)) f
 
     static member inline Invoke   f   =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcRight: _*_*_ -> _) b, c, a)
@@ -573,8 +563,8 @@ type AcRight =
 
 
 type ArrApply =
-    static member ArrApply (_: ('a -> 'b) * 'a -> 'b          , _:ArrApply) =          fun (f, x)         -> f x
-    static member ArrApply (_: Kleisli<Kleisli<'a,'b> * 'a,'b>, _:ArrApply) = Kleisli (fun (Kleisli f, x) -> f x)
+    static member ArrApply (_: ('a -> 'b)     * 'a -> 'b, _:ArrApply) =            fun (f          , x) -> f x
+    static member ArrApply (_:Func<Func<'a,'b> * 'a, 'b>, _:ArrApply) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)
 
     static member inline Invoke()     =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ArrApply: _*_ -> _) b, a)
