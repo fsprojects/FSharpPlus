@@ -295,23 +295,11 @@ module Operators =
     /// Gets the value of the fifth component of a tuple.
     let inline item5 tuple = Item5.Invoke tuple
 
-    /// Gets the value of the sixth component of a tuple.
-    let inline item6 tuple = Item6.Invoke tuple
-
-    /// Gets the value of the seventh component of a tuple.
-    let inline item7 tuple = Item7.Invoke tuple
-
-    /// Gets the value of the eighth component of a tuple.
-    let inline item8 tuple = Item8.Invoke tuple
-
     let inline mapItem1 mapping tuple = MapItem1.Invoke mapping tuple
     let inline mapItem2 mapping tuple = MapItem2.Invoke mapping tuple
     let inline mapItem3 mapping tuple = MapItem3.Invoke mapping tuple
     let inline mapItem4 mapping tuple = MapItem4.Invoke mapping tuple
-    let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
-    let inline mapItem6 mapping tuple = MapItem6.Invoke mapping tuple
-    let inline mapItem7 mapping tuple = MapItem7.Invoke mapping tuple
-    let        mapItem8 mapping tuple = MapItem8.MapItem8(tuple, mapping)
+    let        mapItem5 mapping tuple = MapItem5.MapItem5(tuple, mapping)
     
     
     
