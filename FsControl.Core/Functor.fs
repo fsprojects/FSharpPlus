@@ -377,6 +377,7 @@ type First =
 type First with
     static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance f id x  : '``Bifunctor<'U,'V>``
     static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default1) = First.InvokeOnInstance f x     : '``Bifunctor<'U,'V>``
+    static member inline First (_:^t when ^t: null and ^t: struct, f : 'T->'U,     mthd :Default1) = ()
 
 
 type Second =
@@ -396,11 +397,13 @@ type Second =
 type Second with
     static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance id f x
     static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default1) = Second.InvokeOnInstance f x
+    static member inline Second (_:^t when ^t: null and ^t: struct, f : 'V->'W,   mthd :Default1) = ()
 
 
 type Bimap with
     static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default2) = x |> First.InvokeOnInstance f |> Second.InvokeOnInstance g  : '``Bifunctor<'U,'W>``
     static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default1) = Bimap.InvokeOnInstance f g x                                : '``Bifunctor<'U,'W>``
+    static member inline Bimap (_:^t when ^t: null and ^t: struct, f:'T->'U, g:'V->'W,    mthd :Default1) = ()
 
 
 // Profunctor class -------------------------------------------------------
@@ -435,6 +438,7 @@ type LMap =
 type LMap with
     static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
     static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]mthd :Default1) = LMap.InvokeOnInstance f x     : '``Profunctor<'A,'C>``
+    static member inline LMap (_:^t when ^t: null and ^t: struct   , f:'A->'B,    mthd :Default1) = ()
 
 
 type RMap =
@@ -453,11 +457,13 @@ type RMap =
 type RMap with
     static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
     static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]mthd :Default1) = RMap.InvokeOnInstance  cd x    : '``Profunctor<'B,'D>``
+    static member inline RMap (_:^t when ^t: null and ^t: struct   , f:'C->'D,     mthd :Default1) = ()
 
 
 type Dimap with
-    static member inline Dimap (x :'``Profunctor<'B,'C>``           , ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default2) = x |> RMap.InvokeOnInstance cd |> LMap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
-    static member inline Dimap (x :'``Profunctor<'B,'C>``           , ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default1) = Dimap.InvokeOnInstance ab cd x                            : '``Profunctor<'A,'D>``
+    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default2) = x |> RMap.InvokeOnInstance cd |> LMap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
+    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default1) = Dimap.InvokeOnInstance ab cd x                            : '``Profunctor<'A,'D>``
+    static member inline Dimap (_:^t when ^t: null and ^t: struct,     f:'T->'U, g:'V->'W,   mthd :Default1) = ()
 
 
 type Id =

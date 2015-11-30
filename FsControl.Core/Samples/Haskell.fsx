@@ -427,9 +427,9 @@ let resBoolTrue = Predicate.run fstIsEven [0..10]
 
 // BiFunctors
 
-let inline bimap f g x = Bimap.Invoke f g x
-let inline first   f x = First.Invoke f x
-let inline second  f x = Second.Invoke f x
+let inline bimap f g x = FsControl.Operators.bimap f g x
+let inline first   f x = FsControl.Operators.first f x
+let inline second  f x = FsControl.Operators.second f x
 
 let rInt10Str10 = bimap  int string (10.0, 10)
 let resR11      = bimap  string ((+) 1) (Right 10)
@@ -438,9 +438,9 @@ let rStr10      = second string (true, 10)
 
 // Profunctors
 
-let inline dimap f g x = Dimap.Invoke f g x
-let inline lmap f x = LMap.Invoke f x
-let inline rmap f x = RMap.Invoke f x
+let inline dimap f g x = FsControl.Operators.dimap f g x
+let inline lmap f x = FsControl.Operators.lmap f x
+let inline rmap f x = FsControl.Operators.rmap f x
 
 let resStrFalse  = dimap int string (Predicate.run isEven) 99.0
 
