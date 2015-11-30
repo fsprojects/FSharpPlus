@@ -40,8 +40,9 @@ type NonEmptyList with
         {Head = y; Tail = (ys @ ys')}
 
     static member Return (x:'a) = {Head = x; Tail = []}
-    static member (<*>)  (f:NonEmptyList<'a->'b>, x:NonEmptyList<'a>) = 
-            Apply.FromMonad f x :NonEmptyList<'b>
+    static member (<*>)  (f:NonEmptyList<'T->'U>, x:NonEmptyList<'T>) = 
+        let r = NonEmptyList.toList f <*> NonEmptyList.toList x
+        {Head = r.Head; Tail = r.Tail}
 
     static member Extract    {Head = h; Tail = _} = h : 't
     static member Duplicate (s:NonEmptyList<'a>, [<Optional>]impl:Duplicate) = NonEmptyList.tails s
