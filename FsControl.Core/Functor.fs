@@ -196,6 +196,7 @@ type Map =
     static member inline InvokeOnInstance (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
 
+    static member inline Map (x : '``Monad<'T>``      , f : 'T->'U, [<Optional>]impl:Default3) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
     static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]impl:Default2) = Apply.InvokeOnInstance (Return.InvokeOnInstance f) x : '``Applicative<'U>``
     static member inline Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
 
