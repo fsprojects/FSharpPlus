@@ -7,20 +7,11 @@ module Compatibility =
         open FsControl
 
         let getDual (Dual x) = x
-        type Dual<'t> = FsControl.Dual<'t>
-        let Dual = Dual.Dual 
-
         let getAll (All x) = x
-        type All  = All
-        let All = All.All
-
         let getAny (Any x) = x
-        type Any  = Any
-        let Any = Any.Any
-
+        let getFirst (First x) = x
+        let getLast (Last x) = x
         let runKleisli (Kleisli f) = f
-        type Kleisli<'t,'u> = FsControl.Kleisli<'t,'u>
-        let Kleisli = Kleisli.Kleisli
 
         // Operatots
         let ($)   x y = x y

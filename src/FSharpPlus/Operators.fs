@@ -93,13 +93,13 @@ module Operators =
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
 
-    let inline contramap (f:'T->'U) (x:'``Contravariant<'U>``) :'``Contravariant<'T>`` = Contramap.Invoke f x
-    let inline bimap f g x = Bimap.Invoke x f g
-    let inline first   f x = First.Invoke f x
-    let inline second  f x = Second.Invoke f x
-    let inline dimap f g x = Dimap.Invoke x f g
-    let inline lmap f x = LMap.Invoke f x
-    let inline rmap f x = RMap.Invoke f x
+    let inline contramap (f:'U->'T) (x:'``Contravariant<'T>``) :'``Contravariant<'U>`` = Contramap.Invoke f x
+    let inline bimap  (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` = Bimap.Invoke  f g source
+    let inline first  (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = First.Invoke  f source
+    let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = Second.Invoke f source
+    let inline dimap  (f : 'A->'B) (g:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
+    let inline lmap   (f : 'A->'B) (source : ^``Profunctor<'B,'C>``) : ^``Profunctor<'A,'C>`` = LMap.Invoke f source
+    let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = RMap.Invoke f source
 
 
     // Arrows -----------------------------------------------------------------
@@ -148,6 +148,9 @@ module Operators =
 
     // Indexable
 
+    /// Get an item from the given index.
+    let inline item (n:'K) (source:'``Indexed<'T>``) : 'T = Item.Invoke n source
+
     /// Map with access to the index.
     let inline mapi (mapping:'K->'T->'U) (source:'``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = MapIndexed.Invoke mapping source
 
@@ -176,16 +179,16 @@ module Operators =
     /// Lift a computation from the inner monad to the constructed monad.
     let inline lift      (x:'``Monad<'T>``) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
 
-    /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of layers.
+    /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of monad-layers.
     let inline liftAsync (x:Async<'T>) : '``MonadAsync<'T>`` = LiftAsync.Invoke x
 
     /// (call-with-current-continuation) calls a function with the current continuation as its argument.
-    let inline callCC (f:('T->'``MonadCont<'U>``)->'``MonadCont<'T>``) : '``MonadCont<'T>`` = CallCC.Invoke f
+    let inline callCC (f:('T->'``MonadCont<'R,'U>``)->'``MonadCont<'R,'T>``) : '``MonadCont<'R,'T>`` = CallCC.Invoke f
    
-    /// <summary>Haskell signature: get    :: MonadState  s m => m s</summary>
+    /// Return the state from the internals of the monad.
     let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
 
-    /// <summary>Haskell signature: put    :: MonadState  s m => s -> m ()</summary>
+    /// Replace the state inside the monad.
     let inline put (x:'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
 
     /// Retrieves the monad environment.
@@ -215,7 +218,7 @@ module Operators =
 
     // Collection
 
-    let inline item (n:int) (source:'``Collection<'T>``) : 'T = Item.Invoke n source
+    let inline nth (n:int) (source:'``Collection<'T>``) : 'T = Nth.Invoke n source
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
@@ -314,23 +317,11 @@ module Operators =
     /// Gets the value of the fifth component of a tuple.
     let inline item5 tuple = Item5.Invoke tuple
 
-    /// Gets the value of the sixth component of a tuple.
-    let inline item6 tuple = Item6.Invoke tuple
-
-    /// Gets the value of the seventh component of a tuple.
-    let inline item7 tuple = Item7.Invoke tuple
-
-    /// Gets the value of the eighth component of a tuple.
-    let inline item8 tuple = Item8.Invoke tuple
-
     let inline mapItem1 mapping tuple = MapItem1.Invoke mapping tuple
     let inline mapItem2 mapping tuple = MapItem2.Invoke mapping tuple
     let inline mapItem3 mapping tuple = MapItem3.Invoke mapping tuple
     let inline mapItem4 mapping tuple = MapItem4.Invoke mapping tuple
-    let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
-    let inline mapItem6 mapping tuple = MapItem6.Invoke mapping tuple
-    let inline mapItem7 mapping tuple = MapItem7.Invoke mapping tuple
-    let        mapItem8 mapping tuple = tuple.MapItem8(mapping)
+    let        mapItem5 mapping tuple = MapItem5.MapItem5(tuple, mapping)
     
     
     
