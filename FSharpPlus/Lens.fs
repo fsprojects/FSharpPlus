@@ -10,7 +10,7 @@ module Lens =
     let set  lens v = Identity.run << lens (fun _ -> Identity v)
     let over lens f = Identity.run << lens (Identity << f)
     let view lens   = Const.run << lens Const
-    let preview prism = First.run << Const.run << prism (fun x -> Const (FsControl.First (Some x)))
+    let preview prism = First.run << Const.run << prism (fun x -> Const (FSharpPlus.First (Some x)))
 
     /// Build a 'Lens' from a getter and a setter.
     let inline lens sa sbt afb s = sbt s <!> afb (sa s)
@@ -34,9 +34,6 @@ module Lens =
     let inline _3 f t = map (fun x -> mapItem3 (fun _ -> x) t) (f (item3 t))
     let inline _4 f t = map (fun x -> mapItem4 (fun _ -> x) t) (f (item4 t))
     let inline _5 f t = map (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
-    let inline _6 f t = map (fun x -> mapItem6 (fun _ -> x) t) (f (item6 t))
-    let inline _7 f t = map (fun x -> mapItem7 (fun _ -> x) t) (f (item7 t))
-    let inline _8 f t = map (fun x -> mapItem8 (fun _ -> x) t) (f (item8 t))
 
     // Prism
     let inline _Choice1Of2 x = (prism Choice1Of2 <| choice (Choice2Of2 << Choice2Of2) Choice1Of2) x
@@ -66,7 +63,7 @@ module Lens =
     let inline filtered p f s = if p s then f s else result s
     let inline both f (a, b) = liftA2 tuple2 (f a) (f b)
 
-    type Exchange<'T,'U> = Exchange of 'T * 'U with static member Dimap (Exchange (sa, bt)) = fun f g -> Exchange (sa << f, g << bt)
+    type Exchange<'T,'U> = Exchange of 'T * 'U with static member Dimap (Exchange (sa, bt), f, g) = Exchange (sa << f, g << bt)
     let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run </rmap/> bt)
     let inline from l    = withIso l <| fun sa bt -> iso bt sa
     let inline mapping k = withIso k <| fun sa bt -> iso (map sa) (map bt)
