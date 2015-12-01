@@ -55,7 +55,7 @@ type ListT with
     static member inline MZero (output: ListT<'``MonadPlus<list<'T>``>, impl:MZero)                                                     = ListT <| result []                                    : ListT<'``MonadPlus<list<'T>``>
     static member inline MPlus (ListT x, ListT y, impl:MPlus) = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))   : ListT<'``MonadPlus<list<'T>``>
 
-    static member inline Lift (x:'``Monad<'T>``) = x |> liftM List.singleton |> ListT   : ListT<'``Monad<list<'T>>``> 
+    static member inline Lift (x:'``Monad<'T>``) = x |> map List.singleton |> ListT   : ListT<'``Monad<list<'T>>``> 
     
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x) : '``ListT<'MonadAsync<'T>>``
     

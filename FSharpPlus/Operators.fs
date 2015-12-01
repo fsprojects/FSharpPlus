@@ -444,9 +444,6 @@ module Operators =
     /// An active recognizer for a generic value parser.
     let inline (|Parse|_|) str : 'T option = tryParse str
 
-    /// Equivalent to map but only for Monads.
-    let inline liftM  (f:'T->'U) (m1:'``Monad<'T>``) :'``Monad<'U>``= m1 >>= (result << f)
-
     /// A convenient alias for Choice<'T1,'T2>
     type Result<'Success,'Failure> = Choice<'Success,'Failure>
     let (|Success|Failure|) = function
