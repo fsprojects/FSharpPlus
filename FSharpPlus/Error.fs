@@ -43,10 +43,10 @@ module ErrorT =
     let inline map  (f:'T->'U) (ErrorT m:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT (map (Error.map f) m) :ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>
 
 type ErrorT with
-    static member inline Map    (x:ErrorT<'``Monad<'Choice<'T,'E>>``>, f:'T->'U) = ErrorT.map f x :ErrorT<'``Monad<'Choice<'U,'E>>``>
-    static member inline Return (x:'T) = ErrorT (result (Choice1Of2 x))        : ErrorT<'``Monad<'Choice<'T,'E>>``>
-    static member inline (<*>)  (f:ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>, x:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT.apply f x : ErrorT<'``Monad<'Choice<'U,'E>>``>
-    static member inline Bind   (x:ErrorT<'``Monad<'Choice<'T,'E>>``>, f:'T->ErrorT<'``Monad<'Choice<'U,'E>>``>) = ErrorT.bind f x
+    static member inline Return (x : 'T) = ErrorT (result (Choice1Of2 x))                                                                   : ErrorT<'``Monad<'Choice<'T,'E>>``>
+    static member inline Map    (x : ErrorT<'``Monad<'Choice<'T,'E>>``>, f : 'T->'U) = ErrorT.map f x                                       : ErrorT<'``Monad<'Choice<'U,'E>>``>
+    static member inline (<*>)  (f : ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>, x : ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT.apply f x : ErrorT<'``Monad<'Choice<'U,'E>>``>
+    static member inline Bind   (x : ErrorT<'``Monad<'Choice<'T,'E>>``>, f : 'T->ErrorT<'``Monad<'Choice<'U,'E>>``>)     = ErrorT.bind f x
 
     static member inline Lift (x:'``Monad<'T>``) = x |> map Choice1Of2 |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
 

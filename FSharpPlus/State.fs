@@ -41,10 +41,10 @@ module StateT =
     let inline bind (f :'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
 
 type StateT with
-    static member inline Map    (x :StateT<'S,'``Monad<'T * 'S>``>, f :'T->'U, impl:Map) = StateT.map f x                                : StateT<'S,'``Monad<'U * 'S>``>
-    static member inline Return (output: StateT<'S,'``Monad<'T * 'S>``>, impl:Return) = fun (a:'T) -> StateT (fun s -> result (a, s))           : StateT<'S,'``Monad<'T * 'S>``>
-    static member inline Apply  (f :StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>, output: StateT<'S,'``Monad<'U * 'S>``>, impl:Apply ) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
-    static member inline Bind   (x :StateT<'S,'``Monad<'T * 'S>``>, f :'T->StateT<'S,'``Monad<'U * 'S>``>) = StateT.bind f x
+    static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                          : StateT<'S,'``Monad<'T * 'S>``>
+    static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map f x    : StateT<'S,'``Monad<'U * 'S>``>
+    static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x  : StateT<'S,'``Monad<'U * 'S>``>
+    static member inline Bind   (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind f x
 
     static member inline MZero (output:StateT<'S,'``MonadPlus<'T * 'S>``>, impl:MZero) = StateT (fun _ -> getMZero())   : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline MPlus (StateT m, StateT n, impl:MPlus)                        = StateT (fun s -> m s <|> n s)  : StateT<'S,'``MonadPlus<'T * 'S>``>
