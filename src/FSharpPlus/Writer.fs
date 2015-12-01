@@ -61,10 +61,10 @@ module WriterT =
 
 type WriterT with
 
-    static member inline Map    (x :WriterT<'``Monad<'T * 'Monoid>``>, f:'T->'U, _:Map) = WriterT.map f x
-    static member inline Return (_ :WriterT<'``Monad<'T * 'Monoid>``>, _:Return) :'T -> WriterT<'``Monad<'T * 'Monoid>``> = fun a -> WriterT (result (a, getEmpty()))
-    static member inline Apply  (f :WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x: WriterT<'``Monad<'T * 'Monoid>``>, output: WriterT<'``Monad<'U * 'Monoid>``>, impl:Apply ) = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
-    static member inline Bind   (x :WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)  = WriterT.bind f x             : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline Return (x : 'T) = WriterT (result (x, getEmpty()))                                                                 : WriterT<'``Monad<'T * 'Monoid>``>
+    static member inline Map    (x : WriterT<'``Monad<'T * 'Monoid>``>, f : 'T -> 'U)                                   = WriterT.map f x   : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline (<*>)  (f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x : WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline Bind   (x : WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)                                     = WriterT.bind f x  : WriterT<'``Monad<'U * 'Monoid>``>
 
     static member inline MZero (output:WriterT<'``MonadPlus<'T * 'Monoid>``>, impl:MZero) = WriterT (getMZero())   : WriterT<'``MonadPlus<'T * 'Monoid>``>
     static member inline MPlus (  WriterT m, WriterT n                      , impl:MPlus) = WriterT (m <|> n)      : WriterT<'``MonadPlus<'T * 'Monoid>``>

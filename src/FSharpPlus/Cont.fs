@@ -21,10 +21,11 @@ open FsControl
 type ContT<'r,'t> = Cont<'r,'t>
 
 type Cont with
-    static member Map    (x:Cont<'R,'T>, f) = Cont.map f x              : Cont<'R,'U>
     static member Return n = Cont (fun k -> k n)                        : Cont<'R,'T>
-    static member Bind   (x, f:'T->_) = Cont.bind f x                   : Cont<'R,'U>
-    static member (<*>)  (f, x:Cont<'R,'T>) = Cont.apply f x            : Cont<'R,'U>
+    static member Map    (x : Cont<'R,'T>, f) = Cont.map f x            : Cont<'R,'U>
+    static member (<*>)  (f, x : Cont<'R,'T>) = Cont.apply f x          : Cont<'R,'U>
+    static member Bind   (x, f : 'T->_)       = Cont.bind f x           : Cont<'R,'U>
+    
     static member CallCC (f:('T -> Cont<'R,'U>) -> _) = Cont.callCC f   : Cont<'R,'T>
 
     static member inline Lift (m:'``Monad<'T>``) = Cont ((>>=) m) : ContT<'``Monad<'R>``,'T>    

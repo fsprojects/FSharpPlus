@@ -47,10 +47,10 @@ module ListT =
     let inline map  (f:'T->'U) (ListT m: ListT<'``Monad<list<'T>``>) =  ListT (map (List.map f) m) : ListT<'``Monad<list<'U>``>
 
 type ListT with
-    static member inline Map    (x : ListT<'``Monad<list<'T>``>, f : 'T->'U , impl:Map)                                                 = ListT.map f x                                         : ListT<'``Monad<list<'U>``>
-    static member inline Return (output : ListT<'``Monad<list<'T>``>, impl:Return)                                                      = ListT << result << List.singleton                     : 'T -> ListT<'``Monad<list<'T>``>
-    static member inline Apply  (f : ListT<'``Monad<list<('T -> 'U)>``>, x : ListT<'``Monad<list<'T>``>, output:ListT<'r>, impl:Apply ) = ListT.apply f x                                             : ListT<'``Monad<list<'U>``>
-    static member inline Bind   (x  : ListT<'``Monad<list<'T>``>, f: 'T -> ListT<'``Monad<list<'U>``>)                                  = ListT.bind  f x
+    static member inline Return (x : 'T) = [x] |> result |> ListT                                                           : ListT<'``Monad<seq<'T>``>
+    static member inline Map    (x : ListT<'``Monad<seq<'T>``>, f : 'T->'U) = ListT.map f x                                 : ListT<'``Monad<seq<'U>``>
+    static member inline (<*>)  (f : ListT<'``Monad<seq<('T -> 'U)>``>, x : ListT<'``Monad<seq<'T>``>) = ListT.apply f x    : ListT<'``Monad<seq<'U>``>
+    static member inline Bind   (x : ListT<'``Monad<seq<'T>``>, f : 'T -> ListT<'``Monad<seq<'U>``>)   = ListT.bind f x
 
     static member inline MZero (output: ListT<'``MonadPlus<list<'T>``>, impl:MZero)                                                     = ListT <| result []                                    : ListT<'``MonadPlus<list<'T>``>
     static member inline MPlus (ListT x, ListT y, impl:MPlus) = ListT <| (x >>= (fun a -> y >>= (fun b ->  result (a @ b ))))   : ListT<'``MonadPlus<list<'T>``>
