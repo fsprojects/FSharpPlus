@@ -6,6 +6,16 @@ open FSharpPlus.Operators
 
 module Lens =
 
+    module Internals =
+        let lmap' ab p = ab >> p
+        let rmap' cd p = p >> cd
+        let getAny (Any p) = p
+        let getAll (All p) = p
+        type Exchange<'T,'U> = Exchange of 'T * 'U with
+            static member Dimap (Exchange (sa, bt), f, g) = Exchange (sa << f, g << bt)
+
+    open Internals
+
     // Basic operations
     let set  lens v = Identity.run << lens (fun _ -> Identity v)
     let over lens f = Identity.run << lens (Identity << f)
@@ -16,7 +26,7 @@ module Lens =
     let inline lens sa sbt afb s = sbt s <!> afb (sa s)
 
 
-    /// Build a Prism usign Choice instead of Option a to permit the types of s and t to differ.
+    /// Build a Prism using Choice instead of Option to permit the types of 's and 't to differ.
     let inline prism (bt:'b->'t) (seta:'s->Choice<'a,'t>) = dimap seta (choice result (map bt)) << (fun g -> choice Choice2Of2 (Choice1Of2 << g))
     let inline prism' (bs:'b->'s) (sma:'s->Option<'a>) = prism bs (fun s -> option (Choice2Of2 s) Choice1Of2 (sma s))
 
@@ -49,22 +59,21 @@ module Lens =
     // functions
     let inline to' k = dimap k (contramap k)
 
-    let inline foldMapOf l f = Const.run </rmap/> l (Const </rmap/> f)
-    let inline foldOf    l   = Const.run </rmap/> l Const
-    let inline foldrOf l f z = flip Endo.run z << foldMapOf l (Endo </rmap/> f)
-    let inline foldlOf l f z = (flip Endo.run z </lmap/> Dual.run) </rmap/> foldMapOf l (Dual </rmap/> Endo </rmap/> flip f)
-    let        toListOf  l   = let cons x y = x :: y in foldrOf l cons []
+    let foldMapOf l f = Const.run </rmap'/> l (Const </rmap'/> f)
+    let foldOf    l   = Const.run </rmap'/> l Const
+    let foldrOf l f z = flip Endo.run z << foldMapOf l (Endo </rmap'/> f)
+    let foldlOf l f z = (flip Endo.run z </lmap'/> Dual.run) </rmap'/> foldMapOf l (Dual </rmap'/> Endo </rmap'/> flip f)
+    let toListOf  l   = let cons x y = x :: y in foldrOf l cons []
 
-    let inline anyOf  l f = let getAny (Any p) = p in getAny </rmap/> foldMapOf l (Any </rmap/> f)
-    let inline allOf  l f = let getAll (All p) = p in getAll </rmap/> foldMapOf l (All </rmap/> f)
-    let inline elemOf l = anyOf l << (=)
+    let anyOf  l f = getAny </rmap'/> foldMapOf l (Any </rmap'/> f)
+    let allOf  l f = getAll </rmap'/> foldMapOf l (All </rmap'/> f)
+    let elemOf l = anyOf l << (=)
     let inline items x = traverse x
 
     let inline filtered p f s = if p s then f s else result s
-    let inline both f (a, b) = liftA2 tuple2 (f a) (f b)
+    let inline both f (a, b) = tuple2 <!> f a <*> f b
 
-    type Exchange<'T,'U> = Exchange of 'T * 'U with static member Dimap (Exchange (sa, bt), f, g) = Exchange (sa << f, g << bt)
-    let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run </rmap/> bt)
+    let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run </rmap'/> bt)
     let inline from l    = withIso l <| fun sa bt -> iso bt sa
     let inline mapping k = withIso k <| fun sa bt -> iso (map sa) (map bt)
 
@@ -74,6 +83,3 @@ module Lens =
     let (%->) l s = over l s
     let (^?)  s l = preview  l s
     let (^..) s l = toListOf l s
-
-
-   
