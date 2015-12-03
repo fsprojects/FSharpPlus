@@ -58,16 +58,15 @@ type Bind =
 [<Extension;Sealed>]
 type Join =
     inherit Default1
-    [<Extension>]static member inline Join (x                   , [<Optional>]output:'R        , [<Optional>]impl:Default1) = Bind.Invoke x id :'R
-    [<Extension>]static member        Join (x:Lazy<Lazy<'a>>    , [<Optional>]output:Lazy<'a>  , [<Optional>]impl:Join) = lazy x.Value.Value
-    [<Extension>]static member        Join (x:option<option<'a>>, [<Optional>]output:option<'a>, [<Optional>]impl:Join) = Option.bind   id x
-    [<Extension>]static member        Join (x:list<_>           , [<Optional>]output:list<'b>  , [<Optional>]impl:Join) = List.collect  id x
-    [<Extension>]static member        Join (x:'b [] []          , [<Optional>]output:'b []     , [<Optional>]impl:Join) = Array.collect id x
-    [<Extension>]static member        Join (x:Id<Id<'a>>        , [<Optional>]output:Id<'a>    , [<Optional>]impl:Join) = x.getValue
-
-#if NOTNET35        
-    [<Extension>]static member        Join (x:Task<Task<'a>>    , [<Optional>]output:Task<'a>  , [<Optional>]impl:Join) = x.Unwrap()
-#endif
+    [<Extension>]static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]output : '``Monad<'T>``  , [<Optional>]impl : Default1) = Bind.Invoke x id          : '``Monad<'T>``
+    [<Extension>]static member        Join (x : Lazy<Lazy<_>>         , [<Optional>]output : Lazy<'T>        , [<Optional>]impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
+    [<Extension>]static member        Join (x                         , [<Optional>]output : option<'T>      , [<Optional>]impl : Join    ) = Option.bind   id x        : option<'T>
+    [<Extension>]static member        Join (x                         , [<Optional>]output : list<'T>        , [<Optional>]impl : Join    ) = List.collect  id x        : list<'T>  
+    [<Extension>]static member        Join (x                         , [<Optional>]output : 'T []           , [<Optional>]impl : Join    ) = Array.collect id x        : 'T []     
+    [<Extension>]static member        Join (x : Id<_>                 , [<Optional>]output : Id<'T>          , [<Optional>]impl : Join    ) = x.getValue                : Id<'T>
+#if NOTNET35                                                                                                                              
+    [<Extension>]static member        Join (x : Task<Task<_>>         , [<Optional>]output : Task<'T>        , [<Optional>]impl : Join    ) = x.Unwrap()                : Task<'T>
+#endif                                                                                                                                    
 
     static member inline Invoke (x:'``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd : 'M, input : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Join: _*_*_ -> _) input, output, mthd)
