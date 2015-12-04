@@ -82,9 +82,15 @@ module Operators =
 
     // Arrows -----------------------------------------------------------------
 
-    let inline getCatId()  = Id.Invoke()
-    let inline (<<<<)  f g = Comp.Invoke f g
-    let inline (>>>>)  g f = Comp.Invoke f g
+    /// The identity morphism.
+    let inline getCatId() = Id.Invoke() : '``Category<'T,'T>``
+
+    /// Right-to-left morphism composition.
+    let inline (<<<<) (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = Comp.Invoke f g
+
+    /// Left-to-right morphism composition.
+    let inline (>>>>) (g : '``Category<'T,'U>``) (f : '``Category<'U,'V>``) : '``Category<'T,'V>`` = Comp.Invoke f g
+
     let inline arr     f   = Arr.Invoke f
     let inline arrFirst  f = ArrFirst.Invoke f
     let inline arrSecond f = ArrSecond.Invoke f

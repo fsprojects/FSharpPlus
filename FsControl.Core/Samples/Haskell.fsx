@@ -478,6 +478,9 @@ let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 let r5:List<_>  = (runKleisli (id'())) 5
 let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
 let r8n16n24n10n20n30 = runKleisli k  <| 5
+
+let res1 = (System.Func<_,_>string >>> System.Func<_,_>int).Invoke '1'
+
 let r20n5n30n5   = runKleisli (arrFirst  <| Kleisli (fun y -> [y * 2; y * 3])) (10,5) 
 let r10n10n10n15 = runKleisli (arrSecond <| Kleisli (fun y -> [y * 2; y * 3])) (10,5)
 

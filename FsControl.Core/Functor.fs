@@ -488,25 +488,27 @@ type Dimap with
     static member inline Dimap (_:^t when ^t: null and ^t: struct,     f:'T->'U, g:'V->'W,   mthd :Default1) = ()
 
 
-type Id =
-    static member Id (_: 'r -> 'r   , _:Id) = id                : 'r -> 'r
-    static member Id (_:Func<'r, 'r>, _:Id) = Func<'r, 'r>(id)  : Func<'r, 'r>
+// Category class ---------------------------------------------------------
 
-    static member inline Invoke() =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Id: _*_ -> _) b, a)
-        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Unchecked.defaultof<Id>
+type Id =
+    static member Id ([<Optional>]output :  'T -> 'T  , [<Optional>]mthd : Id) = id               : 'T -> 'T
+    static member Id ([<Optional>]output : Func<'T,'T>, [<Optional>]mthd : Id) = Func<'T,'T>(id)  : Func<'T,'T>
+
+    static member inline Invoke() : '``Category<'T,'T>`` =
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Id: _*_ -> _) output, mthd)
+        call (Unchecked.defaultof<Id>, Unchecked.defaultof<'``Category<'T,'T>``>)
 
 
 type Comp =
-    static member Comp (f          , _, _:Comp) = fun (g: _ -> _)           ->                  g >> f
-    static member Comp (f:Func<_,_>, _, _:Comp) = fun (g:System.Func<_, _>) -> Func<_,_>(g.Invoke >> f.Invoke)
+    static member Comp (f :  'U -> 'V  , [<Optional>]output : 'T -> 'V   , [<Optional>]mthd : Comp) = fun (g: 'T -> 'U  ) -> g >> f     : 'T -> 'V
+    static member Comp (f : Func<'U,'V>, [<Optional>]output : Func<'T,'V>, [<Optional>]mthd : Comp) = fun (g:Func<'T,'U>) -> Func<'T,'V>(g.Invoke >> f.Invoke)
 
-    static member inline Invoke f g =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Comp: _*_*_ -> _) b, c, a)
-        let inline call (a:'a, b:'b) = fun (x:'x) -> call_3 (a, b, Unchecked.defaultof<'r>) x :'r
-        call (Unchecked.defaultof<Comp>, f) g
+    static member inline Invoke (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` =
+        let inline call (mthd : ^M, f : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Comp: _*_*_ -> _) f, output, mthd) g
+        call (Unchecked.defaultof<Comp>, f, Unchecked.defaultof<'``Category<'T,'V>``>)
 
+
+// Arrow class ------------------------------------------------------------
 
 type Arr =
     static member Arr (_: _ -> _  , _:Arr) = fun (f:_->_) -> f
