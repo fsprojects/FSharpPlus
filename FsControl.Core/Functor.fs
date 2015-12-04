@@ -45,6 +45,8 @@ type Bind =
            | _       -> ()
        d
 
+    static member        Bind (source : ResizeArray<'T>, f : 'T -> ResizeArray<'U>) = ResizeArray(Seq.bind (f >> seq<_>) source)              : ResizeArray<'U> 
+
     static member inline Invoke (source : '``Monad<'T>``) (binder : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (mthd : 'M, input : 'I, output : 'R, f) = ((^M or ^I or ^R) : (static member Bind: _*_ -> _) input, f)
         call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
@@ -85,6 +87,8 @@ type Join =
                         | true, v -> d.Add(k, v)
                         | _       -> ()
                     d
+
+    [<Extension>]static member Join (x:ResizeArray<ResizeArray<'T>>   , [<Optional>]output : ResizeArray<'T>        , [<Optional>]impl : Join) = ResizeArray(Seq.bind seq<_> x) : ResizeArray<'T> 
 
     static member inline Invoke (source : '``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd : 'M, input : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Join: _*_*_ -> _) input, output, mthd)
