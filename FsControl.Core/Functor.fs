@@ -17,41 +17,39 @@ open FsControl.Internals.Prelude
 // Monad class ------------------------------------------------------------
 
 type Bind =
-    static member        Bind (x:Lazy<'a>     , f:_->Lazy<'b>  ) = lazy (f x.Value).Value
-    static member        Bind (x:seq<_>       , f:_->seq<'b>   ) = Seq.bind f x
-    static member        Bind (x:Id<'a>       , f:_->Id<'b>    ) = f x.getValue
-
+    static member        Bind (source : Lazy<'T>    , f : 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
+    static member        Bind (source : seq<'T>     , f : 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
+    static member        Bind (source : Id<'T>      , f : 'T -> Id<'U>      ) = f source.getValue                                             : Id<'U>
 #if NOTNET35
-    static member        Bind (x:Task<'a>     , f:_->Task<'b>  ) = x.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()
+    static member        Bind (source : Task<'T>    , f : 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()  : Task<'U>
 #endif
+    static member        Bind (source               , f : 'T -> _           ) = Option.bind   f source                                        : option<'U>
+    static member        Bind (source               , f : 'T -> _           ) = List.collect  f source                                        : list<'U>  
+    static member        Bind (source               , f : 'T -> _           ) = Array.collect f source                                        : 'U []     
+    static member        Bind (source               , k : 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
+    static member inline Bind ((w : 'Monoid, a : 'T), k : 'T -> 'Monoid * 'U) = let m, b = k a in (Append.Invoke w m, b)                      : 'Monoid*'U
+    static member        Bind (source               , f : 'T -> _           ) = async.Bind(source, f)                                         : Async<'U>
+    static member        Bind (source               , k : 'T -> _           ) = Error.bind k source                                           : Choice<'U,'E>
 
-    static member        Bind (x:option<_>    , f:_->option<'b>) = Option.bind   f x
-    static member        Bind (x:list<_>      , f:_->list<'b>  ) = List.collect  f x
-    static member        Bind (x:_ []         , f:_->'b []     ) = Array.collect f x
-    static member        Bind (f:'r->'a       , k:_->_->'b)      = fun r -> k (f r) r
-    static member inline Bind ((w, a):'m * 'a , k:_->'m * 'b   ) = let m, b = k a in (Append.Invoke w m, b)
-    static member        Bind (x:Async<'a>    , f:_->Async<'b> ) = async.Bind(x,f)
-    static member        Bind (x:Choice<'a,'e>, k:'a->Choice<'b,'e>) = Error.bind k x
-
-    static member        Bind (x:Map<'k,'a>   , f:'a->Map<'k,'b>) = Map (seq {
-       for KeyValue(k, v) in x do
+    static member        Bind (source : Map<'Key,'T>, f : 'T -> Map<'Key,'U>) = Map (seq {
+       for KeyValue(k, v) in source do
            match Map.tryFind k (f v) with
            | Some v -> yield k, v
            | _      -> () })
 
-    static member        Bind (x:Dictionary<'k,'a>, f:'a->Dictionary<'k,'b>) = 
+    static member        Bind (source : Dictionary<'Key,'T>, f : 'T -> Dictionary<'Key,'U>) = 
        let d = Dictionary()
-       for KeyValue(k, v) in x do
+       for KeyValue(k, v) in source do
            match (f v).TryGetValue(k)  with
            | true, v -> d.Add(k, v)
            | _       -> ()
        d
 
-    static member inline Invoke (source:'``Monad<'T>``) (binder:'T->'``Monad<'U>``) : '``Monad<'U>`` =
+    static member inline Invoke (source : '``Monad<'T>``) (binder : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (mthd : 'M, input : 'I, output : 'R, f) = ((^M or ^I or ^R) : (static member Bind: _*_ -> _) input, f)
         call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
 
-    static member inline InvokeOnInstance (source:'``Monad<'T>``) (binder:'T->'``Monad<'U>``) : '``Monad<'U>`` =
+    static member inline InvokeOnInstance (source : '``Monad<'T>``) (binder : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member Bind: _*_ -> _) source, binder)
 
 
