@@ -83,15 +83,15 @@ Technically this is a base library with a collection of generic methods overload
 
 There are basically two Types involved in these overloads:
 
- - The type that will implement the abstraction. This will be a “real” type, for example <code>List</code> or <code>Tree</code>. We may refer to this type as the the type or as the instance, since it represents an instance of the abstraction. At the same time we can classify these types in primitive types and custom types. By primitive types we refer to existing types in the .NET framework.
+ - The type that will implement the abstraction. This will be a “real” type, for example <code>List</code> or <code>Tree</code>. We may refer to this type as the type or as the instance-type, since it represents an instance of the abstraction. At the same time we can classify these types in primitive types and custom types. By primitive types we refer to existing types in the .NET framework.
 
- - The type that represent the abstraction: Examples of these types are <code>Map</code>, <code>Bind</code>, <code>Append</code>, etc. This will be a "dummy" type implemented as a static type with a single method  (usually with the same name as the type) which will be overloaded and an entry point method called 'Invoke'. From now on and in order to differentiate from the type-instance we will call this type the type-method.
+ - The type that represent the abstraction: Examples of these types are <code>Map</code>, <code>Bind</code>, <code>Append</code>, etc. This will be a "dummy" type implemented as a static class with an overloaded method (usually with the same name as the type) and an entry point method called 'Invoke'. From now on and in order to differentiate from the type-instance we will call this type the method-class.
 
-For Haskellers this 'Type-Methods' abstraction is similar to Haskell's Type-Classes but with a single method.
+For Haskellers this 'method-class' abstraction is similar to Haskell's Type-Classes but with a single method.
 
 For OOP-ers it may compare to interfaces or abstract classes but with a single method, early binding (compile-time) and without dependencies on the assembly where the interface is defined.
 
-FsControl contains overloads mainly for primitive types, but the generic functions will resolve to any member of a type (a user-defined type) having a matching signature. This makes possible to use some libraries that don't depend on FsControl, as long as the signature is the right one it will work.
+FsControl contains overloads mainly for primitive types, but the generic functions will resolve to any type (a user-defined type) having a member with a matching signature. This makes possible to use some libraries that don't depend on FsControl, as long as the signature is the right one it will work.
 
 
 
@@ -101,22 +101,22 @@ How to use FsControl
 You may find hard to understand how to use FsControl, the best is to have a look at the source code, if you just want to use the generic functions for primitive types open <code>FsControl.Operators</code> module.
 
 
-The purpose of the overloads is to associate types with Type-Methods, here we can have three different scenarios:
+The purpose of the overloads is to associate primitive types with method-classes, here we can have three different scenarios:
 
- 1) Add a new Type-Method and Type-Instances for existing types.
+ 1) Add a new method-class and instance-types for existing types.
 
-This is the most complex scenario, to define a new Type-Method is not straightforward, there will be some guidelines but at the moment the best is to have a look at the source code.
+This is the most complex scenario, to define a new method-class is not straightforward, there will be some guidelines but at the moment the best is to have a look at the source code.
 
- 2) Add a new type and make it an instance of an existing Type-Method.
+ 2) Add a new type and make it an instance of an existing method-class.
  
 There are 2 ways:
 
  a) You can have a look at the signature of the method you want to implement in the source code, which will follow this convention:
 
-    static member [inline] [MethodName] (arg1:Type, [more args], output[:ReturnType], impl:[TypeMethodName]) =
+    static member [inline] [MethodName] (arg1:Type, [more args], output[:ReturnType], mthd[:MethodClassName]) =
             Implementation
 
-To find the exact signature you need to look at the source code of the Type-Method you are interested.
+To find the exact signature you need to look at the source code of the method-class you are interested.
 
 Here's an example:
 
@@ -124,7 +124,7 @@ In the source code for <code>Map</code> (in Functor.fs) the <code>option</code> 
 
     [<Extension>]static member Map (x:option<_>, f, [<Optional>]impl:Map) = Option.map f x
 
-So you can create a type <code>Tree</code> and add an instance for the existing Type Method <code>Map</code> this way:
+So you can create a type <code>Tree</code> and add an instance for the existing method-class <code>Map</code> this way:
 
     // Define a type Tree
     type Tree<'a> =
@@ -141,13 +141,15 @@ So you can create a type <code>Tree</code> and add an instance for the existing 
 
  b) Some methods accept also a 'clean signature' without the unused parameters <code>output</code> and <code>impl</code>. You can find a list of these methods below, in the section "How can I make my classes FsControl-ready?". This way it doesn't require to reference FsControl binaries.
 
- 3) Add an instance for an existing Type of an existing Type-Method:
+ 3) Add an instance for an existing Type of an existing method-class:
 
-We can’t do this. This is only possible if we have control over the source code of either the Type-Instance or the Type-Method.
-The association must be done either in the Type-Instance or in the Type-Method due to both a technical limitation <code>(1)</code> and a conceptual reason <code>(2)</code>.
+We can’t do this. This is only possible if we have control over the source code of either the instance-type or the method-class.
+The fact that the association must be done either in the instance-class or in the method-class is due to both a technical limitation <code>(1)</code> and a conceptual reason <code>(2)</code>.
 
  - <code>(1)</code> Extensions methods are not taken into account in overload resolution.
  - <code>(2)</code> It may lead to a bad design practice, something similar happens in Haskell with Type Classes (see [orphan instances](http://www.haskell.org/haskellwiki/Orphan_instance)).
+
+Anyway if you find a situation like this you can either wrap the type you're interested in or "shadow" the generic function.
 
 
 How can I make my classes FsControl-ready?
@@ -205,4 +207,4 @@ A: No, there some abstractions specifics to F#, however it's true that this libr
 
 Q: How can I contribute to this library?
 
-A: You can review the code, find better implementations of specific instances, add missing instances for primitive types, add/propose new type-methods, add sample files an so on. Finding issues, making suggestions, giving feedback, discussion in general is also welcome.
+A: You can review the code, find better implementations of specific instances, add missing instances for primitive types, add/propose new method-classes, add sample files an so on. Finding issues, making suggestions, giving feedback, discussion in general is also welcome.
