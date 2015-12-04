@@ -511,35 +511,38 @@ type Comp =
 // Arrow class ------------------------------------------------------------
 
 type Arr =
-    static member Arr (_: _ -> _  , _:Arr) = fun (f:_->_) -> f
-    static member Arr (_:Func<_,_>, _:Arr) = fun (f:_->_) -> Func<_, _>(f)
+    static member Arr ([<Optional>]output :  'T-> 'U   , [<Optional>]mthd : Arr) = fun (f : 'T -> 'U) -> f
+    static member Arr ([<Optional>]output : Func<'T,'U>, [<Optional>]mthd : Arr) = fun (f : 'T -> 'U) -> Func<'T,'U>(f)
 
-    static member inline Invoke f = 
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Arr: _*_ -> _) b, a)
-        let inline call   (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Unchecked.defaultof<Arr> f
+    static member inline Invoke (f : 'T -> 'U) : '``Arrow<'T,'U>`` = 
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Arr: _*_ -> _) output, mthd) f
+        call (Unchecked.defaultof<Arr>, Unchecked.defaultof<'``Arrow<'T,'U>``>)
 
 
 type ArrFirst =
-    static member ArrFirst (f          , _:  'a -> 'b   , _:ArrFirst) = fun (x,y)            -> (f x       , y)
-    static member ArrFirst (f:Func<_,_>, _: Func<'a,'b> , _:ArrFirst) = Func<_, _>(fun (x,y) -> (f.Invoke x, y))
+    static member ArrFirst (f : 'T -> 'U   , [<Optional>]output :   'T*'V -> 'U*'V  , [<Optional>]mthd : ArrFirst) = fun (x, y)            -> (f x       , y)  : 'U*'V
+    static member ArrFirst (f : Func<'T,'U>, [<Optional>]output : Func<'T*'V,'U*'V> , [<Optional>]mthd : ArrFirst) = Func<_, _>(fun (x, y) -> (f.Invoke x, y)) : Func<'T*'V,'U*'V>
 
-    static member inline Invoke f =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ArrFirst: _*_*_ -> _) b, c, a)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Unchecked.defaultof<ArrFirst>, f)
+    static member inline Invoke (f : '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member ArrFirst: _*_*_ -> _) source, output, mthd)
+        call (Unchecked.defaultof<ArrFirst>, f, Unchecked.defaultof<'``Arrow<('T * 'V),('U * 'V)>``>)
 
 
 type ArrSecond =
     inherit Default1
-    static member inline ArrSecond (f           , _             , _:Default1 ) = let aswap = Arr.Invoke (fun (x,y) -> (y,x)) in Comp.Invoke aswap (Comp.Invoke (ArrFirst.Invoke f) aswap)
-    static member        ArrSecond (f           , _: 'a -> 'b   , _:ArrSecond) = fun (x,y) -> (x, f y)
-    static member        ArrSecond (f :Func<_,_>, _:Func<'a, 'b>, _:ArrSecond) = Func<_,_>(fun (x,y) -> (x, f.Invoke y))
 
-    static member inline Invoke  f   =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member ArrSecond: _*_*_ -> _) b, c, a)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Unchecked.defaultof<ArrSecond>, f)
+    static member inline ArrSecond (f : '``Arrow<'T,'U>``, [<Optional>] output : '``Arrow<('V * 'T),('V * 'U)>``, [<Optional>]mthd : Default1 ) : '``Arrow<('V * 'T),('V * 'U)>`` = 
+        let arrSwap = Arr.Invoke (fun (x, y) -> (y, x))
+        Comp.Invoke arrSwap (Comp.Invoke (ArrFirst.Invoke f) arrSwap)
+    static member inline ArrSecond (_:^t when ^t: null and ^t: struct, output, mthd : Default1) = ()
+
+    static member ArrSecond (f : 'T -> 'U   , [<Optional>]output :   'V*'T -> 'V*'U  , [<Optional>]mthd : ArrSecond) = fun (x, y)           -> (x,        f y)  : 'V*'U
+    static member ArrSecond (f : Func<'T,'U>, [<Optional>]output : Func<'V*'T,'V*'U> , [<Optional>]mthd : ArrSecond) = Func<_,_>(fun (x, y) -> (x, f.Invoke y)) : Func<'V*'T,'V*'U>
+
+    static member inline Invoke (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member ArrSecond: _*_*_ -> _) source, output, mthd)
+        call (Unchecked.defaultof<ArrSecond>, f, Unchecked.defaultof<'``Arrow<('V * 'T),('V * 'U)>``>)
+
 
 type AcEither =
     static member AcEither (_:Choice<_,_> -> _   , _:AcEither) = fun (f          , g          ) -> choice f g

@@ -80,9 +80,9 @@ module Operators =
     let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = RMap.Invoke f source
 
 
-    // Arrows -----------------------------------------------------------------
+    // Category ---------------------------------------------------------------
 
-    /// The identity morphism.
+    /// the identity morphism.
     let inline getCatId() = Id.Invoke() : '``Category<'T,'T>``
 
     /// Right-to-left morphism composition.
@@ -91,11 +91,25 @@ module Operators =
     /// Left-to-right morphism composition.
     let inline (>>>>) (g : '``Category<'T,'U>``) (f : '``Category<'U,'V>``) : '``Category<'T,'V>`` = Comp.Invoke f g
 
-    let inline arr     f   = Arr.Invoke f
-    let inline arrFirst  f = ArrFirst.Invoke f
-    let inline arrSecond f = ArrSecond.Invoke f
+    
+    // Arrow ------------------------------------------------------------------
+
+    /// Lift a function to an arrow.
+    let inline arr (f : 'T -> 'U) : '``Arrow<'T,'U>`` = Arr.Invoke f
+
+    /// Send the first component of the input through the argument arrow, and copy the rest unchanged to the output.
+    let inline arrFirst  (f : '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` = ArrFirst.Invoke f
+
+    /// Send the second component of the input through the argument arrow, and copy the rest unchanged to the output.
+    let inline arrSecond (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` = ArrSecond.Invoke f
+
+    /// Split the input between the two argument arrows and combine their output. Note that this is in general not a functor.
     let inline ( ****) f g = arrFirst f >>>> arrSecond g
+
+    /// Fanout: send the input to both argument arrows and combine their output.
     let inline (&&&&)  f g = arr (fun b -> (b,b)) >>>> f **** g
+
+
     let inline (||||)  f g = AcEither.Invoke f g
     let inline (++++)  f g = AcMerge.Invoke  f g
     let inline left    f   =  AcLeft.Invoke f

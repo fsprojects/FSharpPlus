@@ -411,6 +411,7 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline MPlus (Kleisli f, Kleisli g, mthd:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
 
 let runKleisli (Kleisli f) = f
+let runFunc (f : System.Func<_,_>) = f.Invoke
 
 // Contravariants
 
@@ -484,7 +485,8 @@ let res1 = (System.Func<_,_>string >>> System.Func<_,_>int).Invoke '1'
 let r20n5n30n5   = runKleisli (arrFirst  <| Kleisli (fun y -> [y * 2; y * 3])) (10,5) 
 let r10n10n10n15 = runKleisli (arrSecond <| Kleisli (fun y -> [y * 2; y * 3])) (10,5)
 
-let res3n6n9 = (arr (fun y -> [y; y * 2 ; y * 3])) 3
+let resStr6 =          arr (fun x -> string (x * 2 ))  3
+let resStr8 = runFunc (arr (fun x -> string (x * 2 ))) 4
 let resSome2n4n6:option<_> = runKleisli (arr (fun y -> [y; y * 2 ; y * 3])) 2
 
 let res500n19 = ( (*) 100) *** ((+) 9)  <| (5,10)
