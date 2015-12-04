@@ -58,19 +58,39 @@ type Bind =
 [<Extension;Sealed>]
 type Join =
     inherit Default1
-    [<Extension>]static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]output : '``Monad<'T>``  , [<Optional>]impl : Default1) = Bind.Invoke x id          : '``Monad<'T>``
+    [<Extension>]static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]output : '``Monad<'T>``  , [<Optional>]impl : Default1) = Bind.InvokeOnInstance x id: '``Monad<'T>``
     [<Extension>]static member        Join (x : Lazy<Lazy<_>>         , [<Optional>]output : Lazy<'T>        , [<Optional>]impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
-    [<Extension>]static member        Join (x                         , [<Optional>]output : option<'T>      , [<Optional>]impl : Join    ) = Option.bind   id x        : option<'T>
-    [<Extension>]static member        Join (x                         , [<Optional>]output : list<'T>        , [<Optional>]impl : Join    ) = List.collect  id x        : list<'T>  
-    [<Extension>]static member        Join (x                         , [<Optional>]output : 'T []           , [<Optional>]impl : Join    ) = Array.collect id x        : 'T []     
+    [<Extension>]static member        Join (x                         , [<Optional>]output : seq<'T>         , [<Optional>]impl : Join    ) = Seq.bind id x             : seq<'T> 
     [<Extension>]static member        Join (x : Id<_>                 , [<Optional>]output : Id<'T>          , [<Optional>]impl : Join    ) = x.getValue                : Id<'T>
 #if NOTNET35                                                                                                                              
     [<Extension>]static member        Join (x : Task<Task<_>>         , [<Optional>]output : Task<'T>        , [<Optional>]impl : Join    ) = x.Unwrap()                : Task<'T>
 #endif                                                                                                                                    
+    [<Extension>]static member        Join (x                         , [<Optional>]output : option<'T>      , [<Optional>]impl : Join    ) = Option.bind   id x        : option<'T>
+    [<Extension>]static member        Join (x                         , [<Optional>]output : list<'T>        , [<Optional>]impl : Join    ) = List.collect  id x        : list<'T>  
+    [<Extension>]static member        Join (x                         , [<Optional>]output : 'T []           , [<Optional>]impl : Join    ) = Array.collect id x        : 'T []     
+    [<Extension>]static member        Join (g                         , [<Optional>]output : 'R->'T          , [<Optional>]impl : Join    ) = (fun r -> (g r) r)        : 'R->'T    
+    [<Extension>]static member inline Join (m1, (m2, x)               , [<Optional>]output : 'Monoid * 'T    , [<Optional>]impl : Join    ) = Append.Invoke m1 m2, x    : 'Monoid*'T
+    [<Extension>]static member        Join (x                         , [<Optional>]output : Async<'T>       , [<Optional>]impl : Join    ) = async.Bind(x, id)         : Async<'T>
+    [<Extension>]static member        Join (x                         , [<Optional>]output : Choice<'T,'E>   , [<Optional>]impl : Join    ) = Error.bind id x           : Choice<'T,'E>
 
-    static member inline Invoke (x:'``Monad<Monad<'T>>``) : '``Monad<'T>`` =
+    [<Extension>]static member Join (x : Map<_,_>                     , [<Optional>]output : Map<'Key,'Value>, [<Optional>]impl : Join    )                             : Map<'Key,'Value> =
+                    Map (seq {
+                        for KeyValue(k, v) in x do
+                            match Map.tryFind k v with
+                            | Some v -> yield k, v
+                            | _      -> () })
+
+    [<Extension>]static member Join (x : Dictionary<_,Dictionary<_,_>>, [<Optional>]output : Dictionary<'Key,'Value>, [<Optional>]impl:Join)                            : Dictionary<'Key,'Value> =
+                    let d = Dictionary()
+                    for KeyValue(k, v) in x do
+                        match v.TryGetValue(k)  with
+                        | true, v -> d.Add(k, v)
+                        | _       -> ()
+                    d
+
+    static member inline Invoke (source : '``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd : 'M, input : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Join: _*_*_ -> _) input, output, mthd)
-        call (Unchecked.defaultof<Join>, x, Unchecked.defaultof<'``Monad<'T>``>)
+        call (Unchecked.defaultof<Join>, source, Unchecked.defaultof<'``Monad<'T>``>)
 
 
 type Return =
