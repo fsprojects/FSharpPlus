@@ -175,9 +175,7 @@ module Operators =
     let inline extract (x:'``Comonad<'T>``): 'T = Extract.Invoke x
     let inline extend (g:'``Comonad<'T>``->'U) (s:'``Comonad<'T>``): '``Comonad<'U>`` = Extend.Invoke g s
     let inline (=>>)  (s:'``Comonad<'T>``) (g:'``Comonad<'T>``->'U): '``Comonad<'U>`` = Extend.Invoke g s
-
-    /// 'Comonad<'T> -> 'Comonad<'Comonad<'T>>
-    let inline duplicate x = Duplicate.Invoke x  
+    let inline duplicate (x : '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x  
 
 
     // Monad Transformers

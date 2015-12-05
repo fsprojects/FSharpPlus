@@ -336,22 +336,23 @@ type Extend =
         call (Unchecked.defaultof<Extend>, s, Unchecked.defaultof<'``Comonad<'U>``>)
 
 [<Extension;Sealed>]
+
 type Duplicate =
     inherit Default1
-    [<Extension>]static member inline Duplicate (x                 , [<Optional>]mthd : Default1 ) = Extend.Invoke id x
-    [<Extension>]static member        Duplicate (s : Async<'T>     , [<Optional>]mthd : Duplicate) = async.Return s             : Async<Async<'T>>
-    [<Extension>]static member        Duplicate (s : Lazy<'T>      , [<Optional>]mthd : Duplicate) = Lazy.CreateFromValue s     : Lazy<Lazy<'T>>
-    [<Extension>]static member        Duplicate ((w : 'W, a : 'T)  , [<Optional>]mthd : Duplicate) = w, (w, a)
-    [<Extension>]static member inline Duplicate (f : 'Monoid -> 'T , [<Optional>]mthd : Duplicate) = fun a b -> f (Append.Invoke a b)
+    [<Extension>]static member inline Duplicate (x : '``Comonad<'T>`` , [<Optional>]mthd : Default1 ) = Extend.Invoke id x          : '``Comonad<'Comonad<'T>>``
+    [<Extension>]static member        Duplicate (s : Async<'T>        , [<Optional>]mthd : Duplicate) = async.Return s              : Async<Async<'T>>
+    [<Extension>]static member        Duplicate (s : Lazy<'T>         , [<Optional>]mthd : Duplicate) = Lazy.CreateFromValue s      : Lazy<Lazy<'T>>
+    [<Extension>]static member        Duplicate (s : Id<'T>           , [<Optional>]mthd : Duplicate) = Id s                        : Id<Id<'T>>
+    [<Extension>]static member        Duplicate ((w : 'W, a : 'T)     , [<Optional>]mthd : Duplicate) = w, (w, a)
+    [<Extension>]static member inline Duplicate (f : 'Monoid -> 'T    , [<Optional>]mthd : Duplicate) = fun a b -> f (Append.Invoke a b)
 
     // Restricted Comonads
-    [<Extension>]static member        Duplicate (s :  list<'T>     , [<Optional>]mthd : Duplicate) = List.tails s
-    [<Extension>]static member        Duplicate (s : array<'T>     , [<Optional>]mthd : Duplicate) = s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray
-    
-    static member inline Invoke x =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Duplicate: _*_ -> _) b, a)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Unchecked.defaultof<Duplicate>, x)
+    [<Extension>]static member        Duplicate (s :  list<'T>        , [<Optional>]mthd : Duplicate) = List.tails s
+    [<Extension>]static member        Duplicate (s : array<'T>        , [<Optional>]mthd : Duplicate) = s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray  
+
+    static member inline Invoke (x : '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Duplicate: _*_ -> _) source, mthd)
+        call (Unchecked.defaultof<Duplicate>, x, Unchecked.defaultof<'``Comonad<'Comonad<'T>>``>)
 
 
 type Contramap =
