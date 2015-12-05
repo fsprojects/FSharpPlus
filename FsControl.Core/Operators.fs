@@ -104,16 +104,23 @@ module Operators =
     let inline arrSecond (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` = ArrSecond.Invoke f
 
     /// Split the input between the two argument arrows and combine their output. Note that this is in general not a functor.
-    let inline ( ****) f g = arrFirst f >>>> arrSecond g
+    let inline ( ****) (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<('T1*'T2),('U1*'U2)>`` = arrFirst f >>>> arrSecond g
 
     /// Fanout: send the input to both argument arrows and combine their output.
-    let inline (&&&&)  f g = arr (fun b -> (b,b)) >>>> f **** g
+    let inline (&&&&) (f : '``ArrowChoice<'T,'U1>``) (g : '``ArrowChoice<'T,'U2>``) : '``ArrowChoice<'T,('U1*'U2)>`` = arr (fun b -> (b,b)) >>>> f **** g
 
+    /// Fanin: Split the input between the two argument arrows and merge their outputs.
+    let inline (||||) (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = AcEither.Invoke f g
 
-    let inline (||||)  f g = AcEither.Invoke f g
-    let inline (++++)  f g = AcMerge.Invoke  f g
-    let inline left    f   =  AcLeft.Invoke f
-    let inline right   f   = AcRight.Invoke f
+    /// Split the input between both argument arrows, retagging and merging their outputs. Note that this is in general not a functor.
+    let inline (++++) (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` = AcMerge.Invoke f g
+
+    /// Feed marked inputs through the left argument arrow, passing the rest through unchanged to the output.
+    let inline left  (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` =  AcLeft.Invoke f
+
+    /// Feed marked inputs through the right argument arrow, passing the rest through unchanged to the output.
+    let inline right (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>`` = AcRight.Invoke f
+
     let inline arrApply()  = ArrApply.Invoke()
 
 

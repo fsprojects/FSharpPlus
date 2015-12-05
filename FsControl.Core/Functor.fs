@@ -545,48 +545,44 @@ type ArrSecond =
 
 
 type AcEither =
-    static member AcEither (_:Choice<_,_> -> _   , _:AcEither) = fun (f          , g          ) -> choice f g
-    static member AcEither (_:Func<Choice<_,_>,_>, _:AcEither) = fun (f:Func<_,_>, g:Func<_,_>) -> Func<_,_>(choice f.Invoke g.Invoke)
+    static member AcEither ([<Optional>]output : Choice<'U,'T> -> 'V   , [<Optional>]mthd : AcEither) = fun (f :  'T -> 'V  , g : 'U -> 'V   ) -> choice f g                                        : Choice<'U,'T> -> 'V
+    static member AcEither ([<Optional>]output : Func<Choice<'U,'T>,'V>, [<Optional>]mthd : AcEither) = fun (f : Func<'T,'V>, g : Func<'U,'V>) -> Func<Choice<'U,'T>,'V>(choice f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
 
-    static member inline Invoke f g =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcEither: _*_ -> _) b, a)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Unchecked.defaultof<AcEither> (f, g)
+    static member inline Invoke (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` =
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member AcEither: _*_ -> _) output, mthd) (f, g)
+        call (Unchecked.defaultof<AcEither>, Unchecked.defaultof<'``ArrowChoice<Choice<'U,'T>,'V>``>)
 
 
 type AcMerge =
-    static member AcMerge (_: _ ->  Choice<_,_> , _:AcMerge) = fun (f          , g          ) -> AcEither.Invoke (Choice2Of2 << f) (Choice1Of2 << g)
-    static member AcMerge (_:Func<_,Choice<_,_>>, _:AcMerge) = fun (f:Func<_,_>, g:Func<_,_>) -> AcEither.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke)) :Func<_,Choice<_,_>>
+    static member AcMerge ([<Optional>]output :  Choice<'T2,'T1> ->  Choice<'U2,'U1> , [<Optional>]mthd : AcMerge) = fun (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   ) -> AcEither.Invoke (Choice2Of2 << f) (Choice1Of2 << g)                                      : Choice<'T2,'T1> ->  Choice<'U2,'U1>
+    static member AcMerge ([<Optional>]output : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>, [<Optional>]mthd : AcMerge) = fun (f : Func<'T1,'U1>, g : Func<'T2,'U2>) -> AcEither.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke))  : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>
 
-    static member inline Invoke f g =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member AcMerge: _*_ -> _) b, a)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
-        call Unchecked.defaultof<AcMerge> (f, g)
+    static member inline Invoke (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` =
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member AcMerge: _*_ -> _) output, mthd) (f, g)
+        call (Unchecked.defaultof<AcMerge>, Unchecked.defaultof<'``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``>)
 
 
 type AcLeft =
-    static member inline AcLeft (f: _ -> _    , _, _:AcLeft) = AcMerge.Invoke f id
-    static member inline AcLeft (f:Func<_, _> , _, _:AcLeft) = AcMerge.Invoke f (Func<_,_>(id))
+    static member inline AcLeft (f :  'T -> 'U   , [<Optional>]output :   Choice<'V,'T> -> Choice<'V,'U> , [<Optional>]mthd : AcLeft) = AcMerge.Invoke f id   : Choice<'V,'T> -> Choice<'V,'U>
+    static member inline AcLeft (f : Func<'T,'U> , [<Optional>]output : Func<Choice<'V,'T>,Choice<'V,'U>>, [<Optional>]mthd : AcLeft) = AcMerge.Invoke f (Func<'V,_>(id))
 
-    static member inline Invoke    f   =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcLeft: _*_*_ -> _) b, c, a)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Unchecked.defaultof<AcLeft>, f)
+    static member inline Invoke (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member AcLeft: _*_*_ -> _) source, output, mthd)
+        call (Unchecked.defaultof<AcLeft>, f, Unchecked.defaultof<'``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``>)
 
 
 type AcRight =
-    static member inline AcRight (f: _ -> _    , _, _:AcRight) = AcMerge.Invoke id f
-    static member inline AcRight (f:Func<_, _> , _, _:AcRight) = AcMerge.Invoke (Func<_,_>(id)) f
+    static member inline AcRight (f :  'T -> 'U   , [<Optional>]output :   Choice<'T,'V> -> Choice<'U,'V> , [<Optional>]mthd : AcRight) = AcMerge.Invoke id f   : Choice<'T,'V> -> Choice<'U,'V>
+    static member inline AcRight (f : Func<'T,'U> , [<Optional>]output : Func<Choice<'T,'V>,Choice<'U,'V>>, [<Optional>]mthd : AcRight) = AcMerge.Invoke (Func<_,'V>(id)) f
 
-    static member inline Invoke   f   =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member AcRight: _*_*_ -> _) b, c, a)
-        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Unchecked.defaultof<AcRight>, f)
+    static member inline Invoke (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>``   =
+        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member AcRight: _*_*_ -> _) source, output, mthd)
+        call (Unchecked.defaultof<AcRight>, f, Unchecked.defaultof<'``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>``>)
 
 
 type ArrApply =
-    static member ArrApply (_: ('a -> 'b)     * 'a -> 'b, _:ArrApply) =            fun (f          , x) -> f x
-    static member ArrApply (_:Func<Func<'a,'b> * 'a, 'b>, _:ArrApply) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)
+    static member ArrApply (_: ('a -> 'b)     * 'a -> 'b, [<Optional>]mthd : ArrApply) =            fun (f          , x) -> f x
+    static member ArrApply (_:Func<Func<'a,'b> * 'a, 'b>, [<Optional>]mthd : ArrApply) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)
 
     static member inline Invoke()     =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ArrApply: _*_ -> _) b, a)
