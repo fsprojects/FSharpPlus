@@ -121,7 +121,8 @@ module Operators =
     /// Feed marked inputs through the right argument arrow, passing the rest through unchanged to the output.
     let inline right (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>`` = AcRight.Invoke f
 
-    let inline arrApply()  = ArrApply.Invoke()
+    /// Apply an arrow produced as the output of some previous computation to an input, producing its output as the output of app. 
+    let inline getArrApply() = ArrApply.Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
 
 
     // Foldable

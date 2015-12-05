@@ -471,7 +471,7 @@ let inline (|||) f g = FsControl.Operators.(||||) f g
 let inline (+++) f g = FsControl.Operators.(++++) f g
 let inline left  f = FsControl.Operators.left  f
 let inline right f = FsControl.Operators.right f
-let inline app() = FsControl.Operators.arrApply ()
+let inline app() = FsControl.Operators.getArrApply()
 let inline zeroArrow() = FsControl.Operators.getMZero()
 let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 

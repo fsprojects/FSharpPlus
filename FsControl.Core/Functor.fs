@@ -581,10 +581,9 @@ type AcRight =
 
 
 type ArrApply =
-    static member ArrApply (_: ('a -> 'b)     * 'a -> 'b, [<Optional>]mthd : ArrApply) =            fun (f          , x) -> f x
-    static member ArrApply (_:Func<Func<'a,'b> * 'a, 'b>, [<Optional>]mthd : ArrApply) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)
+    static member ArrApply ([<Optional>]output :  ('T -> 'U)     * 'T -> 'U, [<Optional>]mthd : ArrApply) =           (fun (f          , x) -> f x)         : ('T -> 'U)     * 'T -> 'U
+    static member ArrApply ([<Optional>]output : Func<Func<'T,'U> * 'T, 'U>, [<Optional>]mthd : ArrApply) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)  : Func<Func<'T,'U> * 'T, 'U>
 
-    static member inline Invoke()     =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ArrApply: _*_ -> _) b, a)
-        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Unchecked.defaultof<ArrApply>
+    static member inline Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` =
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ArrApply: _*_ -> _) output, mthd)
+        call (Unchecked.defaultof<ArrApply>, Unchecked.defaultof<'``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``>)
