@@ -393,10 +393,10 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline Arr (f, _:Kleisli<_,_>, _:Arr) = Kleisli ((<<) return' f)
     static member inline ArrFirst (Kleisli f, _:Kleisli<_,_>, _:ArrFirst  ) = Kleisli (fun (b,d) -> f b >>= fun c -> return' (c,d))
     static member inline ArrSecond (Kleisli f, _:Kleisli<_,_>, _:ArrSecond) = Kleisli (fun (d,b) -> f b >>= fun c -> return' (d,c))
-    static member inline AcEither (Kleisli f, Kleisli g, _:Kleisli<_,_>, _:AcEither) = Kleisli (either f g)
+    static member inline Fanin (Kleisli f, Kleisli g, _:Kleisli<_,_>, _:Fanin) = Kleisli (either f g)
 
     static member inline AcMerge (Kleisli (f:'T->'u), Kleisli (g:'v->'w), _:Kleisli<Choice<'v,'T>,'z>, _:AcMerge) =
-        AcEither.Invoke (Kleisli (f >=> ((<<) return' Choice2Of2))) (Kleisli (g >=> ((<<) return' Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
+        Fanin.Invoke (Kleisli (f >=> ((<<) return' Choice2Of2))) (Kleisli (g >=> ((<<) return' Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
 
     static member inline AcLeft (Kleisli f, _, _:AcLeft) =
         let inline (+++) a b = AcMerge.Invoke a b
@@ -404,7 +404,7 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline AcRight (Kleisli f, _, _:AcRight) =
         let inline (+++) a b = AcMerge.Invoke a b
         (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
-    static member ArrApply (_: Kleisli<Kleisli<'a,'b> * 'a,'b>, _:ArrApply) = Kleisli (fun (Kleisli f, x) -> f x)
+    static member App (_: Kleisli<Kleisli<'a,'b> * 'a,'b>, _:App) = Kleisli (fun (Kleisli f, x) -> f x)
     
     // ArrowPlus
     static member inline MZero (output :Kleisli<'T,'``Monad<'U>``>, mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
@@ -460,18 +460,18 @@ let r205n310n415 = runKleisli resd '5'
 // Arrows
 
 let inline id'() = FsControl.Operators.getCatId()
-let inline (<<<) f g = FsControl.Operators.(<<<<) f g
-let inline (>>>) f g = FsControl.Operators.(>>>>) f g
+let inline (<<<) f g = FsControl.Operators.catComp f g
+let inline (>>>) f g = FsControl.Operators.catComp g f
 let inline arr   f = FsControl.Operators.arr    f
 let inline arrFirst  f = FsControl.Operators.arrFirst f
 let inline arrSecond f = FsControl.Operators.arrSecond f
 let inline ( *** ) f g = arrFirst f >>> arrSecond g
 let inline ( &&& ) f g = arr (fun b -> (b, b)) >>> f *** g
-let inline (|||) f g = FsControl.Operators.(||||) f g
-let inline (+++) f g = FsControl.Operators.(++++) f g
+let inline (|||) f g = FsControl.Operators.fanin f g
+let inline (+++) f g = FsControl.Operators.(+++) f g
 let inline left  f = FsControl.Operators.left  f
 let inline right f = FsControl.Operators.right f
-let inline app() = FsControl.Operators.getArrApply()
+let inline app() = FsControl.Operators.getApp()
 let inline zeroArrow() = FsControl.Operators.getMZero()
 let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 

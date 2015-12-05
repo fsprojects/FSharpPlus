@@ -519,8 +519,8 @@ type Arr =
 
 
 type ArrFirst =
-    static member ArrFirst (f : 'T -> 'U   , [<Optional>]output :   'T*'V -> 'U*'V  , [<Optional>]mthd : ArrFirst) = fun (x, y)            -> (f x       , y)  : 'U*'V
-    static member ArrFirst (f : Func<'T,'U>, [<Optional>]output : Func<'T*'V,'U*'V> , [<Optional>]mthd : ArrFirst) = Func<_, _>(fun (x, y) -> (f.Invoke x, y)) : Func<'T*'V,'U*'V>
+    static member ArrFirst (f : 'T -> 'U   , [<Optional>]output :   'T*'V -> 'U*'V  , [<Optional>]mthd : ArrFirst) = fun (x, y)           -> (f x       , y)  : 'U*'V
+    static member ArrFirst (f : Func<'T,'U>, [<Optional>]output : Func<'T*'V,'U*'V> , [<Optional>]mthd : ArrFirst) = Func<_,_>(fun (x, y) -> (f.Invoke x, y)) : Func<'T*'V,'U*'V>
 
     static member inline Invoke (f : '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member ArrFirst: _*_*_ -> _) source, output, mthd)
@@ -543,18 +543,20 @@ type ArrSecond =
         call (Unchecked.defaultof<ArrSecond>, f, Unchecked.defaultof<'``Arrow<('V * 'T),('V * 'U)>``>)
 
 
-type AcEither =
-    static member AcEither (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]output : Choice<'U,'T> -> 'V   , [<Optional>]mthd : AcEither) = choice f g                                        : Choice<'U,'T> -> 'V
-    static member AcEither (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]output : Func<Choice<'U,'T>,'V>, [<Optional>]mthd : AcEither) = Func<Choice<'U,'T>,'V>(choice f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
+// ArrowChoice class ------------------------------------------------------
+
+type Fanin =
+    static member Fanin (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]output : Choice<'U,'T> -> 'V   , [<Optional>]mthd : Fanin) = choice f g                                        : Choice<'U,'T> -> 'V
+    static member Fanin (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]output : Func<Choice<'U,'T>,'V>, [<Optional>]mthd : Fanin) = Func<Choice<'U,'T>,'V>(choice f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
 
     static member inline Invoke (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` =
-        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member AcEither: _*_*_*_ -> _) f, g, output, mthd)
-        call (Unchecked.defaultof<AcEither>, Unchecked.defaultof<'``ArrowChoice<Choice<'U,'T>,'V>``>)
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Fanin: _*_*_*_ -> _) f, g, output, mthd)
+        call (Unchecked.defaultof<Fanin>, Unchecked.defaultof<'``ArrowChoice<Choice<'U,'T>,'V>``>)
 
 
 type AcMerge =
-    static member AcMerge (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]output :  Choice<'T2,'T1> ->  Choice<'U2,'U1> , [<Optional>]mthd : AcMerge) = AcEither.Invoke (Choice2Of2 << f) (Choice1Of2 << g)                                      : Choice<'T2,'T1> ->  Choice<'U2,'U1>
-    static member AcMerge (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]output : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>, [<Optional>]mthd : AcMerge) = AcEither.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke))  : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>
+    static member AcMerge (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]output :  Choice<'T2,'T1> ->  Choice<'U2,'U1> , [<Optional>]mthd : AcMerge) = Fanin.Invoke (Choice2Of2 << f) (Choice1Of2 << g)                                      : Choice<'T2,'T1> ->  Choice<'U2,'U1>
+    static member AcMerge (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]output : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>, [<Optional>]mthd : AcMerge) = Fanin.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke))  : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>
 
     static member inline Invoke (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member AcMerge: _*_*_*_ -> _) f, g, output, mthd)
@@ -579,10 +581,10 @@ type AcRight =
         call (Unchecked.defaultof<AcRight>, f, Unchecked.defaultof<'``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>``>)
 
 
-type ArrApply =
-    static member ArrApply ([<Optional>]output :  ('T -> 'U)     * 'T -> 'U, [<Optional>]mthd : ArrApply) =           (fun (f          , x) -> f x)         : ('T -> 'U)     * 'T -> 'U
-    static member ArrApply ([<Optional>]output : Func<Func<'T,'U> * 'T, 'U>, [<Optional>]mthd : ArrApply) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)  : Func<Func<'T,'U> * 'T, 'U>
+type App =
+    static member App ([<Optional>]output :  ('T -> 'U)     * 'T -> 'U, [<Optional>]mthd : App) =           (fun (f          , x) -> f x)         : ('T -> 'U)     * 'T -> 'U
+    static member App ([<Optional>]output : Func<Func<'T,'U> * 'T, 'U>, [<Optional>]mthd : App) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)  : Func<Func<'T,'U> * 'T, 'U>
 
     static member inline Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` =
-        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ArrApply: _*_ -> _) output, mthd)
-        call (Unchecked.defaultof<ArrApply>, Unchecked.defaultof<'``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``>)
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member App: _*_ -> _) output, mthd)
+        call (Unchecked.defaultof<App>, Unchecked.defaultof<'``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``>)

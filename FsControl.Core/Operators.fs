@@ -71,12 +71,12 @@ module Operators =
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
 
-    let inline contramap (f:'U->'T) (x:'``Contravariant<'T>``) :'``Contravariant<'U>`` = Contramap.Invoke f x
+    let inline contramap (f : 'U->'T) (x:'``Contravariant<'T>``) : '``Contravariant<'U>`` = Contramap.Invoke f x
     let inline bimap  (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` = Bimap.Invoke  f g source
     let inline first  (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = First.Invoke  f source
     let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = Second.Invoke f source
-    let inline dimap  (f : 'A->'B) (g:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
-    let inline lmap   (f : 'A->'B) (source : ^``Profunctor<'B,'C>``) : ^``Profunctor<'A,'C>`` = LMap.Invoke f source
+    let inline dimap  (f : 'A->'B) ( g: 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
+    let inline lmap   (f : 'A->'B) (source : ^``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` = LMap.Invoke f source
     let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = RMap.Invoke f source
 
 
@@ -86,10 +86,7 @@ module Operators =
     let inline getCatId() = Id.Invoke() : '``Category<'T,'T>``
 
     /// Right-to-left morphism composition.
-    let inline (<<<<) (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = Comp.Invoke f g
-
-    /// Left-to-right morphism composition.
-    let inline (>>>>) (g : '``Category<'T,'U>``) (f : '``Category<'U,'V>``) : '``Category<'T,'V>`` = Comp.Invoke f g
+    let inline catComp (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = Comp.Invoke f g
 
     
     // Arrow ------------------------------------------------------------------
@@ -104,16 +101,19 @@ module Operators =
     let inline arrSecond (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` = ArrSecond.Invoke f
 
     /// Split the input between the two argument arrows and combine their output. Note that this is in general not a functor.
-    let inline ( ****) (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<('T1*'T2),('U1*'U2)>`` = arrFirst f >>>> arrSecond g
+    let inline ( ***) (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>`` = Comp.Invoke (ArrSecond.Invoke g) (ArrFirst.Invoke f)
 
-    /// Fanout: send the input to both argument arrows and combine their output.
-    let inline (&&&&) (f : '``ArrowChoice<'T,'U1>``) (g : '``ArrowChoice<'T,'U2>``) : '``ArrowChoice<'T,('U1*'U2)>`` = arr (fun b -> (b,b)) >>>> f **** g
+    /// Send the input to both argument arrows and combine their output. Also known as the (&&&) operator.
+    let inline fanout (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1*'U2)>`` = catComp (f *** g) (arr (fun b -> (b, b)))
 
-    /// Fanin: Split the input between the two argument arrows and merge their outputs.
-    let inline (||||) (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = AcEither.Invoke f g
+
+    // Arrow Choice------------------------------------------------------------
+
+    /// Split the input between the two argument arrows and merge their outputs. Also known as the (|||) operator.
+    let inline fanin (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g
 
     /// Split the input between both argument arrows, retagging and merging their outputs. Note that this is in general not a functor.
-    let inline (++++) (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` = AcMerge.Invoke f g
+    let inline (+++) (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` = AcMerge.Invoke f g
 
     /// Feed marked inputs through the left argument arrow, passing the rest through unchanged to the output.
     let inline left  (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` =  AcLeft.Invoke f
@@ -121,8 +121,11 @@ module Operators =
     /// Feed marked inputs through the right argument arrow, passing the rest through unchanged to the output.
     let inline right (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>`` = AcRight.Invoke f
 
+
+    // Arrow Apply ------------------------------------------------------------
+
     /// Apply an arrow produced as the output of some previous computation to an input, producing its output as the output of app. 
-    let inline getArrApply() = ArrApply.Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
+    let inline getApp() = App.Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
 
 
     // Foldable
