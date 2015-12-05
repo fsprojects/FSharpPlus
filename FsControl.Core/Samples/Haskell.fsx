@@ -382,20 +382,20 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
 
     // Profunctor
     static member inline Dimap (Kleisli bmc :Kleisli<'B,'``Monad<'C>``>, ab:'A->'B, cd:'C->'D) = let cmd = fmap cd in Kleisli (ab >> bmc >> cmd) : Kleisli<'A,'``Monad<'D>``>
-    static member        LMap (Kleisli f    :Kleisli<'B,'``Monad<'C>``>, k:'A->'B               ) = Kleisli (k >> f)       : Kleisli<'A,'``Monad<'C>``>
-    static member inline RMap (Kleisli f    :Kleisli<'B,'``Monad<'C>``>, cd:'C->'D              ) = Kleisli (fmap cd << f) : Kleisli<'B,'``Monad<'D>``>
+    static member        LMap (Kleisli f    :Kleisli<'B,'``Monad<'C>``>, k:'A->'B            ) = Kleisli (k >> f)       : Kleisli<'A,'``Monad<'C>``>
+    static member inline RMap (Kleisli f    :Kleisli<'B,'``Monad<'C>``>, cd:'C->'D           ) = Kleisli (fmap cd << f) : Kleisli<'B,'``Monad<'D>``>
     
     // Category
     static member inline Id (_:Kleisli<'a,'b>, _:Id) = Kleisli return' :Kleisli<'a,'b>
-    static member inline Comp (Kleisli f, _, _:Comp) = fun (Kleisli g) -> Kleisli (g >=> f)
+    static member inline Comp (Kleisli f, Kleisli g, _, _:Comp) = Kleisli (g >=> f)
 
     // Arrow
-    static member inline Arr (_:Kleisli<_,_>, _:Arr) = fun f -> Kleisli ((<<) return' f)
+    static member inline Arr (f, _:Kleisli<_,_>, _:Arr) = Kleisli ((<<) return' f)
     static member inline ArrFirst (Kleisli f, _:Kleisli<_,_>, _:ArrFirst  ) = Kleisli (fun (b,d) -> f b >>= fun c -> return' (c,d))
     static member inline ArrSecond (Kleisli f, _:Kleisli<_,_>, _:ArrSecond) = Kleisli (fun (d,b) -> f b >>= fun c -> return' (d,c))
-    static member inline AcEither (_:Kleisli<_,_>, _:AcEither) = fun (Kleisli f, Kleisli g) -> Kleisli (either f g)
+    static member inline AcEither (Kleisli f, Kleisli g, _:Kleisli<_,_>, _:AcEither) = Kleisli (either f g)
 
-    static member inline AcMerge (_:Kleisli<Choice<'v,'T>,'z>, _:AcMerge) = fun ((Kleisli (f:'T->'u)), (Kleisli (g:'v->'w))) ->
+    static member inline AcMerge (Kleisli (f:'T->'u), Kleisli (g:'v->'w), _:Kleisli<Choice<'v,'T>,'z>, _:AcMerge) =
         AcEither.Invoke (Kleisli (f >=> ((<<) return' Choice2Of2))) (Kleisli (g >=> ((<<) return' Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
 
     static member inline AcLeft (Kleisli f, _, _:AcLeft) =
