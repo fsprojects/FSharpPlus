@@ -551,9 +551,21 @@ type ArrCombine =
     static member        ArrCombine (f : 'T1 -> 'U1         , g : 'T2 -> 'U2         , [<Optional>]output : 'T1*'T2 -> 'U1*'U2   , [<Optional>]mthd : ArrCombine) =          (fun (x, y) -> (f x       , g y       ))     : 'T1*'T2 -> 'U1*'U2
     static member        ArrCombine (f : Func<'T1,'U1>      , g : Func<'T2,'U2>      , [<Optional>]output : Func<'T1*'T2,'U1*'U2>, [<Optional>]mthd : ArrCombine) = Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))     : Func<'T1*'T2,'U1*'U2>
 
-    static member inline Invoke (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1*'T2),('U1*'U2)>`` =
+    static member inline Invoke (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ArrCombine: _*_*_*_ -> _) f, g, output, mthd)
-        call (Unchecked.defaultof<ArrCombine>, Unchecked.defaultof<'``Arrow<('T1*'T2),('U1*'U2)>``>)
+        call (Unchecked.defaultof<ArrCombine>, Unchecked.defaultof<'``Arrow<('T1 * 'T2),('U1 * 'U2)>``>)
+
+type Fanout =
+    inherit Default1
+
+    static member inline Fanout (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,          mthd : Default1) = Comp.Invoke (ArrCombine.Invoke f g) (Arr.Invoke (fun b -> (b, b)))  : '``Arrow<'T,('U1 * 'U2)>``
+    static member inline Fanout (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, _ : ^t when ^t:null and ^t:struct,          mthd : Default1) = ()
+    static member        Fanout (f : 'T -> 'U1         , g : 'T -> 'U2         , [<Optional>]output : 'T -> 'U1*'U2   , [<Optional>]mthd : Fanout) = (<<) (fun (x, y) -> (f x       , g y       )) ((fun b -> (b, b)))                                  : 'T -> 'U1*'U2
+    static member        Fanout (f : Func<'T,'U1>      , g : Func<'T,'U2>      , [<Optional>]output : Func<'T,'U1*'U2>, [<Optional>]mthd : Fanout) = (Comp.Invoke) (Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))) (Arr.Invoke (fun b -> (b, b)))   : Func<'T,'U1*'U2>
+
+    static member inline Invoke (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1 * 'U2)>`` =
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Fanout: _*_*_*_ -> _) f, g, output, mthd)
+        call (Unchecked.defaultof<Fanout>, Unchecked.defaultof<'``Arrow<'T,('U1 * 'U2)>``>)
 
 
 // ArrowChoice class ------------------------------------------------------

@@ -104,7 +104,7 @@ module Operators =
     let inline ( ***) (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>`` = ArrCombine.Invoke f g
 
     /// Send the input to both argument arrows and combine their output. Also known as the (&&&) operator.
-    let inline fanout (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1*'U2)>`` = catComp (f *** g) (arr (fun b -> (b, b)))
+    let inline fanout (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1 * 'U2)>`` = Fanout.Invoke f g
 
 
     // Arrow Choice------------------------------------------------------------
