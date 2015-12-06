@@ -543,6 +543,19 @@ type ArrSecond =
         call (Unchecked.defaultof<ArrSecond>, f, Unchecked.defaultof<'``Arrow<('V * 'T),('V * 'U)>``>)
 
 
+type ArrCombine =
+    inherit Default1
+
+    static member inline ArrCombine (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``,          mthd : Default1) = Comp.Invoke (ArrSecond.Invoke g) (ArrFirst.Invoke f)  : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
+    static member inline ArrCombine (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, _ : ^t when ^t:null and ^t:struct,          mthd : Default1) = ()
+    static member        ArrCombine (f : 'T1 -> 'U1         , g : 'T2 -> 'U2         , [<Optional>]output : 'T1*'T2 -> 'U1*'U2   , [<Optional>]mthd : ArrCombine) =          (fun (x, y) -> (f x       , g y       ))     : 'T1*'T2 -> 'U1*'U2
+    static member        ArrCombine (f : Func<'T1,'U1>      , g : Func<'T2,'U2>      , [<Optional>]output : Func<'T1*'T2,'U1*'U2>, [<Optional>]mthd : ArrCombine) = Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))     : Func<'T1*'T2,'U1*'U2>
+
+    static member inline Invoke (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1*'T2),('U1*'U2)>`` =
+        let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ArrCombine: _*_*_*_ -> _) f, g, output, mthd)
+        call (Unchecked.defaultof<ArrCombine>, Unchecked.defaultof<'``Arrow<('T1*'T2),('U1*'U2)>``>)
+
+
 // ArrowChoice class ------------------------------------------------------
 
 type Fanin =
@@ -580,6 +593,8 @@ type AcRight =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member AcRight: _*_*_ -> _) source, output, mthd)
         call (Unchecked.defaultof<AcRight>, f, Unchecked.defaultof<'``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>``>)
 
+
+// ArrowApply class -------------------------------------------------------
 
 type App =
     static member App ([<Optional>]output :  ('T -> 'U)     * 'T -> 'U, [<Optional>]mthd : App) =           (fun (f          , x) -> f x)         : ('T -> 'U)     * 'T -> 'U
