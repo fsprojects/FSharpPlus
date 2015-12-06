@@ -386,25 +386,25 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline RMap (Kleisli f    :Kleisli<'B,'``Monad<'C>``>, cd:'C->'D           ) = Kleisli (fmap cd << f) : Kleisli<'B,'``Monad<'D>``>
     
     // Category
-    static member inline Id (_:Kleisli<'a,'b>, _:Id) = Kleisli return' :Kleisli<'a,'b>
-    static member inline Comp (Kleisli f, Kleisli g, _, _:Comp) = Kleisli (g >=> f)
+    static member inline get_Id () = Kleisli return' :Kleisli<'a,'b>
+    static member inline Comp (Kleisli f, Kleisli g) = Kleisli (g >=> f)
 
     // Arrow
-    static member inline Arr (f, _:Kleisli<_,_>, _:Arr) = Kleisli ((<<) return' f)
-    static member inline ArrFirst (Kleisli f, _:Kleisli<_,_>, _:ArrFirst  ) = Kleisli (fun (b,d) -> f b >>= fun c -> return' (c,d))
-    static member inline ArrSecond (Kleisli f, _:Kleisli<_,_>, _:ArrSecond) = Kleisli (fun (d,b) -> f b >>= fun c -> return' (d,c))
-    static member inline Fanin (Kleisli f, Kleisli g, _:Kleisli<_,_>, _:Fanin) = Kleisli (either f g)
+    static member inline Arr f = Kleisli ((<<) return' f)
+    static member inline ArrFirst  (Kleisli f) = Kleisli (fun (b, d) -> f b >>= fun c -> return' (c, d))
+    static member inline ArrSecond (Kleisli f) = Kleisli (fun (d, b) -> f b >>= fun c -> return' (d, c))
+    static member inline Fanin (Kleisli f, Kleisli g) = Kleisli (either f g)
 
-    static member inline AcMerge (Kleisli (f:'T->'u), Kleisli (g:'v->'w), _:Kleisli<Choice<'v,'T>,'z>, _:AcMerge) =
-        Fanin.Invoke (Kleisli (f >=> ((<<) return' Choice2Of2))) (Kleisli (g >=> ((<<) return' Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
+    static member inline AcMerge (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
+        Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) return' Choice2Of2))) (Kleisli (g >=> ((<<) return' Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
 
-    static member inline AcLeft (Kleisli f, _, _:AcLeft) =
+    static member inline AcLeft (Kleisli f) =
         let inline (+++) a b = AcMerge.Invoke a b
-        (+++) (Kleisli f) (Arr.Invoke (Id.Invoke()))
-    static member inline AcRight (Kleisli f, _, _:AcRight) =
+        AcMerge.Invoke (Kleisli f) (Arr.Invoke (Id.Invoke()))
+    static member inline AcRight (Kleisli f) =
         let inline (+++) a b = AcMerge.Invoke a b
         (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
-    static member App (_: Kleisli<Kleisli<'a,'b> * 'a,'b>, _:App) = Kleisli (fun (Kleisli f, x) -> f x)
+    static member get_App () = Kleisli (fun (Kleisli f, x) -> f x)
     
     // ArrowPlus
     static member inline MZero (output :Kleisli<'T,'``Monad<'U>``>, mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
@@ -466,7 +466,7 @@ let inline arr   f = FsControl.Operators.arr    f
 let inline arrFirst  f = FsControl.Operators.arrFirst f
 let inline arrSecond f = FsControl.Operators.arrSecond f
 let inline ( *** ) f g = FsControl.Operators.( *** ) f g
-let inline ( &&& ) f g = arr (fun b -> (b, b)) >>> f *** g
+let inline ( &&& ) f g = FsControl.Operators.fanout f g
 let inline (|||) f g = FsControl.Operators.fanin f g
 let inline (+++) f g = FsControl.Operators.(+++) f g
 let inline left  f = FsControl.Operators.left  f

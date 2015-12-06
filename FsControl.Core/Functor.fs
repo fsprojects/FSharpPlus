@@ -490,15 +490,23 @@ type Dimap with
 // Category class ---------------------------------------------------------
 
 type Id =
-    static member Id ([<Optional>]output :  'T -> 'T  , [<Optional>]mthd : Id) = id               : 'T -> 'T
-    static member Id ([<Optional>]output : Func<'T,'T>, [<Optional>]mthd : Id) = Func<'T,'T>(id)  : Func<'T,'T>
+    inherit Default1
+    static member Id ([<Optional>]output :  'T -> 'T  , [<Optional>]mthd : Id) = id                 : 'T -> 'T
+    static member Id ([<Optional>]output : Func<'T,'T>, [<Optional>]mthd : Id) = Func<'T,'T>(id)    : Func<'T,'T>
 
     static member inline Invoke() : '``Category<'T,'T>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Id: _*_ -> _) output, mthd)
         call (Unchecked.defaultof<Id>, Unchecked.defaultof<'``Category<'T,'T>``>)
 
+    static member inline InvokeOnInstance() : '``Category<'T,'T>`` = ((^``Category<'T,'T>``) : (static member Id  : _) ())
+
+type Id with
+    static member inline Id (output :  '``Category<'T,'T>``        , mthd : Default1) = Id.InvokeOnInstance()   : '``Category<'T,'T>``
+    static member inline Id (output : ^t when ^t:null and ^t:struct, mthd : Default1) = id                       
+
 
 type Comp =
+    inherit Default1  
     static member Comp (f :  'U -> 'V  , g :  'T -> 'U  , [<Optional>]output : 'T -> 'V   , [<Optional>]mthd : Comp) = g >> f     : 'T -> 'V
     static member Comp (f : Func<'U,'V>, g : Func<'T,'U>, [<Optional>]output : Func<'T,'V>, [<Optional>]mthd : Comp) = Func<'T,'V>(g.Invoke >> f.Invoke)
 
@@ -506,10 +514,17 @@ type Comp =
         let inline call (mthd : ^M, f : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Comp: _*_*_*_ -> _) f, g, output, mthd)
         call (Unchecked.defaultof<Comp>, f, Unchecked.defaultof<'``Category<'T,'V>``>)
 
+    static member inline InvokeOnInstance (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'T,'V>``) : (static member Comp  : _*_ -> _) f, g)
+
+type Comp with
+    static member inline Comp (f : '``Category<'U,'V>``, g : '``Category<'T,'U>``, output : '``Category<'T,'V>``             , mthd : Default1) = Comp.InvokeOnInstance f g     : '``Category<'T,'V>``
+    static member inline Comp (_ : '``Category<'U,'V>``, _ : '``Category<'T,'U>``, output : ^t when ^t : null and ^t : struct, mthd : Default1) = id
+
 
 // Arrow class ------------------------------------------------------------
 
 type Arr =
+    inherit Default1
     static member Arr (f : 'T -> 'U, [<Optional>]output :  'T-> 'U   , [<Optional>]mthd : Arr) = f
     static member Arr (f : 'T -> 'U, [<Optional>]output : Func<'T,'U>, [<Optional>]mthd : Arr) = Func<'T,'U>(f)
 
@@ -517,60 +532,88 @@ type Arr =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Arr: _*_*_ -> _) f, output, mthd)
         call (Unchecked.defaultof<Arr>, Unchecked.defaultof<'``Arrow<'T,'U>``>)
 
+    static member inline InvokeOnInstance (f : 'T -> 'U) : '``Arrow<'T,'U>`` = (^``Arrow<'T,'U>`` : (static member Arr: _ -> _) f)
+
+type Arr with
+    static member inline Arr (f : 'T -> 'U, output : '``Arrow<'T,'U>``                , mthd : Default1) = Arr.InvokeOnInstance f : '``Arrow<'T,'U>``
+    static member inline Arr (_ : 'T -> 'U, output : ^t when ^t : null and ^t : struct, mthd : Default1) = id
+
 
 type ArrFirst =
-    static member ArrFirst (f : 'T -> 'U   , [<Optional>]output :   'T*'V -> 'U*'V  , [<Optional>]mthd : ArrFirst) = fun (x, y)           -> (f x       , y)  : 'U*'V
+    inherit Default1
+    static member ArrFirst (f : 'T -> 'U   , [<Optional>]output :   'T*'V -> 'U*'V  , [<Optional>]mthd : ArrFirst) =           fun (x, y) -> (f x       , y)  : 'U*'V
     static member ArrFirst (f : Func<'T,'U>, [<Optional>]output : Func<'T*'V,'U*'V> , [<Optional>]mthd : ArrFirst) = Func<_,_>(fun (x, y) -> (f.Invoke x, y)) : Func<'T*'V,'U*'V>
 
     static member inline Invoke (f : '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member ArrFirst: _*_*_ -> _) source, output, mthd)
         call (Unchecked.defaultof<ArrFirst>, f, Unchecked.defaultof<'``Arrow<('T * 'V),('U * 'V)>``>)
 
+    static member inline InvokeOnInstance (f : '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` = ((^``Arrow<'T,'U>`` or ^``Arrow<('T * 'V),('U * 'V)>``) : (static member ArrFirst: _ -> _) f)
+
+type ArrFirst with
+    static member inline ArrFirst (f : '``Arrow<'T,'U>``, output : '``Arrow<('T * 'V),('U * 'V)>``, mthd : Default1) = ArrFirst.InvokeOnInstance f  : '``Arrow<('T * 'V),('U * 'V)>``
+    static member inline ArrFirst (_ : ^t when ^t : null and ^t : struct  , output                , mthd : Default1) = id
+
 
 type ArrSecond =
     inherit Default1
-
-    static member inline ArrSecond (f : '``Arrow<'T,'U>``, [<Optional>] output : '``Arrow<('V * 'T),('V * 'U)>``, [<Optional>]mthd : Default1 ) : '``Arrow<('V * 'T),('V * 'U)>`` = 
-        let arrSwap = Arr.Invoke (fun (x, y) -> (y, x))
-        Comp.Invoke arrSwap (Comp.Invoke (ArrFirst.Invoke f) arrSwap)
-    static member inline ArrSecond (_:^t when ^t: null and ^t: struct, output, mthd : Default1) = ()
-
-    static member ArrSecond (f : 'T -> 'U   , [<Optional>]output :   'V*'T -> 'V*'U  , [<Optional>]mthd : ArrSecond) = fun (x, y)           -> (x,        f y)  : 'V*'U
+    static member ArrSecond (f : 'T -> 'U   , [<Optional>]output :   'V*'T -> 'V*'U  , [<Optional>]mthd : ArrSecond) =           fun (x, y) -> (x,        f y)  : 'V*'U
     static member ArrSecond (f : Func<'T,'U>, [<Optional>]output : Func<'V*'T,'V*'U> , [<Optional>]mthd : ArrSecond) = Func<_,_>(fun (x, y) -> (x, f.Invoke y)) : Func<'V*'T,'V*'U>
 
     static member inline Invoke (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member ArrSecond: _*_*_ -> _) source, output, mthd)
         call (Unchecked.defaultof<ArrSecond>, f, Unchecked.defaultof<'``Arrow<('V * 'T),('V * 'U)>``>)
 
+    static member inline InvokeOnInstance (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` = ((^``Arrow<'T,'U>`` or ^``Arrow<('V * 'T),('V * 'U)>``) : (static member ArrSecond: _ -> _) f)
+
+type ArrSecond with
+    static member inline ArrSecond (f : '``Arrow<'T,'U>``, output : '``Arrow<('V * 'T),('V * 'U)>``, mthd : Default2 ) : '``Arrow<('V * 'T),('V * 'U)>`` = 
+        let arrSwap = Arr.InvokeOnInstance (fun (x, y) -> (y, x))
+        Comp.InvokeOnInstance arrSwap (Comp.InvokeOnInstance (ArrFirst.InvokeOnInstance f) arrSwap)
+
+    static member inline ArrSecond (f : '``Arrow<'T,'U>``, output : '``Arrow<('V * 'T),('V * 'U)>``, mthd : Default1) = ArrSecond.InvokeOnInstance f    : '``Arrow<('V * 'T),('V * 'U)>``
+    static member inline ArrSecond (_ : ^t when ^t : null and ^t : struct  , output                , mthd : Default1) = id
+
 
 type ArrCombine =
     inherit Default1
-
-    static member inline ArrCombine (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``,          mthd : Default1) = Comp.Invoke (ArrSecond.Invoke g) (ArrFirst.Invoke f)  : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
-    static member inline ArrCombine (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, _ : ^t when ^t:null and ^t:struct,          mthd : Default1) = ()
-    static member        ArrCombine (f : 'T1 -> 'U1         , g : 'T2 -> 'U2         , [<Optional>]output : 'T1*'T2 -> 'U1*'U2   , [<Optional>]mthd : ArrCombine) =          (fun (x, y) -> (f x       , g y       ))     : 'T1*'T2 -> 'U1*'U2
-    static member        ArrCombine (f : Func<'T1,'U1>      , g : Func<'T2,'U2>      , [<Optional>]output : Func<'T1*'T2,'U1*'U2>, [<Optional>]mthd : ArrCombine) = Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))     : Func<'T1*'T2,'U1*'U2>
+    static member ArrCombine (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]output : 'T1*'T2 -> 'U1*'U2   , [<Optional>]mthd : ArrCombine) =          (fun (x, y) -> (f x       , g y       ))     : 'T1*'T2 -> 'U1*'U2
+    static member ArrCombine (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]output : Func<'T1*'T2,'U1*'U2>, [<Optional>]mthd : ArrCombine) = Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))     : Func<'T1*'T2,'U1*'U2>
 
     static member inline Invoke (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ArrCombine: _*_*_*_ -> _) f, g, output, mthd)
         call (Unchecked.defaultof<ArrCombine>, Unchecked.defaultof<'``Arrow<('T1 * 'T2),('U1 * 'U2)>``>)
 
+    static member inline InvokeOnInstance (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>`` = (^``Arrow<('T1 * 'T2),('U1 * 'U2)>`` : (static member ArrCombine: _*_ -> _) f, g)
+
+type ArrCombine with
+    static member inline ArrCombine (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, mthd : Default2) = Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)  : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
+    static member inline ArrCombine (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, mthd : Default1) = ArrCombine.InvokeOnInstance f g                                                     : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
+    static member inline ArrCombine (_ : '``Arrow<'T1,'U1>``, _ : '``Arrow<'T2,'U2>``, output : ^t when ^t : null and ^t : struct  , mthd : Default1) = id
+
+
 type Fanout =
     inherit Default1
-
-    static member inline Fanout (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,          mthd : Default1) = Comp.Invoke (ArrCombine.Invoke f g) (Arr.Invoke (fun b -> (b, b)))  : '``Arrow<'T,('U1 * 'U2)>``
-    static member inline Fanout (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, _ : ^t when ^t:null and ^t:struct,          mthd : Default1) = ()
-    static member        Fanout (f : 'T -> 'U1         , g : 'T -> 'U2         , [<Optional>]output : 'T -> 'U1*'U2   , [<Optional>]mthd : Fanout) = (<<) (fun (x, y) -> (f x       , g y       )) ((fun b -> (b, b)))                                  : 'T -> 'U1*'U2
-    static member        Fanout (f : Func<'T,'U1>      , g : Func<'T,'U2>      , [<Optional>]output : Func<'T,'U1*'U2>, [<Optional>]mthd : Fanout) = (Comp.Invoke) (Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))) (Arr.Invoke (fun b -> (b, b)))   : Func<'T,'U1*'U2>
+    static member Fanout (f : 'T -> 'U1   , g : 'T -> 'U2   , [<Optional>]output : 'T -> 'U1*'U2   , [<Optional>]mthd : Fanout) =           (fun (x, y) -> (f x       , g y       )) << (fun b -> (b, b))       : 'T -> 'U1*'U2
+    static member Fanout (f : Func<'T,'U1>, g : Func<'T,'U2>, [<Optional>]output : Func<'T,'U1*'U2>, [<Optional>]mthd : Fanout) = Func<_,_>((fun (x, y) -> (f.Invoke x, g.Invoke y)) << (fun b -> (b, b)))      : Func<'T,'U1*'U2>
 
     static member inline Invoke (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1 * 'U2)>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Fanout: _*_*_*_ -> _) f, g, output, mthd)
         call (Unchecked.defaultof<Fanout>, Unchecked.defaultof<'``Arrow<'T,('U1 * 'U2)>``>)
 
+    static member inline InvokeOnInstance (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1 * 'U2)>`` = (^``Arrow<'T,('U1 * 'U2)>`` : (static member Fanout: _*_ -> _) f, g)
+
+type Fanout with
+    static member inline Fanout (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,    mthd : Default3) = Comp.InvokeOnInstance (Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)) (Arr.InvokeOnInstance (fun b -> (b, b)))     : '``Arrow<'T,('U1 * 'U2)>``
+    static member inline Fanout (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,    mthd : Default2) = Comp.InvokeOnInstance (ArrCombine.InvokeOnInstance f g) (Arr.InvokeOnInstance (fun b -> (b, b)))                                                        : '``Arrow<'T,('U1 * 'U2)>``
+    static member inline Fanout (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,    mthd : Default1) = Fanout.InvokeOnInstance f g                                                                                                                             : '``Arrow<'T,('U1 * 'U2)>``
+    static member inline Fanout (_ : '``Arrow<'T,'U1>``, _ : '``Arrow<'T,'U2>``, output : ^t when ^t:null and ^t:struct, mthd : Default1) = id
+
 
 // ArrowChoice class ------------------------------------------------------
 
 type Fanin =
+    inherit Default1
     static member Fanin (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]output : Choice<'U,'T> -> 'V   , [<Optional>]mthd : Fanin) = choice f g                                        : Choice<'U,'T> -> 'V
     static member Fanin (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]output : Func<Choice<'U,'T>,'V>, [<Optional>]mthd : Fanin) = Func<Choice<'U,'T>,'V>(choice f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
 
@@ -578,8 +621,15 @@ type Fanin =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Fanin: _*_*_*_ -> _) f, g, output, mthd)
         call (Unchecked.defaultof<Fanin>, Unchecked.defaultof<'``ArrowChoice<Choice<'U,'T>,'V>``>)
 
+    static member inline InvokeOnInstance (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = (^``ArrowChoice<Choice<'U,'T>,'V>`` : (static member Fanin: _*_ -> _) f, g)
+
+type Fanin with
+    static member inline Fanin (f : '``ArrowChoice<'T,'V>``, g : '``ArrowChoice<'U,'V>``, output : '``ArrowChoice<Choice<'U,'T>,'V>``, mthd : Default1) = Fanin.InvokeOnInstance f g : '``ArrowChoice<Choice<'U,'T>,'V>``
+    static member inline Fanin (_ : '``ArrowChoice<'T,'V>``, _ : '``ArrowChoice<'U,'V>``, output : ^t when ^t : null and ^t : struct , mthd : Default1) = id
+
 
 type AcMerge =
+    inherit Default1
     static member AcMerge (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]output :  Choice<'T2,'T1> ->  Choice<'U2,'U1> , [<Optional>]mthd : AcMerge) = Fanin.Invoke (Choice2Of2 << f) (Choice1Of2 << g)                                      : Choice<'T2,'T1> ->  Choice<'U2,'U1>
     static member AcMerge (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]output : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>, [<Optional>]mthd : AcMerge) = Fanin.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke))  : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>
 
@@ -587,8 +637,15 @@ type AcMerge =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member AcMerge: _*_*_*_ -> _) f, g, output, mthd)
         call (Unchecked.defaultof<AcMerge>, Unchecked.defaultof<'``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``>)
 
+    static member inline InvokeOnInstance (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` = (^``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` : (static member AcMerge: _*_ -> _) f, g)
+
+type AcMerge with
+    static member inline AcMerge (f : '``ArrowChoice<'T1,'U1>``, g : '``ArrowChoice<'T2,'U2>``, output : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``, mthd : Default1) = AcMerge.InvokeOnInstance f g : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``
+    static member inline AcMerge (_ : '``ArrowChoice<'T1,'U1>``, _ : '``ArrowChoice<'T2,'U2>``, output : ^t when ^t : null and ^t : struct                , mthd : Default1) = id
+
 
 type AcLeft =
+    inherit Default1
     static member inline AcLeft (f :  'T -> 'U   , [<Optional>]output :   Choice<'V,'T> -> Choice<'V,'U> , [<Optional>]mthd : AcLeft) = AcMerge.Invoke f id   : Choice<'V,'T> -> Choice<'V,'U>
     static member inline AcLeft (f : Func<'T,'U> , [<Optional>]output : Func<Choice<'V,'T>,Choice<'V,'U>>, [<Optional>]mthd : AcLeft) = AcMerge.Invoke f (Func<'V,_>(id))
 
@@ -596,8 +653,15 @@ type AcLeft =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member AcLeft: _*_*_ -> _) source, output, mthd)
         call (Unchecked.defaultof<AcLeft>, f, Unchecked.defaultof<'``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``>)
 
+    static member inline InvokeOnInstance (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``) : (static member AcLeft: _ -> _) f)
+
+type AcLeft with
+    static member inline AcLeft (f : '``ArrowChoice<'T,'U>``, output : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``, mthd : Default1) = AcLeft.InvokeOnInstance f: '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``
+    static member inline AcLeft (_ : '``ArrowChoice<'T,'U>``, output : ^t when ^t : null and ^t : struct            , mthd : Default1) = id
+
 
 type AcRight =
+    inherit Default1
     static member inline AcRight (f :  'T -> 'U   , [<Optional>]output :   Choice<'T,'V> -> Choice<'U,'V> , [<Optional>]mthd : AcRight) = AcMerge.Invoke id f   : Choice<'T,'V> -> Choice<'U,'V>
     static member inline AcRight (f : Func<'T,'U> , [<Optional>]output : Func<Choice<'T,'V>,Choice<'U,'V>>, [<Optional>]mthd : AcRight) = AcMerge.Invoke (Func<_,'V>(id)) f
 
@@ -605,13 +669,27 @@ type AcRight =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member AcRight: _*_*_ -> _) source, output, mthd)
         call (Unchecked.defaultof<AcRight>, f, Unchecked.defaultof<'``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>``>)
 
+    static member inline InvokeOnInstance (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``) : (static member AcRight: _ -> _) f)
+
+type AcRight with
+    static member inline AcRight (f : '``ArrowChoice<'T,'U>``, output : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``, mthd : Default1) = AcRight.InvokeOnInstance f : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``
+    static member inline AcRight (_ : '``ArrowChoice<'T,'U>``, output : ^t when ^t : null and ^t : struct            , mthd : Default1) = id
+
+
 
 // ArrowApply class -------------------------------------------------------
 
 type App =
+    inherit Default1
     static member App ([<Optional>]output :  ('T -> 'U)     * 'T -> 'U, [<Optional>]mthd : App) =           (fun (f          , x) -> f x)         : ('T -> 'U)     * 'T -> 'U
     static member App ([<Optional>]output : Func<Func<'T,'U> * 'T, 'U>, [<Optional>]mthd : App) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)  : Func<Func<'T,'U> * 'T, 'U>
 
     static member inline Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member App: _*_ -> _) output, mthd)
         call (Unchecked.defaultof<App>, Unchecked.defaultof<'``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``>)
+
+    static member inline InvokeOnInstance() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` = ((^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) : (static member App  : _) ())
+
+type App with
+    static member inline App (output : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``, mthd : Default1) = App.InvokeOnInstance() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
+    static member inline App (output : ^t when ^t : null and ^t : struct              , mthd : Default1) = id
