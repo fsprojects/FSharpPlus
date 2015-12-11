@@ -387,21 +387,21 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     
     // Category
     static member inline get_Id () = Kleisli return' :Kleisli<'a,'b>
-    static member inline Comp (Kleisli f, Kleisli g) = Kleisli (g >=> f)
+    static member inline (<<<) (Kleisli f, Kleisli g) = Kleisli (g >=> f)
 
     // Arrow
     static member inline Arr f = Kleisli ((<<) return' f)
-    static member inline ArrFirst  (Kleisli f) = Kleisli (fun (b, d) -> f b >>= fun c -> return' (c, d))
-    static member inline ArrSecond (Kleisli f) = Kleisli (fun (d, b) -> f b >>= fun c -> return' (d, c))
-    static member inline Fanin (Kleisli f, Kleisli g) = Kleisli (either f g)
+    static member inline First  (Kleisli f) = Kleisli (fun (b, d) -> f b >>= fun c -> return' (c, d))
+    static member inline Second (Kleisli f) = Kleisli (fun (d, b) -> f b >>= fun c -> return' (d, c))
+    static member inline (|||) (Kleisli f, Kleisli g) = Kleisli (either f g)
 
-    static member inline AcMerge (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
+    static member inline (+++) (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
         Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) return' Choice2Of2))) (Kleisli (g >=> ((<<) return' Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
 
-    static member inline AcLeft (Kleisli f) =
+    static member inline Left (Kleisli f) =
         let inline (+++) a b = AcMerge.Invoke a b
         AcMerge.Invoke (Kleisli f) (Arr.Invoke (Id.Invoke()))
-    static member inline AcRight (Kleisli f) =
+    static member inline Right (Kleisli f) =
         let inline (+++) a b = AcMerge.Invoke a b
         (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
     static member get_App () = Kleisli (fun (Kleisli f, x) -> f x)
@@ -478,7 +478,7 @@ let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 // Test Arrows
 let r5:List<_>  = (runKleisli (id'())) 5
 let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
-let r8n16n24n10n20n30 = runKleisli k  <| 5
+let r8n16n24n10n20n30 = runKleisli k  5
 
 let res1 = (System.Func<_,_>string >>> System.Func<_,_>int).Invoke '1'
 
@@ -496,8 +496,8 @@ let (res10x8n10x10n15x8n15x10  :list<_>) = runKleisli (Kleisli (fun y -> [y * 2;
 
 // Test Arrow Choice
 let resLeft7       = ( (+) 2) +++ ( (*) 10)   <| Left  5
-let res7n50        = runKleisli (Kleisli (fun y -> [y; y * 2 ; y * 3]) ||| Kleisli (fun x -> [x + 2; x * 10] )) (Right 5)
-let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2 ; y * 3]) +++ Kleisli (fun x -> [x + 3; x *  2] )) (Left  5)
+let res7n50        = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) ||| Kleisli (fun x -> [x + 2; x * 10] )) (Right 5)
+let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) +++ Kleisli (fun x -> [x + 3; x *  2] )) (Left  5)
 
 // Test Arrow Apply
 let res7      = app() ( (+) 3 , 4)
