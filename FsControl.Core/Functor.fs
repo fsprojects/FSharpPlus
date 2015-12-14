@@ -133,27 +133,27 @@ type Return =
 type Apply =
     inherit Default1
     
-    static member inline Apply (f:'``Monad<'T->'U>``  , x:'``Monad<'T>``  , [<Optional>]output:'``Monad<'U>``  , [<Optional>]impl:Default2) : '``Monad<'U>``   = Bind.InvokeOnInstance f (fun (x1:'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
-    static member inline Apply (f:'``Applicative<'T->'U>``, x:'``Applicative<'T>``, [<Optional>]output:'``Applicative<'U>``, [<Optional>]impl:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) f, x)
+    static member inline ``<*>`` (f:'``Monad<'T->'U>``  , x:'``Monad<'T>``  , [<Optional>]output:'``Monad<'U>``  , [<Optional>]impl:Default2) : '``Monad<'U>``   = Bind.InvokeOnInstance f (fun (x1:'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
+    static member inline ``<*>`` (f:'``Applicative<'T->'U>``, x:'``Applicative<'T>``, [<Optional>]output:'``Applicative<'U>``, [<Optional>]impl:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) f, x)
 
-    static member        Apply (f:Lazy<'T->'U>, x:Lazy<'T>     , [<Optional>]output:Lazy<'U>     , [<Optional>]impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'U>
-    static member        Apply (f:seq<_>      , x:seq<'T>      , [<Optional>]output:seq<'U>      , [<Optional>]impl:Apply) = Seq.apply  f x :seq<'U>
-    static member        Apply (f:list<_>     , x:list<'T>     , [<Optional>]output:list<'U>     , [<Optional>]impl:Apply) = List.apply f x :list<'U>
-    static member        Apply (f:_ []        , x:'T []        , [<Optional>]output:'U []        , [<Optional>]impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
-    static member        Apply (f:'r -> _     , g: _ -> 'T     , [<Optional>]output: 'r -> 'U    , [<Optional>]impl:Apply) = fun x -> f x (g x) :'U
-    static member inline Apply ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]output:'Monoid * 'U, [<Optional>]impl:Apply) = (Append.Invoke a b, f x) :'Monoid *'U
-    static member        Apply (f:Async<_>    , x:Async<'T>    , [<Optional>]output:Async<'U>    , [<Optional>]impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
-    static member        Apply (f:option<_>   , x:option<'T>   , [<Optional>]output:option<'U>   , [<Optional>]impl:Apply) = Option.apply f x    :option<'U>
-    static member        Apply (f:Choice<_,'E>, x:Choice<'T,'E>, [<Optional>]output:Choice<'b,'E>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'U,'E>
-    static member        Apply (KeyValue(k:'Key, f), KeyValue(k:'Key,x:'T), [<Optional>]output:KeyValuePair<'Key,'U>, [<Optional>]impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(k, f x)
+    static member        ``<*>`` (f:Lazy<'T->'U>, x:Lazy<'T>     , [<Optional>]output:Lazy<'U>     , [<Optional>]impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'U>
+    static member        ``<*>`` (f:seq<_>      , x:seq<'T>      , [<Optional>]output:seq<'U>      , [<Optional>]impl:Apply) = Seq.apply  f x :seq<'U>
+    static member        ``<*>`` (f:list<_>     , x:list<'T>     , [<Optional>]output:list<'U>     , [<Optional>]impl:Apply) = List.apply f x :list<'U>
+    static member        ``<*>`` (f:_ []        , x:'T []        , [<Optional>]output:'U []        , [<Optional>]impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
+    static member        ``<*>`` (f:'r -> _     , g: _ -> 'T     , [<Optional>]output: 'r -> 'U    , [<Optional>]impl:Apply) = fun x -> f x (g x) :'U
+    static member inline ``<*>`` ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]output:'Monoid * 'U, [<Optional>]impl:Apply) = (Append.Invoke a b, f x) :'Monoid *'U
+    static member        ``<*>`` (f:Async<_>    , x:Async<'T>    , [<Optional>]output:Async<'U>    , [<Optional>]impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
+    static member        ``<*>`` (f:option<_>   , x:option<'T>   , [<Optional>]output:option<'U>   , [<Optional>]impl:Apply) = Option.apply f x    :option<'U>
+    static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>, [<Optional>]output:Choice<'b,'E>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'U,'E>
+    static member        ``<*>`` (KeyValue(k:'Key, f), KeyValue(k:'Key,x:'T), [<Optional>]output:KeyValuePair<'Key,'U>, [<Optional>]impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(k, f x)
 
-    static member        Apply (f:Map<'Key,_>       , x:Map<'Key,'T>       , [<Optional>]output:Map<'Key,'U>, [<Optional>]impl:Apply) :Map<'Key,'U>          = Map (seq {
+    static member        ``<*>`` (f:Map<'Key,_>       , x:Map<'Key,'T>       , [<Optional>]output:Map<'Key,'U>, [<Optional>]impl:Apply) :Map<'Key,'U>          = Map (seq {
        for KeyValue(k, vf) in f do
            match Map.tryFind k x with
            | Some vx -> yield k, vf vx
            | _       -> () })
 
-    static member        Apply (f:Dictionary<'Key,_>, x:Dictionary<'Key,'T>, [<Optional>]output:Dictionary<'Key,'U>, [<Optional>]impl:Apply) :Dictionary<'Key,'U> =
+    static member        ``<*>`` (f:Dictionary<'Key,_>, x:Dictionary<'Key,'T>, [<Optional>]output:Dictionary<'Key,'U>, [<Optional>]impl:Apply) :Dictionary<'Key,'U> =
        let d = Dictionary()
        for KeyValue(k, vf) in f do
            match x.TryGetValue k with
@@ -161,14 +161,14 @@ type Apply =
            | _        -> ()
        d
     
-    static member        Apply (f:Expr<'T->'U>, x:Expr<'T>, [<Optional>]output:Expr<'U>, [<Optional>]impl:Apply) = Expr.Cast<'U>(Expr.Application(f,x))
+    static member        ``<*>`` (f:Expr<'T->'U>, x:Expr<'T>, [<Optional>]output:Expr<'U>, [<Optional>]impl:Apply) = Expr.Cast<'U>(Expr.Application(f,x))
 
-    static member        Apply (f:('T->'U) ResizeArray, x:'T ResizeArray, [<Optional>]output:'U ResizeArray, [<Optional>]impl:Apply) =
+    static member        ``<*>`` (f:('T->'U) ResizeArray, x:'T ResizeArray, [<Optional>]output:'U ResizeArray, [<Optional>]impl:Apply) =
        ResizeArray(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'U ResizeArray
 
     static member inline Invoke (f:'``Applicative<'T -> 'U>``) (x:'``Applicative<'T>``) : '``Applicative<'U>`` =
         let inline call (mthd : ^M, input1 : ^I1, input2 : ^I2, output : ^R) =                                                          
-            ((^M or ^I1 or ^I2 or ^R) : (static member Apply: _*_*_*_ -> _) input1, input2, output, mthd)
+            ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : _*_*_*_ -> _) input1, input2, output, mthd)
         call(Unchecked.defaultof<Apply>, f, x, Unchecked.defaultof<'``Applicative<'U>``>)
 
     static member inline InvokeOnInstance (f:'``Applicative<'T->'U>``) (x:'``Applicative<'T>``) : '``Applicative<'U>`` =
