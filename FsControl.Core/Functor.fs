@@ -381,49 +381,49 @@ type Bimap =
         (^``Bifunctor<'T,'V>``: (static member Bimap: _*_*_ -> _) source, f, g)
 
 
-type First =
+type MapFirst =
     inherit Default1
 
-    static member        First ((x, y)                , f:'T->'U, [<Optional>]mthd :First   ) = (f x, y)
-    static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]mthd :First   ) = choice (Choice2Of2 << f) Choice1Of2 x
-    static member        First (KeyValue(k, x)        , f:'T->'U, [<Optional>]mthd :First   ) = KeyValuePair(f k, x)
+    static member        First ((x, y)                , f:'T->'U, [<Optional>]mthd : MapFirst) = (f x, y)
+    static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]mthd : MapFirst) = choice (Choice2Of2 << f) Choice1Of2 x
+    static member        First (KeyValue(k, x)        , f:'T->'U, [<Optional>]mthd : MapFirst) = KeyValuePair(f k, x)
 
     static member inline Invoke (f : 'T->'U) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member First: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<First>, source, Unchecked.defaultof<'``Bifunctor<'U,'V>``>)
+        call (Unchecked.defaultof<MapFirst>, source, Unchecked.defaultof<'``Bifunctor<'U,'V>``>)
 
     static member inline InvokeOnInstance (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
         (^``Bifunctor<'T,'V>`` : (static member First: _*_ -> _) source, f)
 
-type First with
+type MapFirst with
     static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance f id x  : '``Bifunctor<'U,'V>``
-    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default1) = First.InvokeOnInstance f x     : '``Bifunctor<'U,'V>``
+    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default1) = MapFirst.InvokeOnInstance f x  : '``Bifunctor<'U,'V>``
     static member inline First (_:^t when ^t: null and ^t: struct, f : 'T->'U,     mthd :Default1) = ()
 
 
-type Second =
+type MapSecond =
     inherit Default1
 
-    static member        Second ((x, y)                , f:'V->'W, [<Optional>]mthd :Second  ) = (x, f y)
-    static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]mthd :Second  ) = choice Choice2Of2 (Choice1Of2 << f) x
-    static member        Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]mthd :Second  ) = KeyValuePair(k, f x)
+    static member        Second ((x, y)                , f:'V->'W, [<Optional>]mthd : MapSecond) = (x, f y)
+    static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]mthd : MapSecond) = choice Choice2Of2 (Choice1Of2 << f) x
+    static member        Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]mthd : MapSecond) = KeyValuePair(k, f x)
 
     static member inline Invoke (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Second: _*_*_ -> _) source, f, mthd)
-        call (Unchecked.defaultof<Second>, source, Unchecked.defaultof<'``Bifunctor<'T,'W>``>)
+        call (Unchecked.defaultof<MapSecond>, source, Unchecked.defaultof<'``Bifunctor<'T,'W>``>)
 
     static member inline InvokeOnInstance (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = 
         (^``Bifunctor<'T,'V>`` : (static member Second: _*_ -> _) source, f) 
 
-type Second with
+type MapSecond with
     static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance id f x
-    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default1) = Second.InvokeOnInstance f x
+    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default1) = MapSecond.InvokeOnInstance f x
     static member inline Second (_:^t when ^t: null and ^t: struct, f : 'V->'W,   mthd :Default1) = ()
 
 
 type Bimap with
-    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default2) = x |> First.InvokeOnInstance f |> Second.InvokeOnInstance g  : '``Bifunctor<'U,'W>``
-    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default1) = Bimap.InvokeOnInstance f g x                                : '``Bifunctor<'U,'W>``
+    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default2) = x |> MapFirst.InvokeOnInstance f |> MapSecond.InvokeOnInstance g    : '``Bifunctor<'U,'W>``
+    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default1) = Bimap.InvokeOnInstance f g x                                        : '``Bifunctor<'U,'W>``
     static member inline Bimap (_:^t when ^t: null and ^t: struct, f:'T->'U, g:'V->'W,    mthd :Default1) = ()
 
 
