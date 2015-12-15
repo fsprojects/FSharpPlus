@@ -6,13 +6,22 @@ namespace FsControl.Internals
 
 open FsControl
 
-type Dual<'T> = Dual of 'T with
-    static member inline Empty  (_:Dual<'m>, _:Empty ) = Dual (Empty.Invoke()) :Dual<'m>
-    static member inline Append (  Dual x  ,   Dual y) = Dual (Append.Invoke y x)
 
-type Endo<'T> = Endo of ('T -> 'T) with
-    static member Empty  (_:Endo<'m>, _:Empty ) = Endo id  :Endo<'m>
-    static member Append (  Endo f  ,   Endo g) = Endo (f << g)
+type Dual<'T> =
+    struct
+        val Value : 'T
+        new (value: 'T) = {Value = value}
+    end
+    static member inline get_Empty() = Dual(Empty.Invoke())                                       : Dual<'m>
+    static member inline Append (x: Dual<'m>, y: Dual<'m>) = Dual (Append.Invoke y.Value x.Value) : Dual<'m>
+
+type Endo<'T> =
+    struct
+        val Value : 'T -> 'T
+        new (value: 'T -> 'T) = {Value = value}
+    end
+    static member get_Empty() = Endo id                                             : Endo<'m>
+    static member Append (f : Endo<'m>, g : Endo<'m>) = Endo (f.Value << g.Value)   : Endo<'m>
 
 namespace FsControl
 
@@ -173,13 +182,13 @@ type FoldMap =
         call (Unchecked.defaultof<FoldMap>, x, f)
 
 type FoldBack with
-    static member inline FromFoldMap f z x = let (Endo f) = FoldMap.Invoke (Endo << f) x in f z
+    static member inline FromFoldMap f z x = let (f : Endo<'t>) = FoldMap.Invoke (Endo << f) x in f.Value z
 
 
 type Fold =
     inherit Default1
 
-    static member inline FromFoldMap f z t = let (Dual (Endo f)) = FoldMap.Invoke (Dual << Endo << flip f) t in f z
+    static member inline FromFoldMap f z t = let (f : Dual<Endo<'t>>) = FoldMap.Invoke (Dual << Endo << flip f) t in f.Value.Value z
 
     static member inline Fold (x          , f, z, [<Optional>]impl:Default2) = Seq.fold f z (ToSeq.Invoke x)
     static member inline Fold (x:'F       , f:'b->'a->'b, z:'b , [<Optional>]impl:Default1) = ((^F) : (static member Fold: ^F -> _ -> _-> ^b) x, f, z)
