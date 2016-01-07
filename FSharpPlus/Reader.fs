@@ -42,7 +42,7 @@ module ReaderT =
 type ReaderT with
     static member inline Return (x : 'T) = ReaderT (fun _ -> result x)                                                      : ReaderT<'R, '``Monad<'T>``> 
     static member inline Map    (x : ReaderT<'R, '``Monad<'T>``>, f : 'T->'U)                        = ReaderT.map f x      : ReaderT<'R, '``Monad<'U>``>
-    static member inline Apply  (f : ReaderT<_,'``Monad<'T -> 'U>``>, x : ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x    : ReaderT<'R, '``Monad<'U>``>
+    static member inline (<*>)  (f : ReaderT<_,'``Monad<'T -> 'U>``>, x : ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x    : ReaderT<'R, '``Monad<'U>``>
     static member inline Bind   (x : ReaderT<_,'``Monad<'T>``>, f : 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind f x     : ReaderT<'R, '``Monad<'U>``>
     
     static member inline MZero (output: ReaderT<'R, '``MonadPlus<'T>``>, impl:MZero) = ReaderT (fun _ -> getMZero())        : ReaderT<'R, '``MonadPlus<'T>``>
