@@ -7,21 +7,21 @@ namespace FsControl.Internals
 open FsControl
 
 
-type Dual<'T> =
+type _Dual<'T> =
     struct
         val Value : 'T
         new (value: 'T) = {Value = value}
     end
-    static member inline get_Empty() = Dual(Empty.Invoke())                                       : Dual<'m>
-    static member inline Append (x: Dual<'m>, y: Dual<'m>) = Dual (Append.Invoke y.Value x.Value) : Dual<'m>
+    static member inline get_Empty() = _Dual(Empty.Invoke())                                         : _Dual<'m>
+    static member inline Append (x: _Dual<'m>, y: _Dual<'m>) = _Dual (Append.Invoke y.Value x.Value) : _Dual<'m>
 
-type Endo<'T> =
+type _Endo<'T> =
     struct
         val Value : 'T -> 'T
         new (value: 'T -> 'T) = {Value = value}
     end
-    static member get_Empty() = Endo id                                             : Endo<'m>
-    static member Append (f : Endo<'m>, g : Endo<'m>) = Endo (f.Value << g.Value)   : Endo<'m>
+    static member get_Empty() = _Endo id                                               : _Endo<'m>
+    static member Append (f : _Endo<'m>, g : _Endo<'m>) = _Endo (f.Value << g.Value)   : _Endo<'m>
 
 namespace FsControl
 
@@ -182,13 +182,13 @@ type FoldMap =
         call (Unchecked.defaultof<FoldMap>, x, f)
 
 type FoldBack with
-    static member inline FromFoldMap f z x = let (f : Endo<'t>) = FoldMap.Invoke (Endo << f) x in f.Value z
+    static member inline FromFoldMap f z x = let (f : _Endo<'t>) = FoldMap.Invoke (_Endo << f) x in f.Value z
 
 
 type Fold =
     inherit Default1
 
-    static member inline FromFoldMap f z t = let (f : Dual<Endo<'t>>) = FoldMap.Invoke (Dual << Endo << flip f) t in f.Value.Value z
+    static member inline FromFoldMap f z t = let (f : _Dual<_Endo<'t>>) = FoldMap.Invoke (_Dual << _Endo << flip f) t in f.Value.Value z
 
     static member inline Fold (x          , f, z, [<Optional>]impl:Default2) = Seq.fold f z (ToSeq.Invoke x)
     static member inline Fold (x:'F       , f:'b->'a->'b, z:'b , [<Optional>]impl:Default1) = ((^F) : (static member Fold: ^F -> _ -> _-> ^b) x, f, z)
