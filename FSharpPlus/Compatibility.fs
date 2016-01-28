@@ -192,7 +192,7 @@ module Compatibility =
         let inline ( &&& ) f g = arr (fun b -> (b, b)) >>> f *** g
         let inline (|||) f g = (||||) f g
         let inline (+++) f g = (++++) f g
-        let inline app() = arrApply ()
+        let inline app() = getApp ()
         let inline zeroArrow() = mzero ()
         let inline (<+>)   f g = (<|>) f g
 
