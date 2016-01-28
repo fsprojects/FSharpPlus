@@ -20,7 +20,7 @@ let decodeError = function
 
 let getValidPassword : ErrorT<_> =
     monad {
-        let! s = liftAsync getLine
+        let! s = lift getLine
         if isValid s then return s
         else return! throw -1}
     </catch/>
