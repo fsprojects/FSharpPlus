@@ -13,60 +13,60 @@ A library that enhances the F# coding experience by providing the following two 
  - Download binaries from [Nuget](https://www.nuget.org/packages/FsControl/), use the latest version (2.x)
 
  - Open an F# script file or the F# interactive and reference the library
-
-        #r @"C:\Your path to the binaries\FsControl.Core.dll";;
-
+```fsharp
+#r @"C:\Your path to the binaries\FsControl.Core.dll";;
+```
  Ignore warnings about F# metadata.
 
  - Now you can create generic functions, here's an example with <code>map</code> ([fmap](https://wiki.haskell.org/Functor) for Haskellers, [Select](http://www.dotnetperls.com/select) for C-sharpers):
-
-        let inline map f x = FsControl.Map.Invoke f x;;
-
+```fsharp
+let inline map f x = FsControl.Map.Invoke f x;;
+```
  Static constraints will be inferred automatically.
-    
+
  - Test it with .NET / F# primitive types:
+```fsharp    
+map string [|2;3;4;5|];;
+// val it : string [] = [|"2"; "3"; "4"; "5"|]
 
-        map string [|2;3;4;5|];;
-        // val it : string [] = [|"2"; "3"; "4"; "5"|]
-    
-        map ((+) 9) (Some 3);;
-        // val it : int option = Some 12
-
+map ((+) 9) (Some 3);;
+// val it : int option = Some 12
+```
  - You can also create your own type with a method <code>Map</code>:
-
-        type Tree<'t> =
-            | Tree of 't * Tree<'t> * Tree<'t>
-            | Leaf of 't
-            static member Map (x:Tree<'a>, f) = 
-                let rec loop f = function
-                    | Leaf x -> Leaf (f x)
-                    | Tree (x, t1, t2) -> Tree (f x, loop f t1, loop f t2)
-                loop f x
-            
+```fsharp
+type Tree<'t> =
+    | Tree of 't * Tree<'t> * Tree<'t>
+    | Leaf of 't
+    static member Map (x:Tree<'a>, f) = 
+        let rec loop f = function
+            | Leaf x -> Leaf (f x)
+            | Tree (x, t1, t2) -> Tree (f x, loop f t1, loop f t2)
+        loop f x
+```            
  By adding the static member <code>Map</code> we say that we're making <code>Tree</code> an instance of <code>Map</code>.
 
  - Try mapping over your new type:
-
-        let myTree = Tree(6, Tree(2, Leaf 1, Leaf 3), Leaf 9);;
-        map ((*) 10) myTree;;
-        // val it : Tree<int> = Tree (60,Tree (20,Leaf 10,Leaf 30),Leaf 90)
-    
+```fsharp
+let myTree = Tree(6, Tree(2, Leaf 1, Leaf 3), Leaf 9);;
+map ((*) 10) myTree;;
+// val it : Tree<int> = Tree (60,Tree (20,Leaf 10,Leaf 30),Leaf 90)
+```    
 Generic functions may be seen as an exotic thing in F# that only saves a few key strokes (<code>map</code> instead of <code>List.map</code> or <code>Array.map</code>) still they allow you to reach a higher abstraction level, using ad-hoc polymorphism.
 
 But more interesting is the use of operators. You can't prefix them with the module they belong to, I mean you can but then it's no longer an operator, as an example many F# libraries define the bind operator <code>(>>=)</code> but it's not generic so if you use two different types which are both monads you will need to prefix it e.g. <code>State.(>>=)</code> and <code>Reader.(>>=)</code> which defeats the purpose of having an operator.
 
 Here you can easily define a generic bind operator:
-
-    let inline (>>=) x f = Bind.Invoke x f
-
+```fsharp
+let inline (>>=) x f = Bind.Invoke x f
+```
 Or if you do [Railway Oriented Programming](https://www.google.ch/#q=railway+oriented+programming) you can finally have your generic Kleisli composition (fish) operator:
-
-    let inline (>=>) f g x = Bind.Invoke (f x) g
-
+```fsharp
+let inline (>=>) f g x = Bind.Invoke (f x) g
+```
 Also when working with combinators, the generic applicative functor (space invaders) operator is very handy:
-
-    let inline (<*>) x y = Apply.Invoke x y
-    
+```fsharp
+let inline (<*>) x y = Apply.Invoke x y
+```    
 Of course they are already defined in the FsControl.Operators module and they work with primitive and user defined types.
     
 
@@ -112,33 +112,33 @@ This is the most complex scenario, to define a new method-class is not straightf
 There are 2 ways:
 
  a) You can have a look at the signature of the method you want to implement in the source code, which will follow this convention:
-
-    static member [inline] [MethodName] (arg1:Type, [more args], output[:ReturnType], mthd[:MethodClassName]) =
-            Implementation
-
+```fsharp
+static member [inline] [MethodName] (arg1:Type, [more args], output[:ReturnType], mthd[:MethodClassName]) =
+    Implementation
+```
 To find the exact signature you need to look at the source code of the method-class you are interested.
 
 Here's an example:
 
 In the source code for <code>Map</code> (in Functor.fs) the <code>option</code> instance is defined like this:
-
-    [<Extension>]static member Map (x:option<_>, f, [<Optional>]impl:Map) = Option.map f x
-
+```fsharp
+[<Extension>]static member Map (x:option<_>, f, [<Optional>]impl:Map) = Option.map f x
+```
 So you can create a type <code>Tree</code> and add an instance for the existing method-class <code>Map</code> this way:
+```fsharp
+// Define a type Tree
+type Tree<'a> =
+	| Tree of 'a * Tree<'a> * Tree<'a>
+	| Leaf of 'a
 
-    // Define a type Tree
-    type Tree<'a> =
-        | Tree of 'a * Tree<'a> * Tree<'a>
-        | Leaf of 'a
-
-    // add an instance for Map (Functor)
-        static member Map (x:Tree<_>, f, impl) = 
-            let rec loop f (t:Tree<'a>)  =
-                match t with
-                | Leaf x -> Leaf (f x)
-                | Tree (x, t1, t2) -> Tree (f x, loop f t1, loop f t2)
-            loop f x
-
+// add an instance for Map (Functor)
+static member Map (x:Tree<_>, f, impl) = 
+    let rec loop f (t:Tree<'a>)  =
+        match t with
+        | Leaf x -> Leaf (f x)
+        | Tree (x, t1, t2) -> Tree (f x, loop f t1, loop f t2)
+    loop f x
+```
  b) Some methods accept also a 'clean signature' without the unused parameters <code>output</code> and <code>impl</code>. You can find a list of these methods below, in the section "How can I make my classes FsControl-ready?". This way it doesn't require to reference FsControl binaries.
 
  3) Add an instance for an existing Type of an existing method-class:
@@ -158,31 +158,31 @@ How can I make my classes FsControl-ready?
 An easy way to make classes in your project callable from FsControl without referencing FsControl DLLs at all is to use standard signatures for your methods. Here's a list of the standard signatures available at the moment, this list is not exhaustive:
 
  Functors:
- 
-     static member Map (x:MyFunctor<'T>, f:'T->'U) : MyFunctor<'U> = {my map impl.}
-     
+```fsharp 
+static member Map (x:MyFunctor<'T>, f:'T->'U) : MyFunctor<'U> = {my map impl.}
+```     
  Applicatives:
- 
-     static member Return (x:'T) : MyApplicative<'T> = {my Return impl.}
-     static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'T>) : MyApplicative<'U> = {my Apply impl.}
-     
+ ```fsharp
+static member Return (x:'T) : MyApplicative<'T> = {my Return impl.}
+static member (<*>) (f:MyApplicative<'T->'U>, x:MyApplicative<'T>) : MyApplicative<'U> = {my Apply impl.}
+```     
  Monads:
- 
-     static member Return (x:'T) : MyMonad<'T> = {my Return impl.} // similar to Applicatives
-     static member Bind (x:MyMonad<'T>, f:'T->MyMonad<'U>) : MyMonad<'U> = {my Bind impl.}
-   
+```fsharp
+static member Return (x:'T) : MyMonad<'T> = {my Return impl.} // similar to Applicatives
+static member Bind (x:MyMonad<'T>, f:'T->MyMonad<'U>) : MyMonad<'U> = {my Bind impl.}
+```   
 Monoids:
-
-     static member Empty : MyMonoid = {my Empty impl.}         // get_Empty() = ... may be used alternatively.
-     static member Append (x:MyMonoid, y:MyMonoid) : MyMonoid = {my Append impl.}
-     static member Concat (x:seq<MyMonoid>) : MyMonoid  = {my Concat impl.} // optional: it can be automatically derived from Append
-
+```fsharp
+static member Empty : MyMonoid = {my Empty impl.}         // get_Empty() = ... may be used alternatively.
+static member Append (x:MyMonoid, y:MyMonoid) : MyMonoid = {my Append impl.}
+static member Concat (x:seq<MyMonoid>) : MyMonoid  = {my Concat impl.} // optional: it can be automatically derived from Append
+```
 Foldables:
-
-     static member FoldBack (source:MyFoldable<'T>, folder:'T->'State->'State, state:'State) : 'State = {my FoldBack impl.}
-     static member ToSeq (source:MyFoldable<'T>) : seq<'T> = {my ToSeq impl.}
-     static member FromSeq (source: seq<'T>) : MyFoldable<'T> = {my FromSeq impl.}
-	
+```fsharp
+static member FoldBack (source:MyFoldable<'T>, folder:'T->'State->'State, state:'State) : 'State = {my FoldBack impl.}
+static member ToSeq (source:MyFoldable<'T>) : seq<'T> = {my ToSeq impl.}
+static member FromSeq (source: seq<'T>) : MyFoldable<'T> = {my FromSeq impl.}
+```	
 
 If you find problems (typically insane compile times) you can still define it as described in 2).
 	
