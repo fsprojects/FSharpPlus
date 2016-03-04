@@ -267,7 +267,7 @@ namespace FsControl.BaseLib
 
             if (value == null)
             {
-                throw new ArgumentNullException("byteArray");
+                throw new ArgumentNullException("value");
             }
 
             int arrayLen = value.Length;
