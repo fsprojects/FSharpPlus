@@ -131,10 +131,10 @@ namespace FsControl.BaseLib
         public static unsafe short ToInt16(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             if ((uint)startIndex >= value.Length)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
             if (startIndex > value.Length - 2)
                 throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
@@ -157,10 +157,10 @@ namespace FsControl.BaseLib
         public static unsafe int ToInt32(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             if ((uint)startIndex >= value.Length)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
             if (startIndex > value.Length - 4)
                 throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
@@ -183,10 +183,10 @@ namespace FsControl.BaseLib
         public static unsafe long ToInt64(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             if ((uint)startIndex >= value.Length)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
             if (startIndex > value.Length - 8)
                 throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
@@ -267,19 +267,19 @@ namespace FsControl.BaseLib
 
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
 
             int arrayLen = value.Length;
             if (startIndex < 0 || (startIndex >= arrayLen && startIndex > 0))
             {
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_StartIndex");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_StartIndex");
             }
 
             int realLength = length;
             if (realLength < 0)
             {
-                throw new ArgumentOutOfRangeException("length", "ArgumentOutOfRange_GenericPositive");
+                throw new ArgumentOutOfRangeException(nameof(length), "ArgumentOutOfRange_GenericPositive");
             }
 
             if (startIndex > arrayLen - realLength)
@@ -311,7 +311,7 @@ namespace FsControl.BaseLib
         public static String ToString(byte[] value)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             return ToString(value, 0, value.Length);
         }
 
@@ -319,7 +319,7 @@ namespace FsControl.BaseLib
         public static String ToString(byte[] value, int startIndex)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             return ToString(value, startIndex, value.Length - startIndex);
         }
 
@@ -335,11 +335,11 @@ namespace FsControl.BaseLib
         public static bool ToBoolean(byte[] value, int startIndex)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             if (startIndex < 0)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_NeedNonNegNum");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_NeedNonNegNum");
             if (startIndex > value.Length - 1)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
             return value[startIndex] != 0;
         }
