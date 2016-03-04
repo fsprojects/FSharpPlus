@@ -17,7 +17,7 @@ namespace FsControl.BaseLib
 {
 
     using System;
-    using System.Runtime.CompilerServices;
+
     // The BitConverter class contains methods for
     // converting an array of bytes to one of the base data
     // types, as well as for converting a base data type to an
@@ -85,7 +85,6 @@ namespace FsControl.BaseLib
 
         // Converts an ushort into an array of bytes with
         // length two.
-        [CLSCompliant(false)]
         public static byte[] GetBytes(ushort value, bool isLittleEndian)
         {
             return GetBytes((short)value, isLittleEndian);
@@ -93,7 +92,6 @@ namespace FsControl.BaseLib
 
         // Converts an uint into an array of bytes with
         // length four.
-        [CLSCompliant(false)]
         public static byte[] GetBytes(uint value, bool isLittleEndian)
         {
             return GetBytes((int)value, isLittleEndian);
@@ -101,7 +99,6 @@ namespace FsControl.BaseLib
 
         // Converts an unsigned long into an array of bytes with
         // length eight.
-        [CLSCompliant(false)]
         public static byte[] GetBytes(ulong value, bool isLittleEndian)
         {
             return GetBytes((long)value, isLittleEndian);
@@ -214,7 +211,6 @@ namespace FsControl.BaseLib
 
         // Converts an array of bytes into an ushort.
         //
-        [CLSCompliant(false)]
         public static ushort ToUInt16(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (ushort)ToInt16(value, startIndex, isLittleEndian);
@@ -222,7 +218,6 @@ namespace FsControl.BaseLib
 
         // Converts an array of bytes into an uint.
         //
-        [CLSCompliant(false)]
         public static uint ToUInt32(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (uint)ToInt32(value, startIndex, isLittleEndian);
@@ -230,7 +225,6 @@ namespace FsControl.BaseLib
 
         // Converts an array of bytes into an unsigned long.
         //
-        [CLSCompliant(false)]
         public static ulong ToUInt64(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (ulong)ToInt64(value, startIndex, isLittleEndian);
