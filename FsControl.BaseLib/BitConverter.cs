@@ -17,7 +17,7 @@ namespace FsControl.BaseLib
 {
 
     using System;
-    using System.Runtime.CompilerServices;
+
     // The BitConverter class contains methods for
     // converting an array of bytes to one of the base data
     // types, as well as for converting a base data type to an
@@ -85,7 +85,6 @@ namespace FsControl.BaseLib
 
         // Converts an ushort into an array of bytes with
         // length two.
-        [CLSCompliant(false)]
         public static byte[] GetBytes(ushort value, bool isLittleEndian)
         {
             return GetBytes((short)value, isLittleEndian);
@@ -93,7 +92,6 @@ namespace FsControl.BaseLib
 
         // Converts an uint into an array of bytes with
         // length four.
-        [CLSCompliant(false)]
         public static byte[] GetBytes(uint value, bool isLittleEndian)
         {
             return GetBytes((int)value, isLittleEndian);
@@ -101,7 +99,6 @@ namespace FsControl.BaseLib
 
         // Converts an unsigned long into an array of bytes with
         // length eight.
-        [CLSCompliant(false)]
         public static byte[] GetBytes(ulong value, bool isLittleEndian)
         {
             return GetBytes((long)value, isLittleEndian);
@@ -131,16 +128,16 @@ namespace FsControl.BaseLib
         public static unsafe short ToInt16(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             if ((uint)startIndex >= value.Length)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
             if (startIndex > value.Length - 2)
                 throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
 
             fixed (byte* pbyte = &value[startIndex])
-            {               
+            {
                 if (isLittleEndian)
                 {
                     if (startIndex % 2 == 0) // data is aligned
@@ -148,8 +145,7 @@ namespace FsControl.BaseLib
 
                     return (short)((*pbyte) | (*(pbyte + 1) << 8));
                 }
-                else      
-                    return (short)((*pbyte << 8) | (*(pbyte + 1)));
+                return (short)((*pbyte << 8) | (*(pbyte + 1)));
             }
         }
 
@@ -157,10 +153,10 @@ namespace FsControl.BaseLib
         public static unsafe int ToInt32(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             if ((uint)startIndex >= value.Length)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
             if (startIndex > value.Length - 4)
                 throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
@@ -174,8 +170,7 @@ namespace FsControl.BaseLib
 
                     return (*pbyte) | (*(pbyte + 1) << 8) | (*(pbyte + 2) << 16) | (*(pbyte + 3) << 24);
                 }
-                else
-                    return (*pbyte << 24) | (*(pbyte + 1) << 16) | (*(pbyte + 2) << 8) | (*(pbyte + 3));
+                return (*pbyte << 24) | (*(pbyte + 1) << 16) | (*(pbyte + 2) << 8) | (*(pbyte + 3));
             }
         }
 
@@ -183,10 +178,10 @@ namespace FsControl.BaseLib
         public static unsafe long ToInt64(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             if ((uint)startIndex >= value.Length)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
             if (startIndex > value.Length - 8)
                 throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
@@ -214,7 +209,6 @@ namespace FsControl.BaseLib
 
         // Converts an array of bytes into an ushort.
         //
-        [CLSCompliant(false)]
         public static ushort ToUInt16(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (ushort)ToInt16(value, startIndex, isLittleEndian);
@@ -222,7 +216,6 @@ namespace FsControl.BaseLib
 
         // Converts an array of bytes into an uint.
         //
-        [CLSCompliant(false)]
         public static uint ToUInt32(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (uint)ToInt32(value, startIndex, isLittleEndian);
@@ -230,7 +223,6 @@ namespace FsControl.BaseLib
 
         // Converts an array of bytes into an unsigned long.
         //
-        [CLSCompliant(false)]
         public static ulong ToUInt64(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (ulong)ToInt64(value, startIndex, isLittleEndian);
@@ -267,19 +259,19 @@ namespace FsControl.BaseLib
 
             if (value == null)
             {
-                throw new ArgumentNullException("byteArray");
+                throw new ArgumentNullException(nameof(value));
             }
 
             int arrayLen = value.Length;
             if (startIndex < 0 || (startIndex >= arrayLen && startIndex > 0))
             {
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_StartIndex");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_StartIndex");
             }
 
             int realLength = length;
             if (realLength < 0)
             {
-                throw new ArgumentOutOfRangeException("length", "ArgumentOutOfRange_GenericPositive");
+                throw new ArgumentOutOfRangeException(nameof(length), "ArgumentOutOfRange_GenericPositive");
             }
 
             if (startIndex > arrayLen - realLength)
@@ -311,7 +303,7 @@ namespace FsControl.BaseLib
         public static String ToString(byte[] value)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             return ToString(value, 0, value.Length);
         }
 
@@ -319,7 +311,7 @@ namespace FsControl.BaseLib
         public static String ToString(byte[] value, int startIndex)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             return ToString(value, startIndex, value.Length - startIndex);
         }
 
@@ -335,13 +327,13 @@ namespace FsControl.BaseLib
         public static bool ToBoolean(byte[] value, int startIndex)
         {
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             if (startIndex < 0)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_NeedNonNegNum");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_NeedNonNegNum");
             if (startIndex > value.Length - 1)
-                throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
-            return (value[startIndex] == 0) ? false : true;
+            return value[startIndex] != 0;
         }
 
         public static unsafe long DoubleToInt64Bits(double value)
