@@ -140,7 +140,7 @@ namespace FsControl.BaseLib
                 throw new ArgumentException("Arg_ArrayPlusOffTooSmall");
 
             fixed (byte* pbyte = &value[startIndex])
-            {               
+            {
                 if (isLittleEndian)
                 {
                     if (startIndex % 2 == 0) // data is aligned
@@ -148,7 +148,7 @@ namespace FsControl.BaseLib
 
                     return (short)((*pbyte) | (*(pbyte + 1) << 8));
                 }
-                else      
+                else
                     return (short)((*pbyte << 8) | (*(pbyte + 1)));
             }
         }
@@ -341,7 +341,7 @@ namespace FsControl.BaseLib
             if (startIndex > value.Length - 1)
                 throw new ArgumentOutOfRangeException("startIndex", "ArgumentOutOfRange_Index");
 
-            return (value[startIndex] == 0) ? false : true;
+            return value[startIndex] != 0;
         }
 
         public static unsafe long DoubleToInt64Bits(double value)
