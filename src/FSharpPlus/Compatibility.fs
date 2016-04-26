@@ -186,12 +186,10 @@ module Compatibility =
 
         // Arrow
         let inline id'() = getCatId ()
-        let inline (<<<) f g = (<<<<) f g
-        let inline (>>>) f g = (>>>>) f g
-        let inline ( *** ) f g = arrFirst f >>> arrSecond g
-        let inline ( &&& ) f g = arr (fun b -> (b, b)) >>> f *** g
-        let inline (|||) f g = (||||) f g
-        let inline (+++) f g = (++++) f g
+        let inline (<<<) f g = catComp f g
+        let inline (>>>) f g = catComp g f
+        let inline (&&&) f g = fanout f g
+        let inline (|||) f g = fanin  f g
         let inline app() = getApp ()
         let inline zeroArrow() = mzero ()
         let inline (<+>)   f g = (<|>) f g
