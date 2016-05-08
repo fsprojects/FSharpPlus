@@ -14,7 +14,7 @@ A library that enhances the F# coding experience by providing the following two 
 
  - Open an F# script file or the F# interactive and reference the library
 ```fsharp
-#r @"C:\Your path to the binaries\FsControl.Core.dll";;
+#r @"C:\Your path to the binaries\FsControl.dll";;
 ```
  Ignore warnings about F# metadata.
 
