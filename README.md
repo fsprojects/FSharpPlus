@@ -53,7 +53,7 @@ map ((*) 10) myTree;;
 ```    
 Generic functions may be seen as an exotic thing in F# that only saves a few key strokes (<code>map</code> instead of <code>List.map</code> or <code>Array.map</code>) still they allow you to reach a higher abstraction level, using ad-hoc polymorphism.
 
-But more interesting is the use of operators. You can't prefix them with the module they belong to, I mean you can but then it's no longer an operator, as an example many F# libraries define the bind operator <code>(>>=)</code> but it's not generic so if you use two different types which are both monads you will need to prefix it e.g. <code>State.(>>=)</code> and <code>Reader.(>>=)</code> which defeats the purpose of having an operator.
+But more interesting is the use of operators. You can't prefix them with the module they belong to, well you can but then it's no longer an operator. As an example many F# libraries define the bind operator <code>(>>=)</code> but it's not generic so if you use two different types which are both monads you will need to prefix it e.g. <code>State.(>>=)</code> and <code>Reader.(>>=)</code> which defeats the purpose of having an operator.
 
 Here you can easily define a generic bind operator:
 ```fsharp
@@ -199,11 +199,11 @@ A: In many cases yes, but in FsControl the most generic code is in 'default meth
 
 Q: Where can I find more information about the abstractions provided?
 
-A: There are many posts on Haskell everywhere, of those some are very formal and other are more intuitive. Apart from that in the last years there were some F# intuitive explanations in different blogs about the same abstractions implemented in F# in a non-generic way.
+A: There are many posts on Haskell everywhere, of those some are very formal and others are more intuitive. Apart from that in the last years there were some F# intuitive explanations in different blogs about the same abstractions implemented in F# in a non-generic way.
 
 Q: Is this a Haskell emulator?
 
-A: No, there some abstractions specifics to F#, however it's true that this library (as many others F# libs) is heavily inspired in concepts coming from Haskell but as F# is another language with another type system, strict evaluation and some different conventions there are many differences in names, types and implementations. Also there are some specific F# abstractions. Anyway by knowing those differences you may be able to translate Haskell code to F#. There is a [Haskell Compatibility module in F#+](https://github.com/gmpl/FSharpPlus/blob/master/FSharpPlus/Compatibility.fs#L4) which is another project based in FsControl, and it contains binds to mimic Haskell functions, operator and types.
+A: No, there are some abstractions specifics to F#, however it's true that this library (as many others F# libs) is heavily inspired in concepts coming from Haskell but as F# is another language with another type system, strict evaluation and some different conventions there are many differences in names, types and implementations. Also there are some specific F# abstractions. Anyway by knowing those differences you may be able to translate Haskell code to F#. There is a [Haskell Compatibility module in F#+](https://github.com/gmpl/FSharpPlus/blob/master/FSharpPlus/Compatibility.fs#L4) which is another project based in FsControl, and it contains binds to mimic Haskell functions, operator and types.
 
 Q: How can I contribute to this library?
 
