@@ -63,7 +63,7 @@ type Append =
     [<Extension>]static member        Append (()             , ()) =  ()
     [<Extension>]static member        Append (x:Set<_>       , y ) = Set.union x y
     [<Extension>]static member        Append (x:string       , y ) = x + y
-    [<Extension>]static member        Append (x:StringBuilder, y:StringBuilder) = StringBuilder().Append(x).Append(y)
+                 static member        Append (x:StringBuilder, y:StringBuilder) = StringBuilder().Append(x).Append(y)
 
     static member inline Invoke (x:'T) (y:'T) :'T =
         let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Append: _*_ -> _) a, b)
