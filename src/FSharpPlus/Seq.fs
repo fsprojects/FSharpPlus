@@ -10,7 +10,7 @@ module Seq =
 
     let inline traverse (f:'T->'``Applicative<'U>``) (xs:seq<'T>) :'``Applicative<seq<'U>>`` = traverse f xs
               
-    let groupAdjBy keyMapper (source:_ seq) = seq {
+    let chunkBy keyMapper (source:_ seq) = seq {
         use e = source.GetEnumerator()
         if (e.MoveNext()) then
             let groupKey = ref (keyMapper e.Current)

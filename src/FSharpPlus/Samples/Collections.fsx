@@ -50,7 +50,7 @@ let sq  = myQuery seq1 seq2
 
 let inline myQuery2 x = linq {
     for e in x do
-    groupAdjBy (parse e %  2) into g
+    chunkBy (parse e %  2) into g
     select  (toString (fst g), snd g )} 
 
 let lst3 = myQuery2 [ "1";"2";"4";"3" ]
