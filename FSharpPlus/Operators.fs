@@ -293,13 +293,38 @@ module Operators =
     /// <param name="count">The maximum number of items to return.</param>
     /// <param name="source">The input collection.</param>
     ///
-    /// <returns>The result sequence.</returns>
+    /// <returns>The result collection.</returns>
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
     let inline limit (count:int) (source:'``Collection<'T>``) : '``Collection<'T>`` = Limit.Invoke count source
 
-    let inline groupBy    (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupBy.Invoke projection source
-    let inline groupAdjBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupAdjBy.Invoke projection source
+    /// <summary>Applies a key-generating function to each element of a collection and yields a collection of 
+    /// unique keys. Each unique key contains a collection of all elements that match 
+    /// to this key.</summary>
+    /// 
+    /// <remarks>This function returns a collection that digests the whole initial collection as soon as 
+    /// that collection is iterated. As a result this function should not be used with 
+    /// large or infinite collections. The function makes no assumption on the ordering of the original 
+    /// collection.</remarks>
+    ///
+    /// <param name="projection">A function that transforms an element of the collection into a comparable key.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    let inline groupBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupBy.Invoke projection source
+
+    /// <summary>Applies a key-generating function to each element of a collection and yields a collection of 
+    /// keys. Each key contains a collection of all adjacent elements that match 
+    /// to this key.</summary>
+    /// 
+    /// <remarks>The function makes no assumption on the ordering of the original 
+    /// collection.</remarks>
+    ///
+    /// <param name="projection">A function that transforms an element of the collection into a comparable key.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    let inline chunkBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = ChunkBy.Invoke projection source
 
 
     let inline choose (chooser:'T->'U option)   (source:'``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source        

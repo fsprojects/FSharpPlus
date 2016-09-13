@@ -57,8 +57,8 @@ module Builders =
         [<CustomOperation("groupBy", AllowIntoPattern=true)>]
         member inline __.GroupBy (x,[<ProjectionParameter>] f : 't -> 'key) = groupBy f x
 
-        [<CustomOperation("groupAdjBy", AllowIntoPattern=true)>]
-        member inline __.GroupAdjBy (x,[<ProjectionParameter>] f : 't -> 'key) = groupAdjBy f x
+        [<CustomOperation("chunkBy", AllowIntoPattern=true)>]
+        member inline __.ChunkBy (x,[<ProjectionParameter>] f : 't -> 'key) = chunkBy f x
 
         [<CustomOperation("sortBy", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
         member inline __.SortBy (x,[<ProjectionParameter>] f : 't -> 'key) = sortBy f x
