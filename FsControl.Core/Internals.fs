@@ -41,7 +41,7 @@ module internal Seq =
     let inline apply f x = bind (fun f -> Seq.map ((<|) f) x) f
     let inline foldBack f x z = Array.foldBack f (Seq.toArray x) z
 
-    let inline groupAdjBy projection (source : _ seq) = seq {
+    let inline chunkBy projection (source : _ seq) = seq {
         use e = source.GetEnumerator()
         if e.MoveNext() then
             let g = ref (projection e.Current)

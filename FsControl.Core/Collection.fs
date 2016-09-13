@@ -146,16 +146,16 @@ type GroupBy =
         call (Unchecked.defaultof<GroupBy>, source, projection)
 
 
-type GroupAdjBy =
-    static member GroupAdjBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:GroupAdjBy) = let a = Id.run x in Id.create (f a, x)
-    static member GroupAdjBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
-    static member GroupAdjBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
-    static member GroupAdjBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:GroupAdjBy) = Seq.groupAdjBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
+type ChunkBy =
+    static member ChunkBy (x:Id<'T>  , f:'T->'Key, _:Id<'Key*Id<'T>>    , [<Optional>]impl:ChunkBy) = let a = Id.run x in Id.create (f a, x)
+    static member ChunkBy (x:seq<'T> , f:'T->'Key, _:seq<'Key*seq<'T>>  , [<Optional>]impl:ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
+    static member ChunkBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]impl:ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
+    static member ChunkBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]impl:ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     static member inline Invoke (projection:'T->'Key) (source:'Collection'T) : 'Collection'KeyX'Collection'T = 
-        let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member GroupAdjBy: _*_*_*_ -> _) b, p, c, a)
+        let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member ChunkBy: _*_*_*_ -> _) b, p, c, a)
         let inline call (a:'a, b:'b, p) = call_3 (a, b, Unchecked.defaultof<'r>, p) :'r
-        call (Unchecked.defaultof<GroupAdjBy>, source, projection)
+        call (Unchecked.defaultof<ChunkBy>, source, projection)
 
 
 [<Extension;Sealed>]
