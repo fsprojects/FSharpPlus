@@ -12,35 +12,35 @@ open System.Runtime.InteropServices
 
 type FromBigInt =
     inherit Default1
-    static member inline FromBigInt (_:^R        ,_:Default4  ) = fun (x:bigint) -> Explicit.Invoke x         :^R
-    static member inline FromBigInt (_:^R        ,_:Default3  ) = fun (x:bigint) -> Implicit.Invoke (int64 x) :^R
-    static member inline FromBigInt (_:^R        ,_:Default2  ) = fun (x:bigint) -> Implicit.Invoke x         :^R
-    static member inline FromBigInt (_:^R        ,_:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)
-    static member inline FromBigInt (_:Default1  ,_:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)
-    static member        FromBigInt (_:int32     ,_:FromBigInt) = fun (x:bigint) -> int             x
-    static member        FromBigInt (_:int64     ,_:FromBigInt) = fun (x:bigint) -> int64           x
-    static member        FromBigInt (_:nativeint ,_:FromBigInt) = fun (x:bigint) -> nativeint  (int x)
-    static member        FromBigInt (_:unativeint,_:FromBigInt) = fun (x:bigint) -> unativeint (int x)
-    static member        FromBigInt (_:bigint    ,_:FromBigInt) = fun (x:bigint) ->                 x
-    static member        FromBigInt (_:float     ,_:FromBigInt) = fun (x:bigint) -> float           x
+    static member inline FromBigInt (_:^R        , _:Default4  ) = fun (x:bigint) -> Explicit.Invoke x         :^R
+    static member inline FromBigInt (_:^R        , _:Default3  ) = fun (x:bigint) -> Implicit.Invoke (int64 x) :^R
+    static member inline FromBigInt (_:^R        , _:Default2  ) = fun (x:bigint) -> Implicit.Invoke x         :^R
+    static member inline FromBigInt (_:^R        , _:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)
+    static member inline FromBigInt (_:Default1  , _:Default1  ) = fun (x:bigint) -> (^R: (static member FromBigInt: _ -> ^R) x)
+    static member        FromBigInt (_:int32     , _:FromBigInt) = fun (x:bigint) -> int             x
+    static member        FromBigInt (_:int64     , _:FromBigInt) = fun (x:bigint) -> int64           x
+    static member        FromBigInt (_:nativeint , _:FromBigInt) = fun (x:bigint) -> nativeint  (int x)
+    static member        FromBigInt (_:unativeint, _:FromBigInt) = fun (x:bigint) -> unativeint (int x)
+    static member        FromBigInt (_:bigint    , _:FromBigInt) = fun (x:bigint) ->                 x
+    static member        FromBigInt (_:float     , _:FromBigInt) = fun (x:bigint) -> float           x
 #if NOTNET35
-    static member        FromBigInt (_:sbyte     ,_:FromBigInt) = fun (x:bigint) -> sbyte           x
-    static member        FromBigInt (_:int16     ,_:FromBigInt) = fun (x:bigint) -> int16           x
-    static member        FromBigInt (_:byte      ,_:FromBigInt) = fun (x:bigint) -> byte            x
-    static member        FromBigInt (_:uint16    ,_:FromBigInt) = fun (x:bigint) -> uint16          x
-    static member        FromBigInt (_:uint32    ,_:FromBigInt) = fun (x:bigint) -> uint32          x
-    static member        FromBigInt (_:uint64    ,_:FromBigInt) = fun (x:bigint) -> uint64          x
-    static member        FromBigInt (_:float32   ,_:FromBigInt) = fun (x:bigint) -> float32         x
-    static member        FromBigInt (_:decimal   ,_:FromBigInt) = fun (x:bigint) -> decimal         x
+    static member        FromBigInt (_:sbyte     , _:FromBigInt) = fun (x:bigint) -> sbyte           x
+    static member        FromBigInt (_:int16     , _:FromBigInt) = fun (x:bigint) -> int16           x
+    static member        FromBigInt (_:byte      , _:FromBigInt) = fun (x:bigint) -> byte            x
+    static member        FromBigInt (_:uint16    , _:FromBigInt) = fun (x:bigint) -> uint16          x
+    static member        FromBigInt (_:uint32    , _:FromBigInt) = fun (x:bigint) -> uint32          x
+    static member        FromBigInt (_:uint64    , _:FromBigInt) = fun (x:bigint) -> uint64          x
+    static member        FromBigInt (_:float32   , _:FromBigInt) = fun (x:bigint) -> float32         x
+    static member        FromBigInt (_:decimal   , _:FromBigInt) = fun (x:bigint) -> decimal         x
 #else
-    static member        FromBigInt (_:sbyte     ,_:FromBigInt) = fun (x:bigint) -> sbyte      (int x)
-    static member        FromBigInt (_:int16     ,_:FromBigInt) = fun (x:bigint) -> int16      (int x)
-    static member        FromBigInt (_:byte      ,_:FromBigInt) = fun (x:bigint) -> byte       (int x)
-    static member        FromBigInt (_:uint16    ,_:FromBigInt) = fun (x:bigint) -> uint16     (int x)
-    static member        FromBigInt (_:uint32    ,_:FromBigInt) = fun (x:bigint) -> uint32     (int x)
-    static member        FromBigInt (_:uint64    ,_:FromBigInt) = fun (x:bigint) -> uint64     (int64 x)
-    static member        FromBigInt (_:float32   ,_:FromBigInt) = fun (x:bigint) -> float32    (int x)
-    static member        FromBigInt (_:decimal   ,_:FromBigInt) = fun (x:bigint) -> decimal    (int x)
+    static member        FromBigInt (_:sbyte     , _:FromBigInt) = fun (x:bigint) -> sbyte      (int x)
+    static member        FromBigInt (_:int16     , _:FromBigInt) = fun (x:bigint) -> int16      (int x)
+    static member        FromBigInt (_:byte      , _:FromBigInt) = fun (x:bigint) -> byte       (int x)
+    static member        FromBigInt (_:uint16    , _:FromBigInt) = fun (x:bigint) -> uint16     (int x)
+    static member        FromBigInt (_:uint32    , _:FromBigInt) = fun (x:bigint) -> uint32     (int x)
+    static member        FromBigInt (_:uint64    , _:FromBigInt) = fun (x:bigint) -> uint64     (int64 x)
+    static member        FromBigInt (_:float32   , _:FromBigInt) = fun (x:bigint) -> float32    (int x)
+    static member        FromBigInt (_:decimal   , _:FromBigInt) = fun (x:bigint) -> decimal    (int x)
 #endif
 
     static member inline Invoke (x:bigint)   :'Num    =
@@ -50,11 +50,11 @@ type FromBigInt =
 
 type FromInt64 =
     inherit Default1
-    static member inline FromInt64 (_:^R        ,_:Default4  ) = fun (x:int64) -> Explicit.Invoke x            : ^R
-    static member inline FromInt64 (_:^R        ,_:Default3  ) = fun (x:int64) -> FromBigInt.Invoke (bigint x) : ^R
-    static member inline FromInt64 (_:^R        ,_:Default2  ) = fun (x:int64) -> Implicit.Invoke x            : ^R
-    static member inline FromInt64 (_:^R        ,_:Default1  ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
-    static member inline FromInt64 (_:Default1  ,_:Default1  ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
+    static member inline FromInt64 (_:^R        , _:Default4 ) = fun (x:int64) -> Explicit.Invoke x            : ^R
+    static member inline FromInt64 (_:^R        , _:Default3 ) = fun (x:int64) -> FromBigInt.Invoke (bigint x) : ^R
+    static member inline FromInt64 (_:^R        , _:Default2 ) = fun (x:int64) -> Implicit.Invoke x            : ^R
+    static member inline FromInt64 (_:^R        , _:Default1 ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
+    static member inline FromInt64 (_:Default1  , _:Default1 ) = fun (x:int64) -> (^R: (static member FromInt64: _ -> ^R) x)
     static member        FromInt64 (_:int32     , _:FromInt64) = fun (x:int64) -> int32           x
     static member        FromInt64 (_:int64     , _:FromInt64) = fun (x:int64) ->                 x
     static member        FromInt64 (_:nativeint , _:FromInt64) = fun (x:int64) -> nativeint  (int x)
@@ -88,11 +88,11 @@ type FromInt64 =
 
 type FromInt32 =
     inherit Default1
-    static member inline FromInt32 (_:^R        ,_:Default4  ) = fun (x:int32) -> Explicit.Invoke x          : ^R
-    static member inline FromInt32 (_:^R        ,_:Default3  ) = fun (x:int32) -> FromInt64.Invoke (int64 x) : ^R
-    static member inline FromInt32 (_:^R        ,_:Default2  ) = fun (x:int32) -> Implicit.Invoke x          : ^R
-    static member inline FromInt32 (_:^R        ,_:Default1  ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
-    static member inline FromInt32 (_:Default1  ,_:Default1  ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
+    static member inline FromInt32 (_:^R        , _:Default4 ) = fun (x:int32) -> Explicit.Invoke x          : ^R
+    static member inline FromInt32 (_:^R        , _:Default3 ) = fun (x:int32) -> FromInt64.Invoke (int64 x) : ^R
+    static member inline FromInt32 (_:^R        , _:Default2 ) = fun (x:int32) -> Implicit.Invoke x          : ^R
+    static member inline FromInt32 (_:^R        , _:Default1 ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
+    static member inline FromInt32 (_:Default1  , _:Default1 ) = fun (x:int32) -> (^R: (static member FromInt32: _ -> ^R) x)
     static member        FromInt32 (_:int32     , _:FromInt32) = fun (x:int32) ->                 x
     static member        FromInt32 (_:int64     , _:FromInt32) = fun (x:int32) -> int64           x
     static member        FromInt32 (_:nativeint , _:FromInt32) = fun (x:int32) -> nativeint  (int x)
@@ -118,8 +118,8 @@ type FromInt32 =
 
 type One =
     inherit Default1
-    static member inline One (_:'t             ,_:Default1) = FromInt32.Invoke 1            :'t
-    static member inline One (_:'t             ,_:One     ) = LanguagePrimitives.GenericOne :'t
+    static member inline One (_:'t             , _:Default1) = FromInt32.Invoke 1            :'t
+    static member inline One (_:'t             , _:One     ) = LanguagePrimitives.GenericOne :'t
     static member inline One (_:^t when ^t: null and ^t: struct, _:One) = id
 
     static member inline Invoke ()   :'Num    =
@@ -129,8 +129,8 @@ type One =
 
 type Zero =
     inherit Default1
-    static member inline Zero (_:'t             ,_:Default1) = FromInt32.Invoke 0             :'t
-    static member inline Zero (_:'t             ,_:Zero    ) = LanguagePrimitives.GenericZero :'t
+    static member inline Zero (_:'t             , _:Default1) = FromInt32.Invoke 0             :'t
+    static member inline Zero (_:'t             , _:Zero    ) = LanguagePrimitives.GenericZero :'t
     static member inline Zero (_:^t when ^t: null and ^t: struct, _:Zero) = id
 
     static member inline Invoke ()   :'Num    =
