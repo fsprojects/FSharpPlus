@@ -24,6 +24,7 @@ type Empty =
     static member        Empty (_:unit         , _:Empty) = ()
     static member        Empty (_:Set<'a>      , _:Empty) = Set.empty : Set<'a>
     static member        Empty (_:Map<'a,'b>   , _:Empty) = Map.empty : Map<'a,'b>
+    static member        Empty (_:TimeSpan     , _:Empty) = TimeSpan()
 
     static member inline Invoke() = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Empty: _*_ -> _) b, a)
@@ -64,6 +65,7 @@ type Append =
     [<Extension>]static member        Append (x:Set<_>       , y ) = Set.union x y
     [<Extension>]static member        Append (x:string       , y ) = x + y
                  static member        Append (x:StringBuilder, y:StringBuilder) = StringBuilder().Append(x).Append(y)
+    [<Extension>]static member        Append (x:TimeSpan     , y:TimeSpan) = x + y
 
     static member inline Invoke (x:'T) (y:'T) :'T =
         let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Append: _*_ -> _) a, b)

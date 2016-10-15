@@ -132,6 +132,9 @@ type Zero =
     static member inline Zero (_:'t             , _:Default1) = FromInt32.Invoke 0             :'t
     static member inline Zero (_:'t             , _:Zero    ) = LanguagePrimitives.GenericZero :'t
     static member inline Zero (_:^t when ^t: null and ^t: struct, _:Zero) = id
+    static member        Zero (_:System.TimeSpan, _:Zero   ) = System.TimeSpan()
+    static member        Zero (_:int            , _:Zero   ) = 0
+    static member        Zero (_:uint32         , _:Zero   ) = 0u
 
     static member inline Invoke ()   :'Num    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) b, a)
