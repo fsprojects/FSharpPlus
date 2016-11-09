@@ -355,9 +355,17 @@ type Duplicate =
         call (Unchecked.defaultof<Duplicate>, x, Unchecked.defaultof<'``Comonad<'Comonad<'T>>``>)
 
 
+// Contravariant class ----------------------------------------------------
+
 type Contramap =
     static member Contramap (g : _ -> 'R     , f : 'U -> 'T) = (<<) g f
     static member Contramap (p : Predicate<_>, f : 'U -> 'T) = Predicate(fun x -> p.Invoke(f x))
+    static member Contramap (c : IComparer<_>, f : 'U -> 'T) = { new IComparer<'U> with member __.Compare(x, y) = c.Compare(f x, f y) }
+    static member Contramap (c : IEqualityComparer<_>, f : 'U -> 'T) = { 
+        new IEqualityComparer<'U> with
+            member __.Equals(x, y)  = c.Equals(f x, f y)
+            member __.GetHashCode x = c.GetHashCode(f x) }
+    
     
     static member inline Invoke (f : 'U -> 'T) (x : '``Contravariant<'T>``) : '``Contravariant<'U>`` = 
         let inline call (mthd : 'M, source : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Contramap: _*_ -> _) source, f)

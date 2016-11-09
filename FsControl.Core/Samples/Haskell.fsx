@@ -425,6 +425,12 @@ let isEven      = System.Predicate(fun x -> x </mod'/> 2 = 0)
 let fstIsEven   = contramap List.head isEven
 let resBoolTrue = Predicate.run fstIsEven [0..10]
 
+type Person = Person of string
+let personEqComp = HashIdentity.Structural<Person>
+let personList = [1, Person "me"; 2, Person "you"; 3, Person "you"]
+let cnt3 = Seq.length <| System.Linq.Enumerable.Distinct(personList)
+let cnt2 = Seq.length <| System.Linq.Enumerable.Distinct(personList, contramap snd personEqComp)
+
 
 // BiFunctors
 
