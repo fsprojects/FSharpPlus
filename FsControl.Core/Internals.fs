@@ -144,6 +144,4 @@ type Id0(v:string) =
 
 type Either<'L,'R> = L of 'L | R of 'R
 
-
-
-
+type DmStruct = struct end
