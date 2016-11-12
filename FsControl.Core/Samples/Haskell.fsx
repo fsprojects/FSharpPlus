@@ -481,13 +481,23 @@ let inline app() = FsControl.Operators.getApp()
 let inline zeroArrow() = FsControl.Operators.getMZero()
 let inline (<+>)   f g = FsControl.Operators.(<|>) f g
 
-// Test Arrows
+// Test Categories
 let r5:List<_>  = (runKleisli (id'())) 5
 let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
 let r8n16n24n10n20n30 = runKleisli k  5
 
 let res1 = (System.Func<_,_>string >>> System.Func<_,_>int).Invoke '1'
 
+type MapTuple = MapTuple with
+    static member inline (?<-) (MapTuple, f, (x,y))   = (Invoke.Invoke (f, x), Invoke.Invoke (f, y)) 
+    static member inline (?<-) (MapTuple, f, (x,y,z)) = (Invoke.Invoke (f, x), Invoke.Invoke (f, y), Invoke.Invoke (f, z))
+let inline mapTuple f t = (?<-) MapTuple f t
+
+let tupInt5nInt5  = mapTuple (      List.max           >>>      List.min           ) ([[7;5;8]; [4;5;3]], [   [7;5;8]   ;    [4;5;3]]   )
+let tupInt5nChar5 = mapTuple (Unchecked.defaultof<Max> >>> Unchecked.defaultof<Min>) ([[7;5;8]; [4;5;3]], [['7';'5';'8']; ['4';'5';'3']])
+
+
+// Test Arrows
 let r20n5n30n5   = runKleisli (arrFirst  <| Kleisli (fun y -> [y * 2; y * 3])) (10,5) 
 let r10n10n10n15 = runKleisli (arrSecond <| Kleisli (fun y -> [y * 2; y * 3])) (10,5)
 

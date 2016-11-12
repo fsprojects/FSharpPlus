@@ -495,6 +495,31 @@ type Dimap with
     static member inline Dimap (_:^t when ^t: null and ^t: struct,     f:'T->'U, g:'V->'W,   mthd :Default1) = ()
 
 
+// Invokable class --------------------------------------------------------
+
+type Invoke =
+    inherit Default1
+
+    static member inline Invoke (_ : ^t when ^t : null and ^t : struct, _, output : ^O, mthd : Default1) = id
+    static member inline Invoke (f:'T, x, output : ^O, mthd : Default1) =  ((^T) : (static member Invoke  : _ -> _) x)
+    static member        Invoke (g :  'T -> 'U  , x:'T, output : 'U, mthd : Invoke) = g x        : 'U
+    static member        Invoke (g : Func<'T,'U>, x:'T, output : 'U, mthd : Invoke) = g.Invoke x : 'U
+
+    // No return type check
+    static member inline InvokeNRTC (f : '``Category<'T,'U>``, x : 'T) =
+        let inline call ( f : ^I, x:'TT) = ((^I or ^TT) : (static member Invoke : _-> _) x)
+        call (f, x)  
+
+    static member inline Invoke (f : '``Category<'T,'U>``, x : 'T) : 'U =
+        let inline call (mthd : ^M, f : ^I, output : ^R, x:'TT) = ((^M or ^TT) : (static member Invoke : _*_*_*_ -> _) f, x, output, mthd)
+        call (Unchecked.defaultof<Invoke>, f, Unchecked.defaultof<'U>, x)
+
+type ComposedStaticInvokable< ^F, ^G>  =
+    static member inline Invoke x =
+        let i  =  Invoke.Invoke (Unchecked.defaultof<'G>, x)
+        Invoke.Invoke (Unchecked.defaultof<'F>, i)
+
+
 // Category class ---------------------------------------------------------
 
 type Id =
@@ -514,7 +539,7 @@ type Id with
 
 
 type Comp =
-    inherit Default1  
+    inherit Default1
     static member ``<<<`` (f :  'U -> 'V  , g :  'T -> 'U  , [<Optional>]output : 'T -> 'V   , [<Optional>]mthd : Comp) = g >> f     : 'T -> 'V
     static member ``<<<`` (f : Func<'U,'V>, g : Func<'T,'U>, [<Optional>]output : Func<'T,'V>, [<Optional>]mthd : Comp) = Func<'T,'V>(g.Invoke >> f.Invoke)
 
@@ -523,10 +548,17 @@ type Comp =
         call (Unchecked.defaultof<Comp>, f, Unchecked.defaultof<'``Category<'T,'V>``>)
 
     static member inline InvokeOnInstance (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'T,'V>``) : (static member (<<<)  : _*_ -> _) f, g)
+    static member inline InvokeOnInstance' (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'U,'V>`` or ^``Category<'T,'U>``) : (static member (<<<)  : _*_ -> _) f, g) : '``Category<'T,'V>``
 
 type Comp with
-    static member inline ``<<<`` (f : '``Category<'U,'V>``, g : '``Category<'T,'U>``, output : '``Category<'T,'V>``             , mthd : Default1) = Comp.InvokeOnInstance f g     : '``Category<'T,'V>``
-    static member inline ``<<<`` (_ : '``Category<'U,'V>``, _ : '``Category<'T,'U>``, output : ^t when ^t : null and ^t : struct, mthd : Default1) = id
+    static member inline ``<<<`` (f : '``Category<'U,'V>``, g : '``Category<'T,'U>``, output : '``Category<'T,'V>``             , mthd : Default1) = Comp.InvokeOnInstance' f g     : '``Category<'T,'V>``
+    static member inline ``<<<`` (f:'F, g:'G, _, mthd : Default1) =         
+        let inline ivk (f : 'T) (x : 'U)  = ((^T) : (static member Invoke : _*_ -> _) f, x)    
+        let inline h f g x = 
+            let i  =  ivk f x
+            ivk g i
+        let _ = h f g
+        Unchecked.defaultof<ComposedStaticInvokable<'F,'G>>
 
 
 // Arrow class ------------------------------------------------------------
