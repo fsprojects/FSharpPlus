@@ -104,11 +104,10 @@ type Return =
  
     static member inline InvokeOnInstance (x:'T) = (^``Applicative<'T>`` : (static member Return: ^T -> ^``Applicative<'T>``) x)
 
-    static member inline Return (r:'R, _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
+    static member        Return (_:seq<'a> , _:Default2) = fun  x     -> Seq.singleton x :seq<'a>
+    static member inline Return (r:'R      , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
 
     static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
-    static member        Return (_:seq<'a> , _:Return) = fun x -> Seq.singleton x :seq<'a>
-    static member        Return (_:Id<'a>  , _:Return) = fun x -> Id x :Id<'a>
 #if NOTNET35        
     static member        Return (_:'a Task , _:Return) = fun x -> 
         let s = TaskCompletionSource()
