@@ -19,7 +19,6 @@ open FsControl.Internals.Prelude
 type Bind =
     static member        Bind (source : Lazy<'T>    , f : 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
     static member        Bind (source : seq<'T>     , f : 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
-    static member        Bind (source : Id<'T>      , f : 'T -> Id<'U>      ) = f source.getValue                                             : Id<'U>
 #if NOTNET35
     static member        Bind (source : Task<'T>    , f : 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()  : Task<'U>
 #endif
