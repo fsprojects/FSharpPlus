@@ -7,6 +7,8 @@ open FSharpPlus
 open FSharpPlus.Extensions
 
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
+    interface System.Collections.Generic.IEnumerable<'t> with member x.GetEnumerator() = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator()
+    interface System.Collections.IEnumerable             with member x.GetEnumerator() = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator() :> System.Collections.IEnumerator
     member this.head = let {Head = a; Tail = _} = this in a
     member this.tail = let {Head = _; Tail = a} = this in a
     member this.Item = function 0 -> this.head | n -> this.tail.[n-1]
