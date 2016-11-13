@@ -6,6 +6,10 @@ open FSharpPlus
 
 let inline print x = async { System.Console.WriteLine(toString x) }
 
+let nel = { NonEmptyList.Head = 1; Tail = [2;3;4] }
+let dCnt = Seq.length nel
+let sCnt = length nel
+
 async {
     let arr = [|1;2;3;4|]
     let skip2 = skip 2 arr
