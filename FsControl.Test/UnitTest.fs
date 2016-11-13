@@ -4,6 +4,12 @@ open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open FsControl.Operators
 
+type MonadBuilder() =
+    member inline b.Return(x)    = result x
+    member inline b.Bind(p,rest) = p >>= rest
+    member        b.Let (p,rest) = rest p
+    member    b.ReturnFrom(expr) = expr
+
 module Combinators =
     let inline flip f x y = f y x
     let inline konst k _ = k
@@ -11,11 +17,8 @@ module Combinators =
     let inline (/>) x = flip x
     let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
     let inline option n f = function None -> n | Some x -> f x
-
+    let monad     = new MonadBuilder()
 open Combinators
-
-
-
 
 
 type WrappedListA<'s> = WrappedListA of 's list with
@@ -33,6 +36,13 @@ type WrappedListC<'s> = WrappedListC of 's list with
     static member Append  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
     static member Empty   = WrappedListC List.empty
     static member Concat  (lst: seq<WrappedListC<_>>)  = Seq.head lst
+
+type WrappedListD<'s> = WrappedListD of 's list with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator()
+    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
+    static member Return  (x) = WrappedListD [x]
+    static member Bind ((WrappedListD x):WrappedListD<'T>, f) = WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
+
 
 [<TestClass>]
 type Monoid() =
@@ -85,6 +95,19 @@ type Foldable() =
         let s' = sortBy id s
         Assert.AreEqual (l', [4;6;10;89])
         Assert.AreEqual (s', WrappedListB [4;6;10;89])
+
+
+[<TestClass>]
+type Monad() = 
+    [<TestMethod>]
+    member x.WorkFlow() =     
+        let testVal = 
+            monad {
+                let! x1 = WrappedListD [1;2]
+                let! x2 = WrappedListD [10;20]
+                return ((+) x1 x2) }
+        Assert.IsInstanceOfType (testVal, typeof<WrappedListD<int>>)
+
 
 
 [<TestClass>]
