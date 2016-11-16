@@ -171,7 +171,8 @@ type DoNotationBuilder() =
     member inline b.Return(x)    = return' x
     member inline b.Bind(p,rest) = p >>= rest
     member        b.Let (p,rest) = rest p
-    member    b.ReturnFrom(expr) = expr
+    member        b.ReturnFrom(expr) = expr
+    member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
 let do' = new DoNotationBuilder()
 
 
@@ -345,6 +346,7 @@ type DoPlusNotationBuilder() =
     member b.ReturnFrom(expr) = expr
     member inline x.Zero() = mzero()
     member inline x.Combine(a, b) = mplus a b
+    member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
 let doPlus = new DoPlusNotationBuilder()
 
 // Test MonadPlus

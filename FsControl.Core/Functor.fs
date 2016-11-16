@@ -270,6 +270,24 @@ type MPlus =
         call (Unchecked.defaultof<MPlus>, x, y)
 
 
+type Delay =
+    inherit Default1
+    
+    static member inline Delay (mthd: Default1 , x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` :     struct, _:Default2) = x()
+    static member inline Delay (mthd: Default1 , x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` : not struct, _:Default1) = x()
+    static member inline Delay (mthd: Default1 , x: unit-> ^I                                             , _:Delay   ) = (^I : (static member Delay: _->_) x) :^I
+    static member inline Delay (mthd: Default1 , x: unit-> ^t when  ^t : null and ^t  : struct            , _         ) = ()
+
+    static member        Delay (mthd: Delay    , x: unit-> _                                              , _         ) = Seq.delay(x)     : seq<'T>
+    static member        Delay (mthd: Delay    , x: unit-> _                                              , _         ) = async.Delay(x)   : Async<'T>
+    static member        Delay (mthd: Delay    , x: unit-> Lazy<_>                                        , _         ) = lazy (x().Value) : Lazy<'T>
+
+    static member inline Invoke source : 'R =
+        let inline call (mthd : ^M, input : unit -> ^I) = ((^M or ^I) : (static member Delay: _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
+        call (Unchecked.defaultof<Delay>, source)
+
+
+
 
 namespace FsControl.Internals
 module internal MonadOps =
