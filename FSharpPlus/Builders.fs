@@ -22,12 +22,14 @@ module Builders =
     type MonadBuilder() =
         member inline b.Return(x)    = result x
         member inline b.Bind(p,rest) = p >>= rest
-        member        b.Let (p,rest) = rest p
+        member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
+        member        b.Let (p,rest) = rest p        
         member    b.ReturnFrom(expr) = expr
 
     type MonadPlusBuilder() =
         member inline b.Return(x) = result x
         member inline b.Bind(p,rest) = p >>= rest
+        member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
         member b.Let(p,rest) = rest p
         member b.ReturnFrom(expr) = expr
         member inline x.Zero() = getMZero()
@@ -41,6 +43,7 @@ module Builders =
     type LinqBuilder() =
         member inline __.Return(x)     = result x
         member inline __.Bind(p, rest) = p >>= rest
+        member inline __.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
         member        __.Let (p, rest) = rest p
         member    __.ReturnFrom(expr)  = expr
         member inline __.For(p, rest)  = p >>= rest
