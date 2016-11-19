@@ -556,18 +556,18 @@ type Id with
 
 type Comp =
     inherit Default1
-    static member ``<<<`` (f :  'U -> 'V  , g :  'T -> 'U  , [<Optional>]output : 'T -> 'V   , [<Optional>]mthd : Comp) = g >> f     : 'T -> 'V
-    static member ``<<<`` (f : Func<'U,'V>, g : Func<'T,'U>, [<Optional>]output : Func<'T,'V>, [<Optional>]mthd : Comp) = Func<'T,'V>(g.Invoke >> f.Invoke)
+    static member ``<<<`` (f :  'U -> 'V  , g :  'T -> 'U  , [<Optional>]output (*: 'T -> 'V   *), [<Optional>]mthd : Comp) = g >> f     : 'T -> 'V
+    static member ``<<<`` (f : Func<'U,'V>, g : Func<'T,'U>, [<Optional>]output (*: Func<'T,'V>*), [<Optional>]mthd : Comp) = Func<'T,'V>(g.Invoke >> f.Invoke)
 
     static member inline Invoke (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` =
         let inline call (mthd : ^M, f : ^I, output : ^R) = ((^M or ^I or ^R) : (static member ``<<<`` : _*_*_*_ -> _) f, g, output, mthd)
-        call (Unchecked.defaultof<Comp>, f, Unchecked.defaultof<'``Category<'T,'V>``>)
+        call (Unchecked.defaultof<Comp>, f, Unchecked.defaultof<Comp>)  //Unchecked.defaultof<'``Category<'T,'V>``>)
 
     static member inline InvokeOnInstance (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'T,'V>``) : (static member (<<<)  : _*_ -> _) f, g)
     static member inline InvokeOnInstance' (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'U,'V>`` or ^``Category<'T,'U>``) : (static member (<<<)  : _*_ -> _) f, g) : '``Category<'T,'V>``
 
 type Comp with
-    static member inline ``<<<`` (f : '``Category<'U,'V>``, g : '``Category<'T,'U>``, output : '``Category<'T,'V>``             , mthd : Default1) = Comp.InvokeOnInstance' f g     : '``Category<'T,'V>``
+    static member inline ``<<<`` (f : '``Category<'U,'V>``, g : '``Category<'T,'U>``, output (* : '``Category<'T,'V>``   *)          , mthd : Default1) = Comp.InvokeOnInstance' f g     : '``Category<'T,'V>``
     static member inline ``<<<`` (f:'F, g:'G, _, mthd : Default1) =         
         let inline ivk (f : 'T) (x : 'U)  = ((^T) : (static member Invoke : _*_ -> _) f, x)    
         let inline h f g x = 
