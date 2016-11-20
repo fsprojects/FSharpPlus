@@ -273,7 +273,8 @@ type Scan =
 [<Extension;Sealed>]
 type Sort =
     inherit Default1
-    [<Extension>]static member inline Sort (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Sort (x:'Foldable'T, [<Optional>]impl:Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke :'Foldable'T
+    [<Extension>]static member inline Sort (x:^Foldable'T, [<Optional>]impl:Default1) = ((^Foldable'T) : (static member Sort: _->_) x) : ^Foldable'T
     [<Extension>]static member        Sort (x:list<'a>   , [<Optional>]impl:Sort    ) = List.sort  x
     [<Extension>]static member        Sort (x:'a []      , [<Optional>]impl:Sort    ) = Array.sort x
 
@@ -285,7 +286,7 @@ type Sort =
 
 type SortBy =
     inherit Default1
-    static member inline SortBy (x:'Foldable'T, f      , [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.sortBy f |> OfSeq.Invoke :'Foldable'T
+
     static member        SortBy (x:list<'a>   , f      , [<Optional>]impl:SortBy  ) = List.sortBy  f x
     static member        SortBy (x:'a []      , f      , [<Optional>]impl:SortBy  ) = Array.sortBy f x
 
@@ -293,6 +294,11 @@ type SortBy =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member SortBy: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<SortBy>, source, projection)
+    static member inline InvokeOnInstance (projection:'T->'Key) (source:'Collection'T) : 'Collection'T = (^Collection'T : (static member SortBy: _*_->_) projection, source) : ^Collection'T
+
+    static member inline SortBy (x:'Foldable'T, f      , [<Optional>]impl:Default2) = x |> ToSeq.Invoke |> Seq.sortBy f |> OfSeq.Invoke :'Foldable'T
+    static member inline SortBy (x:^Foldable'T, f      , [<Optional>]impl:Default1) = ((^Foldable'T) : (static member SortBy: _*_->_) f, x) : ^Foldable'T
+    static member inline SortBy (_ : ^t when ^t : null and ^t : struct, f : 'T -> 'U, mthd : Default1) = id
 
 
 [<Extension;Sealed>]
