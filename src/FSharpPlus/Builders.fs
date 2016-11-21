@@ -51,11 +51,17 @@ module Builders =
         member inline __.Zero()        = getMZero()
         member inline __.Combine(a, b) = a <|> b
 
-        [<CustomOperation("select", MaintainsVariableSpace=true)>]
+        [<CustomOperation("select", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
         member inline __.Select(x, [<ProjectionParameter>] f) = map f x
 
         [<CustomOperation("where", MaintainsVariableSpace=true)>]
         member inline __.Where(x, [<ProjectionParameter>] p) = filter p x
+
+        [<CustomOperation("head")>] 
+        member inline __.Head(source) = head source
+
+        [<CustomOperation("nth")>]
+        member inline __.Head(source, n) = nth n
 
         [<CustomOperation("groupBy", AllowIntoPattern=true)>]
         member inline __.GroupBy (x,[<ProjectionParameter>] f : 't -> 'key) = groupBy f x
