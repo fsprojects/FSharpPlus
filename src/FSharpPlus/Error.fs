@@ -48,7 +48,7 @@ type ErrorT with
     static member inline (<*>)  (f : ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>, x : ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT.apply f x : ErrorT<'``Monad<'Choice<'U,'E>>``>
     static member inline Bind   (x : ErrorT<'``Monad<'Choice<'T,'E>>``>, f : 'T->ErrorT<'``Monad<'Choice<'U,'E>>``>)     = ErrorT.bind f x
 
-    static member inline Lift (x:'``Monad<'T>``) = x |> map Choice1Of2 |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
+    static member inline Lift (x:'``Monad<'T>``) = x |> liftM Choice1Of2 |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
 
     static member inline Throw (x:'E) =  x |> Choice2Of2 |> result |> ErrorT : ErrorT<'``Monad<Choice<'T,'E>>``>
     static member inline Catch (ErrorT x :ErrorT<'``MonadError<'E1,'T>``>, f: 'E1 -> _) = (ErrorT (x >>= (fun a -> match a with Choice2Of2 l -> ErrorT.run (f l) | Choice1Of2 r -> result (Choice1Of2 r)))) : ErrorT<'``Monad<Choice<'T,'E2>>``>
