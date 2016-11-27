@@ -29,7 +29,7 @@ type OptionT with
     static member inline MZero (output: OptionT<'``MonadPlus<option<'T>``>, impl:MZero) = OptionT <| result None                                                                   : OptionT<'``MonadPlus<option<'T>``>
     static member inline MPlus (OptionT x, OptionT y, impl:MPlus)                       = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> x | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>
 
-    static member inline Lift (x:'``Monad<'T>``) = x |> map Some |> OptionT : OptionT<'``Monad<option<'T>>``>
+    static member inline Lift (x:'``Monad<'T>``) = x |> liftM Some |> OptionT : OptionT<'``Monad<option<'T>>``>
 
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x)  : '``OptionT<'MonadAsync<'T>>``
 
