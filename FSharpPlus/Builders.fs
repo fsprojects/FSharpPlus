@@ -55,7 +55,7 @@ module Builders =
         member inline __.Select(x, [<ProjectionParameter>] f) = map f x
 
         [<CustomOperation("where", MaintainsVariableSpace=true)>]
-        member inline __.Where(x, [<ProjectionParameter>] p) = filter p x
+        member inline __.Where(x, [<ProjectionParameter>] p) = mfilter p x
 
         [<CustomOperation("head")>] 
         member inline __.Head(source) = head source
