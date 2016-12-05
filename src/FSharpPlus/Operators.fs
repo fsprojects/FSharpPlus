@@ -489,6 +489,9 @@ module Operators =
     /// Folds a Foldable of a Monoid, using its empty as initial state and append as folder.
     let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x
 
+    /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the mzero value.
+    let inline mfilter predicate (m:'``MonadZero<'t>``) :'``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else FsControl.MZero.Invoke()
+
     /// Returns the sum of the elements in the Foldable.
     let inline sum (x:'Foldable'Num) : 'Num = fold (+) (getZero(): 'Num) x
 

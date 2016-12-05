@@ -177,10 +177,6 @@ module Compatibility =
 
         let doPlus = new Builders.MonadPlusBuilder()
 
-        let inline mfilter p ma = do' {
-            let! a = ma
-            if p a then return a else return! mzero()}
-
 
 
 
