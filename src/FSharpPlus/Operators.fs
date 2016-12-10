@@ -513,6 +513,23 @@ module Operators =
     let inline Success x = Choice1Of2 x
     let inline Failure x = Choice2Of2 x
 
+
+    /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
+    module Arrows =
+    
+        /// Right-to-left morphism composition.        
+        let inline (<<<) f g = catComp f g
+        
+        /// Left-to-right morphism composition.
+        let inline (>>>) f g = catComp g f
+        
+        /// Send the input to both argument arrows and combine their output. Also known as fanout.
+        let inline (&&&) (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1 * 'U2)>`` = Fanout.Invoke f g
+
+        /// Split the input between the two argument arrows and merge their outputs. Also known as fanin.
+        let inline (|||) (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g    
+
+
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
     module ApplicativeMath =
 
