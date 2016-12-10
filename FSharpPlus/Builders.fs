@@ -57,8 +57,8 @@ module Builders =
         [<CustomOperation("where", MaintainsVariableSpace=true)>]
         member inline __.Where(x, [<ProjectionParameter>] p) = mfilter p x
 
-        [<CustomOperation("head")>] 
-        member inline __.Head(source) = head source
+        [<CustomOperation("first")>] 
+        member inline __.First(source) = head source
 
         [<CustomOperation("nth")>]
         member inline __.Head(source, n) = nth n
