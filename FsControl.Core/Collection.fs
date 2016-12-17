@@ -302,6 +302,21 @@ type SortBy =
 
 
 [<Extension;Sealed>]
+type Split =
+    inherit Default1
+    [<Extension>]static member        Split (x:seq<'T>      , e:seq<'T> []      , [<Optional>]impl:Split) = x |>                 Seq.split StringSplitOptions.None e                       |> Seq.toArray
+    [<Extension>]static member        Split (x:list<'T>     , e:list<'T> []     , [<Optional>]impl:Split) = x |> List.toSeq   |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toList |> Seq.toArray
+    [<Extension>]static member        Split (x:'T []        , e:'T [] []        , [<Optional>]impl:Split) = x |> Array.toSeq  |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toArray|> Seq.toArray
+    [<Extension>]static member        Split (x:string       , e:string []       , [<Optional>]impl:Split) = x.Split(e, StringSplitOptions.None)
+    [<Extension>]static member        Split (x:StringBuilder, e:StringBuilder [], [<Optional>]impl:Split) = x.ToString().Split(e |> Array.map (fun x -> x.ToString()), StringSplitOptions.None) |> Array.map StringBuilder
+ 
+    static member inline Invoke      (sep:'Collection'T [])        (source:'Collection'T)       =
+        let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Split: _*_*_ -> _) b, s, a)
+        let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
+        call (Unchecked.defaultof<Split>, source,sep) :'Collection'T []
+
+
+[<Extension;Sealed>]
 type Zip =
     [<Extension>]static member Zip (x:Id<'T>  , y:Id<'U>  , [<Optional>]output:Id<'T*'U>  , [<Optional>]impl:Zip) = Id.create(x.getValue,y.getValue)
     [<Extension>]static member Zip (x:seq<'T> , y:seq<'U> , [<Optional>]output:seq<'T*'U> , [<Optional>]impl:Zip) = Seq.zip   x y

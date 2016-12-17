@@ -144,7 +144,7 @@ module Operators =
     let inline pick     (chooser:'T->'U option) (source:'``Foldable<'T>``)   = Pick.Invoke    chooser   source  :'U
     let inline tryPick  (chooser:'T->'U option) (source:'``Foldable<'T>``)   = TryPick.Invoke chooser   source  :'U option
     let inline filter (predicate:_->bool) (x:'``Foldable<'a>``) :'``Foldable<'a>`` =  Filter.Invoke predicate x
-
+       
 
     // Traversable
 
@@ -325,6 +325,7 @@ module Operators =
 
     let inline sort                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Sort.Invoke source 
     let inline sortBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
+    let inline split  (sep:'``Collection<'T>`` []) (source:'``Collection<'T>``) = Split.Invoke sep source : '``Collection<'T>`` []
     let inline toSeq (source:'``Collection<'T>``) = ToSeq.Invoke source  :seq<'T>
 
     let inline zip (source1:'``Collection<'T1>``) (source2:'``Collection<'T2>``) : '``Collection<'T1 * 'T2>`` = Zip.Invoke source1 source2    

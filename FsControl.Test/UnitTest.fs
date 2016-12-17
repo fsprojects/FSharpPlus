@@ -271,3 +271,17 @@ type Numerics() =
         let res19 = abs' argBigRational
 
         Assert.AreEqual(res09 * res19, argBigRational)
+
+
+[<TestClass>]
+type Splits() = 
+    [<TestMethod>]
+    member x.Splits() = 
+        let a1 = "this.isABa.tABCest"  |> split [|"AT";"ABC"|]
+        let a2 = "this.isABa.tABCest"B |> split [|"AT"B;"ABC"B|]  |> Seq.map System.Text.Encoding.ASCII.GetString |> Seq.toArray
+
+        let b1 = "this.is.a.t...est" |> split [|".";"..."|]
+        let b2 = "this.is.a.t...est"B |> split [|"."B;"..."B|] |> Seq.map System.Text.Encoding.ASCII.GetString |> Seq.toArray
+
+        Assert.IsTrue((a1 = a2))
+        Assert.IsTrue((b1 = b2))

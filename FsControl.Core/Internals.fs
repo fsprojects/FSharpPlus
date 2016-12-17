@@ -65,6 +65,32 @@ module internal Seq =
             yield element
             notFirst := true}
 
+    let inline split options separators source = seq {
+        match separators |> Seq.map Seq.toList |> Seq.toList with
+        | []         -> yield source
+        | separators ->
+            let buffer = ResizeArray()
+            let candidate = separators |> List.map List.length |> List.max |> ResizeArray
+            let mutable i = 0
+            for item in source do
+                candidate.Add item
+                match separators |> List.filter (fun sep -> sep.Length > i && item = sep.[i]) with
+                | [] ->
+                    i <- 0
+                    buffer.AddRange candidate
+                    candidate.Clear()                    
+                | seps ->
+                    match seps |> List.tryFind (fun sep -> sep.Length = i + 1) with
+                    | Some sep ->
+                        i <- 0
+                        if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer.ToArray() :> seq<_>
+                        buffer.Clear()
+                        candidate.Clear()                        
+                    | _ -> i <- i + 1
+            if candidate.Count > 0 then buffer.AddRange candidate
+            if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_>
+    }
+
     let inline drop i (source:seq<_>) =
         let mutable count = i
         use e = source.GetEnumerator()
