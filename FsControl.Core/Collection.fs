@@ -161,16 +161,16 @@ type ChunkBy =
 [<Extension;Sealed>]
 type Intercalate =
     inherit Default1
-    [<Extension>]static member inline Intercalate (x:seq<seq<'T>>      , e:seq<'T>      , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e
-    [<Extension>]static member        Intercalate (x:seq<list<'T>>     , e:list<'T>     , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
-    [<Extension>]static member        Intercalate (x:seq<'T []>        , e:'T []        , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
-    [<Extension>]static member        Intercalate (x:seq<string>       , e:string       , [<Optional>]impl:Intercalate) = String.Join(e, x)
-    [<Extension>]static member        Intercalate (x:seq<StringBuilder>, e:StringBuilder, [<Optional>]impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
+    [<Extension>]static member inline Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]impl:Default1   ) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
+    [<Extension>]static member        Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
+    [<Extension>]static member        Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
+    [<Extension>]static member        Intercalate (x:seq<string>           , e:string           , [<Optional>]impl:Intercalate) = String.Join(e, x)
+    [<Extension>]static member        Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
  
-    static member inline Invoke      (sep:'Collection)        (source:seq<'Collection'T>)        =
+    static member inline Invoke      (sep:'``Foldable<'T>``)        (source:seq<'``Foldable<'T>``>)        =
         let inline call_2 (a:^a, b:^b, s:^c) = ((^a or ^c) : (static member Intercalate: _*_*_ -> _) b, s, a)
         let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
-        call (Unchecked.defaultof<Intercalate>, source,sep) :'Collection
+        call (Unchecked.defaultof<Intercalate>, source,sep) :'``Foldable<'T>``
 
 
 [<Extension;Sealed>]

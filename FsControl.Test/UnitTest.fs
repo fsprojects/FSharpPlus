@@ -300,4 +300,7 @@ type Splits() =
         let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
         let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B  |> System.Text.Encoding.ASCII.GetString
 
+        let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
+
         Assert.IsTrue((a1 = a2))
+        Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
