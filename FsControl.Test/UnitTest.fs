@@ -273,6 +273,11 @@ type Numerics() =
         Assert.AreEqual(res09 * res19, argBigRational)
 
 
+type Sum<'a> = Sum of 'a with
+    static member inline get_Empty() = Sum 0G
+    static member inline Append (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
+
+
 [<TestClass>]
 type Splits() = 
     [<TestMethod>]
@@ -302,5 +307,8 @@ type Splits() =
 
         let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
 
+        let c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
+
         Assert.IsTrue((a1 = a2))
         Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
+        Assert.IsTrue((c = Sum 13))

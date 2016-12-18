@@ -161,7 +161,9 @@ type ChunkBy =
 [<Extension;Sealed>]
 type Intercalate =
     inherit Default1
-    [<Extension>]static member inline Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]impl:Default1   ) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
+                 static member inline Intercalate (x:seq<'Monoid>, e:'Monoid, [<Optional>]impl:Default2) = let f t x = match (t, x) with (true, _) , x -> (false, x) | (_, acc ) , x -> (false, Append.Invoke (Append.Invoke acc e) x) in Seq.fold f (true, Empty.Invoke()) x |> snd
+                 static member inline Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]impl:Default1) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
+                 static member inline Intercalate (x:seq<'``Foldable<'T>``>, _ : ^t when ^t : null and ^t : struct, [<Optional>]impl:Default1) = id
     [<Extension>]static member        Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
     [<Extension>]static member        Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
     [<Extension>]static member        Intercalate (x:seq<string>           , e:string           , [<Optional>]impl:Intercalate) = String.Join(e, x)
