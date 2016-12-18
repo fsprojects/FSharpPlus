@@ -309,6 +309,9 @@ type Splits() =
 
         let c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
 
+        let d = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
+
         Assert.IsTrue((a1 = a2))
         Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
         Assert.IsTrue((c = Sum 13))
+        Assert.IsTrue((d = Sum 13))
