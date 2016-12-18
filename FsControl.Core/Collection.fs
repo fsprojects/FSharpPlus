@@ -246,6 +246,22 @@ type MinBy =
 
 
 [<Extension;Sealed>]
+type Replace =
+    inherit Default1
+    [<Extension>]static member        Replace (x:seq<'T>      , o:seq<'T>      , n:seq<'T>      , [<Optional>]impl:Default1) = Seq.replace o n x
+                 static member        Replace (x:Id<'T>       , o:Id<'T>       , n:Id<'T>       , [<Optional>]impl:Default1) = if x = o then n else x
+    [<Extension>]static member        Replace (x:list<'T>     , o:list<'T>     , n:list<'T>     , [<Optional>]impl:Replace ) = x |> List.toSeq   |> Seq.replace o n |> Seq.toList
+    [<Extension>]static member        Replace (x:'T []        , o:'T []        , n:'T []        , [<Optional>]impl:Replace ) = x |> Array.toSeq  |> Seq.replace o n |> Seq.toArray
+    [<Extension>]static member        Replace (x:string       , o:string       , n:string       , [<Optional>]impl:Replace ) = if o.Length = 0 then x else x.Replace(o, n)
+    [<Extension>]static member        Replace (x:StringBuilder, o:StringBuilder, n:StringBuilder, [<Optional>]impl:Replace ) = if o.Length = 0 then x else StringBuilder(x.ToString().Replace(o.ToString(), n.ToString()))
+ 
+    static member inline Invoke      (o:'Collection) (n:'Collection) (source:'Collection) =
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Replace: _*_*_*_ -> _) b, o, n, a)
+        let inline call (a:'a, b:'b) = call_2 (a, b)
+        call (Unchecked.defaultof<Replace>, source) :'Collection
+
+
+[<Extension;Sealed>]
 type Rev =
     inherit Default1
     [<Extension>]static member inline Rev (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray |> Array.rev |> Array.toSeq |> OfSeq.Invoke :'Foldable'T

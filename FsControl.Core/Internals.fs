@@ -88,8 +88,28 @@ module internal Seq =
                         candidate.Clear()                        
                     | _ -> i <- i + 1
             if candidate.Count > 0 then buffer.AddRange candidate
-            if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_>
-    }
+            if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
+
+    let inline replace (oldValue:seq<'t>) (newValue:seq<'t>) (source:seq<'t>) :seq<'t> = seq {
+        let old = oldValue |> Seq.toList
+        if (old.Length = 0) then
+            yield! source
+        else
+            let candidate = ResizeArray(old.Length)
+            let mutable sindex = 0
+            for item in source do
+                candidate.Add(item)
+                if (item = old.[sindex]) then
+                    sindex <- sindex + 1
+                    if (sindex >= old.Length) then
+                        sindex <- 0
+                        yield! newValue
+                        candidate.Clear()                    
+                else
+                    sindex <- 0
+                    yield! candidate
+                    candidate.Clear()                
+            yield! candidate}
 
     let inline drop i (source:seq<_>) =
         let mutable count = i

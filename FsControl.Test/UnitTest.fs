@@ -276,12 +276,22 @@ type Numerics() =
 [<TestClass>]
 type Splits() = 
     [<TestMethod>]
-    member x.Splits() = 
-        let a1 = "this.isABa.tABCest"  |> split [|"AT";"ABC"|]
-        let a2 = "this.isABa.tABCest"B |> split [|"AT"B;"ABC"B|]  |> Seq.map System.Text.Encoding.ASCII.GetString |> Seq.toArray
+    member x.SplitArraysAndStrings() = 
+        let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
+        let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|]  |> Seq.map System.Text.Encoding.ASCII.GetString |> Seq.toArray
 
-        let b1 = "this.is.a.t...est" |> split [|".";"..."|]
-        let b2 = "this.is.a.t...est"B |> split [|"."B;"..."B|] |> Seq.map System.Text.Encoding.ASCII.GetString |> Seq.toArray
+        let b1 = "this.is.a.t...est"  |> split [|"." ; "..." |]
+        let b2 = "this.is.a.t...est"B |> split [|"."B; "..."B|] |> Seq.map System.Text.Encoding.ASCII.GetString |> Seq.toArray
+
+        Assert.IsTrue((a1 = a2))
+        Assert.IsTrue((b1 = b2))
+
+    member x.ReplaceArraysAndStrings() = 
+        let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
+        let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B  |> System.Text.Encoding.ASCII.GetString
+
+        let b1 = "this.is.a.t...est"  |> replace "."  "..."
+        let b2 = "this.is.a.t...est"B |> replace "."B "..."B |> System.Text.Encoding.ASCII.GetString
 
         Assert.IsTrue((a1 = a2))
         Assert.IsTrue((b1 = b2))
