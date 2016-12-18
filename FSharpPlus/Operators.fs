@@ -166,7 +166,9 @@ module Operators =
     let inline pick     (chooser:'T->'U option) (source:'``Foldable<'T>``)   = Pick.Invoke    chooser   source  :'U
     let inline tryPick  (chooser:'T->'U option) (source:'``Foldable<'T>``)   = TryPick.Invoke chooser   source  :'U option
     let inline filter (predicate:_->bool) (x:'``Foldable<'a>``) :'``Foldable<'a>`` =  Filter.Invoke predicate x
-
+    let inline intercalate      (sep:'Monoid)   (source:'``Foldable<'Monoid>``)    = Intercalate.Invoke sep source : 'Monoid
+    let inline intersperse      (sep:'T)        (source:'``Foldable<'T>``)         = Intersperse.Invoke sep source : '``Foldable<'T>``
+       
 
     // Traversable
 
@@ -335,18 +337,18 @@ module Operators =
     let inline head                             (source:'``Collection<'T>``)        = Head.Invoke source    :'T
     let inline tryHead                          (source:'``Collection<'T>``)        = TryHead.Invoke source :'T option
 
-    let inline intersperse      (sep:'T)        (source:'``Collection<'T>``)        = Intersperse.Invoke sep source        : '``Collection<'T>``
-
     let inline length (source:'``Collection<'T>``) :int                             = Length.Invoke source
 
     let inline maxBy (projection:'T->'U) (source:'``Collection<'T>``)               = MaxBy.Invoke projection  source    : 'T
     let inline minBy (projection:'T->'U) (source:'``Collection<'T>``)               = MinBy.Invoke projection  source    : 'T
 
+    let inline replace (oldValue:'Collection) (newValue:'Collection) (source:'Collection) = Replace.Invoke oldValue newValue source : 'Collection
     let inline rev  (source:'``Collection<'T>``)                                    = Rev.Invoke source :'``Collection<'T>``
     let inline scan (folder:'State'->'T->'State) state (source:'``Collection<'T>``) = Scan.Invoke folder (state:'State) source : '``Collection<'State>``
 
     let inline sort                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Sort.Invoke source 
     let inline sortBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
+    let inline split (sep:seq<'Collection>) (source:'Collection) = Split.Invoke sep source : seq<'Collection>
     let inline toSeq (source:'``Collection<'T>``) = ToSeq.Invoke source  :seq<'T>
 
     let inline zip (source1:'``Collection<'T1>``) (source2:'``Collection<'T2>``) : '``Collection<'T1 * 'T2>`` = Zip.Invoke source1 source2    
