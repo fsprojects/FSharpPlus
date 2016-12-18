@@ -161,13 +161,13 @@ type ChunkBy =
 [<Extension;Sealed>]
 type Intercalate =
     inherit Default1
-    [<Extension>]static member inline Intercalate (x:seq<'T> []      , e:seq<'T>      , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e
-    [<Extension>]static member        Intercalate (x:list<'T> []     , e:list<'T>     , [<Optional>]impl:Intercalate) = x |> Array.toSeq |> Seq.intercalate e |> Seq.toList
-    [<Extension>]static member        Intercalate (x:'T [] []        , e:'T []        , [<Optional>]impl:Intercalate) = x |> Array.toSeq |> Seq.intercalate e |> Seq.toArray
-    [<Extension>]static member        Intercalate (x:string []       , e:string       , [<Optional>]impl:Intercalate) = String.Join(e, x)
-    [<Extension>]static member        Intercalate (x:StringBuilder [], e:StringBuilder, [<Optional>]impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Array.map (fun x -> x.ToString()) x))
+    [<Extension>]static member inline Intercalate (x:seq<seq<'T>>      , e:seq<'T>      , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e
+    [<Extension>]static member        Intercalate (x:seq<list<'T>>     , e:list<'T>     , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
+    [<Extension>]static member        Intercalate (x:seq<'T []>        , e:'T []        , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
+    [<Extension>]static member        Intercalate (x:seq<string>       , e:string       , [<Optional>]impl:Intercalate) = String.Join(e, x)
+    [<Extension>]static member        Intercalate (x:seq<StringBuilder>, e:StringBuilder, [<Optional>]impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
  
-    static member inline Invoke      (sep:'Collection)        (source:'Collection [])        =
+    static member inline Invoke      (sep:'Collection)        (source:seq<'Collection'T>)        =
         let inline call_2 (a:^a, b:^b, s:^c) = ((^a or ^c) : (static member Intercalate: _*_*_ -> _) b, s, a)
         let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
         call (Unchecked.defaultof<Intercalate>, source,sep) :'Collection
@@ -335,16 +335,16 @@ type SortBy =
 [<Extension;Sealed>]
 type Split =
     inherit Default1
-    [<Extension>]static member        Split (x:seq<'T>      , e:seq<'T> []      , [<Optional>]impl:Split) = x |>                 Seq.split StringSplitOptions.None e                       |> Seq.toArray
-    [<Extension>]static member        Split (x:list<'T>     , e:list<'T> []     , [<Optional>]impl:Split) = x |> List.toSeq   |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toList |> Seq.toArray
-    [<Extension>]static member        Split (x:'T []        , e:'T [] []        , [<Optional>]impl:Split) = x |> Array.toSeq  |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toArray|> Seq.toArray
-    [<Extension>]static member        Split (x:string       , e:string []       , [<Optional>]impl:Split) = x.Split(e, StringSplitOptions.None)
-    [<Extension>]static member        Split (x:StringBuilder, e:StringBuilder [], [<Optional>]impl:Split) = x.ToString().Split(e |> Array.map (fun x -> x.ToString()), StringSplitOptions.None) |> Array.map StringBuilder
+    [<Extension>]static member        Split (x:seq<'T>      , e:seq<seq<'T>>      , [<Optional>]impl:Split) = x |>                 Seq.split StringSplitOptions.None e
+    [<Extension>]static member        Split (x:list<'T>     , e:seq<list<'T>>     , [<Optional>]impl:Split) = x |> List.toSeq   |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toList
+    [<Extension>]static member        Split (x:'T []        , e:seq<'T []>        , [<Optional>]impl:Split) = x |> Array.toSeq  |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toArray
+    [<Extension>]static member        Split (x:string       , e:seq<string>       , [<Optional>]impl:Split) = x.Split(Seq.toArray e, StringSplitOptions.None) :> seq<_>
+    [<Extension>]static member        Split (x:StringBuilder, e:seq<StringBuilder>, [<Optional>]impl:Split) = x.ToString().Split(e |> Seq.map (fun x -> x.ToString()) |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder :> seq<_>
  
-    static member inline Invoke      (sep:'Collection'T [])        (source:'Collection'T)       =
+    static member inline Invoke      (sep:seq<'Collection>)        (source:'Collection)       =
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Split: _*_*_ -> _) b, s, a)
         let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
-        call (Unchecked.defaultof<Split>, source,sep) :'Collection'T []
+        call (Unchecked.defaultof<Split>, source,sep) :seq<'Collection>
 
 
 [<Extension;Sealed>]

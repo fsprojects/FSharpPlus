@@ -313,7 +313,7 @@ module Operators =
     let inline head                             (source:'``Collection<'T>``)        = Head.Invoke source    :'T
     let inline tryHead                          (source:'``Collection<'T>``)        = TryHead.Invoke source :'T option
 
-    let inline intercalate    (sep:'Collection) (source:'Collection [])             = Intercalate.Invoke sep source        : 'Collection
+    let inline intercalate    (sep:'Collection) (source:seq<'Collection>)           = Intercalate.Invoke sep source        : 'Collection
     let inline intersperse      (sep:'T)        (source:'``Collection<'T>``)        = Intersperse.Invoke sep source        : '``Collection<'T>``
 
     let inline length (source:'``Collection<'T>``) :int                             = Length.Invoke source
@@ -327,7 +327,7 @@ module Operators =
 
     let inline sort                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Sort.Invoke source 
     let inline sortBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
-    let inline split  (sep:'``Collection<'T>`` []) (source:'``Collection<'T>``) = Split.Invoke sep source : '``Collection<'T>`` []
+    let inline split (sep:seq<'Collection>) (source:'Collection) = Split.Invoke sep source : seq<'Collection>
     let inline toSeq (source:'``Collection<'T>``) = ToSeq.Invoke source  :seq<'T>
 
     let inline zip (source1:'``Collection<'T1>``) (source2:'``Collection<'T2>``) : '``Collection<'T1 * 'T2>`` = Zip.Invoke source1 source2    
