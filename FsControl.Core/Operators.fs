@@ -144,6 +144,8 @@ module Operators =
     let inline pick     (chooser:'T->'U option) (source:'``Foldable<'T>``)   = Pick.Invoke    chooser   source  :'U
     let inline tryPick  (chooser:'T->'U option) (source:'``Foldable<'T>``)   = TryPick.Invoke chooser   source  :'U option
     let inline filter (predicate:_->bool) (x:'``Foldable<'a>``) :'``Foldable<'a>`` =  Filter.Invoke predicate x
+    let inline intercalate      (sep:'Monoid)   (source:'``Foldable<'Monoid>``)    = Intercalate.Invoke sep source : 'Monoid
+    let inline intersperse      (sep:'T)        (source:'``Foldable<'T>``)         = Intersperse.Invoke sep source : '``Foldable<'T>``
        
 
     // Traversable
@@ -312,9 +314,6 @@ module Operators =
     
     let inline head                             (source:'``Collection<'T>``)        = Head.Invoke source    :'T
     let inline tryHead                          (source:'``Collection<'T>``)        = TryHead.Invoke source :'T option
-
-    let inline intercalate      (sep:'Monoid)   (source:'``Foldable<'Monoid>``)     = Intercalate.Invoke sep source        : 'Monoid
-    let inline intersperse      (sep:'T)        (source:'``Collection<'T>``)        = Intersperse.Invoke sep source        : '``Collection<'T>``
 
     let inline length (source:'``Collection<'T>``) :int                             = Length.Invoke source
 

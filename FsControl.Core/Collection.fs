@@ -159,36 +159,6 @@ type ChunkBy =
 
 
 [<Extension;Sealed>]
-type Intercalate =
-    inherit Default1
-                 static member inline Intercalate (x:'``Foldable<'Monoid>``, e:'Monoid, [<Optional>]impl:Default2) = let f t x = match (t, x) with (true, _) , x -> (false, x) | (_, acc ) , x -> (false, Append.Invoke (Append.Invoke acc e) x) in Fold.Invoke f (true, Empty.Invoke()) x |> snd
-                 static member inline Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]impl:Default1) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
-                 static member inline Intercalate (x:seq<'``Foldable<'T>``>, _ : ^t when ^t : null and ^t : struct, [<Optional>]impl:Default1) = id
-    [<Extension>]static member        Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
-    [<Extension>]static member        Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
-    [<Extension>]static member        Intercalate (x:seq<string>           , e:string           , [<Optional>]impl:Intercalate) = String.Join(e, x)
-    [<Extension>]static member        Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
- 
-    static member inline Invoke      (sep:'Monoid)        (source:'``Foldable<'Monoid>``)        =
-        let inline call_2 (a:^a, b:^b, s:^c) = ((^a or ^c) : (static member Intercalate: _*_*_ -> _) b, s, a)
-        let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
-        call (Unchecked.defaultof<Intercalate>, source,sep) :'Monoid
-
-
-[<Extension;Sealed>]
-type Intersperse =
-    inherit Default1
-    [<Extension>]static member inline Intersperse (x:'Foldable'T, e:'T, [<Optional>]impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Intersperse (x:list<'T>   , e:'T, [<Optional>]impl:Intersperse) = x |> List.toSeq   |> Seq.intersperse e |> Seq.toList
-    [<Extension>]static member        Intersperse (x:'T []      , e:'T, [<Optional>]impl:Intersperse) = x |> Array.toSeq  |> Seq.intersperse e |> Seq.toArray
- 
-    static member inline Invoke      (sep:'T)        (source:'Collection'T)        =
-        let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)
-        let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
-        call (Unchecked.defaultof<Intersperse>, source,sep) :'Collection'T
-
-
-[<Extension;Sealed>]
 type Length =
     inherit Default1
     [<Extension>]static member inline Length (x:'Foldable'T, [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.length   
