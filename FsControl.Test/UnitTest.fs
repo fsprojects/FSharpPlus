@@ -295,3 +295,9 @@ type Splits() =
 
         Assert.IsTrue((a1 = a2))
         Assert.IsTrue((b1 = b2))
+
+    member x.IntercalateArraysAndStrings() = 
+        let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
+        let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B  |> System.Text.Encoding.ASCII.GetString
+
+        Assert.IsTrue((a1 = a2))

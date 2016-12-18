@@ -313,6 +313,7 @@ module Operators =
     let inline head                             (source:'``Collection<'T>``)        = Head.Invoke source    :'T
     let inline tryHead                          (source:'``Collection<'T>``)        = TryHead.Invoke source :'T option
 
+    let inline intercalate    (sep:'Collection) (source:'Collection [])             = Intercalate.Invoke sep source        : 'Collection
     let inline intersperse      (sep:'T)        (source:'``Collection<'T>``)        = Intersperse.Invoke sep source        : '``Collection<'T>``
 
     let inline length (source:'``Collection<'T>``) :int                             = Length.Invoke source

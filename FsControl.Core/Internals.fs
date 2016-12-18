@@ -65,6 +65,13 @@ module internal Seq =
             yield element
             notFirst := true}
 
+    let inline intercalate sep list = seq {
+        let notFirst = ref false
+        for element in list do 
+            if !notFirst then yield! sep
+            yield! element
+            notFirst := true}
+
     let inline split options separators source = seq {
         match separators |> Seq.map Seq.toList |> Seq.toList with
         | []         -> yield source

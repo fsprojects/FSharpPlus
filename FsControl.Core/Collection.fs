@@ -159,6 +159,21 @@ type ChunkBy =
 
 
 [<Extension;Sealed>]
+type Intercalate =
+    inherit Default1
+    [<Extension>]static member inline Intercalate (x:seq<'T> []      , e:seq<'T>      , [<Optional>]impl:Intercalate) = x |> Seq.intercalate e
+    [<Extension>]static member        Intercalate (x:list<'T> []     , e:list<'T>     , [<Optional>]impl:Intercalate) = x |> Array.toSeq |> Seq.intercalate e |> Seq.toList
+    [<Extension>]static member        Intercalate (x:'T [] []        , e:'T []        , [<Optional>]impl:Intercalate) = x |> Array.toSeq |> Seq.intercalate e |> Seq.toArray
+    [<Extension>]static member        Intercalate (x:string []       , e:string       , [<Optional>]impl:Intercalate) = String.Join(e, x)
+    [<Extension>]static member        Intercalate (x:StringBuilder [], e:StringBuilder, [<Optional>]impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Array.map (fun x -> x.ToString()) x))
+ 
+    static member inline Invoke      (sep:'Collection)        (source:'Collection [])        =
+        let inline call_2 (a:^a, b:^b, s:^c) = ((^a or ^c) : (static member Intercalate: _*_*_ -> _) b, s, a)
+        let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
+        call (Unchecked.defaultof<Intercalate>, source,sep) :'Collection
+
+
+[<Extension;Sealed>]
 type Intersperse =
     inherit Default1
     [<Extension>]static member inline Intersperse (x:'Foldable'T, e:'T, [<Optional>]impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke :'Foldable'T
