@@ -65,3 +65,7 @@ type NonEmptyList with
             Seq.iter append withSemiColons
             append "]"
             b.ToString()
+
+    static member Replace (source:NonEmptyList<'T>, oldValue:NonEmptyList<'T>, newValue:NonEmptyList<'T>, impl:Replace ) =
+        let lst = source |> NonEmptyList.toSeq  |> Seq.replace oldValue newValue |> Seq.toList
+        {Head = lst.Head; Tail = lst.Tail}
