@@ -1,0 +1,4 @@
+FSharp.Core
+group Test
+NUnit
+NUnit.Runners
