@@ -320,6 +320,18 @@ type Split =
 
 
 [<Extension;Sealed>]
+type Unzip =
+    [<Extension>]static member Unzip (source:seq<'T * 'U> , [<Optional>]output:seq<'T> * seq<'U>  , [<Optional>]impl:Unzip) = Seq.map fst source, Seq.map snd source
+    [<Extension>]static member Unzip (source:list<'T * 'U>, [<Optional>]output:list<'T> * list<'U>, [<Optional>]impl:Unzip) = List.unzip  source
+    [<Extension>]static member Unzip (source:('T * 'U) [] , [<Optional>]output:'T [] * 'U []      , [<Optional>]impl:Unzip) = Array.unzip source
+
+    static member inline Invoke (source:'``Collection<'T1 * 'T2>``)  =
+        let inline call_3 (a:^a, b:^b, d:^d) = ((^a or ^b or ^d) : (static member Unzip: _*_*_ -> _) b, d, a)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Unchecked.defaultof<Unzip>, source) :'``Collection<'T1>`` * '``Collection<'T2>``
+                
+        
+[<Extension;Sealed>]
 type Zip =
     [<Extension>]static member Zip (x:Id<'T>  , y:Id<'U>  , [<Optional>]output:Id<'T*'U>  , [<Optional>]impl:Zip) = Id.create(x.getValue,y.getValue)
     [<Extension>]static member Zip (x:seq<'T> , y:seq<'U> , [<Optional>]output:seq<'T*'U> , [<Optional>]impl:Zip) = Seq.zip   x y

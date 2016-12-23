@@ -329,6 +329,7 @@ module Operators =
     let inline split (sep:seq<'Collection>) (source:'Collection) = Split.Invoke sep source : seq<'Collection>
     let inline toSeq (source:'``Collection<'T>``) = ToSeq.Invoke source  :seq<'T>
 
+    let inline unzip (source: '``Collection<'T1 * 'T2>``) = Unzip.Invoke source : '``Collection<'T1>`` * '``Collection<'T2>``
     let inline zip (source1:'``Collection<'T1>``) (source2:'``Collection<'T2>``) : '``Collection<'T1 * 'T2>`` = Zip.Invoke source1 source2    
 
 
