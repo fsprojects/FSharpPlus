@@ -235,7 +235,7 @@ type MinBy =
 [<Extension;Sealed>]
 type Replace =
     inherit Default1
-    [<Extension>]static member        Replace (x:seq<'T>      , o:seq<'T>      , n:seq<'T>      , [<Optional>]impl:Default1) = Seq.replace o n x
+                 static member inline Replace (x:'Collection  , o:'Collection  , n:'Collection  , [<Optional>]impl:Default1) = x |> ToSeq.Invoke |> Seq.replace (ToSeq.Invoke o) (ToSeq.Invoke n) |> OfSeq.Invoke : 'Collection
                  static member        Replace (x:Id<'T>       , o:Id<'T>       , n:Id<'T>       , [<Optional>]impl:Default1) = if x = o then n else x
     [<Extension>]static member        Replace (x:list<'T>     , o:list<'T>     , n:list<'T>     , [<Optional>]impl:Replace ) = x |> List.toSeq   |> Seq.replace o n |> Seq.toList
     [<Extension>]static member        Replace (x:'T []        , o:'T []        , n:'T []        , [<Optional>]impl:Replace ) = x |> Array.toSeq  |> Seq.replace o n |> Seq.toArray
