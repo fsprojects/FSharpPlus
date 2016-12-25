@@ -1,5 +1,5 @@
 ﻿#nowarn "3186"
-#r @"..\bin\Release\FsControl.dll"
+#r @"..\..\build\FSharpPlus.dll"
 
 // This sample code mimics Haskell functions.
 // It is based in an initial exploratory project  at http://code.google.com/p/fsharp-typeclasses/ no longer maintained.
@@ -39,8 +39,8 @@ open System.Numerics
 open FsControl
 // open FsControl.Core.Types.Ratio
 
-let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInt x
-let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInt   x
+let inline fromInteger  (x:Integer)   :'Num    = FSharpPlus.Operators.fromBigInt x
+let inline toInteger    (x:'Integral) :Integer = FSharpPlus.Operators.toBigInt   x
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
@@ -50,15 +50,15 @@ module NumericLiteralG =
     let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
     let inline FromString (i:string) = fromInteger <| BigInteger.Parse i
 
-let inline abs    (x:'Num) :'Num = FsControl.Operators.abs    x
-let inline signum (x:'Num) :'Num = FsControl.Operators.signum x
+let inline abs    (x:'Num) :'Num = FSharpPlus.Operators.abs    x
+let inline signum (x:'Num) :'Num = FSharpPlus.Operators.signum x
 
 let inline (+) (a:'Num) (b:'Num) :'Num = a + b
 let inline (-) (a:'Num) (b:'Num) :'Num = a - b
 let inline (*) (a:'Num) (b:'Num) :'Num = a * b
 
-let inline negate (x:'Num) :'Num = FsControl.Operators.negate x
-let inline (~-)   (x:'Num) :'Num = FsControl.Operators.negate x
+let inline negate (x:'Num) :'Num = FSharpPlus.Operators.negate x
+let inline (~-)   (x:'Num) :'Num = FSharpPlus.Operators.negate x
 
 let inline whenIntegral a = let _ = if false then toInteger a else 0I in ()
 
@@ -69,7 +69,7 @@ let inline div (a:'Integral) b :'Integral =
 
 let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
 let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
-let inline quotRem a b :'Integral * 'Integral = whenIntegral a; FsControl.Operators.divRem a b
+let inline quotRem a b :'Integral * 'Integral = whenIntegral a; FSharpPlus.Operators.divRem a b
 let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
 let inline divMod D d :'Integral * 'Integral =
     let q, r = quotRem D d
@@ -102,7 +102,7 @@ let inline gcd x y :'Integral =
 //     Ratio (quot a gcd, quot b gcd)
 // 
 // let inline (%) (a:'Integral) (b:'Integral) :Ratio<'Integral> = a </ratio/> b
-// let inline fromRational (x:Rational) :'Fractional = FsControl.Operators.fromRational x
+// let inline fromRational (x:Rational) :'Fractional = FSharpPlus.Operators.fromRational x
 // let inline whenFractional a = let _ = if false then fromRational (1I % 1I) else a in ()
 let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = (* whenFractional a;*) a / b
 let inline recip x :'Fractional = 1G / x
@@ -115,12 +115,12 @@ let inline ( **^ ) (x:'Num) (n:'Integral)  =
 let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
 
 // let inline properFraction (x:'RealFrac) : 'Integral * 'RealFrac =
-//     let (a, b:'RealFrac) = FsControl.Operators.properFraction x
+//     let (a, b:'RealFrac) = FSharpPlus.Operators.properFraction x
 //     (fromIntegral a, b)
 
 // let inline truncate (x:'RealFrac) :'Integral = fst <| properFraction x
-// let inline toRational (x:'Real) :Rational = FsControl.Operators.toRational x
-let inline pi() :'Floating = FsControl.Operators.getPi()
+// let inline toRational (x:'Real) :Rational = FSharpPlus.Operators.toRational x
+let inline pi() :'Floating = FSharpPlus.Operators.getPi()
 
 let inline ( **) a (b:'Floating) :'Floating = a ** b
 let inline sqrt    (x:'Floating) :'Floating = sqrt x
@@ -152,9 +152,9 @@ let resCmplx:System.Numerics.Complex * _ = quadratic 2G -3G 9G
 
 // Monads
 
-let inline return' x = FsControl.Operators.result x
-let inline (>>=) x (f:_->'R) : 'R = FsControl.Operators.(>>=) x f
-let inline join (x:'Monad'Monad'a) : 'Monad'a = FsControl.Operators.join x
+let inline return' x = FSharpPlus.Operators.result x
+let inline (>>=) x (f:_->'R) : 'R = FSharpPlus.Operators.(>>=) x f
+let inline join (x:'Monad'Monad'a) : 'Monad'a = FSharpPlus.Operators.join x
 
 let inline sequence ms =
     let k m m' = m >>= fun (x:'a) -> m' >>= fun xs -> (return' :list<'a> -> 'M) (List.Cons(x,xs))
@@ -216,7 +216,7 @@ let action = do' {
 
 // Functors
 
-let inline fmap   f x = FsControl.Operators.map f x
+let inline fmap   f x = FSharpPlus.Operators.map f x
 
 // Test Functors
 let times2,minus3 = (*) 2, (-)/> 3
@@ -246,8 +246,8 @@ let mappedTree = fmap fTimes2minus3 myTree
 
 // Comonads
 
-let inline internal extend g s  = FsControl.Operators.extend g s
-let inline internal duplicate x = FsControl.Operators.duplicate x
+let inline internal extend g s  = FSharpPlus.Operators.extend g s
+let inline internal duplicate x = FSharpPlus.Operators.duplicate x
 let inline internal (=>>)  s g  = fmap g (duplicate s)
 
 let ct1 = duplicate [1;2;3;4] // val it : List<List<int>> = [[1; 2; 3; 4]; [2; 3; 4]; [3; 4]; [4]]
@@ -265,9 +265,9 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 
 // Monoids
 
-let inline mempty() = FsControl.Operators.getEmpty ()
-let inline mappend (x:'a) (y:'a): 'a = FsControl.Operators.append x y
-let inline mconcat (x:seq<'a>) : 'a = FsControl.Operators.concat x
+let inline mempty() = FSharpPlus.Operators.getEmpty ()
+let inline mappend (x:'a) (y:'a): 'a = FSharpPlus.Operators.append x y
+let inline mconcat (x:seq<'a>) : 'a = FSharpPlus.Operators.concat x
 
 type Ordering = LT|EQ|GT with
     static member        Empty = EQ
@@ -336,8 +336,8 @@ let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
 // Monad Plus
 
-let inline mzero () = FsControl.Operators.getMZero ()
-let inline mplus (x:'a) (y:'a) : 'a = FsControl.Operators.(<|>) x y
+let inline mzero () = FSharpPlus.Operators.getMZero ()
+let inline mplus (x:'a) (y:'a) : 'a = FSharpPlus.Operators.(<|>) x y
 let inline guard x = if x then return' () else mzero()
 type DoPlusNotationBuilder() =
     member inline b.Return(x) = return' x
@@ -436,9 +436,9 @@ let cnt2 = Seq.length <| System.Linq.Enumerable.Distinct(personList, contramap s
 
 // BiFunctors
 
-let inline bimap f g x = FsControl.Operators.bimap f g x
-let inline first   f x = FsControl.Operators.first f x
-let inline second  f x = FsControl.Operators.second f x
+let inline bimap f g x = FSharpPlus.Operators.bimap f g x
+let inline first   f x = FSharpPlus.Operators.first f x
+let inline second  f x = FSharpPlus.Operators.second f x
 
 let rInt10Str10 = bimap  int string (10.0, 10)
 let resR11      = bimap  string ((+) 1) (Right 10)
@@ -447,9 +447,9 @@ let rStr10      = second string (true, 10)
 
 // Profunctors
 
-let inline dimap f g x = FsControl.Operators.dimap f g x
-let inline lmap f x = FsControl.Operators.lmap f x
-let inline rmap f x = FsControl.Operators.rmap f x
+let inline dimap f g x = FSharpPlus.Operators.dimap f g x
+let inline lmap f x = FSharpPlus.Operators.lmap f x
+let inline rmap f x = FSharpPlus.Operators.rmap f x
 
 let resStrFalse  = dimap int string (Predicate.run isEven) 99.0
 
@@ -467,21 +467,21 @@ let r205n310n415 = runKleisli resd '5'
 
 // Arrows
 
-let inline id'() = FsControl.Operators.getCatId()
-let inline (<<<) f g = FsControl.Operators.catComp f g
-let inline (>>>) f g = FsControl.Operators.catComp g f
-let inline arr   f = FsControl.Operators.arr    f
-let inline arrFirst  f = FsControl.Operators.arrFirst f
-let inline arrSecond f = FsControl.Operators.arrSecond f
-let inline ( *** ) f g = FsControl.Operators.( *** ) f g
-let inline ( &&& ) f g = FsControl.Operators.fanout f g
-let inline (|||) f g = FsControl.Operators.fanin f g
-let inline (+++) f g = FsControl.Operators.(+++) f g
-let inline left  f = FsControl.Operators.left  f
-let inline right f = FsControl.Operators.right f
-let inline app() = FsControl.Operators.getApp()
-let inline zeroArrow() = FsControl.Operators.getMZero()
-let inline (<+>)   f g = FsControl.Operators.(<|>) f g
+let inline id'() = FSharpPlus.Operators.getCatId()
+let inline (<<<) f g = FSharpPlus.Operators.catComp f g
+let inline (>>>) f g = FSharpPlus.Operators.catComp g f
+let inline arr   f = FSharpPlus.Operators.arr    f
+let inline arrFirst  f = FSharpPlus.Operators.arrFirst f
+let inline arrSecond f = FSharpPlus.Operators.arrSecond f
+let inline ( *** ) f g = FSharpPlus.Operators.( *** ) f g
+let inline ( &&& ) f g = FSharpPlus.Operators.fanout f g
+let inline (|||) f g = FSharpPlus.Operators.fanin f g
+let inline (+++) f g = FSharpPlus.Operators.(+++) f g
+let inline left  f = FSharpPlus.Operators.left  f
+let inline right f = FSharpPlus.Operators.right f
+let inline app() = FSharpPlus.Operators.getApp()
+let inline zeroArrow() = FSharpPlus.Operators.getMZero()
+let inline (<+>)   f g = FSharpPlus.Operators.(<|>) f g
 
 // Test Categories
 let r5:List<_>  = (runKleisli (id'())) 5
@@ -527,10 +527,10 @@ let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 // Applicative functors
 
-let inline pure' x   = FsControl.Operators.result x
-let inline (<*>) x y = FsControl.Operators.(<*>) x y
-let inline empty()   = FsControl.Operators.getMZero()
-let inline (<|>) x y = FsControl.Operators.(<|>) x y
+let inline pure' x   = FSharpPlus.Operators.result x
+let inline (<*>) x y = FSharpPlus.Operators.(<*>) x y
+let inline empty()   = FSharpPlus.Operators.getMZero()
+let inline (<|>) x y = FSharpPlus.Operators.(<|>) x y
 
 
 let inline (<<|>) f a   = fmap f a
@@ -599,9 +599,9 @@ let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii   // *1
 
 // Foldable
 
-let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = FsControl.Operators.foldBack f x z
-let inline foldl (f: 'b -> 'a -> 'b) (z:'b) x :'b = FsControl.Operators.fold     f z x
-let inline foldMap (f:'T->'Monoid) (x:'Foldable'T) :'Monoid = FsControl.Operators.foldMap f x
+let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = FSharpPlus.Operators.foldBack f x z
+let inline foldl (f: 'b -> 'a -> 'b) (z:'b) x :'b = FSharpPlus.Operators.fold     f z x
+let inline foldMap (f:'T->'Monoid) (x:'Foldable'T) :'Monoid = FSharpPlus.Operators.foldMap f x
 
 // Test Foldable
 let resGt = foldMap (compare' 2) [1;2;3]
@@ -633,8 +633,8 @@ module FoldableTree =
 
 // Traversable
 
-let inline traverse f t = FsControl.Operators.traverse f t
-let inline sequenceA  t = FsControl.Operators.sequenceA t
+let inline traverse f t = FSharpPlus.Operators.traverse f t
+let inline sequenceA  t = FSharpPlus.Operators.sequenceA t
 
 // Test Traversable
 let f x = if x < 200 then [3 - x] else []
@@ -660,23 +660,23 @@ let get3strings = sequenceA [getLine;getLine;getLine]
 
 // Monad Transformers
 
-let inline lift (x:'ma) = FsControl.Operators.lift x
-let inline liftIO (x: Async<'a>) = FsControl.Operators.liftAsync x
-let inline callCC f = FsControl.Operators.callCC f
-let inline get< ^T when ^T : (static member Get : ^T)> : ^T = FsControl.Operators.get
-let inline put x = FsControl.Operators.put x
-let inline ask< ^T when ^T : (static member Ask : ^T)> : ^T = FsControl.Operators.ask
-let inline local f m = FsControl.Operators.local f m
-let inline tell   x = FsControl.Operators.tell x
-let inline listen m = FsControl.Operators.listen m
-let inline pass   m = FsControl.Operators.pass   m
+let inline lift (x:'ma) = FSharpPlus.Operators.lift x
+let inline liftIO (x: Async<'a>) = FSharpPlus.Operators.liftAsync x
+let inline callCC f = FSharpPlus.Operators.callCC f
+let inline get< ^T when ^T : (static member Get : ^T)> : ^T = FSharpPlus.Operators.get
+let inline put x = FSharpPlus.Operators.put x
+let inline ask< ^T when ^T : (static member Ask : ^T)> : ^T = FSharpPlus.Operators.ask
+let inline local f m = FSharpPlus.Operators.local f m
+let inline tell   x = FSharpPlus.Operators.tell x
+let inline listen m = FSharpPlus.Operators.listen m
+let inline pass   m = FSharpPlus.Operators.pass   m
 
 
 
 
 // MonadError
-let inline throwError x   = FsControl.Operators.throw x
-let inline catchError v h = FsControl.Operators.catch v h
+let inline throwError x   = FSharpPlus.Operators.throw x
+let inline catchError v h = FSharpPlus.Operators.catch v h
 
 // Test MonadError
 let err1Layers   = catchError (Left "Invalid Value") (fun s -> Left ["the error was: " + s]) : Either<_,int>

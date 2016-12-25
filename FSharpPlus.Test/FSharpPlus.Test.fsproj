@@ -3,7 +3,7 @@
   <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.FileSystem.File" />
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
-    <Name>FsControl.Test</Name>
+    <Name>FSharpPlus.Test</Name>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,8 +11,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>070c8382-4bb8-4eaf-a18f-5cd76762e2d2</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FsControl.Test</RootNamespace>
-    <AssemblyName>FsControl.Test</AssemblyName>
+    <RootNamespace>FSharpPlus.Test</RootNamespace>
+    <AssemblyName>FSharpPlus.Test</AssemblyName>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -38,7 +38,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\FsControl.Test.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\FSharpPlus.Test.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,7 +47,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\FsControl.Test.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\FSharpPlus.Test.XML</DocumentationFile>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '11.0'">
@@ -89,9 +89,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <ProjectReference Include="..\FsControl.Core\FsControl.Core.fsproj">
-      <Name>FsControl.Core</Name>
-      <Project>{92eb1018-06de-4300-8daa-047f4f53c2b9}</Project>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSharpPlus\FSharpPlus.fsproj">
+      <Name>FSharpPlus</Name>
+      <Project>{78496e9f-6072-4287-8415-86b4b6628c36}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

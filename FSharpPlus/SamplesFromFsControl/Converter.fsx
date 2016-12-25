@@ -1,8 +1,8 @@
 ﻿#nowarn "3186"
-#r @"..\bin\Release\FsControl.dll"
+#r @"..\..\build\FSharpPlus.dll"
 
 open System
-open FsControl.Operators
+open FSharpPlus.Operators
 
 let r101 = tryParse "10.1.0.1" : Net.IPAddress option
 let r102 = tryParse "102" : string option

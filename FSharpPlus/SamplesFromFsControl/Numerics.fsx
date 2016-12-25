@@ -1,7 +1,7 @@
 ﻿#nowarn "3186"
-#r @"..\bin\Release\FsControl.dll"
+#r @"..\..\build\FSharpPlus.dll"
 
-open FsControl.Operators
+open FSharpPlus.Operators
 
 let flip f x y = f y x
 let const' k _ = k
@@ -16,8 +16,8 @@ type Integer = bigint
 open System.Numerics
 open FsControl
 
-let inline fromInteger  (x:Integer)   :'Num    = FsControl.Operators.fromBigInt x
-let inline toInteger    (x:'Integral) :Integer = FsControl.Operators.toBigInt   x
+let inline fromInteger  (x:Integer)   :'Num    = FSharpPlus.Operators.fromBigInt x
+let inline toInteger    (x:'Integral) :Integer = FSharpPlus.Operators.toBigInt   x
 let inline fromIntegral (x:'Integral) :'Num = (fromInteger << toInteger) x
 
 module NumericLiteralG =
@@ -87,15 +87,15 @@ type Rational = Ratio.Ratio<bigint>
 
 
 
-let inline abs    (x:'Num) :'Num = FsControl.Operators.abs    x
-let inline signum (x:'Num) :'Num = FsControl.Operators.signum x
+let inline abs    (x:'Num) :'Num = FSharpPlus.Operators.abs    x
+let inline signum (x:'Num) :'Num = FSharpPlus.Operators.signum x
 
 let inline (+) (a:'Num) (b:'Num) :'Num = a + b
 let inline (-) (a:'Num) (b:'Num) :'Num = a - b
 let inline (*) (a:'Num) (b:'Num) :'Num = a * b
 
-let inline negate (x:'Num) :'Num = FsControl.Operators.negate x
-let inline (~-)   (x:'Num) :'Num = FsControl.Operators.negate x
+let inline negate (x:'Num) :'Num = FSharpPlus.Operators.negate x
+let inline (~-)   (x:'Num) :'Num = FSharpPlus.Operators.negate x
 
 
 let inline div (a:'Integral) b :'Integral =
@@ -105,7 +105,7 @@ let inline div (a:'Integral) b :'Integral =
 
 let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
 let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
-let inline quotRem a b :'Integral * 'Integral = whenIntegral a; FsControl.Operators.divRem a b
+let inline quotRem a b :'Integral * 'Integral = whenIntegral a; FSharpPlus.Operators.divRem a b
 let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
 let inline divMod D d :'Integral * 'Integral =
     let q, r = quotRem D d
@@ -128,7 +128,7 @@ let inline ( **^ ) (x:'Num) (n:'Integral)  =
     if (n < 0G) then failwith "Negative exponent" else f 1G x n
 let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
 
-let inline pi() :'Floating = FsControl.Operators.getPi ()
+let inline pi() :'Floating = FSharpPlus.Operators.getPi ()
 
 let inline ( **) a (b:'Floating) :'Floating = a ** b
 

@@ -1,9 +1,9 @@
 ﻿#nowarn "3186"
-#r @"..\bin\Release\FsControl.dll"
+#r @"..\..\build\FSharpPlus.dll"
 
 open System
 open FsControl
-open FsControl.Operators
+open FSharpPlus.Operators
 
 let flip f x y = f y x
 let konst k _ = k

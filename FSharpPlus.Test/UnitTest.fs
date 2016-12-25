@@ -2,7 +2,7 @@
 
 open System
 open Microsoft.VisualStudio.TestTools.UnitTesting
-open FsControl.Operators
+open FSharpPlus.Operators
 
 type MonadBuilder() =
     member inline b.Return(x)    = result x

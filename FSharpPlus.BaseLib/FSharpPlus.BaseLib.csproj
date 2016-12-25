@@ -7,8 +7,8 @@
     <ProjectGuid>{1B99DF98-65AC-4038-8BE5-E72B0882F420}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FsControl.BaseLib</RootNamespace>
-    <AssemblyName>FsControl.BaseLib</AssemblyName>
+    <RootNamespace>FSharpPlus.BaseLib</RootNamespace>
+    <AssemblyName>FSharpPlus.BaseLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

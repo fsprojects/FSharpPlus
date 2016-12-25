@@ -1,6 +1,6 @@
 #nowarn "3186"
-#r @"..\..\build\FsControl.dll"
 #r @"..\..\build\FSharpPlus.dll"
+
 open FSharpPlus
 
 let lst5n6  = map ((+) 4) [ 1;2 ]

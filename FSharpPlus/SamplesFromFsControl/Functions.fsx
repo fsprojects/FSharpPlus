@@ -1,11 +1,11 @@
 ﻿#nowarn "3186"
-#r @"..\bin\Release\FsControl.dll"
+#r @"..\..\build\FSharpPlus.dll"
 
 // FsControl does not automatically export any function, just the 'Type Methods'.
-// However in the FsControl.Operators module there are some function and operator definitions.
+// However in the FSharpPlus.Operators module there are some function and operator definitions.
 // The main purpose of that module is to make tests easier, without having to reapeat code or rely on another library to make simple tests.
 
-open FsControl.Operators
+open FSharpPlus.Operators
 
 let inline flip f x y = f y x
 let inline konst k _ = k

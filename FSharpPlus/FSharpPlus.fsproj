@@ -16,6 +16,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <NoWarn>3186</NoWarn>
+    <OtherFlags>--staticlink:FSharpPlus.BaseLib</OtherFlags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,11 +37,13 @@
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Release\FSharpPlus.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="$(TargetFrameworkVersion) == 'v3.5'">
+    <DefineConstants>$(DefineConstants);NET35</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(TargetFrameworkVersion) != 'v3.5'">
+    <DefineConstants>$(DefineConstants);NOTNET35</DefineConstants>
+  </PropertyGroup>  
   <ItemGroup>
-    <Reference Include="FsControl">
-      <HintPath>..\packages\FsControl.2.0.0-CI00120\lib\net40\FsControl.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Internals.fs" />
+    <Compile Include="Converter.fs" />
+    <Compile Include="Numeric.fs" />
+    <Compile Include="Monoid.fs" />
+    <Compile Include="Functor.fs" />
+    <Compile Include="Foldable.fs" />
+    <Compile Include="Traversable.fs" />
+    <Compile Include="Indexable.fs" />
+    <Compile Include="MonadTrans.fs" />
+    <Compile Include="Collection.fs" />
+    <Compile Include="Tuple.fs" />
     <Compile Include="Operators.fs" />
     <Compile Include="Builders.fs" />
     <Compile Include="Extensions.fs" />
@@ -68,6 +82,11 @@
     <Compile Include="ParallelArray.fs" />
     <Compile Include="Kleisli.fs" />
     <Compile Include="Compatibility.fs" />
+    <None Include="SamplesFromFsControl\Functions.fsx" />
+    <None Include="SamplesFromFsControl\Haskell.fsx" />
+    <None Include="SamplesFromFsControl\Collections.fsx" />
+    <None Include="SamplesFromFsControl\Converter.fsx" />
+    <None Include="SamplesFromFsControl\Numerics.fsx" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Conversions.fsx" />
     <None Include="Samples\Applicatives.fsx" />
@@ -85,6 +104,13 @@
     <None Include="Samples\Traversal.fsx" />
     <None Include="Samples\Iso.fsx" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSharpPlus.BaseLib\FSharpPlus.BaseLib.csproj">
+      <Name>FSharpPlus.BaseLib</Name>
+      <Project>{1b99df98-65ac-4038-8be5-e72b0882f420}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
