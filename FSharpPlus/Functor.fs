@@ -396,7 +396,7 @@ type Bimap =
     inherit Default1
        
     static member        Bimap ((x, y)                 , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = (f x, g y)
-    static member        Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = choice (Choice2Of2 << f) (Choice1Of2 << g) x
+    static member        Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = either (Choice2Of2 << f) (Choice1Of2 << g) x
     static member        Bimap (KeyValue(k, x)         , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = KeyValuePair(f k, g x)
 
     static member inline Invoke (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
@@ -411,7 +411,7 @@ type MapFirst =
     inherit Default1
 
     static member        First ((x, y)                , f:'T->'U, [<Optional>]mthd : MapFirst) = (f x, y)
-    static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]mthd : MapFirst) = choice (Choice2Of2 << f) Choice1Of2 x
+    static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]mthd : MapFirst) = either (Choice2Of2 << f) Choice1Of2 x
     static member        First (KeyValue(k, x)        , f:'T->'U, [<Optional>]mthd : MapFirst) = KeyValuePair(f k, x)
 
     static member inline Invoke (f : 'T->'U) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
@@ -431,7 +431,7 @@ type MapSecond =
     inherit Default1
 
     static member        Second ((x, y)                , f:'V->'W, [<Optional>]mthd : MapSecond) = (x, f y)
-    static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]mthd : MapSecond) = choice Choice2Of2 (Choice1Of2 << f) x
+    static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]mthd : MapSecond) = either Choice2Of2 (Choice1Of2 << f) x
     static member        Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]mthd : MapSecond) = KeyValuePair(k, f x)
 
     static member inline Invoke (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` =
@@ -672,8 +672,8 @@ type Fanout with
 
 type Fanin =
     inherit Default1
-    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]output : Choice<'U,'T> -> 'V   , [<Optional>]mthd : Fanin) = choice f g                                        : Choice<'U,'T> -> 'V
-    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]output : Func<Choice<'U,'T>,'V>, [<Optional>]mthd : Fanin) = Func<Choice<'U,'T>,'V>(choice f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
+    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]output : Choice<'U,'T> -> 'V   , [<Optional>]mthd : Fanin) = either f g                                        : Choice<'U,'T> -> 'V
+    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]output : Func<Choice<'U,'T>,'V>, [<Optional>]mthd : Fanin) = Func<Choice<'U,'T>,'V>(either f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
 
     static member inline Invoke (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ``|||``: _*_*_*_ -> _) f, g, output, mthd)

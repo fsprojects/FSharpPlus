@@ -56,7 +56,7 @@ type ErrorT with
         let liftError (m, w) = Error.map (fun x -> (x, w)) m
         ErrorT (listen (ErrorT.run m) >>= (result << liftError))
 
-    static member inline Pass m = ErrorT (ErrorT.run m >>= choice (result << Choice2Of2) (map Choice1Of2 << pass << result)) : ErrorT<'``MonadWriter<'Monoid,Choice<'T,'E>>``>
+    static member inline Pass m = ErrorT (ErrorT.run m >>= either (result << Choice2Of2) (map Choice1Of2 << pass << result)) : ErrorT<'``MonadWriter<'Monoid,Choice<'T,'E>>``>
 
     static member inline get_Get()  = lift get         : '``ErrorT<'MonadState<'S,Choice<_,'E>>>``
     static member inline Put (x:'S) = x |> put |> lift : '``ErrorT<'MonadState<'S,Choice<_,'E>>>``

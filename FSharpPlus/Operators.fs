@@ -13,7 +13,7 @@ module Operators =
     let inline uncurry f (x, y) = f x y
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
-    let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
+    let inline either f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
     let inline option n f = function None -> n | Some x -> f x
     let inline tuple2 a b             = a,b
     let inline tuple3 a b c           = a,b,c
@@ -488,6 +488,9 @@ module Operators =
 
 
     // Additional functions
+
+    /// Fold using alternative operator `<|>`
+    let inline choice (x:'``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getMZero()) : '``Alternative<'t>>``
 
     /// Folds a Foldable of a Monoid, using its empty as initial state and append as folder.
     let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x

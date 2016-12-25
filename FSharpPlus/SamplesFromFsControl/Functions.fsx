@@ -11,7 +11,6 @@ let inline flip f x y = f y x
 let inline konst k _ = k
 let inline (</) x = (|>) x
 let inline (/>) x = flip x
-let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
 let inline option n f = function None -> n | Some x -> f x
 
 

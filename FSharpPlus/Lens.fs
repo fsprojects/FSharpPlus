@@ -28,7 +28,7 @@ module Lens =
 
 
     /// Build a Prism using Choice instead of Option to permit the types of 's and 't to differ.
-    let inline prism (bt:'b->'t) (seta:'s->Choice<'a,'t>) = dimap seta (choice result (map bt)) << (fun g -> choice Choice2Of2 (Choice1Of2 << g))
+    let inline prism (bt:'b->'t) (seta:'s->Choice<'a,'t>) = dimap seta (either result (map bt)) << (fun g -> either Choice2Of2 (Choice1Of2 << g))
     let inline prism' (bs:'b->'s) (sma:'s->Option<'a>) = prism bs (fun s -> option (Choice2Of2 s) Choice1Of2 (sma s))
 
     /// Build an iso from a pair of inverse functions.
@@ -47,8 +47,8 @@ module Lens =
     let inline _5 f t = map (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
 
     // Prism
-    let inline _Choice1Of2 x = (prism Choice1Of2 <| choice (Choice2Of2 << Choice2Of2) Choice1Of2) x
-    let inline _Choice2Of2 x = (prism Choice2Of2 <| choice Choice1Of2 (Choice2Of2 << Choice1Of2)) x
+    let inline _Choice1Of2 x = (prism Choice1Of2 <| either (Choice2Of2 << Choice2Of2) Choice1Of2) x
+    let inline _Choice2Of2 x = (prism Choice2Of2 <| either Choice1Of2 (Choice2Of2 << Choice1Of2)) x
     let inline _Some x = (prism Some <| option (Choice2Of2 None) Choice1Of2) x
     let inline _None x = (prism' (konst None) <| option (Some ()) (konst None)) x
 

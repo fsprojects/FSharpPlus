@@ -15,7 +15,6 @@ module Combinators =
     let inline konst k _ = k
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
-    let inline choice f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
     let inline option n f = function None -> n | Some x -> f x
     let monad     = new MonadBuilder()
 open Combinators
@@ -63,6 +62,12 @@ type Foldable() =
         Assert.AreEqual (testVal, WrappedListA [2])
         Assert.IsInstanceOfType(Some testVal, typeof<Option<WrappedListA<int>>>)
 
+    [<TestMethod>]
+    member x.foldAternatives() = 
+        let x = choice [None; Some 3; Some 4; None]
+        let y = choice [| []; [3]; [4]; [] |]
+        Assert.AreEqual (x, Some 3)
+        Assert.AreEqual (y, [3;4])
 
     [<TestMethod>]
     member x.FromToSeq() =
