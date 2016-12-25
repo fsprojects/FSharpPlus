@@ -7,6 +7,17 @@ A library that enhances the F# coding experience by providing the following two 
 
 2. The provision of a set of generic standalone function definitions together with their implementation over a set of .NET and F# core types. Some of these functions are abstractions ported from Haskell but adapted to the F#/.NET world. Other functions offer a solution to normalize common function calls over different Types which represent the same abstraction but mainly due to historical reasons have different names and signatures.
 
+
+
+
+### NOTE: FsControl is part of [FSharpPlus](https://github.com/gmpl/FSharpPlus) now.
+
+### This project is no longer maintained here.
+
+
+
+
+
 ### Getting Started
 
 
