@@ -61,7 +61,7 @@ module Builders =
         member inline __.First(source) = head source
 
         [<CustomOperation("nth")>]
-        member inline __.Head(source, n) = nth n
+        member inline __.Nth(source, n) = nth n source
 
         [<CustomOperation("groupBy", AllowIntoPattern=true)>]
         member inline __.GroupBy (x,[<ProjectionParameter>] f : 't -> 'key) = groupBy f x
