@@ -144,7 +144,7 @@ type Apply =
     static member        ``<*>`` (f:Async<_>    , x:Async<'T>    , [<Optional>]output:Async<'U>    , [<Optional>]impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
     static member        ``<*>`` (f:option<_>   , x:option<'T>   , [<Optional>]output:option<'U>   , [<Optional>]impl:Apply) = Option.apply f x    :option<'U>
     static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>, [<Optional>]output:Choice<'b,'E>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'U,'E>
-    static member        ``<*>`` (KeyValue(k:'Key, f), KeyValue(k:'Key,x:'T), [<Optional>]output:KeyValuePair<'Key,'U>, [<Optional>]impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(k, f x)
+    static member inline ``<*>`` (KeyValue(a:'Key, f), KeyValue(b:'Key, x:'T), [<Optional>]output:KeyValuePair<'Key,'U>, [<Optional>]impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(Append.Invoke a b, f x)
 
     static member        ``<*>`` (f:Map<'Key,_>       , x:Map<'Key,'T>       , [<Optional>]output:Map<'Key,'U>, [<Optional>]impl:Apply) :Map<'Key,'U>          = Map (seq {
        for KeyValue(k, vf) in f do
