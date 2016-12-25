@@ -3,6 +3,7 @@
 open System
 open FsControl
 open FSharpPlus.Operators
+open FSharpPlus.Data
 
 module Lens =
 
@@ -20,7 +21,7 @@ module Lens =
     let set  lens v = Identity.run << lens (fun _ -> Identity v)
     let over lens f = Identity.run << lens (Identity << f)
     let view lens   = Const.run << lens Const
-    let preview prism = First.run << Const.run << prism (fun x -> Const (FSharpPlus.First (Some x)))
+    let preview prism = First.run << Const.run << prism (fun x -> Const (FSharpPlus.Data.First (Some x)))
 
     /// Build a 'Lens' from a getter and a setter.
     let inline lens sa sbt afb s = sbt s <!> afb (sa s)

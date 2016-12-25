@@ -12,6 +12,7 @@ open Microsoft.FSharp.Quotations
 
 open FsControl.Internals
 open FsControl.Internals.Prelude
+open FSharpPlus
 
 
 // Monad class ------------------------------------------------------------
@@ -311,6 +312,7 @@ open System.Threading.Tasks
 open FsControl.Internals
 open FsControl.Internals.Prelude
 open FsControl.Internals.MonadOps
+open FSharpPlus
 
 
 // Comonad class ----------------------------------------------------------

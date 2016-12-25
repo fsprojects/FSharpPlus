@@ -1,15 +1,12 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
 
 open FsControl
+open FSharpPlus
 
 [<RequireQualifiedAccess>]
-module internal Option =
-    let inline apply f x =
-        match (f,x) with 
-        | Some f, Some x -> Some (f x) 
-        | _              -> None
+module Option =
+    let inline traverse f = function Some x -> Map.Invoke Some (f x) | _ -> result None   
 
-open FsControl
 
 type OptionT<'``monad<option<'t>>``> = OptionT of '``monad<option<'t>>``
 

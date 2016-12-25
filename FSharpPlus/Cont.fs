@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
 
 /// <summary> Computation type: Computations which can be interrupted and resumed.
 /// <para/>   Binding strategy: Binding a function to a monadic value creates a new continuation which uses the function as the continuation of the monadic computation.
@@ -17,6 +17,7 @@ module Cont =
     let apply (Cont f) (Cont x) = Cont (fun k -> f (fun (f':'T->_) -> x (k << f'))) : Cont<'R,'U>
 
 open FsControl
+open FSharpPlus
 
 type ContT<'r,'t> = Cont<'r,'t>
 

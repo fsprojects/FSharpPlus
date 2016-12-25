@@ -15,6 +15,7 @@ open FsControl.BaseLib
 open FsControl.Internals
 open FsControl.Internals.Prelude
 open System.Numerics
+open FSharpPlus
 
 
 type Explicit =

@@ -8,6 +8,7 @@ open System
 open System.Text
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
+open FSharpPlus
 open FsControl.Internals
 
 
@@ -35,7 +36,7 @@ type Skip =
     [<Extension>]static member        Skip (x:StringBuilder , n, [<Optional>]impl:Skip    ) = new StringBuilder(x.ToString().[n..])
     [<Extension>]static member        Skip (x:'a []         , n, [<Optional>]impl:Skip    ) = x.[n..] : 'a []
     [<Extension>]static member        Skip (x:'a ResizeArray, n, [<Optional>]impl:Skip    ) = ResizeArray<'a> (Seq.skip n x)
-    [<Extension>]static member        Skip (x:list<'a>      , n, [<Optional>]impl:Skip    ) = n |> let rec listSkip lst = function 0 -> lst | n -> listSkip (List.tail lst) (n-1) in listSkip x
+    [<Extension>]static member        Skip (x:list<'a>      , n, [<Optional>]impl:Skip    ) = List.skip n x
     [<Extension>]static member        Skip (x:'a Id         , n, [<Optional>]impl:Skip    ) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
@@ -52,7 +53,7 @@ type Take =
     [<Extension>]static member        Take (x:StringBuilder , n, [<Optional>]impl:Take    ) = new StringBuilder(x.ToString().[..n-1])
     [<Extension>]static member        Take (x:'a []         , n, [<Optional>]impl:Take    ) = x.[..n-1] : 'a []
     [<Extension>]static member        Take (x:'a ResizeArray, n, [<Optional>]impl:Take    ) = ResizeArray<'a> (Seq.take n x)
-    [<Extension>]static member        Take (x:list<'a>      , n, [<Optional>]impl:Take    ) = Seq.take n x |> Seq.toList
+    [<Extension>]static member        Take (x:list<'a>      , n, [<Optional>]impl:Take    ) = List.take n x
     [<Extension>]static member        Take (x:'a Id         , n, [<Optional>]impl:Take    ) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =

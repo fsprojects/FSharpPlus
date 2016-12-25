@@ -4,6 +4,7 @@
 
 open FSharpPlus
 open FSharpPlus.Compatibility.Haskell
+open FSharpPlus.Data
 
 
 

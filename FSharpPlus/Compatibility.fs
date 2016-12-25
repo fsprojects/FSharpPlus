@@ -5,6 +5,7 @@ module Compatibility =
 
         // Types
         open FsControl
+        open FSharpPlus.Data
 
         let getDual (Dual x) = x
         let getAll (All x) = x

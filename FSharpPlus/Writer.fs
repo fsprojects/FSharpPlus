@@ -1,9 +1,11 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
 
 /// <summary> Computation type: Computations which produce a stream of data in addition to the computed values.
 /// <para/>   Binding strategy: Combines the outputs of the subcomputations using <c>mappend</c>.
 /// <para/>   Useful for: Logging, or other computations that produce output "on the side". </summary>
 type Writer<'monoid,'t> = Writer of ('t * 'monoid)
+
+open FSharpPlus
 
 [<RequireQualifiedAccess>]
 module Writer =

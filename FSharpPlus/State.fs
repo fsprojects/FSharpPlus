@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
 
 /// <summary> Computation type: Computations which maintain state.
 /// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
@@ -30,6 +30,7 @@ type State with
     static member Put x     = State.put x                     : State<'S,unit>
 
 open FsControl
+open FSharpPlus
 
 type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 

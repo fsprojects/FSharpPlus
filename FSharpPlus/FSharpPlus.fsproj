@@ -42,7 +42,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFrameworkVersion) != 'v3.5'">
     <DefineConstants>$(DefineConstants);NOTNET35</DefineConstants>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Extensions.fs" />
     <Compile Include="Internals.fs" />
     <Compile Include="Converter.fs" />
     <Compile Include="Numeric.fs" />
@@ -65,7 +66,6 @@
     <Compile Include="Tuple.fs" />
     <Compile Include="Operators.fs" />
     <Compile Include="Builders.fs" />
-    <Compile Include="Extensions.fs" />
     <Compile Include="Identity.fs" />
     <Compile Include="List.fs" />
     <Compile Include="Seq.fs" />

@@ -5,6 +5,7 @@ open System.Runtime.InteropServices
 open FsControl.Internals
 open FsControl.Internals.Prelude
 open FsControl.Internals.MonadOps
+open FSharpPlus
 
 
 type Traverse =

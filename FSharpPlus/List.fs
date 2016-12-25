@@ -1,10 +1,8 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
+
+open FSharpPlus
 
 module List =
-
-    let singleton x = [x]
-
-    let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
 
     let inline sequence (ms:list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequenceA ms
 
