@@ -14,8 +14,10 @@ Target "Clean" (fun _ -> CleanDirs [buildDir])
 Target "RestorePackages" RestorePackages
 
 Target "BuildSolution" (fun _ ->
-    MSBuildWithDefaults "Build" ["./FSharpPlus.sln"]
-    |> Log "AppBuild-Output: "
+    MSBuildWithDefaults "Build" ["./FSharpPlus/FSharpPlus.fsproj"]
+    |> Log "Core Build-Output: "
+    MSBuildWithDefaults "Build" ["./FSharpPlus.BaseLib/FSharpPlus.BaseLib.csproj"]
+    |> Log "BaseLib Build-Output: "
 )
 
 "BuildSolution" <== ["Clean"; "RestorePackages"]
