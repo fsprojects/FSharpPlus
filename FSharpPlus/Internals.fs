@@ -55,7 +55,7 @@ module BigInteger =
             let r2 = r * r
             match compare r2 x with
             | 0 -> Choice1Of2 (r, 0I)
-            | 1 -> let root = r - 1I in Choice1Of2 (r, x - r2)
+            | 1 -> let root = r - 1I in Choice1Of2 (root, x - root * root)
             | _ -> Choice1Of2 (r, x - r2)
 
 
