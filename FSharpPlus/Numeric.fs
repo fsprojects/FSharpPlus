@@ -147,7 +147,7 @@ type Abs =
     static member inline Abs (x:'t        , _:Default2) = (Explicit.Invoke ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
     static member inline Abs (x:'t        , _:Default1) = (Implicit.Invoke ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
     static member inline Abs (x:'t        , _:Abs) = abs x :'t
-    static member inline Abs (x:Default1  , _:Abs) = fun (x) -> (^R: (static member Abs: _ -> ^R) x)
+    static member inline Abs (_:Default1  , _:Abs) = fun x -> (^R: (static member Abs: _ -> ^R) x)
 
     static member inline Invoke (x:'Num) :'Num =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b ) : (static member Abs: ^b*_ -> ^t) b, a)
@@ -197,7 +197,7 @@ type TryNegate =
     static member inline TryNegate (_:^t when ^t: null and ^t: struct) = ()
     static member inline TryNegate (x:'t        ) = Choice1Of2 -x
     static member inline Invoke (x:'Num) :Choice<'Num,exn> =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryNegate: _ -> _) b)
+        let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member TryNegate: _ -> _) b)
         call_2 (Unchecked.defaultof<TryNegate>, x)
 
 type TryNegate' =
@@ -207,16 +207,16 @@ type TryNegate' =
     static member        TryNegate (x:uint64    ) = if x = 0UL then Choice1Of2 x else Choice2Of2 Errors.exnNoSubtraction
     static member        TryNegate (x:unativeint) = if x = 0un then Choice1Of2 x else Choice2Of2 Errors.exnNoSubtraction
     static member inline Invoke (x:'Num) :Choice<'Num,exn> =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryNegate: _ -> _) b)
+        let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member TryNegate: _ -> _) b)
         call_2 (Unchecked.defaultof<TryNegate'>, x)
 
 
 [<Extension; Sealed>]
 type DivRem =
     inherit Default1
-    static member inline DivRem (x:^t when ^t: null and ^t: struct, y:^t, thisclass:DivRem) = (x, y)
-    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]impl:Default1) = let q = D / d in q,  D - q * d
-    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]impl:DivRem  ) =
+    static member inline DivRem (x:^t when ^t: null and ^t: struct, y:^t, _thisClass:DivRem) = (x, y)
+    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]_impl:Default1) = let q = D / d in q,  D - q * d
+    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]_impl:DivRem  ) =
                     let mutable r = Unchecked.defaultof<'T>
                     (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
 
@@ -249,7 +249,7 @@ type ToBigInt =
 #endif
 
     static member inline Invoke    (x:'Integral) :bigint =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToBigInt: _ -> _) b)
+        let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member ToBigInt: _ -> _) b)
         call_2 (Unchecked.defaultof<ToBigInt>, x)
 
 
@@ -308,7 +308,7 @@ type Subtract =
     static member        Subtract (x:unativeint, y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
 
     static member inline Invoke    (x:'Num) (y:'Num)  : 'Num =
-        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member Subtract: _*_ -> _) b, c)
+        let inline call_2 (_:^a, b:^b, c:^b) = ((^a or ^b) : (static member Subtract: _*_ -> _) b, c)
         call_2 (Unchecked.defaultof<Subtract>, x, y)
 
 type TrySubtract =
@@ -322,7 +322,7 @@ type TrySubtract =
     static member        TrySubtract (x:unativeint, y) = if y > x then Choice2Of2 Errors.exnNoSubtraction else Choice1Of2 (x-y) 
 
     static member inline Invoke    (x:'Num) (y:'Num)  : Choice<'Num, exn> =
-        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member TrySubtract: _*_ -> _) b, c)
+        let inline call_2 (_:^a, b:^b, c:^b) = ((^a or ^b) : (static member TrySubtract: _*_ -> _) b, c)
         call_2 (Unchecked.defaultof<TrySubtract>, x, y)
 
 
@@ -337,7 +337,7 @@ type Divide =
     static member        Divide (x:float  , y) = (/) x y
     static member        Divide (x:float32, y) = (/) x y
     static member inline Invoke    (x:'Num) (y:'Num) : 'Num =
-        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member Divide: _*_ -> _) b, c)
+        let inline call_2 (_:^a, b:^b, c:^b) = ((^a or ^b) : (static member Divide: _*_ -> _) b, c)
         call_2 (Unchecked.defaultof<Divide>, x, y)
 
 type TryDivide =
@@ -347,11 +347,11 @@ type TryDivide =
             let c = x / y :'t
             if c * y = x then Choice1Of2 c
             else Choice2Of2 Errors.exnNoDivision
-    static member inline TryDivide (_:^t when ^t: null and ^t: struct, _:Default1) = fun y -> Choice2Of2 null
+    static member inline TryDivide (_:^t when ^t: null and ^t: struct, _:Default1) = fun _ -> Choice2Of2 null
     static member        TryDivide (x:float  , y) = Choice1Of2 (x / y)
     static member        TryDivide (x:float32, y) = Choice1Of2 (x / y)
     static member inline Invoke    (x:'Num) (y:'Num)  : Choice<'Num, exn> =
-        let inline call_2 (a:^a, b:^b, c:^b) = ((^a or ^b) : (static member TryDivide: _*_ -> _) b, c)
+        let inline call_2 (_:^a, b:^b, c:^b) = ((^a or ^b) : (static member TryDivide: _*_ -> _) b, c)
         call_2 (Unchecked.defaultof<TryDivide>, x, y)
 
 
@@ -370,13 +370,13 @@ type TrySqrtRem =
     static member        TrySqrtRem (x:unativeint) = let c = x |> float |> sqrt |> unativeint in c, x - c*c
 
     static member inline Invoke    (x:'Integral) : Choice<'Integral*'Integral, exn> =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TrySqrtRem: _ -> _) b)
+        let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member TrySqrtRem: _ -> _) b)
         call_2 (Unchecked.defaultof<TrySqrtRem>, x)
 
 
 type TrySqrt =
     static member inline Invoke    (x:'Integral) : Choice<'Integral, exn> =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TrySqrt: _ -> _) b)
+        let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member TrySqrt: _ -> _) b)
         call_2 (Unchecked.defaultof<TrySqrt>, x)
 
     static member inline TrySqrt (x:'T) = 

@@ -439,19 +439,19 @@ module Operators =
 
     /// Returns the additive inverse of the number.
     /// Works also for unsigned types (Returns none if there is no inverse).
-    let inline tryNegate'  (x:'Num): 'Num option = TryNegate'.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
+    let inline tryNegate'  (x:'Num): 'Num option = TryNegate'.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
 
     /// Returns the subtraction between two numbers. Throws an error if the result is negative on unsigned types.
     let inline subtract (x:'Num) (y:'Num): 'Num = Subtract.Invoke x y
 
     /// Returns the subtraction between two numbers. Returns None if the result is negative on unsigned types.
-    let inline trySubtract (x:'Num) (y:'Num): 'Num option = y |> TrySubtract.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
+    let inline trySubtract (x:'Num) (y:'Num): 'Num option = y |> TrySubtract.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
 
     /// Returns the division between two numbers. If the numbers are not divisible throws an error.
     let inline div (dividend:'Num) (divisor:'Num): 'Num = Divide.Invoke dividend divisor
 
     /// Returns the division between two numbers. Returns None if the numbers are not divisible.
-    let inline tryDiv (dividend:'Num) (divisor:'Num): 'Num option = divisor |> TryDivide.Invoke dividend |> function Choice1Of2 x -> Some x | Choice2Of2 e -> None
+    let inline tryDiv (dividend:'Num) (divisor:'Num): 'Num option = divisor |> TryDivide.Invoke dividend |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
 
     /// Returns the square root of a number of any type. Throws an exception if there is no square root.
     let inline sqrt x = x |> Sqrt.Invoke

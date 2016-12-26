@@ -23,16 +23,14 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline (+++) (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
         Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) result Choice2Of2))) (Kleisli (g >=> ((<<) result Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
 
-    static member inline Left (Kleisli f) =
-        let inline (+++) a b = AcMerge.Invoke a b
-        AcMerge.Invoke (Kleisli f) (Arr.Invoke (Id.Invoke()))
+    static member inline Left  (Kleisli f) = AcMerge.Invoke (Kleisli f) (Arr.Invoke (Id.Invoke()))
     static member inline Right (Kleisli f) =
         let inline (+++) a b = AcMerge.Invoke a b
         (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
     static member get_App () = Kleisli (fun (Kleisli f, x) -> f x)
     
     // ArrowPlus
-    static member inline MZero (output :Kleisli<'T,'``Monad<'U>``>, mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
-    static member inline MPlus (Kleisli f, Kleisli g, mthd:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
+    static member inline MZero (_output :Kleisli<'T,'``Monad<'U>``>, _mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
+    static member inline MPlus (Kleisli f, Kleisli g, _mthd:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
 
 [<RequireQualifiedAccess>]module Kleisli = let run (Kleisli f) = f

@@ -22,7 +22,7 @@ type ZipList with
     static member inline get_Empty() = result (getEmpty()) :ZipList<'a>
     static member inline Append (x:ZipList<'a>, y:ZipList<'a>) = liftA2 append x y :ZipList<'a>
 
-    static member inline ToString (s:ZipList<'a>, [<Optional>]impl:ToList) = fun (k:System.Globalization.CultureInfo) ->
+    static member inline ToString (s:ZipList<'a>, [<Optional>]_impl:ToList) = fun (k:System.Globalization.CultureInfo) ->
             let b = StringBuilder()
             let inline append (s:string) = b.Append s |> ignore
             append "ZipList ["

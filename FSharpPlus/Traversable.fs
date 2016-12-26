@@ -10,15 +10,15 @@ open FSharpPlus
 
 type Traverse =
     inherit Default1
-    static member inline Traverse (t:^a   , f, [<Optional>]output:'R, [<Optional>]impl:Default3 ) =  Map.Invoke f ((^a) : (static member SequenceA: _ -> 'R) t)
-    static member inline Traverse (t:^a   , f, [<Optional>]output:'R, [<Optional>]impl:Default2 ) =  ((^a) : (static member Traverse: _*_ -> 'R) t, f)
-    static member inline Traverse (t:Id<_>, f, [<Optional>]output:'R, [<Optional>]impl:Default1) = Map.Invoke Id.create (f (Id.run t))
-    static member inline Traverse (t:_ seq, f, [<Optional>]output:'R, [<Optional>]impl:Default1) = 
+    static member inline Traverse (t:^a   , f, [<Optional>]_output:'R, [<Optional>]_impl:Default3) =  Map.Invoke f ((^a) : (static member SequenceA: _ -> 'R) t)
+    static member inline Traverse (t:^a   , f, [<Optional>]_output:'R, [<Optional>]_impl:Default2) =  ((^a) : (static member Traverse: _*_ -> 'R) t, f)
+    static member inline Traverse (t:Id<_>, f, [<Optional>]_output:'R, [<Optional>]_impl:Default1) = Map.Invoke Id.create (f (Id.run t))
+    static member inline Traverse (t:_ seq, f, [<Optional>]_output:'R, [<Optional>]_impl:Default1) = 
        let cons x y = seq {yield x; yield! y}
        let cons_f x ys = Map.Invoke (cons:'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result (Seq.empty))
 
-    static member Traverse (t:'t seq ,f:'t->'u option , [<Optional>]output:option<seq<'t>>, [<Optional>]impl:Traverse) =
+    static member Traverse (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'t>>, [<Optional>]_impl:Traverse) =
        let ok = ref true
        let res = Seq.toArray (seq {
            use e = t.GetEnumerator()
@@ -28,15 +28,15 @@ type Traverse =
                | None   -> ok.Value <- false})
        if ok.Value then Some (Array.toSeq res) else None
 
-    static member        Traverse (t:'t seq   ,f:'t->Async<'u> , [<Optional>]output:Async<seq<'u>>, [<Optional>]impl:Traverse) :Async<seq<_>> = result <| Seq.map (Async.RunSynchronously) (Seq.map f t)
-    static member        Traverse (t:Id<'t>   ,f:'t->option<'u>    , [<Optional>]output:option<Id<'u>>, [<Optional>]impl:Traverse) = Option.map Id.create (f (Id.run t))
-    static member inline Traverse (t:option<_>,f , [<Optional>]output:'R           , [<Optional>]impl:Traverse) :'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None        
+    static member        Traverse (t:'t seq   ,f:'t->Async<'u> , [<Optional>]_output:Async<seq<'u>>, [<Optional>]_impl:Traverse) :Async<seq<_>> = result <| Seq.map (Async.RunSynchronously) (Seq.map f t)
+    static member        Traverse (t:Id<'t>   ,f:'t->option<'u>, [<Optional>]_output:option<Id<'u>>, [<Optional>]_impl:Traverse) = Option.map Id.create (f (Id.run t))
+    static member inline Traverse (t:option<_>,f , [<Optional>]_output:'R, [<Optional>]_impl:Traverse) :'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None        
 
-    static member inline Traverse (t:list<_>  ,f , [<Optional>]output:'R           , [<Optional>]impl:Traverse) :'R =         
+    static member inline Traverse (t:list<_>  ,f , [<Optional>]_output:'R, [<Optional>]_impl:Traverse) :'R =         
        let cons_f x ys = Map.Invoke List.cons (f x) <*> ys
        List.foldBack cons_f t (result [])
 
-    static member inline Traverse (t:_ []  ,f , [<Optional>]output :'R             , [<Optional>]impl:Traverse) :'R =
+    static member inline Traverse (t:_ []  ,f , [<Optional>]_output :'R  , [<Optional>]_impl:Traverse) :'R =
        let cons x y = Array.append [|x|] y            
        let cons_f x ys = Map.Invoke cons (f x) <*> ys
        Array.foldBack cons_f t (result [||])
@@ -50,14 +50,14 @@ type Traverse =
 [<Extension;Sealed>]
 type SequenceA =
     inherit Default1
-    [<Extension>]static member inline SequenceA (t:^a            , [<Optional>]output:'R, [<Optional>]impl:Default2 ) =  ((^a) : (static member Traverse: _*_ -> 'R) t, id)                                     :'R
-    [<Extension>]static member inline SequenceA (t:^a            , [<Optional>]output:'R, [<Optional>]impl:Default1 ) =  ((^a) : (static member SequenceA: _ -> 'R) t)                                          :'R
-    [<Extension>]static member inline SequenceA (t:option<_>     , [<Optional>]output:'R, [<Optional>]impl:SequenceA) = match t with Some x -> Map.Invoke Some x | _ -> result None                             :'R
-    [<Extension>]static member inline SequenceA (t:list<_>       , [<Optional>]output:'R, [<Optional>]impl:SequenceA) = let cons_f x ys = Map.Invoke List.cons x <*> ys in List.foldBack cons_f t (result [])   :'R
-    [<Extension>]static member inline SequenceA (t:_ []          , [<Optional>]output:'R, [<Optional>]impl:SequenceA) = let cons x y = Array.append [|x|] y in let cons_f x ys = Map.Invoke cons x <*> ys in Array.foldBack cons_f t (result [||]) :'R
-    [<Extension>]static member inline SequenceA (t:Id<_>         , [<Optional>]output:'R, [<Optional>]impl:SequenceA) = Traverse.Invoke id t                                                                    :'R
-    [<Extension>]static member inline SequenceA (t: _ ResizeArray, [<Optional>]output:'R, [<Optional>]impl:SequenceA) = Traverse.Invoke id t                                                                    :'R
-    [<Extension>]static member inline SequenceA (t:_ seq         , [<Optional>]output:'R, [<Optional>]impl:SequenceA) :'R =                                                                                         
+    [<Extension>]static member inline SequenceA (t:^a            , [<Optional>]_output:'R, [<Optional>]_impl:Default2 ) =  ((^a) : (static member Traverse: _*_ -> 'R) t, id)                                     :'R
+    [<Extension>]static member inline SequenceA (t:^a            , [<Optional>]_output:'R, [<Optional>]_impl:Default1 ) =  ((^a) : (static member SequenceA: _ -> 'R) t)                                          :'R
+    [<Extension>]static member inline SequenceA (t:option<_>     , [<Optional>]_output:'R, [<Optional>]_impl:SequenceA) = match t with Some x -> Map.Invoke Some x | _ -> result None                             :'R
+    [<Extension>]static member inline SequenceA (t:list<_>       , [<Optional>]_output:'R, [<Optional>]_impl:SequenceA) = let cons_f x ys = Map.Invoke List.cons x <*> ys in List.foldBack cons_f t (result [])   :'R
+    [<Extension>]static member inline SequenceA (t:_ []          , [<Optional>]_output:'R, [<Optional>]_impl:SequenceA) = let cons x y = Array.append [|x|] y in let cons_f x ys = Map.Invoke cons x <*> ys in Array.foldBack cons_f t (result [||]) :'R
+    [<Extension>]static member inline SequenceA (t:Id<_>         , [<Optional>]_output:'R, [<Optional>]_impl:SequenceA) = Traverse.Invoke id t                                                                    :'R
+    [<Extension>]static member inline SequenceA (t: _ ResizeArray, [<Optional>]_output:'R, [<Optional>]_impl:SequenceA) = Traverse.Invoke id t                                                                    :'R
+    [<Extension>]static member inline SequenceA (t:_ seq         , [<Optional>]_output:'R, [<Optional>]_impl:SequenceA) :'R =                                                                                         
                         let cons x y = seq {yield x; yield! y}
                         let cons_f x ys = Map.Invoke (cons:'a->seq<_>->seq<_>) x <*> ys
                         Seq.foldBack cons_f t (result Seq.empty)

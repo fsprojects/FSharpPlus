@@ -48,7 +48,7 @@ type Bind =
     static member        Bind (source : ResizeArray<'T>, f : 'T -> ResizeArray<'U>) = ResizeArray(Seq.bind (f >> seq<_>) source)              : ResizeArray<'U> 
 
     static member inline Invoke (source : '``Monad<'T>``) (binder : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
-        let inline call (mthd : 'M, input : 'I, output : 'R, f) = ((^M or ^I or ^R) : (static member Bind: _*_ -> _) input, f)
+        let inline call (_mthd : 'M, input : 'I, _output : 'R, f) = ((^M or ^I or ^R) : (static member Bind: _*_ -> _) input, f)
         call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
 
     static member inline InvokeOnInstance (source : '``Monad<'T>``) (binder : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
@@ -58,29 +58,29 @@ type Bind =
 [<Extension;Sealed>]
 type Join =
     inherit Default1
-    [<Extension>]static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]output : '``Monad<'T>``  , [<Optional>]impl : Default1) = Bind.InvokeOnInstance x id: '``Monad<'T>``
-    [<Extension>]static member        Join (x : Lazy<Lazy<_>>         , [<Optional>]output : Lazy<'T>        , [<Optional>]impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
-    [<Extension>]static member        Join (x                         , [<Optional>]output : seq<'T>         , [<Optional>]impl : Join    ) = Seq.bind id x             : seq<'T> 
-    [<Extension>]static member        Join (x : Id<_>                 , [<Optional>]output : Id<'T>          , [<Optional>]impl : Join    ) = x.getValue                : Id<'T>
+    [<Extension>]static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default1) = Bind.InvokeOnInstance x id: '``Monad<'T>``
+    [<Extension>]static member        Join (x : Lazy<Lazy<_>>         , [<Optional>]_output : Lazy<'T>        , [<Optional>]_impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
+    [<Extension>]static member        Join (x                         , [<Optional>]_output : seq<'T>         , [<Optional>]_impl : Join    ) = Seq.bind id x             : seq<'T> 
+    [<Extension>]static member        Join (x : Id<_>                 , [<Optional>]_output : Id<'T>          , [<Optional>]_impl : Join    ) = x.getValue                : Id<'T>
 #if NOTNET35                                                                                                                              
-    [<Extension>]static member        Join (x : Task<Task<_>>         , [<Optional>]output : Task<'T>        , [<Optional>]impl : Join    ) = x.Unwrap()                : Task<'T>
+    [<Extension>]static member        Join (x : Task<Task<_>>         , [<Optional>]_output : Task<'T>        , [<Optional>]_impl : Join    ) = x.Unwrap()                : Task<'T>
 #endif                                                                                                                                    
-    [<Extension>]static member        Join (x                         , [<Optional>]output : option<'T>      , [<Optional>]impl : Join    ) = Option.bind   id x        : option<'T>
-    [<Extension>]static member        Join (x                         , [<Optional>]output : list<'T>        , [<Optional>]impl : Join    ) = List.collect  id x        : list<'T>  
-    [<Extension>]static member        Join (x                         , [<Optional>]output : 'T []           , [<Optional>]impl : Join    ) = Array.collect id x        : 'T []     
-    [<Extension>]static member        Join (g                         , [<Optional>]output : 'R->'T          , [<Optional>]impl : Join    ) = (fun r -> (g r) r)        : 'R->'T    
-    [<Extension>]static member inline Join (m1, (m2, x)               , [<Optional>]output : 'Monoid * 'T    , [<Optional>]impl : Join    ) = Append.Invoke m1 m2, x    : 'Monoid*'T
-    [<Extension>]static member        Join (x                         , [<Optional>]output : Async<'T>       , [<Optional>]impl : Join    ) = async.Bind(x, id)         : Async<'T>
-    [<Extension>]static member        Join (x                         , [<Optional>]output : Choice<'T,'E>   , [<Optional>]impl : Join    ) = Error.bind id x           : Choice<'T,'E>
+    [<Extension>]static member        Join (x                         , [<Optional>]_output : option<'T>      , [<Optional>]_impl : Join    ) = Option.bind   id x        : option<'T>
+    [<Extension>]static member        Join (x                         , [<Optional>]_output : list<'T>        , [<Optional>]_impl : Join    ) = List.collect  id x        : list<'T>  
+    [<Extension>]static member        Join (x                         , [<Optional>]_output : 'T []           , [<Optional>]_impl : Join    ) = Array.collect id x        : 'T []     
+    [<Extension>]static member        Join (g                         , [<Optional>]_output : 'R->'T          , [<Optional>]_impl : Join    ) = (fun r -> (g r) r)        : 'R->'T    
+    [<Extension>]static member inline Join (m1, (m2, x)               , [<Optional>]_output : 'Monoid * 'T    , [<Optional>]_impl : Join    ) = Append.Invoke m1 m2, x    : 'Monoid*'T
+    [<Extension>]static member        Join (x                         , [<Optional>]_output : Async<'T>       , [<Optional>]_impl : Join    ) = async.Bind(x, id)         : Async<'T>
+    [<Extension>]static member        Join (x                         , [<Optional>]_output : Choice<'T,'E>   , [<Optional>]_impl : Join    ) = Error.bind id x           : Choice<'T,'E>
 
-    [<Extension>]static member Join (x : Map<_,_>                     , [<Optional>]output : Map<'Key,'Value>, [<Optional>]impl : Join    )                             : Map<'Key,'Value> =
+    [<Extension>]static member Join (x : Map<_,_>                     , [<Optional>]_output : Map<'Key,'Value>, [<Optional>]_impl : Join    )                             : Map<'Key,'Value> =
                     Map (seq {
                         for KeyValue(k, v) in x do
                             match Map.tryFind k v with
                             | Some v -> yield k, v
                             | _      -> () })
 
-    [<Extension>]static member Join (x : Dictionary<_,Dictionary<_,_>>, [<Optional>]output : Dictionary<'Key,'Value>, [<Optional>]impl:Join)                            : Dictionary<'Key,'Value> =
+    [<Extension>]static member Join (x : Dictionary<_,Dictionary<_,_>>, [<Optional>]_output : Dictionary<'Key,'Value>, [<Optional>]_impl:Join)                            : Dictionary<'Key,'Value> =
                     let d = Dictionary()
                     for KeyValue(k, v) in x do
                         match v.TryGetValue(k)  with
@@ -88,7 +88,7 @@ type Join =
                         | _       -> ()
                     d
 
-    [<Extension>]static member Join (x:ResizeArray<ResizeArray<'T>>   , [<Optional>]output : ResizeArray<'T>        , [<Optional>]impl : Join) = ResizeArray(Seq.bind seq<_> x) : ResizeArray<'T> 
+    [<Extension>]static member Join (x:ResizeArray<ResizeArray<'T>>   , [<Optional>]_output : ResizeArray<'T>        , [<Optional>]_impl:Join) = ResizeArray(Seq.bind seq<_> x) : ResizeArray<'T> 
 
     static member inline Invoke (source : '``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd : 'M, input : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Join: _*_*_ -> _) input, output, mthd)
@@ -105,7 +105,7 @@ type Return =
     static member inline InvokeOnInstance (x:'T) = (^``Applicative<'T>`` : (static member Return: ^T -> ^``Applicative<'T>``) x)
 
     static member        Return (_:seq<'a> , _:Default2) = fun  x     -> Seq.singleton x :seq<'a>
-    static member inline Return (r:'R      , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
+    static member inline Return (_:'R      , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
 
     static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
 #if NOTNET35        
@@ -132,27 +132,27 @@ type Return =
 type Apply =
     inherit Default1
     
-    static member inline ``<*>`` (f:'``Monad<'T->'U>``  , x:'``Monad<'T>``  , [<Optional>]output:'``Monad<'U>``  , [<Optional>]impl:Default2) : '``Monad<'U>``   = Bind.InvokeOnInstance f (fun (x1:'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
-    static member inline ``<*>`` (f:'``Applicative<'T->'U>``, x:'``Applicative<'T>``, [<Optional>]output:'``Applicative<'U>``, [<Optional>]impl:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) f, x)
+    static member inline ``<*>`` (f:'``Monad<'T->'U>``  , x:'``Monad<'T>``  , [<Optional>]_output:'``Monad<'U>``  , [<Optional>]_impl:Default2) : '``Monad<'U>``   = Bind.InvokeOnInstance f (fun (x1:'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
+    static member inline ``<*>`` (f:'``Applicative<'T->'U>``, x:'``Applicative<'T>``, [<Optional>]_output:'``Applicative<'U>``, [<Optional>]_impl:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) f, x)
 
-    static member        ``<*>`` (f:Lazy<'T->'U>, x:Lazy<'T>     , [<Optional>]output:Lazy<'U>     , [<Optional>]impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'U>
-    static member        ``<*>`` (f:seq<_>      , x:seq<'T>      , [<Optional>]output:seq<'U>      , [<Optional>]impl:Apply) = Seq.apply  f x :seq<'U>
-    static member        ``<*>`` (f:list<_>     , x:list<'T>     , [<Optional>]output:list<'U>     , [<Optional>]impl:Apply) = List.apply f x :list<'U>
-    static member        ``<*>`` (f:_ []        , x:'T []        , [<Optional>]output:'U []        , [<Optional>]impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
-    static member        ``<*>`` (f:'r -> _     , g: _ -> 'T     , [<Optional>]output: 'r -> 'U    , [<Optional>]impl:Apply) = fun x -> f x (g x) :'U
-    static member inline ``<*>`` ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]output:'Monoid * 'U, [<Optional>]impl:Apply) = (Append.Invoke a b, f x) :'Monoid *'U
-    static member        ``<*>`` (f:Async<_>    , x:Async<'T>    , [<Optional>]output:Async<'U>    , [<Optional>]impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
-    static member        ``<*>`` (f:option<_>   , x:option<'T>   , [<Optional>]output:option<'U>   , [<Optional>]impl:Apply) = Option.apply f x    :option<'U>
-    static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>, [<Optional>]output:Choice<'b,'E>, [<Optional>]impl:Apply) = Error.apply f x :Choice<'U,'E>
-    static member inline ``<*>`` (KeyValue(a:'Key, f), KeyValue(b:'Key, x:'T), [<Optional>]output:KeyValuePair<'Key,'U>, [<Optional>]impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(Append.Invoke a b, f x)
+    static member        ``<*>`` (f:Lazy<'T->'U>, x:Lazy<'T>       , [<Optional>]_output:Lazy<'U>     , [<Optional>]_impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'U>
+    static member        ``<*>`` (f:seq<_>      , x:seq<'T>        , [<Optional>]_output:seq<'U>      , [<Optional>]_impl:Apply) = Seq.apply  f x :seq<'U>
+    static member        ``<*>`` (f:list<_>     , x:list<'T>       , [<Optional>]_output:list<'U>     , [<Optional>]_impl:Apply) = List.apply f x :list<'U>
+    static member        ``<*>`` (f:_ []        , x:'T []          , [<Optional>]_output:'U []        , [<Optional>]_impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
+    static member        ``<*>`` (f:'r -> _     , g: _ -> 'T       , [<Optional>]_output: 'r -> 'U    , [<Optional>]_impl:Apply) = fun x -> f x (g x) :'U
+    static member inline ``<*>`` ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]_output:'Monoid * 'U , [<Optional>]_impl:Apply) = (Append.Invoke a b, f x) :'Monoid *'U
+    static member        ``<*>`` (f:Async<_>    , x:Async<'T>      , [<Optional>]_output:Async<'U>    , [<Optional>]_impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
+    static member        ``<*>`` (f:option<_>   , x:option<'T>     , [<Optional>]_output:option<'U>   , [<Optional>]_impl:Apply) = Option.apply f x    :option<'U>
+    static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>  , [<Optional>]_output:Choice<'b,'E>, [<Optional>]_impl:Apply) = Error.apply f x :Choice<'U,'E>
+    static member inline ``<*>`` (KeyValue(a:'Key, f), KeyValue(b:'Key, x:'T), [<Optional>]_output:KeyValuePair<'Key,'U>, [<Optional>]_impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(Append.Invoke a b, f x)
 
-    static member        ``<*>`` (f:Map<'Key,_>       , x:Map<'Key,'T>       , [<Optional>]output:Map<'Key,'U>, [<Optional>]impl:Apply) :Map<'Key,'U>          = Map (seq {
+    static member        ``<*>`` (f:Map<'Key,_>      , x:Map<'Key,'T>        , [<Optional>]_output:Map<'Key,'U>, [<Optional>]_impl:Apply) :Map<'Key,'U> = Map (seq {
        for KeyValue(k, vf) in f do
            match Map.tryFind k x with
            | Some vx -> yield k, vf vx
            | _       -> () })
 
-    static member        ``<*>`` (f:Dictionary<'Key,_>, x:Dictionary<'Key,'T>, [<Optional>]output:Dictionary<'Key,'U>, [<Optional>]impl:Apply) :Dictionary<'Key,'U> =
+    static member        ``<*>`` (f:Dictionary<'Key,_>, x:Dictionary<'Key,'T>, [<Optional>]_output:Dictionary<'Key,'U>, [<Optional>]_impl:Apply) :Dictionary<'Key,'U> =
        let d = Dictionary()
        for KeyValue(k, vf) in f do
            match x.TryGetValue k with
@@ -160,9 +160,9 @@ type Apply =
            | _        -> ()
        d
     
-    static member        ``<*>`` (f:Expr<'T->'U>, x:Expr<'T>, [<Optional>]output:Expr<'U>, [<Optional>]impl:Apply) = Expr.Cast<'U>(Expr.Application(f,x))
+    static member        ``<*>`` (f:Expr<'T->'U>, x:Expr<'T>, [<Optional>]_output:Expr<'U>, [<Optional>]_impl:Apply) = Expr.Cast<'U>(Expr.Application(f,x))
 
-    static member        ``<*>`` (f:('T->'U) ResizeArray, x:'T ResizeArray, [<Optional>]output:'U ResizeArray, [<Optional>]impl:Apply) =
+    static member        ``<*>`` (f:('T->'U) ResizeArray, x:'T ResizeArray, [<Optional>]_output:'U ResizeArray, [<Optional>]_impl:Apply) =
        ResizeArray(Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) :'U ResizeArray
 
     static member inline Invoke (f:'``Applicative<'T -> 'U>``) (x:'``Applicative<'T>``) : '``Applicative<'U>`` =
@@ -180,7 +180,7 @@ type Iterate =
     static member Iterate (x:seq<'T>   , action) = Seq.iter action x
     static member Iterate (x:option<'T>, action) = match x with Some x -> action x | _ -> ()
     static member Iterate (x:list<'T>  , action) = List.iter action x
-    static member Iterate ((m:'W, a:'T), action) = action a :unit
+    static member Iterate ((_:'W, a:'T), action) = action a :unit
     static member Iterate (x:'T []     , action) = Array.iter   action x
     static member Iterate (x:'T [,]    , action) = Array2D.iter action x
     static member Iterate (x:'T [,,]   , action) = Array3D.iter action x
@@ -192,7 +192,7 @@ type Iterate =
                        action x.[i,j,k,l]
     static member Iterate (x:Async<'T>           , action) = action (Async.RunSynchronously x) : unit
     static member Iterate (x:Choice<'T,'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
-    static member Iterate (KeyValue(k:'Key, x:'T), action) = action x :unit
+    static member Iterate (KeyValue(_:'Key, x:'T), action) = action x :unit
     static member Iterate (x:Map<'Key,'T>        , action) = Map.iter (const' action) x 
     static member Iterate (x:Dictionary<'Key,'T> , action) = Seq.iter action x.Values
     static member Iterate (x:_ ResizeArray       , action) = Seq.iter action x
@@ -203,55 +203,55 @@ type Iterate =
     static member Iterate (x:Set<'T>        , action) = Set.iter action x        
 
     static member inline Invoke (action : 'T->unit) (source : '``Functor<'T>``) : unit =
-        let inline call (mthd : ^M, source : ^I) =  ((^M or ^I) : (static member Iterate: _*_ -> _) source, action)
+        let inline call (_ : ^M, source : ^I) =  ((^M or ^I) : (static member Iterate: _*_ -> _) source, action)
         call (Unchecked.defaultof<Iterate>, source)
 
 type Map =
     inherit Default1
 
     static member inline Invoke (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Map: _*_*_ -> _) source, mapping, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member Map: _*_*_ -> _) source, mapping, mthd)
         call (Unchecked.defaultof<Map>, source, Unchecked.defaultof<'``Functor<'U>``>)
 
     static member inline InvokeOnInstance (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
 
-    static member inline Map (x : '``Monad<'T>``      , f : 'T->'U, [<Optional>]impl:Default3) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
-    static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]impl:Default2) = Apply.InvokeOnInstance (Return.InvokeOnInstance f) x : '``Applicative<'U>``
-    static member inline Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
+    static member inline Map (x : '``Monad<'T>``      , f : 'T->'U, [<Optional>]_impl:Default3) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
+    static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]_impl:Default2) = Apply.InvokeOnInstance (Return.InvokeOnInstance f) x : '``Applicative<'U>``
+    static member inline Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]_impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
 
-    static member Map (x : Lazy<_>        , f : 'T->'U, [<Optional>]mthd : Map) = Lazy.Create (fun () -> f x.Value)   : Lazy<'U>
-    static member Map (x : seq<_>         , f : 'T->'U, [<Optional>]mthd : Map) = Seq.map f x                         : seq<'U>
-    static member Map (x : option<_>      , f : 'T->'U, [<Optional>]mthd : Map) = Option.map  f x
-    static member Map (x : list<_>        , f : 'T->'U, [<Optional>]mthd : Map) = List.map f x                        : list<'U>
-    static member Map (g : 'R->'T         , f : 'T->'U, [<Optional>]mthd : Map) = (>>) g f
-    static member Map ((m : 'Monoid, a)   , f : 'T->'U, [<Optional>]mthd : Map) = (m, f a)
-    static member Map (x : _ []           , f : 'T->'U, [<Optional>]mthd : Map) = Array.map   f x
-    static member Map (x : _ [,]          , f : 'T->'U, [<Optional>]mthd : Map) = Array2D.map f x
-    static member Map (x : _ [,,]         , f : 'T->'U, [<Optional>]mthd : Map) = Array3D.map f x
-    static member Map (x : _ [,,,]        , f : 'T->'U, [<Optional>]mthd : Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-    static member Map (x : Async<_>       , f : 'T->'U, [<Optional>]mthd : Map) = async.Bind(x, async.Return << f)
-    static member Map (x : Choice<_,'E>   , f : 'T->'U, [<Optional>]mthd : Map) = Error.map f x
-    static member Map (KeyValue(k, x)     , f : 'T->'U, [<Optional>]mthd : Map) = KeyValuePair(k, f x)
-    static member Map (x : Map<'Key,'T>   , f : 'T->'U, [<Optional>]mthd : Map) = Map.map (const' f) x : Map<'Key,'U>
-    static member Map (x : Dictionary<_,_>, f : 'T->'U, [<Optional>]mthd : Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d: Dictionary<'Key,'U>
-    static member Map (x : Expr<'T>       , f : 'T->'U, [<Optional>]mthd : Map) = Expr.Cast<'U>(Expr.Application(Expr.Value(f),x))
-    static member Map (x : ResizeArray<'T>, f : 'T->'U, [<Optional>]mthd : Map) = ResizeArray(Seq.map f x) : ResizeArray<'U>
-    static member Map (x : IObservable<'T>, f : 'T->'U, [<Optional>]mthd : Map) = Observable.map f x
+    static member Map (x : Lazy<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = Lazy.Create (fun () -> f x.Value)   : Lazy<'U>
+    static member Map (x : seq<_>         , f : 'T->'U, [<Optional>]_mthd : Map) = Seq.map f x                         : seq<'U>
+    static member Map (x : option<_>      , f : 'T->'U, [<Optional>]_mthd : Map) = Option.map  f x
+    static member Map (x : list<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = List.map f x                        : list<'U>
+    static member Map (g : 'R->'T         , f : 'T->'U, [<Optional>]_mthd : Map) = (>>) g f
+    static member Map ((m : 'Monoid, a)   , f : 'T->'U, [<Optional>]_mthd : Map) = (m, f a)
+    static member Map (x : _ []           , f : 'T->'U, [<Optional>]_mthd : Map) = Array.map   f x
+    static member Map (x : _ [,]          , f : 'T->'U, [<Optional>]_mthd : Map) = Array2D.map f x
+    static member Map (x : _ [,,]         , f : 'T->'U, [<Optional>]_mthd : Map) = Array3D.map f x
+    static member Map (x : _ [,,,]        , f : 'T->'U, [<Optional>]_mthd : Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
+    static member Map (x : Async<_>       , f : 'T->'U, [<Optional>]_mthd : Map) = async.Bind(x, async.Return << f)
+    static member Map (x : Choice<_,'E>   , f : 'T->'U, [<Optional>]_mthd : Map) = Error.map f x
+    static member Map (KeyValue(k, x)     , f : 'T->'U, [<Optional>]_mthd : Map) = KeyValuePair(k, f x)
+    static member Map (x : Map<'Key,'T>   , f : 'T->'U, [<Optional>]_mthd : Map) = Map.map (const' f) x : Map<'Key,'U>
+    static member Map (x : Dictionary<_,_>, f : 'T->'U, [<Optional>]_mthd : Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d: Dictionary<'Key,'U>
+    static member Map (x : Expr<'T>       , f : 'T->'U, [<Optional>]_mthd : Map) = Expr.Cast<'U>(Expr.Application(Expr.Value(f),x))
+    static member Map (x : ResizeArray<'T>, f : 'T->'U, [<Optional>]_mthd : Map) = ResizeArray(Seq.map f x) : ResizeArray<'U>
+    static member Map (x : IObservable<'T>, f : 'T->'U, [<Optional>]_mthd : Map) = Observable.map f x
 
     // Restricted
-    static member Map (x : string         , f, [<Optional>]mthd : Map) = String.map f x
-    static member Map (x : StringBuilder  , f, [<Optional>]mthd : Map) = new StringBuilder(String.map f (x.ToString()))
-    static member Map (x : Set<_>         , f, [<Optional>]mthd : Map) = Set.map f x
+    static member Map (x : string         , f, [<Optional>]_mthd : Map) = String.map f x
+    static member Map (x : StringBuilder  , f, [<Optional>]_mthd : Map) = new StringBuilder(String.map f (x.ToString()))
+    static member Map (x : Set<_>         , f, [<Optional>]_mthd : Map) = Set.map f x
         
 
 
 type MZero =
-    static member        MZero ([<Optional>]output : option<'T>, [<Optional>]mthd : MZero) = None                   : option<'T>
-    static member        MZero ([<Optional>]output : list<'T>  , [<Optional>]mthd : MZero) = [  ]                   : list<'T>  
-    static member        MZero ([<Optional>]output : 'T []     , [<Optional>]mthd : MZero) = [||]                   : 'T []     
-    static member        MZero ([<Optional>]output : seq<'T>   , [<Optional>]mthd : MZero) = Seq.empty              : seq<'T>
-    static member inline MZero ([<Optional>]output : Id<'T>    , [<Optional>]mthd : MZero) = Id (Empty.Invoke())    : Id<'T>
+    static member        MZero ([<Optional>]_output : option<'T>, [<Optional>]_mthd : MZero) = None                   : option<'T>
+    static member        MZero ([<Optional>]_output : list<'T>  , [<Optional>]_mthd : MZero) = [  ]                   : list<'T>  
+    static member        MZero ([<Optional>]_output : 'T []     , [<Optional>]_mthd : MZero) = [||]                   : 'T []     
+    static member        MZero ([<Optional>]_output : seq<'T>   , [<Optional>]_mthd : MZero) = Seq.empty              : seq<'T>
+    static member inline MZero ([<Optional>]_output : Id<'T>    , [<Optional>]_mthd : MZero) = Id (Empty.Invoke())    : Id<'T>
 
     static member inline Invoke () : '``FunctorZero<'T>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member MZero: _*_ -> _) output, mthd)
@@ -260,11 +260,11 @@ type MZero =
 
 [<Extension;Sealed>]
 type MPlus =
-    [<Extension>]static member        MPlus (x :'T option, y, [<Optional>]mthd : MPlus) = match x with None -> y | xs -> xs
-    [<Extension>]static member        MPlus (x :'T list  , y, [<Optional>]mthd : MPlus) = x @ y
-    [<Extension>]static member        MPlus (x :'T []    , y, [<Optional>]mthd : MPlus) = Array.append x y
-    [<Extension>]static member        MPlus (x :'T seq   , y, [<Optional>]mthd : MPlus) = Seq.append   x y
-    [<Extension>]static member inline MPlus (x :'T Id    , y, [<Optional>]mthd : MPlus) = Id (Append.Invoke (Id.run x) (Id.run y))
+    [<Extension>]static member        MPlus (x :'T option, y, [<Optional>]_mthd : MPlus) = match x with None -> y | xs -> xs
+    [<Extension>]static member        MPlus (x :'T list  , y, [<Optional>]_mthd : MPlus) = x @ y
+    [<Extension>]static member        MPlus (x :'T []    , y, [<Optional>]_mthd : MPlus) = Array.append x y
+    [<Extension>]static member        MPlus (x :'T seq   , y, [<Optional>]_mthd : MPlus) = Seq.append   x y
+    [<Extension>]static member inline MPlus (x :'T Id    , y, [<Optional>]_mthd : MPlus) = Id (Append.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'``FunctorPlus<'T>``) (y:'``FunctorPlus<'T>``)  : '``FunctorPlus<'T>`` =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member MPlus: _*_*_ -> _) input1, input2, mthd)
@@ -274,14 +274,14 @@ type MPlus =
 type Delay =
     inherit Default1
     
-    static member inline Delay (mthd: Default3 , x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` :     struct, _:Default2) = x()
-    static member inline Delay (mthd: Default3 , x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` : not struct, _:Default1) = x()
-    static member inline Delay (mthd: Default1 , x: unit-> ^I                                             , _:Delay   ) = (^I : (static member Delay: _->_) x) :^I
-    static member inline Delay (mthd: Default1 , x: unit-> ^t when  ^t : null and ^t  : struct            , _         ) = ()
+    static member inline Delay (_mthd: Default3 , x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` :     struct, _:Default2) = x()
+    static member inline Delay (_mthd: Default3 , x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` : not struct, _:Default1) = x()
+    static member inline Delay (_mthd: Default1 , x: unit-> ^I                                             , _:Delay   ) = (^I : (static member Delay: _->_) x) :^I
+    static member inline Delay (_mthd: Default1 , _: unit-> ^t when  ^t : null and ^t  : struct            , _         ) = ()
 
-    static member        Delay (mthd: Default2 , x: unit-> _                                              , _         ) = Seq.delay(x)     : seq<'T>
-    static member        Delay (mthd: Delay    , x: unit-> _                                              , _         ) = async.Delay(x)   : Async<'T>
-    static member        Delay (mthd: Delay    , x: unit-> Lazy<_>                                        , _         ) = lazy (x().Value) : Lazy<'T>
+    static member        Delay (_mthd: Default2 , x: unit-> _                                              , _         ) = Seq.delay(x)     : seq<'T>
+    static member        Delay (_mthd: Delay    , x: unit-> _                                              , _         ) = async.Delay(x)   : Async<'T>
+    static member        Delay (_mthd: Delay    , x: unit-> Lazy<_>                                        , _         ) = lazy (x().Value) : Lazy<'T>
 
     static member inline Invoke source : 'R =
         let inline call (mthd : ^M, input : unit -> ^I) = ((^M or ^I) : (static member Delay: _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
@@ -321,7 +321,7 @@ open FSharpPlus
 type Extract =
     [<Extension>]static member        Extract (x : Async<'T>    ) = Async.RunSynchronously x
     [<Extension>]static member        Extract (x : Lazy<'T>     ) = x.Value
-    [<Extension>]static member        Extract ((w : 'W, a : 'T) ) = a
+    [<Extension>]static member        Extract ((_ : 'W, a : 'T) ) = a
     [<Extension>]static member inline Extract (f : 'Monoid -> 'T) = f (Empty.Invoke())
     [<Extension>]static member        Extract (f : 'T Id        ) = f
 
@@ -330,7 +330,7 @@ type Extract =
 #endif
 
     static member inline Invoke (x : '``Comonad<'T>``) : 'T =
-        let inline call_2 (mthd : ^M, x : ^I) = ((^M or ^I) : (static member Extract: _ -> _) x)
+        let inline call_2 (_mthd : ^M, x : ^I) = ((^M or ^I) : (static member Extract: _ -> _) x)
         call_2 (Unchecked.defaultof<Extract>, x)
 
 type Extend =
@@ -350,26 +350,26 @@ type Extend =
     static member        Extend (s : seq<'T>      , g) = Seq.map g (s |> Seq.toList |> List.tails |> List.toSeq |> Seq.map List.toSeq) :'U seq
 
     static member inline Invoke (g : '``Comonad<'T>``->'U) (s : '``Comonad<'T>``) : '``Comonad<'U>`` =
-        let inline call (mthd : 'M, source : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Extend: _*_ -> _) source, g)
+        let inline call (_mthd : 'M, source : 'I, _output : 'R) = ((^M or ^I or ^R) : (static member Extend: _*_ -> _) source, g)
         call (Unchecked.defaultof<Extend>, s, Unchecked.defaultof<'``Comonad<'U>``>)
 
 [<Extension;Sealed>]
 
 type Duplicate =
     inherit Default1
-    [<Extension>]static member inline Duplicate (x : '``Comonad<'T>`` , [<Optional>]mthd : Default1 ) = Extend.Invoke id x          : '``Comonad<'Comonad<'T>>``
-    [<Extension>]static member        Duplicate (s : Async<'T>        , [<Optional>]mthd : Duplicate) = async.Return s              : Async<Async<'T>>
-    [<Extension>]static member        Duplicate (s : Lazy<'T>         , [<Optional>]mthd : Duplicate) = Lazy.CreateFromValue s      : Lazy<Lazy<'T>>
-    [<Extension>]static member        Duplicate (s : Id<'T>           , [<Optional>]mthd : Duplicate) = Id s                        : Id<Id<'T>>
-    [<Extension>]static member        Duplicate ((w : 'W, a : 'T)     , [<Optional>]mthd : Duplicate) = w, (w, a)
-    [<Extension>]static member inline Duplicate (f : 'Monoid -> 'T    , [<Optional>]mthd : Duplicate) = fun a b -> f (Append.Invoke a b)
+    [<Extension>]static member inline Duplicate (x : '``Comonad<'T>`` , [<Optional>]_mthd : Default1 ) = Extend.Invoke id x          : '``Comonad<'Comonad<'T>>``
+    [<Extension>]static member        Duplicate (s : Async<'T>        , [<Optional>]_mthd : Duplicate) = async.Return s              : Async<Async<'T>>
+    [<Extension>]static member        Duplicate (s : Lazy<'T>         , [<Optional>]_mthd : Duplicate) = Lazy.CreateFromValue s      : Lazy<Lazy<'T>>
+    [<Extension>]static member        Duplicate (s : Id<'T>           , [<Optional>]_mthd : Duplicate) = Id s                        : Id<Id<'T>>
+    [<Extension>]static member        Duplicate ((w : 'W, a : 'T)     , [<Optional>]_mthd : Duplicate) = w, (w, a)
+    [<Extension>]static member inline Duplicate (f : 'Monoid -> 'T    , [<Optional>]_mthd : Duplicate) = fun a b -> f (Append.Invoke a b)
 
     // Restricted Comonads
-    [<Extension>]static member        Duplicate (s :  list<'T>        , [<Optional>]mthd : Duplicate) = List.tails s
-    [<Extension>]static member        Duplicate (s : array<'T>        , [<Optional>]mthd : Duplicate) = s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray  
+    [<Extension>]static member        Duplicate (s :  list<'T>        , [<Optional>]_mthd : Duplicate) = List.tails s
+    [<Extension>]static member        Duplicate (s : array<'T>        , [<Optional>]_mthd : Duplicate) = s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray  
 
     static member inline Invoke (x : '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Duplicate: _*_ -> _) source, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member Duplicate: _*_ -> _) source, mthd)
         call (Unchecked.defaultof<Duplicate>, x, Unchecked.defaultof<'``Comonad<'Comonad<'T>>``>)
 
 
@@ -386,7 +386,7 @@ type Contramap =
     
     
     static member inline Invoke (f : 'U -> 'T) (x : '``Contravariant<'T>``) : '``Contravariant<'U>`` = 
-        let inline call (mthd : 'M, source : 'I, output : 'R) = ((^M or ^I or ^R) : (static member Contramap: _*_ -> _) source, f)
+        let inline call (_mthd : 'M, source : 'I, _output : 'R) = ((^M or ^I or ^R) : (static member Contramap: _*_ -> _) source, f)
         call (Unchecked.defaultof<Contramap>, x, Unchecked.defaultof<'``Contravariant<'U>``>)
 
 
@@ -395,12 +395,12 @@ type Contramap =
 type Bimap =
     inherit Default1
        
-    static member        Bimap ((x, y)                 , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = (f x, g y)
-    static member        Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = either (Choice2Of2 << f) (Choice1Of2 << g) x
-    static member        Bimap (KeyValue(k, x)         , f:'T->'U, g:'V->'W , [<Optional>]mthd :Bimap   ) = KeyValuePair(f k, g x)
+    static member        Bimap ((x, y)                 , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = (f x, g y)
+    static member        Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = either (Choice2Of2 << f) (Choice1Of2 << g) x
+    static member        Bimap (KeyValue(k, x)         , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = KeyValuePair(f k, g x)
 
     static member inline Invoke (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Bimap: _*_*_*_ -> _) source, f, g, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member Bimap: _*_*_*_ -> _) source, f, g, mthd)
         call (Unchecked.defaultof<Bimap>, source, Unchecked.defaultof<'``Bifunctor<'U,'W>``>)
 
     static member inline InvokeOnInstance (f : 'T->'U) (g : 'V->'W) (source :'``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
@@ -410,47 +410,47 @@ type Bimap =
 type MapFirst =
     inherit Default1
 
-    static member        First ((x, y)                , f:'T->'U, [<Optional>]mthd : MapFirst) = (f x, y)
-    static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]mthd : MapFirst) = either (Choice2Of2 << f) Choice1Of2 x
-    static member        First (KeyValue(k, x)        , f:'T->'U, [<Optional>]mthd : MapFirst) = KeyValuePair(f k, x)
+    static member        First ((x, y)                , f:'T->'U, [<Optional>]_mthd : MapFirst) = (f x, y)
+    static member        First (x : Choice<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = either (Choice2Of2 << f) Choice1Of2 x
+    static member        First (KeyValue(k, x)        , f:'T->'U, [<Optional>]_mthd : MapFirst) = KeyValuePair(f k, x)
 
     static member inline Invoke (f : 'T->'U) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member First: _*_*_ -> _) source, f, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member First: _*_*_ -> _) source, f, mthd)
         call (Unchecked.defaultof<MapFirst>, source, Unchecked.defaultof<'``Bifunctor<'U,'V>``>)
 
     static member inline InvokeOnInstance (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
         (^``Bifunctor<'T,'V>`` : (static member First: _*_ -> _) source, f)
 
 type MapFirst with
-    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance f id x  : '``Bifunctor<'U,'V>``
-    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]mthd :Default1) = MapFirst.InvokeOnInstance f x  : '``Bifunctor<'U,'V>``
-    static member inline First (_:^t when ^t: null and ^t: struct, f : 'T->'U,     mthd :Default1) = ()
+    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]_mthd :Default2) = Bimap.InvokeOnInstance f id x  : '``Bifunctor<'U,'V>``
+    static member inline First (x : '``Bifunctor<'T,'V>``, f : 'T->'U, [<Optional>]_mthd :Default1) = MapFirst.InvokeOnInstance f x  : '``Bifunctor<'U,'V>``
+    static member inline First (_:^t when ^t: null and ^t: struct, _ : 'T->'U,     _mthd :Default1) = ()
 
 
 type MapSecond =
     inherit Default1
 
-    static member        Second ((x, y)                , f:'V->'W, [<Optional>]mthd : MapSecond) = (x, f y)
-    static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]mthd : MapSecond) = either Choice2Of2 (Choice1Of2 << f) x
-    static member        Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]mthd : MapSecond) = KeyValuePair(k, f x)
+    static member        Second ((x, y)                , f:'V->'W, [<Optional>]_mthd : MapSecond) = (x, f y)
+    static member        Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = either Choice2Of2 (Choice1Of2 << f) x
+    static member        Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]_mthd : MapSecond) = KeyValuePair(k, f x)
 
     static member inline Invoke (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Second: _*_*_ -> _) source, f, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member Second: _*_*_ -> _) source, f, mthd)
         call (Unchecked.defaultof<MapSecond>, source, Unchecked.defaultof<'``Bifunctor<'T,'W>``>)
 
     static member inline InvokeOnInstance (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = 
         (^``Bifunctor<'T,'V>`` : (static member Second: _*_ -> _) source, f) 
 
 type MapSecond with
-    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default2) = Bimap.InvokeOnInstance id f x
-    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]mthd :Default1) = MapSecond.InvokeOnInstance f x
-    static member inline Second (_:^t when ^t: null and ^t: struct, f : 'V->'W,   mthd :Default1) = ()
+    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]_mthd :Default2) = Bimap.InvokeOnInstance id f x
+    static member inline Second (x : '``Bifunctor<'T,'V>``, f:'V->'W, [<Optional>]_mthd :Default1) = MapSecond.InvokeOnInstance f x
+    static member inline Second (_:^t when ^t: null and ^t: struct, _ : 'V->'W,   _mthd :Default1) = ()
 
 
 type Bimap with
-    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default2) = x |> MapFirst.InvokeOnInstance f |> MapSecond.InvokeOnInstance g    : '``Bifunctor<'U,'W>``
-    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]mthd :Default1) = Bimap.InvokeOnInstance f g x                                        : '``Bifunctor<'U,'W>``
-    static member inline Bimap (_:^t when ^t: null and ^t: struct, f:'T->'U, g:'V->'W,    mthd :Default1) = ()
+    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]_mthd :Default2) = x |> MapFirst.InvokeOnInstance f |> MapSecond.InvokeOnInstance g    : '``Bifunctor<'U,'W>``
+    static member inline Bimap (x:'``Bifunctor<'T,'V>``, f:'T->'U, g:'V->'W , [<Optional>]_mthd :Default1) = Bimap.InvokeOnInstance f g x                                        : '``Bifunctor<'U,'W>``
+    static member inline Bimap (_:^t when ^t: null and ^t: struct, _:'T->'U, _:'V->'W,    _mthd :Default1) = ()
 
 
 // Profunctor class -------------------------------------------------------
@@ -458,11 +458,11 @@ type Bimap with
 type Dimap =
     inherit Default1
 
-    static member Dimap (f            , g :'A->'B, h :'C->'D, [<Optional>]mthd: Dimap) = g >> f >> h   : 'A->'D
-    static member Dimap (f:Func<'B,'C>, g :'A->'B, h :'C->'D, [<Optional>]mthd: Dimap) = Func<'A,'D>(g >> f.Invoke >> h)
+    static member Dimap (f            , g :'A->'B, h :'C->'D, [<Optional>]_mthd: Dimap) = g >> f >> h   : 'A->'D
+    static member Dimap (f:Func<'B,'C>, g :'A->'B, h :'C->'D, [<Optional>]_mthd: Dimap) = Func<'A,'D>(g >> f.Invoke >> h)
     
     static member inline Invoke (ab:'A->'B) (cd:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Dimap: _*_*_*_ -> _) source, ab, cd, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member Dimap: _*_*_*_ -> _) source, ab, cd, mthd)
         call (Unchecked.defaultof<Dimap>, source, Unchecked.defaultof<'``Profunctor<'A,'D>``>)
 
     static member inline InvokeOnInstance (ab:'A->'B) (cd:'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` =
@@ -473,44 +473,44 @@ type LMap =
     inherit Default1
 
     static member inline Invoke (ab : 'A->'B) (source :'``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member LMap: _*_*_ -> _) source, ab, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member LMap: _*_*_ -> _) source, ab, mthd)
         call (Unchecked.defaultof<LMap>, source, Unchecked.defaultof<'``Profunctor<'A,'C>``>)
 
     static member inline InvokeOnInstance (ab : 'A->'B) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
         (^``Profunctor<'B,'C>`` : (static member LMap: _*_ -> _) source, ab)
 
-    static member LMap (f : 'B->'C     , k:'A->'B, [<Optional>]mthd :LMap) = k >> f     : 'A->'C
-    static member LMap (f : Func<'B,'C>, k:'A->'B, [<Optional>]mthd :LMap) = Func<'A,'C>(k >> f.Invoke)
+    static member LMap (f : 'B->'C     , k:'A->'B, [<Optional>]_mthd :LMap) = k >> f     : 'A->'C
+    static member LMap (f : Func<'B,'C>, k:'A->'B, [<Optional>]_mthd :LMap) = Func<'A,'C>(k >> f.Invoke)
     
 type LMap with
-    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
-    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]mthd :Default1) = LMap.InvokeOnInstance f x     : '``Profunctor<'A,'C>``
-    static member inline LMap (_:^t when ^t: null and ^t: struct   , f:'A->'B,    mthd :Default1) = ()
+    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]_mthd :Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
+    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]_mthd :Default1) = LMap.InvokeOnInstance f x     : '``Profunctor<'A,'C>``
+    static member inline LMap (_:^t when ^t: null and ^t: struct   , _:'A->'B,    _mthd :Default1) = ()
 
 
 type RMap =
     inherit Default1
 
     static member inline Invoke (cd : 'C->'D) (source :'``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
-        let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member RMap: _*_*_ -> _) source, cd, mthd)
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member RMap: _*_*_ -> _) source, cd, mthd)
         call (Unchecked.defaultof<RMap>, source, Unchecked.defaultof<'``Profunctor<'B,'D>``>)
 
     static member inline InvokeOnInstance (cd : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
         (^``Profunctor<'B,'C>`` : (static member RMap: _*_ -> _) source, cd)
 
-    static member RMap (f : 'B->'C     , cd:'C->'D, [<Optional>]mthd :RMap) = f >> cd   : 'B->'D
-    static member RMap (f : Func<'B,'C>, cd:'C->'D, [<Optional>]mthd :RMap) = Func<'B,'D>(f.Invoke >> cd)
+    static member RMap (f : 'B->'C     , cd:'C->'D, [<Optional>]_mthd :RMap) = f >> cd   : 'B->'D
+    static member RMap (f : Func<'B,'C>, cd:'C->'D, [<Optional>]_mthd :RMap) = Func<'B,'D>(f.Invoke >> cd)
     
 type RMap with
-    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]mthd :Default2) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
-    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]mthd :Default1) = RMap.InvokeOnInstance  cd x    : '``Profunctor<'B,'D>``
-    static member inline RMap (_:^t when ^t: null and ^t: struct   , f:'C->'D,     mthd :Default1) = ()
+    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]_mthd :Default2) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
+    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]_mthd :Default1) = RMap.InvokeOnInstance  cd x    : '``Profunctor<'B,'D>``
+    static member inline RMap (_:^t when ^t: null and ^t: struct   , _:'C->'D,     _mthd :Default1) = ()
 
 
 type Dimap with
-    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default2) = x |> RMap.InvokeOnInstance cd |> LMap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
-    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]mthd :Default1) = Dimap.InvokeOnInstance ab cd x                            : '``Profunctor<'A,'D>``
-    static member inline Dimap (_:^t when ^t: null and ^t: struct,     f:'T->'U, g:'V->'W,   mthd :Default1) = ()
+    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default2) = x |> RMap.InvokeOnInstance cd |> LMap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
+    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default1) = Dimap.InvokeOnInstance ab cd x                            : '``Profunctor<'A,'D>``
+    static member inline Dimap (_:^t when ^t: null and ^t: struct,     _:'T->'U, _:'V->'W,   _mthd :Default1) = ()
 
 
 // Invokable class --------------------------------------------------------
@@ -518,14 +518,14 @@ type Dimap with
 type Invoke =
     inherit Default1
 
-    static member inline Invoke (_ : ^t when ^t : null and ^t : struct, _, output : ^O, mthd : Default1) = id
-    static member inline Invoke (f:'T, x, output : ^O, mthd : Default1) =  ((^T) : (static member Invoke  : _ -> _) x)
-    static member        Invoke (g :  'T -> 'U  , x:'T, output : 'U, mthd : Invoke) = g x        : 'U
-    static member        Invoke (g : Func<'T,'U>, x:'T, output : 'U, mthd : Invoke) = g.Invoke x : 'U
+    static member inline Invoke (_ : ^t when ^t : null and ^t : struct, _, _output : ^O, _mthd : Default1) = id
+    static member inline Invoke (_:'T, x, _output : ^O, _mthd : Default1) =  ((^T) : (static member Invoke  : _ -> _) x)
+    static member        Invoke (g :  'T -> 'U  , x:'T, _output : 'U, _mthd : Invoke) = g x        : 'U
+    static member        Invoke (g : Func<'T,'U>, x:'T, _output : 'U, _mthd : Invoke) = g.Invoke x : 'U
 
     // No return type check
     static member inline InvokeNRTC (f : '``Category<'T,'U>``, x : 'T) =
-        let inline call ( f : ^I, x:'TT) = ((^I or ^TT) : (static member Invoke : _-> _) x)
+        let inline call (_ : ^I, x:'TT) = ((^I or ^TT) : (static member Invoke : _-> _) x)
         call (f, x)  
 
     static member inline Invoke (f : '``Category<'T,'U>``, x : 'T) : 'U =
@@ -542,8 +542,8 @@ type ComposedStaticInvokable< ^F, ^G>  =
 
 type Id =
     inherit Default1
-    static member Id ([<Optional>]output :  'T -> 'T  , [<Optional>]mthd : Id) = id                 : 'T -> 'T
-    static member Id ([<Optional>]output : Func<'T,'T>, [<Optional>]mthd : Id) = Func<'T,'T>(id)    : Func<'T,'T>
+    static member Id ([<Optional>]_output :  'T -> 'T  , [<Optional>]_mthd : Id) = id                 : 'T -> 'T
+    static member Id ([<Optional>]_output : Func<'T,'T>, [<Optional>]_mthd : Id) = Func<'T,'T>(id)    : Func<'T,'T>
 
     static member inline Invoke() : '``Category<'T,'T>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Id: _*_ -> _) output, mthd)
@@ -552,25 +552,25 @@ type Id =
     static member inline InvokeOnInstance() : '``Category<'T,'T>`` = ((^``Category<'T,'T>``) : (static member Id  : _) ())
 
 type Id with
-    static member inline Id (output :  '``Category<'T,'T>``        , mthd : Default1) = Id.InvokeOnInstance()   : '``Category<'T,'T>``
-    static member inline Id (output : ^t when ^t:null and ^t:struct, mthd : Default1) = id                       
+    static member inline Id (_output :  '``Category<'T,'T>``        , _mthd : Default1) = Id.InvokeOnInstance()   : '``Category<'T,'T>``
+    static member inline Id (_output : ^t when ^t:null and ^t:struct, _mthd : Default1) = id                       
 
 
 type Comp =
     inherit Default1
-    static member ``<<<`` (f :  'U -> 'V  , g :  'T -> 'U  , [<Optional>]output (*: 'T -> 'V   *), [<Optional>]mthd : Comp) = g >> f     : 'T -> 'V
-    static member ``<<<`` (f : Func<'U,'V>, g : Func<'T,'U>, [<Optional>]output (*: Func<'T,'V>*), [<Optional>]mthd : Comp) = Func<'T,'V>(g.Invoke >> f.Invoke)
+    static member ``<<<`` (f :  'U -> 'V  , g :  'T -> 'U  , [<Optional>]_output (*: 'T -> 'V   *), [<Optional>]_mthd : Comp) = g >> f     : 'T -> 'V
+    static member ``<<<`` (f : Func<'U,'V>, g : Func<'T,'U>, [<Optional>]_output (*: Func<'T,'V>*), [<Optional>]_mthd : Comp) = Func<'T,'V>(g.Invoke >> f.Invoke)
 
     static member inline Invoke (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` =
         let inline call (mthd : ^M, f : ^I, output : ^R) = ((^M or ^I or ^R) : (static member ``<<<`` : _*_*_*_ -> _) f, g, output, mthd)
         call (Unchecked.defaultof<Comp>, f, Unchecked.defaultof<Comp>)  //Unchecked.defaultof<'``Category<'T,'V>``>)
 
-    static member inline InvokeOnInstance (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'T,'V>``) : (static member (<<<)  : _*_ -> _) f, g)
+    static member inline InvokeOnInstance  (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'T,'V>``) : (static member (<<<)  : _*_ -> _) f, g)
     static member inline InvokeOnInstance' (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'U,'V>`` or ^``Category<'T,'U>``) : (static member (<<<)  : _*_ -> _) f, g) : '``Category<'T,'V>``
 
 type Comp with
-    static member inline ``<<<`` (f : '``Category<'U,'V>``, g : '``Category<'T,'U>``, output (* : '``Category<'T,'V>``   *)          , mthd : Default1) = Comp.InvokeOnInstance' f g     : '``Category<'T,'V>``
-    static member inline ``<<<`` (f:'F, g:'G, _, mthd : Default1) =         
+    static member inline ``<<<`` (f : '``Category<'U,'V>``, g : '``Category<'T,'U>``, _output (* : '``Category<'T,'V>``   *) , _mthd : Default1) = Comp.InvokeOnInstance' f g     : '``Category<'T,'V>``
+    static member inline ``<<<`` (f:'F, g:'G, _, _mthd : Default1) =         
         let inline ivk (f : 'T) (x : 'U)  = ((^T) : (static member Invoke : _*_ -> _) f, x)    
         let inline h f g x = 
             let i  =  ivk f x
@@ -583,8 +583,8 @@ type Comp with
 
 type Arr =
     inherit Default1
-    static member Arr (f : 'T -> 'U, [<Optional>]output :  'T-> 'U   , [<Optional>]mthd : Arr) = f
-    static member Arr (f : 'T -> 'U, [<Optional>]output : Func<'T,'U>, [<Optional>]mthd : Arr) = Func<'T,'U>(f)
+    static member Arr (f : 'T -> 'U, [<Optional>]_output :  'T-> 'U   , [<Optional>]_mthd : Arr) = f
+    static member Arr (f : 'T -> 'U, [<Optional>]_output : Func<'T,'U>, [<Optional>]_mthd : Arr) = Func<'T,'U>(f)
 
     static member inline Invoke (f : 'T -> 'U) : '``Arrow<'T,'U>`` = 
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Arr: _*_*_ -> _) f, output, mthd)
@@ -593,14 +593,14 @@ type Arr =
     static member inline InvokeOnInstance (f : 'T -> 'U) : '``Arrow<'T,'U>`` = (^``Arrow<'T,'U>`` : (static member Arr: _ -> _) f)
 
 type Arr with
-    static member inline Arr (f : 'T -> 'U, output : '``Arrow<'T,'U>``                , mthd : Default1) = Arr.InvokeOnInstance f : '``Arrow<'T,'U>``
-    static member inline Arr (_ : 'T -> 'U, output : ^t when ^t : null and ^t : struct, mthd : Default1) = id
+    static member inline Arr (f : 'T -> 'U, _output : '``Arrow<'T,'U>``                , _mthd : Default1) = Arr.InvokeOnInstance f : '``Arrow<'T,'U>``
+    static member inline Arr (_ : 'T -> 'U, _output : ^t when ^t : null and ^t : struct, _mthd : Default1) = id
 
 
 type ArrFirst =
     inherit Default1
-    static member First (f : 'T -> 'U   , [<Optional>]output :   'T*'V -> 'U*'V  , [<Optional>]mthd : ArrFirst) =           fun (x, y) -> (f x       , y)  : 'U*'V
-    static member First (f : Func<'T,'U>, [<Optional>]output : Func<'T*'V,'U*'V> , [<Optional>]mthd : ArrFirst) = Func<_,_>(fun (x, y) -> (f.Invoke x, y)) : Func<'T*'V,'U*'V>
+    static member First (f : 'T -> 'U   , [<Optional>]_output :   'T*'V -> 'U*'V  , [<Optional>]_mthd : ArrFirst) =           fun (x, y) -> (f x       , y)  : 'U*'V
+    static member First (f : Func<'T,'U>, [<Optional>]_output : Func<'T*'V,'U*'V> , [<Optional>]_mthd : ArrFirst) = Func<_,_>(fun (x, y) -> (f.Invoke x, y)) : Func<'T*'V,'U*'V>
 
     static member inline Invoke (f : '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member First: _*_*_ -> _) source, output, mthd)
@@ -609,14 +609,14 @@ type ArrFirst =
     static member inline InvokeOnInstance (f : '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` = ((^``Arrow<'T,'U>`` or ^``Arrow<('T * 'V),('U * 'V)>``) : (static member First: _ -> _) f)
 
 type ArrFirst with
-    static member inline First (f : '``Arrow<'T,'U>``, output : '``Arrow<('T * 'V),('U * 'V)>``, mthd : Default1) = ArrFirst.InvokeOnInstance f  : '``Arrow<('T * 'V),('U * 'V)>``
-    static member inline First (_ : ^t when ^t : null and ^t : struct  , output                , mthd : Default1) = id
+    static member inline First (f : '``Arrow<'T,'U>``, _output : '``Arrow<('T * 'V),('U * 'V)>``, _mthd : Default1) = ArrFirst.InvokeOnInstance f  : '``Arrow<('T * 'V),('U * 'V)>``
+    static member inline First (_ : ^t when ^t : null and ^t : struct  , _output                , _mthd : Default1) = id
 
 
 type ArrSecond =
     inherit Default1
-    static member Second (f : 'T -> 'U   , [<Optional>]output :   'V*'T -> 'V*'U  , [<Optional>]mthd : ArrSecond) =           fun (x, y) -> (x,        f y)  : 'V*'U
-    static member Second (f : Func<'T,'U>, [<Optional>]output : Func<'V*'T,'V*'U> , [<Optional>]mthd : ArrSecond) = Func<_,_>(fun (x, y) -> (x, f.Invoke y)) : Func<'V*'T,'V*'U>
+    static member Second (f : 'T -> 'U   , [<Optional>]_output :   'V*'T -> 'V*'U  , [<Optional>]_mthd : ArrSecond) =           fun (x, y) -> (x,        f y)  : 'V*'U
+    static member Second (f : Func<'T,'U>, [<Optional>]_output : Func<'V*'T,'V*'U> , [<Optional>]_mthd : ArrSecond) = Func<_,_>(fun (x, y) -> (x, f.Invoke y)) : Func<'V*'T,'V*'U>
 
     static member inline Invoke (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Second: _*_*_ -> _) source, output, mthd)
@@ -625,18 +625,18 @@ type ArrSecond =
     static member inline InvokeOnInstance (f : '``Arrow<'T,'U>``) : '``Arrow<('V * 'T),('V * 'U)>`` = ((^``Arrow<'T,'U>`` or ^``Arrow<('V * 'T),('V * 'U)>``) : (static member Second: _ -> _) f)
 
 type ArrSecond with
-    static member inline Second (f : '``Arrow<'T,'U>``, output : '``Arrow<('V * 'T),('V * 'U)>``, mthd : Default2 ) : '``Arrow<('V * 'T),('V * 'U)>`` = 
+    static member inline Second (f : '``Arrow<'T,'U>``, _output : '``Arrow<('V * 'T),('V * 'U)>``, _mthd : Default2 ) : '``Arrow<('V * 'T),('V * 'U)>`` = 
         let arrSwap = Arr.InvokeOnInstance (fun (x, y) -> (y, x))
         Comp.InvokeOnInstance arrSwap (Comp.InvokeOnInstance (ArrFirst.InvokeOnInstance f) arrSwap)
 
-    static member inline Second (f : '``Arrow<'T,'U>``, output : '``Arrow<('V * 'T),('V * 'U)>``, mthd : Default1) = ArrSecond.InvokeOnInstance f    : '``Arrow<('V * 'T),('V * 'U)>``
-    static member inline Second (_ : ^t when ^t : null and ^t : struct  , output                , mthd : Default1) = id
+    static member inline Second (f : '``Arrow<'T,'U>``, _output : '``Arrow<('V * 'T),('V * 'U)>``, _mthd : Default1) = ArrSecond.InvokeOnInstance f    : '``Arrow<('V * 'T),('V * 'U)>``
+    static member inline Second (_ : ^t when ^t : null and ^t : struct  , _output                , _mthd : Default1) = id
 
 
 type ArrCombine =
     inherit Default1
-    static member ``***`` (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]output : 'T1*'T2 -> 'U1*'U2   , [<Optional>]mthd : ArrCombine) =          (fun (x, y) -> (f x       , g y       ))     : 'T1*'T2 -> 'U1*'U2
-    static member ``***`` (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]output : Func<'T1*'T2,'U1*'U2>, [<Optional>]mthd : ArrCombine) = Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))     : Func<'T1*'T2,'U1*'U2>
+    static member ``***`` (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]_output : 'T1*'T2 -> 'U1*'U2   , [<Optional>]_mthd : ArrCombine) =          (fun (x, y) -> (f x       , g y       ))     : 'T1*'T2 -> 'U1*'U2
+    static member ``***`` (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]_output : Func<'T1*'T2,'U1*'U2>, [<Optional>]_mthd : ArrCombine) = Func<_,_>(fun (x, y) -> (f.Invoke x, g.Invoke y))     : Func<'T1*'T2,'U1*'U2>
 
     static member inline Invoke (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ``***``: _*_*_*_ -> _) f, g, output, mthd)
@@ -645,15 +645,15 @@ type ArrCombine =
     static member inline InvokeOnInstance (f : '``Arrow<'T1,'U1>``) (g : '``Arrow<'T2,'U2>``) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>`` = (^``Arrow<('T1 * 'T2),('U1 * 'U2)>`` : (static member ``***``: _*_ -> _) f, g)
 
 type ArrCombine with
-    static member inline ``***`` (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, mthd : Default2) = Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)  : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
-    static member inline ``***`` (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, mthd : Default1) = ArrCombine.InvokeOnInstance f g                                                     : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
-    static member inline ``***`` (_ : '``Arrow<'T1,'U1>``, _ : '``Arrow<'T2,'U2>``, output : ^t when ^t : null and ^t : struct  , mthd : Default1) = id
+    static member inline ``***`` (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, _output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, _mthd : Default2) = Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)  : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
+    static member inline ``***`` (f : '``Arrow<'T1,'U1>``, g : '``Arrow<'T2,'U2>``, _output : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, _mthd : Default1) = ArrCombine.InvokeOnInstance f g                                                     : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
+    static member inline ``***`` (_ : '``Arrow<'T1,'U1>``, _ : '``Arrow<'T2,'U2>``, _output : ^t when ^t : null and ^t : struct  , _mthd : Default1) = id
 
 
 type Fanout =
     inherit Default1
-    static member ``&&&`` (f : 'T -> 'U1   , g : 'T -> 'U2   , [<Optional>]output : 'T -> 'U1*'U2   , [<Optional>]mthd : Fanout) =           (fun (x, y) -> (f x       , g y       )) << (fun b -> (b, b))       : 'T -> 'U1*'U2
-    static member ``&&&`` (f : Func<'T,'U1>, g : Func<'T,'U2>, [<Optional>]output : Func<'T,'U1*'U2>, [<Optional>]mthd : Fanout) = Func<_,_>((fun (x, y) -> (f.Invoke x, g.Invoke y)) << (fun b -> (b, b)))      : Func<'T,'U1*'U2>
+    static member ``&&&`` (f : 'T -> 'U1   , g : 'T -> 'U2   , [<Optional>]_output : 'T -> 'U1*'U2   , [<Optional>]_mthd : Fanout) =           (fun (x, y) -> (f x       , g y       )) << (fun b -> (b, b))       : 'T -> 'U1*'U2
+    static member ``&&&`` (f : Func<'T,'U1>, g : Func<'T,'U2>, [<Optional>]_output : Func<'T,'U1*'U2>, [<Optional>]_mthd : Fanout) = Func<_,_>((fun (x, y) -> (f.Invoke x, g.Invoke y)) << (fun b -> (b, b)))      : Func<'T,'U1*'U2>
 
     static member inline Invoke (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1 * 'U2)>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ``&&&``: _*_*_*_ -> _) f, g, output, mthd)
@@ -662,18 +662,18 @@ type Fanout =
     static member inline InvokeOnInstance (f : '``Arrow<'T,'U1>``) (g : '``Arrow<'T,'U2>``) : '``Arrow<'T,('U1 * 'U2)>`` = (^``Arrow<'T,('U1 * 'U2)>`` : (static member (&&&) : _*_ -> _) f, g)
 
 type Fanout with
-    static member inline ``&&&`` (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,    mthd : Default3) = Comp.InvokeOnInstance (Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)) (Arr.InvokeOnInstance (fun b -> (b, b)))     : '``Arrow<'T,('U1 * 'U2)>``
-    static member inline ``&&&`` (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,    mthd : Default2) = Comp.InvokeOnInstance (ArrCombine.InvokeOnInstance f g) (Arr.InvokeOnInstance (fun b -> (b, b)))                                                        : '``Arrow<'T,('U1 * 'U2)>``
-    static member inline ``&&&`` (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, output : '``Arrow<'T,('U1 * 'U2)>``,    mthd : Default1) = Fanout.InvokeOnInstance f g                                                                                                                             : '``Arrow<'T,('U1 * 'U2)>``
-    static member inline ``&&&`` (_ : '``Arrow<'T,'U1>``, _ : '``Arrow<'T,'U2>``, output : ^t when ^t:null and ^t:struct, mthd : Default1) = id
+    static member inline ``&&&`` (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, _output : '``Arrow<'T,('U1 * 'U2)>``,    _mthd : Default3) = Comp.InvokeOnInstance (Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)) (Arr.InvokeOnInstance (fun b -> (b, b)))     : '``Arrow<'T,('U1 * 'U2)>``
+    static member inline ``&&&`` (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, _output : '``Arrow<'T,('U1 * 'U2)>``,    _mthd : Default2) = Comp.InvokeOnInstance (ArrCombine.InvokeOnInstance f g) (Arr.InvokeOnInstance (fun b -> (b, b)))                                                        : '``Arrow<'T,('U1 * 'U2)>``
+    static member inline ``&&&`` (f : '``Arrow<'T,'U1>``, g : '``Arrow<'T,'U2>``, _output : '``Arrow<'T,('U1 * 'U2)>``,    _mthd : Default1) = Fanout.InvokeOnInstance f g                                                                                                                             : '``Arrow<'T,('U1 * 'U2)>``
+    static member inline ``&&&`` (_ : '``Arrow<'T,'U1>``, _ : '``Arrow<'T,'U2>``, _output : ^t when ^t:null and ^t:struct, _mthd : Default1) = id
 
 
 // ArrowChoice class ------------------------------------------------------
 
 type Fanin =
     inherit Default1
-    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]output : Choice<'U,'T> -> 'V   , [<Optional>]mthd : Fanin) = either f g                                        : Choice<'U,'T> -> 'V
-    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]output : Func<Choice<'U,'T>,'V>, [<Optional>]mthd : Fanin) = Func<Choice<'U,'T>,'V>(either f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
+    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]_output : Choice<'U,'T> -> 'V   , [<Optional>]_mthd : Fanin) = either f g                                        : Choice<'U,'T> -> 'V
+    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]_output : Func<Choice<'U,'T>,'V>, [<Optional>]_mthd : Fanin) = Func<Choice<'U,'T>,'V>(either f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
 
     static member inline Invoke (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ``|||``: _*_*_*_ -> _) f, g, output, mthd)
@@ -682,14 +682,14 @@ type Fanin =
     static member inline InvokeOnInstance (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = (^``ArrowChoice<Choice<'U,'T>,'V>`` : (static member (|||) : _*_ -> _) f, g)
 
 type Fanin with
-    static member inline ``|||`` (f : '``ArrowChoice<'T,'V>``, g : '``ArrowChoice<'U,'V>``, output : '``ArrowChoice<Choice<'U,'T>,'V>``, mthd : Default1) = Fanin.InvokeOnInstance f g : '``ArrowChoice<Choice<'U,'T>,'V>``
-    static member inline ``|||`` (_ : '``ArrowChoice<'T,'V>``, _ : '``ArrowChoice<'U,'V>``, output : ^t when ^t : null and ^t : struct , mthd : Default1) = id
+    static member inline ``|||`` (f : '``ArrowChoice<'T,'V>``, g : '``ArrowChoice<'U,'V>``, _output : '``ArrowChoice<Choice<'U,'T>,'V>``, _mthd : Default1) = Fanin.InvokeOnInstance f g : '``ArrowChoice<Choice<'U,'T>,'V>``
+    static member inline ``|||`` (_ : '``ArrowChoice<'T,'V>``, _ : '``ArrowChoice<'U,'V>``, _output : ^t when ^t : null and ^t : struct , _mthd : Default1) = id
 
 
 type AcMerge =
     inherit Default1
-    static member ``+++`` (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]output :  Choice<'T2,'T1> ->  Choice<'U2,'U1> , [<Optional>]mthd : AcMerge) = Fanin.Invoke (Choice2Of2 << f) (Choice1Of2 << g)                                      : Choice<'T2,'T1> ->  Choice<'U2,'U1>
-    static member ``+++`` (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]output : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>, [<Optional>]mthd : AcMerge) = Fanin.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke))  : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>
+    static member ``+++`` (f : 'T1 -> 'U1   , g : 'T2 -> 'U2   , [<Optional>]_output :  Choice<'T2,'T1> ->  Choice<'U2,'U1> , [<Optional>]_mthd : AcMerge) = Fanin.Invoke (Choice2Of2 << f) (Choice1Of2 << g)                                      : Choice<'T2,'T1> ->  Choice<'U2,'U1>
+    static member ``+++`` (f : Func<'T1,'U1>, g : Func<'T2,'U2>, [<Optional>]_output : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>, [<Optional>]_mthd : AcMerge) = Fanin.Invoke (Func<_,_>(Choice2Of2 << f.Invoke)) (Func<_,_>(Choice1Of2 << g.Invoke))  : Func<Choice<'T2,'T1>,Choice<'U2,'U1>>
 
     static member inline Invoke (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ``+++``: _*_*_*_ -> _) f, g, output, mthd)
@@ -698,14 +698,14 @@ type AcMerge =
     static member inline InvokeOnInstance (f : '``ArrowChoice<'T1,'U1>``) (g : '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` = (^``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` : (static member (+++) : _*_ -> _) f, g)
 
 type AcMerge with
-    static member inline ``+++`` (f : '``ArrowChoice<'T1,'U1>``, g : '``ArrowChoice<'T2,'U2>``, output : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``, mthd : Default1) = AcMerge.InvokeOnInstance f g : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``
-    static member inline ``+++`` (_ : '``ArrowChoice<'T1,'U1>``, _ : '``ArrowChoice<'T2,'U2>``, output : ^t when ^t : null and ^t : struct                , mthd : Default1) = id
+    static member inline ``+++`` (f : '``ArrowChoice<'T1,'U1>``, g : '``ArrowChoice<'T2,'U2>``, _output : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``, _mthd : Default1) = AcMerge.InvokeOnInstance f g : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``
+    static member inline ``+++`` (_ : '``ArrowChoice<'T1,'U1>``, _ : '``ArrowChoice<'T2,'U2>``, _output : ^t when ^t : null and ^t : struct                , _mthd : Default1) = id
 
 
 type AcLeft =
     inherit Default1
-    static member inline Left (f :  'T -> 'U   , [<Optional>]output :   Choice<'V,'T> -> Choice<'V,'U> , [<Optional>]mthd : AcLeft) = AcMerge.Invoke f id   : Choice<'V,'T> -> Choice<'V,'U>
-    static member inline Left (f : Func<'T,'U> , [<Optional>]output : Func<Choice<'V,'T>,Choice<'V,'U>>, [<Optional>]mthd : AcLeft) = AcMerge.Invoke f (Func<'V,_>(id))
+    static member inline Left (f :  'T -> 'U   , [<Optional>]_output :   Choice<'V,'T> -> Choice<'V,'U> , [<Optional>]_mthd : AcLeft) = AcMerge.Invoke f id   : Choice<'V,'T> -> Choice<'V,'U>
+    static member inline Left (f : Func<'T,'U> , [<Optional>]_output : Func<Choice<'V,'T>,Choice<'V,'U>>, [<Optional>]_mthd : AcLeft) = AcMerge.Invoke f (Func<'V,_>(id))
 
     static member inline Invoke (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Left: _*_*_ -> _) source, output, mthd)
@@ -714,14 +714,14 @@ type AcLeft =
     static member inline InvokeOnInstance (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``) : (static member Left: _ -> _) f)
 
 type AcLeft with
-    static member inline Left (f : '``ArrowChoice<'T,'U>``, output : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``, mthd : Default1) = AcLeft.InvokeOnInstance f: '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``
-    static member inline Left (_ : '``ArrowChoice<'T,'U>``, output : ^t when ^t : null and ^t : struct            , mthd : Default1) = id
+    static member inline Left (f : '``ArrowChoice<'T,'U>``, _output : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``, _mthd : Default1) = AcLeft.InvokeOnInstance f: '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``
+    static member inline Left (_ : '``ArrowChoice<'T,'U>``, _output : ^t when ^t : null and ^t : struct            , _mthd : Default1) = id
 
 
 type AcRight =
     inherit Default1
-    static member inline Right (f :  'T -> 'U   , [<Optional>]output :   Choice<'T,'V> -> Choice<'U,'V> , [<Optional>]mthd : AcRight) = AcMerge.Invoke id f   : Choice<'T,'V> -> Choice<'U,'V>
-    static member inline Right (f : Func<'T,'U> , [<Optional>]output : Func<Choice<'T,'V>,Choice<'U,'V>>, [<Optional>]mthd : AcRight) = AcMerge.Invoke (Func<_,'V>(id)) f
+    static member inline Right (f :  'T -> 'U   , [<Optional>]_output :   Choice<'T,'V> -> Choice<'U,'V> , [<Optional>]_mthd : AcRight) = AcMerge.Invoke id f   : Choice<'T,'V> -> Choice<'U,'V>
+    static member inline Right (f : Func<'T,'U> , [<Optional>]_output : Func<Choice<'T,'V>,Choice<'U,'V>>, [<Optional>]_mthd : AcRight) = AcMerge.Invoke (Func<_,'V>(id)) f
 
     static member inline Invoke (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'T,'V>,Choice<'U,'V>>``   =
         let inline call (mthd : ^M, source : ^I, output : ^R) = ((^M or ^I or ^R) : (static member Right: _*_*_ -> _) source, output, mthd)
@@ -730,8 +730,8 @@ type AcRight =
     static member inline InvokeOnInstance (f : '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``) : (static member Right: _ -> _) f)
 
 type AcRight with
-    static member inline Right (f : '``ArrowChoice<'T,'U>``, output : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``, mthd : Default1) = AcRight.InvokeOnInstance f : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``
-    static member inline Right (_ : '``ArrowChoice<'T,'U>``, output : ^t when ^t : null and ^t : struct            , mthd : Default1) = id
+    static member inline Right (f : '``ArrowChoice<'T,'U>``, _output : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``, _mthd : Default1) = AcRight.InvokeOnInstance f : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``
+    static member inline Right (_ : '``ArrowChoice<'T,'U>``, _output : ^t when ^t : null and ^t : struct            , _mthd : Default1) = id
 
 
 
@@ -739,8 +739,8 @@ type AcRight with
 
 type App =
     inherit Default1
-    static member App ([<Optional>]output :  ('T -> 'U)     * 'T -> 'U, [<Optional>]mthd : App) =           (fun (f          , x) -> f x)         : ('T -> 'U)     * 'T -> 'U
-    static member App ([<Optional>]output : Func<Func<'T,'U> * 'T, 'U>, [<Optional>]mthd : App) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)  : Func<Func<'T,'U> * 'T, 'U>
+    static member App ([<Optional>]_output :  ('T -> 'U)     * 'T -> 'U, [<Optional>]_mthd : App) =           (fun (f          , x) -> f x)         : ('T -> 'U)     * 'T -> 'U
+    static member App ([<Optional>]_output : Func<Func<'T,'U> * 'T, 'U>, [<Optional>]_mthd : App) = Func<_, _>(fun (f:Func<_,_>, x) -> f.Invoke x)  : Func<Func<'T,'U> * 'T, 'U>
 
     static member inline Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member App: _*_ -> _) output, mthd)
@@ -749,5 +749,5 @@ type App =
     static member inline InvokeOnInstance() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` = ((^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) : (static member App  : _) ())
 
 type App with
-    static member inline App (output : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``, mthd : Default1) = App.InvokeOnInstance() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
-    static member inline App (output : ^t when ^t : null and ^t : struct              , mthd : Default1) = id
+    static member inline App (_output : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``, _mthd : Default1) = App.InvokeOnInstance() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
+    static member inline App (_output : ^t when ^t : null and ^t : struct              , _mthd : Default1) = id

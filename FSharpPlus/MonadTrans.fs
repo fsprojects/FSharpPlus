@@ -13,7 +13,7 @@ type Lift = static member inline Invoke (x:'``Monad<'T>``) = (^``MonadTrans<'Mon
 
 type LiftAsync =
     static member inline Invoke (x:Async<'T>) :'``MonadAsync<'T>`` =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member LiftAsync: _ -> _) b)
+        let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member LiftAsync: _ -> _) b)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
         call Unchecked.defaultof<LiftAsync> x
 
@@ -26,7 +26,7 @@ type LiftAsync =
 
 type Throw =
     static member inline Invoke (x:'E) : '``'MonadError<'E,'T>`` =
-        let inline call_2 (a:^a, b:^R, x) = ((^a or ^R) : (static member Throw: _*_->'R) (b,x))
+        let inline call_2 (_:^a, b:^R, x) = ((^a or ^R) : (static member Throw: _*_->'R) (b,x))
         let inline call (a:'a, x:'x) = call_2 (a, Unchecked.defaultof<'r>, x) :'r
         call (Unchecked.defaultof<Throw>, x)
 
@@ -39,7 +39,7 @@ type Catch =
     static member        Catch (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Error.catch k x
 
     static member inline Invoke (x:'``MonadError<'E1,'T>``) (f:'E1->'``MonadError<'E2,'T>``) : '``MonadError<'E2,'T>`` =
-        let inline call_3 (a:^a,b:^b,c:^c,f:^f) = ((^a or ^b or ^c) : (static member Catch: _*_ -> _) b, f)
+        let inline call_3 (_:^a,b:^b,_:^c,f:^f) = ((^a or ^b or ^c) : (static member Catch: _*_ -> _) b, f)
         call_3 (Unchecked.defaultof<Catch>, x, Unchecked.defaultof<'``MonadError<'E2,'T>``>, f)
 
 

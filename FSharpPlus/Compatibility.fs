@@ -24,7 +24,7 @@ module Compatibility =
         type DeReference_op = DeReference_op with
             static member (=>) (DeReference_op, a:'a ref        ) = !a
             static member (=>) (DeReference_op, a:string        ) = a.ToCharArray() |> Array.toList
-            static member (=>) (DeReference_op, a:DeReference_op) = DeReference_op
+            static member (=>) (DeReference_op, _:DeReference_op) = DeReference_op
 
         /// converts a string to list<char> otherwise still works as dereference operator.
         let inline (!) a = DeReference_op => a

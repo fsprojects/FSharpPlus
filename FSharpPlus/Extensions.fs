@@ -25,7 +25,7 @@ module List =
         let singleton x = [x]
         let cons x y = x :: y
         let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
-        let tails x = let rec loop = function [] -> [] | x::xs as s -> s::(loop xs) in loop x
+        let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
         let take i list = Seq.take i list |> Seq.toList
 
         let skip i list =
@@ -93,13 +93,12 @@ module Seq =
                         buffer.AddRange candidate
                         candidate.Clear()                    
                     | seps ->
-                        match seps |> List.tryFind (fun sep -> sep.Length = i + 1) with
-                        | Some sep ->
+                        if seps |> List.exists (fun sep -> sep.Length = i + 1) then
                             i <- 0
                             if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer.ToArray() :> seq<_>
                             buffer.Clear()
                             candidate.Clear()                        
-                        | _ -> i <- i + 1
+                        else i <- i + 1
                 if candidate.Count > 0 then buffer.AddRange candidate
                 if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
 

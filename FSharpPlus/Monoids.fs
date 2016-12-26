@@ -37,7 +37,7 @@ type Const<'t,'u> = Const of 't with
     static member inline Append (Const x : Const<'T,'U>, Const y : Const<'T,'U>) = Const (append x y) : Const<'T,'U>
 
     // Functor
-    static member Map (Const x : Const<_,'T>, f:'T->'U) = Const x : Const<'C,'U>
+    static member Map (Const x : Const<_,'T>, _:'T->'U) = Const x : Const<'C,'U>
 
     // Applicative
     static member inline Return (_:'U) = Const (getEmpty()) : Const<'T,'U>

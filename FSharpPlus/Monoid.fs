@@ -68,7 +68,7 @@ type Append =
     [<Extension>]static member        Append (x:TimeSpan     , y:TimeSpan) = x + y
 
     static member inline Invoke (x:'T) (y:'T) :'T =
-        let inline call_3 (m:^M, a:^t, b:^t) = ((^M or ^t) : (static member Append: _*_ -> _) a, b)
+        let inline call_3 (_:^M, a:^t, b:^t) = ((^M or ^t) : (static member Append: _*_ -> _) a, b)
         call_3 (Unchecked.defaultof<Append>, x, y)
 
 type Append with
@@ -129,18 +129,18 @@ type Append with
 [<Extension; Sealed>]
 type Concat =
     inherit Default1
-    [<Extension>]static member inline Concat (x:seq<Dictionary<'a,'b>>, [<Optional>]output:Dictionary<'a,'b>, [<Optional>]impl:Concat) =
+    [<Extension>]static member inline Concat (x:seq<Dictionary<'a,'b>>, [<Optional>]_output:Dictionary<'a,'b>, [<Optional>]_impl:Concat) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
                             dct.[k] <- match dct.TryGetValue k with true, v -> Append.Invoke v u | _ -> u
                     dct
 
-    [<Extension>]static member inline Concat (x:seq<ResizeArray<'a>>, [<Optional>]output:'a ResizeArray, [<Optional>]impl:Concat) = ResizeArray (Seq.concat x)
-    [<Extension>]static member        Concat (x:seq<list<'a>>       , [<Optional>]output:list<'a>      , [<Optional>]impl:Concat) = List.concat   x
-    [<Extension>]static member        Concat (x:seq<array<'a>>      , [<Optional>]output:array<'a>     , [<Optional>]impl:Concat) = Array.concat  x
-    [<Extension>]static member        Concat (x:seq<string>         , [<Optional>]output:string        , [<Optional>]impl:Concat) = String.Concat x
-    [<Extension>]static member        Concat (x:seq<StringBuilder>  , [<Optional>]output:StringBuilder , [<Optional>]impl:Concat) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    [<Extension>]static member inline Concat (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:Concat) = ResizeArray (Seq.concat x)
+    [<Extension>]static member        Concat (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:Concat) = List.concat   x
+    [<Extension>]static member        Concat (x:seq<array<'a>>      , [<Optional>]_output:array<'a>     , [<Optional>]_impl:Concat) = Array.concat  x
+    [<Extension>]static member        Concat (x:seq<string>         , [<Optional>]_output:string        , [<Optional>]_impl:Concat) = String.Concat x
+    [<Extension>]static member        Concat (x:seq<StringBuilder>  , [<Optional>]_output:StringBuilder , [<Optional>]_impl:Concat) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
 
     static member inline Invoke (x:seq<'T>) : 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Concat: _*_*_ -> _) b, c, a)
@@ -148,26 +148,26 @@ type Concat =
         call (Unchecked.defaultof<Concat>, x)
 
 type Concat with
-    [<Extension>]static member inline Concat (x:seq<'a * 'b>, [<Optional>]output:'a * 'b, [<Optional>]impl:Concat) =
+    [<Extension>]static member inline Concat (x:seq<'a * 'b>, [<Optional>]_output:'a * 'b, [<Optional>]_impl:Concat) =
                     Concat.Invoke (Seq.map fst x), 
                     Concat.Invoke (Seq.map snd x)
     
 type Concat with
-    [<Extension>]static member inline Concat (x:seq<'a * 'b * 'c>, [<Optional>]output:'a * 'b * 'c, [<Optional>]impl:Concat) =
+    [<Extension>]static member inline Concat (x:seq<'a * 'b * 'c>, [<Optional>]_output:'a * 'b * 'c, [<Optional>]_impl:Concat) =
                     Concat.Invoke (Seq.map (fun (x,_,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,x,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,_,x) -> x) x)
     
 type Concat with
-    [<Extension>]static member inline Concat (x:seq<'a * 'b * 'c * 'd>, [<Optional>]output:'a * 'b * 'c * 'd, [<Optional>]impl:Concat) =
+    [<Extension>]static member inline Concat (x:seq<'a * 'b * 'c * 'd>, [<Optional>]_output:'a * 'b * 'c * 'd, [<Optional>]_impl:Concat) =
                     Concat.Invoke (Seq.map (fun (x,_,_,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,x,_,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,_,x,_) -> x) x),
                     Concat.Invoke (Seq.map (fun (_,_,_,x) -> x) x)
 
 type Concat with
-    [<Extension>]static member inline Concat (x:seq< 'a>, [<Optional>]output:'a, _:Default2) = Seq.fold Append.Invoke (Empty.Invoke()) x:'a
+    [<Extension>]static member inline Concat (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Append.Invoke (Empty.Invoke()) x:'a
     
 type Concat with
-    [<Extension>]static member inline Concat (x:seq< ^R>, [<Optional>]output:^R, _:Default1) = ((^R) : (static member Concat: 'R seq -> ^R) x)
-                 static member inline Concat (x:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
+    [<Extension>]static member inline Concat (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = ((^R) : (static member Concat: 'R seq -> ^R) x)
+                 static member inline Concat (_:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
