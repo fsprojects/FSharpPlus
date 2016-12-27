@@ -60,11 +60,67 @@
   -->
   <Import Project="..\..\.paket\paket.targets" />
   <ItemGroup>
-    <Compile Include="Library.fs" />
-    <None Include="Script.fsx" />
+    <Compile Include="Extensions.fs" />
+    <Compile Include="Internals.fs" />
+    <Compile Include="Converter.fs" />
+    <Compile Include="Numeric.fs" />
+    <Compile Include="Monoid.fs" />
+    <Compile Include="Functor.fs" />
+    <Compile Include="Foldable.fs" />
+    <Compile Include="Traversable.fs" />
+    <Compile Include="Indexable.fs" />
+    <Compile Include="MonadTrans.fs" />
+    <Compile Include="Collection.fs" />
+    <Compile Include="Tuple.fs" />
+    <Compile Include="Operators.fs" />
+    <Compile Include="Builders.fs" />
+    <Compile Include="Identity.fs" />
+    <Compile Include="List.fs" />
+    <Compile Include="Seq.fs" />
+    <Compile Include="Option.fs" />
+    <Compile Include="Error.fs" />
+    <Compile Include="Cont.fs" />
+    <Compile Include="Reader.fs" />
+    <Compile Include="Writer.fs" />
+    <Compile Include="State.fs" />
+    <Compile Include="Monoids.fs" />
+    <Compile Include="Lens.fs" />
+    <Compile Include="NonEmptyList.fs" />
+    <Compile Include="ZipList.fs" />
+    <Compile Include="ParallelArray.fs" />
+    <Compile Include="Kleisli.fs" />
+    <Compile Include="Compatibility.fs" />
+    <None Include="SamplesFromFsControl\Functions.fsx" />
+    <None Include="SamplesFromFsControl\Haskell.fsx" />
+    <None Include="SamplesFromFsControl\Collections.fsx" />
+    <None Include="SamplesFromFsControl\Converter.fsx" />
+    <None Include="SamplesFromFsControl\Numerics.fsx" />
+    <None Include="Samples\Collections.fsx" />
+    <None Include="Samples\Conversions.fsx" />
+    <None Include="Samples\Applicatives.fsx" />
+    <None Include="Samples\Monads.fsx" />
+    <None Include="Samples\Comonads.fsx" />
+    <None Include="Samples\MonadTransformers.fsx" />
+    <None Include="Samples\ParallelArrays.fsx" />
+    <None Include="Samples\ZipLists.fsx" />
+    <None Include="Samples\Learn You a Haskell.fsx" />
+    <None Include="Samples\Haskell.fsx" />
+    <None Include="Samples\GenericMath.fsx" />
+    <None Include="Samples\Lens.fsx" />
+    <None Include="Samples\Prism.fsx" />
+    <None Include="Samples\Fold.fsx" />
+    <None Include="Samples\Traversal.fsx" />
+    <None Include="Samples\Iso.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />
     <Content Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSharpPlus.BaseLib\FSharpPlus.BaseLib.csproj">
+      <Name>FSharpPlus.BaseLib</Name>
+      <Project>{1b99df98-65ac-4038-8be5-e72b0882f420}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
