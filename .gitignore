@@ -166,6 +166,9 @@ $RECYCLE.BIN/
 # Exclude F# project specific directories and files
 # ===================================================
 
+# AssemblyInfo produced by build
+AssemblyInfo.fs
+
 # NuGet Packages Directory
 packages/
 
