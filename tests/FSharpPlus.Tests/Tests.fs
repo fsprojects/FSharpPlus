@@ -3,6 +3,7 @@
 open System
 open FSharpPlus.Operators
 open FSharpPlus.Builders
+open FSharpPlus.Data
 open NUnit.Framework
 
 
@@ -99,6 +100,21 @@ type Monad() =
                 return ((+) x1 x2) }
         Assert.IsInstanceOf<WrappedListD<int>>(testVal)
 
+    [<Test>]
+    member x.DelayForCont() = 
+        // If Delay is not properly implemented this will stack-overflow
+        // See http://stackoverflow.com/questions/11188779/stackoverflow-in-continuation-monad
+        let map f xs =
+            let rec loop xs =
+                monad {
+                    match xs with
+                    | [] -> return []
+                    | x :: xs ->
+                        let! xs = loop xs
+                        return f x :: xs }
+            Cont.run (loop xs) id
+        let q = [1..100000] |> map ((+) 1)
+        Assert.Pass()
 
 
 [<TestFixture>]

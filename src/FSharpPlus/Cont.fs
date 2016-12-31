@@ -26,6 +26,7 @@ type Cont with
     static member Map    (x : Cont<'R,'T>, f) = Cont.map f x            : Cont<'R,'U>
     static member (<*>)  (f, x : Cont<'R,'T>) = Cont.apply f x          : Cont<'R,'U>
     static member Bind   (x, f : 'T->_)       = Cont.bind f x           : Cont<'R,'U>
+    static member Delay f = Cont (fun k -> Cont.run (f()) k)            : Cont<'R,'T>
     
     static member CallCC (f:('T -> Cont<'R,'U>) -> _) = Cont.callCC f   : Cont<'R,'T>
 
