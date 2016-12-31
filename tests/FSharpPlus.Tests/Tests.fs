@@ -2,22 +2,8 @@
 
 open System
 open FSharpPlus.Operators
+open FSharpPlus.Builders
 open NUnit.Framework
-
-type MonadBuilder() =
-    member inline b.Return(x)    = result x
-    member inline b.Bind(p,rest) = p >>= rest
-    member        b.Let (p,rest) = rest p
-    member    b.ReturnFrom(expr) = expr
-
-module Combinators =
-    let inline flip f x y = f y x
-    let inline konst k _ = k
-    let inline (</) x = (|>) x
-    let inline (/>) x = flip x
-    let inline option n f = function None -> n | Some x -> f x
-    let monad     = new MonadBuilder()
-open Combinators
 
 
 type WrappedListA<'s> = WrappedListA of 's list with
