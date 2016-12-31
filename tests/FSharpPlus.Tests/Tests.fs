@@ -46,7 +46,7 @@ type Foldable() =
         let wlA1 = WrappedListA [1..10]
         let testVal = filter ((=)2) wlA1
         Assert.AreEqual (testVal, WrappedListA [2])
-        Assert.IsInstanceOf (typeof<Option<WrappedListA<int>>>, Some testVal)
+        Assert.IsInstanceOf<Option<WrappedListA<int>>> (Some testVal)
 
     [<Test>]
     member x.foldAternatives() = 
@@ -91,13 +91,13 @@ type Foldable() =
 [<TestFixture>]
 type Monad() = 
     [<Test>]
-    member x.WorkFlow() =     
+    member x.WorkFlow() =       
         let testVal = 
             monad {
                 let! x1 = WrappedListD [1;2]
                 let! x2 = WrappedListD [10;20]
                 return ((+) x1 x2) }
-        Assert.IsInstanceOf (typeof<WrappedListD<int>>, testVal)
+        Assert.IsInstanceOf<WrappedListD<int>>(testVal)
 
 
 
@@ -107,7 +107,7 @@ type Traversable() =
     member x.sequenceA_Default_Primitive() = 
         let testVal = sequenceA [|Some 1; Some 2|]
         Assert.AreEqual (Some [|1;2|], testVal)
-        Assert.IsInstanceOf (typeof<Option<array<int>>>, testVal)
+        Assert.IsInstanceOf<Option<array<int>>> testVal
 
     member x.sequenceA_Specialization() =
         let inline seqSeq (x:_ seq ) = sequenceA x
@@ -116,13 +116,13 @@ type Traversable() =
 
         let a = seqSeq (seq [[1];[3]])
         Assert.AreEqual ([seq [1; 3]], a)
-        Assert.IsInstanceOf (typeof<list<seq<int>>>, a)
+        Assert.IsInstanceOf<list<seq<int>>> a
         let b = seqArr ( [|[1];[3]|])
         Assert.AreEqual ([[|1; 3|]], b)
-        Assert.IsInstanceOf (typeof<list<array<int>>>, b)
+        Assert.IsInstanceOf<list<array<int>>> b
         let c = seqLst ( [ [1];[3] ])
         Assert.AreEqual ([[1; 3]], c)
-        Assert.IsInstanceOf (typeof<list<list<int>>>, c)
+        Assert.IsInstanceOf<list<list<int>>> c
 
         
 type ZipList<'s> = ZipList of 's seq with
@@ -145,7 +145,7 @@ type Applicative() =
 
         let testVal = [1;2] |+| [10;20] |+| [100;200] |+  2
         Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
-        Assert.IsInstanceOf (typeof<Option<list<int>>>, Some testVal)
+        Assert.IsInstanceOf<Option<list<int>>> (Some testVal)
 
 
     [<Test>]
@@ -171,13 +171,13 @@ type Applicative() =
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
 
 
-    // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
-    type Ii = Ii
-    type Ji = Ji
-    type J = J
-    type Idiomatic = Idiomatic with
-        static member inline ($) (Idiomatic, si) = fun sfi x -> (Idiomatic $ x) (sfi <*> si)
-        static member        ($) (Idiomatic, Ii) = id
+// Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
+type Ii = Ii
+type Ji = Ji
+type J = J
+type Idiomatic = Idiomatic with
+    static member inline ($) (Idiomatic, si) = fun sfi x -> (Idiomatic $ x) (sfi <*> si)
+    static member        ($) (Idiomatic, Ii) = id
 
 type Applicative with
     [<Test>]
