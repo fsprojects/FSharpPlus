@@ -162,12 +162,12 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 
+# AssemblyInfo produced by build
+AssemblyInfo.*
+
 # ===================================================
 # Exclude F# project specific directories and files
 # ===================================================
-
-# AssemblyInfo produced by build
-AssemblyInfo.fs
 
 # NuGet Packages Directory
 packages/
