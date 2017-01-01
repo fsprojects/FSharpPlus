@@ -1,5 +1,5 @@
 ﻿#nowarn "3186"
-#r @"..\..\build\FSharpPlus.dll"
+#r @"..\bin\Release\FSharpPlus.dll"
 
 // FsControl does not automatically export any function, just the 'Type Methods'.
 // However in the FSharpPlus.Operators module there are some function and operator definitions.
