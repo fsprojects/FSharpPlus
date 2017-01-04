@@ -253,6 +253,29 @@ type MonadPlus() =
         Assert.AreEqual (v, x)
         Assert.AreEqual (v, y)
 
+    [<Test>]
+    member x.WorkFlows() = 
+        let effects = ResizeArray()
+        let zero = monadPlus {
+            effects.Add(1)
+            do! Async.Sleep 10
+            effects.Add(2) }
+        Assert.AreEqual(effects |> toList, [])
+
+        let combine = monadPlus { 
+            if true then do! Async.Sleep 10
+            return! zero }
+        Assert.AreEqual(effects |> toList, [])
+        Async.RunSynchronously combine
+        Assert.AreEqual(effects |> toList, [1;2])
+
+        let lst: _ list = monadPlus {
+            effects.Add(3)
+            return 5;
+            return 6; }
+        Assert.AreEqual(effects |> toList, [1;2;3])
+        Assert.AreEqual(lst, [5;6])
+
 module NumericLiteralG =
     open FsControl
     let inline FromZero() = Zero.Invoke()

@@ -260,15 +260,14 @@ type MZero =
         call (Unchecked.defaultof<MZero>, Unchecked.defaultof<'``FunctorZero<'T>``>)
 
 
-[<Extension;Sealed>]
 type MPlus =
     inherit Default1
-                 static member inline MPlus (x :'``FunctorPlus<'T>``, y:'``FunctorPlus<'T>``, [<Optional>]_mthd : Default1) = (^``FunctorPlus<'T>`` :  (static member MPlus : _*_ -> _) x, y) : ^``FunctorPlus<'T>``
-    [<Extension>]static member        MPlus (x :'T option           , y                     , [<Optional>]_mthd : MPlus   ) = match x with None -> y | xs -> xs
-    [<Extension>]static member        MPlus (x :'T list             , y                     , [<Optional>]_mthd : MPlus   ) = x @ y
-    [<Extension>]static member        MPlus (x :'T []               , y                     , [<Optional>]_mthd : MPlus   ) = Array.append x y
-    [<Extension>]static member        MPlus (x :'T seq              , y                     , [<Optional>]_mthd : MPlus   ) = Seq.append   x y
-    [<Extension>]static member inline MPlus (x :'T Id               , y                     , [<Optional>]_mthd : MPlus   ) = Id (Append.Invoke (Id.run x) (Id.run y))
+    static member inline MPlus (x :'``FunctorPlus<'T>``, y:'``FunctorPlus<'T>``, [<Optional>]_mthd : Default1) = (^``FunctorPlus<'T>`` :  (static member MPlus : _*_ -> _) x, y) : ^``FunctorPlus<'T>``
+    static member        MPlus (x :'T option           , y                     , [<Optional>]_mthd : MPlus   ) = match x with None -> y | xs -> xs
+    static member        MPlus (x :'T list             , y                     , [<Optional>]_mthd : MPlus   ) = x @ y
+    static member        MPlus (x :'T []               , y                     , [<Optional>]_mthd : MPlus   ) = Array.append x y
+    static member        MPlus (x :'T seq              , y                     , [<Optional>]_mthd : MPlus   ) = Seq.append   x y
+    static member inline MPlus (x :'T Id               , y                     , [<Optional>]_mthd : MPlus   ) = Id (Append.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'``FunctorPlus<'T>``) (y:'``FunctorPlus<'T>``)  : '``FunctorPlus<'T>`` =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member MPlus: _*_*_ -> _) input1, input2, mthd)
