@@ -50,8 +50,8 @@ type ListT with
     static member inline (<*>)  (f : ListT<'``Monad<seq<('T -> 'U)>``>, x : ListT<'``Monad<seq<'T>``>) = ListT.apply f x    : ListT<'``Monad<seq<'U>``>
     static member inline Bind   (x : ListT<'``Monad<seq<'T>``>, f : 'T -> ListT<'``Monad<seq<'U>``>)   = ListT.bind f x
 
-    static member inline MZero (_output: ListT<'``MonadPlus<list<'T>``>, _impl:MZero) = ListT <| result []                  : ListT<'``MonadPlus<list<'T>``>
-    static member inline MPlus (ListT x, ListT y, _impl:MPlus) = ListT (x >>= (fun a -> y >>= (fun b -> result (a @ b))))   : ListT<'``MonadPlus<list<'T>``>
+    static member inline get_MZero () = ListT <| result [] : ListT<'``MonadPlus<list<'T>``>
+    static member inline MPlus (ListT x, ListT y) = ListT (x >>= (fun a -> y >>= (fun b -> result (a @ b)))) : ListT<'``MonadPlus<list<'T>``>
 
     static member inline Lift (x:'``Monad<'T>``) = x |> liftM List.singleton |> ListT   : ListT<'``Monad<list<'T>>``> 
     

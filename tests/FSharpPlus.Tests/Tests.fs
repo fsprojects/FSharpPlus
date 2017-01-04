@@ -29,6 +29,12 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member Return  (x) = WrappedListD [x]
     static member Bind ((WrappedListD x):WrappedListD<'T>, f) = WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
 
+type WrappedListE<'s> = WrappedListE of 's list with
+    static member Return  (x) = WrappedListE [x]
+    static member Bind  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
+    static member get_MZero() = WrappedListE List.empty
+    static member MPlus (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
+    
 
 [<TestFixture>]
 type Monoid() =
@@ -236,6 +242,16 @@ type Applicative with
         Assert.AreEqual ("outerinner", output.ToString())
         Assert.AreEqual (4, v4)
  
+
+[<TestFixture>]
+type MonadPlus() = 
+    [<Test>]
+    member x.ZeroAndPlus() = 
+        let v = WrappedListE [1;2]
+        let x = v <|> getMZero()
+        let y = getMZero() <|> v
+        Assert.AreEqual (v, x)
+        Assert.AreEqual (v, y)
 
 module NumericLiteralG =
     open FsControl

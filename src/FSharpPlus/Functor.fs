@@ -247,11 +247,13 @@ type Map =
 
 
 type MZero =
-    static member        MZero ([<Optional>]_output : option<'T>, [<Optional>]_mthd : MZero) = None                   : option<'T>
-    static member        MZero ([<Optional>]_output : list<'T>  , [<Optional>]_mthd : MZero) = [  ]                   : list<'T>  
-    static member        MZero ([<Optional>]_output : 'T []     , [<Optional>]_mthd : MZero) = [||]                   : 'T []     
-    static member        MZero ([<Optional>]_output : seq<'T>   , [<Optional>]_mthd : MZero) = Seq.empty              : seq<'T>
-    static member inline MZero ([<Optional>]_output : Id<'T>    , [<Optional>]_mthd : MZero) = Id (Empty.Invoke())    : Id<'T>
+    inherit Default1
+    static member inline MZero ([<Optional>]_output : '``FunctorZero<'T>``, [<Optional>]_mthd : Default1) = (^``FunctorZero<'T>`` : (static member MZero: ^``FunctorZero<'T>``) ()) : '``FunctorZero<'T>``
+    static member        MZero ([<Optional>]_output : option<'T>          , [<Optional>]_mthd : MZero   ) = None                  : option<'T>
+    static member        MZero ([<Optional>]_output : list<'T>            , [<Optional>]_mthd : MZero   ) = [  ]                  : list<'T>  
+    static member        MZero ([<Optional>]_output : 'T []               , [<Optional>]_mthd : MZero   ) = [||]                  : 'T []     
+    static member        MZero ([<Optional>]_output : seq<'T>             , [<Optional>]_mthd : MZero   ) = Seq.empty             : seq<'T>
+    static member inline MZero ([<Optional>]_output : Id<'T>              , [<Optional>]_mthd : MZero   ) = Id (Empty.Invoke())   : Id<'T>
 
     static member inline Invoke () : '``FunctorZero<'T>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member MZero: _*_ -> _) output, mthd)
@@ -260,11 +262,13 @@ type MZero =
 
 [<Extension;Sealed>]
 type MPlus =
-    [<Extension>]static member        MPlus (x :'T option, y, [<Optional>]_mthd : MPlus) = match x with None -> y | xs -> xs
-    [<Extension>]static member        MPlus (x :'T list  , y, [<Optional>]_mthd : MPlus) = x @ y
-    [<Extension>]static member        MPlus (x :'T []    , y, [<Optional>]_mthd : MPlus) = Array.append x y
-    [<Extension>]static member        MPlus (x :'T seq   , y, [<Optional>]_mthd : MPlus) = Seq.append   x y
-    [<Extension>]static member inline MPlus (x :'T Id    , y, [<Optional>]_mthd : MPlus) = Id (Append.Invoke (Id.run x) (Id.run y))
+    inherit Default1
+                 static member inline MPlus (x :'``FunctorPlus<'T>``, y:'``FunctorPlus<'T>``, [<Optional>]_mthd : Default1) = (^``FunctorPlus<'T>`` :  (static member MPlus : _*_ -> _) x, y) : ^``FunctorPlus<'T>``
+    [<Extension>]static member        MPlus (x :'T option           , y                     , [<Optional>]_mthd : MPlus   ) = match x with None -> y | xs -> xs
+    [<Extension>]static member        MPlus (x :'T list             , y                     , [<Optional>]_mthd : MPlus   ) = x @ y
+    [<Extension>]static member        MPlus (x :'T []               , y                     , [<Optional>]_mthd : MPlus   ) = Array.append x y
+    [<Extension>]static member        MPlus (x :'T seq              , y                     , [<Optional>]_mthd : MPlus   ) = Seq.append   x y
+    [<Extension>]static member inline MPlus (x :'T Id               , y                     , [<Optional>]_mthd : MPlus   ) = Id (Append.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'``FunctorPlus<'T>``) (y:'``FunctorPlus<'T>``)  : '``FunctorPlus<'T>`` =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member MPlus: _*_*_ -> _) input1, input2, mthd)

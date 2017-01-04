@@ -68,8 +68,8 @@ type WriterT with
     static member inline (<*>)  (f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x : WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline Bind   (x : WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)                                     = WriterT.bind f x  : WriterT<'``Monad<'U * 'Monoid>``>
 
-    static member inline MZero (_output:WriterT<'``MonadPlus<'T * 'Monoid>``>, _impl:MZero) = WriterT (getMZero())   : WriterT<'``MonadPlus<'T * 'Monoid>``>
-    static member inline MPlus (   WriterT m, WriterT n                      , _impl:MPlus) = WriterT (m <|> n)      : WriterT<'``MonadPlus<'T * 'Monoid>``>
+    static member inline get_MZero () = WriterT (getMZero()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
+    static member inline MPlus (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>
 
     static member inline Tell   (w:'Monoid) = WriterT (result ((), w))                                                                                          : WriterT<'``Monad<unit * 'Monoid>``>
     static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w)))  : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
