@@ -49,6 +49,19 @@ module Builders =
         member b.ReturnFrom(expr) = expr
         member inline x.Zero() = Zero.Invoke' ()
         member inline x.Combine(a, b) = Plus.Invoke' a b
+        member x.TryWith(body, handler) =
+            try x.ReturnFrom(body)
+            with e -> handler e
+        member x.TryFinally(body, compensation) =
+            try x.ReturnFrom(body)
+            finally compensation()
+        member x.Using(disposable:#System.IDisposable, body) =
+            let body = fun () -> body disposable
+            x.TryFinally(body, fun () -> 
+                match disposable with 
+                | null -> () 
+                | disp -> disp.Dispose())
+
     
     let monad     = new MonadBuilder()
     let monadPlus = new MonadPlusBuilder()
@@ -65,6 +78,18 @@ module Builders =
         member inline __.Yield(x)      = result x
         member inline __.Zero()        = Zero.Invoke' ()
         member inline __.Combine(a, b) = Plus.Invoke' a b
+        member __.TryWith(body, handler) =
+            try __.ReturnFrom(body)
+            with e -> handler e
+        member __.TryFinally(body, compensation) =
+            try __.ReturnFrom(body)
+            finally compensation()
+        member __.Using(disposable:#System.IDisposable, body) =
+            let body = fun () -> body disposable
+            __.TryFinally(body, fun () -> 
+                match disposable with 
+                | null -> () 
+                | disp -> disp.Dispose())
 
         [<CustomOperation("select", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
         member inline __.Select(x, [<ProjectionParameter>] f) = map f x
