@@ -276,6 +276,24 @@ type MonadPlus() =
         Assert.AreEqual(effects |> toList, [1;2;3])
         Assert.AreEqual(lst, [5;6])
 
+        let effects = ResizeArray()
+        let seq3: seq<_> = monadPlus { 
+            effects.Add "Start"
+            try
+                try
+                    10 / 0 |> ignore
+                finally
+                    effects.Add "execute this"
+            with
+            | e -> 
+                effects.Add (sprintf "Exception! %s" e.Message)
+                return 42 }
+        Assert.AreEqual(effects |> toList, [])
+        let seqValue = seq3 |> Seq.toList
+        Assert.AreEqual(effects |> toList, ["Start"; "execute this"; "Exception! Attempted to divide by zero."])
+        Assert.AreEqual(seqValue, [42])
+
+
 module NumericLiteralG =
     open FsControl
     let inline FromZero() = Zero.Invoke()

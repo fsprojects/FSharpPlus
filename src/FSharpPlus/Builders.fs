@@ -49,12 +49,8 @@ module Builders =
         member b.ReturnFrom(expr) = expr
         member inline x.Zero() = Zero.Invoke' ()
         member inline x.Combine(a, b) = Plus.Invoke' a b
-        member x.TryWith(body, handler) =
-            try x.ReturnFrom(body)
-            with e -> handler e
-        member x.TryFinally(body, compensation) =
-            try x.ReturnFrom(body)
-            finally compensation()
+        member inline x.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``M<t>``
+        member inline x.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``M<t>``
         member x.Using(disposable:#System.IDisposable, body) =
             let body = fun () -> body disposable
             x.TryFinally(body, fun () -> 
@@ -78,12 +74,9 @@ module Builders =
         member inline __.Yield(x)      = result x
         member inline __.Zero()        = Zero.Invoke' ()
         member inline __.Combine(a, b) = Plus.Invoke' a b
-        member __.TryWith(body, handler) =
-            try __.ReturnFrom(body)
-            with e -> handler e
-        member __.TryFinally(body, compensation) =
-            try __.ReturnFrom(body)
-            finally compensation()
+        member inline __.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``M<t>``
+        member inline __.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``M<t>``
+
         member __.Using(disposable:#System.IDisposable, body) =
             let body = fun () -> body disposable
             __.TryFinally(body, fun () -> 
