@@ -333,9 +333,12 @@ type TryFinally =
 
 [<Extension;Sealed>]
 type Unzip =
-    [<Extension>]static member Unzip (source:seq<'T * 'U> , [<Optional>]_output:seq<'T> * seq<'U>  , [<Optional>]_impl:Unzip) = Seq.map fst source, Seq.map snd source
-    [<Extension>]static member Unzip (source:list<'T * 'U>, [<Optional>]_output:list<'T> * list<'U>, [<Optional>]_impl:Unzip) = List.unzip  source
-    [<Extension>]static member Unzip (source:('T * 'U) [] , [<Optional>]_output:'T [] * 'U []      , [<Optional>]_impl:Unzip) = Array.unzip source
+    inherit Default1
+                 static member inline Unzip (source:'``Functor<'T * 'U>`` , [<Optional>]_output:'``Functor<'T>`` * '``Functor<'U>`` , [<Optional>]_impl:Default2) = Map.Invoke fst source, Map.Invoke snd source : '``Functor<'T>`` * '``Functor<'U>``
+                 static member inline Unzip (source:'``Functor<'T * 'U>`` , [<Optional>]_output:'``Functor<'T>`` * '``Functor<'U>`` , [<Optional>]_impl:Default1) = (^``Functor<'T * 'U>``: (static member Unzip: _->_) source) : '``Functor<'T>`` * '``Functor<'U>``
+                 static member inline Unzip ( _    :^t when ^t:null and ^t:struct     , _                                           , _                         ) = ()
+    [<Extension>]static member        Unzip (source:list<'T * 'U>, [<Optional>]_output:list<'T> * list<'U>, [<Optional>]_impl:Unzip   ) = List.unzip  source
+    [<Extension>]static member        Unzip (source:('T * 'U) [] , [<Optional>]_output:'T [] * 'U []      , [<Optional>]_impl:Unzip   ) = Array.unzip source
 
     static member inline Invoke (source:'``Functor<'T1 * 'T2>``)  =
         let inline call_3 (a:^a, b:^b, d:^d) = ((^a or ^b or ^d) : (static member Unzip: _*_*_ -> _) b, d, a)

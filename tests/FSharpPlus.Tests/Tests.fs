@@ -53,6 +53,11 @@ type Functor() =
         let testVal = map ((+) 1) {Head = 10; Tail = [20;30]}
         Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal)
 
+    [<Test>]
+    member x.unzip() = 
+        let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
+        Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
+
 
 [<TestFixture>]
 type Foldable() = 
