@@ -42,6 +42,9 @@ module Operators =
 
     /// Like map but ignoring the results.
     let inline iter   (action :'T->unit) (source :'``Functor<'T>``) :unit = Iterate.Invoke action source
+
+    let inline unzip (source: '``Functor<'T1 * 'T2>``) = Unzip.Invoke source : '``Functor<'T1>`` * '``Functor<'T2>``
+    let inline zip (source1:'``ZipFunctor<'T1>``) (source2:'``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
    
 
     // Applicative ------------------------------------------------------------
@@ -350,9 +353,6 @@ module Operators =
     let inline sortBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
     let inline split (sep:seq<'Collection>) (source:'Collection) = Split.Invoke sep source : seq<'Collection>
     let inline toSeq (source:'``Collection<'T>``) = ToSeq.Invoke source  :seq<'T>
-
-    let inline unzip (source: '``Collection<'T1 * 'T2>``) = Unzip.Invoke source : '``Collection<'T1>`` * '``Collection<'T2>``
-    let inline zip (source1:'``Collection<'T1>``) (source2:'``Collection<'T2>``) : '``Collection<'T1 * 'T2>`` = Zip.Invoke source1 source2    
 
 
 

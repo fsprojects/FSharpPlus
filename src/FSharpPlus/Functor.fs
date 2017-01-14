@@ -331,6 +331,33 @@ type TryFinally =
 
 
 
+[<Extension;Sealed>]
+type Unzip =
+    [<Extension>]static member Unzip (source:seq<'T * 'U> , [<Optional>]_output:seq<'T> * seq<'U>  , [<Optional>]_impl:Unzip) = Seq.map fst source, Seq.map snd source
+    [<Extension>]static member Unzip (source:list<'T * 'U>, [<Optional>]_output:list<'T> * list<'U>, [<Optional>]_impl:Unzip) = List.unzip  source
+    [<Extension>]static member Unzip (source:('T * 'U) [] , [<Optional>]_output:'T [] * 'U []      , [<Optional>]_impl:Unzip) = Array.unzip source
+
+    static member inline Invoke (source:'``Functor<'T1 * 'T2>``)  =
+        let inline call_3 (a:^a, b:^b, d:^d) = ((^a or ^b or ^d) : (static member Unzip: _*_*_ -> _) b, d, a)
+        let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
+        call (Unchecked.defaultof<Unzip>, source) :'``Functor<'T1>`` * '``Functor<'T2>``
+                
+        
+[<Extension;Sealed>]
+type Zip =
+    [<Extension>]static member Zip (x:Id<'T>  , y:Id<'U>  , [<Optional>]_output:Id<'T*'U>  , [<Optional>]_impl:Zip) = Id.create(x.getValue,y.getValue)
+    [<Extension>]static member Zip (x:seq<'T> , y:seq<'U> , [<Optional>]_output:seq<'T*'U> , [<Optional>]_impl:Zip) = Seq.zip   x y
+    [<Extension>]static member Zip (x:list<'T>, y:list<'U>, [<Optional>]_output:list<'T*'U>, [<Optional>]_impl:Zip) = List.zip  x y
+    [<Extension>]static member Zip (x:'T []   , y:'U []   , [<Optional>]_output:('T*'U) [] , [<Optional>]_impl:Zip) = Array.zip x y
+
+    static member inline Invoke (source1:'ZipFunctor'T1) (source2:'ZipFunctor'T2)          =
+        let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member Zip: _*_*_*_ -> _) b, c, d, a)
+        let inline call (a:'a, b:'b, c:'c) = call_4 (a, b, c, Unchecked.defaultof<'r>) :'r
+        call (Unchecked.defaultof<Zip>, source1, source2)           :'ZipFunctor'T1'T2
+
+
+
+
 namespace FsControl.Internals
 module internal MonadOps =
 
