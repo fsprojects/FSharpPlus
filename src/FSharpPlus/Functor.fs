@@ -5,7 +5,8 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
-#if NOTNET35
+#if NET35
+#else
 open System.Threading.Tasks
 #endif
 open Microsoft.FSharp.Quotations
@@ -20,7 +21,8 @@ open FSharpPlus
 type Bind =
     static member        Bind (source : Lazy<'T>    , f : 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
     static member        Bind (source : seq<'T>     , f : 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
-#if NOTNET35
+#if NET35
+#else
     static member        Bind (source : Task<'T>    , f : 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap()  : Task<'U>
 #endif
     static member        Bind (source               , f : 'T -> _           ) = Option.bind   f source                                        : option<'U>
@@ -62,7 +64,8 @@ type Join =
     [<Extension>]static member        Join (x : Lazy<Lazy<_>>         , [<Optional>]_output : Lazy<'T>        , [<Optional>]_impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
     [<Extension>]static member        Join (x                         , [<Optional>]_output : seq<'T>         , [<Optional>]_impl : Join    ) = Seq.bind id x             : seq<'T> 
     [<Extension>]static member        Join (x : Id<_>                 , [<Optional>]_output : Id<'T>          , [<Optional>]_impl : Join    ) = x.getValue                : Id<'T>
-#if NOTNET35                                                                                                                              
+#if NET35
+#else                                                                                                                              
     [<Extension>]static member        Join (x : Task<Task<_>>         , [<Optional>]_output : Task<'T>        , [<Optional>]_impl : Join    ) = x.Unwrap()                : Task<'T>
 #endif                                                                                                                                    
     [<Extension>]static member        Join (x                         , [<Optional>]_output : option<'T>      , [<Optional>]_impl : Join    ) = Option.bind   id x        : option<'T>
@@ -108,7 +111,8 @@ type Return =
     static member inline Return (_:'R      , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
 
     static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
-#if NOTNET35        
+#if NET35
+#else        
     static member        Return (_:'a Task , _:Return) = fun x -> 
         let s = TaskCompletionSource()
         s.SetResult x
@@ -343,7 +347,8 @@ open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Collections.Generic
-#if NOTNET35
+#if NET35
+#else
 open System.Threading.Tasks
 #endif
 open FsControl.Internals
@@ -362,7 +367,8 @@ type Extract =
     [<Extension>]static member inline Extract (f : 'Monoid -> 'T) = f (Empty.Invoke())
     [<Extension>]static member        Extract (f : 'T Id        ) = f
 
-#if NOTNET35
+#if NET35
+#else
     [<Extension>]static member        Extract (f : Task<'T>     ) = f.Result
 #endif
 
@@ -377,7 +383,8 @@ type Extend =
     static member inline Extend (g : 'Monoid -> 'T, f : _ -> 'U        ) = fun a -> f (fun b -> g (Append.Invoke a b))
     static member        Extend (g : Id<'T>       , f : Id<'T> -> 'U   ) = f g
 
-#if NOTNET35
+#if NET35
+#else
     static member        Extend (g : Task<'T>     , f : Task<'T> -> 'U) = g.ContinueWith(f)
 #endif
 

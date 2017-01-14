@@ -101,7 +101,8 @@ type Parse =
     inherit Default1
     static member inline Parse (_:^R                  , _:Default1) = fun (x:string) -> (^R: (static member Parse: _ -> ^R) x)
     static member inline Parse (_:^R                  , _:Parse   ) = fun (x:string) -> (^R: (static member Parse: _ * _ -> ^R) (x, CultureInfo.InvariantCulture))
-#if NOTNET35
+#if NET35
+#else
     static member        Parse (_:'T when 'T : enum<_>, _:Parse   ) = fun x ->
         (match Enum.TryParse(x) with
             | (true, v) -> v

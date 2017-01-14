@@ -6,7 +6,8 @@ open System.Collections.Generic
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open Microsoft.FSharp.Quotations
-#if NOTNET35
+#if NET35
+#else
 open System.Threading.Tasks
 #endif
 open FsControl.Internals
@@ -39,8 +40,8 @@ type Empty with static member inline Empty (_ : 'a*'b*'c*'d*'e, _:Empty) = (Empt
 type Empty with
     static member inline Empty (_:'R, _:Default1) = ((^R) : (static member Empty: ^R) ()):'R
 
-#if NOTNET35        
-
+#if NET35
+#else
     static member inline Empty (_:Task<'a>,        _:Empty) =
         let (v:'a) = Empty.Invoke()
         let s = TaskCompletionSource()
@@ -91,7 +92,8 @@ type Append with
     
 type Append with    
     
-#if NOTNET35
+#if NET35
+#else
     [<Extension>]static member inline Append (x:'a Task, y:'a Task) =
                     x.ContinueWith(fun (t: Task<_>) -> 
                         (fun a -> 
