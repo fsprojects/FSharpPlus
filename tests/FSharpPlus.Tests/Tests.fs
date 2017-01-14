@@ -47,6 +47,14 @@ type Monoid() =
 
 
 [<TestFixture>]
+type Functor() =
+    [<Test>]
+    member x.map_Default_Custom() = 
+        let testVal = map ((+) 1) {Head = 10; Tail = [20;30]}
+        Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal)
+
+
+[<TestFixture>]
 type Foldable() = 
     [<Test>]
     member x.filter_Default_Custom() = 

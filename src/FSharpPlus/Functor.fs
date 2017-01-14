@@ -220,12 +220,13 @@ type Map =
     static member inline InvokeOnInstance (mapping :'T->'U) (source : '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
 
-    static member inline Map (x : '``Monad<'T>``      , f : 'T->'U, [<Optional>]_impl:Default3) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
-    static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]_impl:Default2) = Apply.InvokeOnInstance (Return.InvokeOnInstance f) x : '``Applicative<'U>``
+    static member inline Map (x : '``Monad<'T>``      , f : 'T->'U, [<Optional>]_impl:Default4) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
+    static member inline Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]_impl:Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f) x : '``Applicative<'U>``
+    static member        Map (x : seq<_>              , f : 'T->'U, [<Optional>]_impl:Default2) = Seq.map f x              : seq<'U>
+    static member        Map (x : IObservable<'T>     , f : 'T->'U, [<Optional>]_impl:Default2) = Observable.map f x       : IObservable<'U>
     static member inline Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]_impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
 
     static member Map (x : Lazy<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = Lazy.Create (fun () -> f x.Value)   : Lazy<'U>
-    static member Map (x : seq<_>         , f : 'T->'U, [<Optional>]_mthd : Map) = Seq.map f x                         : seq<'U>
     static member Map (x : option<_>      , f : 'T->'U, [<Optional>]_mthd : Map) = Option.map  f x
     static member Map (x : list<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = List.map f x                        : list<'U>
     static member Map (g : 'R->'T         , f : 'T->'U, [<Optional>]_mthd : Map) = (>>) g f
@@ -241,7 +242,6 @@ type Map =
     static member Map (x : Dictionary<_,_>, f : 'T->'U, [<Optional>]_mthd : Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d: Dictionary<'Key,'U>
     static member Map (x : Expr<'T>       , f : 'T->'U, [<Optional>]_mthd : Map) = Expr.Cast<'U>(Expr.Application(Expr.Value(f),x))
     static member Map (x : ResizeArray<'T>, f : 'T->'U, [<Optional>]_mthd : Map) = ResizeArray(Seq.map f x) : ResizeArray<'U>
-    static member Map (x : IObservable<'T>, f : 'T->'U, [<Optional>]_mthd : Map) = Observable.map f x
 
     // Restricted
     static member Map (x : string         , f, [<Optional>]_mthd : Map) = String.map f x
