@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Writer - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gmpl/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Writer</h1>
+<p>
+  <span>Namespace: FSharpPlus.Data</span><br />
+</p>
+<div class="xmldoc">
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '466', 466)" onmouseover="showTip(event, '466', 466)">
+            apply(arg1 arg2)
+          </code>
+          <div class="tip" id="466">
+            <strong>Signature:</strong> Writer&lt;^Monoid,(&#39;T -&gt; &#39;U)&gt; -&gt; Writer&lt;^Monoid,&#39;T&gt; -&gt; Writer&lt;^Monoid,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^Monoid, 'T, 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '467', 467)" onmouseover="showTip(event, '467', 467)">
+            bind(f arg2)
+          </code>
+          <div class="tip" id="467">
+            <strong>Signature:</strong> f:(&#39;T -&gt; Writer&lt;^Monoid,&#39;U&gt;) -&gt; Writer&lt;^Monoid,&#39;T&gt; -&gt; Writer&lt;^Monoid,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Monoid, 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L17-17" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '468', 468)" onmouseover="showTip(event, '468', 468)">
+            exec(arg1)
+          </code>
+          <div class="tip" id="468">
+            <strong>Signature:</strong> Writer&lt;Writer&lt;&#39;Monoid,&#39;U&gt;,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'Monoid, 'U, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L21-21" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Extract the output from a writer computation.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '469', 469)" onmouseover="showTip(event, '469', 469)">
+            listen(m)
+          </code>
+          <div class="tip" id="469">
+            <strong>Signature:</strong> m:Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,(&#39;T * &#39;Monoid)&gt;<br />
+                          <strong>Type parameters:</strong> 'Monoid, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L29-29" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>An action that executes the action  and adds its output
+to the value of the computation.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '470', 470)" onmouseover="showTip(event, '470', 470)">
+            map(f arg2)
+          </code>
+          <div class="tip" id="470">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'Monoid          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L16-16" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '471', 471)" onmouseover="showTip(event, '471', 471)">
+            pass(m)
+          </code>
+          <div class="tip" id="471">
+            <strong>Signature:</strong> m:Writer&lt;&#39;Monoid,(&#39;T * (&#39;Monoid -&gt; &#39;Monoid))&gt; -&gt; Writer&lt;&#39;Monoid,&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'Monoid, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Action that executes the action m, which returns a value and a function, and returns the value, applying the function to the output.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '472', 472)" onmouseover="showTip(event, '472', 472)">
+            run(arg1)
+          </code>
+          <div class="tip" id="472">
+            <strong>Signature:</strong> Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; &#39;T * &#39;Monoid<br />
+                          <strong>Type parameters:</strong> 'Monoid, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L14-14" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Unwraps a writer computation as a (result, output) pair. (The inverse of Writer.)</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '473', 473)" onmouseover="showTip(event, '473', 473)">
+            tell(w)
+          </code>
+          <div class="tip" id="473">
+            <strong>Signature:</strong> w:&#39;Monoid -&gt; Writer&lt;&#39;Monoid,unit&gt;<br />
+                          <strong>Type parameters:</strong> 'Monoid          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L24-24" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Embeds a simple writer action.</p>
+
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gmpl/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Sample tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gmpl/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
