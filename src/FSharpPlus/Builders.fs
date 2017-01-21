@@ -51,12 +51,7 @@ module Builders =
         member inline x.Combine(a, b) = Plus.Invoke' a b
         member inline x.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``M<t>``
         member inline x.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``M<t>``
-        member x.Using(disposable:#System.IDisposable, body) =
-            let body = fun () -> body disposable
-            x.TryFinally(body, fun () -> 
-                match disposable with 
-                | null -> () 
-                | disp -> disp.Dispose())
+        member inline x.Using(disposable:#System.IDisposable, body) = FsControl.Using.Invoke disposable body : '``M<u>``
 
     
     let monad     = new MonadBuilder()
@@ -76,13 +71,7 @@ module Builders =
         member inline __.Combine(a, b) = Plus.Invoke' a b
         member inline __.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``M<t>``
         member inline __.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``M<t>``
-
-        member __.Using(disposable:#System.IDisposable, body) =
-            let body = fun () -> body disposable
-            __.TryFinally(body, fun () -> 
-                match disposable with 
-                | null -> () 
-                | disp -> disp.Dispose())
+        member inline __.Using(disposable:#System.IDisposable, body) = FsControl.Using.Invoke disposable body : '``M<u>``
 
         [<CustomOperation("select", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
         member inline __.Select(x, [<ProjectionParameter>] f) = map f x
