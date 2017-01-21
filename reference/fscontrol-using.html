@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Divide - FSharpPlus</title>
+    <title>Using - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,7 +35,7 @@
 
 
 
-<h1>Divide</h1>
+<h1>Using</h1>
 <p>
   <span>Namespace: FsControl</span><br />
 </p>
@@ -50,15 +50,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1002', 1002)" onmouseover="showTip(event, '1002', 1002)">
-            Divide(x, y)
+          <code onmouseout="hideTip(event, '1913', 1913)" onmouseover="showTip(event, '1913', 1913)">
+            Invoke(source f)
           </code>
-          <div class="tip" id="1002">
-            <strong>Signature:</strong> (x:float32 * y:float32) -&gt; float32<br />
-                      </div>
+          <div class="tip" id="1913">
+            <strong>Signature:</strong> source:&#39;T -&gt; (f:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;)) -&gt; ^Monad&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Monad<'U>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Numeric.fs#L338-338" class="github-link">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L343-343" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -68,15 +68,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1003', 1003)" onmouseover="showTip(event, '1003', 1003)">
-            Divide(x, y)
+          <code onmouseout="hideTip(event, '1914', 1914)" onmouseover="showTip(event, '1914', 1914)">
+            Using(resource, body, arg3)
           </code>
-          <div class="tip" id="1003">
-            <strong>Signature:</strong> (x:float * y:float) -&gt; float<br />
-                      </div>
+          <div class="tip" id="1914">
+            <strong>Signature:</strong> (resource:&#39;T * body:(&#39;T -&gt; Lazy&lt;&#39;U&gt;) * Using) -&gt; Lazy&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Numeric.fs#L337-337" class="github-link">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L341-341" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -86,15 +86,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1004', 1004)" onmouseover="showTip(event, '1004', 1004)">
-            Divide(x, y)
+          <code onmouseout="hideTip(event, '1915', 1915)" onmouseover="showTip(event, '1915', 1915)">
+            Using(resource, body, arg3)
           </code>
-          <div class="tip" id="1004">
-            <strong>Signature:</strong> (x:^Num * y:^Num) -&gt; ^Num<br />
-                          <strong>Type parameters:</strong> ^Num          </div>
+          <div class="tip" id="1915">
+            <strong>Signature:</strong> (resource:&#39;T * body:(&#39;T -&gt; Async&lt;&#39;U&gt;) * Using) -&gt; Async&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Numeric.fs#L333-333" class="github-link">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L340-340" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -104,15 +104,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1005', 1005)" onmouseover="showTip(event, '1005', 1005)">
-            Divide(x, y)
+          <code onmouseout="hideTip(event, '1916', 1916)" onmouseover="showTip(event, '1916', 1916)">
+            Using(resource, body, arg3)
           </code>
-          <div class="tip" id="1005">
-            <strong>Signature:</strong> (x:^?9906 * y:^?9907) -&gt; ^?9908<br />
-                          <strong>Type parameters:</strong> ^?9906, ^?9907, ^?9908          </div>
+          <div class="tip" id="1916">
+            <strong>Signature:</strong> (resource:&#39;T * body:(&#39;T -&gt; seq&lt;&#39;U&gt;) * Default2) -&gt; seq&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Numeric.fs#L332-332" class="github-link">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L339-339" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -122,15 +122,51 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1006', 1006)" onmouseover="showTip(event, '1006', 1006)">
-            Invoke(x y)
+          <code onmouseout="hideTip(event, '1917', 1917)" onmouseover="showTip(event, '1917', 1917)">
+            Using(arg1, arg2, arg3)
           </code>
-          <div class="tip" id="1006">
-            <strong>Signature:</strong> x:^Num -&gt; y:^Num -&gt; ^Num<br />
-                          <strong>Type parameters:</strong> ^Num          </div>
+          <div class="tip" id="1917">
+            <strong>Signature:</strong> (^t * &#39;?8835 * Default1) -&gt; unit<br />
+                          <strong>Type parameters:</strong> ^t, '?8835          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Numeric.fs#L339-339" class="github-link">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L337-337" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1918', 1918)" onmouseover="showTip(event, '1918', 1918)">
+            Using(resource, body, arg3)
+          </code>
+          <div class="tip" id="1918">
+            <strong>Signature:</strong> (resource:&#39;T * body:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;) * Default1) -&gt; ^Monad&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Monad<'U>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L336-336" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1919', 1919)" onmouseover="showTip(event, '1919', 1919)">
+            Using(resource, body, arg3)
+          </code>
+          <div class="tip" id="1919">
+            <strong>Signature:</strong> (resource:&#39;T * body:(&#39;T -&gt; &#39;Monad&lt;&#39;U&gt;) * Default3) -&gt; &#39;Monad&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'Monad<'U>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L335-335" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
