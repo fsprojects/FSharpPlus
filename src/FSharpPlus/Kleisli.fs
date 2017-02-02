@@ -3,6 +3,7 @@
 open FsControl
 open FSharpPlus.Operators
 
+/// Kleisli arrows of a monad. Represents a function 'T -> 'Monad<'U>  
 type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
 
     // Profunctor
@@ -33,4 +34,5 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline MZero (_output :Kleisli<'T,'``Monad<'U>``>, _mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
     static member inline MPlus (Kleisli f, Kleisli g, _mthd:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
 
+/// Basic operations on Kleisli
 [<RequireQualifiedAccess>]module Kleisli = let run (Kleisli f) = f

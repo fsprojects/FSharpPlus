@@ -2,6 +2,7 @@
 
 open FSharpPlus
 
+/// Additional operations on List
 module List =
 
     let inline sequence (ms:list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequenceA ms
@@ -28,8 +29,10 @@ module List =
 
 open FsControl
 
+/// Monad Transformer for list<'T>
 type ListT<'``monad<list<'t>>``> = ListT of '``monad<list<'t>>``
 
+/// Basic operations on ListT
 [<RequireQualifiedAccess>]
 module ListT =
     let run (ListT m) = m : '``Monad<list<'T>>``

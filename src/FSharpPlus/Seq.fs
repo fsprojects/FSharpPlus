@@ -2,6 +2,7 @@
 
 open FSharpPlus
 
+/// Additional operations on Seq
 module Seq =
 
     let inline sequence (ms:seq<'``Applicative<'T>``>) : '``Applicative<seq<'T>>`` = sequenceA ms
@@ -12,8 +13,10 @@ module Seq =
 
 open FsControl
 
+/// Monad Transformer for seq<'T>
 type SeqT<'``monad<seq<'t>>``> = SeqT of '``monad<seq<'t>>``
 
+/// Basic operations on SeqT
 [<RequireQualifiedAccess>]
 module SeqT =
     let run (SeqT m) = m

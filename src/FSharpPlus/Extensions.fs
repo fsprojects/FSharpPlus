@@ -2,12 +2,14 @@
 
 open System
 
+/// Additional operations on Option
 module Option =
     let apply f x =
             match (f,x) with 
             | Some f, Some x -> Some (f x) 
             | _              -> None
 
+/// Additional operations on Error
 [<RequireQualifiedAccess>]
 module Error =
     let map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
@@ -21,6 +23,7 @@ module Error =
     let bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
     let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
 
+/// Additional operations on List
 module List =
         let singleton x = [x]
         let cons x y = x :: y
@@ -42,6 +45,7 @@ module List =
             if i > 0 then loop i list else list
 
 
+/// Additional operations on Seq
 module Seq =
         let bind (f:'a->seq<'b>) x = Seq.collect f x
         let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
@@ -132,6 +136,7 @@ module Seq =
         let replicate count initial = System.Linq.Enumerable.Repeat(initial, count) 
 
 
+/// Module containing F#+ Extension Methods  
 module Extensions =
 
     type Collections.Generic.IEnumerable<'T>  with

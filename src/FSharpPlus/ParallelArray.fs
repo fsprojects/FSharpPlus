@@ -3,11 +3,13 @@
 open FsControl
 open FSharpPlus.Operators
 
+/// Array with an Applicative functor based on zipping and parallel execution.
 type ParallelArray<'t> =
     | Infinite of 't
     | Bounded  of 't array
 
 
+/// Basic operations on ParallelArray
 module ParallelArray =
     let run = function
         | Bounded a -> a
@@ -28,10 +30,12 @@ module ParallelArray =
 
     //let inline append (a:ParallelArray<'m>) (b:ParallelArray<'m>) = liftA2 mappend a b :ParallelArray<'m>
 
+/// A type alias for ParallelArray<'T>
 type parray<'t> = ParallelArray<'t>
 
 [<AutoOpen>]
 module ParallelArrayOperators =
+    /// Creates a parallel array from a normal array.
     let parray s = Bounded s
 
 type ParallelArray with

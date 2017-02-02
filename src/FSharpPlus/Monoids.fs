@@ -7,6 +7,7 @@ type Dual<'t> = Dual of 't with
     static member inline get_Empty() = Dual (getEmpty())                : Dual<'T>
     static member inline Append (Dual x, Dual y) = Dual (append y x)    : Dual<'T>
 
+/// Basic operations on Dual
 [<RequireQualifiedAccess>]
 module Dual = let run (Dual x) = x          : 'T
 
@@ -15,6 +16,7 @@ type Endo<'t> = Endo of ('t -> 't) with
     static member get_Empty() = Endo id                                 : Endo<'T>
     static member Append (Endo f, Endo g) = Endo (f << g)               : Endo<'T>
 
+/// Basic operations on Endo
 [<RequireQualifiedAccess>]
 module Endo = let run (Endo f) = f          : 'T -> 'T
 
@@ -30,6 +32,9 @@ type Any = Any of bool with
     static member Append (Any x, Any y) = Any (x || y)
 
 
+/// <summary> The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
+/// <para/>   Useful for: Lens getters.
+/// <para/>   Its applicative instance plays a fundamental role in Lens. </summary>
 type Const<'t,'u> = Const of 't with
 
     // Monoid
@@ -50,6 +55,7 @@ type Const<'t,'u> = Const of 't with
     static member First     (Const x : Const<'T,'V>, f:'T->'U) = Const (f x)    : Const<'U,'V>
     static member Second    (Const x : Const<'T,'V>, _:'V->'W) = Const x        : Const<'T,'W>
 
+/// Basic operations on Const
 [<RequireQualifiedAccess>]
 module Const =
     let run (Const t) = t

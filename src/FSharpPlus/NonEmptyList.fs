@@ -6,6 +6,7 @@ open FsControl
 open FSharpPlus
 open FSharpPlus.Extensions
 
+/// A type-safe list that contains at least one element.
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     interface System.Collections.Generic.IEnumerable<'t> with member x.GetEnumerator() = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator()
     interface System.Collections.IEnumerable             with member x.GetEnumerator() = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator() :> System.Collections.IEnumerator
@@ -21,6 +22,7 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
         | Some 0, Some b -> let {Head = x; Tail = xs} = this in {Head = x       ; Tail = xs.[ ..b-1]}
         | Some a, Some b -> let {Head = _; Tail = xs} = this in {Head = xs.[a-1]; Tail = xs.[a..b-1]}
 
+/// Basic operations on NonEmptyList
 [<RequireQualifiedAccess>]
 module NonEmptyList =
     let toList {Head = x; Tail = xs} = x::xs

@@ -5,6 +5,7 @@
 /// <para/>   Useful for: Complex control structures, error handling, and creating co-routines.</summary>
 type Cont<'r,'t> = Cont of (('t->'r)->'r)
 
+/// Basic operations on Cont
 [<RequireQualifiedAccess>]
 module Cont =
     let run (Cont x) = x      : ('T->'R)->'R  
@@ -19,6 +20,7 @@ module Cont =
 open FsControl
 open FSharpPlus
 
+/// Monad Transformer for Cont<'R,'T>
 type ContT<'r,'t> = Cont<'r,'t>
 
 type Cont with
@@ -43,5 +45,6 @@ type Cont with
     static member inline get_Get()  = lift get         : '``ContT<'MonadState<'S, 'T>, 'S>``
     static member inline Put (x:'S) = x |> put |> lift : '``ContT<'MonadState<'S, 'T>, unit>``
 
+/// Basic operations on ContT
 module ContT =
-    let run (Cont x) = x      : ('T->'R)->'R  
+    let run (Cont x) = x      : ('T->'R)->'R

@@ -17,6 +17,7 @@ type Identity<'t> = Identity of 't with
     static member (<*>) (Identity (f : 'T->'U), Identity (x : 'T)) = Identity (f x) : Identity<'U>
     static member Map   (Identity x, f : 'T->'U) = Identity (f x)                   : Identity<'U>
 
+/// Basic operations on Identity
 [<RequireQualifiedAccess>]
 module Identity = 
     let run (Identity x) = x  : 'T

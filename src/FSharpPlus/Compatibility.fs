@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus
 
+/// Bindings for other languages
 module Compatibility =
     module Haskell =
 

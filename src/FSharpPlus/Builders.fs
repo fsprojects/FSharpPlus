@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus
 
+/// Constructs to express generic computations
 [<AutoOpenAttribute>]
 module Builders =    
 

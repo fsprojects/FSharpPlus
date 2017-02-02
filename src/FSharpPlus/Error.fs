@@ -4,6 +4,7 @@ open System
 open FsControl
 open FSharpPlus
 
+/// Additional operations on Error
 [<RequireQualifiedAccess>]
 module Error =
     let inline traverse f = function Choice1Of2 x -> Map.Invoke Choice1Of2 (f x) | Choice2Of2 x -> result (Choice2Of2 x)
@@ -24,8 +25,10 @@ module ResultOrException =
     let Exception :Choice<_,exn>   -> _ = function Choice2Of2 e -> e | _ -> new Exception()
 
 
+/// Monad Transformer for Choice<'T, 'E>
 type ErrorT<'``monad<'choice<'t,'e>>``> = ErrorT of '``monad<'choice<'t,'e>>``
 
+/// Basic operations on ErrorT
 [<RequireQualifiedAccess>]
 module ErrorT =
     let run (ErrorT x) = x : '``Monad<'Choice<'T,'E>>``

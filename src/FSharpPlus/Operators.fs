@@ -2,6 +2,7 @@ namespace FSharpPlus
 
 open FsControl
 
+/// Generic functions and operators
 [<AutoOpenAttribute>]
 module Operators =
 

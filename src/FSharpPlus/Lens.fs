@@ -5,8 +5,10 @@ open FsControl
 open FSharpPlus.Operators
 open FSharpPlus.Data
 
+/// Lens functions and operators
 module Lens =
 
+    /// [omit]
     module Internals =
         let lmap' ab p = ab >> p
         let rmap' cd p = p >> cd

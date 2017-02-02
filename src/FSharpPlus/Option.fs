@@ -3,13 +3,16 @@
 open FsControl
 open FSharpPlus
 
+/// Additional operations on Option
 [<RequireQualifiedAccess>]
 module Option =
     let inline traverse f = function Some x -> Map.Invoke Some (f x) | _ -> result None   
 
 
+/// Monad Transformer for Option<'T>
 type OptionT<'``monad<option<'t>>``> = OptionT of '``monad<option<'t>>``
 
+/// Basic operations on OptionT
 [<RequireQualifiedAccess>]
 module OptionT =
     let run   (OptionT m) = m : '``Monad<option<'T>>``

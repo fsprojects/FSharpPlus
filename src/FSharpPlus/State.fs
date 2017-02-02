@@ -5,6 +5,7 @@
 /// <para/>   Useful for: Building computations from sequences of operations that require a shared state. </summary>
 type State<'s,'t> = State of ('s->('t * 's))
 
+/// Basic operations on State
 [<RequireQualifiedAccess>]
 module State =
     let run (State x) = x                                                                                           : 'S->('T * 'S)
@@ -32,8 +33,10 @@ type State with
 open FsControl
 open FSharpPlus
 
+/// Monad Transformer for State<'S, 'T>
 type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 
+/// Basic operations on StateT
 [<RequireQualifiedAccess>]
 module StateT =
     let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``

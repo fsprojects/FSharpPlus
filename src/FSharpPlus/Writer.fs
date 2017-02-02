@@ -7,6 +7,7 @@ type Writer<'monoid,'t> = Writer of ('t * 'monoid)
 
 open FSharpPlus
 
+/// Basic operations on Writer
 [<RequireQualifiedAccess>]
 module Writer =
 
@@ -42,8 +43,10 @@ type Writer with
 
 open FsControl
 
+/// Monad Transformer for Writer<'Monoid, 'T>
 type WriterT<'``monad<'t * 'monoid>``> = WriterT of '``monad<'t * 'monoid>``
 
+/// Basic operations on WriterT
 [<RequireQualifiedAccess>]
 module WriterT =
 

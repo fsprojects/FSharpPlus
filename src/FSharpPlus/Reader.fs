@@ -5,6 +5,7 @@
 /// <para/>   Useful for: Maintaining variable bindings, or other shared environment.</summary>
 type Reader<'r,'t> = Reader of ('r->'t)
 
+/// Basic operations on Reader
 [<RequireQualifiedAccess>]
 module Reader =
     let run (Reader x) = x                                                  : 'R->'T
@@ -31,8 +32,10 @@ type Reader with
 open FsControl
 open FSharpPlus
 
+/// Monad Transformer for Reader<'R, 'T>
 type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
 
+/// Basic operations on Reader
 [<RequireQualifiedAccess>]
 module ReaderT =
     let  run (ReaderT x) = x    : 'R -> '``Monad<'T>``
