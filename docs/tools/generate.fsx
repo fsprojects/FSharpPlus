@@ -29,12 +29,14 @@ let info =
 
 #load "../../packages/build/FSharp.Formatting/FSharp.Formatting.fsx"
 #I "../../packages/build/FAKE/tools/"
+#r "../../bin/FSharpPlus/FSharpPlus.dll"
 #r "FakeLib.dll"
 open Fake
 open System.IO
 open Fake.FileHelper
 open FSharp.Literate
 open FSharp.MetadataFormat
+open FSharpPlus
 
 // When called from 'build.fsx', use the public project URL as <root>
 // otherwise, use the current 'output' directory.
@@ -104,6 +106,17 @@ let buildReference () =
       sourceRepo = githubLink @@ "tree/master",
       sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ "..",
       publicOnly = true,libDirs = libDirs )
+
+  // Exclude some Namespaces from the index
+  let pathIndex = output @@ "reference" @@ "index.html"
+  printfn "%s" pathIndex
+  let ndx = 
+    File.ReadAllLines pathIndex
+    |> split [[|System.String.Empty|]]
+    |> filter (fun x -> not (x |> exists (fun e -> e.Contains("BaseLib"))))
+    |> filter (fun x -> not (x |> exists (fun e -> e.Contains("FsControl.Internals Namespace"))))
+    |> intercalate [|System.String.Empty|]
+  File.WriteAllLines(pathIndex, ndx)
 
 // Build documentation from `fsx` and `md` files in `docs/content`
 let buildDocumentation () =
