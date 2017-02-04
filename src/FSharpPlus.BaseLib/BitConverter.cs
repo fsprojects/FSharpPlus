@@ -18,12 +18,12 @@ namespace FsControl.BaseLib
 
     using System;
 
-    // The BitConverter class contains methods for
-    // converting an array of bytes to one of the base data
-    // types, as well as for converting a base data type to an
-    // array of bytes.
-    //
-    // Only statics, does not need to be marked with the serializable attribute
+    /// The BitConverter class contains methods for
+    /// converting an array of bytes to one of the base data
+    /// types, as well as for converting a base data type to an
+    /// array of bytes.
+    ///
+    /// Only statics, does not need to be marked with the serializable attribute
     public static class BitConverter
     {
 
@@ -36,7 +36,7 @@ namespace FsControl.BaseLib
 //        public static readonly bool IsLittleEndian = true;
 //#endif
 
-        // Converts a byte into an array of bytes with length one.
+        /// Converts a byte into an array of bytes with length one.
         public static byte[] GetBytes(bool value)
         {
             byte[] r = new byte[1];
@@ -44,14 +44,14 @@ namespace FsControl.BaseLib
             return r;
         }
 
-        // Converts a char into an array of bytes with length two.
+        /// Converts a char into an array of bytes with length two.
         public static byte[] GetBytes(char value, bool isLittleEndian)
         {
             return GetBytes((short)value, isLittleEndian);
         }
 
-        // Converts a short into an array of bytes with length
-        // two.
+        /// Converts a short into an array of bytes with length
+        /// two.
         public unsafe static byte[] GetBytes(short value, bool isLittleEndian)
         {
             if (!isLittleEndian) return new [] {(byte)(value >> 8), (byte)value};
@@ -61,8 +61,8 @@ namespace FsControl.BaseLib
             return bytes;
         }
 
-        // Converts an int into an array of bytes with length
-        // four.
+        /// Converts an int into an array of bytes with length
+        /// four.
         public unsafe static byte[] GetBytes(int value, bool isLittleEndian)
         {
             if (!isLittleEndian) return new [] {(byte)(value >> 24), (byte)(value >> 16), (byte)(value >> 8), (byte)value};
@@ -72,8 +72,8 @@ namespace FsControl.BaseLib
             return bytes;
         }
 
-        // Converts a long into an array of bytes with length
-        // eight.
+        /// Converts a long into an array of bytes with length
+        /// eight.
         public unsafe static byte[] GetBytes(long value, bool isLittleEndian)
         {
             if (!isLittleEndian) return new [] {(byte)(value >> 56), (byte)(value >> 48), (byte)(value >> 40), (byte)(value >> 32), (byte)(value >> 24), (byte)(value >> 16), (byte)(value >> 8), (byte)value};
@@ -83,48 +83,48 @@ namespace FsControl.BaseLib
             return bytes;
         }
 
-        // Converts an ushort into an array of bytes with
-        // length two.
+        /// Converts an ushort into an array of bytes with
+        /// length two.
         public static byte[] GetBytes(ushort value, bool isLittleEndian)
         {
             return GetBytes((short)value, isLittleEndian);
         }
 
-        // Converts an uint into an array of bytes with
-        // length four.
+        /// Converts an uint into an array of bytes with
+        /// length four.
         public static byte[] GetBytes(uint value, bool isLittleEndian)
         {
             return GetBytes((int)value, isLittleEndian);
         }
 
-        // Converts an unsigned long into an array of bytes with
-        // length eight.
+        /// Converts an unsigned long into an array of bytes with
+        /// length eight.
         public static byte[] GetBytes(ulong value, bool isLittleEndian)
         {
             return GetBytes((long)value, isLittleEndian);
         }
 
-        // Converts a float into an array of bytes with length
-        // four.
+        /// Converts a float into an array of bytes with length
+        /// four.
         public unsafe static byte[] GetBytes(float value, bool isLittleEndian)
         {
             return GetBytes(*(int*)&value, isLittleEndian);
         }
 
-        // Converts a double into an array of bytes with length
-        // eight.
+        /// Converts a double into an array of bytes with length
+        /// eight.
         public unsafe static byte[] GetBytes(double value, bool isLittleEndian)
         {
             return GetBytes(*(long*)&value, isLittleEndian);
         }
 
-        // Converts an array of bytes into a char.
+        /// Converts an array of bytes into a char.
         public static char ToChar(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (char)ToInt16(value, startIndex, isLittleEndian);
         }
 
-        // Converts an array of bytes into a short.
+        /// Converts an array of bytes into a short.
         public static unsafe short ToInt16(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
@@ -149,7 +149,7 @@ namespace FsControl.BaseLib
             }
         }
 
-        // Converts an array of bytes into an int.
+        /// Converts an array of bytes into an int.
         public static unsafe int ToInt32(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
@@ -174,7 +174,7 @@ namespace FsControl.BaseLib
             }
         }
 
-        // Converts an array of bytes into a long.
+        /// Converts an array of bytes into a long.
         public static unsafe long ToInt64(byte[] value, int startIndex, bool isLittleEndian)
         {
             if (value == null)
@@ -207,35 +207,35 @@ namespace FsControl.BaseLib
         }
 
 
-        // Converts an array of bytes into an ushort.
-        //
+        /// Converts an array of bytes into an ushort.
+        ///
         public static ushort ToUInt16(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (ushort)ToInt16(value, startIndex, isLittleEndian);
         }
 
-        // Converts an array of bytes into an uint.
-        //
+        /// Converts an array of bytes into an uint.
+        ///
         public static uint ToUInt32(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (uint)ToInt32(value, startIndex, isLittleEndian);
         }
 
-        // Converts an array of bytes into an unsigned long.
-        //
+        /// Converts an array of bytes into an unsigned long.
+        ///
         public static ulong ToUInt64(byte[] value, int startIndex, bool isLittleEndian)
         {
             return (ulong)ToInt64(value, startIndex, isLittleEndian);
         }
 
-        // Converts an array of bytes into a float.
+        /// Converts an array of bytes into a float.
         unsafe public static float ToSingle(byte[] value, int startIndex, bool isLittleEndian)
         {
             int val = ToInt32(value, startIndex, isLittleEndian);
             return *(float*)&val;
         }
 
-        // Converts an array of bytes into a double.
+        /// Converts an array of bytes into a double.
         unsafe public static double ToDouble(byte[] value, int startIndex, bool isLittleEndian)
         {
             long val = ToInt64(value, startIndex, isLittleEndian);
@@ -253,7 +253,7 @@ namespace FsControl.BaseLib
             return (char)(i - 10 + 'A');
         }
 
-        // Converts an array of bytes into a String.
+        /// Converts an array of bytes into a String.
         public static String ToString(byte[] value, int startIndex, int length)
         {
 
@@ -299,7 +299,7 @@ namespace FsControl.BaseLib
             return new String(chArray, 0, chArray.Length - 1);
         }
 
-        // Converts an array of bytes into a String.
+        /// Converts an array of bytes into a String.
         public static String ToString(byte[] value)
         {
             if (value == null)
@@ -307,7 +307,7 @@ namespace FsControl.BaseLib
             return ToString(value, 0, value.Length);
         }
 
-        // Converts an array of bytes into a String.
+        /// Converts an array of bytes into a String.
         public static String ToString(byte[] value, int startIndex)
         {
             if (value == null)
@@ -323,7 +323,7 @@ namespace FsControl.BaseLib
         **           startIndex -- The position within the array.
         **Exceptions: See ToInt4.
         ==============================================================================*/
-        // Converts an array of bytes into a boolean.
+        /// Converts an array of bytes into a boolean.
         public static bool ToBoolean(byte[] value, int startIndex)
         {
             if (value == null)
