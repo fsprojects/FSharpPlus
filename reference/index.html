@@ -245,7 +245,7 @@ Useful for: Complex control structures, error handling, and creating co-routines
           <td class="type-name">
             <a href="fsharpplus-data-contt-2.html">ContT<'r, 't></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for Cont</p>
+          <td class="xmldoc"><p>Monad Transformer for Cont<'R,'T></p>
 
 </td>
         </tr>
@@ -269,7 +269,7 @@ Useful for: Complex control structures, error handling, and creating co-routines
           <td class="type-name">
             <a href="fsharpplus-data-errort-1.html">ErrorT<'monad<'choice<'t,'e>>></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for Choice</p>
+          <td class="xmldoc"><p>Monad Transformer for Choice<'T, 'E></p>
 
 </td>
         </tr>
@@ -293,7 +293,7 @@ Useful for: Complex control structures, error handling, and creating co-routines
           <td class="type-name">
             <a href="fsharpplus-data-listt-1.html">ListT<'monad<list<'t>>></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for list<T></p>
+          <td class="xmldoc"><p>Monad Transformer for list<'T></p>
 
 </td>
         </tr>
@@ -301,7 +301,7 @@ Useful for: Complex control structures, error handling, and creating co-routines
           <td class="type-name">
             <a href="fsharpplus-data-optiont-1.html">OptionT<'monad<option<'t>>></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for Option<T></p>
+          <td class="xmldoc"><p>Monad Transformer for Option<'T></p>
 
 </td>
         </tr>
@@ -319,7 +319,7 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
           <td class="type-name">
             <a href="fsharpplus-data-readert-2.html">ReaderT<'r, 'monad<'t>></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for Reader</p>
+          <td class="xmldoc"><p>Monad Transformer for Reader<'R, 'T></p>
 
 </td>
         </tr>
@@ -327,7 +327,7 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
           <td class="type-name">
             <a href="fsharpplus-data-seqt-1.html">SeqT<'monad<seq<'t>>></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for seq<T></p>
+          <td class="xmldoc"><p>Monad Transformer for seq<'T></p>
 
 </td>
         </tr>
@@ -345,7 +345,7 @@ Useful for: Building computations from sequences of operations that require a sh
           <td class="type-name">
             <a href="fsharpplus-data-statet-2.html">StateT<'s, 'monad<'t * 's>></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for State</p>
+          <td class="xmldoc"><p>Monad Transformer for State<'S, 'T></p>
 
 </td>
         </tr>
@@ -363,7 +363,7 @@ Useful for: Logging, or other computations that produce output "on the side".</p
           <td class="type-name">
             <a href="fsharpplus-data-writert-1.html">WriterT<'monad<'t * 'monoid>></a>
           </td>
-          <td class="xmldoc"><p>Monad Transformer for Writer</p>
+          <td class="xmldoc"><p>Monad Transformer for Writer<'Monoid, 'T></p>
 
 </td>
         </tr>
