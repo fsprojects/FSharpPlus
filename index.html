@@ -46,26 +46,40 @@
   <div class="span1"></div>
 </div>
 <h2><a name="Example" class="anchor" href="#Example">Example</a></h2>
-<p>This example demonstrates using a function defined in this sample library.</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
+<p>This example demonstrates using a generic function defined in this sample library.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;FSharpPlus.dll&quot;</span>
-<span class="k">open</span> <span class="i">FSharpPlus</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;../../bin/FSharpPlus/FSharpPlus.dll&quot;</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">FSharpPlus</span>
 
-<span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="f">printfn</span> <span class="s">&quot;hello = </span><span class="pf">%i</span><span class="s">&quot;</span> <span class="o">&lt;|</span> <span class="i">Library</span><span class="o">.</span><span class="i">hello</span> <span class="n">0</span>
+<span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="f">map</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="f">string</span> [|<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>;<span class="n">5</span>|]
+<span class="c">// val it : string [] = [|&quot;2&quot;; &quot;3&quot;; &quot;4&quot;; &quot;5&quot;|]</span>
+
+<span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="f">map</span> ((<span class="o">+</span>) <span class="n">9</span>) (<span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="p">Some</span> <span class="n">3</span>)
+<span class="c">// val it : int option = Some 12</span>
+
+<span onmouseout="hideTip(event, 'fs2', 6)" onmouseover="showTip(event, 'fs2', 6)" class="f">map</span> <span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="f">string</span> (<span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="t">NonEmptyList</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="f">create</span> <span class="n">2</span> [<span class="n">3</span>;<span class="n">4</span>;<span class="n">5</span>])
+<span class="c">// val it : NonEmptyList&lt;string&gt; = {Head = &quot;2&quot;; Tail = [&quot;3&quot;; &quot;4&quot;; &quot;5&quot;];}</span>
 </code></pre></td>
 </tr>
 </table>
 <p>Some more info</p>
 <h2><a name="Samples-amp-documentation" class="anchor" href="#Samples-amp-documentation">Samples &amp; documentation</a></h2>
 <p>The library comes with comprehensible documentation.
-It can include tutorials automatically generated from <code>*.fsx</code> files in <a href="https://github.com/gmpl/FSharpPlus/tree/master/docs/content">the content folder</a>.
+It include tutorials automatically generated from <code>*.fsx</code> files in <a href="https://github.com/gmpl/FSharpPlus/tree/master/docs/content">the content folder</a>.
 The API reference is automatically generated from Markdown comments in the library implementation.</p>
 <ul>
-<li><p><a href="tutorial.html">Tutorial</a> contains a further explanation of this sample library.</p></li>
+<li><p><a href="tutorial.html">Tutorial</a> contains a further explanation of this library.</p></li>
 <li>
 <p><a href="reference/index.html">API Reference</a> contains automatically generated documentation for all types, modules
 and functions in the library. This includes additional brief samples on using most of the
@@ -81,7 +95,12 @@ also want to read the <a href="https://github.com/gmpl/FSharpPlus/blob/master/RE
 redistribution for both commercial and non-commercial purposes. For more information see the
 <a href="https://github.com/gmpl/FSharpPlus/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
 
-<div class="tip" id="fs1">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
+<div class="tip" id="fs1">namespace FSharpPlus</div>
+<div class="tip" id="fs2">val map : f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)<br /><br />Full name: FSharpPlus.Operators.map</div>
+<div class="tip" id="fs3">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs4">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs5">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;member head : &#39;t<br />&#160;&#160;member tail : &#39;t list<br />&#160;&#160;static member Append : NonEmptyList&lt;&#39;a1&gt; * x:NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;<br />&#160;&#160;static member Bind : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;static member Extend : s:NonEmptyList&lt;&#39;a1&gt; * g:(NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Extract : NonEmptyList&lt;&#39;t&gt; -&gt; &#39;t<br />&#160;&#160;static member FoldBack : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; &#39;a2 -&gt; &#39;a2) * z:&#39;a2 -&gt; &#39;a2<br />&#160;&#160;static member Map : x:NonEmptyList&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Replace : source:NonEmptyList&lt;&#39;T&gt; * oldValue:NonEmptyList&lt;&#39;T&gt; * newValue:NonEmptyList&lt;&#39;T&gt; * _impl:Replace -&gt; NonEmptyList&lt;&#39;T&gt; (requires equality)<br />&#160;&#160;static member Return : x:&#39;a -&gt; NonEmptyList&lt;&#39;a&gt;<br />&#160;&#160;static member ToList : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToList -&gt; &#39;a list<br />&#160;&#160;static member ToSeq : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToSeq -&gt; seq&lt;&#39;a&gt;<br />&#160;&#160;static member ToString : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToString -&gt; (CultureInfo -&gt; string) (requires member ToString)<br />&#160;&#160;static member ( &lt;*&gt; ) : f:NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x:NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;<br /><br />Full name: FSharpPlus.NonEmptyList&lt;_&gt;</div>
+<div class="tip" id="fs6">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;<br /><br />Full name: FSharpPlus.NonEmptyList.create</div>
 
         </div>
         <div class="span3">

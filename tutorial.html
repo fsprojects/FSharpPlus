@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Introducing your project
+    <title>Introducing FSharpPlus
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="F#+ is an overload library for F#."/>
@@ -13,8 +13,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
-    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="file://C:\Repos\FSharpPlus\docs\tools\../output/content/style.css" />
+    <script type="text/javascript" src="file://C:\Repos\FSharpPlus\docs\tools\../output/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -27,46 +27,294 @@
           <li><a href="http://fsharp.org">fsharp.org</a></li>
           <li><a href="https://github.com/gmpl/FSharpPlus">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+        <h3 class="muted"><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/index.html">FSharpPlus</a></h3>
       </div>
       <hr />
       <div class="row">
         <div class="span9" id="main">
           
-<h1><a name="Introducing-your-project" class="anchor" href="#Introducing-your-project">Introducing your project</a></h1>
-<p>Say more</p>
+<h1><a name="Introducing-FSharpPlus" class="anchor" href="#Introducing-FSharpPlus">Introducing FSharpPlus</a></h1>
+<ul>
+<li><p>Download binaries from <a href="https://www.nuget.org/packages/FsControl/">Nuget</a>, use the latest version (2.x)</p></li>
+<li>Open an F# script file or the F# interactive, reference the library and open the namespace</li>
+</ul>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;../../bin/FSharpPlus/FSharpPlus.dll&quot;</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Ignore warnings about F# metadata if any.</p>
+<p>Now we'll start with a quick overview of the features presented in F#+.</p>
+<h3><a name="Generic-functions" class="anchor" href="#Generic-functions">Generic functions</a></h3>
+<p>They are automatically available when opening the FSharpPlus namespace</p>
+<p>here's an example with <code>map</code> (<a href="https://wiki.haskell.org/Functor">fmap</a> for Haskellers, <a href="http://www.dotnetperls.com/select">Select</a> for C-sharpers):</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;../../bin/FSharpPlus/FSharpPlus.dll&quot;</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+
+<span class="i">map</span> <span class="i">string</span> [|<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>;<span class="n">5</span>|]
+<span class="c">// val it : string [] = [|&quot;2&quot;; &quot;3&quot;; &quot;4&quot;; &quot;5&quot;|]</span>
+
+<span class="i">map</span> ((<span class="o">+</span>) <span class="n">9</span>) (<span class="i">Some</span> <span class="n">3</span>)
+<span class="c">// val it : int option = Some 12</span>
+
+<span class="i">map</span> <span class="i">string</span> (<span class="i">NonEmptyList</span><span class="o">.</span><span class="i">create</span> <span class="n">2</span> [<span class="n">3</span>;<span class="n">4</span>;<span class="n">5</span>])
+<span class="c">// val it : NonEmptyList&lt;string&gt; = {Head = &quot;2&quot;; Tail = [&quot;3&quot;; &quot;4&quot;; &quot;5&quot;];}</span>
+
+
+<span class="c">// val it : Tree&lt;int&gt; = Tree (60,Tree (20,Leaf 10,Leaf 30),Leaf 90)</span>
+</code></pre></td>
+</tr>
+</table>
+<p>They're also available for your own types as long as they contain the appropiated method with the expected signature</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">Tree</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">t</span><span class="o">&gt;</span> <span class="o">=</span>
+    | <span class="i">Tree</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">t</span> <span class="o">*</span> <span class="i">Tree</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">t</span><span class="o">&gt;</span> <span class="o">*</span> <span class="i">Tree</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">t</span><span class="o">&gt;</span>
+    | <span class="i">Leaf</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">t</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="i">Map</span> (<span class="i">x</span><span class="o">:</span><span class="i">Tree</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span><span class="o">&gt;</span>, <span class="i">f</span>) <span class="o">=</span> 
+        <span class="k">let</span> <span class="k">rec</span> <span class="i">loop</span> <span class="i">f</span> <span class="o">=</span> <span class="k">function</span>
+            | <span class="i">Leaf</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">Leaf</span> (<span class="i">f</span> <span class="i">x</span>)
+            | <span class="i">Tree</span> (<span class="i">x</span>, <span class="i">t1</span>, <span class="i">t2</span>) <span class="k">-&gt;</span> <span class="i">Tree</span> (<span class="i">f</span> <span class="i">x</span>, <span class="i">loop</span> <span class="i">f</span> <span class="i">t1</span>, <span class="i">loop</span> <span class="i">f</span> <span class="i">t2</span>)
+        <span class="i">loop</span> <span class="i">f</span> <span class="i">x</span>
+
+<span class="i">map</span> (<span class="o">(*)</span> <span class="n">10</span>) (<span class="i">Tree</span>(<span class="n">6</span>, <span class="i">Tree</span>(<span class="n">2</span>, <span class="i">Leaf</span> <span class="n">1</span>, <span class="i">Leaf</span> <span class="n">3</span>), <span class="i">Leaf</span> <span class="n">9</span>))
+<span class="c">// val it : Tree&lt;int&gt; = Tree (60,Tree (20,Leaf 10,Leaf 30),Leaf 90)</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Generic functions may be seen as an exotic thing in F# that only saves a few key strokes (<code>map</code> instead of <code>List.map</code> or <code>Array.map</code>) still they allow you to reach a higher abstraction level, using ad-hoc polymorphism.</p>
+<p>But more interesting is the use of operators. You can't prefix them with the module they belong to, well you can but then it's no longer an operator. As an example many F# libraries define the bind operator <code>(&gt;&gt;=)</code> but it's not generic so if you use two different types which are both monads you will need to prefix it e.g. <code>State.(&gt;&gt;=)</code> and <code>Reader.(&gt;&gt;=)</code> which defeats the purpose of having an operator.</p>
+<p>Here you have a ready-to-use generic bind operator: <code>&gt;&gt;=</code></p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;FSharpPlus.dll&quot;</span>
-<span class="k">open</span> <span class="i">FSharpPlus</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">x</span> <span class="o">=</span> [<span class="s">&quot;hello&quot;</span>;<span class="s">&quot; &quot;</span>;<span class="s">&quot;world&quot;</span>] <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">Seq</span><span class="o">.</span><span class="i">toList</span> <span class="i">x</span>)
+<span class="c">// val x : char list = [&#39;h&#39;; &#39;e&#39;; &#39;l&#39;; &#39;l&#39;; &#39;o&#39;; &#39; &#39;; &#39;w&#39;; &#39;o&#39;; &#39;r&#39;; &#39;l&#39;; &#39;d&#39;]</span>
 
-<span class="i">Library</span><span class="o">.</span><span class="i">hello</span> <span class="n">0</span>
+
+<span class="k">let</span> <span class="i">tryParseInt</span> <span class="o">:</span> <span class="i">string</span> <span class="k">-&gt;</span> <span class="i">int</span> <span class="i">option</span> <span class="o">=</span> <span class="i">tryParse</span>
+<span class="k">let</span> <span class="i">tryDivide</span> <span class="i">x</span> <span class="i">n</span> <span class="o">=</span> <span class="k">if</span> <span class="i">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span> <span class="i">None</span> <span class="k">else</span> <span class="i">Some</span> (<span class="i">x</span> <span class="o">/</span> <span class="i">n</span>)
+
+<span class="k">let</span> <span class="i">y</span> <span class="o">=</span> <span class="i">Some</span> <span class="s">&quot;20&quot;</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">tryParseInt</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">tryDivide</span> <span class="n">100</span>
+<span class="c">// val y : int option = Some 5</span>
 </code></pre></td>
 </tr>
 </table>
-<p>Some more info</p>
+<p>You have also the Kleisli composition (fish) operator:  <code>&gt;=&gt;</code></p>
+<p>Which is becoming popular in F# after the <a href="https://www.google.ch/#q=railway+oriented+programming">Railway Oriented Programming</a> tutorial series</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">parseAndDivide100By</span> <span class="o">=</span> <span class="i">tryParseInt</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">tryDivide</span> <span class="n">100</span>
+
+<span class="k">let</span> <span class="i">parsedAndDivide100By20</span> <span class="o">=</span> <span class="i">parseAndDivide100By</span> <span class="s">&quot;20&quot;</span>   <span class="c">// Some 5</span>
+<span class="k">let</span> <span class="i">parsedAndDivide100By0&#39;</span> <span class="o">=</span> <span class="i">parseAndDivide100By</span> <span class="s">&quot;zero&quot;</span> <span class="c">// None</span>
+<span class="k">let</span> <span class="i">parsedAndDivide100By0</span>  <span class="o">=</span> <span class="i">parseAndDivide100By</span> <span class="s">&quot;0&quot;</span>    <span class="c">// None</span>
+
+<span class="k">let</span> <span class="i">parseElement</span> <span class="i">n</span> <span class="o">=</span> <span class="i">List</span><span class="o">.</span><span class="i">tryItem</span> <span class="i">n</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">tryParseInt</span>
+<span class="k">let</span> <span class="i">parsedElement</span>  <span class="o">=</span> <span class="i">parseElement</span> <span class="n">2</span> [<span class="s">&quot;0&quot;</span>; <span class="s">&quot;1&quot;</span>;<span class="s">&quot;2&quot;</span>]
+</code></pre></td>
+</tr>
+</table>
+<p>But don't forget the above used operators are generic, so we can change the type of our functions and we get a different functionality for free:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">tryParseInt</span> <span class="i">x</span> <span class="o">:</span> <span class="i">Choice</span><span class="o">&lt;</span><span class="i">int</span>, <span class="i">string</span><span class="o">&gt;</span> <span class="o">=</span> 
+    <span class="k">match</span> <span class="i">tryParse</span> <span class="i">x</span> <span class="k">with</span> 
+    | <span class="i">Some</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">Choice1Of2</span> <span class="i">x</span>
+    | <span class="i">None</span>   <span class="k">-&gt;</span> <span class="i">Choice2Of2</span> (<span class="s">&quot;Failed to parse &quot;</span> <span class="o">+</span> <span class="i">x</span>)
+        
+
+<span class="k">let</span> <span class="i">tryDivide</span> <span class="i">x</span> <span class="i">n</span> <span class="o">=</span> 
+    <span class="k">if</span> <span class="i">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span> <span class="i">Choice2Of2</span> <span class="s">&quot;Can&#39;t divide by zero&quot;</span>
+    <span class="k">else</span> <span class="i">Choice1Of2</span> (<span class="i">x</span> <span class="o">/</span> <span class="i">n</span>)
+</code></pre></td>
+</tr>
+</table>
+<p>The test code remains unchanged, but we get a more interesting functionality</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">parseAndDivide100By</span> <span class="o">=</span> <span class="i">tryParseInt</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">tryDivide</span> <span class="n">100</span>
+
+<span class="k">let</span> <span class="i">parsedAndDivide100By20</span> <span class="o">=</span> <span class="i">parseAndDivide100By</span> <span class="s">&quot;20&quot;</span>   <span class="c">// Choice1Of2 5</span>
+<span class="k">let</span> <span class="i">parsedAndDivide100By0&#39;</span> <span class="o">=</span> <span class="i">parseAndDivide100By</span> <span class="s">&quot;zero&quot;</span> <span class="c">// Choice2Of2 &quot;Failed to parse zero&quot;</span>
+<span class="k">let</span> <span class="i">parsedAndDivide100By0</span>  <span class="o">=</span> <span class="i">parseAndDivide100By</span> <span class="s">&quot;0&quot;</span>    <span class="c">// Choice2Of2 &quot;Can&#39;t divide by zero&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Also when working with combinators, the generic applicative functor (space invaders) operator is very handy: <code>&lt;*&gt;</code></p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">sumAllOptions</span> <span class="o">=</span> <span class="i">Some</span> (<span class="o">+</span>) <span class="o">&lt;*&gt;</span> <span class="i">Some</span> <span class="n">2</span> <span class="o">&lt;*&gt;</span> <span class="i">Some</span> <span class="n">10</span>     <span class="c">// val sumAllOptions : int option = Some 12</span>
+
+<span class="k">let</span> <span class="i">sumAllElemets</span> <span class="o">=</span> [(<span class="o">+</span>)] <span class="o">&lt;*&gt;</span> [<span class="n">10</span>; <span class="n">100</span>] <span class="o">&lt;*&gt;</span> [<span class="n">1</span>; <span class="n">2</span>; <span class="n">3</span>]   <span class="c">// int list = [11; 12; 13; 101; 102; 103]</span>
+</code></pre></td>
+</tr>
+</table>
+<p>For more details and features, see <a href="generic-doc.html">generic operators and functions</a></p>
+<p>and here are all <a href="reference\fsharpplus-operators.html">generic operators and functions</a></p>
+<h3><a name="Lens" class="anchor" href="#Lens">Lens</a></h3>
+<p>from <a href="https://github.com/ekmett/lens/wiki/Examples">https://github.com/ekmett/lens/wiki/Examples</a></p>
+<p>First, open F#+ Lens</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Lens</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Now, you can read from lenses (<code>_2</code> is a lens for the second component of a tuple)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r1</span> <span class="o">=</span> (<span class="s">&quot;hello&quot;</span>,<span class="s">&quot;world&quot;</span>)<span class="o">^.</span><span class="i">_2</span>
+<span class="c">// val it : string = &quot;world&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<p>and you can write to lenses.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r2</span> <span class="o">=</span> <span class="i">set</span> <span class="i">_2</span> <span class="n">42</span> (<span class="s">&quot;hello&quot;</span>,<span class="s">&quot;world&quot;</span>)
+<span class="c">// val it : string * int = (&quot;hello&quot;, 42)</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Composing lenses for reading (or writing) goes in the order an imperative programmer would expect, and just uses <code>(&lt;&lt;)</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r3</span> <span class="o">=</span> (<span class="s">&quot;hello&quot;</span>,(<span class="s">&quot;world&quot;</span>,<span class="s">&quot;!!!&quot;</span>))<span class="o">^.</span>(<span class="i">_2</span> <span class="o">&lt;&lt;</span> <span class="i">_1</span>)
+<span class="c">// val it : string = &quot;world&quot;</span>
+
+<span class="k">let</span> <span class="i">r4</span> <span class="o">=</span> <span class="i">set</span> (<span class="i">_2</span> <span class="o">&lt;&lt;</span> <span class="i">_1</span>) <span class="n">42</span> (<span class="s">&quot;hello&quot;</span>,(<span class="s">&quot;world&quot;</span>,<span class="s">&quot;!!!&quot;</span>))             
+<span class="c">// val it : string * (int * string) = (&quot;hello&quot;, (42, &quot;!!!&quot;))</span>
+</code></pre></td>
+</tr>
+</table>
+<p>You can make a Getter out of a pure function with <code>to'</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r5</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span><span class="o">^.</span><span class="i">to&#39;</span> <span class="i">length</span>
+<span class="c">// val it : int = 5</span>
+</code></pre></td>
+</tr>
+</table>
+<p>You can easily compose a Getter with a Lens just using <code>(&lt;&lt;)</code>. No explicit coercion is necessary.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r6</span> <span class="o">=</span> (<span class="s">&quot;hello&quot;</span>,(<span class="s">&quot;world&quot;</span>,<span class="s">&quot;!!!&quot;</span>))<span class="o">^.</span> (<span class="i">_2</span> <span class="o">&lt;&lt;</span> <span class="i">_2</span> <span class="o">&lt;&lt;</span> <span class="i">to&#39;</span> <span class="i">length</span>)
+<span class="c">// val it : int = 3</span>
+</code></pre></td>
+</tr>
+</table>
+<p>As we saw above, you can write to lenses and these writes can change the type of the container. <code>(.-&gt;)</code> is an infix alias for <code>set</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r7</span> <span class="o">=</span> <span class="i">_1</span> <span class="o">.</span><span class="o">-&gt;</span> <span class="s">&quot;hello&quot;</span> <span class="o">&lt;|</span> ((),<span class="s">&quot;world&quot;</span>)
+<span class="c">// val it : string * string = (&quot;hello&quot;, &quot;world&quot;)</span>
+</code></pre></td>
+</tr>
+</table>
+<p>It can be used in conjunction with <code>(|&gt;)</code> for familiar von Neumann style assignment syntax:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r8</span> <span class="o">=</span> ((), <span class="s">&quot;world&quot;</span>) <span class="o">|&gt;</span> <span class="i">_1</span> <span class="o">.</span><span class="o">-&gt;</span> <span class="s">&quot;hello&quot;</span>
+<span class="c">// val it : string * string = (&quot;hello&quot;, &quot;world&quot;)</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Conversely view, can be used as an prefix alias for <code>(^.)</code>.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r9</span> <span class="o">=</span> <span class="i">view</span> <span class="i">_2</span> (<span class="n">10</span>,<span class="n">20</span>)
+<span class="c">// val it : int = 20</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Have a look at all <a href="reference\fsharpplus-lens.html">lens functions</a></p>
 
 
         </div>
         <div class="span3">
-          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <img src="file://C:\Repos\FSharpPlus\docs\tools\../output/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
             <li><a href="https://github.com/gmpl/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/license.html">License</a></li>
+            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/release-notes.html">Release Notes</a></li>
             
             <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Sample tutorial</a></li>
+            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/tutorial.html">Sample tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/reference/index.html">API Reference</a></li>
           </ul>
         </div>
       </div>

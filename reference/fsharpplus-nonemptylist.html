@@ -59,11 +59,11 @@
             cons(e arg2)
           </code>
           <div class="tip" id="170">
-            <strong>Signature:</strong> e:&#39;?13932 -&gt; NonEmptyList&lt;&#39;?13932&gt; -&gt; NonEmptyList&lt;&#39;?13932&gt;<br />
-                          <strong>Type parameters:</strong> '?13932          </div>
+            <strong>Signature:</strong> e:&#39;?13936 -&gt; NonEmptyList&lt;&#39;?13936&gt; -&gt; NonEmptyList&lt;&#39;?13936&gt;<br />
+                          <strong>Type parameters:</strong> '?13936          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L31-31" class="github-link">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L33-33" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -74,46 +74,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '171', 171)" onmouseover="showTip(event, '171', 171)">
-            map(f arg2)
+            create(x xs)
           </code>
           <div class="tip" id="171">
-            <strong>Signature:</strong> f:(&#39;?13929 -&gt; &#39;?13930) -&gt; NonEmptyList&lt;&#39;?13929&gt; -&gt; NonEmptyList&lt;&#39;?13930&gt;<br />
-                          <strong>Type parameters:</strong> '?13929, '?13930          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L30-30" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '172', 172)" onmouseover="showTip(event, '172', 172)">
-            tails(s)
-          </code>
-          <div class="tip" id="172">
-            <strong>Signature:</strong> s:NonEmptyList&lt;&#39;?13934&gt; -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;?13934&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?13934          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L32-32" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '173', 173)" onmouseover="showTip(event, '173', 173)">
-            toList(arg1)
-          </code>
-          <div class="tip" id="173">
-            <strong>Signature:</strong> NonEmptyList&lt;&#39;?13925&gt; -&gt; &#39;?13925 list<br />
+            <strong>Signature:</strong> x:&#39;?13925 -&gt; xs:&#39;?13925 list -&gt; NonEmptyList&lt;&#39;?13925&gt;<br />
                           <strong>Type parameters:</strong> '?13925          </div>
         </td>
         <td class="xmldoc">
@@ -127,15 +91,87 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
-            toSeq(arg1)
+          <code onmouseout="hideTip(event, '172', 172)" onmouseover="showTip(event, '172', 172)">
+            map(f arg2)
           </code>
-          <div class="tip" id="174">
-            <strong>Signature:</strong> NonEmptyList&lt;&#39;?13927&gt; -&gt; seq&lt;&#39;?13927&gt;<br />
+          <div class="tip" id="172">
+            <strong>Signature:</strong> f:(&#39;?13933 -&gt; &#39;?13934) -&gt; NonEmptyList&lt;&#39;?13933&gt; -&gt; NonEmptyList&lt;&#39;?13934&gt;<br />
+                          <strong>Type parameters:</strong> '?13933, '?13934          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '173', 173)" onmouseover="showTip(event, '173', 173)">
+            singleton(x)
+          </code>
+          <div class="tip" id="173">
+            <strong>Signature:</strong> x:&#39;?13927 -&gt; NonEmptyList&lt;&#39;?13927&gt;<br />
                           <strong>Type parameters:</strong> '?13927          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L29-29" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
+            tails(s)
+          </code>
+          <div class="tip" id="174">
+            <strong>Signature:</strong> s:NonEmptyList&lt;&#39;?13938&gt; -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;?13938&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?13938          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L34-34" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '175', 175)" onmouseover="showTip(event, '175', 175)">
+            toList(arg1)
+          </code>
+          <div class="tip" id="175">
+            <strong>Signature:</strong> NonEmptyList&lt;&#39;?13929&gt; -&gt; &#39;?13929 list<br />
+                          <strong>Type parameters:</strong> '?13929          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L30-30" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
+            toSeq(arg1)
+          </code>
+          <div class="tip" id="176">
+            <strong>Signature:</strong> NonEmptyList&lt;&#39;?13931&gt; -&gt; seq&lt;&#39;?13931&gt;<br />
+                          <strong>Type parameters:</strong> '?13931          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/NonEmptyList.fs#L31-31" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
