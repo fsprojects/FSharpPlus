@@ -23,13 +23,20 @@ Documentation
 Example
 -------
 
-This example demonstrates using a function defined in this sample library.
+This example demonstrates using a generic function defined in this sample library.
 
 *)
-#r "FSharpPlus.dll"
+#r "../../bin/FSharpPlus/FSharpPlus.dll"
 open FSharpPlus
 
-printfn "hello = %i" <| Library.hello 0
+map string [|2;3;4;5|]
+// val it : string [] = [|"2"; "3"; "4"; "5"|]
+
+map ((+) 9) (Some 3)
+// val it : int option = Some 12
+
+map string (NonEmptyList.create 2 [3;4;5])
+// val it : NonEmptyList<string> = {Head = "2"; Tail = ["3"; "4"; "5"];}
 
 (**
 Some more info
@@ -38,10 +45,10 @@ Samples & documentation
 -----------------------
 
 The library comes with comprehensible documentation. 
-It can include tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
+It include tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
 The API reference is automatically generated from Markdown comments in the library implementation.
 
- * [Tutorial](tutorial.html) contains a further explanation of this sample library.
+ * [Tutorial](tutorial.html) contains a further explanation of this library.
 
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library. This includes additional brief samples on using most of the
