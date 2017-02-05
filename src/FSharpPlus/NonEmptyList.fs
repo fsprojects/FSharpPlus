@@ -25,6 +25,8 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
 /// Basic operations on NonEmptyList
 [<RequireQualifiedAccess>]
 module NonEmptyList =
+    let create x xs = {Head = x; Tail = xs}
+    let singleton x = {Head = x; Tail = []}
     let toList {Head = x; Tail = xs} = x::xs
     let toSeq  {Head = x; Tail = xs} = seq { yield x; yield! xs; }
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
