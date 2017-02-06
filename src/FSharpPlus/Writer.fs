@@ -37,9 +37,13 @@ type Writer with
     static member inline Return x = Writer (x, getEmpty())              : Writer<'Monoid,'T>
     static member inline Bind  (x, f:'T->_) = Writer.bind f x           : Writer<'Monoid,'U>
     static member inline (<*>) (f, x:Writer<_,'T>) = Writer.apply f x   : Writer<'Monoid,'U>
+
     static member        Tell   w = Writer.tell w                       : Writer<'Monoid,unit>
     static member        Listen m = Writer.listen m                     : Writer<'Monoid,('T * 'Monoid)>
     static member        Pass   m = Writer.pass m                       : Writer<'Monoid,'T>
+
+    static member        Extract (Writer (_ : 'W, a : 'T)) = a
+    static member        Extend  (Writer (w : 'W, _ : 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
 
 open FsControl
 

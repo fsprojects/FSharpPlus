@@ -26,8 +26,12 @@ type Reader with
     static member Return x = Reader (fun _ -> x)                : Reader<'R,'T>
     static member Bind  (x:Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
     static member (<*>) (f, x:Reader<'R,'T>) = Reader.apply f x : Reader<'R,'U>
+
     static member get_Ask()    = Reader.ask                     : Reader<'R,'R>
     static member Local (m, f:'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
+
+    static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (FsControl.Empty.Invoke()) : 'T
+    static member inline Extend  (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (FsControl.Append.Invoke a b))))) : Reader<'Monoid,'U>
 
 open FsControl
 open FSharpPlus
