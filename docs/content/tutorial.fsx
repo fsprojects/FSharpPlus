@@ -41,8 +41,6 @@ map ((+) 9) (Some 3)
 map string (NonEmptyList.create 2 [3;4;5])
 // val it : NonEmptyList<string> = {Head = "2"; Tail = ["3"; "4"; "5"];}
 
-
-// val it : Tree<int> = Tree (60,Tree (20,Leaf 10,Leaf 30),Leaf 90)
 (**
 They're also available for your own types as long as they contain the appropiated method with the expected signature
 *)
@@ -131,7 +129,9 @@ let sumAllElemets = [(+)] <*> [10; 100] <*> [1; 2; 3]   // int list = [11; 12; 1
 
 For more details and features, see [generic operators and functions](generic-doc.html)
 
-and here are all [generic operators and functions](reference\fsharpplus-operators.html)
+Here are all [generic operators and functions](reference\fsharpplus-operators.html)
+
+And [here's a short explanation](applicative-functors.html) of Functor, Applicative and Monad abstractions with code samples.
 
 
 
