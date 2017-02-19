@@ -50,6 +50,8 @@ The API reference is automatically generated from Markdown comments in the libra
 
  * [Tutorial](tutorial.html) contains a further explanation of this library.
 
+ * [Abstractions](abstractions.html) contains detailed information about all the abstractions represented in this library.
+
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library. This includes additional brief samples on using most of the
    functions.
