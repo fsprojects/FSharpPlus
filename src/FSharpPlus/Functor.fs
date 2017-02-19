@@ -60,7 +60,8 @@ type Bind =
 [<Extension;Sealed>]
 type Join =
     inherit Default1
-    [<Extension>]static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default1) = Bind.InvokeOnInstance x id: '``Monad<'T>``
+                 static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default2) = Bind.InvokeOnInstance x id: '``Monad<'T>``
+                 static member inline Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default1) = ((^``Monad<'Monad<'T>>`` or  ^``Monad<'T>``) : (static member Join: _ -> _) x) : '``Monad<'T>``
     [<Extension>]static member        Join (x : Lazy<Lazy<_>>         , [<Optional>]_output : Lazy<'T>        , [<Optional>]_impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
     [<Extension>]static member        Join (x                         , [<Optional>]_output : seq<'T>         , [<Optional>]_impl : Join    ) = Seq.bind id x             : seq<'T> 
     [<Extension>]static member        Join (x : Id<_>                 , [<Optional>]_output : Id<'T>          , [<Optional>]_impl : Join    ) = x.getValue                : Id<'T>

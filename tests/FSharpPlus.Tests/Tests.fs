@@ -6,6 +6,11 @@ open FSharpPlus.Builders
 open FSharpPlus.Data
 open NUnit.Framework
 
+module SideEffects =
+    let private effects = ResizeArray<string> []
+    let reset() = effects.Clear()
+    let add x = effects.Add(x)
+    let get() = effects |> Seq.toList
 
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq    (WrappedListA lst) = List.toSeq lst
@@ -35,6 +40,12 @@ type WrappedListE<'s> = WrappedListE of 's list with
     static member get_MZero() = WrappedListE List.empty
     static member MPlus (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
     
+type WrappedListF<'s> = WrappedListF of 's list with
+    static member Return  (x) = WrappedListF [x]
+    static member Bind  (WrappedListF x: WrappedListF<'T>, f) = WrappedListF (List.collect (f >> (fun (WrappedListF x) -> x)) x)
+    static member Join  (WrappedListF wlst) = SideEffects.add "Join";  WrappedListF wlst >>= id
+    static member get_MZero() = WrappedListF List.empty
+    static member MPlus (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
 
 [<TestFixture>]
 type Monoid() =
@@ -110,6 +121,17 @@ type Foldable() =
 
 [<TestFixture>]
 type Monad() = 
+    [<Test>]
+    member x.join_Default_Custom() = 
+        let x = join [[1];[2]]
+        Assert.AreEqual (x, [1;2])
+        let y : WrappedListE<_> = join (WrappedListE [WrappedListE [1];WrappedListE [2]])
+        Assert.AreEqual (y, WrappedListE [1;2])
+        SideEffects.reset()
+        let z = join (WrappedListF [WrappedListF [1];WrappedListF [2]])
+        Assert.AreEqual (z, WrappedListF [1;2])
+        Assert.AreEqual (SideEffects.get(), ["Join"])
+
     [<Test>]
     member x.WorkFlow() =       
         let testVal = 
