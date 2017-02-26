@@ -47,6 +47,8 @@ type WrappedListF<'s> = WrappedListF of 's list with
     static member get_MZero() = WrappedListF List.empty
     static member MPlus (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
 
+open System.Collections.Generic
+
 [<TestFixture>]
 type Monoid() =
     [<Test>]
@@ -56,8 +58,12 @@ type Monoid() =
         Assert.AreEqual (x, [10;15])
         Assert.AreEqual (y, [10])
 
+        let x = [ ("a", 1); ("b", 2); ("a", 3) ]
+        let y = x |> map (Seq.singleton >> (ofSeq : seq<_*_> -> Dictionary<_,_>) >> map List.singleton) |> concat
+        let z = x |> map (Seq.singleton >>             dict                      >> map List.singleton) |> concat
+        Assert.IsInstanceOf<Option< Dictionary<string,int list>>> (Some y)
+        Assert.IsInstanceOf<Option<IDictionary<string,int list>>> (Some z)
 
-open System.Collections.Generic
 
 [<TestFixture>]
 type Functor() =

@@ -56,6 +56,7 @@ type Empty with
     static member        Empty (_:Dictionary<'a,'b>, _:Empty) = Dictionary<'a,'b>()
     static member        Empty (_:ResizeArray<'a>  , _:Empty) = ResizeArray() : ResizeArray<'a>
     static member        Empty (_:seq<'a>          , _:Empty) = Seq.empty   :  seq<'a>
+    static member        Empty (_:IDictionary<'a,'b>, _:Empty) = Dictionary<'a,'b>() :> IDictionary<'a,'b>
 
 
 [<Extension; Sealed>]
@@ -126,6 +127,11 @@ type Append with
     [<Extension>]static member        Append (x:_ ResizeArray, y:_ ResizeArray) = ResizeArray (Seq.append x y)
     [<Extension>]static member        Append (x:_ IObservable, y              ) = Observable.merge x y
     [<Extension>]static member        Append (x:_ seq        , y              ) = Seq.append x y
+    [<Extension>]static member inline Append (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>) =
+                    let d = Dictionary<'Key,'Value>()
+                    for KeyValue(k, v ) in x do d.[k] <- v
+                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Append.Invoke v v' | _ -> v'
+                    d :> IDictionary<'Key,'Value>
 
 
 [<Extension; Sealed>]
@@ -137,6 +143,13 @@ type Concat =
                         for KeyValue(k, u) in d do
                             dct.[k] <- match dct.TryGetValue k with true, v -> Append.Invoke v u | _ -> u
                     dct
+
+    [<Extension>]static member inline Concat (x:seq<IDictionary<'a,'b>>, [<Optional>]_output:IDictionary<'a,'b>, [<Optional>]_impl:Concat) =
+                    let dct = Dictionary<'a,'b>()
+                    for d in x do
+                        for KeyValue(k, u) in d do
+                            dct.[k] <- match dct.TryGetValue k with true, v -> Append.Invoke v u | _ -> u
+                    dct :> IDictionary<'a,'b>
 
     [<Extension>]static member inline Concat (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:Concat) = ResizeArray (Seq.concat x)
     [<Extension>]static member        Concat (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:Concat) = List.concat   x
