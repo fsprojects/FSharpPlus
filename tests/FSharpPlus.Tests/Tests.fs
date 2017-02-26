@@ -57,12 +57,20 @@ type Monoid() =
         Assert.AreEqual (y, [10])
 
 
+open System.Collections.Generic
+
 [<TestFixture>]
 type Functor() =
     [<Test>]
     member x.map_Default_Custom() = 
-        let testVal = map ((+) 1) {Head = 10; Tail = [20;30]}
-        Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal)
+        let testVal1 = map ((+) 1) {Head = 10; Tail = [20;30]}
+        Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal1)
+
+        let testVal2 = map ((+) 1) ((ofSeq :seq<_*_> -> Dictionary<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<Dictionary<string,int>>> (Some testVal2)
+
+        let testVal3 = map ((+) 1) (dict (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
 
     [<Test>]
     member x.unzip() = 
