@@ -13,8 +13,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="file://C:\Repos\FSharpPlus\docs\tools\../output/content/style.css" />
-    <script type="text/javascript" src="file://C:\Repos\FSharpPlus\docs\tools\../output/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -27,43 +27,36 @@
           <li><a href="http://fsharp.org">fsharp.org</a></li>
           <li><a href="https://github.com/gmpl/FSharpPlus">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/index.html">FSharpPlus</a></h3>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
       <hr />
       <div class="row">
         <div class="span9" id="main">
           
 <h1><a name="Abstractions" class="anchor" href="#Abstractions">Abstractions</a></h1>
-<p>The following diagram illustrates the abstractions that can be represented with this library and the relationships between them.</p>
-<p>Click on the entity for a full description:</p>
-<object data="http://www.plantuml.com/plantuml/svg/jPR1RgCm48RlF8KbBjjT1RJNrGOfgXHf3vKgfRUg1mCck08FnQP9IlBkQy206mXDJNjBRC_tUtuFOsEVYnm70WK9vXnjI4gtEHGPAYs47XzZ8R8_hhjDiyJPKX4NlaF1NMzYd6VtIS5ThE8fi0LlWvrOfCdJaoJyGZZB20lH7XtcuSfL3U98x01rK_maPKwMXT-dSGSCQ6YIGrf7wWcGD1E76HYx1fJ_Gi84bQG8ScNAQSAYtMxd770Cu0IGkglVNVe-Y1WrUDu0bikQ4W0Bi92KounrWeKW365fu4j1M40GH3fiwEIwO86GEpQmCcf2TIzJdA58t-BdIRPaA3D6Ig5pes1lD4FxaOnaR4AbK_ILc6I5-t0zivo88cUVJ-qSDrKdF_x-z6vC_1k8VEpVuAGk5EHLd-Cg4IHdvfRtuRhbRoI7kQXfku-6Tf-BV6ntHAkOEvHzfzfedyIcRHA7Nr7_FSXk49CduddB6waHpL3nAGklh__wzpDGDjfARY4rDJ20WOLatx3tSrYseapQkFHaONEqHSTAj7AY-ZDJbLpbQrWqhOWqXWwk6qX2x2T6RI9IiRsd9HVokmXEKbV0XhmOt3mwqwuXvIsmLv8B-HA1vYPLtzPvBWyvbkluzwJJi8b9UnBzlbHQ2ZPLC-s3OVK5UXthac1bPlyIHOl5qMkVT5Rx86b6jSlSqY_sBWQ78-FQVMGfhkDqwzL8lRAjnqws7jLEzls4QWXMLyQ3vVfcQarzKj-BjiV_" type="image/svg+xml"></object>
-<ul>
-<li><a href="abstraction-semigroup.html">Semigroup</a></li>
-<li><a href="abstraction-monoid.html">Monoid</a></li>
-<li><a href="abstraction-functor.html">Functor</a></li>
-<li><a href="abstraction-applicative.html">Applicative</a></li>
-<li><a href="abstraction-monad.html">Monad</a></li>
-</ul>
+<p>The following diagram illustrates some common FP abstractions that can be represented with this library and the relationships between them.</p>
+<p>Click on the abstraction name for a full description:</p>
+<object data="http://www.plantuml.com/plantuml/svg/nLTDJ-Cm4BtdLupK2ooqlQze9OI4jDAkj5gu8GxJn6czwzZ1TafBuB_lnB5RXvO32RkScjWpxyrdPeeBOpMc5bA1ni0DA_XIgwg4EW6ukrjPMtwTJfT5AIPBRbVLOiBLzFfcXRhyAIepHQ_FbHoRe3nPsKBStnF26M1PCfd11hR3u4OUgBvqlmRieuATY7a1udj94kpwyqD9nRC-pXHEC_Q45QNT3e0PjG3rjun9o-afLzg7nra_B5enqUjGBPHTGIjWFDLivlXI9LEqn3U0pMFKrmAjPHAGql9GCPaoK7c7zZ0_rvLCBOMXHuBoLZNEK84bvEzt9aOQDHZrTvvRyiDTa0HmQHMzUskx8Qpa4ozXSyGv2h_W51g-PdqSnBrwxAHcjjAoLyhGPyn313VNA2fstCSpEBduCZ_j4zNNvhjo55kY44JBCa2zh0fg1N2y_Z24l1lZ_vdO8taKbcdPFuzxzJYFJqoh3u8wkNZkcQDZU27cEMzkeHmEEmfOzIzNUGPGYBRi31YIC_cMooNO5ODIiwmf6tOEFE-U-D8taACm31uvWLJqq0WLBfmEykrHW7qd0MQVsO7p-UoKsF81V0lUp8DR_4C1Ht0NFFMqI5THI-HQ5VHU2kGIxBPaRNzsTCwTKaW7WcIFNO7FQz-6xxVYSY2TWmWZhLqs16wPDdwcELUvf15UuDuK9T-glYjLzAs_L1rK8Dkqs9iXM2EF4ifiDgUFY84bF3VupGBHl0ma89Yu4hAg7Ggi7PW7wu0I6Iv4hyzixdNtSQgDfToaByHhrGrxw54ICUQe1Qclb5mpRKtR5xJhX9I_zkPM8mcQV-DGYytwz9NTs-KTys2-4iBwTla1q3ii7wBz7mmOZv_dOK5FmYBOdaQRKn9lKJiTp8wSHtCwyRYJoKxUdpZ9K6SxMdVgUxHx62KnsPNdmKriZEECBsDR8Xl_0W00" type="image/svg+xml"></object>
 
 
         </div>
         <div class="span3">
-          <img src="file://C:\Repos\FSharpPlus\docs\tools\../output/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
             <li class="nav-header">FSharpPlus</li>
-            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/index.html">Home page</a></li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
             <li><a href="https://github.com/gmpl/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/license.html">License</a></li>
-            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/release-notes.html">Release Notes</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
             <li class="nav-header">Getting started</li>
-            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/tutorial.html">Tutorial</a></li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/reference/index.html">API Reference</a></li>
-			<li><a href="file://C:\Repos\FSharpPlus\docs\tools\../output/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+			<li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
           </ul>
         </div>
       </div>

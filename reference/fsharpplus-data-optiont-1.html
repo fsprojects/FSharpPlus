@@ -83,7 +83,7 @@
           </code>
           <div class="tip" id="698">
             <strong>Signature:</strong> (f:OptionT&lt;^Monad&lt;seq&lt;(&#39;T -&gt; &#39;U)&gt;&gt; * x:OptionT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;) -&gt; OptionT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?15316, '?15317, '?15318, ^Monad<seq<'T>, ^Monad<seq<'U>          </div>
+                          <strong>Type parameters:</strong> ^?15338, '?15339, '?15340, ^Monad<seq<'T>, ^Monad<seq<'U>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L26-26" class="github-link">
@@ -102,7 +102,7 @@
           </code>
           <div class="tip" id="699">
             <strong>Signature:</strong> (x:OptionT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; OptionT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;)) -&gt; OptionT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<seq<'U>, 'T, '?15326          </div>
+                          <strong>Type parameters:</strong> ^Monad<seq<'U>, 'T, '?15348          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L27-27" class="github-link">
@@ -156,7 +156,7 @@
           </code>
           <div class="tip" id="702">
             <strong>Signature:</strong> unit -&gt; ^OptionT&lt;&#39;MonadReader&lt;&#39;R,option&lt;&#39;R&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?15372          </div>
+                          <strong>Type parameters:</strong> ^?15394          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L44-44" class="github-link">
@@ -174,7 +174,7 @@
           </code>
           <div class="tip" id="703">
             <strong>Signature:</strong> unit -&gt; ^OptionT&lt;&#39;MonadState&lt;&#39;S,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?15363          </div>
+                          <strong>Type parameters:</strong> ^?15385          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L41-41" class="github-link">
@@ -192,7 +192,7 @@
           </code>
           <div class="tip" id="704">
             <strong>Signature:</strong> unit -&gt; OptionT&lt;^MonadPlus&lt;option&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?15330          </div>
+                          <strong>Type parameters:</strong> '?15352          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L29-29" class="github-link">
@@ -210,7 +210,7 @@
           </code>
           <div class="tip" id="705">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<option<'T>>, '?15339          </div>
+                          <strong>Type parameters:</strong> ^Monad<option<'T>>, '?15361          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L32-32" class="github-link">
@@ -228,7 +228,7 @@
           </code>
           <div class="tip" id="706">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ^OptionT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^OptionT<'MonadAsync<'T>>, ^?15344          </div>
+                          <strong>Type parameters:</strong> ^OptionT<'MonadAsync<'T>>, ^?15366          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L34-34" class="github-link">
@@ -245,8 +245,8 @@
             Listen(m)
           </code>
           <div class="tip" id="707">
-            <strong>Signature:</strong> m:OptionT&lt;&#39;?15386&gt; -&gt; OptionT&lt;^&#39;MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^'MonadWriter<'Monoid, option<'T>>, ^?15388, '?15389, '?15390          </div>
+            <strong>Signature:</strong> m:OptionT&lt;&#39;?15408&gt; -&gt; OptionT&lt;^&#39;MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^'MonadWriter<'Monoid, option<'T>>, ^?15410, '?15411, '?15412          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L48-48" class="github-link">
@@ -263,8 +263,8 @@
             Local(arg1, f)
           </code>
           <div class="tip" id="708">
-            <strong>Signature:</strong> (OptionT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; OptionT&lt;^?15378&gt;<br />
-                          <strong>Type parameters:</strong> 'R1, 'R2, ^?15378          </div>
+            <strong>Signature:</strong> (OptionT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; OptionT&lt;^?15400&gt;<br />
+                          <strong>Type parameters:</strong> 'R1, 'R2, ^?15400          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L45-45" class="github-link">
@@ -300,7 +300,7 @@
           </code>
           <div class="tip" id="710">
             <strong>Signature:</strong> (OptionT&lt;^MonadPlus&lt;option&lt;&#39;T&gt;&gt; * OptionT&lt;^MonadPlus&lt;option&lt;&#39;T&gt;&gt;) -&gt; OptionT&lt;^MonadPlus&lt;option&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?15334          </div>
+                          <strong>Type parameters:</strong> '?15356          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L30-30" class="github-link">
@@ -317,8 +317,8 @@
             Pass(m)
           </code>
           <div class="tip" id="711">
-            <strong>Signature:</strong> m:OptionT&lt;^?15393&gt; -&gt; OptionT&lt;^MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid, option<'T>>, '?15395, '?15396, ^?15397, ^?15398, '?15399          </div>
+            <strong>Signature:</strong> m:OptionT&lt;^?15415&gt; -&gt; OptionT&lt;^MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid, option<'T>>, '?15417, '?15418, ^?15419, ^?15420, '?15421          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L51-51" class="github-link">
@@ -336,7 +336,7 @@
           </code>
           <div class="tip" id="712">
             <strong>Signature:</strong> x:&#39;T -&gt; ^OptionT&lt;&#39;MonadState&lt;unit,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^OptionT<'MonadState<unit,'S>>, ^?15368          </div>
+                          <strong>Type parameters:</strong> ^OptionT<'MonadState<unit,'S>>, ^?15390          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L42-42" class="github-link">
@@ -372,7 +372,7 @@
           </code>
           <div class="tip" id="714">
             <strong>Signature:</strong> w:&#39;Monoid -&gt; ^OptionT&lt;&#39;MonadWriter&lt;&#39;Monoid, unit&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^OptionT<'MonadWriter<'Monoid, unit>>, ^?15383          </div>
+                          <strong>Type parameters:</strong> ^OptionT<'MonadWriter<'Monoid, unit>>, ^?15405          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L47-47" class="github-link">
@@ -389,8 +389,8 @@
             Throw(x)
           </code>
           <div class="tip" id="715">
-            <strong>Signature:</strong> x:&#39;E -&gt; ^?15348<br />
-                          <strong>Type parameters:</strong> ^?15348, ^?15349          </div>
+            <strong>Signature:</strong> x:&#39;E -&gt; ^?15370<br />
+                          <strong>Type parameters:</strong> ^?15370, ^?15371          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Option.fs#L36-36" class="github-link">
