@@ -1,5 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B98-5CED-492C-A5B7-A5B4F73CF142}"
 	ProjectSection(SolutionItems) = preProject
 		paket.dependencies = paket.dependencies
@@ -27,16 +29,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{83F16175
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D5255-776D-4B61-85F9-73C37AA1FB9A}"
 	ProjectSection(SolutionItems) = preProject
+		docs\content\abstraction-alternatative.fsx = docs\content\abstraction-alternatative.fsx
 		docs\content\abstraction-applicative.fsx = docs\content\abstraction-applicative.fsx
+		docs\content\abstraction-bifunctor.fsx = docs\content\abstraction-bifunctor.fsx
+		docs\content\abstraction-category.fsx = docs\content\abstraction-category.fsx
+		docs\content\abstraction-comonad.fsx = docs\content\abstraction-comonad.fsx
+		docs\content\abstraction-contravariant.fsx = docs\content\abstraction-contravariant.fsx
+		docs\content\abstraction-foldable.fsx = docs\content\abstraction-foldable.fsx
 		docs\content\abstraction-functor.fsx = docs\content\abstraction-functor.fsx
 		docs\content\abstraction-monad.fsx = docs\content\abstraction-monad.fsx
 		docs\content\abstraction-monoid.fsx = docs\content\abstraction-monoid.fsx
+		docs\content\abstraction-profunctor.fsx = docs\content\abstraction-profunctor.fsx
 		docs\content\abstraction-semigroup.fsx = docs\content\abstraction-semigroup.fsx
+		docs\content\abstraction-traversable.fsx = docs\content\abstraction-traversable.fsx
 		docs\content\abstractions.fsx = docs\content\abstractions.fsx
+		docs\content\abstractions.plantuml = docs\content\abstractions.plantuml
+		docs\content\applicative-functors.fsx = docs\content\applicative-functors.fsx
 		docs\content\generic-doc.fsx = docs\content\generic-doc.fsx
 		docs\content\index.fsx = docs\content\index.fsx
 		docs\content\tutorial.fsx = docs\content\tutorial.fsx
-		docs\content\applicative-functors.fsx = docs\content\applicative-functors.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ED8079DD-2B06-4030-9F0F-DC548F98E1C4}"

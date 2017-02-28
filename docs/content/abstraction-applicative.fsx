@@ -34,7 +34,7 @@ Other operations
  * ``concat``
 *)
 (**
-    static member Concat (x:Seq<'Monoid>) :'Monoid
+    static member Concat (x:seq<'Monoid>) :'Monoid
 *)
 (**
 
@@ -63,7 +63,7 @@ Related Abstractions
 Concrete implementations
 ------------------------
 
-Built-in:
+From .Net/F#
  
  -  ``seq<'T>``
  -  ``list<'T>``
@@ -86,7 +86,7 @@ Built-in:
  -  ``ResizeArray<'T>``
 
  
-Externals:
+From F#+
 
  -  ``Cont<'R,'T>`` 
  -  ``ContT<'R,'T>``

@@ -17,7 +17,7 @@ Minimal complete definition
 ---------------------------
 
 
- * ``map``/``(|>>)``/``(!)``
+ * ``map f x``/``(|>>) x f``/``(<<|) f x``/``(<!>) f x``
 *)
 (**
     static member Map (x:'Functor<'T>, f:'T->'U) :'Functor<'U>
@@ -28,7 +28,7 @@ Minimal complete definition
 Other operations
 ----------------
 
- * ``unzip``
+ * ``unzip x``
 *)
 (**
     static member Unzip (x:Functor<'T * 'U>) :'Functor<'T> * 'Functor<'U>
@@ -57,7 +57,7 @@ Related Abstractions
 Concrete implementations
 ------------------------
 
-Built-in:
+From .Net/F#
  
  -  ``seq<'T>``
  -  ``list<'T>``
@@ -77,10 +77,11 @@ Built-in:
  -  ``'R->'T``
  -  ``Expr<'T>``
  -  ``Dictionary<'Key,'T>``
+ -  ``IDictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
 
  
-Externals:
+From F#+
 
  -  ``Cont<'R,'T>`` 
  -  ``ContT<'R,'T>``
@@ -94,6 +95,7 @@ Externals:
  -  ``ZipList<'T>``
  -  ``ParallelArray<'T>``
  -  ``Const<'C,'T>``
+ -  ``Kleisli<'T, 'Monad<'U>>``
  
 Restricted:
 

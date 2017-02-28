@@ -20,7 +20,7 @@ Minimal complete definition
  * ``empty`` and ``append``/``(++)``
 *)
 (**
-    static member Empty () :'Monoid
+    static member Empty () :'Mo noid
     static member Append (x:'Monoid, y:'Monoid) :'Monoid
 *)
 (**
@@ -61,7 +61,7 @@ Related Abstractions
 Concrete implementations
 ------------------------
 
-Built-in:
+From .Net/F#
  
  -  ``list<'a>``
  -  ``option<'a>``
@@ -82,10 +82,11 @@ Built-in:
  -  ``Expr<'a>``
  -  ``Lazy<'a>``
  -  ``Dictionary<'a,'b>``
+ -  ``IDictionary<'a,'b>``
  -  ``ResizeArray<'a>``
  -  ``seq<'a>``
  
-Externals:
+From F#+
  
  -  ``ZipList<'s>``
  -  ``Dual<'t>``

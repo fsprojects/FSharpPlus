@@ -13,7 +13,7 @@ ___
 
 
 
-Minimal complete definition
+Minimal comple te definition
 ---------------------------
 
 
@@ -61,7 +61,7 @@ Related Abstractions
 Concrete implementations
 ------------------------
 
-Built-in:
+From .Net/F#
  
  -  ``seq<'T>``
  -  ``list<'T>``
@@ -78,7 +78,7 @@ Built-in:
  -  ``ResizeArray<'T>``
 
  
-Externals:
+From F#+
 
  -  ``Identity<'T>`` 
  -  ``Cont<'R,'T>`` 

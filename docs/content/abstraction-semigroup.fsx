@@ -48,7 +48,7 @@ Related Abstractions
 Concrete implementations
 ------------------------
 
-Built-in:
+From .Net/F#
  
  -  ``list<'a>``
  -  ``option<'a>``
@@ -72,7 +72,7 @@ Built-in:
  -  ``ResizeArray<'a>``
  -  ``seq<'a>``
  
-Externals:
+From F#+
  
  -  ``NonEmptyList<'s>``
  -  ``ZipList<'s>``

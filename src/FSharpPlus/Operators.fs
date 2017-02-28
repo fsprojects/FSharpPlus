@@ -177,10 +177,10 @@ module Operators =
     // Traversable
 
     /// Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
-    let inline traverse (f:'T->'``Applicative<'U>``) (t:'``Traversable<'T>>``) : '``Applicative<'Traversable<'U>>`` = Traverse.Invoke f t
+    let inline traverse (f:'T->'``Functor<'U>``) (t:'``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = Traverse.Invoke f t
 
     /// Evaluate each action in the structure from left to right, and and collect the results.
-    let inline sequenceA (t:'``Traversable<'Applicative<'T>>``) :'``Applicative<'Traversable<'T>>`` = SequenceA.Invoke t
+    let inline sequenceA (t:'``Traversable<'Functor<'T>>``) :'``Functor<'Traversable<'T>>`` = SequenceA.Invoke t
 
 
     // Indexable
