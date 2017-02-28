@@ -38,7 +38,7 @@
 <hr />
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>map</code>/<code>(|&gt;&gt;)</code>/<code>(!)</code></li>
+<li><code>map f x</code>/<code>(|&gt;&gt;) x f</code>/<code>(&lt;&lt;|) f x</code>/<code>(&lt;!&gt;) f x</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
@@ -48,7 +48,7 @@
 </table>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
-<li><code>unzip</code></li>
+<li><code>unzip x</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
@@ -107,6 +107,7 @@
 <li><code>ZipList&lt;'T&gt;</code></li>
 <li><code>ParallelArray&lt;'T&gt;</code></li>
 <li><code>Const&lt;'C,'T&gt;</code></li>
+<li><code>Kleisli&lt;'T, 'Monad&lt;'U&gt;&gt;</code></li>
 </ul>
 <p>Restricted:</p>
 <ul>

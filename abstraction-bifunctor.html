@@ -38,7 +38,7 @@
 <hr />
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>bimap</code></li>
+<li><code>bimap f g x</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
@@ -48,7 +48,7 @@
 </table>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
-<li><code>first</code></li>
+<li><code>first f x</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
@@ -57,7 +57,7 @@
 </tr>
 </table>
 <ul>
-<li><code>second</code></li>
+<li><code>second g x</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
@@ -79,10 +79,14 @@
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
 <p>From .Net/F#</p>
 <ul>
-<li><p><code>'T * 'U</code></p></li>
-<li><p><code>Choice&lt;'T,'U&gt;</code></p></li>
+<li><code>'T * 'U</code></li>
+<li><code>Choice&lt;'T,'U&gt;</code></li>
+<li><code>KeyValuePair&lt;'T,'U&gt;</code></li>
+</ul>
+<p>From F#+</p>
+<ul>
 <li>
-<p><code>KeyValuePair&lt;'T,'U&gt;</code></p>
+<p><code>Const&lt;'C,'T&gt;</code></p>
 <p><a href="https://github.com/gmpl/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 </li>
 </ul>

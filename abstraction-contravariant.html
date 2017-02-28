@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Foldable
+    <title>Contravariant
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="F#+ is an overload library for F#."/>
@@ -33,61 +33,50 @@
       <div class="row">
         <div class="span9" id="main">
           
-<h1><a name="Foldable" class="anchor" href="#Foldable">Foldable</a></h1>
-<p>Data structures that can be folded to a summary value.</p>
+<h1><a name="Contravariant" class="anchor" href="#Contravariant">Contravariant</a></h1>
+<p>A Contravariant Functor can be mapped over the input.</p>
 <hr />
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>toSeq x</code></li>
+<li><code>contramap f x</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">ToSeq</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Foldable</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>) <span class="o">:</span><span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">seq</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>
-</code></pre></td>
-</tr>
-</table>
-<h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
-<ul>
-<li><code>foldMap</code></li>
-</ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">FoldMap</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Foldable</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>, <span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">T</span><span class="k">-&gt;</span><span class="o">&#39;</span><span class="i">Monoid</span>)
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">Contramap</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Functor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>, <span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">U</span><span class="k">-&gt;</span><span class="o">&#39;</span><span class="i">T</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Functor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">U</span><span class="o">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
-<span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">foldBack</span> <span class="i">f</span> <span class="i">t</span> <span class="i">z</span> <span class="o">=</span> <span class="i">appEndo</span> (<span class="i">foldMap</span> (<span class="i">Endo</span> <span class="o">&lt;&lt;</span> <span class="i">f</span>) <span class="i">t</span> ) <span class="i">z</span>
-<span class="i">fold</span>     <span class="i">f</span> <span class="i">z</span> <span class="i">t</span> <span class="o">=</span> <span class="i">appEndo</span> (<span class="i">getDual</span> (<span class="i">foldMap</span> (<span class="i">Dual</span> <span class="o">&lt;&lt;</span> <span class="i">Endo</span> <span class="o">&lt;&lt;</span> <span class="i">flip</span> <span class="i">f</span>) <span class="i">t</span>)) <span class="i">z</span>
-<span class="i">fold</span> <span class="o">=</span> <span class="i">foldMap</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">id</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">contramap</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">id</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">id</span>
+<span class="i">contramap</span> <span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">contramap</span> <span class="i">g</span> <span class="o">=</span> <span class="i">contramap</span> (<span class="i">g</span> <span class="o">&lt;&lt;</span> <span class="i">f</span>)
 </code></pre></td>
 </tr>
 </table>
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
-<li><a href="abstraction-monoid.html">Monoid</a></li>
+<li><p><a href="abstraction-functor.html">Functor</a>: A Covariant Functor.</p></li>
+<li><p><a href="abstraction-profunctor.html">Profunctor</a> : A profunctor is a bifunctor that is contravariant in the first argument and covariant in the second.</p></li>
 </ul>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
 <p>From .Net/F#</p>
 <ul>
-<li><code>seq&lt;'T&gt;</code></li>
-<li><code>list&lt;'T&gt;</code></li>
-<li><code>'T []</code></li>
-<li><code>option&lt;'T&gt;</code></li>
-<li><code>ResizeArray&lt;'T&gt;</code></li>
+<li><code>('T -&gt; 'U)</code></li>
+<li><code>Predicate&lt;'T&gt;</code></li>
+<li><code>IComparer&lt;'T&gt;</code></li>
+<li><code>IEqualityComparer&lt;'T&gt;</code></li>
 </ul>
 <p>From F#+</p>
 <ul>
-<li><code>NonEmptyList&lt;'T&gt;</code></li>
-</ul>
+<li>
+<p><code>Const&lt;'C,'T&gt;</code></p>
 <p><a href="https://github.com/gmpl/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+</li>
+</ul>
 
-<div class="tip" id="fs1">Multiple items<br />val seq : sequence:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Core.Operators.seq<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.seq&lt;_&gt;</div>
-<div class="tip" id="fs2">val id : x:&#39;T -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.id</div>
+<div class="tip" id="fs1">val id : x:&#39;T -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.id</div>
 
         </div>
         <div class="span3">
