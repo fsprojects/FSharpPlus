@@ -18,7 +18,7 @@ type Traverse =
        let cons_f x ys = Map.Invoke (cons:'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result (Seq.empty))
 
-    static member Traverse (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'t>>, [<Optional>]_impl:Traverse) =
+    static member Traverse (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'u>>, [<Optional>]_impl:Traverse) =
        let ok = ref true
        let res = Seq.toArray (seq {
            use e = t.GetEnumerator()
