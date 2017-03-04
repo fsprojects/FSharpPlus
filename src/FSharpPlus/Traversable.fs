@@ -10,15 +10,14 @@ open FSharpPlus
 
 type Traverse =
     inherit Default1
-    static member inline Traverse (t:^a   , f, [<Optional>]_output:'R, [<Optional>]_impl:Default3) =  Map.Invoke f ((^a) : (static member SequenceA: _ -> 'R) t)
-    static member inline Traverse (t:^a   , f, [<Optional>]_output:'R, [<Optional>]_impl:Default2) =  ((^a) : (static member Traverse: _*_ -> 'R) t, f)
-    static member inline Traverse (t:Id<_>, f, [<Optional>]_output:'R, [<Optional>]_impl:Default1) = Map.Invoke Id.create (f (Id.run t))
-    static member inline Traverse (t:_ seq, f, [<Optional>]_output:'R, [<Optional>]_impl:Default1) = 
+    static member inline Traverse (t:^a   , f, [<Optional>]_output:'R, [<Optional>]_impl:Default4) = Map.Invoke f (^a : (static member SequenceA: _ -> 'R) t)
+    static member inline Traverse (t:Id<_>, f, [<Optional>]_output:'R, [<Optional>]_impl:Default3) = Map.Invoke Id.create (f (Id.run t))
+    static member inline Traverse (t:_ seq, f, [<Optional>]_output:'R, [<Optional>]_impl:Default3) =
        let cons x y = seq {yield x; yield! y}
        let cons_f x ys = Map.Invoke (cons:'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result (Seq.empty))
 
-    static member Traverse (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'u>>, [<Optional>]_impl:Traverse) =
+    static member Traverse (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'u>>, [<Optional>]_impl:Default2) =
        let ok = ref true
        let res = Seq.toArray (seq {
            use e = t.GetEnumerator()
@@ -28,7 +27,11 @@ type Traverse =
                | None   -> ok.Value <- false})
        if ok.Value then Some (Array.toSeq res) else None
 
-    static member        Traverse (t:'t seq   ,f:'t->Async<'u> , [<Optional>]_output:Async<seq<'u>>, [<Optional>]_impl:Traverse) :Async<seq<_>> = result <| Seq.map (Async.RunSynchronously) (Seq.map f t)
+    static member        Traverse (t:'t seq   ,f:'t->Async<'u> , [<Optional>]_output:Async<seq<'u>>, [<Optional>]_impl:Default2) :Async<seq<_>> = result <| Seq.map (Async.RunSynchronously) (Seq.map f t)
+
+    static member inline Traverse (t:^a   , f, [<Optional>]_output:'R, [<Optional>]_impl:Default1) = (^a : (static member Traverse: _*_ -> 'R) t, f)
+    static member inline Traverse (_:^a when ^a : null and ^a :struct, _, _:'R   , _impl:Default1) = id
+
     static member        Traverse (t:Id<'t>   ,f:'t->option<'u>, [<Optional>]_output:option<Id<'u>>, [<Optional>]_impl:Traverse) = Option.map Id.create (f (Id.run t))
     static member inline Traverse (t:option<_>,f , [<Optional>]_output:'R, [<Optional>]_impl:Traverse) :'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None        
 
