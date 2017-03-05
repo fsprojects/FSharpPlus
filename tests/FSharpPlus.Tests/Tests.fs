@@ -189,7 +189,7 @@ type Traversable() =
         let inline seqArr (x:_ []  ) = sequenceA x
         let inline seqLst (x:_ list) = sequenceA x
 
-        let a = seqSeq (seq [[1];[3]])
+        let a : list<_> = seqSeq (seq [[1];[3]])
         Assert.AreEqual ([seq [1; 3]], a)
         Assert.IsInstanceOf<list<seq<int>>> a
         let b = seqArr ( [|[1];[3]|])
@@ -208,8 +208,13 @@ type Traversable() =
 
     member x.traverseInfiniteOptions() =
         let toOptions x = if x = 4 then Some x else None
+        let toChoices x = if x = 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
         let x = traverse toOptions (Seq.initInfinite id)
+        let y = sequenceA  (Seq.initInfinite toOptions)
+        let z = sequenceA  (Seq.initInfinite toChoices)
         Assert.AreEqual (None, x)
+        Assert.AreEqual (None, y)
+        Assert.AreEqual (Choice2Of2 "This is a failure", z)
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
