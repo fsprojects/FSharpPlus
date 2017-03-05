@@ -54,30 +54,28 @@ type Traverse =
 type SequenceA =
     inherit Default1
 
+    static member inline ForInfiniteSequences (t:seq<_> , isFailure) =
+        let mutable failure = None
+        let buf = Seq.toArray (seq {
+            use e = t.GetEnumerator()
+            while e.MoveNext() && failure.IsNone do
+                if isFailure e.Current then failure <- Some e.Current
+                else yield e.Current })
+        let buf = match failure with None -> buf | Some e -> [|e|]
+        let cons x y = Array.append [|x|] y
+        let cons_f x ys = Map.Invoke cons x <*> ys
+        let r = Array.foldBack cons_f buf (result [||])
+        Map.Invoke Array.toSeq r
+
     [<Extension>]static member inline SequenceA (t:_ seq         , [<Optional>]_output:'R, [<Optional>]_impl:Default4 ) :'R =                                                                                         
                         let cons x y = seq {yield x; yield! y}
                         let cons_f x ys = Map.Invoke (cons:'a->seq<_>->seq<_>) x <*> ys
                         Seq.foldBack cons_f t (result Seq.empty)
 
-    static member SequenceA (t:seq<option<'t>>, [<Optional>]_output:option<seq<'t>>, [<Optional>]_impl:Default3) =
-        let mutable ok = true
-        let res = Seq.toArray (seq {
-            use e = t.GetEnumerator()
-            while (e.MoveNext() && ok) do
-                match e.Current with
-                | Some v -> yield v
-                | None   -> ok <- false})
-        if ok then Some (Array.toSeq res) else None
-
-    static member SequenceA (t:seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl:Default3) =
-        let mutable failure = None
-        let res = Seq.toArray (seq {
-            use e = t.GetEnumerator()
-            while (e.MoveNext() && failure.IsNone) do
-                match e.Current with
-                | Choice1Of2 v -> yield v
-                | Choice2Of2 e -> failure <- Some e})
-        match failure with None -> Choice1Of2 (Array.toSeq res) | Some e -> Choice2Of2 e
+    static member SequenceA (t:seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, Option.isNone)                                : option<seq<'t>>    
+    static member SequenceA (t:seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, function (Choice2Of2 _) -> true | _ -> false) : Choice<seq<'t>, 'e>
+    static member SequenceA (t:seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, List.isEmpty)                                 : list<seq<'t>>
+    static member SequenceA (t:seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, Array.isEmpty)                                : seq<'t> []
 
     [<Extension>]static member inline SequenceA (t:^a            , [<Optional>]_output:'R, [<Optional>]_impl:Default2 ) = (^a : (static member Traverse: _*_ -> 'R) t, id)                                     :'R
     [<Extension>]static member inline SequenceA (t:^a            , [<Optional>]_output:'R, [<Optional>]_impl:Default1 ) = (^a : (static member SequenceA: _ -> 'R) t)                                          :'R
