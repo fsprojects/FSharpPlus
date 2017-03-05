@@ -60,6 +60,8 @@ type NonEmptyList with
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
     static member ToList   (s:NonEmptyList<'a>, [<Optional>]_impl:ToList) = NonEmptyList.toList s
     static member ToSeq    (s:NonEmptyList<'a>, [<Optional>]_impl:ToSeq ) = NonEmptyList.toList s |> List.toSeq
+    static member inline Traverse (s:NonEmptyList<'T>, f:'T->'``Functor<'U>``) =
+        (NonEmptyList.create << List.head |> fun f x -> f x (List.tail x)) <!> traverse f (toList s) : '``Functor<'NonEmptyList<'U>>``
 
     static member inline ToString (s:NonEmptyList<'a>, [<Optional>]_impl:ToString) = fun (k:System.Globalization.CultureInfo) ->
             let b = StringBuilder()

@@ -199,6 +199,12 @@ type Traversable() =
         Assert.AreEqual ([[1; 3]], c)
         Assert.IsInstanceOf<list<list<int>>> c
 
+    member x.traversableForNonPrimitive() =
+        let nel = NonEmptyList.create (Some 1) [Some 2]
+        let rs1  = traverse id nel
+        Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
+        let rs2  = sequenceA nel
+        Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
