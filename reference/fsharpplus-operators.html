@@ -132,7 +132,7 @@ By opening this module some common operators become restricted, like (+) to 'a-&
           </code>
           <div class="tip" id="178">
             <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;U&gt; -&gt; ^Applicative&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13286, '?13287, '?13288, ^Applicative<'U>          </div>
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13340, '?13341, '?13342, ^Applicative<'U>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L62-62" class="github-link">
@@ -252,7 +252,7 @@ By opening this module some common operators become restricted, like (+) to 'a-&
           </code>
           <div class="tip" id="184">
             <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;U&gt; -&gt; ^Applicative&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13292, '?13293, '?13294, ^Applicative<'U>          </div>
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13346, '?13347, '?13348, ^Applicative<'U>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L63-63" class="github-link">
@@ -271,7 +271,7 @@ By opening this module some common operators become restricted, like (+) to 'a-&
           </code>
           <div class="tip" id="185">
             <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;T -&gt; &#39;U&gt; -&gt; ^Applicative&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13298, '?13299, '?13300, ^Applicative<'T -> 'U>, ^Applicative<'U>          </div>
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13352, '?13353, '?13354, ^Applicative<'T -> 'U>, ^Applicative<'U>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L64-64" class="github-link">
@@ -781,8 +781,8 @@ to this key.</p>
             curry f x y
           </code>
           <div class="tip" id="211">
-            <strong>Signature:</strong> f:(&#39;?13175 * &#39;?13176 -&gt; &#39;?13177) -&gt; x:&#39;?13175 -&gt; y:&#39;?13176 -&gt; &#39;?13177<br />
-                          <strong>Type parameters:</strong> '?13175, '?13176, '?13177          </div>
+            <strong>Signature:</strong> f:(&#39;?13229 * &#39;?13230 -&gt; &#39;?13231) -&gt; x:&#39;?13229 -&gt; y:&#39;?13230 -&gt; &#39;?13231<br />
+                          <strong>Type parameters:</strong> '?13229, '?13230, '?13231          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L13-13" class="github-link">
@@ -818,7 +818,7 @@ to this key.</p>
           </code>
           <div class="tip" id="213">
             <strong>Signature:</strong> source:^Collection&lt;&#39;T&gt; -&gt; ^Collection&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> ^Collection<'T>, '?13590          </div>
+                          <strong>Type parameters:</strong> ^Collection<'T>, '?13644          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L338-338" class="github-link">
@@ -1024,8 +1024,8 @@ remaining elements of the collection.</p>
             Failure x
           </code>
           <div class="tip" id="224">
-            <strong>Signature:</strong> x:&#39;?13768 -&gt; Choice&lt;&#39;?13769,&#39;?13768&gt;<br />
-                          <strong>Type parameters:</strong> '?13768, '?13769          </div>
+            <strong>Signature:</strong> x:&#39;?13822 -&gt; Choice&lt;&#39;?13823,&#39;?13822&gt;<br />
+                          <strong>Type parameters:</strong> '?13822, '?13823          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L521-521" class="github-link">
@@ -1082,8 +1082,8 @@ remaining elements of the collection.</p>
             filter predicate x
           </code>
           <div class="tip" id="227">
-            <strong>Signature:</strong> predicate:(&#39;?13469 -&gt; bool) -&gt; x:^Foldable&lt;&#39;a&gt; -&gt; ^Foldable&lt;&#39;a&gt;<br />
-                          <strong>Type parameters:</strong> '?13469, ^Foldable<'a>          </div>
+            <strong>Signature:</strong> predicate:(&#39;?13523 -&gt; bool) -&gt; x:^Foldable&lt;&#39;a&gt; -&gt; ^Foldable&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> '?13523, ^Foldable<'a>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L172-172" class="github-link">
@@ -1360,8 +1360,8 @@ remaining elements of the collection.</p>
             getOne ()
           </code>
           <div class="tip" id="242">
-            <strong>Signature:</strong> unit -&gt; ^?13695<br />
-                          <strong>Type parameters:</strong> ^?13695          </div>
+            <strong>Signature:</strong> unit -&gt; ^?13749<br />
+                          <strong>Type parameters:</strong> ^?13749          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L414-414" class="github-link">
@@ -1400,8 +1400,8 @@ remaining elements of the collection.</p>
             getZero ()
           </code>
           <div class="tip" id="244">
-            <strong>Signature:</strong> unit -&gt; ^?13693<br />
-                          <strong>Type parameters:</strong> ^?13693          </div>
+            <strong>Signature:</strong> unit -&gt; ^?13747<br />
+                          <strong>Type parameters:</strong> ^?13747          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L411-411" class="github-link">
@@ -2096,8 +2096,8 @@ to this key.</p>
             maxValue ()
           </code>
           <div class="tip" id="280">
-            <strong>Signature:</strong> unit -&gt; ^?13701<br />
-                          <strong>Type parameters:</strong> ^?13701          </div>
+            <strong>Signature:</strong> unit -&gt; ^?13755<br />
+                          <strong>Type parameters:</strong> ^?13755          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L423-423" class="github-link">
@@ -2174,8 +2174,8 @@ to this key.</p>
             minValue ()
           </code>
           <div class="tip" id="284">
-            <strong>Signature:</strong> unit -&gt; ^?13699<br />
-                          <strong>Type parameters:</strong> ^?13699          </div>
+            <strong>Signature:</strong> unit -&gt; ^?13753<br />
+                          <strong>Type parameters:</strong> ^?13753          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L420-420" class="github-link">
@@ -2253,8 +2253,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytes value
           </code>
           <div class="tip" id="288">
-            <strong>Signature:</strong> value:byte [] -&gt; ^?13677<br />
-                          <strong>Type parameters:</strong> ^?13677          </div>
+            <strong>Signature:</strong> value:byte [] -&gt; ^?13731<br />
+                          <strong>Type parameters:</strong> ^?13731          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L392-392" class="github-link">
@@ -2271,8 +2271,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytesBE value
           </code>
           <div class="tip" id="289">
-            <strong>Signature:</strong> value:byte [] -&gt; ^?13679<br />
-                          <strong>Type parameters:</strong> ^?13679          </div>
+            <strong>Signature:</strong> value:byte [] -&gt; ^?13733<br />
+                          <strong>Type parameters:</strong> ^?13733          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L393-393" class="github-link">
@@ -2289,8 +2289,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytesWithOptions (...)
           </code>
           <div class="tip" id="290">
-            <strong>Signature:</strong> isLtEndian:bool -&gt; startIndex:int -&gt; value:byte [] -&gt; ^?13675<br />
-                          <strong>Type parameters:</strong> ^?13675          </div>
+            <strong>Signature:</strong> isLtEndian:bool -&gt; startIndex:int -&gt; value:byte [] -&gt; ^?13729<br />
+                          <strong>Type parameters:</strong> ^?13729          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L391-391" class="github-link">
@@ -2307,8 +2307,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofList source
           </code>
           <div class="tip" id="291">
-            <strong>Signature:</strong> source:&#39;T list -&gt; ^?13426<br />
-                          <strong>Type parameters:</strong> 'T, ^?13426          </div>
+            <strong>Signature:</strong> source:&#39;T list -&gt; ^?13480<br />
+                          <strong>Type parameters:</strong> 'T, ^?13480          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L159-159" class="github-link">
@@ -2325,8 +2325,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofSeq source
           </code>
           <div class="tip" id="292">
-            <strong>Signature:</strong> source:seq&lt;&#39;T&gt; -&gt; ^?13429<br />
-                          <strong>Type parameters:</strong> 'T, ^?13429          </div>
+            <strong>Signature:</strong> source:seq&lt;&#39;T&gt; -&gt; ^?13483<br />
+                          <strong>Type parameters:</strong> 'T, ^?13483          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L160-160" class="github-link">
@@ -2362,7 +2362,7 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
           </code>
           <div class="tip" id="294">
             <strong>Signature:</strong> v:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;Option&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13305, '?13306, ^?13307, '?13308, ^Applicative<Option'T>          </div>
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?13359, '?13360, ^?13361, '?13362, ^Applicative<Option'T>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L65-65" class="github-link">
@@ -2379,8 +2379,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             parse value
           </code>
           <div class="tip" id="295">
-            <strong>Signature:</strong> value:string -&gt; ^?13689<br />
-                          <strong>Type parameters:</strong> ^?13689          </div>
+            <strong>Signature:</strong> value:string -&gt; ^?13743<br />
+                          <strong>Type parameters:</strong> ^?13743          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L402-402" class="github-link">
@@ -2496,7 +2496,7 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
           </code>
           <div class="tip" id="301">
             <strong>Signature:</strong> source:^Collection&lt;&#39;T&gt; -&gt; ^Collection&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> ^Collection<'T>, '?13615          </div>
+                          <strong>Type parameters:</strong> ^Collection<'T>, '?13669          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L350-350" class="github-link">
@@ -2725,8 +2725,8 @@ remaining elements of the collection.</p>
             sqrt x
           </code>
           <div class="tip" id="313">
-            <strong>Signature:</strong> x:^?13723 -&gt; ^?13723<br />
-                          <strong>Type parameters:</strong> ^?13723          </div>
+            <strong>Signature:</strong> x:^?13777 -&gt; ^?13777<br />
+                          <strong>Type parameters:</strong> ^?13777          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L458-458" class="github-link">
@@ -2785,8 +2785,8 @@ remaining elements of the collection.</p>
             Success x
           </code>
           <div class="tip" id="316">
-            <strong>Signature:</strong> x:&#39;?13765 -&gt; Choice&lt;&#39;?13765,&#39;?13766&gt;<br />
-                          <strong>Type parameters:</strong> '?13765, '?13766          </div>
+            <strong>Signature:</strong> x:&#39;?13819 -&gt; Choice&lt;&#39;?13819,&#39;?13820&gt;<br />
+                          <strong>Type parameters:</strong> '?13819, '?13820          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L520-520" class="github-link">
@@ -2804,7 +2804,7 @@ remaining elements of the collection.</p>
           </code>
           <div class="tip" id="317">
             <strong>Signature:</strong> x:^Foldable&#39;Num -&gt; ^Num<br />
-                          <strong>Type parameters:</strong> ^Foldable'Num, ^Num, ^?13750          </div>
+                          <strong>Type parameters:</strong> ^Foldable'Num, ^Num, ^?13804          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L503-503" class="github-link">
@@ -2883,8 +2883,8 @@ remaining elements of the collection.</p>
             toArray value
           </code>
           <div class="tip" id="321">
-            <strong>Signature:</strong> value:^?13446 -&gt; &#39;T []<br />
-                          <strong>Type parameters:</strong> ^?13446, 'T          </div>
+            <strong>Signature:</strong> value:^?13500 -&gt; &#39;T []<br />
+                          <strong>Type parameters:</strong> ^?13500, 'T          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L165-165" class="github-link">
@@ -2921,8 +2921,8 @@ remaining elements of the collection.</p>
             toBytes value
           </code>
           <div class="tip" id="323">
-            <strong>Signature:</strong> value:^?13681 -&gt; byte []<br />
-                          <strong>Type parameters:</strong> ^?13681          </div>
+            <strong>Signature:</strong> value:^?13735 -&gt; byte []<br />
+                          <strong>Type parameters:</strong> ^?13735          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L395-395" class="github-link">
@@ -2939,8 +2939,8 @@ remaining elements of the collection.</p>
             toBytesBE value
           </code>
           <div class="tip" id="324">
-            <strong>Signature:</strong> value:^?13683 -&gt; byte []<br />
-                          <strong>Type parameters:</strong> ^?13683          </div>
+            <strong>Signature:</strong> value:^?13737 -&gt; byte []<br />
+                          <strong>Type parameters:</strong> ^?13737          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L396-396" class="github-link">
@@ -2957,8 +2957,8 @@ remaining elements of the collection.</p>
             toList value
           </code>
           <div class="tip" id="325">
-            <strong>Signature:</strong> value:^?13443 -&gt; &#39;T list<br />
-                          <strong>Type parameters:</strong> ^?13443, 'T          </div>
+            <strong>Signature:</strong> value:^f -&gt; &#39;T list<br />
+                          <strong>Type parameters:</strong> ^f, 'T          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L164-164" class="github-link">
@@ -2993,8 +2993,8 @@ remaining elements of the collection.</p>
             toString value
           </code>
           <div class="tip" id="327">
-            <strong>Signature:</strong> value:^?13687 -&gt; string<br />
-                          <strong>Type parameters:</strong> ^?13687          </div>
+            <strong>Signature:</strong> value:^?13741 -&gt; string<br />
+                          <strong>Type parameters:</strong> ^?13741          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L399-399" class="github-link">
@@ -3146,8 +3146,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             tryParse value
           </code>
           <div class="tip" id="335">
-            <strong>Signature:</strong> value:string -&gt; ^?13691<br />
-                          <strong>Type parameters:</strong> ^?13691          </div>
+            <strong>Signature:</strong> value:string -&gt; ^?13745<br />
+                          <strong>Type parameters:</strong> ^?13745          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L405-405" class="github-link">
@@ -3184,8 +3184,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             trySqrt x
           </code>
           <div class="tip" id="337">
-            <strong>Signature:</strong> x:^?13725 -&gt; ^?13725 option<br />
-                          <strong>Type parameters:</strong> ^?13725          </div>
+            <strong>Signature:</strong> x:^?13779 -&gt; ^?13779 option<br />
+                          <strong>Type parameters:</strong> ^?13779          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L461-461" class="github-link">
@@ -3242,8 +3242,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             tuple3 a b c
           </code>
           <div class="tip" id="340">
-            <strong>Signature:</strong> a:&#39;?13200 -&gt; b:&#39;?13201 -&gt; c:&#39;?13202 -&gt; &#39;?13200 * &#39;?13201 * &#39;?13202<br />
-                          <strong>Type parameters:</strong> '?13200, '?13201, '?13202          </div>
+            <strong>Signature:</strong> a:&#39;?13254 -&gt; b:&#39;?13255 -&gt; c:&#39;?13256 -&gt; &#39;?13254 * &#39;?13255 * &#39;?13256<br />
+                          <strong>Type parameters:</strong> '?13254, '?13255, '?13256          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L20-20" class="github-link">
@@ -3260,8 +3260,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             tuple4 a b c d
           </code>
           <div class="tip" id="341">
-            <strong>Signature:</strong> a:&#39;?13204 -&gt; b:&#39;?13205 -&gt; c:&#39;?13206 -&gt; d:&#39;?13207 -&gt; &#39;?13204 * &#39;?13205 * &#39;?13206 * &#39;?13207<br />
-                          <strong>Type parameters:</strong> '?13204, '?13205, '?13206, '?13207          </div>
+            <strong>Signature:</strong> a:&#39;?13258 -&gt; b:&#39;?13259 -&gt; c:&#39;?13260 -&gt; d:&#39;?13261 -&gt; &#39;?13258 * &#39;?13259 * &#39;?13260 * &#39;?13261<br />
+                          <strong>Type parameters:</strong> '?13258, '?13259, '?13260, '?13261          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L21-21" class="github-link">
@@ -3278,8 +3278,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             tuple5 a b c d e
           </code>
           <div class="tip" id="342">
-            <strong>Signature:</strong> a:&#39;?13209 -&gt; b:&#39;?13210 -&gt; c:&#39;?13211 -&gt; d:&#39;?13212 -&gt; e:&#39;?13213 -&gt; &#39;?13209 * &#39;?13210 * &#39;?13211 * &#39;?13212 * &#39;?13213<br />
-                          <strong>Type parameters:</strong> '?13209, '?13210, '?13211, '?13212, '?13213          </div>
+            <strong>Signature:</strong> a:&#39;?13263 -&gt; b:&#39;?13264 -&gt; c:&#39;?13265 -&gt; d:&#39;?13266 -&gt; e:&#39;?13267 -&gt; &#39;?13263 * &#39;?13264 * &#39;?13265 * &#39;?13266 * &#39;?13267<br />
+                          <strong>Type parameters:</strong> '?13263, '?13264, '?13265, '?13266, '?13267          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L22-22" class="github-link">
@@ -3296,8 +3296,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             tuple6 a b c d e f
           </code>
           <div class="tip" id="343">
-            <strong>Signature:</strong> a:&#39;?13215 -&gt; b:&#39;?13216 -&gt; c:&#39;?13217 -&gt; d:&#39;?13218 -&gt; e:&#39;?13219 -&gt; f:&#39;?13220 -&gt; &#39;?13215 * &#39;?13216 * &#39;?13217 * &#39;?13218 * &#39;?13219 * &#39;?13220<br />
-                          <strong>Type parameters:</strong> '?13215, '?13216, '?13217, '?13218, '?13219, '?13220          </div>
+            <strong>Signature:</strong> a:&#39;?13269 -&gt; b:&#39;?13270 -&gt; c:&#39;?13271 -&gt; d:&#39;?13272 -&gt; e:&#39;?13273 -&gt; f:&#39;?13274 -&gt; &#39;?13269 * &#39;?13270 * &#39;?13271 * &#39;?13272 * &#39;?13273 * &#39;?13274<br />
+                          <strong>Type parameters:</strong> '?13269, '?13270, '?13271, '?13272, '?13273, '?13274          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L23-23" class="github-link">
@@ -3314,8 +3314,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             tuple7 a b c d e f g
           </code>
           <div class="tip" id="344">
-            <strong>Signature:</strong> a:&#39;?13222 -&gt; b:&#39;?13223 -&gt; c:&#39;?13224 -&gt; d:&#39;?13225 -&gt; e:&#39;?13226 -&gt; f:&#39;?13227 -&gt; g:&#39;?13228 -&gt; &#39;?13222 * &#39;?13223 * &#39;?13224 * &#39;?13225 * &#39;?13226 * &#39;?13227 * &#39;?13228<br />
-                          <strong>Type parameters:</strong> '?13222, '?13223, '?13224, '?13225, '?13226, '?13227, '?13228          </div>
+            <strong>Signature:</strong> a:&#39;?13276 -&gt; b:&#39;?13277 -&gt; c:&#39;?13278 -&gt; d:&#39;?13279 -&gt; e:&#39;?13280 -&gt; f:&#39;?13281 -&gt; g:&#39;?13282 -&gt; &#39;?13276 * &#39;?13277 * &#39;?13278 * &#39;?13279 * &#39;?13280 * &#39;?13281 * &#39;?13282<br />
+                          <strong>Type parameters:</strong> '?13276, '?13277, '?13278, '?13279, '?13280, '?13281, '?13282          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L24-24" class="github-link">
@@ -3332,8 +3332,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             tuple8 a b c d e f g h
           </code>
           <div class="tip" id="345">
-            <strong>Signature:</strong> a:&#39;?13230 -&gt; b:&#39;?13231 -&gt; c:&#39;?13232 -&gt; d:&#39;?13233 -&gt; e:&#39;?13234 -&gt; f:&#39;?13235 -&gt; g:&#39;?13236 -&gt; h:&#39;?13237 -&gt; &#39;?13230 * &#39;?13231 * &#39;?13232 * &#39;?13233 * &#39;?13234 * &#39;?13235 * &#39;?13236 * &#39;?13237<br />
-                          <strong>Type parameters:</strong> '?13230, '?13231, '?13232, '?13233, '?13234, '?13235, '?13236, '?13237          </div>
+            <strong>Signature:</strong> a:&#39;?13284 -&gt; b:&#39;?13285 -&gt; c:&#39;?13286 -&gt; d:&#39;?13287 -&gt; e:&#39;?13288 -&gt; f:&#39;?13289 -&gt; g:&#39;?13290 -&gt; h:&#39;?13291 -&gt; &#39;?13284 * &#39;?13285 * &#39;?13286 * &#39;?13287 * &#39;?13288 * &#39;?13289 * &#39;?13290 * &#39;?13291<br />
+                          <strong>Type parameters:</strong> '?13284, '?13285, '?13286, '?13287, '?13288, '?13289, '?13290, '?13291          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L25-25" class="github-link">
@@ -3350,8 +3350,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             uncurry f (x, y)
           </code>
           <div class="tip" id="346">
-            <strong>Signature:</strong> f:(&#39;?13179 -&gt; &#39;?13180 -&gt; &#39;?13181) -&gt; (x:&#39;?13179 * y:&#39;?13180) -&gt; &#39;?13181<br />
-                          <strong>Type parameters:</strong> '?13179, '?13180, '?13181          </div>
+            <strong>Signature:</strong> f:(&#39;?13233 -&gt; &#39;?13234 -&gt; &#39;?13235) -&gt; (x:&#39;?13233 * y:&#39;?13234) -&gt; &#39;?13235<br />
+                          <strong>Type parameters:</strong> '?13233, '?13234, '?13235          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L14-14" class="github-link">
@@ -3433,8 +3433,8 @@ Works also for unsigned types (Returns none if there is no inverse).</p>
             ( |Success|Failure| ) _arg1
           </code>
           <div class="tip" id="350">
-            <strong>Signature:</strong> _arg1:Choice&lt;&#39;?13762,&#39;?13763&gt; -&gt; Choice&lt;&#39;?13762,&#39;?13763&gt;<br />
-                          <strong>Type parameters:</strong> '?13762, '?13763          </div>
+            <strong>Signature:</strong> _arg1:Choice&lt;&#39;?13816,&#39;?13817&gt; -&gt; Choice&lt;&#39;?13816,&#39;?13817&gt;<br />
+                          <strong>Type parameters:</strong> '?13816, '?13817          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L516-516" class="github-link">
