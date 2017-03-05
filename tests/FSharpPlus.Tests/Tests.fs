@@ -205,6 +205,11 @@ type Traversable() =
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
         let rs2  = sequenceA nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
+
+    member x.traverseInfiniteOptions() =
+        let toOptions x = if x = 4 then Some x else None
+        let x = traverse toOptions (Seq.initInfinite id)
+        Assert.AreEqual (None, x)
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
