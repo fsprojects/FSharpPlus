@@ -40,13 +40,13 @@ open FSharpPlus
 [<Extension;Sealed>]
 type ToSeq =
     inherit Default1
-    [<Extension>]static member inline ToSeq (x:'S when 'S :> Collections.IEnumerable, [<Optional>]_impl:Default2) = let _f i x :'T = (^S : (member get_Item : int -> 'T) x, i) in Seq.cast<'T> x : seq<'T>
-    [<Extension>]static member inline ToSeq (x:'Foldable, [<Optional>]_impl:Default1) = ((^Foldable) : (static member ToSeq: ^Foldable -> seq<'t>) x)
-                 static member inline ToSeq (_:'T when 'T : null and 'T :struct     ,             _   :ToSeq   ) = ()
-    [<Extension>]static member        ToSeq (x:seq<'T>   , [<Optional>]_impl:ToSeq) = x
-    [<Extension>]static member        ToSeq (x:Text.StringBuilder,  _:ToSeq) = x.ToString() :> seq<char>
-    [<Extension>]static member        ToSeq (x:string            ,  _:ToSeq) = x            :> seq<char>
-    [<Extension>]static member        ToSeq (x:option<'T>, [<Optional>]_impl:ToSeq) = match x with Some x -> Seq.singleton x | None -> Seq.empty
+    static member inline       ToSeq (x:'S when 'S :> Collections.IEnumerable, [<Optional>]_impl:Default2) = let _f i x :'T = (^S : (member get_Item : int -> 'T) x, i) in Seq.cast<'T> x : seq<'T>
+    static member inline       ToSeq (x:'Foldable, [<Optional>]_impl:Default1) = ((^Foldable) : (static member ToSeq: ^Foldable -> seq<'t>) x)
+    static member inline       ToSeq (_:'T when 'T : null and 'T :struct     ,             _   :ToSeq   ) = ()
+    [<Extension>]static member ToSeq (x:seq<'T>   , [<Optional>]_impl:ToSeq) = x
+    [<Extension>]static member ToSeq (x:Text.StringBuilder,  _:ToSeq) = x.ToString() :> seq<char>
+    [<Extension>]static member ToSeq (x:string            ,  _:ToSeq) = x            :> seq<char>
+    [<Extension>]static member ToSeq (x:option<'T>, [<Optional>]_impl:ToSeq) = match x with Some x -> Seq.singleton x | None -> Seq.empty
 
     static member inline Invoke (source:'Collection'T)  : seq<'T>  =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToSeq: _*_ -> _) b, a)
@@ -57,15 +57,15 @@ type ToSeq =
 [<Extension;Sealed>]
 type ToList =
     inherit Default1
-    [<Extension>]static member inline ToList (x               , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toList
-    [<Extension>]static member        ToList (x:seq<'a>       , [<Optional>]_impl:ToList  ) = Seq.toList x
-    [<Extension>]static member        ToList (x:Set<'a>       , [<Optional>]_impl:ToList  ) = Set.toList x
-    [<Extension>]static member        ToList (x:string        , [<Optional>]_impl:ToList  ) = x.ToCharArray() |> Array.toList
-    [<Extension>]static member        ToList (x:StringBuilder , [<Optional>]_impl:ToList  ) = x.ToString().ToCharArray() |> Array.toList
-    [<Extension>]static member        ToList (x:'a []         , [<Optional>]_impl:ToList  ) = Array.toList x
-    [<Extension>]static member        ToList (x:'a ResizeArray, [<Optional>]_impl:ToList  ) = Seq.toList x
-    [<Extension>]static member        ToList (x:'a Id         , [<Optional>]_impl:ToList  ) = [x.getValue]
-    [<Extension>]static member        ToList (x:list<'a>      , [<Optional>]_impl:ToList  ) = x
+    static member inline       ToList (x               , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toList
+    [<Extension>]static member ToList (x:seq<'a>       , [<Optional>]_impl:ToList  ) = Seq.toList x
+    [<Extension>]static member ToList (x:Set<'a>       , [<Optional>]_impl:ToList  ) = Set.toList x
+    [<Extension>]static member ToList (x:string        , [<Optional>]_impl:ToList  ) = x.ToCharArray() |> Array.toList
+    [<Extension>]static member ToList (x:StringBuilder , [<Optional>]_impl:ToList  ) = x.ToString().ToCharArray() |> Array.toList
+    [<Extension>]static member ToList (x:'a []         , [<Optional>]_impl:ToList  ) = Array.toList x
+    [<Extension>]static member ToList (x:'a ResizeArray, [<Optional>]_impl:ToList  ) = Seq.toList x
+    [<Extension>]static member ToList (x:'a Id         , [<Optional>]_impl:ToList  ) = [x.getValue]
+    [<Extension>]static member ToList (x:list<'a>      , [<Optional>]_impl:ToList  ) = x
 
     static member inline Invoke  value :'t list = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToList: _*_ -> _) b, a)
@@ -76,15 +76,15 @@ type ToList =
 [<Extension;Sealed>]
 type ToArray =
     inherit Default1
-    [<Extension>]static member inline ToArray (x               , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray
-    [<Extension>]static member        ToArray (x:seq<'a>       , [<Optional>]_impl:ToArray ) = Seq.toArray x
-    [<Extension>]static member        ToArray (x:Set<'a>       , [<Optional>]_impl:ToArray ) = Set.toArray x
-    [<Extension>]static member        ToArray (x:string        , [<Optional>]_impl:ToArray ) = x.ToCharArray()
-    [<Extension>]static member        ToArray (x:StringBuilder , [<Optional>]_impl:ToArray ) = x.ToString().ToCharArray()
-    [<Extension>]static member        ToArray (x:'a []         , [<Optional>]_impl:ToArray ) = x
-    [<Extension>]static member        ToArray (x:'a ResizeArray, [<Optional>]_impl:ToArray ) = Seq.toArray x
-    [<Extension>]static member        ToArray (x:'a Id         , [<Optional>]_impl:ToArray ) = [|x.getValue|]
-    [<Extension>]static member        ToArray (x:list<'a>      , [<Optional>]_impl:ToArray ) = List.toArray x
+    static member inline       ToArray (x               , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray
+    [<Extension>]static member ToArray (x:seq<'a>       , [<Optional>]_impl:ToArray ) = Seq.toArray x
+    [<Extension>]static member ToArray (x:Set<'a>       , [<Optional>]_impl:ToArray ) = Set.toArray x
+    [<Extension>]static member ToArray (x:string        , [<Optional>]_impl:ToArray ) = x.ToCharArray()
+    [<Extension>]static member ToArray (x:StringBuilder , [<Optional>]_impl:ToArray ) = x.ToString().ToCharArray()
+    [<Extension>]static member ToArray (x:'a []         , [<Optional>]_impl:ToArray ) = x
+    [<Extension>]static member ToArray (x:'a ResizeArray, [<Optional>]_impl:ToArray ) = Seq.toArray x
+    [<Extension>]static member ToArray (x:'a Id         , [<Optional>]_impl:ToArray ) = [|x.getValue|]
+    [<Extension>]static member ToArray (x:list<'a>      , [<Optional>]_impl:ToArray ) = List.toArray x
 
     static member inline Invoke  value : 't [] = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToArray: _*_ -> _) b, a)
@@ -273,13 +273,13 @@ type TryFind =
 [<Extension;Sealed>]
 type Head =
     inherit Default1
-    [<Extension>]static member inline Head (x              , [<Optional>]_impl:Default1) = Seq.head (ToSeq.Invoke x) :'T      
-    [<Extension>]static member        Head (x:'t list      , [<Optional>]_impl:Head    ) = List.head x
-    [<Extension>]static member        Head (x:'t []        , [<Optional>]_impl:Head    ) = x.[0]
-    [<Extension>]static member        Head (x:Id<'T>       , [<Optional>]_impl:Head ) = x.getValue
-    [<Extension>]static member        Head (x:string       , [<Optional>]_impl:Head    ) = x.[0]
-    [<Extension>]static member        Head (x:StringBuilder, [<Optional>]_impl:Head    ) = x.ToString().[0]
-    [<Extension>]static member        Head (x:'t seq       , [<Optional>]_impl:Head    ) = Seq.head x
+    static member inline       Head (x              , [<Optional>]_impl:Default1) = Seq.head (ToSeq.Invoke x) :'T      
+    [<Extension>]static member Head (x:'t list      , [<Optional>]_impl:Head    ) = List.head x
+    [<Extension>]static member Head (x:'t []        , [<Optional>]_impl:Head    ) = x.[0]
+    [<Extension>]static member Head (x:Id<'T>       , [<Optional>]_impl:Head ) = x.getValue
+    [<Extension>]static member Head (x:string       , [<Optional>]_impl:Head    ) = x.[0]
+    [<Extension>]static member Head (x:StringBuilder, [<Optional>]_impl:Head    ) = x.ToString().[0]
+    [<Extension>]static member Head (x:'t seq       , [<Optional>]_impl:Head    ) = Seq.head x
 
     static member inline Invoke (source:'Foldable'T)        =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Head: _*_ -> _) b, a)
@@ -290,13 +290,13 @@ type Head =
 [<Extension;Sealed>]
 type TryHead =
     inherit Default1
-    [<Extension>]static member inline TryHead (x              , [<Optional>]_impl:Default1) = let x = ToSeq.Invoke x in if Seq.isEmpty x then None else Some (Seq.head x) :'T option  
-    [<Extension>]static member        TryHead (x:'t list      , [<Optional>]_impl:TryHead ) = match x with [] -> None | _ -> Some (List.head x)
-    [<Extension>]static member        TryHead (x:'t []        , [<Optional>]_impl:TryHead ) = if Array.length x = 0 then None else Some x.[0]
-    [<Extension>]static member        TryHead (x:Id<'T>       , [<Optional>]_impl:TryHead ) = Some x.getValue
-    [<Extension>]static member        TryHead (x:string       , [<Optional>]_impl:TryHead ) = if String.length x = 0 then None else Some x.[0]   
-    [<Extension>]static member        TryHead (x:StringBuilder, [<Optional>]_impl:TryHead ) = if x.Length = 0 then None else Some (x.ToString().[0])
-    [<Extension>]static member        TryHead (x:'t seq       , [<Optional>]_impl:TryHead ) = if Seq.isEmpty x then None else Some (Seq.head x)
+    static member inline       TryHead (x              , [<Optional>]_impl:Default1) = let x = ToSeq.Invoke x in if Seq.isEmpty x then None else Some (Seq.head x) :'T option  
+    [<Extension>]static member TryHead (x:'t list      , [<Optional>]_impl:TryHead ) = match x with [] -> None | _ -> Some (List.head x)
+    [<Extension>]static member TryHead (x:'t []        , [<Optional>]_impl:TryHead ) = if Array.length x = 0 then None else Some x.[0]
+    [<Extension>]static member TryHead (x:Id<'T>       , [<Optional>]_impl:TryHead ) = Some x.getValue
+    [<Extension>]static member TryHead (x:string       , [<Optional>]_impl:TryHead ) = if String.length x = 0 then None else Some x.[0]   
+    [<Extension>]static member TryHead (x:StringBuilder, [<Optional>]_impl:TryHead ) = if x.Length = 0 then None else Some (x.ToString().[0])
+    [<Extension>]static member TryHead (x:'t seq       , [<Optional>]_impl:TryHead ) = if Seq.isEmpty x then None else Some (Seq.head x)
 
     static member inline Invoke (source:'Foldable'T)        =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryHead: _*_ -> _) b, a)
@@ -352,13 +352,13 @@ type Filter =
 [<Extension;Sealed>]
 type Intercalate =
     inherit Default1
-                 static member inline Intercalate (x:'``Foldable<'Monoid>``, e:'Monoid, [<Optional>]_impl:Default2) = let f t x = match (t, x) with (true, _) , x -> (false, x) | (_, acc ) , x -> (false, Append.Invoke (Append.Invoke acc e) x) in Fold.Invoke f (true, Empty.Invoke()) x |> snd
-                 static member inline Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
-                 static member inline Intercalate (_:seq<'``Foldable<'T>``>, _ : ^t when ^t : null and ^t : struct, [<Optional>]_impl:Default1) = id
-    [<Extension>]static member        Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]_impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
-    [<Extension>]static member        Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]_impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
-    [<Extension>]static member        Intercalate (x:seq<string>           , e:string           , [<Optional>]_impl:Intercalate) = String.Join(e, x)
-    [<Extension>]static member        Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]_impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
+    static member inline       Intercalate (x:'``Foldable<'Monoid>``, e:'Monoid, [<Optional>]_impl:Default2) = let f t x = match (t, x) with (true, _) , x -> (false, x) | (_, acc ) , x -> (false, Append.Invoke (Append.Invoke acc e) x) in Fold.Invoke f (true, Empty.Invoke()) x |> snd
+    static member inline       Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
+    static member inline       Intercalate (_:seq<'``Foldable<'T>``>, _ : ^t when ^t : null and ^t : struct, [<Optional>]_impl:Default1) = id
+    [<Extension>]static member Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]_impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
+    [<Extension>]static member Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]_impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
+    [<Extension>]static member Intercalate (x:seq<string>           , e:string           , [<Optional>]_impl:Intercalate) = String.Join(e, x)
+    [<Extension>]static member Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]_impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
  
     static member inline Invoke (sep:'Monoid) (source:'``Foldable<'Monoid>``) =
         let inline call_2 (a:^a, b:^b, s:^c) = ((^a or ^c) : (static member Intercalate: _*_*_ -> _) b, s, a)
@@ -369,9 +369,9 @@ type Intercalate =
 [<Extension;Sealed>]
 type Intersperse =
     inherit Default1
-    [<Extension>]static member inline Intersperse (x:'``Foldable<'T>``, e:'T, [<Optional>]_impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke :'``Foldable<'T>``
-    [<Extension>]static member        Intersperse (x:list<'T>         , e:'T, [<Optional>]_impl:Intersperse) = x |> List.toSeq   |> Seq.intersperse e |> Seq.toList
-    [<Extension>]static member        Intersperse (x:'T []            , e:'T, [<Optional>]_impl:Intersperse) = x |> Array.toSeq  |> Seq.intersperse e |> Seq.toArray
+    static member inline       Intersperse (x:'``Foldable<'T>``, e:'T, [<Optional>]_impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke :'``Foldable<'T>``
+    [<Extension>]static member Intersperse (x:list<'T>         , e:'T, [<Optional>]_impl:Intersperse) = x |> List.toSeq   |> Seq.intersperse e |> Seq.toList
+    [<Extension>]static member Intersperse (x:'T []            , e:'T, [<Optional>]_impl:Intersperse) = x |> Array.toSeq  |> Seq.intersperse e |> Seq.toArray
  
     static member inline Invoke (sep:'T) (source:'``Foldable<'T>``) =
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)

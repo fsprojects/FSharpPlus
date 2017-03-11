@@ -9,11 +9,11 @@ open FsControl.Internals
 
 [<Extension;Sealed>]
 type Item1 =
-    [<Extension>]static member inline Item1 (t :'a          ) = ((^a) : (member Item1: _ ) t)
-    [<Extension>]static member        Item1 ((a, _, _, _, _)) = a
-    [<Extension>]static member        Item1 ((a, _, _, _)   ) = a
-    [<Extension>]static member        Item1 ((a, _, _)      ) = a
-    [<Extension>]static member        Item1 ((a, _)         ) = a
+    static member inline       Item1 (t :'a          ) = ((^a) : (member Item1: _ ) t)
+    [<Extension>]static member Item1 ((a, _, _, _, _)) = a
+    [<Extension>]static member Item1 ((a, _, _, _)   ) = a
+    [<Extension>]static member Item1 ((a, _, _)      ) = a
+    [<Extension>]static member Item1 ((a, _)         ) = a
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item1: _ -> _) b)
@@ -22,11 +22,11 @@ type Item1 =
 
 [<Extension;Sealed>]
 type Item2 =
-    [<Extension>]static member inline Item2 (t :'a          ) = ((^a) : (member Item2: _ ) t)
-    [<Extension>]static member        Item2 ((_, b, _, _, _)) = b
-    [<Extension>]static member        Item2 ((_, b, _, _)   ) = b
-    [<Extension>]static member        Item2 ((_, b, _)      ) = b
-    [<Extension>]static member        Item2 ((_, b)         ) = b
+    static member inline       Item2 (t :'a          ) = ((^a) : (member Item2: _ ) t)
+    [<Extension>]static member Item2 ((_, b, _, _, _)) = b
+    [<Extension>]static member Item2 ((_, b, _, _)   ) = b
+    [<Extension>]static member Item2 ((_, b, _)      ) = b
+    [<Extension>]static member Item2 ((_, b)         ) = b
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item2: _ -> _) b)
@@ -35,10 +35,10 @@ type Item2 =
 
 [<Extension;Sealed>]
 type Item3 =
-    [<Extension>]static member inline Item3 (t :'a          ) = ((^a) : (member Item3: _ ) t)
-    [<Extension>]static member        Item3 ((_, _, c, _, _)) = c
-    [<Extension>]static member        Item3 ((_, _, c, _)   ) = c
-    [<Extension>]static member        Item3 ((_, _, c)      ) = c
+    static member inline       Item3 (t :'a          ) = ((^a) : (member Item3: _ ) t)
+    [<Extension>]static member Item3 ((_, _, c, _, _)) = c
+    [<Extension>]static member Item3 ((_, _, c, _)   ) = c
+    [<Extension>]static member Item3 ((_, _, c)      ) = c
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item3: _ -> _) b)
@@ -47,9 +47,9 @@ type Item3 =
 
 [<Extension;Sealed>]
 type Item4 =
-    [<Extension>]static member inline Item4 (t :'a          ) = ((^a) : (member Item4: _ ) t)
-    [<Extension>]static member        Item4 ((_, _, _, d, _)) = d
-    [<Extension>]static member        Item4 ((_, _, _, d)   ) = d
+    static member inline       Item4 (t :'a          ) = ((^a) : (member Item4: _ ) t)
+    [<Extension>]static member Item4 ((_, _, _, d, _)) = d
+    [<Extension>]static member Item4 ((_, _, _, d)   ) = d
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item4: _ -> _) b)
@@ -58,8 +58,8 @@ type Item4 =
 
 [<Extension;Sealed>]
 type Item5 =
-    [<Extension>]static member inline Item5 (t :'a          ) = ((^a) : (member Item5: _ ) t)
-    [<Extension>]static member        Item5 ((_, _, _, _, e)) = e
+    static member inline       Item5 (t :'a          ) = ((^a) : (member Item5: _ ) t)
+    [<Extension>]static member Item5 ((_, _, _, _, e)) = e
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item5: _ -> _) b)

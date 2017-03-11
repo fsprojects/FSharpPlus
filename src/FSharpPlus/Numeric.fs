@@ -211,12 +211,11 @@ type TryNegate' =
         call_2 (Unchecked.defaultof<TryNegate'>, x)
 
 
-[<Extension; Sealed>]
 type DivRem =
     inherit Default1
     static member inline DivRem (x:^t when ^t: null and ^t: struct, y:^t, _thisClass:DivRem) = (x, y)
-    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]_impl:Default1) = let q = D / d in q,  D - q * d
-    [<Extension>]static member inline DivRem (D:'T, d:'T, [<Optional>]_impl:DivRem  ) =
+    static member inline DivRem (D:'T, d:'T, [<Optional>]_impl:Default1) = let q = D / d in q,  D - q * d
+    static member inline DivRem (D:'T, d:'T, [<Optional>]_impl:DivRem  ) =
                     let mutable r = Unchecked.defaultof<'T>
                     (^T: (static member DivRem: _ * _ -> _ -> _) (D, d, &r)), r
 

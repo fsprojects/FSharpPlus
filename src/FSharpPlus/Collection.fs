@@ -15,13 +15,13 @@ open FsControl.Internals
 [<Extension;Sealed>]
 type Nth =
     inherit Default1
-    [<Extension>]static member inline Nth (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head :'T
-    [<Extension>]static member        Nth (x:string        , n, [<Optional>]_impl:Nth     ) = x.[n]
-    [<Extension>]static member        Nth (x:StringBuilder , n, [<Optional>]_impl:Nth     ) = x.ToString().[n]
-    [<Extension>]static member        Nth (x:'a []         , n, [<Optional>]_impl:Nth     ) = x.[n] : 'a
-    [<Extension>]static member        Nth (x:'a ResizeArray, n, [<Optional>]_impl:Nth     ) = x.[n]
-    [<Extension>]static member        Nth (x:list<'a>      , n, [<Optional>]_impl:Nth     ) = x.[n]
-    [<Extension>]static member        Nth (x:'a Id         , _, [<Optional>]_impl:Nth     ) = x.getValue
+    static member inline       Nth (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head :'T
+    [<Extension>]static member Nth (x:string        , n, [<Optional>]_impl:Nth     ) = x.[n]
+    [<Extension>]static member Nth (x:StringBuilder , n, [<Optional>]_impl:Nth     ) = x.ToString().[n]
+    [<Extension>]static member Nth (x:'a []         , n, [<Optional>]_impl:Nth     ) = x.[n] : 'a
+    [<Extension>]static member Nth (x:'a ResizeArray, n, [<Optional>]_impl:Nth     ) = x.[n]
+    [<Extension>]static member Nth (x:list<'a>      , n, [<Optional>]_impl:Nth     ) = x.[n]
+    [<Extension>]static member Nth (x:'a Id         , _, [<Optional>]_impl:Nth     ) = x.getValue
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Nth: _*_*_ -> _) b, n, a)
@@ -31,13 +31,13 @@ type Nth =
 [<Extension;Sealed>]
 type Skip =
     inherit Default1
-    [<Extension>]static member inline Skip (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Skip (x:string        , n, [<Optional>]_impl:Skip    ) = x.[n..]
-    [<Extension>]static member        Skip (x:StringBuilder , n, [<Optional>]_impl:Skip    ) = new StringBuilder(x.ToString().[n..])
-    [<Extension>]static member        Skip (x:'a []         , n, [<Optional>]_impl:Skip    ) = x.[n..] : 'a []
-    [<Extension>]static member        Skip (x:'a ResizeArray, n, [<Optional>]_impl:Skip    ) = ResizeArray<'a> (Seq.skip n x)
-    [<Extension>]static member        Skip (x:list<'a>      , n, [<Optional>]_impl:Skip    ) = List.skip n x
-    [<Extension>]static member        Skip (x:'a Id         , _, [<Optional>]_impl:Skip    ) = x
+    static member inline       Skip (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> OfSeq.Invoke :'Foldable'T
+    [<Extension>]static member Skip (x:string        , n, [<Optional>]_impl:Skip    ) = x.[n..]
+    [<Extension>]static member Skip (x:StringBuilder , n, [<Optional>]_impl:Skip    ) = new StringBuilder(x.ToString().[n..])
+    [<Extension>]static member Skip (x:'a []         , n, [<Optional>]_impl:Skip    ) = x.[n..] : 'a []
+    [<Extension>]static member Skip (x:'a ResizeArray, n, [<Optional>]_impl:Skip    ) = ResizeArray<'a> (Seq.skip n x)
+    [<Extension>]static member Skip (x:list<'a>      , n, [<Optional>]_impl:Skip    ) = List.skip n x
+    [<Extension>]static member Skip (x:'a Id         , _, [<Optional>]_impl:Skip    ) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Skip: _*_*_ -> _) b, n, a)
@@ -48,13 +48,13 @@ type Skip =
 [<Extension;Sealed>]
 type Take =
     inherit Default1
-    [<Extension>]static member inline Take (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.take n |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Take (x:string        , n, [<Optional>]_impl:Take    ) = x.[..n-1]
-    [<Extension>]static member        Take (x:StringBuilder , n, [<Optional>]_impl:Take    ) = new StringBuilder(x.ToString().[..n-1])
-    [<Extension>]static member        Take (x:'a []         , n, [<Optional>]_impl:Take    ) = x.[..n-1] : 'a []
-    [<Extension>]static member        Take (x:'a ResizeArray, n, [<Optional>]_impl:Take    ) = ResizeArray<'a> (Seq.take n x)
-    [<Extension>]static member        Take (x:list<'a>      , n, [<Optional>]_impl:Take    ) = List.take n x
-    [<Extension>]static member        Take (x:'a Id         , _, [<Optional>]_impl:Take    ) = x
+    static member inline       Take (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.take n |> OfSeq.Invoke :'Foldable'T
+    [<Extension>]static member Take (x:string        , n, [<Optional>]_impl:Take    ) = x.[..n-1]
+    [<Extension>]static member Take (x:StringBuilder , n, [<Optional>]_impl:Take    ) = new StringBuilder(x.ToString().[..n-1])
+    [<Extension>]static member Take (x:'a []         , n, [<Optional>]_impl:Take    ) = x.[..n-1] : 'a []
+    [<Extension>]static member Take (x:'a ResizeArray, n, [<Optional>]_impl:Take    ) = ResizeArray<'a> (Seq.take n x)
+    [<Extension>]static member Take (x:list<'a>      , n, [<Optional>]_impl:Take    ) = List.take n x
+    [<Extension>]static member Take (x:'a Id         , _, [<Optional>]_impl:Take    ) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Take: _*_*_ -> _) b, n, a)
@@ -65,13 +65,13 @@ type Take =
 [<Extension;Sealed>]
 type Drop =
     inherit Default1
-    [<Extension>]static member inline Drop (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.drop n |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Drop (x:string        , n, [<Optional>]_impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else "") else x
-    [<Extension>]static member        Drop (x:StringBuilder , n, [<Optional>]_impl:Drop) = if n > 0 then (if x.Length > n then new StringBuilder(x.ToString().[n..]) else new StringBuilder()) else new StringBuilder(x.ToString())
-    [<Extension>]static member        Drop (x:'a []         , n, [<Optional>]_impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else [||]) else x : 'a []
-    [<Extension>]static member        Drop (x:'a ResizeArray, n, [<Optional>]_impl:Drop) = ResizeArray<'a> (Seq.drop n x)
-    [<Extension>]static member        Drop (x:list<'a>      , n, [<Optional>]_impl:Drop) = List.drop n x
-    [<Extension>]static member        Drop (x:'a Id         , _, [<Optional>]_impl:Drop) = x
+    static member inline       Drop (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.drop n |> OfSeq.Invoke :'Foldable'T
+    [<Extension>]static member Drop (x:string        , n, [<Optional>]_impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else "") else x
+    [<Extension>]static member Drop (x:StringBuilder , n, [<Optional>]_impl:Drop) = if n > 0 then (if x.Length > n then new StringBuilder(x.ToString().[n..]) else new StringBuilder()) else new StringBuilder(x.ToString())
+    [<Extension>]static member Drop (x:'a []         , n, [<Optional>]_impl:Drop) = if n > 0 then (if x.Length > n then x.[n..] else [||]) else x : 'a []
+    [<Extension>]static member Drop (x:'a ResizeArray, n, [<Optional>]_impl:Drop) = ResizeArray<'a> (Seq.drop n x)
+    [<Extension>]static member Drop (x:list<'a>      , n, [<Optional>]_impl:Drop) = List.drop n x
+    [<Extension>]static member Drop (x:'a Id         , _, [<Optional>]_impl:Drop) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Drop: _*_*_ -> _) b, n, a)
@@ -83,13 +83,13 @@ type Drop =
 [<Extension;Sealed>]
 type Limit =
     inherit Default1
-    [<Extension>]static member inline Limit (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.truncate n |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Limit (x:string        , n, [<Optional>]_impl:Limit) = if n < 1 then "" elif n < x.Length then x.[..n-1] else x
-    [<Extension>]static member        Limit (x:StringBuilder , n, [<Optional>]_impl:Limit) = new StringBuilder(x.ToString().[..n-1])
-    [<Extension>]static member        Limit (x:'a []         , n, [<Optional>]_impl:Limit) = if n < 1 then [||] elif n < x.Length then x.[..n-1] else x : 'a []
-    [<Extension>]static member        Limit (x:'a ResizeArray, n, [<Optional>]_impl:Limit) = ResizeArray<'a> (Seq.truncate n x)
-    [<Extension>]static member        Limit (x:list<'a>      , n, [<Optional>]_impl:Limit) = Seq.truncate n x |> Seq.toList
-    [<Extension>]static member        Limit (x:'a Id         , _, [<Optional>]_impl:Limit) = x
+    static member inline Limit (x:'Foldable'T   , n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.truncate n |> OfSeq.Invoke :'Foldable'T
+    [<Extension>]static member Limit (x:string        , n, [<Optional>]_impl:Limit) = if n < 1 then "" elif n < x.Length then x.[..n-1] else x
+    [<Extension>]static member Limit (x:StringBuilder , n, [<Optional>]_impl:Limit) = new StringBuilder(x.ToString().[..n-1])
+    [<Extension>]static member Limit (x:'a []         , n, [<Optional>]_impl:Limit) = if n < 1 then [||] elif n < x.Length then x.[..n-1] else x : 'a []
+    [<Extension>]static member Limit (x:'a ResizeArray, n, [<Optional>]_impl:Limit) = ResizeArray<'a> (Seq.truncate n x)
+    [<Extension>]static member Limit (x:list<'a>      , n, [<Optional>]_impl:Limit) = Seq.truncate n x |> Seq.toList
+    [<Extension>]static member Limit (x:'a Id         , _, [<Optional>]_impl:Limit) = x
 
     static member inline Invoke (n:int) (source:'Collection'T)  :'Collection'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Limit: _*_*_ -> _) b, n, a)
@@ -162,7 +162,7 @@ type ChunkBy =
 [<Extension;Sealed>]
 type Length =
     inherit Default1
-    [<Extension>]static member inline Length (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.length   
+    static member inline       Length (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.length   
     [<Extension>]static member Length (_:Id<'T>  , [<Optional>]_impl:Length) = 1
     [<Extension>]static member Length (x:seq<'T> , [<Optional>]_impl:Length) = Seq.length   x
     [<Extension>]static member Length (x:list<'T>, [<Optional>]_impl:Length) = List.length  x
@@ -178,7 +178,7 @@ type Length =
 [<Extension;Sealed>]
 type Max =
     inherit Default1
-    [<Extension>]static member inline Max (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.max :'T
+    static member inline       Max (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.max :'T
     [<Extension>]static member Max (x:Id<'T>  , [<Optional>]_impl:Max) = x.getValue
     [<Extension>]static member Max (x:seq<'T> , [<Optional>]_impl:Max) = Seq.max   x
     [<Extension>]static member Max (x:list<'T>, [<Optional>]_impl:Max) = List.max  x
@@ -207,7 +207,7 @@ type MaxBy =
 [<Extension;Sealed>]
 type Min =
     inherit Default1
-    [<Extension>]static member inline Min (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.min :'T
+    static member inline       Min (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.min :'T
     [<Extension>]static member Min (x:Id<'T>  , [<Optional>]_impl:Min) = x.getValue
     [<Extension>]static member Min (x:seq<'T> , [<Optional>]_impl:Min) = Seq.min   x
     [<Extension>]static member Min (x:list<'T>, [<Optional>]_impl:Min) = List.min  x
@@ -236,12 +236,12 @@ type MinBy =
 [<Extension;Sealed>]
 type Replace =
     inherit Default1
-                 static member inline Replace (x:'Collection  , o:'Collection  , n:'Collection  , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.replace (ToSeq.Invoke o) (ToSeq.Invoke n) |> OfSeq.Invoke : 'Collection
-                 static member        Replace (x:Id<'T>       , o:Id<'T>       , n:Id<'T>       , [<Optional>]_impl:Default1) = if x = o then n else x
-    [<Extension>]static member        Replace (x:list<'T>     , o:list<'T>     , n:list<'T>     , [<Optional>]_impl:Replace ) = x |> List.toSeq   |> Seq.replace o n |> Seq.toList
-    [<Extension>]static member        Replace (x:'T []        , o:'T []        , n:'T []        , [<Optional>]_impl:Replace ) = x |> Array.toSeq  |> Seq.replace o n |> Seq.toArray
-    [<Extension>]static member        Replace (x:string       , o:string       , n:string       , [<Optional>]_impl:Replace ) = if o.Length = 0 then x else x.Replace(o, n)
-    [<Extension>]static member        Replace (x:StringBuilder, o:StringBuilder, n:StringBuilder, [<Optional>]_impl:Replace ) = if o.Length = 0 then x else StringBuilder(x.ToString().Replace(o.ToString(), n.ToString()))
+    static member inline       Replace (x:'Collection  , o:'Collection  , n:'Collection  , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.replace (ToSeq.Invoke o) (ToSeq.Invoke n) |> OfSeq.Invoke : 'Collection
+                 static member Replace (x:Id<'T>       , o:Id<'T>       , n:Id<'T>       , [<Optional>]_impl:Default1) = if x = o then n else x
+    [<Extension>]static member Replace (x:list<'T>     , o:list<'T>     , n:list<'T>     , [<Optional>]_impl:Replace ) = x |> List.toSeq   |> Seq.replace o n |> Seq.toList
+    [<Extension>]static member Replace (x:'T []        , o:'T []        , n:'T []        , [<Optional>]_impl:Replace ) = x |> Array.toSeq  |> Seq.replace o n |> Seq.toArray
+    [<Extension>]static member Replace (x:string       , o:string       , n:string       , [<Optional>]_impl:Replace ) = if o.Length = 0 then x else x.Replace(o, n)
+    [<Extension>]static member Replace (x:StringBuilder, o:StringBuilder, n:StringBuilder, [<Optional>]_impl:Replace ) = if o.Length = 0 then x else StringBuilder(x.ToString().Replace(o.ToString(), n.ToString()))
  
     static member inline Invoke      (o:'Collection) (n:'Collection) (source:'Collection) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Replace: _*_*_*_ -> _) b, o, n, a)
@@ -252,9 +252,9 @@ type Replace =
 [<Extension;Sealed>]
 type Rev =
     inherit Default1
-    [<Extension>]static member inline Rev (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray |> Array.rev |> Array.toSeq |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member        Rev (x:list<'a>   , [<Optional>]_impl:Rev     ) = List.rev  x
-    [<Extension>]static member        Rev (x:'a []      , [<Optional>]_impl:Rev     ) = Array.rev x
+    static member inline       Rev (x:'Foldable'T, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray |> Array.rev |> Array.toSeq |> OfSeq.Invoke :'Foldable'T
+    [<Extension>]static member Rev (x:list<'a>   , [<Optional>]_impl:Rev     ) = List.rev  x
+    [<Extension>]static member Rev (x:'a []      , [<Optional>]_impl:Rev     ) = Array.rev x
 
     static member inline Invoke  (source:'Collection'T)                                    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Rev: _*_ -> _) b, a)
@@ -277,10 +277,10 @@ type Scan =
 [<Extension;Sealed>]
 type Sort =
     inherit Default1
-    [<Extension>]static member inline Sort (x:'Foldable'T, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke :'Foldable'T
-    [<Extension>]static member inline Sort (x:^Foldable'T, [<Optional>]_impl:Default1) = ((^Foldable'T) : (static member Sort: _->_) x) : ^Foldable'T
-    [<Extension>]static member        Sort (x:list<'a>   , [<Optional>]_impl:Sort    ) = List.sort  x
-    [<Extension>]static member        Sort (x:'a []      , [<Optional>]_impl:Sort    ) = Array.sort x
+    static member inline       Sort (x:'Foldable'T, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke :'Foldable'T
+    static member inline       Sort (x:^Foldable'T, [<Optional>]_impl:Default1) = ((^Foldable'T) : (static member Sort: _->_) x) : ^Foldable'T
+    [<Extension>]static member Sort (x:list<'a>   , [<Optional>]_impl:Sort    ) = List.sort  x
+    [<Extension>]static member Sort (x:'a []      , [<Optional>]_impl:Sort    ) = Array.sort x
 
     static member inline Invoke (source:'Collection'T)                                    =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Sort: _*_ -> _) b, a)

@@ -83,51 +83,51 @@ type Append with
 
 
 type Append with 
-    [<Extension>]static member inline Append ((x1,x2         ), (y1,y2         )) = (Append.Invoke x1 y1, Append.Invoke x2 y2                                                               ) :'a*'b
+    static member inline       Append ((x1,x2         ), (y1,y2         )) = (Append.Invoke x1 y1, Append.Invoke x2 y2                                                               ) :'a*'b
 type Append with 
-    [<Extension>]static member inline Append ((x1,x2,x3      ), (y1,y2,y3      )) = (Append.Invoke x1 y1, Append.Invoke x2 y2, Append.Invoke x3 y3                                          ) :'a*'b*'c
+    static member inline       Append ((x1,x2,x3      ), (y1,y2,y3      )) = (Append.Invoke x1 y1, Append.Invoke x2 y2, Append.Invoke x3 y3                                          ) :'a*'b*'c
 type Append with 
-    [<Extension>]static member inline Append ((x1,x2,x3,x4   ), (y1,y2,y3,y4   )) = (Append.Invoke x1 y1, Append.Invoke x2 y2, Append.Invoke x3 y3, Append.Invoke x4 y4                     ) :'a*'b*'c*'d
+    static member inline       Append ((x1,x2,x3,x4   ), (y1,y2,y3,y4   )) = (Append.Invoke x1 y1, Append.Invoke x2 y2, Append.Invoke x3 y3, Append.Invoke x4 y4                     ) :'a*'b*'c*'d
 type Append with 
-    [<Extension>]static member inline Append ((x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5)) = (Append.Invoke x1 y1, Append.Invoke x2 y2, Append.Invoke x3 y3, Append.Invoke x4 y4, Append.Invoke x5 y5) :'a*'b*'c*'d*'e
+    static member inline       Append ((x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5)) = (Append.Invoke x1 y1, Append.Invoke x2 y2, Append.Invoke x3 y3, Append.Invoke x4 y4, Append.Invoke x5 y5) :'a*'b*'c*'d*'e
     
 type Append with    
     
 #if NET35
 #else
-    [<Extension>]static member inline Append (x:'a Task, y:'a Task) =
+    static member inline       Append (x:'a Task, y:'a Task) =
                     x.ContinueWith(fun (t: Task<_>) -> 
                         (fun a -> 
                             y.ContinueWith(fun (u: Task<_>) -> 
                                 Append.Invoke a u.Result)) t.Result).Unwrap()
 #endif
 
-    [<Extension>]static member inline Append (x:Map<'a,'b>, y) =
+    static member inline       Append (x:Map<'a,'b>, y) =
                     Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> Append.Invoke v v' | None -> v') m) x y
 
-    [<Extension>]static member inline Append (x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>) =
+    static member inline       Append (x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v
                     for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Append.Invoke v v' | _ -> v'
                     d
 
-    [<Extension>]static member inline Append (f:'T->'Monoid, g:'T->'Monoid) = (fun x -> Append.Invoke (f x) (g x)) :'T->'Monoid
+    static member inline       Append (f:'T->'Monoid, g:'T->'Monoid) = (fun x -> Append.Invoke (f x) (g x)) :'T->'Monoid
 
-    [<Extension>]static member inline Append (x:'S Async, y:'S Async) = async {
+    static member inline       Append (x:'S Async, y:'S Async) = async {
                     let! a = x
                     let! b = y
                     return Append.Invoke a b}
 
-    [<Extension>]static member inline Append (x:'a Expr, y:'a Expr) :'a Expr =
+    static member inline       Append (x:'a Expr, y:'a Expr) :'a Expr =
                     let inline f (x:'a)  :'a -> 'a = Append.Invoke x
                     Expr.Cast<'a>(Expr.Application(Expr.Application(Expr.Value(f), x), y))
    
 
-    [<Extension>]static member inline Append (x:'a Lazy      , y:'a Lazy)       = lazy Append.Invoke (x.Value) (y.Value)
-    [<Extension>]static member        Append (x:_ ResizeArray, y:_ ResizeArray) = ResizeArray (Seq.append x y)
-    [<Extension>]static member        Append (x:_ IObservable, y              ) = Observable.merge x y
-    [<Extension>]static member        Append (x:_ seq        , y              ) = Seq.append x y
-    [<Extension>]static member inline Append (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>) =
+    static member inline       Append (x:'a Lazy      , y:'a Lazy)       = lazy Append.Invoke (x.Value) (y.Value)
+    [<Extension>]static member Append (x:_ ResizeArray, y:_ ResizeArray) = ResizeArray (Seq.append x y)
+    [<Extension>]static member Append (x:_ IObservable, y              ) = Observable.merge x y
+    [<Extension>]static member Append (x:_ seq        , y              ) = Seq.append x y
+    static member inline       Append (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v
                     for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Append.Invoke v v' | _ -> v'
@@ -137,25 +137,25 @@ type Append with
 [<Extension; Sealed>]
 type Concat =
     inherit Default1
-    [<Extension>]static member inline Concat (x:seq<Dictionary<'a,'b>>, [<Optional>]_output:Dictionary<'a,'b>, [<Optional>]_impl:Concat) =
+    static member inline       Concat (x:seq<Dictionary<'a,'b>>, [<Optional>]_output:Dictionary<'a,'b>, [<Optional>]_impl:Concat) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
                             dct.[k] <- match dct.TryGetValue k with true, v -> Append.Invoke v u | _ -> u
                     dct
 
-    [<Extension>]static member inline Concat (x:seq<IDictionary<'a,'b>>, [<Optional>]_output:IDictionary<'a,'b>, [<Optional>]_impl:Concat) =
+    static member inline       Concat (x:seq<IDictionary<'a,'b>>, [<Optional>]_output:IDictionary<'a,'b>, [<Optional>]_impl:Concat) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
                             dct.[k] <- match dct.TryGetValue k with true, v -> Append.Invoke v u | _ -> u
                     dct :> IDictionary<'a,'b>
 
-    [<Extension>]static member inline Concat (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:Concat) = ResizeArray (Seq.concat x)
-    [<Extension>]static member        Concat (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:Concat) = List.concat   x
-    [<Extension>]static member        Concat (x:seq<array<'a>>      , [<Optional>]_output:array<'a>     , [<Optional>]_impl:Concat) = Array.concat  x
-    [<Extension>]static member        Concat (x:seq<string>         , [<Optional>]_output:string        , [<Optional>]_impl:Concat) = String.Concat x
-    [<Extension>]static member        Concat (x:seq<StringBuilder>  , [<Optional>]_output:StringBuilder , [<Optional>]_impl:Concat) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    static member inline       Concat (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:Concat) = ResizeArray (Seq.concat x)
+    [<Extension>]static member Concat (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:Concat) = List.concat   x
+    [<Extension>]static member Concat (x:seq<array<'a>>      , [<Optional>]_output:array<'a>     , [<Optional>]_impl:Concat) = Array.concat  x
+    [<Extension>]static member Concat (x:seq<string>         , [<Optional>]_output:string        , [<Optional>]_impl:Concat) = String.Concat x
+    [<Extension>]static member Concat (x:seq<StringBuilder>  , [<Optional>]_output:StringBuilder , [<Optional>]_impl:Concat) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
 
     static member inline Invoke (x:seq<'T>) : 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Concat: _*_*_ -> _) b, c, a)
@@ -163,26 +163,26 @@ type Concat =
         call (Unchecked.defaultof<Concat>, x)
 
 type Concat with
-    [<Extension>]static member inline Concat (x:seq<'a * 'b>, [<Optional>]_output:'a * 'b, [<Optional>]_impl:Concat) =
+    static member inline       Concat (x:seq<'a * 'b>, [<Optional>]_output:'a * 'b, [<Optional>]_impl:Concat) =
                     Concat.Invoke (Seq.map fst x), 
                     Concat.Invoke (Seq.map snd x)
     
 type Concat with
-    [<Extension>]static member inline Concat (x:seq<'a * 'b * 'c>, [<Optional>]_output:'a * 'b * 'c, [<Optional>]_impl:Concat) =
+    static member inline       Concat (x:seq<'a * 'b * 'c>, [<Optional>]_output:'a * 'b * 'c, [<Optional>]_impl:Concat) =
                     Concat.Invoke (Seq.map (fun (x,_,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,x,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,_,x) -> x) x)
     
 type Concat with
-    [<Extension>]static member inline Concat (x:seq<'a * 'b * 'c * 'd>, [<Optional>]_output:'a * 'b * 'c * 'd, [<Optional>]_impl:Concat) =
+    static member inline       Concat (x:seq<'a * 'b * 'c * 'd>, [<Optional>]_output:'a * 'b * 'c * 'd, [<Optional>]_impl:Concat) =
                     Concat.Invoke (Seq.map (fun (x,_,_,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,x,_,_) -> x) x), 
                     Concat.Invoke (Seq.map (fun (_,_,x,_) -> x) x),
                     Concat.Invoke (Seq.map (fun (_,_,_,x) -> x) x)
 
 type Concat with
-    [<Extension>]static member inline Concat (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Append.Invoke (Empty.Invoke()) x:'a
+    static member inline       Concat (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Append.Invoke (Empty.Invoke()) x:'a
     
 type Concat with
-    [<Extension>]static member inline Concat (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = ((^R) : (static member Concat: 'R seq -> ^R) x)
-                 static member inline Concat (_:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
+    static member inline       Concat (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = ((^R) : (static member Concat: 'R seq -> ^R) x)
+    static member inline       Concat (_:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
