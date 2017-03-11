@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B98-5CED-492C-A5B7-A5B4F73CF142}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus", "src\FSharpPlus\FSharpPlus.fsproj", "{4364A3EA-06D8-4493-BE44-E22D5370CCA1}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus", "src\FSharpPlus\FSharpPlus.fsproj", "{1368368E-D2F4-4FEF-BB2F-492E05156E0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSharpPlus.BaseLib", "src\FSharpPlus.BaseLib\FSharpPlus.BaseLib.csproj", "{1B99DF98-65AC-4038-8BE5-E72B0882F420}"
 EndProject
@@ -60,10 +60,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4364A3EA-06D8-4493-BE44-E22D5370CCA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4364A3EA-06D8-4493-BE44-E22D5370CCA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4364A3EA-06D8-4493-BE44-E22D5370CCA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4364A3EA-06D8-4493-BE44-E22D5370CCA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1B99DF98-65AC-4038-8BE5-E72B0882F420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B99DF98-65AC-4038-8BE5-E72B0882F420}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B99DF98-65AC-4038-8BE5-E72B0882F420}.Release|Any CPU.ActiveCfg = Release|Any CPU
