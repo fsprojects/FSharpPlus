@@ -25,7 +25,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/gmpl/FSharpPlus">github page</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
@@ -52,7 +52,7 @@
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">LMap</span> (<span class="i">x</span><span class="o">:</span><span class="i">Profunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span>,<span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span>, <span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">U</span><span class="k">-&gt;</span><span class="o">&#39;</span><span class="i">T</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Bifunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">U</span>,<span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">Contramap</span> (<span class="i">x</span><span class="o">:</span><span class="i">Profunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span>,<span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span>, <span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">U</span><span class="k">-&gt;</span><span class="o">&#39;</span><span class="i">T</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Bifunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">U</span>,<span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -61,7 +61,7 @@
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">RMap</span> (<span class="i">x</span><span class="o">:</span><span class="i">Profunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span>,<span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span>, <span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">V</span><span class="k">-&gt;</span><span class="o">&#39;</span><span class="i">W</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Bifunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span>,<span class="o">&#39;</span><span class="i">W</span><span class="o">&gt;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Map</span> (<span class="i">x</span><span class="o">:</span><span class="i">Profunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span>,<span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span>, <span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">V</span><span class="k">-&gt;</span><span class="o">&#39;</span><span class="i">W</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Bifunctor</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span>,<span class="o">&#39;</span><span class="i">W</span><span class="o">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -69,7 +69,7 @@
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">dimap</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">id</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">id</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 3)" onmouseover="showTip(event, 'fs1', 3)" class="i">id</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">dimap</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">id</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">id</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="i">id</span>
 <span class="i">dimap</span> (<span class="i">h&#39;</span> <span class="o">&lt;&lt;</span> <span class="i">h</span>) (<span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">f&#39;</span>) <span class="o">=</span> <span class="i">dimap</span> <span class="i">h</span> <span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">dimap</span> <span class="i">h&#39;</span> <span class="i">f&#39;</span>
 </code></pre></td>
 </tr>
@@ -88,11 +88,12 @@
 <ul>
 <li>
 <p><code>Kleisli&lt;'T, 'Monad&lt;'U&gt;&gt;</code></p>
-<p><a href="https://github.com/gmpl/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 </li>
 </ul>
 
-<div class="tip" id="fs1">val id : x:&#39;T -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.id</div>
+<div class="tip" id="fs1">Multiple items<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;override Equals : obj -&gt; bool<br />&#160;&#160;member Remove : key:&#39;Key -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;...<br /><br />Full name: Microsoft.FSharp.Collections.Map&lt;_,_&gt;<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="tip" id="fs2">val id : x:&#39;T -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.id</div>
 
         </div>
         <div class="span3">
@@ -102,7 +103,7 @@
             <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/gmpl/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
             <li><a href="/FSharpPlus/license.html">License</a></li>
             <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
@@ -116,6 +117,6 @@
         </div>
       </div>
     </div>
-    <a href="https://github.com/gmpl/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>

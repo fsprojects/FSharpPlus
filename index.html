@@ -25,7 +25,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/gmpl/FSharpPlus">github page</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
@@ -76,7 +76,7 @@
 <p>Some more info</p>
 <h2><a name="Samples-amp-documentation" class="anchor" href="#Samples-amp-documentation">Samples &amp; documentation</a></h2>
 <p>The library comes with comprehensible documentation.
-It include tutorials automatically generated from <code>*.fsx</code> files in <a href="https://github.com/gmpl/FSharpPlus/tree/master/docs/content">the content folder</a>.
+It include tutorials automatically generated from <code>*.fsx</code> files in <a href="https://github.com/gusty/FSharpPlus/tree/master/docs/content">the content folder</a>.
 The API reference is automatically generated from Markdown comments in the library implementation.</p>
 <ul>
 <li><p><a href="tutorial.html">Tutorial</a> contains a further explanation of this library.</p></li>
@@ -88,19 +88,19 @@ functions.</p>
 </li>
 </ul>
 <h2><a name="Contributing-and-copyright" class="anchor" href="#Contributing-and-copyright">Contributing and copyright</a></h2>
-<p>The project is hosted on <a href="https://github.com/gmpl/FSharpPlus">GitHub</a> where you can <a href="https://github.com/gmpl/FSharpPlus/issues">report issues</a>, fork
+<p>The project is hosted on <a href="https://github.com/gusty/FSharpPlus">GitHub</a> where you can <a href="https://github.com/gusty/FSharpPlus/issues">report issues</a>, fork
 the project and submit pull requests. If you're adding a new public API, please also
-consider adding <a href="https://github.com/gmpl/FSharpPlus/tree/master/docs/content">samples</a> that can be turned into a documentation. You might
-also want to read the <a href="https://github.com/gmpl/FSharpPlus/blob/master/README.md">library design notes</a> to understand how it works.</p>
+consider adding <a href="https://github.com/gusty/FSharpPlus/tree/master/docs/content">samples</a> that can be turned into a documentation. You might
+also want to read the <a href="https://github.com/gusty/FSharpPlus/blob/master/README.md">library design notes</a> to understand how it works.</p>
 <p>The library is available under Public Domain license, which allows modification and
 redistribution for both commercial and non-commercial purposes. For more information see the
-<a href="https://github.com/gmpl/FSharpPlus/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
+<a href="https://github.com/gusty/FSharpPlus/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
 
 <div class="tip" id="fs1">namespace FSharpPlus</div>
 <div class="tip" id="fs2">val map : f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)<br /><br />Full name: FSharpPlus.Operators.map</div>
 <div class="tip" id="fs3">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
 <div class="tip" id="fs4">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
-<div class="tip" id="fs5">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;member head : &#39;t<br />&#160;&#160;member tail : &#39;t list<br />&#160;&#160;static member Append : NonEmptyList&lt;&#39;a1&gt; * x:NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;<br />&#160;&#160;static member Bind : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;static member Extend : s:NonEmptyList&lt;&#39;a1&gt; * g:(NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Extract : NonEmptyList&lt;&#39;t&gt; -&gt; &#39;t<br />&#160;&#160;static member FoldBack : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; &#39;a2 -&gt; &#39;a2) * z:&#39;a2 -&gt; &#39;a2<br />&#160;&#160;static member Map : x:NonEmptyList&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Replace : source:NonEmptyList&lt;&#39;T&gt; * oldValue:NonEmptyList&lt;&#39;T&gt; * newValue:NonEmptyList&lt;&#39;T&gt; * _impl:Replace -&gt; NonEmptyList&lt;&#39;T&gt; (requires equality)<br />&#160;&#160;static member Return : x:&#39;a -&gt; NonEmptyList&lt;&#39;a&gt;<br />&#160;&#160;static member ToList : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToList -&gt; &#39;a list<br />&#160;&#160;static member ToSeq : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToSeq -&gt; seq&lt;&#39;a&gt;<br />&#160;&#160;static member ToString : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToString -&gt; (CultureInfo -&gt; string) (requires member ToString)<br />&#160;&#160;static member Traverse : s:NonEmptyList&lt;&#39;T&gt; * f:(&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;&#39;NonEmptyList&lt;&#39;U&gt;&gt; (requires member Map and member ( &lt;*&gt; ) and member Return and member Map and member Traverse)<br />&#160;&#160;static member ( &lt;*&gt; ) : f:NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x:NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;<br /><br />Full name: FSharpPlus.NonEmptyList&lt;_&gt;</div>
+<div class="tip" id="fs5">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;member head : &#39;t<br />&#160;&#160;member tail : &#39;t list<br />&#160;&#160;static member Append : NonEmptyList&lt;&#39;a1&gt; * x:NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;<br />&#160;&#160;static member Bind : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;static member Extend : s:NonEmptyList&lt;&#39;a1&gt; * g:(NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Extract : NonEmptyList&lt;&#39;t&gt; -&gt; &#39;t<br />&#160;&#160;static member FoldBack : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; &#39;a2 -&gt; &#39;a2) * z:&#39;a2 -&gt; &#39;a2<br />&#160;&#160;static member Map : x:NonEmptyList&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;static member Replace : source:NonEmptyList&lt;&#39;T&gt; * oldValue:NonEmptyList&lt;&#39;T&gt; * newValue:NonEmptyList&lt;&#39;T&gt; * _impl:Replace -&gt; NonEmptyList&lt;&#39;T&gt; (requires equality)<br />&#160;&#160;static member Return : x:&#39;a -&gt; NonEmptyList&lt;&#39;a&gt;<br />&#160;&#160;static member ToList : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToList -&gt; &#39;a list<br />&#160;&#160;static member ToSeq : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToSeq -&gt; seq&lt;&#39;a&gt;<br />&#160;&#160;static member ToString : s:NonEmptyList&lt;&#39;a&gt; * _impl:ToString -&gt; (CultureInfo -&gt; string) (requires member ToString)<br />&#160;&#160;static member Traverse : s:NonEmptyList&lt;&#39;T&gt; * f:(&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;&#39;NonEmptyList&lt;&#39;U&gt;&gt; (requires member Map and member ( &lt;*&gt; ) and member Traverse and member Return and member Map)<br />&#160;&#160;static member ( &lt;*&gt; ) : f:NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x:NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;<br /><br />Full name: FSharpPlus.NonEmptyList&lt;_&gt;</div>
 <div class="tip" id="fs6">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;<br /><br />Full name: FSharpPlus.NonEmptyList.create</div>
 
         </div>
@@ -111,7 +111,7 @@ redistribution for both commercial and non-commercial purposes. For more informa
             <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/gmpl/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
             <li><a href="/FSharpPlus/license.html">License</a></li>
             <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
@@ -125,6 +125,6 @@ redistribution for both commercial and non-commercial purposes. For more informa
         </div>
       </div>
     </div>
-    <a href="https://github.com/gmpl/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>

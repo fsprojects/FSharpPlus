@@ -24,7 +24,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/gmpl/FSharpPlus">github page</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
@@ -51,14 +51,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '973', 973)" onmouseover="showTip(event, '973', 973)">
-            Contramap(c, f)
+            Contramap(arg1, arg2, _mthd)
           </code>
           <div class="tip" id="973">
-            <strong>Signature:</strong> (c:IEqualityComparer&lt;&#39;T&gt; * f:(&#39;U -&gt; &#39;T)) -&gt; IEqualityComparer&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U          </div>
+            <strong>Signature:</strong> (^t * (&#39;A -&gt; &#39;B) * _mthd:Default1) -&gt; unit<br />
+                          <strong>Type parameters:</strong> ^t, 'A, 'B          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L474-474" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L551-551" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -69,14 +69,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '974', 974)" onmouseover="showTip(event, '974', 974)">
-            Contramap(c, f)
+            Contramap(x, f, _mthd)
           </code>
           <div class="tip" id="974">
-            <strong>Signature:</strong> (c:IComparer&lt;&#39;T&gt; * f:(&#39;U -&gt; &#39;T)) -&gt; IComparer&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U          </div>
+            <strong>Signature:</strong> (x:^Contravariant&lt;&#39;T&gt; * f:(&#39;U -&gt; &#39;T) * _mthd:Default1) -&gt; &#39;Contravariant&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^Contravariant<'T>, 'U, 'T, 'Contravariant<'U>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L473-473" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L550-550" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -87,14 +87,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '975', 975)" onmouseover="showTip(event, '975', 975)">
-            Contramap(p, f)
+            Contramap(x, f, _mthd)
           </code>
           <div class="tip" id="975">
-            <strong>Signature:</strong> (p:Predicate&lt;&#39;T&gt; * f:(&#39;U -&gt; &#39;T)) -&gt; Predicate&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U          </div>
+            <strong>Signature:</strong> (x:^Profunctor&lt;&#39;B,&#39;C&gt; * f:(&#39;A -&gt; &#39;B) * _mthd:Default2) -&gt; &#39;Profunctor&lt;&#39;A,&#39;C&gt;<br />
+                          <strong>Type parameters:</strong> ^Profunctor<'B,'C>, 'A, 'B, '?14016, 'Profunctor<'A,'C>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L472-472" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L549-549" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -105,14 +105,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '976', 976)" onmouseover="showTip(event, '976', 976)">
-            Contramap(g, f)
+            Contramap(c, f, _mthd)
           </code>
           <div class="tip" id="976">
-            <strong>Signature:</strong> (g:(&#39;T -&gt; &#39;R) * f:(&#39;U -&gt; &#39;T)) -&gt; &#39;U -&gt; &#39;R<br />
-                          <strong>Type parameters:</strong> 'T, 'R, 'U          </div>
+            <strong>Signature:</strong> (c:IEqualityComparer&lt;&#39;T&gt; * f:(&#39;U -&gt; &#39;T) * _mthd:Contramap) -&gt; IEqualityComparer&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L471-471" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L543-543" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -123,14 +123,104 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '977', 977)" onmouseover="showTip(event, '977', 977)">
-            Invoke(f x)
+            Contramap(c, f, _mthd)
           </code>
           <div class="tip" id="977">
-            <strong>Signature:</strong> (f:(&#39;U -&gt; &#39;T)) -&gt; x:^Contravariant&lt;&#39;T&gt; -&gt; ^Contravariant&lt;&#39;U&gt;<br />
+            <strong>Signature:</strong> (c:IComparer&lt;&#39;T&gt; * f:(&#39;U -&gt; &#39;T) * _mthd:Contramap) -&gt; IComparer&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L542-542" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '978', 978)" onmouseover="showTip(event, '978', 978)">
+            Contramap(p, f, _mthd)
+          </code>
+          <div class="tip" id="978">
+            <strong>Signature:</strong> (p:Predicate&lt;&#39;T&gt; * f:(&#39;U -&gt; &#39;T) * _mthd:Contramap) -&gt; Predicate&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L541-541" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '979', 979)" onmouseover="showTip(event, '979', 979)">
+            Contramap(k, f, _mthd)
+          </code>
+          <div class="tip" id="979">
+            <strong>Signature:</strong> (k:Func&lt;&#39;T,&#39;C&gt; * f:(&#39;U -&gt; &#39;T) * _mthd:Contramap) -&gt; Func&lt;&#39;U,&#39;C&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'C, 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L540-540" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '980', 980)" onmouseover="showTip(event, '980', 980)">
+            Contramap(k, f, _mthd)
+          </code>
+          <div class="tip" id="980">
+            <strong>Signature:</strong> (k:(&#39;T -&gt; &#39;C) * f:(&#39;U -&gt; &#39;T) * _mthd:Contramap) -&gt; &#39;U -&gt; &#39;C<br />
+                          <strong>Type parameters:</strong> 'T, 'C, 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L539-539" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '981', 981)" onmouseover="showTip(event, '981', 981)">
+            Invoke(f source)
+          </code>
+          <div class="tip" id="981">
+            <strong>Signature:</strong> (f:(&#39;U -&gt; &#39;T)) -&gt; source:^Contravariant&lt;&#39;T&gt; -&gt; ^Contravariant&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U, 'T, ^Contravariant<'T>, ^Contravariant<'U>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gmpl/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L480-480" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L532-532" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '982', 982)" onmouseover="showTip(event, '982', 982)">
+            InvokeOnInstance(ab source)
+          </code>
+          <div class="tip" id="982">
+            <strong>Signature:</strong> (ab:(&#39;A -&gt; &#39;B)) -&gt; source:^Profunctor&lt;&#39;B,&#39;C&gt; -&gt; &#39;Profunctor&lt;&#39;A,&#39;C&gt;<br />
+                          <strong>Type parameters:</strong> 'A, 'B, ^Profunctor<'B,'C>, 'Profunctor<'A,'C>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L536-536" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -148,7 +238,7 @@
             <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/gmpl/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
             <li><a href="/FSharpPlus/license.html">License</a></li>
             <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
@@ -162,6 +252,6 @@
         </div>
       </div>
     </div>
-    <a href="https://github.com/gmpl/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>
