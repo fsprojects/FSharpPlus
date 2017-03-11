@@ -235,6 +235,7 @@ type Map =
     [<Extension>]static member Map (x : option<_>      , f : 'T->'U, [<Optional>]_mthd : Map) = Option.map  f x
     [<Extension>]static member Map (x : list<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = List.map f x                        : list<'U>
     [<Extension>]static member Map (g : 'R->'T         , f : 'T->'U, [<Optional>]_mthd : Map) = (>>) g f
+    [<Extension>]static member Map (g : Func<'R, 'T>   , f : 'T->'U, [<Optional>]_mthd : Map) = Func<'R, 'U>(g.Invoke >> f)
     [<Extension>]static member Map ((m : 'Monoid, a)   , f : 'T->'U, [<Optional>]_mthd : Map) = (m, f a)
     [<Extension>]static member Map (x : _ []           , f : 'T->'U, [<Optional>]_mthd : Map) = Array.map   f x
     [<Extension>]static member Map (x : _ [,]          , f : 'T->'U, [<Optional>]_mthd : Map) = Array2D.map f x
@@ -378,34 +379,6 @@ type Zip =
         let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member Zip: _*_*_*_ -> _) b, c, d, a)
         let inline call (a:'a, b:'b, c:'c) = call_4 (a, b, c, Unchecked.defaultof<'r>) :'r
         call (Unchecked.defaultof<Zip>, source1, source2)           :'ZipFunctor'T1'T2
-
-
-
-
-namespace FsControl.Internals
-module internal MonadOps =
-
-    let inline (>>=) x f = FsControl.Bind.Invoke x f
-    let inline result  x = FsControl.Return.Invoke x
-    let inline (<*>) f x = FsControl.Apply.Invoke f x
-    let inline (<|>) x y = FsControl.MPlus.Invoke x y
-    let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g
-
-
-namespace FsControl
-
-open System
-open System.Runtime.CompilerServices
-open System.Runtime.InteropServices
-open System.Collections.Generic
-#if NET35
-#else
-open System.Threading.Tasks
-#endif
-open FsControl.Internals
-open FsControl.Internals.Prelude
-open FsControl.Internals.MonadOps
-open FSharpPlus
 
 
 // Comonad class ----------------------------------------------------------
@@ -577,28 +550,12 @@ type Contramap with
     static member inline Contramap (x :'``Contravariant<'T>``, f : 'U->'T, [<Optional>]_mthd :Default1) = Contramap.InvokeOnInstance f x: '``Contravariant<'U>``
     static member inline Contramap (_:^t when ^t: null and ^t: struct   , _:'A->'B,    _mthd :Default1) = ()
 
-
-type RMap =
-    inherit Default1
-
-    static member inline Invoke (cd : 'C->'D) (source :'``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
-        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member RMap: _*_*_ -> _) source, cd, mthd)
-        call (Unchecked.defaultof<RMap>, source, Unchecked.defaultof<'``Profunctor<'B,'D>``>)
-
-    static member inline InvokeOnInstance (cd : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` =
-        (^``Profunctor<'B,'C>`` : (static member RMap: _*_ -> _) source, cd)
-
-    static member RMap (f : 'B->'C     , cd:'C->'D, [<Optional>]_mthd :RMap) = f >> cd   : 'B->'D
-    static member RMap (f : Func<'B,'C>, cd:'C->'D, [<Optional>]_mthd :RMap) = Func<'B,'D>(f.Invoke >> cd)
-    
-type RMap with
-    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]_mthd :Default2) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
-    static member inline RMap (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]_mthd :Default1) = RMap.InvokeOnInstance  cd x    : '``Profunctor<'B,'D>``
-    static member inline RMap (_:^t when ^t: null and ^t: struct   , _:'C->'D,     _mthd :Default1) = ()
+type Map with
+    static member inline Map (x :'``Profunctor<'B,'C>``, cd : 'C->'D, [<Optional>]_mthd :Default5) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
 
 
 type Dimap with
-    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default2) = x |> RMap.InvokeOnInstance cd |> Contramap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
+    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default2) = x |> Map.InvokeOnInstance cd |> Contramap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
     static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default1) = Dimap.InvokeOnInstance ab cd x                            : '``Profunctor<'A,'D>``
     static member inline Dimap (_:^t when ^t: null and ^t: struct,     _:'T->'U, _:'V->'W,   _mthd :Default1) = ()
 
@@ -841,3 +798,14 @@ type App =
 type App with
     static member inline App (_output : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``, _mthd : Default1) = App.InvokeOnInstance() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
     static member inline App (_output : ^t when ^t : null and ^t : struct              , _mthd : Default1) = id
+
+
+
+namespace FsControl.Internals
+module internal MonadOps =
+
+    let inline (>>=) x f = FsControl.Bind.Invoke x f
+    let inline result  x = FsControl.Return.Invoke x
+    let inline (<*>) f x = FsControl.Apply.Invoke f x
+    let inline (<|>) x y = FsControl.MPlus.Invoke x y
+    let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g

@@ -103,7 +103,7 @@ module Operators =
     let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = MapSecond.Invoke f source
     let inline dimap  (f : 'A->'B) ( g: 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
     let inline lmap   (f : 'A->'B) (source : ^``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` = Contramap.Invoke f source
-    let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = RMap.Invoke f source
+    let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = Map.Invoke f source
 
 
     // Category ---------------------------------------------------------------

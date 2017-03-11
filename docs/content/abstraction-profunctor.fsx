@@ -38,7 +38,7 @@ Other operations
  * ``rmap g x``
 *)
 (**
-    static member RMap (x:Profunctor<'T,'V>, f:'V->'W) :'Bifunctor<'T,'W>
+    static member Map (x:Profunctor<'T,'V>, f:'V->'W) :'Bifunctor<'T,'W>
 *)
 (**
 
