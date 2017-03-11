@@ -67,6 +67,7 @@ From .Net/F#
  
 From F#+
 
+ -  ``ZipList<'T>``
  -  ``NonEmptyList<'T>``
 
 
