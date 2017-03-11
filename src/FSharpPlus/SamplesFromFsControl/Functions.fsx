@@ -51,5 +51,4 @@ open FsControl
 let mapp1 = [1..3] </append/> [4..8]
 let mapp2 = [1..3]  .Append   [4..8]
 let mcon1 = [|[|1..3|];[|4..5|]|] |> join
-let mcon2 = [|[|1..3|];[|4..5|]|] .Join(null, Unchecked.defaultof<Join>) // optional arguments don't work from F#
-// but in C# you can write (new[] {new[] {1, 2, 3}, new[] {4, 5, 6}}).Join();
+let mcon2 = [|[|1..3|];[|4..5|]|] .Join()  // Optional arguments work from F# 4.1. In C# you can write (new[] {new[] {1, 2, 3}, new[] {4, 5, 6}}).Join();

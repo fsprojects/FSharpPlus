@@ -592,7 +592,7 @@ type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idi
 
 let resJust2'' = iI safeDivBy (Just 4G) J (Just 8G) Ii
 let resNothing = iI safeDivBy (Just 0G) J (Just 8G) Ii
-let res16n17  = iI (+) (iI (+) (pure' 4) [2;3] Ii) (pure'  10) Ii   // *1
+let res16n17   = iI (+) (iI (+) (pure' 4) [2;3] Ii ) (pure' 10: _ list) Ii   // *1
 
 // *1 These lines fails when Apply.Invoke has no 'or ^'``Applicative<'U>`` ' (output) constraint.
 
