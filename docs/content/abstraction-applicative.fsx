@@ -107,5 +107,5 @@ Restricted:
  -  ``StringBuilder``
  -  ``Set<'T>`` 
 
- [Suggest another](https://github.com/gmpl/FSharpPlus/issues/new) concrete implementation
+ [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 *)

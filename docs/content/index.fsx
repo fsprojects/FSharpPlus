@@ -68,9 +68,9 @@ The library is available under Public Domain license, which allows modification 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
-  [content]: https://github.com/gmpl/FSharpPlus/tree/master/docs/content
-  [gh]: https://github.com/gmpl/FSharpPlus
-  [issues]: https://github.com/gmpl/FSharpPlus/issues
-  [readme]: https://github.com/gmpl/FSharpPlus/blob/master/README.md
-  [license]: https://github.com/gmpl/FSharpPlus/blob/master/LICENSE.txt
+  [content]: https://github.com/gusty/FSharpPlus/tree/master/docs/content
+  [gh]: https://github.com/gusty/FSharpPlus
+  [issues]: https://github.com/gusty/FSharpPlus/issues
+  [readme]: https://github.com/gusty/FSharpPlus/blob/master/README.md
+  [license]: https://github.com/gusty/FSharpPlus/blob/master/LICENSE.txt
 *)

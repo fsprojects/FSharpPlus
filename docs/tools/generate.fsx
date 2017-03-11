@@ -13,7 +13,7 @@ let referenceBinaries = []
 // Web site location for the generated documentation
 let website = "/FSharpPlus"
 
-let githubLink = "https://github.com/gmpl/FSharpPlus"
+let githubLink = "https://github.com/gusty/FSharpPlus"
 
 // Specify more information about your project
 let info =

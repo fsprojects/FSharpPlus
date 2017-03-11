@@ -1,90 +1,90 @@
 @startuml
 
 abstract class Semigroup {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-semigroup.html]]
-  + append x y [[http://gmpl.github.io/FSharpPlus/abstraction-semigroup.html#append {Appends two semigroups} ]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html]]
+  + append x y [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html#append {Appends two semigroups} ]]
 }
 
 abstract class Monoid {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-monoid.html]]
-  + empty [[http://gmpl.github.io/FSharpPlus/abstraction-monoid.html#empty {Identity for append} ]]
-  + append x y [[http://gmpl.github.io/FSharpPlus/abstraction-monoid.html#append {Appends both monoids} ]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html]]
+  + empty [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#empty {Identity for append} ]]
+  + append x y [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#append {Appends both monoids} ]]
   ==
-  + concat x [[http://gmpl.github.io/FSharpPlus/abstraction-monoid.html#concat {Flatten a sequence of monoids} ]]
+  + concat x [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#concat {Flatten a sequence of monoids} ]]
 }
 
 abstract class Functor {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-functor.html]]
-  + map f x [[http://gmpl.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-functor.html]]
+  + map f x [[http://gusty.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]
   ==
   + unzip x
 }
 
 abstract class Applicative {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-applicative.html]]
-  + return x [[http://gmpl.github.io/FSharpPlus/abstraction-monad.html#return {Lift a value into a Functor} ]]
-  + (<*>) f x [[http://gmpl.github.io/FSharpPlus/abstraction-applicative.html {Apply a lifted argument to a lifted function} ]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-applicative.html]]
+  + return x [[http://gusty.github.io/FSharpPlus/abstraction-monad.html#return {Lift a value into a Functor} ]]
+  + (<*>) f x [[http://gusty.github.io/FSharpPlus/abstraction-applicative.html {Apply a lifted argument to a lifted function} ]]
   ==
-  + map f x [[http://gmpl.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]
+  + map f x [[http://gusty.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]
 }
 
 abstract class Alternative {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-alternative.html]]
-  + zero [[http://gmpl.github.io/FSharpPlus/abstraction-alternative.html]]
-  + (<|>) f x [[http://gmpl.github.io/FSharpPlus/abstraction-alternative.html]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]
+  + zero [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]
+  + (<|>) f x [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]
   ==
-  + mfilter p x [[http://gmpl.github.io/FSharpPlus/abstraction-alternative.html#mfilter {Returns all values satisfying the predicate, if the predicate returns false will use the mzero value} ]]
+  + mfilter p x [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html#mfilter {Returns all values satisfying the predicate, if the predicate returns false will use the mzero value} ]]
 }
 
 abstract class Monad {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-monad.html]]
-  + return x [[http://gmpl.github.io/FSharpPlus/abstraction-monad.html#return {Lift a value into a Functor} ]]
-  + (>>=) x f [[http://gmpl.github.io/FSharpPlus/abstraction-monad.html#bind {Takes a monadic value and a function from a plain type to a monadic value, and returns a new monadic value} ]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-monad.html]]
+  + return x [[http://gusty.github.io/FSharpPlus/abstraction-monad.html#return {Lift a value into a Functor} ]]
+  + (>>=) x f [[http://gusty.github.io/FSharpPlus/abstraction-monad.html#bind {Takes a monadic value and a function from a plain type to a monadic value, and returns a new monadic value} ]]
   ==
-  + map f x [[http://gmpl.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]
-  + join x [[http://gmpl.github.io/FSharpPlus/abstraction-functor.html#join {Flattens two layers of monadic information into one} ]]
+  + map f x [[http://gusty.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]
+  + join x [[http://gusty.github.io/FSharpPlus/abstraction-functor.html#join {Flattens two layers of monadic information into one} ]]
 }
 
 abstract class Comonad {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-comonad.html]]
-  + extract x [[http://gmpl.github.io/FSharpPlus/abstraction-comonad.html#extract]]
-  + (=>>) s g | extend s g [[http://gmpl.github.io/FSharpPlus/abstraction-comonad.html#extend]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html]]
+  + extract x [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html#extract]]
+  + (=>>) s g | extend s g [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html#extend]]
   ==
   + duplicate x
 }
 
 abstract class Contravariant {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-contravariant.html]]
-  + contramap f x [[http://gmpl.github.io/FSharpPlus/abstraction-contravariant.html#contramap]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html]]
+  + contramap f x [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html#contramap]]
 }
 
 
 abstract class Bifunctor {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-bifunctor.html]]
-  + {static} bimap f g x [[http://gmpl.github.io/FSharpPlus/abstraction-bifunctor.html#bimap]]
-  + first f x [[http://gmpl.github.io/FSharpPlus/abstraction-bifunctor.html#first]]
-  + second f x [[http://gmpl.github.io/FSharpPlus/abstraction-bifunctor.html#second]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-bifunctor.html]]
+  + {static} bimap f g x [[http://gusty.github.io/FSharpPlus/abstraction-bifunctor.html#bimap]]
+  + first f x [[http://gusty.github.io/FSharpPlus/abstraction-bifunctor.html#first]]
+  + second f x [[http://gusty.github.io/FSharpPlus/abstraction-bifunctor.html#second]]
 }
 
 
 abstract class Profunctor {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-profunctor.html]]
-  + {static} dimap f g x [[http://gmpl.github.io/FSharpPlus/abstraction-profunctor.html#dimap]]
-  + lmap f x [[http://gmpl.github.io/FSharpPlus/abstraction-profunctor.html#lmap]]
-  + rmap f x [[http://gmpl.github.io/FSharpPlus/abstraction-profunctor.html#rmap]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html]]
+  + {static} dimap f g x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#dimap]]
+  + lmap f x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#lmap]]
+  + rmap f x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#rmap]]
 }
 
 
 abstract class Foldable {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-foldable.html]]
-  {static} + toSeq x [[http://gmpl.github.io/FSharpPlus/abstraction-foldable.html#toSeq {Converts to a seq} ]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-foldable.html]]
+  {static} + toSeq x [[http://gusty.github.io/FSharpPlus/abstraction-foldable.html#toSeq {Converts to a seq} ]]
 }
 
 
 abstract class Traversable {
-  [[http://gmpl.github.io/FSharpPlus/abstraction-traversable.html]]
-  {static} + traverse f x [[http://gmpl.github.io/FSharpPlus/abstraction-traversable.html#traverse {Map each element of a structure to an action, evaluate them (left to right) and collect result }]]
-  + sequenceA x [[http://gmpl.github.io/FSharpPlus/abstraction-traversable.html#sequenceA {Evaluate each action in the structure (left to right) and collect the result } ]]
+  [[http://gusty.github.io/FSharpPlus/abstraction-traversable.html]]
+  {static} + traverse f x [[http://gusty.github.io/FSharpPlus/abstraction-traversable.html#traverse {Map each element of a structure to an action, evaluate them (left to right) and collect result }]]
+  + sequenceA x [[http://gusty.github.io/FSharpPlus/abstraction-traversable.html#sequenceA {Evaluate each action in the structure (left to right) and collect the result } ]]
 }
 
 
