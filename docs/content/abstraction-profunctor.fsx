@@ -31,7 +31,7 @@ Other operations
  * ``lmap f x``
 *)
 (**
-    static member LMap (x:Profunctor<'T,'V>, f:'U->'T) :'Bifunctor<'U,'V>
+    static member Contramap (x:Profunctor<'T,'V>, f:'U->'T) :'Bifunctor<'U,'V>
 *)
 (**
 

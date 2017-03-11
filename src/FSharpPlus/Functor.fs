@@ -468,24 +468,6 @@ type Duplicate =
         call (Unchecked.defaultof<Duplicate>, x, Unchecked.defaultof<'``Comonad<'Comonad<'T>>``>)
 
 
-// Contravariant class ----------------------------------------------------
-
-[<Extension;Sealed>]
-type Contramap =
-    [<Extension>]static member Contramap (g : _ -> 'R     , f : 'U -> 'T) = (<<) g f
-    [<Extension>]static member Contramap (p : Predicate<_>, f : 'U -> 'T) = Predicate(fun x -> p.Invoke(f x))
-    [<Extension>]static member Contramap (c : IComparer<_>, f : 'U -> 'T) = { new IComparer<'U> with member __.Compare(x, y) = c.Compare(f x, f y) }
-    [<Extension>]static member Contramap (c : IEqualityComparer<_>, f : 'U -> 'T) = { 
-                    new IEqualityComparer<'U> with
-                        member __.Equals(x, y)  = c.Equals(f x, f y)
-                        member __.GetHashCode x = c.GetHashCode(f x) }
-    
-    
-    static member inline Invoke (f : 'U -> 'T) (x : '``Contravariant<'T>``) : '``Contravariant<'U>`` = 
-        let inline call (_mthd : 'M, source : 'I, _output : 'R) = ((^M or ^I or ^R) : (static member Contramap: _*_ -> _) source, f)
-        call (Unchecked.defaultof<Contramap>, x, Unchecked.defaultof<'``Contravariant<'U>``>)
-
-
 // Bifunctor class --------------------------------------------------------
 
 [<Extension;Sealed>]
@@ -568,23 +550,32 @@ type Dimap =
         (^``Profunctor<'B,'C>`` : (static member Dimap: _*_*_ -> _) source, ab, cd)
 
 
-type LMap =
+// Contravariant class ----------------------------------------------------
+
+[<Extension;Sealed>]
+type Contramap =
     inherit Default1
 
-    static member inline Invoke (ab : 'A->'B) (source :'``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
-        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member LMap: _*_*_ -> _) source, ab, mthd)
-        call (Unchecked.defaultof<LMap>, source, Unchecked.defaultof<'``Profunctor<'A,'C>``>)
+    static member inline Invoke (f : 'U -> 'T) (source :'``Contravariant<'T>``) : '``Contravariant<'U>`` = 
+        let inline call (mthd : ^M, source : ^I, _output : ^R) = ((^M or ^I or ^R) : (static member Contramap: _*_*_ -> _) source, f, mthd)
+        call (Unchecked.defaultof<Contramap>, source, Unchecked.defaultof<'``Contravariant<'U>``>)
 
     static member inline InvokeOnInstance (ab : 'A->'B) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` =
-        (^``Profunctor<'B,'C>`` : (static member LMap: _*_ -> _) source, ab)
+        (^``Profunctor<'B,'C>`` : (static member Contramap: _*_ -> _) source, ab)
 
-    static member LMap (f : 'B->'C     , k:'A->'B, [<Optional>]_mthd :LMap) = k >> f     : 'A->'C
-    static member LMap (f : Func<'B,'C>, k:'A->'B, [<Optional>]_mthd :LMap) = Func<'A,'C>(k >> f.Invoke)
+    [<Extension>]static member Contramap (k: 'T -> 'C            , f: 'U -> 'T, [<Optional>]_mthd :Contramap) = f >> k     : 'U->'C
+    [<Extension>]static member Contramap (k: Func<'T, 'C>        , f: 'U -> 'T, [<Optional>]_mthd :Contramap) = Func<'U, 'C>(f >> k.Invoke)
+    [<Extension>]static member Contramap (p: Predicate<_>        , f: 'U -> 'T, [<Optional>]_mthd :Contramap) = Predicate(fun x -> p.Invoke(f x))
+    [<Extension>]static member Contramap (c: IComparer<_>        , f: 'U -> 'T, [<Optional>]_mthd :Contramap) = { new IComparer<'U> with member __.Compare(x, y) = c.Compare(f x, f y) }
+    [<Extension>]static member Contramap (c: IEqualityComparer<_>, f: 'U -> 'T, [<Optional>]_mthd :Contramap) = { 
+                    new IEqualityComparer<'U> with
+                        member __.Equals(x, y)  = c.Equals(f x, f y)
+                        member __.GetHashCode x = c.GetHashCode(f x) }
     
-type LMap with
-    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]_mthd :Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
-    static member inline LMap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]_mthd :Default1) = LMap.InvokeOnInstance f x     : '``Profunctor<'A,'C>``
-    static member inline LMap (_:^t when ^t: null and ^t: struct   , _:'A->'B,    _mthd :Default1) = ()
+type Contramap with
+    static member inline Contramap (x :'``Profunctor<'B,'C>``, f : 'A->'B, [<Optional>]_mthd :Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
+    static member inline Contramap (x :'``Contravariant<'T>``, f : 'U->'T, [<Optional>]_mthd :Default1) = Contramap.InvokeOnInstance f x: '``Contravariant<'U>``
+    static member inline Contramap (_:^t when ^t: null and ^t: struct   , _:'A->'B,    _mthd :Default1) = ()
 
 
 type RMap =
@@ -607,7 +598,7 @@ type RMap with
 
 
 type Dimap with
-    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default2) = x |> RMap.InvokeOnInstance cd |> LMap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
+    static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default2) = x |> RMap.InvokeOnInstance cd |> Contramap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
     static member inline Dimap (x :'``Profunctor<'B,'C>``, ab:'A->'B, cd:'C->'D, [<Optional>]_mthd :Default1) = Dimap.InvokeOnInstance ab cd x                            : '``Profunctor<'A,'D>``
     static member inline Dimap (_:^t when ^t: null and ^t: struct,     _:'T->'U, _:'V->'W,   _mthd :Default1) = ()
 
