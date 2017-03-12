@@ -9,6 +9,7 @@ module Option =
             | Some f, Some x -> Some (f x) 
             | _              -> None
 
+
 /// Additional operations on Error
 [<RequireQualifiedAccess>]
 module Error =
@@ -22,27 +23,6 @@ module Error =
     let throw  x = Choice2Of2 x
     let bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
     let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
-
-/// Additional operations on List
-module List =
-    let singleton x = [x]
-    let cons x y = x :: y
-    let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
-    let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
-    let take i list = Seq.take i list |> Seq.toList
-
-    let skip i list =
-        let rec listSkip lst = function 
-            | 0 -> lst 
-            | n -> listSkip (List.tail lst) (n-1)
-        listSkip list i
-
-    let drop i list = 
-        let rec loop i lst = 
-            match (lst, i) with
-            | ([] as x, _) | (x, 0) -> x
-            | x, n -> loop (n-1) (List.tail x)
-        if i > 0 then loop i list else list
 
 
 /// Additional operations on Seq
@@ -133,7 +113,30 @@ module Seq =
         while (count > 0 && e.MoveNext()) do count <- count-1
         seq {while (e.MoveNext()) do yield e.Current}
 
-    let replicate count initial = System.Linq.Enumerable.Repeat(initial, count) 
+    let replicate count initial = System.Linq.Enumerable.Repeat(initial, count)
+
+
+/// Additional operations on List
+module List =
+    let singleton x = [x]
+    let cons x y = x :: y
+    let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
+    let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
+    let take i list = Seq.take i list |> Seq.toList
+
+    let skip i list =
+        let rec listSkip lst = function 
+            | 0 -> lst 
+            | n -> listSkip (List.tail lst) (n-1)
+        listSkip list i
+
+    let drop i list = 
+        let rec loop i lst = 
+            match (lst, i) with
+            | ([] as x, _) | (x, 0) -> x
+            | x, n -> loop (n-1) (List.tail x)
+        if i > 0 then loop i list else list
+
 
 
 /// Module containing F#+ Extension Methods  
