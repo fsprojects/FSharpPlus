@@ -62,29 +62,31 @@ module Seq =
             yield! element
             notFirst := true}
 
-    let split options separators source = seq {
-        match separators |> Seq.map Seq.toList |> Seq.toList with
-        | []         -> yield source
-        | separators ->
-            let buffer = ResizeArray()
-            let candidate = separators |> List.map List.length |> List.max |> ResizeArray
-            let mutable i = 0
-            for item in source do
-                candidate.Add item
-                match separators |> List.filter (fun sep -> sep.Length > i && item = sep.[i]) with
-                | [] ->
-                    i <- 0
-                    buffer.AddRange candidate
-                    candidate.Clear()                    
-                | seps ->
-                    if seps |> List.exists (fun sep -> sep.Length = i + 1) then
+    let split separators source =
+        let split options = seq {
+            match separators |> Seq.map Seq.toList |> Seq.toList with
+            | []         -> yield source
+            | separators ->
+                let buffer = ResizeArray()
+                let candidate = separators |> List.map List.length |> List.max |> ResizeArray
+                let mutable i = 0
+                for item in source do
+                    candidate.Add item
+                    match separators |> List.filter (fun sep -> sep.Length > i && item = sep.[i]) with
+                    | [] ->
                         i <- 0
-                        if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer.ToArray() :> seq<_>
-                        buffer.Clear()
-                        candidate.Clear()                        
-                    else i <- i + 1
-            if candidate.Count > 0 then buffer.AddRange candidate
-            if options = System.StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
+                        buffer.AddRange candidate
+                        candidate.Clear()                    
+                    | seps ->
+                        if seps |> List.exists (fun sep -> sep.Length = i + 1) then
+                            i <- 0
+                            if options = StringSplitOptions.None || buffer.Count > 0 then yield buffer.ToArray() :> seq<_>
+                            buffer.Clear()
+                            candidate.Clear()                        
+                        else i <- i + 1
+                if candidate.Count > 0 then buffer.AddRange candidate
+                if options = StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
+        split StringSplitOptions.None
 
     let replace (oldValue:seq<'t>) (newValue:seq<'t>) (source:seq<'t>) :seq<'t> = seq {
         let old = oldValue |> Seq.toList
@@ -113,7 +115,7 @@ module Seq =
         while (count > 0 && e.MoveNext()) do count <- count-1
         seq {while (e.MoveNext()) do yield e.Current}
 
-    let replicate count initial = System.Linq.Enumerable.Repeat(initial, count)
+    let replicate count initial = Linq.Enumerable.Repeat(initial, count)
 
 
 /// Additional operations on List

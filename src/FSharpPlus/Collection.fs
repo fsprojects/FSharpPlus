@@ -308,9 +308,9 @@ type SortBy =
 [<Extension;Sealed>]
 type Split =
     inherit Default1
-    [<Extension>]static member        Split (x:seq<'T>      , e:seq<seq<'T>>      , [<Optional>]_impl:Split) = x |>                 Seq.split StringSplitOptions.None e
-    [<Extension>]static member        Split (x:list<'T>     , e:seq<list<'T>>     , [<Optional>]_impl:Split) = x |> List.toSeq   |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toList
-    [<Extension>]static member        Split (x:'T []        , e:seq<'T []>        , [<Optional>]_impl:Split) = x |> Array.toSeq  |> Seq.split StringSplitOptions.None e |> Seq.map Seq.toArray
+    [<Extension>]static member        Split (x:seq<'T>      , e:seq<seq<'T>>      , [<Optional>]_impl:Split) = x |>                 Seq.split e
+    [<Extension>]static member        Split (x:list<'T>     , e:seq<list<'T>>     , [<Optional>]_impl:Split) = x |> List.toSeq   |> Seq.split e |> Seq.map Seq.toList
+    [<Extension>]static member        Split (x:'T []        , e:seq<'T []>        , [<Optional>]_impl:Split) = x |> Array.toSeq  |> Seq.split e |> Seq.map Seq.toArray
     [<Extension>]static member        Split (x:string       , e:seq<string>       , [<Optional>]_impl:Split) = x.Split(Seq.toArray e, StringSplitOptions.None) :> seq<_>
     [<Extension>]static member        Split (x:StringBuilder, e:seq<StringBuilder>, [<Optional>]_impl:Split) = x.ToString().Split(e |> Seq.map (fun x -> x.ToString()) |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder :> seq<_>
  
