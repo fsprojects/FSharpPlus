@@ -17,10 +17,12 @@ Minimal complete definition
 ---------------------------
 
 
- * ``empty`` and ``append``/``(++)``
+ * ``empty``
+ * ``append x y``/``(++) x y``
+
 *)
 (**
-    static member Empty () :'Mo noid
+    static member get_Empty () :'Monoid
     static member Append (x:'Monoid, y:'Monoid) :'Monoid
 *)
 (**

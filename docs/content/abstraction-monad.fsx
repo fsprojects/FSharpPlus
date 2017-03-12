@@ -17,7 +17,8 @@ Minimal comple te definition
 ---------------------------
 
 
- * ``return``/``result`` and ``(>>=)``
+ * ``return x``/``result x``
+ * ``(>>=) x f``
 *)
 (**
     static member Return (x:'T) : 'Applicative<'T>

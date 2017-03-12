@@ -17,7 +17,10 @@ Minimal complete definition
 ---------------------------
 
 
- * ``return``/``result`` and ``(<*>)``
+ * ``return x``/``result x`` 
+
+ * ``(<*>) f x``
+
 *)
 (**
     static member Return (x:'T) : 'Applicative<'T>
@@ -26,18 +29,6 @@ Minimal complete definition
 (**
 
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
-
-
-Other operations
-----------------
-
- * ``concat``
-*)
-(**
-    static member Concat (x:seq<'Monoid>) :'Monoid
-*)
-(**
-
 
 
 Rules

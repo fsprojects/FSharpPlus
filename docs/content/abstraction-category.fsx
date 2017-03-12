@@ -19,7 +19,7 @@ Minimal complete definition
 
  * ``catId``
 
- * ``catComp``
+ * ``catComp f g`` / ``(<<<)`` f g
 
 *)
 (**

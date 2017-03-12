@@ -4,8 +4,8 @@
 #I "../../bin"
 
 (**
-Monoid
-======
+Alternative
+===========
 
 Applicative Functors which also have a monoid structure.
 
@@ -16,13 +16,17 @@ ___
 Minimal complete definition
 ---------------------------
 
- * ``return``/``result``, ``(<*>)``, ``mzero`` and ``mplus``/``(<|>)``
+ * ``return x``/``result x`` 
+ * ``(<*>) f x``
+ * ``mzero``
+ * ``mplus x y``/``(<|>) x y``
+
 *)
 (**
-    static member Return (x:'T) : 'Applicative<'T>
-    static member (<*>) (f:'T->'U, x:Applicative<'T>) : Applicative<'U>
-    static member Empty () :'Monoid
-    static member Append (x:'Monoid, y:'Monoid) :'Monoid
+    static member Return (x:'T) : 'Alternative<'T>
+    static member (<*>) (f:'T->'U, x:Alternative<'T>) : Alternative<'U>
+    static member get_MZero () :'Alternative
+    static member MPlus (x:'Alternative, y:'Alternative) :'Alternative
 *)
 (**
 

@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 	ProjectSection(SolutionItems) = preProject
 		docs\content\abstraction-alternative.fsx = docs\content\abstraction-alternative.fsx
 		docs\content\abstraction-applicative.fsx = docs\content\abstraction-applicative.fsx
+		docs\content\abstraction-arrow.fsx = docs\content\abstraction-arrow.fsx
 		docs\content\abstraction-bifunctor.fsx = docs\content\abstraction-bifunctor.fsx
 		docs\content\abstraction-category.fsx = docs\content\abstraction-category.fsx
 		docs\content\abstraction-comonad.fsx = docs\content\abstraction-comonad.fsx

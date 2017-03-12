@@ -108,7 +108,7 @@ module Operators =
 
     // Category ---------------------------------------------------------------
 
-    /// the identity morphism.
+    /// The identity morphism.
     let inline getCatId() = Id.Invoke() : '``Category<'T,'T>``
 
     /// Right-to-left morphism composition.

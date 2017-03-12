@@ -1,8 +1,18 @@
 @startuml
 
-abstract class Semigroup {
-  [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html]]
-  + append x y [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html#append {Appends two semigroups} ]]
+together {
+	abstract class Semigroup {
+	  [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html]]
+	  + append x y [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html#append {Appends two semigroups} ]]
+	}
+
+	abstract class Comonad {
+	  [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html]]
+	  + extract x [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html#extract]]
+	  + (=>>) s g | extend s g [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html#extend]]
+	  ==
+	  + duplicate x
+	}
 }
 
 abstract class Monoid {
@@ -13,12 +23,19 @@ abstract class Monoid {
   + concat x [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#concat {Flatten a sequence of monoids} ]]
 }
 
+
 abstract class Functor {
   [[http://gusty.github.io/FSharpPlus/abstraction-functor.html]]
   + map f x [[http://gusty.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]
   ==
   + unzip x
 }
+
+abstract class Contravariant {
+  [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html]]
+  + contramap f x [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html#contramap]]
+}
+
 
 abstract class Applicative {
   [[http://gusty.github.io/FSharpPlus/abstraction-applicative.html]]
@@ -45,19 +62,6 @@ abstract class Monad {
   + join x [[http://gusty.github.io/FSharpPlus/abstraction-functor.html#join {Flattens two layers of monadic information into one} ]]
 }
 
-abstract class Comonad {
-  [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html]]
-  + extract x [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html#extract]]
-  + (=>>) s g | extend s g [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html#extend]]
-  ==
-  + duplicate x
-}
-
-abstract class Contravariant {
-  [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html]]
-  + contramap f x [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html#contramap]]
-}
-
 
 abstract class Bifunctor {
   [[http://gusty.github.io/FSharpPlus/abstraction-bifunctor.html]]
@@ -66,13 +70,6 @@ abstract class Bifunctor {
   + second f x [[http://gusty.github.io/FSharpPlus/abstraction-bifunctor.html#second]]
 }
 
-
-abstract class Profunctor {
-  [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html]]
-  + {static} dimap f g x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#dimap]]
-  + lmap f x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#lmap]]
-  + rmap f x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#rmap]]
-}
 
 
 abstract class Foldable {
@@ -87,8 +84,42 @@ abstract class Traversable {
   + sequenceA x [[http://gusty.github.io/FSharpPlus/abstraction-traversable.html#sequenceA {Evaluate each action in the structure (left to right) and collect the result } ]]
 }
 
+together {
+	abstract class Profunctor {
+	  [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html]]
+	  + {static} dimap f g x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#dimap]]
+	  + lmap f x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#lmap]]
+	  + rmap f x [[http://gusty.github.io/FSharpPlus/abstraction-profunctor.html#rmap]]
+	}
+
+	abstract class Category {
+	  [[http://gusty.github.io/FSharpPlus/abstraction-category.html]]
+	  + catId [[http://gusty.github.io/FSharpPlus/abstraction-category.html#catId {The identity morphism. }]]
+	  + (<<<) f g [[http://gusty.github.io/FSharpPlus/abstraction-category.html#catComp {Right-to-left morphism composition. } ]]
+	  ==
+	  + (>>>) f g [[http://gusty.github.io/FSharpPlus/abstraction-category.html#catComp {Left-to-right morphism composition. } ]]
+	}
+}
+
+abstract class Contravariant {
+  [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html]]
+  + contramap f x [[http://gusty.github.io/FSharpPlus/abstraction-contravariant.html#contramap]]
+}
+
+abstract class Arrow {
+  [[http://gusty.github.io/FSharpPlus/abstraction-arrow.html]]
+  + arr f [[http://gusty.github.io/FSharpPlus/abstraction-arrow.html#arr {Lift a function to an arrow. }]]
+  + arrFirst f g [[http://gusty.github.io/FSharpPlus/abstraction-arrow.html#arrFirst {Send the 1st component of the input through the argument arrow, and copy the rest unchanged to the output. } ]]
+  ==
+  + arrSecond f g [[http://gusty.github.io/FSharpPlus/abstraction-arrow.html#arrSecond {Send the 2nd component of the input through the argument arrow, and copy the rest unchanged to the output. } ]]
+  + (***) f g [[http://gusty.github.io/FSharpPlus/abstraction-arrow.html#arrCombine {Split the input between the two argument arrows and combine their output. } ]]
+  + (&&&) f g [[http://gusty.github.io/FSharpPlus/abstraction-arrow.html#fanout {Send the input to both argument arrows and combine their output. } ]]
+}
+
+
 
 Semigroup  --|> Monoid 
+Functor  --|> Bifunctor
 Functor  --|> Applicative
 Applicative  --|> Monad
 Applicative  --|> Alternative
@@ -99,8 +130,9 @@ Functor --|> Traversable
 Foldable --|> Traversable
 Applicative ..|> Traversable
 Monoid ..|> Alternative
-Functor  --|> Bifunctor
-Functor  --|> Profunctor
-Contravariant  --|> Profunctor
+Functor - Contravariant
+(Functor, Contravariant) --|> Profunctor
+Profunctor - Category
+(Profunctor, Category) --|>  Arrow
 
 @enduml
