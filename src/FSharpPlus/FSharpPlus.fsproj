@@ -90,6 +90,7 @@
     <None Include="SamplesFromFsControl\Converter.fsx" />
     <None Include="SamplesFromFsControl\Numerics.fsx" />
     <None Include="Samples\Collections.fsx" />
+    <None Include="Samples\Split-Join.fsx" />
     <None Include="Samples\Conversions.fsx" />
     <None Include="Samples\Applicatives.fsx" />
     <None Include="Samples\Monads.fsx" />
