@@ -314,37 +314,6 @@ namespace FsControl.BaseLib
                 throw new ArgumentNullException(nameof(value));
             return ToString(value, startIndex, value.Length - startIndex);
         }
-
-        /*==================================ToBoolean===================================
-        **Action:  Convert an array of bytes to a boolean value.  We treat this array
-        **         as if the first 4 bytes were an Int4 an operate on this value.
-        **Returns: True if the Int4 value of the first 4 bytes is non-zero.
-        **Arguments: value -- The byte array
-        **           startIndex -- The position within the array.
-        **Exceptions: See ToInt4.
-        ==============================================================================*/
-        /// Converts an array of bytes into a boolean.
-        public static bool ToBoolean(byte[] value, int startIndex)
-        {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
-            if (startIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_NeedNonNegNum");
-            if (startIndex > value.Length - 1)
-                throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
-
-            return value[startIndex] != 0;
-        }
-
-        public static unsafe long DoubleToInt64Bits(double value)
-        {
-            return *((long*)&value);
-        }
-
-        public static unsafe double Int64BitsToDouble(long value)
-        {
-            return *((double*)&value);
-        }
     }
 
 
