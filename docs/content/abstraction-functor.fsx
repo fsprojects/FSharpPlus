@@ -96,6 +96,7 @@ From F#+
  -  ``ParallelArray<'T>``
  -  ``Const<'C,'T>``
  -  ``Kleisli<'T, 'Monad<'U>>``
+ -  ``Compose<'F<'G<'T>>>``
  
 Restricted:
 

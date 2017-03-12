@@ -91,6 +91,7 @@ From F#+
  -  ``ZipList<'T>``
  -  ``ParallelArray<'T>``
  -  ``Const<'C,'T>``
+ -  ``Compose<'F<'G<'T>>>``
  
 Restricted:
 

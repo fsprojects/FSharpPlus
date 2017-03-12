@@ -72,3 +72,24 @@ type Last<'t> = Last of Option<'t> with
     static member get_Empty() = Last None                                           : Last<'T>
     static member Append (x, y) = match x, y with l, Last None -> l | _, r -> r     : Last<'T>
     static member run (Last a) = a                                                  : 'T option
+
+
+/// Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
+type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
+
+    // Functor
+    static member inline Map  (Compose x, f:'T->'U) = Compose (map (map f) x)
+
+    // Applicative
+    static member inline Return (x:'T) = Compose (result (result x)) : Compose<'``F<'G<'T>``>
+    static member inline (<*>)  (Compose (f: '``F<'G<'T->'U>>``), Compose (x: '``F<'G<'T>>``)) = Compose ((<*>) <!> f <*> x: '``F<'G<'U>>``)
+
+    // Alternative
+    static member inline get_MZero()                  = Compose (getMZero()) : Compose<'``F<'G<'T>``>
+    static member inline MPlus (Compose x, Compose y) = Compose (x <|> y)    : Compose<'``F<'G<'T>``>
+
+
+/// Basic operations on Compose
+[<RequireQualifiedAccess>]
+module Compose =
+    let run (Compose t) = t
