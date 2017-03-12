@@ -55,10 +55,10 @@ module Seq =
             yield element
             notFirst := true}
 
-    let intercalate sep list = seq {
+    let intercalate separator source = seq {
         let notFirst = ref false
-        for element in list do 
-            if !notFirst then yield! sep
+        for element in source do 
+            if !notFirst then yield! separator
             yield! element
             notFirst := true}
 
@@ -138,6 +138,21 @@ module List =
             | ([] as x, _) | (x, 0) -> x
             | x, n -> loop (n-1) (List.tail x)
         if i > 0 then loop i list else list
+
+    let intercalate (separator:list<_>) (source:seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
+    let split (separators:seq<list<_>>) (source:list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
+
+
+/// Additional operations on Array
+module Array =
+    let intercalate (separator:_ []) (source:seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
+    let split (separators:seq<_ []>) (source:_ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
+
+
+/// Additional operations on String
+module String =
+    let intercalate (separator:string) (source:seq<string>) = String.Join(separator, source)
+    let split (separators:seq<string>) (source:string) = source.Split(Seq.toArray separators, StringSplitOptions.None) :> seq<_>
 
 
 

@@ -355,8 +355,8 @@ type Intercalate =
     static member inline       Intercalate (x:'``Foldable<'Monoid>``, e:'Monoid, [<Optional>]_impl:Default2) = let f t x = match (t, x) with (true, _) , x -> (false, x) | (_, acc ) , x -> (false, Append.Invoke (Append.Invoke acc e) x) in Fold.Invoke f (true, Empty.Invoke()) x |> snd
     static member inline       Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
     static member inline       Intercalate (_:seq<'``Foldable<'T>``>, _ : ^t when ^t : null and ^t : struct, [<Optional>]_impl:Default1) = id
-    [<Extension>]static member Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]_impl:Intercalate) = x |> Seq.intercalate e |> Seq.toList
-    [<Extension>]static member Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]_impl:Intercalate) = x |> Seq.intercalate e |> Seq.toArray
+    [<Extension>]static member Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]_impl:Intercalate) = List.intercalate e x
+    [<Extension>]static member Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]_impl:Intercalate) = Array.intercalate e x
     [<Extension>]static member Intercalate (x:seq<string>           , e:string           , [<Optional>]_impl:Intercalate) = String.Join(e, x)
     [<Extension>]static member Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]_impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
  
