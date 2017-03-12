@@ -52,10 +52,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '684', 684)" onmouseover="showTip(event, '684', 684)">
+          <code onmouseout="hideTip(event, '691', 691)" onmouseover="showTip(event, '691', 691)">
             ListT(&#39;monad&lt;list&lt;&#39;t&gt;&gt;)
           </code>
-          <div class="tip" id="684">
+          <div class="tip" id="691">
             <strong>Signature:</strong> &#39;monad&lt;list&lt;&#39;t&gt;&gt;<br />
                       </div>
         </td>
@@ -78,12 +78,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '685', 685)" onmouseover="showTip(event, '685', 685)">
+          <code onmouseout="hideTip(event, '692', 692)" onmouseover="showTip(event, '692', 692)">
             ( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="685">
+          <div class="tip" id="692">
             <strong>Signature:</strong> (f:ListT&lt;^Monad&lt;seq&lt;(&#39;T -&gt; &#39;U)&gt;&gt; * x:ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;) -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9550, '?9551, '?9552, ^Monad<seq<'T>, ^Monad<seq<'U>          </div>
+                          <strong>Type parameters:</strong> ^?9596, '?9597, '?9598, ^Monad<seq<'T>, ^Monad<seq<'U>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L53-53" class="github-link">
@@ -97,12 +97,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '686', 686)" onmouseover="showTip(event, '686', 686)">
+          <code onmouseout="hideTip(event, '693', 693)" onmouseover="showTip(event, '693', 693)">
             Bind(x, f)
           </code>
-          <div class="tip" id="686">
-            <strong>Signature:</strong> (x:ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;)) -&gt; ListT&lt;^?9562&gt;<br />
-                          <strong>Type parameters:</strong> ^?9558, '?9559, ^Monad<seq<'U>, 'T, ^?9562, '?9563          </div>
+          <div class="tip" id="693">
+            <strong>Signature:</strong> (x:ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;)) -&gt; ListT&lt;^?9608&gt;<br />
+                          <strong>Type parameters:</strong> ^?9604, '?9605, ^Monad<seq<'U>, 'T, ^?9608, '?9609          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L54-54" class="github-link">
@@ -115,10 +115,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '687', 687)" onmouseover="showTip(event, '687', 687)">
+          <code onmouseout="hideTip(event, '694', 694)" onmouseover="showTip(event, '694', 694)">
             CallCC(f)
           </code>
-          <div class="tip" id="687">
+          <div class="tip" id="694">
             <strong>Signature:</strong> (f:((&#39;T -&gt; ListT&lt;&#39;MonadCont&lt;&#39;R,list&lt;&#39;U&gt;&gt;&gt;) -&gt; ListT&lt;^MonadCont&lt;&#39;R, list&lt;&#39;T&gt;&gt;&gt;)) -&gt; ListT&lt;^MonadCont&lt;&#39;R, list&lt;&#39;T&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'MonadCont<'R,list<'U>>, ^MonadCont<'R, list<'T>>          </div>
         </td>
@@ -133,10 +133,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '688', 688)" onmouseover="showTip(event, '688', 688)">
+          <code onmouseout="hideTip(event, '695', 695)" onmouseover="showTip(event, '695', 695)">
             Catch(m, h)
           </code>
-          <div class="tip" id="688">
+          <div class="tip" id="695">
             <strong>Signature:</strong> (m:ListT&lt;^MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h:(&#39;E1 -&gt; ListT&lt;^MonadError&lt;&#39;E2,&#39;T&gt;&gt;)) -&gt; ListT&lt;^MonadError&lt;&#39;E2,&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadError<'E2,'T>, 'E1          </div>
         </td>
@@ -151,12 +151,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '689', 689)" onmouseover="showTip(event, '689', 689)">
+          <code onmouseout="hideTip(event, '696', 696)" onmouseover="showTip(event, '696', 696)">
             get_Ask()
           </code>
-          <div class="tip" id="689">
+          <div class="tip" id="696">
             <strong>Signature:</strong> unit -&gt; ^ListT&lt;&#39;MonadReader&lt;&#39;R,  list&lt;&#39;R&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9611          </div>
+                          <strong>Type parameters:</strong> ^?9657          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L71-71" class="github-link">
@@ -169,12 +169,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '690', 690)" onmouseover="showTip(event, '690', 690)">
+          <code onmouseout="hideTip(event, '697', 697)" onmouseover="showTip(event, '697', 697)">
             get_Get()
           </code>
-          <div class="tip" id="690">
+          <div class="tip" id="697">
             <strong>Signature:</strong> unit -&gt; ^ListT&lt;&#39;MonadState&lt;&#39;S,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9602          </div>
+                          <strong>Type parameters:</strong> ^?9648          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L68-68" class="github-link">
@@ -187,12 +187,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '691', 691)" onmouseover="showTip(event, '691', 691)">
+          <code onmouseout="hideTip(event, '698', 698)" onmouseover="showTip(event, '698', 698)">
             get_MZero()
           </code>
-          <div class="tip" id="691">
+          <div class="tip" id="698">
             <strong>Signature:</strong> unit -&gt; ListT&lt;^MonadPlus&lt;list&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9567          </div>
+                          <strong>Type parameters:</strong> '?9613          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L56-56" class="github-link">
@@ -205,12 +205,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '692', 692)" onmouseover="showTip(event, '692', 692)">
+          <code onmouseout="hideTip(event, '699', 699)" onmouseover="showTip(event, '699', 699)">
             Lift(x)
           </code>
-          <div class="tip" id="692">
+          <div class="tip" id="699">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; ListT&lt;^Monad&lt;list&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<list<'T>>, '?9578          </div>
+                          <strong>Type parameters:</strong> ^Monad<list<'T>>, '?9624          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L59-59" class="github-link">
@@ -223,12 +223,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '693', 693)" onmouseover="showTip(event, '693', 693)">
+          <code onmouseout="hideTip(event, '700', 700)" onmouseover="showTip(event, '700', 700)">
             LiftAsync(x)
           </code>
-          <div class="tip" id="693">
+          <div class="tip" id="700">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ^ListT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^ListT<'MonadAsync<'T>>, ^?9583          </div>
+                          <strong>Type parameters:</strong> ^ListT<'MonadAsync<'T>>, ^?9629          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L61-61" class="github-link">
@@ -241,12 +241,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '694', 694)" onmouseover="showTip(event, '694', 694)">
+          <code onmouseout="hideTip(event, '701', 701)" onmouseover="showTip(event, '701', 701)">
             Local(arg1, f)
           </code>
-          <div class="tip" id="694">
-            <strong>Signature:</strong> (ListT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ListT&lt;^?9617&gt;<br />
-                          <strong>Type parameters:</strong> 'R1, 'R2, ^?9617          </div>
+          <div class="tip" id="701">
+            <strong>Signature:</strong> (ListT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ListT&lt;^?9663&gt;<br />
+                          <strong>Type parameters:</strong> 'R1, 'R2, ^?9663          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L72-72" class="github-link">
@@ -259,10 +259,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '695', 695)" onmouseover="showTip(event, '695', 695)">
+          <code onmouseout="hideTip(event, '702', 702)" onmouseover="showTip(event, '702', 702)">
             Map(x, f)
           </code>
-          <div class="tip" id="695">
+          <div class="tip" id="702">
             <strong>Signature:</strong> (x:ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<seq<'U>, 'T, 'U          </div>
         </td>
@@ -277,12 +277,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '696', 696)" onmouseover="showTip(event, '696', 696)">
+          <code onmouseout="hideTip(event, '703', 703)" onmouseover="showTip(event, '703', 703)">
             MPlus(arg1, arg2)
           </code>
-          <div class="tip" id="696">
-            <strong>Signature:</strong> (ListT&lt;^?9570&gt; * ListT&lt;^?9573&gt;) -&gt; ListT&lt;^MonadPlus&lt;list&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadPlus<list<'T>, '?9572, ^?9573          </div>
+          <div class="tip" id="703">
+            <strong>Signature:</strong> (ListT&lt;^?9616&gt; * ListT&lt;^?9619&gt;) -&gt; ListT&lt;^MonadPlus&lt;list&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadPlus<list<'T>, '?9618, ^?9619          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L57-57" class="github-link">
@@ -295,12 +295,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '697', 697)" onmouseover="showTip(event, '697', 697)">
+          <code onmouseout="hideTip(event, '704', 704)" onmouseover="showTip(event, '704', 704)">
             Put(x)
           </code>
-          <div class="tip" id="697">
+          <div class="tip" id="704">
             <strong>Signature:</strong> x:&#39;T -&gt; ^ListT&lt;&#39;MonadState&lt;unit,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^ListT<'MonadState<unit,'S>>, ^?9607          </div>
+                          <strong>Type parameters:</strong> ^ListT<'MonadState<unit,'S>>, ^?9653          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L69-69" class="github-link">
@@ -313,10 +313,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '698', 698)" onmouseover="showTip(event, '698', 698)">
+          <code onmouseout="hideTip(event, '705', 705)" onmouseover="showTip(event, '705', 705)">
             Return(x)
           </code>
-          <div class="tip" id="698">
+          <div class="tip" id="705">
             <strong>Signature:</strong> x:&#39;T -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<seq<'T>          </div>
         </td>
@@ -331,12 +331,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '699', 699)" onmouseover="showTip(event, '699', 699)">
+          <code onmouseout="hideTip(event, '706', 706)" onmouseover="showTip(event, '706', 706)">
             Throw(x)
           </code>
-          <div class="tip" id="699">
-            <strong>Signature:</strong> x:&#39;E -&gt; ^?9587<br />
-                          <strong>Type parameters:</strong> ^?9587, ^?9588          </div>
+          <div class="tip" id="706">
+            <strong>Signature:</strong> x:&#39;E -&gt; ^?9633<br />
+                          <strong>Type parameters:</strong> ^?9633, ^?9634          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L63-63" class="github-link">
