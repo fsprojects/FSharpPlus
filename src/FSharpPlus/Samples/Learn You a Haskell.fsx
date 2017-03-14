@@ -49,15 +49,15 @@ type Pair with
 let res19 = Pair (10, "hello")
 let res20 = map ((*) 100) (Pair (2, 3))                               // Pair (200, 300)
 
-let res21 = append [1;4] [3;6]
-let res22 = append "Hello " "World"
-let res23 = append "pang"  (getEmpty())                              // "pang"
-let res24 = concat [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
+let res21 = mappend [1;4] [3;6]
+let res22 = mappend "Hello " "World"
+let res23 = mappend "pang"  (getMEmpty())                             // "pang"
+let res24 = mconcat [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
 
-let res25 = append (Any true) (Any false)                            // Any true
-let res26 = [false; false; false; true] |> List.map Any |> concat
-let res27 = append (getEmpty()) (All false)                          // All false
-let res28 = append (Some "some") None                                // Some "some"
+let res25 = mappend (Any true) (Any false)                            // Any true
+let res26 = [false; false; false; true] |> List.map Any |> mconcat
+let res27 = mappend (getMEmpty()) (All false)                         // All false
+let res28 = mappend (Some "some") None                                // Some "some"
 
 let res29 = foldBack (*) [1;2;3] 1
 let res30 = fold     (+) 2 (Some 9)
@@ -70,23 +70,23 @@ let res31 = foldBack (||) (Some true) false                           // true
 
 
 type Tree<'a> =
-    | Empty
+    | MEmpty
     | Node of ('a * Tree<'a> * Tree<'a>)
     
 type Tree with
     static member treeFold f tree z =
         match tree with
-        | Empty -> z
+        | MEmpty -> z
         | Node (x, left, right) -> Tree<_>.treeFold f right (Tree<_>.treeFold f left (f x z))
     static member inline FoldBack (x:Tree<'a>, f, z) = Tree<'a>.treeFold f x z
-    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, Append.Invoke << f, getEmpty())
+    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, MAppend.Invoke << f, getMEmpty())
 
 let testTree =
-    let one = Node (1, Empty, Empty)
-    let six = Node (6, Empty, Empty)
+    let one = Node (1, MEmpty, MEmpty)
+    let six = Node (6, MEmpty, MEmpty)
     let three = Node (3, one, six)
-    let eight = Node (8, Empty, Empty)
-    let ten = Node (10, Empty, Empty)
+    let eight = Node (8, MEmpty, MEmpty)
+    let ten = Node (10, MEmpty, MEmpty)
     let nine = Node (9, eight, ten)
     let five = Node (5, three, nine)
     five
@@ -612,24 +612,24 @@ type Tree with
     static member inline Plus   (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
     static member inline Minus  (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
     static member inline Divide (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
-    static member inline Length (x:List<Tree<'a>>, _:Tree<'a>) = Empty : Tree<'a>
+    static member inline Length (x:List<Tree<'a>>, _:Tree<'a>) = MEmpty : Tree<'a>
 
 (* defined above
 let testTree =
-    let one = Node (1, Empty, Empty)
-    let six = Node (6, Empty, Empty)
+    let one = Node (1, MEmpty, MEmpty)
+    let six = Node (6, MEmpty, MEmpty)
     let three = Node (3, one, six)
-    let eight = Node (8, Empty, Empty)
-    let ten = Node (10, Empty, Empty)
+    let eight = Node (8, MEmpty, MEmpty)
+    let ten = Node (10, MEmpty, MEmpty)
     let nine = Node (9, eight, ten)
     let five = Node (5, three, nine)
     five
  *)
     
-let res127 : Tree<int> = plus (testTree) (Empty)
-let res128 : Tree<int> = minus (testTree) (Empty)
-let res129 : Tree<int> = divide (testTree) (Empty)
-let res130 : Tree<int> = length [testTree; Empty]
+let res127 : Tree<int> = plus (testTree) (MEmpty)
+let res128 : Tree<int> = minus (testTree) (MEmpty)
+let res129 : Tree<int> = divide (testTree) (MEmpty)
+let res130 : Tree<int> = length [testTree; MEmpty]
 let res132 : Tree<int> = mean [testTree; testTree]
 
 

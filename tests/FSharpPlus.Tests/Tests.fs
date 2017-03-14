@@ -18,15 +18,15 @@ type WrappedListA<'s> = WrappedListA of 's list with
 
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return   (x) = WrappedListB [x]
-    static member Append  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
-    static member Empty   = WrappedListB List.empty
+    static member MAppend  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
+    static member MEmpty   = WrappedListB List.empty
     static member ToSeq    (WrappedListB lst)     = List.toSeq lst
     static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
 
 type WrappedListC<'s> = WrappedListC of 's list with
-    static member Append  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
-    static member Empty   = WrappedListC List.empty
-    static member Concat  (lst: seq<WrappedListC<_>>)  = Seq.head lst
+    static member MAppend  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
+    static member MEmpty   = WrappedListC List.empty
+    static member MConcat  (lst: seq<WrappedListC<_>>)  = Seq.head lst
 
 type WrappedListD<'s> = WrappedListD of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator()
@@ -53,14 +53,14 @@ open System.Collections.Generic
 type Monoid() =
     [<Test>]
     member x.mconcat_Default_Custom() = 
-        let (WrappedListB x) = concat [WrappedListB [10] ;WrappedListB [15]]
-        let (WrappedListC y) = concat [WrappedListC [10] ;WrappedListC [15]]
+        let (WrappedListB x) = mconcat [WrappedListB [10] ;WrappedListB [15]]
+        let (WrappedListC y) = mconcat [WrappedListC [10] ;WrappedListC [15]]
         Assert.AreEqual (x, [10;15])
         Assert.AreEqual (y, [10])
 
         let x = [ ("a", 1); ("b", 2); ("a", 3) ]
-        let y = x |> map (Seq.singleton >> (ofSeq : seq<_*_> -> Dictionary<_,_>) >> map List.singleton) |> concat
-        let z = x |> map (Seq.singleton >>             dict                      >> map List.singleton) |> concat
+        let y = x |> map (Seq.singleton >> (ofSeq : seq<_*_> -> Dictionary<_,_>) >> map List.singleton) |> mconcat
+        let z = x |> map (Seq.singleton >>             dict                      >> map List.singleton) |> mconcat
         Assert.IsInstanceOf<Option< Dictionary<string,int list>>> (Some y)
         Assert.IsInstanceOf<Option<IDictionary<string,int list>>> (Some z)
 
@@ -410,8 +410,8 @@ type Numerics() =
 
 
 type Sum<'a> = Sum of 'a with
-    static member inline get_Empty() = Sum 0G
-    static member inline Append (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
+    static member inline get_MEmpty() = Sum 0G
+    static member inline MAppend (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
 
 
 [<TestFixture>]

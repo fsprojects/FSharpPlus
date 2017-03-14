@@ -12,4 +12,4 @@ open ApplicativeMath
 
 let arr1_plus_arr2' = parray arr1 |+| parray arr2
 let arrCombined     = 10 *| parray arr1 |+| parray arr2 |- 5
-let asMonoid        = Infinite "Hello " </append/> parray [|"City"; "World"; "Sun"|]
+let asMonoid        = Infinite "Hello " </mappend/> parray [|"City"; "World"; "Sun"|]

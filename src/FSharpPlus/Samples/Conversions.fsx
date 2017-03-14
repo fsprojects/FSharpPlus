@@ -4,7 +4,7 @@
 open FSharpPlus
 
 let r23asBytes = parse "12" + 11 |> toBytes |> toList
-let ipAddress:System.Net.IPAddress = [192;168;0;1] |>> string |> intersperse "." |> concat |> parse
+let ipAddress:System.Net.IPAddress = [192;168;0;1] |>> string |> intersperse "." |> mconcat |> parse
 
 let ipAndPort : (System.Net.IPAddress * int) option = 
     match "192.168.0.1:8001".Split ':' with 

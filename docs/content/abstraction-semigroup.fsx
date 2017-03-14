@@ -17,10 +17,10 @@ Minimal complete definition
 ---------------------------
 
 
- * ``append``/``(++)``
+ * ``mappend``/``(++)``
 *)
 (**
-    static member Append (x:'Semigroup, y:'Semigroup) :'Semigroup
+    static member MAppend (x:'Semigroup, y:'Semigroup) :'Semigroup
 *)
 (**
 
@@ -40,7 +40,7 @@ Rules
 Related Abstractions
 --------------------
 
- - [Monoid](abstraction-monoid.html): A monoid is a Semigroup with an additional ``Empty`` operation
+ - [Monoid](abstraction-monoid.html): A monoid is a Semigroup with an additional ``mempty`` operation
  
  - MonadPlus: Monads that are also Monoids
 

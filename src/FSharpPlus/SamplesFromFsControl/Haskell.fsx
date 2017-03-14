@@ -265,13 +265,13 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 
 // Monoids
 
-let inline mempty() = FSharpPlus.Operators.getEmpty ()
-let inline mappend (x:'a) (y:'a): 'a = FSharpPlus.Operators.append x y
-let inline mconcat (x:seq<'a>) : 'a = FSharpPlus.Operators.concat x
+let inline mempty() = FSharpPlus.Operators.getMEmpty ()
+let inline mappend (x:'a) (y:'a): 'a = FSharpPlus.Operators.mappend x y
+let inline mconcat (x:seq<'a>) : 'a = FSharpPlus.Operators.mconcat x
 
 type Ordering = LT|EQ|GT with
-    static member        Empty = EQ
-    static member        Append (x:Ordering, y) = 
+    static member        MEmpty = EQ
+    static member        MAppend (x:Ordering, y) = 
         match x, y with
         | LT, _ -> LT
         | EQ, a -> a
@@ -284,28 +284,28 @@ let inline compare' x y =
     | _            -> EQ
 
 type Sum<'a> = Sum of 'a with
-    static member inline get_Empty() = Sum 0G
-    static member inline Append (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
+    static member inline get_MEmpty() = Sum 0G
+    static member inline MAppend (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
 
 type Product<'a> = Product of 'a with
-    static member inline get_Empty() = Product 1G
-    static member inline Append (Product (x:'n), Product(y:'n)) = Product (x * y)
+    static member inline get_MEmpty() = Product 1G
+    static member inline MAppend (Product (x:'n), Product(y:'n)) = Product (x * y)
 
 type Dual<'T> = Dual of 'T with
-    static member inline get_Empty() = Dual (mempty())
-    static member inline Append (Dual x, Dual y) = Dual (mappend y x)
+    static member inline get_MEmpty() = Dual (mempty())
+    static member inline MAppend (Dual x, Dual y) = Dual (mappend y x)
 
 type Endo<'T> = Endo of ('T -> 'T) with
-    static member get_Empty() = Endo id
-    static member Append (Endo f, Endo g) = Endo (f << g)
+    static member get_MEmpty() = Endo id
+    static member MAppend (Endo f, Endo g) = Endo (f << g)
 
 type All = All of bool with
-    static member Empty = All true
-    static member Append (All x, All y) = All (x && y)
+    static member MEmpty = All true
+    static member MAppend (All x, All y) = All (x && y)
 
 type Any = Any of bool with
-    static member Empty = Any false
-    static member Append (Any x, Any y ) = Any (x || y)
+    static member MEmpty = Any false
+    static member MAppend (Any x, Any y ) = Any (x || y)
 
 
 // Test Monoids

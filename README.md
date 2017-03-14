@@ -15,7 +15,7 @@ F#+ types contains methods which are added as extensions and at the same time ar
 
 It also provides [Generic Functions and Operators](http://gusty.github.io/FSharpPlus/reference/fsharpplus-operators.html) which may be further extended to support other types.
 
-As an example, there is a <code>NonEmptyList</code> type which can act as a Functor (instance for Map), an Applicative (instances for Return and Apply) and a Semigroup (Append). So code like ``map f lst`` or ``lst1 ++ lst2`` will work on primitive types (list, seq) but also on ``NonEmptyList``.
+As an example, there is a <code>NonEmptyList</code> type which can act as a Functor (instance for Map), an Applicative (instances for Return and Apply) and a Semigroup (MAppend). So code like ``map f lst`` or ``lst1 ++ lst2`` will work on primitive types (list, seq) but also on ``NonEmptyList``.
 
 In the [Sample folder](https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Samples) you can find scripts showing how to use F#+ in your code.
 

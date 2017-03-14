@@ -82,12 +82,12 @@ module Operators =
 
     // Monoid -----------------------------------------------------------------
 
-    let inline getEmpty() :'Monoid = Empty.Invoke()
-    let inline empty< ^Monoid when (Empty or ^Monoid) : (static member Empty : ^Monoid * Empty -> ^Monoid) > : ^Monoid = Empty.Invoke()
+    let inline getMEmpty() :'Monoid = MEmpty.Invoke()
+    let inline mempty< ^Monoid when (MEmpty or ^Monoid) : (static member MEmpty : ^Monoid * MEmpty -> ^Monoid) > : ^Monoid = MEmpty.Invoke()
 
-    let inline (++)   (x:'Monoid) (y:'Monoid): 'Monoid = Append.Invoke x y
-    let inline append (x:'Monoid) (y:'Monoid): 'Monoid = Append.Invoke x y
-    let inline concat (x:seq<'Monoid>)       : 'Monoid = Concat.Invoke x
+    let inline (++)    (x:'Monoid) (y:'Monoid): 'Monoid = MAppend.Invoke x y
+    let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid = MAppend.Invoke x y
+    let inline mconcat (x:seq<'Monoid>)       : 'Monoid = MConcat.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------

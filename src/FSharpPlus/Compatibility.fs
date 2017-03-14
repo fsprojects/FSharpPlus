@@ -97,13 +97,13 @@ module Compatibility =
 
         // Monoids
 
-        let inline mempty() = getEmpty()
-        let inline mappend a b = append a b
-        let inline mconcat s = concat s
+        let inline mempty() = getMEmpty()
+        let inline mappend a b = mappend a b
+        let inline mconcat s = mconcat s
 
         type Ordering = LT|EQ|GT with
-            static member        Empty = EQ
-            static member        Append (x:Ordering, y) = 
+            static member        MEmpty = EQ
+            static member        MAppend (x:Ordering, y) = 
                 match x, y with
                 | LT, _ -> LT
                 | EQ, a -> a

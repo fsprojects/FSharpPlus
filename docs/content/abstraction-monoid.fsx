@@ -17,23 +17,23 @@ Minimal complete definition
 ---------------------------
 
 
- * ``empty``
- * ``append x y``/``(++) x y``
+ * ``mempty``
+ * ``mappend x y``/``(++) x y``
 
 *)
 (**
-    static member get_Empty () :'Monoid
-    static member Append (x:'Monoid, y:'Monoid) :'Monoid
+    static member get_MEmpty () :'Monoid
+    static member MAppend (x:'Monoid, y:'Monoid) :'Monoid
 *)
 (**
 
 Other operations
 ----------------
 
- * ``concat``
+ * ``mconcat``
 *)
 (**
-    static member Concat (x:Seq<'Monoid>) :'Monoid
+    static member MConcat (x:Seq<'Monoid>) :'Monoid
 *)
 (**
 
@@ -44,10 +44,10 @@ Rules
 -----
 *)
 (**
-	empty ++ x = x
-    x ++ empty = x
+	mempty ++ x = x
+    x ++ mempty = x
     (x ++ y) ++ z = x ++ (y ++ z)
-    concat = fold append empty
+    mconcat = fold mappend mempty
 *)
 (**
 
@@ -55,7 +55,7 @@ Rules
 Related Abstractions
 --------------------
 
- - [Semigroup](abstraction-semigroup.html): A monoid is a Semigroup with an additional ``Empty`` operation
+ - [Semigroup](abstraction-semigroup.html): A monoid is a Semigroup with an additional ``mempty`` operation
  
  - MonadPlus: Monads that are also Monoids
 

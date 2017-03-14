@@ -3,7 +3,7 @@
 together {
 	abstract class Semigroup {
 	  [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html]]
-	  + append x y [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html#append {Appends two semigroups} ]]
+	  + append x y [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html#mappend {Appends two semigroups} ]]
 	}
 
 	abstract class Comonad {
@@ -17,10 +17,10 @@ together {
 
 abstract class Monoid {
   [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html]]
-  + empty [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#empty {Identity for append} ]]
-  + append x y [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#append {Appends both monoids} ]]
+  + mempty [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#mempty {Identity for mappend} ]]
+  + mappend x y [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#mappend {Appends both monoids} ]]
   ==
-  + concat x [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#concat {Flatten a sequence of monoids} ]]
+  + mconcat x [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#mconcat {Flatten a sequence of monoids} ]]
 }
 
 

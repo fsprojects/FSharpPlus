@@ -37,7 +37,7 @@ let lst1625 =  (+) <!> [11;20] <*> [5]
 
 // Monoids
 
-let res9823 = mconcat (fmap Dual [getEmpty();"3";"2";"8";"9"])    // Dual "9823"
+let res9823 = mconcat (fmap Dual [mempty();"3";"2";"8";"9"])    // Dual "9823"
 let resLtDualGt= mappend  (LT, Dual GT) (mempty())              // (LT, Dual GT)
 
 

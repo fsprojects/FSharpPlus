@@ -42,5 +42,5 @@ type ParallelArray with
     static member Map (x:parray<_>, f) = ParallelArray.map f x
     static member Return (x:'a) = Infinite x
     static member (<*>) (f:parray<'a->'b>, x:parray<_>) = ParallelArray.ap f x :parray<'b>
-    static member inline get_Empty() = Bounded (getEmpty()) : parray<'m>
-    static member inline Append (x:parray<'m>, y:parray<'m>) = liftA2 append x y:parray<'m>
+    static member inline get_MEmpty() = Bounded (getMEmpty()) : parray<'m>
+    static member inline MAppend (x:parray<'m>, y:parray<'m>) = liftA2 mappend x y:parray<'m>
