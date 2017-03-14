@@ -83,6 +83,8 @@ module Operators =
     // Monoid -----------------------------------------------------------------
 
     let inline getEmpty() :'Monoid = Empty.Invoke()
+    let inline empty< ^Monoid when (Empty or ^Monoid) : (static member Empty : ^Monoid * Empty -> ^Monoid) > : ^Monoid = Empty.Invoke()
+
     let inline (++)   (x:'Monoid) (y:'Monoid): 'Monoid = Append.Invoke x y
     let inline append (x:'Monoid) (y:'Monoid): 'Monoid = Append.Invoke x y
     let inline concat (x:seq<'Monoid>)       : 'Monoid = Concat.Invoke x
@@ -91,6 +93,8 @@ module Operators =
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
     let inline getMZero() :'``Functor<'T>`` = MZero.Invoke()
+    let inline mzero< ^``Functor<'T>`` when (MZero or ^``Functor<'T>``) : (static member MZero : ^``Functor<'T>`` * MZero -> ^``Functor<'T>``) > : ^``Functor<'T>`` = MZero.Invoke()
+
     let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = MPlus.Invoke x y
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else MZero.Invoke()
 
@@ -108,8 +112,11 @@ module Operators =
 
     // Category ---------------------------------------------------------------
 
-    /// The identity morphism.
+    /// Gets the identity morphism.
     let inline getCatId() = Id.Invoke() : '``Category<'T,'T>``
+
+    /// The identity morphism.
+    let inline catId< ^``Category<'T,'T>`` when (Id or ^``Category<'T,'T>``) : (static member Id : ^``Category<'T,'T>`` * Id -> ^``Category<'T,'T>``) > = Id.Invoke() : '``Category<'T,'T>``
 
     /// Right-to-left morphism composition.
     let inline catComp (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = Comp.Invoke f g
@@ -150,8 +157,11 @@ module Operators =
 
     // Arrow Apply ------------------------------------------------------------
 
-    /// Apply an arrow produced as the output of some previous computation to an input, producing its output as the output of app. 
+    /// Apply an arrow produced as the output of some previous computation to an input, producing its output as the output of app.
     let inline getApp() = App.Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
+
+    /// Apply an arrow produced as the output of some previous computation to an input, producing its output as the output of app.
+    let inline app< ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` when (App or ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) : (static member App : ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` * App -> ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) > = App.Invoke() : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
 
 
     // Foldable
