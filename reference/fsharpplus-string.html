@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>NumericLiteralG - FSharpPlus</title>
+    <title>String - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,12 +35,13 @@
 
 
 
-<h1>NumericLiteralG</h1>
+<h1>String</h1>
 <p>
   <span>Namespace: FSharpPlus</span><br />
-  <span>Parent Module: <a href="fsharpplus-operators-genericmath.html">GenericMath</a></span>
 </p>
 <div class="xmldoc">
+<p>Additional operations on String</p>
+
 </div>
 
 <!-- Render nested types and modules, if there are any -->
@@ -54,15 +55,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '392', 392)" onmouseover="showTip(event, '392', 392)">
-            FromInt32 i
+          <code onmouseout="hideTip(event, '412', 412)" onmouseover="showTip(event, '412', 412)">
+            intercalate separator source
           </code>
-          <div class="tip" id="392">
-            <strong>Signature:</strong> i:int -&gt; ^d<br />
-                          <strong>Type parameters:</strong> ^d          </div>
+          <div class="tip" id="412">
+            <strong>Signature:</strong> separator:string -&gt; source:seq&lt;string&gt; -&gt; string<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L588-588" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L158-158" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -72,15 +73,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '393', 393)" onmouseover="showTip(event, '393', 393)">
-            FromInt64 i
+          <code onmouseout="hideTip(event, '413', 413)" onmouseover="showTip(event, '413', 413)">
+            intersperse element source
           </code>
-          <div class="tip" id="393">
-            <strong>Signature:</strong> i:int64 -&gt; ^?12039<br />
-                          <strong>Type parameters:</strong> ^?12039          </div>
+          <div class="tip" id="413">
+            <strong>Signature:</strong> element:char -&gt; source:string -&gt; string<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L589-589" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L159-159" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -90,15 +91,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '394', 394)" onmouseover="showTip(event, '394', 394)">
-            FromOne ()
+          <code onmouseout="hideTip(event, '414', 414)" onmouseover="showTip(event, '414', 414)">
+            replace oldValue newValue source
           </code>
-          <div class="tip" id="394">
-            <strong>Signature:</strong> unit -&gt; ^a<br />
-                          <strong>Type parameters:</strong> ^a          </div>
+          <div class="tip" id="414">
+            <strong>Signature:</strong> oldValue:string -&gt; newValue:string -&gt; source:string -&gt; string<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L587-587" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L161-161" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -108,33 +109,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '395', 395)" onmouseover="showTip(event, '395', 395)">
-            FromString i
+          <code onmouseout="hideTip(event, '415', 415)" onmouseover="showTip(event, '415', 415)">
+            split separators source
           </code>
-          <div class="tip" id="395">
-            <strong>Signature:</strong> i:string -&gt; ^?12041<br />
-                          <strong>Type parameters:</strong> ^?12041          </div>
+          <div class="tip" id="415">
+            <strong>Signature:</strong> separators:seq&lt;string&gt; -&gt; source:string -&gt; seq&lt;string&gt;<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L590-590" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '396', 396)" onmouseover="showTip(event, '396', 396)">
-            FromZero ()
-          </code>
-          <div class="tip" id="396">
-            <strong>Signature:</strong> unit -&gt; ^a<br />
-                          <strong>Type parameters:</strong> ^a          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L586-586" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L160-160" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
