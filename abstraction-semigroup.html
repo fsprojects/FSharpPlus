@@ -42,7 +42,7 @@
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">Append</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Semigroup</span>, <span class="i">y</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Semigroup</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Semigroup</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">MAppend</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Semigroup</span>, <span class="i">y</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Semigroup</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Semigroup</span>
 </code></pre></td>
 </tr>
 </table>
@@ -55,7 +55,7 @@
 </table>
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
-<li><p><a href="abstraction-monoid.html">Monoid</a>: A monoid is a Semigroup with an additional <code>Empty</code> operation</p></li>
+<li><p><a href="abstraction-monoid.html">Monoid</a>: A monoid is a Semigroup with an additional <code>MEmpty</code> operation</p></li>
 <li>MonadPlus: Monads that are also Monoids</li>
 </ul>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
