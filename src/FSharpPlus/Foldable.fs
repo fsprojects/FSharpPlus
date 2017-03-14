@@ -370,8 +370,8 @@ type Intercalate =
 type Intersperse =
     inherit Default1
     static member inline       Intersperse (x:'``Foldable<'T>``, e:'T, [<Optional>]_impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke :'``Foldable<'T>``
-    [<Extension>]static member Intersperse (x:list<'T>         , e:'T, [<Optional>]_impl:Intersperse) = x |> List.toSeq   |> Seq.intersperse e |> Seq.toList
-    [<Extension>]static member Intersperse (x:'T []            , e:'T, [<Optional>]_impl:Intersperse) = x |> Array.toSeq  |> Seq.intersperse e |> Seq.toArray
+    [<Extension>]static member Intersperse (x:list<'T>         , e:'T, [<Optional>]_impl:Intersperse) = List.intersperse e x
+    [<Extension>]static member Intersperse (x:'T []            , e:'T, [<Optional>]_impl:Intersperse) = Array.intersperse e x
  
     static member inline Invoke (sep:'T) (source:'``Foldable<'T>``) =
         let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)

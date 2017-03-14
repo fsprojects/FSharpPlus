@@ -238,9 +238,9 @@ type Replace =
     inherit Default1
     static member inline       Replace (x:'Collection  , o:'Collection  , n:'Collection  , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.replace (ToSeq.Invoke o) (ToSeq.Invoke n) |> OfSeq.Invoke : 'Collection
                  static member Replace (x:Id<'T>       , o:Id<'T>       , n:Id<'T>       , [<Optional>]_impl:Default1) = if x = o then n else x
-    [<Extension>]static member Replace (x:list<'T>     , o:list<'T>     , n:list<'T>     , [<Optional>]_impl:Replace ) = x |> List.toSeq   |> Seq.replace o n |> Seq.toList
-    [<Extension>]static member Replace (x:'T []        , o:'T []        , n:'T []        , [<Optional>]_impl:Replace ) = x |> Array.toSeq  |> Seq.replace o n |> Seq.toArray
-    [<Extension>]static member Replace (x:string       , o:string       , n:string       , [<Optional>]_impl:Replace ) = if o.Length = 0 then x else x.Replace(o, n)
+    [<Extension>]static member Replace (x:list<'T>     , o:list<'T>     , n:list<'T>     , [<Optional>]_impl:Replace ) = List.replace o n x
+    [<Extension>]static member Replace (x:'T []        , o:'T []        , n:'T []        , [<Optional>]_impl:Replace ) = Array.replace o n x
+    [<Extension>]static member Replace (x:string       , o:string       , n:string       , [<Optional>]_impl:Replace ) = String.replace o n x
     [<Extension>]static member Replace (x:StringBuilder, o:StringBuilder, n:StringBuilder, [<Optional>]_impl:Replace ) = if o.Length = 0 then x else StringBuilder(x.ToString().Replace(o.ToString(), n.ToString()))
  
     static member inline Invoke      (o:'Collection) (n:'Collection) (source:'Collection) =

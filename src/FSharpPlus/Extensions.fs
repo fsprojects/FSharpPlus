@@ -140,19 +140,25 @@ module List =
         if i > 0 then loop i list else list
 
     let intercalate (separator:list<_>) (source:seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
+    let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList                              : list<'T>
     let split (separators:seq<list<_>>) (source:list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
+    let replace oldValue newValue source = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList                  : list<'T>
 
 
 /// Additional operations on Array
 module Array =
     let intercalate (separator:_ []) (source:seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
+    let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray                            : 'T []
     let split (separators:seq<_ []>) (source:_ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
+    let replace oldValue newValue source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray                : 'T []
 
 
 /// Additional operations on String
 module String =
     let intercalate (separator:string) (source:seq<string>) = String.Join(separator, source)
+    let intersperse (element: char) (source: string) = String.Join("", Array.ofSeq (source |> Seq.intersperse element))
     let split (separators:seq<string>) (source:string) = source.Split(Seq.toArray separators, StringSplitOptions.None) :> seq<_>
+    let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace(oldValue, newValue)
 
 
 
