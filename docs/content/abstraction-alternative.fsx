@@ -43,6 +43,11 @@ Other operations
 (**
 
 
+ * ``choice``
+*)
+(**
+
+
 
 
 Rules
@@ -85,4 +90,31 @@ From F#+
  -  ``Compose<'F<'G<'T>>>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+
+Examples
+--------
+
 *)
+
+
+
+#r "../../bin/FSharpPlus/FSharpPlus.dll"
+
+open FSharpPlus
+
+// this gives [2; 3; 4; 5]
+let x = [2;3] <|> [] <|> [4;5]
+
+// but I could have written
+let y = [2;3] <|> empty <|> [4;5]
+
+// choice sample usage
+let alternatives = [None; Some "Result is OK"; None ; Some "Result is still OK"]
+let firstGood = choice alternatives //Some "Result is OK"
+
+// it did something like
+let fstGood = None <|> Some "Result is OK" <|>  None <|> Some "Result is still OK"
+
+// mfilter usage
+let fstMatch = mfilter ((=) 5) [1;2;3;4]    // [] -> no element found, it uses the mzero value

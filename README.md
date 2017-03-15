@@ -3,6 +3,7 @@ FSharpPlus [![Build Status](https://api.travis-ci.org/gusty/FSharpPlus.svg?branc
 
 This project contains some extensions for F#.
 
+ - Modern [FP abstractions](http://gusty.github.io/FSharpPlus/abstractions.html).
  - Common FP combinators, generic functions and operators.- Extension methods for common F# types.
  - Collections.
  - Common FP abstration types: Cont, Reader, Writer, State and their Monad Transformers.
