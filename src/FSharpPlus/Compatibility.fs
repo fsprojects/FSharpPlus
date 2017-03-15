@@ -97,7 +97,7 @@ module Compatibility =
 
         // Monoids
 
-        let inline mempty() = getMEmpty()
+        let inline mempty< ^Monoid when (MEmpty or ^Monoid) : (static member MEmpty : ^Monoid * MEmpty -> ^Monoid) > : ^Monoid = MEmpty.Invoke()
         let inline mappend a b = mappend a b
         let inline mconcat s = mconcat s
 
@@ -173,9 +173,9 @@ module Compatibility =
 
 
         // Monad Plus
-        let inline mzero() = getEmpty()
+        let inline mzero< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke()
         let inline mplus (x:'a) (y:'a) : 'a = (<|>) x y
-        let inline guard x = if x then return' () else mzero()
+        let inline guard x = if x then return' () else mzero
 
         let doPlus = new Builders.MonadPlusBuilder()
 
@@ -183,13 +183,13 @@ module Compatibility =
 
 
         // Arrow
-        let inline id'() = getCatId ()
+        let inline id< ^``Category<'T,'T>`` when (Id or ^``Category<'T,'T>``) : (static member Id : ^``Category<'T,'T>`` * Id -> ^``Category<'T,'T>``) > = Id.Invoke() : '``Category<'T,'T>``
         let inline (<<<) f g = catComp f g
         let inline (>>>) f g = catComp g f
         let inline (&&&) f g = fanout f g
         let inline (|||) f g = fanin  f g
         let inline app() = getApp ()
-        let inline zeroArrow() = mzero ()
+        let inline zeroArrow< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke()
         let inline (<+>)   f g = (<|>) f g
 
 
