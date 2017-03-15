@@ -38,8 +38,8 @@
 <hr />
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>empty</code></li>
-<li><code>append x y</code>/<code>(++) x y</code></li>
+<li><code>mempty</code></li>
+<li><code>mappend x y</code>/<code>(++) x y</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -51,7 +51,7 @@
 </table>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
-<li><code>concat</code></li>
+<li><code>mconcat</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
@@ -65,16 +65,16 @@
 <span class="l">3: </span>
 <span class="l">4: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">empty</span> <span class="o">++</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span>
-<span class="i">x</span> <span class="o">++</span> <span class="i">empty</span> <span class="o">=</span> <span class="i">x</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">mempty</span> <span class="o">++</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span>
+<span class="i">x</span> <span class="o">++</span> <span class="i">mempty</span> <span class="o">=</span> <span class="i">x</span>
 (<span class="i">x</span> <span class="o">++</span> <span class="i">y</span>) <span class="o">++</span> <span class="i">z</span> <span class="o">=</span> <span class="i">x</span> <span class="o">++</span> (<span class="i">y</span> <span class="o">++</span> <span class="i">z</span>)
-<span class="i">concat</span> <span class="o">=</span> <span class="i">fold</span> <span class="i">append</span> <span class="i">empty</span>
+<span class="i">mconcat</span> <span class="o">=</span> <span class="i">fold</span> <span class="i">mappend</span> <span class="i">mempty</span>
 </code></pre></td>
 </tr>
 </table>
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
-<li><p><a href="abstraction-semigroup.html">Semigroup</a>: A monoid is a Semigroup with an additional <code>MEmpty</code> operation</p></li>
+<li><p><a href="abstraction-semigroup.html">Semigroup</a>: A monoid is a Semigroup with an additional <code>mempty</code> operation</p></li>
 <li>MonadPlus: Monads that are also Monoids</li>
 </ul>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>

@@ -40,8 +40,8 @@
 <ul>
 <li><code>return x</code>/<code>result x</code></li>
 <li><code>(&lt;*&gt;) f x</code></li>
-<li><code>mzero</code></li>
-<li><code>mplus x y</code>/<code>(&lt;|&gt;) x y</code></li>
+<li><code>empty</code></li>
+<li><code>append x y</code>/<code>(&lt;|&gt;) x y</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -50,8 +50,8 @@
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">Return</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">T</span>) <span class="o">:</span> <span class="o">&#39;</span><span class="i">Alternative</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>
 <span class="k">static</span> <span class="k">member</span> (<span class="o">&lt;*&gt;</span>) (<span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">T</span><span class="k">-&gt;</span><span class="o">&#39;</span><span class="i">U</span>, <span class="i">x</span><span class="o">:</span><span class="i">Alternative</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>) <span class="o">:</span> <span class="i">Alternative</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">U</span><span class="o">&gt;</span>
-<span class="k">static</span> <span class="k">member</span> <span class="i">get_MZero</span> () <span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>
-<span class="k">static</span> <span class="k">member</span> <span class="i">MPlus</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>, <span class="i">y</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>
+<span class="k">static</span> <span class="k">member</span> <span class="i">get_Empty</span> () <span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>
+<span class="k">static</span> <span class="k">member</span> <span class="i">Append</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>, <span class="i">y</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>
 </code></pre></td>
 </tr>
 </table>
@@ -74,12 +74,12 @@
 <span class="l">5: </span>
 <span class="l">6: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">mzero</span> <span class="o">&lt;|&gt;</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span>
-<span class="i">x</span> <span class="o">&lt;|&gt;</span> <span class="i">mzero</span> <span class="o">=</span> <span class="i">x</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">empty</span> <span class="o">&lt;|&gt;</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span>
+<span class="i">x</span> <span class="o">&lt;|&gt;</span> <span class="i">empty</span> <span class="o">=</span> <span class="i">x</span>
 (<span class="i">x</span> <span class="o">&lt;|&gt;</span> <span class="i">y</span>) <span class="o">&lt;|&gt;</span> <span class="i">z</span> <span class="o">=</span> <span class="i">x</span> <span class="o">&lt;|&gt;</span> (<span class="i">y</span> <span class="o">&lt;|&gt;</span> <span class="i">z</span>)
 <span class="i">f</span> <span class="o">&lt;!&gt;</span> (<span class="i">x</span> <span class="o">&lt;|&gt;</span> <span class="i">y</span>) <span class="o">=</span> (<span class="i">f</span> <span class="o">&lt;!&gt;</span> <span class="i">x</span>) <span class="o">&lt;|&gt;</span> (<span class="i">f</span> <span class="o">&lt;!&gt;</span> <span class="i">y</span>)
 (<span class="i">f</span> <span class="o">&lt;|&gt;</span> <span class="i">g</span>) <span class="o">&lt;*&gt;</span> <span class="i">x</span> <span class="o">=</span> (<span class="i">f</span> <span class="o">&lt;*&gt;</span> <span class="i">x</span>) <span class="o">&lt;|&gt;</span> (<span class="i">g</span> <span class="o">&lt;*&gt;</span> <span class="i">x</span>)
-<span class="i">mzero</span> <span class="o">&lt;*&gt;</span> <span class="i">f</span> <span class="o">=</span> <span class="i">mzero</span>
+<span class="i">empty</span> <span class="o">&lt;*&gt;</span> <span class="i">f</span> <span class="o">=</span> <span class="i">empty</span>
 </code></pre></td>
 </tr>
 </table>
