@@ -50,8 +50,8 @@ type StateT with
     static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x  : StateT<'S,'``Monad<'U * 'S>``>
     static member inline Bind   (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind f x
 
-    static member inline get_MZero () = StateT (fun _ -> getMZero()) : StateT<'S,'``MonadPlus<'T * 'S>``>
-    static member inline MPlus (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
+    static member inline get_Empty () = StateT (fun _ -> getEmpty()) : StateT<'S,'``MonadPlus<'T * 'S>``>
+    static member inline Append (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
 
     static member inline Lift (m:'``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> = StateT <| fun s -> m >>= fun a -> result (a, s)
 

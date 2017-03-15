@@ -20,17 +20,17 @@ module Builders =
 
 
     type Zero =
-        inherit FsControl.MZero
-        static member inline MZero (_output : '``FunctorZero<unit>``, _mthd : FsControl.Internals.Default2) = FsControl.Return.Invoke () : '``FunctorZero<unit>``
+        inherit FsControl.Empty
+        static member inline Empty (_output : '``FunctorZero<unit>``, _mthd : FsControl.Internals.Default2) = FsControl.Return.Invoke () : '``FunctorZero<unit>``
         static member inline Invoke' () : '``FunctorZero<'T>`` =
-            let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member MZero: _*_ -> _) output, mthd)
+            let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Empty: _*_ -> _) output, mthd)
             call (Unchecked.defaultof<Zero>, Unchecked.defaultof<'``FunctorZero<'T>``>)
 
     type Plus =
-        inherit FsControl.MPlus
-        static member inline MPlus (x :'``FunctorPlus<unit>``, y:'``FunctorPlus<'T>``, _mthd : FsControl.Internals.Default2) = FsControl.Bind.Invoke x (fun () -> y) :'``FunctorPlus<'T>``    
+        inherit FsControl.Append
+        static member inline Append (x :'``FunctorPlus<unit>``, y:'``FunctorPlus<'T>``, _mthd : FsControl.Internals.Default2) = FsControl.Bind.Invoke x (fun () -> y) :'``FunctorPlus<'T>``    
         static member inline Invoke' (x :'``FunctorPlus<'T or unit>``) (y:'``FunctorPlus<'T>``)  : '``FunctorPlus<'T>`` =
-            let inline call (mthd : ^M, input1 : ^U, input2 : ^I) = ((^M or ^I) : (static member MPlus: _*_*_ -> _) input1, input2, mthd)
+            let inline call (mthd : ^M, input1 : ^U, input2 : ^I) = ((^M or ^I) : (static member Append: _*_*_ -> _) input1, input2, mthd)
             call (Unchecked.defaultof<Plus>, x, y)
 
 

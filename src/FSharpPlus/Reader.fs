@@ -53,8 +53,8 @@ type ReaderT with
     static member inline (<*>)  (f : ReaderT<_,'``Monad<'T -> 'U>``>, x : ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x    : ReaderT<'R, '``Monad<'U>``>
     static member inline Bind   (x : ReaderT<_,'``Monad<'T>``>, f : 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind f x     : ReaderT<'R, '``Monad<'U>``>
     
-    static member inline get_MZero () = ReaderT (fun _ -> getMZero()) : ReaderT<'R, '``MonadPlus<'T>``>
-    static member inline MPlus (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
+    static member inline get_Empty () = ReaderT (fun _ -> getEmpty()) : ReaderT<'R, '``MonadPlus<'T>``>
+    static member inline Append (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
 
     static member        Lift m = ReaderT (fun _ -> m)                                      : ReaderT<'R,'``Monad<'T>``>
 

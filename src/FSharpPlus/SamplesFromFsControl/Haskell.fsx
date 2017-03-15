@@ -336,7 +336,7 @@ let tuple5 :string*(Any*string)*(All*All*All)*Sum<int>*string = mempty()
 
 // Monad Plus
 
-let inline mzero () = FSharpPlus.Operators.getMZero ()
+let inline mzero () = FSharpPlus.Operators.getEmpty ()
 let inline mplus (x:'a) (y:'a) : 'a = FSharpPlus.Operators.(<|>) x y
 let inline guard x = if x then return' () else mzero()
 type DoPlusNotationBuilder() =
@@ -409,8 +409,8 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member get_App () = Kleisli (fun (Kleisli f, x) -> f x)
     
     // ArrowPlus
-    static member inline MZero (output :Kleisli<'T,'``Monad<'U>``>, mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
-    static member inline MPlus (Kleisli f, Kleisli g, mthd:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
+    static member inline Empty (output :Kleisli<'T,'``Monad<'U>``>, mthd :Empty) = Kleisli (fun _ -> Empty.Invoke ())
+    static member inline Append (Kleisli f, Kleisli g, mthd:Append) = Kleisli (fun x -> Append.Invoke (f x) (g x))
 
 let runKleisli (Kleisli f) = f
 let runFunc (f : System.Func<_,_>) = f.Invoke
@@ -480,7 +480,7 @@ let inline (+++) f g = FSharpPlus.Operators.(+++) f g
 let inline left  f = FSharpPlus.Operators.left  f
 let inline right f = FSharpPlus.Operators.right f
 let inline app() = FSharpPlus.Operators.getApp()
-let inline zeroArrow() = FSharpPlus.Operators.getMZero()
+let inline zeroArrow() = FSharpPlus.Operators.getEmpty()
 let inline (<+>)   f g = FSharpPlus.Operators.(<|>) f g
 
 // Test Categories
@@ -529,7 +529,7 @@ let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
 
 let inline pure' x   = FSharpPlus.Operators.result x
 let inline (<*>) x y = FSharpPlus.Operators.(<*>) x y
-let inline empty()   = FSharpPlus.Operators.getMZero()
+let inline empty()   = FSharpPlus.Operators.getEmpty()
 let inline (<|>) x y = FSharpPlus.Operators.(<|>) x y
 
 

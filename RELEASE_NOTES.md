@@ -8,7 +8,7 @@
 * Extensive documentation, including tutorials and a classepedia (abstractions) diagram (WIP)
 
 #### 1.0.0-CI00078  - January 21 2017
-* Builders support MPlus and FX computations
+* Builders support MonadPlus and FX computations
 * Bin path for sample files corrected
 * Added Delay implementation for Cont
 * Added Invokables for builders: TryWith, TryFinally and Using

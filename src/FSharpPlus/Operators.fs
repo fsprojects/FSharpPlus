@@ -92,11 +92,11 @@ module Operators =
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
-    let inline getMZero() :'``Functor<'T>`` = MZero.Invoke()
-    let inline mzero< ^``Functor<'T>`` when (MZero or ^``Functor<'T>``) : (static member MZero : ^``Functor<'T>`` * MZero -> ^``Functor<'T>``) > : ^``Functor<'T>`` = MZero.Invoke()
+    let inline getEmpty() :'``Functor<'T>`` = Empty.Invoke()
+    let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke()
 
-    let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = MPlus.Invoke x y
-    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else MZero.Invoke()
+    let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = Append.Invoke x y
+    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke()
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
@@ -501,13 +501,13 @@ module Operators =
     // Additional functions
 
     /// Fold using alternative operator `<|>`
-    let inline choice (x:'``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getMZero()) : '``Alternative<'t>>``
+    let inline choice (x:'``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getEmpty()) : '``Alternative<'t>>``
 
     /// Folds a Foldable of a Monoid, using its empty as initial state and append as folder.
     let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x
 
-    /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the mzero value.
-    let inline mfilter predicate (m:'``MonadZero<'t>``) :'``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else FsControl.MZero.Invoke()
+    /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
+    let inline mfilter predicate (m:'``MonadZero<'t>``) :'``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else FsControl.Empty.Invoke()
 
     /// Returns the sum of the elements in the Foldable.
     let inline sum (x:'Foldable'Num) : 'Num = fold (+) (getZero(): 'Num) x

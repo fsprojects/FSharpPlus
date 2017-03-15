@@ -37,15 +37,15 @@ type WrappedListD<'s> = WrappedListD of 's list with
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return  (x) = WrappedListE [x]
     static member Bind  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
-    static member get_MZero() = WrappedListE List.empty
-    static member MPlus (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
+    static member get_Empty() = WrappedListE List.empty
+    static member Append (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
     
 type WrappedListF<'s> = WrappedListF of 's list with
     static member Return  (x) = WrappedListF [x]
     static member Bind  (WrappedListF x: WrappedListF<'T>, f) = WrappedListF (List.collect (f >> (fun (WrappedListF x) -> x)) x)
     static member Join  (WrappedListF wlst) = SideEffects.add "Join";  WrappedListF wlst >>= id
-    static member get_MZero() = WrappedListF List.empty
-    static member MPlus (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
+    static member get_Empty() = WrappedListF List.empty
+    static member Append (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
 
 open System.Collections.Generic
 
@@ -316,8 +316,8 @@ type MonadPlus() =
     [<Test>]
     member x.ZeroAndPlus() = 
         let v = WrappedListE [1;2]
-        let x = v <|> getMZero()
-        let y = getMZero() <|> v
+        let x = v <|> getEmpty()
+        let y = getEmpty() <|> v
         Assert.AreEqual (v, x)
         Assert.AreEqual (v, y)
 

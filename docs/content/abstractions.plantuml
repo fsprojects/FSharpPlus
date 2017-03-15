@@ -50,7 +50,7 @@ abstract class Alternative {
   + zero [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]
   + (<|>) f x [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]
   ==
-  + mfilter p x [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html#mfilter {Returns all values satisfying the predicate, if the predicate returns false will use the mzero value} ]]
+  + mfilter p x [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html#mfilter {Returns all values satisfying the predicate, if the predicate returns false will use the empty value} ]]
 }
 
 abstract class Monad {

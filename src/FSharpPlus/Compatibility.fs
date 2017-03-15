@@ -92,7 +92,7 @@ module Compatibility =
         // Applicative functors
             
         let inline pure' x   = result x
-        let inline empty()   = getMZero()    
+        let inline empty()   = getEmpty()    
         let inline optional v = Just <!> v <|> pure' Nothing
 
         // Monoids
@@ -173,7 +173,7 @@ module Compatibility =
 
 
         // Monad Plus
-        let inline mzero() = getMZero()
+        let inline mzero() = getEmpty()
         let inline mplus (x:'a) (y:'a) : 'a = (<|>) x y
         let inline guard x = if x then return' () else mzero()
 

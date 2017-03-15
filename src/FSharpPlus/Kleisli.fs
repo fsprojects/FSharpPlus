@@ -31,8 +31,8 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member get_App () = Kleisli (fun (Kleisli f, x) -> f x)
     
     // ArrowPlus
-    static member inline MZero (_output :Kleisli<'T,'``Monad<'U>``>, _mthd :MZero) = Kleisli (fun _ -> MZero.Invoke ())
-    static member inline MPlus (Kleisli f, Kleisli g, _mthd:MPlus) = Kleisli (fun x -> MPlus.Invoke (f x) (g x))
+    static member inline Empty (_output :Kleisli<'T,'``Monad<'U>``>, _mthd :Empty) = Kleisli (fun _ -> Empty.Invoke ())
+    static member inline Append (Kleisli f, Kleisli g, _mthd:Append) = Kleisli (fun x -> Append.Invoke (f x) (g x))
 
 /// Basic operations on Kleisli
 [<RequireQualifiedAccess>]module Kleisli = let run (Kleisli f) = f

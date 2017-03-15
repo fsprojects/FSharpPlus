@@ -18,15 +18,15 @@ Minimal complete definition
 
  * ``return x``/``result x`` 
  * ``(<*>) f x``
- * ``mzero``
- * ``mplus x y``/``(<|>) x y``
+ * ``empty``
+ * ``append x y``/``(<|>) x y``
 
 *)
 (**
     static member Return (x:'T) : 'Alternative<'T>
     static member (<*>) (f:'T->'U, x:Alternative<'T>) : Alternative<'U>
-    static member get_MZero () :'Alternative
-    static member MPlus (x:'Alternative, y:'Alternative) :'Alternative
+    static member get_Empty () :'Alternative
+    static member Append (x:'Alternative, y:'Alternative) :'Alternative
 *)
 (**
 
@@ -49,12 +49,12 @@ Rules
 -----
 *)
 (**
-    mzero <|> x = x
-    x <|> mzero = x
+    empty <|> x = x
+    x <|> empty = x
     (x <|> y) <|> z = x <|> (y <|> z)
     f <!> (x <|> y) = (f <!> x) <|> (f <!> y)
     (f <|> g) <*> x = (f <*> x) <|> (g <*> x)
-    mzero <*> f = mzero
+    empty <*> f = empty
 *)
 (**
 
