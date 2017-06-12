@@ -5,7 +5,6 @@
 namespace FsControl
 
 open FsControl.Internals
-open FsControl.Internals.Prelude
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
@@ -269,11 +268,7 @@ namespace FsControl
 
 open Numerics
 open FsControl.Internals
-open FsControl.Internals.Prelude
 open FsControl
-
-open System.Runtime.CompilerServices
-open System.Runtime.InteropServices
 
 
 

@@ -3,7 +3,6 @@
 
 open System
 open FSharpPlus
-open FSharpPlus.Extensions
 open FSharpPlus.Operators
 open FSharpPlus.Data
 

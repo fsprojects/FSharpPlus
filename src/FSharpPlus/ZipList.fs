@@ -4,7 +4,6 @@ open System.Text
 open System.Runtime.InteropServices
 open FsControl
 open FSharpPlus.Operators
-open FSharpPlus.Extensions
 
 /// A sequence with an Applicative functor based on zipping.
 type ZipList<'s> = ZipList of 's seq with

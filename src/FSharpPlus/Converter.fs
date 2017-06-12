@@ -6,15 +6,12 @@ namespace FsControl
 
 open System
 open System.Runtime.CompilerServices
-open System.Runtime.InteropServices
 open System.Collections.Generic
 open System.Text
 open Microsoft.FSharp.Quotations
-open Microsoft.FSharp.Core.Printf
 open FsControl.BaseLib
 open FsControl.Internals
 open FsControl.Internals.Prelude
-open System.Numerics
 open FSharpPlus
 
 

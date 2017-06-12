@@ -2,7 +2,6 @@
 #r @"..\bin\Release\FSharpPlus.dll"
 
 open FSharpPlus
-open FSharpPlus.Extensions
 
 let lst   = {Head = 1; Tail = [2;3;4;5]}
 let elem1 = extract   lst

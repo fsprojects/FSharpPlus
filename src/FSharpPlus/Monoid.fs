@@ -11,7 +11,6 @@ open Microsoft.FSharp.Quotations
 open System.Threading.Tasks
 #endif
 open FsControl.Internals
-open FsControl.Internals.Prelude
 
 
 type MEmpty =

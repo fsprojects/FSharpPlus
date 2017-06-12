@@ -1,6 +1,5 @@
 ﻿namespace FSharpPlus
 
-open FSharpPlus.Operators
 
 /// <summary> Computation type: Simple function application.
 /// <para/>   Binding strategy: The bound function is applied to the input value. Identity x >>= f = Identity (f x)

@@ -4,7 +4,6 @@ open System.Text
 open System.Runtime.InteropServices
 open FsControl
 open FSharpPlus
-open FSharpPlus.Extensions
 
 /// A type-safe list that contains at least one element.
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with

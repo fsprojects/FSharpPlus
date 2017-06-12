@@ -17,7 +17,6 @@ module Cont =
     let bind (f:'T->_) (Cont x) = Cont (fun k -> x (fun a -> run(f a) k))           : Cont<'R,'U>
     let apply (Cont f) (Cont x) = Cont (fun k -> f (fun (f':'T->_) -> x (k << f'))) : Cont<'R,'U>
 
-open FsControl
 open FSharpPlus
 
 /// Monad Transformer for Cont<'R,'T>

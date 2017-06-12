@@ -2,7 +2,6 @@
 #r @"..\bin\Release\FSharpPlus.dll"
 
 open System
-open FsControl
 open FSharpPlus
 open FSharpPlus.Data
 

@@ -11,7 +11,6 @@ module Seq =
 
     let inline replicateM count (initial:'``Applicative<'T>``) = sequence (Seq.replicate count initial)
 
-open FsControl
 
 /// Monad Transformer for seq<'T>
 type SeqT<'``monad<seq<'t>>``> = SeqT of '``monad<seq<'t>>``
