@@ -16,7 +16,7 @@ abstract class Monoid [[http://gusty.github.io/FSharpPlus/abstraction-monoid.htm
   + zero [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#zero {Identity for (+)} ]]]
   + (+) x y [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#plus {Appends both monoids} ]]]
   ==
-  + mconcat x [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#mconcat {Flatten a sequence of monoids} ]]]
+  + Seq.sum x [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#sum {Flatten a sequence of monoids} ]]]
 }
 
 

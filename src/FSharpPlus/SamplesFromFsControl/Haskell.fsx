@@ -267,7 +267,7 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 
 let inline mempty() = FSharpPlus.Operators.getZero ()
 let inline mappend (x:'a) (y:'a): 'a = FSharpPlus.Operators.plus x y
-let inline mconcat (x:seq<'a>) : 'a = FSharpPlus.Operators.mconcat x
+let inline mconcat (x:seq<'a>) : 'a = FSharpPlus.Operators.Seq.sum x
 
 type Ordering = LT|EQ|GT with
     static member        Zero = EQ

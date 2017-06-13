@@ -51,10 +51,10 @@ let res20 = map ((*) 100) (Pair (2, 3))                               // Pair (2
 let res21 = plus    [1;4] [3;6]
 let res22 = plus    "Hello " "World"
 let res23 = plus    "pang"  (getZero())                               // "pang"
-let res24 = mconcat [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
+let res24 = Seq.sum [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
 
 let res25 = plus    (Any true) (Any false)                            // Any true
-let res26 = [false; false; false; true] |> List.map Any |> mconcat
+let res26 = [false; false; false; true] |> List.map Any |> Seq.sum
 let res27 = plus    (getZero()) (All false)                           // All false
 let res28 = plus    (Some "some") None                                // Some "some"
 

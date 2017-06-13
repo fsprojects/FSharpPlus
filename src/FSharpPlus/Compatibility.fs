@@ -99,7 +99,7 @@ module Compatibility =
 
         let inline mempty< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke()
         let inline mappend a b = plus a b
-        let inline mconcat s = mconcat s
+        let inline mconcat s = Seq.sum s
 
         type Ordering = LT|EQ|GT with
             static member Zero = EQ

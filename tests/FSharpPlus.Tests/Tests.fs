@@ -26,7 +26,7 @@ type WrappedListB<'s> = WrappedListB of 's list with
 type WrappedListC<'s> = WrappedListC of 's list with
     static member (+)  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
     static member Zero   = WrappedListC List.empty
-    static member MConcat  (lst: seq<WrappedListC<_>>)  = Seq.head lst
+    static member Sum  (lst: seq<WrappedListC<_>>)  = Seq.head lst
 
 type WrappedListD<'s> = WrappedListD of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator()
@@ -52,15 +52,15 @@ open System.Collections.Generic
 [<TestFixture>]
 type Monoid() =
     [<Test>]
-    member x.mconcat_Default_Custom() = 
-        let (WrappedListB x) = mconcat [WrappedListB [10] ;WrappedListB [15]]
-        let (WrappedListC y) = mconcat [WrappedListC [10] ;WrappedListC [15]]
+    member x.SeqSum_Default_Custom() = 
+        let (WrappedListB x) = Seq.sum [WrappedListB [10] ;WrappedListB [15]]
+        let (WrappedListC y) = Seq.sum [WrappedListC [10] ;WrappedListC [15]]
         Assert.AreEqual (x, [10;15])
         Assert.AreEqual (y, [10])
 
         let x = [ ("a", 1); ("b", 2); ("a", 3) ]
-        let y = x |> map (Seq.singleton >> (ofSeq : seq<_*_> -> Dictionary<_,_>) >> map List.singleton) |> mconcat
-        let z = x |> map (Seq.singleton >>             dict                      >> map List.singleton) |> mconcat
+        let y = x |> map (Seq.singleton >> (ofSeq : seq<_*_> -> Dictionary<_,_>) >> map List.singleton) |> Seq.sum
+        let z = x |> map (Seq.singleton >>             dict                      >> map List.singleton) |> Seq.sum
         Assert.IsInstanceOf<Option< Dictionary<string,int list>>> (Some y)
         Assert.IsInstanceOf<Option<IDictionary<string,int list>>> (Some z)
 

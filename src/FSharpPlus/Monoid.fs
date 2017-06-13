@@ -93,54 +93,54 @@ type Plus with
 
 
 [<Extension; Sealed>]
-type MConcat =
+type Sum =
     inherit Default1
-    static member inline       MConcat (x:seq<Dictionary<'a,'b>>, [<Optional>]_output:Dictionary<'a,'b>, [<Optional>]_impl:MConcat) =
+    static member inline       Sum (x:seq<Dictionary<'a,'b>>, [<Optional>]_output:Dictionary<'a,'b>, [<Optional>]_impl:Sum) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
                             dct.[k] <- match dct.TryGetValue k with true, v -> Plus.Invoke v u | _ -> u
                     dct
 
-    static member inline       MConcat (x:seq<IDictionary<'a,'b>>, [<Optional>]_output:IDictionary<'a,'b>, [<Optional>]_impl:MConcat) =
+    static member inline       Sum (x:seq<IDictionary<'a,'b>>, [<Optional>]_output:IDictionary<'a,'b>, [<Optional>]_impl:Sum) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
                             dct.[k] <- match dct.TryGetValue k with true, v -> Plus.Invoke v u | _ -> u
                     dct :> IDictionary<'a,'b>
 
-    static member inline       MConcat (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:MConcat) = ResizeArray (Seq.concat x)
-    [<Extension>]static member MConcat (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:MConcat) = List.concat   x
-    [<Extension>]static member MConcat (x:seq<array<'a>>      , [<Optional>]_output:array<'a>     , [<Optional>]_impl:MConcat) = Array.concat  x
-    [<Extension>]static member MConcat (x:seq<string>         , [<Optional>]_output:string        , [<Optional>]_impl:MConcat) = String.Concat x
-    [<Extension>]static member MConcat (x:seq<StringBuilder>  , [<Optional>]_output:StringBuilder , [<Optional>]_impl:MConcat) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    static member inline       Sum (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:Sum) = ResizeArray (Seq.concat x)
+    [<Extension>]static member Sum (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:Sum) = List.concat   x
+    [<Extension>]static member Sum (x:seq<array<'a>>      , [<Optional>]_output:array<'a>     , [<Optional>]_impl:Sum) = Array.concat  x
+    [<Extension>]static member Sum (x:seq<string>         , [<Optional>]_output:string        , [<Optional>]_impl:Sum) = String.Concat x
+    [<Extension>]static member Sum (x:seq<StringBuilder>  , [<Optional>]_output:StringBuilder , [<Optional>]_impl:Sum) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
 
     static member inline Invoke (x:seq<'T>) : 'T =
-        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member MConcat: _*_*_ -> _) b, c, a)
+        let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Sum: _*_*_ -> _) b, c, a)
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
-        call (Unchecked.defaultof<MConcat>, x)
+        call (Unchecked.defaultof<Sum>, x)
 
-type MConcat with
-    static member inline       MConcat (x:seq<'a * 'b>, [<Optional>]_output:'a * 'b, [<Optional>]_impl:MConcat) =
-                    MConcat.Invoke (Seq.map fst x), 
-                    MConcat.Invoke (Seq.map snd x)
+type Sum with
+    static member inline       Sum (x:seq<'a * 'b>, [<Optional>]_output:'a * 'b, [<Optional>]_impl:Sum) =
+                    Sum.Invoke (Seq.map fst x), 
+                    Sum.Invoke (Seq.map snd x)
     
-type MConcat with
-    static member inline       MConcat (x:seq<'a * 'b * 'c>, [<Optional>]_output:'a * 'b * 'c, [<Optional>]_impl:MConcat) =
-                    MConcat.Invoke (Seq.map (fun (x,_,_) -> x) x), 
-                    MConcat.Invoke (Seq.map (fun (_,x,_) -> x) x), 
-                    MConcat.Invoke (Seq.map (fun (_,_,x) -> x) x)
+type Sum with
+    static member inline       Sum (x:seq<'a * 'b * 'c>, [<Optional>]_output:'a * 'b * 'c, [<Optional>]_impl:Sum) =
+                    Sum.Invoke (Seq.map (fun (x,_,_) -> x) x), 
+                    Sum.Invoke (Seq.map (fun (_,x,_) -> x) x), 
+                    Sum.Invoke (Seq.map (fun (_,_,x) -> x) x)
     
-type MConcat with
-    static member inline       MConcat (x:seq<'a * 'b * 'c * 'd>, [<Optional>]_output:'a * 'b * 'c * 'd, [<Optional>]_impl:MConcat) =
-                    MConcat.Invoke (Seq.map (fun (x,_,_,_) -> x) x), 
-                    MConcat.Invoke (Seq.map (fun (_,x,_,_) -> x) x), 
-                    MConcat.Invoke (Seq.map (fun (_,_,x,_) -> x) x),
-                    MConcat.Invoke (Seq.map (fun (_,_,_,x) -> x) x)
+type Sum with
+    static member inline       Sum (x:seq<'a * 'b * 'c * 'd>, [<Optional>]_output:'a * 'b * 'c * 'd, [<Optional>]_impl:Sum) =
+                    Sum.Invoke (Seq.map (fun (x,_,_,_) -> x) x), 
+                    Sum.Invoke (Seq.map (fun (_,x,_,_) -> x) x), 
+                    Sum.Invoke (Seq.map (fun (_,_,x,_) -> x) x),
+                    Sum.Invoke (Seq.map (fun (_,_,_,x) -> x) x)
 
-type MConcat with
-    static member inline       MConcat (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Plus.Invoke (Zero.Invoke()) x:'a
+type Sum with
+    static member inline       Sum (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Plus.Invoke (Zero.Invoke()) x:'a
     
-type MConcat with
-    static member inline       MConcat (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = ((^R) : (static member MConcat: 'R seq -> ^R) x)
-    static member inline       MConcat (_:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
+type Sum with
+    static member inline       Sum (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = ((^R) : (static member Sum: 'R seq -> ^R) x)
+    static member inline       Sum (_:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id

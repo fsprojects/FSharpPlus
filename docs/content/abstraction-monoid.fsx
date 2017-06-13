@@ -30,10 +30,10 @@ Minimal complete definition
 Other operations
 ----------------
 
- * ``mconcat``
+ * ``Seq.sum``
 *)
 (**
-    static member MConcat (x:Seq<'Monoid>) :'Monoid
+    static member Sum (x:Seq<'Monoid>) :'Monoid
 *)
 (**
 
@@ -47,7 +47,8 @@ Rules
 	zero + x = x
     x + zero = x
     (x + y) + z = x + (y + z)
-    mconcat = fold (+) zero
+    Seq.sum = Seq.fold (+) zero
+    sum = fold (+) zero (generic to all foldables)
 *)
 (**
 

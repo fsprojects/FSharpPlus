@@ -94,7 +94,7 @@ type ToArray =
 
 type OfSeq =
     inherit Default1
-    static member inline OfSeq (x:seq<'t>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> MConcat.Invoke :'Foldable'T
+    static member inline OfSeq (x:seq<'t>                 , _:'Foldable'T                     , _:Default5) = x |> Seq.map Return.Invoke |> Sum.Invoke :'Foldable'T
     static member        OfSeq (x:seq<'t>                 , _:seq<'t>                         , _:Default4) = x
     static member        OfSeq (x:seq<'t>                 , _:ICollection<'t>                 , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> ICollection<'t>
     static member        OfSeq (x:seq<'t>                 , _:IList<'t>                       , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> IList<'t>

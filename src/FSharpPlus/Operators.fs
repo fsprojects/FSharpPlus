@@ -90,7 +90,9 @@ module Operators =
 
     let inline (++)    (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
     let inline plus    (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
-    let inline mconcat (x:seq<'Monoid>)       : 'Monoid = MConcat.Invoke x
+
+    module Seq = 
+        let inline sum (x:seq<'Monoid>) : 'Monoid = FsControl.Sum.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
@@ -503,13 +505,10 @@ module Operators =
     /// Fold using alternative operator `<|>`
     let inline choice (x:'``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getEmpty()) : '``Alternative<'t>>``
 
-    /// Folds a Foldable of a Monoid, using its zero as initial state and its (+) as folder.
-    let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x
-
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
     let inline mfilter predicate (m:'``MonadZero<'t>``) :'``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else FsControl.Empty.Invoke()
 
-    /// Returns the sum of the elements in the Foldable.
+    /// Returns the sum of the monoid elements in the Foldable.
     let inline sum (x:'Foldable'Num) : 'Num = fold (+) (getZero(): 'Num) x
 
     /// Converts using the implicit operator. 

@@ -53,7 +53,7 @@ type ZipList<'s> = ZipList of 's seq with
     static member inline get_Zero() = result (getZero())                      :ZipList<'a>
     static member inline (+) (x:ZipList<'a>, y:ZipList<'a>) = liftA2 plus x y :ZipList<'a>
     // try also commenting/uncommenting the following method.
-    static member inline MConcat (x:seq<ZipList<'a>>) = printfn "ZipList mconcat optimized (in theory)"; List.foldBack plus (Seq.toList x) (getZero()):ZipList<'a>
+    static member inline Sum (x:seq<ZipList<'a>>) = printfn "ZipList Seq.sum optimized (in theory)"; List.foldBack plus (Seq.toList x) (getZero()):ZipList<'a>
     static member ToSeq    (ZipList lst)     = lst
 
 type WrappedList<'s> = WrappedList of 's list with
@@ -108,7 +108,7 @@ let quot1       = plus    <@ ResizeArray([1])   @>      (getZero())
 let quot23      = plus       (getZero())         <@ ResizeArray([2;3])   @>
 let quot13      = plus       (getZero())         <@ ("1","3") @>
 let quotLst123  = plus       (getZero())           (ZipList [ [1];[2];[3] ])
-let quotLst123' = mconcat    [getZero(); getZero(); ZipList [ [1];[2];[3] ]]
+let quotLst123' = Seq.sum    [getZero(); getZero(); ZipList [ [1];[2];[3] ]]
 
 let lzy1 = plus (lazy [1]) (lazy [2;3])
 let lzy2 = plus (getZero()) lzy1
@@ -125,7 +125,7 @@ let mapB = Map.empty
 
 let mapAB = plus mapA mapB
 let greeting1 = Async.RunSynchronously mapAB.[2]
-let greeting2 = Async.RunSynchronously (mconcat [mapA; getZero(); mapB]).[2]
+let greeting2 = Async.RunSynchronously (Seq.sum [mapA; getZero(); mapB]).[2]
 
 open System.Collections.Generic
 open System.Threading.Tasks
@@ -141,10 +141,10 @@ dicB.["keyb"] <- (result " World": Task<_>)
 let dicAB = plus dicA dicB
 
 let greeting3 = extract dicAB.["keyb"]
-let greeting4 = extract (mconcat [dicA; getZero(); dicB]).["keyb"]
+let greeting4 = extract (Seq.sum [dicA; getZero(); dicB]).["keyb"]
 
-let res2   = mconcat [ async {return Endo ((+) 2)} ; async {return Endo ((*) 10)} ; async {return Endo id } ;  async {return Endo ((%) 3)} ; async {return getZero() } ] |> Async.RunSynchronously |> Endo.run <| 3
-let res330 = mconcat [ async {return (fun (x:int) -> string x)} ; async {return (fun (x:int) -> string (x*10))} ; async {return getZero() } ] </Async.RunSynchronously/>  3
+let res2   = Seq.sum [ async {return Endo ((+) 2)} ; async {return Endo ((*) 10)} ; async {return Endo id } ;  async {return Endo ((%) 3)} ; async {return getZero() } ] |> Async.RunSynchronously |> Endo.run <| 3
+let res330 = Seq.sum [ async {return (fun (x:int) -> string x)} ; async {return (fun (x:int) -> string (x*10))} ; async {return getZero() } ] </Async.RunSynchronously/>  3
 
 // Functors, Monads
 
