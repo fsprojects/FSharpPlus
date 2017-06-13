@@ -54,10 +54,10 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '652', 652)" onmouseover="showTip(event, '652', 652)">
+          <code onmouseout="hideTip(event, '650', 650)" onmouseover="showTip(event, '650', 650)">
             Const(&#39;t)
           </code>
-          <div class="tip" id="652">
+          <div class="tip" id="650">
             <strong>Signature:</strong> &#39;t<br />
                       </div>
         </td>
@@ -80,10 +80,29 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '653', 653)" onmouseover="showTip(event, '653', 653)">
+          <code onmouseout="hideTip(event, '651', 651)" onmouseover="showTip(event, '651', 651)">
+            ( + )(arg1, arg2)
+          </code>
+          <div class="tip" id="651">
+            <strong>Signature:</strong> (Const&lt;^T,&#39;U&gt; * Const&lt;^T,&#39;U&gt;) -&gt; Const&lt;^T,&#39;U&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L42-42" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_Addition</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '652', 652)" onmouseover="showTip(event, '652', 652)">
             ( &lt;*&gt; )(arg1, arg2)
           </code>
-          <div class="tip" id="653">
+          <div class="tip" id="652">
             <strong>Signature:</strong> (Const&lt;^C,(&#39;T -&gt; &#39;U)&gt; * Const&lt;^C,&#39;T&gt;) -&gt; Const&lt;^C,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
         </td>
@@ -99,10 +118,10 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '654', 654)" onmouseover="showTip(event, '654', 654)">
+          <code onmouseout="hideTip(event, '653', 653)" onmouseover="showTip(event, '653', 653)">
             Contramap(arg1, arg2)
           </code>
-          <div class="tip" id="654">
+          <div class="tip" id="653">
             <strong>Signature:</strong> (Const&lt;&#39;C,&#39;T&gt; * (&#39;U -&gt; &#39;T)) -&gt; Const&lt;&#39;C,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
         </td>
@@ -117,10 +136,10 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '655', 655)" onmouseover="showTip(event, '655', 655)">
+          <code onmouseout="hideTip(event, '654', 654)" onmouseover="showTip(event, '654', 654)">
             First(arg1, f)
           </code>
-          <div class="tip" id="655">
+          <div class="tip" id="654">
             <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Const&lt;&#39;U,&#39;V&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
         </td>
@@ -135,10 +154,10 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '656', 656)" onmouseover="showTip(event, '656', 656)">
-            get_MEmpty()
+          <code onmouseout="hideTip(event, '655', 655)" onmouseover="showTip(event, '655', 655)">
+            get_Zero()
           </code>
-          <div class="tip" id="656">
+          <div class="tip" id="655">
             <strong>Signature:</strong> unit -&gt; Const&lt;^T,&#39;U&gt;<br />
                       </div>
         </td>
@@ -153,10 +172,10 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '657', 657)" onmouseover="showTip(event, '657', 657)">
+          <code onmouseout="hideTip(event, '656', 656)" onmouseover="showTip(event, '656', 656)">
             Map(arg1, arg2)
           </code>
-          <div class="tip" id="657">
+          <div class="tip" id="656">
             <strong>Signature:</strong> (Const&lt;&#39;C,&#39;T&gt; * (&#39;T -&gt; &#39;U)) -&gt; Const&lt;&#39;C,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
         </td>
@@ -171,28 +190,10 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '658', 658)" onmouseover="showTip(event, '658', 658)">
-            MAppend(arg1, arg2)
-          </code>
-          <div class="tip" id="658">
-            <strong>Signature:</strong> (Const&lt;^T,&#39;U&gt; * Const&lt;^T,&#39;U&gt;) -&gt; Const&lt;^T,&#39;U&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L42-42" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '659', 659)" onmouseover="showTip(event, '659', 659)">
+          <code onmouseout="hideTip(event, '657', 657)" onmouseover="showTip(event, '657', 657)">
             Return(arg1)
           </code>
-          <div class="tip" id="659">
+          <div class="tip" id="657">
             <strong>Signature:</strong> &#39;U -&gt; Const&lt;^T,&#39;U&gt;<br />
                       </div>
         </td>
@@ -207,10 +208,10 @@ Its applicative instance plays a fundamental role in Lens.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '660', 660)" onmouseover="showTip(event, '660', 660)">
+          <code onmouseout="hideTip(event, '658', 658)" onmouseover="showTip(event, '658', 658)">
             Second(arg1, arg2)
           </code>
-          <div class="tip" id="660">
+          <div class="tip" id="658">
             <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * (&#39;V -&gt; &#39;W)) -&gt; Const&lt;&#39;T,&#39;W&gt;<br />
                           <strong>Type parameters:</strong> 'W          </div>
         </td>
@@ -241,8 +242,8 @@ Its applicative instance plays a fundamental role in Lens.</p>
             <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-			<li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
           </ul>
         </div>
       </div>

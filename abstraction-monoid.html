@@ -38,24 +38,24 @@
 <hr />
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>mempty</code></li>
-<li><code>mappend x y</code>/<code>(++) x y</code></li>
+<li><code>zero</code>`</li>
+<li><code>(+) x y</code>/<code>(++) x y</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">get_MEmpty</span> () <span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>
-<span class="k">static</span> <span class="k">member</span> <span class="i">MAppend</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>, <span class="i">y</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">get_Zero</span> () <span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>
+<span class="k">static</span> <span class="k">member</span> (<span class="o">+</span>) (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>, <span class="i">y</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>
 </code></pre></td>
 </tr>
 </table>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
-<li><code>mconcat</code></li>
+<li><code>Seq.sum</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">MConcat</span> (<span class="i">x</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Seq</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">Monoid</span><span class="o">&gt;</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">Sum</span> (<span class="i">x</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Seq</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">Monoid</span><span class="o">&gt;</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Monoid</span>
 </code></pre></td>
 </tr>
 </table>
@@ -64,17 +64,19 @@
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
+<span class="l">5: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">mempty</span> <span class="o">++</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span>
-<span class="i">x</span> <span class="o">++</span> <span class="i">mempty</span> <span class="o">=</span> <span class="i">x</span>
-(<span class="i">x</span> <span class="o">++</span> <span class="i">y</span>) <span class="o">++</span> <span class="i">z</span> <span class="o">=</span> <span class="i">x</span> <span class="o">++</span> (<span class="i">y</span> <span class="o">++</span> <span class="i">z</span>)
-<span class="i">mconcat</span> <span class="o">=</span> <span class="i">fold</span> <span class="i">mappend</span> <span class="i">mempty</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">zero</span> <span class="o">+</span> <span class="i">x</span> <span class="o">=</span> <span class="i">x</span>
+<span class="i">x</span> <span class="o">+</span> <span class="i">zero</span> <span class="o">=</span> <span class="i">x</span>
+(<span class="i">x</span> <span class="o">+</span> <span class="i">y</span>) <span class="o">+</span> <span class="i">z</span> <span class="o">=</span> <span class="i">x</span> <span class="o">+</span> (<span class="i">y</span> <span class="o">+</span> <span class="i">z</span>)
+<span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">sum</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 4)" onmouseover="showTip(event, 'fs1', 4)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="i">fold</span> (<span class="o">+</span>) <span class="i">zero</span>
+<span class="i">sum</span> <span class="o">=</span> <span class="i">fold</span> (<span class="o">+</span>) <span class="i">zero</span> (<span class="i">generic</span> <span class="k">to</span> <span class="i">all</span> <span class="i">foldables</span>)
 </code></pre></td>
 </tr>
 </table>
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
-<li><p><a href="abstraction-semigroup.html">Semigroup</a>: A monoid is a Semigroup with an additional <code>mempty</code> operation</p></li>
+<li><p><a href="abstraction-semigroup.html">Semigroup</a>: A monoid is a Semigroup with an additional <code>zero</code> operation</p></li>
 <li>MonadPlus: Monads that are also Monoids</li>
 </ul>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
@@ -119,6 +121,8 @@
 </ul>
 
 <div class="tip" id="fs1">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs2">val sum : source:seq&lt;&#39;T&gt; -&gt; &#39;T (requires member ( + ) and member get_Zero)<br /><br />Full name: Microsoft.FSharp.Collections.Seq.sum</div>
+<div class="tip" id="fs3">val fold : folder:(&#39;State -&gt; &#39;T -&gt; &#39;State) -&gt; state:&#39;State -&gt; source:seq&lt;&#39;T&gt; -&gt; &#39;State<br /><br />Full name: Microsoft.FSharp.Collections.Seq.fold</div>
 
         </div>
         <div class="span3">
@@ -136,8 +140,8 @@
             <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-			<li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
           </ul>
         </div>
       </div>

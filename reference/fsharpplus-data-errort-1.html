@@ -52,10 +52,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '682', 682)" onmouseover="showTip(event, '682', 682)">
+          <code onmouseout="hideTip(event, '680', 680)" onmouseover="showTip(event, '680', 680)">
             ErrorT(&#39;monad&lt;&#39;choice&lt;&#39;t,&#39;e&gt;&gt;)
           </code>
-          <div class="tip" id="682">
+          <div class="tip" id="680">
             <strong>Signature:</strong> &#39;monad&lt;&#39;choice&lt;&#39;t,&#39;e&gt;&gt;<br />
                       </div>
         </td>
@@ -78,10 +78,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '683', 683)" onmouseover="showTip(event, '683', 683)">
+          <code onmouseout="hideTip(event, '681', 681)" onmouseover="showTip(event, '681', 681)">
             ( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="683">
+          <div class="tip" id="681">
             <strong>Signature:</strong> (f:ErrorT&lt;^Monad&lt;&#39;Choice&lt;(&#39;T -&gt; &#39;U),&#39;E&gt;&gt;&gt; * x:ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt;) -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^?9264, '?9265, '?9266, '?9267, ^Monad<'Choice<'T,'E>>, ^Monad<'Choice<'U,'E>>          </div>
         </td>
@@ -97,10 +97,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '684', 684)" onmouseover="showTip(event, '684', 684)">
+          <code onmouseout="hideTip(event, '682', 682)" onmouseover="showTip(event, '682', 682)">
             Bind(x, f)
           </code>
-          <div class="tip" id="684">
+          <div class="tip" id="682">
             <strong>Signature:</strong> (x:ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt; * f:(&#39;T -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;)) -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'Choice<'U,'E>>, '?9274, '?9275, 'T          </div>
         </td>
@@ -115,10 +115,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '685', 685)" onmouseover="showTip(event, '685', 685)">
+          <code onmouseout="hideTip(event, '683', 683)" onmouseover="showTip(event, '683', 683)">
             CallCC(f)
           </code>
-          <div class="tip" id="685">
+          <div class="tip" id="683">
             <strong>Signature:</strong> (f:((&#39;T -&gt; ErrorT&lt;&#39;MonadCont&lt;&#39;R,Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;) -&gt; ErrorT&lt;^MonadCont&lt;&#39;R, Choice&lt;&#39;T,&#39;E&gt;&gt;&gt;)) -&gt; ErrorT&lt;^MonadCont&lt;&#39;R, Choice&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'MonadCont<'R,Choice<'U,'E>>, ^MonadCont<'R, Choice<'T,'E>>, '?9305          </div>
         </td>
@@ -133,10 +133,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '686', 686)" onmouseover="showTip(event, '686', 686)">
+          <code onmouseout="hideTip(event, '684', 684)" onmouseover="showTip(event, '684', 684)">
             Catch(arg1, f)
           </code>
-          <div class="tip" id="686">
+          <div class="tip" id="684">
             <strong>Signature:</strong> (ErrorT&lt;^MonadError&lt;&#39;E1,&#39;T&gt;&gt; * f:(&#39;E1 -&gt; ErrorT&lt;^Monad&lt;Choice&lt;&#39;T,&#39;E2&gt;&gt;&gt;)) -&gt; ErrorT&lt;^Monad&lt;Choice&lt;&#39;T,&#39;E2&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<Choice<'T,'E2>>, '?9292, 'E1, '?9294          </div>
         </td>
@@ -151,10 +151,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '687', 687)" onmouseover="showTip(event, '687', 687)">
+          <code onmouseout="hideTip(event, '685', 685)" onmouseover="showTip(event, '685', 685)">
             get_Ask()
           </code>
-          <div class="tip" id="687">
+          <div class="tip" id="685">
             <strong>Signature:</strong> unit -&gt; ErrorT&lt;^MonadReader&lt;&#39;R,Choice&lt;&#39;R,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^?9309, '?9310, '?9311          </div>
         </td>
@@ -169,10 +169,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '688', 688)" onmouseover="showTip(event, '688', 688)">
+          <code onmouseout="hideTip(event, '686', 686)" onmouseover="showTip(event, '686', 686)">
             get_Get()
           </code>
-          <div class="tip" id="688">
+          <div class="tip" id="686">
             <strong>Signature:</strong> unit -&gt; ^ErrorT&lt;&#39;MonadState&lt;&#39;S,Choice&lt;_,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^?9345          </div>
         </td>
@@ -187,10 +187,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '689', 689)" onmouseover="showTip(event, '689', 689)">
+          <code onmouseout="hideTip(event, '687', 687)" onmouseover="showTip(event, '687', 687)">
             Lift(x)
           </code>
-          <div class="tip" id="689">
+          <div class="tip" id="687">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; ErrorT&lt;^Monad&lt;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<Choice<'T,'E>>, '?9281, '?9282          </div>
         </td>
@@ -205,10 +205,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '690', 690)" onmouseover="showTip(event, '690', 690)">
+          <code onmouseout="hideTip(event, '688', 688)" onmouseover="showTip(event, '688', 688)">
             LiftAsync(x)
           </code>
-          <div class="tip" id="690">
+          <div class="tip" id="688">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ^ErrorT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^ErrorT<'MonadAsync<'T>>, ^?9299          </div>
         </td>
@@ -223,10 +223,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '691', 691)" onmouseover="showTip(event, '691', 691)">
+          <code onmouseout="hideTip(event, '689', 689)" onmouseover="showTip(event, '689', 689)">
             Listen(m)
           </code>
-          <div class="tip" id="691">
+          <div class="tip" id="689">
             <strong>Signature:</strong> m:ErrorT&lt;&#39;?9325&gt; -&gt; ErrorT&lt;^MonadWriter&lt;&#39;Monoid,Choice&lt;&#39;T*&#39;Monoid,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,Choice<'T*'Monoid,'E>>, ^?9327, '?9328, '?9329, '?9330          </div>
         </td>
@@ -241,10 +241,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '692', 692)" onmouseover="showTip(event, '692', 692)">
+          <code onmouseout="hideTip(event, '690', 690)" onmouseover="showTip(event, '690', 690)">
             Local(arg1, f)
           </code>
-          <div class="tip" id="692">
+          <div class="tip" id="690">
             <strong>Signature:</strong> (ErrorT&lt;^MonadReader&lt;&#39;R2,Choice&lt;&#39;R2,&#39;E&gt;&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ErrorT&lt;^?9317&gt;<br />
                           <strong>Type parameters:</strong> 'R1, 'R2, ^?9317          </div>
         </td>
@@ -259,10 +259,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '693', 693)" onmouseover="showTip(event, '693', 693)">
+          <code onmouseout="hideTip(event, '691', 691)" onmouseover="showTip(event, '691', 691)">
             Map(x, f)
           </code>
-          <div class="tip" id="693">
+          <div class="tip" id="691">
             <strong>Signature:</strong> (x:ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'Choice<'U,'E>>, 'T, '?9259, 'U          </div>
         </td>
@@ -277,10 +277,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '694', 694)" onmouseover="showTip(event, '694', 694)">
+          <code onmouseout="hideTip(event, '692', 692)" onmouseover="showTip(event, '692', 692)">
             Pass(m)
           </code>
-          <div class="tip" id="694">
+          <div class="tip" id="692">
             <strong>Signature:</strong> m:ErrorT&lt;^?9333&gt; -&gt; ErrorT&lt;^MonadWriter&lt;&#39;Monoid,Choice&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,Choice<'T,'E>>, '?9335, '?9336, '?9337, ^?9338, ^?9339, '?9340, '?9341          </div>
         </td>
@@ -295,10 +295,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '695', 695)" onmouseover="showTip(event, '695', 695)">
+          <code onmouseout="hideTip(event, '693', 693)" onmouseover="showTip(event, '693', 693)">
             Put(x)
           </code>
-          <div class="tip" id="695">
+          <div class="tip" id="693">
             <strong>Signature:</strong> x:&#39;S -&gt; ^ErrorT&lt;&#39;MonadState&lt;&#39;S,Choice&lt;_,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^ErrorT<'MonadState<'S,Choice<_,'E>>>, ^?9350          </div>
         </td>
@@ -313,10 +313,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '696', 696)" onmouseover="showTip(event, '696', 696)">
+          <code onmouseout="hideTip(event, '694', 694)" onmouseover="showTip(event, '694', 694)">
             Return(x)
           </code>
-          <div class="tip" id="696">
+          <div class="tip" id="694">
             <strong>Signature:</strong> x:&#39;T -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'Choice<'T,'E>>, '?9253          </div>
         </td>
@@ -331,10 +331,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '697', 697)" onmouseover="showTip(event, '697', 697)">
+          <code onmouseout="hideTip(event, '695', 695)" onmouseover="showTip(event, '695', 695)">
             Tell(w)
           </code>
-          <div class="tip" id="697">
+          <div class="tip" id="695">
             <strong>Signature:</strong> w:&#39;Monoid -&gt; ^ErrorT&lt;Writer&lt;&#39;Monoid,Choice&lt;unit,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^ErrorT<Writer<'Monoid,Choice<unit,'E>>>, ^?9322          </div>
         </td>
@@ -349,10 +349,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '698', 698)" onmouseover="showTip(event, '698', 698)">
+          <code onmouseout="hideTip(event, '696', 696)" onmouseover="showTip(event, '696', 696)">
             Throw(x)
           </code>
-          <div class="tip" id="698">
+          <div class="tip" id="696">
             <strong>Signature:</strong> x:&#39;E -&gt; ErrorT&lt;^Monad&lt;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<Choice<'T,'E>>, '?9287          </div>
         </td>
@@ -383,8 +383,8 @@
             <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-			<li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
           </ul>
         </div>
       </div>
