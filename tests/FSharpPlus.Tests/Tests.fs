@@ -18,14 +18,14 @@ type WrappedListA<'s> = WrappedListA of 's list with
 
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return   (x) = WrappedListB [x]
-    static member MAppend  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
-    static member MEmpty   = WrappedListB List.empty
+    static member (+)  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
+    static member Zero   = WrappedListB List.empty
     static member ToSeq    (WrappedListB lst)     = List.toSeq lst
     static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
 
 type WrappedListC<'s> = WrappedListC of 's list with
-    static member MAppend  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
-    static member MEmpty   = WrappedListC List.empty
+    static member (+)  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
+    static member Zero   = WrappedListC List.empty
     static member MConcat  (lst: seq<WrappedListC<_>>)  = Seq.head lst
 
 type WrappedListD<'s> = WrappedListD of 's list with
@@ -410,8 +410,8 @@ type Numerics() =
 
 
 type Sum<'a> = Sum of 'a with
-    static member inline get_MEmpty() = Sum 0G
-    static member inline MAppend (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
+    static member inline get_Zero() = Sum 0G
+    static member inline (+) (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
 
 
 [<TestFixture>]

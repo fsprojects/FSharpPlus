@@ -30,7 +30,7 @@ type Bind =
     [<Extension>]static member Bind (source               , f : 'T -> _           ) = List.collect  f source                                        : list<'U>  
     [<Extension>]static member Bind (source               , f : 'T -> _           ) = Array.collect f source                                        : 'U []     
     [<Extension>]static member Bind (source               , k : 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
-    static member inline       Bind ((w : 'Monoid, a : 'T), k : 'T -> 'Monoid * 'U) = let m, b = k a in (MAppend.Invoke w m, b)                     : 'Monoid*'U
+    static member inline       Bind ((w : 'Monoid, a : 'T), k : 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
     [<Extension>]static member Bind (source               , f : 'T -> _           ) = async.Bind(source, f)                                         : Async<'U>
     [<Extension>]static member Bind (source               , k : 'T -> _           ) = Error.bind k source                                           : Choice<'U,'E>
 
@@ -74,7 +74,7 @@ type Join =
     [<Extension>]static member Join (x                         , [<Optional>]_output : list<'T>        , [<Optional>]_impl : Join    ) = List.collect  id x        : list<'T>  
     [<Extension>]static member Join (x                         , [<Optional>]_output : 'T []           , [<Optional>]_impl : Join    ) = Array.collect id x        : 'T []     
     [<Extension>]static member Join (g                         , [<Optional>]_output : 'R->'T          , [<Optional>]_impl : Join    ) = (fun r -> (g r) r)        : 'R->'T    
-    static member inline       Join (m1, (m2, x)               , [<Optional>]_output : 'Monoid * 'T    , [<Optional>]_impl : Join    ) = MAppend.Invoke m1 m2, x    : 'Monoid*'T
+    static member inline       Join (m1, (m2, x)               , [<Optional>]_output : 'Monoid * 'T    , [<Optional>]_impl : Join    ) = Plus.Invoke m1 m2, x      : 'Monoid*'T
     [<Extension>]static member Join (x                         , [<Optional>]_output : Async<'T>       , [<Optional>]_impl : Join    ) = async.Bind(x, id)         : Async<'T>
     [<Extension>]static member Join (x                         , [<Optional>]_output : Choice<'T,'E>   , [<Optional>]_impl : Join    ) = Error.bind id x           : Choice<'T,'E>
 
@@ -124,7 +124,7 @@ type Return =
     static member        Return (_:list<'a>      , _:Return) = fun x -> [ x ]       :list<'a>
     static member        Return (_:'a []         , _:Return) = fun x -> [|x|]       :'a []
     static member        Return (_:'r -> 'a      , _:Return) = const':'a  -> 'r -> _
-    static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (MEmpty.Invoke():'m), x
+    static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (Zero.Invoke():'m), x
     static member        Return (_:'a Async      , _:Return) = fun (x:'a) -> async.Return x
     static member        Return (_:Choice<'a,'e> , _:Return) = fun x -> Choice1Of2 x :Choice<'a,'e>
     static member        Return (_:Expr<'a>      , _:Return) = fun x -> Expr.Cast<'a>(Expr.Value(x:'a))
@@ -146,11 +146,11 @@ type Apply =
     static member        ``<*>`` (f:list<_>     , x:list<'T>       , [<Optional>]_output:list<'U>     , [<Optional>]_impl:Apply) = List.apply f x :list<'U>
     static member        ``<*>`` (f:_ []        , x:'T []          , [<Optional>]_output:'U []        , [<Optional>]_impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
     static member        ``<*>`` (f:'r -> _     , g: _ -> 'T       , [<Optional>]_output: 'r -> 'U    , [<Optional>]_impl:Apply) = fun x -> f x (g x) :'U
-    static member inline ``<*>`` ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]_output:'Monoid * 'U , [<Optional>]_impl:Apply) = (MAppend.Invoke a b, f x) :'Monoid *'U
+    static member inline ``<*>`` ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]_output:'Monoid * 'U , [<Optional>]_impl:Apply) = (Plus.Invoke a b, f x) :'Monoid *'U
     static member        ``<*>`` (f:Async<_>    , x:Async<'T>      , [<Optional>]_output:Async<'U>    , [<Optional>]_impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
     static member        ``<*>`` (f:option<_>   , x:option<'T>     , [<Optional>]_output:option<'U>   , [<Optional>]_impl:Apply) = Option.apply f x    :option<'U>
     static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>  , [<Optional>]_output:Choice<'b,'E>, [<Optional>]_impl:Apply) = Error.apply f x :Choice<'U,'E>
-    static member inline ``<*>`` (KeyValue(a:'Key, f), KeyValue(b:'Key, x:'T), [<Optional>]_output:KeyValuePair<'Key,'U>, [<Optional>]_impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(MAppend.Invoke a b, f x)
+    static member inline ``<*>`` (KeyValue(a:'Key, f), KeyValue(b:'Key, x:'T), [<Optional>]_output:KeyValuePair<'Key,'U>, [<Optional>]_impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(Plus.Invoke a b, f x)
 
     static member        ``<*>`` (f:Map<'Key,_>      , x:Map<'Key,'T>        , [<Optional>]_output:Map<'Key,'U>, [<Optional>]_impl:Apply) :Map<'Key,'U> = Map (seq {
        for KeyValue(k, vf) in f do
@@ -263,7 +263,7 @@ type Empty =
     static member        Empty ([<Optional>]_output : list<'T>            , [<Optional>]_mthd : Empty   ) = [  ]                  : list<'T>  
     static member        Empty ([<Optional>]_output : 'T []               , [<Optional>]_mthd : Empty   ) = [||]                  : 'T []     
     static member        Empty ([<Optional>]_output : seq<'T>             , [<Optional>]_mthd : Empty   ) = Seq.empty             : seq<'T>
-    static member inline Empty ([<Optional>]_output : Id<'T>              , [<Optional>]_mthd : Empty   ) = Id (MEmpty.Invoke())  : Id<'T>
+    static member inline Empty ([<Optional>]_output : Id<'T>              , [<Optional>]_mthd : Empty   ) = Id (Zero.Invoke())    : Id<'T>
 
     static member inline Invoke () : '``FunctorZero<'T>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Empty: _*_ -> _) output, mthd)
@@ -277,7 +277,7 @@ type Append =
     static member        Append (x :'T list             , y                     , [<Optional>]_mthd : Append  ) = x @ y
     static member        Append (x :'T []               , y                     , [<Optional>]_mthd : Append  ) = Array.append x y
     static member        Append (x :'T seq              , y                     , [<Optional>]_mthd : Append  ) = Seq.append   x y
-    static member inline Append (x :'T Id               , y                     , [<Optional>]_mthd : Append  ) = Id (MAppend.Invoke (Id.run x) (Id.run y))
+    static member inline Append (x :'T Id               , y                     , [<Optional>]_mthd : Append  ) = Id (Plus.Invoke (Id.run x) (Id.run y))
 
     static member inline Invoke (x:'``FunctorPlus<'T>``) (y:'``FunctorPlus<'T>``)  : '``FunctorPlus<'T>`` =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member Append: _*_*_ -> _) input1, input2, mthd)
@@ -388,7 +388,7 @@ type Extract =
     [<Extension>]static member Extract (x : Async<'T>    ) = Async.RunSynchronously x
     [<Extension>]static member Extract (x : Lazy<'T>     ) = x.Value
     [<Extension>]static member Extract ((_ : 'W, a : 'T) ) = a
-    static member inline       Extract (f : 'Monoid -> 'T) = f (MEmpty.Invoke())
+    static member inline       Extract (f : 'Monoid -> 'T) = f (Zero.Invoke())
     [<Extension>]static member Extract (f : 'T Id        ) = f
 
 #if NET35
@@ -405,7 +405,7 @@ type Extend =
     [<Extension>]static member Extend (g : Async<'T>    , f : Async<'T> -> 'U) = async.Return (f g)             : Async<'U>
     [<Extension>]static member Extend (g : Lazy<'T>     , f : Lazy<'T> -> 'U ) = Lazy.Create  (fun () -> f g)   : Lazy<'U>
     [<Extension>]static member Extend ((w : 'W, a : 'T) , f : _ -> 'U        ) = (w, f (w, a))        
-    static member inline       Extend (g : 'Monoid -> 'T, f : _ -> 'U        ) = fun a -> f (fun b -> g (MAppend.Invoke a b))
+    static member inline       Extend (g : 'Monoid -> 'T, f : _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
     [<Extension>]static member Extend (g : Id<'T>       , f : Id<'T> -> 'U   ) = f g
 
 #if NET35
@@ -430,7 +430,7 @@ type Duplicate =
     [<Extension>]static member Duplicate (s : Lazy<'T>         , [<Optional>]_mthd : Duplicate) = Lazy.CreateFromValue s      : Lazy<Lazy<'T>>
     [<Extension>]static member Duplicate (s : Id<'T>           , [<Optional>]_mthd : Duplicate) = Id s                        : Id<Id<'T>>
     [<Extension>]static member Duplicate ((w : 'W, a : 'T)     , [<Optional>]_mthd : Duplicate) = w, (w, a)
-    static member inline       Duplicate (f : 'Monoid -> 'T    , [<Optional>]_mthd : Duplicate) = fun a b -> f (MAppend.Invoke a b)
+    static member inline       Duplicate (f : 'Monoid -> 'T    , [<Optional>]_mthd : Duplicate) = fun a b -> f (Plus.Invoke a b)
 
     // Restricted Comonads
     [<Extension>]static member Duplicate (s :  list<'T>        , [<Optional>]_mthd : Duplicate) = List.tails s

@@ -17,13 +17,13 @@ Minimal complete definition
 ---------------------------
 
 
- * ``mempty``
- * ``mappend x y``/``(++) x y``
+ * `zero``
+ * ``(+) x y``/``(++) x y``
 
 *)
 (**
-    static member get_MEmpty () :'Monoid
-    static member MAppend (x:'Monoid, y:'Monoid) :'Monoid
+    static member get_Zero () :'Monoid
+    static member (+) (x:'Monoid, y:'Monoid) :'Monoid
 *)
 (**
 
@@ -44,10 +44,10 @@ Rules
 -----
 *)
 (**
-	mempty ++ x = x
-    x ++ mempty = x
-    (x ++ y) ++ z = x ++ (y ++ z)
-    mconcat = fold mappend mempty
+	zero + x = x
+    x + zero = x
+    (x + y) + z = x + (y + z)
+    mconcat = fold (+) zero
 *)
 (**
 
@@ -55,7 +55,7 @@ Rules
 Related Abstractions
 --------------------
 
- - [Semigroup](abstraction-semigroup.html): A monoid is a Semigroup with an additional ``mempty`` operation
+ - [Semigroup](abstraction-semigroup.html): A monoid is a Semigroup with an additional ``zero`` operation
  
  - MonadPlus: Monads that are also Monoids
 

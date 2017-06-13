@@ -37,8 +37,8 @@ let lst1625 =  (+) <!> [11;20] <*> [5]
 
 // Monoids
 
-let res9823 = mconcat (fmap Dual [mempty;"3";"2";"8";"9"])    // Dual "9823"
-let resLtDualGt= mappend  (LT, Dual GT) mempty                // (LT, Dual GT)
+let res9823 = mconcat (fmap Dual [mempty();"3";"2";"8";"9"])    // Dual "9823"
+let resLtDualGt= mappend  (LT, Dual GT) (mempty())              // (LT, Dual GT)
 
 
 // Monad
@@ -60,9 +60,7 @@ let someListOf42 = replicateM 5 (Some 42)
 
 // Arrow
 
-let res5:List<_>  = runKleisli id 5
-let k = runKleisli (Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< id <<< Kleisli (fun x -> [x + 3; x * 2])) 5
-let res3n6n9 = arr (fun y -> [y; y * 2 ; y * 3]) 3
+let res3n6n9 = (arr (fun y -> [y; y * 2 ; y * 3])) 3
 let resSome2n4n6:Maybe<_> = runKleisli (arr (fun y -> [y; y * 2 ; y * 3])) 2
 let res500n19 = ((*) 100) *** ((+) 9)  $ (5, 10)
 let res500n14 = ((*) 100) &&& ((+) 9)  $ 5

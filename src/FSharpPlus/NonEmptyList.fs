@@ -54,7 +54,7 @@ type NonEmptyList with
     static member Extend    (s, g) = NonEmptyList.map g (NonEmptyList.tails s) :NonEmptyList<'b>
     
 
-    static member MAppend ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
+    static member (+) ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
     static member ToList   (s:NonEmptyList<'a>, [<Optional>]_impl:ToList) = NonEmptyList.toList s

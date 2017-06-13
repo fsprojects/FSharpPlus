@@ -265,13 +265,13 @@ let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id
 
 // Monoids
 
-let inline mempty() = FSharpPlus.Operators.getMEmpty ()
-let inline mappend (x:'a) (y:'a): 'a = FSharpPlus.Operators.mappend x y
+let inline mempty() = FSharpPlus.Operators.getZero ()
+let inline mappend (x:'a) (y:'a): 'a = FSharpPlus.Operators.plus x y
 let inline mconcat (x:seq<'a>) : 'a = FSharpPlus.Operators.mconcat x
 
 type Ordering = LT|EQ|GT with
-    static member        MEmpty = EQ
-    static member        MAppend (x:Ordering, y) = 
+    static member        Zero = EQ
+    static member        (+) (x:Ordering, y) = 
         match x, y with
         | LT, _ -> LT
         | EQ, a -> a
@@ -284,28 +284,28 @@ let inline compare' x y =
     | _            -> EQ
 
 type Sum<'a> = Sum of 'a with
-    static member inline get_MEmpty() = Sum 0G
-    static member inline MAppend (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
+    static member inline get_Zero() = Sum 0G
+    static member inline (+) (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
 
 type Product<'a> = Product of 'a with
-    static member inline get_MEmpty() = Product 1G
-    static member inline MAppend (Product (x:'n), Product(y:'n)) = Product (x * y)
+    static member inline get_Zero() = Product 1G
+    static member inline (+) (Product (x:'n), Product(y:'n)) = Product (x * y)
 
 type Dual<'T> = Dual of 'T with
-    static member inline get_MEmpty() = Dual (mempty())
-    static member inline MAppend (Dual x, Dual y) = Dual (mappend y x)
+    static member inline get_Zero() = Dual (mempty())
+    static member inline (+) (Dual x, Dual y) = Dual (mappend y x)
 
 type Endo<'T> = Endo of ('T -> 'T) with
-    static member get_MEmpty() = Endo id
-    static member MAppend (Endo f, Endo g) = Endo (f << g)
+    static member get_Zero() = Endo id
+    static member (+) (Endo f, Endo g) = Endo (f << g)
 
 type All = All of bool with
-    static member MEmpty = All true
-    static member MAppend (All x, All y) = All (x && y)
+    static member Zero = All true
+    static member (+) (All x, All y) = All (x && y)
 
 type Any = Any of bool with
-    static member MEmpty = Any false
-    static member MAppend (Any x, Any y ) = Any (x || y)
+    static member Zero = Any false
+    static member (+) (Any x, Any y ) = Any (x || y)
 
 
 // Test Monoids

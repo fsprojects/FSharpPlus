@@ -1,8 +1,7 @@
 @startuml
-
 together {
 	abstract class Semigroup [[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html]] {
-	  + append x y [[[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html#mappend {Appends two semigroups} ]]]
+	  + (+) x y [[[http://gusty.github.io/FSharpPlus/abstraction-semigroup.html#plus {Appends two semigroups} ]]]
 	}
 
 	abstract class Comonad [[http://gusty.github.io/FSharpPlus/abstraction-comonad.html]] {
@@ -14,8 +13,8 @@ together {
 }
 
 abstract class Monoid [[http://gusty.github.io/FSharpPlus/abstraction-monoid.html]] {
-  + mempty [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#mempty {Identity for mappend} ]]]
-  + mappend x y [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#mappend {Appends both monoids} ]]]
+  + zero [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#zero {Identity for (+)} ]]]
+  + (+) x y [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#plus {Appends both monoids} ]]]
   ==
   + mconcat x [[[http://gusty.github.io/FSharpPlus/abstraction-monoid.html#mconcat {Flatten a sequence of monoids} ]]]
 }
@@ -115,5 +114,4 @@ Functor - Contravariant
 (Functor, Contravariant) --|> Profunctor
 Profunctor - Category
 (Profunctor, Category) --|>  Arrow
-
 @enduml

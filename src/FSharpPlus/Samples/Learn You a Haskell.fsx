@@ -48,15 +48,15 @@ type Pair with
 let res19 = Pair (10, "hello")
 let res20 = map ((*) 100) (Pair (2, 3))                               // Pair (200, 300)
 
-let res21 = mappend [1;4] [3;6]
-let res22 = mappend "Hello " "World"
-let res23 = mappend "pang"  (getMEmpty())                             // "pang"
+let res21 = plus    [1;4] [3;6]
+let res22 = plus    "Hello " "World"
+let res23 = plus    "pang"  (getZero())                               // "pang"
 let res24 = mconcat [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
 
-let res25 = mappend (Any true) (Any false)                            // Any true
+let res25 = plus    (Any true) (Any false)                            // Any true
 let res26 = [false; false; false; true] |> List.map Any |> mconcat
-let res27 = mappend (getMEmpty()) (All false)                         // All false
-let res28 = mappend (Some "some") None                                // Some "some"
+let res27 = plus    (getZero()) (All false)                           // All false
+let res28 = plus    (Some "some") None                                // Some "some"
 
 let res29 = foldBack (*) [1;2;3] 1
 let res30 = fold     (+) 2 (Some 9)
@@ -78,7 +78,7 @@ type Tree with
         | MEmpty -> z
         | Node (x, left, right) -> Tree<_>.treeFold f right (Tree<_>.treeFold f left (f x z))
     static member inline FoldBack (x:Tree<'a>, f, z) = Tree<'a>.treeFold f x z
-    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, MAppend.Invoke << f, getMEmpty())
+    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, plus << f, getZero())
 
 let testTree =
     let one = Node (1, MEmpty, MEmpty)

@@ -126,6 +126,17 @@ type One =
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<One>
 
+open System
+open System.Text
+#if NET35
+#else
+open System.Threading.Tasks
+#endif
+open System.Collections.Generic
+open Microsoft.FSharp.Quotations
+
+
+
 type Zero =
     inherit Default1
     static member inline Zero (_:'t             , _:Default2) = FromInt32.Invoke 0             :'t
@@ -133,11 +144,44 @@ type Zero =
     static member inline Zero (_:^t when ^t: null and ^t: struct, _:Default1) = id
     static member        Zero (_:System.TimeSpan, _:Zero    ) = System.TimeSpan()
     static member        Zero (_:DmStruct       , _:Zero    ) = Unchecked.defaultof<DmStruct>
+        
+    static member        Zero (_:list<'a>     , _:Zero) = []   :  list<'a>
+    static member        Zero (_:option<'a>   , _:Zero) = None :option<'a>
+    static member        Zero (_:array<'a>    , _:Zero) = [||] : array<'a>
+    static member        Zero (_:string       , _:Zero) = ""
+    static member        Zero (_:StringBuilder, _:Zero) = new StringBuilder()
+    static member        Zero (_:unit         , _:Zero) = ()
+    static member        Zero (_:Set<'a>      , _:Zero) = Set.empty : Set<'a>
+    static member        Zero (_:Map<'a,'b>   , _:Zero) = Map.empty : Map<'a,'b>
 
-    static member inline Invoke ()   :'Num    =
+    static member inline Invoke() = 
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Zero: _*_ -> _) b, a)
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<Zero>
+
+type Zero with static member inline Zero (_ : 'a*'b         , _:Zero) = (Zero.Invoke(), Zero.Invoke()                                                   ): 'a*'b
+type Zero with static member inline Zero (_ : 'a*'b*'c      , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke()                                  ): 'a*'b*'c
+type Zero with static member inline Zero (_ : 'a*'b*'c*'d   , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke()                 ): 'a*'b*'c*'d
+type Zero with static member inline Zero (_ : 'a*'b*'c*'d*'e, _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke()): 'a*'b*'c*'d*'e
+
+#if NET35
+#else
+type Zero with
+    static member inline Zero (_:Task<'a>,        _:Zero) =
+        let (v:'a) = Zero.Invoke()
+        let s = TaskCompletionSource()
+        s.SetResult v
+        s.Task
+#endif
+
+    static member inline Zero (_:'T->'Monoid      , _:Zero) = (fun _ -> Zero.Invoke()) :'T->'Monoid
+    static member inline Zero (_:Async<'a>        , _:Zero) = let (v:'a) = Zero.Invoke() in async.Return v
+    static member inline Zero (_:Expr<'a>         , _:Zero) = let (v:'a) = Zero.Invoke() in Expr.Cast<'a>(Expr.Value(v))
+    static member inline Zero (_:Lazy<'a>         , _:Zero) = let (v:'a) = Zero.Invoke() in lazy v
+    static member        Zero (_:Dictionary<'a,'b>, _:Zero) = Dictionary<'a,'b>()
+    static member        Zero (_:ResizeArray<'a>  , _:Zero) = ResizeArray() : ResizeArray<'a>
+    static member        Zero (_:seq<'a>          , _:Zero) = Seq.empty   :  seq<'a>
+    static member        Zero (_:IDictionary<'a,'b>, _:Zero) = Dictionary<'a,'b>() :> IDictionary<'a,'b>
 
 
 

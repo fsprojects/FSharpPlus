@@ -97,13 +97,13 @@ module Compatibility =
 
         // Monoids
 
-        let inline mempty< ^Monoid when (MEmpty or ^Monoid) : (static member MEmpty : ^Monoid * MEmpty -> ^Monoid) > : ^Monoid = MEmpty.Invoke()
-        let inline mappend a b = mappend a b
+        let inline mempty< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke()
+        let inline mappend a b = plus a b
         let inline mconcat s = mconcat s
 
         type Ordering = LT|EQ|GT with
-            static member        MEmpty = EQ
-            static member        MAppend (x:Ordering, y) = 
+            static member Zero = EQ
+            static member (+) (x:Ordering, y) = 
                 match x, y with
                 | LT, _ -> LT
                 | EQ, a -> a

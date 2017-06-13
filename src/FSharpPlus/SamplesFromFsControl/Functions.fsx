@@ -48,8 +48,8 @@ let minUInt = findMin [1u;0u;12u;2u]  // loops only twice
 // Test Extension Methods
 open FsControl
 
-let mapp1 = [1..3] </mappend/> [4..8]
-let mapp2 = [1..3]  .MAppend   [4..8]
+let mapp1 = [1..3] </plus/> [4..8]
+let mapp2 = [1..3]  .Plus   [4..8]
 let mcon1 = [|[|1..3|];[|4..5|]|] |> join
 let mcon2 = [|[|1..3|];[|4..5|]|] .Join()  // Optional arguments work from F# 4.1. In C# you can write (new[] {new[] {1, 2, 3}, new[] {4, 5, 6}}).Join();
 

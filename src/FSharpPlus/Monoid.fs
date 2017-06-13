@@ -13,123 +13,82 @@ open System.Threading.Tasks
 open FsControl.Internals
 
 
-type MEmpty =
-    inherit Default1
-        
-    static member        MEmpty (_:list<'a>     , _:MEmpty) = []   :  list<'a>
-    static member        MEmpty (_:option<'a>   , _:MEmpty) = None :option<'a>
-    static member        MEmpty (_:array<'a>    , _:MEmpty) = [||] : array<'a>
-    static member        MEmpty (_:string       , _:MEmpty) = ""
-    static member        MEmpty (_:StringBuilder, _:MEmpty) = new StringBuilder()
-    static member        MEmpty (_:unit         , _:MEmpty) = ()
-    static member        MEmpty (_:Set<'a>      , _:MEmpty) = Set.empty : Set<'a>
-    static member        MEmpty (_:Map<'a,'b>   , _:MEmpty) = Map.empty : Map<'a,'b>
-    static member        MEmpty (_:TimeSpan     , _:MEmpty) = TimeSpan()
-
-    static member inline Invoke() = 
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member MEmpty: _*_ -> _) b, a)
-        let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
-        call Unchecked.defaultof<MEmpty>
-
-type MEmpty with static member inline MEmpty (_ : 'a*'b         , _:MEmpty) = (MEmpty.Invoke(), MEmpty.Invoke()                                                   ): 'a*'b
-type MEmpty with static member inline MEmpty (_ : 'a*'b*'c      , _:MEmpty) = (MEmpty.Invoke(), MEmpty.Invoke(), MEmpty.Invoke()                                  ): 'a*'b*'c
-type MEmpty with static member inline MEmpty (_ : 'a*'b*'c*'d   , _:MEmpty) = (MEmpty.Invoke(), MEmpty.Invoke(), MEmpty.Invoke(), MEmpty.Invoke()                 ): 'a*'b*'c*'d
-type MEmpty with static member inline MEmpty (_ : 'a*'b*'c*'d*'e, _:MEmpty) = (MEmpty.Invoke(), MEmpty.Invoke(), MEmpty.Invoke(), MEmpty.Invoke(), MEmpty.Invoke()): 'a*'b*'c*'d*'e
-
-type MEmpty with
-    static member inline MEmpty (_:'R, _:Default1) = ((^R) : (static member MEmpty: ^R) ()):'R
-
-#if NET35
-#else
-    static member inline MEmpty (_:Task<'a>,        _:MEmpty) =
-        let (v:'a) = MEmpty.Invoke()
-        let s = TaskCompletionSource()
-        s.SetResult v
-        s.Task
-#endif
-
-    static member inline MEmpty (_:'T->'Monoid      , _:MEmpty) = (fun _ -> MEmpty.Invoke()) :'T->'Monoid
-    static member inline MEmpty (_:Async<'a>        , _:MEmpty) = let (v:'a) = MEmpty.Invoke() in async.Return v
-    static member inline MEmpty (_:Expr<'a>         , _:MEmpty) = let (v:'a) = MEmpty.Invoke() in Expr.Cast<'a>(Expr.Value(v))
-    static member inline MEmpty (_:Lazy<'a>         , _:MEmpty) = let (v:'a) = MEmpty.Invoke() in lazy v
-    static member        MEmpty (_:Dictionary<'a,'b>, _:MEmpty) = Dictionary<'a,'b>()
-    static member        MEmpty (_:ResizeArray<'a>  , _:MEmpty) = ResizeArray() : ResizeArray<'a>
-    static member        MEmpty (_:seq<'a>          , _:MEmpty) = Seq.empty   :  seq<'a>
-    static member        MEmpty (_:IDictionary<'a,'b>, _:MEmpty) = Dictionary<'a,'b>() :> IDictionary<'a,'b>
-
-
 [<Extension; Sealed>]
-type MAppend =       
-    [<Extension>]static member        MAppend (x:list<_>      , y ) = x @ y       
-    [<Extension>]static member        MAppend (x:array<_>     , y ) = Array.append x y
-    [<Extension>]static member        MAppend (()             , ()) =  ()
-    [<Extension>]static member        MAppend (x:Set<_>       , y ) = Set.union x y
-    [<Extension>]static member        MAppend (x:string       , y ) = x + y
-                 static member        MAppend (x:StringBuilder, y:StringBuilder) = StringBuilder().Append(x).Append(y)
-    [<Extension>]static member        MAppend (x:TimeSpan     , y:TimeSpan) = x + y
+type Plus =     
+    inherit Default1
+                 static member inline Plus (x :'Plus       , y:'Plus,                  _: Default2) = (^Plus :  (static member Append : _*_ -> _) x, y) : ^Plus
+                 static member inline Plus (x :'Plus       , y:'Plus, [<Optional>]_mthd : Default1) = x + y : ^Plus
+                 static member inline Plus (_ :^t when ^t:null and ^t:struct       , _:^t, [<Optional>]_mthd : Default1) = id
+    [<Extension>]static member        Plus (x:list<_>      , y      , [<Optional>]_mthd : Plus    ) = x @ y
+    [<Extension>]static member        Plus (x:array<_>     , y      , [<Optional>]_mthd : Plus    ) = Array.append x y
+    [<Extension>]static member        Plus (()             , ()     , [<Optional>]_mthd : Plus    ) =  ()
+    [<Extension>]static member        Plus (x:Set<_>       , y      , [<Optional>]_mthd : Plus    ) = Set.union x y
+    [<Extension>]static member        Plus (x:string       , y ) = x + y
+                 static member        Plus (x:StringBuilder, y:StringBuilder      , [<Optional>]_mthd : Plus    ) = StringBuilder().Append(x).Append(y)
+    [<Extension>]static member        Plus (x:TimeSpan     , y:TimeSpan) = x + y
 
-    static member inline Invoke (x:'T) (y:'T) :'T =
-        let inline call_3 (_:^M, a:^t, b:^t) = ((^M or ^t) : (static member MAppend: _*_ -> _) a, b)
-        call_3 (Unchecked.defaultof<MAppend>, x, y)
+    static member inline Invoke (x:'Plus) (y:'Plus)  : 'Plus =
+        let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member Plus: _*_*_ -> _) input1, input2, mthd)
+        call (Unchecked.defaultof<Plus>, x, y)
 
-type MAppend with
-    [<Extension>]static member inline MAppend (x:option<_>,y ) =
+type Plus with
+    [<Extension>]static member inline Plus (x:option<_>,y , [<Optional>]_mthd : Plus    ) =
                     match (x,y) with
-                    | (Some a , Some b) -> Some (MAppend.Invoke a b)
+                    | (Some a , Some b) -> Some (Plus.Invoke a b)
                     | (Some a , None  ) -> Some a
                     | (None   , Some b) -> Some b
                     | _                 -> None
 
 
-type MAppend with 
-    static member inline       MAppend ((x1,x2         ), (y1,y2         )) = (MAppend.Invoke x1 y1, MAppend.Invoke x2 y2                                                                  ) :'a*'b
-type MAppend with 
-    static member inline       MAppend ((x1,x2,x3      ), (y1,y2,y3      )) = (MAppend.Invoke x1 y1, MAppend.Invoke x2 y2, MAppend.Invoke x3 y3                                            ) :'a*'b*'c
-type MAppend with 
-    static member inline       MAppend ((x1,x2,x3,x4   ), (y1,y2,y3,y4   )) = (MAppend.Invoke x1 y1, MAppend.Invoke x2 y2, MAppend.Invoke x3 y3, MAppend.Invoke x4 y4                      ) :'a*'b*'c*'d
-type MAppend with 
-    static member inline       MAppend ((x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5)) = (MAppend.Invoke x1 y1, MAppend.Invoke x2 y2, MAppend.Invoke x3 y3, MAppend.Invoke x4 y4, MAppend.Invoke x5 y5) :'a*'b*'c*'d*'e
+type Plus with 
+    static member inline       Plus ((x1,x2         ), (y1,y2         ), [<Optional>]_mthd : Plus    ) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                                  ) :'a*'b
+type Plus with 
+    static member inline       Plus ((x1,x2,x3      ), (y1,y2,y3      ), [<Optional>]_mthd : Plus    ) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3                                            ) :'a*'b*'c
+type Plus with 
+    static member inline       Plus ((x1,x2,x3,x4   ), (y1,y2,y3,y4   ), [<Optional>]_mthd : Plus    ) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4                      ) :'a*'b*'c*'d
+type Plus with 
+    static member inline       Plus ((x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5), [<Optional>]_mthd : Plus    ) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5) :'a*'b*'c*'d*'e
     
-type MAppend with    
+type Plus with    
     
 #if NET35
 #else
-    static member inline       MAppend (x:'a Task, y:'a Task) =
+    static member inline       Plus (x:'a Task, y:'a Task, [<Optional>]_mthd : Plus    ) =
                     x.ContinueWith(fun (t: Task<_>) -> 
                         (fun a -> 
                             y.ContinueWith(fun (u: Task<_>) -> 
-                                MAppend.Invoke a u.Result)) t.Result).Unwrap()
+                                Plus.Invoke a u.Result)) t.Result).Unwrap()
 #endif
 
-    static member inline       MAppend (x:Map<'a,'b>, y) =
-                    Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> MAppend.Invoke v v' | None -> v') m) x y
+    static member inline       Plus (x:Map<'a,'b>, y, [<Optional>]_mthd : Plus    ) =
+                    Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> Plus.Invoke v v' | None -> v') m) x y
 
-    static member inline       MAppend (x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>) =
+    static member inline       Plus (x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>, [<Optional>]_mthd : Plus    ) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v
-                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> MAppend.Invoke v v' | _ -> v'
+                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Plus.Invoke v v' | _ -> v'
                     d
 
-    static member inline       MAppend (f:'T->'Monoid, g:'T->'Monoid) = (fun x -> MAppend.Invoke (f x) (g x)) :'T->'Monoid
+    static member inline       Plus (f:'T->'Monoid, g:'T->'Monoid, [<Optional>]_mthd : Plus    ) = (fun x -> Plus.Invoke (f x) (g x)) :'T->'Monoid
 
-    static member inline       MAppend (x:'S Async, y:'S Async) = async {
+    static member inline       Plus (x:'S Async, y:'S Async, [<Optional>]_mthd : Plus    ) = async {
                     let! a = x
                     let! b = y
-                    return MAppend.Invoke a b}
+                    return Plus.Invoke a b}
 
-    static member inline       MAppend (x:'a Expr, y:'a Expr) :'a Expr =
-                    let inline f (x:'a)  :'a -> 'a = MAppend.Invoke x
+    static member inline       Plus (x:'a Expr, y:'a Expr, [<Optional>]_mthd : Plus    ) :'a Expr =
+                    let inline f (x:'a)  :'a -> 'a = Plus.Invoke x
                     Expr.Cast<'a>(Expr.Application(Expr.Application(Expr.Value(f), x), y))
    
 
-    static member inline       MAppend (x:'a Lazy      , y:'a Lazy)       = lazy MAppend.Invoke (x.Value) (y.Value)
-    [<Extension>]static member MAppend (x:_ ResizeArray, y:_ ResizeArray) = ResizeArray (Seq.append x y)
-    [<Extension>]static member MAppend (x:_ IObservable, y              ) = Observable.merge x y
-    [<Extension>]static member MAppend (x:_ seq        , y              ) = Seq.append x y
-    static member inline       MAppend (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>) =
+    static member inline       Plus (x:'a Lazy      , y:'a Lazy      , [<Optional>]_mthd : Plus    ) = lazy Plus.Invoke (x.Value) (y.Value)
+    [<Extension>]static member Plus (x:_ ResizeArray, y:_ ResizeArray, [<Optional>]_mthd : Plus    ) = ResizeArray (Seq.append x y)
+    [<Extension>]static member Plus (x:_ IObservable, y              , [<Optional>]_mthd : Default3) = Observable.merge x y
+    [<Extension>]static member Plus (x:_ seq        , y              , [<Optional>]_mthd : Default3) = Seq.append x y
+    static member inline       Plus (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>, [<Optional>]_mthd : Default3) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v
-                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> MAppend.Invoke v v' | _ -> v'
+                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Plus.Invoke v v' | _ -> v'
                     d :> IDictionary<'Key,'Value>
 
 
@@ -140,14 +99,14 @@ type MConcat =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
-                            dct.[k] <- match dct.TryGetValue k with true, v -> MAppend.Invoke v u | _ -> u
+                            dct.[k] <- match dct.TryGetValue k with true, v -> Plus.Invoke v u | _ -> u
                     dct
 
     static member inline       MConcat (x:seq<IDictionary<'a,'b>>, [<Optional>]_output:IDictionary<'a,'b>, [<Optional>]_impl:MConcat) =
                     let dct = Dictionary<'a,'b>()
                     for d in x do
                         for KeyValue(k, u) in d do
-                            dct.[k] <- match dct.TryGetValue k with true, v -> MAppend.Invoke v u | _ -> u
+                            dct.[k] <- match dct.TryGetValue k with true, v -> Plus.Invoke v u | _ -> u
                     dct :> IDictionary<'a,'b>
 
     static member inline       MConcat (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:MConcat) = ResizeArray (Seq.concat x)
@@ -180,7 +139,7 @@ type MConcat with
                     MConcat.Invoke (Seq.map (fun (_,_,_,x) -> x) x)
 
 type MConcat with
-    static member inline       MConcat (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold MAppend.Invoke (MEmpty.Invoke()) x:'a
+    static member inline       MConcat (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Plus.Invoke (Zero.Invoke()) x:'a
     
 type MConcat with
     static member inline       MConcat (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = ((^R) : (static member MConcat: 'R seq -> ^R) x)

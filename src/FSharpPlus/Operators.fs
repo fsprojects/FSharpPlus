@@ -82,11 +82,14 @@ module Operators =
 
     // Monoid -----------------------------------------------------------------
 
-    let inline getMEmpty() :'Monoid = MEmpty.Invoke()
-    let inline mempty< ^Monoid when (MEmpty or ^Monoid) : (static member MEmpty : ^Monoid * MEmpty -> ^Monoid) > : ^Monoid = MEmpty.Invoke()
+    /// Gets a value that represents the 0 element.
+    let inline getZero() :'Monoid = Zero.Invoke()
 
-    let inline (++)    (x:'Monoid) (y:'Monoid): 'Monoid = MAppend.Invoke x y
-    let inline mappend (x:'Monoid) (y:'Monoid): 'Monoid = MAppend.Invoke x y
+    /// A value that represents the 0 element.
+    let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke()
+
+    let inline (++)    (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
+    let inline plus    (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
     let inline mconcat (x:seq<'Monoid>)       : 'Monoid = MConcat.Invoke x
 
 
@@ -417,9 +420,6 @@ module Operators =
 
     // Numerics
 
-    /// Gets a value that represents the number 0 (zero).
-    let inline getZero() = Zero.Invoke()
-
     /// Gets a value that represents the number 1 (one).
     let inline getOne()  = One.Invoke()
 
@@ -503,7 +503,7 @@ module Operators =
     /// Fold using alternative operator `<|>`
     let inline choice (x:'``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getEmpty()) : '``Alternative<'t>>``
 
-    /// Folds a Foldable of a Monoid, using its empty as initial state and append as folder.
+    /// Folds a Foldable of a Monoid, using its zero as initial state and its (+) as folder.
     let inline mfold (x:'Foldable'Monoid): 'Monoid = foldMap id x
 
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
@@ -589,7 +589,7 @@ module Operators =
             let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
             let inline FromString (i:string) = fromBigInt <| BigInteger.Parse i
 
-        let inline (+) (a:'Num) (b:'Num) :'Num = a + b
+        let inline (+) (a:'Num) (b:'Num) :'Num = Plus.Invoke a b
         let inline (-) (a:'Num) (b:'Num) :'Num = a - b
         let inline (*) (a:'Num) (b:'Num) :'Num = a * b
 
