@@ -23,32 +23,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{83F16175-43B1-4C90-A1EE-8E351C33435D}"
 	ProjectSection(SolutionItems) = preProject
-		docs\tools\generate.fsx = docs\tools\generate.fsx
-		docs\tools\templates\template.cshtml = docs\tools\templates\template.cshtml
+		docsrc\tools\generate.fsx = docsrc\tools\generate.fsx
+		docsrc\tools\templates\template.cshtml = docsrc\tools\templates\template.cshtml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D5255-776D-4B61-85F9-73C37AA1FB9A}"
 	ProjectSection(SolutionItems) = preProject
-		docs\content\abstraction-alternative.fsx = docs\content\abstraction-alternative.fsx
-		docs\content\abstraction-applicative.fsx = docs\content\abstraction-applicative.fsx
-		docs\content\abstraction-arrow.fsx = docs\content\abstraction-arrow.fsx
-		docs\content\abstraction-bifunctor.fsx = docs\content\abstraction-bifunctor.fsx
-		docs\content\abstraction-category.fsx = docs\content\abstraction-category.fsx
-		docs\content\abstraction-comonad.fsx = docs\content\abstraction-comonad.fsx
-		docs\content\abstraction-contravariant.fsx = docs\content\abstraction-contravariant.fsx
-		docs\content\abstraction-foldable.fsx = docs\content\abstraction-foldable.fsx
-		docs\content\abstraction-functor.fsx = docs\content\abstraction-functor.fsx
-		docs\content\abstraction-monad.fsx = docs\content\abstraction-monad.fsx
-		docs\content\abstraction-monoid.fsx = docs\content\abstraction-monoid.fsx
-		docs\content\abstraction-profunctor.fsx = docs\content\abstraction-profunctor.fsx
-		docs\content\abstraction-semigroup.fsx = docs\content\abstraction-semigroup.fsx
-		docs\content\abstraction-traversable.fsx = docs\content\abstraction-traversable.fsx
-		docs\content\abstractions.fsx = docs\content\abstractions.fsx
-		docs\content\abstractions.plantuml = docs\content\abstractions.plantuml
-		docs\content\applicative-functors.fsx = docs\content\applicative-functors.fsx
-		docs\content\generic-doc.fsx = docs\content\generic-doc.fsx
-		docs\content\index.fsx = docs\content\index.fsx
-		docs\content\tutorial.fsx = docs\content\tutorial.fsx
+		docsrc\content\abstraction-alternative.fsx = docsrc\content\abstraction-alternative.fsx
+		docsrc\content\abstraction-applicative.fsx = docsrc\content\abstraction-applicative.fsx
+		docsrc\content\abstraction-arrow.fsx = docsrc\content\abstraction-arrow.fsx
+		docsrc\content\abstraction-bifunctor.fsx = docsrc\content\abstraction-bifunctor.fsx
+		docsrc\content\abstraction-category.fsx = docsrc\content\abstraction-category.fsx
+		docsrc\content\abstraction-comonad.fsx = docsrc\content\abstraction-comonad.fsx
+		docsrc\content\abstraction-contravariant.fsx = docsrc\content\abstraction-contravariant.fsx
+		docsrc\content\abstraction-foldable.fsx = docsrc\content\abstraction-foldable.fsx
+		docsrc\content\abstraction-functor.fsx = docsrc\content\abstraction-functor.fsx
+		docsrc\content\abstraction-monad.fsx = docsrc\content\abstraction-monad.fsx
+		docsrc\content\abstraction-monoid.fsx = docsrc\content\abstraction-monoid.fsx
+		docsrc\content\abstraction-profunctor.fsx = docsrc\content\abstraction-profunctor.fsx
+		docsrc\content\abstraction-semigroup.fsx = docsrc\content\abstraction-semigroup.fsx
+		docsrc\content\abstraction-traversable.fsx = docsrc\content\abstraction-traversable.fsx
+		docsrc\content\abstractions.fsx = docsrc\content\abstractions.fsx
+		docsrc\content\abstractions.plantuml = docsrc\content\abstractions.plantuml
+		docsrc\content\applicative-functors.fsx = docsrc\content\applicative-functors.fsx
+		docsrc\content\generic-doc.fsx = docsrc\content\generic-doc.fsx
+		docsrc\content\index.fsx = docsrc\content\index.fsx
+		docsrc\content\tutorial.fsx = docsrc\content\tutorial.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ED8079DD-2B06-4030-9F0F-DC548F98E1C4}"

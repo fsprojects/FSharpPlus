@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------
-// Builds the documentation from `.fsx` and `.md` files in the 'docs/content' directory
-// (the generated documentation is stored in the 'docs/output' directory)
+// Builds the documentation from `.fsx` and `.md` files in the 'docsrc/content' directory
+// (the generated documentation is stored in the 'docsrc/output' directory)
 // --------------------------------------------------------------------------------------
 
 // Binaries that have XML documentation (in a corresponding generated XML file)
@@ -43,13 +43,13 @@ open FSharpPlus
 #if RELEASE
 let root = website
 #else
-let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../output")
+let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../../docs")
 #endif
 
 // Paths with template/source/output locations
 let bin        = __SOURCE_DIRECTORY__ @@ "../../bin"
 let content    = __SOURCE_DIRECTORY__ @@ "../content"
-let output     = __SOURCE_DIRECTORY__ @@ "../output"
+let output     = __SOURCE_DIRECTORY__ @@ "../../docs"
 let files      = __SOURCE_DIRECTORY__ @@ "../files"
 let templates  = __SOURCE_DIRECTORY__ @@ "templates"
 let formatting = __SOURCE_DIRECTORY__ @@ "../../packages/build/FSharp.Formatting/"

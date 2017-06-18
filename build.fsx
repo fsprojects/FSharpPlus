@@ -24,7 +24,7 @@ open SourceLink
 //  - for version and project name in generated AssemblyInfo file
 //  - by the generated NuGet package
 //  - to run tests and to publish documentation on GitHub gh-pages
-//  - for documentation, you also need to edit info in "docs/tools/generate.fsx"
+//  - for documentation, you also need to edit info in "docsrc/tools/generate.fsx"
 
 // The name of the project
 // (used by attributes in AssemblyInfo, name of a NuGet package and directory in 'src')
@@ -131,7 +131,7 @@ let vsProjProps =
 
 Target "Clean" (fun _ ->
     !! solutionFile |> MSBuildReleaseExt "" vsProjProps "Clean" |> ignore
-    CleanDirs ["bin"; "temp"; "docs/output"]
+    CleanDirs ["bin"; "temp"; "docs"]
 )
 
 // --------------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ let executeFAKEWithOutput workingDirectory script fsiargs envArgs =
 // Documentation
 let buildDocumentationTarget fsiargs target =
     trace (sprintf "Building documentation (%s), this could take some time, please wait..." target)
-    let exit = executeFAKEWithOutput "docs/tools" "generate.fsx" fsiargs ["target", target]
+    let exit = executeFAKEWithOutput "docsrc/tools" "generate.fsx" fsiargs ["target", target]
     if exit <> 0 then
         failwith "generating reference documentation failed"
     ()
@@ -245,31 +245,31 @@ let generateHelp fail =
     generateHelp' fail false
 
 Target "GenerateHelp" (fun _ ->
-    DeleteFile "docs/content/release-notes.md"
-    CopyFile "docs/content/" "RELEASE_NOTES.md"
-    Rename "docs/content/release-notes.md" "docs/content/RELEASE_NOTES.md"
+    DeleteFile "docsrc/content/release-notes.md"
+    CopyFile "docsrc/content/" "RELEASE_NOTES.md"
+    Rename "docsrc/content/release-notes.md" "docsrc/content/RELEASE_NOTES.md"
 
-    DeleteFile "docs/content/license.md"
-    CopyFile "docs/content/" "LICENSE.txt"
-    Rename "docs/content/license.md" "docs/content/LICENSE.txt"
+    DeleteFile "docsrc/content/license.md"
+    CopyFile "docsrc/content/" "LICENSE.txt"
+    Rename "docsrc/content/license.md" "docsrc/content/LICENSE.txt"
 
     generateHelp true
 )
 
 Target "GenerateHelpDebug" (fun _ ->
-    DeleteFile "docs/content/release-notes.md"
-    CopyFile "docs/content/" "RELEASE_NOTES.md"
-    Rename "docs/content/release-notes.md" "docs/content/RELEASE_NOTES.md"
+    DeleteFile "docsrc/content/release-notes.md"
+    CopyFile "docsrc/content/" "RELEASE_NOTES.md"
+    Rename "docsrc/content/release-notes.md" "docsrc/content/RELEASE_NOTES.md"
 
-    DeleteFile "docs/content/license.md"
-    CopyFile "docs/content/" "LICENSE.txt"
-    Rename "docs/content/license.md" "docs/content/LICENSE.txt"
+    DeleteFile "docsrc/content/license.md"
+    CopyFile "docsrc/content/" "LICENSE.txt"
+    Rename "docsrc/content/license.md" "docsrc/content/LICENSE.txt"
 
     generateHelp' true true
 )
 
 Target "KeepRunning" (fun _ ->
-    use watcher = !! "docs/content/**/*.*" |> WatchChanges (fun changes ->
+    use watcher = !! "docsrc/content/**/*.*" |> WatchChanges (fun changes ->
          generateHelp' true true
     )
 
@@ -293,7 +293,7 @@ F# Project Scaffold ({0})
 =========================
 *)
 """
-    let targetDir = "docs/content" </> lang
+    let targetDir = "docsrc/content" </> lang
     let targetFile = targetDir </> "index.fsx"
     ensureDirectory targetDir
     System.IO.File.WriteAllText(targetFile, System.String.Format(content, lang))
@@ -309,7 +309,7 @@ Target "AddLangDocs" (fun _ ->
             failwithf "Language must be 2 or 3 characters (ex. 'de', 'fr', 'ja', 'gsw', etc.): %s" lang
 
         let templateFileName = "template.cshtml"
-        let templateDir = "docs/tools/templates"
+        let templateDir = "docsrc/tools/templates"
         let langTemplateDir = templateDir </> lang
         let langTemplateFileName = langTemplateDir </> templateFileName
 

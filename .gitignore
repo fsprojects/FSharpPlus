@@ -189,7 +189,7 @@ localpackages/
 paket-files
 *.orig
 .paket/paket.exe
-docs/content/license.md
-docs/content/release-notes.md
+docsrc/content/license.md
+docsrc/content/release-notes.md
 .fake
-docs/tools/FSharp.Formatting.svclog
+docsrc/tools/FSharp.Formatting.svclog
