@@ -13,7 +13,6 @@ group Build
 group Test
   source https://nuget.org/api/v2
   
-  nuget MathNet.Numerics
   nuget MathNet.Numerics.FSharp
   nuget NUnit ~> 2
   nuget NUnit.Runners ~> 2
