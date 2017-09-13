@@ -47,7 +47,7 @@ module ListT =
     let inline apply  (ListT f : ListT<'``Monad<list<('T -> 'U)>``>) (ListT x : ListT<'``Monad<list<'T>``>) = ListT (map List.apply f <*> x)  : ListT<'``Monad<list<'U>``>
     let inline map  (f:'T->'U) (ListT m: ListT<'``Monad<list<'T>``>) =  ListT (map (List.map f) m) : ListT<'``Monad<list<'U>``>
 
-type ListT with
+type ListT<'``monad<list<'t>>``> with
     static member inline Return (x : 'T) = [x] |> result |> ListT                                                           : ListT<'``Monad<seq<'T>``>
     static member inline Map    (x : ListT<'``Monad<seq<'T>``>, f : 'T->'U) = ListT.map f x                                 : ListT<'``Monad<seq<'U>``>
     static member inline (<*>)  (f : ListT<'``Monad<seq<('T -> 'U)>``>, x : ListT<'``Monad<seq<'T>``>) = ListT.apply f x    : ListT<'``Monad<seq<'U>``>

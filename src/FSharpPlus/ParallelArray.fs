@@ -38,7 +38,7 @@ module ParallelArrayOperators =
     /// Creates a parallel array from a normal array.
     let parray s = Bounded s
 
-type ParallelArray with
+type ParallelArray<'t> with
     static member Map (x:parray<_>, f) = ParallelArray.map f x
     static member Return (x:'a) = Infinite x
     static member (<*>) (f:parray<'a->'b>, x:parray<_>) = ParallelArray.ap f x :parray<'b>

@@ -32,7 +32,7 @@ module Writer =
     /// Action that executes the action m, which returns a value and a function, and returns the value, applying the function to the output.
     let pass m = let (Writer((a, f), w:'Monoid)) = m in Writer(a, f w)                          : Writer<'Monoid,'T>
 
-type Writer with
+type Writer<'monoid,'t> with
     static member        Map   (x, f:'T->_) = Writer.map f x            : Writer<'Monoid,'U>
     static member inline Return x = Writer (x, getZero())               : Writer<'Monoid,'T>
     static member inline Bind  (x, f:'T->_) = Writer.bind f x           : Writer<'Monoid,'U>
@@ -68,7 +68,7 @@ module WriterT =
         WriterT (m >>= (fun (a, w) -> run (f a) >>= (fun (b, w') -> result (b, plus w w'))))  : WriterT<'``Monad<'U * 'Monoid>``>
     
 
-type WriterT with
+type WriterT<'``monad<'t * 'monoid>``> with
 
     static member inline Return (x : 'T) = WriterT (result (x, getZero()))                                                                  : WriterT<'``Monad<'T * 'Monoid>``>
     static member inline Map    (x : WriterT<'``Monad<'T * 'Monoid>``>, f : 'T -> 'U)                                   = WriterT.map f x   : WriterT<'``Monad<'U * 'Monoid>``>

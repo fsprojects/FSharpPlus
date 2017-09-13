@@ -16,7 +16,7 @@ module ZipList =
     let map f (ZipList x) = ZipList (Seq.map f x)
     let singleton x = ZipList (Seq.singleton x)
 
-type ZipList with
+type ZipList<'s> with
     static member Map (ZipList x, f:'a->'b) = ZipList (Seq.map f x)
     static member Return (x:'a)     = ZipList (Seq.initInfinite (konst x))
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>

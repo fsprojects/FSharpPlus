@@ -20,7 +20,7 @@ module OptionT =
     let inline apply (OptionT f : OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x : OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x)  : OptionT<'``Monad<option<'U>``>
     let inline map  (f:'T->'U) (OptionT m : OptionT<'``Monad<option<'T>``>)                                            = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
 
-type OptionT with
+type OptionT<'``monad<option<'t>>``> with
     static member inline Return (x : 'T) = Some x |> result |> OptionT                                                          : OptionT<'``Monad<seq<'T>``>
     static member inline Map    (x : OptionT<'``Monad<seq<'T>``>, f : 'T->'U) = OptionT.map f x                                 : OptionT<'``Monad<seq<'U>``>
     static member inline (<*>)  (f : OptionT<'``Monad<seq<('T -> 'U)>``>, x : OptionT<'``Monad<seq<'T>``>) = OptionT.apply f x  : OptionT<'``Monad<seq<'U>``>

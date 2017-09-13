@@ -22,7 +22,7 @@ open FSharpPlus
 /// Monad Transformer for Cont<'R,'T>
 type ContT<'r,'t> = Cont<'r,'t>
 
-type Cont with
+type Cont<'r,'t> with
     static member Return n = Cont (fun k -> k n)                        : Cont<'R,'T>
     static member Map    (x : Cont<'R,'T>, f) = Cont.map f x            : Cont<'R,'U>
     static member (<*>)  (f, x : Cont<'R,'T>) = Cont.apply f x          : Cont<'R,'U>

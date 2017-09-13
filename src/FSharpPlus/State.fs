@@ -22,7 +22,7 @@ module State =
     /// Replace the state inside the monad.
     let put x = State (fun _ -> ((), x))                                                                            : State<'S,unit>
 
-type State with
+type State<'s,'t> with
     static member Map   (x, f:'T->_) = State.map f x          : State<'S,'U>
     static member Return a = State (fun s -> (a, s))          : State<'S,'T>
     static member Bind  (x, f:'T->_) = State.bind f x         : State<'S,'U>
@@ -44,7 +44,7 @@ module StateT =
     let inline apply (StateT f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a :StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z, u) -> (g z, u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
     let inline bind (f :'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
 
-type StateT with
+type StateT<'s,'``monad<'t * 's>``> with
     static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                          : StateT<'S,'``Monad<'T * 'S>``>
     static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map f x    : StateT<'S,'``Monad<'U * 'S>``>
     static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x  : StateT<'S,'``Monad<'U * 'S>``>

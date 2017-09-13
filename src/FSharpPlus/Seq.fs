@@ -30,7 +30,7 @@ module SeqT =
     let inline apply (SeqT f : SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x : SeqT<'``Monad<seq<'T>``>) = SeqT (map (Seq.apply:seq<_->_>->seq<_>->seq<_>) f <*> x)          : SeqT<'``Monad<seq<'U>``>       
     let inline map  (f:'T->'U) (SeqT m : SeqT<'``Monad<seq<'T>``>)                                   = SeqT <| map (Seq.map f: (seq<_>->_)) m      : SeqT<'``Monad<seq<'U>``>
 
-type SeqT with
+type SeqT<'``monad<seq<'t>>``> with
     static member inline Return (x : 'T) = x |> Seq.singleton |> result |> SeqT                                         : SeqT<'``Monad<seq<'T>``>
     static member inline Map    (x : SeqT<'``Monad<seq<'T>``>, f : 'T->'U) = SeqT.map f x                               : SeqT<'``Monad<seq<'U>``>
     static member inline (<*>)  (f : SeqT<'``Monad<seq<('T -> 'U)>``>, x : SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x   : SeqT<'``Monad<seq<'U>``>

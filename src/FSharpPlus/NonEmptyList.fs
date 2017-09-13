@@ -36,7 +36,7 @@ module NonEmptyList =
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
          
-type NonEmptyList with
+type NonEmptyList<'t> with
     static member Map (x:NonEmptyList<'a>, f:'a->'b) = NonEmptyList.map f x
         
     static member Bind ({Head = x; Tail = xs}, f:_->NonEmptyList<'b>  ) =

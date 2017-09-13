@@ -21,7 +21,7 @@ module Reader =
     /// <param name="m"> Reader to run in the modified environment. </param>
     let local (f:'R1->'R2) m = let (Reader m) = m in Reader (m << f)        : Reader<'R1,'T>
 
-type Reader with
+type Reader<'r,'t> with
     static member Map   (x:Reader<'R,'T>, f) = Reader.map f x   : Reader<'R,'U>
     static member Return x = Reader (fun _ -> x)                : Reader<'R,'T>
     static member Bind  (x:Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
@@ -47,7 +47,7 @@ module ReaderT =
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x:_->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r)      : ReaderT<'R, '``Monad<'U>``>
     let inline bind  (f:'T->_) (ReaderT (m:_->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))                  : ReaderT<'R, '``Monad<'U>``>
 
-type ReaderT with
+type ReaderT<'r,'``monad<'t>``> with
     static member inline Return (x : 'T) = ReaderT (fun _ -> result x)                                                      : ReaderT<'R, '``Monad<'T>``> 
     static member inline Map    (x : ReaderT<'R, '``Monad<'T>``>, f : 'T->'U)                        = ReaderT.map f x      : ReaderT<'R, '``Monad<'U>``>
     static member inline (<*>)  (f : ReaderT<_,'``Monad<'T -> 'U>``>, x : ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x    : ReaderT<'R, '``Monad<'U>``>

@@ -36,7 +36,7 @@ module ErrorT =
     let inline apply  (ErrorT f:ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>) (ErrorT x:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT(map Error.apply f <*> x) : ErrorT<'``Monad<'Choice<'U,'E>>``>
     let inline map  (f:'T->'U) (ErrorT m:ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT (map (Error.map f) m) :ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>
 
-type ErrorT with
+type ErrorT<'``monad<'choice<'t,'e>>``> with
     static member inline Return (x : 'T) = ErrorT (result (Choice1Of2 x))                                                                   : ErrorT<'``Monad<'Choice<'T,'E>>``>
     static member inline Map    (x : ErrorT<'``Monad<'Choice<'T,'E>>``>, f : 'T->'U) = ErrorT.map f x                                       : ErrorT<'``Monad<'Choice<'U,'E>>``>
     static member inline (<*>)  (f : ErrorT<'``Monad<'Choice<('T -> 'U),'E>>``>, x : ErrorT<'``Monad<'Choice<'T,'E>>``>) = ErrorT.apply f x : ErrorT<'``Monad<'Choice<'U,'E>>``>
