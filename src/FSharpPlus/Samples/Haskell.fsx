@@ -1,6 +1,6 @@
 ﻿#nowarn "3186"
 #nowarn "62"
-#r @"..\bin\Release\FSharpPlus.dll"
+#r @"../bin/Release/FSharpPlus.dll"
 
 open FSharpPlus
 open FSharpPlus.Compatibility.Haskell

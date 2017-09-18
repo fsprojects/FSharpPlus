@@ -1,5 +1,5 @@
 #nowarn "3186"
-#r @"..\bin\Release\FSharpPlus.dll"
+#r @"../bin/Release/FSharpPlus.dll"
 
 open System
 open FSharpPlus
