@@ -1,10 +1,6 @@
 ﻿#nowarn "3186"
 #r @"../bin/Release/FSharpPlus.dll"
 
-// FsControl does not automatically export any function, just the 'Type Methods'.
-// However in the FSharpPlus.Operators module there are some function and operator definitions.
-// The main purpose of that module is to make tests easier, without having to reapeat code or rely on another library to make simple tests.
-
 open FSharpPlus.Operators
 
 let inline flip f x y = f y x
@@ -25,7 +21,7 @@ let res3n4        = result ((+) 2) <*> [1;2]
 
 
 
-// test numbers
+// Test numbers
 
 let qr0  = divRem 7  3  //val qr0 : int * int = (2, 1)
 let qr1  = divRem 7I 3I //val qr1 : System.Numerics.BigInteger * System.Numerics.BigInteger = (2, 1)

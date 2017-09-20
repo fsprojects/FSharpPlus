@@ -303,6 +303,8 @@ module Operators =
 
     /// <summary>Returns a collection that drops N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
+    /// <remarks>When count exceeds the number of elements in the collection it
+    /// returns an empty collection instead of throwing an exception.</remarks>
     /// <param name="count">The number of items to drop.</param>
     /// <param name="source">The input collection.</param>
     ///

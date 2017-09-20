@@ -109,6 +109,14 @@ module Seq =
                     candidate.Clear()                
             yield! candidate}
 
+    /// <summary>Returns a sequence that drops N elements of the original sequence and then yields the
+    /// remaining elements of the sequence.</summary>
+    /// <remarks>When count exceeds the number of elements in the sequence it
+    /// returns an empty sequence instead of throwing an exception.</remarks>
+    /// <param name="count">The number of items to drop.</param>
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
     let drop i (source:seq<_>) =
         let mutable count = i
         use e = source.GetEnumerator()
@@ -132,6 +140,15 @@ module List =
             | n -> listSkip (List.tail lst) (n-1)
         listSkip list i
 
+
+    /// <summary>Returns a list that drops N elements of the original list and then yields the
+    /// remaining elements of the list.</summary>
+    /// <remarks>When count exceeds the number of elements in the list it
+    /// returns an empty list instead of throwing an exception.</remarks>
+    /// <param name="count">The number of items to drop.</param>
+    /// <param name="source">The input list.</param>
+    ///
+    /// <returns>The result list.</returns>
     let drop i list = 
         let rec loop i lst = 
             match (lst, i) with
