@@ -7,7 +7,7 @@ open FSharpPlus.Operators
 
 /// A sequence with an Applicative functor based on zipping.
 type ZipList<'s> = ZipList of 's seq with
-    member this.Item n = let (ZipList s) = this in Seq.nth n s
+    member this.Item n = let (ZipList s) = this in Seq.item n s
 
 /// Basic operations on ZipList
 [<RequireQualifiedAccess>]
