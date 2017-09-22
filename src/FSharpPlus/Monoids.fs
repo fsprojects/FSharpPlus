@@ -63,15 +63,15 @@ module Const =
 
 /// Option<'T> monoid returning the leftmost non-None value.
 type First<'t> = First of Option<'t> with
-    static member get_Zero() = First None                                        : First<'T>
-    static member (+) (x, y) = match x, y with First None, r -> r | l, _ -> l    : First<'T>
-    static member run (First a) = a                                              : 'T option
+    static member get_Zero() = First None                                        : First<'t>
+    static member (+) (x, y) = match x, y with First None, r -> r | l, _ -> l    : First<'t>
+    static member run (First a) = a                                              : 't option
 
 /// Option<'T> monoid returning the rightmost non-None value.
 type Last<'t> = Last of Option<'t> with
-    static member get_Zero() = Last None                                         : Last<'T>
-    static member (+) (x, y) = match x, y with l, Last None -> l | _, r -> r     : Last<'T>
-    static member run (Last a) = a                                               : 'T option
+    static member get_Zero() = Last None                                         : Last<'t>
+    static member (+) (x, y) = match x, y with l, Last None -> l | _, r -> r     : Last<'t>
+    static member run (Last a) = a                                               : 't option
 
 
 /// Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
