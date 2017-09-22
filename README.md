@@ -1,22 +1,24 @@
 FSharpPlus [![Build Status](https://api.travis-ci.org/gusty/FSharpPlus.svg?branch=master)](https://travis-ci.org/gusty/FSharpPlus)
 ==========
 
-This project contains some extensions for F#.
+A complete and extensible base library for F#.
 
- - Modern [FP abstractions](http://gusty.github.io/FSharpPlus/abstractions.html).
- - Common FP combinators, generic functions and operators.- Extension methods for common F# types.
- - Collections.
- - Common FP abstration types: Cont, Reader, Writer, State and their Monad Transformers.
+It contains the most requested additions to the F# core library, including:
+
+ - Common FP combinators, generic functions and operators.
+ - Extension methods for F# types with consistent names and signatures.
+ - Standard Monads: Cont, Reader, Writer, State and their Monad Transformers.
+ - Other common [FP abstractions](http://gusty.github.io/FSharpPlus/abstractions.html).
+ - [Generic Functions and Operators](http://gusty.github.io/FSharpPlus/reference/fsharpplus-operators.html) which may be further extended to support other types.
  - Generic Computation Expressions and Linq Builders.
  - A generic Math module.
- - A full Lens/Optics module.
+ - A true polymorphic Lens/Optics module.
  - A Haskell compatibility module.
 
-F#+ types contains methods which are added as extensions and at the same time are made instances of the existing 'Invokables' defined in FsControl Namespace, integrating them with existing .NET types.
-
-It also provides [Generic Functions and Operators](http://gusty.github.io/FSharpPlus/reference/fsharpplus-operators.html) which may be further extended to support other types.
-
-As an example, there is a <code>NonEmptyList</code> type which can act as a Functor (instance for Map), an Applicative (instances for Return and Apply) and a Semigroup (MAppend). So code like ``map f lst`` or ``lst1 ++ lst2`` will work on primitive types (list, seq) but also on ``NonEmptyList``.
+Users of this library have the option to use their functions in different styles:
+ - F# Standard module + function style: [module].[function] [arg]
+ - As extension methods [arg].[function]
+ - As generic functions [function] [arg]
 
 In the [Sample folder](https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Samples) you can find scripts showing how to use F#+ in your code.
 
