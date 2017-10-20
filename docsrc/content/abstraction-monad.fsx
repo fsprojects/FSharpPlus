@@ -21,7 +21,7 @@ Minimal comple te definition
  * ``(>>=) x f``
 *)
 (**
-    static member Return (x:'T) : 'Applicative<'T>
+    static member Return (x:'T) : 'Monad<'T>
     static member Bind (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
 *)
 (**
