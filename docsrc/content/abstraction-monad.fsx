@@ -22,7 +22,7 @@ Minimal comple te definition
 *)
 (**
     static member Return (x:'T) : 'Applicative<'T>
-    static member (>>=) (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
+    static member Bind (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
 *)
 (**
 
