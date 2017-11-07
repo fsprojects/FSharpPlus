@@ -4,7 +4,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FSharpPlus.BaseLib</RootNamespace>
     <AssemblyName>FSharpPlus.BaseLib</AssemblyName>
-    <TargetFramework>netstandard1.3;net40</TargetFramework>
+    <TargetFrameworks>netstandard1.3;net40</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
