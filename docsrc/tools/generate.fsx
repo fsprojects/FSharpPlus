@@ -29,7 +29,7 @@ let info =
 
 #load "../../packages/FSharp.Formatting/FSharp.Formatting.fsx"
 #I "../../packages/FAKE/tools/"
-#r "../../bin/net45/FSharpPlus/FSharpPlus.dll"
+#r "../../bin/FSharpPlus/net45/FSharpPlus.dll"
 #r "FakeLib.dll"
 open Fake
 open System.IO
