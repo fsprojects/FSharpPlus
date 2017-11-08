@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Title>FSharpPlus</Title>
+    <AssemblyName>FSharpPlus</AssemblyName>
     <VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix>
     </VersionSuffix>
@@ -28,6 +29,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <OutputPath>..\..\bin</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Extensions.fs" />
