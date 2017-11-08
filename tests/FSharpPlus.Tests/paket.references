@@ -1,5 +1,4 @@
 FSharp.Core
-group Test
 MathNet.Numerics.FSharp
 NUnit
 NUnit.Runners
