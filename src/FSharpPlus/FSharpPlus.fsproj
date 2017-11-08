@@ -21,6 +21,12 @@
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OtherFlags>--staticlink:FSharpPlus.BaseLib --warnon:1182</OtherFlags>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Extensions.fs" />
