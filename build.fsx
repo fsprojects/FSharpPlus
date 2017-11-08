@@ -140,6 +140,10 @@ Target "Build" (fun _ ->
     |> ignore
 )
 
+Target "Restore" (fun _ ->
+    DotNetCli.Restore(fun r->{ r with  Project=solutionFile })
+)
+
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
@@ -347,6 +351,7 @@ Target "BuildPackage" DoNothing
 Target "All" DoNothing
 
 "AssemblyInfo"
+  ==> "Restore"
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
