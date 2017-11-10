@@ -161,8 +161,15 @@ Target "RunTests" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
+  let (prefix,suffix) = match release.NugetVersion.Split('-') |> Array.toList with
+                | prefix::[]->(prefix,"")
+                | prefix::suffix::[]->(prefix,suffix)
+                | _-> failwith "failed to recognise version"
+
+  let p=("VersionSuffix",suffix)::("VersionPrefix",prefix)::vsProjProps
+
   !! (sprintf "src/%s/%s.fsproj" project project)
-  |> MSBuildReleaseExt "bin" vsProjProps "pack"
+  |> MSBuildReleaseExt "bin" p "pack"
   |> ignore
 )
 
