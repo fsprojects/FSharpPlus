@@ -161,11 +161,11 @@ Target "RunTests" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-    Paket.Pack(fun p ->
-        { p with
-            OutputPath = "bin"
-            Version = release.NugetVersion
-            ReleaseNotes = toLines release.Notes})
+    DotNetCli.Pack(fun p->
+        {p with
+           OutputPath = "bin" 
+           Project = sprintf "src/%s/%s.fsproj" project project
+           VersionSuffix = release.NugetVersion})
 )
 
 Target "PublishNuget" (fun _ ->
@@ -353,7 +353,6 @@ Target "All" DoNothing
 "AssemblyInfo"
   ==> "Restore"
   ==> "Build"
-  ==> "CopyBinaries"
   ==> "RunTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
