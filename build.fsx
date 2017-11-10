@@ -162,7 +162,7 @@ Target "RunTests" (fun _ ->
 
 Target "NuGet" (fun _ ->
   !! (sprintf "src/%s/%s.fsproj" project project)
-  |> MSBuildReleaseExt "" vsProjProps "pack"
+  |> MSBuildReleaseExt "bin" vsProjProps "pack"
   |> ignore
 )
 
