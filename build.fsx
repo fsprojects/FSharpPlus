@@ -161,11 +161,9 @@ Target "RunTests" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-    DotNetCli.Pack(fun p->
-        {p with
-           OutputPath = "bin" 
-           Project = sprintf "src/%s/%s.fsproj" project project
-           VersionSuffix = release.NugetVersion})
+  !! (sprintf "src/%s/%s.fsproj" project project)
+  |> MSBuildReleaseExt "" vsProjProps "pack"
+  |> ignore
 )
 
 Target "PublishNuget" (fun _ ->
