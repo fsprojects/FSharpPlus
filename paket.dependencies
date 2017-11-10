@@ -1,18 +1,12 @@
 source https://nuget.org/api/v2
 
-nuget FSharp.Core redirects: force
+nuget FSharp.Core ~> 4.1 redirects: force
 
-group Build
-  source https://nuget.org/api/v2
-  
-  nuget FAKE
-  nuget FSharp.Formatting
+nuget FAKE
+nuget FSharp.Formatting
 
-  github fsharp/FAKE modules/Octokit/Octokit.fsx
+github fsharp/FAKE modules/Octokit/Octokit.fsx
 
-group Test
-  source https://nuget.org/api/v2
-  
-  nuget MathNet.Numerics.FSharp
-  nuget NUnit ~> 2
-  nuget NUnit.Runners ~> 2
+nuget MathNet.Numerics.FSharp redirects: force
+nuget NUnit ~> 2
+nuget NUnit.Runners ~> 2

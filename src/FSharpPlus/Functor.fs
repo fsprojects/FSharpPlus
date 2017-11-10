@@ -112,7 +112,7 @@ type Return =
     static member        Return (_:seq<'a> , _:Default2) = fun  x     -> Seq.singleton x :seq<'a>
     static member inline Return (_:'R      , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
 
-    static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy.CreateFromValue x : Lazy<'a>
+    static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
 #if NET35
 #else        
     static member        Return (_:'a Task , _:Return) = fun x -> 
@@ -141,7 +141,7 @@ type Apply =
     static member inline ``<*>`` (f:'``Monad<'T->'U>``  , x:'``Monad<'T>``  , [<Optional>]_output:'``Monad<'U>``  , [<Optional>]_impl:Default2) : '``Monad<'U>``   = Bind.InvokeOnInstance f (fun (x1:'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
     static member inline ``<*>`` (f:'``Applicative<'T->'U>``, x:'``Applicative<'T>``, [<Optional>]_output:'``Applicative<'U>``, [<Optional>]_impl:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) f, x)
 
-    static member        ``<*>`` (f:Lazy<'T->'U>, x:Lazy<'T>       , [<Optional>]_output:Lazy<'U>     , [<Optional>]_impl:Apply) = Lazy.Create (fun () -> f.Value x.Value) : Lazy<'U>
+    static member        ``<*>`` (f:Lazy<'T->'U>, x:Lazy<'T>       , [<Optional>]_output:Lazy<'U>     , [<Optional>]_impl:Apply) = Lazy<_>.Create (fun () -> f.Value x.Value) : Lazy<'U>
     static member        ``<*>`` (f:seq<_>      , x:seq<'T>        , [<Optional>]_output:seq<'U>      , [<Optional>]_impl:Apply) = Seq.apply  f x :seq<'U>
     static member        ``<*>`` (f:list<_>     , x:list<'T>       , [<Optional>]_output:list<'U>     , [<Optional>]_impl:Apply) = List.apply f x :list<'U>
     static member        ``<*>`` (f:_ []        , x:'T []          , [<Optional>]_output:'U []        , [<Optional>]_impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
@@ -231,7 +231,7 @@ type Map =
     [<Extension>]static member Map (x : IObservable<'T>     , f : 'T->'U, [<Optional>]_impl:Default2) = Observable.map f x       : IObservable<'U>
     static member inline       Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]_impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
 
-    [<Extension>]static member Map (x : Lazy<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = Lazy.Create (fun () -> f x.Value)   : Lazy<'U>
+    [<Extension>]static member Map (x : Lazy<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = Lazy<_>.Create (fun () -> f x.Value)   : Lazy<'U>
     [<Extension>]static member Map (x : option<_>      , f : 'T->'U, [<Optional>]_mthd : Map) = Option.map  f x
     [<Extension>]static member Map (x : list<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = List.map f x                        : list<'U>
     [<Extension>]static member Map (g : 'R->'T         , f : 'T->'U, [<Optional>]_mthd : Map) = (>>) g f
@@ -403,7 +403,7 @@ type Extract =
 [<Extension;Sealed>]
 type Extend =
     [<Extension>]static member Extend (g : Async<'T>    , f : Async<'T> -> 'U) = async.Return (f g)             : Async<'U>
-    [<Extension>]static member Extend (g : Lazy<'T>     , f : Lazy<'T> -> 'U ) = Lazy.Create  (fun () -> f g)   : Lazy<'U>
+    [<Extension>]static member Extend (g : Lazy<'T>     , f : Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g)   : Lazy<'U>
     [<Extension>]static member Extend ((w : 'W, a : 'T) , f : _ -> 'U        ) = (w, f (w, a))        
     static member inline       Extend (g : 'Monoid -> 'T, f : _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
     [<Extension>]static member Extend (g : Id<'T>       , f : Id<'T> -> 'U   ) = f g
@@ -427,7 +427,7 @@ type Duplicate =
     inherit Default1
     static member inline       Duplicate (x : '``Comonad<'T>`` , [<Optional>]_mthd : Default1 ) = Extend.Invoke id x          : '``Comonad<'Comonad<'T>>``
     [<Extension>]static member Duplicate (s : Async<'T>        , [<Optional>]_mthd : Duplicate) = async.Return s              : Async<Async<'T>>
-    [<Extension>]static member Duplicate (s : Lazy<'T>         , [<Optional>]_mthd : Duplicate) = Lazy.CreateFromValue s      : Lazy<Lazy<'T>>
+    [<Extension>]static member Duplicate (s : Lazy<'T>         , [<Optional>]_mthd : Duplicate) = Lazy<_>.CreateFromValue s      : Lazy<Lazy<'T>>
     [<Extension>]static member Duplicate (s : Id<'T>           , [<Optional>]_mthd : Duplicate) = Id s                        : Id<Id<'T>>
     [<Extension>]static member Duplicate ((w : 'W, a : 'T)     , [<Optional>]_mthd : Duplicate) = w, (w, a)
     static member inline       Duplicate (f : 'Monoid -> 'T    , [<Optional>]_mthd : Duplicate) = fun a b -> f (Plus.Invoke a b)

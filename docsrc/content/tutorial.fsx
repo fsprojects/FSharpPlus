@@ -13,7 +13,7 @@ Introducing FSharpPlus
 
 *)
 
-#r "../../bin/FSharpPlus/FSharpPlus.dll"
+#r "../../bin/FSharpPlus/net45/FSharpPlus.dll"
 open FSharpPlus
 
 (**
@@ -29,7 +29,7 @@ They are automatically available when opening the FSharpPlus namespace
 here's an example with <code>map</code> ([fmap](https://wiki.haskell.org/Functor) for Haskellers, [Select](http://www.dotnetperls.com/select) for C-sharpers):
 
 *)
-#r "../../bin/FSharpPlus/FSharpPlus.dll"
+#r "../../bin/FSharpPlus/net45/FSharpPlus.dll"
 open FSharpPlus
 
 map string [|2;3;4;5|]

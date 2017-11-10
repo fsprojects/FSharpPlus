@@ -27,9 +27,10 @@ let info =
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
 
-#load "../../packages/build/FSharp.Formatting/FSharp.Formatting.fsx"
-#I "../../packages/build/FAKE/tools/"
-#r "../../bin/FSharpPlus/FSharpPlus.dll"
+#load "../../packages/FSharp.Formatting/FSharp.Formatting.fsx"
+#I "../../packages/FAKE/tools/"
+#I "../../bin/net45/"
+#r "FSharpPlus.dll"
 #r "FakeLib.dll"
 open Fake
 open System.IO
@@ -52,7 +53,7 @@ let content    = __SOURCE_DIRECTORY__ @@ "../content"
 let output     = __SOURCE_DIRECTORY__ @@ "../../docs"
 let files      = __SOURCE_DIRECTORY__ @@ "../files"
 let templates  = __SOURCE_DIRECTORY__ @@ "templates"
-let formatting = __SOURCE_DIRECTORY__ @@ "../../packages/build/FSharp.Formatting/"
+let formatting = __SOURCE_DIRECTORY__ @@ "../../packages/FSharp.Formatting/"
 let docTemplate = "docpage.cshtml"
 
 // Where to look for *.csproj templates (in this order)
