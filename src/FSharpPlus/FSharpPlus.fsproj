@@ -4,9 +4,9 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <!--<VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix>
-    </VersionSuffix>
+    </VersionSuffix>-->
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
@@ -21,7 +21,8 @@
       </PackageTags>
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OtherFlags>--staticlink:FSharpPlus.BaseLib --warnon:1182</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--staticlink:FSharpPlus.BaseLib --warnon:1182</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -29,7 +30,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <OutputPath>..\..\bin</OutputPath>
+    <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Extensions.fs" />

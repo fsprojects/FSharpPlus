@@ -13,6 +13,6 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <OutputPath>..\..\bin</OutputPath>
+    <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
 </Project>
