@@ -13,7 +13,7 @@ Introducing FSharpPlus
 
 *)
 
-#r "../../bin/FSharpPlus/net45/FSharpPlus.dll"
+#r "../../bin/net45/FSharpPlus.dll"
 open FSharpPlus
 
 (**

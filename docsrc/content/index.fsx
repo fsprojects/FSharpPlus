@@ -26,7 +26,7 @@ Example
 This example demonstrates using a generic function defined in this sample library.
 
 *)
-#r "../../bin/FSharpPlus/net45/FSharpPlus.dll"
+#r "../../bin/net45/FSharpPlus.dll"
 open FSharpPlus
 
 map string [|2;3;4;5|]
