@@ -18,8 +18,6 @@ copyright
 tags
     FSharp Applicative Monad MonadTransformer Arrow Overloading
 summary
-    F#+ is an overload library for F#.
+    F#+ is a base library for F#.
 description
-    F#+ is an overload library for F#.
-
-
+    A complete and extensible base library for F#.
