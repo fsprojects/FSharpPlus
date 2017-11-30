@@ -1,3 +1,15 @@
+#### 1.0.0-CI00091  - December 30 2017
+* Targeting Netstandard 2.0
+* (0, +) as default monoid for numerics
+* Rename: 
+	* Empty, Append and Concat to MEmpty, MAppend and MConcat
+	* MZero and MPlus to Empty and Append.
+	* mempty and mappend to zero and plus
+	* mconcat and mfold to Seq.sum and sum
+* Generic constants (empty, zero, app, ...)
+* Compose for applicative functors
+* Unify RMap with Map and LMap with Contramap
+
 #### 1.0.0-CI00089  - March 9 2017
 * Functions create, singleton and traverse (Traversable) for NonEmptyList
 * Reader<'R, 'T> and Writer<'Monad<'T * 'Monoid>> as Comonads
