@@ -64,15 +64,15 @@ type Join =
     static member inline       Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default2) = Bind.InvokeOnInstance x id: '``Monad<'T>``
     static member inline       Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default1) = ((^``Monad<'Monad<'T>>`` or  ^``Monad<'T>``) : (static member Join: _ -> _) x) : '``Monad<'T>``
     [<Extension>]static member Join (x : Lazy<Lazy<_>>         , [<Optional>]_output : Lazy<'T>        , [<Optional>]_impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
-    [<Extension>]static member Join (x                         , [<Optional>]_output : seq<'T>         , [<Optional>]_impl : Join    ) = Seq.bind id x             : seq<'T> 
+    [<Extension>]static member Join (x : seq<seq<_>>           , [<Optional>]_output : seq<'T>         , [<Optional>]_impl : Join    ) = Seq.concat x              : seq<'T> 
     [<Extension>]static member Join (x : Id<_>                 , [<Optional>]_output : Id<'T>          , [<Optional>]_impl : Join    ) = x.getValue                : Id<'T>
 #if NET35
 #else                                                                                                                              
     [<Extension>]static member Join (x : Task<Task<_>>         , [<Optional>]_output : Task<'T>        , [<Optional>]_impl : Join    ) = x.Unwrap()                : Task<'T>
 #endif                                                                                                                                    
-    [<Extension>]static member Join (x                         , [<Optional>]_output : option<'T>      , [<Optional>]_impl : Join    ) = Option.bind   id x        : option<'T>
-    [<Extension>]static member Join (x                         , [<Optional>]_output : list<'T>        , [<Optional>]_impl : Join    ) = List.collect  id x        : list<'T>  
-    [<Extension>]static member Join (x                         , [<Optional>]_output : 'T []           , [<Optional>]_impl : Join    ) = Array.collect id x        : 'T []     
+    [<Extension>]static member Join (x                         , [<Optional>]_output : option<'T>      , [<Optional>]_impl : Join    ) = Option.flatten x          : option<'T>
+    [<Extension>]static member Join (x : list<list<_>>         , [<Optional>]_output : list<'T>        , [<Optional>]_impl : Join    ) = List.concat x             : list<'T>  
+    [<Extension>]static member Join (x : _ [][]                , [<Optional>]_output : 'T []           , [<Optional>]_impl : Join    ) = Array.concat x            : 'T []     
     [<Extension>]static member Join (g                         , [<Optional>]_output : 'R->'T          , [<Optional>]_impl : Join    ) = (fun r -> (g r) r)        : 'R->'T    
     static member inline       Join (m1, (m2, x)               , [<Optional>]_output : 'Monoid * 'T    , [<Optional>]_impl : Join    ) = Plus.Invoke m1 m2, x      : 'Monoid*'T
     [<Extension>]static member Join (x                         , [<Optional>]_output : Async<'T>       , [<Optional>]_impl : Join    ) = async.Bind(x, id)         : Async<'T>
