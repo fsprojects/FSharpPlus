@@ -12,6 +12,7 @@ module internal Prelude =
     let inline either f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
     let inline option n f = function None -> n | Some x -> f x
     let inline isNull (value : 'T) =  match value with null -> true | _ -> false
+    let inline tupleToOption x = match x with true, value -> Some value | _ -> None
 
 
 

@@ -453,3 +453,14 @@ type Splits() =
         Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
         // Assert.IsTrue((c = Sum 13))
         Assert.IsTrue((d = Sum 13))
+
+
+[<TestFixture>]
+type Parsing() = 
+    [<Test>]
+    member x.Parse() = 
+        let v1 : DateTime       = parse "2011-03-04T15:42:19+03:00"
+        let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
+
+        Assert.IsTrue((v1 = DateTime(2011,3,4,12,42,19)))
+        Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))

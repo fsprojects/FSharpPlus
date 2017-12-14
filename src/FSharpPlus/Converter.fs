@@ -80,12 +80,14 @@ type ToBytes =
 open System.Globalization
 
 type TryParse =
-    static member inline TryParse (_:'t     option, _:TryParse) = fun x -> 
+    static member inline TryParse (_:'t     option, _:TryParse) = fun x ->
         let mutable r = Unchecked.defaultof< ^R>
         if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
 
-    static member TryParse (_:string        option, _:TryParse) = fun x -> Some x                             :option<string>
-    static member TryParse (_:StringBuilder option, _:TryParse) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
+    static member TryParse (_:string         option, _:TryParse) = fun x -> Some x                             :option<string>
+    static member TryParse (_:StringBuilder  option, _:TryParse) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
+    static member TryParse (_:DateTime       option, _:TryParse) = fun x -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
+    static member TryParse (_:DateTimeOffset option, _:TryParse) = fun x -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
 
     static member inline Invoke (value:string) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryParse: _*_ -> _) b, a)
