@@ -14,7 +14,7 @@ module Operators =
     let inline uncurry f (x, y) = f x y
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
-    let inline either f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
+    let inline either f g = function Error x -> f x | Ok y -> g y
     let inline option n f = function None -> n | Some x -> f x
     let inline tuple2 a b             = a,b
     let inline tuple3 a b c           = a,b,c
@@ -446,39 +446,39 @@ module Operators =
     let inline getPi() :'Floating = Pi.Invoke()
 
     /// Returns the additive inverse of the number.
-    let inline negate  (x:'Num): 'Num = x |> TryNegate.Invoke |> function Choice1Of2 x -> x | Choice2Of2 e -> raise e
+    let inline negate  (x:'Num): 'Num = x |> TryNegate.Invoke |> function Ok x -> x | Error e -> raise e
 
     /// Returns the additive inverse of the number.
     /// Works also for unsigned types (Throws an exception if there is no inverse).
-    let inline negate'  (x:'Num): 'Num = x |> TryNegate'.Invoke |> function Choice1Of2 x -> x | Choice2Of2 e -> raise e
+    let inline negate'  (x:'Num): 'Num = x |> TryNegate'.Invoke |> function Ok x -> x | Error e -> raise e
 
     /// Returns the additive inverse of the number.
     /// Works also for unsigned types (Returns none if there is no inverse).
-    let inline tryNegate'  (x:'Num): 'Num option = TryNegate'.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
+    let inline tryNegate'  (x:'Num): 'Num option = TryNegate'.Invoke x |> function Ok x -> Some x | Error _ -> None
 
     /// Returns the subtraction between two numbers. Throws an error if the result is negative on unsigned types.
     let inline subtract (x:'Num) (y:'Num): 'Num = Subtract.Invoke x y
 
     /// Returns the subtraction between two numbers. Returns None if the result is negative on unsigned types.
-    let inline trySubtract (x:'Num) (y:'Num): 'Num option = y |> TrySubtract.Invoke x |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
+    let inline trySubtract (x:'Num) (y:'Num): 'Num option = y |> TrySubtract.Invoke x |> function Ok x -> Some x | Error _ -> None
 
     /// Returns the division between two numbers. If the numbers are not divisible throws an error.
     let inline div (dividend:'Num) (divisor:'Num): 'Num = Divide.Invoke dividend divisor
 
     /// Returns the division between two numbers. Returns None if the numbers are not divisible.
-    let inline tryDiv (dividend:'Num) (divisor:'Num): 'Num option = divisor |> TryDivide.Invoke dividend |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
+    let inline tryDiv (dividend:'Num) (divisor:'Num): 'Num option = divisor |> TryDivide.Invoke dividend |> function Ok x -> Some x | Error _ -> None
 
     /// Returns the square root of a number of any type. Throws an exception if there is no square root.
     let inline sqrt x = x |> Sqrt.Invoke
 
     /// Returns the square root of a number of any type. Returns None if there is no square root.
-    let inline trySqrt x = x |> TrySqrt.Invoke |> function Choice1Of2 x -> Some x | Choice2Of2 _ -> None
+    let inline trySqrt x = x |> TrySqrt.Invoke |> function Ok x -> Some x | Error _ -> None
 
     /// Returns the square root of an integral number.
-    let inline isqrt   (x:'Integral): 'Integral = x |> TrySqrtRem.Invoke |> function Choice1Of2 (x, _) -> x | Choice2Of2 e -> raise e
+    let inline isqrt   (x:'Integral): 'Integral = x |> TrySqrtRem.Invoke |> function Ok (x, _) -> x | Error e -> raise e
 
     /// Returns the square root of an integral number.
-    let inline sqrtRem   (x:'Integral): 'Integral*'Integral = x |> TrySqrtRem.Invoke |> function Choice1Of2 x -> x | Choice2Of2 e -> raise e
+    let inline sqrtRem   (x:'Integral): 'Integral*'Integral = x |> TrySqrtRem.Invoke |> function Ok x -> x | Error e -> raise e
 
     /// <summary> Returns a number which represents the sign.
     /// <para/>   Rule: signum x * abs x = x        </summary>
@@ -521,16 +521,6 @@ module Operators =
 
     /// Equivalent to map but only for Monads.
     let inline liftM  (f:'T->'U) (m1:'``Monad<'T>``) :'``Monad<'U>``= m1 >>= (result << f)
-
-    /// A convenient alias for Choice<'T1,'T2>
-    type Result<'Success,'Failure> = Choice<'Success,'Failure>
-    let (|Success|Failure|) = function
-        | Choice1Of2 x -> Success x
-        | Choice2Of2 x -> Failure x
-
-    let inline Success x = Choice1Of2 x
-    let inline Failure x = Choice2Of2 x
-
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =

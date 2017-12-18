@@ -19,7 +19,7 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline Arr f = Kleisli ((<<) result f)
     static member inline First  (Kleisli f) = Kleisli (fun (b, d) -> f b >>= fun c -> result (c, d))
     static member inline Second (Kleisli f) = Kleisli (fun (d, b) -> f b >>= fun c -> result (d, c))
-    static member inline (|||) (Kleisli f, Kleisli g) = Kleisli (either f g)
+    static member inline (|||) (Kleisli f, Kleisli g) = Kleisli (Choice.either f g)
 
     static member inline (+++) (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
         Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) result Choice2Of2))) (Kleisli (g >=> ((<<) result Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>

@@ -10,9 +10,25 @@ module Option =
             | _              -> None
 
 
-/// Additional operations on Error
+/// Additional operations on Result<'Ok,'Error>
 [<RequireQualifiedAccess>]
-module Error =
+module Result =
+    let map f = function Ok x -> Ok(f x) | Error x -> Error x
+    let apply f x =
+        match (f, x) with
+        | (Ok a, Ok b) -> Ok (a b)
+        | (Error a, _) -> Error a
+        | (_, Error b) -> Error b: Result<'b,'e>
+    let result x = Ok x
+    let throw  x = Error x
+    let bind  (f:'t -> Result<'v,'e>) = function Ok v  -> f v | Error e -> Error e
+    let inline catch (f:'t -> Result<'v,'e>) = function Ok v  -> Ok v | Error e -> f e
+    let inline either f g = function Ok x         -> f x | Error      y -> g y
+
+
+/// Additional operations on Choice
+[<RequireQualifiedAccess>]
+module Choice =
     let map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
     let apply f x =
         match (f,x) with
@@ -22,7 +38,8 @@ module Error =
     let result x = Choice1Of2 x
     let throw  x = Choice2Of2 x
     let bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
-    let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e
+    let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e    
+    let inline either f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
 
 
 /// Additional operations on Seq

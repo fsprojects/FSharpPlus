@@ -73,6 +73,7 @@ type SequenceA =
                         Seq.foldBack cons_f t (result Seq.empty)
 
     [<Extension>]static member SequenceA (t:seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, Option.isNone)                                : option<seq<'t>>    
+    [<Extension>]static member SequenceA (t:seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, function (Error _     ) -> true | _ -> false) : Result<seq<'t>, 'e>
     [<Extension>]static member SequenceA (t:seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, function (Choice2Of2 _) -> true | _ -> false) : Choice<seq<'t>, 'e>
     [<Extension>]static member SequenceA (t:seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, List.isEmpty)                                 : list<seq<'t>>
     [<Extension>]static member SequenceA (t:seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl:Default3) = SequenceA.ForInfiniteSequences(t, Array.isEmpty)                                : seq<'t> []

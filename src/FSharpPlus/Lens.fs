@@ -35,17 +35,17 @@ module Lens =
     let inline lens sa sbt afb s = sbt s <!> afb (sa s)
 
 
-    /// Build a Prism using Choice instead of Option to permit the types of 's and 't to differ.
-    let inline prism (bt:'b->'t) (seta:'s->Choice<'a,'t>) = dimap seta (either result (map bt)) << (fun g -> either Choice2Of2 (Choice1Of2 << g))
-    let inline prism' (bs:'b->'s) (sma:'s->Option<'a>) = prism bs (fun s -> option (Choice2Of2 s) Choice1Of2 (sma s))
+    /// Build a Prism using Result instead of Option to permit the types of 's and 't to differ.
+    let inline prism (bt:'b->'t) (seta:'s->Result<'a,'t>) = dimap seta (either result (map bt)) << (fun g -> either Error (Ok << g))
+    let inline prism' (bs:'b->'s) (sma:'s->Option<'a>) = prism bs (fun s -> option (Error s) Ok (sma s))
 
     /// Build an iso from a pair of inverse functions.
     let inline iso (sa:'s->'a) (bt:'b->'t) = dimap sa (map bt)
 
     /// Merge two lenses, getters, setters, folds or traversals.
     let inline choosing l r f = function
-        | Choice2Of2 x -> Choice2Of2 <!> l f x
-        | Choice1Of2 x -> Choice1Of2 <!> r f x
+        | Error x -> Error <!> l f x
+        | Ok    x -> Ok    <!> r f x
 
     // Some common Lens
 
@@ -65,9 +65,9 @@ module Lens =
     let inline _5 f t = map (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
 
     // Prism
-    let inline _Choice1Of2 x = (prism Choice1Of2 <| either (Choice2Of2 << Choice2Of2) Choice1Of2) x
-    let inline _Choice2Of2 x = (prism Choice2Of2 <| either Choice1Of2 (Choice2Of2 << Choice1Of2)) x
-    let inline _Some x = (prism Some <| option (Choice2Of2 None) Choice1Of2) x
+    let inline _Ok    x = (prism Ok    <| either (Error << Error) Ok) x
+    let inline _Error x = (prism Error <| either Ok (Error << Ok)) x
+    let inline _Some x = (prism Some <| option (Error None) Ok) x
     let inline _None x = (prism' (konst None) <| option (Some ()) (konst None)) x
 
     // Traversal

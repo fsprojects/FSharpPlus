@@ -32,11 +32,12 @@ type Throw =
 
     static member inline Throw (_:'R        ,x :'E) = (^R : (static member Throw: _ -> ^R) x)
     static member inline Throw (_:^t when ^t: null and ^t: struct, _) = id
+    static member        Throw (_:Result<'T,'E>, x:'E) = Error x     : Result<'T,'E>
     static member        Throw (_:Choice<'T,'E>, x:'E) = Choice2Of2 x: Choice<'T,'E>
 
 type Catch =
-    static member        Catch (x:Either<'a,'e1>, k:'e1->Either<'a,'e2>) = match x with L v -> L v | R e -> k e
-    static member        Catch (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Error.catch k x
+    static member        Catch (x:Result<'a,'e1>, k:'e1->Result<'a,'e2>) = Result.catch k x
+    static member        Catch (x:Choice<'a,'e1>, k:'e1->Choice<'a,'e2>) = Choice.catch k x
 
     static member inline Invoke (x:'``MonadError<'E1,'T>``) (f:'E1->'``MonadError<'E2,'T>``) : '``MonadError<'E2,'T>`` =
         let inline call_3 (_:^a,b:^b,_:^c,f:^f) = ((^a or ^b or ^c) : (static member Catch: _*_ -> _) b, f)

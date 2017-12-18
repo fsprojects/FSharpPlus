@@ -69,6 +69,7 @@ From .Net/F#
  -  ``IObservable<'T>``
  -  ``Lazy<'T>``
  -  ``Async<'T>``
+ -  ``Result<'T,'U>``
  -  ``Choice<'T,'U>``
  -  ``KeyValuePair<'Key,'T>``
  -  ``Map<'Key,'T>``

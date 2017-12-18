@@ -66,6 +66,7 @@ Concrete implementations
 From .Net/F#
  
  -  ``'T * 'U``
+ -  ``Result<'T,'U>``
  -  ``Choice<'T,'U>``
  -  ``KeyValuePair<'T,'U>``
 

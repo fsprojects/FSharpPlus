@@ -27,10 +27,10 @@ let  Nothing:Maybe<'t> = None
 let  (|Just|Nothing|) = function Some x -> Just x | _ -> Nothing
 let maybe  n f = function | Nothing -> n | Just x -> f x
 
-type Either<'a,'b> = Choice<'b,'a>
-let  Right x :Either<'a,'b> = Choice1Of2 x
-let  Left  x :Either<'a,'b> = Choice2Of2 x
-let  (|Right|Left|) = function Choice1Of2 x -> Right x | Choice2Of2 x -> Left x
+type Either<'a,'b> = Result<'b,'a>
+let  Right x :Either<'a,'b> = Ok x
+let  Left  x :Either<'a,'b> = Error x
+let  (|Right|Left|) = function Ok x -> Right x | Error x -> Left x
 let either f g = function Left x -> f x | Right y -> g y
 
 // Numerics
@@ -395,7 +395,7 @@ type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
     static member inline Arr f = Kleisli ((<<) return' f)
     static member inline First  (Kleisli f) = Kleisli (fun (b, d) -> f b >>= fun c -> return' (c, d))
     static member inline Second (Kleisli f) = Kleisli (fun (d, b) -> f b >>= fun c -> return' (d, c))
-    static member inline (|||) (Kleisli f, Kleisli g) = Kleisli (either f g)
+    static member inline (|||) (Kleisli f, Kleisli g) = Kleisli (FSharpPlus.Choice.either f g)
 
     static member inline (+++) (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
         Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) return' Choice2Of2))) (Kleisli (g >=> ((<<) return' Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
@@ -513,9 +513,9 @@ let (res10x13n10x20n15x13n15x20:list<_>) = runKleisli (Kleisli (fun y -> [y * 2;
 let (res10x8n10x10n15x8n15x10  :list<_>) = runKleisli (Kleisli (fun y -> [y * 2; y * 3]) &&& Kleisli (fun x -> [x + 3; x *  2] )) 5
 
 // Test Arrow Choice
-let resLeft7       = ( (+) 2) +++ ( (*) 10)   <| Left  5
-let res7n50        = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) ||| Kleisli (fun x -> [x + 2; x * 10] )) (Right 5)
-let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) +++ Kleisli (fun x -> [x + 3; x *  2] )) (Left  5)
+let resLeft7       = ( (+) 2) +++ ( (*) 10)   <| Choice2Of2 5
+let res7n50        = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) ||| Kleisli (fun x -> [x + 2; x * 10] )) (Choice1Of2 5)
+let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) +++ Kleisli (fun x -> [x + 3; x *  2] )) (Choice2Of2 5)
 
 // Test Arrow Apply
 let res7      = app() ( (+) 3 , 4)

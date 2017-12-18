@@ -32,7 +32,8 @@ type Bind =
     [<Extension>]static member Bind (source               , k : 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
     static member inline       Bind ((w : 'Monoid, a : 'T), k : 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
     [<Extension>]static member Bind (source               , f : 'T -> _           ) = async.Bind(source, f)                                         : Async<'U>
-    [<Extension>]static member Bind (source               , k : 'T -> _           ) = Error.bind k source                                           : Choice<'U,'E>
+    [<Extension>]static member Bind (source               , k : 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
+    [<Extension>]static member Bind (source               , k : 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
 
     [<Extension>]static member Bind (source : Map<'Key,'T>, f : 'T -> Map<'Key,'U>) = Map (seq {
                    for KeyValue(k, v) in source do
@@ -76,7 +77,8 @@ type Join =
     [<Extension>]static member Join (g                         , [<Optional>]_output : 'R->'T          , [<Optional>]_impl : Join    ) = (fun r -> (g r) r)        : 'R->'T    
     static member inline       Join (m1, (m2, x)               , [<Optional>]_output : 'Monoid * 'T    , [<Optional>]_impl : Join    ) = Plus.Invoke m1 m2, x      : 'Monoid*'T
     [<Extension>]static member Join (x                         , [<Optional>]_output : Async<'T>       , [<Optional>]_impl : Join    ) = async.Bind(x, id)         : Async<'T>
-    [<Extension>]static member Join (x                         , [<Optional>]_output : Choice<'T,'E>   , [<Optional>]_impl : Join    ) = Error.bind id x           : Choice<'T,'E>
+    [<Extension>]static member Join (x                         , [<Optional>]_output : Result<'T,'E>   , [<Optional>]_impl : Join    ) = Result.bind id x          : Result<'T,'E>
+    [<Extension>]static member Join (x                         , [<Optional>]_output : Choice<'T,'E>   , [<Optional>]_impl : Join    ) = Choice.bind id x          : Choice<'T,'E>
 
     [<Extension>]static member Join (x : Map<_,_>                     , [<Optional>]_output : Map<'Key,'Value>, [<Optional>]_impl : Join    )                             : Map<'Key,'Value> =
                     Map (seq {
@@ -126,7 +128,8 @@ type Return =
     static member        Return (_:'r -> 'a      , _:Return) = const':'a  -> 'r -> _
     static member inline Return (_: 'm * 'a      , _:Return) = fun (x:'a) -> (Zero.Invoke():'m), x
     static member        Return (_:'a Async      , _:Return) = fun (x:'a) -> async.Return x
-    static member        Return (_:Choice<'a,'e> , _:Return) = fun x -> Choice1Of2 x :Choice<'a,'e>
+    static member        Return (_:Result<'a,'e> , _:Return) = fun x -> Ok x        : Result<'a,'e>
+    static member        Return (_:Choice<'a,'e> , _:Return) = fun x -> Choice1Of2 x: Choice<'a,'e>
     static member        Return (_:Expr<'a>      , _:Return) = fun x -> Expr.Cast<'a>(Expr.Value(x:'a))
     static member        Return (_:'a ResizeArray, _:Return) = fun x -> ResizeArray<'a>(Seq.singleton x)
 
@@ -149,7 +152,8 @@ type Apply =
     static member inline ``<*>`` ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]_output:'Monoid * 'U , [<Optional>]_impl:Apply) = (Plus.Invoke a b, f x) :'Monoid *'U
     static member        ``<*>`` (f:Async<_>    , x:Async<'T>      , [<Optional>]_output:Async<'U>    , [<Optional>]_impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
     static member        ``<*>`` (f:option<_>   , x:option<'T>     , [<Optional>]_output:option<'U>   , [<Optional>]_impl:Apply) = Option.apply f x    :option<'U>
-    static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>  , [<Optional>]_output:Choice<'b,'E>, [<Optional>]_impl:Apply) = Error.apply f x :Choice<'U,'E>
+    static member        ``<*>`` (f:Result<_,'E>, x:Result<'T,'E>  , [<Optional>]_output:Result<'b,'E>, [<Optional>]_impl:Apply) = Result.apply f x: Result<'U,'E>
+    static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>  , [<Optional>]_output:Choice<'b,'E>, [<Optional>]_impl:Apply) = Choice.apply f x: Choice<'U,'E>
     static member inline ``<*>`` (KeyValue(a:'Key, f), KeyValue(b:'Key, x:'T), [<Optional>]_output:KeyValuePair<'Key,'U>, [<Optional>]_impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(Plus.Invoke a b, f x)
 
     static member        ``<*>`` (f:Map<'Key,_>      , x:Map<'Key,'T>        , [<Optional>]_output:Map<'Key,'U>, [<Optional>]_impl:Apply) :Map<'Key,'U> = Map (seq {
@@ -198,6 +202,7 @@ type Iterate =
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
     [<Extension>]static member Iterate (x:Async<'T>           , action) = action (Async.RunSynchronously x) : unit
+    [<Extension>]static member Iterate (x:Result<'T,'E>       , action) = match x with Ok x         -> action x | _ -> ()
     [<Extension>]static member Iterate (x:Choice<'T,'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
     [<Extension>]static member Iterate (KeyValue(_:'Key, x:'T), action) = action x :unit
     [<Extension>]static member Iterate (x:Map<'Key,'T>        , action) = Map.iter (const' action) x 
@@ -242,7 +247,8 @@ type Map =
     [<Extension>]static member Map (x : _ [,,]         , f : 'T->'U, [<Optional>]_mthd : Map) = Array3D.map f x
     [<Extension>]static member Map (x : _ [,,,]        , f : 'T->'U, [<Optional>]_mthd : Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
     [<Extension>]static member Map (x : Async<_>       , f : 'T->'U, [<Optional>]_mthd : Map) = async.Bind(x, async.Return << f)
-    [<Extension>]static member Map (x : Choice<_,'E>   , f : 'T->'U, [<Optional>]_mthd : Map) = Error.map f x
+    [<Extension>]static member Map (x : Result<_,'E>   , f : 'T->'U, [<Optional>]_mthd : Map) = Result.map f x
+    [<Extension>]static member Map (x : Choice<_,'E>   , f : 'T->'U, [<Optional>]_mthd : Map) = Choice.map f x
     [<Extension>]static member Map (KeyValue(k, x)     , f : 'T->'U, [<Optional>]_mthd : Map) = KeyValuePair(k, f x)
     [<Extension>]static member Map (x : Map<'Key,'T>   , f : 'T->'U, [<Optional>]_mthd : Map) = Map.map (const' f) x : Map<'Key,'U>
     [<Extension>]static member Map (x : Dictionary<_,_>, f : 'T->'U, [<Optional>]_mthd : Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d: Dictionary<'Key,'U>
@@ -448,7 +454,8 @@ type Bimap =
     inherit Default1
        
     [<Extension>]static member Bimap ((x, y)                 , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = (f x, g y)
-    [<Extension>]static member Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = either (Choice2Of2 << f) (Choice1Of2 << g) x
+    [<Extension>]static member Bimap (x : Result<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = Result.either (Error << f)      (Ok << g) x
+    [<Extension>]static member Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = Choice.either (Choice2Of2 << f) (Choice1Of2 << g) x
     [<Extension>]static member Bimap (KeyValue(k, x)         , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = KeyValuePair(f k, g x)
 
     static member inline Invoke (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
@@ -464,7 +471,8 @@ type MapFirst =
     inherit Default1
 
     [<Extension>]static member First ((x, y)                , f:'T->'U, [<Optional>]_mthd : MapFirst) = (f x, y)
-    [<Extension>]static member First (x : Choice<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = either (Choice2Of2 << f) Choice1Of2 x
+    [<Extension>]static member First (x : Result<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = Result.either (Error      << f) Ok x
+    [<Extension>]static member First (x : Choice<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = Choice.either (Choice2Of2 << f) Choice1Of2 x
     [<Extension>]static member First (KeyValue(k, x)        , f:'T->'U, [<Optional>]_mthd : MapFirst) = KeyValuePair(f k, x)
 
     static member inline Invoke (f : 'T->'U) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
@@ -485,7 +493,8 @@ type MapSecond =
     inherit Default1
 
     [<Extension>]static member Second ((x, y)                , f:'V->'W, [<Optional>]_mthd : MapSecond) = (x, f y)
-    [<Extension>]static member Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = either Choice2Of2 (Choice1Of2 << f) x
+    [<Extension>]static member Second (x : Result<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = Result.either Error      (Ok         << f) x
+    [<Extension>]static member Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = Choice.either Choice2Of2 (Choice1Of2 << f) x
     [<Extension>]static member Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]_mthd : MapSecond) = KeyValuePair(k, f x)
 
     static member inline Invoke (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` =
@@ -719,8 +728,8 @@ type Fanout with
 
 type Fanin =
     inherit Default1
-    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]_output : Choice<'U,'T> -> 'V   , [<Optional>]_mthd : Fanin) = either f g                                        : Choice<'U,'T> -> 'V
-    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]_output : Func<Choice<'U,'T>,'V>, [<Optional>]_mthd : Fanin) = Func<Choice<'U,'T>,'V>(either f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
+    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]_output : Choice<'U,'T> -> 'V   , [<Optional>]_mthd : Fanin) = Choice.either f g                                        : Choice<'U,'T> -> 'V
+    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]_output : Func<Choice<'U,'T>,'V>, [<Optional>]_mthd : Fanin) = Func<Choice<'U,'T>,'V>(Choice.either f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
 
     static member inline Invoke (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ``|||``: _*_*_*_ -> _) f, g, output, mthd)

@@ -210,6 +210,11 @@ type ToString with static member inline ToString (x:_ option, _:ToString) = fun 
                     | Some a -> "Some " + ToString.Invoke k a
                     | None   -> "None"
 
+type ToString with static member inline ToString (x:Result<_,_>, _:ToString) = fun (k:CultureInfo) ->
+                    match x with
+                    | Ok a    -> "Ok "    + ToString.Invoke k a
+                    | Error b -> "Error " + ToString.Invoke k b
+
 type ToString with static member inline ToString (x:Choice<_,_>, _:ToString) = fun (k:CultureInfo) ->
                     match x with
                     | Choice1Of2 a -> "Choice1Of2 " + ToString.Invoke k a

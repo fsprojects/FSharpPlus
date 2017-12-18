@@ -70,6 +70,7 @@ From .Net/F#
  -  ``option<'T>`` 
  -  ``Lazy<'T>``
  -  ``Async<'T>``
+ -  ``Result<'T,'U>`` 
  -  ``Choice<'T,'U>``
  -  ``Map<'Key,'T>``
  -  ``'Monoid * 'T``
