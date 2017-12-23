@@ -12,7 +12,7 @@
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <RepositoryUrl>https://github.com/gusty/FSharpPlus</RepositoryUrl>
-    <Description>F#+ is an overload library for F#.
+    <Description>A complete and extensible base library for F#.
       </Description>
     <Authors>Gusty</Authors>
     <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>

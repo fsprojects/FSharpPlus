@@ -29,11 +29,11 @@ let project = "FSharpPlus"
 
 // Short summary of the project
 // (used as description in AssemblyInfo and as a short summary for NuGet package)
-let summary = "F#+ is an overload library for F#."
+let summary = "F#+ is a base library for F#."
 
 // Longer description of the project
 // (used as a description for NuGet package; line breaks are automatically cleaned up)
-let description = "F#+ is an overload library for F#."
+let description = "A complete and extensible base library for F#."
 
 // List of author names (for NuGet package)
 let authors = [ "Gusty" ]

@@ -19,7 +19,7 @@ let githubLink = "https://github.com/gusty/FSharpPlus"
 let info =
   [ "project-name", "FSharpPlus"
     "project-author", "Gusty"
-    "project-summary", "F#+ is an overload library for F#."
+    "project-summary", "F#+ is a base library for F#."
     "project-github", githubLink
     "project-nuget", "http://nuget.org/packages/FSharpPlus" ]
 
