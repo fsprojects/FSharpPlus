@@ -596,6 +596,8 @@ type ComposedStaticInvokable< ^F, ^G>  =
 
 // Category class ---------------------------------------------------------
 
+#nowarn "0077"
+
 type Id =
     inherit Default1
     static member Id ([<Optional>]_output :  'T -> 'T  , [<Optional>]_mthd : Id) = id                 : 'T -> 'T
