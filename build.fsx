@@ -170,9 +170,14 @@ Target "RunTests" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-  !! (sprintf "src/%s/%s.fsproj" project project)
-  |> MSBuildReleaseExt "bin" vsProjProps "pack"
+  !! ("src" </> project </> (sprintf "%s.fsproj" project))
+  |> MSBuildReleaseExt "" vsProjProps "pack"
   |> ignore
+)
+
+Target "CopyNuGet" (fun _ ->
+    !! ("src" </> project </> "bin" </> configuration </> (sprintf "%s*.nupkg" project))
+    |> CopyTo "bin"
 )
 
 Target "PublishNuget" (fun _ ->
@@ -365,6 +370,7 @@ Target "All" DoNothing
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
   ==> "NuGet"
+  ==> "CopyNuGet"
   ==> "BuildPackage"
   ==> "All"
 
