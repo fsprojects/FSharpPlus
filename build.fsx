@@ -137,7 +137,7 @@ let vsProjProps = [
 
 Target "Clean" (fun _ ->
     !! solutionFile |> MSBuildReleaseExt "" vsProjProps "Clean" |> ignore
-    CleanDirs ["bin"; "temp"; "docs"]
+    CleanDirs ["bin"; "temp"; "docs"; (sprintf "src/%s/bin" project); (sprintf "src/%s/obj" project) ]
 )
 
 // --------------------------------------------------------------------------------------
