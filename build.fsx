@@ -118,13 +118,22 @@ Target "CopyBinaries" (fun _ ->
 
 // --------------------------------------------------------------------------------------
 // Clean build results
+let (nugetVersionPrefix,nugetVersionSuffix) = 
+  match release.NugetVersion.Split('-') |> Array.toList with
+  | prefix::[]->(prefix,"")
+  | prefix::suffix::[]->(prefix,suffix)
+  | _-> failwith "failed to recognise version"
 
-let vsProjProps = 
+let vsProjProps = [
 #if MONO
-    [ ("DefineConstants","MONO"); ("Configuration", configuration) ]
+     ("DefineConstants","MONO")
 #else
-    [ ("Configuration", configuration); ("Platform", "Any CPU") ]
+     ("Platform", "Any CPU") 
 #endif
+     ("Configuration", configuration)
+     ("VersionSuffix", nugetVersionSuffix)
+     ("VersionPrefix", nugetVersionPrefix)
+]
 
 Target "Clean" (fun _ ->
     !! solutionFile |> MSBuildReleaseExt "" vsProjProps "Clean" |> ignore
@@ -161,15 +170,8 @@ Target "RunTests" (fun _ ->
 // Build a NuGet package
 
 Target "NuGet" (fun _ ->
-  let (prefix,suffix) = match release.NugetVersion.Split('-') |> Array.toList with
-                        | prefix::[]->(prefix,"")
-                        | prefix::suffix::[]->(prefix,suffix)
-                        | _-> failwith "failed to recognise version"
-
-  let p=("VersionSuffix",suffix)::("VersionPrefix",prefix)::vsProjProps
-
   !! (sprintf "src/%s/%s.fsproj" project project)
-  |> MSBuildReleaseExt "bin" p "pack"
+  |> MSBuildReleaseExt "bin" vsProjProps "pack"
   |> ignore
 )
 
