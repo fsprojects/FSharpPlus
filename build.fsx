@@ -176,7 +176,7 @@ Target "NuGet" (fun _ ->
 )
 
 Target "CopyNuGet" (fun _ ->
-    !! ("src" </> project </> "bin" </> configuration </> (sprintf "%s*.nupkg" project))
+    !! ("src" </> project </> "bin" </> "**" </> configuration </> (sprintf "%s*.nupkg" project))
     |> CopyTo "bin"
 )
 
