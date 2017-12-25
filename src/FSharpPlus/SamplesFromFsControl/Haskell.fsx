@@ -575,7 +575,7 @@ let inline iI x = (idiomatic << pure') x
 let res3n4''  = iI ((+) 2) [1;2] Ii
 let res3n4''' = iI (+) (pure' 2) [1;2] Ii                               // *1
 let res18n24' = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
-let res6n7n8' = iI (+) (pure' 5G          ) (ZipList [1;2;3]     ) Ii   // *1
+// let res6n7n8' = iI (+) (pure' 5G          ) (ZipList [1;2;3]     ) Ii   // *1
 let res18n14' = iI (+) (ZipList(seq [8;4])) (pure' 10            ) Ii
 
 type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
