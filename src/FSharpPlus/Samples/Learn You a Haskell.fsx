@@ -40,7 +40,7 @@ let res18 = List.sequence [Some 3; Some 2; Some 1]                    // Some [3
 open FsControl
 
 type Pair<'a, 'b> = Pair of ('a * 'b)
-type Pair with
+type Pair<'a, 'b> with
     static member runPair (Pair tuple : Pair<'a, 'b>) : ('a * 'b) = tuple
     static member map f (Pair (a, b) : Pair<'a, 'a>) : Pair<'b, 'b> = Pair ((f a), (f b))
     static member Map (x:Pair<'a,'a>, f) = Pair.map f x
@@ -72,7 +72,7 @@ type Tree<'a> =
     | MEmpty
     | Node of ('a * Tree<'a> * Tree<'a>)
     
-type Tree with
+type Tree<'a> with
     static member treeFold f tree z =
         match tree with
         | MEmpty -> z
@@ -532,7 +532,7 @@ module Probability =
     
     type Prob<'a> = Prob of List<'a * float>
     
-    type Prob with
+    type Prob<'a> with
         static member probMap f (Prob prob : Prob<'a>) : Prob<'b> = List.map (fun (x, p) -> (f x, p)) prob |> Prob
         static member flatten (Prob xs : Prob<Prob<'a>>) : Prob<'a> =
             let multAll (Prob innerxs, p) = List.map (fun (x, r) -> (x, p * r)) innerxs
@@ -607,7 +607,7 @@ open StatisticsLib
 let res125 = mean [13.; 23.; 42.; 45.; 61.; 73.; 96.; 100.; 199.; 420.; 900.; 3839.]
 let res126 = mean [13; 23; 42; 45; 61; 73; 96; 100; 199; 420; 900; 3839]
     
-type Tree with
+type Tree<'a> with
     static member inline Plus   (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
     static member inline Minus  (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
     static member inline Divide (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
