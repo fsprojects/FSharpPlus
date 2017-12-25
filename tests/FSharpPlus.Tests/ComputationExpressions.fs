@@ -11,11 +11,10 @@ module Helpers =
 
 open Helpers
 
-[<TestFixture>]
-type Workflows() = 
+module ComputationExpressions = 
 
     [<Test>]
-    member __.MonadFx() =
+    let monadFx() =
         let effects = ResizeArray()
 
         // This workflow perform side-effects before and after an async operation in a monad.fx
@@ -42,7 +41,7 @@ type Workflows() =
 
 
     [<Test>]
-    member __.MonadPlus() =
+    let monadPlus() =
         let effects = ResizeArray()
 
         // This is a plus workflow

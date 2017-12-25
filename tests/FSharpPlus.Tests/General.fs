@@ -48,10 +48,9 @@ type WrappedListF<'s> = WrappedListF of 's list with
 
 open System.Collections.Generic
 
-[<TestFixture>]
-type Monoid() =
+module Monoid =
     [<Test>]
-    member x.SeqSum_Default_Custom() = 
+    let seqSumDefaultCustom() =
         let (WrappedListB x) = Seq.sum [WrappedListB [10] ;WrappedListB [15]]
         let (WrappedListC y) = Seq.sum [WrappedListC [10] ;WrappedListC [15]]
         Assert.AreEqual (x, [10;15])
@@ -64,10 +63,9 @@ type Monoid() =
         Assert.IsInstanceOf<Option<IDictionary<string,int list>>> (Some z)
 
 
-[<TestFixture>]
-type Functor() =
+module Functor =
     [<Test>]
-    member x.map_Default_Custom() = 
+    let mapDefaultCustom() = 
         let testVal1 = map ((+) 1) {Head = 10; Tail = [20;30]}
         Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal1)
 
@@ -78,29 +76,28 @@ type Functor() =
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
 
     [<Test>]
-    member x.unzip() = 
+    let unzip() = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
 
 
-[<TestFixture>]
-type Foldable() = 
+module Foldable =
     [<Test>]
-    member x.filter_Default_Custom() = 
+    let filterDefaultCustom() = 
         let wlA1 = WrappedListA [1..10]
         let testVal = filter ((=)2) wlA1
         Assert.AreEqual (testVal, WrappedListA [2])
         Assert.IsInstanceOf<Option<WrappedListA<int>>> (Some testVal)
 
     [<Test>]
-    member x.foldAternatives() = 
+    let foldAternatives() = 
         let x = choice [None; Some 3; Some 4; None]
         let y = choice [| []; [3]; [4]; [] |]
         Assert.AreEqual (x, Some 3)
         Assert.AreEqual (y, [3;4])
 
     [<Test>]
-    member x.FromToSeq() =
+    let fromToSeq() =
         let s = (seq [Collections.Generic.KeyValuePair(1, "One"); Collections.Generic.KeyValuePair(2, "Two")])
         let t = {'a'..'d'}
 
@@ -123,7 +120,7 @@ type Foldable() =
 
 
     [<Test>]
-    member x.SortBy() =
+    let sortBy() =
         let l  = [10;4;6;89]
         let l' = sortBy id l
         let s  = WrappedListB [10;4;6;89]
@@ -132,10 +129,9 @@ type Foldable() =
         Assert.AreEqual (s', WrappedListB [4;6;10;89])
 
 
-[<TestFixture>]
-type Monad() = 
+module Monad = 
     [<Test>]
-    member x.join_Default_Custom() = 
+    let joinDefaultCustom() = 
         let x = join [[1];[2]]
         Assert.AreEqual (x, [1;2])
         let y : WrappedListE<_> = join (WrappedListE [WrappedListE [1];WrappedListE [2]])
@@ -146,7 +142,7 @@ type Monad() =
         Assert.AreEqual (SideEffects.get(), ["Join"])
 
     [<Test>]
-    member x.WorkFlow() =       
+    let workFlow() =       
         let testVal = 
             monad {
                 let! x1 = WrappedListD [1;2]
@@ -155,7 +151,7 @@ type Monad() =
         Assert.IsInstanceOf<WrappedListD<int>>(testVal)
 
     [<Test>]
-    member x.DelayForCont() = 
+    let DelayForCont() = 
         // If Delay is not properly implemented this will stack-overflow
         // See http://stackoverflow.com/questions/11188779/stackoverflow-in-continuation-monad
 #if MONO
@@ -175,16 +171,15 @@ type Monad() =
 #endif
 
 
-[<TestFixture>]
-type Traversable() = 
+module Traversable = 
     [<Test>]
-    member x.sequenceA_Default_Primitive() = 
+    let sequenceA_Default_Primitive() = 
         let testVal = sequenceA [|Some 1; Some 2|]
         Assert.AreEqual (Some [|1;2|], testVal)
         Assert.IsInstanceOf<Option<array<int>>> testVal
 
     [<Test>]
-    member x.sequenceA_Specialization() =
+    let sequenceA_Specialization() =
         let inline seqSeq (x:_ seq ) = sequenceA x
         let inline seqArr (x:_ []  ) = sequenceA x
         let inline seqLst (x:_ list) = sequenceA x
@@ -200,7 +195,7 @@ type Traversable() =
         Assert.IsInstanceOf<list<list<int>>> c
 
     [<Test>]
-    member x.traversableForNonPrimitive() =
+    let traversableForNonPrimitive() =
         let nel = NonEmptyList.create (Some 1) [Some 2]
         let rs1  = traverse id nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
@@ -208,7 +203,7 @@ type Traversable() =
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
 
     [<Test>]
-    member x.traverseInfiniteOptions() =
+    let traverseInfiniteOptions() =
         let toOptions x = if x <> 4 then Some x       else None
         let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
         let toLists   x = if x <> 4 then [x; x]       else []
@@ -230,10 +225,9 @@ type ZipList'<'s> = ZipList' of 's seq with
     static member Return (x:'a)                                = ZipList' (Seq.initInfinite (konst x))
     static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList'<'b>
 
-[<TestFixture>]
-type Applicative() = 
+module Applicative = 
     [<Test>]
-    member x.ApplicativeMath() = 
+    let applicativeMath() = 
         let inline (+) (a:'T) (b:'T) :'T = a + b
         let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
         let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
@@ -245,7 +239,7 @@ type Applicative() =
 
 
     [<Test>]
-    member x.Applicatives() = 
+    let applicatives() = 
 
         let run (ZipList x) = x
         let run' (ZipList' x) = x
@@ -275,9 +269,9 @@ type Idiomatic = Idiomatic with
     static member inline ($) (Idiomatic, si) = fun sfi x -> (Idiomatic $ x) (sfi <*> si)
     static member        ($) (Idiomatic, Ii) = id
 
-type Applicative with
+module IdiomBrackets =
     [<Test>]
-    member x.IdiomBrackets() =    
+    let idiomBrackets() =    
         let inline idiomatic a b = (Idiomatic $ b) a
         let inline iI x = (idiomatic << result) x
 
@@ -285,8 +279,6 @@ type Applicative with
         let res3n4''' = iI (+) (result 2) [1;2] Ii   // fails to compile when constraints are not properly defined
         Assert.AreEqual ([3;4], res3n4'' )
         Assert.AreEqual ([3;4], res3n4''')
-
-
 
 
         let output = System.Text.StringBuilder()
@@ -313,10 +305,9 @@ type Applicative with
         Assert.AreEqual (4, v4)
  
 
-[<TestFixture>]
-type MonadPlus() = 
+module MonadPlus = 
     [<Test>]
-    member x.ZeroAndPlus() = 
+    let zeroAndPlus() = 
         let v = WrappedListE [1;2]
         let x = v <|> getEmpty()
         let y = getEmpty() <|> v
@@ -334,10 +325,9 @@ module NumericLiteralG =
 
 open MathNet.Numerics
 
-[<TestFixture>]
-type Numerics() = 
+module Numerics = 
     [<Test>]
-    member x.GenericMath() = 
+    let genericMath() = 
         let argUint        :uint32       =              42G
         let argInt         :    int      =         -424242G
         let argBigInt      : bigint      = -42424242424242G
@@ -376,10 +366,9 @@ type Sum<'a> = Sum of 'a with
     static member inline (+) (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
 
 
-[<TestFixture>]
-type Splits() = 
+module Splits = 
     [<Test>]
-    member x.SplitArraysAndStrings() = 
+    let splitArraysAndStrings() = 
         let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
         let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|]  |> Seq.map System.Text.Encoding.ASCII.GetString
 
@@ -390,7 +379,7 @@ type Splits() =
         Assert.IsTrue((toList b1 = toList b2))
 
     [<Test>]
-    member x.ReplaceArraysAndStrings() = 
+    let replaceArraysAndStrings() = 
         let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
         let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B  |> System.Text.Encoding.ASCII.GetString
 
@@ -401,7 +390,7 @@ type Splits() =
         Assert.IsTrue((b1 = b2))
 
     [<Test>]
-    member x.IntercalateArraysAndStrings() = 
+    let intercalateArraysAndStrings() = 
         let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
         let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B  |> System.Text.Encoding.ASCII.GetString
 
@@ -419,10 +408,9 @@ type Splits() =
         Assert.IsTrue((d = Sum 13))
 
 
-[<TestFixture>]
-type Parsing() = 
+module Parsing = 
     [<Test>]
-    member x.Parse() = 
+    let parse() = 
         let v1 : DateTime       = parse "2011-03-04T15:42:19+03:00"
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
 
