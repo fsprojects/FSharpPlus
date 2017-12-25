@@ -25,13 +25,14 @@ type Workflows() =
         Async.RunSynchronously combine
         Assert.AreEqual(effects |> toList, [1;2])
 
+    [<Test>]
     member x.MonadPlus() = 
         let effects = ResizeArray()
         let lst: _ list = monad.plus {
             effects.Add(3)
             return 5;
             return 6; }
-        Assert.AreEqual(effects |> toList, [1;2;3])
+        Assert.AreEqual(effects |> toList, [3])
         Assert.AreEqual(lst, [5;6])
 
         let effects = ResizeArray()

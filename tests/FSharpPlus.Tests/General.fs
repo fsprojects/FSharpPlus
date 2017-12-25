@@ -183,6 +183,7 @@ type Traversable() =
         Assert.AreEqual (Some [|1;2|], testVal)
         Assert.IsInstanceOf<Option<array<int>>> testVal
 
+    [<Test>]
     member x.sequenceA_Specialization() =
         let inline seqSeq (x:_ seq ) = sequenceA x
         let inline seqArr (x:_ []  ) = sequenceA x
@@ -198,6 +199,7 @@ type Traversable() =
         Assert.AreEqual ([[1; 3]], c)
         Assert.IsInstanceOf<list<list<int>>> c
 
+    [<Test>]
     member x.traversableForNonPrimitive() =
         let nel = NonEmptyList.create (Some 1) [Some 2]
         let rs1  = traverse id nel
@@ -205,6 +207,7 @@ type Traversable() =
         let rs2  = sequenceA nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
 
+    [<Test>]
     member x.traverseInfiniteOptions() =
         let toOptions x = if x <> 4 then Some x       else None
         let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
@@ -215,7 +218,7 @@ type Traversable() =
         let d = sequenceA  (Seq.initInfinite toLists)
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
-        Assert.AreEqual (Choice2Of2 "This is a failure", c)
+        Assert.True ((Choice2Of2 "This is a failure" = c))
         Assert.AreEqual ([], d)
         
 type ZipList<'s> = ZipList of 's seq with
@@ -386,6 +389,7 @@ type Splits() =
         Assert.IsTrue((toList a1 = toList a2))
         Assert.IsTrue((toList b1 = toList b2))
 
+    [<Test>]
     member x.ReplaceArraysAndStrings() = 
         let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
         let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B  |> System.Text.Encoding.ASCII.GetString
@@ -396,6 +400,7 @@ type Splits() =
         Assert.IsTrue((a1 = a2))
         Assert.IsTrue((b1 = b2))
 
+    [<Test>]
     member x.IntercalateArraysAndStrings() = 
         let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
         let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B  |> System.Text.Encoding.ASCII.GetString
