@@ -9,7 +9,7 @@ Functors and Applicatives
 
 *)
 
-#r "../../bin/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 open FSharpPlus
 
 (**

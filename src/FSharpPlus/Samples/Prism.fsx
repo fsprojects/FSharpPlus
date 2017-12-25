@@ -1,5 +1,5 @@
 ﻿#nowarn "3186"
-#r @"../../../bin/net45/FSharpPlus.dll"
+#r @"../bin/Release/net45/FSharpPlus.dll"
 
 open FSharpPlus
 open FSharpPlus.Lens
