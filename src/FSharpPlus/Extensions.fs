@@ -5,41 +5,33 @@ open System
 /// Additional operations on Option
 module Option =
     let apply f x =
-            match (f,x) with 
-            | Some f, Some x -> Some (f x) 
-            | _              -> None
+        match (f, x) with 
+        | Some f, Some x -> Some (f x) 
+        | _              -> None
 
 
 /// Additional operations on Result<'Ok,'Error>
 [<RequireQualifiedAccess>]
 module Result =
-    let map f = function Ok x -> Ok(f x) | Error x -> Error x
-    let apply f x =
-        match (f, x) with
-        | (Ok a, Ok b) -> Ok (a b)
-        | (Error a, _) -> Error a
-        | (_, Error b) -> Error b: Result<'b,'e>
     let result x = Ok x
-    let throw  x = Error x
-    let bind  (f:'t -> Result<'v,'e>) = function Ok v  -> f v | Error e -> Error e
-    let inline catch (f:'t -> Result<'v,'e>) = function Ok v  -> Ok v | Error e -> f e
-    let inline either f g = function Ok x         -> f x | Error      y -> g y
+    let throw  x = Error x    
+    let apply f x = match (f, x) with (Ok a, Ok b)     -> Ok (a b) | Error e, _ | _, Error e -> Error e: Result<'b, 'e>
+    let map   f                   = function Ok v      -> Ok (f v) | Error e                 -> Error e
+    let bind (f:'t -> _)          = function Ok v      -> f v      | Error e                 -> Error e: Result<'v,'e>
+    let inline catch (f:'t -> _)  = function Ok v      -> Ok v     | Error e                 -> f e    : Result<'v,'e>
+    let inline either f g         = function Ok v      -> f v      | Error e                 -> g e
 
 
 /// Additional operations on Choice
 [<RequireQualifiedAccess>]
 module Choice =
-    let map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
-    let apply f x =
-        match (f,x) with
-        | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
-        | (Choice2Of2 a, _)            -> Choice2Of2 a
-        | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
     let result x = Choice1Of2 x
-    let throw  x = Choice2Of2 x
-    let bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> f v | Choice2Of2 e -> Choice2Of2 e
-    let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v  -> Choice1Of2 v | Choice2Of2 e -> f e    
-    let inline either f g = function Choice2Of2 x -> f x | Choice1Of2 y -> g y
+    let throw  x = Choice2Of2 x    
+    let apply f x = match (f, x) with Choice1Of2 a, Choice1Of2 b              -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e        -> Choice2Of2 e: Choice<'b,'e>
+    let map   f                          = function Choice1Of2 v              -> Choice1Of2 (f v) | Choice2Of2 e                             -> Choice2Of2 e
+    let bind (f:'t -> _)                 = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e: Choice<'v,'e>
+    let inline catch (f:'t -> _)         = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e         : Choice<'v,'e>
+    let inline either f g                = function Choice2Of2 v              -> f v              | Choice1Of2 e                             -> g e
 
 
 /// Additional operations on Seq

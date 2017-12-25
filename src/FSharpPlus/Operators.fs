@@ -14,8 +14,8 @@ module Operators =
     let inline uncurry f (x, y) = f x y
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
-    let inline either f g = function Error x -> f x | Ok y -> g y
-    let inline option n f = function None -> n | Some x -> f x
+    let inline either f g = function Error x -> f x | Ok y   -> g y
+    let inline option n f = function None    -> n   | Some x -> f x
     let inline tuple2 a b             = a,b
     let inline tuple3 a b c           = a,b,c
     let inline tuple4 a b c d         = a,b,c,d
@@ -396,7 +396,7 @@ module Operators =
     let inline mapItem2 mapping tuple = MapItem2.Invoke mapping tuple
     let inline mapItem3 mapping tuple = MapItem3.Invoke mapping tuple
     let inline mapItem4 mapping tuple = MapItem4.Invoke mapping tuple
-    let        mapItem5 mapping tuple = MapItem5.MapItem5(tuple, mapping)
+    let        mapItem5 mapping tuple = MapItem5.MapItem5 (tuple, mapping)
     
     
     
