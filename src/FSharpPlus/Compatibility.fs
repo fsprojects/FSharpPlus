@@ -169,7 +169,7 @@ module Compatibility =
         let inline liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
         let inline ap     x y     = liftM2 id x y
             
-        let do' = new Builders.MonadBuilder()
+        let do' = new Builders.MonadFxBuilder()
 
 
         // Monad Plus

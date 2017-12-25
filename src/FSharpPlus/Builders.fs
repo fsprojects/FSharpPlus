@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus
 
+#nowarn "40"
+
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]
 module Builders =    
@@ -19,80 +21,114 @@ module Builders =
     type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idiomatic $ x) (join fii)
 
 
-    type Zero =
-        inherit FsControl.Empty
-        static member inline Empty (_output : '``FunctorZero<unit>``, _mthd : FsControl.Internals.Default2) = FsControl.Return.Invoke () : '``FunctorZero<unit>``
-        static member inline Invoke' () : '``FunctorZero<'T>`` =
-            let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member Empty: _*_ -> _) output, mthd)
-            call (Unchecked.defaultof<Zero>, Unchecked.defaultof<'``FunctorZero<'T>``>)
-
-    type Plus =
-        inherit FsControl.Append
-        static member inline Append (x :'``FunctorPlus<unit>``, y:'``FunctorPlus<'T>``, _mthd : FsControl.Internals.Default2) = FsControl.Bind.Invoke x (fun () -> y) :'``FunctorPlus<'T>``    
-        static member inline Invoke' (x :'``FunctorPlus<'T or unit>``) (y:'``FunctorPlus<'T>``)  : '``FunctorPlus<'T>`` =
-            let inline call (mthd : ^M, input1 : ^U, input2 : ^I) = ((^M or ^I) : (static member Append: _*_*_ -> _) input1, input2, mthd)
-            call (Unchecked.defaultof<Plus>, x, y)
-
-
-    // Do notation
-    type MonadBuilder() =
-        member inline b.Return(x)    = result x
-        member inline b.Bind(p,rest) = p >>= rest
-        member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
-        member        b.Let (p,rest) = rest p        
-        member    b.ReturnFrom(expr) = expr
-
-    type MonadPlusBuilder() =
-        member inline b.Return(x) = result x
-        member inline b.Bind(p,rest) = p >>= rest
-        member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
-        member b.Let(p,rest) = rest p
-        member b.ReturnFrom(expr) = expr
-        member inline x.Zero() = Zero.Invoke' ()
-        member inline x.Combine(a, b) = Plus.Invoke' a b
-        member inline x.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``M<t>``
-        member inline x.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``M<t>``
-        member inline x.Using(disposable:#System.IDisposable, body) = FsControl.Using.Invoke disposable body : '``M<u>``
-
     
-    let monad     = new MonadBuilder()
-    let monadPlus = new MonadPlusBuilder()
+    // Workflows
 
+    open System
 
-    // Linq
-    type LinqBuilder() =
-        member inline __.Return(x)     = result x
-        member inline __.Bind(p, rest) = p >>= rest
-        member inline __.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
-        member        __.Let (p, rest) = rest p
-        member    __.ReturnFrom(expr)  = expr
-        member inline __.For(p, rest)  = p >>= rest
-        member inline __.Yield(x)      = result x
-        member inline __.Zero()        = Zero.Invoke' ()
-        member inline __.Combine(a, b) = Plus.Invoke' a b
-        member inline __.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``M<t>``
-        member inline __.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``M<t>``
-        member inline __.Using(disposable:#System.IDisposable, body) = FsControl.Using.Invoke disposable body : '``M<u>``
+    type Builder() =
+        member        __.ReturnFrom (expr) = expr                                       : '``Monad<'T>``
+        member inline __.Return (x: 'T) = result x                                      : '``Monad<'T>``
+        member inline __.Yield  (x: 'T) = result x                                      : '``Monad<'T>``
+        member inline __.Bind (p: '``Monad<'T>``, rest:'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
 
-        [<CustomOperation("select", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member inline __.Select(x, [<ProjectionParameter>] f) = map f x
+        [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
+        member inline __.Select (x, [<ProjectionParameter>] f) = map f x
 
-        [<CustomOperation("where", MaintainsVariableSpace=true)>]
-        member inline __.Where(x, [<ProjectionParameter>] p) = mfilter p x
+        [<CustomOperation("where", MaintainsVariableSpaceUsingBind=true)>]
+        member inline __.Where (x, [<ProjectionParameter>] p) = mfilter p x
 
         [<CustomOperation("first")>] 
-        member inline __.First(source) = head source
+        member inline __.First (source) = head source
 
         [<CustomOperation("nth")>]
-        member inline __.Nth(source, n) = nth n source
+        member inline __.Nth (source, n) = nth n source
 
-        [<CustomOperation("groupBy", AllowIntoPattern=true)>]
-        member inline __.GroupBy (x,[<ProjectionParameter>] f : 't -> 'key) = groupBy f x
+        [<CustomOperation("groupBy", AllowIntoPattern=true, MaintainsVariableSpaceUsingBind=true)>]
+        member inline __.GroupBy (x,[<ProjectionParameter>] f : 'T -> 'key) = groupBy f x
 
-        [<CustomOperation("chunkBy", AllowIntoPattern=true)>]
-        member inline __.ChunkBy (x,[<ProjectionParameter>] f : 't -> 'key) = chunkBy f x
+        [<CustomOperation("chunkBy", AllowIntoPattern=true, MaintainsVariableSpaceUsingBind=true)>]
+        member inline __.ChunkBy (x,[<ProjectionParameter>] f : 'T -> 'key) = chunkBy f x
 
-        [<CustomOperation("sortBy", MaintainsVariableSpace=true, AllowIntoPattern=true)>]
-        member inline __.SortBy (x,[<ProjectionParameter>] f : 't -> 'key) = sortBy f x
+        [<CustomOperation("sortBy", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
+        member inline __.SortBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
 
-    let linq = LinqBuilder()
+    type StrictBuilder() =
+        inherit Builder()
+        member inline __.Delay (expr) = expr : unit -> '``Monad<'T>``
+        member        __.Run f = f()         : '``Monad<'T>``
+        member        __.TryWith   (expr, handler)      = try expr () with e -> handler e
+        member        __.TryFinally(expr, compensation) = try expr () finally compensation ()
+        member        rs.Using(disposable:#IDisposable, body) =
+            let body = fun () -> (body ()) disposable
+            rs.TryFinally (body, fun () -> if isNull disposable then () else disposable.Dispose ())
+
+    type DelayedBuilder() =
+        inherit Builder()
+        member inline __.Delay(expr:_->'``Monad<'T>``) = FsControl.Delay.Invoke expr : '``Monad<'T>``
+        member        __.Run f = f                                                   : '``Monad<'T>``
+        member inline __.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``Monad<'T>``
+        member inline __.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``Monad<'T>``
+        member inline __.Using(disposable:#IDisposable, body) = FsControl.Using.Invoke disposable body  : '``Monad<'T>``
+
+    type MonadPlusStrictBuilder() =
+        inherit StrictBuilder()      
+        member inline __.Zero() = FsControl.Empty.Invoke()                : '``MonadPlus<'T>``
+        member inline __.Combine(a : '``MonadPlus<'T>``, b) = a <|> b()   : '``MonadPlus<'T>``
+        member inline __.While (guard, body : unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
+            let rec loop guard body =
+                if guard() then body() <|> loop guard body
+                else FsControl.Empty.Invoke()
+            loop guard body
+        member inline this.For (p: #seq<'T>, rest :'T->'``MonadPlus<'U>``) =
+            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``))
+    
+    type MonadFxStrictBuilder() =
+        inherit StrictBuilder()
+        member inline __.Zero() = result ()                                       : '``Monad<unit>``
+        member inline __.Combine(a : '``Monad<unit>``, b) = a >>= (fun () -> b()) : '``Monad<'T>``
+        member inline __.While (guard, body : unit -> '``Monad<'T>``) : '``Monad<'T>`` =
+            let rec loop guard body =
+                if guard () then body () >>= fun () -> loop guard body
+                else result ()
+            loop guard body
+        member inline this.For (p: #seq<'T>, rest :'T->'``Monad<'U>``) =
+            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fun () -> rest enum.Current) : '``Monad<'U>``))
+ 
+    type MonadPlusBuilder() =
+        inherit DelayedBuilder()     
+        member inline __.Zero() = FsControl.Empty.Invoke()            : '``MonadPlus<'T>``
+        member inline __.Combine(a : '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
+        member inline __.While (guard, body : '``MonadPlus<'T>``)     : '``MonadPlus<'T>`` =
+            let rec fix = FsControl.Delay.Invoke (fun () -> if guard() then body <|> fix else FsControl.Empty.Invoke())
+            fix
+        member inline this.For (p: #seq<'T>, rest :'T->'``MonadPlus<'U>``) =
+            let fdelay x = FsControl.Delay.Invoke x  : '``MonadPlus<'U>``
+            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fdelay(fun () -> rest enum.Current)) : '``MonadPlus<'U>``))
+
+        member __.strict = new MonadPlusStrictBuilder()
+
+    type MonadFxBuilder() =
+        inherit DelayedBuilder()
+        member inline __.Zero() = result ()                                     : '``Monad<unit>``
+        member inline __.Combine(a : '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
+        member inline __.While (guard, body : '``Monad<unit>``) : '``Monad<'T>`` =
+            let rec loop guard body =
+                if guard () then body >>= (fun () -> loop guard body)
+                else result ()
+            loop guard body
+        member inline this.For (p: #seq<'T>, rest :'T->'``Monad<unit>``) =
+            let fdelay x = FsControl.Delay.Invoke x  : '``Monad<unit>``
+            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fdelay(fun () -> rest enum.Current)) : '``Monad<unit>``))
+
+    
+        member __.plus   = new MonadPlusBuilder()
+        member __.strict = new MonadFxStrictBuilder()
+
+        member this.fx   = this
+
+    let monad = new MonadFxBuilder()

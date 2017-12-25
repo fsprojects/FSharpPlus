@@ -151,16 +151,6 @@ let res330 = Seq.sum [ async {return (fun (x:int) -> string x)} ; async {return 
 let quot7 = map ((+)2) <@ 5 @>
 let (quot5:Microsoft.FSharp.Quotations.Expr<int>) = result 5
 
-// Do notation
-type MonadBuilder() =
-    member inline b.Return(x)    = result x
-    member inline b.Bind(p,rest) = p >>= rest
-    member        b.Let (p,rest) = rest p
-    member    b.ReturnFrom(expr) = expr
-    member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
-let monad     = new MonadBuilder()
-
-
 // Indexables
 
 let namesWithNdx = mapi (fun k v -> "(" + string k + ")" + v ) (Map.ofSeq ['f',"Fred";'p',"Paul"])
@@ -202,6 +192,8 @@ let stackGroup  = groupBy ((%)/> 2) stack
 
 
 // Test Seq Monad
+
+open FSharpPlus.Builders
                         
 let rseq =
     monad {
@@ -253,16 +245,6 @@ let inline sequence ms =
 
 let inline mapM f as' = sequence (Seq.map f as')
 
-type DoPlusNotationBuilder() =
-    member inline b.Return(x) = result x
-    member inline b.Bind(p,rest) = p >>= rest
-    member b.Let(p,rest) = rest p
-    member b.ReturnFrom(expr) = expr
-    member inline x.Zero() = getEmpty()
-    member inline x.Combine(a, b) = a <|> b
-    member inline b.Delay(expr:unit -> 't) = FsControl.Delay.Invoke(expr) : 't
-let doPlus = new DoPlusNotationBuilder()
-
 // Test MonadPlus
 let nameAndAddress = mapM (fun x -> putStrLn x >>= fun _ -> getLine) (seq ["name";"address"])
 
@@ -276,11 +258,18 @@ let pythags = monad {
   return (x, y, z)}
 
 
-let pythags' = doPlus{
+let pythags' = monad.plus {
   let! z = seq [1..50]
   let! x = seq [1..z]
   let! y = seq [x..z]
   if (x*x + y*y = z*z) then return (x, y, z)}
+
+let pythags'' = monad.plus {
+  let! z = seq [1..50]
+  for x in seq [1..z]  do
+  for y in seq [x..z]  do
+  where (x*x + y*y = z*z)
+  yield (x, y, z)}
 
 let res123123 = (seq [1;2;3]) <|> (seq [1;2;3])
 let allCombinations = sequence (seq [seq ['a';'b';'c']; seq ['1';'2']]) //|> Seq.map Seq.toList |> Seq.toList

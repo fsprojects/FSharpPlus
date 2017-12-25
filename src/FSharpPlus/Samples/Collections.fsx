@@ -18,9 +18,9 @@ async {
 } |> Async.RunSynchronously
 
 
-let inline myQuery x1 x2 = linq {
-    for e1 in x1 do
-    for e2 in x2 do
+let inline myQuery x1 x2 = monad {
+    let! e1 = x1
+    let! e2 = x2
     where   (parse e1 + e2 < 23)
     groupBy (parse e1 + e2 %  2) into g
     sortBy  (-(fst g))
@@ -34,10 +34,10 @@ let arr = myQuery arr1 arr2
 let lst = myQuery lst1 lst2
 let sq  = myQuery seq1 seq2
 
-let inline myQuery2 x = linq {
-    for e in x do
+let inline myQuery2 x = monad {
+    let! e = x
     chunkBy (parse e %  2) into g
-    select  (toString (fst g), snd g )} 
+    select  (toString (fst g), snd g )}
 
 let lst3 = myQuery2 [ "1";"2";"4";"3" ]
 let seq3 = myQuery2 (Seq.initInfinite string)
