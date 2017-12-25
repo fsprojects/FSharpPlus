@@ -5,7 +5,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Tests.fs" />
+    <Compile Include="General.fs" />
     <None Include="paket.references" />
     <Content Include="App.config" />
   </ItemGroup>
