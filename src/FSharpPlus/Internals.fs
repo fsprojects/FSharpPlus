@@ -8,8 +8,7 @@ type Default1 = class inherit Default2 end
 
 module internal Prelude =
     let inline flip f x y = f y x
-    let inline const' k _ = k    
-    let inline isNull (value : 'T) =  match value with null -> true | _ -> false
+    let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
 
 
