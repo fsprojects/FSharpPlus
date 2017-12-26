@@ -1,4 +1,10 @@
-#### 1.0.0-CI00091  - December 30 2017
+#### 1.0.0-CI00092  - December 26 2017
+* New execution model for Computation Expressions
+* Use F# new Result Type to model failures
+* Functions minValue and maxValue are now generic constants
+* Many String and other extensions
+
+#### 1.0.0-CI00091  - November 30 2017
 * Targeting Netstandard 2.0
 * (0, +) as default monoid for numerics
 * Rename: 
