@@ -77,8 +77,8 @@ type Join =
     [<Extension>]static member Join (g                         , [<Optional>]_output : 'R->'T          , [<Optional>]_impl : Join    ) = (fun r -> (g r) r)        : 'R->'T    
     static member inline       Join (m1, (m2, x)               , [<Optional>]_output : 'Monoid * 'T    , [<Optional>]_impl : Join    ) = Plus.Invoke m1 m2, x      : 'Monoid*'T
     [<Extension>]static member Join (x                         , [<Optional>]_output : Async<'T>       , [<Optional>]_impl : Join    ) = async.Bind(x, id)         : Async<'T>
-    [<Extension>]static member Join (x                         , [<Optional>]_output : Result<'T,'E>   , [<Optional>]_impl : Join    ) = Result.bind id x          : Result<'T,'E>
-    [<Extension>]static member Join (x                         , [<Optional>]_output : Choice<'T,'E>   , [<Optional>]_impl : Join    ) = Choice.bind id x          : Choice<'T,'E>
+    [<Extension>]static member Join (x                         , [<Optional>]_output : Result<'T,'E>   , [<Optional>]_impl : Join    ) = Result.flatten x          : Result<'T,'E>
+    [<Extension>]static member Join (x                         , [<Optional>]_output : Choice<'T,'E>   , [<Optional>]_impl : Join    ) = Choice.flatten x          : Choice<'T,'E>
 
     [<Extension>]static member Join (x : Map<_,_>                     , [<Optional>]_output : Map<'Key,'Value>, [<Optional>]_impl : Join    )                             : Map<'Key,'Value> =
                     Map (seq {
