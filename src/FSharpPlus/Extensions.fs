@@ -183,11 +183,30 @@ module Array =
 
 /// Additional operations on String
 module String =
+    open System.Text
+    open System.Globalization
+
     let intercalate (separator:string) (source:seq<string>) = String.Join(separator, source)
     let intersperse (element: char) (source: string) = String.Join("", Array.ofSeq (source |> Seq.intersperse element))
     let split (separators:seq<string>) (source:string) = source.Split(Seq.toArray separators, StringSplitOptions.None) :> seq<_>
     let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace(oldValue, newValue)
 
+    let isSubString subString (source:string) = source.Contains subString
+    let startsWith  subString (source:string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
+    let endsWith    subString (source:string) = source.EndsWith   (subString, false, CultureInfo.InvariantCulture)
+    let contains    char      (source:string) = Seq.contains char source
+    let toUpper (source:string) = if isNull source then source else source.ToUpperInvariant()
+    let toLower (source:string) = if isNull source then source else source.ToLowerInvariant()    
+    let trimWhiteSpaces (source:string) = source.Trim()
+
+    let normalize normalizationForm (source:string) = if isNull source then source else source.Normalize normalizationForm
+    let removeDiacritics (source:string) =
+        if isNull source then source
+        else 
+            source 
+            |> normalize NormalizationForm.FormD
+            |> String.filter (fun ch -> CharUnicodeInfo.GetUnicodeCategory ch <> UnicodeCategory.NonSpacingMark)
+            |> normalize NormalizationForm.FormC
 
 
 /// Module containing F#+ Extension Methods  
