@@ -28,7 +28,6 @@ let qr1  = divRem 7I 3I //val qr1 : System.Numerics.BigInteger * System.Numerics
 let qr2  = divRem 7. 3. //val qr2 : float * float = (2.333333333, 0.0) -> using default method.
 
 let inline findMin (lst: 'a list) =
-    let minValue, maxValue = minValue(), maxValue()
     let rec loop acc = function
         | [] -> acc
         | x::_ when x = minValue -> x

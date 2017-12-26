@@ -427,14 +427,23 @@ module Operators =
     /// Gets a value that represents the number 1 (one).
     let inline getOne()  = One.Invoke()
 
+    /// A value that represents the 1 element.
+    let inline one< ^Num when (One or ^Num) : (static member One : ^Num * One -> ^Num) > : ^Num = One.Invoke()
+
     /// Divides one number by another, returns a tuple with the result and the remainder.
     let inline divRem (D:'T) (d:'T) :'T*'T = DivRem.Invoke D d
 
     /// Returns the smallest possible value.
-    let inline minValue() = MinValue.Invoke()
+    let inline getMinValue() = MinValue.Invoke()
+
+    /// The smallest possible value.
+    let inline minValue< ^Num when (MinValue or ^Num) : (static member MinValue : ^Num * MinValue -> ^Num) > : ^Num = MinValue.Invoke()
 
     /// Returns the largest possible value.
-    let inline maxValue() = MaxValue.Invoke()
+    let inline getMaxValue() = MaxValue.Invoke()
+
+    /// The largest possible value.
+    let inline maxValue< ^Num when (MaxValue or ^Num) : (static member MaxValue : ^Num * MaxValue -> ^Num) > : ^Num = MaxValue.Invoke()
 
     /// Converts from BigInteger to the inferred destination type.
     let inline fromBigInt  (x:bigint)    :'Num   = FromBigInt.Invoke x
@@ -444,6 +453,9 @@ module Operators =
 
     /// Gets the pi number.
     let inline getPi() :'Floating = Pi.Invoke()
+
+    /// The pi number.
+    let inline pi< ^Num when (Pi or ^Num) : (static member Pi : ^Num * Pi -> ^Num) > : ^Num = Pi.Invoke()
 
     /// Returns the additive inverse of the number.
     let inline negate  (x:'Num): 'Num = x |> TryNegate.Invoke |> function Ok x -> x | Error e -> raise e
