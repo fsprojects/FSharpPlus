@@ -76,3 +76,8 @@ type ReaderT<'r,'``monad<'t>``> with
 
     static member inline get_Get() = lift get         :ReaderT<'R, '``MonadState<'S, 'S>``>
     static member inline Put x     = x |> put |> lift :ReaderT<'R, '``MonadState<'S, unit>``>
+
+    static member inline Delay (f: unit -> ReaderT<'R,'``Monad<'T>``>) =
+        ReaderT (fun s ->
+            let d() = ReaderT.run (f()) s
+            FsControl.Delay.Invoke d) : ReaderT<'R,'``Monad<'T>``>

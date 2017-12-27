@@ -82,3 +82,23 @@ module ComputationExpressions =
 
         // Check the result
         areEqual seqValue [42]
+
+
+    [<Test>]
+    let delayedMonadTransformers() =
+
+        let effects = ResizeArray()
+
+        let threeElements : ReaderT<string, list<_>> = monad.plus {
+            let! s = ask
+            for i in 1 .. 3 do
+                effects.Add (sprintf "processing %i" i)
+                yield parse s + i }
+
+        areEqual (toList effects) []
+        
+        // Following line would throw an exception (due to the for loop) if ReaderT had no Delay implementation
+        let results = ReaderT.run threeElements "100"
+
+        areEqual (toList effects) ["processing 1"; "processing 2"; "processing 3"]
+        areEqual results [101; 102; 103]
