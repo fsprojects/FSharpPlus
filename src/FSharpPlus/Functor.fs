@@ -237,6 +237,10 @@ type Map =
     static member inline       Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]_impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
 
     [<Extension>]static member Map (x : Lazy<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = Lazy<_>.Create (fun () -> f x.Value)   : Lazy<'U>
+    #if NET35
+    #else
+    [<Extension>]static member Map (x : Task<'T>       , f : 'T->'U, [<Optional>]_mthd : Map) = x.ContinueWith (fun (x: Task<_>) -> f x.Result)   : Task<'U>
+    #endif
     [<Extension>]static member Map (x : option<_>      , f : 'T->'U, [<Optional>]_mthd : Map) = Option.map  f x
     [<Extension>]static member Map (x : list<_>        , f : 'T->'U, [<Optional>]_mthd : Map) = List.map f x                        : list<'U>
     [<Extension>]static member Map (g : 'R->'T         , f : 'T->'U, [<Optional>]_mthd : Map) = (>>) g f
