@@ -41,7 +41,7 @@ Rules
 *)
 (**
     map id  =  id
-    map (f << g) = map f << fmap g
+    map (f << g) = map f << map g
 *)
 (**
 
