@@ -15,7 +15,7 @@ module Compatibility =
         let getLast (Last x) = x
         let runKleisli (Kleisli f) = f
 
-        // Operatots
+        // Operators
         let ($)   x y = x y
         let (.()) x y = x << y
         let const' k _ = k
