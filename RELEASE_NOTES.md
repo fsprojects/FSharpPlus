@@ -1,3 +1,7 @@
+#### 1.0.0-CI00099  - December 31 2017
+* Some Delayed Monad Transformers
+* Bug fixes
+
 #### 1.0.0-CI00092  - December 26 2017
 * New execution model for Computation Expressions
 * Use F# new Result Type to model failures
