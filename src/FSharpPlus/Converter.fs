@@ -1,4 +1,4 @@
-﻿#nowarn "77" 
+#nowarn "77" 
 // Warn FS0077 -> Member constraints with the name 'op_Explicit' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // But all simulated types are being handled so here Explicit is SAFE from runtime errors.
 
@@ -80,18 +80,18 @@ type ToBytes =
 open System.Globalization
 
 type TryParse =
-    static member inline TryParse (_:'t     option, _:TryParse) = fun x ->
+    static member inline TryParse (_:'R, _:TryParse) = fun x ->
         let mutable r = Unchecked.defaultof< ^R>
         if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
 
-    static member TryParse (_:string         option, _:TryParse) = fun x -> Some x                             :option<string>
-    static member TryParse (_:StringBuilder  option, _:TryParse) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
-    static member TryParse (_:DateTime       option, _:TryParse) = fun x -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
-    static member TryParse (_:DateTimeOffset option, _:TryParse) = fun x -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
+    static member TryParse (_:string        , _:TryParse) = fun x -> Some x                             :option<string>
+    static member TryParse (_:StringBuilder , _:TryParse) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
+    static member TryParse (_:DateTime      , _:TryParse) = fun x -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
+    static member TryParse (_:DateTimeOffset, _:TryParse) = fun x -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
 
     static member inline Invoke (value:string) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryParse: _*_ -> _) b, a)
-        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r option
         call Unchecked.defaultof<TryParse> value
 
 
