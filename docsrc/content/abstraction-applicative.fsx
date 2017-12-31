@@ -38,7 +38,7 @@ Rules
     result id <*> v = v
     result (<<) <*> u <*> v <*> w = u <*> (v <*> w)
     result f <*> result x = result (f x)
-    u <*> result y = result ((<|) y) <*> u
+    u <*> result y = result ((|>) y) <*> u
 *)
 (**
 
