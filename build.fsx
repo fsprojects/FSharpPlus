@@ -3,6 +3,7 @@
 // --------------------------------------------------------------------------------------
 
 #r @"packages/FAKE/tools/FakeLib.dll"
+
 open Fake
 open Fake.Git
 open Fake.AssemblyInfoFile
@@ -187,7 +188,27 @@ Target "PublishNuget" (fun _ ->
             WorkingDir = "bin" })
 )
 
+// --------------------------------------------------------------------------------------
+// Build samples
+module Samples=
+  open FscHelper
+  let fsxFilesIn folder = 
+    Directory.GetFiles(folder, "*.fsx", SearchOption.AllDirectories)
+    |> List.ofArray 
+  let compileFsxTo out fsxFiles =
+    fsxFiles 
+    |> Compile [ Target Exe
+                 Out out
+                 TargetProfile MsCorlib
+               ]
 
+Target "BuildSamples" (fun _ ->
+  Samples.fsxFilesIn ("src" </> project </> "Samples")
+  |> Samples.compileFsxTo ("temp" </>"Samples.exe")
+
+  Samples.fsxFilesIn ("src" </> project </> "SamplesFromFsControl")
+  |> Samples.compileFsxTo ("temp" </>"SamplesFromFsControl.exe")
+)
 // --------------------------------------------------------------------------------------
 // Generate the documentation
 
@@ -367,6 +388,7 @@ Target "All" DoNothing
   ==> "Restore"
   ==> "Build"
   ==> "CopyBinaries"
+  ==> "BuildSamples"
   ==> "RunTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
