@@ -92,7 +92,6 @@ module Compatibility =
         // Applicative functors
             
         let inline pure' x   = result x
-        let inline empty()   = getEmpty()    
         let inline optional v = Just <!> v <|> pure' Nothing
 
         // Monoids
