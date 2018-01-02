@@ -3,7 +3,8 @@
 open FsControl
 open FSharpPlus.Operators
 
-/// Kleisli arrows of a monad. Represents a function 'T -> 'Monad<'U>  
+/// Kleisli arrows of a monad. Represents a function 'T -> 'Monad<'U>
+[<NoEquality; NoComparison>]
 type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
 
     // Profunctor

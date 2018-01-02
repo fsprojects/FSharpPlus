@@ -155,7 +155,7 @@ module Monad =
         // If Delay is not properly implemented this will stack-overflow
         // See http://stackoverflow.com/questions/11188779/stackoverflow-in-continuation-monad
 #if MONO
-    Assert.Ignore()
+        Assert.Ignore()
 #else
         let map f xs =
             let rec loop xs =

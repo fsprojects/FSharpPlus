@@ -12,6 +12,7 @@ type Dual<'t> = Dual of 't with
 module Dual = let run (Dual x) = x          : 'T
 
 /// The monoid of endomorphisms under composition.
+[<NoEquality; NoComparison>]
 type Endo<'t> = Endo of ('t -> 't) with
     static member get_Zero() = Endo id                               : Endo<'T>
     static member (+) (Endo f, Endo g) = Endo (f << g)               : Endo<'T>

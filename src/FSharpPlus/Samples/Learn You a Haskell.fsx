@@ -165,7 +165,7 @@ let res51 =
     }
 
 let res52 = [3;4;5] >>= (fun x -> [x;-x])                                 // [3; -3; 4; -4; 5; -5]
-let res53 = [] >>= (fun x -> ["bad","mad","rad"])                         // []
+let res53 = [] >>= (fun _ -> ["bad","mad","rad"])                         // []
 let res54 = [1;2] >>= (fun n -> [(n, 'a'); (n, 'b')])                     // [(1, 'a'); (1, 'b'); (2, 'a'); (2, 'b')]
 
 let res55 =
@@ -265,7 +265,7 @@ let multWithLog =
 let multWithLog1 : Writer<List<string>, int> =
     logNumber 3 >>= fun a ->
     logNumber 5 >>= fun b ->
-    tell ["Gonna multiply these two"] >>= fun c ->
+    tell ["Gonna multiply these two"] >>= fun _ ->
     Writer ((a * b), [])
     
 let rec gcd' a b : Writer<List<string>, int> =    
@@ -324,7 +324,7 @@ let push a xs = ((),a::xs)
 
 let stackManip stack =
     let ((),newStack1) = push 3 stack  
-    let (a,newStack2) = pop newStack1  
+    let (_ ,newStack2) = pop newStack1  
     in pop newStack2  
     
 let res73 = stackManip [5;8;2;1]                                                      // (5, [8; 2; 1])
@@ -335,8 +335,8 @@ let push1 a = State ( fun xs -> ((),a::xs) )
 let stackManip1 =
     monad {
         do! push1 3
-        let! a = pop1
-        return! pop1
+        let! _ = pop1
+        return!  pop1
     }
 
 let res74 = stackManip1 |> State.run <| [5;8;2;1]                                     // (5, [8; 2; 1])
@@ -370,8 +370,8 @@ let _11_r69 = stackyStack |> State.run <| [9;0;2;1;0]                           
    --------------------------------------------------*)
 
 let res76 : Choice<int, string> = Choice2Of2 "boom" >>= (fun x -> Choice1Of2 (x+1))   // Choice2Of2 "boom"
-let res77 : Choice<int, string> = Choice1Of2 10 >>= (fun x -> Choice1Of2 (x+1))       // Choice1Of2 11
-let res78 : Choice<int, string> = Choice1Of2 100 >>= (fun x -> Choice2Of2 "no way!")  // Choice2Of2 "no way!"
+let res77 : Choice<int, string> = Choice1Of2 10  >>= (fun x -> Choice1Of2 (x+1))      // Choice1Of2 11
+let res78 : Choice<int, string> = Choice1Of2 100 >>= (fun _ -> Choice2Of2 "no way!")  // Choice2Of2 "no way!"
 
 
 (* --------------------------------------------------
@@ -470,7 +470,7 @@ let res106 = List.foldBack (<=<) fs (fun _ -> Some 4) <| 10                     
 let experiment (x:KnightPos) = 
     match x with
     | (10, 10) -> None
-    | (v1, v2) as v -> Some (v1 + 10, v2 + 10)
+    | (v1, v2) -> Some (v1 + 10, v2 + 10)
 
 let res107 = Some (11,11) >>= experiment >>= experiment >>= experiment                 // Some (41,41)
 let exps = [experiment; experiment; experiment]
@@ -510,8 +510,8 @@ let solveRPN st =
     monad {
         let! result = foldM foldingFunction [] (words st)
         match result with
-        | h::[] -> return result
-        | _ -> return []
+        | _::[] -> return result
+        | _     -> return []
     }
     
 let res116 = solveRPN "1 2 * 4 +"                                                 // Some [6]
@@ -586,10 +586,10 @@ module MathLibTypeClasses =
         static member Length (xs: List<int>  , _:int)   = xs.Length
         static member Length (xs: List<float>, _:float) = xs.Length |> float
     
-    let inline internal plus   x y = let inline Invoke (a: ^a, b: ^b) = ((^a or ^b) : (static member Plus  : ^b -> _) b) in Invoke (Unchecked.defaultof<PlusClass>  , x) y
-    let inline internal minus  x y = let inline Invoke (a: ^a, b: ^b) = ((^a or ^b) : (static member Minus : ^b -> _) b) in Invoke (Unchecked.defaultof<MinusClass> , x) y
-    let inline internal divide x y = let inline Invoke (a: ^a, b: ^b) = ((^a or ^b) : (static member Divide: ^b -> _) b) in Invoke (Unchecked.defaultof<DivideClass>, x) y
-    let inline internal length xs :^R  = let inline Invoke (a: ^a, b: ^b, r:^r) = ((^a or ^b or ^r) : (static member Length: _*_ -> _) b, r) in Invoke (Unchecked.defaultof<LengthClass>, xs, Unchecked.defaultof<'R>) 
+    let inline internal plus   x y    = let inline Invoke (_: ^a, b: ^b) = ((^a or ^b) : (static member Plus  : ^b -> _) b) in Invoke (Unchecked.defaultof<PlusClass>  , x) y
+    let inline internal minus  x y    = let inline Invoke (_: ^a, b: ^b) = ((^a or ^b) : (static member Minus : ^b -> _) b) in Invoke (Unchecked.defaultof<MinusClass> , x) y
+    let inline internal divide x y    = let inline Invoke (_: ^a, b: ^b) = ((^a or ^b) : (static member Divide: ^b -> _) b) in Invoke (Unchecked.defaultof<DivideClass>, x) y
+    let inline internal length xs: ^R = let inline Invoke (_: ^a, b: ^b, r:^r) = ((^a or ^b or ^r) : (static member Length: _*_ -> _) b, r) in Invoke (Unchecked.defaultof<LengthClass>, xs, Unchecked.defaultof<'R>)
 
 open MathLibTypeClasses
 
@@ -611,7 +611,7 @@ type Tree<'a> with
     static member inline Plus   (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
     static member inline Minus  (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
     static member inline Divide (x:Tree<'a>      ) = fun (_ : Tree<'a>) -> x
-    static member inline Length (x:List<Tree<'a>>, _:Tree<'a>) = MEmpty : Tree<'a>
+    static member inline Length (_:List<Tree<'a>>, _:Tree<'a>) = MEmpty : Tree<'a>
 
 (* defined above
 let testTree =
@@ -646,16 +646,16 @@ module YesNoTypeClass =
         static member YesNo (xs:List<_>) = 
             match xs with
             | [] -> false
-            | _ -> true
+            | _  -> true
         static member YesNo (b:bool) = b
         static member YesNo (op:option<_>) = 
             match op with
             | Some _ -> true
-            | None -> false
+            | None   -> false
 
     module internal YesNoOverloads =
-        let inline Invoke (a: ^a, b: ^b) =
-            ( (^a or ^b) : (static member YesNo: ^b -> bool) b )
+        let inline Invoke (_: ^a, b: ^b) =
+            ((^a or ^b) : (static member YesNo: ^b -> bool) b)
 
     let inline yesno (x) : bool = YesNoOverloads.Invoke (YesNoClass, x)
 

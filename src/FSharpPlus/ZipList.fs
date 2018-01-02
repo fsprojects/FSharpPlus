@@ -6,6 +6,7 @@ open FsControl
 open FSharpPlus.Operators
 
 /// A sequence with an Applicative functor based on zipping.
+[<NoComparison>]
 type ZipList<'s> = ZipList of 's seq with
     member this.Item n = let (ZipList s) = this in Seq.item n s
 
