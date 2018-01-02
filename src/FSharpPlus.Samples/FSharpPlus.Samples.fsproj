@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net45</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\FSharpPlus\Samples\*.fsx">
+      <Link>Samples\%(FileName)</Link>
+    </Compile>
+    <Compile Include="..\FSharpPlus\SamplesFromFsControl\*.fsx">
+      <Link>SamplesFromFsControl\%(FileName)</Link>
+    </Compile>
+
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
+      <Name>FSharpPlus</Name>
+      <Project>{4364a3ea-06d8-4493-be44-e22d5370cca1}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
