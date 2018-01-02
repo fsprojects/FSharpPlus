@@ -1,5 +1,9 @@
-#nowarn "3186"
+#if INTERACTIVE
 #r @"../bin/Release/net45/FSharpPlus.dll"
+#else
+module Samples.MonadTransformers
+#endif
+#nowarn "3186"
 
 open System
 open FSharpPlus

@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\FSharpPlus\Samples\*.fsx">
-      <Link>Samples\%(FileName)</Link>
+      <Link>Samples\%(FileName).fsx</Link>
     </Compile>
     <Compile Include="..\FSharpPlus\SamplesFromFsControl\*.fsx">
-      <Link>SamplesFromFsControl\%(FileName)</Link>
+      <Link>SamplesFromFsControl\%(FileName).fsx</Link>
     </Compile>
 
     <Compile Include="Program.fs" />

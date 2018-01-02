@@ -1,6 +1,9 @@
-#nowarn "3186"
+#if INTERACTIVE
 #r @"../bin/Release/net45/FSharpPlus.dll"
-
+#else
+module Samples.Conversions
+#endif
+#nowarn "3186"
 open FSharpPlus
 
 let r23asBytes = parse "12" + 11 |> toBytes |> toList
