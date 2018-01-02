@@ -4,6 +4,7 @@ nuget FSharp.Core ~> 4.1 redirects: force
 
 nuget FAKE
 nuget FSharp.Formatting
+nuget System.Reflection.Metadata
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
 
