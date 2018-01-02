@@ -1,5 +1,9 @@
-#nowarn "3186"
+#if INTERACTIVE
 #r @"../bin/Release/net45/FSharpPlus.dll"
+#else
+module Samples.Learn_You_a_Haskell
+#endif
+#nowarn "3186"
 
 open System
 open FSharpPlus

@@ -1,6 +1,9 @@
-﻿#nowarn "3186"
+﻿#if INTERACTIVE
 #r @"../bin/Release/net45/FSharpPlus.dll"
-
+#else
+module SamplesFromFsControl.Collections
+#endif
+#nowarn "3186"
 open System
 open FsControl
 open FSharpPlus.Operators

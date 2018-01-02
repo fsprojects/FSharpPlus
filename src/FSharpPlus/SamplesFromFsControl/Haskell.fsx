@@ -1,5 +1,9 @@
-﻿#nowarn "3186"
+﻿#if INTERACTIVE
 #r @"../bin/Release/net45/FSharpPlus.dll"
+#else
+module SamplesFromFsControl.Haskell
+#endif
+#nowarn "3186"
 
 // This sample code mimics Haskell functions.
 // It is based in an initial exploratory project  at http://code.google.com/p/fsharp-typeclasses/ no longer maintained.

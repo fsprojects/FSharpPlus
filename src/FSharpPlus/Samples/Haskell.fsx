@@ -1,7 +1,10 @@
-﻿#nowarn "3186"
-#nowarn "62"
+﻿#if INTERACTIVE
 #r @"../bin/Release/net45/FSharpPlus.dll"
-
+#else
+module Samples.Haskell
+#endif
+#nowarn "3186"
+#nowarn "62"
 open FSharpPlus
 open FSharpPlus.Compatibility.Haskell
 open FSharpPlus.Data
