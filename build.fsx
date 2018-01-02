@@ -3,6 +3,8 @@
 // --------------------------------------------------------------------------------------
 
 #r @"packages/FAKE/tools/FakeLib.dll"
+#r @"packages/System.Reflection/lib/net462/System.Reflection.dll"
+#r @"packages/System.Reflection.MetaData/lib/portable-net45+win8/System.Reflection.Metadata.dll"
 
 open Fake
 open Fake.Git
