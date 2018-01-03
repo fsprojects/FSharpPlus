@@ -3,7 +3,7 @@
 #else
 module Samples.SplitJoin
 #endif
-#nowarn "3186"
+
 
 open FSharpPlus
 

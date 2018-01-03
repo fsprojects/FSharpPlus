@@ -3,7 +3,7 @@
 #else
 module Samples.Prism
 #endif
-#nowarn "3186"
+
 
 open FSharpPlus
 open FSharpPlus.Lens

@@ -3,7 +3,7 @@
 #else
 module Samples.GenericMath
 #endif
-#nowarn "3186"
+
 
 open FSharpPlus
 open GenericMath

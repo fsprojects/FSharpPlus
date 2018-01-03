@@ -3,7 +3,7 @@
 #else
 module Samples.Monads
 #endif
-#nowarn "3186"
+
 
 open FSharpPlus
 

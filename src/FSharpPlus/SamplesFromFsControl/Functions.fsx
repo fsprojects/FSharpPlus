@@ -3,7 +3,7 @@
 #else
 module SamplesFromFsControl.Functions
 #endif
-#nowarn "3186"
+
 open FSharpPlus.Operators
 
 let inline flip f x y = f y x

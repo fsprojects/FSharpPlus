@@ -3,7 +3,7 @@
 #else
 module Samples.MonadTransformers
 #endif
-#nowarn "3186"
+
 
 open System
 open FSharpPlus

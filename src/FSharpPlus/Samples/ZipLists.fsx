@@ -3,7 +3,7 @@
 #else
 module Samples.ZipLists
 #endif
-#nowarn "3186"
+
 
 open FSharpPlus
 

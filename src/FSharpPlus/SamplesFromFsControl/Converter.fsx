@@ -3,7 +3,7 @@
 #else
 module SamplesFromFsControl.Converter
 #endif
-#nowarn "3186"
+
 
 open System
 open FSharpPlus.Operators

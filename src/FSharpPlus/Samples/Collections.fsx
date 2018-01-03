@@ -3,7 +3,7 @@
 #else
 module Samples.Collections
 #endif
-#nowarn "3186"
+
 open FSharpPlus
 
 let inline print x = async { System.Console.WriteLine(toString x) }

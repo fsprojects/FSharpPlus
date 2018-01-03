@@ -3,7 +3,7 @@
 #else
 module Samples.Learn_You_a_Haskell
 #endif
-#nowarn "3186"
+
 
 open System
 open FSharpPlus

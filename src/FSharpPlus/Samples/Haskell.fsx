@@ -3,7 +3,7 @@
 #else
 module Samples.Haskell
 #endif
-#nowarn "3186"
+
 #nowarn "62"
 open FSharpPlus
 open FSharpPlus.Compatibility.Haskell

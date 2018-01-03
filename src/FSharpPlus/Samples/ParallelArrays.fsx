@@ -3,7 +3,7 @@
 #else
 module Samples.ParallelArrays
 #endif
-#nowarn "3186"
+
 
 open FSharpPlus
 

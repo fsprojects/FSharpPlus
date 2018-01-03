@@ -3,7 +3,7 @@
 #else
 module SamplesFromFsControl.Collections
 #endif
-#nowarn "3186"
+
 open System
 open FsControl
 open FSharpPlus.Operators

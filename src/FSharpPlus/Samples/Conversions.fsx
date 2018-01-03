@@ -3,7 +3,7 @@
 #else
 module Samples.Conversions
 #endif
-#nowarn "3186"
+
 open FSharpPlus
 
 let r23asBytes = parse "12" + 11 |> toBytes |> toList

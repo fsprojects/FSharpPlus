@@ -3,7 +3,7 @@
 #else
 module Samples.Applicatives
 #endif
-#nowarn "3186"
+
 
 open FSharpPlus
 
