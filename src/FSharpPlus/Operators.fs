@@ -33,12 +33,14 @@ module Operators =
     let inline map    (f:'T->'U) (x:'``Functor<'T>``) :'``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map.
+    /// To by used in Applicative Style expressions, combined with <*>
     let inline (<!>)  (f:'T->'U) (x:'``Functor<'T>``) :'``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map.
     let inline (<<|)  (f:'T->'U) (x:'``Functor<'T>``) :'``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map but with flipped arguments.
+    /// To be used in pipe-forward stlye expressions
     let inline (|>>)  (x:'``Functor<'T>``) (f:'T->'U) :'``Functor<'U>`` = Map.Invoke f x
 
     /// Like map but ignoring the results.
@@ -88,10 +90,11 @@ module Operators =
     /// A value that represents the 0 element.
     let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke()
 
-    let inline (++)    (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
-    let inline plus    (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
+    let inline (++) (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
+    let inline plus (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
 
-    module Seq = 
+    module Seq =
+        /// Fold all values in the sequence using the monoidal addition
         let inline sum (x:seq<'Monoid>) : 'Monoid = FsControl.Sum.Invoke x
 
 
@@ -100,7 +103,9 @@ module Operators =
     let inline getEmpty() :'``Functor<'T>`` = Empty.Invoke()
     let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke()
 
+    /// Combines two Alternatives
     let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = Append.Invoke x y
+
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke()
 
    
@@ -218,9 +223,17 @@ module Operators =
 
     // Comonads
 
+    /// Extract a value from a comonadic context.
     let inline extract (x:'``Comonad<'T>``): 'T = Extract.Invoke x
+
+    /// Extend a local context-dependent computation to a global computation.
     let inline extend (g:'``Comonad<'T>``->'U) (s:'``Comonad<'T>``): '``Comonad<'U>`` = Extend.Invoke g s
+
+    /// Extend a local context-dependent computation to a global computation.
+    /// Same as extend but with flipped arguments.
     let inline (=>>)  (s:'``Comonad<'T>``) (g:'``Comonad<'T>``->'U): '``Comonad<'U>`` = Extend.Invoke g s
+
+    /// Duplicate a comonadic context.
     let inline duplicate (x : '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x  
 
 
@@ -412,7 +425,10 @@ module Operators =
     let inline toBytes   value :byte[] = ToBytes.Invoke true value
     let inline toBytesBE value :byte[] = ToBytes.Invoke false value
 
+    /// Converts to a value to its string representation.
     let inline toStringWithCulture (cultureInfo:System.Globalization.CultureInfo) value:string = ToString.Invoke cultureInfo value
+
+    /// Converts to a value to its string representation.
     let inline toString  value:string  = ToString.Invoke System.Globalization.CultureInfo.InvariantCulture value  
      
     /// Converts to a value from its string representation.
