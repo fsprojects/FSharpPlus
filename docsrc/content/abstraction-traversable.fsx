@@ -20,7 +20,7 @@ Minimal complete definition
  * ``traverse f x`` | ``sequenceA x``
 *)
 (**
-    static member (t:'Traversable<'T>, f : 'T->'``Functor<'U>) : 'Functor<'Traversable<'U>>
+    static member Traverse (t:'Traversable<'T>, f : 'T->'``Functor<'U>) : 'Functor<'Traversable<'U>>
     static member SequenceA (t:'Traversable<'Functor<'T>>) : 'Functor<'Traversable<'T>>
 *)
 (**
