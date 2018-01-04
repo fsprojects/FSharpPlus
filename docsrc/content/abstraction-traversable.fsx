@@ -20,7 +20,7 @@ Minimal complete definition
  * ``traverse f x`` | ``sequenceA x``
 *)
 (**
-    static member (t:'Traversable<'T>, f : 'T->'``Functor<'U>) : 'Functor<'Traversable<'U>>
+    static member Traverse (t:'Traversable<'T>, f : 'T->'Functor<'U>) : 'Functor<'Traversable<'U>>
     static member SequenceA (t:'Traversable<'Functor<'T>>) : 'Functor<'Traversable<'T>>
 *)
 (**
@@ -41,7 +41,7 @@ Rules
 Related Abstractions
 --------------------
 
- - [Functor](abstraction-functor.html): An applicative is a functor whose ``map`` operation can splitted in ``return`` and ``(<*>)`` operations,
+ - [Functor](abstraction-functor.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations,
  
  - [Foldable](abstraction-foldable.html) : All traversables are foldables.
 

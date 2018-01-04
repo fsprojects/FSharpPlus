@@ -49,7 +49,7 @@ Rules
 Related Abstractions
 --------------------
 
- - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can splitted in ``return`` and ``(<*>)`` operations,
+ - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations,
  
  - [Monad](abstraction-monad.html) : Monads are functors with an additional ``Join`` operation,
 

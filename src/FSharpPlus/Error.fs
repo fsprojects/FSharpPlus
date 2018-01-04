@@ -26,7 +26,7 @@ module ResultOrException =
 
 
 /// Monad Transformer for Result<'T, 'E>
-type ErrorT<'``monad<'choice<'t,'e>>``> = ErrorT of '``monad<'choice<'t,'e>>``
+type ErrorT<'``monad<'result<'t,'e>>``> = ErrorT of '``monad<'result<'t,'e>>``
 
 /// Basic operations on ErrorT
 [<RequireQualifiedAccess>]
@@ -36,7 +36,7 @@ module ErrorT =
     let inline apply  (ErrorT f:ErrorT<'``Monad<'Result<('T -> 'U),'E>>``>) (ErrorT x:ErrorT<'``Monad<'Result<'T,'E>>``>) = ErrorT(map Result.apply f <*> x) : ErrorT<'``Monad<'Result<'U,'E>>``>
     let inline map  (f:'T->'U) (ErrorT m:ErrorT<'``Monad<'Result<'T,'E>>``>) = ErrorT (map (Result.map f) m) :ErrorT<'``Monad<'Result<('T -> 'U),'E>>``>
 
-type ErrorT<'``monad<'choice<'t,'e>>``> with
+type ErrorT<'``monad<'result<'t,'e>>``> with
     static member inline Return (x : 'T) = ErrorT (result (Ok x))                                                                           : ErrorT<'``Monad<'Result<'T,'E>>``>
     static member inline Map    (x : ErrorT<'``Monad<'Result<'T,'E>>``>, f : 'T->'U) = ErrorT.map f x                                       : ErrorT<'``Monad<'Result<'U,'E>>``>
     static member inline (<*>)  (f : ErrorT<'``Monad<'Result<('T -> 'U),'E>>``>, x : ErrorT<'``Monad<'Result<'T,'E>>``>) = ErrorT.apply f x : ErrorT<'``Monad<'Result<'U,'E>>``>
