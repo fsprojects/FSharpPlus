@@ -5,7 +5,7 @@
     <title>Alternative
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="F#+ is an overload library for F#."/>
+    <meta name="description" content="F#+ is a base library for F#."/>
     <meta name="author" content="Gusty"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
@@ -62,7 +62,7 @@
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">MFilter</span> (<span class="i">x</span><span class="o">:</span><span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">seq</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">Alternative</span><span class="o">&gt;</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">MFilter</span> (<span class="i">x</span><span class="o">:</span><span class="i">seq</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">Alternative</span><span class="o">&gt;</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Alternative</span>
 </code></pre></td>
 </tr>
 </table>
@@ -131,42 +131,29 @@
 <span class="l">18: </span>
 <span class="l">19: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;../../bin/FSharpPlus/FSharpPlus.dll&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">FSharpPlus</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span>
 
 <span class="c">// this gives [2; 3; 4; 5]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">x</span> <span class="o">=</span> [<span class="n">2</span>;<span class="n">3</span>] <span class="o">&lt;|&gt;</span> [] <span class="o">&lt;|&gt;</span> [<span class="n">4</span>;<span class="n">5</span>]
+<span class="k">let</span> <span class="i">x</span> <span class="o">=</span> [<span class="n">2</span>;<span class="n">3</span>] <span class="o">&lt;|&gt;</span> [] <span class="o">&lt;|&gt;</span> [<span class="n">4</span>;<span class="n">5</span>]
 
 <span class="c">// but I could have written</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">y</span> <span class="o">=</span> [<span class="n">2</span>;<span class="n">3</span>] <span class="o">&lt;|&gt;</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">empty</span> <span class="o">&lt;|&gt;</span> [<span class="n">4</span>;<span class="n">5</span>]
+<span class="k">let</span> <span class="i">y</span> <span class="o">=</span> [<span class="n">2</span>;<span class="n">3</span>] <span class="o">&lt;|&gt;</span> <span class="i">empty</span> <span class="o">&lt;|&gt;</span> [<span class="n">4</span>;<span class="n">5</span>]
 
 <span class="c">// choice sample usage</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="i">alternatives</span> <span class="o">=</span> [<span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="p">None</span>; <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="p">Some</span> <span class="s">&quot;Result is OK&quot;</span>; <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="p">None</span> ; <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="p">Some</span> <span class="s">&quot;Result is still OK&quot;</span>]
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="i">firstGood</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="f">choice</span> <span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="i">alternatives</span> <span class="c">//Some &quot;Result is OK&quot;</span>
+<span class="k">let</span> <span class="i">alternatives</span> <span class="o">=</span> [<span class="i">None</span>; <span class="i">Some</span> <span class="s">&quot;Result is OK&quot;</span>; <span class="i">None</span> ; <span class="i">Some</span> <span class="s">&quot;Result is still OK&quot;</span>]
+<span class="k">let</span> <span class="i">firstGood</span> <span class="o">=</span> <span class="i">choice</span> <span class="i">alternatives</span> <span class="c">//Some &quot;Result is OK&quot;</span>
 
 <span class="c">// it did something like</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="i">fstGood</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 15)" onmouseover="showTip(event, 'fs7', 15)" class="p">None</span> <span class="o">&lt;|&gt;</span> <span onmouseout="hideTip(event, 'fs8', 16)" onmouseover="showTip(event, 'fs8', 16)" class="p">Some</span> <span class="s">&quot;Result is OK&quot;</span> <span class="o">&lt;|&gt;</span>  <span onmouseout="hideTip(event, 'fs7', 17)" onmouseover="showTip(event, 'fs7', 17)" class="p">None</span> <span class="o">&lt;|&gt;</span> <span onmouseout="hideTip(event, 'fs8', 18)" onmouseover="showTip(event, 'fs8', 18)" class="p">Some</span> <span class="s">&quot;Result is still OK&quot;</span>
+<span class="k">let</span> <span class="i">fstGood</span> <span class="o">=</span> <span class="i">None</span> <span class="o">&lt;|&gt;</span> <span class="i">Some</span> <span class="s">&quot;Result is OK&quot;</span> <span class="o">&lt;|&gt;</span>  <span class="i">None</span> <span class="o">&lt;|&gt;</span> <span class="i">Some</span> <span class="s">&quot;Result is still OK&quot;</span>
 
 <span class="c">// mfilter usage</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 19)" onmouseover="showTip(event, 'fs12', 19)" class="i">fstMatch</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="f">mfilter</span> ((<span class="o">=</span>) <span class="n">5</span>) [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>]    <span class="c">// [] -&gt; no element found, it uses the mzero value</span>
+<span class="k">let</span> <span class="i">fstMatch</span> <span class="o">=</span> <span class="i">mfilter</span> ((<span class="o">=</span>) <span class="n">5</span>) [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>]    <span class="c">// [] -&gt; no element found, it uses the mzero value</span>
 </code></pre></td>
 </tr>
 </table>
 
-<div class="tip" id="fs1">Multiple items<br />val seq : sequence:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Core.Operators.seq<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.seq&lt;_&gt;</div>
-<div class="tip" id="fs2">namespace FSharpPlus</div>
-<div class="tip" id="fs3">val x : int list<br /><br />Full name: Abstraction-alternative.x</div>
-<div class="tip" id="fs4">val y : int list<br /><br />Full name: Abstraction-alternative.y</div>
-<div class="tip" id="fs5">val empty&lt;&#39;Functor&lt;&#39;T&gt; (requires member Empty)&gt; : &#39;Functor&lt;&#39;T&gt; (requires member Empty)<br /><br />Full name: FSharpPlus.Operators.empty</div>
-<div class="tip" id="fs6">val alternatives : string option list<br /><br />Full name: Abstraction-alternative.alternatives</div>
-<div class="tip" id="fs7">union case Option.None: Option&lt;&#39;T&gt;</div>
-<div class="tip" id="fs8">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
-<div class="tip" id="fs9">val firstGood : string option<br /><br />Full name: Abstraction-alternative.firstGood</div>
-<div class="tip" id="fs10">val choice : x:&#39;Foldable&lt;&#39;Alternative&lt;&#39;t&gt;&gt; -&gt; &#39;Alternative&lt;&#39;t&gt;&gt; (requires member FoldBack and member Append and member Empty)<br /><br />Full name: FSharpPlus.Operators.choice</div>
-<div class="tip" id="fs11">val fstGood : string option<br /><br />Full name: Abstraction-alternative.fstGood</div>
-<div class="tip" id="fs12">val fstMatch : int list<br /><br />Full name: Abstraction-alternative.fstMatch</div>
-<div class="tip" id="fs13">val mfilter : predicate:(&#39;a -&gt; bool) -&gt; m:&#39;MonadZero&lt;&#39;t&gt; -&gt; &#39;MonadZero&lt;&#39;t&gt; (requires member Bind and member Return and member Empty)<br /><br />Full name: FSharpPlus.Operators.mfilter</div>
 
         </div>
         <div class="span3">

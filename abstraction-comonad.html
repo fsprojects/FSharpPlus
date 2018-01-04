@@ -5,7 +5,7 @@
     <title>Comonad
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="F#+ is an overload library for F#."/>
+    <meta name="description" content="F#+ is a base library for F#."/>
     <meta name="author" content="Gusty"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
@@ -64,7 +64,7 @@
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">extend</span> <span class="i">extract</span>       <span class="o">=</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">id</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">extend</span> <span class="i">extract</span>       <span class="o">=</span> <span class="i">id</span>
 <span class="i">extract</span> <span class="o">&lt;&lt;</span> <span class="i">extend</span> <span class="i">f</span>  <span class="o">=</span> <span class="i">f</span>
 <span class="i">extend</span> <span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">extend</span> <span class="i">g</span> <span class="o">=</span> <span class="i">extend</span> (<span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">extend</span> <span class="i">g</span>)
 </code></pre></td>
@@ -90,7 +90,6 @@
 </ul>
 <p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 
-<div class="tip" id="fs1">val id : x:&#39;T -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.Operators.id</div>
 
         </div>
         <div class="span3">
@@ -108,8 +107,8 @@
             <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-			<li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
           </ul>
         </div>
       </div>

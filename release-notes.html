@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <title>release-notes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="F#+ is an overload library for F#."/>
+    <meta name="description" content="F#+ is a base library for F#."/>
     <meta name="author" content="Gusty"/>
 
     <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
@@ -32,6 +32,35 @@
       <div class="row">
         <div class="span9" id="main">
           
+<h4><a name="1-0-0-CI00099-December-31-2017" class="anchor" href="#1-0-0-CI00099-December-31-2017">1.0.0-CI00099  - December 31 2017</a></h4>
+<ul>
+<li>Some Delayed Monad Transformers</li>
+<li>Bug fixes</li>
+</ul>
+<h4><a name="1-0-0-CI00092-December-26-2017" class="anchor" href="#1-0-0-CI00092-December-26-2017">1.0.0-CI00092  - December 26 2017</a></h4>
+<ul>
+<li>New execution model for Computation Expressions</li>
+<li>Use F# new Result Type to model failures</li>
+<li>Functions minValue and maxValue are now generic constants</li>
+<li>Many String and other extensions</li>
+</ul>
+<h4><a name="1-0-0-CI00091-November-30-2017" class="anchor" href="#1-0-0-CI00091-November-30-2017">1.0.0-CI00091  - November 30 2017</a></h4>
+<ul>
+<li>Targeting Netstandard 2.0</li>
+<li>(0, +) as default monoid for numerics</li>
+<li>
+Rename:
+<ul>
+<li>Empty, Append and Concat to MEmpty, MAppend and MConcat</li>
+<li>MZero and MPlus to Empty and Append.</li>
+<li>mempty and mappend to zero and plus</li>
+<li>mconcat and mfold to Seq.sum and sum</li>
+</ul>
+</li>
+<li>Generic constants (empty, zero, app, ...)</li>
+<li>Compose for applicative functors</li>
+<li>Unify RMap with Map and LMap with Contramap</li>
+</ul>
 <h4><a name="1-0-0-CI00089-March-9-2017" class="anchor" href="#1-0-0-CI00089-March-9-2017">1.0.0-CI00089  - March 9 2017</a></h4>
 <ul>
 <li>Functions create, singleton and traverse (Traversable) for NonEmptyList</li>
@@ -74,8 +103,8 @@
             <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-			<li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
           </ul>
         </div>
       </div>
