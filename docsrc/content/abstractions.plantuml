@@ -39,7 +39,7 @@ abstract class Applicative [[http://gusty.github.io/FSharpPlus/abstraction-appli
 }
 
 abstract class Alternative [[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]] {
-  + zero [[[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]]
+  + empty [[[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]]
   + (<|>) f x [[[http://gusty.github.io/FSharpPlus/abstraction-alternative.html]]]
   ==
   + mfilter p x [[[http://gusty.github.io/FSharpPlus/abstraction-alternative.html#mfilter {Returns all values satisfying the predicate, if the predicate returns false will use the empty value} ]]]
