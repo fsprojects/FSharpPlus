@@ -173,7 +173,7 @@ AssemblyInfo.*
 packages/
 
 # Generated documentation folder
-docs/output/
+docs/
 
 # Temp folder used for publishing docs
 temp/

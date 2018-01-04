@@ -322,6 +322,17 @@ Target "AddLangDocs" (fun _ ->
 // --------------------------------------------------------------------------------------
 // Release Scripts
 
+Target "ReleaseDocs" (fun _ ->
+    let tempDocsDir = "temp/gh-pages"
+    CleanDir tempDocsDir
+    Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+
+    CopyRecursive "docs" tempDocsDir true |> tracefn "%A"
+    StageAll tempDocsDir
+    Git.Commit.Commit tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
+    Branches.push tempDocsDir
+)
+
 #load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 open Octokit
 
@@ -374,6 +385,7 @@ Target "All" DoNothing
   ==> "CopyNuGet"
   ==> "BuildPackage"
   ==> "All"
+  =?> ("ReleaseDocs",isLocalBuild)
 
 "GenerateHelp"
   ==> "GenerateReferenceDocs"
@@ -387,6 +399,9 @@ Target "All" DoNothing
 
 "BuildPackage"
   ==> "PublishNuget"
+  ==> "Release"
+
+"ReleaseDocs"
   ==> "Release"
 
 RunTargetOrDefault "All"
