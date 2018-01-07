@@ -46,6 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\abstractions.fsx = docsrc\content\abstractions.fsx
 		docsrc\content\abstractions.plantuml = docsrc\content\abstractions.plantuml
 		docsrc\content\applicative-functors.fsx = docsrc\content\applicative-functors.fsx
+		docsrc\content\computation-expressions.fsx = docsrc\content\computation-expressions.fsx
 		docsrc\content\generic-doc.fsx = docsrc\content\generic-doc.fsx
 		docsrc\content\index.fsx = docsrc\content\index.fsx
 		docsrc\content\tutorial.fsx = docsrc\content\tutorial.fsx

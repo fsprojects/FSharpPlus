@@ -10,7 +10,7 @@ It contains the most requested additions to the F# core library, including:
  - Standard Monads: Cont, Reader, Writer, State and their Monad Transformers.
  - Other popular [FP abstractions](//gusty.github.io/FSharpPlus/abstractions.html).
  - [Generic Functions and Operators](//gusty.github.io/FSharpPlus/reference/fsharpplus-operators.html) which may be further extended to support other types.
- - Generic and customizable Computation Expressions.
+ - Generic and customizable [Computation Expressions](//gusty.github.io/FSharpPlus/computation-expressions.html).
  - A generic Math module.
  - A true polymorphic [Lens/Optics module](//gusty.github.io/FSharpPlus/tutorial.html#Lens).
  - A Haskell compatibility module.
