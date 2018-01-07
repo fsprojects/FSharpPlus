@@ -26,7 +26,7 @@ Minimal complete definition
     static member Return (x:'T) : 'Alternative<'T>
     static member (<*>) (f:'T->'U, x:Alternative<'T>) : Alternative<'U>
     static member get_Empty () :'Alternative
-    static member Append (x:'Alternative, y:'Alternative) :'Alternative
+    static member Append (x:'Alternative<'T>, y:'Alternative<'T>) :'Alternative<'T>
 *)
 (**
 

@@ -7,7 +7,7 @@
 Introducing FSharpPlus
 ======================
 
- - Download binaries from [Nuget](https://www.nuget.org/packages/FsControl/), use the latest version (2.x)
+ - Download binaries from [Nuget](https://www.nuget.org/packages/FSharpPlus/), use the latest CI version.
 
  - Open an F# script file or the F# interactive, reference the library and open the namespace
 
