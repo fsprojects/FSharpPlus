@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Computations Expressions
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="F#+ is a base library for F#."/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1><a name="Computations-Expressions" class="anchor" href="#Computations-Expressions">Computations Expressions</a></h1>
+<p>This library allows to use some common computation expressions without writing any boiler plate code.</p>
+<p>There is a single computation expression: <code>monad</code> but it comes in 4 flavours:</p>
+<ul>
+<li>It could be delayed or strict</li>
+<li>It can have embedded side-effects or act as a monad plus</li>
+</ul>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Examples" class="anchor" href="#Examples">Examples</a></h1>
+<p>You may run this script step-by-step.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">lazyValue</span> <span class="o">=</span> <span class="i">monad</span> {
+    <span class="k">let!</span> <span class="i">a</span> <span class="o">=</span> <span class="k">lazy</span> (<span class="i">printfn</span> <span class="s">&quot;I&#39;m lazy&quot;</span>; <span class="n">2</span>)
+    <span class="k">let!</span> <span class="i">b</span> <span class="o">=</span> <span class="k">lazy</span> (<span class="i">printfn</span> <span class="s">&quot;I&#39;m lazy too&quot;</span>; <span class="n">10</span>)
+    <span class="k">return</span> <span class="i">a</span> <span class="o">+</span> <span class="i">b</span>}
+
+<span class="c">// val lazyValue : System.Lazy&lt;int&gt; = Value is not created.</span>
+
+<span class="k">let</span> <span class="i">res12</span> <span class="o">=</span> <span class="i">lazyValue</span><span class="o">.</span><span class="i">Value</span>
+
+
+<span class="k">let</span> <span class="i">maybeWithSideFx</span> <span class="o">=</span> <span class="i">monad</span><span class="o">.</span><span class="i">fx</span><span class="o">.</span><span class="i">strict</span> { 
+    <span class="k">let!</span> <span class="i">a</span> <span class="o">=</span> <span class="i">Some</span> <span class="n">3</span>
+    <span class="k">let</span> <span class="i">b</span> <span class="o">=</span> <span class="i">ref</span> <span class="n">0</span>
+    <span class="k">while</span> <span class="o">!</span><span class="i">b</span> <span class="o">&lt;</span> <span class="n">10</span> <span class="k">do</span> 
+      <span class="k">let!</span> <span class="i">n</span> <span class="o">=</span> <span class="i">Some</span> ()
+      <span class="i">incr</span> <span class="i">b</span>
+    <span class="k">if</span> <span class="i">a</span> <span class="o">=</span> <span class="n">3</span> <span class="k">then</span> <span class="i">printfn</span> <span class="s">&quot;got 3&quot;</span>
+    <span class="k">else</span> <span class="i">printfn</span> <span class="s">&quot;got something else (will never print this)&quot;</span>
+    <span class="k">return</span> <span class="i">a</span> }
+
+<span class="c">// val maybeWithSideFx : int option = Some 3</span>
+
+<span class="c">// effects.Clear()</span>
+<span class="c">// effects.Add</span>
+
+<span class="k">let</span> <span class="i">lst</span> <span class="o">=</span> [<span class="i">None</span>; <span class="i">None</span>; <span class="i">Some</span> <span class="n">2</span>; <span class="i">Some</span> <span class="n">4</span>; <span class="i">Some</span> <span class="n">10</span>; <span class="i">None</span>]
+
+<span class="k">let</span> <span class="i">maybeManyTimes</span> <span class="o">=</span> <span class="i">monad</span><span class="o">.</span><span class="i">plus</span><span class="o">.</span><span class="i">strict</span> {
+    <span class="k">let</span> <span class="i">defaultValue</span> <span class="o">=</span> <span class="n">42</span>
+    <span class="k">let</span> <span class="k">mutable</span> <span class="i">i</span> <span class="o">=</span> <span class="n">0</span>
+    <span class="k">return!</span> <span class="i">None</span>
+    <span class="k">while</span> <span class="i">i</span> <span class="o">&lt;</span> <span class="n">5</span> <span class="k">do</span>
+        <span class="i">printfn</span> <span class="s">&quot;looping %i&quot;</span> <span class="i">i</span>
+        <span class="i">i</span> <span class="o">&lt;-</span> <span class="i">i</span> <span class="o">+</span> <span class="n">1</span>
+        <span class="k">return!</span> <span class="i">lst</span><span class="o">.</span>[<span class="i">i</span>]
+    <span class="i">printfn</span> <span class="s">&quot;halfway&quot;</span>
+    <span class="k">return!</span> <span class="i">None</span>
+    <span class="i">printfn</span> <span class="s">&quot;near the end&quot;</span>
+    <span class="k">return</span> <span class="i">defaultValue</span> }
+
+<span class="c">// val maybeManyTimes : int option = Some 2</span>
+</code></pre></td>
+</tr>
+</table>
+
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
