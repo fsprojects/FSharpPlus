@@ -59,9 +59,9 @@
 <span class="i">map</span> ((<span class="o">+</span>) <span class="n">9</span>) (<span class="i">Some</span> <span class="n">3</span>)
 <span class="c">// val it : int option = Some 12</span>
 
-<span class="i">map</span> ((<span class="o">+</span>) <span class="n">9</span>) (<span class="i">async</span> {<span class="k">return</span> <span class="n">3</span>});;
+<span class="k">let</span> <span class="i">res12</span> <span class="o">=</span> <span class="i">map</span> ((<span class="o">+</span>) <span class="n">9</span>) (<span class="i">async</span> {<span class="k">return</span> <span class="n">3</span>})
 <span class="c">// val it : Async&lt;int&gt; = Microsoft.FSharp.Control.FSharpAsync`1[System.Int32]</span>
-<span class="i">extract</span> <span class="i">it</span>;;
+<span class="i">extract</span> <span class="i">res12</span>
 <span class="c">// val it : int = 12</span>
 </code></pre></td>
 </tr>
@@ -123,8 +123,8 @@
 <span class="l">3: </span>
 <span class="l">4: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;../../packages/test/MathNet.Numerics/lib/net40/MathNet.Numerics.dll&quot;</span>
-<span class="prep">#r</span> <span class="s">&quot;../../packages/test/MathNet.Numerics.FSharp/lib/net40/MathNet.Numerics.FSharp.dll&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;../../packages/MathNet.Numerics/lib/net40/MathNet.Numerics.dll&quot;</span>
+<span class="prep">#r</span> <span class="s">&quot;../../packages/MathNet.Numerics.FSharp/lib/net40/MathNet.Numerics.FSharp.dll&quot;</span>
 
 <span class="k">let</span> <span class="i">x</span> <span class="o">:</span> <span class="i">MathNet</span><span class="o">.</span><span class="i">Numerics</span><span class="o">.</span><span class="i">BigRational</span> <span class="o">=</span> <span class="i">fromBigInt</span> <span class="n">10I</span>
 </code></pre></td>

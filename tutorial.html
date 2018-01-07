@@ -152,28 +152,6 @@
 </tr>
 </table>
 <p>But don't forget the above used operators are generic, so we can change the type of our functions and we get a different functionality for free:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-<span class="l">5: </span>
-<span class="l">6: </span>
-<span class="l">7: </span>
-<span class="l">8: </span>
-<span class="l">9: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">tryParseInt</span> <span class="i">x</span> <span class="o">:</span> <span class="i">Choice</span><span class="o">&lt;</span><span class="i">int</span>, <span class="i">string</span><span class="o">&gt;</span> <span class="o">=</span> 
-    <span class="k">match</span> <span class="i">tryParse</span> <span class="i">x</span> <span class="k">with</span> 
-    | <span class="i">Some</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">Choice1Of2</span> <span class="i">x</span>
-    | <span class="i">None</span>   <span class="k">-&gt;</span> <span class="i">Choice2Of2</span> (<span class="s">&quot;Failed to parse &quot;</span> <span class="o">+</span> <span class="i">x</span>)
-        
-
-<span class="k">let</span> <span class="i">tryDivide</span> <span class="i">x</span> <span class="i">n</span> <span class="o">=</span> 
-    <span class="k">if</span> <span class="i">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span> <span class="i">Choice2Of2</span> <span class="s">&quot;Can&#39;t divide by zero&quot;</span>
-    <span class="k">else</span> <span class="i">Choice1Of2</span> (<span class="i">x</span> <span class="o">/</span> <span class="i">n</span>)
-</code></pre></td>
-</tr>
-</table>
 <p>The test code remains unchanged, but we get a more interesting functionality</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>

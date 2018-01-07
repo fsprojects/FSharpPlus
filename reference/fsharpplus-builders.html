@@ -54,6 +54,18 @@
     <tbody>
         <tr>
           <td class="type-name">
+            <a href="fsharpplus-builders-builder.html">Builder</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-builders-delayedbuilder.html">DelayedBuilder</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="fsharpplus-builders-idiomatic.html">Idiomatic</a>
           </td>
           <td class="xmldoc"></td>
@@ -78,13 +90,13 @@
         </tr>
         <tr>
           <td class="type-name">
-            <a href="fsharpplus-builders-linqbuilder.html">LinqBuilder</a>
+            <a href="fsharpplus-builders-monadfxbuilder.html">MonadFxBuilder</a>
           </td>
           <td class="xmldoc"></td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="fsharpplus-builders-monadbuilder.html">MonadBuilder</a>
+            <a href="fsharpplus-builders-monadfxstrictbuilder.html">MonadFxStrictBuilder</a>
           </td>
           <td class="xmldoc"></td>
         </tr>
@@ -96,13 +108,13 @@
         </tr>
         <tr>
           <td class="type-name">
-            <a href="fsharpplus-builders-plus.html">Plus</a>
+            <a href="fsharpplus-builders-monadplusstrictbuilder.html">MonadPlusStrictBuilder</a>
           </td>
           <td class="xmldoc"></td>
         </tr>
         <tr>
           <td class="type-name">
-            <a href="fsharpplus-builders-zero.html">Zero</a>
+            <a href="fsharpplus-builders-strictbuilder.html">StrictBuilder</a>
           </td>
           <td class="xmldoc"></td>
         </tr>
@@ -124,11 +136,11 @@
             idiomatic a b
           </code>
           <div class="tip" id="5">
-            <strong>Signature:</strong> a:&#39;?11065 -&gt; b:^?11066 -&gt; &#39;?11067<br />
-                          <strong>Type parameters:</strong> '?11065, ^?11066, '?11067          </div>
+            <strong>Signature:</strong> a:&#39;?11071 -&gt; b:^?11072 -&gt; &#39;?11073<br />
+                          <strong>Type parameters:</strong> '?11071, ^?11072, '?11073          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L16-16" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L18-18" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -142,11 +154,11 @@
             iI x
           </code>
           <div class="tip" id="6">
-            <strong>Signature:</strong> x:&#39;?11069 -&gt; ^?11070 -&gt; &#39;?11072<br />
-                          <strong>Type parameters:</strong> '?11069, ^?11070, ^?11071, '?11072          </div>
+            <strong>Signature:</strong> x:&#39;?11075 -&gt; ^?11076 -&gt; &#39;?11078<br />
+                          <strong>Type parameters:</strong> '?11075, ^?11076, ^?11077, '?11078          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L17-17" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L19-19" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -157,50 +169,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
-            linq 
-          </code>
-          <div class="tip" id="7">
-            <strong>Signature:</strong> LinqBuilder<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L98-98" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
             monad 
           </code>
-          <div class="tip" id="8">
-            <strong>Signature:</strong> MonadBuilder<br />
+          <div class="tip" id="7">
+            <strong>Signature:</strong> MonadFxBuilder<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L58-58" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
-            monadPlus 
-          </code>
-          <div class="tip" id="9">
-            <strong>Signature:</strong> MonadPlusBuilder<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L59-59" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L134-134" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

@@ -55,12 +55,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '428', 428)" onmouseover="showTip(event, '428', 428)">
+          <code onmouseout="hideTip(event, '221', 221)" onmouseover="showTip(event, '221', 221)">
             apply(arg1 arg2)
           </code>
-          <div class="tip" id="428">
-            <strong>Signature:</strong> ErrorT&lt;^Monad&lt;&#39;Choice&lt;(&#39;T -&gt; &#39;U),&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'Choice<('T -> 'U),'E>>, ^?10565, '?10566, '?10567, '?10568, ^Monad<'Choice<'T,'E>>, ^Monad<'Choice<'U,'E>>          </div>
+          <div class="tip" id="221">
+            <strong>Signature:</strong> ErrorT&lt;^Monad&lt;&#39;Result&lt;(&#39;T -&gt; &#39;U),&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'Result<('T -> 'U),'E>>, ^?10571, '?10572, '?10573, '?10574, ^Monad<'Result<'T,'E>>, ^Monad<'Result<'U,'E>>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Error.fs#L36-36" class="github-link">
@@ -73,12 +73,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '429', 429)" onmouseover="showTip(event, '429', 429)">
+          <code onmouseout="hideTip(event, '222', 222)" onmouseover="showTip(event, '222', 222)">
             bind(f arg2)
           </code>
-          <div class="tip" id="429">
-            <strong>Signature:</strong> f:(&#39;T -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;) -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'T, ^Monad<'Choice<'U,'E>>, '?10560, '?10561, ^Monad<'Choice<'T,'E>>          </div>
+          <div class="tip" id="222">
+            <strong>Signature:</strong> f:(&#39;T -&gt; ErrorT&lt;^Monad&lt;&#39;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;) -&gt; ErrorT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Monad<'Result<'U,'E>>, '?10566, '?10567, ^Monad<'Result<'T,'E>>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Error.fs#L35-35" class="github-link">
@@ -91,12 +91,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '430', 430)" onmouseover="showTip(event, '430', 430)">
+          <code onmouseout="hideTip(event, '223', 223)" onmouseover="showTip(event, '223', 223)">
             map(f arg2)
           </code>
-          <div class="tip" id="430">
-            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Choice&lt;(&#39;T -&gt; &#39;U),&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U, ^Monad<'Choice<'T,'E>>, ^Monad<'Choice<('T -> 'U),'E>>, '?10576          </div>
+          <div class="tip" id="223">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; ErrorT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; ErrorT&lt;^Monad&lt;&#39;Result&lt;(&#39;T -&gt; &#39;U),&#39;E&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, ^Monad<'Result<'T,'E>>, ^Monad<'Result<('T -> 'U),'E>>, '?10582          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Error.fs#L37-37" class="github-link">
@@ -109,12 +109,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '431', 431)" onmouseover="showTip(event, '431', 431)">
+          <code onmouseout="hideTip(event, '224', 224)" onmouseover="showTip(event, '224', 224)">
             run(arg1)
           </code>
-          <div class="tip" id="431">
-            <strong>Signature:</strong> ErrorT&lt;&#39;Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; &#39;Monad&lt;&#39;Choice&lt;&#39;T,&#39;E&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'Monad<'Choice<'T,'E>>          </div>
+          <div class="tip" id="224">
+            <strong>Signature:</strong> ErrorT&lt;&#39;Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; &#39;Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'Monad<'Result<'T,'E>>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Error.fs#L34-34" class="github-link">

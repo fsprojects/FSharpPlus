@@ -52,10 +52,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '749', 749)" onmouseover="showTip(event, '749', 749)">
+          <code onmouseout="hideTip(event, '526', 526)" onmouseover="showTip(event, '526', 526)">
             ReaderT(&#39;r -&gt; &#39;monad&lt;&#39;t&gt;)
           </code>
-          <div class="tip" id="749">
+          <div class="tip" id="526">
             <strong>Signature:</strong> &#39;r -&gt; &#39;monad&lt;&#39;t&gt;<br />
                       </div>
         </td>
@@ -78,10 +78,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '750', 750)" onmouseover="showTip(event, '750', 750)">
+          <code onmouseout="hideTip(event, '527', 527)" onmouseover="showTip(event, '527', 527)">
             ( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="750">
+          <div class="tip" id="527">
             <strong>Signature:</strong> (f:ReaderT&lt;&#39;R,^Monad&lt;&#39;T -&gt; &#39;U&gt;&gt; * x:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<'U>          </div>
         </td>
@@ -97,10 +97,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '751', 751)" onmouseover="showTip(event, '751', 751)">
+          <code onmouseout="hideTip(event, '528', 528)" onmouseover="showTip(event, '528', 528)">
             Append(arg1, arg2)
           </code>
-          <div class="tip" id="751">
+          <div class="tip" id="528">
             <strong>Signature:</strong> (ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt; * ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt;<br />
                       </div>
         </td>
@@ -115,10 +115,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '752', 752)" onmouseover="showTip(event, '752', 752)">
+          <code onmouseout="hideTip(event, '529', 529)" onmouseover="showTip(event, '529', 529)">
             Bind(x, f)
           </code>
-          <div class="tip" id="752">
+          <div class="tip" id="529">
             <strong>Signature:</strong> (x:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'U>, 'T          </div>
         </td>
@@ -133,12 +133,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '753', 753)" onmouseover="showTip(event, '753', 753)">
+          <code onmouseout="hideTip(event, '530', 530)" onmouseover="showTip(event, '530', 530)">
             CallCC(f)
           </code>
-          <div class="tip" id="753">
-            <strong>Signature:</strong> (f:((&#39;T -&gt; ReaderT&lt;&#39;R,Cont&lt;&#39;?9093,&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9093, 'U, ^MonadCont<'C,'T>          </div>
+          <div class="tip" id="530">
+            <strong>Signature:</strong> (f:((&#39;T -&gt; ReaderT&lt;&#39;R,Cont&lt;&#39;?9092,&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?9092, 'U, ^MonadCont<'C,'T>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L63-63" class="github-link">
@@ -151,10 +151,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '754', 754)" onmouseover="showTip(event, '754', 754)">
+          <code onmouseout="hideTip(event, '531', 531)" onmouseover="showTip(event, '531', 531)">
             Catch(m, h)
           </code>
-          <div class="tip" id="754">
+          <div class="tip" id="531">
             <strong>Signature:</strong> (m:ReaderT&lt;&#39;R,^MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h:(&#39;E1 -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E2,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E2,&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadError<'E2,'T>, 'E1          </div>
         </td>
@@ -169,10 +169,28 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '755', 755)" onmouseover="showTip(event, '755', 755)">
+          <code onmouseout="hideTip(event, '532', 532)" onmouseover="showTip(event, '532', 532)">
+            Delay(f)
+          </code>
+          <div class="tip" id="532">
+            <strong>Signature:</strong> (f:(unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L80-80" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '533', 533)" onmouseover="showTip(event, '533', 533)">
             get_Ask()
           </code>
-          <div class="tip" id="755">
+          <div class="tip" id="533">
             <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
                       </div>
         </td>
@@ -187,10 +205,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '756', 756)" onmouseover="showTip(event, '756', 756)">
+          <code onmouseout="hideTip(event, '534', 534)" onmouseover="showTip(event, '534', 534)">
             get_Empty()
           </code>
-          <div class="tip" id="756">
+          <div class="tip" id="534">
             <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt;<br />
                       </div>
         </td>
@@ -205,10 +223,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '757', 757)" onmouseover="showTip(event, '757', 757)">
+          <code onmouseout="hideTip(event, '535', 535)" onmouseover="showTip(event, '535', 535)">
             get_Get()
           </code>
-          <div class="tip" id="757">
+          <div class="tip" id="535">
             <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, &#39;S&gt;&gt;<br />
                       </div>
         </td>
@@ -223,10 +241,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '758', 758)" onmouseover="showTip(event, '758', 758)">
+          <code onmouseout="hideTip(event, '536', 536)" onmouseover="showTip(event, '536', 536)">
             Lift(m)
           </code>
-          <div class="tip" id="758">
+          <div class="tip" id="536">
             <strong>Signature:</strong> m:&#39;Monad&lt;&#39;T&gt; -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;&gt;<br />
                       </div>
         </td>
@@ -241,10 +259,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '759', 759)" onmouseover="showTip(event, '759', 759)">
+          <code onmouseout="hideTip(event, '537', 537)" onmouseover="showTip(event, '537', 537)">
             LiftAsync(x)
           </code>
-          <div class="tip" id="759">
+          <div class="tip" id="537">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ReaderT&lt;&#39;R,^MonadAsync&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadAsync<'T>          </div>
         </td>
@@ -259,11 +277,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '760', 760)" onmouseover="showTip(event, '760', 760)">
+          <code onmouseout="hideTip(event, '538', 538)" onmouseover="showTip(event, '538', 538)">
             Listen(arg1)
           </code>
-          <div class="tip" id="760">
-            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9130&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T*&#39;Monoid&gt;&gt;<br />
+          <div class="tip" id="538">
+            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9129&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T*&#39;Monoid&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T*'Monoid>          </div>
         </td>
         <td class="xmldoc">
@@ -277,10 +295,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '761', 761)" onmouseover="showTip(event, '761', 761)">
+          <code onmouseout="hideTip(event, '539', 539)" onmouseover="showTip(event, '539', 539)">
             Local(arg1, f)
           </code>
-          <div class="tip" id="761">
+          <div class="tip" id="539">
             <strong>Signature:</strong> (ReaderT&lt;&#39;R2,&#39;Monad&lt;&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ReaderT&lt;&#39;R1,&#39;Monad&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'R1          </div>
         </td>
@@ -295,10 +313,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '762', 762)" onmouseover="showTip(event, '762', 762)">
+          <code onmouseout="hideTip(event, '540', 540)" onmouseover="showTip(event, '540', 540)">
             Map(x, f)
           </code>
-          <div class="tip" id="762">
+          <div class="tip" id="540">
             <strong>Signature:</strong> (x:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'U>, 'T, 'U          </div>
         </td>
@@ -313,11 +331,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '763', 763)" onmouseover="showTip(event, '763', 763)">
+          <code onmouseout="hideTip(event, '541', 541)" onmouseover="showTip(event, '541', 541)">
             Pass(arg1)
           </code>
-          <div class="tip" id="763">
-            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9136&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T&gt;&gt;<br />
+          <div class="tip" id="541">
+            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9135&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T>          </div>
         </td>
         <td class="xmldoc">
@@ -331,11 +349,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '764', 764)" onmouseover="showTip(event, '764', 764)">
+          <code onmouseout="hideTip(event, '542', 542)" onmouseover="showTip(event, '542', 542)">
             Put(x)
           </code>
-          <div class="tip" id="764">
-            <strong>Signature:</strong> x:&#39;?9146 -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, unit&gt;&gt;<br />
+          <div class="tip" id="542">
+            <strong>Signature:</strong> x:&#39;?9145 -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, unit&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadState<'S, unit>          </div>
         </td>
         <td class="xmldoc">
@@ -349,10 +367,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '765', 765)" onmouseover="showTip(event, '765', 765)">
+          <code onmouseout="hideTip(event, '543', 543)" onmouseover="showTip(event, '543', 543)">
             Return(x)
           </code>
-          <div class="tip" id="765">
+          <div class="tip" id="543">
             <strong>Signature:</strong> x:&#39;T -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>          </div>
         </td>
@@ -367,11 +385,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '766', 766)" onmouseover="showTip(event, '766', 766)">
+          <code onmouseout="hideTip(event, '544', 544)" onmouseover="showTip(event, '544', 544)">
             Tell(w)
           </code>
-          <div class="tip" id="766">
-            <strong>Signature:</strong> w:&#39;?9123 -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,unit&gt;&gt;<br />
+          <div class="tip" id="544">
+            <strong>Signature:</strong> w:&#39;?9122 -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,unit&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,unit>          </div>
         </td>
         <td class="xmldoc">
@@ -385,10 +403,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '767', 767)" onmouseover="showTip(event, '767', 767)">
+          <code onmouseout="hideTip(event, '545', 545)" onmouseover="showTip(event, '545', 545)">
             Throw(x)
           </code>
-          <div class="tip" id="767">
+          <div class="tip" id="545">
             <strong>Signature:</strong> x:&#39;E -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E,&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadError<'E,'T>          </div>
         </td>
