@@ -40,9 +40,9 @@ map string [|2;3;4;5|]
 map ((+) 9) (Some 3)
 // val it : int option = Some 12
 
-map ((+) 9) (async {return 3});;
+let res12 = map ((+) 9) (async {return 3})
 // val it : Async<int> = Microsoft.FSharp.Control.FSharpAsync`1[System.Int32]
-extract it;;
+extract res12
 // val it : int = 12
 
 (**
@@ -82,7 +82,7 @@ For a type defined in an external library it will work when it contains a static
 Here's an example of the generic function ``fromBigInt`` targeting a type defined in the MathNet library
 *)
 
-#r "../../packages/test/MathNet.Numerics/lib/net40/MathNet.Numerics.dll"
-#r "../../packages/test/MathNet.Numerics.FSharp/lib/net40/MathNet.Numerics.FSharp.dll"
+#r "../../packages/MathNet.Numerics/lib/net40/MathNet.Numerics.dll"
+#r "../../packages/MathNet.Numerics.FSharp/lib/net40/MathNet.Numerics.FSharp.dll"
 
 let x : MathNet.Numerics.BigRational = fromBigInt 10I

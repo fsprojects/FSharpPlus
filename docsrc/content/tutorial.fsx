@@ -95,6 +95,9 @@ let parsedElement  = parseElement 2 ["0"; "1";"2"]
 But don't forget the above used operators are generic, so we can change the type of our functions and we get a different functionality for free:
 *)
 
+(*** hide ***)
+module E2 =
+
 let tryParseInt x : Choice<int, string> = 
     match tryParse x with 
     | Some x -> Choice1Of2 x
