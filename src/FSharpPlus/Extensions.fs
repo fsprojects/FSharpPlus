@@ -209,6 +209,286 @@ module String =
             |> normalize NormalizationForm.FormC
 
 
+
+/// Additional operations on IEnumerator
+module Enumerator =
+        
+    let inline invalidArgFmt (arg:string) (format:string) paramArray =    
+        let msg = String.Format (format,paramArray)
+        raise (new ArgumentException (msg,arg))
+    
+    let noReset()         = raise (new System.NotSupportedException("Reset is not supported on this enumerator."))
+    let notStarted()      = raise (new System.InvalidOperationException("Enumeration has not started. Call MoveNext."))
+    let alreadyFinished() = raise (new System.InvalidOperationException("Enumeration already finished."))
+    let check started = if not started then notStarted()
+    let dispose (r : System.IDisposable) = r.Dispose()
+    
+    open System.Collections
+    open System.Collections.Generic
+    
+    /// A concrete implementation of an enumerator that returns no values
+    [<Sealed>]
+    type EmptyEnumerator<'T>() =
+        let mutable started = false
+        interface IEnumerator<'T> with
+            member x.Current =
+                check started
+                (alreadyFinished() : 'T)
+    
+        interface System.Collections.IEnumerator with
+            member x.Current =
+                check started
+                (alreadyFinished() : obj)
+            member x.MoveNext() =
+                if not started then started <- true
+                false
+            member x.Reset() = noReset()
+        interface System.IDisposable with
+            member x.Dispose() = ()
+              
+    let Empty<'T> () = (new EmptyEnumerator<'T>() :> IEnumerator<'T>)
+    
+    let rec tryItem index (e : IEnumerator<'T>) =
+        if not (e.MoveNext()) then None
+        elif index = 0 then Some(e.Current)
+        else tryItem (index-1) e
+    
+    let rec nth index (e : IEnumerator<'T>) =
+        if not (e.MoveNext()) then
+            let shortBy = index + 1
+            invalidArgFmt "index"
+                "{0}\nseq was short by {1} {2}"
+                [|"The input sequence has an insufficient number of elements."; shortBy; (if shortBy = 1 then "element" else "elements")|]
+        if index = 0 then e.Current
+        else nth (index-1) e
+    
+    [<NoEquality; NoComparison>]
+    type MapEnumeratorState =
+        | NotStarted
+        | InProcess
+        | Finished
+    
+    [<AbstractClass>]
+    type MapEnumerator<'T> () =
+        let mutable state = NotStarted
+        [<DefaultValue(false)>]
+        val mutable private curr : 'T
+    
+        member this.GetCurrent () =
+            match state with
+            | NotStarted -> notStarted()
+            | Finished   -> alreadyFinished()
+            | InProcess  -> ()
+            this.curr
+    
+        abstract DoMoveNext : byref<'T> -> bool
+        abstract Dispose : unit -> unit
+    
+        interface IEnumerator<'T> with
+            member this.Current = this.GetCurrent()
+    
+        interface IEnumerator with
+            member this.Current = box(this.GetCurrent())
+            member this.MoveNext () =
+                state <- InProcess
+                if this.DoMoveNext(&this.curr) then
+                    true
+                else
+                    state <- Finished
+                    false
+            member this.Reset() = noReset()
+        interface System.IDisposable with
+            member this.Dispose() = this.Dispose()
+    
+    let map f (e : IEnumerator<_>) : IEnumerator<_> =
+        upcast
+            { new MapEnumerator<_>() with
+                  member this.DoMoveNext (curr : byref<_>) =
+                      if e.MoveNext() then
+                          curr <- (f e.Current)
+                          true
+                      else
+                          false
+                  member this.Dispose() = e.Dispose()
+            }
+    
+    let mapi f (e : IEnumerator<_>) : IEnumerator<_> =
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(f)
+        let i = ref (-1)
+        upcast
+            {  new MapEnumerator<_>() with
+                   member this.DoMoveNext curr =
+                      i := !i + 1
+                      if e.MoveNext() then
+                         curr <- f.Invoke(!i, e.Current)
+                         true
+                      else
+                         false
+                   member this.Dispose() = e.Dispose()
+            }
+    
+    let map2 f (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) : IEnumerator<_>=
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(f)
+        upcast
+            {  new MapEnumerator<_>() with
+                   member this.DoMoveNext curr =
+                      let n1 = e1.MoveNext()
+                      let n2 = e2.MoveNext()
+                      if n1 && n2 then
+                         curr <- f.Invoke(e1.Current, e2.Current)
+                         true
+                      else
+                         false
+                   member this.Dispose() =
+                      try
+                          e1.Dispose()
+                      finally
+                          e2.Dispose()
+            }
+    
+    let mapi2 f (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) : IEnumerator<_> =
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt(f)
+        let i = ref (-1)
+        upcast
+            {  new MapEnumerator<_>() with
+                   member this.DoMoveNext curr =
+                      i := !i + 1
+                      if (e1.MoveNext() && e2.MoveNext()) then
+                         curr <- f.Invoke(!i, e1.Current, e2.Current)
+                         true
+                      else
+                         false
+                   member this.Dispose() =
+                      try
+                          e1.Dispose()
+                      finally
+                          e2.Dispose()
+            }
+    
+    let map3 f (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) (e3 : IEnumerator<_>) : IEnumerator<_> =
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt(f)
+        upcast
+            {  new MapEnumerator<_>() with
+                   member this.DoMoveNext curr =
+                      let n1 = e1.MoveNext()
+                      let n2 = e2.MoveNext()
+                      let n3 = e3.MoveNext()
+                   
+                      if n1 && n2 && n3 then
+                         curr <- f.Invoke(e1.Current, e2.Current, e3.Current)
+                         true
+                      else
+                         false
+                   member this.Dispose() =
+                      try
+                          e1.Dispose()
+                      finally
+                          try
+                              e2.Dispose()
+                          finally
+                              e3.Dispose()
+          }
+    
+    let choose f (e : IEnumerator<'T>) =
+        let started = ref false
+        let curr = ref None
+        let get() =  check !started; (match !curr with None -> alreadyFinished() | Some x -> x)
+        { new IEnumerator<'U> with
+              member x.Current = get()
+          interface IEnumerator with
+              member x.Current = box (get())
+              member x.MoveNext() =
+                  if not !started then started := true
+                  curr := None
+                  while ((!curr).IsNone && e.MoveNext()) do
+                      curr := f e.Current
+                  Option.isSome !curr
+              member x.Reset() = noReset()
+          interface System.IDisposable with
+              member x.Dispose() = e.Dispose()  }
+    
+    let filter f (e : IEnumerator<'T>) =
+        let started = ref false
+        let this =
+            { new IEnumerator<'T> with
+                  member x.Current = check !started; e.Current
+              interface IEnumerator with
+                  member x.Current = check !started; box e.Current
+                  member x.MoveNext() =
+                      let rec next() =
+                          if not !started then started := true
+                          e.MoveNext() && (f  e.Current || next())
+                      next()
+                  member x.Reset() = noReset()
+              interface System.IDisposable with
+                  member x.Dispose() = e.Dispose()  }
+        this
+    
+    let unfold f x : IEnumerator<_> =
+        let state = ref x
+        upcast
+            {  new MapEnumerator<_>() with
+                  member this.DoMoveNext curr =
+                      match f !state with
+                      |   None -> false
+                      |   Some(r,s) ->
+                              curr <- r
+                              state := s
+                              true
+                  member this.Dispose() = ()
+            }
+    
+    let upto lastOption f =
+        match lastOption with
+        | Some b when b < 0 -> Empty()    // a request for -ve length returns empty sequence
+        | _ ->
+            let unstarted   = -1  // index value means unstarted (and no valid index)
+            let completed   = -2  // index value means completed (and no valid index)
+            let unreachable = -3  // index is unreachable from 0,1,2,3,...
+            let finalIndex  = match lastOption with
+                              | Some b -> b             // here b>=0, a valid end value.
+                              | None   -> unreachable   // run "forever", well as far as Int32.MaxValue since indexing with a bounded type.
+            // The Current value for a valid index is "f i".
+            // Lazy<_> values are used as caches, to store either the result or an exception if thrown.
+            // These "Lazy<_>" caches are created only on the first call to current and forced immediately.
+            // The lazy creation of the cache nodes means enumerations that skip many Current values are not delayed by GC.
+            // For example, the full enumeration of Seq.initInfinite in the tests.
+            // state
+            let index   = ref unstarted
+            // a Lazy node to cache the result/exception
+            let current = ref (Unchecked.defaultof<_>)
+            let setIndex i = index := i; current := (Unchecked.defaultof<_>) // cache node unprimed, initialised on demand.
+            let getCurrent() =
+                if !index = unstarted then notStarted()
+                if !index = completed then alreadyFinished()
+                match box !current with
+                | null -> current := Lazy<_>.Create(fun () -> f !index)
+                | _ ->  ()
+                // forced or re-forced immediately.
+                (!current).Force()
+            { new IEnumerator<'U> with
+                  member x.Current = getCurrent()
+              interface IEnumerator with
+                  member x.Current = box (getCurrent())
+                  member x.MoveNext() =
+                      if !index = completed then
+                          false
+                      elif !index = unstarted then
+                          setIndex 0
+                          true
+                      else (
+                          if !index = System.Int32.MaxValue then raise <| System.InvalidOperationException ("Enumeration based on System.Int32 exceeded System.Int32.MaxValue.")
+                          if !index = finalIndex then
+                              false
+                          else
+                              setIndex (!index + 1)
+                              true
+                      )
+                  member self.Reset() = noReset()
+              interface System.IDisposable with
+                  member x.Dispose() = () }
+
+
 /// Module containing F#+ Extension Methods  
 module Extensions =
 
