@@ -247,6 +247,8 @@ module Enumerator =
             member x.Dispose() = ()
               
     let Empty<'T> () = (new EmptyEnumerator<'T>() :> IEnumerator<'T>)
+
+    let singleton x = (Seq.singleton x).GetEnumerator()
     
     let rec tryItem index (e : IEnumerator<'T>) =
         if not (e.MoveNext()) then None
@@ -487,6 +489,40 @@ module Enumerator =
                   member self.Reset() = noReset()
               interface System.IDisposable with
                   member x.Dispose() = () }
+
+    let zip (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) : IEnumerator<_>=
+        upcast
+            {  new MapEnumerator<_>() with
+                   member this.DoMoveNext curr =
+                      let n1 = e1.MoveNext()
+                      let n2 = e2.MoveNext()
+                      if n1 && n2 then curr <- (e1.Current, e2.Current); true
+                      else false
+                   member this.Dispose() =
+                      try
+                          e1.Dispose()
+                      finally
+                          e2.Dispose()
+            }
+
+    let zip3 (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) (e3 : IEnumerator<_>) : IEnumerator<_> =
+        upcast
+            {  new MapEnumerator<_>() with
+                   member this.DoMoveNext curr =
+                      let n1 = e1.MoveNext()
+                      let n2 = e2.MoveNext()
+                      let n3 = e3.MoveNext()
+                      if n1 && n2 && n3 then curr <- (e1.Current, e2.Current, e3.Current); true
+                      else false
+                   member this.Dispose() =
+                      try
+                          e1.Dispose()
+                      finally
+                          try
+                              e2.Dispose()
+                          finally
+                              e3.Dispose()
+          }
 
 
 /// Module containing F#+ Extension Methods  
