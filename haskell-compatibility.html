@@ -36,9 +36,227 @@
 <h1><a name="Haskell-Compatibility" class="anchor" href="#Haskell-Compatibility">Haskell Compatibility</a></h1>
 <ul>
 <li>This module helps to run Haskell fragments or to port code from/to Haskell.</li>
-<li>By opening this module many F# and F#+ get shadowed</li>
+<li>By opening this module many F# and F#+ operators get shadowed.</li>
 </ul>
 <p>Here's a table listing some commeon operators/functions:</p>
+<table>
+<thead>
+<tr class="header">
+<th><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">  <span class="i">Operation</span>
+</code></pre></td>
+</tr>
+</table></th>
+<th><p>F-Sharp (Plus)</p></th>
+<th><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">  <span class="i">H</span><span class="o">-</span><span class="i">Sharp</span>
+</code></pre></td>
+</tr>
+</table></th>
+<th><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">  <span class="i">Haskell</span>
+</code></pre></td>
+</tr>
+</table></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>List.append</p></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">     <span class="o">@</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="o">++</span>
+</code></pre></td>
+</tr>
+</table></td>
+</tr>
+<tr class="even">
+<td><p>Function composition</p></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">   <span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">g</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">  <span class="i">f</span> <span class="o">.</span> (<span class="i">g</span>)
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">   <span class="i">f</span> <span class="o">.</span> <span class="i">g</span>
+</code></pre></td>
+</tr>
+</table></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">     <span class="o">=</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="o">==</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="o">==</span>
+</code></pre></td>
+</tr>
+</table></td>
+</tr>
+<tr class="even">
+<td></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">     <span class="o">&lt;|</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="o">$</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="o">$</span>
+</code></pre></td>
+</tr>
+</table></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">     <span class="o">&lt;&gt;</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="o">=/</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="o">/=</span>
+</code></pre></td>
+</tr>
+</table></td>
+</tr>
+<tr class="even">
+<td><p>flip</p></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">     <span class="o">/&gt;</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><p>apply function to
+a value</p></td>
+<td><table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">  <span class="o">&lt;/</span> <span class="k">or</span> <span class="o">|&gt;</span>
+</code></pre></td>
+</tr>
+</table></td>
+<td><p>not available
+in Haskell</p></td>
+<td><p>not available
+in Haskell</p></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>|                                        Functors                                     |
++----------------------+--------------------+--------------------+--------------------+
+| map                  |     <!> or <<|     |     <!> or fmap    |    <$> or fmap     |
++----------------------+--------------------+--------------------+--------------------+
+| map with             |                    |                    |                    |
+| interchanged         |        |&gt;&gt;         |                    |                    |
+| arguments            |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+|                      |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+|                                        Monoids                                      |
++----------------------+--------------------+--------------------+--------------------+
+| zero element         |        zero        |       mempty       |       mempty       |
++----------------------+--------------------+--------------------+--------------------+
+| append               |     ++ or plus     |       mappen       |       mappend      |
++----------------------+--------------------+--------------------+--------------------+
+|                      |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+|                                 Applicative functors                                |
++----------------------+--------------------+--------------------+--------------------+
+| apply (combine)      |        <*>         |        <*>         |       <*>          |
++----------------------+--------------------+--------------------+--------------------+
+| Sequence actions     |                    |                    |                    |
+| and discard values   |        <em>&gt;          |        </em>&gt;          |       <em>&gt;           |
+| of first argument    |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+| Sequence actions     |                    |                    |                    |
+| and discard values   |        &lt;</em>          |        <*          |       <*           |
+| of second argument   |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+| A variant of <*>     |                    |                    |                    |
+| with the arguments   |        <**>        |        <**>        |        <**>        |
+| reversed.            |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+| Lift a value.        |       result       |        pure'       |        pure        |
++----------------------+--------------------+--------------------+--------------------+
+|                      |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+|                                      Alternatives                                   |
++----------------------+--------------------+--------------------+--------------------+
+| binary operation     |        <|>         |        <|>         |        <|>         |
++----------------------+--------------------+--------------------+--------------------+
+|                      |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+|                                         Monads                                      |
++----------------------+--------------------+--------------------+--------------------+
+| Bind sequentially    |                    |                    |                    |
+| compose two actions, |                    |                    |                    |
+| passing any value    |        &gt;&gt;=         |        &gt;&gt;=         |        &gt;&gt;=         |
+| produced by the      |                    |                    |                    |
+| first as an argument |                    |                    |                    |
+| to the second.       |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+
+| Bind with            |                    |                    |                    |
+| interchanged         |        =&lt;&lt;         |        =&lt;&lt;         |        =&lt;&lt;         |
+| arguments.           |                    |                    |                    |
++----------------------+--------------------+--------------------+--------------------+</p>
+<h1><a name="Examples" class="anchor" href="#Examples">Examples</a></h1>
+<p>You may run this script step-by-step.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -116,84 +334,98 @@
 <span class="l">75: </span>
 <span class="l">76: </span>
 <span class="l">77: </span>
+<span class="l">78: </span>
+<span class="l">79: </span>
+<span class="l">80: </span>
+<span class="l">81: </span>
+<span class="l">82: </span>
+<span class="l">83: </span>
+<span class="l">84: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|      <span class="i">Operation</span>       |   <span class="i">F</span><span class="o">-</span><span class="i">Sharp</span> (<span class="i">Plus</span>)   |      <span class="i">H</span><span class="o">-</span><span class="i">Sharp</span>       |      <span class="i">Haskell</span>       |
-<span class="o">+======================+====================+====================+====================+</span>
-| <span class="i">List</span><span class="o">.</span><span class="i">append</span>          |         <span class="o">@</span>          |                    |        <span class="o">++</span>          |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">Function</span> <span class="i">composition</span> |       <span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">g</span>       |      <span class="i">f</span> <span class="o">.</span> (<span class="i">g</span>)       |       <span class="i">f</span> <span class="o">.</span> <span class="i">g</span>        |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |         <span class="o">=</span>          |        <span class="o">==</span>          |        <span class="o">==</span>          |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |         <span class="o">&lt;|</span>         |        <span class="o">$</span>           |        <span class="o">$</span>           |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |         <span class="o">&lt;&gt;</span>         |        <span class="o">=/</span>          |        <span class="o">/=</span>          |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">flip</span>                 |         <span class="o">/&gt;</span>         |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">apply</span> <span class="k">function</span> <span class="k">to</span>    |      <span class="o">&lt;/</span> <span class="k">or</span> <span class="o">|&gt;</span>      |   <span class="i">not</span> <span class="i">available</span>    |  <span class="i">not</span> <span class="i">available</span>     | 
-| <span class="i">a</span> <span class="i">value</span>              |                    |     <span class="k">in</span> <span class="i">Haskell</span>     |    <span class="k">in</span> <span class="i">Haskell</span>      |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                                        <span class="i">Functors</span>                                     |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">map</span>                  |     <span class="o">&lt;!&gt;</span> <span class="k">or</span> <span class="o">&lt;&lt;|</span>     |     <span class="o">&lt;!&gt;</span> <span class="k">or</span> <span class="i">fmap</span>    |    <span class="o">&lt;$&gt;</span> <span class="k">or</span> <span class="i">fmap</span>     |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">map</span> <span class="k">with</span>             |                    |                    |                    |
-| <span class="i">interchanged</span>         |        <span class="o">|&gt;&gt;</span>         |                    |                    |
-| <span class="i">arguments</span>            |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                                        <span class="i">Monoids</span>                                      |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">zero</span> <span class="i">element</span>         |        <span class="i">zero</span>        |       <span class="i">mempty</span>       |       <span class="i">mempty</span>       |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">append</span>               |     <span class="o">++</span> <span class="k">or</span> <span class="i">plus</span>     |       <span class="i">mappen</span>       |       <span class="i">mappend</span>      |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                                 <span class="i">Applicative</span> <span class="i">functors</span>                                |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">apply</span> (<span class="i">combine</span>)      |        <span class="o">&lt;*&gt;</span>         |        <span class="o">&lt;*&gt;</span>         |       <span class="o">&lt;*&gt;</span>          |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">Sequence</span> <span class="i">actions</span>     |                    |                    |                    |
-| <span class="k">and</span> <span class="i">discard</span> <span class="i">values</span>   |        <span class="o">*&gt;</span>          |        <span class="o">*&gt;</span>          |       <span class="o">*&gt;</span>           |
-| <span class="k">of</span> <span class="i">first</span> <span class="i">argument</span>    |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">Sequence</span> <span class="i">actions</span>     |                    |                    |                    |
-| <span class="k">and</span> <span class="i">discard</span> <span class="i">values</span>   |        <span class="o">&lt;*</span>          |        <span class="o">&lt;*</span>          |       <span class="o">&lt;*</span>           |
-| <span class="k">of</span> <span class="i">second</span> <span class="i">argument</span>   |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">A</span> <span class="i">variant</span> <span class="k">of</span> <span class="o">&lt;*&gt;</span>     |                    |                    |                    |
-| <span class="k">with</span> <span class="i">the</span> <span class="i">arguments</span>   |        <span class="o">&lt;**&gt;</span>        |        <span class="o">&lt;**&gt;</span>        |        <span class="o">&lt;**&gt;</span>        |
-| <span class="i">reversed</span><span class="o">.</span>            |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">Lift</span> <span class="i">a</span> <span class="i">value</span><span class="o">.</span>        |       <span class="i">result</span>       |        <span class="i">pure&#39;</span>       |        <span class="i">pure</span>        |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                                      <span class="i">Alternatives</span>                                   |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">binary</span> <span class="i">operation</span>     |        <span class="o">&lt;|&gt;</span>         |        <span class="o">&lt;|&gt;</span>         |        <span class="o">&lt;|&gt;</span>         |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                      |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-|                                         <span class="i">Monads</span>                                      |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">Bind</span> <span class="i">sequentially</span>    |                    |                    |                    |
-| <span class="i">compose</span> <span class="i">two</span> <span class="i">actions</span>, |                    |                    |                    |
-| <span class="i">passing</span> <span class="i">any</span> <span class="i">value</span>    |        <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span>         |        <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span>         |        <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span>         |
-| <span class="i">produced</span> <span class="i">by</span> <span class="i">the</span>      |                    |                    |                    |
-| <span class="i">first</span> <span class="k">as</span> <span class="i">an</span> <span class="i">argument</span> |                    |                    |                    |
-| <span class="k">to</span> <span class="i">the</span> <span class="i">second</span><span class="o">.</span>       |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
-| <span class="i">Bind</span> <span class="k">with</span>            |                    |                    |                    |
-| <span class="i">interchanged</span>         |        <span class="o">=&lt;&lt;</span>         |        <span class="o">=&lt;&lt;</span>         |        <span class="o">=&lt;&lt;</span>         |
-| <span class="i">arguments</span><span class="o">.</span>           |                    |                    |                    |
-<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Compatibility</span><span class="o">.</span><span class="i">Haskell</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Data</span>
+
+<span class="prep">#nowarn</span> <span class="s">&quot;62&quot;</span>
+
+
+
+
+
+<span class="c">// Operators</span>
+
+<span class="k">let</span> <span class="i">res9</span> <span class="o">=</span> ((<span class="o">+</span>) <span class="n">5</span>) <span class="o">$</span> <span class="n">4</span>
+<span class="k">let</span> <span class="i">res10</span> <span class="o">=</span> <span class="i">filter</span> ((<span class="o">=/</span>) <span class="n">9</span>) ([<span class="n">9</span>] <span class="o">++</span> [<span class="n">10</span>])
+<span class="k">let</span> <span class="i">halfThenSqrt</span> <span class="o">=</span> <span class="i">sqrt</span> <span class="o">.</span> (<span class="i">flip</span> (<span class="o">/</span>) <span class="n">2.0</span>) 
+
+
+<span class="c">// IO</span>
+
+<span class="k">let</span> <span class="i">main</span> <span class="o">=</span> <span class="i">print</span> (<span class="i">halfThenSqrt</span> <span class="n">32.0</span>)
+<span class="i">runIO</span> <span class="i">main</span>                                                  <span class="c">// prints 4.0</span>
+<span class="k">let</span> <span class="i">get3strings</span>  <span class="o">=</span> <span class="i">sequenceA</span> [<span class="i">getLine</span>;<span class="i">getLine</span>;<span class="i">getLine</span>]      <span class="c">// try runIO get3strings</span>
+
+
+<span class="c">// List</span>
+
+<span class="k">let</span> <span class="i">lstOf20Elements</span> <span class="o">=</span> <span class="i">map</span> ((<span class="o">+</span>) <span class="n">100</span>) (<span class="i">take</span> <span class="n">20</span> (<span class="i">cycle</span> [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>]))
+
+
+<span class="c">// Applicatives</span>
+
+<span class="k">let</span> <span class="i">just3</span> <span class="o">:</span><span class="i">Maybe</span><span class="o">&lt;</span>_<span class="o">&gt;</span> <span class="o">=</span> <span class="i">return&#39;</span> <span class="n">3</span>
+<span class="k">let</span> <span class="i">just4</span>           <span class="o">=</span> <span class="i">Just</span> <span class="n">4</span>
+<span class="k">let</span> <span class="i">just7</span> <span class="o">=</span> <span class="i">Just</span> (<span class="o">+</span>) <span class="o">&lt;*&gt;</span> <span class="i">just3</span> <span class="o">&lt;*&gt;</span> <span class="i">just4</span>
+<span class="k">let</span> <span class="i">lst1625</span> <span class="o">=</span>  (<span class="o">+</span>) <span class="o">&lt;!&gt;</span> [<span class="n">11</span>;<span class="n">20</span>] <span class="o">&lt;*&gt;</span> [<span class="n">5</span>]
+
+
+<span class="c">// Monoids</span>
+
+<span class="k">let</span> <span class="i">res9823</span> <span class="o">=</span> <span class="i">mconcat</span> (<span class="i">fmap</span> <span class="i">Dual</span> [<span class="i">mempty</span>();<span class="s">&quot;3&quot;</span>;<span class="s">&quot;2&quot;</span>;<span class="s">&quot;8&quot;</span>;<span class="s">&quot;9&quot;</span>])    <span class="c">// Dual &quot;9823&quot;</span>
+<span class="k">let</span> <span class="i">resLtDualGt</span><span class="o">=</span> <span class="i">mappend</span>  (<span class="i">LT</span>, <span class="i">Dual</span> <span class="i">GT</span>) (<span class="i">mempty</span>())              <span class="c">// (LT, Dual GT)</span>
+
+
+<span class="c">// Monad</span>
+
+<span class="c">// F#                           // Haskell</span>
+<span class="k">let</span> <span class="i">result</span> <span class="o">=</span> 
+    <span class="i">do&#39;</span> {                       <span class="c">// do {</span>
+        <span class="k">let!</span> <span class="i">x1</span> <span class="o">=</span> [ <span class="n">1</span>;  <span class="n">2</span>]      <span class="c">//   x1 &lt;- [ 1;  2]</span>
+        <span class="k">let!</span> <span class="i">x2</span> <span class="o">=</span> [<span class="n">10</span>; <span class="n">20</span>]      <span class="c">//   x2 &lt;- [10; 20]</span>
+        <span class="k">return</span> ((<span class="o">+</span>) <span class="i">x1</span> <span class="i">x2</span>) }    <span class="c">//   return ((+) x1 x2) }</span>
+
+<span class="c">// desugared version</span>
+<span class="k">let</span> <span class="i">lst11n21n12n22</span> <span class="o">=</span> [<span class="n">1</span>; <span class="n">2</span>]  <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> (<span class="k">fun</span> <span class="i">x1</span> <span class="k">-&gt;</span> [<span class="n">10</span>; <span class="n">20</span>] <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> (<span class="k">fun</span> <span class="i">x2</span> <span class="k">-&gt;</span>  <span class="i">return&#39;</span> ((<span class="o">+</span>) <span class="i">x1</span> <span class="i">x2</span>)))
+
+<span class="k">let</span> <span class="i">just2</span> <span class="o">=</span> <span class="i">mfilter</span> ((<span class="o">==</span>) <span class="n">2</span>) (<span class="i">Just</span> <span class="n">2</span>)
+
+<span class="k">let</span> <span class="i">someListOf42</span> <span class="o">=</span> <span class="i">replicateM</span> <span class="n">5</span> (<span class="i">Some</span> <span class="n">42</span>)
+
+
+<span class="c">// Arrow</span>
+
+<span class="k">let</span> <span class="i">res3n6n9</span> <span class="o">=</span> (<span class="i">arr</span> (<span class="k">fun</span> <span class="i">y</span> <span class="k">-&gt;</span> [<span class="i">y</span>; <span class="i">y</span> <span class="o">*</span> <span class="n">2</span> ; <span class="i">y</span> <span class="o">*</span> <span class="n">3</span>])) <span class="n">3</span>
+<span class="k">let</span> <span class="i">resSome2n4n6</span><span class="o">:</span><span class="i">Maybe</span><span class="o">&lt;</span>_<span class="o">&gt;</span> <span class="o">=</span> <span class="i">runKleisli</span> (<span class="i">arr</span> (<span class="k">fun</span> <span class="i">y</span> <span class="k">-&gt;</span> [<span class="i">y</span>; <span class="i">y</span> <span class="o">*</span> <span class="n">2</span> ; <span class="i">y</span> <span class="o">*</span> <span class="n">3</span>])) <span class="n">2</span>
+<span class="k">let</span> <span class="i">res500n19</span> <span class="o">=</span> (<span class="o">(*)</span> <span class="n">100</span>) <span class="o">***</span> ((<span class="o">+</span>) <span class="n">9</span>)  <span class="o">$</span> (<span class="n">5</span>, <span class="n">10</span>)
+<span class="k">let</span> <span class="i">res500n14</span> <span class="o">=</span> (<span class="o">(*)</span> <span class="n">100</span>) <span class="o">&amp;&amp;&amp;</span> ((<span class="o">+</span>) <span class="n">9</span>)  <span class="o">$</span> <span class="n">5</span>
+<span class="k">let</span> <span class="i">resLeft7</span>  <span class="o">=</span> ((<span class="o">+</span>) <span class="n">2</span>)   <span class="o">+++</span> (<span class="o">(*)</span> <span class="n">10</span>) <span class="o">$</span> <span class="i">Left</span>  <span class="n">5</span>
+
+
+<span class="c">// Monad transformers</span>
+
+<span class="c">// from http://en.wikibooks.org/wiki/Haskell/Continuation_passing_style</span>
+<span class="c">// askString :: (String -&gt; ContT () IO String) -&gt; ContT () IO String</span>
+<span class="k">let</span> <span class="i">askString</span> <span class="i">next</span> <span class="o">=</span> <span class="i">do&#39;</span> {
+  <span class="k">do!</span> (<span class="i">liftIO</span> <span class="o">$</span> <span class="i">putStrLn</span> <span class="s">&quot;Please enter a string&quot;</span>) 
+  <span class="k">let!</span> <span class="i">s</span> <span class="o">=</span> <span class="i">liftIO</span> <span class="o">$</span> <span class="i">getLine</span>
+  <span class="k">return!</span> <span class="i">next</span> <span class="i">s</span>}
+
+<span class="c">// reportResult :: String -&gt; IO ()</span>
+<span class="k">let</span> <span class="i">reportResult</span> <span class="i">s</span> <span class="o">=</span> <span class="i">do&#39;</span> {
+  <span class="k">return!</span> <span class="i">putStrLn</span> (<span class="s">&quot;You entered: &quot;</span> <span class="o">+</span> <span class="i">s</span>) }
+  
+<span class="k">let</span> <span class="i">mainAction</span> <span class="o">=</span> <span class="i">runContT</span> (<span class="i">callCC</span> <span class="i">askString</span>) <span class="i">reportResult</span>       <span class="c">//try -&gt; runIO mainAction</span>
 </code></pre></td>
 </tr>
 </table>
