@@ -50,11 +50,29 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '745', 745)" onmouseover="showTip(event, '745', 745)">
+          <code onmouseout="hideTip(event, '775', 775)" onmouseover="showTip(event, '775', 775)">
             Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="745">
+          <div class="tip" id="775">
             <strong>Signature:</strong> (s:&#39;T array * _mthd:Duplicate) -&gt; &#39;T [] []<br />
+                          <strong>Type parameters:</strong> 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L448-448" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '776', 776)" onmouseover="showTip(event, '776', 776)">
+            Duplicate(s, _mthd)
+          </code>
+          <div class="tip" id="776">
+            <strong>Signature:</strong> (s:&#39;T list * _mthd:Duplicate) -&gt; &#39;T list list<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
@@ -68,15 +86,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '746', 746)" onmouseover="showTip(event, '746', 746)">
-            Duplicate(s, _mthd)
+          <code onmouseout="hideTip(event, '777', 777)" onmouseover="showTip(event, '777', 777)">
+            Duplicate(f, _mthd)
           </code>
-          <div class="tip" id="746">
-            <strong>Signature:</strong> (s:&#39;T list * _mthd:Duplicate) -&gt; &#39;T list list<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="777">
+            <strong>Signature:</strong> (f:(^Monoid -&gt; &#39;T) * _mthd:Duplicate) -&gt; ^Monoid -&gt; ^Monoid -&gt; &#39;T<br />
+                          <strong>Type parameters:</strong> ^Monoid, 'T          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L446-446" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L444-444" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -86,12 +104,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '747', 747)" onmouseover="showTip(event, '747', 747)">
-            Duplicate(f, _mthd)
+          <code onmouseout="hideTip(event, '778', 778)" onmouseover="showTip(event, '778', 778)">
+            Duplicate(arg1, _mthd)
           </code>
-          <div class="tip" id="747">
-            <strong>Signature:</strong> (f:(^Monoid -&gt; &#39;T) * _mthd:Duplicate) -&gt; ^Monoid -&gt; ^Monoid -&gt; &#39;T<br />
-                          <strong>Type parameters:</strong> ^Monoid, 'T          </div>
+          <div class="tip" id="778">
+            <strong>Signature:</strong> ((&#39;W * &#39;T) * _mthd:Duplicate) -&gt; &#39;W * (&#39;W * &#39;T)<br />
+                          <strong>Type parameters:</strong> 'W, 'T          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L443-443" class="github-link">
@@ -104,12 +122,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '748', 748)" onmouseover="showTip(event, '748', 748)">
-            Duplicate(arg1, _mthd)
+          <code onmouseout="hideTip(event, '779', 779)" onmouseover="showTip(event, '779', 779)">
+            Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="748">
-            <strong>Signature:</strong> ((&#39;W * &#39;T) * _mthd:Duplicate) -&gt; &#39;W * (&#39;W * &#39;T)<br />
-                          <strong>Type parameters:</strong> 'W, 'T          </div>
+          <div class="tip" id="779">
+            <strong>Signature:</strong> (s:Id&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Id&lt;Id&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L442-442" class="github-link">
@@ -122,11 +140,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '749', 749)" onmouseover="showTip(event, '749', 749)">
+          <code onmouseout="hideTip(event, '780', 780)" onmouseover="showTip(event, '780', 780)">
             Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="749">
-            <strong>Signature:</strong> (s:Id&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Id&lt;Id&lt;&#39;T&gt;&gt;<br />
+          <div class="tip" id="780">
+            <strong>Signature:</strong> (s:Lazy&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Lazy&lt;Lazy&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
@@ -140,11 +158,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '750', 750)" onmouseover="showTip(event, '750', 750)">
+          <code onmouseout="hideTip(event, '781', 781)" onmouseover="showTip(event, '781', 781)">
             Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="750">
-            <strong>Signature:</strong> (s:Lazy&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Lazy&lt;Lazy&lt;&#39;T&gt;&gt;<br />
+          <div class="tip" id="781">
+            <strong>Signature:</strong> (s:Async&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
@@ -158,12 +176,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '751', 751)" onmouseover="showTip(event, '751', 751)">
-            Duplicate(s, _mthd)
+          <code onmouseout="hideTip(event, '782', 782)" onmouseover="showTip(event, '782', 782)">
+            Duplicate(x, _mthd)
           </code>
-          <div class="tip" id="751">
-            <strong>Signature:</strong> (s:Async&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="782">
+            <strong>Signature:</strong> (x:^Comonad&lt;&#39;T&gt; * _mthd:Default1) -&gt; ^Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Comonad<'T>, ^Comonad<'Comonad<'T>>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L439-439" class="github-link">
@@ -176,33 +194,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '752', 752)" onmouseover="showTip(event, '752', 752)">
-            Duplicate(x, _mthd)
-          </code>
-          <div class="tip" id="752">
-            <strong>Signature:</strong> (x:^Comonad&lt;&#39;T&gt; * _mthd:Default1) -&gt; ^Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Comonad<'T>, ^Comonad<'Comonad<'T>>          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L438-438" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '753', 753)" onmouseover="showTip(event, '753', 753)">
+          <code onmouseout="hideTip(event, '783', 783)" onmouseover="showTip(event, '783', 783)">
             Invoke(x)
           </code>
-          <div class="tip" id="753">
+          <div class="tip" id="783">
             <strong>Signature:</strong> x:^Comonad&lt;&#39;T&gt; -&gt; ^Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Comonad<'T>, ^Comonad<'Comonad<'T>>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L449-449" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L450-450" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

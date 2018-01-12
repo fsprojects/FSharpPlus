@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Haskell Compatibility
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="F#+ is a base library for F#."/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1><a name="Haskell-Compatibility" class="anchor" href="#Haskell-Compatibility">Haskell Compatibility</a></h1>
+<ul>
+<li>This module helps to run Haskell fragments or to port code from/to Haskell.</li>
+<li>By opening this module many F# and F#+ get shadowed</li>
+</ul>
+<p>Here's a table listing some commeon operators/functions:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
+<span class="l">54: </span>
+<span class="l">55: </span>
+<span class="l">56: </span>
+<span class="l">57: </span>
+<span class="l">58: </span>
+<span class="l">59: </span>
+<span class="l">60: </span>
+<span class="l">61: </span>
+<span class="l">62: </span>
+<span class="l">63: </span>
+<span class="l">64: </span>
+<span class="l">65: </span>
+<span class="l">66: </span>
+<span class="l">67: </span>
+<span class="l">68: </span>
+<span class="l">69: </span>
+<span class="l">70: </span>
+<span class="l">71: </span>
+<span class="l">72: </span>
+<span class="l">73: </span>
+<span class="l">74: </span>
+<span class="l">75: </span>
+<span class="l">76: </span>
+<span class="l">77: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|      <span class="i">Operation</span>       |   <span class="i">F</span><span class="o">-</span><span class="i">Sharp</span> (<span class="i">Plus</span>)   |      <span class="i">H</span><span class="o">-</span><span class="i">Sharp</span>       |      <span class="i">Haskell</span>       |
+<span class="o">+======================+====================+====================+====================+</span>
+| <span class="i">List</span><span class="o">.</span><span class="i">append</span>          |         <span class="o">@</span>          |                    |        <span class="o">++</span>          |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">Function</span> <span class="i">composition</span> |       <span class="i">f</span> <span class="o">&lt;&lt;</span> <span class="i">g</span>       |      <span class="i">f</span> <span class="o">.</span> (<span class="i">g</span>)       |       <span class="i">f</span> <span class="o">.</span> <span class="i">g</span>        |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |         <span class="o">=</span>          |        <span class="o">==</span>          |        <span class="o">==</span>          |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |         <span class="o">&lt;|</span>         |        <span class="o">$</span>           |        <span class="o">$</span>           |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |         <span class="o">&lt;&gt;</span>         |        <span class="o">=/</span>          |        <span class="o">/=</span>          |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">flip</span>                 |         <span class="o">/&gt;</span>         |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">apply</span> <span class="k">function</span> <span class="k">to</span>    |      <span class="o">&lt;/</span> <span class="k">or</span> <span class="o">|&gt;</span>      |   <span class="i">not</span> <span class="i">available</span>    |  <span class="i">not</span> <span class="i">available</span>     | 
+| <span class="i">a</span> <span class="i">value</span>              |                    |     <span class="k">in</span> <span class="i">Haskell</span>     |    <span class="k">in</span> <span class="i">Haskell</span>      |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                                        <span class="i">Functors</span>                                     |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">map</span>                  |     <span class="o">&lt;!&gt;</span> <span class="k">or</span> <span class="o">&lt;&lt;|</span>     |     <span class="o">&lt;!&gt;</span> <span class="k">or</span> <span class="i">fmap</span>    |    <span class="o">&lt;$&gt;</span> <span class="k">or</span> <span class="i">fmap</span>     |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">map</span> <span class="k">with</span>             |                    |                    |                    |
+| <span class="i">interchanged</span>         |        <span class="o">|&gt;&gt;</span>         |                    |                    |
+| <span class="i">arguments</span>            |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                                        <span class="i">Monoids</span>                                      |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">zero</span> <span class="i">element</span>         |        <span class="i">zero</span>        |       <span class="i">mempty</span>       |       <span class="i">mempty</span>       |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">append</span>               |     <span class="o">++</span> <span class="k">or</span> <span class="i">plus</span>     |       <span class="i">mappen</span>       |       <span class="i">mappend</span>      |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                                 <span class="i">Applicative</span> <span class="i">functors</span>                                |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">apply</span> (<span class="i">combine</span>)      |        <span class="o">&lt;*&gt;</span>         |        <span class="o">&lt;*&gt;</span>         |       <span class="o">&lt;*&gt;</span>          |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">Sequence</span> <span class="i">actions</span>     |                    |                    |                    |
+| <span class="k">and</span> <span class="i">discard</span> <span class="i">values</span>   |        <span class="o">*&gt;</span>          |        <span class="o">*&gt;</span>          |       <span class="o">*&gt;</span>           |
+| <span class="k">of</span> <span class="i">first</span> <span class="i">argument</span>    |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">Sequence</span> <span class="i">actions</span>     |                    |                    |                    |
+| <span class="k">and</span> <span class="i">discard</span> <span class="i">values</span>   |        <span class="o">&lt;*</span>          |        <span class="o">&lt;*</span>          |       <span class="o">&lt;*</span>           |
+| <span class="k">of</span> <span class="i">second</span> <span class="i">argument</span>   |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">A</span> <span class="i">variant</span> <span class="k">of</span> <span class="o">&lt;*&gt;</span>     |                    |                    |                    |
+| <span class="k">with</span> <span class="i">the</span> <span class="i">arguments</span>   |        <span class="o">&lt;**&gt;</span>        |        <span class="o">&lt;**&gt;</span>        |        <span class="o">&lt;**&gt;</span>        |
+| <span class="i">reversed</span><span class="o">.</span>            |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">Lift</span> <span class="i">a</span> <span class="i">value</span><span class="o">.</span>        |       <span class="i">result</span>       |        <span class="i">pure&#39;</span>       |        <span class="i">pure</span>        |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                                      <span class="i">Alternatives</span>                                   |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">binary</span> <span class="i">operation</span>     |        <span class="o">&lt;|&gt;</span>         |        <span class="o">&lt;|&gt;</span>         |        <span class="o">&lt;|&gt;</span>         |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                      |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+|                                         <span class="i">Monads</span>                                      |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">Bind</span> <span class="i">sequentially</span>    |                    |                    |                    |
+| <span class="i">compose</span> <span class="i">two</span> <span class="i">actions</span>, |                    |                    |                    |
+| <span class="i">passing</span> <span class="i">any</span> <span class="i">value</span>    |        <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span>         |        <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span>         |        <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span>         |
+| <span class="i">produced</span> <span class="i">by</span> <span class="i">the</span>      |                    |                    |                    |
+| <span class="i">first</span> <span class="k">as</span> <span class="i">an</span> <span class="i">argument</span> |                    |                    |                    |
+| <span class="k">to</span> <span class="i">the</span> <span class="i">second</span><span class="o">.</span>       |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+| <span class="i">Bind</span> <span class="k">with</span>            |                    |                    |                    |
+| <span class="i">interchanged</span>         |        <span class="o">=&lt;&lt;</span>         |        <span class="o">=&lt;&lt;</span>         |        <span class="o">=&lt;&lt;</span>         |
+| <span class="i">arguments</span><span class="o">.</span>           |                    |                    |                    |
+<span class="o">+----------------------+--------------------+--------------------+--------------------+</span>
+</code></pre></td>
+</tr>
+</table>
+
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

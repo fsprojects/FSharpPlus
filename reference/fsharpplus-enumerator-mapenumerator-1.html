@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>DeReference_op - FSharpPlus</title>
+    <title>MapEnumerator<'T> - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,31 +35,32 @@
 
 
 
-<h1>DeReference_op</h1>
+<h1>MapEnumerator<'T></h1>
 <p>
   <span>Namespace: FSharpPlus</span><br />
-  <span>Parent Module: <a href="fsharpplus-compatibility-haskell.html">Haskell</a></span>
+  <span>Parent Module: <a href="fsharpplus-enumerator.html">Enumerator</a></span>
 </p>
 <div class="xmldoc">
 </div>
-  <h3>Union Cases</h3>
+  <h3>Record Fields</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Union Case</td><td>Description</td></tr>
+      <tr><td>Record Field</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '369', 369)" onmouseover="showTip(event, '369', 369)">
-            DeReference_op
+          <code onmouseout="hideTip(event, '396', 396)" onmouseover="showTip(event, '396', 396)">
+            curr
           </code>
-          <div class="tip" id="369">
-            <strong>Signature:</strong> <br />
+          <div class="tip" id="396">
+            <strong>Signature:</strong> &#39;T<br />
+              <strong>Modifiers:</strong> mutable<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Compatibility.fs#L25-25" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L277-277" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -68,67 +69,93 @@
       </tr>
     </tbody>
   </table>
-  <h3>Static members</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '370', 370)" onmouseover="showTip(event, '370', 370)">
-            ( =&gt; )(DeReference_op, arg2)
+          <code onmouseout="hideTip(event, '397', 397)" onmouseover="showTip(event, '397', 397)">
+            new()
           </code>
-          <div class="tip" id="370">
-            <strong>Signature:</strong> (DeReference_op:DeReference_op * DeReference_op) -&gt; DeReference_op<br />
+          <div class="tip" id="397">
+            <strong>Signature:</strong> unit -&gt; MapEnumerator&lt;&#39;T&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Compatibility.fs#L28-28" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L274-274" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
-              <p>CompiledName: <code>op_EqualsGreater</code></p>
+              <p>CompiledName: <code>.ctor</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '398', 398)" onmouseover="showTip(event, '398', 398)">
+            Dispose()
+          </code>
+          <div class="tip" id="398">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L287-287" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '371', 371)" onmouseover="showTip(event, '371', 371)">
-            ( =&gt; )(DeReference_op, a)
+          <code onmouseout="hideTip(event, '399', 399)" onmouseover="showTip(event, '399', 399)">
+            DoMoveNext(arg1)
           </code>
-          <div class="tip" id="371">
-            <strong>Signature:</strong> (DeReference_op:DeReference_op * a:string) -&gt; char list<br />
+          <div class="tip" id="399">
+            <strong>Signature:</strong> byref&lt;&#39;T&gt; -&gt; bool<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Compatibility.fs#L27-27" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L286-286" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
-              <p>CompiledName: <code>op_EqualsGreater</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '372', 372)" onmouseover="showTip(event, '372', 372)">
-            ( =&gt; )(DeReference_op, a)
+          <code onmouseout="hideTip(event, '400', 400)" onmouseover="showTip(event, '400', 400)">
+            GetCurrent()
           </code>
-          <div class="tip" id="372">
-            <strong>Signature:</strong> (DeReference_op:DeReference_op * a:&#39;a ref) -&gt; &#39;a<br />
-                          <strong>Type parameters:</strong> 'a          </div>
+          <div class="tip" id="400">
+            <strong>Signature:</strong> unit -&gt; &#39;T<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Compatibility.fs#L26-26" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L279-279" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
-              <p>CompiledName: <code>op_EqualsGreater</code></p>
         </td>
       </tr>
     </tbody>

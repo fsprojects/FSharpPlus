@@ -50,12 +50,31 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '805', 805)" onmouseover="showTip(event, '805', 805)">
+          <code onmouseout="hideTip(event, '835', 835)" onmouseover="showTip(event, '835', 835)">
             ( ||| )(arg1, arg2, _output, _mthd)
           </code>
-          <div class="tip" id="805">
-            <strong>Signature:</strong> (&#39;ArrowChoice&lt;&#39;T,&#39;V&gt; * &#39;ArrowChoice&lt;&#39;U,&#39;V&gt; * _output:^t * _mthd:Default1) -&gt; &#39;?14530 -&gt; &#39;?14530<br />
-                          <strong>Type parameters:</strong> 'ArrowChoice<'T,'V>, 'ArrowChoice<'U,'V>, ^t, '?14530          </div>
+          <div class="tip" id="835">
+            <strong>Signature:</strong> (&#39;ArrowChoice&lt;&#39;T,&#39;V&gt; * &#39;ArrowChoice&lt;&#39;U,&#39;V&gt; * _output:^t * _mthd:Default1) -&gt; &#39;?14632 -&gt; &#39;?14632<br />
+                          <strong>Type parameters:</strong> 'ArrowChoice<'T,'V>, 'ArrowChoice<'U,'V>, ^t, '?14632          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L749-749" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>|||</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '836', 836)" onmouseover="showTip(event, '836', 836)">
+            ( ||| )(f, g, _output, _mthd)
+          </code>
+          <div class="tip" id="836">
+            <strong>Signature:</strong> (f:&#39;ArrowChoice&lt;&#39;T,&#39;V&gt; * g:&#39;ArrowChoice&lt;&#39;U,&#39;V&gt; * _output:^ArrowChoice&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt; * _mthd:Default1) -&gt; ^ArrowChoice&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt;<br />
+                          <strong>Type parameters:</strong> 'ArrowChoice<'T,'V>, 'ArrowChoice<'U,'V>, ^ArrowChoice<Choice<'U,'T>,'V>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L748-748" class="github-link">
@@ -69,15 +88,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '806', 806)" onmouseover="showTip(event, '806', 806)">
+          <code onmouseout="hideTip(event, '837', 837)" onmouseover="showTip(event, '837', 837)">
             ( ||| )(f, g, _output, _mthd)
           </code>
-          <div class="tip" id="806">
-            <strong>Signature:</strong> (f:&#39;ArrowChoice&lt;&#39;T,&#39;V&gt; * g:&#39;ArrowChoice&lt;&#39;U,&#39;V&gt; * _output:^ArrowChoice&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt; * _mthd:Default1) -&gt; ^ArrowChoice&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt;<br />
-                          <strong>Type parameters:</strong> 'ArrowChoice<'T,'V>, 'ArrowChoice<'U,'V>, ^ArrowChoice<Choice<'U,'T>,'V>          </div>
+          <div class="tip" id="837">
+            <strong>Signature:</strong> (f:Func&lt;&#39;T,&#39;V&gt; * g:Func&lt;&#39;U,&#39;V&gt; * _output:Func&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt; * _mthd:Fanin) -&gt; Func&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'V, 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L747-747" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L739-739" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -88,11 +107,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '807', 807)" onmouseover="showTip(event, '807', 807)">
+          <code onmouseout="hideTip(event, '838', 838)" onmouseover="showTip(event, '838', 838)">
             ( ||| )(f, g, _output, _mthd)
           </code>
-          <div class="tip" id="807">
-            <strong>Signature:</strong> (f:Func&lt;&#39;T,&#39;V&gt; * g:Func&lt;&#39;U,&#39;V&gt; * _output:Func&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt; * _mthd:Fanin) -&gt; Func&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt;<br />
+          <div class="tip" id="838">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;V) * g:(&#39;U -&gt; &#39;V) * _output:(Choice&lt;&#39;U,&#39;T&gt; -&gt; &#39;V) * _mthd:Fanin) -&gt; Choice&lt;&#39;U,&#39;T&gt; -&gt; &#39;V<br />
                           <strong>Type parameters:</strong> 'T, 'V, 'U          </div>
         </td>
         <td class="xmldoc">
@@ -107,34 +126,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '808', 808)" onmouseover="showTip(event, '808', 808)">
-            ( ||| )(f, g, _output, _mthd)
-          </code>
-          <div class="tip" id="808">
-            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;V) * g:(&#39;U -&gt; &#39;V) * _output:(Choice&lt;&#39;U,&#39;T&gt; -&gt; &#39;V) * _mthd:Fanin) -&gt; Choice&lt;&#39;U,&#39;T&gt; -&gt; &#39;V<br />
-                          <strong>Type parameters:</strong> 'T, 'V, 'U          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L737-737" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>|||</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '809', 809)" onmouseover="showTip(event, '809', 809)">
+          <code onmouseout="hideTip(event, '839', 839)" onmouseover="showTip(event, '839', 839)">
             Invoke(f g)
           </code>
-          <div class="tip" id="809">
+          <div class="tip" id="839">
             <strong>Signature:</strong> f:&#39;ArrowChoice&lt;&#39;T,&#39;V&gt; -&gt; g:&#39;ArrowChoice&lt;&#39;U,&#39;V&gt; -&gt; ^ArrowChoice&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt;<br />
                           <strong>Type parameters:</strong> 'ArrowChoice<'T,'V>, 'ArrowChoice<'U,'V>, ^ArrowChoice<Choice<'U,'T>,'V>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L740-740" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L741-741" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -144,15 +144,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '810', 810)" onmouseover="showTip(event, '810', 810)">
+          <code onmouseout="hideTip(event, '840', 840)" onmouseover="showTip(event, '840', 840)">
             InvokeOnInstance(f g)
           </code>
-          <div class="tip" id="810">
+          <div class="tip" id="840">
             <strong>Signature:</strong> f:&#39;ArrowChoice&lt;&#39;T,&#39;V&gt; -&gt; g:&#39;ArrowChoice&lt;&#39;U,&#39;V&gt; -&gt; ^ArrowChoice&lt;Choice&lt;&#39;U,&#39;T&gt;,&#39;V&gt;<br />
                           <strong>Type parameters:</strong> 'ArrowChoice<'T,'V>, 'ArrowChoice<'U,'V>, ^ArrowChoice<Choice<'U,'T>,'V>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L744-744" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L745-745" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

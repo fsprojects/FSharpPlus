@@ -40,14 +40,6 @@
 <li>It could be delayed or strict</li>
 <li>It can have embedded side-effects or act as a monad plus</li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-<span class="k">open</span> <span class="i">FSharpPlus</span>
-</code></pre></td>
-</tr>
-</table>
 <h1><a name="Examples" class="anchor" href="#Examples">Examples</a></h1>
 <p>You may run this script step-by-step.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
@@ -91,8 +83,13 @@
 <span class="l">39: </span>
 <span class="l">40: </span>
 <span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">lazyValue</span> <span class="o">=</span> <span class="i">monad</span> {
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+
+<span class="k">let</span> <span class="i">lazyValue</span> <span class="o">=</span> <span class="i">monad</span> {
     <span class="k">let!</span> <span class="i">a</span> <span class="o">=</span> <span class="k">lazy</span> (<span class="i">printfn</span> <span class="s">&quot;I&#39;m lazy&quot;</span>; <span class="n">2</span>)
     <span class="k">let!</span> <span class="i">b</span> <span class="o">=</span> <span class="k">lazy</span> (<span class="i">printfn</span> <span class="s">&quot;I&#39;m lazy too&quot;</span>; <span class="n">10</span>)
     <span class="k">return</span> <span class="i">a</span> <span class="o">+</span> <span class="i">b</span>}
@@ -114,8 +111,7 @@
 
 <span class="c">// val maybeWithSideFx : int option = Some 3</span>
 
-<span class="c">// effects.Clear()</span>
-<span class="c">// effects.Add</span>
+
 
 <span class="k">let</span> <span class="i">lst</span> <span class="o">=</span> [<span class="i">None</span>; <span class="i">None</span>; <span class="i">Some</span> <span class="n">2</span>; <span class="i">Some</span> <span class="n">4</span>; <span class="i">Some</span> <span class="n">10</span>; <span class="i">None</span>]
 
