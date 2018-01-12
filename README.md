@@ -13,7 +13,7 @@ It contains the most requested additions to the F# core library, including:
  - Generic and customizable [Computation Expressions](//gusty.github.io/FSharpPlus/computation-expressions.html).
  - A generic Math module.
  - A true polymorphic [Lens/Optics module](//gusty.github.io/FSharpPlus/tutorial.html#Lens).
- - A Haskell compatibility module.
+ - A [Haskell compatibility](//gusty.github.io/FSharpPlus/haskell-compatibility.html) module.
 
 Users of this library have the option to use their functions in different styles:
  - F# Standard module + function style: [module].[function] [arg]
