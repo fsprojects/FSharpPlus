@@ -89,6 +89,41 @@
 <li><code>Writer&lt;'Monoid,'T&gt;</code></li>
 </ul>
 <p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+
+<span class="c">// A non-empty list</span>
+<span class="k">let</span> <span class="i">lst</span>   <span class="o">=</span> {<span class="i">Head</span> <span class="o">=</span> <span class="n">1</span>; <span class="i">Tail</span> <span class="o">=</span> [<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>;<span class="n">5</span>]}
+
+<span class="c">// Get the head</span>
+<span class="k">let</span> <span class="i">elem1</span> <span class="o">=</span> <span class="i">extract</span>   <span class="i">lst</span>
+
+<span class="c">// Get ALL tails</span>
+<span class="k">let</span> <span class="i">tails</span> <span class="o">=</span> <span class="i">duplicate</span> <span class="i">lst</span>
+
+<span class="c">// This should return the original list</span>
+<span class="k">let</span> <span class="i">lst&#39;</span>  <span class="o">=</span> <span class="i">extend</span> <span class="i">extract</span> <span class="i">lst</span>
+</code></pre></td>
+</tr>
+</table>
 
 
         </div>

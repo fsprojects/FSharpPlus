@@ -119,6 +119,81 @@
 <p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 </li>
 </ul>
+<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+
+
+<span class="c">// Apply +4 to a list</span>
+<span class="k">let</span> <span class="i">lst5n6</span>  <span class="o">=</span> <span class="i">map</span> ((<span class="o">+</span>) <span class="n">4</span>) [ <span class="n">1</span>;<span class="n">2</span> ]
+
+<span class="c">// Apply +4 to an array</span>
+<span class="k">let</span> <span class="i">arr5n6</span>  <span class="o">=</span> <span class="i">map</span> ((<span class="o">+</span>) <span class="n">4</span>) [|<span class="n">1</span>;<span class="n">2</span>|]
+
+<span class="c">// I could have written this</span>
+<span class="k">let</span> <span class="i">arr5n6&#39;</span> <span class="o">=</span> (<span class="o">+</span>) <span class="o">&lt;!&gt;</span> [|<span class="n">4</span>|] <span class="o">&lt;*&gt;</span> [|<span class="n">1</span>;<span class="n">2</span>|]
+
+<span class="c">// Add two options</span>
+<span class="k">let</span> <span class="i">opt120</span>  <span class="o">=</span> (<span class="o">+</span>) <span class="o">&lt;!&gt;</span> <span class="i">Some</span> <span class="n">20</span> <span class="o">&lt;*&gt;</span> <span class="i">tryParse</span> <span class="s">&quot;100&quot;</span>
+
+
+<span class="c">// Another way to write applicative expressions</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Builders</span>
+
+<span class="k">let</span> <span class="i">opt121</span>  <span class="o">=</span> <span class="i">iI</span> (<span class="o">+</span>) (<span class="i">Some</span> <span class="n">21</span>) (<span class="i">tryParse</span> <span class="s">&quot;100&quot;</span>) <span class="i">Ii</span>
+<span class="k">let</span> <span class="i">opt122</span>  <span class="o">=</span> <span class="i">iI</span> <span class="i">tryDiv</span> (<span class="i">tryParse</span> <span class="s">&quot;488&quot;</span>) (<span class="i">trySqrt</span> <span class="n">16</span>) <span class="i">Ji</span>
+
+
+<span class="c">// Using applicative math operators</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">ApplicativeMath</span>
+
+<span class="k">let</span> <span class="i">opt121&#39;</span>  <span class="o">=</span> <span class="i">Some</span> <span class="n">21</span> <span class="o">.</span><span class="o">+.</span> <span class="i">tryParse</span> <span class="s">&quot;100&quot;</span>
+<span class="k">let</span> <span class="i">optTrue</span>  <span class="o">=</span> <span class="n">30</span> <span class="o">&gt;</span><span class="o">.</span> <span class="i">tryParse</span> <span class="s">&quot;29&quot;</span>
+<span class="k">let</span> <span class="i">optFalse</span> <span class="o">=</span> <span class="i">tryParse</span> <span class="s">&quot;30&quot;</span> <span class="o">.</span><span class="o">&lt;</span> <span class="n">29</span>
+
+<span class="c">// Composing applicatives</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Data</span>
+<span class="k">let</span> <span class="i">res4</span> <span class="o">=</span> (<span class="o">+</span>) <span class="o">&lt;!&gt;</span> <span class="i">Compose</span> [<span class="i">Some</span> <span class="n">3</span>] <span class="o">&lt;*&gt;</span> <span class="i">Compose</span> [<span class="i">Some</span> <span class="n">1</span>]
+</code></pre></td>
+</tr>
+</table>
 
 
         </div>
