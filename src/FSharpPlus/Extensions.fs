@@ -235,7 +235,7 @@ module Enumerator =
                 check started
                 (alreadyFinished() : 'T)
     
-        interface System.Collections.IEnumerator with
+        interface IEnumerator with
             member x.Current =
                 check started
                 (alreadyFinished() : obj)
@@ -249,6 +249,107 @@ module Enumerator =
     let Empty<'T> () = (new EmptyEnumerator<'T>() :> IEnumerator<'T>)
 
     let singleton x = (Seq.singleton x).GetEnumerator()
+
+    type IFinallyEnumerator =
+        abstract AppendFinallyAction : (unit -> unit) -> unit
+
+    [<Sealed>]
+    type ConcatEnumerator<'T>(sources: IEnumerator<IEnumerator<'T>>) =
+        let mutable outerEnum = sources
+        let mutable currInnerEnum = Empty()
+
+        let mutable started = false
+        let mutable finished = false
+        let mutable compensations = []
+
+        [<DefaultValue(false)>] // false = unchecked
+        val mutable private currElement : 'T
+
+        member x.Finish() =
+            finished <- true
+            try
+                match currInnerEnum with
+                | null -> ()
+                | _ ->
+                    try
+                        currInnerEnum.Dispose()
+                    finally
+                        currInnerEnum <- null
+            finally
+                try
+                    match outerEnum with
+                    | null -> ()
+                    | _ ->
+                        try
+                            outerEnum.Dispose()
+                        finally
+                            outerEnum <- null
+                finally
+                    let rec iter comps =
+                        match comps with
+                        |   [] -> ()
+                        |   h::t ->
+                                try h() finally iter t
+                    try
+                        compensations |> List.rev |> iter
+                    finally
+                        compensations <- []
+
+        member x.GetCurrent() =
+            check started
+            if finished then alreadyFinished() else x.currElement
+
+        interface IFinallyEnumerator with
+            member x.AppendFinallyAction(f) =
+                compensations <- f :: compensations
+
+        interface IEnumerator<'T> with
+            member x.Current = 
+                x.GetCurrent()
+
+        interface IEnumerator with
+            member x.Current = box (x.GetCurrent())
+
+            member x.MoveNext() =
+                if not started then (started <- true)
+                if finished then false
+                else
+                  let rec takeInner () =
+                    // check the inner list
+                    if currInnerEnum.MoveNext() then
+                        x.currElement <- currInnerEnum.Current
+                        true
+                    else
+                        // check the outer list
+                        let rec takeOuter() =
+                            if outerEnum.MoveNext() then
+                                let ie = outerEnum.Current
+                                // Optimization to detect the statically-allocated empty IEnumerators
+                                match box ie with
+                                | :? EmptyEnumerator<'T> ->
+                                        // This one is empty, just skip, don't call GetEnumerator, try again
+                                        takeOuter()
+                                | _ ->
+                                        // OK, this one may not be empty.
+                                        // Don't forget to dispose of the inner enumerator now we're done with it
+                                        currInnerEnum.Dispose()
+                                        currInnerEnum <- ie
+                                        takeInner ()
+                            else
+                                // We're done
+                                x.Finish()
+                                false
+                        takeOuter()
+                  takeInner ()
+
+            member x.Reset() = noReset()
+
+        interface System.IDisposable with
+            member x.Dispose() =
+                if not finished then
+                    x.Finish()
+
+    let concat sources = new ConcatEnumerator<_>(sources) :> IEnumerator<_>
     
     let rec tryItem index (e : IEnumerator<'T>) =
         if not (e.MoveNext()) then None
