@@ -95,18 +95,19 @@
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
 <p>From .Net/F#</p>
 <ul>
-<li><code>list&lt;'a&gt;</code></li>
-<li><code>option&lt;'a&gt;</code></li>
-<li><code>array&lt;'a&gt;</code></li>
-<li><code>seq&lt;'a&gt;</code></li>
+<li><code>list&lt;'T&gt;</code></li>
+<li><code>option&lt;'T&gt;</code></li>
+<li><code>array&lt;'T&gt;</code></li>
+<li><code>seq&lt;'T&gt;</code></li>
 </ul>
 <p>From F#+</p>
 <ul>
 <li><p><code>ReaderT&lt;'R, 'MonadPlus&lt;'T&gt;&gt;</code></p></li>
 <li><p><code>WriterT&lt;'MonadPlus&lt;'T * 'Monoid&gt;&gt;</code></p></li>
 <li><p><code>StateT&lt;'S,'MonadPlus&lt;'T * 'S&gt;&gt;</code></p></li>
+<li><p><code>Compose&lt;'F&lt;'G&lt;'T&gt;&gt;&gt;</code></p></li>
 <li>
-<p><code>Compose&lt;'F&lt;'G&lt;'T&gt;&gt;&gt;</code></p>
+<p><code>DList&lt;'T&gt;</code></p>
 <p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 </li>
 </ul>
@@ -149,7 +150,7 @@
 <span class="k">let</span> <span class="i">fstGood</span> <span class="o">=</span> <span class="i">None</span> <span class="o">&lt;|&gt;</span> <span class="i">Some</span> <span class="s">&quot;Result is OK&quot;</span> <span class="o">&lt;|&gt;</span>  <span class="i">None</span> <span class="o">&lt;|&gt;</span> <span class="i">Some</span> <span class="s">&quot;Result is still OK&quot;</span>
 
 <span class="c">// mfilter usage</span>
-<span class="k">let</span> <span class="i">fstMatch</span> <span class="o">=</span> <span class="i">mfilter</span> ((<span class="o">=</span>) <span class="n">5</span>) [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>]    <span class="c">// [] -&gt; no element found, it uses the mzero value</span>
+<span class="k">let</span> <span class="i">fstMatch</span> <span class="o">=</span> <span class="i">mfilter</span> ((<span class="o">=</span>) <span class="n">5</span>) [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>]    <span class="c">// [] -&gt; no element found, it uses the empty value</span>
 </code></pre></td>
 </tr>
 </table>
