@@ -229,11 +229,11 @@ module Applicative =
     [<Test>]
     let applicativeMath() = 
         let inline (+) (a:'T) (b:'T) :'T = a + b
-        let inline ( |+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
-        let inline (  +| ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
-        let inline ( |+| ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
+        let inline ( .+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
+        let inline (  +. ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
+        let inline ( .+. ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
 
-        let testVal = [1;2] |+| [10;20] |+| [100;200] |+  2
+        let testVal = [1;2] .+. [10;20] .+. [100;200] .+  2
         Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
         Assert.IsInstanceOf<Option<list<int>>> (Some testVal)
 

@@ -58,8 +58,8 @@ let x2' = 7G + Vector2d (32,5)
 // Requires only Map
 
 open FSharpPlus.Operators.ApplicativeMath
-let x3 = Vector2d (32,5) |+ 7
-let x3' = 7 +| Vector2d (32,5)
+let x3 = Vector2d (32,5) .+ 7
+let x3' = 7 +. Vector2d (32,5)
 
 
 
