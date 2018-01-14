@@ -589,11 +589,29 @@ module Operators =
         let inline (  /. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((/)   x) y :'``Functor<'T>``
         let inline ( ./. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (/) <!> x <*> y :'``Applicative<'T>``
 
-    
+        let inline ( .=  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((=)/> y) x :'``Functor<bool>``
+        let inline (  =. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((=)   x) y :'``Functor<bool>``
+        let inline ( .=. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (=) <!> x <*> y :'``Applicative<bool>``
+
+        let inline ( .>  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((>)/> y) x :'``Functor<bool>``
+        let inline (  >. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((>)   x) y :'``Functor<bool>``
+        let inline ( .>. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (>) <!> x <*> y :'``Applicative<bool>``
+
+        let inline ( .<  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((<)/> y) x :'``Functor<bool>``
+        let inline (  <. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((<)   x) y :'``Functor<bool>``
+        let inline ( .<. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (<) <!> x <*> y :'``Applicative<bool>``
+
+        let inline ( .||  ) (x :'``Functor<bool>``)     (y :bool)                   = map ((||)/> y) x :'``Functor<bool>``
+        let inline (  ||. ) (x :bool)                   (y :'``Functor<bool>``)     = map ((||)   x) y :'``Functor<bool>``
+        let inline ( .||. ) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (||) <!> x <*> y :'``Applicative<bool>``
+
+        let inline ( .&&  ) (x :'``Functor<bool>``)     (y :bool)                   = map ((&&)/> y) x :'``Functor<bool>``
+        let inline (  &&. ) (x :bool)                   (y :'``Functor<bool>``)     = map ((&&)   x) y :'``Functor<bool>``
+        let inline ( .&&. ) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (&&) <!> x <*> y :'``Applicative<bool>``
 
     /// <summary>
     /// Generic numbers, functions and operators.
-    /// By opening this module some common operators become restricted, like (+) to 'a->'a->'a 
+    /// By opening this module some common operators become restricted, like (+) to 'a->'a->'a
     /// </summary>
     module GenericMath =
 
