@@ -85,6 +85,7 @@ type Plus with
     [<Extension>]static member Plus (x:_ ResizeArray, y:_ ResizeArray, [<Optional>]_mthd : Plus    ) = ResizeArray (Seq.append x y)
     [<Extension>]static member Plus (x:_ IObservable, y              , [<Optional>]_mthd : Default3) = Observable.merge x y
     [<Extension>]static member Plus (x:_ seq        , y              , [<Optional>]_mthd : Default3) = Seq.append x y
+    [<Extension>]static member Plus (x:_ IEnumerator, y              , [<Optional>]_mthd : Default3) = FSharpPlus.Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator()
     static member inline       Plus (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>, [<Optional>]_mthd : Default3) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v

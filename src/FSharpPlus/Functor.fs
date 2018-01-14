@@ -65,7 +65,7 @@ type Join =
     static member inline       Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default2) = Bind.InvokeOnInstance x id: '``Monad<'T>``
     static member inline       Join (x : '``Monad<'Monad<'T>>``, [<Optional>]_output : '``Monad<'T>``  , [<Optional>]_impl : Default1) = ((^``Monad<'Monad<'T>>`` or  ^``Monad<'T>``) : (static member Join: _ -> _) x) : '``Monad<'T>``
     [<Extension>]static member Join (x : Lazy<Lazy<_>>         , [<Optional>]_output : Lazy<'T>        , [<Optional>]_impl : Join    ) = lazy x.Value.Value        : Lazy<'T>
-    [<Extension>]static member Join (x : seq<seq<_>>           , [<Optional>]_output : seq<'T>         , [<Optional>]_impl : Join    ) = Seq.concat x              : seq<'T> 
+    [<Extension>]static member Join (x : seq<seq<_>>           , [<Optional>]_output : seq<'T>         , [<Optional>]_impl : Join    ) = Seq.concat x              : seq<'T>
     [<Extension>]static member Join (x : Id<_>                 , [<Optional>]_output : Id<'T>          , [<Optional>]_impl : Join    ) = x.getValue                : Id<'T>
 #if NET35
 #else                                                                                                                              
@@ -112,6 +112,7 @@ type Return =
     static member inline InvokeOnInstance (x:'T) = (^``Applicative<'T>`` : (static member Return: ^T -> ^``Applicative<'T>``) x)
 
     static member        Return (_:seq<'a> , _:Default2) = fun  x     -> Seq.singleton x :seq<'a>
+    static member        Return (_:IEnumerator<'a>, _:Default2) = fun x -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
     static member inline Return (_:'R      , _:Default1) = fun (x:'T) -> Return.InvokeOnInstance x :'R
 
     static member        Return (_:Lazy<'a>, _:Return) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
@@ -146,6 +147,7 @@ type Apply =
 
     static member        ``<*>`` (f:Lazy<'T->'U>, x:Lazy<'T>       , [<Optional>]_output:Lazy<'U>     , [<Optional>]_impl:Apply) = Lazy<_>.Create (fun () -> f.Value x.Value) : Lazy<'U>
     static member        ``<*>`` (f:seq<_>      , x:seq<'T>        , [<Optional>]_output:seq<'U>      , [<Optional>]_impl:Apply) = Seq.apply  f x :seq<'U>
+    static member        ``<*>`` (f:IEnumerator<_>, x:IEnumerator<'T>, [<Optional>]_output:IEnumerator<'U>, [<Optional>]_impl:Apply) = Enumerator.map2 id f x : IEnumerator<'U>
     static member        ``<*>`` (f:list<_>     , x:list<'T>       , [<Optional>]_output:list<'U>     , [<Optional>]_impl:Apply) = List.apply f x :list<'U>
     static member        ``<*>`` (f:_ []        , x:'T []          , [<Optional>]_output:'U []        , [<Optional>]_impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
     static member        ``<*>`` (f:'r -> _     , g: _ -> 'T       , [<Optional>]_output: 'r -> 'U    , [<Optional>]_impl:Apply) = fun x -> f x (g x) :'U
@@ -232,6 +234,7 @@ type Map =
     static member inline       Map (x : '``Monad<'T>``      , f : 'T->'U, [<Optional>]_impl:Default4) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
     static member inline       Map (x : '``Applicative<'T>``, f : 'T->'U, [<Optional>]_impl:Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f) x : '``Applicative<'U>``
     [<Extension>]static member Map (x : seq<_>              , f : 'T->'U, [<Optional>]_impl:Default2) = Seq.map f x              : seq<'U>
+    [<Extension>]static member Map (x : IEnumerator<_>      , f : 'T->'U, [<Optional>]_impl:Default2) = Enumerator.map f x       : IEnumerator<'U>
     [<Extension>]static member Map (x : IDictionary<_,_>    , f : 'T->'U, [<Optional>]_impl:Default2) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d :> IDictionary<'Key,'U>
     [<Extension>]static member Map (x : IObservable<'T>     , f : 'T->'U, [<Optional>]_impl:Default2) = Observable.map f x       : IObservable<'U>
     static member inline       Map (x : '``Functor<'T>``    , f : 'T->'U, [<Optional>]_impl:Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
@@ -382,6 +385,7 @@ type Unzip =
 type Zip =
     [<Extension>]static member Zip (x:Id<'T>  , y:Id<'U>  , [<Optional>]_output:Id<'T*'U>  , [<Optional>]_impl:Zip) = Id.create(x.getValue,y.getValue)
     [<Extension>]static member Zip (x:seq<'T> , y:seq<'U> , [<Optional>]_output:seq<'T*'U> , [<Optional>]_impl:Zip) = Seq.zip   x y
+    [<Extension>]static member Zip (x:IEnumerator<'T>, y:IEnumerator<'U>, [<Optional>]_output:IEnumerator<'T*'U> , [<Optional>]_impl:Zip) = Enumerator.zip x y
     [<Extension>]static member Zip (x:list<'T>, y:list<'U>, [<Optional>]_output:list<'T*'U>, [<Optional>]_impl:Zip) = List.zip  x y
     [<Extension>]static member Zip (x:'T []   , y:'U []   , [<Optional>]_output:('T*'U) [] , [<Optional>]_impl:Zip) = Array.zip x y
 

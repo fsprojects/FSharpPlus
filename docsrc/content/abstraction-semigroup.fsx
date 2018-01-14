@@ -71,6 +71,7 @@ From .Net/F#
  -  ``Dictionary<'a,'b>``
  -  ``ResizeArray<'a>``
  -  ``seq<'a>``
+ -  ``IEnumerator<'a>``
  
 From F#+
  

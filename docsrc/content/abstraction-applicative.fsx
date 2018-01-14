@@ -76,6 +76,7 @@ From .Net/F#
  -  ``Expr<'T>``
  -  ``Dictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
+ -  ``IEnumerator<'T>``
 
  
 From F#+

@@ -80,6 +80,7 @@ From .Net/F#
  -  ``Dictionary<'Key,'T>``
  -  ``IDictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
+ -  ``IEnumerator<'T>``
 
  
 From F#+
