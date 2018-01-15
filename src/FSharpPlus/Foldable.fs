@@ -167,12 +167,9 @@ type FoldBack =
 
 type FoldMap =
     inherit Default1
-    static member inline FromFoldFoldBack f x = FoldBack.Invoke (Plus.Invoke << f) (Zero.Invoke()) x  
+    static member inline FromFoldFoldBack f x = FoldBack.Invoke (Plus.Invoke << f) (Zero.Invoke()) x
     
-    static member inline FoldMap (x          , f, [<Optional>]_impl:Default1) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke()) x
     static member inline FoldMap (x:option<_>, f, [<Optional>]_impl:FoldMap ) = match x with Some x -> f x | _ -> Zero.Invoke()
-    static member        FoldMap (x:Id<_>    , f, [<Optional>]_impl:FoldMap ) = f x.getValue
-    static member inline FoldMap (x:seq<_>   , f, [<Optional>]_impl:FoldMap ) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke()) x
     static member inline FoldMap (x:list<_>  , f, [<Optional>]_impl:FoldMap ) = List.fold  (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke()) x
     static member inline FoldMap (x:Set<_>   , f, [<Optional>]_impl:FoldMap ) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke()) x
     static member inline FoldMap (x:_ []     , f, [<Optional>]_impl:FoldMap ) = Array.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke()) x
@@ -181,6 +178,11 @@ type FoldMap =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member FoldMap: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<FoldMap>, x, f)
+
+type FoldMap with
+    static member inline FoldMap (x:seq<_>   , f, [<Optional>]_impl:Default2) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke()) x
+    static member inline FoldMap (x          , f, [<Optional>]_impl:Default1) = (^F : (static member FoldMap: ^F -> _ -> _) x, f)
+    static member inline FoldMap (_:^t when  ^t : null and ^t  : struct, _, _:Default1) = ()
 
 type FoldBack with
     static member inline FromFoldMap f z x = let (f : _Endo<'t>) = FoldMap.Invoke (_Endo << f) x in f.Value z

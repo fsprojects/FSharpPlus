@@ -32,6 +32,9 @@ type WrappedListD<'s> = WrappedListD of 's list with
     interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
     static member Return  (x) = WrappedListD [x]
     static member Bind ((WrappedListD x):WrappedListD<'T>, f) = WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
+    static member inline FoldMap (WrappedListD x, f) =
+        SideEffects.add "Using optimized foldMap"
+        Seq.fold (fun x y -> x ++ (f y)) zero x
 
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return  (x) = WrappedListE [x]
@@ -82,6 +85,19 @@ module Functor =
 
 
 module Foldable =
+
+    [<Test>]
+    let foldMapDefaultCustom() =
+        SideEffects.reset()
+        let x = foldMap ((+) 10) (WrappedListD [1..4]) //= 50 w side effect
+        Assert.AreEqual (x, 50)
+        Assert.AreEqual (SideEffects.get(), ["Using optimized foldMap"])
+
+        SideEffects.reset()
+        let y = foldMap ((+) 10) {1..4}  //= 50 w/o side effect
+        Assert.AreEqual (x, 50)
+        Assert.AreEqual (SideEffects.get(), [])
+
     [<Test>]
     let filterDefaultCustom() = 
         let wlA1 = WrappedListA [1..10]

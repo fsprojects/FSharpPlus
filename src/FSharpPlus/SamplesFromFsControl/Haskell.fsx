@@ -618,7 +618,7 @@ module FoldableTree =
         | Node of (Tree<'a>) * 'a * (Tree<'a>)
 
         // add instance for Foldable class
-        static member inline FoldMap (t:Tree<_>, f, _:FoldMap) =
+        static member inline FoldMap (t:Tree<_>, f) =
             let rec _foldMap x f =
                 match x with
                 | Empty        -> mempty()
