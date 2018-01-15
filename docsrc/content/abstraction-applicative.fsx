@@ -76,7 +76,6 @@ From .Net/F#
  -  ``Expr<'T>``
  -  ``Dictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
- -  ``IEnumerator<'T>``
 
  
 From F#+
@@ -99,7 +98,8 @@ Restricted:
 
  -  ``string``
  -  ``StringBuilder``
- -  ``Set<'T>`` 
+ -  ``Set<'T>``
+ -  ``IEnumerator<'T>``
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 *)

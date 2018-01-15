@@ -6,36 +6,24 @@
 (**
 Functor
 =======
-
 The Functor abstraction is used for types that can be mapped over.
-
 ___
-
-
-
 Minimal complete definition
 ---------------------------
-
-
  * ``map f x``/``(|>>) x f``/``(<<|) f x``/``(<!>) f x``
 *)
 (**
     static member Map (x:'Functor<'T>, f:'T->'U) :'Functor<'U>
 *)
 (**
-
-
 Other operations
 ----------------
-
  * ``unzip x``
 *)
 (**
     static member Unzip (x:Functor<'T * 'U>) :'Functor<'T> * 'Functor<'U>
 *)
 (**
-
-
 Rules
 -----
 *)
@@ -44,19 +32,13 @@ Rules
     map (f << g) = map f << map g
 *)
 (**
-
-
 Related Abstractions
 --------------------
-
  - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations,
  
  - [Monad](abstraction-monad.html) : Monads are functors with an additional ``Join`` operation,
-
-
 Concrete implementations
 ------------------------
-
 From .Net/F#
  
  -  ``seq<'T>``
@@ -80,11 +62,8 @@ From .Net/F#
  -  ``Dictionary<'Key,'T>``
  -  ``IDictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
- -  ``IEnumerator<'T>``
-
  
 From F#+
-
  -  ``Cont<'R,'T>`` 
  -  ``ContT<'R,'T>``
  -  ``Reader<'R,'T>`` 
@@ -101,10 +80,9 @@ From F#+
  -  ``Compose<'F<'G<'T>>>``
  
 Restricted:
-
  -  ``string``
  -  ``StringBuilder``
- -  ``Set<'T>`` 
-
+ -  ``Set<'T>``
+ -  ``IEnumerator<'T>``
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 *)

@@ -6,28 +6,16 @@
 (**
 Semigroup
 =========
-
 In mathematics, a semigroup is an algebraic structure consisting of a set together with an associative binary operation. A semigroup generalizes a monoid in that there might not exist an identity element. It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup.
-
 ___
-
-
-
 Minimal complete definition
 ---------------------------
-
-
  * ``(+)``/``(++)``
 *)
 (**
     static member (+) (x:'Semigroup, y:'Semigroup) :'Semigroup
 *)
 (**
-
-
-
-
-
 Rules
 -----
 *)
@@ -35,55 +23,49 @@ Rules
     (x + y) + z = x + (y + z)
 *)
 (**
-
-
 Related Abstractions
 --------------------
-
  - [Monoid](abstraction-monoid.html): A monoid is a Semigroup with an additional ``zero`` operation
  
  - MonadPlus: Monads that are also Monoids
-
-
 Concrete implementations
 ------------------------
-
 From .Net/F#
  
- -  ``list<'a>``
- -  ``option<'a>``
- -  ``array<'a>``
+ -  ``list<'T>``
+ -  ``option<'T>``
+ -  ``array<'T>``
  -  ``string``
  -  ``StringBuilder``
  -  ``unit``
- -  ``Set<'a>``
- -  ``Map<'a,'b>``
+ -  ``Set<'T>``
+ -  ``Map<'T,'U>``
  -  ``TimeSpan`` 
- -  ``'a*'b``
- -  ``'a*'b*'c``
- -  ``'a*'b*'c*'d``
- -  ``'a*'b*'c*'d*'e``
- -  ``Task<'a>``
+ -  ``'T*'U``
+ -  ``'T*'U*'V``
+ -  ``'T*'U*'V*'W``
+ -  ``'T*'U*'V*'W*'X``
+ -  ``Task<'T>``
  -  ``'T->'Semigroup``
- -  ``Async<'a>``
- -  ``Expr<'a>``
- -  ``Lazy<'a>``
- -  ``Dictionary<'a,'b>``
- -  ``ResizeArray<'a>``
- -  ``seq<'a>``
- -  ``IEnumerator<'a>``
+ -  ``Async<'T>``
+ -  ``Expr<'T>``
+ -  ``Lazy<'T>``
+ -  ``Dictionary<'T,'U>``
+ -  ``ResizeArray<'T>``
+ -  ``seq<'T>``
+ -  ``IEnumerator<'T>``
  
 From F#+
  
- -  ``NonEmptyList<'s>``
- -  ``ZipList<'s>``
- -  ``Dual<'t>``
- -  ``Endo<'t>``
+ -  ``NonEmptyList<'S>``
+ -  ``ZipList<'S>``
+ -  ``Dual<'T>``
+ -  ``Endo<'T>``
  -  ``All``
  -  ``Any``
- -  ``Const<'t,'u>``
- -  ``First<'t>``
- -  ``Last<'t>``
+ -  ``Const<'T,'U>``
+ -  ``First<'T>``
+ -  ``Last<'T>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 *)

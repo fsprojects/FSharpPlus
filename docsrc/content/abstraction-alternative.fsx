@@ -6,21 +6,14 @@
 (**
 Alternative
 ===========
-
 Applicative Functors which also have a monoid structure.
-
 ___
-
-
-
 Minimal complete definition
 ---------------------------
-
  * ``return x``/``result x`` 
  * ``(<*>) f x``
  * ``empty``
  * ``append x y``/``(<|>) x y``
-
 *)
 (**
     static member Return (x:'T) : 'Alternative<'T>
@@ -29,27 +22,18 @@ Minimal complete definition
     static member Append (x:'Alternative<'T>, y:'Alternative<'T>) :'Alternative<'T>
 *)
 (**
-
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
-
 Other operations
 ----------------
-
  * ``mfilter``
 *)
 (**
     static member MFilter (x:seq<'Alternative>) :'Alternative
 *)
 (**
-
-
  * ``choice``
 *)
 (**
-
-
-
-
 Rules
 -----
 *)
@@ -62,25 +46,19 @@ Rules
     empty <*> f = empty
 *)
 (**
-
-
 Related Abstractions
 --------------------
-
  - [Monoid](abstraction-monoid.html): An Alternative is a Monoid that is also an Applicative Functor
  - [Applicative](abstraction-applicative.html): An Alternative is a Monoid that is also an Applicative Functor
  - MonadPlus: Alternatives that are also Monads
-
-
 Concrete implementations
 ------------------------
-
 From .Net/F#
  
- -  ``list<'a>``
- -  ``option<'a>``
- -  ``array<'a>``
- -  ``seq<'a>``
+ -  ``list<'T>``
+ -  ``option<'T>``
+ -  ``array<'T>``
+ -  ``seq<'T>``
  
 From F#+
  
@@ -90,11 +68,8 @@ From F#+
  -  ``Compose<'F<'G<'T>>>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
-
-
 Examples
 --------
-
 *)
 
 
@@ -117,4 +92,4 @@ let firstGood = choice alternatives //Some "Result is OK"
 let fstGood = None <|> Some "Result is OK" <|>  None <|> Some "Result is still OK"
 
 // mfilter usage
-let fstMatch = mfilter ((=) 5) [1;2;3;4]    // [] -> no element found, it uses the mzero value
+let fstMatch = mfilter ((=) 5) [1;2;3;4]    // [] -> no element found, it uses the empty value

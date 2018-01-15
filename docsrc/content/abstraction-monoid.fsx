@@ -6,40 +6,26 @@
 (**
 Monoid
 ======
-
 Types with an associative binary operation that has an identity.
-
 ___
-
-
-
 Minimal complete definition
 ---------------------------
-
-
  * `zero``
  * ``(+) x y``/``(++) x y``
-
 *)
 (**
     static member get_Zero () :'Monoid
     static member (+) (x:'Monoid, y:'Monoid) :'Monoid
 *)
 (**
-
 Other operations
 ----------------
-
  * ``Seq.sum``
 *)
 (**
     static member Sum (x:Seq<'Monoid>) :'Monoid
 *)
 (**
-
-
-
-
 Rules
 -----
 *)
@@ -51,55 +37,49 @@ Rules
     sum = fold (+) zero (generic to all foldables)
 *)
 (**
-
-
 Related Abstractions
 --------------------
-
  - [Semigroup](abstraction-semigroup.html): A monoid is a Semigroup with an additional ``zero`` operation
  
  - MonadPlus: Monads that are also Monoids
-
-
 Concrete implementations
 ------------------------
-
 From .Net/F#
  
- -  ``list<'a>``
- -  ``option<'a>``
- -  ``array<'a>``
+ -  ``list<'T>``
+ -  ``option<'T>``
+ -  ``array<'T>``
  -  ``string``
  -  ``StringBuilder``
  -  ``unit``
- -  ``Set<'a>``
- -  ``Map<'a,'b>``
+ -  ``Set<'T>``
+ -  ``Map<'T,'U>``
  -  ``TimeSpan`` 
- -  ``'a*'b``
- -  ``'a*'b*'c``
- -  ``'a*'b*'c*'d``
- -  ``'a*'b*'c*'d*'e``
- -  ``Task<'a>``
+ -  ``'T*'U``
+ -  ``'T*'U*'V``
+ -  ``'T*'U*'V*'W``
+ -  ``'T*'U*'V*'W*'X``
+ -  ``Task<'T>``
  -  ``'T->'Monoid``
- -  ``Async<'a>``
- -  ``Expr<'a>``
- -  ``Lazy<'a>``
- -  ``Dictionary<'a,'b>``
- -  ``IDictionary<'a,'b>``
- -  ``ResizeArray<'a>``
- -  ``seq<'a>``
- -  ``IEnumerator<'a>``
+ -  ``Async<'T>``
+ -  ``Expr<'T>``
+ -  ``Lazy<'T>``
+ -  ``Dictionary<'T,'U>``
+ -  ``IDictionary<'T,'U>``
+ -  ``ResizeArray<'T>``
+ -  ``seq<'T>``
+ -  ``IEnumerator<'T>``
  
 From F#+
  
- -  ``ZipList<'s>``
- -  ``Dual<'t>``
- -  ``Endo<'t>``
+ -  ``ZipList<'S>``
+ -  ``Dual<'T>``
+ -  ``Endo<'T>``
  -  ``All``
  -  ``Any``
- -  ``Const<'t,'u>``
- -  ``First<'t>``
- -  ``Last<'t>``
+ -  ``Const<'T,'U>``
+ -  ``First<'T>``
+ -  ``Last<'T>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 *)
