@@ -76,4 +76,26 @@ From F#+
 
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+
+Examples
+--------
+
 *)
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open FSharpPlus
+
+// A non-empty list
+let lst   = {Head = 1; Tail = [2;3;4;5]}
+
+// Get the head
+let elem1 = extract   lst
+
+// Get ALL tails
+let tails = duplicate lst
+
+// This should return the original list
+let lst'  = extend extract lst

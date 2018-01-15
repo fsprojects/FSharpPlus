@@ -6,31 +6,19 @@
 (**
 Applicative
 ===========
-
 A functor with application, providing operations to embed pure expressions (``return``), and sequence computations and combine their results (``<*>``).
-
 ___
-
-
-
 Minimal complete definition
 ---------------------------
-
-
  * ``return x``/``result x`` 
-
  * ``(<*>) f x``
-
 *)
 (**
     static member Return (x:'T) : 'Applicative<'T>
     static member (<*>) (f:'T->'U, x:Applicative<'T>) : Applicative<'U>
 *)
 (**
-
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
-
-
 Rules
 -----
 *)
@@ -41,19 +29,13 @@ Rules
     u <*> result y = result ((|>) y) <*> u
 *)
 (**
-
-
 Related Abstractions
 --------------------
-
  - [Functor](abstraction-functor.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations,
  
  - [Monad](abstraction-monad.html) : Monads are functors with an additional ``Join`` operation,
-
-
 Concrete implementations
 ------------------------
-
 From .Net/F#
  
  -  ``seq<'T>``
@@ -76,10 +58,8 @@ From .Net/F#
  -  ``Expr<'T>``
  -  ``Dictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
-
  
 From F#+
-
  -  ``Cont<'R,'T>`` 
  -  ``ContT<'R,'T>``
  -  ``Reader<'R,'T>`` 
@@ -96,11 +76,48 @@ From F#+
  -  ``DList<'T>``
  
 Restricted:
-
  -  ``string``
  -  ``StringBuilder``
  -  ``Set<'T>``
  -  ``IEnumerator<'T>``
-
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+Examples
+--------
 *)
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open FSharpPlus
+
+
+// Apply +4 to a list
+let lst5n6  = map ((+) 4) [ 1;2 ]
+
+// Apply +4 to an array
+let arr5n6  = map ((+) 4) [|1;2|]
+
+// I could have written this
+let arr5n6' = (+) <!> [|4|] <*> [|1;2|]
+
+// Add two options
+let opt120  = (+) <!> Some 20 <*> tryParse "100"
+
+
+// Another way to write applicative expressions
+open FSharpPlus.Builders
+
+let opt121  = iI (+) (Some 21) (tryParse "100") Ii
+let opt122  = iI tryDiv (tryParse "488") (trySqrt 16) Ji
+
+
+// Using applicative math operators
+open FSharpPlus.Operators.ApplicativeMath
+
+let opt121'  = Some 21 .+. tryParse "100"
+let optTrue  = 30 >. tryParse "29"
+let optFalse = tryParse "30" .< 29
+
+// Composing applicatives
+open FSharpPlus.Data
+let res4 = (+) <!> Compose [Some 3] <*> Compose [Some 1]

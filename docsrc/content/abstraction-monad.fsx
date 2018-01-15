@@ -95,6 +95,80 @@ From F#+
  -  ``ZipList<'T>``
  -  ``ParallelArray<'T>``
  -  ``Const<'C,'T>``
+ -  ``DList<'T>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+
+Examples
+--------
+
 *)
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open FSharpPlus
+
+
+// Monads allow us to use our generic computation expressions
+
+// This will return the list [11;21;12;22] which is both lists combined in different ways with the (+) operation
+let lst11n21n12n22 =
+    monad {
+        let! x1 = [1;   2]
+        let! x2 = [10; 20]
+        return ((+) x1 x2)}
+
+// This is the same example but with a non-empty list
+let neLst11n21n12n22 = 
+    monad {
+        let! x1 = { NonEmptyList.Head =  1; Tail =  [2] }
+        let! x2 = { NonEmptyList.Head = 10; Tail = [20] }
+        return ((+) x1 x2)}
+
+// And now an example with options
+let some14 =
+    monad {
+        let! x1 = Some 4
+        let! x2 = tryParse "10"
+        return ((+) x1 x2)}
+
+
+// Monads do not compose well, we need to use Monad Transformers
+
+open System
+open FSharpPlus.Data
+
+// First let's define some functions we'll use later
+
+let getLine    = async { return System.Console.ReadLine()}
+let putStrLn x = async { printfn "%s" x}
+let isValid s =
+    String.length s >= 8
+        && String.exists System.Char.IsLetter s
+        && String.exists System.Char.IsNumber s
+        && String.exists Char.IsPunctuation s
+
+let decodeError = function
+    | -1 -> "Password not valid"
+    | _  -> "Unknown"
+
+
+// The following functions compose the Error monad with the Async one.
+
+let getValidPassword : ErrorT<_> =
+    monad {
+        let! s = liftAsync getLine
+        if isValid s then return s
+        else return! throw -1}
+    </catch/>
+        (fun s -> throw ("The error was: " + decodeError s))
+
+let askPassword = monad {
+    do! lift <| putStrLn "Insert your new password:"
+    let! value = getValidPassword
+    do! lift <| putStrLn "Storing in database..."
+    return value}
+
+//try -> Async.RunSynchronously (ErrorT.run askPassword)
