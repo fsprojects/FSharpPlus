@@ -66,6 +66,7 @@ From F#+
  -  ``WriterT<'MonadPlus<'T * 'Monoid>>``
  -  ``StateT<'S,'MonadPlus<'T * 'S>>``
  -  ``Compose<'F<'G<'T>>>``
+ -  ``DList<'T>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 Examples

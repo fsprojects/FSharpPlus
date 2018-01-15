@@ -78,6 +78,7 @@ From F#+
  -  ``Const<'C,'T>``
  -  ``Kleisli<'T, 'Monad<'U>>``
  -  ``Compose<'F<'G<'T>>>``
+ -  ``DList<'T>``
  
 Restricted:
  -  ``string``

@@ -61,6 +61,7 @@
     <Compile Include="NonEmptyList.fs" />
     <Compile Include="ZipList.fs" />
     <Compile Include="ParallelArray.fs" />
+    <Compile Include="DList.fs" />    
     <Compile Include="Kleisli.fs" />
     <Compile Include="Compatibility.fs" />
     <None Include="SamplesFromFsControl\Functions.fsx" />

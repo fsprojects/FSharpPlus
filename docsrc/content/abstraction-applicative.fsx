@@ -93,6 +93,7 @@ From F#+
  -  ``ParallelArray<'T>``
  -  ``Const<'C,'T>``
  -  ``Compose<'F<'G<'T>>>``
+ -  ``DList<'T>``
  
 Restricted:
 

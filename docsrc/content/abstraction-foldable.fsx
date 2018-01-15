@@ -69,6 +69,7 @@ From F#+
 
  -  ``ZipList<'T>``
  -  ``NonEmptyList<'T>``
+ -  ``DList<'T>``
 
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation

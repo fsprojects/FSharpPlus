@@ -66,6 +66,7 @@ From F#+
  -  ``Const<'T,'U>``
  -  ``First<'T>``
  -  ``Last<'T>``
+ -  ``DList<'T>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 *)
