@@ -143,5 +143,5 @@ type Sum with
     static member inline       Sum (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Plus.Invoke (Zero.Invoke()) x:'a
     
 type Sum with
-    static member inline       Sum (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = ((^R) : (static member Sum: 'R seq -> ^R) x)
+    static member inline       Sum (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = (^R : (static member Sum: 'R seq -> ^R) x)
     static member inline       Sum (_:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id

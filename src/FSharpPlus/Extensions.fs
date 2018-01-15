@@ -217,9 +217,9 @@ module Enumerator =
         let msg = String.Format (format,paramArray)
         raise (new ArgumentException (msg,arg))
     
-    let noReset()         = raise (new System.NotSupportedException("Reset is not supported on this enumerator."))
-    let notStarted()      = raise (new System.InvalidOperationException("Enumeration has not started. Call MoveNext."))
-    let alreadyFinished() = raise (new System.InvalidOperationException("Enumeration already finished."))
+    let noReset()         = raise (new System.NotSupportedException ("Reset is not supported on this enumerator."))
+    let notStarted()      = invalidOp "Enumeration has not started. Call MoveNext."
+    let alreadyFinished() = invalidOp "Enumeration already finished."
     let check started = if not started then notStarted()
     let dispose (r : System.IDisposable) = r.Dispose()
     
@@ -246,23 +246,21 @@ module Enumerator =
         interface System.IDisposable with
             member x.Dispose() = ()
               
-    let Empty<'T> () = (new EmptyEnumerator<'T>() :> IEnumerator<'T>)
+    let Empty<'T> () = new EmptyEnumerator<'T>() :> IEnumerator<'T>
 
     let singleton x = (Seq.singleton x).GetEnumerator()
 
-    type IFinallyEnumerator =
-        abstract AppendFinallyAction : (unit -> unit) -> unit
+    type IFinallyEnumerator = abstract AppendFinallyAction : (unit -> unit) -> unit
 
     [<Sealed>]
     type ConcatEnumerator<'T>(sources: IEnumerator<IEnumerator<'T>>) =
         let mutable outerEnum = sources
         let mutable currInnerEnum = Empty()
-
-        let mutable started = false
+        let mutable started  = false
         let mutable finished = false
         let mutable compensations = []
 
-        [<DefaultValue(false)>] // false = unchecked
+        [<DefaultValue(false)>]
         val mutable private currElement : 'T
 
         member x.Finish() =
@@ -315,12 +313,12 @@ module Enumerator =
                 if finished then false
                 else
                   let rec takeInner () =
-                    // check the inner list
+                    // check inner
                     if currInnerEnum.MoveNext() then
                         x.currElement <- currInnerEnum.Current
                         true
                     else
-                        // check the outer list
+                        // check outer
                         let rec takeOuter() =
                             if outerEnum.MoveNext() then
                                 let ie = outerEnum.Current
@@ -418,79 +416,64 @@ module Enumerator =
     let mapi f (e : IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(f)
         let i = ref (-1)
-        upcast
-            {  new MapEnumerator<_>() with
-                   member this.DoMoveNext curr =
-                      i := !i + 1
-                      if e.MoveNext() then
-                         curr <- f.Invoke(!i, e.Current)
-                         true
-                      else
-                         false
-                   member this.Dispose() = e.Dispose()
-            }
+        upcast {  
+            new MapEnumerator<_>() with
+                member this.DoMoveNext curr =
+                    i := !i + 1
+                    if e.MoveNext() then
+                        curr <- f.Invoke(!i, e.Current)
+                        true
+                    else false
+                member this.Dispose() = e.Dispose() }
     
     let map2 f (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) : IEnumerator<_>=
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(f)
-        upcast
-            {  new MapEnumerator<_>() with
-                   member this.DoMoveNext curr =
-                      let n1 = e1.MoveNext()
-                      let n2 = e2.MoveNext()
-                      if n1 && n2 then
-                         curr <- f.Invoke(e1.Current, e2.Current)
-                         true
-                      else
-                         false
-                   member this.Dispose() =
-                      try
-                          e1.Dispose()
-                      finally
-                          e2.Dispose()
-            }
+        upcast {
+            new MapEnumerator<_>() with
+                member this.DoMoveNext curr =
+                    let n1 = e1.MoveNext()
+                    let n2 = e2.MoveNext()
+                    if n1 && n2 then
+                        curr <- f.Invoke(e1.Current, e2.Current)
+                        true
+                    else false
+                member this.Dispose() =
+                    try e1.Dispose()
+                    finally e2.Dispose() }
     
     let mapi2 f (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt(f)
         let i = ref (-1)
-        upcast
-            {  new MapEnumerator<_>() with
-                   member this.DoMoveNext curr =
-                      i := !i + 1
-                      if (e1.MoveNext() && e2.MoveNext()) then
-                         curr <- f.Invoke(!i, e1.Current, e2.Current)
-                         true
-                      else
-                         false
-                   member this.Dispose() =
-                      try
-                          e1.Dispose()
-                      finally
-                          e2.Dispose()
-            }
+        upcast {
+            new MapEnumerator<_>() with
+                member this.DoMoveNext curr =
+                    i := !i + 1
+                    if (e1.MoveNext() && e2.MoveNext()) then
+                        curr <- f.Invoke(!i, e1.Current, e2.Current)
+                        true
+                    else false
+                member this.Dispose() =
+                    try e1.Dispose()
+                    finally e2.Dispose() }
     
     let map3 f (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) (e3 : IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt(f)
-        upcast
-            {  new MapEnumerator<_>() with
-                   member this.DoMoveNext curr =
-                      let n1 = e1.MoveNext()
-                      let n2 = e2.MoveNext()
-                      let n3 = e3.MoveNext()
+        upcast {
+            new MapEnumerator<_>() with
+                member this.DoMoveNext curr =
+                    let n1 = e1.MoveNext()
+                    let n2 = e2.MoveNext()
+                    let n3 = e3.MoveNext()
                    
-                      if n1 && n2 && n3 then
-                         curr <- f.Invoke(e1.Current, e2.Current, e3.Current)
-                         true
-                      else
-                         false
-                   member this.Dispose() =
-                      try
-                          e1.Dispose()
-                      finally
-                          try
-                              e2.Dispose()
-                          finally
-                              e3.Dispose()
-          }
+                    if n1 && n2 && n3 then
+                        curr <- f.Invoke(e1.Current, e2.Current, e3.Current)
+                        true
+                    else false
+                member this.Dispose() =
+                    try e1.Dispose()
+                    finally
+                        try e2.Dispose()
+                        finally e3.Dispose() }
     
     let choose f (e : IEnumerator<'T>) =
         let started = ref false
@@ -508,38 +491,35 @@ module Enumerator =
                   Option.isSome !curr
               member x.Reset() = noReset()
           interface System.IDisposable with
-              member x.Dispose() = e.Dispose()  }
+              member x.Dispose() = e.Dispose() }
     
     let filter f (e : IEnumerator<'T>) =
         let started = ref false
-        let this =
-            { new IEnumerator<'T> with
-                  member x.Current = check !started; e.Current
-              interface IEnumerator with
-                  member x.Current = check !started; box e.Current
-                  member x.MoveNext() =
-                      let rec next() =
-                          if not !started then started := true
-                          e.MoveNext() && (f  e.Current || next())
-                      next()
-                  member x.Reset() = noReset()
-              interface System.IDisposable with
-                  member x.Dispose() = e.Dispose()  }
-        this
+        { new IEnumerator<'T> with
+                member x.Current = check !started; e.Current
+            interface IEnumerator with
+                member x.Current = check !started; box e.Current
+                member x.MoveNext() =
+                    let rec next() =
+                        if not !started then started := true
+                        e.MoveNext() && (f  e.Current || next())
+                    next()
+                member x.Reset() = noReset()
+            interface System.IDisposable with
+                member x.Dispose() = e.Dispose() }
     
     let unfold f x : IEnumerator<_> =
         let state = ref x
-        upcast
-            {  new MapEnumerator<_>() with
-                  member this.DoMoveNext curr =
-                      match f !state with
-                      |   None -> false
-                      |   Some(r,s) ->
-                              curr <- r
-                              state := s
-                              true
-                  member this.Dispose() = ()
-            }
+        upcast {
+            new MapEnumerator<_>() with
+                member this.DoMoveNext curr =
+                    match f !state with
+                    |   None -> false
+                    |   Some(r,s) ->
+                            curr <- r
+                            state := s
+                            true
+                member this.Dispose() = () }
     
     let upto lastOption f =
         match lastOption with
@@ -574,56 +554,46 @@ module Enumerator =
               interface IEnumerator with
                   member x.Current = box (getCurrent())
                   member x.MoveNext() =
-                      if !index = completed then
-                          false
+                      if !index = completed then false
                       elif !index = unstarted then
                           setIndex 0
                           true
                       else (
                           if !index = System.Int32.MaxValue then raise <| System.InvalidOperationException ("Enumeration based on System.Int32 exceeded System.Int32.MaxValue.")
-                          if !index = finalIndex then
-                              false
+                          if !index = finalIndex then false
                           else
                               setIndex (!index + 1)
-                              true
-                      )
+                              true )
                   member self.Reset() = noReset()
               interface System.IDisposable with
                   member x.Dispose() = () }
 
     let zip (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) : IEnumerator<_>=
-        upcast
-            {  new MapEnumerator<_>() with
-                   member this.DoMoveNext curr =
-                      let n1 = e1.MoveNext()
-                      let n2 = e2.MoveNext()
-                      if n1 && n2 then curr <- (e1.Current, e2.Current); true
-                      else false
-                   member this.Dispose() =
-                      try
-                          e1.Dispose()
-                      finally
-                          e2.Dispose()
-            }
+        upcast {
+            new MapEnumerator<_>() with
+                member this.DoMoveNext curr =
+                    let n1 = e1.MoveNext()
+                    let n2 = e2.MoveNext()
+                    if n1 && n2 then curr <- (e1.Current, e2.Current); true
+                    else false
+                member this.Dispose() =
+                    try e1.Dispose()
+                    finally e2.Dispose() }
 
     let zip3 (e1 : IEnumerator<_>) (e2 : IEnumerator<_>) (e3 : IEnumerator<_>) : IEnumerator<_> =
-        upcast
-            {  new MapEnumerator<_>() with
-                   member this.DoMoveNext curr =
-                      let n1 = e1.MoveNext()
-                      let n2 = e2.MoveNext()
-                      let n3 = e3.MoveNext()
-                      if n1 && n2 && n3 then curr <- (e1.Current, e2.Current, e3.Current); true
-                      else false
-                   member this.Dispose() =
-                      try
-                          e1.Dispose()
-                      finally
-                          try
-                              e2.Dispose()
-                          finally
-                              e3.Dispose()
-          }
+        upcast {
+            new MapEnumerator<_>() with
+                member this.DoMoveNext curr =
+                    let n1 = e1.MoveNext()
+                    let n2 = e2.MoveNext()
+                    let n3 = e3.MoveNext()
+                    if n1 && n2 && n3 then curr <- (e1.Current, e2.Current, e3.Current); true
+                    else false
+                member this.Dispose() =
+                    try e1.Dispose()
+                    finally
+                        try e2.Dispose()
+                        finally e3.Dispose() }
 
 
 /// Module containing F#+ Extension Methods  

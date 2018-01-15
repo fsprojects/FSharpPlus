@@ -12,35 +12,35 @@ open FSharpPlus
 module Writer =
 
     /// Unwraps a writer computation as a (result, output) pair. (The inverse of Writer.)
-    let run (Writer x) = x                                                                      : 'T * 'Monoid
+    let run (Writer x) = x                                                                   : 'T * 'Monoid
 
-    let map f (Writer (a:'T, w)) = Writer (f a, w)                                              : Writer<'Monoid,'U>
+    let map f (Writer (a:'T, w)) = Writer (f a, w)                                           : Writer<'Monoid,'U>
     let inline bind f (Writer (a:'T, w)) = Writer (let (b, w') = run (f a) in (b, plus w w')): Writer<'Monoid,'U>
     let inline apply  (Writer (f, a)) (Writer (x:'T, b))       = Writer (f x, plus a b)      : Writer<'Monoid,'U>
 
     /// Extract the output from a writer computation.
-    let exec (Writer m:Writer<_,'T>) = snd m                                                    : Writer<'Monoid,'U>
+    let exec (Writer m:Writer<_,'T>) = snd m                                                 : Writer<'Monoid,'U>
 
     /// Embeds a simple writer action.
-    let tell w = Writer((), w)                                                                  : Writer<'Monoid,unit>
+    let tell w = Writer((), w)                                                               : Writer<'Monoid,unit>
 
     /// <summary> An action that executes the action <paramref name="m"/> and adds its output
     /// to the value of the computation. </summary>
     /// <param name="m">The action to be executed.</param>
-    let listen m = let (Writer (a, w)) = m in Writer((a, w), w)                                 : Writer<'Monoid,('T * 'Monoid)>
+    let listen m = let (Writer (a, w)) = m in Writer((a, w), w)                              : Writer<'Monoid,('T * 'Monoid)>
     
     /// Action that executes the action m, which returns a value and a function, and returns the value, applying the function to the output.
-    let pass m = let (Writer((a, f), w:'Monoid)) = m in Writer(a, f w)                          : Writer<'Monoid,'T>
+    let pass m = let (Writer((a, f), w:'Monoid)) = m in Writer(a, f w)                       : Writer<'Monoid,'T>
 
 type Writer<'monoid,'t> with
-    static member        Map   (x, f:'T->_) = Writer.map f x            : Writer<'Monoid,'U>
-    static member inline Return x = Writer (x, getZero())               : Writer<'Monoid,'T>
-    static member inline Bind  (x, f:'T->_) = Writer.bind f x           : Writer<'Monoid,'U>
-    static member inline (<*>) (f, x:Writer<_,'T>) = Writer.apply f x   : Writer<'Monoid,'U>
+    static member        Map   (x, f:'T->_) = Writer.map f x          : Writer<'Monoid,'U>
+    static member inline Return x = Writer (x, getZero())             : Writer<'Monoid,'T>
+    static member inline Bind  (x, f:'T->_) = Writer.bind f x         : Writer<'Monoid,'U>
+    static member inline (<*>) (f, x:Writer<_,'T>) = Writer.apply f x : Writer<'Monoid,'U>
 
-    static member        Tell   w = Writer.tell w                       : Writer<'Monoid,unit>
-    static member        Listen m = Writer.listen m                     : Writer<'Monoid,('T * 'Monoid)>
-    static member        Pass   m = Writer.pass m                       : Writer<'Monoid,'T>
+    static member        Tell   w = Writer.tell w                     : Writer<'Monoid,unit>
+    static member        Listen m = Writer.listen m                   : Writer<'Monoid,('T * 'Monoid)>
+    static member        Pass   m = Writer.pass m                     : Writer<'Monoid,'T>
 
     static member        Extract (Writer (_ : 'W, a : 'T)) = a
     static member        Extend  (Writer (w : 'W, _ : 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
@@ -71,16 +71,16 @@ module WriterT =
 type WriterT<'``monad<'t * 'monoid>``> with
 
     static member inline Return (x : 'T) = WriterT (result (x, getZero()))                                                                  : WriterT<'``Monad<'T * 'Monoid>``>
-    static member inline Map    (x : WriterT<'``Monad<'T * 'Monoid>``>, f : 'T -> 'U)                                   = WriterT.map f x   : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline Map    (x : WriterT<'``Monad<'T * 'Monoid>``>, f : 'T -> 'U)                                   = WriterT.map   f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline (<*>)  (f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x : WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
-    static member inline Bind   (x : WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)                                     = WriterT.bind f x  : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline Bind   (x : WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)                                     = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>
 
     static member inline get_Empty () = WriterT (getEmpty()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
     static member inline Append (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>
 
-    static member inline Tell   (w:'Monoid) = WriterT (result ((), w))                                                                                          : WriterT<'``Monad<unit * 'Monoid>``>
-    static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w)))  : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
-    static member inline Pass   (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))                           : WriterT<'``Monad<'T * 'Monoid>``>
+    static member inline Tell   (w:'Monoid) = WriterT (result ((), w))                                                                                         : WriterT<'``Monad<unit * 'Monoid>``>
+    static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w))) : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
+    static member inline Pass   (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))                          : WriterT<'``Monad<'T * 'Monoid>``>
 
     static member inline Lift (m:'``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT (m >>= (fun a -> result (a, getZero())))
     

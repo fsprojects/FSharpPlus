@@ -26,15 +26,15 @@ module SeqT =
 
     let inline internal mapM f as' = sequence (Seq.map f as')
 
-    let inline bind (f:'T-> SeqT<'``Monad<seq<'U>``>) (SeqT m : SeqT<'``Monad<seq<'T>``>)            = SeqT (m >>= (mapM:_->seq<_>->_) (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> result)) 
-    let inline apply (SeqT f : SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x : SeqT<'``Monad<seq<'T>``>) = SeqT (map (Seq.apply:seq<_->_>->seq<_>->seq<_>) f <*> x)          : SeqT<'``Monad<seq<'U>``>       
-    let inline map  (f:'T->'U) (SeqT m : SeqT<'``Monad<seq<'T>``>)                                   = SeqT <| map (Seq.map f: (seq<_>->_)) m      : SeqT<'``Monad<seq<'U>``>
+    let inline bind (f:'T-> SeqT<'``Monad<seq<'U>``>) (SeqT m : SeqT<'``Monad<seq<'T>``>)            = SeqT (m >>= (mapM:_->seq<_>->_) (run << f) >>= ((Seq.concat:seq<seq<_>>->_) >> result))
+    let inline apply (SeqT f : SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x : SeqT<'``Monad<seq<'T>``>) = SeqT (map (Seq.apply:seq<_->_>->seq<_>->seq<_>) f <*> x) : SeqT<'``Monad<seq<'U>``>
+    let inline map  (f:'T->'U) (SeqT m : SeqT<'``Monad<seq<'T>``>)                                   = SeqT <| map (Seq.map f: (seq<_>->_)) m                   : SeqT<'``Monad<seq<'U>``>
 
 type SeqT<'``monad<seq<'t>>``> with
-    static member inline Return (x : 'T) = x |> Seq.singleton |> result |> SeqT                                         : SeqT<'``Monad<seq<'T>``>
-    static member inline Map    (x : SeqT<'``Monad<seq<'T>``>, f : 'T->'U) = SeqT.map f x                               : SeqT<'``Monad<seq<'U>``>
-    static member inline (<*>)  (f : SeqT<'``Monad<seq<('T -> 'U)>``>, x : SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x   : SeqT<'``Monad<seq<'U>``>
-    static member inline Bind   (x : SeqT<'``Monad<seq<'T>``>, f : 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind f x
+    static member inline Return (x : 'T) = x |> Seq.singleton |> result |> SeqT                                       : SeqT<'``Monad<seq<'T>``>
+    static member inline Map    (x : SeqT<'``Monad<seq<'T>``>, f : 'T->'U) = SeqT.map f x                             : SeqT<'``Monad<seq<'U>``>
+    static member inline (<*>)  (f : SeqT<'``Monad<seq<('T -> 'U)>``>, x : SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x : SeqT<'``Monad<seq<'U>``>
+    static member inline Bind   (x : SeqT<'``Monad<seq<'T>``>, f : 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind  f x
 
     static member inline get_Empty () = SeqT <| result Seq.empty : SeqT<'``MonadPlus<seq<'T>``>
     static member inline Append (SeqT x , SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>

@@ -145,17 +145,17 @@ type Apply =
     static member inline ``<*>`` (f:'``Monad<'T->'U>``  , x:'``Monad<'T>``  , [<Optional>]_output:'``Monad<'U>``  , [<Optional>]_impl:Default2) : '``Monad<'U>``   = Bind.InvokeOnInstance f (fun (x1:'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.Invoke(x1 x2)))
     static member inline ``<*>`` (f:'``Applicative<'T->'U>``, x:'``Applicative<'T>``, [<Optional>]_output:'``Applicative<'U>``, [<Optional>]_impl:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>): _*_ -> _) f, x)
 
-    static member        ``<*>`` (f:Lazy<'T->'U>, x:Lazy<'T>       , [<Optional>]_output:Lazy<'U>     , [<Optional>]_impl:Apply) = Lazy<_>.Create (fun () -> f.Value x.Value) : Lazy<'U>
-    static member        ``<*>`` (f:seq<_>      , x:seq<'T>        , [<Optional>]_output:seq<'U>      , [<Optional>]_impl:Apply) = Seq.apply  f x :seq<'U>
+    static member        ``<*>`` (f:Lazy<'T->'U>  , x:Lazy<'T>       , [<Optional>]_output:Lazy<'U>       , [<Optional>]_impl:Apply) = Lazy<_>.Create (fun () -> f.Value x.Value) : Lazy<'U>
+    static member        ``<*>`` (f:seq<_>        , x:seq<'T>        , [<Optional>]_output:seq<'U>        , [<Optional>]_impl:Apply) = Seq.apply  f x :seq<'U>
     static member        ``<*>`` (f:IEnumerator<_>, x:IEnumerator<'T>, [<Optional>]_output:IEnumerator<'U>, [<Optional>]_impl:Apply) = Enumerator.map2 id f x : IEnumerator<'U>
-    static member        ``<*>`` (f:list<_>     , x:list<'T>       , [<Optional>]_output:list<'U>     , [<Optional>]_impl:Apply) = List.apply f x :list<'U>
-    static member        ``<*>`` (f:_ []        , x:'T []          , [<Optional>]_output:'U []        , [<Optional>]_impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
-    static member        ``<*>`` (f:'r -> _     , g: _ -> 'T       , [<Optional>]_output: 'r -> 'U    , [<Optional>]_impl:Apply) = fun x -> f x (g x) :'U
-    static member inline ``<*>`` ((a:'Monoid, f), (b:'Monoid, x:'T), [<Optional>]_output:'Monoid * 'U , [<Optional>]_impl:Apply) = (Plus.Invoke a b, f x) :'Monoid *'U
-    static member        ``<*>`` (f:Async<_>    , x:Async<'T>      , [<Optional>]_output:Async<'U>    , [<Optional>]_impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) :Async<'U>
-    static member        ``<*>`` (f:option<_>   , x:option<'T>     , [<Optional>]_output:option<'U>   , [<Optional>]_impl:Apply) = Option.apply f x    :option<'U>
-    static member        ``<*>`` (f:Result<_,'E>, x:Result<'T,'E>  , [<Optional>]_output:Result<'b,'E>, [<Optional>]_impl:Apply) = Result.apply f x: Result<'U,'E>
-    static member        ``<*>`` (f:Choice<_,'E>, x:Choice<'T,'E>  , [<Optional>]_output:Choice<'b,'E>, [<Optional>]_impl:Apply) = Choice.apply f x: Choice<'U,'E>
+    static member        ``<*>`` (f:list<_>       , x:list<'T>       , [<Optional>]_output:list<'U>       , [<Optional>]_impl:Apply) = List.apply f x :list<'U>
+    static member        ``<*>`` (f:_ []          , x:'T []          , [<Optional>]_output:'U []          , [<Optional>]_impl:Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f :'U []
+    static member        ``<*>`` (f:'r -> _       , g: _ -> 'T       , [<Optional>]_output: 'r -> 'U      , [<Optional>]_impl:Apply) = fun x -> f x (g x) :'U
+    static member inline ``<*>`` ((a:'Monoid, f)  , (b:'Monoid, x:'T), [<Optional>]_output:'Monoid * 'U   , [<Optional>]_impl:Apply) = (Plus.Invoke a b, f x) :'Monoid *'U
+    static member        ``<*>`` (f:Async<_>      , x:Async<'T>      , [<Optional>]_output:Async<'U>      , [<Optional>]_impl:Apply) = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2})) : Async<'U>
+    static member        ``<*>`` (f:option<_>     , x:option<'T>     , [<Optional>]_output:option<'U>     , [<Optional>]_impl:Apply) = Option.apply f x : option<'U>
+    static member        ``<*>`` (f:Result<_,'E>  , x:Result<'T,'E>  , [<Optional>]_output:Result<'b,'E>  , [<Optional>]_impl:Apply) = Result.apply f x : Result<'U,'E>
+    static member        ``<*>`` (f:Choice<_,'E>  , x:Choice<'T,'E>  , [<Optional>]_output:Choice<'b,'E>  , [<Optional>]_impl:Apply) = Choice.apply f x : Choice<'U,'E>
     static member inline ``<*>`` (KeyValue(a:'Key, f), KeyValue(b:'Key, x:'T), [<Optional>]_output:KeyValuePair<'Key,'U>, [<Optional>]_impl:Apply) :KeyValuePair<'Key,'U> = KeyValuePair(Plus.Invoke a b, f x)
 
     static member        ``<*>`` (f:Map<'Key,_>      , x:Map<'Key,'T>        , [<Optional>]_output:Map<'Key,'U>, [<Optional>]_impl:Apply) :Map<'Key,'U> = Map (seq {

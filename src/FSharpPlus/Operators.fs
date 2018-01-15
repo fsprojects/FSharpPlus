@@ -240,13 +240,13 @@ module Operators =
     // Monad Transformers
 
     /// Lift a computation from the inner monad to the constructed monad.
-    let inline lift      (x:'``Monad<'T>``) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
+    let inline lift (x:'``Monad<'T>``) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
 
     /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of monad-layers.
     let inline liftAsync (x:Async<'T>) : '``MonadAsync<'T>`` = LiftAsync.Invoke x
 
     /// (call-with-current-continuation) calls a function with the current continuation as its argument.
-    let inline callCC (f:('T->'``MonadCont<'R,'U>``)->'``MonadCont<'R,'T>``) : '``MonadCont<'R,'T>`` = CallCC.Invoke f
+    let inline callCC (f:('T->'``MonadCont<'R,'U>``) -> '``MonadCont<'R,'T>``) : '``MonadCont<'R,'T>`` = CallCC.Invoke f
    
     /// Return the state from the internals of the monad.
     let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
@@ -429,10 +429,10 @@ module Operators =
     let inline toStringWithCulture (cultureInfo:System.Globalization.CultureInfo) value:string = ToString.Invoke cultureInfo value
 
     /// Converts to a value to its string representation.
-    let inline toString  value:string  = ToString.Invoke System.Globalization.CultureInfo.InvariantCulture value  
+    let inline toString value:string  = ToString.Invoke System.Globalization.CultureInfo.InvariantCulture value
      
     /// Converts to a value from its string representation.
-    let inline parse    (value:string) = Parse.Invoke    value
+    let inline parse (value:string) = Parse.Invoke value
 
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     let inline tryParse (value:string) = TryParse.Invoke value
@@ -441,7 +441,7 @@ module Operators =
     // Numerics
 
     /// Gets a value that represents the number 1 (one).
-    let inline getOne()  = One.Invoke()
+    let inline getOne() = One.Invoke()
 
     /// A value that represents the 1 element.
     let inline one< ^Num when (One or ^Num) : (static member One : ^Num * One -> ^Num) > : ^Num = One.Invoke()
@@ -462,10 +462,10 @@ module Operators =
     let inline maxValue< ^Num when (MaxValue or ^Num) : (static member MaxValue : ^Num * MaxValue -> ^Num) > : ^Num = MaxValue.Invoke()
 
     /// Converts from BigInteger to the inferred destination type.
-    let inline fromBigInt  (x:bigint)    :'Num   = FromBigInt.Invoke x
+    let inline fromBigInt (x:bigint) : 'Num = FromBigInt.Invoke x
 
     /// Converts to BigInteger.
-    let inline toBigInt    (x:'Integral) :bigint = ToBigInt.Invoke x
+    let inline toBigInt (x:'Integral) : bigint = ToBigInt.Invoke x
 
     /// Gets the pi number.
     let inline getPi() :'Floating = Pi.Invoke()
@@ -474,11 +474,11 @@ module Operators =
     let inline pi< ^Num when (Pi or ^Num) : (static member Pi : ^Num * Pi -> ^Num) > : ^Num = Pi.Invoke()
 
     /// Returns the additive inverse of the number.
-    let inline negate  (x:'Num): 'Num = x |> TryNegate.Invoke |> function Ok x -> x | Error e -> raise e
+    let inline negate (x:'Num): 'Num = x |> TryNegate.Invoke |> function Ok x -> x | Error e -> raise e
 
     /// Returns the additive inverse of the number.
     /// Works also for unsigned types (Throws an exception if there is no inverse).
-    let inline negate'  (x:'Num): 'Num = x |> TryNegate'.Invoke |> function Ok x -> x | Error e -> raise e
+    let inline negate' (x:'Num): 'Num = x |> TryNegate'.Invoke |> function Ok x -> x | Error e -> raise e
 
     /// Returns the additive inverse of the number.
     /// Works also for unsigned types (Returns none if there is no inverse).
@@ -503,10 +503,10 @@ module Operators =
     let inline trySqrt x = x |> TrySqrt.Invoke |> function Ok x -> Some x | Error _ -> None
 
     /// Returns the square root of an integral number.
-    let inline isqrt   (x:'Integral): 'Integral = x |> TrySqrtRem.Invoke |> function Ok (x, _) -> x | Error e -> raise e
+    let inline isqrt (x:'Integral): 'Integral = x |> TrySqrtRem.Invoke |> function Ok (x, _) -> x | Error e -> raise e
 
     /// Returns the square root of an integral number.
-    let inline sqrtRem   (x:'Integral): 'Integral*'Integral = x |> TrySqrtRem.Invoke |> function Ok x -> x | Error e -> raise e
+    let inline sqrtRem (x:'Integral): 'Integral*'Integral = x |> TrySqrtRem.Invoke |> function Ok x -> x | Error e -> raise e
 
     /// <summary> Returns a number which represents the sign.
     /// <para/>   Rule: signum x * abs x = x        </summary>
@@ -601,13 +601,13 @@ module Operators =
         let inline (  <. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((<)   x) y :'``Functor<bool>``
         let inline ( .<. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (<) <!> x <*> y :'``Applicative<bool>``
 
-        let inline ( .||  ) (x :'``Functor<bool>``)     (y :bool)                   = map ((||)/> y) x :'``Functor<bool>``
-        let inline (  ||. ) (x :bool)                   (y :'``Functor<bool>``)     = map ((||)   x) y :'``Functor<bool>``
-        let inline ( .||. ) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (||) <!> x <*> y :'``Applicative<bool>``
+        let inline (.|| ) (x :'``Functor<bool>``)     (y :bool)                   = map ((||)/> y) x :'``Functor<bool>``
+        let inline ( ||.) (x :bool)                   (y :'``Functor<bool>``)     = map ((||)   x) y :'``Functor<bool>``
+        let inline (.||.) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (||) <!> x <*> y :'``Applicative<bool>``
 
-        let inline ( .&&  ) (x :'``Functor<bool>``)     (y :bool)                   = map ((&&)/> y) x :'``Functor<bool>``
-        let inline (  &&. ) (x :bool)                   (y :'``Functor<bool>``)     = map ((&&)   x) y :'``Functor<bool>``
-        let inline ( .&&. ) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (&&) <!> x <*> y :'``Applicative<bool>``
+        let inline (.&& ) (x :'``Functor<bool>``)     (y :bool)                   = map ((&&)/> y) x :'``Functor<bool>``
+        let inline ( &&.) (x :bool)                   (y :'``Functor<bool>``)     = map ((&&)   x) y :'``Functor<bool>``
+        let inline (.&&.) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (&&) <!> x <*> y :'``Applicative<bool>``
 
     /// <summary>
     /// Generic numbers, functions and operators.

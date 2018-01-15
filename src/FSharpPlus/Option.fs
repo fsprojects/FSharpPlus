@@ -21,10 +21,10 @@ module OptionT =
     let inline map  (f:'T->'U) (OptionT m : OptionT<'``Monad<option<'T>``>)                                            = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
 
 type OptionT<'``monad<option<'t>>``> with
-    static member inline Return (x : 'T) = Some x |> result |> OptionT                                                          : OptionT<'``Monad<seq<'T>``>
-    static member inline Map    (x : OptionT<'``Monad<seq<'T>``>, f : 'T->'U) = OptionT.map f x                                 : OptionT<'``Monad<seq<'U>``>
-    static member inline (<*>)  (f : OptionT<'``Monad<seq<('T -> 'U)>``>, x : OptionT<'``Monad<seq<'T>``>) = OptionT.apply f x  : OptionT<'``Monad<seq<'U>``>
-    static member inline Bind   (x : OptionT<'``Monad<seq<'T>``>, f : 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind f x
+    static member inline Return (x : 'T) = Some x |> result |> OptionT                                                         : OptionT<'``Monad<seq<'T>``>
+    static member inline Map    (x : OptionT<'``Monad<seq<'T>``>, f : 'T->'U) = OptionT.map f x                                : OptionT<'``Monad<seq<'U>``>
+    static member inline (<*>)  (f : OptionT<'``Monad<seq<('T -> 'U)>``>, x : OptionT<'``Monad<seq<'T>``>) = OptionT.apply f x : OptionT<'``Monad<seq<'U>``>
+    static member inline Bind   (x : OptionT<'``Monad<seq<'T>``>, f : 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind  f x
 
     static member inline get_Empty () = OptionT <| result None : OptionT<'``MonadPlus<option<'T>``>
     static member inline Append (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some _ -> x | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>

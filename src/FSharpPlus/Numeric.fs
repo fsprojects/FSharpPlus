@@ -320,10 +320,10 @@ open FsControl
 
 type Pi =
     inherit Default1
-    static member inline Pi (_:^R      , _:Default3) = Implicit.Invoke 3.14159274f    :^R
-    static member inline Pi (_:^R      , _:Default2) = Implicit.Invoke System.Math.PI :^R
-    static member inline Pi (_:^R      , _:Default1) = (^R: (static member PI:  ^R) ())
-    static member inline Pi (_:Default1, _:Default1) = (^R: (static member PI:  ^R) ())
+    static member inline Pi (_:^R      , _:Default3) = Implicit.Invoke 3.14159274f    : ^R
+    static member inline Pi (_:^R      , _:Default2) = Implicit.Invoke System.Math.PI : ^R
+    static member inline Pi (_:^R      , _:Default1) = (^R: (static member PI: ^R) ())
+    static member inline Pi (_:Default1, _:Default1) = (^R: (static member PI: ^R) ())
     static member        Pi (_:float32 , _:Pi      ) = 3.14159274f
     static member        Pi (_:float   , _:Pi      ) = System.Math.PI
     static member        Pi (_:decimal , _:Pi      ) = 3.1415926535897932384626433833M
@@ -336,7 +336,7 @@ type Pi =
 type Subtract =
     static member inline Subtract (x, y) = x - y
     static member inline Subtract (x, y) =
-            match ((^Num) : (static member TrySubtract: ^Num * ^Num -> Result< ^Num, exn>) (x, y)) with
+            match (^Num : (static member TrySubtract: ^Num * ^Num -> Result<'Num, exn>) x, y) with
             | Ok x    -> x
             | Error e -> raise e
 
@@ -444,7 +444,7 @@ type TrySqrt =
 type Sqrt =
     inherit Default1
     static member inline Sqrt (x:^Num, _:Default2) =
-            match ((^Num) : (static     member TrySqrt: ^Num -> Result< ^Num, exn>) (x)) with
+            match (^Num : (static member TrySqrt: ^Num -> Result< ^Num, exn>) x) with
             | Ok x    -> x
             | Error e -> raise e
 

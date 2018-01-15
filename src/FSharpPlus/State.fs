@@ -8,19 +8,19 @@ type State<'s,'t> = State of ('s->('t * 's))
 /// Basic operations on State
 [<RequireQualifiedAccess>]
 module State =
-    let run (State x) = x                                                                                           : 'S->('T * 'S)
-    let map   f (State m) = State (fun s -> let (a:'T, s') = m s in (f a, s'))                                      : State<'S,'U>
-    let bind  f (State m) = State (fun s -> let (a:'T, s') = m s in run (f a) s')                                   : State<'S,'U>
-    let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x':'T, s2) = x s1 in (f' x', s2))    : State<'S,'U>
+    let run (State x) = x                                                                                        : 'S->('T * 'S)
+    let map   f (State m) = State (fun s -> let (a:'T, s') = m s in (f a, s'))                                   : State<'S,'U>
+    let bind  f (State m) = State (fun s -> let (a:'T, s') = m s in run (f a) s')                                : State<'S,'U>
+    let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x':'T, s2) = x s1 in (f' x', s2)) : State<'S,'U>
 
-    let eval (State sa) (s:'s)           = fst (sa s)                                                               : 'T
-    let exec (State sa : State<'S,'A>) s = snd (sa s)                                                               : 'S
+    let eval (State sa) (s:'s)           = fst (sa s)                                                            : 'T
+    let exec (State sa : State<'S,'A>) s = snd (sa s)                                                            : 'S
 
     /// Return the state from the internals of the monad.
-    let get   = State (fun s -> (s, s))                                                                             : State<'S,'S>
+    let get   = State (fun s -> (s, s))                                                                          : State<'S,'S>
 
     /// Replace the state inside the monad.
-    let put x = State (fun _ -> ((), x))                                                                            : State<'S,unit>
+    let put x = State (fun _ -> ((), x))                                                                         : State<'S,unit>
 
 type State<'s,'t> with
     static member Map   (x, f:'T->_) = State.map f x          : State<'S,'U>
@@ -45,10 +45,10 @@ module StateT =
     let inline bind (f :'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
 
 type StateT<'s,'``monad<'t * 's>``> with
-    static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                          : StateT<'S,'``Monad<'T * 'S>``>
-    static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map f x    : StateT<'S,'``Monad<'U * 'S>``>
-    static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x  : StateT<'S,'``Monad<'U * 'S>``>
-    static member inline Bind   (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind f x
+    static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                         : StateT<'S,'``Monad<'T * 'S>``>
+    static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
+    static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
+    static member inline Bind   (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind  f x
 
     static member inline get_Empty () = StateT (fun _ -> getEmpty()) : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline Append (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>

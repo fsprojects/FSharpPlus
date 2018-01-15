@@ -9,7 +9,7 @@ open FsControl.Internals
 
 [<Extension;Sealed>]
 type Item1 =
-    static member inline       Item1 (t :'a          ) = ((^a) : (member Item1: _ ) t)
+    static member inline       Item1 (t :'a          ) = (^a : (member Item1: _ ) t)
     [<Extension>]static member Item1 ((a, _, _, _, _)) = a
     [<Extension>]static member Item1 ((a, _, _, _)   ) = a
     [<Extension>]static member Item1 ((a, _, _)      ) = a
@@ -22,7 +22,7 @@ type Item1 =
 
 [<Extension;Sealed>]
 type Item2 =
-    static member inline       Item2 (t :'a          ) = ((^a) : (member Item2: _ ) t)
+    static member inline       Item2 (t :'a          ) = (^a : (member Item2: _ ) t)
     [<Extension>]static member Item2 ((_, b, _, _, _)) = b
     [<Extension>]static member Item2 ((_, b, _, _)   ) = b
     [<Extension>]static member Item2 ((_, b, _)      ) = b
@@ -35,7 +35,7 @@ type Item2 =
 
 [<Extension;Sealed>]
 type Item3 =
-    static member inline       Item3 (t :'a          ) = ((^a) : (member Item3: _ ) t)
+    static member inline       Item3 (t :'a          ) = (^a : (member Item3: _ ) t)
     [<Extension>]static member Item3 ((_, _, c, _, _)) = c
     [<Extension>]static member Item3 ((_, _, c, _)   ) = c
     [<Extension>]static member Item3 ((_, _, c)      ) = c
@@ -47,7 +47,7 @@ type Item3 =
 
 [<Extension;Sealed>]
 type Item4 =
-    static member inline       Item4 (t :'a          ) = ((^a) : (member Item4: _ ) t)
+    static member inline       Item4 (t :'a          ) = (^a : (member Item4: _ ) t)
     [<Extension>]static member Item4 ((_, _, _, d, _)) = d
     [<Extension>]static member Item4 ((_, _, _, d)   ) = d
 
@@ -58,7 +58,7 @@ type Item4 =
 
 [<Extension;Sealed>]
 type Item5 =
-    static member inline       Item5 (t :'a          ) = ((^a) : (member Item5: _ ) t)
+    static member inline       Item5 (t :'a          ) = (^a : (member Item5: _ ) t)
     [<Extension>]static member Item5 ((_, _, _, _, e)) = e
 
     static member inline Invoke value = 

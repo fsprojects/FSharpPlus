@@ -47,9 +47,9 @@ module Compatibility =
         // IO
         type IO<'a> = Async<'a>
         let runIO (f:IO<'a>) = Async.RunSynchronously f
-        let getLine    = async {return System.Console.ReadLine()} :IO<string>
-        let putStrLn x = async {printfn "%s" x}                   :IO<unit>
-        let print    x = async {printfn "%A" x}                   :IO<unit>
+        let getLine    = async {return System.Console.ReadLine()} : IO<string>
+        let putStrLn x = async {printfn "%s" x}                   : IO<unit>
+        let print    x = async {printfn "%A" x}                   : IO<unit>
 
 
         // List
@@ -137,8 +137,8 @@ module Compatibility =
         let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
         let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
         let inline quotRem a b :'Integral * 'Integral = whenIntegral a; divRem a b
-        let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
-        let inline divMod D d :'Integral * 'Integral =
+        let inline mod'    a b :'Integral = whenIntegral a; ((a % b) + b) % b  
+        let inline divMod  D d :'Integral * 'Integral =
             let q, r = quotRem D d
             if (r < 0G) then
                 if (d > 0G) then (q - 1G, r + d)
@@ -162,7 +162,7 @@ module Compatibility =
 
         let inline sequence ms = List.sequence ms
         let inline replicateM n x = List.replicateM n x            
-        let inline mapM f as' = List.traverse f as'
+        let inline mapM f as'  = List.traverse f as'
         let inline filterM p x = List.filterM p x
         let inline liftM  f m1    = m1 >>= (return' << f)
         let inline liftM2 f m1 m2 = m1 >>= fun x1 -> m2 >>= fun x2 -> return' (f x1 x2)
@@ -219,7 +219,7 @@ module Compatibility =
         let put'      = State.put
         let execState = State.exec
 
-        let runState  = State.run
+        let runState = State.run
         type State = State
         let State = State.State
 
@@ -234,7 +234,7 @@ module Compatibility =
 
         
         // ContT
-        let runContT  = ContT.run
+        let runContT = ContT.run
         type ContT = ContT
         let ContT = ContT.ContT
             
