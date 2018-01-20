@@ -73,4 +73,42 @@ From F#+
 
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+ Examples
+--------
 *)
+
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open FSharpPlus
+open FSharpPlus.Data
+
+open FsControl
+
+let res1_Gt   = foldMap (compare 2) [1;2;3]
+let resHelloW = foldMap (fun x -> Some ("hello " + x)) (Some "world")
+
+module FoldableTree =
+    type Tree<'a> =
+        | Empty 
+        | Leaf of 'a 
+        | Node of (Tree<'a>) * 'a * (Tree<'a>)
+
+        // add instance for Foldable class
+        static member inline FoldMap (t:Tree<_>, f) =
+            let rec loop x f =
+                match x with
+                | Empty          -> zero
+                | Leaf  n        -> f n
+                | Node (l, k, r) -> loop l f ++ f k ++ loop r f
+            loop t f
+        static member inline FoldBack (x:Tree<_>, f, z) = FoldBack.FromFoldMap f z x
+        static member inline ToSeq    (x:Tree<_>) = Tree<_>.FoldBack (x, (fun x y -> seq {yield x; yield! y}), Seq.empty)
+    
+    let myTree = Node (Node (Leaf 1, 6, Leaf 3), 2 , Leaf 9)
+    let resSum21      = foldMap id   myTree
+    let resProduct324 = foldMap Mult myTree
+    let res21         = foldBack   (+) myTree 0
+    let res21'        = fold       (+) 0 myTree    // <- Fallback to the default method (ToSeq)

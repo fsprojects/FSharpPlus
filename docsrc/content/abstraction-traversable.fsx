@@ -65,4 +65,39 @@ From F#+
 
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+ Examples
+--------
 *)
+
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open FSharpPlus
+
+
+// Some functions
+let getLine    = async { return System.Console.ReadLine() }
+let f x = if x < 200 then [3 - x] else []
+let g x = if x < 200 then Some (3 - x) else None
+
+// traverse
+let resSomeminus100 = traverse f (Some 103)
+let resLstOfNull    = traverse f None 
+let res210          = traverse f [1;2;3]  
+let resSome210      = traverse g [1;2;3]  
+let resEmptyList    = traverse f [1000;2000;3000] 
+let resEListOfElist = traverse f []
+
+// sequence
+let resSome321  = sequence [Some 3;Some 2;Some 1]
+let resNone     = sequence [Some 3;None  ;Some 1]
+let res654      = sequence [ (+)3 ; (+)2 ; (+) 1] 3
+let resCombined = sequence [ [1;2;3] ; [4;5;6]  ]
+let resLstOfArr = sequence [|[1;2;3] ; [4;5;6] |]  // <- Uses the default method.
+let resArrOfLst = sequence [[|1;2;3|];[|4;5;6 |]]
+
+// This computation will ask for three user inputs
+// try Async.RunSynchronously get3strings
+let get3strings = sequence [getLine;getLine;getLine]

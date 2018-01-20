@@ -601,65 +601,6 @@ let res16n17   = iI (+) (iI (+) (pure' 4) [2;3] Ii ) (pure' 10: _ list) Ii   // 
 // *1 These lines fails when Apply.Invoke has no 'or ^'``Applicative<'U>`` ' (output) constraint.
 
 
-// Foldable
-
-let inline foldr (f: 'a -> 'b -> 'b) (z:'b) x :'b = FSharpPlus.Operators.foldBack f x z
-let inline foldl (f: 'b -> 'a -> 'b) (z:'b) x :'b = FSharpPlus.Operators.fold     f z x
-let inline foldMap (f:'T->'Monoid) (x:'Foldable'T) :'Monoid = FSharpPlus.Operators.foldMap f x
-
-// Test Foldable
-let resGt = foldMap (compare' 2) [1;2;3]
-let resHW = foldMap (fun x -> Just ("hello " + x)) (Just "world")
-
-module FoldableTree =
-    type Tree<'a> =
-        | Empty 
-        | Leaf of 'a 
-        | Node of (Tree<'a>) * 'a * (Tree<'a>)
-
-        // add instance for Foldable class
-        static member inline FoldMap (t:Tree<_>, f) =
-            let rec _foldMap x f =
-                match x with
-                | Empty        -> mempty()
-                | Leaf n       -> f n
-                | Node (l,k,r) -> mappend (_foldMap l f) (mappend (f k) (_foldMap r f) )
-            _foldMap t f
-        static member inline FoldBack (x:Tree<_>, f, z, _:FoldBack) = FoldBack.FromFoldMap f z x
-        static member inline ToSeq    (x:Tree<_>) = Tree.FoldBack (x, (fun x y -> seq {yield x; yield! y}), Seq.empty, Unchecked.defaultof<FoldBack>)
-    
-    let myTree = Node (Node (Leaf(1), 6, Leaf(3)), 2 , Leaf(9))
-    let resSum21      = foldMap Sum     myTree
-    let resProduct324 = foldMap Product myTree
-    let res21         = foldr   (+) 0   myTree
-    let res21'        = foldl   (+) 0   myTree      // <- Uses the default method.
-
-
-// Traversable
-
-let inline traverse f t = FSharpPlus.Operators.traverse f t
-let inline sequenceA  t = FSharpPlus.Operators.sequence t
-
-// Test Traversable
-let f x = if x < 200 then [3 - x] else []
-let g x = if x < 200 then Just (3 - x) else Nothing
-
-let resSomeminus100 = traverse f (Just 103)
-let resLstOfNull    = traverse f Nothing 
-let res210          = traverse f [1;2;3]  
-let resSome210      = traverse g [1;2;3]  
-let resEmptyList    = traverse f [1000;2000;3000] 
-let resEListOfElist = traverse f []
-let resSome321  = sequenceA [Some 3;Some 2;Some 1]
-let resNone     = sequenceA [Some 3;None  ;Some 1]
-let res654      = sequenceA [ (+)3 ; (+)2 ; (+) 1] 3
-let resCombined = sequenceA [ [1;2;3] ; [4;5;6]  ]
-let resLstOfArr = sequenceA [|[1;2;3] ; [4;5;6] |]  // <- Uses the default method.
-let resArrOfLst = sequenceA [[|1;2;3|];[|4;5;6 |]]
-let get3strings = sequenceA [getLine;getLine;getLine]
-
-
-
 
 
 // Monad Transformers
