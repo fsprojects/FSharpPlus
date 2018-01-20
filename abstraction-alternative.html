@@ -34,8 +34,8 @@
         <div class="span9" id="main">
           
 <h1><a name="Alternative" class="anchor" href="#Alternative">Alternative</a></h1>
-<p>Applicative Functors which also have a monoid structure.</p>
-<hr />
+<p>Applicative Functors which also have a monoid structure.
+<em></em>_</p>
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
 <li><code>return x</code>/<code>result x</code></li>
@@ -88,27 +88,28 @@
 </table>
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
-<li><a href="abstraction-monoid.html">Monoid</a>: An Alternative is a Monoid that is also an Applicative Functor</li>
-<li><a href="abstraction-applicative.html">Applicative</a>: An Alternative is a Monoid that is also an Applicative Functor</li>
-<li>MonadPlus: Alternatives that are also Monads</li>
-</ul>
+<li><p><a href="abstraction-monoid.html">Monoid</a>: An Alternative is a Monoid that is also an Applicative Functor</p></li>
+<li><p><a href="abstraction-applicative.html">Applicative</a>: An Alternative is a Monoid that is also an Applicative Functor</p></li>
+<li>
+<p>MonadPlus: Alternatives that are also Monads</p>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
 <p>From .Net/F#</p>
-<ul>
-<li><code>list&lt;'T&gt;</code></li>
-<li><code>option&lt;'T&gt;</code></li>
-<li><code>array&lt;'T&gt;</code></li>
-<li><code>seq&lt;'T&gt;</code></li>
+</li>
+<li><p><code>list&lt;'T&gt;</code></p></li>
+<li><p><code>option&lt;'T&gt;</code></p></li>
+<li><p><code>array&lt;'T&gt;</code></p></li>
+<li><p><code>seq&lt;'T&gt;</code></p></li>
 </ul>
 <p>From F#+</p>
 <ul>
-<li><p><code>ReaderT&lt;'R, 'MonadPlus&lt;'T&gt;&gt;</code></p></li>
-<li><p><code>WriterT&lt;'MonadPlus&lt;'T * 'Monoid&gt;&gt;</code></p></li>
-<li><p><code>StateT&lt;'S,'MonadPlus&lt;'T * 'S&gt;&gt;</code></p></li>
-<li><p><code>Compose&lt;'F&lt;'G&lt;'T&gt;&gt;&gt;</code></p></li>
+<li><code>ReaderT&lt;'R, 'MonadPlus&lt;'T&gt;&gt;</code></li>
+<li><code>WriterT&lt;'MonadPlus&lt;'T * 'Monoid&gt;&gt;</code></li>
+<li><code>StateT&lt;'S,'MonadPlus&lt;'T * 'S&gt;&gt;</code></li>
+<li><code>Compose&lt;'F&lt;'G&lt;'T&gt;&gt;&gt;</code></li>
 <li>
-<p><code>DList&lt;'T&gt;</code></p>
-<p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<code>DList&lt;'T&gt;</code>
+
+<a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation
 </li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>

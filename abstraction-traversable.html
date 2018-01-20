@@ -38,7 +38,7 @@
 <hr />
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>traverse f x</code> | <code>sequenceA x</code></li>
+<li><code>traverse f x</code> | <code>sequence x</code></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -79,6 +79,69 @@
 <li><code>NonEmptyList&lt;'T&gt;</code></li>
 </ul>
 <p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+
+
+<span class="c">// Some functions</span>
+<span class="k">let</span> <span class="i">getLine</span>    <span class="o">=</span> <span class="i">async</span> { <span class="k">return</span> <span class="i">System</span><span class="o">.</span><span class="i">Console</span><span class="o">.</span><span class="i">ReadLine</span>() }
+<span class="k">let</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span> <span class="k">if</span> <span class="i">x</span> <span class="o">&lt;</span> <span class="n">200</span> <span class="k">then</span> [<span class="n">3</span> <span class="o">-</span> <span class="i">x</span>] <span class="k">else</span> []
+<span class="k">let</span> <span class="i">g</span> <span class="i">x</span> <span class="o">=</span> <span class="k">if</span> <span class="i">x</span> <span class="o">&lt;</span> <span class="n">200</span> <span class="k">then</span> <span class="i">Some</span> (<span class="n">3</span> <span class="o">-</span> <span class="i">x</span>) <span class="k">else</span> <span class="i">None</span>
+
+<span class="c">// traverse</span>
+<span class="k">let</span> <span class="i">resSomeminus100</span> <span class="o">=</span> <span class="i">traverse</span> <span class="i">f</span> (<span class="i">Some</span> <span class="n">103</span>)
+<span class="k">let</span> <span class="i">resLstOfNull</span>    <span class="o">=</span> <span class="i">traverse</span> <span class="i">f</span> <span class="i">None</span> 
+<span class="k">let</span> <span class="i">res210</span>          <span class="o">=</span> <span class="i">traverse</span> <span class="i">f</span> [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>]  
+<span class="k">let</span> <span class="i">resSome210</span>      <span class="o">=</span> <span class="i">traverse</span> <span class="i">g</span> [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>]  
+<span class="k">let</span> <span class="i">resEmptyList</span>    <span class="o">=</span> <span class="i">traverse</span> <span class="i">f</span> [<span class="n">1000</span>;<span class="n">2000</span>;<span class="n">3000</span>] 
+<span class="k">let</span> <span class="i">resEListOfElist</span> <span class="o">=</span> <span class="i">traverse</span> <span class="i">f</span> []
+
+<span class="c">// sequence</span>
+<span class="k">let</span> <span class="i">resSome321</span>  <span class="o">=</span> <span class="i">sequence</span> [<span class="i">Some</span> <span class="n">3</span>;<span class="i">Some</span> <span class="n">2</span>;<span class="i">Some</span> <span class="n">1</span>]
+<span class="k">let</span> <span class="i">resNone</span>     <span class="o">=</span> <span class="i">sequence</span> [<span class="i">Some</span> <span class="n">3</span>;<span class="i">None</span>  ;<span class="i">Some</span> <span class="n">1</span>]
+<span class="k">let</span> <span class="i">res654</span>      <span class="o">=</span> <span class="i">sequence</span> [ (<span class="o">+</span>)<span class="n">3</span> ; (<span class="o">+</span>)<span class="n">2</span> ; (<span class="o">+</span>) <span class="n">1</span>] <span class="n">3</span>
+<span class="k">let</span> <span class="i">resCombined</span> <span class="o">=</span> <span class="i">sequence</span> [ [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>] ; [<span class="n">4</span>;<span class="n">5</span>;<span class="n">6</span>]  ]
+<span class="k">let</span> <span class="i">resLstOfArr</span> <span class="o">=</span> <span class="i">sequence</span> [|[<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>] ; [<span class="n">4</span>;<span class="n">5</span>;<span class="n">6</span>] |]  <span class="c">// &lt;- Uses the default method.</span>
+<span class="k">let</span> <span class="i">resArrOfLst</span> <span class="o">=</span> <span class="i">sequence</span> [[|<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>|];[|<span class="n">4</span>;<span class="n">5</span>;<span class="n">6</span> |]]
+
+<span class="c">// This computation will ask for three user inputs</span>
+<span class="c">// try Async.RunSynchronously get3strings</span>
+<span class="k">let</span> <span class="i">get3strings</span> <span class="o">=</span> <span class="i">sequence</span> [<span class="i">getLine</span>;<span class="i">getLine</span>;<span class="i">getLine</span>]
+</code></pre></td>
+</tr>
+</table>
 
 
         </div>
