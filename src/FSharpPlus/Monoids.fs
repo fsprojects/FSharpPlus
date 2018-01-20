@@ -75,6 +75,12 @@ type Last<'t> = Last of Option<'t> with
     static member run (Last a) = a                                            : 't option
 
 
+/// Numeric wrapper for multiplication monoid (*, 1)
+type Mult<'a> = Mult of 'a with
+    static member inline get_Zero() = Mult one
+    static member inline (+) (Mult (x:'n), Mult (y:'n)) = Mult (x * y)
+
+
 /// Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
 type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
 
