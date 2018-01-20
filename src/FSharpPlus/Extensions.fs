@@ -654,3 +654,37 @@ module Extensions =
                                TaskContinuationOptions.ExecuteSynchronously,
                                TaskScheduler.Default) |> ignore)
             tcs.Task
+
+
+    type Async<'t> with
+
+        /// Combine all asyncs in one, chaining them in sequence order.
+        static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
+            use enum = t.GetEnumerator ()
+            let rec loop () =
+                if enum.MoveNext () then async.Bind (enum.Current, fun x -> async.Bind (loop (), fun y -> async.Return (seq {yield x; yield! y})))
+                else async.Return Seq.empty
+            return! loop () }
+
+        /// Combine all asyncs in one, chaining them in sequence order.
+        static member Sequence (t:array<Async<_>>) : Async<array<_>> = async {
+            let siz = Array.length t
+            let arr = Array.zeroCreate siz
+            for i in 0 .. siz-1 do
+                let! v = t.[i]
+                arr.[i] <- v
+            return arr }
+
+
+    type Option<'t> with
+
+        /// Returns None if it contains a None element, otherwise a list of all elements
+        static member Sequence (t : seq<option<'T>>) =
+            let ok = ref true
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator()
+                while e.MoveNext() && ok.Value do
+                    match e.Current with
+                    | Some v -> yield v
+                    | None   -> ok.Value <- false})
+            if ok.Value then Some (Array.toSeq res) else None
