@@ -27,7 +27,12 @@ type Traverse =
                | None   -> ok.Value <- false})
        if ok.Value then Some (Array.toSeq res) else None
 
-    static member        Traverse (t:'t seq   ,f:'t->Async<'u> , [<Optional>]_output:Async<seq<'u>>, [<Optional>]_impl:Default2) :Async<seq<_>> = result <| Seq.map (Async.RunSynchronously) (Seq.map f t)
+    static member        Traverse (t:'t seq   ,f:'t->Async<'u> , [<Optional>]_output:Async<seq<'u>>, [<Optional>]_impl:Default2) : Async<seq<_>> = async {
+        use enum = t.GetEnumerator ()
+        let rec loop () =
+            if enum.MoveNext () then async.Bind (f enum.Current, fun x -> async.Bind (loop (), fun y -> async.Return (seq {yield x; yield! y})))
+            else async.Return Seq.empty
+        return! loop () }
 
     static member inline Traverse (t:^a   , f, [<Optional>]_output:'R, [<Optional>]_impl:Default1) = (^a : (static member Traverse: _*_ -> 'R) t, f)
     static member inline Traverse (_:^a when ^a : null and ^a :struct, _, _:'R   , _impl:Default1) = id
