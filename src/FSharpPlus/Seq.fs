@@ -5,7 +5,7 @@ open FSharpPlus
 /// Additional operations on Seq
 module Seq =
 
-    let inline sequence (ms:seq<'``Applicative<'T>``>) : '``Applicative<seq<'T>>`` = sequenceA ms
+    let inline sequence (ms:seq<'``Applicative<'T>``>) : '``Applicative<seq<'T>>`` = sequence ms
 
     let inline traverse (f:'T->'``Applicative<'U>``) (xs:seq<'T>) :'``Applicative<seq<'U>>`` = traverse f xs  
 

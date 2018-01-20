@@ -189,16 +189,16 @@ module Monad =
 
 module Traversable = 
     [<Test>]
-    let sequenceA_Default_Primitive() = 
-        let testVal = sequenceA [|Some 1; Some 2|]
+    let sequence_Default_Primitive() = 
+        let testVal = sequence [|Some 1; Some 2|]
         Assert.AreEqual (Some [|1;2|], testVal)
         Assert.IsInstanceOf<Option<array<int>>> testVal
 
     [<Test>]
-    let sequenceA_Specialization() =
-        let inline seqSeq (x:_ seq ) = sequenceA x
-        let inline seqArr (x:_ []  ) = sequenceA x
-        let inline seqLst (x:_ list) = sequenceA x
+    let sequence_Specialization() =
+        let inline seqSeq (x:_ seq ) = sequence x
+        let inline seqArr (x:_ []  ) = sequence x
+        let inline seqLst (x:_ list) = sequence x
 
         let a : list<_> = seqSeq (seq [[1];[3]])
         Assert.AreEqual ([seq [1; 3]], a)
@@ -215,7 +215,7 @@ module Traversable =
         let nel = NonEmptyList.create (Some 1) [Some 2]
         let rs1  = traverse id nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
-        let rs2  = sequenceA nel
+        let rs2  = sequence nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
 
     [<Test>]
@@ -224,9 +224,9 @@ module Traversable =
         let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
         let toLists   x = if x <> 4 then [x; x]       else []
         let a = traverse toOptions (Seq.initInfinite id)
-        let b = sequenceA  (Seq.initInfinite toOptions)
-        let c = sequenceA  (Seq.initInfinite toChoices)
-        let d = sequenceA  (Seq.initInfinite toLists)
+        let b = sequence  (Seq.initInfinite toOptions)
+        let c = sequence  (Seq.initInfinite toChoices)
+        let d = sequence  (Seq.initInfinite toLists)
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.True ((Choice2Of2 "This is a failure" = c))

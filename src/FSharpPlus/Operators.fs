@@ -200,7 +200,7 @@ module Operators =
     let inline traverse (f:'T->'``Functor<'U>``) (t:'``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = Traverse.Invoke f t
 
     /// Evaluate each action in the structure from left to right, and and collect the results.
-    let inline sequenceA (t:'``Traversable<'Functor<'T>>``) :'``Functor<'Traversable<'T>>`` = SequenceA.Invoke t
+    let inline sequence (t:'``Traversable<'Functor<'T>>``) :'``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
 
     // Indexable

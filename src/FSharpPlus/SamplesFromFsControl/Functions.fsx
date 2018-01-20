@@ -54,5 +54,5 @@ let mcon2 = [|[|1..3|];[|4..5|]|] .Join()  // Optional arguments work from F# 4.
 let arr = [|1..4|].Rev().Map((+) -1).Intersperse(10)
 let lst =  [1..4] .Rev().Map((+) -1).Intersperse(10)
 
-let opt  = [Some 1; Some 2].SequenceA()
-let arr' = [|[|1|]; [|2|]|].SequenceA()
+let opt  = [Some 1; Some 2].Sequence()
+let arr' = [|[|1|]; [|2|]|].Sequence()

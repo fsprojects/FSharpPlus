@@ -5,7 +5,7 @@ open FSharpPlus
 /// Additional operations on List
 module List =
 
-    let inline sequence (ms:list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequenceA ms
+    let inline sequence (ms:list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequence ms
 
     let inline traverse (f:'T->'``Applicative<'U>``) (xs:list<'T>) :'``Applicative<list<'U>>`` = traverse f xs
     

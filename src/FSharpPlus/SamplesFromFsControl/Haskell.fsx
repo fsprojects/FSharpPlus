@@ -638,7 +638,7 @@ module FoldableTree =
 // Traversable
 
 let inline traverse f t = FSharpPlus.Operators.traverse f t
-let inline sequenceA  t = FSharpPlus.Operators.sequenceA t
+let inline sequenceA  t = FSharpPlus.Operators.sequence t
 
 // Test Traversable
 let f x = if x < 200 then [3 - x] else []

@@ -120,6 +120,10 @@ module Compatibility =
         let inline foldl (f: 'b -> 'a -> 'b) (z:'b) x :'b = fold     f z x
 
 
+        // Traversable
+        let inline sequenceA x = sequence x
+
+
         // Numerics
         open GenericMath
 

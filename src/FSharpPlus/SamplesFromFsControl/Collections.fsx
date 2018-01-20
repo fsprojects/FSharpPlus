@@ -232,10 +232,10 @@ let r03' = filter ((=) 3) stack
 // Test traversable
 
 let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
-let resNone'  = sequenceA (seq [Some 3;None ;Some 1])
+let resNone'  = sequence (seq [Some 3;None ;Some 1])
 
 // This should not compile (but it does)
-let resNone'' = sequenceA (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
+let resNone'' = sequence (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
 
 
 

@@ -69,7 +69,7 @@ abstract class Foldable [[http://gusty.github.io/FSharpPlus/abstraction-foldable
 
 abstract class Traversable [[http://gusty.github.io/FSharpPlus/abstraction-traversable.html]] {
   {static} + traverse f x [[[http://gusty.github.io/FSharpPlus/abstraction-traversable.html#traverse {Map each element of a structure to an action, evaluate them left to right and collect result }]]]
-  + sequenceA x [[[http://gusty.github.io/FSharpPlus/abstraction-traversable.html#sequenceA {Evaluate each action in the structure left to right and collect the result } ]]]
+  + sequence x [[[http://gusty.github.io/FSharpPlus/abstraction-traversable.html#sequence {Evaluate each action in the structure left to right and collect the result } ]]]
 }
 
 together {
