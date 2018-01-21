@@ -16,9 +16,7 @@ module Result =
     let result x = Ok x
     let throw  x = Error x    
     let apply f x = match (f, x) with (Ok a, Ok b)     -> Ok (a b) | Error e, _ | _, Error e -> Error e: Result<'b, 'e>
-    let map   f                   = function Ok v      -> Ok (f v) | Error e                 -> Error e
     let flatten                   = function Ok (Ok v) -> Ok v     | Ok (Error e) | Error e  -> Error e
-    let bind (f:'t -> _)          = function Ok v      -> f v      | Error e                 -> Error e: Result<'v,'e>
     let inline catch (f:'t -> _)  = function Ok v      -> Ok v     | Error e                 -> f e    : Result<'v,'e>
     let inline either f g         = function Ok v      -> f v      | Error e                 -> g e
 
