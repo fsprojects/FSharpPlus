@@ -83,7 +83,7 @@
           </code>
           <div class="tip" id="553">
             <strong>Signature:</strong> (f:ListT&lt;^Monad&lt;seq&lt;(&#39;T -&gt; &#39;U)&gt;&gt; * x:ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;) -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9741, '?9742, '?9743, ^Monad<seq<'T>, ^Monad<seq<'U>          </div>
+                          <strong>Type parameters:</strong> ^?9736, '?9737, '?9738, ^Monad<seq<'T>, ^Monad<seq<'U>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L53-53" class="github-link">
@@ -101,8 +101,8 @@
             Append(arg1, arg2)
           </code>
           <div class="tip" id="554">
-            <strong>Signature:</strong> (ListT&lt;^?9761&gt; * ListT&lt;^?9764&gt;) -&gt; ListT&lt;^MonadPlus&lt;list&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadPlus<list<'T>, '?9763, ^?9764          </div>
+            <strong>Signature:</strong> (ListT&lt;^?9756&gt; * ListT&lt;^?9759&gt;) -&gt; ListT&lt;^MonadPlus&lt;list&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadPlus<list<'T>, '?9758, ^?9759          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L57-57" class="github-link">
@@ -119,8 +119,8 @@
             Bind(x, f)
           </code>
           <div class="tip" id="555">
-            <strong>Signature:</strong> (x:ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;)) -&gt; ListT&lt;^?9753&gt;<br />
-                          <strong>Type parameters:</strong> ^?9749, '?9750, ^Monad<seq<'U>, 'T, ^?9753, '?9754          </div>
+            <strong>Signature:</strong> (x:ListT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; ListT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;)) -&gt; ListT&lt;^?9748&gt;<br />
+                          <strong>Type parameters:</strong> ^?9744, '?9745, ^Monad<seq<'U>, 'T, ^?9748, '?9749          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L54-54" class="github-link">
@@ -174,7 +174,7 @@
           </code>
           <div class="tip" id="558">
             <strong>Signature:</strong> unit -&gt; ^ListT&lt;&#39;MonadReader&lt;&#39;R,  list&lt;&#39;R&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9802          </div>
+                          <strong>Type parameters:</strong> ^?9797          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L71-71" class="github-link">
@@ -192,7 +192,7 @@
           </code>
           <div class="tip" id="559">
             <strong>Signature:</strong> unit -&gt; ListT&lt;^MonadPlus&lt;list&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9758          </div>
+                          <strong>Type parameters:</strong> '?9753          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L56-56" class="github-link">
@@ -210,7 +210,7 @@
           </code>
           <div class="tip" id="560">
             <strong>Signature:</strong> unit -&gt; ^ListT&lt;&#39;MonadState&lt;&#39;S,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9793          </div>
+                          <strong>Type parameters:</strong> ^?9788          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L68-68" class="github-link">
@@ -228,7 +228,7 @@
           </code>
           <div class="tip" id="561">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; ListT&lt;^Monad&lt;list&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<list<'T>>, '?9769          </div>
+                          <strong>Type parameters:</strong> ^Monad<list<'T>>, '?9764          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L59-59" class="github-link">
@@ -246,7 +246,7 @@
           </code>
           <div class="tip" id="562">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ^ListT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^ListT<'MonadAsync<'T>>, ^?9774          </div>
+                          <strong>Type parameters:</strong> ^ListT<'MonadAsync<'T>>, ^?9769          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L61-61" class="github-link">
@@ -263,8 +263,8 @@
             Local(arg1, f)
           </code>
           <div class="tip" id="563">
-            <strong>Signature:</strong> (ListT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ListT&lt;^?9808&gt;<br />
-                          <strong>Type parameters:</strong> 'R1, 'R2, ^?9808          </div>
+            <strong>Signature:</strong> (ListT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ListT&lt;^?9803&gt;<br />
+                          <strong>Type parameters:</strong> 'R1, 'R2, ^?9803          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L72-72" class="github-link">
@@ -300,7 +300,7 @@
           </code>
           <div class="tip" id="565">
             <strong>Signature:</strong> x:&#39;T -&gt; ^ListT&lt;&#39;MonadState&lt;unit,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^ListT<'MonadState<unit,'S>>, ^?9798          </div>
+                          <strong>Type parameters:</strong> ^ListT<'MonadState<unit,'S>>, ^?9793          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L69-69" class="github-link">
@@ -335,8 +335,8 @@
             Throw(x)
           </code>
           <div class="tip" id="567">
-            <strong>Signature:</strong> x:&#39;E -&gt; ^?9778<br />
-                          <strong>Type parameters:</strong> ^?9778, ^?9779          </div>
+            <strong>Signature:</strong> x:&#39;E -&gt; ^?9773<br />
+                          <strong>Type parameters:</strong> ^?9773, ^?9774          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/List.fs#L63-63" class="github-link">

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Numeric functions
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="F#+ is a base library for F#."/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1><a name="Numeric-functions" class="anchor" href="#Numeric-functions">Numeric functions</a></h1>
+<p>This library comes with some additional numeric functions and constants.</p>
+<p>These functions work over many numeric types</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">qr0</span>  <span class="o">=</span> <span class="i">divRem</span> <span class="n">7</span>  <span class="n">3</span>  <span class="c">//val qr0 : int * int = (2, 1)</span>
+<span class="k">let</span> <span class="i">qr1</span>  <span class="o">=</span> <span class="i">divRem</span> <span class="n">7I</span> <span class="n">3I</span> <span class="c">//val qr1 : System.Numerics.BigInteger * System.Numerics.BigInteger = (2, 1)</span>
+<span class="k">let</span> <span class="i">qr2</span>  <span class="o">=</span> <span class="i">divRem</span> <span class="n">7.</span> <span class="n">3.</span> <span class="c">//val qr2 : float * float = (2.333333333, 0.0) -&gt; using default method.</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Numeric-constants" class="anchor" href="#Numeric-constants">Numeric constants</a></h1>
+<p>Apart from typical math constants, bounded types comes with minValue and maxValue constants.</p>
+<p>Here's an example how can this be used to implement an efficient findMin function</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="k">inline</span> <span class="i">findMin</span> (<span class="i">lst</span><span class="o">:</span> <span class="o">&#39;</span><span class="i">a</span> <span class="i">list</span>) <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span class="i">loop</span> <span class="i">acc</span> <span class="o">=</span> <span class="k">function</span>
+        | [] <span class="k">-&gt;</span> <span class="i">acc</span>
+        | <span class="i">x</span><span class="o">::</span>_ <span class="k">when</span> <span class="i">x</span> <span class="o">=</span> <span class="i">minValue</span> <span class="k">-&gt;</span> <span class="i">x</span>
+        | <span class="i">x</span><span class="o">::</span><span class="i">xs</span> <span class="k">-&gt;</span> <span class="i">loop</span> (<span class="k">if</span> <span class="i">x</span> <span class="o">&lt;</span> <span class="i">acc</span> <span class="k">then</span> <span class="i">x</span> <span class="k">else</span> <span class="i">acc</span>) <span class="i">xs</span>
+    <span class="i">loop</span> <span class="i">maxValue</span> <span class="i">lst</span>
+    
+<span class="k">let</span> <span class="i">minInt</span>  <span class="o">=</span> <span class="i">findMin</span> [<span class="n">1</span>;<span class="n">0</span>;<span class="n">12</span>;<span class="n">2</span>]
+<span class="k">let</span> <span class="i">minUInt</span> <span class="o">=</span> <span class="i">findMin</span> [<span class="n">1u</span>;<span class="n">0u</span>;<span class="n">12u</span>;<span class="n">2u</span>]  <span class="c">// loops only twice</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Generic-operations-over-numeric-types" class="anchor" href="#Generic-operations-over-numeric-types">Generic operations over numeric types</a></h1>
+<p>Writing code that is generic over different numeric types can be really tedious in F#.</p>
+<p>Using this library it becomes an easy task, but it's important to understand the numeric abstractions and its limitations.</p>
+<p>In order to have a reasonable type inference over generic types we need strict operations.</p>
+<p>For example the F# definition of (+) can take 2 different types, this makes possible to interact with some .NET types that have defined the (+) operator in a very arbitrary way.</p>
+<p>For instance you can add a float to a DateTime with the (+) operator, and that float will be interpreted as seconds.</p>
+<p>By opening the GenericMath namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.</p>
+<h1><a name="Generic-number-literals" class="anchor" href="#Generic-number-literals">Generic number literals</a></h1>
+<p>Numbers with a G suffix are generics.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">GenericMath</span>
+
+<span class="k">let</span> <span class="i">res5Int</span>  <span class="o">:</span> <span class="i">int</span>    <span class="o">=</span> <span class="n">5G</span>
+<span class="k">let</span> <span class="i">res5UInt</span> <span class="o">:</span> <span class="i">uint32</span> <span class="o">=</span> <span class="n">5G</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Often you need to define generic constants when defining generic functions.
+Since there is no way to define generic decimal literals in F# at the moment of writing this, we can use divisions:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="k">inline</span> <span class="i">areaOfCircle</span> <span class="i">radio</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="i">pi</span> <span class="o">=</span> 
+        <span class="n">314159265358979323846264338G</span> 
+                    <span class="o">/</span> 
+        <span class="n">100000000000000000000000000G</span>
+    <span class="i">pi</span> <span class="o">*</span> <span class="i">radio</span> <span class="o">*</span> <span class="i">radio</span>
+
+<span class="k">let</span> <span class="i">area1</span> <span class="o">=</span> <span class="i">areaOfCircle</span> <span class="n">5.</span>
+<span class="k">let</span> <span class="i">area2</span> <span class="o">=</span> <span class="i">areaOfCircle</span> <span class="n">5.0f</span>
+<span class="k">let</span> <span class="i">area3</span> <span class="o">=</span> <span class="i">areaOfCircle</span> <span class="n">5.0M</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Defining-custom-types-support-generic-operations" class="anchor" href="#Defining-custom-types-support-generic-operations">Defining custom types, support generic operations</a></h1>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">Vector2d</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="i">Vector2d</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">T</span> <span class="o">*</span> <span class="o">&#39;</span><span class="i">T</span>  <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> (<span class="o">+</span>) (<span class="i">Vector2d</span>(<span class="i">a</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>, <span class="i">b</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>), <span class="i">Vector2d</span>(<span class="i">c</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>, <span class="i">d</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>)) <span class="o">=</span> <span class="i">Vector2d</span> (((<span class="i">a</span> <span class="o">+</span> <span class="i">c</span>)<span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>), ((<span class="i">b</span> <span class="o">+</span> <span class="i">d</span>)<span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>))
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> (<span class="o">-</span>) (<span class="i">Vector2d</span>(<span class="i">a</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>, <span class="i">b</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>), <span class="i">Vector2d</span>(<span class="i">c</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>, <span class="i">d</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>)) <span class="o">=</span> <span class="i">Vector2d</span> (((<span class="i">a</span> <span class="o">-</span> <span class="i">c</span>)<span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>), ((<span class="i">b</span> <span class="o">-</span> <span class="i">d</span>)<span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>))
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="o">(*)</span> (<span class="i">Vector2d</span>(<span class="i">a</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>, <span class="i">b</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>), <span class="i">Vector2d</span>(<span class="i">c</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>, <span class="i">d</span><span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>)) <span class="o">=</span> <span class="i">Vector2d</span> (((<span class="i">a</span> <span class="o">*</span> <span class="i">c</span>)<span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>), ((<span class="i">b</span> <span class="o">*</span> <span class="i">d</span>)<span class="o">:</span><span class="o">&#39;</span><span class="i">t</span>))
+    <span class="k">static</span> <span class="k">member</span>        <span class="i">Return</span> <span class="i">x</span>                               <span class="o">=</span> <span class="i">Vector2d</span> (<span class="i">x</span>, <span class="i">x</span>)
+    <span class="k">static</span> <span class="k">member</span>        <span class="i">Map</span>(<span class="i">Vector2d</span>(<span class="i">x</span>, <span class="i">y</span>), <span class="i">f</span>)                 <span class="o">=</span> <span class="i">Vector2d</span> (<span class="i">f</span> <span class="i">x</span>, <span class="i">f</span> <span class="i">y</span>)
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="i">FromBigInt</span> <span class="i">x</span> <span class="o">=</span> <span class="k">let</span> <span class="i">y</span> <span class="o">=</span> <span class="i">fromBigInt</span> <span class="i">x</span> <span class="k">in</span> <span class="i">Vector2d</span> (<span class="i">y</span>, <span class="i">y</span>)
+</code></pre></td>
+</tr>
+</table>
+<p>Note we don't define overloads for adding a vector to a number</p>
+<p>Why? Apart from being tedious they will break math operators strictness</p>
+<p>so we will have problems type inferencing generic functions.</p>
+<p>OK, but then how to add (subtract, multiply) to a number?</p>
+<p>Option 1, explicitely 'lift' the number.</p>
+<p>Requires Return and ( + , - , * )</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">x1</span>  <span class="o">=</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>) <span class="o">+</span> <span class="i">result</span> <span class="n">7</span>
+<span class="k">let</span> <span class="i">x1&#39;</span> <span class="o">=</span> <span class="i">result</span> <span class="n">7</span> <span class="o">+</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>)
+</code></pre></td>
+</tr>
+</table>
+<p>Option 2, use Generic Numbers</p>
+<p>Requires FromBigInt and (+,-,*,/)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">GenericMath</span>
+<span class="k">let</span> <span class="i">x2</span>  <span class="o">=</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>) <span class="o">+</span> <span class="n">7G</span>
+<span class="k">let</span> <span class="i">x2&#39;</span> <span class="o">=</span> <span class="n">7G</span> <span class="o">+</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>)
+</code></pre></td>
+</tr>
+</table>
+<p>Option 3, use Applicative Math Operators
+Requires only Map</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">ApplicativeMath</span>
+<span class="k">let</span> <span class="i">x3</span> <span class="o">=</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>) <span class="o">.</span><span class="o">+</span> <span class="n">7</span>
+<span class="k">let</span> <span class="i">x3&#39;</span> <span class="o">=</span> <span class="n">7</span> <span class="o">+.</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>)
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Integrate-with-3rd-party-libraries" class="anchor" href="#Integrate-with-3rd-party-libraries">Integrate with 3rd party libraries</a></h1>
+<p>We may use types defined in other libraries, let's suppose we have this type Ratio defined somewhere.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="i">Ratio</span> <span class="o">=</span>
+    <span class="k">struct</span>
+        <span class="k">val</span> <span class="i">Numerator</span>   <span class="o">:</span> <span class="i">bigint</span>
+        <span class="k">val</span> <span class="i">Denominator</span> <span class="o">:</span> <span class="i">bigint</span>
+        <span class="k">new</span> (<span class="i">numerator</span><span class="o">:</span> <span class="i">bigint</span>, <span class="i">denominator</span><span class="o">:</span> <span class="i">bigint</span>) <span class="o">=</span> {<span class="i">Numerator</span> <span class="o">=</span> <span class="i">numerator</span>; <span class="i">Denominator</span> <span class="o">=</span> <span class="i">denominator</span>}
+    <span class="k">end</span>
+    <span class="k">override</span> <span class="i">this</span><span class="o">.</span><span class="i">ToString</span>() <span class="o">=</span> <span class="i">this</span><span class="o">.</span><span class="i">Numerator</span><span class="o">.</span><span class="i">ToString</span>() <span class="o">+</span> <span class="s">&quot; % &quot;</span> <span class="o">+</span> <span class="i">this</span><span class="o">.</span><span class="i">Denominator</span><span class="o">.</span><span class="i">ToString</span>()
+
+<span class="k">let</span> <span class="i">ratio</span> (<span class="i">a</span><span class="o">:</span><span class="i">bigint</span>) (<span class="i">b</span><span class="o">:</span><span class="i">bigint</span>) <span class="o">:</span><span class="i">Ratio</span> <span class="o">=</span>
+    <span class="k">if</span> <span class="i">b</span> <span class="o">=</span> <span class="n">0I</span> <span class="k">then</span> <span class="i">failwith</span> <span class="s">&quot;Ratio.%: zero denominator&quot;</span>
+    <span class="k">let</span> <span class="i">a</span>, <span class="i">b</span> <span class="o">=</span> <span class="k">if</span> <span class="i">b</span> <span class="o">&lt;</span> <span class="n">0I</span> <span class="k">then</span> (<span class="o">-</span><span class="i">a</span>, <span class="o">-</span><span class="i">b</span>) <span class="k">else</span> (<span class="i">a</span>, <span class="i">b</span>)
+    <span class="k">let</span> <span class="i">gcd</span> <span class="o">=</span> <span class="i">gcd</span> <span class="i">a</span> <span class="i">b</span>
+    <span class="i">Ratio</span> (<span class="i">a</span> <span class="o">/</span> <span class="i">gcd</span>, <span class="i">b</span> <span class="o">/</span> <span class="i">gcd</span>)
+
+<span class="k">let</span> <span class="i">Ratio</span> (<span class="i">x</span>,<span class="i">y</span>) <span class="o">=</span> <span class="i">x</span> <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> <span class="i">y</span>
+
+<span class="k">type</span> <span class="i">Ratio</span> <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> (<span class="o">/</span>) (<span class="i">a</span><span class="o">:</span><span class="i">Ratio</span>, <span class="i">b</span><span class="o">:</span><span class="i">Ratio</span>) <span class="o">=</span> (<span class="i">a</span><span class="o">.</span><span class="i">Numerator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Denominator</span>) <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> (<span class="i">a</span><span class="o">.</span><span class="i">Denominator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Numerator</span>)                                              
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> (<span class="o">+</span>) (<span class="i">a</span><span class="o">:</span><span class="i">Ratio</span>, <span class="i">b</span><span class="o">:</span><span class="i">Ratio</span>) <span class="o">=</span> (<span class="i">a</span><span class="o">.</span><span class="i">Numerator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Denominator</span> <span class="o">+</span> <span class="i">b</span><span class="o">.</span><span class="i">Numerator</span> <span class="o">*</span> <span class="i">a</span><span class="o">.</span><span class="i">Denominator</span>) <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> (<span class="i">a</span><span class="o">.</span><span class="i">Denominator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Denominator</span>)
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> (<span class="o">-</span>) (<span class="i">a</span><span class="o">:</span><span class="i">Ratio</span>, <span class="i">b</span><span class="o">:</span><span class="i">Ratio</span>) <span class="o">=</span> (<span class="i">a</span><span class="o">.</span><span class="i">Numerator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Denominator</span> <span class="o">-</span> <span class="i">b</span><span class="o">.</span><span class="i">Numerator</span> <span class="o">*</span> <span class="i">a</span><span class="o">.</span><span class="i">Denominator</span>) <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> (<span class="i">a</span><span class="o">.</span><span class="i">Denominator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Denominator</span>)
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="o">(*)</span> (<span class="i">a</span><span class="o">:</span><span class="i">Ratio</span>, <span class="i">b</span><span class="o">:</span><span class="i">Ratio</span>) <span class="o">=</span> (<span class="i">a</span><span class="o">.</span><span class="i">Numerator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Numerator</span>) <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> (<span class="i">a</span><span class="o">.</span><span class="i">Denominator</span> <span class="o">*</span> <span class="i">b</span><span class="o">.</span><span class="i">Denominator</span>)
+
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="i">Abs</span>        (<span class="i">r</span><span class="o">:</span><span class="i">Ratio</span>) <span class="o">=</span> (<span class="i">abs</span>    <span class="i">r</span><span class="o">.</span><span class="i">Numerator</span>) <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> <span class="i">r</span><span class="o">.</span><span class="i">Denominator</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="i">Signum</span>     (<span class="i">r</span><span class="o">:</span><span class="i">Ratio</span>) <span class="o">=</span> (<span class="i">signum</span> <span class="i">r</span><span class="o">.</span><span class="i">Numerator</span>) <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> <span class="n">1I</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="i">FromBigInt</span> (<span class="i">x</span><span class="o">:</span><span class="i">bigint</span>) <span class="o">=</span> <span class="i">fromBigInt</span> <span class="i">x</span> <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> <span class="n">1I</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> (<span class="o">~-</span>)       (<span class="i">r</span><span class="o">:</span><span class="i">Ratio</span>) <span class="o">=</span> <span class="o">-</span>(<span class="i">r</span><span class="o">.</span><span class="i">Numerator</span>) <span class="o">&lt;/</span><span class="i">ratio</span><span class="o">/&gt;</span> <span class="i">r</span><span class="o">.</span><span class="i">Denominator</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Since most Rational implementations have Numerator and Denominator defined we can just use our generic functions on it:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">some3_2</span> <span class="o">=</span> <span class="i">trySqrt</span> (<span class="i">Ratio</span>(<span class="n">9I</span>, <span class="n">4I</span>))
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Example-creating-a-polymorphic-quadratic-function" class="anchor" href="#Example-creating-a-polymorphic-quadratic-function">Example: creating a polymorphic quadratic function</a></h1>
+<p>The quadratic functions has different results depending on which domain it operates.</p>
+<p>For example for real numbers it can have 0 or 2 solutions (arguably also 1 that is a double solution).</p>
+<p>But for complex numbers it always has 2 solutions.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">GenericMath</span>
+
+<span class="k">let</span> <span class="k">inline</span> <span class="i">quadratic</span> <span class="i">a</span> <span class="i">b</span> <span class="i">c</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="i">root1</span> <span class="o">=</span> ( <span class="o">-</span><span class="i">b</span> <span class="o">+</span> <span class="i">sqrt</span> (  <span class="i">b</span> <span class="o">*</span> <span class="i">b</span> <span class="o">-</span> <span class="n">4G</span> <span class="o">*</span> <span class="i">a</span> <span class="o">*</span> <span class="i">c</span>) )  <span class="o">/</span> (<span class="n">2G</span> <span class="o">*</span> <span class="i">a</span>)
+    <span class="k">let</span> <span class="i">root2</span> <span class="o">=</span> ( <span class="o">-</span><span class="i">b</span> <span class="o">-</span> <span class="i">sqrt</span> (  <span class="i">b</span> <span class="o">*</span> <span class="i">b</span> <span class="o">-</span> <span class="n">4G</span> <span class="o">*</span> <span class="i">a</span> <span class="o">*</span> <span class="i">c</span>) )  <span class="o">/</span> (<span class="n">2G</span> <span class="o">*</span> <span class="i">a</span>)
+    (<span class="i">root1</span>,<span class="i">root2</span>)
+
+
+<span class="k">let</span> <span class="i">noRes</span>  <span class="o">=</span> <span class="i">quadratic</span> <span class="n">2.0</span>  <span class="n">3G</span> <span class="n">9G</span>
+<span class="c">// val noRes : float * float = (nan, nan)</span>
+
+<span class="k">let</span> <span class="i">res30_15</span>  <span class="o">=</span> <span class="i">quadratic</span> <span class="n">2.0</span>  <span class="o">-</span><span class="n">3G</span> <span class="o">-</span><span class="n">9G</span>
+<span class="c">// val res30_15 : float * float = (3.0, -1.5)</span>
+
+<span class="k">let</span> <span class="i">res30_15f</span> <span class="o">=</span> <span class="i">quadratic</span> <span class="n">2.0f</span> <span class="o">-</span><span class="n">3G</span> <span class="o">-</span><span class="n">9G</span>
+<span class="c">// val res30_15f : float32 * float32 = (3.0f, -1.5f)</span>
+
+<span class="k">let</span> <span class="i">resCmplx</span><span class="o">:</span><span class="i">System</span><span class="o">.</span><span class="i">Numerics</span><span class="o">.</span><span class="i">Complex</span> <span class="o">*</span> _ <span class="o">=</span> <span class="i">quadratic</span> <span class="n">2G</span> <span class="o">-</span><span class="n">3G</span> <span class="n">9G</span>
+<span class="c">// val resCmplx : System.Numerics.Complex * System.Numerics.Complex = ((0.75, -1.98431348329844), (0.75, 1.98431348329844))</span>
+
+<span class="k">let</span> <span class="i">res30_15r</span><span class="o">:</span><span class="i">Ratio</span> <span class="o">*</span> _ <span class="o">=</span> <span class="i">quadratic</span> <span class="n">2G</span> <span class="o">-</span><span class="n">3G</span> <span class="o">-</span><span class="n">9G</span>
+<span class="c">// val res30_15r : Ratio * Ratio = (3 % 1, -3 % 2)</span>
+</code></pre></td>
+</tr>
+</table>
+
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

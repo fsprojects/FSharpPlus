@@ -83,7 +83,7 @@
           </code>
           <div class="tip" id="667">
             <strong>Signature:</strong> (f:WriterT&lt;^Monad&lt;(&#39;T -&gt; &#39;U) * &#39;Monoid&gt;&gt; * x:WriterT&lt;^Monad&lt;&#39;T * &#39;Monoid&gt;&gt;) -&gt; WriterT&lt;^Monad&lt;&#39;U * &#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9052, '?9053, '?9054, ^?9055, ^?9056, ^Monad<'T * 'Monoid>, ^Monad<'U * 'Monoid>          </div>
+                          <strong>Type parameters:</strong> ^?9047, '?9048, '?9049, ^?9050, ^?9051, ^Monad<'T * 'Monoid>, ^Monad<'U * 'Monoid>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L75-75" class="github-link">
@@ -120,7 +120,7 @@
           </code>
           <div class="tip" id="669">
             <strong>Signature:</strong> (x:WriterT&lt;^Monad&lt;&#39;T * &#39;Monoid&gt;&gt; * f:(&#39;T -&gt; WriterT&lt;^Monad&lt;&#39;U * &#39;Monoid&gt;&gt;)) -&gt; WriterT&lt;^Monad&lt;&#39;U * &#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'U * 'Monoid>, 'T, ^?9064, '?9065          </div>
+                          <strong>Type parameters:</strong> ^Monad<'U * 'Monoid>, 'T, ^?9059, '?9060          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L76-76" class="github-link">
@@ -138,7 +138,7 @@
           </code>
           <div class="tip" id="670">
             <strong>Signature:</strong> (f:((&#39;a -&gt; WriterT&lt;Cont&lt;&#39;r,&#39;t&gt;&gt;) -&gt; WriterT&lt;^MonadCont&lt;&#39;r,&#39;a*&#39;b&gt;&gt;)) -&gt; WriterT&lt;^MonadCont&lt;&#39;r,&#39;a*&#39;b&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'r, 't, ^MonadCont<'r,'a*'b>, ^?9115          </div>
+                          <strong>Type parameters:</strong> 'r, 't, ^MonadCont<'r,'a*'b>, ^?9110          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L93-93" class="github-link">
@@ -174,7 +174,7 @@
           </code>
           <div class="tip" id="672">
             <strong>Signature:</strong> unit -&gt; ^WriterT&lt;&#39;MonadReader&lt;&#39;R,&#39;R*&#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9119          </div>
+                          <strong>Type parameters:</strong> ^?9114          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L96-96" class="github-link">
@@ -210,7 +210,7 @@
           </code>
           <div class="tip" id="674">
             <strong>Signature:</strong> unit -&gt; ^WriterT&lt;&#39;MonadState&lt;&#39;S,&#39;S*&#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9129          </div>
+                          <strong>Type parameters:</strong> ^?9124          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L99-99" class="github-link">
@@ -228,7 +228,7 @@
           </code>
           <div class="tip" id="675">
             <strong>Signature:</strong> m:^Monad&lt;&#39;T&gt; -&gt; WriterT&lt;^Monad&lt;&#39;T * &#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'T * 'Monoid>, '?9092, ^?9093          </div>
+                          <strong>Type parameters:</strong> ^Monad<'T * 'Monoid>, '?9087, ^?9088          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L85-85" class="github-link">
@@ -246,7 +246,7 @@
           </code>
           <div class="tip" id="676">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ^WriterT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^WriterT<'MonadAsync<'T>>, ^?9098          </div>
+                          <strong>Type parameters:</strong> ^WriterT<'MonadAsync<'T>>, ^?9093          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L87-87" class="github-link">
@@ -264,7 +264,7 @@
           </code>
           <div class="tip" id="677">
             <strong>Signature:</strong> (WriterT&lt;^Monad&lt;(&#39;T * (&#39;Monoid&#39;T -&gt; &#39;Monoid)) * &#39;Monoid&gt;&gt;) -&gt; WriterT&lt;^Monad&lt;(&#39;T * &#39;Monoid) * &#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<('T * 'Monoid) * 'Monoid>, '?9080, '?9081          </div>
+                          <strong>Type parameters:</strong> ^Monad<('T * 'Monoid) * 'Monoid>, '?9075, '?9076          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L82-82" class="github-link">
@@ -281,7 +281,7 @@
             Local(arg1, f)
           </code>
           <div class="tip" id="678">
-            <strong>Signature:</strong> (WriterT&lt;^?9122&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; WriterT&lt;^MonadReader&lt;&#39;R1,&#39;T*&#39;Monoid&gt;&gt;<br />
+            <strong>Signature:</strong> (WriterT&lt;^?9117&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; WriterT&lt;^MonadReader&lt;&#39;R1,&#39;T*&#39;Monoid&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'R1, 'R2, ^MonadReader<'R1,'T*'Monoid>          </div>
         </td>
         <td class="xmldoc">
@@ -300,7 +300,7 @@
           </code>
           <div class="tip" id="679">
             <strong>Signature:</strong> (x:WriterT&lt;^Monad&lt;&#39;T * &#39;Monoid&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; WriterT&lt;^Monad&lt;&#39;U * &#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'U * 'Monoid>, 'T, '?9047, 'U          </div>
+                          <strong>Type parameters:</strong> ^Monad<'U * 'Monoid>, 'T, '?9042, 'U          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L74-74" class="github-link">
@@ -318,7 +318,7 @@
           </code>
           <div class="tip" id="680">
             <strong>Signature:</strong> (WriterT&lt;^Monad&lt;&#39;T * &#39;Monoid&gt;&gt;) -&gt; WriterT&lt;^Monad&lt;&#39;T * &#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9085, '?9086, '?9087          </div>
+                          <strong>Type parameters:</strong> '?9080, '?9081, '?9082          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L83-83" class="github-link">
@@ -336,7 +336,7 @@
           </code>
           <div class="tip" id="681">
             <strong>Signature:</strong> x:&#39;S -&gt; ^WriterT&lt;&#39;MonadState&lt;&#39;S,unit*&#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^WriterT<'MonadState<'S,unit*'Monoid>>, ^?9134          </div>
+                          <strong>Type parameters:</strong> ^WriterT<'MonadState<'S,unit*'Monoid>>, ^?9129          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L100-100" class="github-link">
@@ -354,7 +354,7 @@
           </code>
           <div class="tip" id="682">
             <strong>Signature:</strong> x:&#39;T -&gt; WriterT&lt;^Monad&lt;&#39;T * &#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'T * 'Monoid>, ^?9041          </div>
+                          <strong>Type parameters:</strong> ^Monad<'T * 'Monoid>, ^?9036          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L73-73" class="github-link">
@@ -389,8 +389,8 @@
             Throw(x)
           </code>
           <div class="tip" id="684">
-            <strong>Signature:</strong> x:&#39;E -&gt; ^?9102<br />
-                          <strong>Type parameters:</strong> ^?9102, ^?9103          </div>
+            <strong>Signature:</strong> x:&#39;E -&gt; ^?9097<br />
+                          <strong>Type parameters:</strong> ^?9097, ^?9098          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L89-89" class="github-link">
