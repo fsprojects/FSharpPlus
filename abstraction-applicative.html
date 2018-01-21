@@ -149,6 +149,24 @@
 <span class="l">33: </span>
 <span class="l">34: </span>
 <span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
@@ -185,6 +203,24 @@
 <span class="c">// Composing applicatives</span>
 <span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Data</span>
 <span class="k">let</span> <span class="i">res4</span> <span class="o">=</span> (<span class="o">+</span>) <span class="o">&lt;!&gt;</span> <span class="i">Compose</span> [<span class="i">Some</span> <span class="n">3</span>] <span class="o">&lt;*&gt;</span> <span class="i">Compose</span> [<span class="i">Some</span> <span class="n">1</span>]
+
+
+<span class="c">// Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets</span>
+<span class="k">let</span> <span class="i">res3n4</span>   <span class="o">=</span> <span class="i">iI</span> ((<span class="o">+</span>) <span class="n">2</span>) [<span class="n">1</span>;<span class="n">2</span>] <span class="i">Ii</span>
+<span class="k">let</span> <span class="i">res3n4&#39;</span>  <span class="o">=</span> <span class="i">iI</span> (<span class="o">+</span>) (<span class="i">result</span> <span class="n">2</span>) [<span class="n">1</span>;<span class="n">2</span>] <span class="i">Ii</span>
+<span class="k">let</span> <span class="i">res18n24</span> <span class="o">=</span> <span class="i">iI</span> (<span class="o">+</span>) (<span class="i">ZipList</span>(<span class="i">seq</span> [<span class="n">8</span>;<span class="n">4</span>])) (<span class="i">ZipList</span>(<span class="i">seq</span> [<span class="n">10</span>;<span class="n">20</span>])) <span class="i">Ii</span>
+
+<span class="k">let</span> <span class="i">tryDiv</span> <span class="i">x</span> <span class="i">y</span> <span class="o">=</span> <span class="k">if</span> <span class="i">y</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span> <span class="i">None</span> <span class="k">else</span> <span class="i">Some</span> (<span class="i">x</span> <span class="o">&lt;/</span><span class="i">div</span><span class="o">/&gt;</span> <span class="i">y</span>)
+<span class="k">let</span> <span class="i">resSome3</span>    <span class="o">=</span> <span class="i">join</span> (<span class="i">iI</span> <span class="i">tryDiv</span> (<span class="i">Some</span> <span class="n">6</span>) (<span class="i">Some</span> <span class="n">2</span>) <span class="i">Ii</span>)
+<span class="k">let</span> <span class="i">resSome3&#39;</span>   <span class="o">=</span>       <span class="i">iI</span> <span class="i">tryDiv</span> (<span class="i">Some</span> <span class="n">6</span>) (<span class="i">Some</span> <span class="n">2</span>) <span class="i">Ji</span>
+
+<span class="k">let</span> <span class="i">tryDivBy</span> <span class="i">y</span> <span class="o">=</span> <span class="k">if</span> <span class="i">y</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span> <span class="i">None</span> <span class="k">else</span> <span class="i">Some</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">x</span> <span class="o">&lt;/</span><span class="i">div</span><span class="o">/&gt;</span> <span class="i">y</span>)
+<span class="k">let</span> <span class="i">resSome2</span>  <span class="o">=</span> <span class="i">join</span> (<span class="i">result</span> <span class="i">tryDivBy</span>  <span class="o">&lt;*&gt;</span> <span class="i">Some</span> <span class="n">4</span>) <span class="o">&lt;*&gt;</span> <span class="i">Some</span> <span class="n">8</span>
+<span class="k">let</span> <span class="i">resSome2&#39;</span> <span class="o">=</span> <span class="i">join</span> (   <span class="i">iI</span> <span class="i">tryDivBy</span> (<span class="i">Some</span> <span class="n">4</span>) <span class="i">Ii</span>) <span class="o">&lt;*&gt;</span> <span class="i">Some</span> <span class="n">8</span>
+
+<span class="k">let</span> <span class="i">resSome2&#39;&#39;</span> <span class="o">=</span> <span class="i">iI</span> <span class="i">tryDivBy</span> (<span class="i">Some</span> <span class="n">4</span>) <span class="i">J</span> (<span class="i">Some</span> <span class="n">8</span>) <span class="i">Ii</span>
+<span class="k">let</span> <span class="i">resNone</span> <span class="o">=</span> <span class="i">iI</span> <span class="i">tryDivBy</span> (<span class="i">Some</span> <span class="n">0</span>) <span class="i">J</span> (<span class="i">Some</span> <span class="n">8</span>) <span class="i">Ii</span>
+<span class="k">let</span> <span class="i">res16n17</span>   <span class="o">=</span> <span class="i">iI</span> (<span class="o">+</span>) (<span class="i">iI</span> (<span class="o">+</span>) (<span class="i">result</span> <span class="n">4</span>) [<span class="n">2</span>; <span class="n">3</span>] <span class="i">Ii</span>) [<span class="n">10</span>] <span class="i">Ii</span>
 </code></pre></td>
 </tr>
 </table>

@@ -87,10 +87,40 @@
 <p>From F#+</p>
 <ul>
 <li>
-<p><code>Const&lt;'C,'T&gt;</code></p>
-<p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<code>Const&lt;'C,'T&gt;</code>
+
+<a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation
+
+Examples
 </li>
 </ul>
+<hr />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+
+<span class="c">// convert (map) first element to an int and the second to a string</span>
+<span class="k">let</span> <span class="i">rInt10Str10</span> <span class="o">=</span> <span class="i">bimap</span>  <span class="i">int</span> <span class="i">string</span> (<span class="n">10.0</span>, <span class="n">10</span>)
+
+
+<span class="k">let</span> <span class="i">resOk11</span>  <span class="o">=</span> <span class="i">bimap</span>  ((<span class="o">+</span>) <span class="n">1</span>) <span class="i">string</span> (<span class="i">Ok</span> <span class="n">10</span>)
+<span class="k">let</span> <span class="i">rStrTrue</span> <span class="o">=</span> <span class="i">first</span>  <span class="i">string</span> (<span class="k">true</span>, <span class="n">10</span>)
+<span class="k">let</span> <span class="i">rStr10</span>   <span class="o">=</span> <span class="i">second</span> <span class="i">string</span> (<span class="k">true</span>, <span class="n">10</span>)
+</code></pre></td>
+</tr>
+</table>
 
 
         </div>

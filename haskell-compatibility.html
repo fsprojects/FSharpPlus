@@ -283,6 +283,20 @@
 <span class="l">82: </span>
 <span class="l">83: </span>
 <span class="l">84: </span>
+<span class="l">85: </span>
+<span class="l">86: </span>
+<span class="l">87: </span>
+<span class="l">88: </span>
+<span class="l">89: </span>
+<span class="l">90: </span>
+<span class="l">91: </span>
+<span class="l">92: </span>
+<span class="l">93: </span>
+<span class="l">94: </span>
+<span class="l">95: </span>
+<span class="l">96: </span>
+<span class="l">97: </span>
+<span class="l">98: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 <span class="k">open</span> <span class="i">FSharpPlus</span>
@@ -307,6 +321,20 @@
 <span class="k">let</span> <span class="i">main</span> <span class="o">=</span> <span class="i">print</span> (<span class="i">halfThenSqrt</span> <span class="n">32.0</span>)
 <span class="i">runIO</span> <span class="i">main</span>                                                  <span class="c">// prints 4.0</span>
 <span class="k">let</span> <span class="i">get3strings</span>  <span class="o">=</span> <span class="i">sequenceA</span> [<span class="i">getLine</span>;<span class="i">getLine</span>;<span class="i">getLine</span>]      <span class="c">// try runIO get3strings</span>
+
+
+<span class="c">// Test IO</span>
+<span class="k">let</span> <span class="i">action</span> <span class="o">=</span> <span class="i">do&#39;</span> {
+    <span class="k">do!</span> <span class="i">putStrLn</span>  <span class="s">&quot;What is your first name?&quot;</span>
+    <span class="k">let!</span> <span class="i">fn</span> <span class="o">=</span> <span class="i">getLine</span>
+    <span class="k">do!</span> <span class="i">putStrLn</span>  (<span class="s">&quot;Thanks, &quot;</span> <span class="o">+</span> <span class="i">fn</span>) 
+    <span class="k">do!</span> <span class="i">putStrLn</span>  (<span class="s">&quot;What is your last name?&quot;</span>)
+    <span class="k">let!</span> <span class="i">ln</span> <span class="o">=</span> <span class="i">getLine</span>
+    <span class="k">let</span>  <span class="i">fullname</span> <span class="o">=</span> <span class="i">fn</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="i">ln</span>
+    <span class="k">do!</span> <span class="i">putStrLn</span>  (<span class="s">&quot;Your full name is: &quot;</span> <span class="o">+</span> <span class="i">fullname</span>)
+    <span class="k">return</span> <span class="i">fullname</span> }
+<span class="c">// try -&gt; runIO action ;;</span>
+
 
 
 <span class="c">// List</span>

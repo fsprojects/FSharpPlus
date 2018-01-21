@@ -132,6 +132,40 @@
 <span class="l">17: </span>
 <span class="l">18: </span>
 <span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
@@ -152,6 +186,40 @@
 
 <span class="c">// mfilter usage</span>
 <span class="k">let</span> <span class="i">fstMatch</span> <span class="o">=</span> <span class="i">mfilter</span> ((<span class="o">=</span>) <span class="n">5</span>) [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>]    <span class="c">// [] -&gt; no element found, it uses the empty value</span>
+
+
+<span class="c">// MonadPlus</span>
+
+<span class="k">let</span> <span class="i">getLine</span>    <span class="o">=</span> <span class="i">async</span> { <span class="k">return</span> <span class="i">System</span><span class="o">.</span><span class="i">Console</span><span class="o">.</span><span class="i">ReadLine</span>() }
+<span class="k">let</span> <span class="i">putStrLn</span> <span class="i">x</span> <span class="o">=</span> <span class="i">async</span> { <span class="i">printfn</span> <span class="s">&quot;%s&quot;</span> <span class="i">x</span>}
+
+<span class="k">let</span> <span class="i">nameAndAddress</span> <span class="o">=</span> <span class="i">traverse</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">putStrLn</span> <span class="i">x</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="k">fun</span> _ <span class="k">-&gt;</span> <span class="i">getLine</span>) [<span class="s">&quot;name&quot;</span>;<span class="s">&quot;address&quot;</span>]
+
+<span class="k">let</span> <span class="i">a</span><span class="o">:</span><span class="i">list</span><span class="o">&lt;</span><span class="i">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="i">empty</span>
+<span class="k">let</span> <span class="i">res123</span>      <span class="o">=</span> <span class="i">empty</span> <span class="o">&lt;|&gt;</span> [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>]
+
+<span class="k">let</span> <span class="k">inline</span> <span class="i">mfilter</span> <span class="i">p</span> <span class="i">ma</span> <span class="o">=</span> <span class="i">monad</span><span class="o">.</span><span class="i">plus</span> {
+  <span class="k">let!</span> <span class="i">a</span> <span class="o">=</span> <span class="i">ma</span>
+  <span class="k">if</span> <span class="i">p</span> <span class="i">a</span> <span class="k">then</span> <span class="k">return</span> <span class="i">a</span> <span class="k">else</span> <span class="k">return!</span> <span class="i">empty</span>}
+
+<span class="k">let</span> <span class="i">mfilterRes2</span> <span class="o">=</span> <span class="i">mfilter</span> ((<span class="o">=</span>)<span class="n">2</span>) (<span class="i">Some</span> <span class="n">2</span>)
+
+<span class="c">// sample code from http://en.wikibooks.org/wiki/Haskell/MonadPlus</span>
+<span class="k">let</span> <span class="i">pythags</span> <span class="o">=</span> <span class="i">monad</span> {
+  <span class="k">let!</span> <span class="i">z</span> <span class="o">=</span> [<span class="n">1..</span><span class="n">50</span>]
+  <span class="k">let!</span> <span class="i">x</span> <span class="o">=</span> [<span class="n">1..</span><span class="i">z</span>]
+  <span class="k">let!</span> <span class="i">y</span> <span class="o">=</span> [<span class="i">x</span><span class="o">..</span><span class="i">z</span>]
+  <span class="k">do!</span> <span class="i">guard</span> (<span class="i">x</span><span class="o">*</span><span class="i">x</span> <span class="o">+</span> <span class="i">y</span><span class="o">*</span><span class="i">y</span> <span class="o">=</span> <span class="i">z</span><span class="o">*</span><span class="i">z</span>)
+  <span class="k">return</span> (<span class="i">x</span>, <span class="i">y</span>, <span class="i">z</span>)}
+
+<span class="c">// same operation but using the monad.plus computation expression</span>
+<span class="k">let</span> <span class="i">pythags&#39;</span> <span class="o">=</span> <span class="i">monad</span><span class="o">.</span><span class="i">plus</span> {
+  <span class="k">let!</span> <span class="i">z</span> <span class="o">=</span> [<span class="n">1..</span><span class="n">50</span>]
+  <span class="k">let!</span> <span class="i">x</span> <span class="o">=</span> [<span class="n">1..</span><span class="i">z</span>]
+  <span class="k">let!</span> <span class="i">y</span> <span class="o">=</span> [<span class="i">x</span><span class="o">..</span><span class="i">z</span>]
+  <span class="k">if</span> (<span class="i">x</span><span class="o">*</span><span class="i">x</span> <span class="o">+</span> <span class="i">y</span><span class="o">*</span><span class="i">y</span> <span class="o">=</span> <span class="i">z</span><span class="o">*</span><span class="i">z</span>) <span class="k">then</span> <span class="k">return</span> (<span class="i">x</span>, <span class="i">y</span>, <span class="i">z</span>)}
+
+<span class="k">let</span> <span class="i">allCombinations</span> <span class="o">=</span> <span class="i">sequence</span> [[<span class="s">&#39;a&#39;</span>; <span class="s">&#39;b&#39;</span>; <span class="s">&#39;c&#39;</span>]; [<span class="s">&#39;1&#39;</span>; <span class="s">&#39;2&#39;</span>]]
 </code></pre></td>
 </tr>
 </table>

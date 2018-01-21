@@ -63,7 +63,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L603-603" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L601-601" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -83,7 +83,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L603-603" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L601-601" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -102,7 +102,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L612-612" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L610-610" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -121,7 +121,7 @@
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L612-612" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L610-610" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -136,15 +136,15 @@
             Sequence(t)
           </code>
           <div class="tip" id="162">
-            <strong>Signature:</strong> t:seq&lt;Async&lt;&#39;?12525&gt;&gt; -&gt; Async&lt;seq&lt;&#39;?12525&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?12525          </div>
+            <strong>Signature:</strong> t:seq&lt;Async&lt;&#39;?12517&gt;&gt; -&gt; Async&lt;seq&lt;&#39;?12517&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?12517          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L662-662" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L660-660" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Combine all asyncs in one, in sequence.</p>
+          <p>Combine all asyncs in one, chaining them in sequence order.</p>
 
 
               <p>CompiledName: <code>Async`1.Sequence.Static</code></p>
@@ -157,15 +157,15 @@
             Sequence(t)
           </code>
           <div class="tip" id="163">
-            <strong>Signature:</strong> (t:Async&lt;&#39;?12528&gt; array) -&gt; Async&lt;&#39;?12528 array&gt;<br />
-                          <strong>Type parameters:</strong> '?12528          </div>
+            <strong>Signature:</strong> (t:Async&lt;&#39;?12520&gt; array) -&gt; Async&lt;&#39;?12520 array&gt;<br />
+                          <strong>Type parameters:</strong> '?12520          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L673-673" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L668-668" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Combine all asyncs in one, in sequence.</p>
+          <p>Combine all asyncs in one, chaining them in sequence order.</p>
 
 
               <p>CompiledName: <code>Async`1.Sequence.Static</code></p>
@@ -175,14 +175,35 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '164', 164)" onmouseover="showTip(event, '164', 164)">
-            WhenAll(tasks, ?cancellationToken)
+            Sequence(t)
           </code>
           <div class="tip" id="164">
+            <strong>Signature:</strong> (t:seq&lt;&#39;T option&gt;) -&gt; seq&lt;&#39;T&gt; option<br />
+                          <strong>Type parameters:</strong> 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L680-680" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Returns None if it contains a None element, otherwise a list of all elements</p>
+
+
+              <p>CompiledName: <code>Option`1.Sequence.Static</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '165', 165)" onmouseover="showTip(event, '165', 165)">
+            WhenAll(tasks, ?cancellationToken)
+          </code>
+          <div class="tip" id="165">
             <strong>Signature:</strong> (tasks:Task&lt;&#39;a&gt; [] * cancellationToken:CancellationToken option) -&gt; Task&lt;&#39;a []&gt;<br />
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L638-638" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L636-636" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

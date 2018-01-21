@@ -108,19 +108,137 @@
 </ul>
 <p>From F#+</p>
 <ul>
-<li><p><code>ZipList&lt;'S&gt;</code></p></li>
-<li><p><code>Dual&lt;'T&gt;</code></p></li>
-<li><p><code>Endo&lt;'T&gt;</code></p></li>
-<li><p><code>All</code></p></li>
-<li><p><code>Any</code></p></li>
-<li><p><code>Const&lt;'T,'U&gt;</code></p></li>
-<li><p><code>First&lt;'T&gt;</code></p></li>
-<li><p><code>Last&lt;'T&gt;</code></p></li>
+<li><code>ZipList&lt;'S&gt;</code></li>
+<li><code>Dual&lt;'T&gt;</code></li>
+<li><code>Endo&lt;'T&gt;</code></li>
+<li><code>All</code></li>
+<li><code>Any</code></li>
+<li><code>Const&lt;'T,'U&gt;</code></li>
+<li><code>First&lt;'T&gt;</code></li>
+<li><code>Last&lt;'T&gt;</code></li>
 <li>
-<p><code>DList&lt;'T&gt;</code></p>
-<p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<code>DList&lt;'T&gt;</code>
+
+<a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation
+
+Examples
 </li>
 </ul>
+<hr />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
+<span class="l">54: </span>
+<span class="l">55: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">GenericMath</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Data</span>
+
+
+<span class="c">/// A monoid that represents results of comparisons</span>
+<span class="k">type</span> <span class="i">Ordering</span> <span class="o">=</span> <span class="i">LT</span>|<span class="i">EQ</span>|<span class="i">GT</span> <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span>        <span class="i">Zero</span> <span class="o">=</span> <span class="i">EQ</span>
+    <span class="k">static</span> <span class="k">member</span>        (<span class="o">+</span>) (<span class="i">x</span><span class="o">:</span><span class="i">Ordering</span>, <span class="i">y</span>) <span class="o">=</span> 
+        <span class="k">match</span> <span class="i">x</span>, <span class="i">y</span> <span class="k">with</span>
+        | <span class="i">LT</span>, _ <span class="k">-&gt;</span> <span class="i">LT</span>
+        | <span class="i">EQ</span>, <span class="i">a</span> <span class="k">-&gt;</span> <span class="i">a</span>
+        | <span class="i">GT</span>, _ <span class="k">-&gt;</span> <span class="i">GT</span>
+
+<span class="k">let</span> <span class="k">inline</span> <span class="i">compare&#39;</span> <span class="i">x</span> <span class="i">y</span> <span class="o">=</span>
+    <span class="k">match</span> <span class="i">compare</span> <span class="i">x</span> <span class="i">y</span> <span class="k">with</span>
+    | <span class="i">a</span> <span class="k">when</span> <span class="i">a</span> <span class="o">&gt;</span> <span class="n">0</span> <span class="k">-&gt;</span> <span class="i">GT</span>
+    | <span class="i">a</span> <span class="k">when</span> <span class="i">a</span> <span class="o">&lt;</span> <span class="n">0</span> <span class="k">-&gt;</span> <span class="i">LT</span>
+    | _            <span class="k">-&gt;</span> <span class="i">EQ</span>
+
+<span class="k">let</span> <span class="i">resGreater</span> <span class="o">=</span> <span class="i">compare&#39;</span> <span class="n">7</span> <span class="n">6</span>
+
+<span class="c">/// A monoid of all numbers from 0 to 4</span>
+<span class="k">type</span> <span class="i">Mod5</span> <span class="o">=</span> <span class="i">Mod5</span> <span class="k">of</span> <span class="i">uint32</span> <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="i">get_Zero</span>() <span class="o">=</span> <span class="i">Mod5</span> <span class="n">0u</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> (<span class="o">+</span>) (<span class="i">Mod5</span> <span class="i">x</span>, <span class="i">Mod5</span> <span class="i">y</span>) <span class="o">=</span> <span class="i">Mod5</span> ( (<span class="i">x</span> <span class="o">+</span> <span class="i">y</span>) <span class="o">%</span> <span class="n">5u</span>)
+<span class="k">let</span> <span class="i">Mod5</span> <span class="i">x</span> <span class="o">=</span> <span class="i">Mod5</span> (<span class="i">x</span> <span class="o">%</span> <span class="n">5u</span>)
+
+
+<span class="c">// Results of Monoid operations</span>
+<span class="k">let</span> <span class="i">emptyLst</span><span class="o">:</span><span class="i">list</span><span class="o">&lt;</span><span class="i">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="i">zero</span>
+<span class="k">let</span> <span class="i">zeroUint</span><span class="o">:</span><span class="i">Mod5</span>   <span class="o">=</span> <span class="i">zero</span>
+<span class="k">let</span> <span class="i">res1</span> <span class="o">=</span> <span class="i">zero</span> <span class="o">++</span> <span class="i">Mod5</span> <span class="n">11u</span>
+<span class="k">let</span> <span class="i">res2</span>  <span class="o">=</span> <span class="i">sum</span> <span class="o">&lt;|</span> <span class="i">map</span> <span class="i">Mod5</span> [<span class="n">4u</span>; <span class="n">2u</span>; <span class="n">1u</span>]
+<span class="k">let</span> <span class="i">res3</span>  <span class="o">=</span> <span class="i">sum</span> [<span class="i">zero</span>; <span class="i">Mod5</span> <span class="n">2G</span>; <span class="i">Mod5</span> <span class="n">6G</span>]
+<span class="k">let</span> <span class="i">res8n4</span> <span class="o">=</span> [<span class="i">zero</span>; [<span class="n">8</span>;<span class="n">4</span>]]
+<span class="k">let</span> <span class="i">res15</span> <span class="o">=</span> <span class="i">Mult</span> <span class="n">15</span> <span class="o">++</span> <span class="i">zero</span>
+<span class="k">let</span> <span class="i">resTrue</span> <span class="o">=</span> <span class="i">sum</span> [<span class="i">zero</span>; <span class="i">Any</span> <span class="k">true</span>]
+<span class="k">let</span> <span class="i">resFalse</span> <span class="o">=</span> <span class="i">sum</span> (<span class="i">map</span> <span class="i">All</span> [<span class="k">true</span>;<span class="k">false</span>])
+<span class="k">let</span> <span class="i">resHi</span> <span class="o">=</span> <span class="i">zero</span> <span class="o">++</span> <span class="s">&quot;Hi&quot;</span>
+<span class="k">let</span> <span class="i">resGT</span> <span class="o">=</span> <span class="i">zero</span> <span class="o">++</span>  <span class="i">GT</span>
+<span class="k">let</span> <span class="i">resLT</span> <span class="o">=</span> <span class="i">sum</span> [<span class="i">zero</span>; <span class="i">LT</span> ; <span class="i">EQ</span> ;<span class="i">GT</span>]
+<span class="k">let</span> <span class="i">res9823</span> <span class="o">=</span> <span class="i">sum</span> (<span class="i">map</span> <span class="i">Dual</span> [<span class="i">zero</span>;<span class="s">&quot;3&quot;</span>;<span class="s">&quot;2&quot;</span>;<span class="s">&quot;8&quot;</span>;<span class="s">&quot;9&quot;</span>])
+<span class="k">let</span> <span class="i">resBA</span> <span class="o">=</span> <span class="i">Dual</span> <span class="s">&quot;A&quot;</span> <span class="o">++</span> <span class="i">Dual</span> <span class="s">&quot;B&quot;</span> 
+<span class="k">let</span> <span class="i">resEl00</span><span class="o">:</span><span class="i">list</span><span class="o">&lt;</span><span class="i">int</span><span class="o">&gt;</span><span class="o">*</span><span class="i">float</span> <span class="o">=</span> <span class="i">zero</span>
+<span class="k">let</span> <span class="i">resS3P20</span>     <span class="o">=</span> (<span class="n">1G</span>, <span class="i">Mult</span> <span class="n">5.0</span>) <span class="o">++</span>  (<span class="n">2</span>, <span class="i">Mult</span> <span class="n">4G</span>)
+<span class="k">let</span> <span class="i">res230</span>       <span class="o">=</span> (<span class="i">zero</span>,<span class="i">zero</span>) <span class="o">++</span> ([<span class="n">2</span>],[<span class="n">3.0</span>])
+<span class="k">let</span> <span class="i">res243</span>       <span class="o">=</span> ([<span class="n">2</span>;<span class="n">4</span>],[<span class="n">3</span>]) <span class="o">++</span> <span class="i">zero</span>
+<span class="k">let</span> <span class="i">res23</span>        <span class="o">=</span> <span class="i">zero</span> <span class="o">++</span> ([<span class="n">2</span>],<span class="s">&quot;3&quot;</span>)
+<span class="k">let</span> <span class="i">resLtDualGt</span>  <span class="o">=</span>  (<span class="i">LT</span>,<span class="i">Dual</span> <span class="i">GT</span>) <span class="o">++</span> <span class="i">zero</span>
+<span class="k">let</span> <span class="i">res230hiSum2</span> <span class="o">=</span> (<span class="i">zero</span>, <span class="i">zero</span>, <span class="n">2</span>) <span class="o">++</span> ([<span class="n">2</span>], ([<span class="n">3.0</span>], <span class="s">&quot;hi&quot;</span>), <span class="i">zero</span>)
+<span class="k">let</span> <span class="i">res230hiS4P3</span> <span class="o">=</span> (<span class="i">zero</span>, <span class="i">zero</span>   ) <span class="o">++</span> ([<span class="n">2</span>], ([<span class="n">3.0</span>], <span class="s">&quot;hi&quot;</span>, <span class="n">4</span>, <span class="i">Mult</span> (<span class="n">6</span> <span class="o">%</span> <span class="n">2</span>)))
+<span class="k">let</span> <span class="i">tuple5</span> <span class="o">:</span><span class="i">string</span><span class="o">*</span>(<span class="i">Any</span><span class="o">*</span><span class="i">string</span>)<span class="o">*</span>(<span class="i">All</span><span class="o">*</span><span class="i">All</span><span class="o">*</span><span class="i">All</span>)<span class="o">*</span><span class="i">int</span><span class="o">*</span><span class="i">string</span> <span class="o">=</span> <span class="i">zero</span>
+</code></pre></td>
+</tr>
+</table>
 
 
         </div>

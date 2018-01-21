@@ -105,6 +105,21 @@
 <span class="l">13: </span>
 <span class="l">14: </span>
 <span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
@@ -121,6 +136,21 @@
 
 <span class="c">// This should return the original list</span>
 <span class="k">let</span> <span class="i">lst&#39;</span>  <span class="o">=</span> <span class="i">extend</span> <span class="i">extract</span> <span class="i">lst</span>
+
+
+
+<span class="k">let</span> <span class="i">ct1</span> <span class="o">=</span> <span class="i">duplicate</span> [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>] <span class="c">// val it : List&lt;List&lt;int&gt;&gt; = [[1; 2; 3; 4]; [2; 3; 4]; [3; 4]; [4]]</span>
+<span class="k">let</span> <span class="i">ct2</span> <span class="o">=</span> <span class="i">duplicate</span> (<span class="s">&quot;a&quot;</span>, <span class="n">10</span>) <span class="c">// val it : string * (string * int) = (&quot;a&quot;, (&quot;a&quot;, 10))</span>
+<span class="k">let</span> <span class="i">ct3</span> <span class="o">=</span> <span class="i">duplicate</span> (<span class="k">fun</span> (<span class="i">x</span><span class="o">:</span><span class="i">string</span>) <span class="k">-&gt;</span> <span class="i">System</span><span class="o">.</span><span class="i">Int32</span><span class="o">.</span><span class="i">Parse</span> <span class="i">x</span>)
+<span class="k">let</span> <span class="i">r80100</span> <span class="o">=</span> <span class="i">ct3</span> <span class="s">&quot;80&quot;</span> <span class="s">&quot;100&quot;</span>
+
+<span class="k">let</span> <span class="i">ct1&#39;</span> <span class="o">=</span> <span class="i">extend</span> <span class="i">id</span> [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>]
+<span class="k">let</span> <span class="i">ct2&#39;</span> <span class="o">=</span> <span class="i">extend</span> <span class="i">id</span> (<span class="s">&quot;a&quot;</span>, <span class="n">10</span>)
+<span class="k">let</span> <span class="i">ct3&#39;</span> <span class="o">=</span> <span class="i">extend</span> <span class="i">id</span> (<span class="k">fun</span> (<span class="i">x</span><span class="o">:</span><span class="i">string</span>) <span class="k">-&gt;</span> <span class="i">System</span><span class="o">.</span><span class="i">Int32</span><span class="o">.</span><span class="i">Parse</span> <span class="i">x</span>)
+
+<span class="k">let</span> <span class="i">ct1&#39;&#39;</span> <span class="o">=</span> (<span class="o">=&gt;&gt;</span>) [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>;<span class="n">4</span>] <span class="i">id</span>
+<span class="k">let</span> <span class="i">ct2&#39;&#39;</span> <span class="o">=</span> (<span class="o">=&gt;&gt;</span>) (<span class="s">&quot;a&quot;</span>, <span class="n">10</span>) <span class="i">id</span>
+<span class="k">let</span> <span class="i">ct3&#39;&#39;</span> <span class="o">=</span> (<span class="o">=&gt;&gt;</span>) (<span class="k">fun</span> (<span class="i">x</span><span class="o">:</span><span class="i">string</span>) <span class="k">-&gt;</span> <span class="i">System</span><span class="o">.</span><span class="i">Int32</span><span class="o">.</span><span class="i">Parse</span> <span class="i">x</span>) <span class="i">id</span>
 </code></pre></td>
 </tr>
 </table>

@@ -55,33 +55,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '225', 225)" onmouseover="showTip(event, '225', 225)">
+          <code onmouseout="hideTip(event, '226', 226)" onmouseover="showTip(event, '226', 226)">
             apply f x
           </code>
-          <div class="tip" id="225">
+          <div class="tip" id="226">
             <strong>Signature:</strong> f:seq&lt;(&#39;a -&gt; &#39;b)&gt; -&gt; x:seq&lt;&#39;a&gt; -&gt; seq&lt;&#39;b&gt;<br />
                           <strong>Type parameters:</strong> 'a, 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L42-42" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '226', 226)" onmouseover="showTip(event, '226', 226)">
-            bind f x
-          </code>
-          <div class="tip" id="226">
-            <strong>Signature:</strong> f:(&#39;a -&gt; seq&lt;&#39;b&gt;) -&gt; x:seq&lt;&#39;a&gt; -&gt; seq&lt;&#39;b&gt;<br />
-                          <strong>Type parameters:</strong> 'a, 'b          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L41-41" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -92,14 +74,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '227', 227)" onmouseover="showTip(event, '227', 227)">
-            chunkBy projection source
+            bind f x
           </code>
           <div class="tip" id="227">
-            <strong>Signature:</strong> projection:(&#39;a -&gt; &#39;b) -&gt; source:seq&lt;&#39;a&gt; -&gt; seq&lt;&#39;b * List&lt;&#39;a&gt;&gt;<br />
+            <strong>Signature:</strong> f:(&#39;a -&gt; seq&lt;&#39;b&gt;) -&gt; x:seq&lt;&#39;a&gt; -&gt; seq&lt;&#39;b&gt;<br />
                           <strong>Type parameters:</strong> 'a, 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L45-45" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L39-39" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -110,32 +92,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '228', 228)" onmouseover="showTip(event, '228', 228)">
-            drop i source
+            chunkBy projection source
           </code>
           <div class="tip" id="228">
-            <strong>Signature:</strong> i:int -&gt; source:seq&lt;&#39;b&gt; -&gt; seq&lt;&#39;b&gt;<br />
-                          <strong>Type parameters:</strong> 'b          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L131-131" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns a sequence that drops N elements of the original sequence and then yields the
-remaining elements of the sequence.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '229', 229)" onmouseover="showTip(event, '229', 229)">
-            foldBack f x z
-          </code>
-          <div class="tip" id="229">
-            <strong>Signature:</strong> f:(&#39;f -&gt; &#39;g -&gt; &#39;g) -&gt; x:seq&lt;&#39;f&gt; -&gt; z:&#39;g -&gt; &#39;g<br />
-                          <strong>Type parameters:</strong> 'f, 'g          </div>
+            <strong>Signature:</strong> projection:(&#39;a -&gt; &#39;b) -&gt; source:seq&lt;&#39;a&gt; -&gt; seq&lt;&#39;b * List&lt;&#39;a&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'a, 'b          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L43-43" class="github-link">
@@ -148,15 +109,36 @@ remaining elements of the sequence.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '230', 230)" onmouseover="showTip(event, '230', 230)">
-            intercalate separator source
+          <code onmouseout="hideTip(event, '229', 229)" onmouseover="showTip(event, '229', 229)">
+            drop i source
           </code>
-          <div class="tip" id="230">
-            <strong>Signature:</strong> separator:seq&lt;&#39;b&gt; -&gt; source:seq&lt;&#39;c&gt; -&gt; seq&lt;&#39;b&gt;<br />
-                          <strong>Type parameters:</strong> 'b, 'c          </div>
+          <div class="tip" id="229">
+            <strong>Signature:</strong> i:int -&gt; source:seq&lt;&#39;b&gt; -&gt; seq&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L69-69" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L129-129" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Returns a sequence that drops N elements of the original sequence and then yields the
+remaining elements of the sequence.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '230', 230)" onmouseover="showTip(event, '230', 230)">
+            foldBack f x z
+          </code>
+          <div class="tip" id="230">
+            <strong>Signature:</strong> f:(&#39;f -&gt; &#39;g -&gt; &#39;g) -&gt; x:seq&lt;&#39;f&gt; -&gt; z:&#39;g -&gt; &#39;g<br />
+                          <strong>Type parameters:</strong> 'f, 'g          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L41-41" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -167,14 +149,14 @@ remaining elements of the sequence.</p>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '231', 231)" onmouseover="showTip(event, '231', 231)">
-            intersperse sep list
+            intercalate separator source
           </code>
           <div class="tip" id="231">
-            <strong>Signature:</strong> sep:&#39;b -&gt; list:seq&lt;&#39;b&gt; -&gt; seq&lt;&#39;b&gt;<br />
-                          <strong>Type parameters:</strong> 'b          </div>
+            <strong>Signature:</strong> separator:seq&lt;&#39;b&gt; -&gt; source:seq&lt;&#39;c&gt; -&gt; seq&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'b, 'c          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L62-62" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L67-67" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -185,14 +167,14 @@ remaining elements of the sequence.</p>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '232', 232)" onmouseover="showTip(event, '232', 232)">
-            replace oldValue newValue source
+            intersperse sep list
           </code>
           <div class="tip" id="232">
-            <strong>Signature:</strong> oldValue:seq&lt;&#39;t&gt; -&gt; newValue:seq&lt;&#39;t&gt; -&gt; source:seq&lt;&#39;t&gt; -&gt; seq&lt;&#39;t&gt;<br />
-                          <strong>Type parameters:</strong> 't          </div>
+            <strong>Signature:</strong> sep:&#39;b -&gt; list:seq&lt;&#39;b&gt; -&gt; seq&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L102-102" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L60-60" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -203,14 +185,14 @@ remaining elements of the sequence.</p>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '233', 233)" onmouseover="showTip(event, '233', 233)">
-            replicate count initial
+            replace oldValue newValue source
           </code>
           <div class="tip" id="233">
-            <strong>Signature:</strong> count:int -&gt; initial:&#39;e -&gt; IEnumerable&lt;&#39;e&gt;<br />
-                          <strong>Type parameters:</strong> 'e          </div>
+            <strong>Signature:</strong> oldValue:seq&lt;&#39;t&gt; -&gt; newValue:seq&lt;&#39;t&gt; -&gt; source:seq&lt;&#39;t&gt; -&gt; seq&lt;&#39;t&gt;<br />
+                          <strong>Type parameters:</strong> 't          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L137-137" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L100-100" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -221,14 +203,32 @@ remaining elements of the sequence.</p>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '234', 234)" onmouseover="showTip(event, '234', 234)">
-            split separators source
+            replicate count initial
           </code>
           <div class="tip" id="234">
+            <strong>Signature:</strong> count:int -&gt; initial:&#39;e -&gt; IEnumerable&lt;&#39;e&gt;<br />
+                          <strong>Type parameters:</strong> 'e          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L135-135" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '235', 235)" onmouseover="showTip(event, '235', 235)">
+            split separators source
+          </code>
+          <div class="tip" id="235">
             <strong>Signature:</strong> separators:seq&lt;&#39;a&gt; -&gt; source:seq&lt;&#39;b&gt; -&gt; seq&lt;seq&lt;&#39;b&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'a, 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L76-76" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L74-74" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

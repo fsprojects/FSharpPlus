@@ -87,10 +87,64 @@
 <p>From F#+</p>
 <ul>
 <li>
-<p><code>Kleisli&lt;'T, 'Monad&lt;'U&gt;&gt;</code></p>
-<p><a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<code>Kleisli&lt;'T, 'Monad&lt;'U&gt;&gt;</code>
+
+<a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation
+
+Examples
 </li>
 </ul>
+<hr />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+
+<span class="k">open</span> <span class="i">System</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">GenericMath</span>
+
+<span class="k">module</span> <span class="i">Predicate</span> <span class="o">=</span> <span class="k">let</span> <span class="i">run</span> (<span class="i">p</span><span class="o">:</span> <span class="i">Predicate</span><span class="o">&lt;</span>_<span class="o">&gt;</span>) <span class="i">x</span> <span class="o">=</span> <span class="i">p</span><span class="o">.</span><span class="i">Invoke</span> (<span class="i">x</span>)
+
+<span class="k">let</span> <span class="i">isEven</span>      <span class="o">=</span> <span class="i">Predicate</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">x</span> <span class="o">%</span> <span class="n">2</span> <span class="o">=</span> <span class="n">0</span>)
+
+<span class="k">let</span> <span class="i">resStrFalse</span>  <span class="o">=</span> <span class="i">dimap</span> <span class="i">int</span> <span class="i">string</span> (<span class="i">Predicate</span><span class="o">.</span><span class="i">run</span> <span class="i">isEven</span>) <span class="n">99.0</span>
+
+
+<span class="k">let</span> <span class="i">lx</span> <span class="i">x</span> <span class="o">=</span> <span class="i">Char</span><span class="o">.</span><span class="i">GetNumericValue</span> <span class="i">x</span> <span class="o">+</span> <span class="n">100.</span>
+<span class="k">let</span> <span class="i">rx</span> <span class="i">x</span> <span class="o">=</span> <span class="i">string</span> (<span class="i">x</span> <span class="o">+</span> <span class="n">100</span>)
+<span class="k">let</span> <span class="i">kl</span> <span class="o">=</span> <span class="i">Kleisli</span> (<span class="k">fun</span> (<span class="i">y</span><span class="o">:</span><span class="i">float</span>) <span class="k">-&gt;</span> [<span class="i">int</span> <span class="i">y</span>; <span class="i">int</span> <span class="i">y</span> <span class="o">*</span> <span class="n">2</span> ; <span class="i">int</span> <span class="i">y</span> <span class="o">*</span> <span class="n">3</span>])
+
+<span class="k">let</span> <span class="i">resl</span> <span class="o">=</span> <span class="i">lmap</span> <span class="i">lx</span> <span class="i">kl</span>
+<span class="k">let</span> <span class="i">r105n210n315</span> <span class="o">=</span> <span class="i">Kleisli</span><span class="o">.</span><span class="i">run</span> <span class="i">resl</span> <span class="s">&#39;5&#39;</span>
+<span class="k">let</span> <span class="i">resr</span> <span class="o">=</span> <span class="i">rmap</span> <span class="i">rx</span> <span class="i">kl</span>
+<span class="k">let</span> <span class="i">r105n110n115</span> <span class="o">=</span> <span class="i">Kleisli</span><span class="o">.</span><span class="i">run</span> <span class="i">resr</span> <span class="n">5.0</span>
+<span class="k">let</span> <span class="i">resd</span> <span class="o">=</span> <span class="i">dimap</span> <span class="i">lx</span> <span class="i">rx</span> <span class="i">kl</span>
+<span class="k">let</span> <span class="i">r205n310n415</span> <span class="o">=</span> <span class="i">Kleisli</span><span class="o">.</span><span class="i">run</span> <span class="i">resd</span> <span class="s">&#39;5&#39;</span>
+</code></pre></td>
+</tr>
+</table>
 
 
         </div>
