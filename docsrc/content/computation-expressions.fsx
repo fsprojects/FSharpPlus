@@ -12,7 +12,17 @@ This library allows to use some common computation expressions without writing a
 There is a single computation expression: ``monad`` but it comes in 4 flavours:
 
  - It could be delayed or strict
+
+   Delayed computations require that the type implements a Delay method.
+   F# comes with async and seq computation expressions, both are delayed.
+
  - It can have embedded side-effects or act as a monad plus
+
+   A monad plus can return (or yield) many times, so for example all expressions in a loop can be returned, whereas in the other model those expressions are of type unit, since a side effect is expected.
+
+   Async workflows is an example of a side-effect computation expression and seq expressions are an example of monad plus.
+
+   Side effect workflows don't have any additional requirement over the type (apart of the monad operations), but monad plus requires the additional [get_Empty and Append](abstraction-alternative.html) methods.
 
 
 Examples

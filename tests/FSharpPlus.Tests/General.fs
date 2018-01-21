@@ -377,6 +377,7 @@ module Numerics =
         Assert.AreEqual(res09 * res19, argBigRational)
 
 
+
 type Sum<'a> = Sum of 'a with
     static member inline get_Zero() = Sum 0G
     static member inline (+) (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
@@ -470,3 +471,100 @@ module ApplicativeInference =
 
     // *1 These lines fails when Apply.Invoke has no 'or ^'``Applicative<'U>`` ' (output) constraint.
     // *2 F# 4.1 regression
+
+
+
+// Old code, no longer used but still interesting to see if it still compiles
+
+module Ratio =
+    open FsControl
+    // Strict version of math operators
+    let inline internal ( +.) (a:'Num) (b:'Num) :'Num = a + b
+    let inline internal ( -.) (a:'Num) (b:'Num) :'Num = a - b
+    let inline internal ( *.) (a:'Num) (b:'Num) :'Num = a * b
+
+    let inline whenIntegral a = let _ = if false then toBigInt a else 0I in ()
+
+    let inline internal gcd x y :'Integral =
+        let zero = getZero()
+        let rec loop a b =
+            if b = zero then a
+            else loop b (a % b)
+        if (x, y) = (zero, zero) then failwith "gcd 0 0 is undefined"
+        else loop (Abs.Invoke x) (Abs.Invoke y)
+
+    type Ratio<'Integral> =
+        struct
+            val Numerator   :'Integral
+            val Denominator :'Integral
+            new (numerator: 'Integral, denominator: 'Integral) = {Numerator = numerator; Denominator = denominator}
+        end
+        override this.ToString() = this.Numerator.ToString() + " % " + this.Denominator.ToString()
+
+    let inline internal ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
+        whenIntegral a
+        let zero = getZero()
+        if b = zero then failwith "Ratio.%: zero denominator"
+        let (a, b) = if b < zero then (-a, -b) else (a, b)
+        let gcd = gcd a b
+        Ratio (a / gcd, b / gcd)
+
+    let inline internal Ratio (x,y) = x </ratio/> y
+
+    let inline internal numerator   (r:Ratio<_>) = r.Numerator
+    let inline internal denominator (r:Ratio<_>) = r.Denominator
+
+    type Ratio<'Integral> with
+        static member inline (/) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator) </ratio/> (a.Denominator *. b.Numerator)                                              
+        static member inline (+) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator +. b.Numerator *. a.Denominator) </ratio/> (a.Denominator *. b.Denominator)
+        static member inline (-) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator -. b.Numerator *. a.Denominator) </ratio/> (a.Denominator *. b.Denominator)
+        static member inline (*) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Numerator) </ratio/> (a.Denominator *. b.Denominator)
+
+        static member inline Abs        (r:Ratio<_>) = (Abs.Invoke    (numerator r)) </ratio/> (denominator r)
+        static member inline Signum     (r:Ratio<_>) = (Signum.Invoke (numerator r)) </ratio/> (One.Invoke())
+        static member inline FromBigInt (x:bigint) = FromBigInt.Invoke x </ratio/> (One.Invoke())
+        static member inline (~-)       (r:Ratio<_>) = -(numerator r) </ratio/> (denominator r)
+
+
+    let (|Ratio|) (ratio:Ratio<_>) = (ratio.Numerator, ratio.Denominator)
+
+type Rational = Ratio.Ratio<bigint>
+
+module testCompileOldCode =
+    open Ratio
+
+    open FSharpPlus.Operators.GenericMath
+
+    let inline negate (x:'Num) :'Num = FSharpPlus.Operators.negate x
+    let inline (~-)   (x:'Num) :'Num = FSharpPlus.Operators.negate x
+
+
+    let inline div (a:'Integral) b :'Integral =
+        whenIntegral a
+        let (a,b) = if b < 0G then (-a,-b) else (a,b)
+        (if a < 0G then (a - b + 1G) else a) / b
+
+    let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
+    let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
+    let inline quotRem a b :'Integral * 'Integral = whenIntegral a; FSharpPlus.Operators.divRem a b
+    let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
+    let inline divMod D d :'Integral * 'Integral =
+        let q, r = quotRem D d
+        if (r < 0G) then
+            if (d > 0G) then (q - 1G, r + d)
+            else             (q + 1G, r - d)
+        else (q, r)
+
+    
+    // let inline (%) (a:'Integral) (b:'Integral) :Ratio<'Integral> = a </ratio/> b
+    // let inline fromRational (x:Rational) :'Fractional = FSharpPlus.Operators.fromRational x
+    // let inline whenFractional a = let _ = if false then fromRational (1I % 1I) else a in ()
+    let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = (* whenFractional a;*) a / b
+    let inline recip x :'Fractional = 1G / x
+
+    // Exp functions
+    let inline ( **^ ) (x:'Num) (n:'Integral)  = 
+        whenIntegral n
+        let rec f a b n = if n == 0G then a else f (b * a) b (n - 1G)
+        if (n < 0G) then failwith "Negative exponent" else f 1G x n
+    let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
