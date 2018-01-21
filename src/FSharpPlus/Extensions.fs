@@ -14,7 +14,7 @@ module Option =
 [<RequireQualifiedAccess>]
 module Result =
     let result x = Ok x
-    let throw  x = Error x    
+    let throw  x = Error x
     let apply f x = match (f, x) with (Ok a, Ok b)     -> Ok (a b) | Error e, _ | _, Error e -> Error e: Result<'b, 'e>
     let flatten                   = function Ok (Ok v) -> Ok v     | Ok (Error e) | Error e  -> Error e
     let inline catch (f:'t -> _)  = function Ok v      -> Ok v     | Error e                 -> f e    : Result<'v,'e>
@@ -25,13 +25,13 @@ module Result =
 [<RequireQualifiedAccess>]
 module Choice =
     let result x = Choice1Of2 x
-    let throw  x = Choice2Of2 x    
+    let throw  x = Choice2Of2 x
     let apply f x = match (f, x) with Choice1Of2 a, Choice1Of2 b              -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e        -> Choice2Of2 e: Choice<'b,'e>
     let map   f                          = function Choice1Of2 v              -> Choice1Of2 (f v) | Choice2Of2 e                             -> Choice2Of2 e
     let flatten                          = function Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v     | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
     let bind (f:'t -> _)                 = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e: Choice<'v,'e>
     let inline catch (f:'t -> _)         = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e         : Choice<'v,'e>
-    let inline either f g                = function Choice2Of2 v              -> f v              | Choice1Of2 e                             -> g e
+    let inline either f g                = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
 
 
 /// Additional operations on Seq

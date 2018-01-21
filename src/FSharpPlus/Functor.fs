@@ -462,8 +462,8 @@ type Bimap =
     inherit Default1
        
     [<Extension>]static member Bimap ((x, y)                 , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = (f x, g y)
-    [<Extension>]static member Bimap (x : Result<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = Result.either (Error << f)      (Ok << g) x
-    [<Extension>]static member Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = Choice.either (Choice2Of2 << f) (Choice1Of2 << g) x
+    [<Extension>]static member Bimap (x : Result<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = Result.either (Ok << f)         (Error << g) x
+    [<Extension>]static member Bimap (x : Choice<_,_>        , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = Choice.either (Choice1Of2 << f) (Choice2Of2 << g) x
     [<Extension>]static member Bimap (KeyValue(k, x)         , f:'T->'U, g:'V->'W , [<Optional>]_mthd :Bimap   ) = KeyValuePair(f k, g x)
 
     static member inline Invoke (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
@@ -479,8 +479,8 @@ type MapFirst =
     inherit Default1
 
     [<Extension>]static member First ((x, y)                , f:'T->'U, [<Optional>]_mthd : MapFirst) = (f x, y)
-    [<Extension>]static member First (x : Result<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = Result.either (Error      << f) Ok x
-    [<Extension>]static member First (x : Choice<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = Choice.either (Choice2Of2 << f) Choice1Of2 x
+    [<Extension>]static member First (x : Result<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = Result.either (Ok         << f) Error      x
+    [<Extension>]static member First (x : Choice<_,_>       , f:'T->'U, [<Optional>]_mthd : MapFirst) = Choice.either (Choice1Of2 << f) Choice2Of2 x
     [<Extension>]static member First (KeyValue(k, x)        , f:'T->'U, [<Optional>]_mthd : MapFirst) = KeyValuePair(f k, x)
 
     static member inline Invoke (f : 'T->'U) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
@@ -501,8 +501,8 @@ type MapSecond =
     inherit Default1
 
     [<Extension>]static member Second ((x, y)                , f:'V->'W, [<Optional>]_mthd : MapSecond) = (x, f y)
-    [<Extension>]static member Second (x : Result<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = Result.either Error      (Ok         << f) x
-    [<Extension>]static member Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = Choice.either Choice2Of2 (Choice1Of2 << f) x
+    [<Extension>]static member Second (x : Result<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = Result.either (Ok         << f) Error      x
+    [<Extension>]static member Second (x : Choice<_,_>       , f:'V->'W, [<Optional>]_mthd : MapSecond) = Choice.either (Choice1Of2 << f) Choice2Of2 x
     [<Extension>]static member Second (KeyValue(k, x)        , f:'V->'W, [<Optional>]_mthd : MapSecond) = KeyValuePair(k, f x)
 
     static member inline Invoke (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` =
@@ -738,8 +738,8 @@ type Fanout with
 
 type Fanin =
     inherit Default1
-    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]_output : Choice<'U,'T> -> 'V   , [<Optional>]_mthd : Fanin) = Choice.either f g                                        : Choice<'U,'T> -> 'V
-    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]_output : Func<Choice<'U,'T>,'V>, [<Optional>]_mthd : Fanin) = Func<Choice<'U,'T>,'V>(Choice.either f.Invoke g.Invoke)  : Func<Choice<'U,'T>,'V>
+    static member ``|||`` (f :  'T -> 'V  , g : 'U -> 'V   , [<Optional>]_output : Choice<'U,'T> -> 'V   , [<Optional>]_mthd : Fanin) = Choice.either g f                                        : Choice<'U,'T> -> 'V
+    static member ``|||`` (f : Func<'T,'V>, g : Func<'U,'V>, [<Optional>]_output : Func<Choice<'U,'T>,'V>, [<Optional>]_mthd : Fanin) = Func<Choice<'U,'T>,'V>(Choice.either g.Invoke f.Invoke)  : Func<Choice<'U,'T>,'V>
 
     static member inline Invoke (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` =
         let inline call (mthd : ^M, output : ^R) = ((^M or ^R) : (static member ``|||``: _*_*_*_ -> _) f, g, output, mthd)

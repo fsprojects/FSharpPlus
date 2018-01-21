@@ -48,4 +48,4 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline Listen (m )                                 : OptionT<'``'MonadWriter<'Monoid, option<'T>>``> =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
         OptionT (listen (OptionT.run m) >>= (result << liftMaybe))
-    static member inline Pass m : OptionT<'``MonadWriter<'Monoid, option<'T>>``> = OptionT (OptionT.run m >>= option (result None) (map Some << pass << result))
+    static member inline Pass m : OptionT<'``MonadWriter<'Monoid, option<'T>>``> = OptionT (OptionT.run m >>= option (map Some << pass << result) (result None))

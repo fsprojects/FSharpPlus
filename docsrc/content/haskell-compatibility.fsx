@@ -130,6 +130,20 @@ runIO main                                                  // prints 4.0
 let get3strings  = sequenceA [getLine;getLine;getLine]      // try runIO get3strings
 
 
+// Test IO
+let action = do' {
+    do! putStrLn  "What is your first name?"
+    let! fn = getLine
+    do! putStrLn  ("Thanks, " + fn) 
+    do! putStrLn  ("What is your last name?")
+    let! ln = getLine
+    let  fullname = fn + " " + ln
+    do! putStrLn  ("Your full name is: " + fullname)
+    return fullname }
+// try -> runIO action ;;
+
+
+
 // List
 
 let lstOf20Elements = map ((+) 100) (take 20 (cycle [1;2;3]))
