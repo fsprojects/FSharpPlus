@@ -61,4 +61,29 @@ From F#+
  -  ``Const<'C,'T>``
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+ Examples
+--------
 *)
+
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open System
+open FSharpPlus
+
+
+module Predicate = let run (p: Predicate<_>) x = p.Invoke (x)
+
+let intToString (x:int) = string x
+let resStr54 = contramap (fun (x:float) -> int x) intToString <| 54.
+let isEven      = Predicate (fun x -> x % 2 = 0)
+let fstIsEven   = contramap List.head isEven
+let resBoolTrue = Predicate.run fstIsEven [0..10]
+
+type Person = Person of string
+let personEqComp = HashIdentity.Structural<Person>
+let personList = [1, Person "me"; 2, Person "you"; 3, Person "you"]
+let cnt3 = Seq.length <| Linq.Enumerable.Distinct (personList)
+let cnt2 = Seq.length <| Linq.Enumerable.Distinct (personList, contramap snd personEqComp)

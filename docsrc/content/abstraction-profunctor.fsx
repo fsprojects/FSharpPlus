@@ -74,4 +74,33 @@ From F#+
  -  ``Kleisli<'T, 'Monad<'U>>``
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+ Examples
+--------
 *)
+
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open System
+open FSharpPlus
+open FSharpPlus.Operators.GenericMath
+
+module Predicate = let run (p: Predicate<_>) x = p.Invoke (x)
+
+let isEven      = Predicate (fun x -> x % 2 = 0)
+
+let resStrFalse  = dimap int string (Predicate.run isEven) 99.0
+
+
+let lx x = Char.GetNumericValue x + 100.
+let rx x = string (x + 100)
+let kl = Kleisli (fun (y:float) -> [int y; int y * 2 ; int y * 3])
+
+let resl = lmap lx kl
+let r105n210n315 = Kleisli.run resl '5'
+let resr = rmap rx kl
+let r105n110n115 = Kleisli.run resr 5.0
+let resd = dimap lx rx kl
+let r205n310n415 = Kleisli.run resd '5'

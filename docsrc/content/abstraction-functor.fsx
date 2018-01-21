@@ -86,4 +86,55 @@ Restricted:
  -  ``Set<'T>``
  -  ``IEnumerator<'T>``
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+ Examples
+--------
 *)
+
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open FSharpPlus
+open FSharpPlus.Operators.GenericMath
+
+let getLine    = async { return System.Console.ReadLine() }
+let putStrLn x = async { printfn "%s" x}
+let print    x = async { printfn "%A" x}
+
+// Test IO
+let action = monad {
+    do! putStrLn  "What is your first name?"
+    let! fn = getLine
+    do! putStrLn  ("Thanks, " + fn) 
+    do! putStrLn  ("What is your last name?")
+    let! ln = getLine
+    let  fullname = fn + " " + ln
+    do! putStrLn  ("Your full name is: " + fullname)
+    return fullname }
+
+
+// Test Functors
+let times2,minus3 = (*) 2, (-)/> 3
+let resSome1      = map minus3 (Some 4G)
+let noValue       = map minus3 None
+let lstTimes2     = map times2 [1;2;3;4]
+let fTimes2minus3 = map minus3 times2
+let res39         = fTimes2minus3 21G
+let getChars      = map (fun (x:string) -> x.ToCharArray() |> Seq.toList ) action
+// try -> runIO getChars ;;
+
+// Define a type Tree
+type Tree<'a> =
+    | Tree of 'a * Tree<'a> * Tree<'a>
+    | Leaf of 'a
+    static member map f (t:Tree<'a>  )  =
+        match t with
+        | Leaf x -> Leaf (f x)
+        | Tree(x,t1,t2) -> Tree(f x, Tree.map f t1, Tree.map f t2)
+
+// add ìnstance for Functor class
+    static member Map (x:Tree<_>, f) = Tree.map f x
+
+let myTree = Tree(6, Tree(2, Leaf 1, Leaf 3), Leaf 9)
+let mappedTree = map fTimes2minus3 myTree

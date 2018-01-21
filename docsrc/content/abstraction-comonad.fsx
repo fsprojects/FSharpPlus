@@ -99,3 +99,18 @@ let tails = duplicate lst
 
 // This should return the original list
 let lst'  = extend extract lst
+
+
+
+let ct1 = duplicate [1;2;3;4] // val it : List<List<int>> = [[1; 2; 3; 4]; [2; 3; 4]; [3; 4]; [4]]
+let ct2 = duplicate ("a", 10) // val it : string * (string * int) = ("a", ("a", 10))
+let ct3 = duplicate (fun (x:string) -> System.Int32.Parse x)
+let r80100 = ct3 "80" "100"
+
+let ct1' = extend id [1;2;3;4]
+let ct2' = extend id ("a", 10)
+let ct3' = extend id (fun (x:string) -> System.Int32.Parse x)
+
+let ct1'' = (=>>) [1;2;3;4] id
+let ct2'' = (=>>) ("a", 10) id
+let ct3'' = (=>>) (fun (x:string) -> System.Int32.Parse x) id

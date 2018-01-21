@@ -121,3 +121,21 @@ let optFalse = tryParse "30" .< 29
 // Composing applicatives
 open FSharpPlus.Data
 let res4 = (+) <!> Compose [Some 3] <*> Compose [Some 1]
+
+
+// Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
+let res3n4   = iI ((+) 2) [1;2] Ii
+let res3n4'  = iI (+) (result 2) [1;2] Ii
+let res18n24 = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
+
+let tryDiv x y = if y = 0 then None else Some (x </div/> y)
+let resSome3    = join (iI tryDiv (Some 6) (Some 2) Ii)
+let resSome3'   =       iI tryDiv (Some 6) (Some 2) Ji
+
+let tryDivBy y = if y = 0 then None else Some (fun x -> x </div/> y)
+let resSome2  = join (result tryDivBy  <*> Some 4) <*> Some 8
+let resSome2' = join (   iI tryDivBy (Some 4) Ii) <*> Some 8
+
+let resSome2'' = iI tryDivBy (Some 4) J (Some 8) Ii
+let resNone = iI tryDivBy (Some 0) J (Some 8) Ii
+let res16n17   = iI (+) (iI (+) (result 4) [2; 3] Ii) [10] Ii

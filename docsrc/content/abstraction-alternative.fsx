@@ -94,3 +94,37 @@ let fstGood = None <|> Some "Result is OK" <|>  None <|> Some "Result is still O
 
 // mfilter usage
 let fstMatch = mfilter ((=) 5) [1;2;3;4]    // [] -> no element found, it uses the empty value
+
+
+// MonadPlus
+
+let getLine    = async { return System.Console.ReadLine() }
+let putStrLn x = async { printfn "%s" x}
+
+let nameAndAddress = traverse (fun x -> putStrLn x >>= fun _ -> getLine) ["name";"address"]
+
+let a:list<int> = empty
+let res123      = empty <|> [1;2;3]
+
+let inline mfilter p ma = monad.plus {
+  let! a = ma
+  if p a then return a else return! empty}
+
+let mfilterRes2 = mfilter ((=)2) (Some 2)
+
+// sample code from http://en.wikibooks.org/wiki/Haskell/MonadPlus
+let pythags = monad {
+  let! z = [1..50]
+  let! x = [1..z]
+  let! y = [x..z]
+  do! guard (x*x + y*y = z*z)
+  return (x, y, z)}
+
+// same operation but using the monad.plus computation expression
+let pythags' = monad.plus {
+  let! z = [1..50]
+  let! x = [1..z]
+  let! y = [x..z]
+  if (x*x + y*y = z*z) then return (x, y, z)}
+
+let allCombinations = sequence [['a'; 'b'; 'c']; ['1'; '2']]

@@ -76,4 +76,21 @@ From F#+
  -  ``Const<'C,'T>``
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
+ Examples
+--------
 *)
+
+
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
+open FSharpPlus
+
+// convert (map) first element to an int and the second to a string
+let rInt10Str10 = bimap  int string (10.0, 10)
+
+
+let resOk11  = bimap  ((+) 1) string (Ok 10)
+let rStrTrue = first  string (true, 10)
+let rStr10   = second string (true, 10)
