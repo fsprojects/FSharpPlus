@@ -629,6 +629,7 @@ module Operators =
         let inline (+) (a:'Num) (b:'Num) :'Num = Plus.Invoke a b
         let inline (-) (a:'Num) (b:'Num) :'Num = a - b
         let inline (*) (a:'Num) (b:'Num) :'Num = a * b
+        let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = (* whenFractional a;*) a / b
 
         let inline internal whenIntegral a = let _ = if false then toBigInt a else 0I in ()
  
