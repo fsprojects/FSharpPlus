@@ -550,6 +550,9 @@ module Operators =
     /// Equivalent to map but only for Monads.
     let inline liftM  (f:'T->'U) (m1:'``Monad<'T>``) :'``Monad<'U>``= m1 >>= (result << f)
 
+    /// Safely dispose a resource (includes null-checking).
+    let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
+
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =
     

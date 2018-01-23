@@ -61,7 +61,7 @@ module Builders =
         member        __.TryFinally(expr, compensation) = try expr () finally compensation ()
         member        rs.Using(disposable:#IDisposable, body) =
             let body = fun () -> (body ()) disposable
-            rs.TryFinally (body, fun () -> if isNull disposable then () else disposable.Dispose ())
+            rs.TryFinally (body, fun () -> dispose disposable)
 
     type DelayedBuilder() =
         inherit Builder()
@@ -81,7 +81,7 @@ module Builders =
                 else FsControl.Empty.Invoke()
             loop guard body
         member inline this.For (p: #seq<'T>, rest :'T->'``MonadPlus<'U>``) =
-            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            let fusing (resource:#IDisposable) body = try body resource finally dispose resource   
             fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``))
     
     type MonadFxStrictBuilder() =
@@ -94,7 +94,7 @@ module Builders =
                 else result ()
             loop guard body
         member inline this.For (p: #seq<'T>, rest :'T->'``Monad<'U>``) =
-            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            let fusing (resource:#IDisposable) body = try body resource finally dispose resource  
             fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fun () -> rest enum.Current) : '``Monad<'U>``))
  
     type MonadPlusBuilder() =
@@ -106,7 +106,7 @@ module Builders =
             fix
         member inline this.For (p: #seq<'T>, rest :'T->'``MonadPlus<'U>``) =
             let fdelay x = FsControl.Delay.Invoke x  : '``MonadPlus<'U>``
-            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            let fusing (resource:#IDisposable) body = try body resource finally dispose resource
             fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fdelay(fun () -> rest enum.Current)) : '``MonadPlus<'U>``))
 
         member __.strict = new MonadPlusStrictBuilder()
@@ -122,7 +122,7 @@ module Builders =
             loop guard body
         member inline this.For (p: #seq<'T>, rest :'T->'``Monad<unit>``) =
             let fdelay x = FsControl.Delay.Invoke x  : '``Monad<unit>``
-            let fusing (resource:#IDisposable) body = try body resource finally match resource with null -> () | disp -> disp.Dispose()    
+            let fusing (resource:#IDisposable) body = try body resource finally dispose resource
             fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fdelay(fun () -> rest enum.Current)) : '``Monad<unit>``))
 
     
