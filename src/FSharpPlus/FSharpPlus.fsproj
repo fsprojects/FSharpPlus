@@ -64,9 +64,6 @@
     <Compile Include="DList.fs" />    
     <Compile Include="Kleisli.fs" />
     <Compile Include="Compatibility.fs" />
-    <None Include="SamplesFromFsControl\Haskell.fsx" />
-    <None Include="SamplesFromFsControl\Collections.fsx" />
-    <None Include="SamplesFromFsControl\Converter.fsx" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Split-Join.fsx" />
     <None Include="Samples\Conversions.fsx" />

@@ -14,4 +14,7 @@ Click on the abstraction name for a full description:
 
 <object data="//www.plantuml.com/plantuml/svg/{plantUMLDiag}" type="image/svg+xml"></object>
  
+
+Some more abstractions [here](abstraction-misc.html).
+
 *)

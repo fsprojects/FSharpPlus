@@ -104,6 +104,15 @@ let arr5n6' = (+) <!> [|4|] <*> [|1;2|]
 let opt120  = (+) <!> Some 20 <*> tryParse "100"
 
 
+// Applicatives need Return (result)
+
+// Test return
+let resSome2 : option<_> = result 2
+let resSing2 : list<_>   = result 2
+let resLazy2 : Lazy<_>   = result 2
+let (quot5 : Microsoft.FSharp.Quotations.Expr<int>) = result 5
+
+
 // Another way to write applicative expressions
 open FSharpPlus.Builders
 

@@ -122,6 +122,9 @@ let lstTimes2     = map times2 [1;2;3;4]
 let fTimes2minus3 = map minus3 times2
 let res39         = fTimes2minus3 21G
 let getChars      = map (fun (x:string) -> x.ToCharArray() |> Seq.toList ) action
+let quot7         = map ((+)2) <@ 5 @>
+
+
 // try -> runIO getChars ;;
 
 // Define a type Tree

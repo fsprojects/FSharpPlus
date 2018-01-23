@@ -22,6 +22,13 @@ type WrappedListB<'s> = WrappedListB of 's list with
     static member ToSeq    (WrappedListB lst)     = List.toSeq lst
     static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
 
+type WrappedListB'<'s> = WrappedListB' of 's list with // Same as B but without clean signatures
+    static member Return   (_:WrappedListB'<'a>, _:FsControl.Return ) = fun (x:'a)     -> WrappedListB' [x]
+    static member (+)      (WrappedListB' l, WrappedListB' x) = WrappedListB' (l @ x)
+    static member Zero     (_:WrappedListB'<'a>, _:FsControl.Zero) = WrappedListB' List.empty
+    static member ToSeq    (WrappedListB' lst)     = List.toSeq lst
+    static member FoldBack (WrappedListB' x, f, z) = List.foldBack f x z
+
 type WrappedListC<'s> = WrappedListC of 's list with
     static member (+)  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
     static member Zero   = WrappedListC List.empty
@@ -50,8 +57,70 @@ type WrappedListF<'s> = WrappedListF of 's list with
     static member Append (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
 
 open System.Collections.Generic
+open System.Threading.Tasks
 
 module Monoid =
+
+    type ZipList<'s> = ZipList of 's seq with
+        static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
+        static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
+        static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
+        static member inline get_Zero() = result zero                      :ZipList<'a>
+        static member inline (+) (x:ZipList<'a>, y:ZipList<'a>) = liftA2 plus x y :ZipList<'a>
+        static member ToSeq    (ZipList lst)     = lst
+
+    type ZipList'<'s> = ZipList' of 's seq with
+        static member Return (x:'a)                              = ZipList' (Seq.initInfinite (konst x))
+        static member Map   (ZipList' x, f:'a->'b)                = ZipList' (Seq.map f x)
+        static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList'<'b>
+        static member inline get_Zero() = result zero                      :ZipList'<'a>
+        static member inline (+) (x:ZipList'<'a>, y:ZipList'<'a>) = liftA2 plus x y :ZipList'<'a>
+        static member inline Sum (x:seq<ZipList'<'a>>) = SideEffects.add "Using optimized Sum"; List.foldBack plus (Seq.toList x) zero:ZipList'<'a>
+        static member ToSeq    (ZipList' lst)     = lst
+
+
+    let testCompile =
+
+        let asQuotation = plus    <@ ResizeArray(["1"]) @> <@ ResizeArray(["2;3"]) @>
+        let quot123     = plus    <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>
+        let quot1       = plus    <@ ResizeArray([1])   @>      (zero)
+        let quot23      = plus       (zero)         <@ ResizeArray([2;3])   @>
+        let quot13      = plus       (zero)         <@ ("1","3") @>
+        let lzy1 = plus (lazy [1]) (lazy [2;3])
+        let lzy2 = plus (zero) lzy1
+        let asy1 = plus (async.Return [1]) (async.Return [2;3])
+        let asy2 = plus (zero) asy1
+
+        let mapA = Map.empty 
+                    |> Map.add 1 (async.Return "Hey")
+                    |> Map.add 2 (async.Return "Hello")
+
+        let mapB = Map.empty 
+                    |> Map.add 3 (async.Return " You")
+                    |> Map.add 2 (async.Return " World")
+
+        let mapAB = plus mapA mapB
+        let greeting1 = Async.RunSynchronously mapAB.[2]
+        let greeting2 = Async.RunSynchronously (Seq.sum [mapA; zero; mapB]).[2]
+
+        let dicA = new Dictionary<string,Task<string>>()
+        dicA.["keya"] <- (result "Hey"  : Task<_>)
+        dicA.["keyb"] <- (result "Hello": Task<_>)
+
+        let dicB = new Dictionary<string,Task<string>>()
+        dicB.["keyc"] <- (result " You"  : Task<_>)
+        dicB.["keyb"] <- (result " World": Task<_>)
+
+        let dicAB = plus dicA dicB
+
+        let greeting3 = extract dicAB.["keyb"]
+        let greeting4 = extract (Seq.sum [dicA; zero; dicB]).["keyb"]
+
+        let res2   = Seq.sum [ async {return Endo ((+) 2)} ; async {return Endo ((*) 10)} ; async {return Endo id } ;  async {return Endo ((%) 3)} ; async {return zero } ] |> Async.RunSynchronously |> Endo.run <| 3
+        let res330 = Seq.sum [ async {return (fun (x:int) -> string x)} ; async {return (fun (x:int) -> string (x*10))} ; async {return zero } ] </Async.RunSynchronously/>  3
+        ()
+
+
     [<Test>]
     let seqSumDefaultCustom() =
         let (WrappedListB x) = Seq.sum [WrappedListB [10] ;WrappedListB [15]]
@@ -64,6 +133,50 @@ module Monoid =
         let z = x |> map (Seq.singleton >>             dict                      >> map List.singleton) |> Seq.sum
         Assert.IsInstanceOf<Option< Dictionary<string,int list>>> (Some y)
         Assert.IsInstanceOf<Option<IDictionary<string,int list>>> (Some z)
+
+        SideEffects.reset()
+
+        let quotLst123  = plus zero (ZipList [ [1];[2];[3] ])
+
+        Assert.AreEqual (quotLst123 |> toList, [[1]; [2]; [3]])
+        Assert.AreEqual (SideEffects.get(), [])
+
+        let quotLst123' = Seq.sum [zero; zero; ZipList' [ [1];[2];[3] ]]
+
+        Assert.AreEqual (quotLst123' |> toList, [[1]; [2]; [3]])
+        Assert.AreEqual (SideEffects.get(), ["Using optimized Sum"])
+
+        let wl = WrappedListB  [2..10]
+
+        let arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]
+        let listGroup  = groupBy ((%)/> 2) [ 11;2;3;9;5;6;7;8;9;10 ]
+        let seqGroup   = groupBy ((%)/> 2) (seq [11;2;3;9;5;6;7;8;9;10])
+
+        let arrayGroupAdj   = chunkBy ((%)/> 2) [11;2;3;9;5;6;7;8;9;10]
+
+        let bigSeq = seq {1..10000000}
+        let bigLst = [ 1..10000000 ]
+        let bigArr = [|1..10000000|]
+        let bigMut = ResizeArray(seq {1..10000000})
+
+        let x = head bigSeq
+        let y = head bigLst
+        let z = head bigArr
+
+        let a = skip 1000 bigSeq
+        let b = skip 1000 bigLst
+        let c = skip 1000 bigArr
+        let d = skip 1000 bigMut
+        let e = "hello world" |> skip 6 |> toList
+        let h = ofList ['h';'e';'l';'l';'o';' '] + "world"
+        let i = item 2 bigSeq
+        let j = item 2 "hello"
+
+        ()
+
+
+
+
 
 
 module Functor =
@@ -84,7 +197,105 @@ module Functor =
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
 
 
+module Collections =
+
+    open System.Collections
+    open System.Collections.Concurrent
+    open System.Collections.Generic
+
+    let testCollections =
+        let bigSeq = seq {1..10000000}
+        let bigLst = [ 1..10000000 ]
+        let bigArr = [|1..10000000|]
+        let bigMut = ResizeArray(seq {1..10000000})
+
+        let x = head bigSeq
+        let y = head bigLst
+        let z = head bigArr
+
+        let a = skip 1000 bigSeq
+        let b = skip 1000 bigLst
+        let c = skip 1000 bigArr
+        let d = skip 1000 bigMut
+        let e = "hello world" |> skip 6 |> toList
+        let h = ofList ['h';'e';'l';'l';'o';' '] + "world"
+        let i = item 2 bigSeq
+        let j = item 2 "hello"
+
+
+        // From sequence
+
+        let sk :Generic.Stack<_>          = ofSeq { 1 .. 3 }
+        let sg :string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
+        let sb :Text.StringBuilder        = ofSeq {'1'..'3'}  // but it will come back as seq<char>
+        let sq1:_ seq                     = ofSeq { 1 .. 3 }
+        let sq2:_ seq                     = ofSeq (seq [(1, "One"); (2, "Two")])
+        let sq3:_ seq                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+        let sq4:_ seq                     = ofSeq (seq [(1, "One", '1', 1M); (2, "Two", '2', 2M)])
+        let ls1:_ list                    = ofSeq {'1'..'3'}
+        let ls2:_ list                    = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+        let st1:_ Set                     = ofSeq {'1'..'3'}
+        let st2:_ Set                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+        let ss :Generic.SortedSet<_>      = ofSeq (seq [3..6])
+        let ra :Generic.List<_>           = ofSeq (seq [1..3])
+        let sl :Generic.SortedList<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+        let sl2:Generic.SortedList<_,_>   = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let dc :Generic.Dictionary<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as kKeyValuePair
+        let mp :Map<_,_>                  = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+        let mp2:Map<_,_>                  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let d  :Generic.IDictionary<_,_>  = ofSeq (seq [("One", 1)])             // but it will come back as ...
+        let d2 :Generic.IDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let ut :Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+        let al :ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
+        let us :SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
+        let cc :BlockingCollection<_>     = ofSeq {'1'..'3'}                     // but it will come back as seq<obj>
+        let cd :ConcurrentDictionary<_,_> = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+        let cd2:ConcurrentDictionary<_,_> = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let cb :ConcurrentBag<_>          = ofSeq {'1'..'3'}
+
+        // now go back
+        let sk'  = toSeq sk
+        let sg'  = toSeq sg
+        let sb'  = toSeq sb
+        let sq1' = toSeq sq1
+        let sq2' = toSeq sq2
+        let sq3' = toSeq sq3
+        let sq4' = toSeq sq4
+        let ls1' = toSeq ls1
+        let ls2' = toSeq ls2
+        let st1' = toSeq st1
+        let st2' = toSeq st2
+        let ss'  = toSeq ss 
+        let ra'  = toSeq ra 
+        let sl'  = toSeq sl 
+        let dc'  = toSeq dc 
+        let mp'  = toSeq mp 
+        let d'   = toSeq d  
+        let ut'  = toSeq ut 
+        let al'  = toSeq al 
+        let us'  = toSeq us 
+        let cc'  = toSeq cc 
+        let cd'  = toSeq cd 
+        let cb'  = toSeq cb 
+
+        // there are some 'one-way' collections that can only be converted toSeq
+
+        let columns = 
+            let d = new Data.DataTable() 
+            [|new Data.DataColumn "id";new Data.DataColumn "column1";new Data.DataColumn "column2"|] |> d.Columns.AddRange
+            d.Columns
+        let col1 = columns |> find (fun x -> x.ColumnName = "column1")
+        let cols = columns |> toList |> map  (fun x -> x.ColumnName)
+
+        ()
+
 module Foldable =
+
+    let foldables =
+        let r10  = foldBack (+) (seq [1;2;3;4]) 0
+        let r323 = toList (seq [3;2;3])
+        let r03  = filter ((=) 3) (seq [1;2;3])
+        ()
 
     [<Test>]
     let foldMapDefaultCustom() =
@@ -104,6 +315,12 @@ module Foldable =
         let testVal = filter ((=)2) wlA1
         Assert.AreEqual (testVal, WrappedListA [2])
         Assert.IsInstanceOf<Option<WrappedListA<int>>> (Some testVal)
+
+        let twos   = filter ((=) (box 2)) (([1;2;3;4;3;2;1;2;3] |> ofSeq) : Collections.ArrayList)
+        let five   = filter ((=) 5) (WrappedListB' [1;2;3;4;5;6])   // <- Uses the default method for filter.
+        let optionFilter = filter ((=) 3) (Some 4)
+
+        ()
 
     [<Test>]
     let foldAternatives() = 
@@ -143,6 +360,11 @@ module Foldable =
         let s' = sortBy id s
         Assert.AreEqual (l', [4;6;10;89])
         Assert.AreEqual (s', WrappedListB [4;6;10;89])
+
+        let sortedList = sortBy string     [ 11;2;3;9;5;6;7;8;9;10 ]
+        let sortedSeq  = sortBy string (seq [11;2;3;9;5;6;7;8;9;10])
+        Assert.IsInstanceOf<Option<list<int>>> (Some sortedList)
+        Assert.IsInstanceOf<Option<seq<int>>> (Some sortedSeq)
 
 
 module Monad = 
@@ -188,6 +410,10 @@ module Monad =
 
 
 module Traversable = 
+    let traverseTest =
+        let resNone = sequence (seq [Some 3;None ;Some 1])
+        ()
+
     [<Test>]
     let sequence_Default_Primitive() = 
         let testVal = sequence [|Some 1; Some 2|]
@@ -196,6 +422,7 @@ module Traversable =
 
     [<Test>]
     let sequence_Specialization() =
+        
         let inline seqSeq (x:_ seq ) = sequence x
         let inline seqArr (x:_ []  ) = sequence x
         let inline seqLst (x:_ list) = sequence x
@@ -231,6 +458,9 @@ module Traversable =
         Assert.AreEqual (None, b)
         Assert.True ((Choice2Of2 "This is a failure" = c))
         Assert.AreEqual ([], d)
+        let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
+        ()
+        
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
@@ -330,6 +560,117 @@ module MonadPlus =
         Assert.AreEqual (v, x)
         Assert.AreEqual (v, y)
 
+
+module MonadTransformers =
+    let testCompile() =
+        // Test MonadError
+        let err1Layers   = catch (Error "Invalid Value") (fun s -> Error ["the error was: " + s]) : Result<int, _>
+
+        ()
+
+module Categories =
+
+    // Kleisli (slightly different definition)
+
+    open FsControl
+
+    type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
+
+        // Profunctor
+        static member inline Dimap (Kleisli bmc :Kleisli<'B,'``Monad<'C>``>, ab:'A->'B, cd:'C->'D) = let cmd = map cd in Kleisli (ab >> bmc >> cmd) : Kleisli<'A,'``Monad<'D>``>
+        static member        Contramap (Kleisli f    :Kleisli<'B,'``Monad<'C>``>, k:'A->'B            ) = Kleisli (k >> f)       : Kleisli<'A,'``Monad<'C>``>
+        static member inline Map (Kleisli f    :Kleisli<'B,'``Monad<'C>``>, cd:'C->'D           ) = Kleisli (map cd << f) : Kleisli<'B,'``Monad<'D>``>
+    
+        // Category
+        static member inline get_Id () = Kleisli result :Kleisli<'a,'b>
+        static member inline (<<<) (Kleisli f, Kleisli g) = Kleisli (g >=> f)
+
+        // Arrow
+        static member inline Arr f = Kleisli ((<<) result f)
+        static member inline First  (Kleisli f) = Kleisli (fun (b, d) -> f b >>= fun c -> result (c, d))
+        static member inline Second (Kleisli f) = Kleisli (fun (d, b) -> f b >>= fun c -> result (d, c))
+        static member inline (|||) (Kleisli f, Kleisli g) = Kleisli (FSharpPlus.Choice.either g f)
+
+        static member inline (+++) (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
+            Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) result Choice2Of2))) (Kleisli (g >=> ((<<) result Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
+
+        static member inline Left (Kleisli f) =
+            let inline (+++) a b = AcMerge.Invoke a b
+            AcMerge.Invoke (Kleisli f) (Arr.Invoke (Id.Invoke()))
+        static member inline Right (Kleisli f) =
+            let inline (+++) a b = AcMerge.Invoke a b
+            (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
+        static member get_App () = Kleisli (fun (Kleisli f, x) -> f x)
+    
+        // ArrowPlus
+        static member inline Empty (output :Kleisli<'T,'``Monad<'U>``>, mthd :Empty) = Kleisli (fun _ -> Empty.Invoke ())
+        static member inline Append (Kleisli f, Kleisli g, mthd:Append) = Kleisli (fun x -> Append.Invoke (f x) (g x))
+
+    let runKleisli (Kleisli f) = f
+    let runFunc (f : System.Func<_,_>) = f.Invoke
+
+
+    type MapTuple = MapTuple with
+        static member inline (?<-) (MapTuple, f, (x,y))   = (Invoke.Invoke (f, x), Invoke.Invoke (f, y)) 
+        static member inline (?<-) (MapTuple, f, (x,y,z)) = (Invoke.Invoke (f, x), Invoke.Invoke (f, y), Invoke.Invoke (f, z))
+    let inline mapTuple f t = (?<-) MapTuple f t
+    
+
+    let testCompile() =
+
+        // Arrows
+
+        let inline id'() = FSharpPlus.Operators.getCatId()
+        let inline (<<<) f g = FSharpPlus.Operators.catComp f g
+        let inline (>>>) f g = FSharpPlus.Operators.catComp g f
+        let inline ( *** ) f g = FSharpPlus.Operators.( *** ) f g
+        let inline ( &&& ) f g = FSharpPlus.Operators.fanout f g
+        let inline (|||) f g = FSharpPlus.Operators.fanin f g
+        let inline (+++) f g = FSharpPlus.Operators.(+++) f g
+        let inline app() = FSharpPlus.Operators.getApp()
+        let inline zeroArrow() = FSharpPlus.Operators.getEmpty()
+        let inline (<+>)   f g = FSharpPlus.Operators.(<|>) f g
+
+        // Test Categories
+        let r5:List<_>  = (runKleisli (id'())) 5
+        let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
+        let r8n16n24n10n20n30 = runKleisli k  5
+
+        let res1 = (System.Func<_,_>string >>> System.Func<_,_>int).Invoke '1'
+
+
+
+        let tupInt5nInt5  = mapTuple (      List.max           >>>      List.min           ) ([[7;5;8]; [4;5;3]], [   [7;5;8]   ;    [4;5;3]]   )
+        let tupInt5nChar5 = mapTuple (Unchecked.defaultof<Max> >>> Unchecked.defaultof<Min>) ([[7;5;8]; [4;5;3]], [['7';'5';'8']; ['4';'5';'3']])
+
+
+        // Test Arrows
+        let r20n5n30n5   = runKleisli (arrFirst  <| Kleisli (fun y -> [y * 2; y * 3])) (10,5) 
+        let r10n10n10n15 = runKleisli (arrSecond <| Kleisli (fun y -> [y * 2; y * 3])) (10,5)
+
+        let resStr6 =          arr (fun x -> string (x * 2 ))  3
+        let resStr8 = runFunc (arr (fun x -> string (x * 2 ))) 4
+        let resSome2n4n6:option<_> = runKleisli (arr (fun y -> [y; y * 2 ; y * 3])) 2
+
+        let res500n19 = ( (*) 100) *** ((+) 9)  <| (5,10)
+        let res500n14 = ( (*) 100) &&& ((+) 9)  <| 5
+        let (res10x13n10x20n15x13n15x20:list<_>) = runKleisli (Kleisli (fun y -> [y * 2; y * 3]) *** Kleisli (fun x -> [x + 3; x *  2] )) (5,10)
+        let (res10x8n10x10n15x8n15x10  :list<_>) = runKleisli (Kleisli (fun y -> [y * 2; y * 3]) &&& Kleisli (fun x -> [x + 3; x *  2] )) 5
+
+        // Test Arrow Choice
+        let resLeft7       = ( (+) 2) +++ ( (*) 10)   <| Choice2Of2 5
+        let res7n50        = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) ||| Kleisli (fun x -> [x + 2; x * 10] )) (Choice1Of2 5)
+        let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) +++ Kleisli (fun x -> [x + 3; x *  2] )) (Choice2Of2 5)
+
+        // Test Arrow Apply
+        let res7      = app() ( (+) 3 , 4)
+        let res4n8n12 = runKleisli (app()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
+
+        // Test Arrow Plus
+        let resSomeX = Kleisli(fun x -> Some x)
+        let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
+
+        ()
 
 module NumericLiteralG =
     open FsControl
@@ -433,6 +774,144 @@ module Parsing =
 
         Assert.IsTrue((v1 = DateTime(2011,3,4,12,42,19)))
         Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))
+
+        let r101 = tryParse "10.1.0.1" : Net.IPAddress option
+        let r102 = tryParse "102" : string option
+        let rMTS = [tryParse "Monday" ; Some DayOfWeek.Thursday; Some DayOfWeek.Saturday]
+        let r103 = tryParse "103" : Text.StringBuilder option
+
+        let r109 = parse "10.0.9.1" : Net.IPAddress
+        let r111 = parse "true" && true
+        let rMTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
+        let r110 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
+        let r120 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;|]                + 100
+        let r121 = parse "121" : string
+        let r122 = parse "122" : Text.StringBuilder
+        ()
+
+    let print() = 
+        let r123 = toString [1;2;3]
+        let r140 = toString (1,4,0)
+        let r150 = toString (Some 150)
+        let r160 = toString ([1;6;0] :> _ seq)
+        let r170 = toString (ResizeArray([1;7;0]))
+        let r180 = toString (Set [1;8;0])
+        let r190 = toString [|1;9;0|]
+        let r200 = toString [|{1..3};{4..6};{7..9}|]
+        let r210 = toString (Map  ['a',2; 'b',1; 'c',0])
+        let r220 = toString (dict ['a',2; 'b',2; 'c',0])
+
+        ()
+
+module Conversions =
+    let test =
+        // Generic op_Explicit
+        let r302:float  = explicit 302
+        let r303:float  = explicit "303"
+        let r304:char   = explicit "F"        
+        ()
+
+module Sequences =
+    open FSharpPlus.Builders
+    let test =
+        let stack = new Collections.Generic.Stack<_>([1;2;3])
+
+        let twoSeqs = plus (seq [1;2;3]) (seq [4;5;6])
+        let sameSeq = plus (getZero()  ) (seq [4;5;6])
+
+        let seqFromLst:_ seq = ofList [1;2;3;4]
+        let seqFromLst' = toSeq [1;2;3;4]
+        let seqFromOpt  = toSeq (Some 1)
+
+        let singletonList: _ list = result 1
+        let singletonSeq : _ seq  = result 1
+
+        let mappedstack = map string stack
+        let stackGroup  = groupBy ((%)/> 2) stack
+
+        let r03' = filter ((=) 3) stack
+
+        // Test Seq Monad
+                        
+        let rseq =
+            monad {
+                let! x1 = seq [1;2]
+                let! x2 = seq [10;20]
+                return ((+) x1 x2) }
+
+
+        // Test Seq Comonad
+
+        let lst   = seq [1;2;3;4;5]
+        let elem1 = head        lst
+        let tails = duplicate   lst
+        let lst'  = extend head lst
+
+        // Test MonadPlus
+        let getLine    = async { return System.Console.ReadLine() }
+        let putStrLn x = async { printfn "%s" x}
+
+        let inline sequence ms =
+            let k m m' = m >>= fun (x:'a) -> m' >>= fun (xs:seq<'a>) -> (result :seq<'a> -> 'M) (seq {yield x; yield! xs})
+            Array.foldBack k (Seq.toArray ms) ((result :seq<'a> -> 'M) (Seq.empty))
+
+        let inline mapM f as' = sequence (Seq.map f as')
+
+        let nameAndAddress = mapM (fun x -> putStrLn x >>= fun _ -> getLine) (seq ["name";"address"])
+
+        let pythags' = monad.plus {
+          let! z = seq [1..50]
+          let! x = seq [1..z]
+          let! y = seq [x..z]
+          if (x*x + y*y = z*z) then return (x, y, z)}
+
+        let pythags'' = monad.plus {
+          let! z = seq [1..50]
+          for x in seq [1..z]  do
+          for y in seq [x..z]  do
+          where (x*x + y*y = z*z)
+          yield (x, y, z)}
+
+        let res123123 = (seq [1;2;3]) <|> (seq [1;2;3])
+        let allCombinations = sequence (seq [seq ['a';'b';'c']; seq ['1';'2']])
+        ()
+
+
+
+module ShouldNotCompile =
+    let stack = new Collections.Generic.Stack<_>([1;2;3])
+
+    // This should not compile. TODO find out how to test that it keeps failing
+    (*
+    let twoStacks = plus stack stack
+    let twoSeqs'  = plus (seq [1;2;3]) [4;5;6]
+    let twoSeqs'' = plus [1;2;3] (seq [4;5;6])
+    let (stackFromLst:_ Collections.Generic.Stack) = ofList [1;2;3;4]
+    let tails' = duplicate stack
+    let stk'  = extend head stack
+    *)
+
+    // This should not compile, it started failing, at least at f80ad7e6, now unfortunately it compiles again, todo find out since when
+    let sortedStack = sortBy  string    stack
+
+    // This should not compile ??? (but it does)
+    let r10' = foldBack (+) stack 0
+    let r123 = toList stack
+
+    // This should not compile (but it does)
+    let resNone'' = sequence (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
+
+    // this compiles but it requires a type annotation to tell between
+    // seq and other monadplus #seq types
+    let pythags = monad {
+      let! z = seq [1..50]
+      let! x = seq [1..z]
+      let! y = seq [x..z]
+      do! (guard (x*x + y*y = z*z) : _ seq)
+      return (x, y, z)}
+
+
+
 
 module ApplicativeInference =
 

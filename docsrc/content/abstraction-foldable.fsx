@@ -111,4 +111,36 @@ module FoldableTree =
     let resSum21      = foldMap id   myTree
     let resProduct324 = foldMap Mult myTree
     let res21         = foldBack   (+) myTree 0
-    let res21'        = fold       (+) 0 myTree    // <- Fallback to the default method (ToSeq)
+    let res21'        = fold       (+) 0 myTree    // <- Tree.Fold is not defined but it fallbacks to the default method (Tree.ToSeq)
+
+module FoldableTree2 =
+    type Tree<'a> =
+        | Empty 
+        | Leaf of 'a 
+        | Node of (Tree<'a>) * 'a * (Tree<'a>)
+
+        // add instance for Foldable abstraction (ToSeq is the minimal definition).
+        static member ToSeq x =        
+            let rec loop t = seq {
+                match t with
+                | Empty        -> ()
+                | Leaf n       -> yield n
+                | Node (l,k,r) -> yield k; yield! loop l; yield! loop r}
+            loop x
+       
+        static member inline FoldBack (x, f, z) = 
+            let rec _foldMap x f =
+                match x with
+                | Empty        -> getZero()
+                | Leaf n       -> f n
+                | Node (l,k,r) -> plus (_foldMap l f) (plus (f k) (_foldMap r f))
+            Endo.run (_foldMap x (Endo << f )) z
+
+    
+    let tree = Node (Node (Leaf 1, 6, Leaf 3), 2 , Leaf 9)
+    let res21  = foldBack   (+) tree 0
+
+    // Following operations work by falling back to Tree.ToSeq which is the default
+    let res21' = fold   (+) 0   tree      
+    let resTr  = exists ((=) 3) tree
+    let resS3  = tryPick (fun x -> if x = 3 then Some x else None) tree
