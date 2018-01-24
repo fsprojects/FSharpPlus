@@ -7,7 +7,6 @@ module Samples.Learn_You_a_Haskell
 
 open System
 open FSharpPlus
-open FSharpPlus.Operators
 open FSharpPlus.Data
 
 (* --------------------------------------------------
@@ -18,7 +17,7 @@ let res1 = map ((+) 2) (Some 2)
 let res2 = map ((*) 3) ((+) 100) 1                                    // 303
 let res3 = map (List.replicate 3) [1;2;3;4]
 let res4 = map (List.replicate 3) (Some 3)
-let res5 = map id (Some 3)
+let res5 = map id  (Some 3)
 let res6 = map (*) (Some 3)
 
 let res7 = Some ((+) 3) <*> (Some 9)
@@ -41,8 +40,6 @@ let res18 = List.sequence [Some 3; Some 2; Some 1]                    // Some [3
     Monoid    
    --------------------------------------------------*)
 
-open FsControl
-
 type Pair<'a, 'b> = Pair of ('a * 'b)
 type Pair<'a, 'b> with
     static member runPair (Pair tuple : Pair<'a, 'b>) : ('a * 'b) = tuple
@@ -54,12 +51,12 @@ let res20 = map ((*) 100) (Pair (2, 3))                               // Pair (2
 
 let res21 = plus    [1;4] [3;6]
 let res22 = plus    "Hello " "World"
-let res23 = plus    "pang"  (getZero())                               // "pang"
+let res23 = plus    "pang"    zero                                    // "pang"
 let res24 = Seq.sum [[1;2]; [3;6]; [9]]                               // [1; 2; 3; 6; 9]
 
 let res25 = plus    (Any true) (Any false)                            // Any true
 let res26 = [false; false; false; true] |> List.map Any |> Seq.sum
-let res27 = plus    (getZero()) (All false)                           // All false
+let res27 = plus    zero (All false)                                  // All false
 let res28 = plus    (Some "some") None                                // Some "some"
 
 let res29 = foldBack (*) [1;2;3] 1
@@ -82,7 +79,7 @@ type Tree<'a> with
         | MEmpty -> z
         | Node (x, left, right) -> Tree<_>.treeFold f right (Tree<_>.treeFold f left (f x z))
     static member inline FoldBack (x:Tree<'a>, f, z) = Tree<'a>.treeFold f x z
-    static member inline FoldMap  (x:Tree<'a>, f, impl:FoldMap) = Tree<'a>.FoldBack(x, plus << f, getZero())
+    static member inline FoldMap  (x:Tree<'a>, f) = Tree<'a>.FoldBack(x, plus << f, zero)
 
 let testTree =
     let one = Node (1, MEmpty, MEmpty)
@@ -476,10 +473,10 @@ let experiment (x:KnightPos) =
     | (10, 10) -> None
     | (v1, v2) -> Some (v1 + 10, v2 + 10)
 
-let res107 = Some (11,11) >>= experiment >>= experiment >>= experiment                 // Some (41,41)
+let res107 = Some (11,11) >>= experiment >>= experiment >>= experiment                // Some (41,41)
 let exps = [experiment; experiment; experiment]
-let res108 = List.foldBack (<=<) exps (experiment) <| (11, 11)                         // Some (51,51)
-let res109 = List.reduce (<=<) exps <| (11,11)                                         // Some (41,41)
+let res108 = List.foldBack (<=<) exps (experiment) <| (11, 11)                        // Some (51,51)
+let res109 = List.reduce (<=<) exps <| (11,11)                                        // Some (41,41)
     
 let inMany (n:int) (start: KnightPos) =
     let xs = List.replicate n (moveKnight) 
@@ -629,9 +626,9 @@ let testTree =
     five
  *)
     
-let res127 : Tree<int> = plus (testTree) (MEmpty)
-let res128 : Tree<int> = minus (testTree) (MEmpty)
-let res129 : Tree<int> = divide (testTree) (MEmpty)
+let res127 : Tree<int> = plus    testTree  MEmpty
+let res128 : Tree<int> = minus   testTree  MEmpty
+let res129 : Tree<int> = divide  testTree  MEmpty
 let res130 : Tree<int> = length [testTree; MEmpty]
 let res132 : Tree<int> = mean [testTree; testTree]
 
