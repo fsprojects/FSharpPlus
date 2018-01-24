@@ -569,8 +569,13 @@ module Operators =
         let inline (|||) (f : '``ArrowChoice<'T,'V>``) (g : '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g    
 
 
+namespace FSharpPlus.Math
+
+    open FSharpPlus
+    open FSharpPlus.Control
+
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
-    module ApplicativeMath =
+    module Applicative =
 
         let inline ( .+  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((+)/> y) x :'``Functor<'T>``
         let inline (  +. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((+)   x) y :'``Functor<'T>``
@@ -616,7 +621,7 @@ module Operators =
     /// Generic numbers, functions and operators.
     /// By opening this module some common operators become restricted, like (+) to 'a->'a->'a
     /// </summary>
-    module GenericMath =
+    module Generic =
 
         open System.Numerics
 

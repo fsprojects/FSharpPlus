@@ -85,7 +85,7 @@ From F#+
 
 open System
 open FSharpPlus
-open FSharpPlus.Operators.GenericMath
+open FSharpPlus.Math.Generic
 
 module Predicate = let run (p: Predicate<_>) x = p.Invoke (x)
 

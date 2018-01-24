@@ -121,7 +121,7 @@ let opt122  = iI tryDiv (tryParse "488") (trySqrt 16) Ji
 
 
 // Using applicative math operators
-open FSharpPlus.Operators.ApplicativeMath
+open FSharpPlus.Math.Applicative
 
 let opt121'  = Some 21 .+. tryParse "100"
 let optTrue  = 30 >. tryParse "29"

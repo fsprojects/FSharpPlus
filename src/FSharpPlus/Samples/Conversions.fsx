@@ -17,7 +17,7 @@ let ipAndPort : (System.Net.IPAddress * int) option =
 let r10:float  = explicit 10
 let r11:System.Nullable<_> = implicit 11
 
-open GenericMath
+open FSharpPlus.Math.Generic
 let r12:float = fromBigInt 10I + 2G
 let r13       = toBigInt (5G + 8G : int64)  // plus doens't have the default type (int) therefore a type annotation is required
 let r14       = toBigInt (20G - 6G)         // (-) still uses the default type (int)

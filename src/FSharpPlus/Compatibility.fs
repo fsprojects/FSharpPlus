@@ -125,7 +125,7 @@ module Compatibility =
 
 
         // Numerics
-        open GenericMath
+        open FSharpPlus.Math.Generic
 
         type Integer = bigint
 

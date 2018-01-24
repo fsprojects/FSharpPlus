@@ -60,7 +60,7 @@ For example the F# definition of (+) can take 2 different types, this makes poss
 
 For instance you can add a float to a DateTime with the (+) operator, and that float will be interpreted as seconds.
 
-By opening the GenericMath namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.
+By opening the FSharpPlus.Math.Generic namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.
 
 
 
@@ -71,7 +71,7 @@ Numbers with a G suffix are generics.
 
 *)
 
-open GenericMath
+open FSharpPlus.Math.Generic
 
 let res5Int  : int    = 5G
 let res5UInt : uint32 = 5G
@@ -134,7 +134,7 @@ Option 2, use Generic Numbers
 Requires FromBigInt and (+,-,*,/)
 *)
 
-open FSharpPlus.Operators.GenericMath
+open FSharpPlus.Math.Generic
 let x2  = Vector2d (32,5) + 7G
 let x2' = 7G + Vector2d (32,5)
 
@@ -143,7 +143,7 @@ Option 3, use Applicative Math Operators
 Requires only Map
 *)
 
-open FSharpPlus.Operators.ApplicativeMath
+open FSharpPlus.Math.Applicative
 let x3 = Vector2d (32,5) .+ 7
 let x3' = 7 +. Vector2d (32,5)
 
@@ -202,7 +202,7 @@ But for complex numbers it always has 2 solutions.
 
 *)
 
-open FSharpPlus.Operators.GenericMath
+open FSharpPlus.Math.Generic
 
 let inline quadratic a b c =
     let root1 = ( -b + sqrt (  b * b - 4G * a * c) )  / (2G * a)

@@ -96,7 +96,7 @@ Restricted:
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 open FSharpPlus
-open FSharpPlus.Operators.GenericMath
+open FSharpPlus.Math.Generic
 
 let getLine    = async { return System.Console.ReadLine() }
 let putStrLn x = async { printfn "%s" x}

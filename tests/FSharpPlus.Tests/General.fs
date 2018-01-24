@@ -924,7 +924,7 @@ module ApplicativeInference =
     let res9n5   = map ((+) 1) (ZipList(seq [8;4]))
     let res18n24 = result (+) <*> ZipList(seq [8;4]) <*> ZipList(seq [10;20])
 
-    open FSharpPlus.Operators.GenericMath
+    open FSharpPlus.Math.Generic
 
     let res6n7n8 = result (+) <*> result 5G <*> ZipList [1;2;3]
     let res18n14 = result (+) <*> ZipList(seq [8;4]) <*> result 10
@@ -1013,7 +1013,7 @@ type Rational = Ratio.Ratio<bigint>
 module testCompileOldCode =
     open Ratio
 
-    open FSharpPlus.Operators.GenericMath
+    open FSharpPlus.Math.Generic
 
     let inline negate (x:'Num) :'Num = FSharpPlus.Operators.negate x
     let inline (~-)   (x:'Num) :'Num = FSharpPlus.Operators.negate x
