@@ -6,6 +6,7 @@ module Samples.ZipLists
 
 
 open FSharpPlus
+open FSharpPlus.Data
 
 let seq1 = seq { 1..100000}
 let seq2 = seq {10..100000}

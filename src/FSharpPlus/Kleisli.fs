@@ -1,7 +1,7 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
 
+open FSharpPlus
 open FSharpPlus.Control
-open FSharpPlus.Operators
 
 /// Kleisli arrows of a monad. Represents a function 'T -> 'Monad<'U>
 [<NoEquality; NoComparison>]

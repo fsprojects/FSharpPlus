@@ -5,6 +5,7 @@ module Samples.Collections
 #endif
 
 open FSharpPlus
+open FSharpPlus.Data
 
 let inline print x = async { System.Console.WriteLine(toString x) }
 

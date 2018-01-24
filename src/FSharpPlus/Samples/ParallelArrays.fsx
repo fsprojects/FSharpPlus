@@ -6,6 +6,7 @@ module Samples.ParallelArrays
 
 
 open FSharpPlus
+open FSharpPlus.Data
 
 let arr1 = [| 1..100000|]
 let arr2 = [|10..100000|]

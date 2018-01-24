@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
 
 open System.Text
 open System.Runtime.InteropServices
