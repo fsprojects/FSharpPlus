@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus.Data
 
-open FsControl
+open FSharpPlus.Control
 open FSharpPlus
 
 /// Additional operations on Option

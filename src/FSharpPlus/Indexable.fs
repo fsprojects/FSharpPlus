@@ -1,10 +1,10 @@
-﻿namespace FsControl
+﻿namespace FSharpPlus.Control
 
 open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
-open FsControl.Internals
+open FSharpPlus.Internals
 
 
 [<Extension;Sealed>]

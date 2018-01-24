@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-open FsControl
+open FSharpPlus.Control
 open FSharpPlus.Operators
 
 /// Kleisli arrows of a monad. Represents a function 'T -> 'Monad<'U>

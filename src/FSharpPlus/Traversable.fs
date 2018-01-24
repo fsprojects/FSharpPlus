@@ -1,10 +1,10 @@
-﻿namespace FsControl
+﻿namespace FSharpPlus.Control
 
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
-open FsControl.Internals
-open FsControl.Internals.Prelude
-open FsControl.Internals.MonadOps
+open FSharpPlus.Internals
+open FSharpPlus.Internals.Prelude
+open FSharpPlus.Internals.MonadOps
 open FSharpPlus
 
 

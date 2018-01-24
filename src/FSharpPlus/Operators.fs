@@ -1,6 +1,6 @@
 namespace FSharpPlus
 
-open FsControl
+open FSharpPlus.Control
 
 /// Generic functions and operators
 [<AutoOpenAttribute>]
@@ -95,7 +95,7 @@ module Operators =
 
     module Seq =
         /// Fold all values in the sequence using the monoidal addition
-        let inline sum (x:seq<'Monoid>) : 'Monoid = FsControl.Sum.Invoke x
+        let inline sum (x:seq<'Monoid>) : 'Monoid = Sum.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
@@ -536,7 +536,7 @@ module Operators =
     let inline choice (x:'``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getEmpty()) : '``Alternative<'t>>``
 
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
-    let inline mfilter (predicate:'t->bool) (m:'``MonadZero<'t>``) :'``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else FsControl.Empty.Invoke()
+    let inline mfilter (predicate:'t->bool) (m:'``MonadZero<'t>``) :'``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke()
 
     /// Returns the sum of the monoid elements in the Foldable.
     let inline sum (x:'Foldable'Num) : 'Num = fold (+) (getZero(): 'Num) x

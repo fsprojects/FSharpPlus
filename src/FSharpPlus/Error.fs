@@ -1,7 +1,7 @@
 ﻿namespace FSharpPlus.Data
 
 open System
-open FsControl
+open FSharpPlus.Control
 open FSharpPlus
 
 /// Additional operations on Result

@@ -84,8 +84,7 @@ From F#+
 
 open FSharpPlus
 open FSharpPlus.Data
-
-open FsControl
+open FSharpPlus.Control
 
 let res1_Gt   = foldMap (compare 2) [1;2;3]
 let resHelloW = foldMap (fun x -> Some ("hello " + x)) (Some "world")

@@ -118,7 +118,7 @@ let buildReference () =
     File.ReadAllLines pathIndex
     |> split [[|System.String.Empty|]]
     |> filter (fun x -> not (x |> exists (fun e -> e.Contains("BaseLib"))))
-    |> filter (fun x -> not (x |> exists (fun e -> e.Contains("FsControl.Internals Namespace"))))
+    |> filter (fun x -> not (x |> exists (fun e -> e.Contains("FSharpPlus.Internals Namespace"))))
     |> intercalate [|System.String.Empty|]
   File.WriteAllLines(pathIndex, ndx)
 

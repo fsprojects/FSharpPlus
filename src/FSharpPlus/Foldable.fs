@@ -2,9 +2,9 @@
 // Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // Those .NET types are string and array. String is explicitely handled here and array through the seq overload.
 
-namespace FsControl.Internals
+namespace FSharpPlus.Internals
 
-open FsControl
+open FSharpPlus.Control
 
 
 type _Dual<'T> =
@@ -23,7 +23,7 @@ type _Endo<'T> =
     static member get_Zero() = _Endo id                                             : _Endo<'m>
     static member (+) (f : _Endo<'m>, g : _Endo<'m>) = _Endo (f.Value << g.Value)   : _Endo<'m>
 
-namespace FsControl
+namespace FSharpPlus.Control
 
 open System
 open System.Runtime.CompilerServices
@@ -31,8 +31,8 @@ open System.Runtime.InteropServices
 open System.Text
 open System.Collections
 open System.Collections.Generic
-open FsControl.Internals
-open FsControl.Internals.Prelude
+open FSharpPlus.Internals
+open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
 

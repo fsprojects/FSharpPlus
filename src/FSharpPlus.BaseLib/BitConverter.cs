@@ -13,7 +13,7 @@
 **
 **
 ===========================================================*/
-namespace FsControl.BaseLib
+namespace FSharpPlus.BaseLib
 {
 
     using System;

@@ -5,7 +5,7 @@ module Compatibility =
     module Haskell =
 
         // Types
-        open FsControl
+        open FSharpPlus.Control
         open FSharpPlus.Data
 
         let getDual (Dual x) = x

@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-open FsControl
+open FSharpPlus.Control
 open FSharpPlus.Operators
 
 /// Array with an Applicative functor based on zipping and parallel execution.

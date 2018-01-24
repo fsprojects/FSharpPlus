@@ -20,7 +20,7 @@ Here are some examples:
 
 *)
 
-open FsControl
+open FSharpPlus.Control
 
 let mapp1 = [1..3] </plus/> [4..8]
 let mapp2 = [1..3]  .Plus   [4..8]

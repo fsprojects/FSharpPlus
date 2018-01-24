@@ -27,7 +27,7 @@ module List =
     let inline replicateM count (initial:'``Applicative<'T>``)  = sequence (List.replicate count initial)
 
 
-open FsControl
+open FSharpPlus.Control
 
 /// Monad Transformer for list<'T>
 type ListT<'``monad<list<'t>>``> = ListT of '``monad<list<'t>>``

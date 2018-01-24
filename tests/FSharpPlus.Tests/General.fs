@@ -3,6 +3,7 @@
 open System
 open FSharpPlus
 open FSharpPlus.Data
+open FSharpPlus.Control
 open NUnit.Framework
 
 module SideEffects =
@@ -23,9 +24,9 @@ type WrappedListB<'s> = WrappedListB of 's list with
     static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
 
 type WrappedListB'<'s> = WrappedListB' of 's list with // Same as B but without clean signatures
-    static member Return   (_:WrappedListB'<'a>, _:FsControl.Return ) = fun (x:'a)     -> WrappedListB' [x]
+    static member Return   (_:WrappedListB'<'a>, _:Return ) = fun (x:'a)     -> WrappedListB' [x]
     static member (+)      (WrappedListB' l, WrappedListB' x) = WrappedListB' (l @ x)
-    static member Zero     (_:WrappedListB'<'a>, _:FsControl.Zero) = WrappedListB' List.empty
+    static member Zero     (_:WrappedListB'<'a>, _:Zero) = WrappedListB' List.empty
     static member ToSeq    (WrappedListB' lst)     = List.toSeq lst
     static member FoldBack (WrappedListB' x, f, z) = List.foldBack f x z
 
@@ -572,7 +573,7 @@ module Categories =
 
     // Kleisli (slightly different definition)
 
-    open FsControl
+    open FSharpPlus.Control
 
     type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
 
@@ -673,7 +674,7 @@ module Categories =
         ()
 
 module NumericLiteralG =
-    open FsControl
+    open FSharpPlus.Control
     let inline FromZero() = Zero.Invoke()
     let inline FromOne () = One.Invoke()
     let inline FromInt32  (i:int   ) = FromInt32.Invoke i
@@ -956,7 +957,7 @@ module ApplicativeInference =
 // Old code, no longer used but still interesting to see if it still compiles
 
 module Ratio =
-    open FsControl
+    open FSharpPlus.Control
     // Strict version of math operators
     let inline internal ( +.) (a:'Num) (b:'Num) :'Num = a + b
     let inline internal ( -.) (a:'Num) (b:'Num) :'Num = a - b

@@ -45,7 +45,7 @@ type Writer<'monoid,'t> with
     static member        Extract (Writer (_ : 'W, a : 'T)) = a
     static member        Extend  (Writer (w : 'W, _ : 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
 
-open FsControl
+open FSharpPlus.Control
 
 /// Monad Transformer for Writer<'Monoid, 'T>
 type WriterT<'``monad<'t * 'monoid>``> = WriterT of '``monad<'t * 'monoid>``

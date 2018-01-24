@@ -1,4 +1,4 @@
-namespace FsControl
+namespace FSharpPlus.Control
 
 open System
 open System.Text
@@ -10,7 +10,7 @@ open Microsoft.FSharp.Quotations
 #else
 open System.Threading.Tasks
 #endif
-open FsControl.Internals
+open FSharpPlus.Internals
 
 
 [<Extension; Sealed>]

@@ -2,7 +2,7 @@
 
 open System.Text
 open System.Runtime.InteropServices
-open FsControl
+open FSharpPlus.Control
 open FSharpPlus.Operators
 
 /// A sequence with an Applicative functor based on zipping.

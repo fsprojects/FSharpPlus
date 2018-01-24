@@ -2,9 +2,9 @@
 // Warn FS0077 -> Member constraints with the name 'Abs' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // But the first Abs overload relies in the standard abs function which handle all those simulated cases.
 
-namespace FsControl
+namespace FSharpPlus.Control
 
-open FsControl.Internals
+open FSharpPlus.Internals
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
@@ -309,11 +309,11 @@ module internal Numerics =
 
 
 
-namespace FsControl
+namespace FSharpPlus.Control
 
 open Numerics
-open FsControl.Internals
-open FsControl
+open FSharpPlus.Internals
+open FSharpPlus.Control
 
 
 

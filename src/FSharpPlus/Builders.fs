@@ -25,6 +25,7 @@ module Builders =
     // Workflows
 
     open System
+    open FSharpPlus.Control
 
     type Builder() =
         member        __.ReturnFrom (expr) = expr                                       : '``Monad<'T>``
@@ -65,20 +66,20 @@ module Builders =
 
     type DelayedBuilder() =
         inherit Builder()
-        member inline __.Delay(expr:_->'``Monad<'T>``) = FsControl.Delay.Invoke expr : '``Monad<'T>``
-        member        __.Run f = f                                                   : '``Monad<'T>``
-        member inline __.TryWith   (expr, handler     ) = FsControl.TryWith.Invoke    expr handler      : '``Monad<'T>``
-        member inline __.TryFinally(expr, compensation) = FsControl.TryFinally.Invoke expr compensation : '``Monad<'T>``
-        member inline __.Using(disposable:#IDisposable, body) = FsControl.Using.Invoke disposable body  : '``Monad<'T>``
+        member inline __.Delay(expr:_->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
+        member        __.Run f = f                                         : '``Monad<'T>``
+        member inline __.TryWith   (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
+        member inline __.TryFinally(expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
+        member inline __.Using(disposable:#IDisposable, body) = Using.Invoke disposable body  : '``Monad<'T>``
 
     type MonadPlusStrictBuilder() =
         inherit StrictBuilder()      
-        member inline __.Zero() = FsControl.Empty.Invoke()                : '``MonadPlus<'T>``
+        member inline __.Zero() = Empty.Invoke()                          : '``MonadPlus<'T>``
         member inline __.Combine(a : '``MonadPlus<'T>``, b) = a <|> b()   : '``MonadPlus<'T>``
         member inline __.While (guard, body : unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
             let rec loop guard body =
                 if guard() then body() <|> loop guard body
-                else FsControl.Empty.Invoke()
+                else Empty.Invoke()
             loop guard body
         member inline this.For (p: #seq<'T>, rest :'T->'``MonadPlus<'U>``) =
             let fusing (resource:#IDisposable) body = try body resource finally dispose resource   
@@ -99,13 +100,13 @@ module Builders =
  
     type MonadPlusBuilder() =
         inherit DelayedBuilder()     
-        member inline __.Zero() = FsControl.Empty.Invoke()            : '``MonadPlus<'T>``
+        member inline __.Zero() = Empty.Invoke()                      : '``MonadPlus<'T>``
         member inline __.Combine(a : '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
         member inline __.While (guard, body : '``MonadPlus<'T>``)     : '``MonadPlus<'T>`` =
-            let rec fix = FsControl.Delay.Invoke (fun () -> if guard() then body <|> fix else FsControl.Empty.Invoke())
+            let rec fix = Delay.Invoke (fun () -> if guard() then body <|> fix else Empty.Invoke())
             fix
         member inline this.For (p: #seq<'T>, rest :'T->'``MonadPlus<'U>``) =
-            let fdelay x = FsControl.Delay.Invoke x  : '``MonadPlus<'U>``
+            let fdelay x = Delay.Invoke x            : '``MonadPlus<'U>``
             let fusing (resource:#IDisposable) body = try body resource finally dispose resource
             fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fdelay(fun () -> rest enum.Current)) : '``MonadPlus<'U>``))
 
@@ -121,7 +122,7 @@ module Builders =
                 else result ()
             loop guard body
         member inline this.For (p: #seq<'T>, rest :'T->'``Monad<unit>``) =
-            let fdelay x = FsControl.Delay.Invoke x  : '``Monad<unit>``
+            let fdelay x = Delay.Invoke x            : '``Monad<unit>``
             let fusing (resource:#IDisposable) body = try body resource finally dispose resource
             fusing (p.GetEnumerator()) (fun enum -> (this.While(enum.MoveNext, fdelay(fun () -> rest enum.Current)) : '``Monad<unit>``))
 

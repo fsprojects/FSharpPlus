@@ -1,4 +1,4 @@
-namespace FsControl.Internals
+namespace FSharpPlus.Internals
 
 type Default5 = class end
 type Default4 = class inherit Default5 end

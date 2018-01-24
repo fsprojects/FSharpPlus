@@ -1,5 +1,8 @@
 ﻿namespace FSharpPlus.Data
 
+open FSharpPlus
+open FSharpPlus.Control
+
 /// <summary> Computation type: Computations which read values from a shared environment.
 /// <para/>   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
 /// <para/>   Useful for: Maintaining variable bindings, or other shared environment.</summary>
@@ -30,11 +33,9 @@ type Reader<'r,'t> with
     static member get_Ask()    = Reader.ask                     : Reader<'R,'R>
     static member Local (m, f:'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
-    static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (FsControl.Zero.Invoke()) : 'T
-    static member inline Extend  (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (FsControl.Plus.Invoke a b))))) : Reader<'Monoid,'U>
+    static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke()) : 'T
+    static member inline Extend  (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
 
-open FsControl
-open FSharpPlus
 
 /// Monad Transformer for Reader<'R, 'T>
 type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
@@ -80,4 +81,4 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Delay (f: unit -> ReaderT<'R,'``Monad<'T>``>) =
         ReaderT (fun s ->
             let d() = ReaderT.run (f()) s
-            FsControl.Delay.Invoke d) : ReaderT<'R,'``Monad<'T>``>
+            Delay.Invoke d) : ReaderT<'R,'``Monad<'T>``>

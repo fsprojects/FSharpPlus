@@ -1,4 +1,4 @@
-namespace FsControl
+namespace FSharpPlus.Control
 
 open System
 open System.Runtime.CompilerServices
@@ -11,8 +11,8 @@ open System.Threading.Tasks
 #endif
 open Microsoft.FSharp.Quotations
 
-open FsControl.Internals
-open FsControl.Internals.Prelude
+open FSharpPlus.Internals
+open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
 
@@ -820,11 +820,12 @@ type App with
 
 
 
-namespace FsControl.Internals
+namespace FSharpPlus.Internals
 module internal MonadOps =
+    open FSharpPlus.Control
 
-    let inline (>>=) x f = FsControl.Bind.Invoke x f
-    let inline result  x = FsControl.Return.Invoke x
-    let inline (<*>) f x = FsControl.Apply.Invoke f x
-    let inline (<|>) x y = FsControl.Append.Invoke x y
+    let inline (>>=) x f = Bind.Invoke x f
+    let inline result  x = Return.Invoke x
+    let inline (<*>) f x = Apply.Invoke f x
+    let inline (<|>) x y = Append.Invoke x y
     let inline (>=>) (f:'a->'Monad'b) (g:'b->'Monad'c) (x:'a) :'Monad'c = f x >>= g

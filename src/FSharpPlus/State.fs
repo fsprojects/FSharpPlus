@@ -30,7 +30,7 @@ type State<'s,'t> with
     static member get_Get() = State.get                       : State<'S,'S>
     static member Put x     = State.put x                     : State<'S,unit>
 
-open FsControl
+open FSharpPlus.Control
 open FSharpPlus
 
 /// Monad Transformer for State<'S, 'T>
@@ -67,4 +67,4 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Delay (f: unit -> StateT<'S,'``Monad<'T * 'S>``>) =
         StateT (fun s ->
             let d() = StateT.run (f()) s
-            FsControl.Delay.Invoke d) : StateT<'S,'``Monad<'T * 'S>``>
+            Delay.Invoke d) : StateT<'S,'``Monad<'T * 'S>``>

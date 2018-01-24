@@ -1,8 +1,8 @@
-﻿namespace FsControl
+﻿namespace FSharpPlus.Control
 
-open FsControl.Internals
+open FSharpPlus.Internals
 open FSharpPlus
-open FsControl.Internals.MonadOps
+open FSharpPlus.Internals.MonadOps
 
 // MonadTrans
 

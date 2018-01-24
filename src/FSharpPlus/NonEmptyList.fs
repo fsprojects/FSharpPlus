@@ -2,7 +2,7 @@
 
 open System.Text
 open System.Runtime.InteropServices
-open FsControl
+open FSharpPlus.Control
 open FSharpPlus
 
 /// A type-safe list that contains at least one element.
