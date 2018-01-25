@@ -424,12 +424,6 @@ module Operators =
 
     let inline toBytes   value :byte[] = ToBytes.Invoke true value
     let inline toBytesBE value :byte[] = ToBytes.Invoke false value
-
-    /// Converts to a value to its string representation.
-    let inline toStringWithCulture (cultureInfo:System.Globalization.CultureInfo) value:string = ToString.Invoke cultureInfo value
-
-    /// Converts to a value to its string representation.
-    let inline toString value:string  = ToString.Invoke System.Globalization.CultureInfo.InvariantCulture value
      
     /// Converts to a value from its string representation.
     let inline parse (value:string) = Parse.Invoke value

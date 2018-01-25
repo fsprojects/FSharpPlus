@@ -63,15 +63,6 @@ type NonEmptyList<'t> with
         let lst = traverse f (toList s) : '``Functor<'List<'U>>``
         (NonEmptyList.create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<'NonEmptyList<'U>>``
 
-    static member inline ToString (s:NonEmptyList<'a>, [<Optional>]_impl:ToString) = fun (k:System.Globalization.CultureInfo) ->
-            let b = StringBuilder()
-            let inline append (s:string) = b.Append s |> ignore
-            append "NonEmptyList ["
-            let withSemiColons = NonEmptyList.toSeq s |> Seq.map (toStringWithCulture k) |> Seq.intersperse "; "
-            Seq.iter append withSemiColons
-            append "]"
-            b.ToString()
-
     static member Replace (source:NonEmptyList<'T>, oldValue:NonEmptyList<'T>, newValue:NonEmptyList<'T>, _impl:Replace ) =
         let lst = source |> NonEmptyList.toSeq  |> Seq.replace oldValue newValue |> Seq.toList
         {Head = lst.Head; Tail = lst.Tail}

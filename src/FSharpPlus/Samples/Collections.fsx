@@ -7,7 +7,7 @@ module Samples.Collections
 open FSharpPlus
 open FSharpPlus.Data
 
-let inline print x = async { System.Console.WriteLine(toString x) }
+let inline print x = async { System.Console.WriteLine(string x) }
 
 let nel = { NonEmptyList.Head = 1; Tail = [2;3;4] }
 let dCnt = Seq.length nel
@@ -28,7 +28,7 @@ let inline myQuery x1 x2 = monad {
     where   (parse e1 + e2 < 23)
     groupBy (parse e1 + e2 %  2) into g
     sortBy  (-(fst g))
-    select  (toString (fst g), snd g )}
+    select  (string (fst g), snd g )}
 
 let (arr1, arr2) = [|"1";"2";"3"|], [|10;20;30;40|]
 let (lst1, lst2) = [ "1";"2";"3" ], [ 10;20;30;40 ]
@@ -41,7 +41,7 @@ let sq  = myQuery seq1 seq2
 let inline myQuery2 x = monad {
     let! e = x
     chunkBy (parse e %  2) into g
-    select  (toString (fst g), snd g )}
+    select  (string (fst g), snd g )}
 
 let lst3 = myQuery2 [ "1";"2";"4";"3" ]
 let seq3 = myQuery2 (Seq.initInfinite string)

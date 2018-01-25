@@ -790,20 +790,6 @@ module Parsing =
         let r122 = parse "122" : Text.StringBuilder
         ()
 
-    let print() = 
-        let r123 = toString [1;2;3]
-        let r140 = toString (1,4,0)
-        let r150 = toString (Some 150)
-        let r160 = toString ([1;6;0] :> _ seq)
-        let r170 = toString (ResizeArray([1;7;0]))
-        let r180 = toString (Set [1;8;0])
-        let r190 = toString [|1;9;0|]
-        let r200 = toString [|{1..3};{4..6};{7..9}|]
-        let r210 = toString (Map  ['a',2; 'b',1; 'c',0])
-        let r220 = toString (dict ['a',2; 'b',2; 'c',0])
-
-        ()
-
 module Conversions =
     let test =
         // Generic op_Explicit

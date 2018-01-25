@@ -28,12 +28,3 @@ type ZipList<'s> with
     static member inline Traverse (ZipList (x:seq<'T>), f:'T->'``Functor<'U>``) =
         let lst = traverse f x : '``Functor<List<'U>>``
         ZipList <!> lst : '``Functor<ZipList<'U>>``
-
-    static member inline ToString (s:ZipList<'a>, [<Optional>]_impl:ToList) = fun (k:System.Globalization.CultureInfo) ->
-            let b = StringBuilder()
-            let inline append (s:string) = b.Append s |> ignore
-            append "ZipList ["
-            let withSemiColons = ZipList.run s |> Seq.map (toStringWithCulture k) |> Seq.intersperse "; "
-            Seq.iter append withSemiColons
-            append "]"
-            b.ToString()
