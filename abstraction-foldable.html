@@ -120,13 +120,43 @@
 <span class="l">30: </span>
 <span class="l">31: </span>
 <span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
+<span class="l">54: </span>
+<span class="l">55: </span>
+<span class="l">56: </span>
+<span class="l">57: </span>
+<span class="l">58: </span>
+<span class="l">59: </span>
+<span class="l">60: </span>
+<span class="l">61: </span>
+<span class="l">62: </span>
+<span class="l">63: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
 <span class="k">open</span> <span class="i">FSharpPlus</span>
 <span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Data</span>
-
-<span class="k">open</span> <span class="i">FsControl</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Control</span>
 
 <span class="k">let</span> <span class="i">res1_Gt</span>   <span class="o">=</span> <span class="i">foldMap</span> (<span class="i">compare</span> <span class="n">2</span>) [<span class="n">1</span>;<span class="n">2</span>;<span class="n">3</span>]
 <span class="k">let</span> <span class="i">resHelloW</span> <span class="o">=</span> <span class="i">foldMap</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">Some</span> (<span class="s">&quot;hello &quot;</span> <span class="o">+</span> <span class="i">x</span>)) (<span class="i">Some</span> <span class="s">&quot;world&quot;</span>)
@@ -152,7 +182,39 @@
     <span class="k">let</span> <span class="i">resSum21</span>      <span class="o">=</span> <span class="i">foldMap</span> <span class="i">id</span>   <span class="i">myTree</span>
     <span class="k">let</span> <span class="i">resProduct324</span> <span class="o">=</span> <span class="i">foldMap</span> <span class="i">Mult</span> <span class="i">myTree</span>
     <span class="k">let</span> <span class="i">res21</span>         <span class="o">=</span> <span class="i">foldBack</span>   (<span class="o">+</span>) <span class="i">myTree</span> <span class="n">0</span>
-    <span class="k">let</span> <span class="i">res21&#39;</span>        <span class="o">=</span> <span class="i">fold</span>       (<span class="o">+</span>) <span class="n">0</span> <span class="i">myTree</span>    <span class="c">// &lt;- Fallback to the default method (ToSeq)</span>
+    <span class="k">let</span> <span class="i">res21&#39;</span>        <span class="o">=</span> <span class="i">fold</span>       (<span class="o">+</span>) <span class="n">0</span> <span class="i">myTree</span>    <span class="c">// &lt;- Tree.Fold is not defined but it fallbacks to the default method (Tree.ToSeq)</span>
+
+<span class="k">module</span> <span class="i">FoldableTree2</span> <span class="o">=</span>
+    <span class="k">type</span> <span class="i">Tree</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span><span class="o">&gt;</span> <span class="o">=</span>
+        | <span class="i">Empty</span> 
+        | <span class="i">Leaf</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">a</span> 
+        | <span class="i">Node</span> <span class="k">of</span> (<span class="i">Tree</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span><span class="o">&gt;</span>) <span class="o">*</span> <span class="o">&#39;</span><span class="i">a</span> <span class="o">*</span> (<span class="i">Tree</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">a</span><span class="o">&gt;</span>)
+
+        <span class="c">// add instance for Foldable abstraction (ToSeq is the minimal definition).</span>
+        <span class="k">static</span> <span class="k">member</span> <span class="i">ToSeq</span> <span class="i">x</span> <span class="o">=</span>        
+            <span class="k">let</span> <span class="k">rec</span> <span class="i">loop</span> <span class="i">t</span> <span class="o">=</span> <span class="i">seq</span> {
+                <span class="k">match</span> <span class="i">t</span> <span class="k">with</span>
+                | <span class="i">Empty</span>        <span class="k">-&gt;</span> ()
+                | <span class="i">Leaf</span> <span class="i">n</span>       <span class="k">-&gt;</span> <span class="k">yield</span> <span class="i">n</span>
+                | <span class="i">Node</span> (<span class="i">l</span>,<span class="i">k</span>,<span class="i">r</span>) <span class="k">-&gt;</span> <span class="k">yield</span> <span class="i">k</span>; <span class="k">yield!</span> <span class="i">loop</span> <span class="i">l</span>; <span class="k">yield!</span> <span class="i">loop</span> <span class="i">r</span>}
+            <span class="i">loop</span> <span class="i">x</span>
+       
+        <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="i">FoldBack</span> (<span class="i">x</span>, <span class="i">f</span>, <span class="i">z</span>) <span class="o">=</span> 
+            <span class="k">let</span> <span class="k">rec</span> <span class="i">_foldMap</span> <span class="i">x</span> <span class="i">f</span> <span class="o">=</span>
+                <span class="k">match</span> <span class="i">x</span> <span class="k">with</span>
+                | <span class="i">Empty</span>        <span class="k">-&gt;</span> <span class="i">getZero</span>()
+                | <span class="i">Leaf</span> <span class="i">n</span>       <span class="k">-&gt;</span> <span class="i">f</span> <span class="i">n</span>
+                | <span class="i">Node</span> (<span class="i">l</span>,<span class="i">k</span>,<span class="i">r</span>) <span class="k">-&gt;</span> <span class="i">plus</span> (<span class="i">_foldMap</span> <span class="i">l</span> <span class="i">f</span>) (<span class="i">plus</span> (<span class="i">f</span> <span class="i">k</span>) (<span class="i">_foldMap</span> <span class="i">r</span> <span class="i">f</span>))
+            <span class="i">Endo</span><span class="o">.</span><span class="i">run</span> (<span class="i">_foldMap</span> <span class="i">x</span> (<span class="i">Endo</span> <span class="o">&lt;&lt;</span> <span class="i">f</span> )) <span class="i">z</span>
+
+    
+    <span class="k">let</span> <span class="i">tree</span> <span class="o">=</span> <span class="i">Node</span> (<span class="i">Node</span> (<span class="i">Leaf</span> <span class="n">1</span>, <span class="n">6</span>, <span class="i">Leaf</span> <span class="n">3</span>), <span class="n">2</span> , <span class="i">Leaf</span> <span class="n">9</span>)
+    <span class="k">let</span> <span class="i">res21</span>  <span class="o">=</span> <span class="i">foldBack</span>   (<span class="o">+</span>) <span class="i">tree</span> <span class="n">0</span>
+
+    <span class="c">// Following operations work by falling back to Tree.ToSeq which is the default</span>
+    <span class="k">let</span> <span class="i">res21&#39;</span> <span class="o">=</span> <span class="i">fold</span>   (<span class="o">+</span>) <span class="n">0</span>   <span class="i">tree</span>      
+    <span class="k">let</span> <span class="i">resTr</span>  <span class="o">=</span> <span class="i">exists</span> ((<span class="o">=</span>) <span class="n">3</span>) <span class="i">tree</span>
+    <span class="k">let</span> <span class="i">resS3</span>  <span class="o">=</span> <span class="i">tryPick</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="k">if</span> <span class="i">x</span> <span class="o">=</span> <span class="n">3</span> <span class="k">then</span> <span class="i">Some</span> <span class="i">x</span> <span class="k">else</span> <span class="i">None</span>) <span class="i">tree</span>
 </code></pre></td>
 </tr>
 </table>

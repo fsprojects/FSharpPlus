@@ -203,7 +203,7 @@
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r2</span> <span class="o">=</span> <span class="i">set</span> <span class="i">_2</span> <span class="n">42</span> (<span class="s">&quot;hello&quot;</span>,<span class="s">&quot;world&quot;</span>)
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r2</span> <span class="o">=</span> <span class="i">setl</span> <span class="i">_2</span> <span class="n">42</span> (<span class="s">&quot;hello&quot;</span>,<span class="s">&quot;world&quot;</span>)
 <span class="c">// val it : string * int = (&quot;hello&quot;, 42)</span>
 </code></pre></td>
 </tr>
@@ -218,7 +218,7 @@
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="i">r3</span> <span class="o">=</span> (<span class="s">&quot;hello&quot;</span>,(<span class="s">&quot;world&quot;</span>,<span class="s">&quot;!!!&quot;</span>))<span class="o">^.</span>(<span class="i">_2</span> <span class="o">&lt;&lt;</span> <span class="i">_1</span>)
 <span class="c">// val it : string = &quot;world&quot;</span>
 
-<span class="k">let</span> <span class="i">r4</span> <span class="o">=</span> <span class="i">set</span> (<span class="i">_2</span> <span class="o">&lt;&lt;</span> <span class="i">_1</span>) <span class="n">42</span> (<span class="s">&quot;hello&quot;</span>,(<span class="s">&quot;world&quot;</span>,<span class="s">&quot;!!!&quot;</span>))             
+<span class="k">let</span> <span class="i">r4</span> <span class="o">=</span> <span class="i">setl</span> (<span class="i">_2</span> <span class="o">&lt;&lt;</span> <span class="i">_1</span>) <span class="n">42</span> (<span class="s">&quot;hello&quot;</span>,(<span class="s">&quot;world&quot;</span>,<span class="s">&quot;!!!&quot;</span>))
 <span class="c">// val it : string * (int * string) = (&quot;hello&quot;, (42, &quot;!!!&quot;))</span>
 </code></pre></td>
 </tr>

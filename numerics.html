@@ -77,7 +77,7 @@
 <p>In order to have a reasonable type inference over generic types we need strict operations.</p>
 <p>For example the F# definition of (+) can take 2 different types, this makes possible to interact with some .NET types that have defined the (+) operator in a very arbitrary way.</p>
 <p>For instance you can add a float to a DateTime with the (+) operator, and that float will be interpreted as seconds.</p>
-<p>By opening the GenericMath namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.</p>
+<p>By opening the FSharpPlus.Math.Generic namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.</p>
 <h1><a name="Generic-number-literals" class="anchor" href="#Generic-number-literals">Generic number literals</a></h1>
 <p>Numbers with a G suffix are generics.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -85,7 +85,7 @@
 <span class="l">3: </span>
 <span class="l">4: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">GenericMath</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Math</span><span class="o">.</span><span class="i">Generic</span>
 
 <span class="k">let</span> <span class="i">res5Int</span>  <span class="o">:</span> <span class="i">int</span>    <span class="o">=</span> <span class="n">5G</span>
 <span class="k">let</span> <span class="i">res5UInt</span> <span class="o">:</span> <span class="i">uint32</span> <span class="o">=</span> <span class="n">5G</span>
@@ -157,7 +157,7 @@ Since there is no way to define generic decimal literals in F# at the moment of 
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">GenericMath</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Math</span><span class="o">.</span><span class="i">Generic</span>
 <span class="k">let</span> <span class="i">x2</span>  <span class="o">=</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>) <span class="o">+</span> <span class="n">7G</span>
 <span class="k">let</span> <span class="i">x2&#39;</span> <span class="o">=</span> <span class="n">7G</span> <span class="o">+</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>)
 </code></pre></td>
@@ -169,7 +169,7 @@ Requires only Map</p>
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">ApplicativeMath</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Math</span><span class="o">.</span><span class="i">Applicative</span>
 <span class="k">let</span> <span class="i">x3</span> <span class="o">=</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>) <span class="o">.</span><span class="o">+</span> <span class="n">7</span>
 <span class="k">let</span> <span class="i">x3&#39;</span> <span class="o">=</span> <span class="n">7</span> <span class="o">+.</span> <span class="i">Vector2d</span> (<span class="n">32</span>,<span class="n">5</span>)
 </code></pre></td>
@@ -241,7 +241,7 @@ Requires only Map</p>
 </tr>
 </table>
 <h1><a name="Example-creating-a-polymorphic-quadratic-function" class="anchor" href="#Example-creating-a-polymorphic-quadratic-function">Example: creating a polymorphic quadratic function</a></h1>
-<p>The quadratic functions has different results depending on which domain it operates.</p>
+<p>The quadratic function has different results depending on which domain it operates.</p>
 <p>For example for real numbers it can have 0 or 2 solutions (arguably also 1 that is a double solution).</p>
 <p>But for complex numbers it always has 2 solutions.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
@@ -267,7 +267,7 @@ Requires only Map</p>
 <span class="l">21: </span>
 <span class="l">22: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">GenericMath</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Math</span><span class="o">.</span><span class="i">Generic</span>
 
 <span class="k">let</span> <span class="k">inline</span> <span class="i">quadratic</span> <span class="i">a</span> <span class="i">b</span> <span class="i">c</span> <span class="o">=</span>
     <span class="k">let</span> <span class="i">root1</span> <span class="o">=</span> ( <span class="o">-</span><span class="i">b</span> <span class="o">+</span> <span class="i">sqrt</span> (  <span class="i">b</span> <span class="o">*</span> <span class="i">b</span> <span class="o">-</span> <span class="n">4G</span> <span class="o">*</span> <span class="i">a</span> <span class="o">*</span> <span class="i">c</span>) )  <span class="o">/</span> (<span class="n">2G</span> <span class="o">*</span> <span class="i">a</span>)

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>DList<'T> - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>DList<'T></h1>
+<p>
+  <span>Namespace: FSharpPlus.Data</span><br />
+</p>
+<div class="xmldoc">
+<p>List-like type supporting O(1) append</p>
+
+</div>
+  <h3>Union Cases</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Union Case</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1382', 1382)" onmouseover="showTip(event, '1382', 1382)">
+            DList(&#39;T list -&gt; &#39;T list)
+          </code>
+          <div class="tip" id="1382">
+            <strong>Signature:</strong> &#39;T list -&gt; &#39;T list<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L6-6" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1383', 1383)" onmouseover="showTip(event, '1383', 1383)">
+            ( + )(arg1, arg2)
+          </code>
+          <div class="tip" id="1383">
+            <strong>Signature:</strong> (DList&lt;&#39;?7716&gt; * DList&lt;&#39;?7716&gt;) -&gt; DList&lt;&#39;?7716&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L30-30" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_Addition</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1384', 1384)" onmouseover="showTip(event, '1384', 1384)">
+            ( &lt;*&gt; )(f, x)
+          </code>
+          <div class="tip" id="1384">
+            <strong>Signature:</strong> (f:DList&lt;(&#39;?7748 -&gt; &#39;?7749)&gt; * x:DList&lt;&#39;?7748&gt;) -&gt; DList&lt;&#39;?7749&gt;<br />
+                          <strong>Type parameters:</strong> '?7749          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L43-43" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_LessMultiplyGreater</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1385', 1385)" onmouseover="showTip(event, '1385', 1385)">
+            Append(arg1, arg2)
+          </code>
+          <div class="tip" id="1385">
+            <strong>Signature:</strong> (DList&lt;&#39;?7721&gt; * DList&lt;&#39;?7721&gt;) -&gt; DList&lt;&#39;?7721&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L33-33" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1386', 1386)" onmouseover="showTip(event, '1386', 1386)">
+            Bind(x, f)
+          </code>
+          <div class="tip" id="1386">
+            <strong>Signature:</strong> (x:DList&lt;&#39;?7755&gt; * f:(&#39;?7755 -&gt; DList&lt;&#39;?7756&gt;)) -&gt; DList&lt;&#39;?7756&gt;<br />
+                          <strong>Type parameters:</strong> '?7756          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L45-45" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1387', 1387)" onmouseover="showTip(event, '1387', 1387)">
+            Fold(x, f, z, _impl)
+          </code>
+          <div class="tip" id="1387">
+            <strong>Signature:</strong> (x:&#39;?7736 * f:(&#39;?7736 -&gt; &#39;?7737 -&gt; &#39;?7736) * z:DList&lt;&#39;?7737&gt; * _impl:&#39;?7738) -&gt; &#39;?7736<br />
+                          <strong>Type parameters:</strong> '?7737, '?7738          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L39-39" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1388', 1388)" onmouseover="showTip(event, '1388', 1388)">
+            get_Empty
+          </code>
+          <div class="tip" id="1388">
+            <strong>Signature:</strong> DList&lt;obj&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>get_get_Empty</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1389', 1389)" onmouseover="showTip(event, '1389', 1389)">
+            get_Zero
+          </code>
+          <div class="tip" id="1389">
+            <strong>Signature:</strong> DList&lt;obj&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L29-29" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>get_get_Zero</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1390', 1390)" onmouseover="showTip(event, '1390', 1390)">
+            Join(x)
+          </code>
+          <div class="tip" id="1390">
+            <strong>Signature:</strong> x:DList&lt;DList&lt;&#39;?7752&gt;&gt; -&gt; DList&lt;&#39;?7752&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L44-44" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1391', 1391)" onmouseover="showTip(event, '1391', 1391)">
+            Map(x, f)
+          </code>
+          <div class="tip" id="1391">
+            <strong>Signature:</strong> (x:DList&lt;&#39;?7744&gt; * f:(&#39;?7744 -&gt; &#39;?7745)) -&gt; DList&lt;&#39;?7745&gt;<br />
+                          <strong>Type parameters:</strong> '?7745          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L42-42" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1392', 1392)" onmouseover="showTip(event, '1392', 1392)">
+            OfList(x)
+          </code>
+          <div class="tip" id="1392">
+            <strong>Signature:</strong> (x:&#39;?7733 list) -&gt; DList&lt;&#39;?7733&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L38-38" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1393', 1393)" onmouseover="showTip(event, '1393', 1393)">
+            OfSeq(x)
+          </code>
+          <div class="tip" id="1393">
+            <strong>Signature:</strong> x:seq&lt;&#39;?7730&gt; -&gt; DList&lt;&#39;?7730&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L37-37" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1394', 1394)" onmouseover="showTip(event, '1394', 1394)">
+            Return(x)
+          </code>
+          <div class="tip" id="1394">
+            <strong>Signature:</strong> x:&#39;?7741 -&gt; DList&lt;&#39;?7741&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L41-41" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1395', 1395)" onmouseover="showTip(event, '1395', 1395)">
+            ToList(x)
+          </code>
+          <div class="tip" id="1395">
+            <strong>Signature:</strong> x:DList&lt;&#39;?7727&gt; -&gt; &#39;?7727 list<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L36-36" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1396', 1396)" onmouseover="showTip(event, '1396', 1396)">
+            ToSeq(x)
+          </code>
+          <div class="tip" id="1396">
+            <strong>Signature:</strong> x:DList&lt;&#39;?7724&gt; -&gt; seq&lt;&#39;?7724&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/DList.fs#L35-35" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

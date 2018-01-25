@@ -163,11 +163,14 @@
 <span class="l">43: </span>
 <span class="l">44: </span>
 <span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
 <span class="k">open</span> <span class="i">FSharpPlus</span>
-<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">GenericMath</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Math</span><span class="o">.</span><span class="i">Generic</span>
 
 <span class="k">let</span> <span class="i">getLine</span>    <span class="o">=</span> <span class="i">async</span> { <span class="k">return</span> <span class="i">System</span><span class="o">.</span><span class="i">Console</span><span class="o">.</span><span class="i">ReadLine</span>() }
 <span class="k">let</span> <span class="i">putStrLn</span> <span class="i">x</span> <span class="o">=</span> <span class="i">async</span> { <span class="i">printfn</span> <span class="s">&quot;%s&quot;</span> <span class="i">x</span>}
@@ -193,6 +196,9 @@
 <span class="k">let</span> <span class="i">fTimes2minus3</span> <span class="o">=</span> <span class="i">map</span> <span class="i">minus3</span> <span class="i">times2</span>
 <span class="k">let</span> <span class="i">res39</span>         <span class="o">=</span> <span class="i">fTimes2minus3</span> <span class="n">21G</span>
 <span class="k">let</span> <span class="i">getChars</span>      <span class="o">=</span> <span class="i">map</span> (<span class="k">fun</span> (<span class="i">x</span><span class="o">:</span><span class="i">string</span>) <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">ToCharArray</span>() <span class="o">|&gt;</span> <span class="i">Seq</span><span class="o">.</span><span class="i">toList</span> ) <span class="i">action</span>
+<span class="k">let</span> <span class="i">quot7</span>         <span class="o">=</span> <span class="i">map</span> ((<span class="o">+</span>)<span class="n">2</span>) &lt;@ <span class="n">5</span> @&gt;
+
+
 <span class="c">// try -&gt; runIO getChars ;;</span>
 
 <span class="c">// Define a type Tree</span>

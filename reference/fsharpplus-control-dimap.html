@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Dimap - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Dimap</h1>
+<p>
+  <span>Namespace: FSharpPlus.Control</span><br />
+</p>
+<div class="xmldoc">
+</div>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '586', 586)" onmouseover="showTip(event, '586', 586)">
+            Dimap(arg1, arg2, arg3, _mthd)
+          </code>
+          <div class="tip" id="586">
+            <strong>Signature:</strong> (^t * (&#39;T -&gt; &#39;U) * (&#39;V -&gt; &#39;W) * _mthd:Default1) -&gt; unit<br />
+                          <strong>Type parameters:</strong> ^t, 'T, 'U, 'V, 'W          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L577-577" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '587', 587)" onmouseover="showTip(event, '587', 587)">
+            Dimap(x, ab, cd, _mthd)
+          </code>
+          <div class="tip" id="587">
+            <strong>Signature:</strong> (x:^Profunctor&lt;&#39;B,&#39;C&gt; * ab:(&#39;A -&gt; &#39;B) * cd:(&#39;C -&gt; &#39;D) * _mthd:Default1) -&gt; &#39;Profunctor&lt;&#39;A,&#39;D&gt;<br />
+                          <strong>Type parameters:</strong> ^Profunctor<'B,'C>, 'A, 'B, 'C, 'D, 'Profunctor<'A,'D>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L576-576" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '588', 588)" onmouseover="showTip(event, '588', 588)">
+            Dimap(x, ab, cd, _mthd)
+          </code>
+          <div class="tip" id="588">
+            <strong>Signature:</strong> (x:^Profunctor&lt;&#39;B,&#39;C&gt; * ab:(&#39;A -&gt; &#39;B) * cd:(&#39;C -&gt; &#39;D) * _mthd:Default2) -&gt; &#39;Profunctor&lt;&#39;A,&#39;D&gt;<br />
+                          <strong>Type parameters:</strong> ^Profunctor<'B,'C>, 'C, 'D, ^?14322, 'A, 'B, 'Profunctor<'A,'D>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L575-575" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '589', 589)" onmouseover="showTip(event, '589', 589)">
+            Dimap(f, g, h, _mthd)
+          </code>
+          <div class="tip" id="589">
+            <strong>Signature:</strong> (f:Func&lt;&#39;B,&#39;C&gt; * g:(&#39;A -&gt; &#39;B) * h:(&#39;C -&gt; &#39;D) * _mthd:Dimap) -&gt; Func&lt;&#39;A,&#39;D&gt;<br />
+                          <strong>Type parameters:</strong> 'B, 'C, 'A, 'D          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L533-533" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '590', 590)" onmouseover="showTip(event, '590', 590)">
+            Dimap(f, g, h, _mthd)
+          </code>
+          <div class="tip" id="590">
+            <strong>Signature:</strong> (f:(&#39;B -&gt; &#39;C) * g:(&#39;A -&gt; &#39;B) * h:(&#39;C -&gt; &#39;D) * _mthd:Dimap) -&gt; &#39;A -&gt; &#39;D<br />
+                          <strong>Type parameters:</strong> 'B, 'C, 'A, 'D          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L532-532" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '591', 591)" onmouseover="showTip(event, '591', 591)">
+            Invoke(ab cd source)
+          </code>
+          <div class="tip" id="591">
+            <strong>Signature:</strong> (ab:(&#39;A -&gt; &#39;B)) -&gt; (cd:(&#39;C -&gt; &#39;D)) -&gt; source:^Profunctor&lt;&#39;B,&#39;C&gt; -&gt; ^Profunctor&lt;&#39;A,&#39;D&gt;<br />
+                          <strong>Type parameters:</strong> 'A, 'B, 'C, 'D, ^Profunctor<'B,'C>, ^Profunctor<'A,'D>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L535-535" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '592', 592)" onmouseover="showTip(event, '592', 592)">
+            InvokeOnInstance(ab cd source)
+          </code>
+          <div class="tip" id="592">
+            <strong>Signature:</strong> (ab:(&#39;A -&gt; &#39;B)) -&gt; (cd:(&#39;C -&gt; &#39;D)) -&gt; source:^Profunctor&lt;&#39;B,&#39;C&gt; -&gt; &#39;Profunctor&lt;&#39;A,&#39;D&gt;<br />
+                          <strong>Type parameters:</strong> 'A, 'B, 'C, 'D, ^Profunctor<'B,'C>, 'Profunctor<'A,'D>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L539-539" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Applicative - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Applicative</h1>
+<p>
+  <span>Namespace: FSharpPlus.Math</span><br />
+</p>
+<div class="xmldoc">
+<p>Math Operators ready to use over Applicative Functors.</p>
+
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '331', 331)" onmouseover="showTip(event, '331', 331)">
+            ( %. ) x y
+          </code>
+          <div class="tip" id="331">
+            <strong>Signature:</strong> x:^T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^T, ^?12117, ^?12118, ^Functor<'T>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L587-587" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_PercentDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '332', 332)" onmouseover="showTip(event, '332', 332)">
+            ( &amp;&amp;. ) x y
+          </code>
+          <div class="tip" id="332">
+            <strong>Signature:</strong> x:bool -&gt; y:^Functor&lt;bool&gt; -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L611-611" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_AmpAmpDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '333', 333)" onmouseover="showTip(event, '333', 333)">
+            ( *. ) x y
+          </code>
+          <div class="tip" id="333">
+            <strong>Signature:</strong> x:^T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^T, ^?12101, ^?12102, ^Functor<'T>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L583-583" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_MultiplyDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '334', 334)" onmouseover="showTip(event, '334', 334)">
+            ( .- ) x y
+          </code>
+          <div class="tip" id="334">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:^T -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^?12080, ^T, ^?12082          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L578-578" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotMinus</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '335', 335)" onmouseover="showTip(event, '335', 335)">
+            ( -. ) x y
+          </code>
+          <div class="tip" id="335">
+            <strong>Signature:</strong> x:^T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^T, ^?12085, ^?12086, ^Functor<'T>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L579-579" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_MinusDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '336', 336)" onmouseover="showTip(event, '336', 336)">
+            ( .% ) x y
+          </code>
+          <div class="tip" id="336">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:^T -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^?12112, ^T, ^?12114          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L586-586" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotPercent</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '337', 337)" onmouseover="showTip(event, '337', 337)">
+            ( .%. ) x y
+          </code>
+          <div class="tip" id="337">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12122, ^?12123, ^?12124, ^?12125          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L588-588" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotPercentDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '338', 338)" onmouseover="showTip(event, '338', 338)">
+            ( .&amp;&amp; ) x y
+          </code>
+          <div class="tip" id="338">
+            <strong>Signature:</strong> x:^Functor&lt;bool&gt; -&gt; y:bool -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L610-610" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotAmpAmp</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '339', 339)" onmouseover="showTip(event, '339', 339)">
+            ( .&amp;&amp;. ) x y
+          </code>
+          <div class="tip" id="339">
+            <strong>Signature:</strong> x:^Applicative&lt;bool&gt; -&gt; y:^Applicative&lt;bool&gt; -&gt; ^Applicative&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<bool>, ^?12194          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L612-612" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotAmpAmpDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '340', 340)" onmouseover="showTip(event, '340', 340)">
+            ( .* ) x y
+          </code>
+          <div class="tip" id="340">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:^T -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^?12096, ^T, ^?12098          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L582-582" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotMultiply</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '341', 341)" onmouseover="showTip(event, '341', 341)">
+            ( .*. ) x y
+          </code>
+          <div class="tip" id="341">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12106, ^?12107, ^?12108, ^?12109          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L584-584" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotMultiplyDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '342', 342)" onmouseover="showTip(event, '342', 342)">
+            ( .-. ) x y
+          </code>
+          <div class="tip" id="342">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12090, ^?12091, ^?12092, ^?12093          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L580-580" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotMinusDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '343', 343)" onmouseover="showTip(event, '343', 343)">
+            ( ./ ) x y
+          </code>
+          <div class="tip" id="343">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:^T -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^?12128, ^T, ^?12130          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L590-590" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotDivide</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '344', 344)" onmouseover="showTip(event, '344', 344)">
+            ( ./. ) x y
+          </code>
+          <div class="tip" id="344">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12138, ^?12139, ^?12140, ^?12141          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L592-592" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotDivideDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '345', 345)" onmouseover="showTip(event, '345', 345)">
+            ( .|| ) x y
+          </code>
+          <div class="tip" id="345">
+            <strong>Signature:</strong> x:^Functor&lt;bool&gt; -&gt; y:bool -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L606-606" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotBarBar</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '346', 346)" onmouseover="showTip(event, '346', 346)">
+            ( .||. ) x y
+          </code>
+          <div class="tip" id="346">
+            <strong>Signature:</strong> x:^Applicative&lt;bool&gt; -&gt; y:^Applicative&lt;bool&gt; -&gt; ^Applicative&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<bool>, ^?12187          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L608-608" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotBarBarDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '347', 347)" onmouseover="showTip(event, '347', 347)">
+            ( .+ ) x y
+          </code>
+          <div class="tip" id="347">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:^T -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^?12064, ^T, ^?12066          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L574-574" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotPlus</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '348', 348)" onmouseover="showTip(event, '348', 348)">
+            ( .+. ) x y
+          </code>
+          <div class="tip" id="348">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12074, ^?12075, ^?12076, ^?12077          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L576-576" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotPlusDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '349', 349)" onmouseover="showTip(event, '349', 349)">
+            ( .&lt; ) x y
+          </code>
+          <div class="tip" id="349">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:&#39;T -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<bool>, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L602-602" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotLess</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '350', 350)" onmouseover="showTip(event, '350', 350)">
+            ( .&lt;. ) x y
+          </code>
+          <div class="tip" id="350">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12178, '?12179, ^Applicative<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L604-604" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotLessDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '351', 351)" onmouseover="showTip(event, '351', 351)">
+            ( .= ) x y
+          </code>
+          <div class="tip" id="351">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:&#39;T -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<bool>, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L594-594" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotEquals</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '352', 352)" onmouseover="showTip(event, '352', 352)">
+            ( .=. ) x y
+          </code>
+          <div class="tip" id="352">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12152, '?12153, ^Applicative<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L596-596" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotEqualsDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '353', 353)" onmouseover="showTip(event, '353', 353)">
+            ( .&gt; ) x y
+          </code>
+          <div class="tip" id="353">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:&#39;T -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<bool>, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L598-598" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotGreater</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '354', 354)" onmouseover="showTip(event, '354', 354)">
+            ( .&gt;. ) x y
+          </code>
+          <div class="tip" id="354">
+            <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?12165, '?12166, ^Applicative<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L600-600" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DotGreaterDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '355', 355)" onmouseover="showTip(event, '355', 355)">
+            ( /. ) x y
+          </code>
+          <div class="tip" id="355">
+            <strong>Signature:</strong> x:^T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^T, ^?12133, ^?12134, ^Functor<'T>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L591-591" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_DivideDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '356', 356)" onmouseover="showTip(event, '356', 356)">
+            ( ||. ) x y
+          </code>
+          <div class="tip" id="356">
+            <strong>Signature:</strong> x:bool -&gt; y:^Functor&lt;bool&gt; -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L607-607" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_BarBarDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '357', 357)" onmouseover="showTip(event, '357', 357)">
+            ( +. ) x y
+          </code>
+          <div class="tip" id="357">
+            <strong>Signature:</strong> x:^T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^T, ^?12069, ^?12070, ^Functor<'T>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L575-575" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_PlusDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '358', 358)" onmouseover="showTip(event, '358', 358)">
+            ( &lt;. ) x y
+          </code>
+          <div class="tip" id="358">
+            <strong>Signature:</strong> x:&#39;T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Functor<'T>, ^Functor<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L603-603" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_LessDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '359', 359)" onmouseover="showTip(event, '359', 359)">
+            ( =. ) x y
+          </code>
+          <div class="tip" id="359">
+            <strong>Signature:</strong> x:&#39;T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Functor<'T>, ^Functor<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L595-595" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_EqualsDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '360', 360)" onmouseover="showTip(event, '360', 360)">
+            ( &gt;. ) x y
+          </code>
+          <div class="tip" id="360">
+            <strong>Signature:</strong> x:&#39;T -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;bool&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Functor<'T>, ^Functor<bool>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L599-599" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_GreaterDot</code></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

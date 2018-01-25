@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Kleisli<'t, 'monad<'u>> - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Kleisli<'t, 'monad<'u>></h1>
+<p>
+  <span>Namespace: FSharpPlus.Data</span><br />
+</p>
+<div class="xmldoc">
+<p>Kleisli arrows of a monad. Represents a function 'T -&gt; 'Monad<'U></p>
+
+</div>
+  <h3>Union Cases</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Union Case</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1407', 1407)" onmouseover="showTip(event, '1407', 1407)">
+            Kleisli(&#39;t -&gt; &#39;monad&lt;&#39;u&gt;)
+          </code>
+          <div class="tip" id="1407">
+            <strong>Signature:</strong> &#39;t -&gt; &#39;monad&lt;&#39;u&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L8-8" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1408', 1408)" onmouseover="showTip(event, '1408', 1408)">
+            ( ||| )(arg1, arg2)
+          </code>
+          <div class="tip" id="1408">
+            <strong>Signature:</strong> (Kleisli&lt;&#39;?7666,&#39;?7667&gt; * Kleisli&lt;&#39;?7668,&#39;?7667&gt;) -&gt; Kleisli&lt;Choice&lt;&#39;?7668,&#39;?7666&gt;,&#39;?7667&gt;<br />
+                          <strong>Type parameters:</strong> '?7668          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L23-23" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_BitwiseOr</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1409', 1409)" onmouseover="showTip(event, '1409', 1409)">
+            ( +++ )(arg1, arg2)
+          </code>
+          <div class="tip" id="1409">
+            <strong>Signature:</strong> (Kleisli&lt;&#39;T,^u&gt; * Kleisli&lt;&#39;v,^w&gt;) -&gt; Kleisli&lt;Choice&lt;&#39;v,&#39;T&gt;,^z&gt;<br />
+                          <strong>Type parameters:</strong> ^z, '?7675, '?7676, ^w, 'v          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L25-25" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_PlusPlusPlus</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1410', 1410)" onmouseover="showTip(event, '1410', 1410)">
+            ( &lt;&lt;&lt; )(arg1, arg2)
+          </code>
+          <div class="tip" id="1410">
+            <strong>Signature:</strong> (Kleisli&lt;&#39;?7637,^?7638&gt; * Kleisli&lt;&#39;?7640,^?7639&gt;) -&gt; Kleisli&lt;&#39;?7640,^?7638&gt;<br />
+                          <strong>Type parameters:</strong> ^?7639, '?7640          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L17-17" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_LeftShift</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1411', 1411)" onmouseover="showTip(event, '1411', 1411)">
+            Append(arg1, arg2, _mthd)
+          </code>
+          <div class="tip" id="1411">
+            <strong>Signature:</strong> (Kleisli&lt;&#39;?7710,^?7711&gt; * Kleisli&lt;&#39;?7710,^?7711&gt; * _mthd:Append) -&gt; Kleisli&lt;&#39;?7710,^?7711&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L36-36" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1412', 1412)" onmouseover="showTip(event, '1412', 1412)">
+            Arr(f)
+          </code>
+          <div class="tip" id="1412">
+            <strong>Signature:</strong> (f:(&#39;?7644 -&gt; &#39;?7645)) -&gt; Kleisli&lt;&#39;?7644,^?7646&gt;<br />
+                          <strong>Type parameters:</strong> ^?7646          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L20-20" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1413', 1413)" onmouseover="showTip(event, '1413', 1413)">
+            Contramap(arg1, k)
+          </code>
+          <div class="tip" id="1413">
+            <strong>Signature:</strong> (Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;C&gt;&gt; * k:(&#39;A -&gt; &#39;B)) -&gt; Kleisli&lt;&#39;A,&#39;Monad&lt;&#39;C&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'A          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L12-12" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1414', 1414)" onmouseover="showTip(event, '1414', 1414)">
+            Dimap(arg1, ab, cd)
+          </code>
+          <div class="tip" id="1414">
+            <strong>Signature:</strong> (Kleisli&lt;&#39;B,^Monad&lt;&#39;C&gt;&gt; * ab:(&#39;A -&gt; &#39;B) * cd:(&#39;C -&gt; &#39;D)) -&gt; Kleisli&lt;&#39;A,^Monad&lt;&#39;D&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'D>, 'C, 'D, 'A          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L11-11" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1415', 1415)" onmouseover="showTip(event, '1415', 1415)">
+            Empty(_output, _mthd)
+          </code>
+          <div class="tip" id="1415">
+            <strong>Signature:</strong> (_output:Kleisli&lt;&#39;T,&#39;Monad&lt;&#39;U&gt;&gt; * _mthd:Empty) -&gt; Kleisli&lt;&#39;?7705,^?7706&gt;<br />
+                          <strong>Type parameters:</strong> '?7705, ^?7706          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L35-35" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1416', 1416)" onmouseover="showTip(event, '1416', 1416)">
+            First(arg1)
+          </code>
+          <div class="tip" id="1416">
+            <strong>Signature:</strong> Kleisli&lt;&#39;?7650,^?7651&gt; -&gt; Kleisli&lt;(&#39;?7650 * &#39;?7654),^?7652&gt;<br />
+                          <strong>Type parameters:</strong> ^?7652, '?7653, '?7654          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L21-21" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1417', 1417)" onmouseover="showTip(event, '1417', 1417)">
+            get_App()
+          </code>
+          <div class="tip" id="1417">
+            <strong>Signature:</strong> unit -&gt; Kleisli&lt;(Kleisli&lt;&#39;?7698,&#39;?7699&gt; * &#39;?7698),&#39;?7699&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1418', 1418)" onmouseover="showTip(event, '1418', 1418)">
+            get_Id()
+          </code>
+          <div class="tip" id="1418">
+            <strong>Signature:</strong> unit -&gt; Kleisli&lt;&#39;a,^b&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L16-16" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1419', 1419)" onmouseover="showTip(event, '1419', 1419)">
+            Left(arg1)
+          </code>
+          <div class="tip" id="1419">
+            <strong>Signature:</strong> Kleisli&lt;&#39;?7682,&#39;?7683&gt; -&gt; ^?7684<br />
+                          <strong>Type parameters:</strong> ^?7684, ^?7685, '?7686          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L28-28" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1420', 1420)" onmouseover="showTip(event, '1420', 1420)">
+            Map(arg1, cd)
+          </code>
+          <div class="tip" id="1420">
+            <strong>Signature:</strong> (Kleisli&lt;&#39;B,^Monad&lt;&#39;C&gt;&gt; * cd:(&#39;C -&gt; &#39;D)) -&gt; Kleisli&lt;&#39;B,^Monad&lt;&#39;D&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'D>, 'C, 'D          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L13-13" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1421', 1421)" onmouseover="showTip(event, '1421', 1421)">
+            Right(arg1)
+          </code>
+          <div class="tip" id="1421">
+            <strong>Signature:</strong> Kleisli&lt;&#39;?7690,&#39;?7691&gt; -&gt; ^?7692<br />
+                          <strong>Type parameters:</strong> ^?7692, ^?7693, '?7694          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L29-29" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1422', 1422)" onmouseover="showTip(event, '1422', 1422)">
+            Second(arg1)
+          </code>
+          <div class="tip" id="1422">
+            <strong>Signature:</strong> Kleisli&lt;&#39;?7658,^?7659&gt; -&gt; Kleisli&lt;(&#39;?7661 * &#39;?7658),^?7660&gt;<br />
+                          <strong>Type parameters:</strong> ^?7660, '?7661, '?7662          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Kleisli.fs#L22-22" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">FSharpPlus</li>
+            <li><a href="/FSharpPlus/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="/FSharpPlus/license.html">License</a></li>
+            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+            
+            <li class="nav-header">Getting started</li>
+            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+            <li class="nav-header">Documentation</li>
+            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

@@ -167,6 +167,15 @@
 <span class="l">51: </span>
 <span class="l">52: </span>
 <span class="l">53: </span>
+<span class="l">54: </span>
+<span class="l">55: </span>
+<span class="l">56: </span>
+<span class="l">57: </span>
+<span class="l">58: </span>
+<span class="l">59: </span>
+<span class="l">60: </span>
+<span class="l">61: </span>
+<span class="l">62: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
@@ -186,6 +195,15 @@
 <span class="k">let</span> <span class="i">opt120</span>  <span class="o">=</span> (<span class="o">+</span>) <span class="o">&lt;!&gt;</span> <span class="i">Some</span> <span class="n">20</span> <span class="o">&lt;*&gt;</span> <span class="i">tryParse</span> <span class="s">&quot;100&quot;</span>
 
 
+<span class="c">// Applicatives need Return (result)</span>
+
+<span class="c">// Test return</span>
+<span class="k">let</span> <span class="i">resSome2</span> <span class="o">:</span> <span class="i">option</span><span class="o">&lt;</span>_<span class="o">&gt;</span> <span class="o">=</span> <span class="i">result</span> <span class="n">2</span>
+<span class="k">let</span> <span class="i">resSing2</span> <span class="o">:</span> <span class="i">list</span><span class="o">&lt;</span>_<span class="o">&gt;</span>   <span class="o">=</span> <span class="i">result</span> <span class="n">2</span>
+<span class="k">let</span> <span class="i">resLazy2</span> <span class="o">:</span> <span class="i">Lazy</span><span class="o">&lt;</span>_<span class="o">&gt;</span>   <span class="o">=</span> <span class="i">result</span> <span class="n">2</span>
+<span class="k">let</span> (<span class="i">quot5</span> <span class="o">:</span> <span class="i">Microsoft</span><span class="o">.</span><span class="i">FSharp</span><span class="o">.</span><span class="i">Quotations</span><span class="o">.</span><span class="i">Expr</span><span class="o">&lt;</span><span class="i">int</span><span class="o">&gt;</span>) <span class="o">=</span> <span class="i">result</span> <span class="n">5</span>
+
+
 <span class="c">// Another way to write applicative expressions</span>
 <span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Builders</span>
 
@@ -194,7 +212,7 @@
 
 
 <span class="c">// Using applicative math operators</span>
-<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Operators</span><span class="o">.</span><span class="i">ApplicativeMath</span>
+<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Math</span><span class="o">.</span><span class="i">Applicative</span>
 
 <span class="k">let</span> <span class="i">opt121&#39;</span>  <span class="o">=</span> <span class="i">Some</span> <span class="n">21</span> <span class="o">.</span><span class="o">+.</span> <span class="i">tryParse</span> <span class="s">&quot;100&quot;</span>
 <span class="k">let</span> <span class="i">optTrue</span>  <span class="o">=</span> <span class="n">30</span> <span class="o">&gt;</span><span class="o">.</span> <span class="i">tryParse</span> <span class="s">&quot;29&quot;</span>

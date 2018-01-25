@@ -45,14 +45,6 @@
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="fsharpplus-dlist-1.html">DList<'T></a>
-          </td>
-          <td class="xmldoc"><p>List-like type supporting O(1) append</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="fsharpplus-identity-1.html">Identity<'t></a>
           </td>
           <td class="xmldoc"><p>Computation type: Simple function application.
@@ -64,46 +56,6 @@ Computationally, there is no reason to use the Identity monad instead of the muc
 The purpose of the Identity monad is its fundamental role in the theory of monad transformers.
 Any monad transformer applied to the Identity monad yields a non-transformer version of that monad.
 Its applicative instance plays a fundamental role in Lens.</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharpplus-kleisli-2.html">Kleisli<'t, 'monad<'u>></a>
-          </td>
-          <td class="xmldoc"><p>Kleisli arrows of a monad. Represents a function 'T -&gt; 'Monad<'U></p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharpplus-nonemptylist-1.html">NonEmptyList<'t></a>
-          </td>
-          <td class="xmldoc"><p>A type-safe list that contains at least one element.</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharpplus-parallelarray-1.html">ParallelArray<'t></a>
-          </td>
-          <td class="xmldoc"><p>Array with an Applicative functor based on zipping and parallel execution.</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharpplus-ziplist-1.html">ZipList<'s></a>
-          </td>
-          <td class="xmldoc"><p>A sequence with an Applicative functor based on zipping.</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharpplus-parray-1.html">parray<'t></a>
-          </td>
-          <td class="xmldoc"><p>A type alias for ParallelArray<'T></p>
 
 </td>
         </tr>
@@ -148,12 +100,6 @@ Its applicative instance plays a fundamental role in Lens.</p>
         </tr>
         <tr>
           <td class="module-name">
-            <a href="fsharpplus-dlist.html">DList</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="module-name">
             <a href="fsharpplus-enumerator.html">Enumerator</a>
           </td>
           <td class="xmldoc"><p>Additional operations on IEnumerator</p>
@@ -178,14 +124,6 @@ Its applicative instance plays a fundamental role in Lens.</p>
         </tr>
         <tr>
           <td class="module-name">
-            <a href="fsharpplus-kleisli.html">Kleisli</a>
-          </td>
-          <td class="xmldoc"><p>Basic operations on Kleisli</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
             <a href="fsharpplus-lens.html">Lens</a>
           </td>
           <td class="xmldoc"><p>Lens functions and operators</p>
@@ -202,33 +140,11 @@ Its applicative instance plays a fundamental role in Lens.</p>
         </tr>
         <tr>
           <td class="module-name">
-            <a href="fsharpplus-nonemptylist.html">NonEmptyList</a>
-          </td>
-          <td class="xmldoc"><p>Basic operations on NonEmptyList</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
             <a href="fsharpplus-option.html">Option</a>
           </td>
           <td class="xmldoc"><p>Additional operations on Option</p>
 
 </td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsharpplus-parallelarray.html">ParallelArray</a>
-          </td>
-          <td class="xmldoc"><p>Basic operations on ParallelArray</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsharpplus-parallelarrayoperators.html">ParallelArrayOperators</a>
-          </td>
-          <td class="xmldoc"></td>
         </tr>
         <tr>
           <td class="module-name">
@@ -246,13 +162,700 @@ Its applicative instance plays a fundamental role in Lens.</p>
 
 </td>
         </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsharpplus-ziplist.html">ZipList</a>
-          </td>
-          <td class="xmldoc"><p>Basic operations on ZipList</p>
+    </tbody>
+  </table>
 
-</td>
+    </div>
+  <h2>FSharpPlus.Control Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-abs.html">Abs</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-abs'.html">Abs'</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-acleft.html">AcLeft</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-acmerge.html">AcMerge</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-acright.html">AcRight</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-app.html">App</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-append.html">Append</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-arr.html">Arr</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-arrcombine.html">ArrCombine</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-arrfirst.html">ArrFirst</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-arrsecond.html">ArrSecond</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-ask.html">Ask</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-callcc.html">CallCC</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-choose.html">Choose</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-chunkby.html">ChunkBy</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-comp.html">Comp</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-composedstaticinvokable-2.html">ComposedStaticInvokable<'F, 'G></a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-contramap.html">Contramap</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-delay.html">Delay</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-dimap.html">Dimap</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-distinct.html">Distinct</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-distinctby.html">DistinctBy</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-divrem.html">DivRem</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-drop.html">Drop</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-duplicate.html">Duplicate</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-empty.html">Empty</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-exists.html">Exists</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-explicit.html">Explicit</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-extend.html">Extend</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-extract.html">Extract</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-fanin.html">Fanin</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-fanout.html">Fanout</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-filter.html">Filter</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-find.html">Find</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-fold.html">Fold</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-foldback.html">FoldBack</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-foldindexed.html">FoldIndexed</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-foldmap.html">FoldMap</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-forall.html">ForAll</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-frombigint.html">FromBigInt</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-fromint32.html">FromInt32</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-fromint64.html">FromInt64</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-get.html">Get</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-groupby.html">GroupBy</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-head.html">Head</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-id.html">Id</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-intercalate.html">Intercalate</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-intersperse.html">Intersperse</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-invoke.html">Invoke</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-item.html">Item</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-item1.html">Item1</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-item2.html">Item2</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-item3.html">Item3</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-item4.html">Item4</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-item5.html">Item5</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-iterateindexed.html">IterateIndexed</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-length.html">Length</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-lift.html">Lift</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-liftasync.html">LiftAsync</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-limit.html">Limit</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-listen.html">Listen</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-local.html">Local</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-mapindexed.html">MapIndexed</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-mapitem1.html">MapItem1</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-mapitem2.html">MapItem2</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-mapitem3.html">MapItem3</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-mapitem4.html">MapItem4</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-mapitem5.html">MapItem5</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-max.html">Max</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-maxby.html">MaxBy</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-maxvalue.html">MaxValue</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-min.html">Min</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-minby.html">MinBy</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-minvalue.html">MinValue</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-nth.html">Nth</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-ofbytes.html">OfBytes</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-oflist.html">OfList</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-ofseq.html">OfSeq</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-one.html">One</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-parse.html">Parse</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-pass.html">Pass</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-pi.html">Pi</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-pick.html">Pick</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-plus.html">Plus</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-put.html">Put</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-replace.html">Replace</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-rev.html">Rev</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-scan.html">Scan</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-signum.html">Signum</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-signum'.html">Signum'</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-skip.html">Skip</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-sort.html">Sort</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-sortby.html">SortBy</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-split.html">Split</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-sum.html">Sum</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-take.html">Take</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tell.html">Tell</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-toarray.html">ToArray</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tobigint.html">ToBigInt</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tobytes.html">ToBytes</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tolist.html">ToList</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-toseq.html">ToSeq</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-traverse.html">Traverse</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-traverseindexed.html">TraverseIndexed</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tryfinally.html">TryFinally</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tryfind.html">TryFind</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tryhead.html">TryHead</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-tryparse.html">TryParse</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-trypick.html">TryPick</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-trywith.html">TryWith</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-unzip.html">Unzip</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-using.html">Using</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-zero.html">Zero</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-control-zip.html">Zip</a>
+          </td>
+          <td class="xmldoc"></td>
         </tr>
     </tbody>
   </table>
@@ -319,6 +922,14 @@ Useful for: Complex control structures, error handling, and creating co-routines
         </tr>
         <tr>
           <td class="type-name">
+            <a href="fsharpplus-data-dlist-1.html">DList<'T></a>
+          </td>
+          <td class="xmldoc"><p>List-like type supporting O(1) append</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="fsharpplus-data-dual-1.html">Dual<'t></a>
           </td>
           <td class="xmldoc"><p>The dual of a monoid, obtained by swapping the arguments of append.</p>
@@ -338,6 +949,14 @@ Useful for: Complex control structures, error handling, and creating co-routines
             <a href="fsharpplus-data-first-1.html">First<'t></a>
           </td>
           <td class="xmldoc"><p>Option<'T> monoid returning the leftmost non-None value.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-data-kleisli-2.html">Kleisli<'t, 'monad<'u>></a>
+          </td>
+          <td class="xmldoc"><p>Kleisli arrows of a monad. Represents a function 'T -&gt; 'Monad<'U></p>
 
 </td>
         </tr>
@@ -367,9 +986,25 @@ Useful for: Complex control structures, error handling, and creating co-routines
         </tr>
         <tr>
           <td class="type-name">
+            <a href="fsharpplus-data-nonemptylist-1.html">NonEmptyList<'t></a>
+          </td>
+          <td class="xmldoc"><p>A type-safe list that contains at least one element.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
             <a href="fsharpplus-data-optiont-1.html">OptionT<'monad<option<'t>>></a>
           </td>
           <td class="xmldoc"><p>Monad Transformer for Option<'T></p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-data-parallelarray-1.html">ParallelArray<'t></a>
+          </td>
+          <td class="xmldoc"><p>Array with an Applicative functor based on zipping and parallel execution.</p>
 
 </td>
         </tr>
@@ -435,6 +1070,22 @@ Useful for: Logging, or other computations that produce output "on the side".</p
 
 </td>
         </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-data-ziplist-1.html">ZipList<'s></a>
+          </td>
+          <td class="xmldoc"><p>A sequence with an Applicative functor based on zipping.</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="fsharpplus-data-parray-1.html">parray<'t></a>
+          </td>
+          <td class="xmldoc"><p>A type alias for ParallelArray<'T></p>
+
+</td>
+        </tr>
     </tbody>
   </table>
   <table class="table table-bordered module-list">
@@ -476,6 +1127,12 @@ Useful for: Logging, or other computations that produce output "on the side".</p
         </tr>
         <tr>
           <td class="module-name">
+            <a href="fsharpplus-data-dlist.html">DList</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="module-name">
             <a href="fsharpplus-data-dual.html">Dual</a>
           </td>
           <td class="xmldoc"><p>Basic operations on Dual</p>
@@ -500,6 +1157,14 @@ Useful for: Logging, or other computations that produce output "on the side".</p
         </tr>
         <tr>
           <td class="module-name">
+            <a href="fsharpplus-data-kleisli.html">Kleisli</a>
+          </td>
+          <td class="xmldoc"><p>Basic operations on Kleisli</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="module-name">
             <a href="fsharpplus-data-list.html">List</a>
           </td>
           <td class="xmldoc"><p>Additional operations on List</p>
@@ -511,6 +1176,14 @@ Useful for: Logging, or other computations that produce output "on the side".</p
             <a href="fsharpplus-data-listt.html">ListT</a>
           </td>
           <td class="xmldoc"><p>Basic operations on ListT</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="module-name">
+            <a href="fsharpplus-data-nonemptylist.html">NonEmptyList</a>
+          </td>
+          <td class="xmldoc"><p>Basic operations on NonEmptyList</p>
 
 </td>
         </tr>
@@ -529,6 +1202,20 @@ Useful for: Logging, or other computations that produce output "on the side".</p
           <td class="xmldoc"><p>Basic operations on OptionT</p>
 
 </td>
+        </tr>
+        <tr>
+          <td class="module-name">
+            <a href="fsharpplus-data-parallelarray.html">ParallelArray</a>
+          </td>
+          <td class="xmldoc"><p>Basic operations on ParallelArray</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="module-name">
+            <a href="fsharpplus-data-parallelarrayoperators.html">ParallelArrayOperators</a>
+          </td>
+          <td class="xmldoc"></td>
         </tr>
         <tr>
           <td class="module-name">
@@ -594,700 +1281,41 @@ Useful for: Logging, or other computations that produce output "on the side".</p
 
 </td>
         </tr>
+        <tr>
+          <td class="module-name">
+            <a href="fsharpplus-data-ziplist.html">ZipList</a>
+          </td>
+          <td class="xmldoc"><p>Basic operations on ZipList</p>
+
+</td>
+        </tr>
     </tbody>
   </table>
 
     </div>
-  <h2>FsControl Namespace</h2>
+  <h2>FSharpPlus.Math Namespace</h2>
     <div>
-      <table class="table table-bordered type-list">
+      <table class="table table-bordered module-list">
     <thead>
-      <tr><td>Type</td><td>Description</td></tr>
+      <tr><td>Module</td><td>Description</td></tr>
     </thead>
     <tbody>
         <tr>
-          <td class="type-name">
-            <a href="fscontrol-abs.html">Abs</a>
+          <td class="module-name">
+            <a href="fsharpplus-math-applicative.html">Applicative</a>
           </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>Math Operators ready to use over Applicative Functors.</p>
+
+</td>
         </tr>
         <tr>
-          <td class="type-name">
-            <a href="fscontrol-abs'.html">Abs'</a>
+          <td class="module-name">
+            <a href="fsharpplus-math-generic.html">Generic</a>
           </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-acleft.html">AcLeft</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-acmerge.html">AcMerge</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-acright.html">AcRight</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-app.html">App</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-append.html">Append</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-arr.html">Arr</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-arrcombine.html">ArrCombine</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-arrfirst.html">ArrFirst</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-arrsecond.html">ArrSecond</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-ask.html">Ask</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-callcc.html">CallCC</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-choose.html">Choose</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-chunkby.html">ChunkBy</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-comp.html">Comp</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-composedstaticinvokable-2.html">ComposedStaticInvokable<'F, 'G></a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-contramap.html">Contramap</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-delay.html">Delay</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-dimap.html">Dimap</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-distinct.html">Distinct</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-distinctby.html">DistinctBy</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-divrem.html">DivRem</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-drop.html">Drop</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-duplicate.html">Duplicate</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-empty.html">Empty</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-exists.html">Exists</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-explicit.html">Explicit</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-extend.html">Extend</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-extract.html">Extract</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-fanin.html">Fanin</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-fanout.html">Fanout</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-filter.html">Filter</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-find.html">Find</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-fold.html">Fold</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-foldback.html">FoldBack</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-foldindexed.html">FoldIndexed</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-foldmap.html">FoldMap</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-forall.html">ForAll</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-frombigint.html">FromBigInt</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-fromint32.html">FromInt32</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-fromint64.html">FromInt64</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-get.html">Get</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-groupby.html">GroupBy</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-head.html">Head</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-id.html">Id</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-intercalate.html">Intercalate</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-intersperse.html">Intersperse</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-invoke.html">Invoke</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-item.html">Item</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-item1.html">Item1</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-item2.html">Item2</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-item3.html">Item3</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-item4.html">Item4</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-item5.html">Item5</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-iterateindexed.html">IterateIndexed</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-length.html">Length</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-lift.html">Lift</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-liftasync.html">LiftAsync</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-limit.html">Limit</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-listen.html">Listen</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-local.html">Local</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-mapindexed.html">MapIndexed</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-mapitem1.html">MapItem1</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-mapitem2.html">MapItem2</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-mapitem3.html">MapItem3</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-mapitem4.html">MapItem4</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-mapitem5.html">MapItem5</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-max.html">Max</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-maxby.html">MaxBy</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-maxvalue.html">MaxValue</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-min.html">Min</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-minby.html">MinBy</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-minvalue.html">MinValue</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-nth.html">Nth</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-ofbytes.html">OfBytes</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-oflist.html">OfList</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-ofseq.html">OfSeq</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-one.html">One</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-parse.html">Parse</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-pass.html">Pass</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-pi.html">Pi</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-pick.html">Pick</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-plus.html">Plus</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-put.html">Put</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-replace.html">Replace</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-rev.html">Rev</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-scan.html">Scan</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-signum.html">Signum</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-signum'.html">Signum'</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-skip.html">Skip</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-sort.html">Sort</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-sortby.html">SortBy</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-split.html">Split</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-sum.html">Sum</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-take.html">Take</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tell.html">Tell</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-toarray.html">ToArray</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tobigint.html">ToBigInt</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tobytes.html">ToBytes</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tolist.html">ToList</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-toseq.html">ToSeq</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-traverse.html">Traverse</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-traverseindexed.html">TraverseIndexed</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tryfinally.html">TryFinally</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tryfind.html">TryFind</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tryhead.html">TryHead</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-tryparse.html">TryParse</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-trypick.html">TryPick</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-trywith.html">TryWith</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-unzip.html">Unzip</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-using.html">Using</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-zero.html">Zero</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fscontrol-zip.html">Zip</a>
-          </td>
-          <td class="xmldoc"></td>
+          <td class="xmldoc"><p>Generic numbers, functions and operators.
+By opening this module some common operators become restricted, like (+) to 'a-&gt;'a-&gt;'a</p>
+
+</td>
         </tr>
     </tbody>
   </table>
