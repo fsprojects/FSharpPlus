@@ -156,14 +156,14 @@ let r1 = ("hello","world")^._2
 // val it : string = "world"
 
 (** and you can write to lenses. *)
-let r2 = set _2 42 ("hello","world")
+let r2 = setl _2 42 ("hello","world")
 // val it : string * int = ("hello", 42)
 
 (**  Composing lenses for reading (or writing) goes in the order an imperative programmer would expect, and just uses ``(<<)``. *)
 let r3 = ("hello",("world","!!!"))^.(_2 << _1)
 // val it : string = "world"
 
-let r4 = set (_2 << _1) 42 ("hello",("world","!!!"))             
+let r4 = setl (_2 << _1) 42 ("hello",("world","!!!"))
 // val it : string * (int * string) = ("hello", (42, "!!!"))
 
 (**  You can make a Getter out of a pure function with ``to'``. *)

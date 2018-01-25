@@ -39,7 +39,7 @@ let match2 = over (_players << _2 << _score) ((+) 1) match1
 
 // Produce Match<Result> from Match<Player * Player> 
 // This is possible with these Lenses since they support polymorphic updates.
-let matchResult0 = set _players {winner = None; started = true} match2
+let matchResult0 = setl _players {winner = None; started = true} match2
 
 // See if there is a winner by using a prism
 let _noWinner = preview _winner_team matchResult0
@@ -48,7 +48,7 @@ let _noWinner = preview _winner_team matchResult0
 let match3 = over (_players << _1 << _score) ((+) 1) match2
 
 // End of the match
-let match4 = set _finished true match3
+let match4 = setl _finished true match3
 let match5 = over (_players << _1 << _team << _victories) ((+) 1) match4
 let matchResult1 = over _players (fun (x, _) -> {winner = Some x; started = true}) match5
 

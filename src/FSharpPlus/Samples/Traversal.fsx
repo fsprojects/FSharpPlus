@@ -8,7 +8,7 @@ module Samples.Traversal
 open FSharpPlus
 open FSharpPlus.Lens
 
-let x = [|"Something"; ""; "Something Else"; "";|] |> set (_all "") ("Nothing")
+let x = [|"Something"; ""; "Something Else"; "";|] |> setl (_all "") ("Nothing")
 // val it : string [] = c
 
 // we can preview it

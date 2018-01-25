@@ -20,7 +20,7 @@ module Lens =
     // Basic operations
 
     /// Write to a lens
-    let set  lens v = Identity.run << lens (fun _ -> Identity v)
+    let setl lens v = Identity.run << lens (fun _ -> Identity v)
 
     /// Update a value in a lens
     let over lens f = Identity.run << lens (Identity << f)
@@ -95,7 +95,7 @@ module Lens =
     let inline both f (a, b) = tuple2 <!> f a <*> f b
 
     let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run </rmap'/> bt)
-    let inline from l    = withIso l <| fun sa bt -> iso bt sa
+    let inline from' l   = withIso l <| fun sa bt -> iso bt sa
     let inline mapping k = withIso k <| fun sa bt -> iso (map sa) (map bt)
 
     // Operators
@@ -103,8 +103,8 @@ module Lens =
     /// Read from a lens. Same as ``view``.
     let (^.)  s l = view l s
 
-    /// Write to a lens. Same as ``set``.
-    let (.->) l s = set  l s
+    /// Write to a lens. Same as ``setl``.
+    let (.->) l s = setl l s
 
     /// Update a value in a lens. Same as ``over``.
     let (%->) l s = over l s
