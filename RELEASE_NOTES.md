@@ -1,3 +1,13 @@
+#### 1.0.0-CI00134  - January 25 2018
+* IEnumerator functions
+* Applicative Math: new syntax, more operators
+* Function sequenceA renamed to sequence
+* More types: DList, Multiplication monoid
+* Changes in either function (args swapped)
+* Namespaces renamed
+* Lens functions renamed
+* Removed function toString
+
 #### 1.0.0-CI00099  - December 31 2017
 * Some Delayed Monad Transformers
 * Bug fixes
