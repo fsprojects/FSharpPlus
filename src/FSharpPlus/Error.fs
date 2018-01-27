@@ -22,7 +22,7 @@ module ResultOrException =
     let Result :Result<_,exn>      -> _ = function Ok v -> v | Error e -> raise e
 
     [<Runtime.CompilerServices.Extension>]
-    let Exception :Result<_,exn>   -> _ = function Error e -> e | _ -> new Exception()
+    let Exception :Result<_,exn>   -> _ = function Error e -> e | _ -> exn ()
 
 
 /// Monad Transformer for Result<'T, 'E>

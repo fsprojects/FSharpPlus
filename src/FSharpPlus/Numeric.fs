@@ -159,9 +159,9 @@ type Zero =
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<Zero>
 
-type Zero with static member inline Zero (_ : 'a*'b         , _:Zero) = (Zero.Invoke(), Zero.Invoke()                                                   ): 'a*'b
-type Zero with static member inline Zero (_ : 'a*'b*'c      , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke()                                  ): 'a*'b*'c
-type Zero with static member inline Zero (_ : 'a*'b*'c*'d   , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke()                 ): 'a*'b*'c*'d
+type Zero with static member inline Zero (_ : 'a*'b         , _:Zero) = (Zero.Invoke(), Zero.Invoke()                                             ): 'a*'b
+type Zero with static member inline Zero (_ : 'a*'b*'c      , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke()                              ): 'a*'b*'c
+type Zero with static member inline Zero (_ : 'a*'b*'c*'d   , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke()               ): 'a*'b*'c*'d
 type Zero with static member inline Zero (_ : 'a*'b*'c*'d*'e, _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke()): 'a*'b*'c*'d*'e
 
 #if NET35
@@ -174,22 +174,22 @@ type Zero with
         s.Task
 #endif
 
-    static member inline Zero (_:'T->'Monoid      , _:Zero) = (fun _ -> Zero.Invoke()) :'T->'Monoid
-    static member inline Zero (_:Async<'a>        , _:Zero) = let (v:'a) = Zero.Invoke() in async.Return v
-    static member inline Zero (_:Expr<'a>         , _:Zero) = let (v:'a) = Zero.Invoke() in Expr.Cast<'a>(Expr.Value(v))
-    static member inline Zero (_:Lazy<'a>         , _:Zero) = let (v:'a) = Zero.Invoke() in lazy v
-    static member        Zero (_:Dictionary<'a,'b>, _:Zero) = Dictionary<'a,'b>()
-    static member        Zero (_:ResizeArray<'a>  , _:Zero) = ResizeArray() : ResizeArray<'a>
-    static member        Zero (_:seq<'a>          , _:Zero) = Seq.empty   :  seq<'a>
-    static member        Zero (_:IEnumerator<'a>  , _:Zero) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
+    static member inline Zero (_:'T->'Monoid       , _:Zero) = (fun _ -> Zero.Invoke()) :'T->'Monoid
+    static member inline Zero (_:Async<'a>         , _:Zero) = let (v:'a) = Zero.Invoke() in async.Return v
+    static member inline Zero (_:Expr<'a>          , _:Zero) = let (v:'a) = Zero.Invoke() in Expr.Cast<'a>(Expr.Value(v))
+    static member inline Zero (_:Lazy<'a>          , _:Zero) = let (v:'a) = Zero.Invoke() in lazy v
+    static member        Zero (_:Dictionary<'a,'b> , _:Zero) = Dictionary<'a,'b>()
+    static member        Zero (_:ResizeArray<'a>   , _:Zero) = ResizeArray() : ResizeArray<'a>
+    static member        Zero (_:seq<'a>           , _:Zero) = Seq.empty     : seq<'a>
+    static member        Zero (_:IEnumerator<'a>   , _:Zero) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
     static member        Zero (_:IDictionary<'a,'b>, _:Zero) = Dictionary<'a,'b>() :> IDictionary<'a,'b>
 
 
 
 type Abs =
     inherit Default1
-    static member inline Abs (x:'t        , _:Default2) = (Explicit.Invoke ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
-    static member inline Abs (x:'t        , _:Default1) = (Implicit.Invoke ((^t ) : (static member Abs: ^t -> ^u) x)) :'t
+    static member inline Abs (x:'t        , _:Default2) = (Explicit.Invoke (^t : (static member Abs: ^t -> ^u) x)) :'t
+    static member inline Abs (x:'t        , _:Default1) = (Implicit.Invoke (^t : (static member Abs: ^t -> ^u) x)) :'t
     static member inline Abs (x:'t        , _:Abs) = abs x :'t
     static member inline Abs (_:Default1  , _:Abs) = fun x -> (^R: (static member Abs: _ -> ^R) x)
 

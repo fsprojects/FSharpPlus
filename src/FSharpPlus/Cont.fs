@@ -14,7 +14,7 @@ module Cont =
     let callCC (f:('T->Cont<'R,'U>)->_) = Cont (fun k -> run (f (fun a -> Cont(fun _ -> k a))) k)
 
     let map  (f:'T->_) (Cont x) = Cont (fun c -> x (c << f))                        : Cont<'R,'U>
-    let bind (f:'T->_) (Cont x) = Cont (fun k -> x (fun a -> run(f a) k))           : Cont<'R,'U>
+    let bind (f:'T->_) (Cont x) = Cont (fun k -> x (fun a -> run (f a) k))          : Cont<'R,'U>
     let apply (Cont f) (Cont x) = Cont (fun k -> f (fun (f':'T->_) -> x (k << f'))) : Cont<'R,'U>
 
 open FSharpPlus
@@ -31,17 +31,17 @@ type Cont<'r,'t> with
     static member TryWith    (Cont c, h) = Cont(fun k -> try (c k) with e -> Cont.run (h e) k) : Cont<'R,'T>
     static member TryFinally (Cont c, h) = Cont(fun k -> try (c k) finally h())                : Cont<'R,'T>
 
-    static member CallCC (f:('T -> Cont<'R,'U>) -> _) = Cont.callCC f   : Cont<'R,'T>
+    static member CallCC (f: ('T -> Cont<'R,'U>) -> _) = Cont.callCC f  : Cont<'R,'T>
 
     static member inline Lift (m:'``Monad<'T>``) = Cont ((>>=) m) : ContT<'``Monad<'R>``,'T>    
 
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
 
-    static member inline get_Ask() = lift ask               : '``ContT<'MonadReader<'R,'T>,'R>``
+    static member inline get_Ask () = lift ask              : '``ContT<'MonadReader<'R,'T>,'R>``
     static member inline Local (Cont m, f : 'R1 -> 'R2)     : ContT<_,'``MonadReader<R1,'T>,'U``> =
         Cont <| fun c -> (ask >>= (fun r -> local f (m (local (konst r) << c))))
     
-    static member inline get_Get()  = lift get         : '``ContT<'MonadState<'S, 'T>, 'S>``
+    static member inline get_Get () = lift get         : '``ContT<'MonadState<'S, 'T>, 'S>``
     static member inline Put (x:'S) = x |> put |> lift : '``ContT<'MonadState<'S, 'T>, unit>``
 
 /// Basic operations on ContT

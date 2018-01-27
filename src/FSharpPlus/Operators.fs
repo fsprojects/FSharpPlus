@@ -85,10 +85,10 @@ module Operators =
     // Monoid -----------------------------------------------------------------
 
     /// Gets a value that represents the 0 element.
-    let inline getZero() :'Monoid = Zero.Invoke()
+    let inline getZero () :'Monoid = Zero.Invoke ()
 
     /// A value that represents the 0 element.
-    let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke()
+    let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke ()
 
     let inline (++) (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
     let inline plus (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
@@ -100,13 +100,13 @@ module Operators =
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
-    let inline getEmpty() :'``Functor<'T>`` = Empty.Invoke()
-    let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke()
+    let inline getEmpty () :'``Functor<'T>`` = Empty.Invoke ()
+    let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke ()
 
     /// Combines two Alternatives
     let inline (<|>) (x:'``Functor<'T>``) (y:'``Functor<'T>``) : '``Functor<'T>`` = Append.Invoke x y
 
-    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke()
+    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
@@ -126,7 +126,7 @@ module Operators =
     let inline getCatId() = Id.Invoke() : '``Category<'T,'T>``
 
     /// The identity morphism.
-    let inline catId< ^``Category<'T,'T>`` when (Id or ^``Category<'T,'T>``) : (static member Id : ^``Category<'T,'T>`` * Id -> ^``Category<'T,'T>``) > = Id.Invoke() : '``Category<'T,'T>``
+    let inline catId< ^``Category<'T,'T>`` when (Id or ^``Category<'T,'T>``) : (static member Id : ^``Category<'T,'T>`` * Id -> ^``Category<'T,'T>``) > = Id.Invoke () : '``Category<'T,'T>``
 
     /// Right-to-left morphism composition.
     let inline catComp (f : '``Category<'U,'V>``) (g : '``Category<'T,'U>``) : '``Category<'T,'V>`` = Comp.Invoke f g
@@ -571,45 +571,45 @@ namespace FSharpPlus.Math
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
     module Applicative =
 
-        let inline ( .+  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((+)/> y) x :'``Functor<'T>``
-        let inline (  +. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((+)   x) y :'``Functor<'T>``
-        let inline ( .+. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (+) <!> x <*> y :'``Applicative<'T>``
+        let inline ( .+  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((+)/> y) x : '``Functor<'T>``
+        let inline (  +. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((+)   x) y : '``Functor<'T>``
+        let inline ( .+. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (+) <!> x <*> y : '``Applicative<'T>``
 
-        let inline ( .-  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((-)/> y) x :'``Functor<'T>``
-        let inline (  -. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((-)   x) y :'``Functor<'T>``
-        let inline ( .-. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (-) <!> x <*> y :'``Applicative<'T>``
+        let inline ( .-  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((-)/> y) x : '``Functor<'T>``
+        let inline (  -. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((-)   x) y : '``Functor<'T>``
+        let inline ( .-. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (-) <!> x <*> y : '``Applicative<'T>``
 
-        let inline ( .*  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((*)/> y) x :'``Functor<'T>``
-        let inline (  *. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((*)   x) y :'``Functor<'T>``
-        let inline ( .*. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (*) <!> x <*> y :'``Applicative<'T>``
+        let inline ( .*  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((*)/> y) x : '``Functor<'T>``
+        let inline (  *. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((*)   x) y : '``Functor<'T>``
+        let inline ( .*. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (*) <!> x <*> y : '``Applicative<'T>``
 
-        let inline ( .%  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((%)/> y) x :'``Functor<'T>``
-        let inline (  %. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((%)   x) y :'``Functor<'T>``
-        let inline ( .%. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (%) <!> x <*> y :'``Applicative<'T>``
+        let inline ( .%  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((%)/> y) x : '``Functor<'T>``
+        let inline (  %. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((%)   x) y : '``Functor<'T>``
+        let inline ( .%. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (%) <!> x <*> y : '``Applicative<'T>``
 
-        let inline ( ./  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((/)/> y) x :'``Functor<'T>``
-        let inline (  /. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((/)   x) y :'``Functor<'T>``
-        let inline ( ./. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (/) <!> x <*> y :'``Applicative<'T>``
+        let inline ( ./  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((/)/> y) x : '``Functor<'T>``
+        let inline (  /. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((/)   x) y : '``Functor<'T>``
+        let inline ( ./. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (/) <!> x <*> y : '``Applicative<'T>``
 
-        let inline ( .=  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((=)/> y) x :'``Functor<bool>``
-        let inline (  =. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((=)   x) y :'``Functor<bool>``
-        let inline ( .=. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (=) <!> x <*> y :'``Applicative<bool>``
+        let inline ( .=  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((=)/> y) x : '``Functor<bool>``
+        let inline (  =. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((=)   x) y : '``Functor<bool>``
+        let inline ( .=. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (=) <!> x <*> y : '``Applicative<bool>``
 
-        let inline ( .>  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((>)/> y) x :'``Functor<bool>``
-        let inline (  >. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((>)   x) y :'``Functor<bool>``
-        let inline ( .>. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (>) <!> x <*> y :'``Applicative<bool>``
+        let inline ( .>  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((>)/> y) x : '``Functor<bool>``
+        let inline (  >. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((>)   x) y : '``Functor<bool>``
+        let inline ( .>. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (>) <!> x <*> y : '``Applicative<bool>``
 
-        let inline ( .<  ) (x :'``Functor<'T>``)     (y :'T)                   = map ((<)/> y) x :'``Functor<bool>``
-        let inline (  <. ) (x :'T)                   (y :'``Functor<'T>``)     = map ((<)   x) y :'``Functor<bool>``
-        let inline ( .<. ) (x :'``Applicative<'T>``) (y :'``Applicative<'T>``) = (<) <!> x <*> y :'``Applicative<bool>``
+        let inline ( .<  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((<)/> y) x : '``Functor<bool>``
+        let inline (  <. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((<)   x) y : '``Functor<bool>``
+        let inline ( .<. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (<) <!> x <*> y : '``Applicative<bool>``
 
-        let inline (.|| ) (x :'``Functor<bool>``)     (y :bool)                   = map ((||)/> y) x :'``Functor<bool>``
-        let inline ( ||.) (x :bool)                   (y :'``Functor<bool>``)     = map ((||)   x) y :'``Functor<bool>``
-        let inline (.||.) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (||) <!> x <*> y :'``Applicative<bool>``
+        let inline (.|| ) (x: '``Functor<bool>``)     (y: bool)                   = map ((||)/> y) x : '``Functor<bool>``
+        let inline ( ||.) (x: bool)                   (y: '``Functor<bool>``)     = map ((||)   x) y : '``Functor<bool>``
+        let inline (.||.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (||) <!> x <*> y : '``Applicative<bool>``
 
-        let inline (.&& ) (x :'``Functor<bool>``)     (y :bool)                   = map ((&&)/> y) x :'``Functor<bool>``
-        let inline ( &&.) (x :bool)                   (y :'``Functor<bool>``)     = map ((&&)   x) y :'``Functor<bool>``
-        let inline (.&&.) (x :'``Applicative<bool>``) (y :'``Applicative<bool>``) = (&&) <!> x <*> y :'``Applicative<bool>``
+        let inline (.&& ) (x: '``Functor<bool>``)     (y: bool)                   = map ((&&)/> y) x : '``Functor<bool>``
+        let inline ( &&.) (x: bool)                   (y: '``Functor<bool>``)     = map ((&&)   x) y : '``Functor<bool>``
+        let inline (.&&.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (&&) <!> x <*> y : '``Applicative<bool>``
 
     /// <summary>
     /// Generic numbers, functions and operators.
@@ -619,19 +619,19 @@ namespace FSharpPlus.Math
 
         open System.Numerics
 
-        let inline fromIntegral   (x:'Integral) :'Num   = (fromBigInt << toBigInt) x
+        let inline fromIntegral (x: 'Integral) : 'Num = (fromBigInt << toBigInt) x
 
         module NumericLiteralG =
-            let inline FromZero() = getZero()
-            let inline FromOne () = getOne()
+            let inline FromZero () = getZero ()
+            let inline FromOne  () = getOne ()
             let inline FromInt32  (i:int   ) = FromInt32.Invoke i
             let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
             let inline FromString (i:string) = fromBigInt <| BigInteger.Parse i
 
-        let inline (+) (a:'Num) (b:'Num) :'Num = Plus.Invoke a b
-        let inline (-) (a:'Num) (b:'Num) :'Num = a - b
-        let inline (*) (a:'Num) (b:'Num) :'Num = a * b
-        let inline (/) (a:'Fractional) (b:'Fractional) :'Fractional = (* whenFractional a;*) a / b
+        let inline (+) (a:'Num) (b:'Num) : 'Num = Plus.Invoke a b
+        let inline (-) (a:'Num) (b:'Num) : 'Num = a - b
+        let inline (*) (a:'Num) (b:'Num) : 'Num = a * b
+        let inline (/) (a:'Fractional) (b:'Fractional) : 'Fractional = (* whenFractional a;*) a / b
 
         let inline internal whenIntegral a = let _ = if false then toBigInt a else 0I in ()
  
@@ -645,10 +645,10 @@ namespace FSharpPlus.Math
             (if a < 0G then (a - b + 1G) else a) / b
 
         /// Remainder of Integer division. Same as (%).
-        let inline rem (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
+        let inline rem (a:'Integral) (b:'Integral) : 'Integral = whenIntegral a; a % b
 
         /// Euclidean remainder of integer division, following the mathematical convention where the mod is always positive.
-        let inline remE (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; ((a % b) + b) % b
+        let inline remE (a:'Integral) (b:'Integral) : 'Integral = whenIntegral a; ((a % b) + b) % b
 
         /// Euclidean division-remainder, following the mathematical convention where the mod is always positive.
         let inline divRemE D d =

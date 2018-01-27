@@ -223,7 +223,7 @@ type Exists =
     static member inline Invoke (predicate :'T->bool) (source:'``Foldable'<T>``) =
         let inline call_3 (a:^a, b:^b, f) = ((^a or ^b) : (static member Exists: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, f)
-        call (Unchecked.defaultof<Exists>,  source, predicate)        :bool
+        call (Unchecked.defaultof<Exists>, source, predicate) : bool
  
 
 type ForAll =
@@ -241,7 +241,7 @@ type ForAll =
     static member inline Invoke (predicate :'T->bool) (source:'``Foldable'<T>``) =
         let inline call_3 (a:^a, b:^b, f) = ((^a or ^b) : (static member ForAll: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_3 (a, b, f)
-        call (Unchecked.defaultof<ForAll>,  source, predicate)        :bool
+        call (Unchecked.defaultof<ForAll>, source, predicate) : bool
 
 
 type Find =
@@ -255,7 +255,7 @@ type Find =
     static member inline Invoke (predicate :'T->bool) (source:'``Foldable'<T>``) =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member Find: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, x:'x) = call_2 (a, b, x)
-        call (Unchecked.defaultof<Find>,    source, predicate)  :'T
+        call (Unchecked.defaultof<Find>, source, predicate) : 'T
 
 
 type TryFind =
@@ -269,7 +269,7 @@ type TryFind =
     static member inline Invoke (predicate :'T->bool) (source:'``Foldable'<T>``) =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member TryFind: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, x:'x) = call_2 (a, b, x)
-        call (Unchecked.defaultof<TryFind>, source, predicate)   :'T option
+        call (Unchecked.defaultof<TryFind>, source, predicate) : 'T option
 
 
 [<Extension;Sealed>]
@@ -278,7 +278,7 @@ type Head =
     static member inline       Head (x              , [<Optional>]_impl:Default1) = Seq.head (ToSeq.Invoke x) :'T      
     [<Extension>]static member Head (x:'t list      , [<Optional>]_impl:Head    ) = List.head x
     [<Extension>]static member Head (x:'t []        , [<Optional>]_impl:Head    ) = x.[0]
-    [<Extension>]static member Head (x:Id<'T>       , [<Optional>]_impl:Head ) = x.getValue
+    [<Extension>]static member Head (x:Id<'T>       , [<Optional>]_impl:Head    ) = x.getValue
     [<Extension>]static member Head (x:string       , [<Optional>]_impl:Head    ) = x.[0]
     [<Extension>]static member Head (x:StringBuilder, [<Optional>]_impl:Head    ) = x.ToString().[0]
     [<Extension>]static member Head (x:'t seq       , [<Optional>]_impl:Head    ) = Seq.head x
@@ -286,7 +286,7 @@ type Head =
     static member inline Invoke (source:'``Foldable'<T>``)        =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Head: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Head>,    source)  :'T
+        call (Unchecked.defaultof<Head>, source) : 'T
 
 
 [<Extension;Sealed>]
@@ -303,12 +303,12 @@ type TryHead =
     static member inline Invoke (source:'``Foldable'<T>``)        =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryHead: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<TryHead>,    source)  :'T option
+        call (Unchecked.defaultof<TryHead>, source) : 'T option
 
 
 type Pick =
     inherit Default1
-    static member inline Pick (x         , f:_->'U option, [<Optional>]_impl:Default1) = Seq.pick   f (ToSeq.Invoke x) :'U
+    static member inline Pick (x         , f:_->'U option, [<Optional>]_impl:Default1) = Seq.pick   f (ToSeq.Invoke x) : 'U
     static member        Pick (x:Id<'T>  , f:_->'U option, [<Optional>]_impl:Pick    ) = List.pick  f [x.getValue]
     static member        Pick (x:seq<'T> , f:_->'U option, [<Optional>]_impl:Pick    ) = Seq.pick   f x
     static member        Pick (x:list<'T>, f:_->'U option, [<Optional>]_impl:Pick    ) = List.pick  f x
@@ -317,13 +317,13 @@ type Pick =
     static member inline Invoke (chooser:'T->'U option) (source:'``Foldable'<T>``)        =
         let inline call_2 (a:^a, b:^b, x) = ((^a or ^b ) : (static member Pick: _*_*_ -> _) b, x, a)
         let inline call (a:'a, b:'b, x:'x) = call_2 (a, b, x)
-        call (Unchecked.defaultof<Pick>,   source, chooser)    :'U
+        call (Unchecked.defaultof<Pick>, source, chooser) : 'U
 
 
 type TryPick =
     inherit Default1
-    static member inline TryPick (x         , f:_->'U option, [<Optional>]_impl:Default1) = Seq.tryPick   f (ToSeq.Invoke x)  :'U option
-    static member        TryPick (_:Id<'T>  , _:_->'U option, [<Optional>]_impl:TryPick ) = invalidOp "TryPick on ID" :'U option
+    static member inline TryPick (x         , f:_->'U option, [<Optional>]_impl:Default1) = Seq.tryPick   f (ToSeq.Invoke x) : 'U option
+    static member        TryPick (_:Id<'T>  , _:_->'U option, [<Optional>]_impl:TryPick ) = invalidOp "TryPick on ID"        : 'U option
     static member        TryPick (x:seq<'T> , f:_->'U option, [<Optional>]_impl:TryPick ) = Seq.tryPick   f x
     static member        TryPick (x:list<'T>, f:_->'U option, [<Optional>]_impl:TryPick ) = List.tryPick  f x
     static member        TryPick (x:'T []   , f:_->'U option, [<Optional>]_impl:TryPick ) = Array.tryPick f x
@@ -337,13 +337,13 @@ type TryPick =
 type Filter =
     inherit Default1
     static member        Filter (x:'t seq           , p, [<Optional>]_impl:Default2) = Seq.filter p x
-    static member inline Filter (x:'``Foldable'<T>``, p, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.filter p |> OfSeq.Invoke :'``Foldable'<T>``
+    static member inline Filter (x:'``Foldable'<T>``, p, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.filter p |> OfSeq.Invoke : '``Foldable'<T>``
     static member        Filter (x:'t Set           , p, [<Optional>]_impl:Filter  ) = Set.filter p x
     static member        Filter (x:'t option        , p, [<Optional>]_impl:Filter  ) = match x with None -> None | Some a -> if p a then x else None
     static member        Filter (x:'t list          , p, [<Optional>]_impl:Filter  ) = List.filter  p x
     static member        Filter (x:'t []            , p, [<Optional>]_impl:Filter  ) = Array.filter p x
     static member        Filter (x:'t IObservable   , p, [<Optional>]_impl:Filter  ) = Observable.filter p x
-    static member        Filter (x:'t ResizeArray   , p, [<Optional>]_impl:Filter  ) = ResizeArray(Seq.filter p x)
+    static member        Filter (x:'t ResizeArray   , p, [<Optional>]_impl:Filter  ) = ResizeArray (Seq.filter p x)
 
     static member inline Invoke (predicate:'T->bool) (x:'``Foldable<'T>``) : '``Foldable<'T>`` =
         let inline call_2 (i:^i, b:^b, f) = ((^i or ^b) : (static member Filter: _*_*_ -> ^b) b, f, i)
@@ -357,10 +357,10 @@ type Intercalate =
     static member inline       Intercalate (x:'``Foldable<'Monoid>``, e:'Monoid, [<Optional>]_impl:Default2) = let f t x = match (t, x) with (true, _) , x -> (false, x) | (_, acc ) , x -> (false, Plus.Invoke (Plus.Invoke acc e) x) in Fold.Invoke f (true, Zero.Invoke()) x |> snd
     static member inline       Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
     static member inline       Intercalate (_:seq<'``Foldable<'T>``>, _ : ^t when ^t : null and ^t : struct, [<Optional>]_impl:Default1) = id
-    [<Extension>]static member Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]_impl:Intercalate) = List.intercalate e x
+    [<Extension>]static member Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]_impl:Intercalate) = List.intercalate  e x
     [<Extension>]static member Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]_impl:Intercalate) = Array.intercalate e x
-    [<Extension>]static member Intercalate (x:seq<string>           , e:string           , [<Optional>]_impl:Intercalate) = String.Join(e, x)
-    [<Extension>]static member Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]_impl:Intercalate) = StringBuilder(String.Join(e.ToString(), Seq.map (fun x -> x.ToString()) x))
+    [<Extension>]static member Intercalate (x:seq<string>           , e:string           , [<Optional>]_impl:Intercalate) = String.Join (e, x)
+    [<Extension>]static member Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]_impl:Intercalate) = StringBuilder (String.Join (string e, Seq.map string x))
  
     static member inline Invoke (sep:'Monoid) (source:'``Foldable<'Monoid>``) =
         let inline call_2 (a:^a, b:^b, s:^c) = ((^a or ^c) : (static member Intercalate: _*_*_ -> _) b, s, a)
@@ -371,8 +371,8 @@ type Intercalate =
 [<Extension;Sealed>]
 type Intersperse =
     inherit Default1
-    static member inline       Intersperse (x:'``Foldable<'T>``, e:'T, [<Optional>]_impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke :'``Foldable<'T>``
-    [<Extension>]static member Intersperse (x:list<'T>         , e:'T, [<Optional>]_impl:Intersperse) = List.intersperse e x
+    static member inline       Intersperse (x:'``Foldable<'T>``, e:'T, [<Optional>]_impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke : '``Foldable<'T>``
+    [<Extension>]static member Intersperse (x:list<'T>         , e:'T, [<Optional>]_impl:Intersperse) = List.intersperse  e x
     [<Extension>]static member Intersperse (x:'T []            , e:'T, [<Optional>]_impl:Intersperse) = Array.intersperse e x
  
     static member inline Invoke (sep:'T) (source:'``Foldable<'T>``) =

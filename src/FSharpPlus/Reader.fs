@@ -75,8 +75,8 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Listen (ReaderT m) = ReaderT (fun w -> listen (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T*'Monoid>``>
     static member inline Pass   (ReaderT m) = ReaderT (fun w -> pass   (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T>``>   
 
-    static member inline get_Get() = lift get         :ReaderT<'R, '``MonadState<'S, 'S>``>
-    static member inline Put x     = x |> put |> lift :ReaderT<'R, '``MonadState<'S, unit>``>
+    static member inline get_Get () = lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
+    static member inline Put x      = x |> put |> lift : ReaderT<'R, '``MonadState<'S, unit>``>
 
     static member inline Delay (f: unit -> ReaderT<'R,'``Monad<'T>``>) =
         ReaderT (fun s ->
