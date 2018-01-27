@@ -157,7 +157,7 @@ let decodeError = function
 
 // The following functions compose the Error monad with the Async one.
 
-let getValidPassword : ErrorT<_> =
+let getValidPassword : ResultT<_> =
     monad {
         let! s = liftAsync getLine
         if isValid s then return s
@@ -171,4 +171,4 @@ let askPassword = monad {
     do! lift <| putStrLn "Storing in database..."
     return value}
 
-//try -> Async.RunSynchronously (ErrorT.run askPassword)
+//try -> Async.RunSynchronously (ResultT.run askPassword)

@@ -257,6 +257,6 @@ module Compatibility =
         let inline catchError v h = catch v h
             
         // ErrorT
-        let runErrorT = ErrorT.run
-        type ErrorT = ErrorT
-        let ErrorT = ErrorT.ErrorT
+        let runErrorT = ResultT.run
+        type ErrorT<'T> = ResultT<'T>
+        let ErrorT = ErrorT.ResultT
