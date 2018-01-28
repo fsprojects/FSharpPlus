@@ -106,9 +106,7 @@ module Builders =
             let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
             fix ()
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) =
-            let fdelay x = Delay.Invoke x            : '``MonadPlus<'U>``
-            let fusing (resource: #IDisposable) body = try body resource finally dispose resource
-            fusing (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, fdelay (fun () -> rest enum.Current)) : '``MonadPlus<'U>``))
+            using (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``MonadPlus<'U>``))
 
         member __.strict = new MonadPlusStrictBuilder ()
 
@@ -122,9 +120,7 @@ module Builders =
                 else result ()
             loop guard body
         member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) =
-            let fdelay x = Delay.Invoke x            : '``Monad<unit>``
-            let fusing (resource: #IDisposable) body = try body resource finally dispose resource
-            fusing (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, fdelay (fun () -> rest enum.Current)) : '``Monad<unit>``))
+            using (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``Monad<unit>``))
 
     
         member __.plus   = new MonadPlusBuilder ()
