@@ -1,3 +1,7 @@
+#### 1.0.0-CI00136  - January 28 2018
+* Rename ErrorT to ResultT
+* Removed Haskell Compatibility
+
 #### 1.0.0-CI00134  - January 25 2018
 * IEnumerator functions
 * Applicative Math: new syntax, more operators
