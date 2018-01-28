@@ -665,6 +665,13 @@ module Extensions =
             return! loop () }
 
         /// Combine all asyncs in one, chaining them in sequence order.
+        static member Sequence (t: list<Async<_>>) : Async<list<_>> =
+            let rec loop acc = function
+                | []    -> async.Return (List.rev acc)
+                | x::xs -> async.Bind (x, fun x -> loop (x::acc) xs)
+            loop [] t
+
+        /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t: array<Async<_>>) : Async<array<_>> = async {
             let siz = Array.length t
             let arr = Array.zeroCreate siz
