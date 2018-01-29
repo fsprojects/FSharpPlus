@@ -40,6 +40,7 @@ open Fake.FileHelper
 open FSharp.Literate
 open FSharp.MetadataFormat
 open FSharp.Markdown
+open FSharp.Formatting.Razor
 open FSharpPlus
 
 // When called from 'build.fsx', use the public project URL as <root>
@@ -104,7 +105,7 @@ let libDirs =
 // Build API reference from XML comments
 let buildReference () =
   CleanDir (output @@ "reference")
-  MetadataFormat.Generate
+  RazorMetadataFormat.Generate
     ( binaries, output @@ "reference", layoutRootsAll.["en"],
       parameters = ("root", root)::info,
       sourceRepo = githubLink @@ "tree/master",
@@ -168,7 +169,7 @@ let toUrl input =
 
 let abstractions = content </> "abstractions.plantuml"
 let plantUMLDiag = toUrl (File.ReadAllText abstractions)
-let customize _ (doc:LiterateDocument) = doc.With (paragraphs = (doc.Paragraphs |>> function InlineBlock x -> InlineBlock (replace "{plantUMLDiag}" plantUMLDiag x) | x -> x))
+let customize _ (doc:LiterateDocument) = doc.With (paragraphs = (doc.Paragraphs |>> function InlineBlock (x,y) -> InlineBlock ((replace "{plantUMLDiag}" plantUMLDiag x),y) | x -> x))
 
 
 // Build documentation from `fsx` and `md` files in `docs/content`
@@ -176,7 +177,7 @@ let buildDocumentation () =
 
   // First, process files which are placed in the content root directory.
 
-  Literate.ProcessDirectory
+  RazorLiterate.ProcessDirectory
     ( content, docTemplate, output, replacements = ("root", root)::info,
       layoutRoots = layoutRootsAll.["en"],
       generateAnchors = true,
@@ -198,7 +199,7 @@ let buildDocumentation () =
         | Some lang -> layoutRootsAll.[lang]
         | None -> layoutRootsAll.["en"] // "en" is the default language
 
-    Literate.ProcessDirectory
+    RazorLiterate.ProcessDirectory
       ( dir, docTemplate, output @@ dirname, replacements = ("root", root)::info,
         layoutRoots = layoutRoots,
         generateAnchors = true )
