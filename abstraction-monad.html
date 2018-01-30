@@ -44,8 +44,8 @@
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">Return</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">T</span>) <span class="o">:</span> <span class="o">&#39;</span><span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>
-<span class="k">static</span> <span class="k">member</span> <span class="i">Bind</span> (<span class="i">x</span><span class="o">:</span><span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>, <span class="i">f</span><span class="o">:</span><span class="o">&#39;</span><span class="i">T</span><span class="k">-&gt;</span><span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">U</span><span class="o">&gt;</span>) <span class="o">:</span> <span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">U</span><span class="o">&gt;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Return</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
+<span class="k">static</span> <span class="k">member</span> <span class="id">Bind</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">T</span><span class="k">-&gt;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -56,7 +56,7 @@
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="i">Join</span> (<span class="i">x</span><span class="o">:</span><span class="o">&#39;</span><span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span><span class="o">&gt;</span>) <span class="o">:</span><span class="o">&#39;</span><span class="i">Monad</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Join</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -65,9 +65,9 @@
 <span class="l">2: </span>
 <span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">return</span> <span class="i">a</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">k</span> <span class="o">=</span> <span class="i">k</span> <span class="i">a</span>
-<span class="i">m</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="k">return</span> <span class="o">=</span> <span class="i">m</span>
-<span class="i">m</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> (<span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">k</span> <span class="i">x</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">h</span>) <span class="o">=</span> (<span class="i">m</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">k</span>) <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">h</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">return</span> <span class="id">a</span> <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="id">k</span> <span class="o">=</span> <span class="id">k</span> <span class="id">a</span>
+<span class="id">m</span> <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="k">return</span> <span class="o">=</span> <span class="id">m</span>
+<span class="id">m</span> <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="pn">(</span><span class="k">fun</span> <span class="id">x</span> <span class="k">-&gt;</span> <span class="id">k</span> <span class="id">x</span> <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="id">h</span><span class="pn">)</span> <span class="o">=</span> <span class="pn">(</span><span class="id">m</span> <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="id">k</span><span class="pn">)</span> <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="id">h</span>
 </code></pre></td>
 </tr>
 </table>
@@ -182,76 +182,108 @@
 <span class="l">65: </span>
 <span class="l">66: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
-<span class="k">open</span> <span class="i">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 
 
 <span class="c">// Monads allow us to use our generic computation expressions</span>
 
 <span class="c">// This will return the list [11;21;12;22] which is both lists combined in different ways with the (+) operation</span>
-<span class="k">let</span> <span class="i">lst11n21n12n22</span> <span class="o">=</span>
-    <span class="i">monad</span> {
-        <span class="k">let!</span> <span class="i">x1</span> <span class="o">=</span> [<span class="n">1</span>;   <span class="n">2</span>]
-        <span class="k">let!</span> <span class="i">x2</span> <span class="o">=</span> [<span class="n">10</span>; <span class="n">20</span>]
-        <span class="k">return</span> ((<span class="o">+</span>) <span class="i">x1</span> <span class="i">x2</span>)}
+<span class="k">let</span> <span class="id">lst11n21n12n22</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">x1</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span>   <span class="n">2</span><span class="pn">]</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">x2</span> <span class="o">=</span> <span class="pn">[</span><span class="n">10</span><span class="pn">;</span> <span class="n">20</span><span class="pn">]</span>
+        <span class="k">return</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="id">x1</span> <span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="id">x2</span><span class="pn">)</span><span class="pn">}</span>
 
 <span class="c">// This is the same example but with a non-empty list</span>
-<span class="k">let</span> <span class="i">neLst11n21n12n22</span> <span class="o">=</span> 
-    <span class="i">monad</span> {
-        <span class="k">let!</span> <span class="i">x1</span> <span class="o">=</span> { <span class="i">NonEmptyList</span><span class="o">.</span><span class="i">Head</span> <span class="o">=</span>  <span class="n">1</span>; <span class="i">Tail</span> <span class="o">=</span>  [<span class="n">2</span>] }
-        <span class="k">let!</span> <span class="i">x2</span> <span class="o">=</span> { <span class="i">NonEmptyList</span><span class="o">.</span><span class="i">Head</span> <span class="o">=</span> <span class="n">10</span>; <span class="i">Tail</span> <span class="o">=</span> [<span class="n">20</span>] }
-        <span class="k">return</span> ((<span class="o">+</span>) <span class="i">x1</span> <span class="i">x2</span>)}
+<span class="k">let</span> <span class="id">neLst11n21n12n22</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, 'fs2', 7)" onmouseover="showTip(event, 'fs2', 7)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs3', 8)" onmouseover="showTip(event, 'fs3', 8)" class="id">x1</span> <span class="o">=</span> <span class="pn">{</span> <span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">Head</span> <span class="o">=</span>  <span class="n">1</span><span class="pn">;</span> <span class="id">Tail</span> <span class="o">=</span>  <span class="pn">[</span><span class="n">2</span><span class="pn">]</span> <span class="pn">}</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="id">x2</span> <span class="o">=</span> <span class="pn">{</span> <span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">Head</span> <span class="o">=</span> <span class="n">10</span><span class="pn">;</span> <span class="id">Tail</span> <span class="o">=</span> <span class="pn">[</span><span class="n">20</span><span class="pn">]</span> <span class="pn">}</span>
+        <span class="k">return</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs3', 10)" onmouseover="showTip(event, 'fs3', 10)" class="id">x1</span> <span onmouseout="hideTip(event, 'fs4', 11)" onmouseover="showTip(event, 'fs4', 11)" class="id">x2</span><span class="pn">)</span><span class="pn">}</span>
 
 <span class="c">// And now an example with options</span>
-<span class="k">let</span> <span class="i">some14</span> <span class="o">=</span>
-    <span class="i">monad</span> {
-        <span class="k">let!</span> <span class="i">x1</span> <span class="o">=</span> <span class="i">Some</span> <span class="n">4</span>
-        <span class="k">let!</span> <span class="i">x2</span> <span class="o">=</span> <span class="i">tryParse</span> <span class="s">&quot;10&quot;</span>
-        <span class="k">return</span> ((<span class="o">+</span>) <span class="i">x1</span> <span class="i">x2</span>)}
+<span class="k">let</span> <span class="id">some14</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs2', 12)" onmouseover="showTip(event, 'fs2', 12)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs3', 13)" onmouseover="showTip(event, 'fs3', 13)" class="id">x1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 14)" onmouseover="showTip(event, 'fs5', 14)" class="uc">Some</span> <span class="n">4</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs4', 15)" onmouseover="showTip(event, 'fs4', 15)" class="id">x2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 16)" onmouseover="showTip(event, 'fs6', 16)" class="fn">tryParse</span> <span class="s">&quot;10&quot;</span>
+        <span class="k">return</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs3', 17)" onmouseover="showTip(event, 'fs3', 17)" class="id">x1</span> <span onmouseout="hideTip(event, 'fs4', 18)" onmouseover="showTip(event, 'fs4', 18)" class="id">x2</span><span class="pn">)</span><span class="pn">}</span>
 
 
 <span class="c">// Monads do not compose well, we need to use Monad Transformers</span>
 
-<span class="k">open</span> <span class="i">System</span>
-<span class="k">open</span> <span class="i">FSharpPlus</span><span class="o">.</span><span class="i">Data</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs7', 19)" onmouseover="showTip(event, 'fs7', 19)" class="id">System</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 20)" onmouseover="showTip(event, 'fs1', 20)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 21)" onmouseover="showTip(event, 'fs8', 21)" class="id">Data</span>
 
 <span class="c">// First let&#39;s define some functions we&#39;ll use later</span>
 
-<span class="k">let</span> <span class="i">getLine</span>    <span class="o">=</span> <span class="i">async</span> { <span class="k">return</span> <span class="i">System</span><span class="o">.</span><span class="i">Console</span><span class="o">.</span><span class="i">ReadLine</span>()}
-<span class="k">let</span> <span class="i">putStrLn</span> <span class="i">x</span> <span class="o">=</span> <span class="i">async</span> { <span class="i">printfn</span> <span class="s">&quot;%s&quot;</span> <span class="i">x</span>}
-<span class="k">let</span> <span class="i">isValid</span> <span class="i">s</span> <span class="o">=</span>
-    <span class="i">String</span><span class="o">.</span><span class="i">length</span> <span class="i">s</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">8</span>
-        <span class="o">&amp;&amp;</span> <span class="i">String</span><span class="o">.</span><span class="i">exists</span> <span class="i">System</span><span class="o">.</span><span class="i">Char</span><span class="o">.</span><span class="i">IsLetter</span> <span class="i">s</span>
-        <span class="o">&amp;&amp;</span> <span class="i">String</span><span class="o">.</span><span class="i">exists</span> <span class="i">System</span><span class="o">.</span><span class="i">Char</span><span class="o">.</span><span class="i">IsNumber</span> <span class="i">s</span>
-        <span class="o">&amp;&amp;</span> <span class="i">String</span><span class="o">.</span><span class="i">exists</span> <span class="i">Char</span><span class="o">.</span><span class="i">IsPunctuation</span> <span class="i">s</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 22)" onmouseover="showTip(event, 'fs9', 22)" class="id">getLine</span>    <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 23)" onmouseover="showTip(event, 'fs10', 23)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs7', 24)" onmouseover="showTip(event, 'fs7', 24)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 25)" onmouseover="showTip(event, 'fs11', 25)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="id">ReadLine</span><span class="pn">(</span><span class="pn">)</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 27)" onmouseover="showTip(event, 'fs13', 27)" class="fn">putStrLn</span> <span onmouseout="hideTip(event, 'fs14', 28)" onmouseover="showTip(event, 'fs14', 28)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 29)" onmouseover="showTip(event, 'fs10', 29)" class="k">async</span> <span class="pn">{</span> <span onmouseout="hideTip(event, 'fs15', 30)" onmouseover="showTip(event, 'fs15', 30)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs14', 31)" onmouseover="showTip(event, 'fs14', 31)" class="id">x</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 32)" onmouseover="showTip(event, 'fs16', 32)" class="fn">isValid</span> <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="id">s</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs18', 34)" onmouseover="showTip(event, 'fs18', 34)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="id">length</span> <span onmouseout="hideTip(event, 'fs17', 36)" onmouseover="showTip(event, 'fs17', 36)" class="id">s</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">8</span>
+        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, 'fs18', 37)" onmouseover="showTip(event, 'fs18', 37)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 38)" onmouseover="showTip(event, 'fs20', 38)" class="id">exists</span> <span onmouseout="hideTip(event, 'fs7', 39)" onmouseover="showTip(event, 'fs7', 39)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 40)" onmouseover="showTip(event, 'fs21', 40)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs22', 41)" onmouseover="showTip(event, 'fs22', 41)" class="id">IsLetter</span> <span onmouseout="hideTip(event, 'fs17', 42)" onmouseover="showTip(event, 'fs17', 42)" class="id">s</span>
+        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 44)" onmouseover="showTip(event, 'fs20', 44)" class="id">exists</span> <span onmouseout="hideTip(event, 'fs7', 45)" onmouseover="showTip(event, 'fs7', 45)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 46)" onmouseover="showTip(event, 'fs21', 46)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs23', 47)" onmouseover="showTip(event, 'fs23', 47)" class="id">IsNumber</span> <span onmouseout="hideTip(event, 'fs17', 48)" onmouseover="showTip(event, 'fs17', 48)" class="id">s</span>
+        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, 'fs18', 49)" onmouseover="showTip(event, 'fs18', 49)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 50)" onmouseover="showTip(event, 'fs20', 50)" class="id">exists</span> <span onmouseout="hideTip(event, 'fs21', 51)" onmouseover="showTip(event, 'fs21', 51)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs24', 52)" onmouseover="showTip(event, 'fs24', 52)" class="id">IsPunctuation</span> <span onmouseout="hideTip(event, 'fs17', 53)" onmouseover="showTip(event, 'fs17', 53)" class="id">s</span>
 
-<span class="k">let</span> <span class="i">decodeError</span> <span class="o">=</span> <span class="k">function</span>
-    | <span class="o">-</span><span class="n">1</span> <span class="k">-&gt;</span> <span class="s">&quot;Password not valid&quot;</span>
-    | _  <span class="k">-&gt;</span> <span class="s">&quot;Unknown&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 54)" onmouseover="showTip(event, 'fs25', 54)" class="fn">decodeError</span> <span class="o">=</span> <span class="k">function</span>
+    <span class="pn">|</span> <span class="o">-</span><span class="n">1</span> <span class="k">-&gt;</span> <span class="s">&quot;Password not valid&quot;</span>
+    <span class="pn">|</span> <span class="id">_</span>  <span class="k">-&gt;</span> <span class="s">&quot;Unknown&quot;</span>
 
 
 <span class="c">// The following functions compose the Error monad with the Async one.</span>
 
-<span class="k">let</span> <span class="i">getValidPassword</span> <span class="o">:</span> <span class="i">ErrorT</span><span class="o">&lt;</span>_<span class="o">&gt;</span> <span class="o">=</span>
-    <span class="i">monad</span> {
-        <span class="k">let!</span> <span class="i">s</span> <span class="o">=</span> <span class="i">liftAsync</span> <span class="i">getLine</span>
-        <span class="k">if</span> <span class="i">isValid</span> <span class="i">s</span> <span class="k">then</span> <span class="k">return</span> <span class="i">s</span>
-        <span class="k">else</span> <span class="k">return!</span> <span class="i">throw</span> <span class="o">-</span><span class="n">1</span>}
-    <span class="o">&lt;/</span><span class="i">catch</span><span class="o">/&gt;</span>
-        (<span class="k">fun</span> <span class="i">s</span> <span class="k">-&gt;</span> <span class="i">throw</span> (<span class="s">&quot;The error was: &quot;</span> <span class="o">+</span> <span class="i">decodeError</span> <span class="i">s</span>))
+<span class="k">let</span> <span class="id">getValidPassword</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs26', 55)" onmouseover="showTip(event, 'fs26', 55)" class="rt">ResultT</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs2', 56)" onmouseover="showTip(event, 'fs2', 56)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs17', 57)" onmouseover="showTip(event, 'fs17', 57)" class="id">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs27', 58)" onmouseover="showTip(event, 'fs27', 58)" class="fn">liftAsync</span> <span onmouseout="hideTip(event, 'fs9', 59)" onmouseover="showTip(event, 'fs9', 59)" class="id">getLine</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, 'fs16', 60)" onmouseover="showTip(event, 'fs16', 60)" class="fn">isValid</span> <span onmouseout="hideTip(event, 'fs17', 61)" onmouseover="showTip(event, 'fs17', 61)" class="id">s</span> <span class="k">then</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs17', 62)" onmouseover="showTip(event, 'fs17', 62)" class="id">s</span>
+        <span class="k">else</span> <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs28', 63)" onmouseover="showTip(event, 'fs28', 63)" class="fn">throw</span> <span class="o">-</span><span class="n">1</span><span class="pn">}</span>
+    <span class="o">&lt;/</span><span onmouseout="hideTip(event, 'fs29', 64)" onmouseover="showTip(event, 'fs29', 64)" class="fn">catch</span><span class="o">/&gt;</span>
+        <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, 'fs30', 65)" onmouseover="showTip(event, 'fs30', 65)" class="id">s</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 66)" onmouseover="showTip(event, 'fs28', 66)" class="fn">throw</span> <span class="pn">(</span><span class="s">&quot;The error was: &quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs25', 67)" onmouseover="showTip(event, 'fs25', 67)" class="fn">decodeError</span> <span onmouseout="hideTip(event, 'fs30', 68)" onmouseover="showTip(event, 'fs30', 68)" class="id">s</span><span class="pn">)</span><span class="pn">)</span>
 
-<span class="k">let</span> <span class="i">askPassword</span> <span class="o">=</span> <span class="i">monad</span> {
-    <span class="k">do!</span> <span class="i">lift</span> <span class="o">&lt;|</span> <span class="i">putStrLn</span> <span class="s">&quot;Insert your new password:&quot;</span>
-    <span class="k">let!</span> <span class="i">value</span> <span class="o">=</span> <span class="i">getValidPassword</span>
-    <span class="k">do!</span> <span class="i">lift</span> <span class="o">&lt;|</span> <span class="i">putStrLn</span> <span class="s">&quot;Storing in database...&quot;</span>
-    <span class="k">return</span> <span class="i">value</span>}
+<span class="k">let</span> <span class="id">askPassword</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 69)" onmouseover="showTip(event, 'fs2', 69)" class="k">monad</span> <span class="pn">{</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs31', 70)" onmouseover="showTip(event, 'fs31', 70)" class="fn">lift</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs13', 71)" onmouseover="showTip(event, 'fs13', 71)" class="fn">putStrLn</span> <span class="s">&quot;Insert your new password:&quot;</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs32', 72)" onmouseover="showTip(event, 'fs32', 72)" class="id">value</span> <span class="o">=</span> <span class="id">getValidPassword</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs31', 73)" onmouseover="showTip(event, 'fs31', 73)" class="fn">lift</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs13', 74)" onmouseover="showTip(event, 'fs13', 74)" class="fn">putStrLn</span> <span class="s">&quot;Storing in database...&quot;</span>
+    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs32', 75)" onmouseover="showTip(event, 'fs32', 75)" class="id">value</span><span class="pn">}</span>
 
-<span class="c">//try -&gt; Async.RunSynchronously (ErrorT.run askPassword)</span>
+<span class="c">//try -&gt; Async.RunSynchronously (ResultT.run askPassword)</span>
 </code></pre></td>
 </tr>
 </table>
 
+<div class="tip" id="fs1">namespace FSharpPlus</div>
+<div class="tip" id="fs2">val monad : MonadFxBuilder</div>
+<div class="tip" id="fs3">val x1 : &#39;a (requires member ( + ))</div>
+<div class="tip" id="fs4">val x2 : &#39;a (requires member ( + ))</div>
+<div class="tip" id="fs5">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs6">val tryParse : value:string -&gt; &#39;a option (requires member TryParse)</div>
+<div class="tip" id="fs7">namespace System</div>
+<div class="tip" id="fs8">namespace FSharpPlus.Data</div>
+<div class="tip" id="fs9">val getLine : Async&lt;string&gt;</div>
+<div class="tip" id="fs10">val async : AsyncBuilder</div>
+<div class="tip" id="fs11">type Console =<br />&#160;&#160;static member BackgroundColor : ConsoleColor with get, set<br />&#160;&#160;static member Beep : unit -&gt; unit + 1 overload<br />&#160;&#160;static member BufferHeight : int with get, set<br />&#160;&#160;static member BufferWidth : int with get, set<br />&#160;&#160;static member CapsLock : bool<br />&#160;&#160;static member Clear : unit -&gt; unit<br />&#160;&#160;static member CursorLeft : int with get, set<br />&#160;&#160;static member CursorSize : int with get, set<br />&#160;&#160;static member CursorTop : int with get, set<br />&#160;&#160;static member CursorVisible : bool with get, set<br />&#160;&#160;...</div>
+<div class="tip" id="fs12">Console.ReadLine() : string</div>
+<div class="tip" id="fs13">val putStrLn : x:string -&gt; Async&lt;unit&gt;</div>
+<div class="tip" id="fs14">val x : string</div>
+<div class="tip" id="fs15">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
+<div class="tip" id="fs16">val isValid : s:string -&gt; bool</div>
+<div class="tip" id="fs17">val s : string</div>
+<div class="tip" id="fs18">Multiple items<br />type String =<br />&#160;&#160;new : value:char -&gt; string + 7 overloads<br />&#160;&#160;member Chars : int -&gt; char<br />&#160;&#160;member Clone : unit -&gt; obj<br />&#160;&#160;member CompareTo : value:obj -&gt; int + 1 overload<br />&#160;&#160;member Contains : value:string -&gt; bool<br />&#160;&#160;member CopyTo : sourceIndex:int * destination:char[] * destinationIndex:int * count:int -&gt; unit<br />&#160;&#160;member EndsWith : value:string -&gt; bool + 2 overloads<br />&#160;&#160;member Equals : obj:obj -&gt; bool + 2 overloads<br />&#160;&#160;member GetEnumerator : unit -&gt; CharEnumerator<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;...<br /><br />--------------------<br />String(value: nativeptr&lt;char&gt;) : String<br />String(value: nativeptr&lt;sbyte&gt;) : String<br />String(value: char []) : String<br />String(c: char, count: int) : String<br />String(value: nativeptr&lt;char&gt;, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int) : String<br />String(value: char [], startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int, enc: Text.Encoding) : String</div>
+<div class="tip" id="fs19">val length : str:string -&gt; int</div>
+<div class="tip" id="fs20">val exists : predicate:(char -&gt; bool) -&gt; str:string -&gt; bool</div>
+<div class="tip" id="fs21">type Char =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;member CompareTo : value:obj -&gt; int + 1 overload<br />&#160;&#160;&#160;&#160;member Equals : obj:obj -&gt; bool + 1 overload<br />&#160;&#160;&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;&#160;&#160;member GetTypeCode : unit -&gt; TypeCode<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string + 1 overload<br />&#160;&#160;&#160;&#160;static val MaxValue : char<br />&#160;&#160;&#160;&#160;static val MinValue : char<br />&#160;&#160;&#160;&#160;static member ConvertFromUtf32 : utf32:int -&gt; string<br />&#160;&#160;&#160;&#160;static member ConvertToUtf32 : highSurrogate:char * lowSurrogate:char -&gt; int + 1 overload<br />&#160;&#160;&#160;&#160;static member GetNumericValue : c:char -&gt; float + 1 overload<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end</div>
+<div class="tip" id="fs22">Char.IsLetter(c: char) : bool<br />Char.IsLetter(s: string, index: int) : bool</div>
+<div class="tip" id="fs23">Char.IsNumber(c: char) : bool<br />Char.IsNumber(s: string, index: int) : bool</div>
+<div class="tip" id="fs24">Char.IsPunctuation(c: char) : bool<br />Char.IsPunctuation(s: string, index: int) : bool</div>
+<div class="tip" id="fs25">val decodeError : _arg1:int -&gt; string</div>
+<div class="tip" id="fs26">Multiple items<br />union case ResultT.ResultT: &#39;monad&lt;&#39;result&lt;&#39;t,&#39;e&gt;&gt; -&gt; ResultT&lt;&#39;monad&lt;&#39;result&lt;&#39;t,&#39;e&gt;&gt;&gt;<br /><br />--------------------<br />module ResultT<br /><br />from FSharpPlus.Data<br /><br />--------------------</div>
+<div class="tip" id="fs27">val liftAsync : x:Async&lt;&#39;T&gt; -&gt; &#39;MonadAsync&lt;&#39;T&gt; (requires member LiftAsync)</div>
+<div class="tip" id="fs28">val throw : error:&#39;E -&gt; &#39;&#39;MonadError&lt;&#39;E,&#39;T&gt; (requires member Throw)</div>
+<div class="tip" id="fs29">val catch : value:&#39;&#39;MonadError&lt;&#39;E1,&#39;T&gt; -&gt; handler:(&#39;E1 -&gt; &#39;&#39;MonadError&lt;&#39;E2,&#39;T&gt;) -&gt; &#39;&#39;MonadError&lt;&#39;E2,&#39;T&gt; (requires member Catch)</div>
+<div class="tip" id="fs30">val s : int</div>
+<div class="tip" id="fs31">val lift : x:&#39;Monad&lt;&#39;T&gt; -&gt; &#39;MonadTrans&lt;&#39;Monad&lt;&#39;T&gt;&gt; (requires member Lift)</div>
+<div class="tip" id="fs32">val value : &#39;a</div>
 
         </div>
         <div class="span3">
