@@ -35,6 +35,8 @@ map string [|2;3;4;5|]
 map ((+) 9) (Some 3)
 // val it : int option = Some 12
 
+open FSharpPlus.Data
+
 map string (NonEmptyList.create 2 [3;4;5])
 // val it : NonEmptyList<string> = {Head = "2"; Tail = ["3"; "4"; "5"];}
 

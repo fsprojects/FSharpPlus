@@ -85,11 +85,12 @@ From F#+
 
 open System
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Math.Generic
 
 module Predicate = let run (p: Predicate<_>) x = p.Invoke (x)
 
-let isEven      = Predicate (fun x -> x % 2 = 0)
+let isEven       = Predicate (fun x -> x % 2 = 0)
 
 let resStrFalse  = dimap int string (Predicate.run isEven) 99.0
 

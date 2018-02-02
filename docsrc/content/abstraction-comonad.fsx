@@ -87,6 +87,7 @@ Examples
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 open FSharpPlus
+open FSharpPlus.Data
 
 // A non-empty list
 let lst   = {Head = 1; Tail = [2;3;4;5]}

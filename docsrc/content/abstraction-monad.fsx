@@ -109,6 +109,7 @@ Examples
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 open FSharpPlus
+open FSharpPlus.Data
 
 
 // Monads allow us to use our generic computation expressions

@@ -107,9 +107,9 @@ let opt120  = (+) <!> Some 20 <*> tryParse "100"
 // Applicatives need Return (result)
 
 // Test return
-let resSome2 : option<_> = result 2
-let resSing2 : list<_>   = result 2
-let resLazy2 : Lazy<_>   = result 2
+let resSome22 : option<_> = result 22
+let resSing22 : list<_>   = result 22
+let resLazy22 : Lazy<_>   = result 22
 let (quot5 : Microsoft.FSharp.Quotations.Expr<int>) = result 5
 
 
