@@ -57,6 +57,16 @@ type WrappedListF<'s> = WrappedListF of 's list with
     static member get_Empty() = WrappedListF List.empty
     static member Append (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
 
+type WrappedListG<'s> = WrappedListG of 's list with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator()
+    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
+    static member Return  (x) = WrappedListG [x]
+    static member Bind  (WrappedListG x: WrappedListG<'T>, f) = WrappedListG (List.collect (f >> (fun (WrappedListG x) -> x)) x)
+    static member Join  (WrappedListG wlst) = (*SideEffects.add "Join";*)  WrappedListG wlst >>= id
+    static member get_Empty() = WrappedListG List.empty
+    static member Append (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
+
+
 open System.Collections.Generic
 open System.Threading.Tasks
 
@@ -552,14 +562,42 @@ module IdiomBrackets =
         Assert.AreEqual (4, v4)
  
 
-module MonadPlus = 
+module Alternative =
+    
+    let testEmpty() =
+        let (v: WrappedListE<int>) = empty
+        let (w: list<int>)         = empty
+        let (x: WrappedListG<int>) = empty
+        let (y: seq<int>)          = empty
+        
+        // shoud not compile. 
+        // Although WrappedListD implements IEnumerable, it should explicitely implement Empty. Not all IEnumerables have empty.
+        // let (z: WrappedListD<int>) = empty
+        ()
+
+    let testAppend() =
+        let v = WrappedListE [1;2] <|> WrappedListE [3;4]
+        let w = [1;2] <|> [3;4]
+        let x = WrappedListG [1;2] <|> WrappedListG [3;4]
+        let y = seq [1;2] <|> seq [3;4]
+
+        // shoud not compile. 
+        // Although WrappedListD implements IEnumerable, it should explicitely implement Append. Not all IEnumerables have append.
+        // let z = WrappedListD [1;2] ++ WrappedListD [3;4]
+        ()
+
     [<Test>]
-    let zeroAndPlus() = 
-        let v = WrappedListE [1;2]
-        let x = v <|> getEmpty()
-        let y = getEmpty() <|> v
-        Assert.AreEqual (v, x)
+    let testEmptyAndAppendForCustomType() =
+        let u = WrappedListE [1;2]
+        let v = WrappedListG [1;2]
+        let w = u <|> empty
+        let x = empty <|> u
+        let y = v <|> empty
+        let z = empty <|> v
+        Assert.AreEqual (u, w)
+        Assert.AreEqual (u, x)
         Assert.AreEqual (v, y)
+        Assert.AreEqual (v, z)
 
 
 module MonadTransformers =
