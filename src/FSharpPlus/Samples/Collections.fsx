@@ -45,3 +45,32 @@ let inline myQuery2 x = monad {
 
 let lst3 = myQuery2 [ "1";"2";"4";"3" ]
 let seq3 = myQuery2 (Seq.initInfinite string)
+
+
+
+// Test fallback for mfilter
+
+
+type WrappedListB<'s> = WrappedListB of 's list with
+    static member Return   (x) = WrappedListB [x]
+    static member (+)  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
+    static member Zero   = WrappedListB List.empty
+    static member ToSeq    (WrappedListB lst)     = List.toSeq lst
+    static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
+
+
+open FSharpPlus.Control
+
+type WrappedListB'<'s> = WrappedListB' of 's list with // Same as B but without clean signatures
+    static member Return   (_:WrappedListB'<'a>, _:Return ) = fun (x:'a)     -> WrappedListB' [x]
+    static member (+)      (WrappedListB' l, WrappedListB' x) = WrappedListB' (l @ x)
+    static member Zero     (_:WrappedListB'<'a>, _:Zero) = WrappedListB' List.empty
+    static member ToSeq    (WrappedListB' lst)     = List.toSeq lst
+    static member FoldBack (WrappedListB' x, f, z) = List.foldBack f x z
+
+
+let five   = filter ((=) 5) (WrappedListB [1;2;3;4;5;6])   // <- Uses the default method for filter.
+
+#nowarn // interrupt compilation
+
+let five'   = filter ((=) 5) (WrappedListB' [1;2;3;4;5;6])   // <- Uses the default method for filter.

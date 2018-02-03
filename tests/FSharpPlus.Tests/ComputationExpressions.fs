@@ -6,25 +6,23 @@ open FSharpPlus.Builders
 open FSharpPlus.Data
 open NUnit.Framework
 
-module Helpers =
-    let areEqual (x:'t) (y:'t) = Assert.AreEqual (x, y)
-
 open Helpers
+open SideEffects
 
 module ComputationExpressions = 
 
     [<Test>]
     let monadFx() =
-        let effects = ResizeArray()
+        SideEffects.reset()
 
         // This workflow perform side-effects before and after an async operation in a monad.fx
         let zerowf = monad {
-            effects.Add(1)
+            SideEffects.add "1"
             do! Async.Sleep 10
-            effects.Add(2) }
+            SideEffects.add "2" }
 
         // Check side effects are not yet executed
-        areEqual (toList effects) []
+        areEqual (SideEffects.get()) []
 
         // This workflow will always run the previous one
         let combinewf = monad { 
@@ -32,53 +30,53 @@ module ComputationExpressions =
             return! zerowf }
 
         // The list should be empty, no workflow was run
-        areEqual (toList effects) []
+        areEqual (SideEffects.get()) []
 
         Async.RunSynchronously combinewf
 
         // Since it's an FX workflow, the last line should have been executed
-        areEqual (toList effects) [1;2]
+        areEqual (SideEffects.get()) ["1"; "2"]
 
 
     [<Test>]
     let monadPlus() =
-        let effects = ResizeArray()
+        SideEffects.reset()
 
         // This is a plus workflow
         // Although we're not explicitely using a strict workflow list hasn't a proper delay mechanism
         let lst: _ list = monad.plus {
-            effects.Add(3)
+            SideEffects.add "3"
             return 5;
             return 6; }
 
         // Check if side effect was already performed
-        areEqual (effects |> toList) [3]
+        areEqual (SideEffects.get()) ["3"]
 
         // Check 'plus' (<|>) operation was properly performed
         areEqual lst [5;6]
 
-        let effects = ResizeArray()
+        SideEffects.reset()
 
         // Now let's a try with seq, which has a delay mechanism
         let seq3: seq<_> = monad.plus { 
-            effects.Add "Start"
+            SideEffects.add "Start"
             try
                 try
                     10 / 0 |> ignore
                 finally
-                    effects.Add "execute this"
+                    SideEffects.add "execute this"
             with
             | e -> 
-                effects.Add (sprintf "Exception! %s" e.Message)
+                SideEffects.add (sprintf "Exception! %s" e.Message)
                 return 42 }
 
         // Confirm the side effect wasn't performed
-        areEqual (toList effects) []
+        areEqual (SideEffects.get()) []
 
         let seqValue = toList seq3
 
         // Now they should
-        areEqual (toList effects) ["Start"; "execute this"; "Exception! Attempted to divide by zero."]
+        areEqual (SideEffects.get()) ["Start"; "execute this"; "Exception! Attempted to divide by zero."]
 
         // Check the result
         areEqual seqValue [42]
@@ -87,18 +85,18 @@ module ComputationExpressions =
     [<Test>]
     let delayedMonadTransformers() =
 
-        let effects = ResizeArray()
+        SideEffects.reset()
 
         let threeElements : ReaderT<string, list<_>> = monad.plus {
             let! s = ask
             for i in 1 .. 3 do
-                effects.Add (sprintf "processing %i" i)
+                SideEffects.add (sprintf "processing %i" i)
                 yield parse s + i }
 
-        areEqual (toList effects) []
+        areEqual (SideEffects.get()) []
         
         // Following line would throw an exception (due to the for loop) if ReaderT had no Delay implementation
         let results = ReaderT.run threeElements "100"
 
-        areEqual (toList effects) ["processing 1"; "processing 2"; "processing 3"]
+        areEqual (SideEffects.get()) ["processing 1"; "processing 2"; "processing 3"]
         areEqual results [101; 102; 103]
