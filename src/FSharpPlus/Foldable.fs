@@ -40,31 +40,37 @@ open FSharpPlus
 [<Extension;Sealed>]
 type ToSeq =
     inherit Default1
-    static member inline       ToSeq (x:'S when 'S :> Collections.IEnumerable, [<Optional>]_impl:Default2) = let _f i x :'T = (^S : (member get_Item : int -> 'T) x, i) in Seq.cast<'T> x : seq<'T>
-    static member inline       ToSeq (x:'Foldable, [<Optional>]_impl:Default1) = (^Foldable : (static member ToSeq: ^Foldable -> seq<'t>) x)
-    static member inline       ToSeq (_:'T when 'T : null and 'T :struct     ,            _ : ToSeq) = ()
     [<Extension>]static member ToSeq (x:seq<'T>   , [<Optional>]_impl:ToSeq) = x
     [<Extension>]static member ToSeq (x:Text.StringBuilder,  _:ToSeq) = x.ToString() :> seq<char>
     [<Extension>]static member ToSeq (x:string            ,  _:ToSeq) = x            :> seq<char>
     [<Extension>]static member ToSeq (x:option<'T>, [<Optional>]_impl:ToSeq) = match x with Some x -> Seq.singleton x | None -> Seq.empty
+    [<Extension>]static member ToSeq (x:Id<'T>, [<Optional>]_impl:ToSeq) = Seq.singleton x.getValue
 
     static member inline Invoke (source:'``Collection<'T>``)  : seq<'T>  =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member ToSeq: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<ToSeq> , source)
 
+    static member inline InvokeOnInstance (source:'``Foldable<'T>``)  : seq<'T>  =
+        (^``Foldable<'T>``: (static member ToSeq: _ -> _) source)
+
+type ToSeq with
+    static member inline       ToSeq (x:'S when 'S :> Collections.IEnumerable, [<Optional>]_impl:Default2) = let _f i x :'T = (^S : (member get_Item : int -> 'T) x, i) in Seq.cast<'T> x : seq<'T>
+    static member inline       ToSeq (x:'Foldable, [<Optional>]_impl:Default1) = ToSeq.InvokeOnInstance x
+    static member inline       ToSeq (_:'T when 'T : null and 'T :struct, _: Default1) = ()
+
 
 [<Extension;Sealed>]
 type ToList =
-    inherit Default1
-    static member inline       ToList (x               , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toList
-    [<Extension>]static member ToList (x:seq<'a>       , [<Optional>]_impl:ToList  ) = Seq.toList x
+    inherit Default1    
+    static member inline       ToList (x               , [<Optional>]_impl:Default3) = x |> ToSeq.Invoke |> Seq.toList
+    [<Extension>]static member ToList (x:seq<'a>       , [<Optional>]_impl:Default2) = Seq.toList x
+    static member inline       ToList (x               , [<Optional>]_impl:Default1) = (^Foldable : (static member ToList: 'Foldable->list<_>) x)
     [<Extension>]static member ToList (x:Set<'a>       , [<Optional>]_impl:ToList  ) = Set.toList x
     [<Extension>]static member ToList (x:string        , [<Optional>]_impl:ToList  ) = x.ToCharArray() |> Array.toList
     [<Extension>]static member ToList (x:StringBuilder , [<Optional>]_impl:ToList  ) = x.ToString().ToCharArray() |> Array.toList
     [<Extension>]static member ToList (x:'a []         , [<Optional>]_impl:ToList  ) = Array.toList x
     [<Extension>]static member ToList (x:'a ResizeArray, [<Optional>]_impl:ToList  ) = Seq.toList x
-    [<Extension>]static member ToList (x:'a Id         , [<Optional>]_impl:ToList  ) = [x.getValue]
     [<Extension>]static member ToList (x:list<'a>      , [<Optional>]_impl:ToList  ) = x
 
     static member inline Invoke  value :'t list = 
@@ -76,14 +82,14 @@ type ToList =
 [<Extension;Sealed>]
 type ToArray =
     inherit Default1
-    static member inline       ToArray (x               , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray
-    [<Extension>]static member ToArray (x:seq<'a>       , [<Optional>]_impl:ToArray ) = Seq.toArray x
+    static member inline       ToArray (x               , [<Optional>]_impl:Default3) = x |> ToSeq.Invoke |> Seq.toArray
+    [<Extension>]static member ToArray (x:seq<'a>       , [<Optional>]_impl:Default2) = Seq.toArray x
+    static member inline       ToArray (x               , [<Optional>]_impl:Default1) = (^Foldable : (static member ToArray: 'Foldable->array<_>) x)
     [<Extension>]static member ToArray (x:Set<'a>       , [<Optional>]_impl:ToArray ) = Set.toArray x
     [<Extension>]static member ToArray (x:string        , [<Optional>]_impl:ToArray ) = x.ToCharArray()
     [<Extension>]static member ToArray (x:StringBuilder , [<Optional>]_impl:ToArray ) = x.ToString().ToCharArray()
     [<Extension>]static member ToArray (x:'a []         , [<Optional>]_impl:ToArray ) = x
     [<Extension>]static member ToArray (x:'a ResizeArray, [<Optional>]_impl:ToArray ) = Seq.toArray x
-    [<Extension>]static member ToArray (x:'a Id         , [<Optional>]_impl:ToArray ) = [|x.getValue|]
     [<Extension>]static member ToArray (x:list<'a>      , [<Optional>]_impl:ToArray ) = List.toArray x
 
     static member inline Invoke  value : 't [] = 
@@ -336,8 +342,6 @@ type TryPick =
  
 type Filter =
     inherit Default1
-    static member        Filter (x:'t seq           , p, [<Optional>]_impl:Default2) = Seq.filter p x
-    static member inline Filter (x:'``Foldable'<T>``, p, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.filter p |> OfSeq.Invoke : '``Foldable'<T>``
     static member        Filter (x:'t Set           , p, [<Optional>]_impl:Filter  ) = Set.filter p x
     static member        Filter (x:'t option        , p, [<Optional>]_impl:Filter  ) = match x with None -> None | Some a -> if p a then x else None
     static member        Filter (x:'t list          , p, [<Optional>]_impl:Filter  ) = List.filter  p x
@@ -349,6 +353,15 @@ type Filter =
         let inline call_2 (i:^i, b:^b, f) = ((^i or ^b) : (static member Filter: _*_*_ -> ^b) b, f, i)
         let inline call (i:'i, b:'b, f:'f) = call_2 (i, b, f)
         call (Unchecked.defaultof<Filter>, x, predicate)
+
+    static member inline InvokeOnInstance (predicate:'T->bool) (source:'``Foldable<'T>``) : '``Foldable<'T>`` =
+        (^``Foldable<'T>``: (static member Filter: _*_ -> _) predicate, source)
+
+type Filter with
+    static member        Filter (x:'t seq           , p, [<Optional>]_impl:Default3) = Seq.filter p x
+    static member inline Filter (x:'``Foldable'<T>``, p, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.filter p |> OfSeq.Invoke : '``Foldable'<T>``
+    static member inline Filter (x:'``Foldable'<T>``, p, [<Optional>]_impl:Default1) = Filter.InvokeOnInstance p x : '``Foldable'<T>``
+    static member inline Filter (_:^t when ^t: null and ^t: struct, _, _:Default1) = ()
 
 
 [<Extension;Sealed>]

@@ -121,6 +121,9 @@ type Sum =
         let inline call (a:'a, b:'b) = call_3 (a, b, Unchecked.defaultof<'r>) :'r
         call (Unchecked.defaultof<Sum>, x)
 
+    static member inline InvokeOnInstance (x:seq<'Monoid>) : 'Monoid =
+        (^Monoid : (static member Sum: seq<'Monoid> -> 'Monoid) x)
+
 type Sum with
     static member inline       Sum (x:seq<'a * 'b>, [<Optional>]_output:'a * 'b, [<Optional>]_impl:Sum) =
                     Sum.Invoke (Seq.map fst x), 
@@ -143,5 +146,5 @@ type Sum with
     static member inline       Sum (x:seq< 'a>, [<Optional>]_output:'a, _:Default2) = Seq.fold Plus.Invoke (Zero.Invoke()) x:'a
     
 type Sum with
-    static member inline       Sum (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = (^R : (static member Sum: 'R seq -> ^R) x)
+    static member inline       Sum (x:seq< ^R>, [<Optional>]_output:^R, _:Default1) = Sum.InvokeOnInstance x
     static member inline       Sum (_:seq< ^R>, _:^t when ^t: null and ^t: struct, _:Default1) = fun () -> id
