@@ -69,6 +69,7 @@
     <None Include="Samples\ParallelArrays.fsx" />
     <None Include="Samples\ZipLists.fsx" />
     <None Include="Samples\Learn You a Haskell.fsx" />
+    <None Include="Samples\Cont.fsx" />
     <None Include="Samples\Lens.fsx" />
     <None Include="Samples\Prism.fsx" />
     <None Include="Samples\Fold.fsx" />
