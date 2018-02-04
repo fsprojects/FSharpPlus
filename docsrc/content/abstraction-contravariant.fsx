@@ -11,7 +11,7 @@ A Contravariant Functor can be mapped over the input.
 
 ___
 
-
+One can think of a [Functor](abstraction-functor.html) as containing or producing values, a contravariant functor is a functor that can be thought of as consuming values.
 
 Minimal complete definition
 ---------------------------
@@ -87,3 +87,16 @@ let personEqComp = HashIdentity.Structural<Person>
 let personList = [1, Person "me"; 2, Person "you"; 3, Person "you"]
 let cnt3 = Seq.length <| Linq.Enumerable.Distinct (personList)
 let cnt2 = Seq.length <| Linq.Enumerable.Distinct (personList, contramap snd personEqComp)
+
+(**
+For instance a predicate function from a type to bool. An example of such a function is the predicate that classifies 
+integers as negative: 
+*)
+  let negative = Predicate( fun integer -> integer < 0 )
+(**
+
+However, given this predicate, we can re-use it in other situations, providing we have a way to map values to integers. 
+For instance, we can use the `negative` predicate on a person's bank balance to work out if they are currently overdrawn.
+*)
+  let personBankBalance (person:Person) : int = failwith "query persons bank account" 
+  let overdrawn = contramap personBankBalance negative
