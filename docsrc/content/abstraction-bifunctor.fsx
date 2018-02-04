@@ -11,6 +11,7 @@ Intuitively a bifunctor is a functor with 2 arguments which are covariant.
 
 ___
 
+A bifunctor (short for binary functor) or functor of two variables is simply a functor whose domain is the product of two types.
 
 
 Minimal complete definition

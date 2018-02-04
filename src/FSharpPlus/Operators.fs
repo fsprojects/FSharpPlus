@@ -110,13 +110,20 @@ module Operators =
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
-
     let inline contramap (f : 'U->'T) (x:'``Contravariant<'T>``) : '``Contravariant<'U>`` = Contramap.Invoke f x
+    /// Map over both arguments of the Bifunctor at the same time.
     let inline bimap  (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` = Bimap.Invoke  f g source
+    /// Map covariantly over the first argument of the Bifunctor.
     let inline first  (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = MapFirst.Invoke  f source
+    /// Map covariantly over the second argument of the Bifunctor.
     let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = MapSecond.Invoke f source
+    /// Map over both arguments at the same time of a Profunctor.
     let inline dimap  (f : 'A->'B) ( g: 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
+    /// Can be thought of as mapping the left part of a Profunctor
+    /// For instance (Error) when working on Result<_,_>
     let inline lmap   (f : 'A->'B) (source : ^``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` = Contramap.Invoke f source
+    /// Can be thought of as mapping the right part of a Profunctor 
+    /// For instance (Ok) when working on Result<_,_>
     let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = Map.Invoke f source
 
 
