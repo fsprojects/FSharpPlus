@@ -169,23 +169,6 @@ module Monoid =
 
         let arrayGroupAdj   = chunkBy ((%)/> 2) [11;2;3;9;5;6;7;8;9;10]
 
-        let bigSeq = seq {1..10000000}
-        let bigLst = [ 1..10000000 ]
-        let bigArr = [|1..10000000|]
-        let bigMut = ResizeArray(seq {1..10000000})
-
-        let x = head bigSeq
-        let y = head bigLst
-        let z = head bigArr
-
-        let a = skip 1000 bigSeq
-        let b = skip 1000 bigLst
-        let c = skip 1000 bigArr
-        let d = skip 1000 bigMut
-        let e = "hello world" |> skip 6 |> toList
-        let h = ofList ['h';'e';'l';'l';'o';' '] + "world"
-        let j = item 2 "hello"
-
         ()
 
 
