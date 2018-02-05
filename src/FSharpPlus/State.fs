@@ -3,6 +3,7 @@
 /// <summary> Computation type: Computations which maintain state.
 /// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
 /// <para/>   Useful for: Building computations from sequences of operations that require a shared state. </summary>
+[<Struct>]
 type State<'s,'t> = State of ('s->('t * 's))
 
 /// Basic operations on State
@@ -34,6 +35,7 @@ open FSharpPlus.Control
 open FSharpPlus
 
 /// Monad Transformer for State<'S, 'T>
+[<Struct>]
 type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 
 /// Basic operations on StateT

@@ -7,6 +7,7 @@ namespace FSharpPlus.Internals
 open FSharpPlus.Control
 
 
+[<Struct>]
 type _Dual<'T> =
     struct
         val Value : 'T
@@ -15,6 +16,7 @@ type _Dual<'T> =
     static member inline get_Zero() = _Dual(Zero.Invoke())                                      : _Dual<'m>
     static member inline (+) (x: _Dual<'m>, y: _Dual<'m>) = _Dual (Plus.Invoke y.Value x.Value) : _Dual<'m>
 
+[<Struct>]
 type _Endo<'T> =
     struct
         val Value : 'T -> 'T

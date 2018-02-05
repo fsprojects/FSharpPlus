@@ -4,7 +4,7 @@ open FSharpPlus
 open FSharpPlus.Control
 
 /// Kleisli arrows of a monad. Represents a function 'T -> 'Monad<'U>
-[<NoEquality; NoComparison>]
+[<Struct; NoEquality; NoComparison>]
 type Kleisli<'t, '``monad<'u>``> = Kleisli of ('t -> '``monad<'u>``) with
 
     // Profunctor

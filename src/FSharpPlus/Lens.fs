@@ -12,6 +12,8 @@ module Lens =
         let rmap' cd p = p >> cd
         let getAny (Any p) = p
         let getAll (All p) = p
+
+        [<Struct>]
         type Exchange<'T,'U> = Exchange of 'T * 'U with
             static member Dimap (Exchange (sa, bt), f, g) = Exchange (sa << f, g << bt)
 
