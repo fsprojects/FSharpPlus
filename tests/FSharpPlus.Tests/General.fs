@@ -391,6 +391,12 @@ module Indexable =
         let h = ResizeArray [1, "one"; 2, "two"]
         let h1 = item 1 h
 
+        let i = Array3D.create 3 2 2 0
+        let i1 = item (1, 1, 1) i
+
+        let j = Array4D.create 3 2 2 3 0
+        let j1 = item (1, 1, 1, 1) j
+
         // This doesn't intetionally compile: seq is not Indexable. Not all foldables are Indexable, for example a Set is foldable but not Indexable. For seq use nth instead.
         // let f = seq [1, "one"; 2, "two"]
         // let f1 = item 1 f
@@ -424,6 +430,12 @@ module Indexable =
 
         let h = ResizeArray [1, "one"; 2, "two"]
         let h1 = tryItem 1 h
+
+        let i = Array3D.create 3 2 2 0
+        let i1 = tryItem (1, 1, 1) i
+
+        let j = Array4D.create 3 2 2 3 0
+        let j1 = tryItem (1, 1, 1, 1) j
 
         let w = WrappedListA [1, "one"; 2, "two"]
         let w1 = tryItem 1 w
