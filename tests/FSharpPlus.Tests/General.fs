@@ -183,7 +183,6 @@ module Monoid =
         let d = skip 1000 bigMut
         let e = "hello world" |> skip 6 |> toList
         let h = ofList ['h';'e';'l';'l';'o';' '] + "world"
-        let i = item 2 bigSeq
         let j = item 2 "hello"
 
         ()
@@ -233,7 +232,6 @@ module Collections =
         let d = skip 1000 bigMut
         let e = "hello world" |> skip 6 |> toList
         let h = ofList ['h';'e';'l';'l';'o';' '] + "world"
-        let i = item 2 bigSeq
         let j = item 2 "hello"
 
 
@@ -380,6 +378,40 @@ module Foldable =
         Assert.IsInstanceOf<Option<list<int>>> (Some sortedList)
         Assert.IsInstanceOf<Option<seq<int>>> (Some sortedSeq)
 
+
+module Indexable = 
+    [<Test>]
+    let testCompileAndExecuteItem() =
+
+        let a = Map.ofSeq [1, "one"; 2, "two"]
+        let a1 = item 1 a
+
+        let b = Map.ofSeq [1, "one"; 2, "two"] :> IDictionary<_,_>
+        let b1 = item 1 b
+
+        let c = "two"
+        let c1 = item 1 c
+
+        let d = System.Text.StringBuilder "one"
+        let d1 = item 1 d
+
+        let e = array2D [[1;2];[3;4];[5;6]]
+        let e1 = item (1, 1) e
+
+        let f = [1, "one"; 2, "two"]
+        let f1 = item 1 f
+
+        let g = [|1, "one"; 2, "two"|]
+        let g1 = item 1 g
+
+        let h = ResizeArray [1, "one"; 2, "two"]
+        let h1 = item 1 h
+
+        // This doesn't intetionally compile: seq is not Indexable. Not all foldables are Indexable, for example a Set is foldable but not Indexable. For seq use nth instead.
+        // let f = seq [1, "one"; 2, "two"]
+        // let f1 = item 1 f
+
+        ()
 
 module Monad = 
     [<Test>]

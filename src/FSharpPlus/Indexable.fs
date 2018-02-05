@@ -6,18 +6,19 @@ open System.Runtime.InteropServices
 open System.Text
 open FSharpPlus.Internals
 
+#nowarn "77"
+// Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
+// Those .NET types are string and array but they are explicitely handled here.
 
 [<Extension;Sealed>]
 type Item =
     inherit Default1
-    static member inline       Item (x:'Foldable'T   , n    , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head :'T
+    static member inline      Item (x: '``Indexable<'T>``, k, [<Optional>]_impl: Default1) = (^``Indexable<'T>`` : (member get_Item : _ -> 'T) x, k) : 'T
+    static member inline      Item (_:'T when 'T: null and 'T: struct, _, _impl: Default1) = ()
     [<Extension>]static member Item (x:string        , n    , [<Optional>]_impl:Item    ) = x.[n]
     [<Extension>]static member Item (x:StringBuilder , n    , [<Optional>]_impl:Item    ) = x.ToString().[n]
     [<Extension>]static member Item (x:'a []         , n    , [<Optional>]_impl:Item    ) = x.[n] : 'a
     [<Extension>]static member Item (x:'a [,]        , (i,j), [<Optional>]_impl:Item) = x.[i,j] : 'a
-    [<Extension>]static member Item (x:'a ResizeArray, n    , [<Optional>]_impl:Item    ) = x.[n]
-    [<Extension>]static member Item (x:list<'a>      , n    , [<Optional>]_impl:Item    ) = x.[n]
-    [<Extension>]static member Item (x:Map<'K,'T>    , k    , [<Optional>]_impl:Item) = x.[k] : 'T
 
     static member inline Invoke (n:'K) (source:'``Indexed<'T>``)  :'T =
         let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)

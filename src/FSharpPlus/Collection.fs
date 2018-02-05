@@ -1,8 +1,4 @@
-﻿#nowarn "77"
-// Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
-// Those .NET types are string and array but they are explicitely handled here.
-
-namespace FSharpPlus.Control
+﻿namespace FSharpPlus.Control
 
 open System
 open System.Text
