@@ -18,6 +18,7 @@ module SideEffects =
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq    (WrappedListA lst) = List.toSeq lst
     static member OfSeq  lst = WrappedListA (Seq.toList lst)
+    static member TryItem (i, WrappedListA x) = List.tryItem i x
 
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return   (x) = WrappedListB [x]
@@ -412,6 +413,40 @@ module Indexable =
         // let f1 = item 1 f
 
         ()
+
+    [<Test>]
+    let testCompileAndExecuteTryItem() =
+
+        let a = Map.ofSeq [1, "one"; 2, "two"]
+        let a1 = tryItem 1 a
+
+        let b = Map.ofSeq [1, "one"; 2, "two"] :> IDictionary<_,_>
+        let b1 = tryItem 1 b
+
+        let c = "two"
+        let c1 = tryItem 1 c
+
+        let d = System.Text.StringBuilder "one"
+        let d1 = tryItem 1 d
+
+        let e = array2D [[1;2];[3;4];[5;6]]
+        let e1 = tryItem (1, 1) e
+
+
+        let f = [1, "one"; 2, "two"]
+        let f1 = tryItem 1 f
+
+        let g = [|1, "one"; 2, "two"|]
+        let g1 = tryItem 1 g
+
+        let h = ResizeArray [1, "one"; 2, "two"]
+        let h1 = tryItem 1 h
+
+        let w = WrappedListA [1, "one"; 2, "two"]
+        let w1 = tryItem 1 w
+
+        ()
+
 
 module Monad = 
     [<Test>]

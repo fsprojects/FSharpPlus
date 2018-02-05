@@ -215,6 +215,9 @@ module Operators =
     /// Get an item from the given index.
     let inline item (n:'K) (source:'``Indexed<'T>``) : 'T = Item.Invoke n source
 
+    /// Try to get an item from the given index.
+    let inline tryItem (n:'K) (source: '``Indexed<'T>``) : 'T option = TryItem.Invoke n source
+
     /// Map with access to the index.
     let inline mapi (mapping:'K->'T->'U) (source:'``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = MapIndexed.Invoke mapping source
 
