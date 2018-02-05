@@ -30,6 +30,7 @@ module List =
 open FSharpPlus.Control
 
 /// Monad Transformer for list<'T>
+[<Struct>]
 type ListT<'``monad<list<'t>>``> = ListT of '``monad<list<'t>>``
 
 /// Basic operations on ListT

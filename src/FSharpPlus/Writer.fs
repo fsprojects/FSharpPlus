@@ -3,6 +3,7 @@
 /// <summary> Computation type: Computations which produce a stream of data in addition to the computed values.
 /// <para/>   Binding strategy: Combines the outputs of the subcomputations using <c>mappend</c>.
 /// <para/>   Useful for: Logging, or other computations that produce output "on the side". </summary>
+[<Struct>]
 type Writer<'monoid,'t> = Writer of ('t * 'monoid)
 
 open FSharpPlus
@@ -48,6 +49,7 @@ type Writer<'monoid,'t> with
 open FSharpPlus.Control
 
 /// Monad Transformer for Writer<'Monoid, 'T>
+[<Struct>]
 type WriterT<'``monad<'t * 'monoid>``> = WriterT of '``monad<'t * 'monoid>``
 
 /// Basic operations on WriterT

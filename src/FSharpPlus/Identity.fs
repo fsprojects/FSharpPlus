@@ -10,6 +10,7 @@
 ///           The purpose of the Identity monad is its fundamental role in the theory of monad transformers.
 ///           Any monad transformer applied to the Identity monad yields a non-transformer version of that monad.
 ///           Its applicative instance plays a fundamental role in Lens. </summary> 
+[<Struct>]
 type Identity<'t> = Identity of 't with
     static member Return x = Identity x                                             : Identity<'T>
     static member Bind  (Identity x, f :'T -> Identity<'U>) = f x                   : Identity<'U>

@@ -10,6 +10,7 @@ module Option =
 
 
 /// Monad Transformer for Option<'T>
+[<Struct>]
 type OptionT<'``monad<option<'t>>``> = OptionT of '``monad<option<'t>>``
 
 /// Basic operations on OptionT

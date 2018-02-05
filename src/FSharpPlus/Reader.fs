@@ -6,6 +6,7 @@ open FSharpPlus.Control
 /// <summary> Computation type: Computations which read values from a shared environment.
 /// <para/>   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
 /// <para/>   Useful for: Maintaining variable bindings, or other shared environment.</summary>
+[<Struct>]
 type Reader<'r,'t> = Reader of ('r->'t)
 
 /// Basic operations on Reader
@@ -38,6 +39,7 @@ type Reader<'r,'t> with
 
 
 /// Monad Transformer for Reader<'R, 'T>
+[<Struct>]
 type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
 
 /// Basic operations on Reader

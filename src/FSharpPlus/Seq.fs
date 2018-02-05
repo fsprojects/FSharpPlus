@@ -13,6 +13,7 @@ module Seq =
 
 
 /// Monad Transformer for seq<'T>
+[<Struct>]
 type SeqT<'``monad<seq<'t>>``> = SeqT of '``monad<seq<'t>>``
 
 /// Basic operations on SeqT

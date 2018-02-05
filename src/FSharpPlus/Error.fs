@@ -26,6 +26,7 @@ module ResultOrException =
 
 
 /// Monad Transformer for Result<'T, 'E>
+[<Struct>]
 type ResultT<'``monad<'result<'t,'e>>``> = ResultT of '``monad<'result<'t,'e>>``
 
 /// Basic operations on ResultT
