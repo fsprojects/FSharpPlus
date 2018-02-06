@@ -1,3 +1,9 @@
+#### 1.0.0-CI00145  - February 6 2018
+* Wrappers compiled as structs
+* New tryItem operation for Indexable types
+* Better default methods
+* Bug fixes
+
 #### 1.0.0-CI00136  - January 28 2018
 * Rename ErrorT to ResultT
 * Removed Haskell Compatibility
