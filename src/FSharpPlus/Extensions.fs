@@ -208,6 +208,39 @@ module String =
 
 
 
+/// Additional operations on IDictionary<'Key, 'Value>
+module Dict =
+    open System.Collections.Generic
+
+    let tryGetValue k (dct: IDictionary<'Key, 'Value>) =
+               match dct.TryGetValue k with
+               | true, v -> Some v
+               | _       -> None
+
+    let map f (x: IDictionary<'Key, 'T>) =
+           let dct = Dictionary<'Key, 'U> ()           
+           for KeyValue(k, v) in x do
+               dct.Add (k, f v)
+           dct :> IDictionary<'Key, 'U>
+
+    let map2 f (x: IDictionary<'Key, 'T1>) (y: IDictionary<'Key, 'T2>) =
+           let dct = Dictionary<'Key, 'U> ()
+           for KeyValue(k, vx) in x do
+               match tryGetValue k y with
+               | Some vy -> dct.Add (k, f vx vy)
+               | None    -> ()
+           dct :> IDictionary<'Key, 'U>
+
+    let zip (x: IDictionary<'Key, 'T1>) (y: IDictionary<'Key, 'T2>) =
+           let dct = Dictionary<'Key, 'T1 * 'T2> ()
+           for KeyValue(k, vx) in x do
+               match tryGetValue k y with
+               | Some vy -> dct.Add (k, (vx, vy))
+               | None    -> ()
+           dct :> IDictionary<'Key, 'T1 * 'T2>
+
+
+
 /// Additional operations on IEnumerator
 module Enumerator =
         
