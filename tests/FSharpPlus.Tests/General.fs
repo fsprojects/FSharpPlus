@@ -47,6 +47,7 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member inline FoldMap (WrappedListD x, f) =
         SideEffects.add "Using optimized foldMap"
         Seq.fold (fun x y -> x ++ (f y)) zero x
+    static member Zip (WrappedListD x, WrappedListD y) = SideEffects.add "Using WrappedListD's zip"; WrappedListD (List.zip x y)
 
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return  (x) = WrappedListE [x]
@@ -192,6 +193,44 @@ module Functor =
     let unzip() = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
+
+    [<Test>]
+    let zipTest() =
+
+        SideEffects.reset()
+        let a = zip (seq [1;2;3]) (seq [1. .. 3. ])
+        Assert.AreEqual (SideEffects.get(), [])
+
+        let b = zip (WrappedListD [1;2;3]) (WrappedListD [1. .. 3. ])
+        Assert.AreEqual (SideEffects.get(), ["Using WrappedListD's zip"])
+
+        let c = zip (dict [1,'1' ; 2,'2' ; 4,'4']) (dict [1,'1' ; 2,'2' ; 3,'3'])
+        let d = zip [ 1;2;3 ] [ 1. .. 3. ]
+        let e = zip [|1;2;3|] [|1. .. 3.|]
+        let g = zip ((seq [1;2;3]).GetEnumerator()) ((seq [1. .. 3. ]).GetEnumerator())
+
+        let fa a = zip a (seq [1. .. 3. ])
+        let fb a = zip a (WrappedListD [1. .. 3. ])
+        let fc a = zip a (dict [1,'1' ; 2,'2' ; 3,'3'])
+        let fd a = zip a [ 1. .. 3. ]
+        let fe a = zip a [|1. .. 3.|]
+        let fg a = zip a ((seq [1. .. 3. ]).GetEnumerator())
+
+        let ga b = zip (seq [1;2;3]) b
+        let gb b = zip (WrappedListD [1;2;3]) b
+        let gc b = zip (dict [1,'1' ; 2,'2' ; 4,'4']) b
+        let gd b = zip  [ 1;2;3 ] b
+        let ge b = zip  [|1;2;3|] b
+        let gg b = zip ((seq [1;2;3]).GetEnumerator()) b
+
+        let ha : _ -> _ -> _ seq            = zip
+        let hb : _ -> _ -> _ WrappedListD   = zip
+        let hc : _ -> _ -> IDictionary<_,_> = zip
+        let hd : _ -> _ -> _ list           = zip
+        let he : _ -> _ -> _ []             = zip
+        let hg : _ -> _ -> _ IEnumerator    = zip
+
+        ()
 
 
 module Collections =

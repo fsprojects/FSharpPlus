@@ -386,16 +386,25 @@ type Unzip =
 
 [<Extension;Sealed>]
 type Zip =
-    [<Extension>]static member Zip (x: Id<'T>         , y: Id<'U>         , [<Optional>]_output: Id<'T*'U>         , [<Optional>]_mthd: Zip) = Id.create (x.getValue, y.getValue)
-    [<Extension>]static member Zip (x: seq<'T>        , y: seq<'U>        , [<Optional>]_output: seq<'T*'U>        , [<Optional>]_mthd: Zip) = Seq.zip        x y
-    [<Extension>]static member Zip (x: IEnumerator<'T>, y: IEnumerator<'U>, [<Optional>]_output: IEnumerator<'T*'U>, [<Optional>]_mthd: Zip) = Enumerator.zip x y
-    [<Extension>]static member Zip (x: list<'T>       , y: list<'U>       , [<Optional>]_output: list<'T*'U>       , [<Optional>]_mthd: Zip) = List.zip       x y
-    [<Extension>]static member Zip (x: 'T []          , y: 'U []          , [<Optional>]_output: ('T*'U) []        , [<Optional>]_mthd: Zip) = Array.zip      x y
+    inherit Default1
+
+    static member Zip ((x: IEnumerator<'T>     , y: IEnumerator<'U>   , _output: IEnumerator<'T*'U>   ) , _mthd: Zip) = Enumerator.zip x y
+    static member Zip ((x: seq<'T>             , y: seq<'U>           , _output: seq<'T*'U>           ) , _mthd: Zip) = Seq.zip        x y
+    static member Zip ((x: IDictionary<'K, 'T> , y: IDictionary<'K,'U>, _output: IDictionary<'K,'T*'U>) , _mthd: Zip) = Dict.zip       x y    
+    static member Zip ((x: list<'T>            , y: list<'U>          , _output: list<'T*'U>          ) , _mthd: Zip) = List.zip       x y
+    static member Zip ((x: 'T []               , y: 'U []             , _output: ('T*'U) []           ) , _mthd: Zip) = Array.zip      x y
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =
-        let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member Zip: _*_*_*_ -> _) b, c, d, a)
+        let inline call_4 (a:^a, b:^b, c:^c, d:^d) = ((^a or ^b or ^c or ^d) : (static member Zip: (_*_*_)*_ -> _) (b, c, d), a)
         let inline call (a:'a, b:'b, c:'c) = call_4 (a, b, c, Unchecked.defaultof<'r>) : 'r
         call (Unchecked.defaultof<Zip>, source1, source2) : '``ZipFunctor<'T1 * 'T2>``
+
+    static member inline InvokeOnInstance (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` =
+        ((^``ZipFunctor<'T1>`` or ^``ZipFunctor<'T2>`` or  ^``ZipFunctor<'T1 * 'T2>``) : (static member Zip: _*_ -> _) source1, source2)
+
+type Zip with    
+    static member inline Zip ((_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _output: ^r when ^r : null and ^r: struct), _mthd: Default1) = id
+    static member inline Zip ((x: '``ZipFunctor<'T1>``            , y: '``ZipFunctor<'T2>``            , _output: '``ZipFunctor<'T1 * 'T2>``      ), _mthd: Default1) = Zip.InvokeOnInstance x y : '``ZipFunctor<'T1 * 'T2>``
 
 
 // Comonad class ----------------------------------------------------------
