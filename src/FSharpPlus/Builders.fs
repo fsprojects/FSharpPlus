@@ -25,6 +25,7 @@ module Builders =
     // Workflows
 
     open System
+    open System.Collections.Generic
     open FSharpPlus.Control
 
     type Builder () =
@@ -106,7 +107,9 @@ module Builders =
             let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
             fix ()
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) =
-            Using.Invoke (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``MonadPlus<'U>``))
+            Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
+                let enum = enum :?> IEnumerator<_>
+                this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``MonadPlus<'U>``)
 
         member __.strict = new MonadPlusStrictBuilder ()
 
@@ -120,7 +123,9 @@ module Builders =
                 else result ()
             loop guard body
         member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) =
-            Using.Invoke (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``Monad<unit>``))
+            Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
+                let enum = enum :?> IEnumerator<_>
+                this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``Monad<unit>``)
 
     
         member __.plus   = new MonadPlusBuilder ()

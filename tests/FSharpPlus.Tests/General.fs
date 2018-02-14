@@ -72,6 +72,34 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member Append (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
 
 
+type WrappedSeqA<'s> = WrappedSeqA of 's seq with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqA x) = x in x).GetEnumerator()
+    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqA x) = x in x).GetEnumerator() :> Collections.IEnumerator
+    static member Return  (x) = WrappedSeqA [x]
+    static member Bind  (WrappedSeqA x: WrappedSeqA<'T>, f) = WrappedSeqA (Seq.collect (f >> (fun (WrappedSeqA x) -> x)) x)
+    static member Join  (WrappedSeqA wlst) = WrappedSeqA wlst >>= id
+    static member get_Empty() = WrappedSeqA List.empty
+    static member Append (WrappedSeqA l, WrappedSeqA x) = WrappedSeqA (Seq.append l x)
+    static member Delay (f: unit -> WrappedSeqA<_>) =
+                    let run (WrappedSeqA s) = s
+                    WrappedSeqA (Seq.delay (f >> run))
+
+type WrappedSeqB<'s> = WrappedSeqB of 's seq with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqB x) = x in x).GetEnumerator()
+    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqB x) = x in x).GetEnumerator() :> Collections.IEnumerator
+    static member Return  (x) = WrappedSeqB [x]
+    static member Bind  (WrappedSeqB x: WrappedSeqB<'T>, f) = WrappedSeqB (Seq.collect (f >> (fun (WrappedSeqB x) -> x)) x)
+    static member Join  (WrappedSeqB wlst) = WrappedSeqB wlst >>= id
+    static member get_Empty() = WrappedSeqB List.empty
+    static member Append (WrappedSeqB l, WrappedSeqB x) = WrappedSeqB (Seq.append l x)
+    static member Delay (f: unit -> WrappedSeqB<_>) =
+                    let run (WrappedSeqB s) = s
+                    WrappedSeqB (Seq.delay (f >> run))
+    static member Using (resource, body) = 
+                    SideEffects.add "Using WrappedSeqB's Using"
+                    using resource body
+
+
 open System.Collections.Generic
 open System.Threading.Tasks
 

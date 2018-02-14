@@ -100,3 +100,84 @@ module ComputationExpressions =
 
         areEqual (SideEffects.get()) ["processing 1"; "processing 2"; "processing 3"]
         areEqual results [101; 102; 103]
+
+
+    [<Test>]
+    let usingInForLoops() =
+
+        SideEffects.reset()
+
+        // desugared version
+        let a1 s _ = StateT (fun s -> Seq.singleton (s, 0))
+
+        let a2 =
+            monad.plus.For ([("first1", "second1"); ("first2", "second2")], (fun str ->
+                monad.plus.For ([1 + (fst str).Length ; 2 + (snd str).Length], (fun len ->
+                    a1 "" (Some len) >>=  fun _ -> result str))))
+
+        let a3 = StateT.run a2 0|> Seq.map fst
+
+        // sugared
+        let b1 s _ = StateT (fun s -> Seq.singleton (s, 0))
+        let b2 = monad.plus {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = b1 "" (Some len)
+            return str }
+    
+        let b3 = StateT.run b2 0 |> Seq.map fst
+
+        // external type, default definition of using
+        let c1 s _ = WrappedSeqA (Seq.singleton (s, 0))
+        let c2 = monad.plus {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = c1 "" (Some len)
+            return str }
+
+        let c3 = c2 |> Seq.toList
+
+        // external type, custom definition of using
+        let d1 s _ = WrappedSeqB (Seq.singleton (s, 0))
+        let d2 = monad.plus {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = d1 "" (Some len)
+            return str }
+
+        areEqual (SideEffects.get()) []
+        let d3 = d2 |> Seq.toList
+        areEqual (SideEffects.get()) ["Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"]
+        SideEffects.reset()
+
+        // plains seqs
+        let e1 s _ = (Seq.singleton (s, 0))
+        let e2 = monad.plus {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = e1 "" (Some len)
+            return str }  
+
+        let e3 = e2 |> Seq.toList
+
+        // lazy (monad.fx)
+        let f1 s _ = (lazy (s, 0))
+        let f2 = monad.fx {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = f1 "" (Some len)
+            () }  
+
+        let f3 = f2.Value
+
+        // async (monad.fx)
+        let g1 s _ = (async.Return (s, 0))
+        let g2 = monad.fx {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = g1 "" (Some len)
+            () }  
+
+        let g3 = g2 |> Async.RunSynchronously
+
+        areEqual (SideEffects.get()) []
