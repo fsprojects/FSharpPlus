@@ -70,6 +70,8 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member Join  (WrappedListG wlst) = (*SideEffects.add "Join";*)  WrappedListG wlst >>= id
     static member get_Empty() = WrappedListG List.empty
     static member Append (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
+    static member Delay (f: unit -> WrappedListD<_>) = SideEffects.add "Using WrappedListG's Delay"; f()
+    static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
 
 type WrappedSeqA<'s> = WrappedSeqA of 's seq with

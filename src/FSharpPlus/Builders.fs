@@ -83,8 +83,9 @@ module Builders =
                 else Empty.Invoke ()
             loop guard body
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) =
-            let fusing (resource: #IDisposable) body = try body resource finally dispose resource   
-            fusing (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``))
+            Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
+                let enum = enum :?> IEnumerator<_>
+                this.While (enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``)
     
     type MonadFxStrictBuilder () =
         inherit StrictBuilder ()
@@ -95,9 +96,10 @@ module Builders =
                 if guard () then body () >>= fun () -> loop guard body
                 else result ()
             loop guard body
-        member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<'U>``) =
-            let fusing (resource: #IDisposable) body = try body resource finally dispose resource
-            fusing (p.GetEnumerator ()) (fun enum -> (this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<'U>``))
+        member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) =
+            Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
+                let enum = enum :?> IEnumerator<_>
+                this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<unit>``)
  
     type MonadPlusBuilder () =
         inherit DelayedBuilder()     

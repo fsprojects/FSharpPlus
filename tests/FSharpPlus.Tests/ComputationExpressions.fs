@@ -180,4 +180,12 @@ module ComputationExpressions =
 
         let g3 = g2 |> Async.RunSynchronously
 
-        areEqual (SideEffects.get()) []
+        // external type, custom definition of using, Strict (Monadic Container)
+        let h1 s _ = WrappedListG (List.singleton (s, 0))
+        let h2 = monad.plus.strict {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = h1 "" (Some len)
+            return str }
+
+        areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
