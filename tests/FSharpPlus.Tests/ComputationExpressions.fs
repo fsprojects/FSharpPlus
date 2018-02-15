@@ -189,3 +189,14 @@ module ComputationExpressions =
             return str }
 
         areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
+        SideEffects.reset()
+
+        // same example but without explicitely telling that the monad is strict
+        let i1 s _ = WrappedListG (List.singleton (s, 0))
+        let i2 = monad.plus {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = i1 "" (Some len)
+            return str }
+
+        areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]

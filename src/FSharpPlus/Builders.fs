@@ -102,21 +102,26 @@ module Builders =
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<unit>``)
  
     type MonadPlusBuilder () =
-        inherit DelayedBuilder()     
+        inherit DelayedBuilder()
+        member        __.strict = new MonadPlusStrictBuilder ()
         member inline __.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
         member inline __.While (guard, body: '``MonadPlus<'T>``)      : '``MonadPlus<'T>`` =
             let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
             fix ()
-        member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) =
+        member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) : '``MonadPlus<'U>`` =
+            let mutable isReallyDelayed = true
+            Delay.Invoke (fun () -> isReallyDelayed <- false; Unchecked.defaultof<'``MonadPlus<'U>``>) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
-                this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``MonadPlus<'U>``)
-
-        member __.strict = new MonadPlusStrictBuilder ()
+                if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
+                else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
     type MonadFxBuilder () =
         inherit DelayedBuilder ()
+        member        __.strict = new MonadFxStrictBuilder ()
+        member        __.plus   = new MonadPlusBuilder ()        
+        member        this.fx   = this
         member inline __.Zero () = result ()                                    : '``Monad<unit>``
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
         member inline __.While (guard, body: '``Monad<unit>``)                  : '``Monad<unit>`` =
@@ -124,15 +129,13 @@ module Builders =
                 if guard () then body >>= (fun () -> loop guard body)
                 else result ()
             loop guard body
-        member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) =
+        member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) : '``Monad<unit>``=
+            let mutable isReallyDelayed = true
+            Delay.Invoke (fun () -> isReallyDelayed <- false; Unchecked.defaultof<'``Monad<unit>``>) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
-                this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current)) : '``Monad<unit>``)
+                if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
+                else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
-    
-        member __.plus   = new MonadPlusBuilder ()
-        member __.strict = new MonadFxStrictBuilder ()
-
-        member this.fx   = this
 
     let monad = new MonadFxBuilder ()
