@@ -91,7 +91,7 @@ module Builders =
         inherit StrictBuilder ()
         member inline __.Zero () = result ()                                       : '``Monad<unit>``
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b ()) : '``Monad<'T>``
-        member inline __.While (guard, body: unit -> '``Monad<'T>``) : '``Monad<'T>`` =
+        member inline __.While (guard, body: unit -> '``Monad<unit>``)             : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body () >>= fun () -> loop guard body
                 else result ()
@@ -119,7 +119,7 @@ module Builders =
         inherit DelayedBuilder ()
         member inline __.Zero () = result ()                                    : '``Monad<unit>``
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
-        member inline __.While (guard, body: '``Monad<unit>``) : '``Monad<'T>`` =
+        member inline __.While (guard, body: '``Monad<unit>``)                  : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body >>= (fun () -> loop guard body)
                 else result ()
