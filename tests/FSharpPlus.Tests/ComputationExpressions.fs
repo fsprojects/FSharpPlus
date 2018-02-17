@@ -200,3 +200,43 @@ module ComputationExpressions =
             return str }
 
         areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
+
+
+    
+    open System.Threading
+
+    [<Test>]
+    let usingInAsyncs() =
+
+        // from https://github.com/Microsoft/visualfsharp/issues/1436        
+        SideEffects.reset()
+        do let source = new CancellationTokenSource ()
+           let token = source.Token
+           let example = monad.fx {
+             SideEffects.add "A: Here we go"
+             use! h = Async.OnCancel <| fun () -> SideEffects.add "A: We got cancelled"
+             use x =
+                source.Cancel ()
+                SideEffects.add "A: Creating disposable"
+                {new IDisposable with override __.Dispose () = SideEffects.add "A: Disposed properly"}
+             do SideEffects.add "A: Never getting here" }
+           Async.Start (example, token)
+
+        do let source = new CancellationTokenSource ()
+           let token = source.Token
+           let example = monad.fx {
+             SideEffects.add "B: Here we go"
+             use! h = Async.OnCancel <| fun () -> SideEffects.add "B: We got cancelled"
+             use x = 
+                SideEffects.add "B: Creating disposable"
+                {new IDisposable with override __.Dispose () = SideEffects.add "B: Disposed properly"}
+             do source.Cancel ()
+             do! async { return () }
+             do SideEffects.add "B: Never getting here" }
+           Async.Start (example, token)
+
+
+        do Async.Sleep 1000 |> Async.RunSynchronously
+
+        let effA, effB = List.partition (String.startsWith "A") (SideEffects.get())
+        areEqual (List.last effA, List.last effB) ("A: Disposed properly", "B: Disposed properly")
