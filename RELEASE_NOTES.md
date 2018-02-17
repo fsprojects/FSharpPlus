@@ -1,3 +1,8 @@
+#### 1.0.0-CI00148  - February 17 2018
+* More flexibility in Computation Expressions
+* Dictionary extensions
+* Bug fixes
+
 #### 1.0.0-CI00145  - February 6 2018
 * Wrappers compiled as structs
 * New tryItem operation for Indexable types
