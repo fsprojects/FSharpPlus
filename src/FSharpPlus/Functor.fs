@@ -351,9 +351,9 @@ type TryFinally =
 type Using =
     inherit Default1
     
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>       , _:Using   ) = seq (try Seq.toArray (body resource) finally match resource with null -> () | disp -> disp.Dispose ()): seq<'U>
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>       , _:Using   ) = seq (try Seq.toArray (body resource) finally if not (isNull (box resource)) then resource.Dispose ()): seq<'U>
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>     , _:Using   ) = async.Using (resource, body)
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Lazy<'U>      , _:Using   ) = lazy (try (body resource).Force () finally match resource with null -> () | disp -> disp.Dispose ()) : Lazy<'U>
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Lazy<'U>      , _:Using   ) = lazy (try (body resource).Force () finally if not (isNull (box resource)) then resource.Dispose ()) : Lazy<'U>
 
     static member inline Invoke (source : 'T when 'T :> IDisposable) (f : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (mthd: 'M, input: 'T, _output: 'R, h: 'T -> 'I) = ((^M or ^I) : (static member Using: _*_*_ -> _) input, h, mthd)
@@ -365,7 +365,7 @@ type Using =
 type Using with
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``:     struct , _:Default2) = using resource body
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``: not struct , _:Default1) = using resource body    
-    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _:Using   ) = Using.InvokeOnInstance resource body : '``Monad<'U>``    
+    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _:Using   ) = Using.InvokeOnInstance resource body : '``Monad<'U>``
     static member inline Using (_                                  , _   : 'a -> ^t when ^t : null and ^t: struct               , _:Using   ) = ()
 
 
