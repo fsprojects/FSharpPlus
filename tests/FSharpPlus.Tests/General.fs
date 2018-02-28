@@ -970,6 +970,29 @@ module Conversions =
         let r304:char   = explicit "F"        
         ()
 
+module BitConverter =
+    [<Test>]
+    let roundtrips () =
+        let a0 = -79800210978L
+        let b0 = -798021978
+        let c0 = -79872.8
+        let d0 = -79872.7969f
+        let e0 = 43u
+        let f0 = -45s
+        let g0 = "this is just a String"
+        let h0 = true
+        let i0 = 'h'
+
+        Assert.IsTrue ((a0 = (a0 |> toBytes |> ofBytes)))
+        Assert.IsTrue ((b0 = (b0 |> toBytes |> ofBytes)))
+        Assert.IsTrue ((c0 = (c0 |> toBytes |> ofBytes)))
+        Assert.IsTrue ((d0 = (d0 |> toBytes |> ofBytes)))
+        Assert.IsTrue ((e0 = (e0 |> toBytes |> ofBytes)))
+        Assert.IsTrue ((f0 = (f0 |> toBytes |> ofBytes)))
+        Assert.IsTrue (("74-68-69-73-20-69-73-20-6A-75-73-74-20-61-20-53-74-72-69-6E-67" = (g0 |> toBytes |> ofBytes)))
+        Assert.IsTrue ((h0 = (h0 |> toBytes |> ofBytes)))
+        Assert.IsTrue ((i0 = (i0 |> toBytes |> ofBytes)))
+
 module Sequences =
     open FSharpPlus.Builders
     let test =

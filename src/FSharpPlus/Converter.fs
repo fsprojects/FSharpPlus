@@ -9,6 +9,7 @@ open System.Runtime.CompilerServices
 open System.Collections.Generic
 open System.Text
 open Microsoft.FSharp.Quotations
+open FSharpPlus.BaseLib
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
@@ -39,17 +40,17 @@ type Explicit =
         call Unchecked.defaultof<Explicit> value
 
 type OfBytes =
-    static member OfBytes (_:bool   , _:OfBytes) = fun (x:byte [], i, _) -> BitConverter.ToBoolean(x, i)
-    static member OfBytes (_:char   , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToChar   ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_:float  , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToDouble ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_: int16 , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToInt16  ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_: int   , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToInt32  ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_:int64  , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToInt64  ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_:float32, _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToSingle ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_:string , _:OfBytes) = fun (x:byte [], i, _) -> BitConverter.ToString (x, i)
-    static member OfBytes (_:uint16 , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToUInt16 ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_:uint32 , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToUInt32 ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
-    static member OfBytes (_:uint64 , _:OfBytes) = fun (x:byte [], i, e) -> BitConverter.ToUInt64 ((if BitConverter.IsLittleEndian = e then x else Array.rev x), i)
+    static member OfBytes (_:bool   , _:OfBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
+    static member OfBytes (_:char   , _:OfBytes) = fun (x, i, e) -> BitConverter.ToChar   (x, i, e)
+    static member OfBytes (_:float  , _:OfBytes) = fun (x, i, e) -> BitConverter.ToDouble (x, i, e)
+    static member OfBytes (_: int16 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToInt16  (x, i, e)
+    static member OfBytes (_: int   , _:OfBytes) = fun (x, i, e) -> BitConverter.ToInt32  (x, i, e)
+    static member OfBytes (_:int64  , _:OfBytes) = fun (x, i, e) -> BitConverter.ToInt64  (x, i, e)
+    static member OfBytes (_:float32, _:OfBytes) = fun (x, i, e) -> BitConverter.ToSingle (x, i, e)
+    static member OfBytes (_:string , _:OfBytes) = fun (x, i, _) -> BitConverter.ToString (x, i)
+    static member OfBytes (_:uint16 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToUInt16 (x, i, e)
+    static member OfBytes (_:uint32 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
+    static member OfBytes (_:uint64 , _:OfBytes) = fun (x, i, e) -> BitConverter.ToUInt64 (x, i, e)
 
     static member inline Invoke (isLtEndian:bool) (startIndex:int) (value:byte[]) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member OfBytes: _*_ -> _) b, a)
@@ -60,16 +61,16 @@ type OfBytes =
 [<Extension;Sealed>]
 type ToBytes =
     [<Extension>]static member ToBytes (x:bool   , _, _:ToBytes) = BitConverter.GetBytes(x)
-    [<Extension>]static member ToBytes (x:char   , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
-    [<Extension>]static member ToBytes (x:float  , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
-    [<Extension>]static member ToBytes (x: int16 , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
-    [<Extension>]static member ToBytes (x: int   , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
-    [<Extension>]static member ToBytes (x:int64  , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
-    [<Extension>]static member ToBytes (x:float32, e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
+    [<Extension>]static member ToBytes (x:char   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:float  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x: int16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x: int   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:int64  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:float32, e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
     [<Extension>]static member ToBytes (x:string , _, _:ToBytes) = Array.map byte (x.ToCharArray())
-    [<Extension>]static member ToBytes (x:uint16 , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
-    [<Extension>]static member ToBytes (x:uint32 , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
-    [<Extension>]static member ToBytes (x:uint64 , e, _:ToBytes) = BitConverter.GetBytes(x) |> if BitConverter.IsLittleEndian = e then id else Array.rev
+    [<Extension>]static member ToBytes (x:uint16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:uint32 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    [<Extension>]static member ToBytes (x:uint64 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
 
     static member inline Invoke (isLittleEndian:bool) value :byte[] =
         let inline call_2 (a:^a, b:^b, e) = ((^a or ^b) : (static member ToBytes: _*_*_ -> _) b, e, a)

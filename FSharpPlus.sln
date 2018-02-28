@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A6A6AF7D-D
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus", "src\FSharpPlus\FSharpPlus.fsproj", "{1368368E-D2F4-4FEF-BB2F-492E05156E0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSharpPlus.BaseLib", "src\FSharpPlus.BaseLib\FSharpPlus.BaseLib.csproj", "{1B99DF98-65AC-4038-8BE5-E72B0882F420}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60BC93-E09B-4E5F-9D85-95A519479D54}"
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
