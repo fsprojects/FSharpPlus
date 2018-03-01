@@ -1,4 +1,6 @@
-﻿namespace FSharpPlus
+﻿namespace FSharpPlus.Data
+
+open FSharpPlus
 
 
 /// <summary> Computation type: Simple function application.
