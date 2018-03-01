@@ -3,6 +3,7 @@
 open System
 
 /// Additional operations on Option
+[<RequireQualifiedAccess>]
 module Option =
     let apply f x =
         match (f, x) with 
@@ -35,6 +36,7 @@ module Choice =
 
 
 /// Additional operations on Seq
+[<RequireQualifiedAccess>]
 module Seq =
     let bind (f:'a->seq<'b>) x = Seq.collect f x
     let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
@@ -136,6 +138,7 @@ module Seq =
 
 
 /// Additional operations on List
+[<RequireQualifiedAccess>]
 module List =
     let singleton x = [x]
     let cons x y = x :: y
@@ -172,6 +175,7 @@ module List =
 
 
 /// Additional operations on Array
+[<RequireQualifiedAccess>]
 module Array =
     let intercalate (separator:_ []) (source:seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
     let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray                            : 'T []
@@ -180,6 +184,7 @@ module Array =
 
 
 /// Additional operations on String
+[<RequireQualifiedAccess>]
 module String =
     open System.Text
     open System.Globalization
@@ -209,6 +214,7 @@ module String =
 
 
 /// Additional operations on IDictionary<'Key, 'Value>
+[<RequireQualifiedAccess>]
 module Dict =
     open System.Collections.Generic
 
@@ -242,6 +248,7 @@ module Dict =
 
 
 /// Additional operations on IEnumerator
+[<RequireQualifiedAccess>]
 module Enumerator =
         
     let inline invalidArgFmt (arg:string) (format:string) paramArray =    
