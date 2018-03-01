@@ -58,6 +58,8 @@
 <span class="l"> 9: </span>
 <span class="l">10: </span>
 <span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
@@ -68,7 +70,9 @@
 <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="fn">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">9</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="uc">Some</span> <span class="n">3</span><span class="pn">)</span>
 <span class="c">// val it : int option = Some 12</span>
 
-<span onmouseout="hideTip(event, 'fs2', 6)" onmouseover="showTip(event, 'fs2', 6)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="fn">string</span> <span class="pn">(</span><span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">create</span> <span class="n">2</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">)</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 6)" onmouseover="showTip(event, 'fs1', 6)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="id">Data</span>
+
+<span onmouseout="hideTip(event, 'fs2', 8)" onmouseover="showTip(event, 'fs2', 8)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs3', 9)" onmouseover="showTip(event, 'fs3', 9)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 10)" onmouseover="showTip(event, 'fs6', 10)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="id">create</span> <span class="n">2</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">)</span>
 <span class="c">// val it : NonEmptyList&lt;string&gt; = {Head = &quot;2&quot;; Tail = [&quot;3&quot;; &quot;4&quot;; &quot;5&quot;];}</span>
 </code></pre></td>
 </tr>
@@ -101,6 +105,9 @@ redistribution for both commercial and non-commercial purposes. For more informa
 <div class="tip" id="fs2">val map : f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)</div>
 <div class="tip" id="fs3">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
 <div class="tip" id="fs4">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs5">namespace FSharpPlus.Data</div>
+<div class="tip" id="fs6">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member head : &#39;t<br />&#160;&#160;&#160;&#160;member tail : &#39;t list<br />&#160;&#160;&#160;&#160;static member Bind : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;static member Extend : s:NonEmptyList&lt;&#39;a1&gt; * g:(NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;<br />&#160;&#160;&#160;&#160;static member Extract : NonEmptyList&lt;&#39;t&gt; -&gt; &#39;t<br />&#160;&#160;&#160;&#160;...</div>
+<div class="tip" id="fs7">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;</div>
 
         </div>
         <div class="span3">

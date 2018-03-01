@@ -254,8 +254,8 @@
 <div class="tip" id="fs33">val empty&lt;&#39;T&gt; : seq&lt;&#39;T&gt;</div>
 <div class="tip" id="fs34">val myTree : Tree&lt;int&gt;</div>
 <div class="tip" id="fs35">val resSum21 : int</div>
-<div class="tip" id="fs36">val resProduct324 : Mult&lt;int&gt;</div>
-<div class="tip" id="fs37">Multiple items<br />union case Mult.Mult: &#39;a -&gt; Mult&lt;&#39;a&gt;<br /><br />--------------------<br />type Mult&lt;&#39;a&gt; =<br />&#160;&#160;| Mult of &#39;a<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Mult&lt;&#39;a1&gt; (requires member One)<br />&#160;&#160;&#160;&#160;static member ( + ) : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a2&gt; (requires member ( * ))</div>
+<div class="tip" id="fs36">[&lt;Struct&gt;]<br />val resProduct324 : Mult&lt;int&gt;</div>
+<div class="tip" id="fs37">Multiple items<br />union case Mult.Mult: &#39;a -&gt; Mult&lt;&#39;a&gt;<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Mult&lt;&#39;a&gt; =<br />&#160;&#160;| Mult of &#39;a<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Mult&lt;&#39;a1&gt; (requires member One)<br />&#160;&#160;&#160;&#160;static member ( + ) : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a2&gt; (requires member ( * ))</div>
 <div class="tip" id="fs38">val res21 : int</div>
 <div class="tip" id="fs39">val foldBack : folder:(&#39;T -&gt; &#39;State -&gt; &#39;State) -&gt; foldable:&#39;Foldable&lt;&#39;T&gt; -&gt; state:&#39;State -&gt; &#39;State (requires member FoldBack)</div>
 <div class="tip" id="fs40">val res21&#39; : int</div>
@@ -271,7 +271,7 @@
 <div class="tip" id="fs50">val f : (&#39;a -&gt; Endo&lt;&#39;b&gt;)</div>
 <div class="tip" id="fs51">val getZero : unit -&gt; &#39;Monoid (requires member Zero)</div>
 <div class="tip" id="fs52">val plus : x:&#39;Monoid -&gt; y:&#39;Monoid -&gt; &#39;Monoid (requires member Plus)</div>
-<div class="tip" id="fs53">Multiple items<br />union case Endo.Endo: (&#39;t -&gt; &#39;t) -&gt; Endo&lt;&#39;t&gt;<br /><br />--------------------<br />module Endo<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type Endo&lt;&#39;t&gt; =<br />&#160;&#160;| Endo of (&#39;t -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Endo&lt;&#39;T&gt;<br />&#160;&#160;&#160;&#160;static member ( + ) : Endo&lt;&#39;T&gt; * Endo&lt;&#39;T&gt; -&gt; Endo&lt;&#39;T&gt;</div>
+<div class="tip" id="fs53">Multiple items<br />union case Endo.Endo: (&#39;t -&gt; &#39;t) -&gt; Endo&lt;&#39;t&gt;<br /><br />--------------------<br />module Endo<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Endo&lt;&#39;t&gt; =<br />&#160;&#160;| Endo of (&#39;t -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Endo&lt;&#39;T&gt;<br />&#160;&#160;&#160;&#160;static member ( + ) : Endo&lt;&#39;T&gt; * Endo&lt;&#39;T&gt; -&gt; Endo&lt;&#39;T&gt;</div>
 <div class="tip" id="fs54">val run : Endo&lt;&#39;T&gt; -&gt; (&#39;T -&gt; &#39;T)</div>
 <div class="tip" id="fs55">val tree : Tree&lt;int&gt;</div>
 <div class="tip" id="fs56">val resTr : bool</div>

@@ -54,15 +54,15 @@ Useful for: Logging, or other computations that produce output "on the side".</p
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1426', 1426)" onmouseover="showTip(event, '1426', 1426)">
+          <code onmouseout="hideTip(event, '1475', 1475)" onmouseover="showTip(event, '1475', 1475)">
             Writer(&#39;t * &#39;monoid)
           </code>
-          <div class="tip" id="1426">
+          <div class="tip" id="1475">
             <strong>Signature:</strong> &#39;t * &#39;monoid<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L6-6" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L7-7" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -80,15 +80,15 @@ Useful for: Logging, or other computations that produce output "on the side".</p
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1427', 1427)" onmouseover="showTip(event, '1427', 1427)">
+          <code onmouseout="hideTip(event, '1476', 1476)" onmouseover="showTip(event, '1476', 1476)">
             ( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="1427">
+          <div class="tip" id="1476">
             <strong>Signature:</strong> (f:Writer&lt;^Monoid,(&#39;T -&gt; &#39;U)&gt; * x:Writer&lt;^Monoid,&#39;T&gt;) -&gt; Writer&lt;^Monoid,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L39-39" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -99,15 +99,15 @@ Useful for: Logging, or other computations that produce output "on the side".</p
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1428', 1428)" onmouseover="showTip(event, '1428', 1428)">
+          <code onmouseout="hideTip(event, '1477', 1477)" onmouseover="showTip(event, '1477', 1477)">
             Bind(x, f)
           </code>
-          <div class="tip" id="1428">
+          <div class="tip" id="1477">
             <strong>Signature:</strong> (x:Writer&lt;^Monoid,&#39;T&gt; * f:(&#39;T -&gt; Writer&lt;^Monoid,&#39;U&gt;)) -&gt; Writer&lt;^Monoid,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L38-38" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L39-39" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -117,12 +117,30 @@ Useful for: Logging, or other computations that produce output "on the side".</p
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1429', 1429)" onmouseover="showTip(event, '1429', 1429)">
+          <code onmouseout="hideTip(event, '1478', 1478)" onmouseover="showTip(event, '1478', 1478)">
             Extend(arg1, f)
           </code>
-          <div class="tip" id="1429">
+          <div class="tip" id="1478">
             <strong>Signature:</strong> (Writer&lt;&#39;T,&#39;W&gt; * f:(Writer&lt;&#39;T,&#39;W&gt; -&gt; &#39;U)) -&gt; Writer&lt;&#39;U,&#39;W&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L47-47" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1479', 1479)" onmouseover="showTip(event, '1479', 1479)">
+            Extract(arg1)
+          </code>
+          <div class="tip" id="1479">
+            <strong>Signature:</strong> Writer&lt;&#39;T,&#39;W&gt; -&gt; &#39;T<br />
+                      </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L46-46" class="github-link">
@@ -135,65 +153,11 @@ Useful for: Logging, or other computations that produce output "on the side".</p
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1430', 1430)" onmouseover="showTip(event, '1430', 1430)">
-            Extract(arg1)
-          </code>
-          <div class="tip" id="1430">
-            <strong>Signature:</strong> Writer&lt;&#39;T,&#39;W&gt; -&gt; &#39;T<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L45-45" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1431', 1431)" onmouseover="showTip(event, '1431', 1431)">
+          <code onmouseout="hideTip(event, '1480', 1480)" onmouseover="showTip(event, '1480', 1480)">
             Listen(m)
           </code>
-          <div class="tip" id="1431">
+          <div class="tip" id="1480">
             <strong>Signature:</strong> m:Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,(&#39;T * &#39;Monoid)&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L42-42" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1432', 1432)" onmouseover="showTip(event, '1432', 1432)">
-            Map(x, f)
-          </code>
-          <div class="tip" id="1432">
-            <strong>Signature:</strong> (x:Writer&lt;&#39;Monoid,&#39;T&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Writer&lt;&#39;Monoid,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L36-36" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1433', 1433)" onmouseover="showTip(event, '1433', 1433)">
-            Pass(m)
-          </code>
-          <div class="tip" id="1433">
-            <strong>Signature:</strong> (m:Writer&lt;&#39;Monoid,(&#39;T * (&#39;Monoid -&gt; &#39;Monoid))&gt;) -&gt; Writer&lt;&#39;Monoid,&#39;T&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -207,12 +171,12 @@ Useful for: Logging, or other computations that produce output "on the side".</p
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1434', 1434)" onmouseover="showTip(event, '1434', 1434)">
-            Return(x)
+          <code onmouseout="hideTip(event, '1481', 1481)" onmouseover="showTip(event, '1481', 1481)">
+            Map(x, f)
           </code>
-          <div class="tip" id="1434">
-            <strong>Signature:</strong> x:&#39;T -&gt; Writer&lt;^Monoid,&#39;T&gt;<br />
-                      </div>
+          <div class="tip" id="1481">
+            <strong>Signature:</strong> (x:Writer&lt;&#39;Monoid,&#39;T&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Writer&lt;&#39;Monoid,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'U          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L37-37" class="github-link">
@@ -225,15 +189,51 @@ Useful for: Logging, or other computations that produce output "on the side".</p
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1435', 1435)" onmouseover="showTip(event, '1435', 1435)">
+          <code onmouseout="hideTip(event, '1482', 1482)" onmouseover="showTip(event, '1482', 1482)">
+            Pass(m)
+          </code>
+          <div class="tip" id="1482">
+            <strong>Signature:</strong> (m:Writer&lt;&#39;Monoid,(&#39;T * (&#39;Monoid -&gt; &#39;Monoid))&gt;) -&gt; Writer&lt;&#39;Monoid,&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L44-44" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1483', 1483)" onmouseover="showTip(event, '1483', 1483)">
+            Return(x)
+          </code>
+          <div class="tip" id="1483">
+            <strong>Signature:</strong> x:&#39;T -&gt; Writer&lt;^Monoid,&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L38-38" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1484', 1484)" onmouseover="showTip(event, '1484', 1484)">
             Tell(w)
           </code>
-          <div class="tip" id="1435">
+          <div class="tip" id="1484">
             <strong>Signature:</strong> w:&#39;Monoid -&gt; Writer&lt;&#39;Monoid,unit&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L41-41" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Writer.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

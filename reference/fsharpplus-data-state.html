@@ -55,12 +55,30 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '190', 190)" onmouseover="showTip(event, '190', 190)">
+          <code onmouseout="hideTip(event, '194', 194)" onmouseover="showTip(event, '194', 194)">
             apply(arg1 arg2)
           </code>
-          <div class="tip" id="190">
+          <div class="tip" id="194">
             <strong>Signature:</strong> State&lt;&#39;S,(&#39;T -&gt; &#39;U)&gt; -&gt; State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'S, 'T, 'U          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L15-15" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '195', 195)" onmouseover="showTip(event, '195', 195)">
+            bind(f arg2)
+          </code>
+          <div class="tip" id="195">
+            <strong>Signature:</strong> f:(&#39;T -&gt; State&lt;&#39;S,&#39;U&gt;) -&gt; State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'S, 'U          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L14-14" class="github-link">
@@ -73,48 +91,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '191', 191)" onmouseover="showTip(event, '191', 191)">
-            bind(f arg2)
-          </code>
-          <div class="tip" id="191">
-            <strong>Signature:</strong> f:(&#39;T -&gt; State&lt;&#39;S,&#39;U&gt;) -&gt; State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'S, 'U          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L13-13" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '192', 192)" onmouseover="showTip(event, '192', 192)">
+          <code onmouseout="hideTip(event, '196', 196)" onmouseover="showTip(event, '196', 196)">
             eval(arg1 s)
           </code>
-          <div class="tip" id="192">
+          <div class="tip" id="196">
             <strong>Signature:</strong> State&lt;&#39;s,&#39;T&gt; -&gt; s:&#39;s -&gt; &#39;T<br />
                           <strong>Type parameters:</strong> 's, 'T          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L16-16" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '193', 193)" onmouseover="showTip(event, '193', 193)">
-            exec(arg1 s)
-          </code>
-          <div class="tip" id="193">
-            <strong>Signature:</strong> State&lt;&#39;S,&#39;A&gt; -&gt; s:&#39;S -&gt; &#39;S<br />
-                          <strong>Type parameters:</strong> 'S, 'A          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L17-17" class="github-link">
@@ -127,15 +109,33 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '194', 194)" onmouseover="showTip(event, '194', 194)">
+          <code onmouseout="hideTip(event, '197', 197)" onmouseover="showTip(event, '197', 197)">
+            exec(arg1 s)
+          </code>
+          <div class="tip" id="197">
+            <strong>Signature:</strong> State&lt;&#39;S,&#39;A&gt; -&gt; s:&#39;S -&gt; &#39;S<br />
+                          <strong>Type parameters:</strong> 'S, 'A          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L18-18" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '198', 198)" onmouseover="showTip(event, '198', 198)">
             get
           </code>
-          <div class="tip" id="194">
+          <div class="tip" id="198">
             <strong>Signature:</strong> State&lt;&#39;S,&#39;S&gt;<br />
                           <strong>Type parameters:</strong> 'S          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L20-20" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L21-21" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -147,15 +147,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '195', 195)" onmouseover="showTip(event, '195', 195)">
+          <code onmouseout="hideTip(event, '199', 199)" onmouseover="showTip(event, '199', 199)">
             map(f arg2)
           </code>
-          <div class="tip" id="195">
+          <div class="tip" id="199">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, 'S          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L12-12" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L13-13" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -165,15 +165,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '196', 196)" onmouseover="showTip(event, '196', 196)">
+          <code onmouseout="hideTip(event, '200', 200)" onmouseover="showTip(event, '200', 200)">
             put(x)
           </code>
-          <div class="tip" id="196">
+          <div class="tip" id="200">
             <strong>Signature:</strong> x:&#39;S -&gt; State&lt;&#39;S,unit&gt;<br />
                           <strong>Type parameters:</strong> 'S          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L23-23" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L24-24" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -185,15 +185,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '197', 197)" onmouseover="showTip(event, '197', 197)">
+          <code onmouseout="hideTip(event, '201', 201)" onmouseover="showTip(event, '201', 201)">
             run(arg1)
           </code>
-          <div class="tip" id="197">
+          <div class="tip" id="201">
             <strong>Signature:</strong> State&lt;&#39;S,&#39;T&gt; -&gt; &#39;S -&gt; &#39;T * &#39;S<br />
                           <strong>Type parameters:</strong> 'S, 'T          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L11-11" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/State.fs#L12-12" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

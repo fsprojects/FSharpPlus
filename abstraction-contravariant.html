@@ -36,6 +36,7 @@
 <h1><a name="Contravariant" class="anchor" href="#Contravariant">Contravariant</a></h1>
 <p>A Contravariant Functor can be mapped over the input.</p>
 <hr />
+<p>One can think of a <a href="abstraction-functor.html">Functor</a> as containing or producing values, a contravariant functor is a functor that can be thought of as consuming values.</p>
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
 <li><code>contramap f x</code></li>
@@ -121,6 +122,24 @@ Examples
 </code></pre></td>
 </tr>
 </table>
+<p>For instance a predicate function from a type to bool. An example of such a function is the predicate that classifies
+integers as negative:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 66)" onmouseover="showTip(event, 'fs35', 66)" class="id">negative</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 67)" onmouseover="showTip(event, 'fs4', 67)" class="id">Predicate</span><span class="pn">(</span> <span class="k">fun</span> <span onmouseout="hideTip(event, 'fs36', 68)" onmouseover="showTip(event, 'fs36', 68)" class="id">integer</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs36', 69)" onmouseover="showTip(event, 'fs36', 69)" class="id">integer</span> <span class="o">&lt;</span> <span class="n">0</span> <span class="pn">)</span>
+</code></pre></td>
+</tr>
+</table>
+<p>However, given this predicate, we can re-use it in other situations, providing we have a way to map values to integers.
+For instance, we can use the <code>negative</code> predicate on a person's bank balance to work out if they are currently overdrawn.</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 70)" onmouseover="showTip(event, 'fs37', 70)" class="fn">personBankBalance</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs38', 71)" onmouseover="showTip(event, 'fs38', 71)" class="id">person</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs22', 72)" onmouseover="showTip(event, 'fs22', 72)" class="rt">Person</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs11', 73)" onmouseover="showTip(event, 'fs11', 73)" class="vt">int</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs39', 74)" onmouseover="showTip(event, 'fs39', 74)" class="fn">failwith</span> <span class="s">&quot;query persons bank account&quot;</span> 
+  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs40', 75)" onmouseover="showTip(event, 'fs40', 75)" class="id">overdrawn</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 76)" onmouseover="showTip(event, 'fs14', 76)" class="fn">contramap</span> <span onmouseout="hideTip(event, 'fs37', 77)" onmouseover="showTip(event, 'fs37', 77)" class="fn">personBankBalance</span> <span onmouseout="hideTip(event, 'fs35', 78)" onmouseover="showTip(event, 'fs35', 78)" class="id">negative</span>
+</code></pre></td>
+</tr>
+</table>
 
 <div class="tip" id="fs1">val id : x:&#39;T -&gt; &#39;T</div>
 <div class="tip" id="fs2">namespace System</div>
@@ -156,6 +175,12 @@ Examples
 <div class="tip" id="fs32">Linq.Enumerable.Distinct&lt;&#39;TSource&gt;(source: Collections.Generic.IEnumerable&lt;&#39;TSource&gt;) : Collections.Generic.IEnumerable&lt;&#39;TSource&gt;<br />Linq.Enumerable.Distinct&lt;&#39;TSource&gt;(source: Collections.Generic.IEnumerable&lt;&#39;TSource&gt;, comparer: Collections.Generic.IEqualityComparer&lt;&#39;TSource&gt;) : Collections.Generic.IEnumerable&lt;&#39;TSource&gt;</div>
 <div class="tip" id="fs33">val cnt2 : int</div>
 <div class="tip" id="fs34">val snd : tuple:(&#39;T1 * &#39;T2) -&gt; &#39;T2</div>
+<div class="tip" id="fs35">val negative : Predicate&lt;int&gt;</div>
+<div class="tip" id="fs36">val integer : int</div>
+<div class="tip" id="fs37">val personBankBalance : person:Person -&gt; int</div>
+<div class="tip" id="fs38">val person : Person</div>
+<div class="tip" id="fs39">val failwith : message:string -&gt; &#39;T</div>
+<div class="tip" id="fs40">val overdrawn : Predicate&lt;Person&gt;</div>
 
         </div>
         <div class="span3">
