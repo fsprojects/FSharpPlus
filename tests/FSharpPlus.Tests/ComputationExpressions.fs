@@ -149,54 +149,67 @@ module ComputationExpressions =
         let d3 = d2 |> Seq.toList
         areEqual (SideEffects.get()) ["Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"]
         SideEffects.reset()
-
-        // plains seqs
-        let e1 s _ = (Seq.singleton (s, 0))
+        
+        // external type, custom definition of TryFinally
+        let e1 s _ = WrappedSeqC (Seq.singleton (s, 0))
         let e2 = monad.plus {
             for str in [("first1", "second1"); ("first2", "second2")] do
             for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
             let!  _  = e1 "" (Some len)
-            return str }  
+            return str }
 
+        areEqual (SideEffects.get()) []
         let e3 = e2 |> Seq.toList
+        areEqual (SideEffects.get()) ["Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"]
+        SideEffects.reset()
 
-        // lazy (monad.fx)
-        let f1 s _ = (lazy (s, 0))
-        let f2 = monad.fx {
+        // plain seqs
+        let f1 s _ = (Seq.singleton (s, 0))
+        let f2 = monad.plus {
             for str in [("first1", "second1"); ("first2", "second2")] do
             for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
             let!  _  = f1 "" (Some len)
-            () }  
+            return str }  
 
-        let f3 = f2.Value
+        let f3 = f2 |> Seq.toList
 
-        // async (monad.fx)
-        let g1 s _ = (async.Return (s, 0))
+        // lazy (monad.fx)
+        let g1 s _ = (lazy (s, 0))
         let g2 = monad.fx {
             for str in [("first1", "second1"); ("first2", "second2")] do
             for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
             let!  _  = g1 "" (Some len)
             () }  
 
-        let g3 = g2 |> Async.RunSynchronously
+        let g3 = g2.Value
 
-        // external type, custom definition of using, Strict (Monadic Container)
-        let h1 s _ = WrappedListG (List.singleton (s, 0))
-        let h2 = monad.plus.strict {
+        // async (monad.fx)
+        let h1 s _ = (async.Return (s, 0))
+        let h2 = monad.fx {
             for str in [("first1", "second1"); ("first2", "second2")] do
             for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
             let!  _  = h1 "" (Some len)
+            () }  
+
+        let h3 = h2 |> Async.RunSynchronously
+
+        // external type, custom definition of using, Strict (Monadic Container)
+        let i1 s _ = WrappedListG (List.singleton (s, 0))
+        let i2 = monad.plus.strict {
+            for str in [("first1", "second1"); ("first2", "second2")] do
+            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+            let!  _  = i1 "" (Some len)
             return str }
 
         areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
         SideEffects.reset()
 
         // same example but without explicitely telling that the monad is strict
-        let i1 s _ = WrappedListG (List.singleton (s, 0))
-        let i2 = monad.plus {
+        let j1 s _ = WrappedListG (List.singleton (s, 0))
+        let j2 = monad.plus {
             for str in [("first1", "second1"); ("first2", "second2")] do
             for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
-            let!  _  = i1 "" (Some len)
+            let!  _  = j1 "" (Some len)
             return str }
 
         areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]

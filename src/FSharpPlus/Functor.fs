@@ -321,7 +321,7 @@ type TryWith =
     static member inline TryWith (computation: '``Monad<'T>``    , catchHandler: exn -> '``Monad<'T>``, _: Default1) = (^``Monad<'T>`` : (static member TryWith: _*_->_) computation, catchHandler): '``Monad<'T>``
     static member inline TryWith (_:^t when ^t:null and ^t:struct, _           : exn -> 't            , _: Default1) = ()
 
-    static member        TryWith (computation: seq<_>            , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))    
+    static member        TryWith (computation: seq<_>            , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))
     static member        TryWith (computation: Async<_>          , catchHandler: exn -> Async<_>      , _: TryWith ) = async.TryWith (computation, catchHandler)
     static member        TryWith (computation: Lazy<_>           , catchHandler: exn -> Lazy<_>       , _: TryWith ) = lazy (try computation.Force () with e -> (catchHandler e).Force ()): Lazy<_>
 
@@ -333,11 +333,6 @@ type TryWith =
 type TryFinally =
     inherit Default1
 
-    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2  ) = try computation finally compensation ()
-    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1  ) = try computation finally compensation ()
-    static member inline TryFinally ((computation: '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinally) = (^``Monad<'T>`` : (static member TryFinally: _*_->_) computation, compensation): '``Monad<'T>``
-    static member inline TryFinally (( _         : ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            ) = ()
-
     static member        TryFinally ((computation: seq<_>  , compensation: unit -> unit), _:Default2  , _) = seq (try (Seq.toArray computation) finally compensation ())
     static member        TryFinally ((computation: Id<_>   , compensation: unit -> unit), _:TryFinally, _) = try computation finally compensation()
     static member        TryFinally ((computation: Async<_>, compensation: unit -> unit), _:TryFinally, _) = async.TryFinally (computation, compensation): Async<_>
@@ -346,6 +341,14 @@ type TryFinally =
     static member inline Invoke (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally: (_*_)*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>)
         call (Unchecked.defaultof<TryFinally>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
+
+    static member inline InvokeOnInstance (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = (^``Monad<'T>`` : (static member TryFinally: _*_->_) source, f): '``Monad<'T>``
+
+type TryFinally with
+    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2  ) = try computation finally compensation ()
+    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1  ) = try computation finally compensation ()
+    static member inline TryFinally ((computation: '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinally) = TryFinally.InvokeOnInstance computation compensation: '``Monad<'T>``
+    static member inline TryFinally (( _         : ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            ) = ()
 
 
 type Using =
@@ -363,8 +366,9 @@ type Using =
         (^``Monad<'U>`` : (static member Using: _*_->_) resource, body) : '``Monad<'U>``
 
 type Using with
-    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``:     struct , _:Default2) = using resource body
-    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``: not struct , _:Default1) = using resource body    
+    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``:     struct , _:Default3) = using resource body
+    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``: not struct , _:Default2) = using resource body
+    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _:Default1) = TryFinally.InvokeOnInstance (body resource) (fun () -> if not (isNull (box resource)) then resource.Dispose ()) : '``Monad<'U>``
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _:Using   ) = Using.InvokeOnInstance resource body : '``Monad<'U>``
     static member inline Using (_                                  , _   : 'a -> ^t when ^t : null and ^t: struct               , _:Using   ) = ()
 

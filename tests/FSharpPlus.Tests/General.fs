@@ -97,9 +97,27 @@ type WrappedSeqB<'s> = WrappedSeqB of 's seq with
     static member Delay (f: unit -> WrappedSeqB<_>) =
                     let run (WrappedSeqB s) = s
                     WrappedSeqB (Seq.delay (f >> run))
+    static member TryFinally (computation, compensation) =
+                    SideEffects.add "Using WrappedSeqA's TryFinally"
+                    try computation finally compensation ()
     static member Using (resource, body) = 
                     SideEffects.add "Using WrappedSeqB's Using"
                     using resource body
+
+type WrappedSeqC<'s> = WrappedSeqC of 's seq with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqC x) = x in x).GetEnumerator()
+    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqC x) = x in x).GetEnumerator() :> Collections.IEnumerator
+    static member Return  (x) = WrappedSeqC [x]
+    static member Bind  (WrappedSeqC x: WrappedSeqC<'T>, f) = WrappedSeqC (Seq.collect (f >> (fun (WrappedSeqC x) -> x)) x)
+    static member Join  (WrappedSeqC wlst) = WrappedSeqC wlst >>= id
+    static member get_Empty() = WrappedSeqC List.empty
+    static member Append (WrappedSeqC l, WrappedSeqC x) = WrappedSeqC (Seq.append l x)
+    static member Delay (f: unit -> WrappedSeqC<_>) =
+                    let run (WrappedSeqC s) = s
+                    WrappedSeqC (Seq.delay (f >> run))
+    static member TryFinally (computation, compensation) =
+                    SideEffects.add "Using WrappedSeqC's TryFinally"
+                    try computation finally compensation ()
 
 
 open System.Collections.Generic
@@ -1083,8 +1101,9 @@ module ShouldNotCompile =
     // This should not compile (but it does)
     let resNone'' = sequence (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
 
-    // this compiles but it requires a type annotation to tell between
-    // seq and other monadplus #seq types
+    // this compiles but it requires a type annotation, but
+    // thanks to https://github.com/Microsoft/visualfsharp/pull/4170
+    // in F# 4.1 versions released as of 2018 it won't be required
     let pythags = monad {
       let! z = seq [1..50]
       let! x = seq [1..z]
