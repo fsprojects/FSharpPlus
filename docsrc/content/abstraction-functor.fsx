@@ -151,3 +151,12 @@ type ZipList<'s> = ZipList of 's seq with
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
 
 let mappedZipList = map string (ZipList [1;2;3])
+
+
+// A Monad is automatically a Functor
+
+type MyList<'s> = MyList of 's seq with
+    static member Return (x:'a)     = MyList x
+    static member Bind  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
+
+let mappedMyList = map string (MyList [1;2;3])

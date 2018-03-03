@@ -243,11 +243,15 @@ module Functor =
         let testVal3 = map ((+) 1) (dict (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
 
-        // WrappedListD is Applicative. Applicatives are Functors => map should work
+        // WrappedSeqD is Applicative. Applicatives are Functors => map should work
         Assert.AreEqual (SideEffects.get(), [])
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
         Assert.AreEqual (SideEffects.get(), ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"])
+        
+        // WrappedListE is a Monad. Monads are Functors => map should work
+        let testVal5 = map ((+) 1) (WrappedListE [1..3])
+        Assert.IsInstanceOf<Option<WrappedListE<int>>> (Some testVal5)
 
     [<Test>]
     let unzip() = 

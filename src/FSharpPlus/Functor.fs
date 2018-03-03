@@ -224,21 +224,6 @@ type Iterate =
 type Map =
     inherit Default1
 
-    static member inline Invoke (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
-        let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Map: _*_*_ -> _) source, mapping, mthd)
-        call (Unchecked.defaultof<Map>, source, Unchecked.defaultof<'``Functor<'U>``>)
-
-    static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
-        (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
-
-    static member inline       Map (x: '``Monad<'T>``      , f: 'T->'U, [<Optional>]_mthd: Default4) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
-    static member inline       Map (x: '``Applicative<'T>``, f: 'T->'U, [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f) x   : '``Applicative<'U>``
-    [<Extension>]static member Map (x: seq<_>              , f: 'T->'U, [<Optional>]_mthd: Default2) = Seq.map f x              : seq<'U>
-    [<Extension>]static member Map (x: IEnumerator<_>      , f: 'T->'U, [<Optional>]_mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
-    [<Extension>]static member Map (x: IDictionary<_,_>    , f: 'T->'U, [<Optional>]_mthd: Default2) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d :> IDictionary<'Key,'U>
-    [<Extension>]static member Map (x: IObservable<'T>     , f: 'T->'U, [<Optional>]_mthd: Default2) = Observable.map f x       : IObservable<'U>
-    static member inline       Map (x: '``Functor<'T>``    , f: 'T->'U, [<Optional>]_mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
-
     [<Extension>]static member Map (x: Lazy<_>             , f: 'T->'U, [<Optional>]_mthd: Map     ) = Lazy<_>.Create (fun () -> f x.Value)   : Lazy<'U>
     #if NET35
     #else
@@ -266,6 +251,31 @@ type Map =
     [<Extension>]static member Map (x: string              , f        , [<Optional>]_mthd: Map     ) = String.map f x
     [<Extension>]static member Map (x: StringBuilder       , f        , [<Optional>]_mthd: Map     ) = new StringBuilder (String.map f (string x))
     [<Extension>]static member Map (x: Set<_>              , f        , [<Optional>]_mthd: Map     ) = Set.map f x
+
+
+    static member inline Invoke (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
+        let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Map: _*_*_ -> _) source, mapping, mthd)
+        call (Unchecked.defaultof<Map>, source, Unchecked.defaultof<'``Functor<'U>``>)
+
+    static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
+        (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
+
+type Map with
+    static member inline       Map (x: '``Monad<'T>`` when '``Monad<'T>`` : (static member Bind   :  '``Monad<'T>`` *  ('T -> '``Monad<'U>``)  ->  '``Monad<'U>``) 
+                                                      and  '``Monad<'U>`` : (static member Return :  'U -> '``Monad<'U>``)
+                                                              , f: 'T->'U, [<Optional>]_mthd: Default4) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
+
+    static member inline       Map (x: '``Applicative<'T>`` when '``Applicative<'T>``     : (static member (<*>)  : '``Applicative<'T->'U>`` * '``Applicative<'T>`` -> '``Applicative<'U>``)
+                                                            and  '``Applicative<'T->'U>`` : (static member Return : ('T -> 'U) -> '``Applicative<'T->'U>``)
+                                                              , f: 'T->'U, [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
+    static member inline       Map (_:^t when ^t: null and ^t: struct, _,  _mthd: Default3) = ()
+
+    [<Extension>]static member Map (x: seq<_>                 , f: 'T->'U, _mthd: Default2) = Seq.map f x              : seq<'U>
+    [<Extension>]static member Map (x: IEnumerator<_>         , f: 'T->'U, _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
+    [<Extension>]static member Map (x: IDictionary<_,_>       , f: 'T->'U, _mthd: Default2) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d :> IDictionary<'Key,'U>
+    [<Extension>]static member Map (x: IObservable<'T>        , f: 'T->'U, _mthd: Default2) = Observable.map f x       : IObservable<'U>
+    static member inline       Map (x: '``Functor<'T>``       , f: 'T->'U, _mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
+    static member inline       Map (_: ^t when ^t: null and ^t: struct, _, _mthd: Default1) = ()
         
 
 
