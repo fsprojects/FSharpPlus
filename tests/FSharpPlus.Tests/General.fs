@@ -42,8 +42,8 @@ type WrappedListC<'s> = WrappedListC of 's list with
 type WrappedListD<'s> = WrappedListD of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator()
     interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
-    static member Return  (x) = WrappedListD [x]
-    static member Bind ((WrappedListD x):WrappedListD<'T>, f) = WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
+    static member Return  (x) = SideEffects.add "Using WrappedListD's Return"; WrappedListD [x]
+    static member Bind ((WrappedListD x):WrappedListD<'T>, f) = SideEffects.add "Using WrappedListD's Bind"; WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
     static member inline FoldMap (WrappedListD x, f) =
         SideEffects.add "Using optimized foldMap"
         Seq.fold (fun x y -> x ++ (f y)) zero x
@@ -248,10 +248,17 @@ module Functor =
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
         Assert.AreEqual (SideEffects.get(), ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"])
+        SideEffects.reset()
         
         // WrappedListE is a Monad. Monads are Functors => map should work
         let testVal5 = map ((+) 1) (WrappedListE [1..3])
         Assert.IsInstanceOf<Option<WrappedListE<int>>> (Some testVal5)
+
+        // Same with WrappedListD but WrappedListD is also IEnumerable<_>
+        Assert.AreEqual (SideEffects.get(), [])
+        let testVal6 = map ((+) 1) (WrappedListD [1..3])
+        Assert.IsInstanceOf<Option<WrappedListD<int>>> (Some testVal6)
+        Assert.AreEqual (SideEffects.get(), ["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"])
 
     [<Test>]
     let unzip() = 
@@ -1042,7 +1049,11 @@ module Sequences =
         let singletonList: _ list = result 1
         let singletonSeq : _ seq  = result 1
 
+        // This stopped compiling, but actually it's the right thing, before was returning a seq<_>
+        (*
         let mappedstack = map string stack
+        *)
+        
         let stackGroup  = groupBy ((%)/> 2) stack
 
         let r03' = filter ((=) 3) stack

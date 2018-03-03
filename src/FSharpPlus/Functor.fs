@@ -220,62 +220,61 @@ type Iterate =
         let inline call (_: ^M, source: ^I) =  ((^M or ^I) : (static member Iterate: _*_ -> _) source, action)
         call (Unchecked.defaultof<Iterate>, source)
 
-[<Extension;Sealed>]
 type Map =
     inherit Default1
 
-    [<Extension>]static member Map (x: Lazy<_>             , f: 'T->'U, [<Optional>]_mthd: Map     ) = Lazy<_>.Create (fun () -> f x.Value)   : Lazy<'U>
+    static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value)   : Lazy<'U>
     #if NET35
     #else
-    [<Extension>]static member Map (x: Task<'T>            , f: 'T->'U, [<Optional>]_mthd: Map     ) = x.ContinueWith (fun (x: Task<_>) -> f x.Result)   : Task<'U>
+    static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = x.ContinueWith (fun (x: Task<_>) -> f x.Result)   : Task<'U>
     #endif
-    [<Extension>]static member Map (x: option<_>           , f: 'T->'U, [<Optional>]_mthd: Map     ) = Option.map  f x
-    [<Extension>]static member Map (x: list<_>             , f: 'T->'U, [<Optional>]_mthd: Map     ) = List.map    f x      : list<'U>
-    [<Extension>]static member Map (g: 'R->'T              , f: 'T->'U, [<Optional>]_mthd: Map     ) = (>>) g f
-    [<Extension>]static member Map (g: Func<'R, 'T>        , f: 'T->'U, [<Optional>]_mthd: Map     ) = Func<'R, 'U>(g.Invoke >> f)
-    [<Extension>]static member Map ((m: 'Monoid, a)        , f: 'T->'U, [<Optional>]_mthd: Map     ) = (m, f a)
-    [<Extension>]static member Map (x: _ []                , f: 'T->'U, [<Optional>]_mthd: Map     ) = Array.map   f x
-    [<Extension>]static member Map (x: _ [,]               , f: 'T->'U, [<Optional>]_mthd: Map     ) = Array2D.map f x
-    [<Extension>]static member Map (x: _ [,,]              , f: 'T->'U, [<Optional>]_mthd: Map     ) = Array3D.map f x
-    [<Extension>]static member Map (x: _ [,,,]             , f: 'T->'U, [<Optional>]_mthd: Map     ) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-    [<Extension>]static member Map (x: Async<_>            , f: 'T->'U, [<Optional>]_mthd: Map     ) = async.Bind (x, async.Return << f)
-    [<Extension>]static member Map (x: Result<_,'E>        , f: 'T->'U, [<Optional>]_mthd: Map     ) = Result.map f x
-    [<Extension>]static member Map (x: Choice<_,'E>        , f: 'T->'U, [<Optional>]_mthd: Map     ) = Choice.map f x
-    [<Extension>]static member Map (KeyValue(k, x)         , f: 'T->'U, [<Optional>]_mthd: Map     ) = KeyValuePair (k, f x)
-    [<Extension>]static member Map (x: Map<'Key,'T>        , f: 'T->'U, [<Optional>]_mthd: Map     ) = Map.map (const' f) x : Map<'Key,'U>
-    [<Extension>]static member Map (x: Dictionary<_,_>     , f: 'T->'U, [<Optional>]_mthd: Map     ) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d: Dictionary<'Key,'U>
-    [<Extension>]static member Map (x: Expr<'T>            , f: 'T->'U, [<Optional>]_mthd: Map     ) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
-    [<Extension>]static member Map (x: ResizeArray<'T>     , f: 'T->'U, [<Optional>]_mthd: Map     ) = ResizeArray(Seq.map f x) : ResizeArray<'U>
+    static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
+    static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x      : list<'U>
+    static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
+    static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U>(g.Invoke >> f)
+    static member Map (((m: 'Monoid, a)        , f: 'T->'U), _mthd: Map) = (m, f a)
+    static member Map ((x: _ []                , f: 'T->'U), _mthd: Map) = Array.map   f x
+    static member Map ((x: _ [,]               , f: 'T->'U), _mthd: Map) = Array2D.map f x
+    static member Map ((x: _ [,,]              , f: 'T->'U), _mthd: Map) = Array3D.map f x
+    static member Map ((x: _ [,,,]             , f: 'T->'U), _mthd: Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
+    static member Map ((x: Async<_>            , f: 'T->'U), _mthd: Map) = async.Bind (x, async.Return << f)
+    static member Map ((x: Result<_,'E>        , f: 'T->'U), _mthd: Map) = Result.map f x
+    static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
+    static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
+    static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
+    static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d: Dictionary<'Key,'U>
+    static member Map ((x: Expr<'T>            , f: 'T->'U), _mthd: Map) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
+    static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray(Seq.map f x) : ResizeArray<'U>
 
     // Restricted
-    [<Extension>]static member Map (x: string              , f        , [<Optional>]_mthd: Map     ) = String.map f x
-    [<Extension>]static member Map (x: StringBuilder       , f        , [<Optional>]_mthd: Map     ) = new StringBuilder (String.map f (string x))
-    [<Extension>]static member Map (x: Set<_>              , f        , [<Optional>]_mthd: Map     ) = Set.map f x
+    static member Map ((x: string              , f)        , _mthd: Map) = String.map f x
+    static member Map ((x: StringBuilder       , f)        , _mthd: Map) = new StringBuilder (String.map f (string x))
+    static member Map ((x: Set<_>              , f)        , _mthd: Map) = Set.map f x
 
 
     static member inline Invoke (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
-        let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Map: _*_*_ -> _) source, mapping, mthd)
+        let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Map: (_*_)*_ -> _) (source, mapping), mthd)
         call (Unchecked.defaultof<Map>, source, Unchecked.defaultof<'``Functor<'U>``>)
 
     static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
 
 type Map with
-    static member inline       Map (x: '``Monad<'T>`` when '``Monad<'T>`` : (static member Bind   :  '``Monad<'T>`` *  ('T -> '``Monad<'U>``)  ->  '``Monad<'U>``) 
-                                                      and  '``Monad<'U>`` : (static member Return :  'U -> '``Monad<'U>``)
-                                                              , f: 'T->'U, [<Optional>]_mthd: Default4) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
+    static member inline Map ((x: '``Monad<'T>``       when '``Monad<'T>`` : (static member Bind   :  '``Monad<'T>`` *  ('T -> '``Monad<'U>``)  ->  '``Monad<'U>``)
+                                                       and  '``Monad<'U>`` : (static member Return :  'U -> '``Monad<'U>``)
+                                                         , f: 'T->'U), [<Optional>]_mthd: Default4) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
 
-    static member inline       Map (x: '``Applicative<'T>`` when '``Applicative<'T>``     : (static member (<*>)  : '``Applicative<'T->'U>`` * '``Applicative<'T>`` -> '``Applicative<'U>``)
-                                                            and  '``Applicative<'T->'U>`` : (static member Return : ('T -> 'U) -> '``Applicative<'T->'U>``)
-                                                              , f: 'T->'U, [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
-    static member inline       Map (_:^t when ^t: null and ^t: struct, _,  _mthd: Default3) = ()
+    static member inline Map ((x: '``Applicative<'T>`` when '``Applicative<'T>``     : (static member (<*>)  : '``Applicative<'T->'U>`` * '``Applicative<'T>`` -> '``Applicative<'U>``)
+                                                       and  '``Applicative<'T->'U>`` : (static member Return : ('T -> 'U) -> '``Applicative<'T->'U>``)
+                                                         , f: 'T->'U), [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
+    static member inline Map (_:^t when ^t: null and ^t: struct, _,  _mthd: Default3) = ()
 
-    [<Extension>]static member Map (x: seq<_>                 , f: 'T->'U, _mthd: Default2) = Seq.map f x              : seq<'U>
-    [<Extension>]static member Map (x: IEnumerator<_>         , f: 'T->'U, _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
-    [<Extension>]static member Map (x: IDictionary<_,_>       , f: 'T->'U, _mthd: Default2) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d :> IDictionary<'Key,'U>
-    [<Extension>]static member Map (x: IObservable<'T>        , f: 'T->'U, _mthd: Default2) = Observable.map f x       : IObservable<'U>
-    static member inline       Map (x: '``Functor<'T>``       , f: 'T->'U, _mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
-    static member inline       Map (_: ^t when ^t: null and ^t: struct, _, _mthd: Default1) = ()
+    static member        Map ((x: seq<_>                 , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
+    static member        Map ((x: IEnumerator<_>         , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
+    static member        Map ((x: IDictionary<_,_>       , f: 'T->'U), _mthd: Default2) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add(k, f v)) x; d :> IDictionary<'Key,'U>
+    static member        Map ((x: IObservable<'T>        , f: 'T->'U), _mthd: Default2) = Observable.map f x       : IObservable<'U>
+    static member inline Map ((x: '``Functor<'T>``       , f: 'T->'U), _mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
+    static member inline Map ((_: ^t when ^t: null and ^t: struct, _), _mthd: Default1) = ()
         
 
 
@@ -596,7 +595,7 @@ type Contramap with
     static member inline Contramap (_: ^t when ^t: null and ^t: struct  , _: 'A->'B,  _mthd: Default1) = ()
 
 type Map with
-    static member inline Map (x:'``Profunctor<'B,'C>``, cd: 'C->'D, [<Optional>]_mthd: Default5) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
+    static member inline Map ((x:'``Profunctor<'B,'C>``, cd: 'C->'D), [<Optional>]_mthd: Default5) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
 
 
 type Dimap with
