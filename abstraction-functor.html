@@ -166,6 +166,25 @@
 <span class="l">46: </span>
 <span class="l">47: </span>
 <span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
+<span class="l">54: </span>
+<span class="l">55: </span>
+<span class="l">56: </span>
+<span class="l">57: </span>
+<span class="l">58: </span>
+<span class="l">59: </span>
+<span class="l">60: </span>
+<span class="l">61: </span>
+<span class="l">62: </span>
+<span class="l">63: </span>
+<span class="l">64: </span>
+<span class="l">65: </span>
+<span class="l">66: </span>
+<span class="l">67: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
@@ -215,6 +234,25 @@
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs40', 97)" onmouseover="showTip(event, 'fs40', 97)" class="id">myTree</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs30', 98)" onmouseover="showTip(event, 'fs30', 98)" class="uc">Tree</span><span class="pn">(</span><span class="n">6</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs30', 99)" onmouseover="showTip(event, 'fs30', 99)" class="uc">Tree</span><span class="pn">(</span><span class="n">2</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs31', 100)" onmouseover="showTip(event, 'fs31', 100)" class="uc">Leaf</span> <span class="n">1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs31', 101)" onmouseover="showTip(event, 'fs31', 101)" class="uc">Leaf</span> <span class="n">3</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs31', 102)" onmouseover="showTip(event, 'fs31', 102)" class="uc">Leaf</span> <span class="n">9</span><span class="pn">)</span>
 <span class="k">let</span> <span class="id">mappedTree</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs22', 103)" onmouseover="showTip(event, 'fs22', 103)" class="fn">map</span> <span class="id">fTimes2minus3</span> <span onmouseout="hideTip(event, 'fs40', 104)" onmouseover="showTip(event, 'fs40', 104)" class="id">myTree</span>
+
+
+
+<span class="c">// An applicative is automatically a Functor</span>
+
+<span class="k">type</span> <span class="rt">ZipList</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">s</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 105)" onmouseover="showTip(event, 'fs41', 105)" class="uc">ZipList</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">s</span> <span onmouseout="hideTip(event, 'fs42', 106)" onmouseover="showTip(event, 'fs42', 106)" class="if">seq</span> <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs43', 107)" onmouseover="showTip(event, 'fs43', 107)" class="fn">Return</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs15', 108)" onmouseover="showTip(event, 'fs15', 108)" class="id">x</span><span class="pn">:</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">)</span>     <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 109)" onmouseover="showTip(event, 'fs41', 109)" class="uc">ZipList</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 110)" onmouseover="showTip(event, 'fs28', 110)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs44', 111)" onmouseover="showTip(event, 'fs44', 111)" class="id">initInfinite</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs45', 112)" onmouseover="showTip(event, 'fs45', 112)" class="fn">konst</span> <span onmouseout="hideTip(event, 'fs15', 113)" onmouseover="showTip(event, 'fs15', 113)" class="id">x</span><span class="pn">)</span><span class="pn">)</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="pn">(</span><span class="o">&lt;*&gt;</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs41', 114)" onmouseover="showTip(event, 'fs41', 114)" class="uc">ZipList</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs46', 115)" onmouseover="showTip(event, 'fs46', 115)" class="id">f</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs42', 116)" onmouseover="showTip(event, 'fs42', 116)" class="if">seq</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span><span class="k">-&gt;</span><span class="ta">&#39;</span><span class="id">b</span><span class="pn">&gt;</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs41', 117)" onmouseover="showTip(event, 'fs41', 117)" class="uc">ZipList</span> <span onmouseout="hideTip(event, 'fs47', 118)" onmouseover="showTip(event, 'fs47', 118)" class="id">x</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 119)" onmouseover="showTip(event, 'fs41', 119)" class="uc">ZipList</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 120)" onmouseover="showTip(event, 'fs28', 120)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs48', 121)" onmouseover="showTip(event, 'fs48', 121)" class="id">zip</span> <span onmouseout="hideTip(event, 'fs46', 122)" onmouseover="showTip(event, 'fs46', 122)" class="id">f</span> <span onmouseout="hideTip(event, 'fs47', 123)" onmouseover="showTip(event, 'fs47', 123)" class="id">x</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs28', 124)" onmouseover="showTip(event, 'fs28', 124)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs49', 125)" onmouseover="showTip(event, 'fs49', 125)" class="id">map</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs39', 126)" onmouseover="showTip(event, 'fs39', 126)" class="fn">f</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs15', 127)" onmouseover="showTip(event, 'fs15', 127)" class="id">x</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs39', 128)" onmouseover="showTip(event, 'fs39', 128)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs15', 129)" onmouseover="showTip(event, 'fs15', 129)" class="id">x</span><span class="pn">)</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs41', 130)" onmouseover="showTip(event, 'fs41', 130)" class="rt">ZipList</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">b</span><span class="pn">&gt;</span>
+
+<span class="k">let</span> <span class="id">mappedZipList</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs22', 131)" onmouseover="showTip(event, 'fs22', 131)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs26', 132)" onmouseover="showTip(event, 'fs26', 132)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs41', 133)" onmouseover="showTip(event, 'fs41', 133)" class="uc">ZipList</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span>
+
+
+<span class="c">// A Monad is automatically a Functor</span>
+
+<span class="k">type</span> <span class="rt">MyList</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">s</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs50', 134)" onmouseover="showTip(event, 'fs50', 134)" class="uc">MyList</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">s</span> <span onmouseout="hideTip(event, 'fs42', 135)" onmouseover="showTip(event, 'fs42', 135)" class="if">seq</span> <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs51', 136)" onmouseover="showTip(event, 'fs51', 136)" class="fn">Return</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs52', 137)" onmouseover="showTip(event, 'fs52', 137)" class="id">x</span><span class="pn">:</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">)</span>     <span class="o">=</span> <span onmouseout="hideTip(event, 'fs50', 138)" onmouseover="showTip(event, 'fs50', 138)" class="uc">MyList</span> <span onmouseout="hideTip(event, 'fs52', 139)" onmouseover="showTip(event, 'fs52', 139)" class="id">x</span>
+    <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs53', 140)" onmouseover="showTip(event, 'fs53', 140)" class="fn">Bind</span>  <span class="pn">(</span><span onmouseout="hideTip(event, 'fs50', 141)" onmouseover="showTip(event, 'fs50', 141)" class="uc">MyList</span> <span onmouseout="hideTip(event, 'fs54', 142)" onmouseover="showTip(event, 'fs54', 142)" class="id">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs50', 143)" onmouseover="showTip(event, 'fs50', 143)" class="rt">MyList</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs55', 144)" onmouseover="showTip(event, 'fs55', 144)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs50', 145)" onmouseover="showTip(event, 'fs50', 145)" class="uc">MyList</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 146)" onmouseover="showTip(event, 'fs28', 146)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs56', 147)" onmouseover="showTip(event, 'fs56', 147)" class="id">collect</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs55', 148)" onmouseover="showTip(event, 'fs55', 148)" class="fn">f</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs50', 149)" onmouseover="showTip(event, 'fs50', 149)" class="uc">MyList</span> <span onmouseout="hideTip(event, 'fs47', 150)" onmouseover="showTip(event, 'fs47', 150)" class="id">x</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs47', 151)" onmouseover="showTip(event, 'fs47', 151)" class="id">x</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs54', 152)" onmouseover="showTip(event, 'fs54', 152)" class="id">x</span><span class="pn">)</span>
+
+<span class="k">let</span> <span class="id">mappedMyList</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs22', 153)" onmouseover="showTip(event, 'fs22', 153)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs26', 154)" onmouseover="showTip(event, 'fs26', 154)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs50', 155)" onmouseover="showTip(event, 'fs50', 155)" class="uc">MyList</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span>
 </code></pre></td>
 </tr>
 </table>
@@ -259,6 +297,22 @@
 <div class="tip" id="fs38">val x : Tree&lt;&#39;a&gt;</div>
 <div class="tip" id="fs39">val f : (&#39;a -&gt; &#39;b)</div>
 <div class="tip" id="fs40">val myTree : Tree&lt;int&gt;</div>
+<div class="tip" id="fs41">Multiple items<br />union case ZipList.ZipList: seq&lt;&#39;s&gt; -&gt; ZipList&lt;&#39;s&gt;<br /><br />--------------------<br />type ZipList&lt;&#39;s&gt; =<br />&#160;&#160;| ZipList of seq&lt;&#39;s&gt;<br />&#160;&#160;&#160;&#160;static member Return : x:&#39;a -&gt; ZipList&lt;&#39;a&gt;<br />&#160;&#160;&#160;&#160;static member ( &lt;*&gt; ) : ZipList&lt;(&#39;a -&gt; &#39;b)&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;b&gt;</div>
+<div class="tip" id="fs42">Multiple items<br />val seq : sequence:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
+<div class="tip" id="fs43">static member ZipList.Return : x:&#39;a -&gt; ZipList&lt;&#39;a&gt;</div>
+<div class="tip" id="fs44">val initInfinite : initializer:(int -&gt; &#39;T) -&gt; seq&lt;&#39;T&gt;</div>
+<div class="tip" id="fs45">val konst : k:&#39;f -&gt; &#39;g -&gt; &#39;f</div>
+<div class="tip" id="fs46">val f : seq&lt;(&#39;a -&gt; &#39;b)&gt;</div>
+<div class="tip" id="fs47">val x : seq&lt;&#39;a&gt;</div>
+<div class="tip" id="fs48">val zip : source1:seq&lt;&#39;T1&gt; -&gt; source2:seq&lt;&#39;T2&gt; -&gt; seq&lt;&#39;T1 * &#39;T2&gt;</div>
+<div class="tip" id="fs49">val map : mapping:(&#39;T -&gt; &#39;U) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;</div>
+<div class="tip" id="fs50">Multiple items<br />union case MyList.MyList: seq&lt;&#39;s&gt; -&gt; MyList&lt;&#39;s&gt;<br /><br />--------------------<br />type MyList&lt;&#39;s&gt; =<br />&#160;&#160;| MyList of seq&lt;&#39;s&gt;<br />&#160;&#160;&#160;&#160;static member Bind : MyList&lt;&#39;T&gt; * f:(&#39;T -&gt; MyList&lt;&#39;a&gt;) -&gt; MyList&lt;&#39;a&gt;<br />&#160;&#160;&#160;&#160;static member Return : x:#seq&lt;&#39;a0&gt; -&gt; MyList&lt;&#39;a0&gt;</div>
+<div class="tip" id="fs51">static member MyList.Return : x:#seq&lt;&#39;a0&gt; -&gt; MyList&lt;&#39;a0&gt;</div>
+<div class="tip" id="fs52">val x : #seq&lt;&#39;a0&gt;</div>
+<div class="tip" id="fs53">static member MyList.Bind : MyList&lt;&#39;T&gt; * f:(&#39;T -&gt; MyList&lt;&#39;a&gt;) -&gt; MyList&lt;&#39;a&gt;</div>
+<div class="tip" id="fs54">val x : seq&lt;&#39;T&gt;</div>
+<div class="tip" id="fs55">val f : (&#39;T -&gt; MyList&lt;&#39;a&gt;)</div>
+<div class="tip" id="fs56">val collect : mapping:(&#39;T -&gt; #seq&lt;&#39;U&gt;) -&gt; source:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;</div>
 
         </div>
         <div class="span3">

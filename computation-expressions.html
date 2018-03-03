@@ -38,15 +38,15 @@
 <p>There is a single computation expression: <code>monad</code> but it comes in 4 flavours:</p>
 <ul>
 <li>
-<p>It could be delayed or strict</p>
+<p>Delayed or strict</p>
 <p>Delayed computations require that the type implements a Delay method.
 F# comes with async and seq computation expressions, both are delayed.</p>
 </li>
 <li>
-<p>It can have embedded side-effects or act as a monad plus</p>
-<p>A monad plus can return (or yield) many times, so for example all expressions in a loop can be returned, whereas in the other model those expressions are of type unit, since a side effect is expected.</p>
-<p>Async workflows is an example of a side-effect computation expression and seq expressions are an example of monad plus.</p>
-<p>Side effect workflows don't have any additional requirement over the type (apart of the monad operations), but monad plus requires the additional <a href="abstraction-alternative.html">get_Empty and Append</a> methods.</p>
+<p>It can have embedded side-effects or act as a monadplus</p>
+<p>A monadplus can return (or yield) many times, so for example all expressions in a loop can be returned, whereas in the other model those expressions are of type unit, since a side effect is expected.</p>
+<p>Async workflows is an example of a side-effect computation expression and seq expressions are an example of monadplus.</p>
+<p>Side effect workflows don't have any additional requirement over the type (apart from the monad operations), but monadplus requires the additional <a href="abstraction-alternative.html">get_Empty and Append</a> methods.</p>
 </li>
 </ul>
 <h1><a name="Examples" class="anchor" href="#Examples">Examples</a></h1>
