@@ -119,6 +119,10 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
                     SideEffects.add "Using WrappedSeqC's TryFinally"
                     try computation finally compensation ()
 
+type WrappedSeqD<'s> = WrappedSeqD of 's seq with
+    static member Return  (x) = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
+    static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (f <*> x)
+    static member ToList (WrappedSeqD x) = Seq.toList x
 
 open System.Collections.Generic
 open System.Threading.Tasks
@@ -228,6 +232,8 @@ module Monoid =
 module Functor =
     [<Test>]
     let mapDefaultCustom() = 
+
+        // NonEmptyList<_> has Map but at the same time is a seq<_>
         let testVal1 = map ((+) 1) {Head = 10; Tail = [20;30]}
         Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal1)
 
@@ -236,6 +242,12 @@ module Functor =
 
         let testVal3 = map ((+) 1) (dict (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
+
+        // WrappedListD is Applicative. Applicatives are Functors => map should work
+        Assert.AreEqual (SideEffects.get(), [])
+        let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
+        Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
+        Assert.AreEqual (SideEffects.get(), ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"])
 
     [<Test>]
     let unzip() = 

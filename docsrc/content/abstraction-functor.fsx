@@ -141,3 +141,13 @@ type Tree<'a> =
 
 let myTree = Tree(6, Tree(2, Leaf 1, Leaf 3), Leaf 9)
 let mappedTree = map fTimes2minus3 myTree
+
+
+
+// An applicative is automatically a Functor
+
+type ZipList<'s> = ZipList of 's seq with
+    static member Return (x:'a)     = ZipList (Seq.initInfinite (konst x))
+    static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
+
+let mappedZipList = map string (ZipList [1;2;3])
