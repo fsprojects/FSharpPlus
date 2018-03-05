@@ -116,7 +116,7 @@ module Operators =
     /// Map covariantly over the first argument of the Bifunctor.
     let inline first  (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = MapFirst.Invoke  f source
     /// Map covariantly over the second argument of the Bifunctor.
-    let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = MapSecond.Invoke f source
+    let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = Map.Invoke f source
     /// Map over both arguments at the same time of a Profunctor.
     let inline dimap  (f : 'A->'B) ( g: 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
     /// Can be thought of as mapping the left part of a Profunctor

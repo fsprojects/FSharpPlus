@@ -782,6 +782,24 @@ module MonadTransformers =
 
         ()
 
+module ProfunctorDefaults =
+    type Fun<'T,'U> = Fun of ('T -> 'U) with
+        static member Dimap ((Fun f): Fun<'B,'C>, g: 'A->'B, h:'C->'D) = Fun (g >> f >> h)
+
+    let a = lmap id (Fun int)
+    let b = rmap id (Fun float)
+    let b' = map id (Fun float)
+    ()
+
+module BifunctorDefaults =
+    type Tup<'a,'b> = Tup of ('a * 'b) with
+        static member Bimap (Tup (a, b), f, g) = Tup (f a, g b)
+
+    let a = first  string (Tup (1, '2'))
+    let b = second string (Tup (1, '2'))
+    let b' =  map  string (Tup (1, '2'))
+    ()
+
 module Categories =
 
     // Kleisli (slightly different definition)

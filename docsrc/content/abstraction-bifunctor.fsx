@@ -39,7 +39,7 @@ Other operations
  * ``second g x``
 *)
 (**
-    static member Second (x:Bifunctor<'T,'V>, f:'V->'W) :'Bifunctor<'T,'W>
+    static member Map (x:Bifunctor<'T,'V>, f:'V->'W) :'Bifunctor<'T,'W>
 *)
 (**
 
@@ -78,7 +78,7 @@ From F#+
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 
- Examples
+Examples
 --------
 *)
 
