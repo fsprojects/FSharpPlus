@@ -62,7 +62,7 @@ From F#+
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 
- Examples
+Examples
 --------
 *)
 
@@ -92,11 +92,11 @@ let cnt2 = Seq.length <| Linq.Enumerable.Distinct (personList, contramap snd per
 For instance a predicate function from a type to bool. An example of such a function is the predicate that classifies 
 integers as negative: 
 *)
-  let negative = Predicate( fun integer -> integer < 0 )
+let negative = Predicate( fun integer -> integer < 0 )
 (**
 
 However, given this predicate, we can re-use it in other situations, providing we have a way to map values to integers. 
 For instance, we can use the `negative` predicate on a person's bank balance to work out if they are currently overdrawn.
 *)
-  let personBankBalance (person:Person) : int = failwith "query persons bank account" 
-  let overdrawn = contramap personBankBalance negative
+let personBankBalance (person:Person) : int = failwith "query persons bank account" 
+let overdrawn = contramap personBankBalance negative

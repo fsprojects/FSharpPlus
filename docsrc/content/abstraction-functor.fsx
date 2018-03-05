@@ -87,7 +87,7 @@ Restricted:
  -  ``IEnumerator<'T>``
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 
- Examples
+Examples
 --------
 *)
 
@@ -144,7 +144,7 @@ let mappedTree = map fTimes2minus3 myTree
 
 
 
-// An applicative is automatically a Functor
+// An Applicative is automatically a Functor
 
 type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)     = ZipList (Seq.initInfinite (konst x))

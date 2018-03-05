@@ -66,7 +66,7 @@ From F#+
 
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 
- Examples
+Examples
 --------
 *)
 

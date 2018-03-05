@@ -27,7 +27,8 @@ Related Abstractions
 --------------------
  - [Monoid](abstraction-monoid.html): A monoid is a Semigroup with an additional ``zero`` operation
  
- - MonadPlus: Monads that are also Monoids
+ - Alt/MonadPlus: Applicatives/Monads that are also Semigroups/Monoids
+
 Concrete implementations
 ------------------------
 From .Net/F#

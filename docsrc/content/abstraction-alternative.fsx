@@ -69,6 +69,7 @@ From F#+
  -  ``DList<'T>``
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
 Examples
 --------
 *)

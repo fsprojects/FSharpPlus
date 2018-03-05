@@ -280,28 +280,28 @@ type Map with
 
 type Empty =
     inherit Default1
-    static member        Empty ([<Optional>]_output: seq<'T>             , [<Optional>]_mthd: Default2) = Seq.empty            : seq<'T>
-    static member inline Empty ([<Optional>]_output: '``FunctorZero<'T>``, [<Optional>]_mthd: Default1) = (^``FunctorZero<'T>``: (static member Empty: ^``FunctorZero<'T>``) ()) : '``FunctorZero<'T>``
+    static member        Empty ([<Optional>]_output: seq<'T>             , [<Optional>]_mthd: Default2) = Seq.empty    : seq<'T>
+    static member inline Empty ([<Optional>]_output: '``Alternative<'T>``, [<Optional>]_mthd: Default1) = (^``Alternative<'T>``: (static member Empty: ^``Alternative<'T>``) ()) : '``Alternative<'T>``
     static member inline Empty (_output: ^t when ^t: null and ^t: struct ,             _mthd: Default1) = id    
-    static member        Empty ([<Optional>]_output: option<'T>          , [<Optional>]_mthd: Empty   ) = None                 : option<'T>
-    static member        Empty ([<Optional>]_output: list<'T>            , [<Optional>]_mthd: Empty   ) = [  ]                 : list<'T>
-    static member        Empty ([<Optional>]_output: 'T []               , [<Optional>]_mthd: Empty   ) = [||]                 : 'T []    
+    static member        Empty ([<Optional>]_output: option<'T>          , [<Optional>]_mthd: Empty   ) = None         : option<'T>
+    static member        Empty ([<Optional>]_output: list<'T>            , [<Optional>]_mthd: Empty   ) = [  ]         : list<'T>
+    static member        Empty ([<Optional>]_output: 'T []               , [<Optional>]_mthd: Empty   ) = [||]         : 'T []    
 
-    static member inline Invoke () : '``FunctorZero<'T>`` =
+    static member inline Invoke () : '``Alternative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Empty: _*_ -> _) output, mthd)
-        call (Unchecked.defaultof<Empty>, Unchecked.defaultof<'``FunctorZero<'T>``> )
+        call (Unchecked.defaultof<Empty>, Unchecked.defaultof<'``Alternative<'T>``> )
 
 
 type Append =
     inherit Default1
-    static member        Append (x: 'T seq              , y                      , [<Optional>]_mthd: Default2) = Seq.append   x y
-    static member inline Append (x: '``FunctorPlus<'T>``, y: '``FunctorPlus<'T>``, [<Optional>]_mthd: Default1) = (^``FunctorPlus<'T>`` :  (static member Append : _*_ -> _) x, y) : '``FunctorPlus<'T>``
-    static member inline Append (_: ^t when ^t:null and ^t:struct, _             ,             _mthd: Default1) = ()
-    static member        Append (x: 'T option           , y                      , [<Optional>]_mthd: Append  ) = match x with None -> y | xs -> xs
-    static member        Append (x: 'T list             , y                      , [<Optional>]_mthd: Append  ) = x @ y
-    static member        Append (x: 'T []               , y                      , [<Optional>]_mthd: Append  ) = Array.append x y
+    static member        Append (x: 'T seq              , y         , [<Optional>]_mthd: Default2) = Seq.append   x y
+    static member inline Append (x: '``Alt<'T>``, y: '``Alt<'T>``   , [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member Append : _*_ -> _) x, y) : '``Alt<'T>``
+    static member inline Append (_: ^t when ^t:null and ^t:struct, _,             _mthd: Default1) = ()
+    static member        Append (x: 'T option           , y         , [<Optional>]_mthd: Append  ) = match x with None -> y | xs -> xs
+    static member        Append (x: 'T list             , y         , [<Optional>]_mthd: Append  ) = x @ y
+    static member        Append (x: 'T []               , y         , [<Optional>]_mthd: Append  ) = Array.append x y
 
-    static member inline Invoke (x: '``FunctorPlus<'T>``) (y: '``FunctorPlus<'T>``)  : '``FunctorPlus<'T>`` =
+    static member inline Invoke (x: '``Alt<'T>``) (y: '``Alt<'T>``)  : '``Alt<'T>`` =
         let inline call (mthd: ^M, input1: ^I, input2: ^I) = ((^M or ^I) : (static member Append: _*_*_ -> _) input1, input2, mthd)
         call (Unchecked.defaultof<Append>, x, y)
 

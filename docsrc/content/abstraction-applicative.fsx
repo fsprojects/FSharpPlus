@@ -81,6 +81,7 @@ Restricted:
  -  ``Set<'T>``
  -  ``IEnumerator<'T>``
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+
 Examples
 --------
 *)
@@ -148,3 +149,13 @@ let resSome2' = join (   iI tryDivBy (Some 4) Ii) <*> Some 8
 let resSome2'' = iI tryDivBy (Some 4) J (Some 8) Ii
 let resNone = iI tryDivBy (Some 0) J (Some 8) Ii
 let res16n17   = iI (+) (iI (+) (result 4) [2; 3] Ii) [10] Ii
+
+
+
+// A Monad is automatically an Applicative
+
+type MyList<'s> = MyList of 's seq with
+    static member Return (x:'a)     = MyList x
+    static member Bind  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
+
+let mappedMyList : MyList<_> = (MyList [(+) 1;(+) 2;(+) 3]) <*> (MyList [1;2;3])

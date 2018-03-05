@@ -41,7 +41,9 @@ Related Abstractions
 --------------------
  - [Semigroup](abstraction-semigroup.html): A monoid is a Semigroup with an additional ``zero`` operation
  
- - MonadPlus: Monads that are also Monoids
+ - [Alternative / MonadPlus](abstraction-alternative.html): Applicatives/Monads that are also Monoids. Though their monoidal definition could be different.
+
+
 Concrete implementations
 ------------------------
 From .Net/F#
@@ -84,7 +86,7 @@ From F#+
  
  [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
 
- Examples
+Examples
 --------
 *)
 
