@@ -11,18 +11,22 @@ This library allows to use some common computation expressions without writing a
 
 There is a single computation expression: ``monad`` but it comes in 4 flavours:
 
- - It could be delayed or strict
+ - Delayed or strict
 
    Delayed computations require that the type implements a Delay method.
    F# comes with async and seq computation expressions, both are delayed.
 
- - It can have embedded side-effects or act as a monad plus
+ - It can have embedded side-effects or act as a monadplus
 
-   A monad plus can return (or yield) many times, so for example all expressions in a loop can be returned, whereas in the other model those expressions are of type unit, since a side effect is expected.
+   A monadplus can return (or yield) many times, so for example all expressions in a loop can be returned, whereas in the other model those expressions are of type unit, since a side effect is expected.
 
-   Async workflows is an example of a side-effect computation expression and seq expressions are an example of monad plus.
+   Async workflows is an example of a side-effect computation expression and seq expressions are an example of monadplus.
 
-   Side effect workflows don't have any additional requirement over the type (apart of the monad operations), but monad plus requires the additional [get_Empty and Append](abstraction-alternative.html) methods.
+   Side effect workflows don't have any additional requirement over the type (apart from the monad operations), but monadplus requires the additional [get_Empty and Append](abstraction-alternative.html) methods.
+
+  The generic computation expression ``monad`` is a side-effect one, but it can be turned into a monadplus by accessing the ``.plus`` property.
+
+  These computations are lazy by default, but they can be made strict by adding ``.strict`` or using a ``'``, ie ``monad.plus'``.
 
 
 Examples
@@ -46,7 +50,7 @@ let lazyValue = monad {
 let res12 = lazyValue.Value
 
 
-let maybeWithSideFx = monad.fx.strict { 
+let maybeWithSideFx = monad' { 
     let! a = Some 3
     let b = ref 0
     while !b < 10 do 
@@ -62,7 +66,7 @@ let maybeWithSideFx = monad.fx.strict {
 
 let lst = [None; None; Some 2; Some 4; Some 10; None]
 
-let maybeManyTimes = monad.plus.strict {
+let maybeManyTimes = monad.plus' {
     let defaultValue = 42
     let mutable i = 0
     return! None

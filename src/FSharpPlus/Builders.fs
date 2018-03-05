@@ -119,9 +119,11 @@ module Builders =
 
     type MonadFxBuilder () =
         inherit DelayedBuilder ()
-        member        __.strict = new MonadFxStrictBuilder ()
-        member        __.plus   = new MonadPlusBuilder ()        
-        member        this.fx   = this
+        member        __.strict  = new MonadFxStrictBuilder ()
+        member        __.plus    = new MonadPlusBuilder ()
+        member        __.plus'   = new MonadPlusStrictBuilder ()
+        member        this.fx    = this
+        member        __.fx'     = new MonadFxStrictBuilder ()
         member inline __.Zero () = result ()                                    : '``Monad<unit>``
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
         member inline __.While (guard, body: '``Monad<unit>``)                  : '``Monad<unit>`` =
@@ -139,3 +141,4 @@ module Builders =
 
 
     let monad = new MonadFxBuilder ()
+    let monad' = new MonadFxStrictBuilder ()
