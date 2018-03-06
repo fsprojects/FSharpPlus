@@ -146,8 +146,18 @@ module Monoid =
         static member inline Sum (x:seq<ZipList'<'a>>) = SideEffects.add "Using optimized Sum"; List.foldBack plus (Seq.toList x) zero:ZipList'<'a>
         static member ToSeq    (ZipList' lst)     = lst
 
+    type MyList<'t> = MyList of list<'t> with
+        static member get_Empty () = MyList []
+        static member Append (MyList x, MyList y) = MyList (x @ y)
+
+    type MyNum = MyNum of int with
+        static member get_Empty () = MyNum 0
+        static member FromInt32 x = MyNum x
+
 
     let testCompile =
+        let res1n2 = MyList [1] ++ MyList [2] ++ zero
+        let res0 : MyNum = zero 
 
         let asQuotation = plus    <@ ResizeArray(["1"]) @> <@ ResizeArray(["2;3"]) @>
         let quot123     = plus    <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>

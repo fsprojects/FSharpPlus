@@ -129,3 +129,27 @@ let pythags' = monad.plus {
   if (x*x + y*y = z*z) then return (x, y, z)}
 
 let allCombinations = sequence [['a'; 'b'; 'c']; ['1'; '2']]
+
+
+// An Alternative is automatically a Monoid and a Functor
+
+type Maybe<'t> =
+    | Just of 't
+    | Nothing 
+    with
+        static member Return (x:'a)     = Just x
+        static member (<*>) (f, x) = 
+            match (f, x) with 
+            | Just f, Just x -> Just (f x) 
+            | _              -> Nothing
+        static member inline get_Empty () = Nothing
+        static member inline Append (x, y) = match x with Nothing -> y | xs -> xs
+
+let r5 = Nothing ++ Just 5 ++ Just 6 ++ zero
+let r6 = map string (Just 6)
+
+
+// But not always the Monoidal behaviour is the same
+
+let r3 = Some 2 ++ Some 1   // addition         => Some 3
+let r2 = Some 2 <|> Some 1  // first success    => Some 2

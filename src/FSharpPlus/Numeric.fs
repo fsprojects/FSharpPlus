@@ -139,7 +139,9 @@ open Microsoft.FSharp.Quotations
 
 type Zero =
     inherit Default1
+    static member inline Zero (_:'t             , _:Default3) = (^t: (static member Empty: ^t) ()) : 't
     static member inline Zero (_:'t             , _:Default2) = FromInt32.Invoke 0             :'t
+    static member inline Zero (_:^t when ^t: null and ^t: struct, _:Default2) = id
     static member inline Zero (_:'t             , _:Default1) = LanguagePrimitives.GenericZero :'t
     static member inline Zero (_:^t when ^t: null and ^t: struct, _:Default1) = id
     static member        Zero (_:System.TimeSpan, _:Zero    ) = System.TimeSpan()
