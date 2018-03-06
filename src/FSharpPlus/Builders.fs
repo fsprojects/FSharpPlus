@@ -40,11 +40,8 @@ module Builders =
         [<CustomOperation("where", MaintainsVariableSpaceUsingBind=true)>]
         member inline __.Where (x, [<ProjectionParameter>] p) = mfilter p x
 
-        [<CustomOperation("first")>] 
-        member inline __.First (source) = head source
-
-        [<CustomOperation("nth")>]
-        member inline __.Nth (source, n) = nth n source
+        [<CustomOperation("top", MaintainsVariableSpaceUsingBind=true)>]
+        member inline __.Top (source, n) = limit n source
 
         [<CustomOperation("groupBy", AllowIntoPattern=true, MaintainsVariableSpaceUsingBind=true)>]
         member inline __.GroupBy (x,[<ProjectionParameter>] f : 'T -> 'key) = groupBy f x
@@ -52,8 +49,8 @@ module Builders =
         [<CustomOperation("chunkBy", AllowIntoPattern=true, MaintainsVariableSpaceUsingBind=true)>]
         member inline __.ChunkBy (x,[<ProjectionParameter>] f : 'T -> 'key) = chunkBy f x
 
-        [<CustomOperation("sortBy", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
-        member inline __.SortBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
+        [<CustomOperation("orderBy", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
+        member inline __.OrderBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
 
     type StrictBuilder () =
         inherit Builder ()

@@ -21,14 +21,20 @@ async {
     do! print nel
 } |> Async.RunSynchronously
 
+let topTenResults : seq<_> = monad.plus {
+    for i in 0..100 do
+    for j in 0..100 do
+    where (i = j)
+    top 10}
 
 let inline myQuery x1 x2 = monad {
     let! e1 = x1
     let! e2 = x2
     where   (parse e1 + e2 < 23)
-    groupBy (parse e1 + e2 %  2) into g
-    sortBy  (-(fst g))
-    select  (string (fst g), snd g )}
+    groupBy (parse e1 + e2 %  2) into g    
+    orderBy  (-(fst g))
+    select  (string (fst g), snd g )    
+    }
 
 let (arr1, arr2) = [|"1";"2";"3"|], [|10;20;30;40|]
 let (lst1, lst2) = [ "1";"2";"3" ], [ 10;20;30;40 ]
