@@ -267,7 +267,6 @@ type Map with
     static member inline Map ((x: '``Applicative<'T>`` when '``Applicative<'T>``     : (static member (<*>)  : '``Applicative<'T->'U>`` * '``Applicative<'T>`` -> '``Applicative<'U>``)
                                                        and  '``Applicative<'T->'U>`` : (static member Return : ('T -> 'U) -> '``Applicative<'T->'U>``)
                                                          , f: 'T->'U), [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
-    static member inline Map (_:^t when ^t: null and ^t: struct, _,  _mthd: Default3) = ()
 
     static member        Map ((x: seq<_>                 , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
     static member        Map ((x: IEnumerator<_>         , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
