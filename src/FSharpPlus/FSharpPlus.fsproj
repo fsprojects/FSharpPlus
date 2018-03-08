@@ -61,7 +61,7 @@
     <Compile Include="NonEmptyList.fs" />
     <Compile Include="ZipList.fs" />
     <Compile Include="ParallelArray.fs" />
-    <Compile Include="DList.fs" />    
+    <Compile Include="DList.fs" />
     <Compile Include="Kleisli.fs" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Split-Join.fsx" />
@@ -77,7 +77,7 @@
     <None Include="Samples\Iso.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />
-    <Content Include="App.config" />
+    <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
