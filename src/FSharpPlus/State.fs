@@ -26,7 +26,7 @@ module State =
 type State<'s,'t> with
     static member Map   (x, f:'T->_) = State.map f x          : State<'S,'U>
     static member Return a = State (fun s -> (a, s))          : State<'S,'T>
-    static member Bind  (x, f:'T->_) = State.bind f x         : State<'S,'U>
+    static member (>>=) (x, f:'T->_) = State.bind f x         : State<'S,'U>
     static member (<*>) (f, x:State<'S,'T>) = State.apply f x : State<'S,'U>
     static member get_Get() = State.get                       : State<'S,'S>
     static member Put x     = State.put x                     : State<'S,unit>
@@ -50,7 +50,7 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                         : StateT<'S,'``Monad<'T * 'S>``>
     static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
     static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
-    static member inline Bind   (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind  f x
+    static member inline (>>=)  (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind  f x
 
     static member inline get_Empty () = StateT (fun _ -> getEmpty()) : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline Append (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>

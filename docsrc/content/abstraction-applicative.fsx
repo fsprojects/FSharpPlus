@@ -156,6 +156,6 @@ let res16n17   = iI (+) (iI (+) (result 4) [2; 3] Ii) [10] Ii
 
 type MyList<'s> = MyList of 's seq with
     static member Return (x:'a)     = MyList (Seq.singleton x)
-    static member Bind  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
+    static member (>>=)  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
 
 let mappedMyList : MyList<_> = (MyList [(+) 1;(+) 2;(+) 3]) <*> (MyList [1;2;3])

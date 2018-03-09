@@ -18,30 +18,29 @@ open FSharpPlus
 
 // Monad class ------------------------------------------------------------
 
-[<Extension;Sealed>]
 type Bind =
-    [<Extension>]static member Bind (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
-    [<Extension>]static member Bind (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
+    static member (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
+    static member (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
 #if NET35
 #else
-    [<Extension>]static member Bind (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
+    static member (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
 #endif
-    [<Extension>]static member Bind (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
-    [<Extension>]static member Bind (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
-    [<Extension>]static member Bind (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []     
-    [<Extension>]static member Bind (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
-    static member inline       Bind ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
-    [<Extension>]static member Bind (source             , f: 'T -> _           ) = async.Bind(source, f)                                         : Async<'U>
-    [<Extension>]static member Bind (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
-    [<Extension>]static member Bind (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
+    static member (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
+    static member (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
+    static member (>>=) (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []     
+    static member (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
+    static member inline       (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
+    static member (>>=) (source             , f: 'T -> _           ) = async.Bind(source, f)                                         : Async<'U>
+    static member (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
+    static member (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
 
-    [<Extension>]static member Bind (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
+    static member (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
                    for KeyValue(k, v) in source do
                        match Map.tryFind k (f v) with
                        | Some v -> yield k, v
                        | _      -> () })
 
-    [<Extension>]static member Bind (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) = 
+    static member (>>=) (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) = 
                    let dct = Dictionary ()
                    for KeyValue(k, v) in source do
                        match (f v).TryGetValue (k) with
@@ -49,14 +48,14 @@ type Bind =
                        | _       -> ()
                    dct
 
-    [<Extension>]static member Bind (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray(Seq.bind (f >> seq<_>) source)              : ResizeArray<'U> 
+    static member (>>=) (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray(Seq.bind (f >> seq<_>) source)              : ResizeArray<'U> 
 
     static member inline Invoke (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
-        let inline call (_mthd: 'M, input: 'I, _output: 'R, f) = ((^M or ^I or ^R) : (static member Bind: _*_ -> _) input, f)
+        let inline call (_mthd: 'M, input: 'I, _output: 'R, f) = ((^M or ^I or ^R) : (static member (>>=): _*_ -> _) input, f)
         call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
 
     static member inline InvokeOnInstance (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
-        ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member Bind: _*_ -> _) source, binder)
+        ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member (>>=): _*_ -> _) source, binder)
 
 
 [<Extension;Sealed>]
@@ -260,7 +259,7 @@ type Map =
         (^``Functor<'T>`` : (static member Map: _ * _ -> _) source, mapping)
 
 type Map with
-    static member inline Map ((x: '``Monad<'T>``       when '``Monad<'T>`` : (static member Bind   :  '``Monad<'T>`` *  ('T -> '``Monad<'U>``)  ->  '``Monad<'U>``)
+    static member inline Map ((x: '``Monad<'T>``       when '``Monad<'T>`` : (static member (>>=)   :  '``Monad<'T>`` *  ('T -> '``Monad<'U>``)  ->  '``Monad<'U>``)
                                                        and  '``Monad<'U>`` : (static member Return :  'U -> '``Monad<'U>``)
                                                          , f: 'T->'U), [<Optional>]_mthd: Default4) = Bind.InvokeOnInstance x (f >> Return.InvokeOnInstance) : '``Monad<'U>``
 

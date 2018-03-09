@@ -42,4 +42,4 @@ type DList<'T> with
     static member Map (x, f) = map f x
     static member (<*>) (f, x) = ap f x
     static member Join x = join x
-    static member Bind (x, f) = bind x f
+    static member (>>=) (x, f) = bind x f

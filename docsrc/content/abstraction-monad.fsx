@@ -22,7 +22,7 @@ Minimal complete definition
 *)
 (**
     static member Return (x:'T) : 'Monad<'T>
-    static member Bind (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
+    static member (>>=) (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
 *)
 (**
 

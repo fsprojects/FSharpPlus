@@ -39,7 +39,7 @@ module NonEmptyList =
 type NonEmptyList<'t> with
     static member Map (x:NonEmptyList<'a>, f:'a->'b) = NonEmptyList.map f x
         
-    static member Bind ({Head = x; Tail = xs}, f:_->NonEmptyList<'b>  ) =
+    static member (>>=) ({Head = x; Tail = xs}, f:_->NonEmptyList<'b>  ) =
         let {Head = y; Tail = ys} = f x
         let ys' = List.collect (NonEmptyList.toList << f) xs
         {Head = y; Tail = (ys @ ys')}

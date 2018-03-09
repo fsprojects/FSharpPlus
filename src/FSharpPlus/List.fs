@@ -52,7 +52,7 @@ type ListT<'``monad<list<'t>>``> with
     static member inline Return (x : 'T) = [x] |> result |> ListT                                                           : ListT<'``Monad<seq<'T>``>
     static member inline Map    (x : ListT<'``Monad<seq<'T>``>, f : 'T->'U) = ListT.map f x                                 : ListT<'``Monad<seq<'U>``>
     static member inline (<*>)  (f : ListT<'``Monad<seq<('T -> 'U)>``>, x : ListT<'``Monad<seq<'T>``>) = ListT.apply f x    : ListT<'``Monad<seq<'U>``>
-    static member inline Bind   (x : ListT<'``Monad<seq<'T>``>, f : 'T -> ListT<'``Monad<seq<'U>``>)   = ListT.bind f x
+    static member inline (>>=)  (x : ListT<'``Monad<seq<'T>``>, f : 'T -> ListT<'``Monad<seq<'U>``>)   = ListT.bind f x
 
     static member inline get_Empty () = ListT <| result [] : ListT<'``MonadPlus<list<'T>``>
     static member inline Append (ListT x, ListT y) = ListT (x >>= (fun a -> y >>= (fun b -> result (a @ b)))) : ListT<'``MonadPlus<list<'T>``>

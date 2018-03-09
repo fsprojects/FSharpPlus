@@ -43,7 +43,7 @@ type WrappedListD<'s> = WrappedListD of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator()
     interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
     static member Return  (x) = SideEffects.add "Using WrappedListD's Return"; WrappedListD [x]
-    static member Bind ((WrappedListD x):WrappedListD<'T>, f) = SideEffects.add "Using WrappedListD's Bind"; WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
+    static member (>>=) ((WrappedListD x):WrappedListD<'T>, f) = SideEffects.add "Using WrappedListD's Bind"; WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
     static member inline FoldMap (WrappedListD x, f) =
         SideEffects.add "Using optimized foldMap"
         Seq.fold (fun x y -> x ++ (f y)) zero x
@@ -51,13 +51,13 @@ type WrappedListD<'s> = WrappedListD of 's list with
 
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return  (x) = WrappedListE [x]
-    static member Bind  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
+    static member (>>=)  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
     static member get_Empty() = WrappedListE List.empty
     static member Append (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
     
 type WrappedListF<'s> = WrappedListF of 's list with
     static member Return  (x) = WrappedListF [x]
-    static member Bind  (WrappedListF x: WrappedListF<'T>, f) = WrappedListF (List.collect (f >> (fun (WrappedListF x) -> x)) x)
+    static member (>>=)  (WrappedListF x: WrappedListF<'T>, f) = WrappedListF (List.collect (f >> (fun (WrappedListF x) -> x)) x)
     static member Join  (WrappedListF wlst) = SideEffects.add "Join";  WrappedListF wlst >>= id
     static member get_Empty() = WrappedListF List.empty
     static member Append (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
@@ -66,7 +66,7 @@ type WrappedListG<'s> = WrappedListG of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator()
     interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
     static member Return  (x) = WrappedListG [x]
-    static member Bind  (WrappedListG x: WrappedListG<'T>, f) = WrappedListG (List.collect (f >> (fun (WrappedListG x) -> x)) x)
+    static member (>>=)  (WrappedListG x: WrappedListG<'T>, f) = WrappedListG (List.collect (f >> (fun (WrappedListG x) -> x)) x)
     static member Join  (WrappedListG wlst) = (*SideEffects.add "Join";*)  WrappedListG wlst >>= id
     static member get_Empty() = WrappedListG List.empty
     static member Append (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
@@ -78,7 +78,7 @@ type WrappedSeqA<'s> = WrappedSeqA of 's seq with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqA x) = x in x).GetEnumerator()
     interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqA x) = x in x).GetEnumerator() :> Collections.IEnumerator
     static member Return  (x) = WrappedSeqA [x]
-    static member Bind  (WrappedSeqA x: WrappedSeqA<'T>, f) = WrappedSeqA (Seq.collect (f >> (fun (WrappedSeqA x) -> x)) x)
+    static member (>>=)  (WrappedSeqA x: WrappedSeqA<'T>, f) = WrappedSeqA (Seq.collect (f >> (fun (WrappedSeqA x) -> x)) x)
     static member Join  (WrappedSeqA wlst) = WrappedSeqA wlst >>= id
     static member get_Empty() = WrappedSeqA List.empty
     static member Append (WrappedSeqA l, WrappedSeqA x) = WrappedSeqA (Seq.append l x)
@@ -90,7 +90,7 @@ type WrappedSeqB<'s> = WrappedSeqB of 's seq with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqB x) = x in x).GetEnumerator()
     interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqB x) = x in x).GetEnumerator() :> Collections.IEnumerator
     static member Return  (x) = WrappedSeqB [x]
-    static member Bind  (WrappedSeqB x: WrappedSeqB<'T>, f) = WrappedSeqB (Seq.collect (f >> (fun (WrappedSeqB x) -> x)) x)
+    static member (>>=)  (WrappedSeqB x: WrappedSeqB<'T>, f) = WrappedSeqB (Seq.collect (f >> (fun (WrappedSeqB x) -> x)) x)
     static member Join  (WrappedSeqB wlst) = WrappedSeqB wlst >>= id
     static member get_Empty() = WrappedSeqB List.empty
     static member Append (WrappedSeqB l, WrappedSeqB x) = WrappedSeqB (Seq.append l x)
@@ -108,7 +108,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqC x) = x in x).GetEnumerator()
     interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqC x) = x in x).GetEnumerator() :> Collections.IEnumerator
     static member Return  (x) = WrappedSeqC [x]
-    static member Bind  (WrappedSeqC x: WrappedSeqC<'T>, f) = WrappedSeqC (Seq.collect (f >> (fun (WrappedSeqC x) -> x)) x)
+    static member (>>=)  (WrappedSeqC x: WrappedSeqC<'T>, f) = WrappedSeqC (Seq.collect (f >> (fun (WrappedSeqC x) -> x)) x)
     static member Join  (WrappedSeqC wlst) = WrappedSeqC wlst >>= id
     static member get_Empty() = WrappedSeqC List.empty
     static member Append (WrappedSeqC l, WrappedSeqC x) = WrappedSeqC (Seq.append l x)

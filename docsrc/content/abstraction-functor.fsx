@@ -157,6 +157,6 @@ let mappedZipList = map string (ZipList [1;2;3])
 
 type MyList<'s> = MyList of 's seq with
     static member Return (x:'a)     = MyList x
-    static member Bind  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
+    static member (>>=)  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
 
 let mappedMyList = map string (MyList [1;2;3])

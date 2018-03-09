@@ -36,7 +36,7 @@ module Writer =
 type Writer<'monoid,'t> with
     static member        Map   (x, f:'T->_) = Writer.map f x          : Writer<'Monoid,'U>
     static member inline Return x = Writer (x, getZero ())            : Writer<'Monoid,'T>
-    static member inline Bind  (x, f:'T->_) = Writer.bind f x         : Writer<'Monoid,'U>
+    static member inline (>>=) (x, f:'T->_) = Writer.bind f x         : Writer<'Monoid,'U>
     static member inline (<*>) (f, x:Writer<_,'T>) = Writer.apply f x : Writer<'Monoid,'U>
 
     static member        Tell   w = Writer.tell w                     : Writer<'Monoid,unit>
@@ -75,7 +75,7 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline Return (x : 'T) = WriterT (result (x, getZero ()))                                                                 : WriterT<'``Monad<'T * 'Monoid>``>
     static member inline Map    (x : WriterT<'``Monad<'T * 'Monoid>``>, f : 'T -> 'U)                                   = WriterT.map   f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline (<*>)  (f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x : WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
-    static member inline Bind   (x : WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)                                     = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline (>>=)  (x : WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)                                     = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>
 
     static member inline get_Empty () = WriterT (getEmpty()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
     static member inline Append (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>

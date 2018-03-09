@@ -28,7 +28,7 @@ module Reader =
 type Reader<'r,'t> with
     static member Map   (x:Reader<'R,'T>, f) = Reader.map f x   : Reader<'R,'U>
     static member Return x = Reader (fun _ -> x)                : Reader<'R,'T>
-    static member Bind  (x:Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
+    static member (>>=) (x:Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
     static member (<*>) (f, x:Reader<'R,'T>) = Reader.apply f x : Reader<'R,'U>
 
     static member get_Ask()    = Reader.ask                     : Reader<'R,'R>
@@ -54,7 +54,7 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Return (x : 'T) = ReaderT (fun _ -> result x)                                                   : ReaderT<'R, '``Monad<'T>``> 
     static member inline Map    (x : ReaderT<'R, '``Monad<'T>``>, f : 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
     static member inline (<*>)  (f : ReaderT<_,'``Monad<'T -> 'U>``>, x : ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x : ReaderT<'R, '``Monad<'U>``>
-    static member inline Bind   (x : ReaderT<_,'``Monad<'T>``>, f : 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>
+    static member inline (>>=)  (x : ReaderT<_,'``Monad<'T>``>, f : 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>
     
     static member inline get_Empty () = ReaderT (fun _ -> getEmpty()) : ReaderT<'R, '``MonadPlus<'T>``>
     static member inline Append (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
