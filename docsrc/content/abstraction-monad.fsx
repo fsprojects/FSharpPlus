@@ -13,7 +13,7 @@ ___
 
 
 
-Minimal comple te definition
+Minimal complete definition
 ---------------------------
 
 
