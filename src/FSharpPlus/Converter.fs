@@ -58,19 +58,18 @@ type OfBytes =
         call Unchecked.defaultof<OfBytes> (value, startIndex, isLtEndian)
 
 
-[<Extension;Sealed>]
 type ToBytes =
-    [<Extension>]static member ToBytes (x:bool   , _, _:ToBytes) = BitConverter.GetBytes(x)
-    [<Extension>]static member ToBytes (x:char   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x:float  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x: int16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x: int   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x:int64  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x:float32, e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x:string , _, _:ToBytes) = Array.map byte (x.ToCharArray())
-    [<Extension>]static member ToBytes (x:uint16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x:uint32 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
-    [<Extension>]static member ToBytes (x:uint64 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x:bool   , _, _:ToBytes) = BitConverter.GetBytes(x)
+    static member ToBytes (x:char   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x:float  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x: int16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x: int   , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x:int64  , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x:float32, e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x:string , _, _:ToBytes) = Array.map byte (x.ToCharArray())
+    static member ToBytes (x:uint16 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x:uint32 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
+    static member ToBytes (x:uint64 , e, _:ToBytes) = BitConverter.GetBytes(x, BitConverter.IsLittleEndian = e)
 
     static member inline Invoke (isLittleEndian:bool) value :byte[] =
         let inline call_2 (a:^a, b:^b, e) = ((^a or ^b) : (static member ToBytes: _*_*_ -> _) b, e, a)

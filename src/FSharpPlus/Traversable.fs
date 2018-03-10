@@ -55,7 +55,6 @@ type Traverse =
         call (Unchecked.defaultof<Traverse>, t, f)
     
 
-[<Extension;Sealed>]
 type Sequence =
     inherit Default1
 
@@ -77,11 +76,11 @@ type Sequence =
                         let cons_f x ys = Map.Invoke (cons:'a->seq<_>->seq<_>) x <*> ys
                         Seq.foldBack cons_f t (result Seq.empty)
 
-    [<Extension>]static member Sequence (t:seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, Option.isNone)                                : option<seq<'t>>
-    [<Extension>]static member Sequence (t:seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, function (Error _     ) -> true | _ -> false) : Result<seq<'t>, 'e>
-    [<Extension>]static member Sequence (t:seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, function (Choice2Of2 _) -> true | _ -> false) : Choice<seq<'t>, 'e>
-    [<Extension>]static member Sequence (t:seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty)                                 : list<seq<'t>>
-    [<Extension>]static member Sequence (t:seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty)                                : seq<'t> []
+    static member Sequence (t:seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, Option.isNone)                                : option<seq<'t>>
+    static member Sequence (t:seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, function (Error _     ) -> true | _ -> false) : Result<seq<'t>, 'e>
+    static member Sequence (t:seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, function (Choice2Of2 _) -> true | _ -> false) : Choice<seq<'t>, 'e>
+    static member Sequence (t:seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty)                                 : list<seq<'t>>
+    static member Sequence (t:seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl:Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty)                                : seq<'t> []
 
     static member inline       Sequence (t:^a            , [<Optional>]_output:'R, [<Optional>]_impl:Default2) = (^a : (static member Traverse: _*_ -> 'R) t, id)                                      : 'R
     static member inline       Sequence (t:^a            , [<Optional>]_output:'R, [<Optional>]_impl:Default1) = (^a : (static member Sequence: _ -> 'R) t)                                            : 'R

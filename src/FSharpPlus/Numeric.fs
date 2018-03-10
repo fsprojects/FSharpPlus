@@ -274,23 +274,22 @@ type DivRem =
 
 // Integral class ---------------------------------------------------------
 
-[<Extension; Sealed>]
 type ToBigInt =
-    [<Extension>]static member        ToBigInt (x:sbyte     ) = bigint (int x)
-    [<Extension>]static member        ToBigInt (x:int16     ) = bigint (int x)
-    [<Extension>]static member        ToBigInt (x:int32     ) = bigint      x
-    [<Extension>]static member        ToBigInt (x:int64     ) = bigint      x
-    [<Extension>]static member        ToBigInt (x:nativeint ) = bigint (int x)
-    [<Extension>]static member        ToBigInt (x:byte      ) = bigint (int x)
-    [<Extension>]static member        ToBigInt (x:uint16    ) = bigint (int x)
-    [<Extension>]static member        ToBigInt (x:unativeint) = bigint (int x)
-    [<Extension>]static member        ToBigInt (x:bigint    ) =             x
+    static member        ToBigInt (x:sbyte     ) = bigint (int x)
+    static member        ToBigInt (x:int16     ) = bigint (int x)
+    static member        ToBigInt (x:int32     ) = bigint      x
+    static member        ToBigInt (x:int64     ) = bigint      x
+    static member        ToBigInt (x:nativeint ) = bigint (int x)
+    static member        ToBigInt (x:byte      ) = bigint (int x)
+    static member        ToBigInt (x:uint16    ) = bigint (int x)
+    static member        ToBigInt (x:unativeint) = bigint (int x)
+    static member        ToBigInt (x:bigint    ) =             x
 #if NET35
-    [<Extension>]static member        ToBigInt (x:uint32    ) = bigint (int x)
-    [<Extension>]static member        ToBigInt (x:uint64    ) = bigint (int64 x)
+    static member        ToBigInt (x:uint32    ) = bigint (int x)
+    static member        ToBigInt (x:uint64    ) = bigint (int64 x)
 #else
-    [<Extension>]static member        ToBigInt (x:uint32    ) = bigint      x
-    [<Extension>]static member        ToBigInt (x:uint64    ) = bigint      x
+    static member        ToBigInt (x:uint32    ) = bigint      x
+    static member        ToBigInt (x:uint64    ) = bigint      x
 #endif
 
     static member inline Invoke    (x:'Integral) :bigint =

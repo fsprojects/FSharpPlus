@@ -19,20 +19,20 @@ type Plus =
                  static member inline Plus (x :'Plus       , y:'Plus,                  _: Default2) = (^Plus :  (static member Append : _*_ -> _) x, y) : ^Plus
                  static member inline Plus (x :'Plus       , y:'Plus, [<Optional>]_mthd : Default1) = x + y : ^Plus
                  static member inline Plus (_ :^t when ^t:null and ^t:struct       , _:^t, [<Optional>]_mthd : Default1) = id
-    [<Extension>]static member        Plus (x:list<_>      , y      , [<Optional>]_mthd : Plus    ) = x @ y
-    [<Extension>]static member        Plus (x:array<_>     , y      , [<Optional>]_mthd : Plus    ) = Array.append x y
-    [<Extension>]static member        Plus (()             , ()     , [<Optional>]_mthd : Plus    ) =  ()
-    [<Extension>]static member        Plus (x:Set<_>       , y      , [<Optional>]_mthd : Plus    ) = Set.union x y
-    [<Extension>]static member        Plus (x:string       , y ) = x + y
+    static member        Plus (x:list<_>      , y      , [<Optional>]_mthd : Plus    ) = x @ y
+    static member        Plus (x:array<_>     , y      , [<Optional>]_mthd : Plus    ) = Array.append x y
+    static member        Plus (()             , ()     , [<Optional>]_mthd : Plus    ) =  ()
+    static member        Plus (x:Set<_>       , y      , [<Optional>]_mthd : Plus    ) = Set.union x y
+    static member        Plus (x:string       , y ) = x + y
                  static member        Plus (x:StringBuilder, y:StringBuilder      , [<Optional>]_mthd : Plus    ) = StringBuilder().Append(x).Append(y)
-    [<Extension>]static member        Plus (x:TimeSpan     , y:TimeSpan) = x + y
+    static member        Plus (x:TimeSpan     , y:TimeSpan) = x + y
 
     static member inline Invoke (x:'Plus) (y:'Plus)  : 'Plus =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member Plus: _*_*_ -> _) input1, input2, mthd)
         call (Unchecked.defaultof<Plus>, x, y)
 
 type Plus with
-    [<Extension>]static member inline Plus (x:option<_>,y , [<Optional>]_mthd : Plus    ) =
+    static member inline Plus (x:option<_>,y , [<Optional>]_mthd : Plus    ) =
                     match (x,y) with
                     | (Some a , Some b) -> Some (Plus.Invoke a b)
                     | (Some a , None  ) -> Some a
@@ -82,10 +82,10 @@ type Plus with
    
 
     static member inline       Plus (x:'a Lazy      , y:'a Lazy      , [<Optional>]_mthd : Plus    ) = lazy Plus.Invoke (x.Value) (y.Value)
-    [<Extension>]static member Plus (x:_ ResizeArray, y:_ ResizeArray, [<Optional>]_mthd : Plus    ) = ResizeArray (Seq.append x y)
-    [<Extension>]static member Plus (x:_ IObservable, y              , [<Optional>]_mthd : Default3) = Observable.merge x y
-    [<Extension>]static member Plus (x:_ seq        , y              , [<Optional>]_mthd : Default3) = Seq.append x y
-    [<Extension>]static member Plus (x:_ IEnumerator, y              , [<Optional>]_mthd : Default3) = FSharpPlus.Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator()
+    static member Plus (x:_ ResizeArray, y:_ ResizeArray, [<Optional>]_mthd : Plus    ) = ResizeArray (Seq.append x y)
+    static member Plus (x:_ IObservable, y              , [<Optional>]_mthd : Default3) = Observable.merge x y
+    static member Plus (x:_ seq        , y              , [<Optional>]_mthd : Default3) = Seq.append x y
+    static member Plus (x:_ IEnumerator, y              , [<Optional>]_mthd : Default3) = FSharpPlus.Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator()
     static member inline       Plus (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>, [<Optional>]_mthd : Default3) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v
@@ -111,10 +111,10 @@ type Sum =
                     dct :> IDictionary<'a,'b>
 
     static member inline       Sum (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:Sum) = ResizeArray (Seq.concat x)
-    [<Extension>]static member Sum (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:Sum) = List.concat   x
-    [<Extension>]static member Sum (x:seq<array<'a>>      , [<Optional>]_output:array<'a>     , [<Optional>]_impl:Sum) = Array.concat  x
-    [<Extension>]static member Sum (x:seq<string>         , [<Optional>]_output:string        , [<Optional>]_impl:Sum) = String.Concat x
-    [<Extension>]static member Sum (x:seq<StringBuilder>  , [<Optional>]_output:StringBuilder , [<Optional>]_impl:Sum) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    static member Sum (x:seq<list<'a>>       , [<Optional>]_output:list<'a>      , [<Optional>]_impl:Sum) = List.concat   x
+    static member Sum (x:seq<array<'a>>      , [<Optional>]_output:array<'a>     , [<Optional>]_impl:Sum) = Array.concat  x
+    static member Sum (x:seq<string>         , [<Optional>]_output:string        , [<Optional>]_impl:Sum) = String.Concat x
+    static member Sum (x:seq<StringBuilder>  , [<Optional>]_output:StringBuilder , [<Optional>]_impl:Sum) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
 
     static member inline Invoke (x:seq<'T>) : 'T =
         let inline call_3 (a:^a, b:^b, c:^c) = ((^a or ^b or ^c) : (static member Sum: _*_*_ -> _) b, c, a)
