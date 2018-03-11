@@ -275,21 +275,21 @@ type DivRem =
 // Integral class ---------------------------------------------------------
 
 type ToBigInt =
-    static member        ToBigInt (x:sbyte     ) = bigint (int x)
-    static member        ToBigInt (x:int16     ) = bigint (int x)
-    static member        ToBigInt (x:int32     ) = bigint      x
-    static member        ToBigInt (x:int64     ) = bigint      x
-    static member        ToBigInt (x:nativeint ) = bigint (int x)
-    static member        ToBigInt (x:byte      ) = bigint (int x)
-    static member        ToBigInt (x:uint16    ) = bigint (int x)
-    static member        ToBigInt (x:unativeint) = bigint (int x)
-    static member        ToBigInt (x:bigint    ) =             x
+    static member ToBigInt (x:sbyte     ) = bigint (int x)
+    static member ToBigInt (x:int16     ) = bigint (int x)
+    static member ToBigInt (x:int32     ) = bigint      x
+    static member ToBigInt (x:int64     ) = bigint      x
+    static member ToBigInt (x:nativeint ) = bigint (int x)
+    static member ToBigInt (x:byte      ) = bigint (int x)
+    static member ToBigInt (x:uint16    ) = bigint (int x)
+    static member ToBigInt (x:unativeint) = bigint (int x)
+    static member ToBigInt (x:bigint    ) =             x
 #if NET35
-    static member        ToBigInt (x:uint32    ) = bigint (int x)
-    static member        ToBigInt (x:uint64    ) = bigint (int64 x)
+    static member ToBigInt (x:uint32    ) = bigint (int x)
+    static member ToBigInt (x:uint64    ) = bigint (int64 x)
 #else
-    static member        ToBigInt (x:uint32    ) = bigint      x
-    static member        ToBigInt (x:uint64    ) = bigint      x
+    static member ToBigInt (x:uint32    ) = bigint      x
+    static member ToBigInt (x:uint64    ) = bigint      x
 #endif
 
     static member inline Invoke    (x:'Integral) :bigint =
@@ -397,17 +397,17 @@ type TryDivide =
 
 
 type TrySqrtRem =
-    static member        TrySqrtRem (x:bigint    ) = x |> BigInteger.trySqrtRem
-    static member        TrySqrtRem (x:int16     ) = if x < 0s then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int16 in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:int32     ) = if x < 0  then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int   in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:int64     ) = if x < 0L then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int64 in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:sbyte     ) = if x < 0y then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> sbyte in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:uint16    ) = let c = x |> float |> sqrt |> uint16     in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:uint32    ) = let c = x |> float |> sqrt |> uint32     in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:uint64    ) = let c = x |> float |> sqrt |> uint64     in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:nativeint ) = let c = x |> float |> sqrt |> nativeint  in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:byte      ) = let c = x |> float |> sqrt |> byte       in Ok (c, x - c*c)
-    static member        TrySqrtRem (x:unativeint) = let c = x |> float |> sqrt |> unativeint in c, x - c*c
+    static member TrySqrtRem (x:bigint    ) = x |> BigInteger.trySqrtRem
+    static member TrySqrtRem (x:int16     ) = if x < 0s then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int16 in Ok (c, x - c*c)
+    static member TrySqrtRem (x:int32     ) = if x < 0  then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int   in Ok (c, x - c*c)
+    static member TrySqrtRem (x:int64     ) = if x < 0L then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> int64 in Ok (c, x - c*c)
+    static member TrySqrtRem (x:sbyte     ) = if x < 0y then Error Errors.exnSqrtOfNegative else let c = x |> float |> sqrt |> sbyte in Ok (c, x - c*c)
+    static member TrySqrtRem (x:uint16    ) = let c = x |> float |> sqrt |> uint16     in Ok (c, x - c*c)
+    static member TrySqrtRem (x:uint32    ) = let c = x |> float |> sqrt |> uint32     in Ok (c, x - c*c)
+    static member TrySqrtRem (x:uint64    ) = let c = x |> float |> sqrt |> uint64     in Ok (c, x - c*c)
+    static member TrySqrtRem (x:nativeint ) = let c = x |> float |> sqrt |> nativeint  in Ok (c, x - c*c)
+    static member TrySqrtRem (x:byte      ) = let c = x |> float |> sqrt |> byte       in Ok (c, x - c*c)
+    static member TrySqrtRem (x:unativeint) = let c = x |> float |> sqrt |> unativeint in c, x - c*c
 
     static member inline Invoke    (x:'Integral) : Result<'Integral*'Integral, exn> =
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member TrySqrtRem: _ -> _) b)

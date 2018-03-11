@@ -60,32 +60,32 @@ type Bind =
 
 type Join =
     inherit Default1
-    static member inline       Join (x: '``Monad<'Monad<'T>>``, [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default2) = Bind.InvokeOnInstance x id: '``Monad<'T>``
-    static member inline       Join (x: '``Monad<'Monad<'T>>``, [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default1) = ((^``Monad<'Monad<'T>>`` or  ^``Monad<'T>``) : (static member Join: _ -> _) x) : '``Monad<'T>``
-    static member Join (x: Lazy<Lazy<_>>         , [<Optional>]_output: Lazy<'T>        , [<Optional>]_mthd: Join    ) = lazy x.Value.Value        : Lazy<'T>
-    static member Join (x: seq<seq<_>>           , [<Optional>]_output: seq<'T>         , [<Optional>]_mthd: Join    ) = Seq.concat x              : seq<'T>
-    static member Join (x: Id<_>                 , [<Optional>]_output: Id<'T>          , [<Optional>]_mthd: Join    ) = x.getValue                : Id<'T>
+    static member inline Join (x: '``Monad<'Monad<'T>>``, [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default2) = Bind.InvokeOnInstance x id: '``Monad<'T>``
+    static member inline Join (x: '``Monad<'Monad<'T>>``, [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default1) = ((^``Monad<'Monad<'T>>`` or  ^``Monad<'T>``) : (static member Join: _ -> _) x) : '``Monad<'T>``
+    static member        Join (x: Lazy<Lazy<_>>         , [<Optional>]_output: Lazy<'T>        , [<Optional>]_mthd: Join    ) = lazy x.Value.Value        : Lazy<'T>
+    static member        Join (x: seq<seq<_>>           , [<Optional>]_output: seq<'T>         , [<Optional>]_mthd: Join    ) = Seq.concat x              : seq<'T>
+    static member        Join (x: Id<_>                 , [<Optional>]_output: Id<'T>          , [<Optional>]_mthd: Join    ) = x.getValue                : Id<'T>
 #if NET35
 #else                                                                                                                              
-    static member Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = x.Unwrap()                : Task<'T>
+    static member        Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = x.Unwrap()                : Task<'T>
 #endif                                                                                                                                    
-    static member Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x          : option<'T>
-    static member Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x             : list<'T>  
-    static member Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x            : 'T []     
-    static member Join (g                        , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)        : 'R->'T    
-    static member inline       Join (m1, (m2, x)              , [<Optional>]_output: 'Monoid * 'T    , [<Optional>]_mthd: Join    ) = Plus.Invoke m1 m2, x      : 'Monoid*'T
-    static member Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind(x, id)         : Async<'T>
-    static member Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x          : Result<'T,'E>
-    static member Join (x                        , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x          : Choice<'T,'E>
+    static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x          : option<'T>
+    static member        Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x             : list<'T>  
+    static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x            : 'T []     
+    static member        Join (g                        , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)        : 'R->'T    
+    static member inline Join (m1, (m2, x)              , [<Optional>]_output: 'Monoid * 'T    , [<Optional>]_mthd: Join    ) = Plus.Invoke m1 m2, x      : 'Monoid*'T
+    static member        Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind(x, id)         : Async<'T>
+    static member        Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x          : Result<'T,'E>
+    static member        Join (x                        , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x          : Choice<'T,'E>
 
-    static member Join (x: Map<_,_>              , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    )                             : Map<'Key,'Value> =
+    static member        Join (x: Map<_,_>              , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    )                             : Map<'Key,'Value> =
                     Map (seq {
                         for KeyValue(k, v) in x do
                             match Map.tryFind k v with
                             | Some v -> yield k, v
                             | _      -> () })
 
-    static member Join (x: Dictionary<_,Dictionary<_,_>>, [<Optional>]_output: Dictionary<'Key,'Value>, [<Optional>]_mthd: Join)                   : Dictionary<'Key,'Value> =
+    static member        Join (x: Dictionary<_,Dictionary<_,_>>, [<Optional>]_output: Dictionary<'Key,'Value>, [<Optional>]_mthd: Join)                   : Dictionary<'Key,'Value> =
                     let dct = Dictionary ()
                     for KeyValue(k, v) in x do
                         match v.TryGetValue (k)  with
@@ -93,7 +93,7 @@ type Join =
                         | _       -> ()
                     dct
 
-    static member Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray(Seq.bind seq<_> x) : ResizeArray<'T> 
+    static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray(Seq.bind seq<_> x) : ResizeArray<'T> 
 
     static member inline Invoke (source: '``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, output: 'R) = ((^M or ^I or ^R) : (static member Join: _*_*_ -> _) input, output, mthd)
@@ -382,11 +382,11 @@ type Using with
 
 type Unzip =
     inherit Default1
-    static member inline       Unzip (source: '``Functor<'T * 'U>`` , [<Optional>]_output: '``Functor<'T>`` * '``Functor<'U>`` , [<Optional>]_mthd:Default2) = Map.Invoke fst source, Map.Invoke snd source : '``Functor<'T>`` * '``Functor<'U>``
-    static member inline       Unzip (source: '``Functor<'T * 'U>`` , [<Optional>]_output: '``Functor<'T>`` * '``Functor<'U>`` , [<Optional>]_mthd:Default1) = (^``Functor<'T * 'U>``: (static member Unzip: _->_) source) : '``Functor<'T>`` * '``Functor<'U>``
-    static member inline       Unzip ( _    : ^t when ^t: null and ^t: struct     , _                                          , _                         ) = ()
-    static member Unzip (source: list<'T * 'U>         , [<Optional>]_output: list<'T> * list<'U>                 , [<Optional>]_mthd:Unzip   ) = List.unzip  source
-    static member Unzip (source: ('T * 'U) []          , [<Optional>]_output: 'T [] * 'U []                       , [<Optional>]_mthd:Unzip   ) = Array.unzip source
+    static member inline Unzip (source: '``Functor<'T * 'U>`` , [<Optional>]_output: '``Functor<'T>`` * '``Functor<'U>`` , [<Optional>]_mthd:Default2) = Map.Invoke fst source, Map.Invoke snd source : '``Functor<'T>`` * '``Functor<'U>``
+    static member inline Unzip (source: '``Functor<'T * 'U>`` , [<Optional>]_output: '``Functor<'T>`` * '``Functor<'U>`` , [<Optional>]_mthd:Default1) = (^``Functor<'T * 'U>``: (static member Unzip: _->_) source) : '``Functor<'T>`` * '``Functor<'U>``
+    static member inline Unzip ( _    : ^t when ^t: null and ^t: struct     , _                                          , _                         ) = ()
+    static member        Unzip (source: list<'T * 'U>         , [<Optional>]_output: list<'T> * list<'U>                 , [<Optional>]_mthd:Unzip   ) = List.unzip  source
+    static member        Unzip (source: ('T * 'U) []          , [<Optional>]_output: 'T [] * 'U []                       , [<Optional>]_mthd:Unzip   ) = Array.unzip source
 
     static member inline Invoke (source:'``Functor<'T1 * 'T2>``)  =
         let inline call_3 (a:^a, b:^b, d:^d) = ((^a or ^b or ^d) : (static member Unzip: _*_*_ -> _) b, d, a)
@@ -419,15 +419,15 @@ type Zip with
 // Comonad class ----------------------------------------------------------
 
 type Extract =
-    static member Extract (x: Async<'T>    ) = Async.RunSynchronously x
-    static member Extract (x: Lazy<'T>     ) = x.Value
-    static member Extract ((_: 'W, a: 'T)  ) = a
-    static member inline       Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
-    static member Extract (f: 'T Id        ) = f
+    static member        Extract (x: Async<'T>    ) = Async.RunSynchronously x
+    static member        Extract (x: Lazy<'T>     ) = x.Value
+    static member        Extract ((_: 'W, a: 'T)  ) = a
+    static member inline Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
+    static member        Extract (f: 'T Id        ) = f
 
 #if NET35
 #else
-    static member Extract (f: Task<'T>     ) = f.Result
+    static member        Extract (f: Task<'T>     ) = f.Result
 #endif
 
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
@@ -435,21 +435,21 @@ type Extract =
         call_2 (Unchecked.defaultof<Extract>, x)
 
 type Extend =
-    static member Extend (g: Async<'T>    , f: Async<'T> -> 'U) = async.Return (f g)              : Async<'U>
-    static member Extend (g: Lazy<'T>     , f: Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g) : Lazy<'U>
-    static member Extend ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))        
-    static member inline       Extend (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
-    static member Extend (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
+    static member        Extend (g: Async<'T>    , f: Async<'T> -> 'U) = async.Return (f g)              : Async<'U>
+    static member        Extend (g: Lazy<'T>     , f: Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g) : Lazy<'U>
+    static member        Extend ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))        
+    static member inline Extend (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
+    static member        Extend (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
 
 #if NET35
 #else
-    static member Extend (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith(f)
+    static member        Extend (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith(f)
 #endif
 
     // Restricted Comonads
-    static member Extend (s: list<'T>     , g) = List.map g (List.tails s) :list<'U>
-    static member Extend (s: 'T []        , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray): 'U []
-    static member Extend (s: seq<'T>      , g) = Seq.map   g (s |> Seq.toList   |> List.tails |> List.toSeq   |> Seq.map   List.toSeq) : 'U seq
+    static member        Extend (s: list<'T>     , g) = List.map g (List.tails s) :list<'U>
+    static member        Extend (s: 'T []        , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray): 'U []
+    static member        Extend (s: seq<'T>      , g) = Seq.map   g (s |> Seq.toList   |> List.tails |> List.toSeq   |> Seq.map   List.toSeq) : 'U seq
 
     static member inline Invoke (g: '``Comonad<'T>``->'U) (s: '``Comonad<'T>``) : '``Comonad<'U>`` =
         let inline call (_mthd: 'M, source: 'I, _output: 'R) = ((^M or ^I or ^R) : (static member Extend: _*_ -> _) source, g)
@@ -457,12 +457,12 @@ type Extend =
 
 type Duplicate =
     inherit Default1
-    static member inline       Duplicate (x: '``Comonad<'T>``, [<Optional>]_mthd: Default1 ) = Extend.Invoke id x          : '``Comonad<'Comonad<'T>>``
-    static member Duplicate (s: Async<'T>       , [<Optional>]_mthd: Duplicate) = async.Return s              : Async<Async<'T>>
-    static member Duplicate (s: Lazy<'T>        , [<Optional>]_mthd: Duplicate) = Lazy<_>.CreateFromValue s   : Lazy<Lazy<'T>>
-    static member Duplicate (s: Id<'T>          , [<Optional>]_mthd: Duplicate) = Id s                        : Id<Id<'T>>
-    static member Duplicate ((w: 'W, a: 'T)     , [<Optional>]_mthd: Duplicate) = w, (w, a)
-    static member inline       Duplicate (f: 'Monoid -> 'T   , [<Optional>]_mthd: Duplicate) = fun a b -> f (Plus.Invoke a b)
+    static member inline Duplicate (x: '``Comonad<'T>``, [<Optional>]_mthd: Default1 ) = Extend.Invoke id x          : '``Comonad<'Comonad<'T>>``
+    static member        Duplicate (s: Async<'T>       , [<Optional>]_mthd: Duplicate) = async.Return s              : Async<Async<'T>>
+    static member        Duplicate (s: Lazy<'T>        , [<Optional>]_mthd: Duplicate) = Lazy<_>.CreateFromValue s   : Lazy<Lazy<'T>>
+    static member        Duplicate (s: Id<'T>          , [<Optional>]_mthd: Duplicate) = Id s                        : Id<Id<'T>>
+    static member        Duplicate ((w: 'W, a: 'T)     , [<Optional>]_mthd: Duplicate) = w, (w, a)
+    static member inline Duplicate (f: 'Monoid -> 'T   , [<Optional>]_mthd: Duplicate) = fun a b -> f (Plus.Invoke a b)
 
     // Restricted Comonads
     static member Duplicate (s:  list<'T>       , [<Optional>]_mthd: Duplicate) = List.tails s
