@@ -101,7 +101,7 @@ type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
 
     // Alternative
     static member inline get_Empty ()                  = Compose (getEmpty ()) : Compose<'``F<'G<'T>``>
-    static member inline Append (Compose x, Compose y) = Compose (x <|> y)     : Compose<'``F<'G<'T>``>
+    static member inline (<|>) (Compose x, Compose y) = Compose (x <|> y)     : Compose<'``F<'G<'T>``>
 
 
 /// Basic operations on Compose

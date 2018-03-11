@@ -7,54 +7,49 @@ open System.Runtime.InteropServices
 open FSharpPlus.Internals
 
 
-[<Extension;Sealed>]
 type Item1 =
-    [<Extension>]static member Item1 ((a, _, _, _, _)) = a
-    [<Extension>]static member Item1 ((a, _, _, _)   ) = a
-    [<Extension>]static member Item1 ((a, _, _)      ) = a
-    [<Extension>]static member Item1 ((a, _)         ) = a
+    static member Item1 ((a, _, _, _, _)) = a
+    static member Item1 ((a, _, _, _)   ) = a
+    static member Item1 ((a, _, _)      ) = a
+    static member Item1 ((a, _)         ) = a
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item1: _ -> _) b)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Item1> , value)
 
-[<Extension;Sealed>]
 type Item2 =
-    [<Extension>]static member Item2 ((_, b, _, _, _)) = b
-    [<Extension>]static member Item2 ((_, b, _, _)   ) = b
-    [<Extension>]static member Item2 ((_, b, _)      ) = b
-    [<Extension>]static member Item2 ((_, b)         ) = b
+    static member Item2 ((_, b, _, _, _)) = b
+    static member Item2 ((_, b, _, _)   ) = b
+    static member Item2 ((_, b, _)      ) = b
+    static member Item2 ((_, b)         ) = b
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item2: _ -> _) b)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Item2> , value)
 
-[<Extension;Sealed>]
 type Item3 =
-    [<Extension>]static member Item3 ((_, _, c, _, _)) = c
-    [<Extension>]static member Item3 ((_, _, c, _)   ) = c
-    [<Extension>]static member Item3 ((_, _, c)      ) = c
+    static member Item3 ((_, _, c, _, _)) = c
+    static member Item3 ((_, _, c, _)   ) = c
+    static member Item3 ((_, _, c)      ) = c
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item3: _ -> _) b)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Item3> , value)
 
-[<Extension;Sealed>]
 type Item4 =
-    [<Extension>]static member Item4 ((_, _, _, d, _)) = d
-    [<Extension>]static member Item4 ((_, _, _, d)   ) = d
+    static member Item4 ((_, _, _, d, _)) = d
+    static member Item4 ((_, _, _, d)   ) = d
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item4: _ -> _) b)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Item4> , value)
 
-[<Extension;Sealed>]
 type Item5 =
-    [<Extension>]static member Item5 ((_, _, _, _, e)) = e
+    static member Item5 ((_, _, _, _, e)) = e
 
     static member inline Invoke value = 
         let inline call_2 (_:^a, b:^b) = ((^a or ^b) : (static member Item5: _ -> _) b)
@@ -73,7 +68,6 @@ type MapItem1 =
         let inline call   (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem1> , value)
 
-[<Extension;Sealed>]
 type MapItem2 =
     static member MapItem2 ((a, b, c, d, e)         , fn) = (a, fn b, c, d, e)
     static member MapItem2 ((a, b, c, d)            , fn) = (a, fn b, c, d)      

@@ -19,7 +19,7 @@ Minimal complete definition
     static member Return (x:'T) : 'Alternative<'T>
     static member (<*>) (f:'T->'U, x:Alternative<'T>) : Alternative<'U>
     static member get_Empty () :'Alternative
-    static member Append (x:'Alternative<'T>, y:'Alternative<'T>) :'Alternative<'T>
+    static member (<|>) (x:'Alternative<'T>, y:'Alternative<'T>) :'Alternative<'T>
 *)
 (**
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
@@ -143,7 +143,7 @@ type Maybe<'t> =
             | Just f, Just x -> Just (f x) 
             | _              -> Nothing
         static member inline get_Empty () = Nothing
-        static member inline Append (x, y) = match x with Nothing -> y | xs -> xs
+        static member inline (<|>) (x, y) = match x with Nothing -> y | xs -> xs
 
 let r5 = Nothing ++ Just 5 ++ Just 6 ++ zero
 let r6 = map string (Just 6)

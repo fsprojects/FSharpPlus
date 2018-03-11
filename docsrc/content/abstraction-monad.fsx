@@ -13,7 +13,7 @@ ___
 
 
 
-Minimal comple te definition
+Minimal complete definition
 ---------------------------
 
 
@@ -22,7 +22,7 @@ Minimal comple te definition
 *)
 (**
     static member Return (x:'T) : 'Monad<'T>
-    static member Bind (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
+    static member (>>=) (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
 *)
 (**
 

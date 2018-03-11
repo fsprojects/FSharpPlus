@@ -20,15 +20,7 @@ Here are some examples:
 
 *)
 
-open FSharpPlus.Control
+open FSharpPlus.Extensions
 
-let mapp1 = [1..3] </plus/> [4..8]
-let mapp2 = [1..3]  .Plus   [4..8]
-let mcon1 = [|[|1..3|];[|4..5|]|] |> join
-let mcon2 = [|[|1..3|];[|4..5|]|] .Join()  // Optional arguments work from F# 4.1. In C# you can write (new[] {new[] {1, 2, 3}, new[] {4, 5, 6}}).Join();
-
-let arr = [|1..4|].Rev().Intersperse(10)
-let lst =  [1..4] .Rev().Intersperse(10)
-
-let opt  = [Some 1; Some 2].Sequence()
-let arr' = [|[|1|]; [|2|]|].Sequence()
+let opt  = Option.Sequence [Some 1; Some 2]
+let asn = Async.Sequence [| async {return 1}; async {return 2} |]

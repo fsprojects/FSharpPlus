@@ -16,8 +16,8 @@ It contains the most requested additions to the F# core library, including:
 
 Users of this library have the option to use their functions in different styles:
  - F# Standard module + function style: [module].[function] [arg]
- - As [extension methods](//gusty.github.io/FSharpPlus/extension-methods.html) [arg].[function]
  - As [generic functions](//gusty.github.io/FSharpPlus/generic-doc.html) [function] [arg]
+ - As [extension methods](//gusty.github.io/FSharpPlus/extension-methods.html) [type].[function] [arg]
 
 In the [Sample folder](//github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Samples) you can find scripts showing how to use F#+ in your code.
 

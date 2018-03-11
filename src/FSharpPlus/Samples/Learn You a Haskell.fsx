@@ -542,7 +542,7 @@ module Probability =
             Prob.probMap f prob : Prob<'b>
         static member Return (x) =
             Prob [(x, 1.0)] : Prob<'a>
-        static member Bind (prob:Prob<'a>, f:'a -> Prob<'b>) =
+        static member (>>=) (prob:Prob<'a>, f:'a -> Prob<'b>) =
             Prob.flatten (map f prob) : Prob<'b>
 
 open Probability

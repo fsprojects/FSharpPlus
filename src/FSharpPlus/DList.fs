@@ -152,7 +152,7 @@ type DList<'T> with
     static member (+) (x:DList<_>, y:DList<_>) = DList.append x y
 
     static member get_Empty = DList( 0, Nil)
-    static member Append (x:DList<_>, y:DList<_>) = DList.append x y
+    static member (<|>) (x:DList<_>, y:DList<_>) = DList.append x y
     
     static member ToSeq  x = DList.toSeq  x
     static member ToList x = DList.toList x
@@ -164,4 +164,4 @@ type DList<'T> with
     static member Map (x, f) = DList.map f x
     static member (<*>) (f, x) = DList.ap f x
     static member Join x = DList.join x
-    static member Bind (x, f) = DList.bind x f
+    static member (>>=) (x, f) = DList.bind x f
