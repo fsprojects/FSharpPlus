@@ -28,7 +28,7 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline (>>=)  (x : OptionT<'``Monad<seq<'T>``>, f : 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind  f x
 
     static member inline get_Empty () = OptionT <| result None : OptionT<'``MonadPlus<option<'T>``>
-    static member inline Append (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some _ -> x | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>
+    static member inline (<|>) (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some _ -> x | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>
 
     static member inline Lift (x:'``Monad<'T>``) = x |> liftM Some |> OptionT : OptionT<'``Monad<option<'T>>``>
 

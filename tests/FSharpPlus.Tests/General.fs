@@ -53,14 +53,14 @@ type WrappedListE<'s> = WrappedListE of 's list with
     static member Return  (x) = WrappedListE [x]
     static member (>>=)  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
     static member get_Empty() = WrappedListE List.empty
-    static member Append (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
+    static member (<|>) (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
     
 type WrappedListF<'s> = WrappedListF of 's list with
     static member Return  (x) = WrappedListF [x]
     static member (>>=)  (WrappedListF x: WrappedListF<'T>, f) = WrappedListF (List.collect (f >> (fun (WrappedListF x) -> x)) x)
     static member Join  (WrappedListF wlst) = SideEffects.add "Join";  WrappedListF wlst >>= id
     static member get_Empty() = WrappedListF List.empty
-    static member Append (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
+    static member (<|>) (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
 
 type WrappedListG<'s> = WrappedListG of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator()
@@ -69,7 +69,7 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member (>>=)  (WrappedListG x: WrappedListG<'T>, f) = WrappedListG (List.collect (f >> (fun (WrappedListG x) -> x)) x)
     static member Join  (WrappedListG wlst) = (*SideEffects.add "Join";*)  WrappedListG wlst >>= id
     static member get_Empty() = WrappedListG List.empty
-    static member Append (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
+    static member (<|>) (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
     static member Delay (f: unit -> WrappedListD<_>) = SideEffects.add "Using WrappedListG's Delay"; f()
     static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
@@ -81,7 +81,7 @@ type WrappedSeqA<'s> = WrappedSeqA of 's seq with
     static member (>>=)  (WrappedSeqA x: WrappedSeqA<'T>, f) = WrappedSeqA (Seq.collect (f >> (fun (WrappedSeqA x) -> x)) x)
     static member Join  (WrappedSeqA wlst) = WrappedSeqA wlst >>= id
     static member get_Empty() = WrappedSeqA List.empty
-    static member Append (WrappedSeqA l, WrappedSeqA x) = WrappedSeqA (Seq.append l x)
+    static member (<|>) (WrappedSeqA l, WrappedSeqA x) = WrappedSeqA (Seq.append l x)
     static member Delay (f: unit -> WrappedSeqA<_>) =
                     let run (WrappedSeqA s) = s
                     WrappedSeqA (Seq.delay (f >> run))
@@ -93,7 +93,7 @@ type WrappedSeqB<'s> = WrappedSeqB of 's seq with
     static member (>>=)  (WrappedSeqB x: WrappedSeqB<'T>, f) = WrappedSeqB (Seq.collect (f >> (fun (WrappedSeqB x) -> x)) x)
     static member Join  (WrappedSeqB wlst) = WrappedSeqB wlst >>= id
     static member get_Empty() = WrappedSeqB List.empty
-    static member Append (WrappedSeqB l, WrappedSeqB x) = WrappedSeqB (Seq.append l x)
+    static member (<|>) (WrappedSeqB l, WrappedSeqB x) = WrappedSeqB (Seq.append l x)
     static member Delay (f: unit -> WrappedSeqB<_>) =
                     let run (WrappedSeqB s) = s
                     WrappedSeqB (Seq.delay (f >> run))
@@ -111,7 +111,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
     static member (>>=)  (WrappedSeqC x: WrappedSeqC<'T>, f) = WrappedSeqC (Seq.collect (f >> (fun (WrappedSeqC x) -> x)) x)
     static member Join  (WrappedSeqC wlst) = WrappedSeqC wlst >>= id
     static member get_Empty() = WrappedSeqC List.empty
-    static member Append (WrappedSeqC l, WrappedSeqC x) = WrappedSeqC (Seq.append l x)
+    static member (<|>) (WrappedSeqC l, WrappedSeqC x) = WrappedSeqC (Seq.append l x)
     static member Delay (f: unit -> WrappedSeqC<_>) =
                     let run (WrappedSeqC s) = s
                     WrappedSeqC (Seq.delay (f >> run))
@@ -148,7 +148,7 @@ module Monoid =
 
     type MyList<'t> = MyList of list<'t> with
         static member get_Empty () = MyList []
-        static member Append (MyList x, MyList y) = MyList (x @ y)
+        static member (<|>) (MyList x, MyList y) = MyList (x @ y)
 
     type MyNum = MyNum of int with
         static member get_Empty () = MyNum 0
@@ -767,7 +767,7 @@ module Alternative =
         let y = seq [1;2] <|> seq [3;4]
 
         // shoud not compile. 
-        // Although WrappedListD implements IEnumerable, it should explicitely implement Append. Not all IEnumerables have append.
+        // Although WrappedListD implements IEnumerable, it should explicitely implement (<|>). Not all IEnumerables have (<|>).
         // let z = WrappedListD [1;2] ++ WrappedListD [3;4]
         ()
 
@@ -846,7 +846,7 @@ module Categories =
     
         // ArrowPlus
         static member inline Empty (output :Kleisli<'T,'``Monad<'U>``>, mthd :Empty) = Kleisli (fun _ -> Empty.Invoke ())
-        static member inline Append (Kleisli f, Kleisli g, mthd:Append) = Kleisli (fun x -> Append.Invoke (f x) (g x))
+        static member inline ``<|>`` (Kleisli f, Kleisli g, mthd:Append) = Kleisli (fun x -> Append.Invoke (f x) (g x))
 
     let runKleisli (Kleisli f) = f
     let runFunc (f : System.Func<_,_>) = f.Invoke

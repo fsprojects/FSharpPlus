@@ -55,7 +55,7 @@ type ListT<'``monad<list<'t>>``> with
     static member inline (>>=)  (x : ListT<'``Monad<seq<'T>``>, f : 'T -> ListT<'``Monad<seq<'U>``>)   = ListT.bind f x
 
     static member inline get_Empty () = ListT <| result [] : ListT<'``MonadPlus<list<'T>``>
-    static member inline Append (ListT x, ListT y) = ListT (x >>= (fun a -> y >>= (fun b -> result (a @ b)))) : ListT<'``MonadPlus<list<'T>``>
+    static member inline (<|>) (ListT x, ListT y) = ListT (x >>= (fun a -> y >>= (fun b -> result (a @ b)))) : ListT<'``MonadPlus<list<'T>``>
 
     static member inline Lift (x:'``Monad<'T>``) = x |> liftM List.singleton |> ListT   : ListT<'``Monad<list<'T>>``> 
     

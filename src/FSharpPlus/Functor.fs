@@ -290,15 +290,15 @@ type Empty =
 
 type Append =
     inherit Default1
-    static member        Append (x: 'T seq              , y         , [<Optional>]_mthd: Default2) = Seq.append   x y
-    static member inline Append (x: '``Alt<'T>``, y: '``Alt<'T>``   , [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member Append : _*_ -> _) x, y) : '``Alt<'T>``
-    static member inline Append (_: ^t when ^t:null and ^t:struct, _,             _mthd: Default1) = ()
-    static member        Append (x: 'T option           , y         , [<Optional>]_mthd: Append  ) = match x with None -> y | xs -> xs
-    static member        Append (x: 'T list             , y         , [<Optional>]_mthd: Append  ) = x @ y
-    static member        Append (x: 'T []               , y         , [<Optional>]_mthd: Append  ) = Array.append x y
+    static member        ``<|>`` (x: 'T seq              , y         , [<Optional>]_mthd: Default2) = Seq.append   x y
+    static member inline ``<|>`` (x: '``Alt<'T>``, y: '``Alt<'T>``   , [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member (<|>) : _*_ -> _) x, y) : '``Alt<'T>``
+    static member inline ``<|>`` (_: ^t when ^t:null and ^t:struct, _,             _mthd: Default1) = ()
+    static member        ``<|>`` (x: 'T option           , y         , [<Optional>]_mthd: Append  ) = match x with None -> y | xs -> xs
+    static member        ``<|>`` (x: 'T list             , y         , [<Optional>]_mthd: Append  ) = x @ y
+    static member        ``<|>`` (x: 'T []               , y         , [<Optional>]_mthd: Append  ) = Array.append x y
 
     static member inline Invoke (x: '``Alt<'T>``) (y: '``Alt<'T>``)  : '``Alt<'T>`` =
-        let inline call (mthd: ^M, input1: ^I, input2: ^I) = ((^M or ^I) : (static member Append: _*_*_ -> _) input1, input2, mthd)
+        let inline call (mthd: ^M, input1: ^I, input2: ^I) = ((^M or ^I) : (static member ``<|>``: _*_*_ -> _) input1, input2, mthd)
         call (Unchecked.defaultof<Append>, x, y)
 
 

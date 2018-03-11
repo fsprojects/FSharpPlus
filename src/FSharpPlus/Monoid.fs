@@ -16,7 +16,7 @@ open FSharpPlus.Internals
 [<Extension; Sealed>]
 type Plus =     
     inherit Default1
-    static member inline ``+`` (x :'Plus       , y:'Plus              ,             _mthd : Default2) = (^Plus :  (static member Append : _*_ -> _) x, y) : ^Plus
+    static member inline ``+`` (x :'Plus       , y:'Plus              ,             _mthd : Default2) = (^Plus :  (static member (<|>) : _*_ -> _) x, y) : ^Plus
     static member inline ``+`` (x :'Plus       , y:'Plus              , [<Optional>]_mthd : Default1) = x + y : ^Plus
     static member inline ``+`` (_ :^t when ^t:null and ^t:struct, _:^t, [<Optional>]_mthd : Default1) = id
     static member        ``+`` (x:list<_>      , y                    , [<Optional>]_mthd : Plus    ) = x @ y

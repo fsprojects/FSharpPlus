@@ -30,7 +30,7 @@ type DList<'T> with
     static member (+) (DList x, DList y) = DList (x << y)
 
     static member get_Empty = DList id
-    static member Append (DList x, DList y) = DList (x << y)
+    static member (<|>) (DList x, DList y) = DList (x << y)
     
     static member ToSeq  x = toSeq  x
     static member ToList x = toList x

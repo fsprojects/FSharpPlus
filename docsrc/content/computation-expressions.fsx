@@ -22,7 +22,7 @@ There is a single computation expression: ``monad`` but it comes in 4 flavours:
 
    Async workflows is an example of a side-effect computation expression and seq expressions are an example of monadplus.
 
-   Side effect workflows don't have any additional requirement over the type (apart from the monad operations), but monadplus requires the additional [get_Empty and Append](abstraction-alternative.html) methods.
+   Side effect workflows don't have any additional requirement over the type (apart from the monad operations), but monadplus requires the additional [get_Empty and (<|>)](abstraction-alternative.html) methods.
 
   The generic computation expression ``monad`` is a side-effect one, but it can be turned into a monadplus by accessing the ``.plus`` property.
 
