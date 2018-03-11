@@ -42,7 +42,6 @@ type DList<'T>(length : int , data : DListData<'T>) =
             | []    -> xs
             | t::ts -> walk ts t xs
         in walk [] l.dc state
-    //static member Fold (x, f, z, [<Optional>]_impl) = fold f x z    
     // making only a small adjustment to Ramsey's algorithm we get a left to right fold
     static member internal Fold' (f : ('State -> 'T -> 'State)) (state : 'State) (l:DList<'T>)  =
         let rec walk rights l xs =
@@ -129,8 +128,6 @@ module DList =
     let ap f x = join <| map (fun y -> map ((|>) y) f) x
     let bind m k = DList<_>.FoldBack' (append << k) empty m
 
-open DList
-
 type DList<'T> with
     
     static member get_Zero = DList( 0, Nil)
@@ -139,14 +136,14 @@ type DList<'T> with
     static member get_Empty = DList( 0, Nil)
     static member Append (x:DList<_>, y:DList<_>) = DList.append x y
     
-    static member ToSeq  x = toSeq  x
-    static member ToList x = toList x
-    static member OfSeq  x = ofSeq  x
-    static member OfList x = ofList x
-    static member Fold (x, f, z, [<Optional>]_impl) = fold f x z    
+    static member ToSeq  x = DList.toSeq  x
+    static member ToList x = DList.toList x
+    static member OfSeq  x = DList.ofSeq  x
+    static member OfList x = DList.ofList x
+    static member Fold (x, f, z) = DList.fold f x z
 
     static member Return x = DList (1, x)
-    static member Map (x, f) = map f x
-    static member (<*>) (f, x) = ap f x
-    static member Join x = join x
-    static member Bind (x, f) = bind x f
+    static member Map (x, f) = DList.map f x
+    static member (<*>) (f, x) = DList.ap f x
+    static member Join x = DList.join x
+    static member Bind (x, f) = DList.bind x f
