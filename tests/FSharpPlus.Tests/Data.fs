@@ -11,7 +11,7 @@ open FsCheck
 
 module Helpers =
     let areEqual (x:'t) (y:'t) = Assert.AreEqual (x, y)
-    let throws (exnT:Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate( x)) 
+    let throws (exnT:Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate( x)) |> ignore
     let fsCheck s x= Check.Quick( s , x )
 
 module DList=
@@ -78,8 +78,8 @@ module DList=
     // NUnit TestCaseSource does not understand array of tuples at runtime
     let intGens start =
         let v = Array.create 3 (box (DListIntGen, "DList"))
-        v.[1] <- box ((DListIntOfSeqGen |> Gen.suchThat (fun (q, l) -> l.Length >= start)), "DList OfSeq")
-        v.[2] <- box ((DListIntSnocGen |> Gen.suchThat (fun (q, l) -> l.Length >= start)), "DList snocDList") 
+        v.[1] <- box ((DListIntOfSeqGen |> Gen.filter (fun (q, l) -> l.Length >= start)), "DList OfSeq")
+        v.[2] <- box ((DListIntSnocGen |> Gen.filter (fun (q, l) -> l.Length >= start)), "DList snocDList") 
         v
 
     let intGensStart1 =
@@ -121,13 +121,13 @@ module DList=
 
     [<Test>]
     let ``fail if there is no head in the DList``() =
-        (fun () -> DList.empty |> head |> ignore) |> throws typeof<System.Exception>
+        (fun () -> DList.empty |> head |> ignore) |> throws typeof<System.ArgumentException>
 
     [<Test>]
     let ``fail if there is no tail in the DList``() =
-        (fun () -> DList.empty |> tail |> ignore) |> throws typeof<System.Exception>
+        (fun () -> DList.empty |> tail |> ignore) |> throws typeof<System.ArgumentException>
 
-(*    [<Test>]
+    [<Test>]
     let ``fold matches build list rev``() =
         fsCheck "DList" (Prop.forAll (Arb.fromGen DListIntGen) 
             (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
@@ -137,7 +137,7 @@ module DList=
 
         fsCheck "DList Snoc" (Prop.forAll (Arb.fromGen DListIntGen) 
              (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
-*)
+
     [<Test>]
     let ``foldBack matches build list``() =
 
@@ -156,24 +156,23 @@ module DList=
         let lq = foldBack (fun (elem : string) (l' : string list) -> elem::l') q []
         areEqual lq (DList.toList q)
 
-(*    [<Test>]
+    [<Test>]
     let ``fold matches build list rev 2``() =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"]
         let lq = fold (fun (l' : string list) (elem : string) -> elem::l') [] q
         areEqual lq (List.rev (DList.toList q))
-*)
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
     let ``get head from DList``(x : obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (head q) = (List.nth l 0) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (head q) = (List.item 0 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
     let ``get head from DList safely``(x : obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (tryHead q).Value = (List.nth l 0) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (tryHead q).Value = (List.item 0 l) ))
 
 (*    [<Test>]
     [<TestCaseSource("intGensStart2")>]

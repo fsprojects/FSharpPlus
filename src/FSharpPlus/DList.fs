@@ -89,7 +89,7 @@ module internal DListData =
     let rec tryHead (x:DListData<_>)  =
         match x with
         | Unit x' -> Some x'
-        | Join(x',y) -> tryHead x'
+        | Join(x',_) -> tryHead x'
         | _ -> None
 
     let append (left: DListData<_>) (right: DListData<_>) = 
@@ -121,14 +121,14 @@ module DList =
         let len =left.Length + right.Length
         let data= DListData.append left.dc right.dc
         DList(len, data)
-
+    /// return a new DList with hd as its head
     let cons hd (f:DList<_>)  =
         match f.dc with
         | Nil -> DList (1, (Unit hd))
         | _ ->  DList ((f.Length + 1), Join(Unit hd, f.dc) )
-
-    let snoc hd (f:DList<_>)  = DList( (f.Length + 1), DListData.append (f.dc) (Unit hd) )
-    let fold f x              = DList<_>.Fold'(f x)
+    /// return a new DList with x appended in the end
+    let snoc x (f:DList<_>)   = DList( (f.Length + 1), DListData.append (f.dc) (Unit x) )
+    let fold f x              = DList<_>.Fold' f x
     let map f (x:DList<_>)    = DList<_>.FoldBack' (cons << f ) x empty
     let concat x              = DList<_>.Fold' append empty x
     let join (f:DList<DList<_>>) = concat f
