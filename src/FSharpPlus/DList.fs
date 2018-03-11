@@ -135,7 +135,7 @@ module DList =
     let ap f x                = join <| map (fun y -> map ((|>) y) f) x
     let bind m k              = DList<_>.FoldBack' (append << k) empty m
     let tryHead (x:DList<_>)  = DListData.tryHead x.dc
-
+    let head x                = match tryHead x with | Some l -> l | None -> raise (System.ArgumentException "empty dlist")
     let tryTail (x:DList<_>)  =
         let rec step (xs:DListData<'T>) (acc:DListData<'T>) =
             match xs with
@@ -144,7 +144,7 @@ module DList =
             | Join(x,y) -> step x (DListData.append y acc)
         if isEmpty x then None
         else Some (DList( (x.Length - 1), (step x.dc Nil )))
-    let tail (x:DList<_>)     = match tryTail x with | Some l -> l | None -> raise (System.ArgumentException "empty dlist")
+    let tail x                = match tryTail x with | Some l -> l | None -> raise (System.ArgumentException "empty dlist")
 
 type DList<'T> with
     
