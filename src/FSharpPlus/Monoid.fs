@@ -23,9 +23,7 @@ type Plus =
     static member        Plus (x:array<_>     , y                    , [<Optional>]_mthd : Plus    ) = Array.append x y
     static member        Plus (()             , ()                   , [<Optional>]_mthd : Plus    ) = ()
     static member        Plus (x:Set<_>       , y                    , [<Optional>]_mthd : Plus    ) = Set.union x y
-    static member        Plus (x:string       , y ) = x + y
     static member        Plus (x:StringBuilder, y:StringBuilder      , [<Optional>]_mthd : Plus    ) = StringBuilder().Append(x).Append(y)
-    static member        Plus (x:TimeSpan     , y:TimeSpan) = x + y
 
     static member inline Invoke (x:'Plus) (y:'Plus)  : 'Plus =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member Plus: _*_*_ -> _) input1, input2, mthd)
