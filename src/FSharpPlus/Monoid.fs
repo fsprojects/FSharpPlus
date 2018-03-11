@@ -16,21 +16,21 @@ open FSharpPlus.Internals
 [<Extension; Sealed>]
 type Plus =     
     inherit Default1
-    static member inline Plus (x :'Plus       , y:'Plus              ,             _mthd : Default2) = (^Plus :  (static member Append : _*_ -> _) x, y) : ^Plus
-    static member inline Plus (x :'Plus       , y:'Plus              , [<Optional>]_mthd : Default1) = x + y : ^Plus
-    static member inline Plus (_ :^t when ^t:null and ^t:struct, _:^t, [<Optional>]_mthd : Default1) = id
-    static member        Plus (x:list<_>      , y                    , [<Optional>]_mthd : Plus    ) = x @ y
-    static member        Plus (x:array<_>     , y                    , [<Optional>]_mthd : Plus    ) = Array.append x y
-    static member        Plus (()             , ()                   , [<Optional>]_mthd : Plus    ) = ()
-    static member        Plus (x:Set<_>       , y                    , [<Optional>]_mthd : Plus    ) = Set.union x y
-    static member        Plus (x:StringBuilder, y:StringBuilder      , [<Optional>]_mthd : Plus    ) = StringBuilder().Append(x).Append(y)
+    static member inline ``+`` (x :'Plus       , y:'Plus              ,             _mthd : Default2) = (^Plus :  (static member Append : _*_ -> _) x, y) : ^Plus
+    static member inline ``+`` (x :'Plus       , y:'Plus              , [<Optional>]_mthd : Default1) = x + y : ^Plus
+    static member inline ``+`` (_ :^t when ^t:null and ^t:struct, _:^t, [<Optional>]_mthd : Default1) = id
+    static member        ``+`` (x:list<_>      , y                    , [<Optional>]_mthd : Plus    ) = x @ y
+    static member        ``+`` (x:array<_>     , y                    , [<Optional>]_mthd : Plus    ) = Array.append x y
+    static member        ``+`` (()             , ()                   , [<Optional>]_mthd : Plus    ) = ()
+    static member        ``+`` (x:Set<_>       , y                    , [<Optional>]_mthd : Plus    ) = Set.union x y
+    static member        ``+`` (x:StringBuilder, y:StringBuilder      , [<Optional>]_mthd : Plus    ) = StringBuilder().Append(x).Append(y)
 
     static member inline Invoke (x:'Plus) (y:'Plus)  : 'Plus =
-        let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member Plus: _*_*_ -> _) input1, input2, mthd)
+        let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member ``+``: _*_*_ -> _) input1, input2, mthd)
         call (Unchecked.defaultof<Plus>, x, y)
 
 type Plus with
-    static member inline Plus (x:option<_>,y , [<Optional>]_mthd : Plus    ) =
+    static member inline ``+`` (x:option<_>,y , [<Optional>]_mthd : Plus    ) =
                     match (x,y) with
                     | (Some a , Some b) -> Some (Plus.Invoke a b)
                     | (Some a , None  ) -> Some a
@@ -39,52 +39,52 @@ type Plus with
 
 
 type Plus with 
-    static member inline Plus ((x1,x2         ), (y1,y2         ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                         ) :'a*'b
+    static member inline ``+`` ((x1,x2         ), (y1,y2         ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                         ) :'a*'b
 type Plus with 
-    static member inline Plus ((x1,x2,x3      ), (y1,y2,y3      ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3                                      ) :'a*'b*'c
+    static member inline ``+`` ((x1,x2,x3      ), (y1,y2,y3      ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3                                      ) :'a*'b*'c
 type Plus with 
-    static member inline Plus ((x1,x2,x3,x4   ), (y1,y2,y3,y4   ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4                   ) :'a*'b*'c*'d
+    static member inline ``+`` ((x1,x2,x3,x4   ), (y1,y2,y3,y4   ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4                   ) :'a*'b*'c*'d
 type Plus with 
-    static member inline Plus ((x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5) :'a*'b*'c*'d*'e
+    static member inline ``+`` ((x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5) :'a*'b*'c*'d*'e
     
 type Plus with    
     
 #if NET35
 #else
-    static member inline Plus (x:'a Task, y:'a Task, [<Optional>]_mthd : Plus    ) =
+    static member inline ``+`` (x:'a Task, y:'a Task, [<Optional>]_mthd : Plus    ) =
                     x.ContinueWith(fun (t: Task<_>) -> 
                         (fun a -> 
                             y.ContinueWith(fun (u: Task<_>) -> 
                                 Plus.Invoke a u.Result)) t.Result).Unwrap()
 #endif
 
-    static member inline Plus (x:Map<'a,'b>, y, [<Optional>]_mthd : Plus    ) =
+    static member inline ``+`` (x:Map<'a,'b>, y, [<Optional>]_mthd : Plus    ) =
                     Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> Plus.Invoke v v' | None -> v') m) x y
 
-    static member inline Plus (x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>, [<Optional>]_mthd : Plus    ) =
+    static member inline ``+`` (x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>, [<Optional>]_mthd : Plus    ) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v
                     for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Plus.Invoke v v' | _ -> v'
                     d
 
-    static member inline Plus (f:'T->'Monoid, g:'T->'Monoid, [<Optional>]_mthd : Plus    ) = (fun x -> Plus.Invoke (f x) (g x)) :'T->'Monoid
+    static member inline ``+`` (f:'T->'Monoid, g:'T->'Monoid, [<Optional>]_mthd : Plus    ) = (fun x -> Plus.Invoke (f x) (g x)) :'T->'Monoid
 
-    static member inline Plus (x:'S Async, y:'S Async, [<Optional>]_mthd : Plus    ) = async {
+    static member inline ``+`` (x:'S Async, y:'S Async, [<Optional>]_mthd : Plus    ) = async {
                     let! a = x
                     let! b = y
                     return Plus.Invoke a b}
 
-    static member inline Plus (x:'a Expr, y:'a Expr, [<Optional>]_mthd : Plus    ) :'a Expr =
+    static member inline ``+`` (x:'a Expr, y:'a Expr, [<Optional>]_mthd : Plus    ) :'a Expr =
                     let inline f (x:'a)  :'a -> 'a = Plus.Invoke x
                     Expr.Cast<'a>(Expr.Application(Expr.Application(Expr.Value(f), x), y))
    
 
-    static member inline Plus (x:'a Lazy      , y:'a Lazy      , [<Optional>]_mthd : Plus    ) = lazy Plus.Invoke (x.Value) (y.Value)
-    static member        Plus (x:_ ResizeArray, y:_ ResizeArray, [<Optional>]_mthd : Plus    ) = ResizeArray (Seq.append x y)
-    static member        Plus (x:_ IObservable, y              , [<Optional>]_mthd : Default3) = Observable.merge x y
-    static member        Plus (x:_ seq        , y              , [<Optional>]_mthd : Default3) = Seq.append x y
-    static member        Plus (x:_ IEnumerator, y              , [<Optional>]_mthd : Default3) = FSharpPlus.Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator()
-    static member inline Plus (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>, [<Optional>]_mthd : Default3) =
+    static member inline ``+`` (x:'a Lazy      , y:'a Lazy      , [<Optional>]_mthd : Plus    ) = lazy Plus.Invoke (x.Value) (y.Value)
+    static member        ``+`` (x:_ ResizeArray, y:_ ResizeArray, [<Optional>]_mthd : Plus    ) = ResizeArray (Seq.append x y)
+    static member        ``+`` (x:_ IObservable, y              , [<Optional>]_mthd : Default3) = Observable.merge x y
+    static member        ``+`` (x:_ seq        , y              , [<Optional>]_mthd : Default3) = Seq.append x y
+    static member        ``+`` (x:_ IEnumerator, y              , [<Optional>]_mthd : Default3) = FSharpPlus.Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator()
+    static member inline ``+`` (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>, [<Optional>]_mthd : Default3) =
                     let d = Dictionary<'Key,'Value>()
                     for KeyValue(k, v ) in x do d.[k] <- v
                     for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Plus.Invoke v v' | _ -> v'
