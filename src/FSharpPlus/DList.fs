@@ -85,7 +85,13 @@ and
     | Unit of 'T
     | Join of DListData<'T> * DListData<'T> 
 module internal DListData =
-    let isEmpty data = match data with Nil -> true | _ -> false
+    let isEmpty data      = match data with Nil -> true | _ -> false
+    let rec tryHead (x:DListData<_>)  =
+        match x with
+        | Unit x' -> Some x'
+        | Join(x',y) -> tryHead x'
+        | _ -> None
+
     let append (left: DListData<_>) (right: DListData<_>) = 
         match left with
         | Nil -> right
@@ -93,40 +99,52 @@ module internal DListData =
                | Nil -> left
                | _ -> Join(left, right)
 module DList =
-
+    let isEmpty (x:DList<_>)  = DListData.isEmpty x.dc
+    let length (x:DList<_>)   = x.Length
     let empty<'a>             = DList<'a> (0, Nil)
     let toList (x:DList<_>)   = x.Walk [] |> Seq.toList
     let toSeq  (x:DList<_>)   = x.Walk []
-    let ofSeq  source = 
-        DList(Seq.length source, (Seq.fold (fun state x ->
-            match state with 
-            | Nil -> Unit x
-            | Unit _ -> Join(state, Unit x)
-            | Join(_,_) as xs -> Join(state, Unit x)) Nil source))
-    let ofList source = 
-        DList(List.length source, (List.fold (fun state x ->
-            match state with 
-            | Nil -> Unit x
-            | Unit _ -> Join(state, Unit x)
-            | Join(_,_) as xs -> Join(state, Unit x)) Nil source))
+    let singleton x           = DList (1, Unit x)
+
+    let private ofSeqT s len fold
+                              = 
+                                DList(len s, (fold (fun state x ->
+                                    match state with 
+                                    | Nil -> Unit x
+                                    | Unit _ -> Join(state, Unit x)
+                                    | Join(_,_) as xs -> Join(xs, Unit x)) Nil s))
+
+    let ofSeq  source         = ofSeqT source Seq.length Seq.fold
+    let ofList source         = ofSeqT source List.length List.fold
 
     let append (left: DList<_>) (right: DList<_>) = 
         let len =left.Length + right.Length
         let data= DListData.append left.dc right.dc
         DList(len, data)
 
-    let singleton x = DList (1, Unit x)
-    let cons hd (f:DList<_>) =
+    let cons hd (f:DList<_>)  =
         match f.dc with
         | Nil -> DList (1, (Unit hd))
         | _ ->  DList ((f.Length + 1), Join(Unit hd, f.dc) )
-    let snoc (f:DList<_>) x = DList( (f.Length + 1), DListData.append (f.dc) (Unit x) )
-    let fold f x = DList<_>.Fold'(f x)
-    let map f (x:DList<_>) = DList<_>.FoldBack' (cons << f ) x empty
-    let concat x = DList<_>.Fold' append empty x
+
+    let snoc hd (f:DList<_>)  = DList( (f.Length + 1), DListData.append (f.dc) (Unit hd) )
+    let fold f x              = DList<_>.Fold'(f x)
+    let map f (x:DList<_>)    = DList<_>.FoldBack' (cons << f ) x empty
+    let concat x              = DList<_>.Fold' append empty x
     let join (f:DList<DList<_>>) = concat f
-    let ap f x = join <| map (fun y -> map ((|>) y) f) x
-    let bind m k = DList<_>.FoldBack' (append << k) empty m
+    let ap f x                = join <| map (fun y -> map ((|>) y) f) x
+    let bind m k              = DList<_>.FoldBack' (append << k) empty m
+    let tryHead (x:DList<_>)  = DListData.tryHead x.dc
+
+    let tryTail (x:DList<_>)  =
+        let rec step (xs:DListData<'T>) (acc:DListData<'T>) =
+            match xs with
+            | Nil -> acc
+            | Unit _ -> acc
+            | Join(x,y) -> step x (DListData.append y acc)
+        if isEmpty x then None
+        else Some (DList( (x.Length - 1), (step x.dc Nil )))
+    let tail (x:DList<_>)     = match tryTail x with | Some l -> l | None -> raise (System.ArgumentException "empty dlist")
 
 type DList<'T> with
     
