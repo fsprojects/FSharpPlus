@@ -35,7 +35,7 @@ type Reader<'r,'t> with
     static member Local (m, f:'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke()) : 'T
-    static member inline Extend  (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
+    static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
 
 
 /// Monad Transformer for Reader<'R, 'T>

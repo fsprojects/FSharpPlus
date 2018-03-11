@@ -435,24 +435,24 @@ type Extract =
         call_2 (Unchecked.defaultof<Extract>, x)
 
 type Extend =
-    static member        Extend (g: Async<'T>    , f: Async<'T> -> 'U) = async.Return (f g)              : Async<'U>
-    static member        Extend (g: Lazy<'T>     , f: Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g) : Lazy<'U>
-    static member        Extend ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))        
-    static member inline Extend (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
-    static member        Extend (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
+    static member        (=>>) (g: Async<'T>    , f: Async<'T> -> 'U) = async.Return (f g)              : Async<'U>
+    static member        (=>>) (g: Lazy<'T>     , f: Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g) : Lazy<'U>
+    static member        (=>>) ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))        
+    static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
+    static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
 
 #if NET35
 #else
-    static member        Extend (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith(f)
+    static member        (=>>) (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith(f)
 #endif
 
     // Restricted Comonads
-    static member        Extend (s: list<'T>     , g) = List.map g (List.tails s) :list<'U>
-    static member        Extend (s: 'T []        , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray): 'U []
-    static member        Extend (s: seq<'T>      , g) = Seq.map   g (s |> Seq.toList   |> List.tails |> List.toSeq   |> Seq.map   List.toSeq) : 'U seq
+    static member        (=>>) (s: list<'T>     , g) = List.map g (List.tails s) :list<'U>
+    static member        (=>>) (s: 'T []        , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray): 'U []
+    static member        (=>>) (s: seq<'T>      , g) = Seq.map   g (s |> Seq.toList   |> List.tails |> List.toSeq   |> Seq.map   List.toSeq) : 'U seq
 
     static member inline Invoke (g: '``Comonad<'T>``->'U) (s: '``Comonad<'T>``) : '``Comonad<'U>`` =
-        let inline call (_mthd: 'M, source: 'I, _output: 'R) = ((^M or ^I or ^R) : (static member Extend: _*_ -> _) source, g)
+        let inline call (_mthd: 'M, source: 'I, _output: 'R) = ((^M or ^I or ^R) : (static member (=>>): _*_ -> _) source, g)
         call (Unchecked.defaultof<Extend>, s, Unchecked.defaultof<'``Comonad<'U>``>)
 
 type Duplicate =

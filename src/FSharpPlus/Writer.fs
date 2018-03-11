@@ -44,7 +44,7 @@ type Writer<'monoid,'t> with
     static member        Pass   m = Writer.pass m                     : Writer<'Monoid,'T>
 
     static member        Extract (Writer (_ : 'W, a : 'T)) = a
-    static member        Extend  (Writer (w : 'W, _ : 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
+    static member        (=>>)   (Writer (w : 'W, _ : 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
 
 open FSharpPlus.Control
 
