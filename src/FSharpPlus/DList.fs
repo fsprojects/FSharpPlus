@@ -1,10 +1,19 @@
 ﻿namespace FSharpPlus.Data
 open System.Collections.Generic
 open FSharpPlus
-/// List-like type supporting O(1) append
-type DList<'T>(length : int , data : DListData<'T>) =
+// DList from FSharpx.Collections
+//This implementation adds an additional parameter to allow O(1) retrieval of the list length.
+
+type DList<'T>(length : int , data : DListData<'T> ) =
     let mutable hashCode = None
     member internal this.dc = data
+
+    static member ofSeq (s : seq<'T>) =
+         DList(Seq.length s, (Seq.fold (fun state x ->
+                    match state with 
+                    | Nil -> Unit x
+                    | Unit _ -> Join(state, Unit x)
+                    | Join(_,_) as xs -> Join(state, Unit x)) Nil s))
 
     override this.GetHashCode() =
         match hashCode with
@@ -26,11 +35,12 @@ type DList<'T>(length : int , data : DListData<'T>) =
         | _ -> false
 
     member this.Length = length
+
     // O(n). FoldBack walks the DList using constant stack space. Implementation is from Norman Ramsey.
     // Called a "fold" in the article processes the linear representation from right to left
     // and so is more appropriately implemented under the foldBack signature
     // See http://stackoverflow.com/questions/5324623/functional-o1-append-and-on-iteration-from-first-element-list-data-structure/5334068#5334068
-    static member foldBack (f : ('T -> 'State -> 'State)) (l:DList<'T>)  (state : 'State) =
+    static member  foldBack (f : ('T -> 'State -> 'State)) (l:DList<'T>)  (state : 'State) =
         let rec walk lefts l xs =
             match l with
             | Nil       -> finish lefts xs
@@ -40,9 +50,10 @@ type DList<'T>(length : int , data : DListData<'T>) =
             match lefts with
             | []    -> xs
             | t::ts -> walk ts t xs
-        in walk [] l.dc state
+        walk [] l.dc state
+
     // making only a small adjustment to Ramsey's algorithm we get a left to right fold
-    static member fold (f : ('State -> 'T -> 'State)) (state : 'State) (l:DList<'T>)  =
+    static member  fold (f : ('State -> 'T -> 'State)) (state : 'State) (l:DList<'T>)  =
         let rec walk rights l xs =
             match l with
             | Nil       -> finish rights xs
@@ -52,9 +63,69 @@ type DList<'T>(length : int , data : DListData<'T>) =
             match rights with
             | []    -> xs
             | t::ts -> walk ts t xs
-        in walk [] l.dc state
+        walk [] l.dc state
 
-    member internal this.Walk rights =
+    static member append (left, right) =
+        match left with
+        | Nil -> right
+        | _ -> match right with
+               | Nil -> left
+               | _ -> Join(left, right)
+
+    static member appendLists ((left : DList<'T>), (right : DList<'T>)) = 
+        DList( (left.Length + right.Length), (DList<'T>.append(left.dc, right.dc)))
+
+    static member head data =
+        match data with
+        | Unit x' -> x'
+        | Join(x',y) -> DList<'T>.head x'
+        | _ -> failwith "DList.head: empty DList"
+
+    static member tryHead data =
+        match data with
+        | Unit x' -> Some x'
+        | Join(x',y) -> DList<'T>.tryHead x'
+        | _ -> None
+
+    member this.Cons (hd : 'T) =
+        match data with
+        | Nil -> DList (1, (Unit hd))
+        | _ ->  DList ((length + 1), Join(Unit hd, data) )
+
+    member this.Head = DList<'T>.head data
+
+    member this.TryHead = DList<'T>.tryHead data
+
+    member this.IsEmpty = match data with Nil -> true | _ -> false
+
+    member this.Conj (x:'T) = DList( (length + 1), DList<'T>.append(data, Unit x) )
+
+    member this.Tail =
+        let rec step (xs:DListData<'T>) (acc:DListData<'T>) =
+            match xs with
+            | Nil -> acc
+            | Unit _ -> acc
+            | Join(x,y) -> step x (DList<'T>.append(y, acc))
+        if this.IsEmpty then failwith "DList.tail: empty DList"
+        else DList( (length - 1), (step data Nil ))
+
+    member this.TryTail =
+        let rec step (xs:DListData<'T>) (acc:DListData<'T>) =
+            match xs with
+            | Nil -> acc
+            | Unit _ -> acc
+            | Join(x,y) -> step x (DList<'T>.append(y, acc))
+        if this.IsEmpty then None
+        else Some (DList( (length - 1), (step data Nil )))
+
+    member this.Uncons = ((DList<'T>.head data), (this.Tail))
+
+    member this.TryUncons =
+        match DList<'T>.tryHead data with
+        | Some(x) -> Some (x, this.Tail)
+        | None -> None
+
+    member this.toSeq() =
         //adaptation of right-hand side of Norman Ramsey's "fold"
         let rec walk rights l = 
            seq {match l with
@@ -68,82 +139,74 @@ type DList<'T>(length : int , data : DListData<'T>) =
                     | []    -> () 
                     | t::ts -> yield! walk ts t 
                 | Join(x,y) -> yield! walk (y::rights) x}
-        walk rights this.dc
-
-    member private this.ToSeq() =
-        (this.Walk []).GetEnumerator()
+               
+        (walk [] data).GetEnumerator()
 
     interface IEnumerable<'T> with
-        member s.GetEnumerator() = s.ToSeq()
+        member s.GetEnumerator() = s.toSeq()
 
     interface System.Collections.IEnumerable with
-        override s.GetEnumerator() = (s.ToSeq() :> System.Collections.IEnumerator)
+        override s.GetEnumerator() = (s.toSeq() :> System.Collections.IEnumerator)
+            
 and 
     DListData<'T> =
     | Nil
     | Unit of 'T
-    | Join of DListData<'T> * DListData<'T> 
-module internal DListData =
-    let isEmpty data      = match data with Nil -> true | _ -> false
-    let rec tryHead (x:DListData<_>)  =
-        match x with
-        | Unit x' -> Some x'
-        | Join(x',_) -> tryHead x'
-        | _ -> None
+    | Join of DListData<'T> * DListData<'T>  
 
-    let append (left: DListData<_>) (right: DListData<_>) = 
-        match left with
-        | Nil -> right
-        | _ -> match right with
-               | Nil -> left
-               | _ -> Join(left, right)
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module DList =
-    let isEmpty (x:DList<_>)  = DListData.isEmpty x.dc
-    let length (x:DList<_>)   = x.Length
-    let empty<'a>             = DList<'a> (0, Nil)
-    let toList (x:DList<_>)   = DList.foldBack List.cons x []
-    let toSeq  (x:DList<_>)   = x.Walk []
-    let singleton x           = DList (1, Unit x)
 
-    let private ofSeqT s len fold
-                              = 
-                                DList(len s, (fold (fun state x ->
-                                    match state with 
-                                    | Nil -> Unit x
-                                    | Unit _ -> Join(state, Unit x)
-                                    | Join(_,_) as xs -> Join(xs, Unit x)) Nil s))
+    //pattern discriminators  (active pattern)
+    let (|Cons|Nil|) (l : DList<'T>) = match l.TryUncons with Some(a,b) -> Cons(a,b) | None -> Nil
 
-    let ofSeq  source         = ofSeqT source Seq.length Seq.fold
-    let ofList source         = ofSeqT source List.length List.fold
+    let append left right = DList<'T>.appendLists(left, right)
 
-    let append (left: DList<_>) (right: DList<_>) = 
-        let len =left.Length + right.Length
-        let data= DListData.append left.dc right.dc
-        DList(len, data)
-    /// return a new DList with hd as its head
-    let cons hd (f:DList<_>)  =
-        match f.dc with
-        | Nil -> DList (1, (Unit hd))
-        | _ ->  DList ((f.Length + 1), Join(Unit hd, f.dc) )
-    /// return a new DList with x appended in the end
-    let snoc x (f:DList<_>)   = DList( (f.Length + 1), DListData.append (f.dc) (Unit x) )
-    let fold f x              = DList.fold f x
-    let map f (x:DList<_>)    = DList.foldBack (cons << f ) x empty
-    let concat x              = DList.fold append empty x
-    let join (f:DList<DList<_>>) = concat f
-    let ap f x                = join <| map (fun y -> map ((|>) y) f) x
-    let bind m k              = DList.foldBack (append << k) empty m
-    let tryHead (x:DList<_>)  = DListData.tryHead x.dc
-    let head x                = match tryHead x with | Some l -> l | None -> raise (System.ArgumentException "empty dlist")
-    let tryTail (x:DList<_>)  =
-        let rec step (xs:DListData<'T>) (acc:DListData<'T>) =
-            match xs with
-            | Nil -> acc
-            | Unit _ -> acc
-            | Join(x,y) -> step x (DListData.append y acc)
-        if isEmpty x then None
-        else Some (DList( (x.Length - 1), (step x.dc Nil )))
-    let tail x                = match tryTail x with | Some l -> l | None -> raise (System.ArgumentException "empty dlist")
+    let cons hd (l:DList<'T>) = 
+        match l.Length with
+        | 0 -> DList(1, Unit hd)
+        | _ -> DList(l.Length + 1, Join(Unit hd, l.dc) )
+    
+    let empty<'T> : DList<'T> = DList(0, Nil )
+
+    let foldBack (f : ('T -> 'State -> 'State)) (l:DList<'T>) (state : 'State) =
+        DList<'T>.foldBack f l state
+
+    let fold (f : ('State -> 'T -> 'State)) (state : 'State) (l:DList<'T>) =
+        DList<'T>.fold f state l
+
+    let inline head (l:DList<'T>) = l.Head
+
+    let inline tryHead (l:DList<'T>) = l.TryHead
+
+    let inline isEmpty (l:DList<'T>) = l.IsEmpty
+
+    let inline length (l:DList<'T>) = l.Length
+    
+    let singleton x = DList(1, Unit x )
+
+    let inline conj x (l:DList<'T>) = l.Conj x
+
+    let inline tail (l:DList<'T>) = l.Tail
+
+    let inline tryTail (l:DList<'T>) = l.TryTail
+
+    let inline uncons (l:DList<'T>) = l.Uncons
+
+    let inline tryUncons (l:DList<'T>) = l.TryUncons
+
+    let ofSeq s = DList<'T>.ofSeq s
+
+    let inline toList l = foldBack (List.cons) l [] 
+
+    let inline toSeq (l:DList<'T>) = l :> seq<'T>
+
+    // additions to fit f#+ :
+    let inline map f (x:DList<_>)    = DList.foldBack (cons << f ) x empty
+    let concat x = DList.fold append empty x 
+    let inline join (f:DList<DList<_>>) = concat f
+    let inline ap f x = join <| map (fun y -> map ((|>) y) f) x
+    let inline bind m k              = DList.foldBack (append << k) empty m
 
 type DList<'T> with
     
@@ -156,7 +219,6 @@ type DList<'T> with
     static member ToSeq  x = DList.toSeq  x
     static member ToList x = DList.toList x
     static member OfSeq  x = DList.ofSeq  x
-    static member OfList x = DList.ofList x
     static member Fold (x, f, z) = DList.fold f x z
 
     static member Return x = DList (1, x)
