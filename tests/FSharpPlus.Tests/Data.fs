@@ -5,8 +5,6 @@ open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
 open NUnit.Framework
-open FsCheck.NUnit
-open NUnit.Framework
 open FsCheck
 
 module Helpers =
