@@ -30,7 +30,7 @@ type DList<'T>(length : int , data : DListData<'T>) =
     // Called a "fold" in the article processes the linear representation from right to left
     // and so is more appropriately implemented under the foldBack signature
     // See http://stackoverflow.com/questions/5324623/functional-o1-append-and-on-iteration-from-first-element-list-data-structure/5334068#5334068
-    static member internal FoldBack' (f : ('T -> 'State -> 'State)) (l:DList<'T>)  (state : 'State) =
+    static member foldBack (f : ('T -> 'State -> 'State)) (l:DList<'T>)  (state : 'State) =
         let rec walk lefts l xs =
             match l with
             | Nil       -> finish lefts xs
@@ -42,7 +42,7 @@ type DList<'T>(length : int , data : DListData<'T>) =
             | t::ts -> walk ts t xs
         in walk [] l.dc state
     // making only a small adjustment to Ramsey's algorithm we get a left to right fold
-    static member internal Fold' (f : ('State -> 'T -> 'State)) (state : 'State) (l:DList<'T>)  =
+    static member fold (f : ('State -> 'T -> 'State)) (state : 'State) (l:DList<'T>)  =
         let rec walk rights l xs =
             match l with
             | Nil       -> finish rights xs
@@ -101,7 +101,7 @@ module DList =
     let isEmpty (x:DList<_>)  = DListData.isEmpty x.dc
     let length (x:DList<_>)   = x.Length
     let empty<'a>             = DList<'a> (0, Nil)
-    let toList (x:DList<_>)   = foldBack List.cons x []
+    let toList (x:DList<_>)   = DList.foldBack List.cons x []
     let toSeq  (x:DList<_>)   = x.Walk []
     let singleton x           = DList (1, Unit x)
 
@@ -127,12 +127,12 @@ module DList =
         | _ ->  DList ((f.Length + 1), Join(Unit hd, f.dc) )
     /// return a new DList with x appended in the end
     let snoc x (f:DList<_>)   = DList( (f.Length + 1), DListData.append (f.dc) (Unit x) )
-    let fold f x              = DList<_>.Fold' f x
-    let map f (x:DList<_>)    = DList<_>.FoldBack' (cons << f ) x empty
-    let concat x              = DList<_>.Fold' append empty x
+    let fold f x              = DList.fold f x
+    let map f (x:DList<_>)    = DList.foldBack (cons << f ) x empty
+    let concat x              = DList.fold append empty x
     let join (f:DList<DList<_>>) = concat f
     let ap f x                = join <| map (fun y -> map ((|>) y) f) x
-    let bind m k              = DList<_>.FoldBack' (append << k) empty m
+    let bind m k              = DList.foldBack (append << k) empty m
     let tryHead (x:DList<_>)  = DListData.tryHead x.dc
     let head x                = match tryHead x with | Some l -> l | None -> raise (System.ArgumentException "empty dlist")
     let tryTail (x:DList<_>)  =
