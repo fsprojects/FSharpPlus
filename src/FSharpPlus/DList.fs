@@ -1,7 +1,7 @@
 ﻿namespace FSharpPlus.Data
 open System.Collections.Generic
 open System.Runtime.InteropServices
-
+open Microsoft.FSharp.Collections
 /// List-like type supporting O(1) append
 type DList<'T>(length : int , data : DListData<'T>) =
     let mutable hashCode = None
@@ -102,7 +102,7 @@ module DList =
     let isEmpty (x:DList<_>)  = DListData.isEmpty x.dc
     let length (x:DList<_>)   = x.Length
     let empty<'a>             = DList<'a> (0, Nil)
-    let toList (x:DList<_>)   = x.Walk [] |> Seq.toList
+    let toList (x:DList<_>)   = DList<_>.FoldBack' (fun head tail -> List.Cons(head, tail)) x []
     let toSeq  (x:DList<_>)   = x.Walk []
     let singleton x           = DList (1, Unit x)
 
