@@ -11,4 +11,3 @@ github fsharp/FAKE modules/Octokit/Octokit.fsx
 nuget MathNet.Numerics.FSharp redirects: force
 nuget NUnit ~> 2
 nuget NUnit.Runners ~> 2
-nuget FsCheck.Nunit
