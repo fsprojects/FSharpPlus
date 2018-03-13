@@ -256,10 +256,10 @@ module DList=
         let x = DList.ofSeq test 
         x :> seq<_> |> shouldEqual (List.toSeq test) 
 
-(*  [<Test>]
+    [<Test>]
     let ``test ofSeq should create a DList from an array``() =
         let test = [| for i in 0..4 -> i |]
-        DList.ofSeq test |> shouldEqual (Array.toSeq test) *)
+        DList.ofSeq test :> seq<_> |> shouldEqual (Array.toSeq test) 
 
     [<Test>]
     let ``test singleton should return a Unit containing the solo value``() =
