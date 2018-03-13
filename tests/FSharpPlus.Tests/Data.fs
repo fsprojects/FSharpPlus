@@ -250,13 +250,13 @@ module DList=
     let ``empty length 0``() =
         empty |> length |> shouldEqual 0
 
-(*    [<Test>]
+    [<Test>]
     let ``test ofSeq should create a DList from a list``() =
         let test = [ for i in 0..4 -> i ]
         let x = DList.ofSeq test 
-        x |> shouldEqual (List.toSeq test) *)
+        x :> seq<_> |> shouldEqual (List.toSeq test) 
 
-(*    [<Test>]
+(*  [<Test>]
     let ``test ofSeq should create a DList from an array``() =
         let test = [| for i in 0..4 -> i |]
         DList.ofSeq test |> shouldEqual (Array.toSeq test) *)
