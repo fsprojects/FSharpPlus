@@ -4,7 +4,8 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <ItemGroup>    
+  <ItemGroup>
+    <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <None Include="paket.references" />
@@ -15,8 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
-      <Name>FSharpPlus</Name>
-      <Project>{4364a3ea-06d8-4493-be44-e22d5370cca1}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
