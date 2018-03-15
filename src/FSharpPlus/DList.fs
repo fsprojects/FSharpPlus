@@ -8,6 +8,7 @@ open FSharpPlus
 /// DList is an ordered linear structure implementing the List signature (head, tail, cons), 
 /// end-insertion (add), and O(1) append. Ordering is by insertion history.
 /// DList is an implementation of [John Hughes' append list](http://dl.acm.org/citation.cfm?id=8475).
+[<Sealed>]
 type DList<'T>(length : int , data : DListData<'T> ) =
     let mutable hashCode = None
     member internal this.dc = data
@@ -236,8 +237,7 @@ module DList =
     // additions to fit f#+ :
     let inline map f (x:DList<_>)    = DList.foldBack (cons << f ) x empty
     let concat x = DList.fold append empty x 
-    let inline join (f:DList<DList<_>>) = concat f
-    let inline ap f x = join <| map (fun y -> map ((|>) y) f) x
+    let inline ap f x = concat <| map (fun y -> map ((|>) y) f) x
     let inline bind m k              = DList.foldBack (append << k) empty m
 
 type DList<'T> with
@@ -256,5 +256,4 @@ type DList<'T> with
     static member Return x = DList (1, x)
     static member Map (x, f) = DList.map f x
     static member (<*>) (f, x) = DList.ap f x
-    static member Join x = DList.join x
     static member (>>=) (x, f) = DList.bind x f
