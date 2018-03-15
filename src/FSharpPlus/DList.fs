@@ -72,11 +72,10 @@ type DList<'T>(length : int , data : DListData<'T> ) =
         walk [] l.dc state
 
     static member append (left, right) =
-        match left with
-        | Nil -> right
-        | _ -> match right with
-               | Nil -> left
-               | _ -> Join(left, right)
+        match (left, right) with
+        | Nil, _ -> right
+        | _, Nil -> left
+        | _, _   -> Join(left, right)
 
     static member appendLists ((left : DList<'T>), (right : DList<'T>)) = 
         DList( (left.Length + right.Length), (DList<'T>.append(left.dc, right.dc)))
