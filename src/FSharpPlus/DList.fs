@@ -6,7 +6,7 @@ open FSharpPlus
 
 
 /// DList is an ordered linear structure implementing the List signature (head, tail, cons), 
-/// end-insertion (conj), and O(1) append. Ordering is by insertion history.
+/// end-insertion (add), and O(1) append. Ordering is by insertion history.
 /// DList is an implementation of [John Hughes' append list](http://dl.acm.org/citation.cfm?id=8475).
 type DList<'T>(length : int , data : DListData<'T> ) =
     let mutable hashCode = None
@@ -107,7 +107,7 @@ type DList<'T>(length : int , data : DListData<'T> ) =
     member this.IsEmpty = match data with Nil -> true | _ -> false
 
     ///O(1). Returns a new DList with the element added to the end.
-    member this.Conj (x:'T) = DList( (length + 1), DList<'T>.append(data, Unit x) )
+    member this.Add (x:'T) = DList( (length + 1), DList<'T>.append(data, Unit x) )
 
     ///O(log n). Returns a new DList of the elements trailing the first element.
     member this.Tail =
@@ -210,7 +210,7 @@ module DList =
     let singleton x = DList(1, Unit x )
 
     ///O(1). Returns a new DList with the element added to the end.
-    let inline conj x (l:DList<'T>) = l.Conj x
+    let inline add x (l:DList<'T>) = l.Add x
 
     ///O(log n). Returns a new DList of the elements trailing the first element.
     let inline tail (l:DList<'T>) = l.Tail

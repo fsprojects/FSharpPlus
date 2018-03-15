@@ -29,8 +29,8 @@ module DList=
     let enDListThruList l q  =
         let rec loop (q' : 'a DList) (l' : 'a list) = 
             match l' with
-            | hd :: [] -> q'.Conj hd
-            | hd :: tl -> loop (q'.Conj hd) tl
+            | hd :: [] -> q'.Add hd
+            | hd :: tl -> loop (q'.Add hd) tl
             | [] -> q'
             
         loop q l
@@ -44,7 +44,7 @@ module DList=
                 let! x = Gen.listInt n
                 return ( (DList.ofSeq x), x) }                
     (*
-    IDList generators from random ofSeq and/or conj elements from random list 
+    IDList generators from random ofSeq and/or add elements from random list 
     *)
     let DListIntGen =
         gen {   let! n = Gen.length1thru12
@@ -58,7 +58,7 @@ module DList=
                 let! x = Gen.listInt n
                 return ( (DList.ofSeq x), x) }
 
-    let DListIntConjGen =
+    let DListIntAddGen =
         gen {   let! n = Gen.length1thru12
                 let! x = Gen.listInt n
                 return ( (DList.empty |> enDListThruList x), x) }
@@ -81,7 +81,7 @@ module DList=
     let intGens start =
         let v = Array.create 3 (box (DListIntGen, "DList"))
         v.[1] <- box ((DListIntOfSeqGen |> Gen.suchThat (fun (q, l) -> l.Length >= start)), "DList OfSeq")
-        v.[2] <- box ((DListIntConjGen |> Gen.suchThat (fun (q, l) -> l.Length >= start)), "DList conjDList") 
+        v.[2] <- box ((DListIntAddGen |> Gen.suchThat (fun (q, l) -> l.Length >= start)), "DList addDList") 
         v
 
     let intGensStart1 =
@@ -92,19 +92,19 @@ module DList=
 
     [<Test>]
     let ``allow to tail to work``() =
-        emptyDList |> conj 1 |> tail |> isEmpty |> shouldEqual true
+        emptyDList |> add 1 |> tail |> isEmpty |> shouldEqual true
 
     [<Test>]
-    let ``conj to work``() =
-        emptyDList |> conj 1 |> conj 2 |> isEmpty |> shouldEqual false
+    let ``add to work``() =
+        emptyDList |> add 1 |> add 2 |> isEmpty |> shouldEqual false
 
     [<Test>]
     let ``cons to work``() =
         emptyDList |> cons 1 |> cons 2 |> length |> shouldEqual 2
 
     [<Test>]
-    let ``allow to cons and conj to work``() =
-        emptyDList |> cons 1 |> cons 2 |> conj 3 |> length |> shouldEqual 3
+    let ``allow to cons and add to work``() =
+        emptyDList |> cons 1 |> cons 2 |> add 3 |> length |> shouldEqual 3
 
     [<Test>]
     let ``cons pattern discriminator - DList``() =
@@ -138,7 +138,7 @@ module DList=
         fsCheck "DList OfSeq" (Prop.forAll (Arb.fromGen DListIntOfSeqGen) 
             (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
 
-        fsCheck "DList Conj" (Prop.forAll (Arb.fromGen DListIntConjGen) 
+        fsCheck "DList Add" (Prop.forAll (Arb.fromGen DListIntAddGen) 
              (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
 
     [<Test>]
@@ -150,7 +150,7 @@ module DList=
         fsCheck "DList OfSeq" (Prop.forAll (Arb.fromGen DListIntOfSeqGen) 
             (fun ((q :DList<int>), (l : int list)) -> foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
 
-        fsCheck "DList Conj" (Prop.forAll (Arb.fromGen DListIntConjGen) 
+        fsCheck "DList Add" (Prop.forAll (Arb.fromGen DListIntAddGen) 
              (fun ((q :DList<int>), (l : int list)) -> foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
 
     [<Test>]
@@ -302,6 +302,6 @@ module DList=
 
         l1 = l2 |> shouldEqual true
 
-        let l3 = ofSeq [1..99] |> conj 7
+        let l3 = ofSeq [1..99] |> add 7
 
         l1 = l3 |> shouldEqual false
