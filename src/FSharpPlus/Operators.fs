@@ -101,6 +101,8 @@ module Operators =
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
     let inline getEmpty () :'``Functor<'T>`` = Empty.Invoke ()
+
+    [<GeneralizableValue>]
     let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke ()
 
     /// Combines two Alternatives

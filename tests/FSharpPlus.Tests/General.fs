@@ -405,6 +405,17 @@ module Collections =
 
         ()
 
+    let testGeneralizableValues() =
+        let a:list<_> = empty
+        let b =  0 ::a
+        let c = '0'::a
+
+        let d:WrappedSeqA<_> = empty
+        let e = WrappedSeqA [ 0 ] <|> d
+        let f = WrappedSeqA ['0'] <|> d
+         
+        ()
+
 module Foldable =
 
     let foldables =
