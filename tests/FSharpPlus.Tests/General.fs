@@ -1047,7 +1047,8 @@ module Conversions =
         // Generic op_Explicit
         let r302:float  = explicit 302
         let r303:float  = explicit "303"
-        let r304:char   = explicit "F"        
+        let r304:char   = explicit "F"
+        let a : unativeint = explicit 2147483648I
         ()
 
 module BitConverter =
