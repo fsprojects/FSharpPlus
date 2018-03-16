@@ -169,10 +169,6 @@ and
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module DList =
-
-    //pattern discriminators  (active pattern)
-    let (|Cons|Nil|) (l : DList<'T>) = match l.TryUncons with Some(a,b) -> Cons(a,b) | None -> Nil
-
     ///O(1). Returns a new DList of two lists.
     let append left right = DList<'T>.appendLists(left, right)
 
