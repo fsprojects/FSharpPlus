@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------
 // Builds the documentation from `.fsx` and `.md` files in the 'docsrc/content' directory
-// (the generated documentation is stored in the 'docs' directory)
+
 // --------------------------------------------------------------------------------------
 
 // Binaries that have XML documentation (in a corresponding generated XML file)
