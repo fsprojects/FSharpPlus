@@ -9,7 +9,6 @@ open System.Runtime.CompilerServices
 open System.Collections.Generic
 open System.Text
 open Microsoft.FSharp.Quotations
-open FSharpPlus.BaseLib
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
