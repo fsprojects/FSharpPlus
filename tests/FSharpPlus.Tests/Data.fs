@@ -107,17 +107,6 @@ module DList=
         emptyDList |> cons 1 |> cons 2 |> add 3 |> length |> shouldEqual 3
 
     [<Test>]
-    let ``cons pattern discriminator - DList``() =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"]
-        
-        let h1, t1 = 
-            match q with
-            | Cons(h, t) -> h, t
-            | _ ->  "x", q
-
-        ((h1 = "f") && (t1.Length = 5)) |> shouldEqual true
-
-    [<Test>]
     let ``empty DList should be empty``() =
         emptyDList |> isEmpty |> shouldEqual true
 
