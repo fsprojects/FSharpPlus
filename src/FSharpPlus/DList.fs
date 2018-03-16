@@ -18,7 +18,7 @@ type DList<'T>(length : int , data : DListData<'T> ) =
                     match state with 
                     | Nil -> Unit x
                     | Unit _ -> Join(state, Unit x)
-                    | Join(_,_) as xs -> Join(state, Unit x)) Nil s))
+                    | Join(_,_) -> Join(state, Unit x)) Nil s))
 
     override this.GetHashCode() =
         match hashCode with
@@ -83,13 +83,13 @@ type DList<'T>(length : int , data : DListData<'T> ) =
     static member head data =
         match data with
         | Unit x' -> x'
-        | Join(x',y) -> DList<'T>.head x'
+        | Join(x', _) -> DList<'T>.head x'
         | _ -> failwith "DList.head: empty DList"
 
     static member tryHead data =
         match data with
         | Unit x' -> Some x'
-        | Join(x',y) -> DList<'T>.tryHead x'
+        | Join(x', _) -> DList<'T>.tryHead x'
         | _ -> None
     ///O(1). Returns a new DList with the element added to the front.
     member this.Cons (hd : 'T) =
