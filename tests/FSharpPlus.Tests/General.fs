@@ -1007,14 +1007,20 @@ module Splits =
         // Assert.IsTrue((c = Sum 13))
         Assert.IsTrue((d = Sum 13))
 
-
+open System.Globalization
 module Parsing = 
     [<Test>]
     let parse() = 
+        let inline assertEq expected actual description=
+            Assert.IsTrue((expected = actual), (sprintf "%s %A" description (expected, actual)))
+        let assertDateTimeEqual expected actual=
+            let dateTimeToString (d:DateTime) = d.ToString("yyyy-MM-ddTHH:mm:ssK", CultureInfo.InvariantCulture)
+            assertEq (dateTimeToString expected) (dateTimeToString actual) "toString(yyyy-MM-ddTHH:mm:ssK)"
+
         let v1 : DateTime       = parse "2011-03-04T15:42:19+03:00"
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
 
-        Assert.IsTrue((v1 = DateTime(2011,3,4,12,42,19)))
+        assertDateTimeEqual (DateTime(2011,3,4,12,42,19, DateTimeKind.Local)) v1
         Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))
 
         let r101 = tryParse "10.1.0.1" : Net.IPAddress option
