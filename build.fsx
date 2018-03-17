@@ -48,7 +48,7 @@ let solutionFile  = "FSharpPlus.sln"
 let configuration = "Release"
 
 // Pattern specifying assemblies to be tested using NUnit
-let testAssemblies = "tests/**/bin" </> configuration </> "net45" </> "*Tests*.dll"
+let testAssemblies = "tests/**/bin" </> configuration </> "net461" </> "*Tests*.dll"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
