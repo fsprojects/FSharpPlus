@@ -14,11 +14,12 @@ type DList<'T>(length : int , data : DListData<'T> ) =
     member internal this.dc = data
 
     static member ofSeq (s : seq<'T>) =
-         DList(Seq.length s, (Seq.fold (fun state x ->
-                    match state with 
+         DList (Seq.fold (fun (i, state) x ->
+            (i+1, 
+                match state with
                     | Nil -> Unit x
                     | Unit _ -> Join(state, Unit x)
-                    | Join(_,_) -> Join(state, Unit x)) Nil s))
+                    | Join(_,_) -> Join (state, Unit x))) (0, Nil) s)
 
     override this.GetHashCode() =
         match hashCode with
