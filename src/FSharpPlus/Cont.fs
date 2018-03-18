@@ -1,4 +1,5 @@
 ﻿namespace FSharpPlus.Data
+open System.ComponentModel
 
 /// <summary> Computation type: Computations which can be interrupted and resumed.
 /// <para/>   Binding strategy: Binding a function to a monadic value creates a new continuation which uses the function as the continuation of the monadic computation.
@@ -24,25 +25,39 @@ open FSharpPlus
 type ContT<'r,'t> = Cont<'r,'t>
 
 type Cont<'r,'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return n = Cont (fun k -> k n)                        : Cont<'R,'T>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map    (x : Cont<'R,'T>, f) = Cont.map f x            : Cont<'R,'U>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>)  (f, x : Cont<'R,'T>) = Cont.apply f x          : Cont<'R,'U>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=)  (x, f : 'T->_)       = Cont.bind f x           : Cont<'R,'U>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Delay f = Cont (fun k -> Cont.run (f()) k)            : Cont<'R,'T>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member TryWith    (Cont c, h) = Cont(fun k -> try (c k) with e -> Cont.run (h e) k) : Cont<'R,'T>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member TryFinally (Cont c, h) = Cont(fun k -> try (c k) finally h())                : Cont<'R,'T>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member CallCC (f: ('T -> Cont<'R,'U>) -> _) = Cont.callCC f  : Cont<'R,'T>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m:'``Monad<'T>``) = Cont ((>>=) m) : ContT<'``Monad<'R>``,'T>    
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask () = lift ask              : '``ContT<'MonadReader<'R,'T>,'R>``
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (Cont m, f : 'R1 -> 'R2)     : ContT<_,'``MonadReader<R1,'T>,'U``> =
         Cont <| fun c -> (ask >>= (fun r -> local f (m (local (konst r) << c))))
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get () = lift get         : '``ContT<'MonadState<'S, 'T>, 'S>``
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'S) = x |> put |> lift : '``ContT<'MonadState<'S, 'T>, unit>``
 
 /// Basic operations on ContT
