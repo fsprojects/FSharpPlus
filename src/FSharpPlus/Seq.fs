@@ -37,14 +37,10 @@ type SeqT<'``monad<seq<'t>>``> with
     static member inline Return (x : 'T) = x |> Seq.singleton |> result |> SeqT                                       : SeqT<'``Monad<seq<'T>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : SeqT<'``Monad<seq<'T>``>, f : 'T->'U) = SeqT.map f x                             : SeqT<'``Monad<seq<'U>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>)  (f : SeqT<'``Monad<seq<('T -> 'U)>``>, x : SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x : SeqT<'``Monad<seq<'U>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=)  (x : SeqT<'``Monad<seq<'T>``>, f : 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind  f x
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () = SeqT <| result Seq.empty : SeqT<'``MonadPlus<seq<'T>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<|>) (SeqT x , SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -61,12 +57,10 @@ type SeqT<'``monad<seq<'t>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f:(('T -> SeqT<'``MonadCont<'R,seq<'U>>``>) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get()  = lift get                                          : '``SeqT<'MonadState<'S,'S>>``
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'T) = x |> put |> lift                                  : '``SeqT<'MonadState<unit,'S>>``
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask() = lift ask                                           : '``SeqT<'MonadReader<'R,seq<'R>>>``
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (SeqT (m:'``MonadReader<'R2,'T>``), f:'R1->'R2) = SeqT (local f m)

@@ -27,14 +27,10 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline Return (x : 'T) = Some x |> result |> OptionT                                                         : OptionT<'``Monad<seq<'T>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : OptionT<'``Monad<seq<'T>``>, f : 'T->'U) = OptionT.map f x                                : OptionT<'``Monad<seq<'U>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>)  (f : OptionT<'``Monad<seq<('T -> 'U)>``>, x : OptionT<'``Monad<seq<'T>``>) = OptionT.apply f x : OptionT<'``Monad<seq<'U>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=)  (x : OptionT<'``Monad<seq<'T>``>, f : 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind  f x
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () = OptionT <| result None : OptionT<'``MonadPlus<option<'T>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<|>) (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some _ -> x | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -51,12 +47,10 @@ type OptionT<'``monad<option<'t>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f:(('T -> OptionT<'``MonadCont<'R,option<'U>>``>) -> _)) = OptionT(callCC <| fun c -> OptionT.run(f (OptionT << c << Some)))  : OptionT<'``MonadCont<'R,option<'T>>``>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get() = lift get           : '``OptionT<'MonadState<'S,'S>>``
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'T) = x |> put |> lift  : '``OptionT<'MonadState<unit,'S>>``
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask() = lift ask                                                   :'``OptionT<'MonadReader<'R,option<'R>>>``
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (OptionT (m:'``MonadReader<'R2,'T>``), f:'R1->'R2) = OptionT (local f m)

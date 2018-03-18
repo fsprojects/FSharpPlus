@@ -29,9 +29,7 @@ type Cont<'r,'t> with
     static member Return n = Cont (fun k -> k n)                        : Cont<'R,'T>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map    (x : Cont<'R,'T>, f) = Cont.map f x            : Cont<'R,'U>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>)  (f, x : Cont<'R,'T>) = Cont.apply f x          : Cont<'R,'U>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=)  (x, f : 'T->_)       = Cont.bind f x           : Cont<'R,'U>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Delay f = Cont (fun k -> Cont.run (f()) k)            : Cont<'R,'T>
@@ -49,13 +47,11 @@ type Cont<'r,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask () = lift ask              : '``ContT<'MonadReader<'R,'T>,'R>``
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (Cont m, f : 'R1 -> 'R2)     : ContT<_,'``MonadReader<R1,'T>,'U``> =
         Cont <| fun c -> (ask >>= (fun r -> local f (m (local (konst r) << c))))
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get () = lift get         : '``ContT<'MonadState<'S, 'T>, 'S>``
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'S) = x |> put |> lift : '``ContT<'MonadState<'S, 'T>, unit>``

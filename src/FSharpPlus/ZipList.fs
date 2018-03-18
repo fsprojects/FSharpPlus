@@ -23,11 +23,8 @@ type ZipList<'s> with
     static member Map (ZipList x, f:'a->'b) = ZipList (Seq.map f x)
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return (x:'a)     = ZipList (Seq.initInfinite (konst x))
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Zero() = result (getZero()) : ZipList<'a>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (+) (x:ZipList<'a>, y:ZipList<'a>) = liftA2 plus x y : ZipList<'a>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToSeq (ZipList x) = x

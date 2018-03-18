@@ -41,7 +41,6 @@ type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x:NonEmptyList<'a>, f:'a->'b) = NonEmptyList.map f x
         
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=) ({Head = x; Tail = xs}, f:_->NonEmptyList<'b>  ) =
         let {Head = y; Tail = ys} = f x
         let ys' = List.collect (NonEmptyList.toList << f) xs
@@ -49,7 +48,6 @@ type NonEmptyList<'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return (x:'a) = {Head = x; Tail = []}
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>)  (f:NonEmptyList<'T->'U>, x:NonEmptyList<'T>) = 
         let r = NonEmptyList.toList f <*> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
@@ -58,11 +56,9 @@ type NonEmptyList<'t> with
     static member Extract    {Head = h; Tail = _} = h : 't
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Duplicate (s:NonEmptyList<'a>, [<Optional>]_impl:Duplicate) = NonEmptyList.tails s
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (=>>)     (s, g) = NonEmptyList.map g (NonEmptyList.tails s) :NonEmptyList<'b>
     
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (+) ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]

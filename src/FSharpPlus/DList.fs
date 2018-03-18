@@ -239,13 +239,9 @@ module DList =
     let inline bind m k              = DList.foldBack (append << k) empty m
 type DList<'T> with
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member get_Zero = DList( 0, Nil)
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (+) (x:DList<_>, y:DList<_>) = DList.append x y
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member get_Empty = DList( 0, Nil)
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<|>) (x:DList<_>, y:DList<_>) = DList.append x y
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToSeq  x = DList.toSeq  x
@@ -260,7 +256,5 @@ type DList<'T> with
     static member Return x = DList (1, x)
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x, f) = DList.map f x
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>) (f, x) = DList.ap f x
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=) (x, f) = DList.bind x f

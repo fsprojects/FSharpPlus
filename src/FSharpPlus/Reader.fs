@@ -30,19 +30,15 @@ type Reader<'r,'t> with
     static member Map   (x:Reader<'R,'T>, f) = Reader.map f x   : Reader<'R,'U>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return x = Reader (fun _ -> x)                : Reader<'R,'T>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=) (x:Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>) (f, x:Reader<'R,'T>) = Reader.apply f x : Reader<'R,'U>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member get_Ask()    = Reader.ask                     : Reader<'R,'R>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Local (m, f:'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke()) : 'T
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
 
 
@@ -63,14 +59,10 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Return (x : 'T) = ReaderT (fun _ -> result x)                                                   : ReaderT<'R, '``Monad<'T>``> 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : ReaderT<'R, '``Monad<'T>``>, f : 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>)  (f : ReaderT<_,'``Monad<'T -> 'U>``>, x : ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x : ReaderT<'R, '``Monad<'U>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=)  (x : ReaderT<_,'``Monad<'T>``>, f : 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () = ReaderT (fun _ -> getEmpty()) : ReaderT<'R, '``MonadPlus<'T>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<|>) (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -83,7 +75,6 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline CallCC (f : ('T -> ReaderT<'R, Cont<_,'U>>) -> _)              : ReaderT<'R,'``MonadCont<'C,'T>``> =
         ReaderT (fun r -> callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
             
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask() = ReaderT result                                     : ReaderT<'R,'``Monad<'T>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Local (ReaderT m, f:_->'R2) = ReaderT(fun r -> m (f r))        : ReaderT<'R1,'``Monad<'T>``>
@@ -101,7 +92,6 @@ type ReaderT<'r,'``monad<'t>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Pass   (ReaderT m) = ReaderT (fun w -> pass   (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T>``>   
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get () = lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put x      = x |> put |> lift : ReaderT<'R, '``MonadState<'S, unit>``>

@@ -44,9 +44,7 @@ type ResultT<'``monad<'result<'t,'e>>``> with
     static member inline Return (x : 'T) = ResultT (result (Ok x))                                                                            : ResultT<'``Monad<'Result<'T,'E>>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : ResultT<'``Monad<'Result<'T,'E>>``>, f : 'T->'U) = ResultT.map f x                                       : ResultT<'``Monad<'Result<'U,'E>>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>)  (f : ResultT<'``Monad<'Result<('T -> 'U),'E>>``>, x : ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT.apply f x: ResultT<'``Monad<'Result<'U,'E>>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=)  (x : ResultT<'``Monad<'Result<'T,'E>>``>, f : 'T->ResultT<'``Monad<'Result<'U,'E>>``>)     = ResultT.bind f x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -63,7 +61,6 @@ type ResultT<'``monad<'result<'t,'e>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f:('T -> ResultT<'``MonadCont<'R,Result<'U,'E>>``>) -> _) :ResultT<'``MonadCont<'R, Result<'T,'E>>``> = ResultT(callCC <| fun c -> ResultT.run(f (ResultT << c << Ok)))
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask () = (ResultT << (map Ok)) ask : ResultT<'``MonadReader<'R,Result<'R,'E>>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (ResultT m : ResultT<'``MonadReader<'R2,Result<'R2,'E>>``>, f:'R1->'R2) = ResultT (local f m)
@@ -78,7 +75,6 @@ type ResultT<'``monad<'result<'t,'e>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Pass m = ResultT (ResultT.run m >>= either (map Ok << pass << result) (result << Error)) : ResultT<'``MonadWriter<'Monoid,Result<'T,'E>>``>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get()  = lift get         : '``ResultT<'MonadState<'S,Result<_,'E>>>``
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'S) = x |> put |> lift : '``ResultT<'MonadState<'S,Result<_,'E>>>``

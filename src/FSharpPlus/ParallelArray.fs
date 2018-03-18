@@ -44,9 +44,6 @@ type ParallelArray<'t> with
     static member Map (x:parray<_>, f) = ParallelArray.map f x
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return (x:'a) = Infinite x
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>) (f:parray<'a->'b>, x:parray<_>) = ParallelArray.ap f x :parray<'b>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Zero() = Bounded (getZero()) : parray<'m>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (+) (x:parray<'m>, y:parray<'m>) = liftA2 plus x y:parray<'m>

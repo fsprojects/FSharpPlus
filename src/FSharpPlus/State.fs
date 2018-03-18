@@ -29,11 +29,8 @@ type State<'s,'t> with
     static member Map   (x, f:'T->_) = State.map f x          : State<'S,'U>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return a = State (fun s -> (a, s))          : State<'S,'T>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=) (x, f:'T->_) = State.bind f x         : State<'S,'U>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>) (f, x:State<'S,'T>) = State.apply f x : State<'S,'U>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member get_Get() = State.get                       : State<'S,'S>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                     : State<'S,unit>
@@ -58,14 +55,10 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                         : StateT<'S,'``Monad<'T * 'S>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=)  (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind  f x
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () = StateT (fun _ -> getEmpty()) : StateT<'S,'``MonadPlus<'T * 'S>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -74,7 +67,6 @@ type StateT<'s,'``monad<'t * 's>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x) : '``StateT<'S,'MonadAsync<'T>>``
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get () = StateT (fun s -> result (s , s))  : StateT<'S, '``Monad<'S * 'S>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``Monad<unit * 'S>``>
