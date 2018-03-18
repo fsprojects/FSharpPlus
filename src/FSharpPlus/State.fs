@@ -1,4 +1,5 @@
 ﻿namespace FSharpPlus.Data
+open System.ComponentModel
 
 /// <summary> Computation type: Computations which maintain state.
 /// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
@@ -24,11 +25,17 @@ module State =
     let put x = State (fun _ -> ((), x))                                                                         : State<'S,unit>
 
 type State<'s,'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x, f:'T->_) = State.map f x          : State<'S,'U>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return a = State (fun s -> (a, s))          : State<'S,'T>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=) (x, f:'T->_) = State.bind f x         : State<'S,'U>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>) (f, x:State<'S,'T>) = State.apply f x : State<'S,'U>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member get_Get() = State.get                       : State<'S,'S>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                     : State<'S,unit>
 
 open FSharpPlus.Control
@@ -47,25 +54,38 @@ module StateT =
     let inline bind (f :'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
 
 type StateT<'s,'``monad<'t * 's>``> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                         : StateT<'S,'``Monad<'T * 'S>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=)  (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind  f x
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () = StateT (fun _ -> getEmpty()) : StateT<'S,'``MonadPlus<'T * 'S>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m:'``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> = StateT <| fun s -> m >>= fun a -> result (a, s)
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x) : '``StateT<'S,'MonadAsync<'T>>``
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get () = StateT (fun s -> result (s , s))  : StateT<'S, '``Monad<'S * 'S>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``Monad<unit * 'S>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Throw (x :'E) = x |> throw |> lift
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Catch (m :StateT<'S,'``MonadError<'E1,'T * 'S>``>, h:'E1 -> _) = 
         StateT (fun s -> catch (StateT.run m s) (fun e -> StateT.run (h e) s)) : StateT<'S,'``MonadError<'E2, 'T * 'S>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Delay (f: unit -> StateT<'S,'``Monad<'T * 'S>``>) =
         StateT (fun s ->
             let d () = StateT.run (f ()) s

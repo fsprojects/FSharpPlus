@@ -2,6 +2,7 @@
 
 open System.Text
 open System.Runtime.InteropServices
+open System.ComponentModel
 open FSharpPlus.Control
 open FSharpPlus
 
@@ -37,32 +38,45 @@ module NonEmptyList =
         | h::t -> cons s (tails {Head = h; Tail = t})
          
 type NonEmptyList<'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x:NonEmptyList<'a>, f:'a->'b) = NonEmptyList.map f x
         
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (>>=) ({Head = x; Tail = xs}, f:_->NonEmptyList<'b>  ) =
         let {Head = y; Tail = ys} = f x
         let ys' = List.collect (NonEmptyList.toList << f) xs
         {Head = y; Tail = (ys @ ys')}
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return (x:'a) = {Head = x; Tail = []}
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (<*>)  (f:NonEmptyList<'T->'U>, x:NonEmptyList<'T>) = 
         let r = NonEmptyList.toList f <*> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Extract    {Head = h; Tail = _} = h : 't
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Duplicate (s:NonEmptyList<'a>, [<Optional>]_impl:Duplicate) = NonEmptyList.tails s
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (=>>)     (s, g) = NonEmptyList.map g (NonEmptyList.tails s) :NonEmptyList<'b>
     
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member (+) ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList   (s:NonEmptyList<'a>, [<Optional>]_impl:ToList) = NonEmptyList.toList s
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToSeq    (s:NonEmptyList<'a>, [<Optional>]_impl:ToSeq ) = NonEmptyList.toList s |> List.toSeq
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (s:NonEmptyList<'T>, f:'T->'``Functor<'U>``) =
         let lst = traverse f (toList s) : '``Functor<'List<'U>>``
         (NonEmptyList.create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<'NonEmptyList<'U>>``
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Replace (source:NonEmptyList<'T>, oldValue:NonEmptyList<'T>, newValue:NonEmptyList<'T>, _impl:Replace ) =
         let lst = source |> NonEmptyList.toSeq  |> Seq.replace oldValue newValue |> Seq.toList
         {Head = lst.Head; Tail = lst.Tail}
