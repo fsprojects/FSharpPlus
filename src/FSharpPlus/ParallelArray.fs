@@ -42,7 +42,6 @@ module ParallelArrayOperators =
 type ParallelArray<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x:parray<_>, f) = ParallelArray.map f x
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return (x:'a) = Infinite x
     static member (<*>) (f:parray<'a->'b>, x:parray<_>) = ParallelArray.ap f x :parray<'b>
     static member inline get_Zero() = Bounded (getZero()) : parray<'m>

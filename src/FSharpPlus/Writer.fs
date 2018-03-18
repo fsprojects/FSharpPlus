@@ -78,7 +78,6 @@ module WriterT =
 
 type WriterT<'``monad<'t * 'monoid>``> with
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return (x : 'T) = WriterT (result (x, getZero ()))                                                                 : WriterT<'``Monad<'T * 'Monoid>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : WriterT<'``Monad<'T * 'Monoid>``>, f : 'T -> 'U)                                   = WriterT.map   f x : WriterT<'``Monad<'U * 'Monoid>``>
@@ -88,33 +87,23 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline get_Empty () = WriterT (getEmpty()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
     static member inline (<|>) (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Tell   (w:'Monoid) = WriterT (result ((), w))                                                                                         : WriterT<'``Monad<unit * 'Monoid>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w))) : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Pass   (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))                          : WriterT<'``Monad<'T * 'Monoid>``>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m:'``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT (m >>= (fun a -> result (a, getZero ())))
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``WriterT<'MonadAsync<'T>>``
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Throw (x: 'E) = x |> throw |> lift
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Catch (m:WriterT<'``MonadError<'E2, 'T * 'Monoid>``> , h:'E2 -> _) = 
             WriterT (catch (WriterT.run m) (WriterT.run << h)) : WriterT<'``MonadChoice<'T * 'Monoid, 'E2>``>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f : ('a->WriterT<Cont<'r,'t>>)->_)  : WriterT<'``MonadCont<'r,'a*'b>``> = 
         WriterT (callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, getZero ()))))
        
     static member inline get_Ask ()                    = lift ask            : '``WriterT<'MonadReader<'R,'R*'Monoid>>``
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (WriterT m, f:'R1->'R2) = WriterT (local f m) : WriterT<'``MonadReader<'R1,'T*'Monoid>``>
 
     static member inline get_Get () = lift get         : '``WriterT<'MonadState<'S,'S*'Monoid>>``
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x:'S) = x |> put |> lift : '``WriterT<'MonadState<'S,unit*'Monoid>>``

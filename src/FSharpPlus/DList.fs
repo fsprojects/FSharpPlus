@@ -253,7 +253,7 @@ type DList<'T> with
     static member Fold (x, f, z) = DList.fold f x z
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Return x = DList (1, x)
+    static member Return x = DList.singleton x
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x, f) = DList.map f x
     static member (<*>) (f, x) = DList.ap f x
