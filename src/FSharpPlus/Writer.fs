@@ -36,19 +36,14 @@ module Writer =
 type Writer<'monoid,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Map   (x, f:'T->_) = Writer.map f x          : Writer<'Monoid,'U>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return x = Writer (x, getZero ())            : Writer<'Monoid,'T>
     static member inline (>>=) (x, f:'T->_) = Writer.bind f x         : Writer<'Monoid,'U>
     static member inline (<*>) (f, x:Writer<_,'T>) = Writer.apply f x : Writer<'Monoid,'U>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Tell   w = Writer.tell w                     : Writer<'Monoid,unit>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Listen m = Writer.listen m                   : Writer<'Monoid,('T * 'Monoid)>
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Pass   m = Writer.pass m                     : Writer<'Monoid,'T>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Extract (Writer (_ : 'W, a : 'T)) = a
     static member        (=>>)   (Writer (w : 'W, _ : 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
 
