@@ -2,6 +2,7 @@
 
 open FSharpPlus.Control
 open FSharpPlus.Operators
+open System.ComponentModel
 
 /// Array with an Applicative functor based on zipping and parallel execution.
 type ParallelArray<'t> =
@@ -39,6 +40,7 @@ module ParallelArrayOperators =
     let parray s = Bounded s
 
 type ParallelArray<'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x:parray<_>, f) = ParallelArray.map f x
     static member Return (x:'a) = Infinite x
     static member (<*>) (f:parray<'a->'b>, x:parray<_>) = ParallelArray.ap f x :parray<'b>

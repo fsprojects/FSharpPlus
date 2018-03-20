@@ -1,6 +1,8 @@
 ﻿namespace FSharpPlus.Data
 open System.Collections.Generic
 open FSharpPlus
+open System.ComponentModel
+
 // DList from FSharpx.Collections
 //This implementation adds an additional parameter to allow O(1) retrieval of the list length.
 
@@ -235,21 +237,24 @@ module DList =
     let concat x = DList.fold append empty x 
     let inline ap f x = concat <| map (fun y -> map ((|>) y) f) x
     let inline bind m k              = DList.foldBack (append << k) empty m
-
 type DList<'T> with
     
     static member get_Zero = DList( 0, Nil)
     static member (+) (x:DList<_>, y:DList<_>) = DList.append x y
-
     static member get_Empty = DList( 0, Nil)
     static member (<|>) (x:DList<_>, y:DList<_>) = DList.append x y
-    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToSeq  x = DList.toSeq  x
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList x = DList.toList x
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member OfSeq  x = DList.ofSeq  x
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Fold (x, f, z) = DList.fold f x z
 
-    static member Return x = DList (1, x)
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Return x = DList.singleton x
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x, f) = DList.map f x
     static member (<*>) (f, x) = DList.ap f x
     static member (>>=) (x, f) = DList.bind x f

@@ -4,6 +4,7 @@ open System.Text
 open System.Runtime.InteropServices
 open FSharpPlus
 open FSharpPlus.Control
+open System.ComponentModel
 
 /// A sequence with an Applicative functor based on zipping.
 [<NoComparison>]
@@ -18,6 +19,7 @@ module ZipList =
     let singleton x = ZipList (Seq.singleton x)
 
 type ZipList<'s> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (ZipList x, f:'a->'b) = ZipList (Seq.map f x)
     static member Return (x:'a)     = ZipList (Seq.initInfinite (konst x))
     static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>

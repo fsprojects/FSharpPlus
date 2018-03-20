@@ -2,7 +2,7 @@
 
 open FSharpPlus
 open FSharpPlus.Control
-
+open System.ComponentModel
 /// <summary> Computation type: Computations which read values from a shared environment.
 /// <para/>   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
 /// <para/>   Useful for: Maintaining variable bindings, or other shared environment.</summary>
@@ -26,12 +26,14 @@ module Reader =
     let local (f:'R1->'R2) m = let (Reader m) = m in Reader (m << f)      : Reader<'R1,'T>
 
 type Reader<'r,'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x:Reader<'R,'T>, f) = Reader.map f x   : Reader<'R,'U>
     static member Return x = Reader (fun _ -> x)                : Reader<'R,'T>
     static member (>>=) (x:Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
     static member (<*>) (f, x:Reader<'R,'T>) = Reader.apply f x : Reader<'R,'U>
 
     static member get_Ask()    = Reader.ask                     : Reader<'R,'R>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Local (m, f:'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke()) : 'T
@@ -52,6 +54,7 @@ module ReaderT =
 
 type ReaderT<'r,'``monad<'t>``> with
     static member inline Return (x : 'T) = ReaderT (fun _ -> result x)                                                   : ReaderT<'R, '``Monad<'T>``> 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : ReaderT<'R, '``Monad<'T>``>, f : 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
     static member inline (<*>)  (f : ReaderT<_,'``Monad<'T -> 'U>``>, x : ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x : ReaderT<'R, '``Monad<'U>``>
     static member inline (>>=)  (x : ReaderT<_,'``Monad<'T>``>, f : 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>

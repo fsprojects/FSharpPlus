@@ -2,6 +2,7 @@
 
 open System.Text
 open System.Runtime.InteropServices
+open System.ComponentModel
 open FSharpPlus.Control
 open FSharpPlus
 
@@ -37,6 +38,7 @@ module NonEmptyList =
         | h::t -> cons s (tails {Head = h; Tail = t})
          
 type NonEmptyList<'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x:NonEmptyList<'a>, f:'a->'b) = NonEmptyList.map f x
         
     static member (>>=) ({Head = x; Tail = xs}, f:_->NonEmptyList<'b>  ) =
@@ -57,6 +59,7 @@ type NonEmptyList<'t> with
     static member (+) ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList   (s:NonEmptyList<'a>, [<Optional>]_impl:ToList) = NonEmptyList.toList s
     static member ToSeq    (s:NonEmptyList<'a>, [<Optional>]_impl:ToSeq ) = NonEmptyList.toList s |> List.toSeq
     static member inline Traverse (s:NonEmptyList<'T>, f:'T->'``Functor<'U>``) =

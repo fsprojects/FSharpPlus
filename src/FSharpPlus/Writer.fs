@@ -1,5 +1,5 @@
 ﻿namespace FSharpPlus.Data
-
+open System.ComponentModel
 /// <summary> Computation type: Computations which produce a stream of data in addition to the computed values.
 /// <para/>   Binding strategy: Combines the outputs of the subcomputations using <c>mappend</c>.
 /// <para/>   Useful for: Logging, or other computations that produce output "on the side". </summary>
@@ -34,6 +34,7 @@ module Writer =
     let pass m = let (Writer((a, f), w:'Monoid)) = m in Writer(a, f w)                       : Writer<'Monoid,'T>
 
 type Writer<'monoid,'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Map   (x, f:'T->_) = Writer.map f x          : Writer<'Monoid,'U>
     static member inline Return x = Writer (x, getZero ())            : Writer<'Monoid,'T>
     static member inline (>>=) (x, f:'T->_) = Writer.bind f x         : Writer<'Monoid,'U>
@@ -73,6 +74,7 @@ module WriterT =
 type WriterT<'``monad<'t * 'monoid>``> with
 
     static member inline Return (x : 'T) = WriterT (result (x, getZero ()))                                                                 : WriterT<'``Monad<'T * 'Monoid>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : WriterT<'``Monad<'T * 'Monoid>``>, f : 'T -> 'U)                                   = WriterT.map   f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline (<*>)  (f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x : WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline (>>=)  (x : WriterT<'``Monad<'T * 'Monoid>``>, f :'T -> _)                                     = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>

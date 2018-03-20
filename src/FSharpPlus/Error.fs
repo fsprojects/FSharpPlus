@@ -3,6 +3,8 @@
 open System
 open FSharpPlus.Control
 open FSharpPlus
+open System.ComponentModel
+
 
 /// Additional operations on Result
 [<RequireQualifiedAccess>]
@@ -39,6 +41,7 @@ module ResultT =
 
 type ResultT<'``monad<'result<'t,'e>>``> with
     static member inline Return (x : 'T) = ResultT (result (Ok x))                                                                            : ResultT<'``Monad<'Result<'T,'E>>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : ResultT<'``Monad<'Result<'T,'E>>``>, f : 'T->'U) = ResultT.map f x                                       : ResultT<'``Monad<'Result<'U,'E>>``>
     static member inline (<*>)  (f : ResultT<'``Monad<'Result<('T -> 'U),'E>>``>, x : ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT.apply f x: ResultT<'``Monad<'Result<'U,'E>>``>
     static member inline (>>=)  (x : ResultT<'``Monad<'Result<'T,'E>>``>, f : 'T->ResultT<'``Monad<'Result<'U,'E>>``>)     = ResultT.bind f x

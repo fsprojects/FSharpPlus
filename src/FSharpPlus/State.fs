@@ -1,4 +1,5 @@
 ﻿namespace FSharpPlus.Data
+open System.ComponentModel
 
 /// <summary> Computation type: Computations which maintain state.
 /// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
@@ -24,11 +25,13 @@ module State =
     let put x = State (fun _ -> ((), x))                                                                         : State<'S,unit>
 
 type State<'s,'t> with
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x, f:'T->_) = State.map f x          : State<'S,'U>
     static member Return a = State (fun s -> (a, s))          : State<'S,'T>
     static member (>>=) (x, f:'T->_) = State.bind f x         : State<'S,'U>
     static member (<*>) (f, x:State<'S,'T>) = State.apply f x : State<'S,'U>
     static member get_Get() = State.get                       : State<'S,'S>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                     : State<'S,unit>
 
 open FSharpPlus.Control
@@ -48,6 +51,7 @@ module StateT =
 
 type StateT<'s,'``monad<'t * 's>``> with
     static member inline Return (x : 'T) = StateT (fun s -> result (x, s))                                                         : StateT<'S,'``Monad<'T * 'S>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
     static member inline (<*>)  (f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x :StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
     static member inline (>>=)  (x : StateT<'S,'``Monad<'T * 'S>``>, f : 'T->StateT<'S,'``Monad<'U * 'S>``>)    = StateT.bind  f x

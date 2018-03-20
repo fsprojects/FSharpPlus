@@ -1,6 +1,7 @@
 ﻿namespace FSharpPlus.Data
 
 open FSharpPlus
+open System.ComponentModel
 
 /// Additional operations on Seq
 module Seq =
@@ -33,6 +34,7 @@ module SeqT =
 
 type SeqT<'``monad<seq<'t>>``> with
     static member inline Return (x : 'T) = x |> Seq.singleton |> result |> SeqT                                       : SeqT<'``Monad<seq<'T>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : SeqT<'``Monad<seq<'T>``>, f : 'T->'U) = SeqT.map f x                             : SeqT<'``Monad<seq<'U>``>
     static member inline (<*>)  (f : SeqT<'``Monad<seq<('T -> 'U)>``>, x : SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x : SeqT<'``Monad<seq<'U>``>
     static member inline (>>=)  (x : SeqT<'``Monad<seq<'T>``>, f : 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind  f x

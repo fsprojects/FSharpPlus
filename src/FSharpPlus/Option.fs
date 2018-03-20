@@ -2,6 +2,7 @@
 
 open FSharpPlus.Control
 open FSharpPlus
+open System.ComponentModel
 
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
@@ -23,6 +24,7 @@ module OptionT =
 
 type OptionT<'``monad<option<'t>>``> with
     static member inline Return (x : 'T) = Some x |> result |> OptionT                                                         : OptionT<'``Monad<seq<'T>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x : OptionT<'``Monad<seq<'T>``>, f : 'T->'U) = OptionT.map f x                                : OptionT<'``Monad<seq<'U>``>
     static member inline (<*>)  (f : OptionT<'``Monad<seq<('T -> 'U)>``>, x : OptionT<'``Monad<seq<'T>``>) = OptionT.apply f x : OptionT<'``Monad<seq<'U>``>
     static member inline (>>=)  (x : OptionT<'``Monad<seq<'T>``>, f : 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind  f x
