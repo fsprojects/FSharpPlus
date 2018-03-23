@@ -78,9 +78,10 @@ module AlternativeP=
 
   // holds when f is a function (success)
   [<Test>]
-  let ``empty <*> f = empty ``(f:string->int)=
-    let empty:AccValidation<string list,_>=getEmpty()
-    (empty <*> (AccSuccess f))=getEmpty()
+  let ``empty <*> f = empty ``()=
+    Check.Quick("empty <*> f = empty", fun (f:string->int)->
+      let empty:AccValidation<string list,_>=getEmpty()
+      (empty <*> (AccSuccess f))=getEmpty())
 
 module TraversableP=
 
@@ -102,8 +103,9 @@ module TraversableP=
     left_side = right_side
 *)
   [<Test>]
-  let ``traverse Identity = Identity``(x :AccValidation<int list, string>)=
-    AccValidation.traverse (Identity) x = Identity x
+  let ``traverse Identity = Identity``()=
+    Check.Quick("traverse Identity = Identity", fun (x :AccValidation<int list, string>)->
+      AccValidation.traverse (Identity) x = Identity x)
 (*
   [<Property>]
   let ``traverse (Compose << fmap g . f) = Compose << fmap (traverse g) << traverse f``(x :AccValidation<int list, string>) (g :int list->string) (f:string->int list)=
