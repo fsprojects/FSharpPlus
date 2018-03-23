@@ -62,6 +62,7 @@
     <Compile Include="ZipList.fs" />
     <Compile Include="ParallelArray.fs" />
     <Compile Include="DList.fs" />
+    <Compile Include="Validations.fs" />
     <Compile Include="Kleisli.fs" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Split-Join.fsx" />
