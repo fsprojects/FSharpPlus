@@ -6,7 +6,7 @@ open FSharpPlus.Validations
 open FsCheck
 open NUnit.Framework
 open FSharpPlus.Data
-
+let areEqual x y = Assert.IsTrue( (x = y), sprintf "Expected %A to equal %A" x y)
 module FunctorP=
   [<Test>]
   let ``map id  =  id ``() =
@@ -121,22 +121,22 @@ let plusOne x = x + 1
 let testYY() =
   let subject:AccValidation<string,int>  = AccSuccess plusOne <*> AccSuccess seven
   let expected = AccSuccess 8
-  Assert.AreEqual(expected, subject)
+  areEqual expected subject
 [<Test>]
 let testNY() =
   let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccSuccess seven
   let expected = AccFailure ["f1"]
-  Assert.AreEqual(expected, subject)
+  areEqual expected subject
 [<Test>]
 let testYN() =
   let subject:AccValidation<string list,int>  = AccSuccess plusOne <*> AccFailure ["f2"] 
   let expected = AccFailure ["f2"]
-  Assert.AreEqual(expected, subject)
+  areEqual expected subject
 [<Test>]
 let testNN() =
   let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccFailure ["f2"] 
   let expected = AccFailure ["f1";"f2"]
-  Assert.AreEqual(expected, subject)
+  areEqual expected subject
 (*
 [<Fact>]
 let testValidationNel() =
@@ -147,34 +147,34 @@ let const' k _ = k
 [<Test>]
 let testEnsureLeftFalse () =
   let subject = ensure three (const' false) (AccFailure seven)
-  Assert.AreEqual((AccFailure seven), subject)
+  areEqual (AccFailure seven) subject
 
 [<Test>]
 let testEnsureLeftTrue () =
   let subject = ensure three (const' true) (AccFailure seven)
-  Assert.AreEqual((AccFailure seven), subject)
+  areEqual (AccFailure seven) subject
 
 [<Test>]
 let testEnsureRightFalse () =
   let subject = ensure three (const' false) (AccSuccess seven)
-  Assert.AreEqual((AccFailure three), subject)
+  areEqual (AccFailure three) subject
 
 [<Test>]
 let testEnsureRightTrue () =
   let subject = ensure three (const' true ) (AccSuccess seven)
-  Assert.AreEqual((AccSuccess seven), subject)
+  areEqual (AccSuccess seven) subject
 
 [<Test>]
 let testOrElseRight () =
   let v = AccSuccess  seven
   let subject = AccValidation.orElse v three
-  Assert.AreEqual(seven, subject)
+  areEqual seven subject
 
 [<Test>]
 let testOrElseLeft () =
   let v = AccFailure seven
   let subject = AccValidation.orElse v three
-  Assert.AreEqual(three, subject)
+  areEqual three subject
 
 //testEnsureLeftFalse, testEnsureLeftTrue, testEnsureRightFalse, testEnsureRightTrue,
 //  testOrElseRight, testOrElseLeft
@@ -185,13 +185,13 @@ let testOrElseLeft () =
 let testValidateTrue ()=
   let subject = validate three (const' true) seven
   let expected = AccSuccess seven
-  Assert.AreEqual(expected, subject)
+  areEqual expected subject
 
 [<Test>]
 let testValidateFalse ()=
   let subject = validate three (const' false) seven
   let expected = AccFailure three
-  Assert.AreEqual(expected, subject)
+  areEqual expected subject
 
 module Tests=
   //( # ) :: AReview t b -> b -> t
@@ -203,22 +203,22 @@ module Tests=
   let testYY() =
     let subject:AccValidation<string,int>  = AccSuccess plusOne <*> AccSuccess seven
     let expected = AccSuccess 8
-    Assert.AreEqual(expected, subject)
+    areEqual expected subject
   [<Test>]
   let testNY() =
     let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccSuccess seven
     let expected = AccFailure ["f1"]
-    Assert.AreEqual(expected, subject)
+    areEqual expected subject
   [<Test>]
   let testYN() =
     let subject:AccValidation<string list,int>  = AccSuccess plusOne <*> AccFailure ["f2"] 
     let expected = AccFailure ["f2"]
-    Assert.AreEqual(expected, subject)
+    areEqual expected subject
   [<Test>]
   let testNN() =
     let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccFailure ["f2"] 
     let expected = AccFailure ["f1";"f2"]
-    Assert.AreEqual(expected, subject)
+    areEqual expected subject
   (*
   [<Fact>]
   let testValidationNel() =
@@ -228,34 +228,34 @@ module Tests=
   [<Test>]
   let testEnsureLeftFalse () =
     let subject = ensure three (const' false) (AccFailure seven)
-    Assert.AreEqual((AccFailure seven), subject)
+    areEqual (AccFailure seven) subject
 
   [<Test>]
   let testEnsureLeftTrue () =
     let subject = ensure three (const' true) (AccFailure seven)
-    Assert.AreEqual((AccFailure seven), subject)
+    areEqual (AccFailure seven) subject
 
   [<Test>]
   let testEnsureRightFalse () =
     let subject = ensure three (const' false) (AccSuccess seven)
-    Assert.AreEqual((AccFailure three), subject)
+    areEqual (AccFailure three) subject
 
   [<Test>]
   let testEnsureRightTrue () =
     let subject = ensure three (const' true ) (AccSuccess seven)
-    Assert.AreEqual((AccSuccess seven), subject)
+    areEqual (AccSuccess seven) subject
 
   [<Test>]
   let testOrElseRight () =
     let v = AccSuccess  seven
     let subject = AccValidation.orElse v three
-    Assert.AreEqual(seven, subject)
+    areEqual seven subject
 
   [<Test>]
   let testOrElseLeft () =
     let v = AccFailure seven
     let subject = AccValidation.orElse v three
-    Assert.AreEqual(three, subject)
+    areEqual three subject
 
   //testEnsureLeftFalse, testEnsureLeftTrue, testEnsureRightFalse, testEnsureRightTrue,
   //  testOrElseRight, testOrElseLeft
@@ -266,12 +266,12 @@ module Tests=
   let testValidateTrue ()=
     let subject = validate three (const' true) seven
     let expected = AccSuccess seven
-    Assert.AreEqual(expected, subject)
+    areEqual expected subject
 
   [<Test>]
   let testValidateFalse ()=
     let subject = validate three (const' false) seven
     let expected = AccFailure three
-    Assert.AreEqual(expected, subject)
+    areEqual expected subject
 
  
