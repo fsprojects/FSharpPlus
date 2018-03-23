@@ -96,7 +96,7 @@ type AccValidation<'err,'a> with
         AccValidation.apply f x
   // as Alternative (inherits from Applicative)
   static member inline get_Empty () = AccFailure ( getEmpty() )
-  static member inline Append (x:AccValidation<_,_>, y:AccValidation<_,_>) = AccValidation.appAccValidation Control.Append.Invoke x y
+  static member inline (<|>) (x:AccValidation<_,_>, y:AccValidation<_,_>) = AccValidation.appAccValidation Control.Append.Invoke x y
 
   // as Functor
   static member Map        (x : AccValidation<_,_>, f) = AccValidation.map f x
