@@ -4,6 +4,8 @@ open FSharpPlus
 open FSharpPlus.Lens
 open FSharpPlus.Data
 
+// Validation is based on AccValidation from https://github.com/qfpl/validation
+
 /// A 'Validation' is either a value of the type 'err or 'a, similar to 'Result'. However,
 /// the 'Applicative' instance for 'Validation' /accumulates/ errors using a 'Semigroup' on 'err.
 /// In contrast, the Applicative for 'Result' returns only the first error.
