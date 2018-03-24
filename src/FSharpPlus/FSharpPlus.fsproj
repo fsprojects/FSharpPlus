@@ -75,6 +75,7 @@
     <None Include="Samples\Prism.fsx" />
     <None Include="Samples\Fold.fsx" />
     <None Include="Samples\Traversal.fsx" />
+    <None Include="Samples\Validations.fsx" />
     <None Include="Samples\Iso.fsx" />
     <None Include="paket.references" />
     <None Include="paket.template" />

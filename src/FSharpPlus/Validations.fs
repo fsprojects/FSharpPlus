@@ -118,7 +118,7 @@ module Validation=
   let inline _Success    x = (prism Success <| either Ok (Error << Failure)) x
   let inline _Failure    x = (prism Failure <| either (Error << Failure) Ok ) x
 
-  let inline isoAccValidationResult x = x |> iso toResult ofResult
+  let inline isoValidationResult x = x |> iso toResult ofResult
 
 
 
