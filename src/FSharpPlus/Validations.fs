@@ -27,7 +27,8 @@ module Validation=
     |Failure e1, Success _  -> Failure e1
     |Success _, Failure e2 -> Failure e2
     |Success f, Success a -> Success (f a)
-  let inline foldBack f x = function 
+  let inline foldBack f state x =
+    match state with
     |Success a -> f a x
     |Failure _ -> x
 
@@ -39,7 +40,8 @@ module Validation=
     |Failure e -> Failure (f e)
     |Success a -> Success (g a)
 
-  let inline biFoldBack f g x = function 
+  let inline biFoldBack f g state x =
+    match state with
     |Success a -> g a x
     |Failure e -> f e x
 
