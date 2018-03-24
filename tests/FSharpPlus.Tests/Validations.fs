@@ -2,49 +2,51 @@ module Validations
 
 open System
 open FSharpPlus
-open FSharpPlus.Validations
+open FSharpPlus.Data
 open FsCheck
 open NUnit.Framework
 open FSharpPlus.Data
+
+open Validation
 let areEqual x y = Assert.IsTrue( (x = y), sprintf "Expected %A to equal %A" x y)
 module FunctorP=
   [<Test>]
   let ``map id  =  id ``() =
-    Check.Quick("map id = id",fun (x :AccValidation<string list, int>) ->
-      (AccValidation.map id) x =  id x )
+    Check.Quick("map id = id",fun (x :Validation<string list, int>) ->
+      (Validation.map id) x =  id x )
 
   [<Test>]
   let ``map (f << g) = map f << map g ``()=
-    Check.Quick("map (f << g) = map f << map g", fun (x :AccValidation<string list, int>) (f:string->int) (g:int->string)->
-      (AccValidation.map (f << g)) x = (AccValidation.map f << AccValidation.map g) x)
+    Check.Quick("map (f << g) = map f << map g", fun (x :Validation<string list, int>) (f:string->int) (g:int->string)->
+      (Validation.map (f << g)) x = (Validation.map f << Validation.map g) x)
 
 module BifunctorP=  
   [<Test>]
   let ``bimap f g = first f << second g``()=
-     Check.Quick("bimap f g = first f << second g", fun (x :AccValidation<string, int>) (f:string->int) (g:int->string)->
+     Check.Quick("bimap f g = first f << second g", fun (x :Validation<string, int>) (f:string->int) (g:int->string)->
        (bimap f g) x = (first f << second g) x)
 
 module ApplicativeP=  
   ///The identity law
   [<Test>]
   let ``result id <*> v = v``() =
-    Check.Quick("result id <*> v = v", fun (v :AccValidation<string list, int>)-> 
+    Check.Quick("result id <*> v = v", fun (v :Validation<string list, int>)-> 
       result id <*> v = v)
   [<Test>]
   let ``result (<<) <*> u <*> v <*> w = u <*> (v <*> w)``()=
-    Check.Quick("result (<<) <*> u <*> v <*> w = u <*> (v <*> w)", fun (v :AccValidation<string list, string->string>) (u :AccValidation<string list, string->string>) (w :AccValidation<string list, string>) ->
+    Check.Quick("result (<<) <*> u <*> v <*> w = u <*> (v <*> w)", fun (v :Validation<string list, string->string>) (u :Validation<string list, string->string>) (w :Validation<string list, string>) ->
       (result (<<) <*> u <*> v <*> w) = (u <*> (v <*> w)))
   ///Homomorphism:
   [<Test>]
   let ``result f <*> result x = result (f x)``()=
-    Check.Quick("result f <*> result x = result (f x)", fun (x :AccValidation<string list, int>) (f:AccValidation<string list, int> -> int) ->
-      let y=(result (f x)):AccValidation<string list, int>
+    Check.Quick("result f <*> result x = result (f x)", fun (x :Validation<string list, int>) (f:Validation<string list, int> -> int) ->
+      let y=(result (f x)):Validation<string list, int>
       y=(result f <*> result x) )
   /// Interchange
   /// in haskell: u <*> pure y = pure ($ y) <*> u
   [<Test>] 
   let ``u <*> result y = result ((|>) y) <*> u``()=
-    Check.Quick("u <*> result y = result ((|>) y) <*> u", fun (u:AccValidation<string list, string->int>) (y:string) ->
+    Check.Quick("u <*> result y = result ((|>) y) <*> u", fun (u:Validation<string list, string->int>) (y:string) ->
       let right_side =result ((|>) y) <*> u
       let left_side = u <*> (result y)
       right_side=left_side)
@@ -52,40 +54,40 @@ module ApplicativeP=
 module AlternativeP=  
   [<Test>]
   let ``empty <|> x = x``() =
-    Check.Quick("empty <|> x = x", fun (x :AccValidation<string list, int>)-> 
+    Check.Quick("empty <|> x = x", fun (x :Validation<string list, int>)-> 
       getEmpty() <|> x = x)
   
   [<Test>]
   let ``x <|> empty = x``() =
-    Check.Quick("x <|> empty = x", fun (x :AccValidation<string list, int>)->
+    Check.Quick("x <|> empty = x", fun (x :Validation<string list, int>)->
       x <|> getEmpty() = x)
   
   [<Test>]
   let ``(x <|> y) <|> z = x <|> (y <|> z)``()=
-    Check.Quick("(x <|> y) <|> z = x <|> (y <|> z)",fun (x :AccValidation<string list, int>) (y :AccValidation<string list, int>) (z :AccValidation<string list, int>)->
+    Check.Quick("(x <|> y) <|> z = x <|> (y <|> z)",fun (x :Validation<string list, int>) (y :Validation<string list, int>) (z :Validation<string list, int>)->
       ((x <|> y) <|> z) = (x <|> (y <|> z)))
   
   [<Test>]
   let ``f <!> (x <|> y) = (f <!> x) <|> (f <!> y)``()=
-    Check.Quick("f <!> (x <|> y) = (f <!> x) <|> (f <!> y)",fun (x :AccValidation<string list, int>) (y :AccValidation<string list, int>) (f:int->string)->
+    Check.Quick("f <!> (x <|> y) = (f <!> x) <|> (f <!> y)",fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:int->string)->
       (f <!> (x <|> y)) = ((f <!> x) <|> (f <!> y)))
   
   //Right Distribution: does not hold
   //[<Test()>]
   let ``(f <|> g) <*> x = (f <*> x) <|> (g <*> x)``()=
-    Check.Quick("(f <|> g) <*> x = (f <*> x) <|> (g <*> x)", fun (x :AccValidation<string list, int>) (y :AccValidation<string list, int>) (f:AccValidation<string list,int->string>) (g:AccValidation<string list,int->string>)->
+    Check.Quick("(f <|> g) <*> x = (f <*> x) <|> (g <*> x)", fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:Validation<string list,int->string>) (g:Validation<string list,int->string>)->
       ((f <|> g) <*> x) = ((f <*> x) <|> (g <*> x)))
 
   // holds when f is a function (success)
   [<Test>]
   let ``empty <*> f = empty ``()=
     Check.Quick("empty <*> f = empty", fun (f:string->int)->
-      let empty:AccValidation<string list,_>=getEmpty()
-      (empty <*> (AccSuccess f))=getEmpty())
+      let empty:Validation<string list,_>=getEmpty()
+      (empty <*> (Success f))=getEmpty())
 
 module TraversableP=
 
-  //let y_1 =traverse (fun x -> [0..x]) (AccFailure [1])
+  //let y_1 =traverse (fun x -> [0..x]) (Failure [1])
 (*
   [<Property>]
   let ``Result: t << traverse f = traverse (t << f) ``
@@ -97,18 +99,18 @@ module TraversableP=
 *)
 (*
   [<Property>]
-  let ``t << traverse f = traverse (t << f) ``(x :AccValidation<string list, int>) (t :int->string) (f:string->int)=
+  let ``t << traverse f = traverse (t << f) ``(x :Validation<string list, int>) (t :int->string) (f:string->int)=
     let right_side =((traverse (t << f) x))
     let left_side =(t << traverse f x)
     left_side = right_side
 *)
   [<Test>]
   let ``traverse Identity = Identity``()=
-    Check.Quick("traverse Identity = Identity", fun (x :AccValidation<int list, string>)->
-      AccValidation.traverse (Identity) x = Identity x)
+    Check.Quick("traverse Identity = Identity", fun (x :Validation<int list, string>)->
+      Validation.traverse (Identity) x = Identity x)
 (*
   [<Property>]
-  let ``traverse (Compose << fmap g . f) = Compose << fmap (traverse g) << traverse f``(x :AccValidation<int list, string>) (g :int list->string) (f:string->int list)=
+  let ``traverse (Compose << fmap g . f) = Compose << fmap (traverse g) << traverse f``(x :Validation<int list, string>) (g :int list->string) (f:string->int list)=
     let y_1 = traverse (Compose << map (g << f))
     let y_2 = Compose << map (traverse g) << traverse f
     y_1 x= y_2 x
@@ -121,23 +123,23 @@ let plusOne x = x + 1
 
 [<Test>]
 let testYY() =
-  let subject:AccValidation<string,int>  = AccSuccess plusOne <*> AccSuccess seven
-  let expected = AccSuccess 8
+  let subject:Validation<string,int>  = Success plusOne <*> Success seven
+  let expected = Success 8
   areEqual expected subject
 [<Test>]
 let testNY() =
-  let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccSuccess seven
-  let expected = AccFailure ["f1"]
+  let subject:Validation<string list,int>  = Failure ["f1"] <*> Success seven
+  let expected = Failure ["f1"]
   areEqual expected subject
 [<Test>]
 let testYN() =
-  let subject:AccValidation<string list,int>  = AccSuccess plusOne <*> AccFailure ["f2"] 
-  let expected = AccFailure ["f2"]
+  let subject:Validation<string list,int>  = Success plusOne <*> Failure ["f2"] 
+  let expected = Failure ["f2"]
   areEqual expected subject
 [<Test>]
 let testNN() =
-  let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccFailure ["f2"] 
-  let expected = AccFailure ["f1";"f2"]
+  let subject:Validation<string list,int>  = Failure ["f1"] <*> Failure ["f2"] 
+  let expected = Failure ["f1";"f2"]
   areEqual expected subject
 (*
 [<Fact>]
@@ -148,34 +150,34 @@ let testValidationNel() =
 let const' k _ = k
 [<Test>]
 let testEnsureLeftFalse () =
-  let subject = ensure three (const' false) (AccFailure seven)
-  areEqual (AccFailure seven) subject
+  let subject = ensure three (const' false) (Failure seven)
+  areEqual (Failure seven) subject
 
 [<Test>]
 let testEnsureLeftTrue () =
-  let subject = ensure three (const' true) (AccFailure seven)
-  areEqual (AccFailure seven) subject
+  let subject = ensure three (const' true) (Failure seven)
+  areEqual (Failure seven) subject
 
 [<Test>]
 let testEnsureRightFalse () =
-  let subject = ensure three (const' false) (AccSuccess seven)
-  areEqual (AccFailure three) subject
+  let subject = ensure three (const' false) (Success seven)
+  areEqual (Failure three) subject
 
 [<Test>]
 let testEnsureRightTrue () =
-  let subject = ensure three (const' true ) (AccSuccess seven)
-  areEqual (AccSuccess seven) subject
+  let subject = ensure three (const' true ) (Success seven)
+  areEqual (Success seven) subject
 
 [<Test>]
 let testOrElseRight () =
-  let v = AccSuccess  seven
-  let subject = AccValidation.orElse v three
+  let v = Success  seven
+  let subject = Validation.orElse v three
   areEqual seven subject
 
 [<Test>]
 let testOrElseLeft () =
-  let v = AccFailure seven
-  let subject = AccValidation.orElse v three
+  let v = Failure seven
+  let subject = Validation.orElse v three
   areEqual three subject
 
 //testEnsureLeftFalse, testEnsureLeftTrue, testEnsureRightFalse, testEnsureRightTrue,
@@ -186,13 +188,13 @@ let testOrElseLeft () =
 [<Test>]
 let testValidateTrue ()=
   let subject = validate three (const' true) seven
-  let expected = AccSuccess seven
+  let expected = Success seven
   areEqual expected subject
 
 [<Test>]
 let testValidateFalse ()=
   let subject = validate three (const' false) seven
-  let expected = AccFailure three
+  let expected = Failure three
   areEqual expected subject
 
 module Tests=
@@ -203,23 +205,23 @@ module Tests=
 
   [<Test>]
   let testYY() =
-    let subject:AccValidation<string,int>  = AccSuccess plusOne <*> AccSuccess seven
-    let expected = AccSuccess 8
+    let subject:Validation<string,int>  = Success plusOne <*> Success seven
+    let expected = Success 8
     areEqual expected subject
   [<Test>]
   let testNY() =
-    let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccSuccess seven
-    let expected = AccFailure ["f1"]
+    let subject:Validation<string list,int>  = Failure ["f1"] <*> Success seven
+    let expected = Failure ["f1"]
     areEqual expected subject
   [<Test>]
   let testYN() =
-    let subject:AccValidation<string list,int>  = AccSuccess plusOne <*> AccFailure ["f2"] 
-    let expected = AccFailure ["f2"]
+    let subject:Validation<string list,int>  = Success plusOne <*> Failure ["f2"] 
+    let expected = Failure ["f2"]
     areEqual expected subject
   [<Test>]
   let testNN() =
-    let subject:AccValidation<string list,int>  = AccFailure ["f1"] <*> AccFailure ["f2"] 
-    let expected = AccFailure ["f1";"f2"]
+    let subject:Validation<string list,int>  = Failure ["f1"] <*> Failure ["f2"] 
+    let expected = Failure ["f1";"f2"]
     areEqual expected subject
   (*
   [<Fact>]
@@ -229,34 +231,34 @@ module Tests=
   *)
   [<Test>]
   let testEnsureLeftFalse () =
-    let subject = ensure three (const' false) (AccFailure seven)
-    areEqual (AccFailure seven) subject
+    let subject = ensure three (const' false) (Failure seven)
+    areEqual (Failure seven) subject
 
   [<Test>]
   let testEnsureLeftTrue () =
-    let subject = ensure three (const' true) (AccFailure seven)
-    areEqual (AccFailure seven) subject
+    let subject = ensure three (const' true) (Failure seven)
+    areEqual (Failure seven) subject
 
   [<Test>]
   let testEnsureRightFalse () =
-    let subject = ensure three (const' false) (AccSuccess seven)
-    areEqual (AccFailure three) subject
+    let subject = ensure three (const' false) (Success seven)
+    areEqual (Failure three) subject
 
   [<Test>]
   let testEnsureRightTrue () =
-    let subject = ensure three (const' true ) (AccSuccess seven)
-    areEqual (AccSuccess seven) subject
+    let subject = ensure three (const' true ) (Success seven)
+    areEqual (Success seven) subject
 
   [<Test>]
   let testOrElseRight () =
-    let v = AccSuccess  seven
-    let subject = AccValidation.orElse v three
+    let v = Success  seven
+    let subject = Validation.orElse v three
     areEqual seven subject
 
   [<Test>]
   let testOrElseLeft () =
-    let v = AccFailure seven
-    let subject = AccValidation.orElse v three
+    let v = Failure seven
+    let subject = Validation.orElse v three
     areEqual three subject
 
   //testEnsureLeftFalse, testEnsureLeftTrue, testEnsureRightFalse, testEnsureRightTrue,
@@ -267,13 +269,13 @@ module Tests=
   [<Test>]
   let testValidateTrue ()=
     let subject = validate three (const' true) seven
-    let expected = AccSuccess seven
+    let expected = Success seven
     areEqual expected subject
 
   [<Test>]
   let testValidateFalse ()=
     let subject = validate three (const' false) seven
-    let expected = AccFailure three
+    let expected = Failure three
     areEqual expected subject
 
  

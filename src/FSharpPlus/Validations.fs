@@ -1,137 +1,139 @@
-module FSharpPlus.Validations
+namespace FSharpPlus.Data
 
 open FSharpPlus
 open FSharpPlus.Lens
 open FSharpPlus.Data
 
-/// An 'AccValidation' is either a value of the type 'err or 'a, similar to 'Result'. However,
-/// the 'Applicative' instance for 'AccValidation' /accumulates/ errors using a 'Semigroup' on 'err.
+/// A 'Validation' is either a value of the type 'err or 'a, similar to 'Result'. However,
+/// the 'Applicative' instance for 'Validation' /accumulates/ errors using a 'Semigroup' on 'err.
 /// In contrast, the Applicative for 'Result' returns only the first error.
 ///
-/// A consequence of this is that 'AccValidation' is not a monad. There is no F#+ 'Bind' method since
+/// A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
 /// that would violate monad rules.
 ///
 /// An example of typical usage can be found <https://github.com/qfpl/validation/blob/master/examples/src/Email.hs here>.
 ///
-type AccValidation<'err,'a> =
-  | AccFailure of 'err
-  | AccSuccess of 'a
+type Validation<'err,'a> =
+  | Failure of 'err
+  | Success of 'a
 
-module AccValidation=
+module Validation=
   let inline map (f:'T->'U)=function
-    |AccFailure e -> AccFailure e
-    |AccSuccess a -> AccSuccess (f a) 
+    |Failure e -> Failure e
+    |Success a -> Success (f a) 
   let inline apply e1' e2' = 
     match e1',e2' with
-    |AccFailure e1, AccFailure e2 -> AccFailure (plus e1 e2)
-    |AccFailure e1, AccSuccess _  -> AccFailure e1
-    |AccSuccess _, AccFailure e2 -> AccFailure e2
-    |AccSuccess f, AccSuccess a -> AccSuccess (f a)
-  let inline foldr f x = function 
-    |AccSuccess a -> f a x
-    |AccFailure _ -> x
+    |Failure e1, Failure e2 -> Failure (plus e1 e2)
+    |Failure e1, Success _  -> Failure e1
+    |Success _, Failure e2 -> Failure e2
+    |Success f, Success a -> Success (f a)
+  let inline foldBack f x = function 
+    |Success a -> f a x
+    |Failure _ -> x
 
   let inline traverse f = function 
-    |AccSuccess a -> AccSuccess <!> f a
-    |AccFailure e -> result (AccFailure e)
+    |Success a -> Success <!> f a
+    |Failure e -> result (Failure e)
 
   let inline bimap f g = function
-    |AccFailure e -> AccFailure (f e)
-    |AccSuccess a -> AccSuccess (g a)
+    |Failure e -> Failure (f e)
+    |Success a -> Success (g a)
 
-  let inline bifoldr f g x = function 
-    |AccSuccess a -> g a x
-    |AccFailure e -> f e x
+  let inline biFoldBack f g x = function 
+    |Success a -> g a x
+    |Failure e -> f e x
 
   let inline bitraverse f g = function 
-    | AccSuccess a -> AccSuccess <!> g a
-    | AccFailure e -> AccFailure <!> f e
+    | Success a -> Success <!> g a
+    | Failure e -> Failure <!> f e
 
-  /// 'bind' binds through an AccValidation, which is useful for
-  /// composing AccValidations sequentially. Note that despite having a bind
-  /// function of the correct type, AccValidation is not a monad.
+  /// 'bind' binds through a Validation, which is useful for
+  /// composing Validations sequentially. Note that despite having a bind
+  /// function of the correct type, Validation is not a monad.
   /// The reason is, this bind does not accumulate errors, so it does not
   /// agree with the Applicative instance.
   ///
   /// There is nothing wrong with using this function, it just does not make a
   /// valid Monad instance.
-  let inline bind (f:'T->AccValidation<_,_>) x :AccValidation<_,_>=
+  let inline bind (f:'T->Validation<_,_>) x :Validation<_,_>=
       match x with 
-      | AccFailure e -> AccFailure e
-      | AccSuccess a -> f a
+      | Failure e -> Failure e
+      | Success a -> f a
 
-  /// orElse v a returns 'a when v is AccFailure, and the a in AccSuccess a.
+  /// orElse v a returns 'a when v is Failure, and the a in Success a.
   let inline orElse v (a:'a) = 
       match v with
-      |AccFailure _ -> a
-      |AccSuccess x -> x
+      |Failure _ -> a
+      |Success x -> x
   /// Return the 'a or run the given function over the 'e.
-  let valueOr ea (v:AccValidation<'e,'a>) = 
+  let valueOr ea (v:Validation<'e,'a>) = 
     match v with
-    |AccFailure e -> ea e
-    |AccSuccess a -> a
-  /// 'liftResult' is useful for converting a 'Result' to an 'AccValidation'
+    |Failure e -> ea e
+    |Success a -> a
+  /// 'liftResult' is useful for converting a 'Result' to an 'Validation'
   /// when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.
-  let liftResult (f:('b -> 'e)) : (Result<'a,'b>->AccValidation<'e,'a>) = function | Error e-> AccFailure (f e) | Ok a-> AccSuccess a
-  /// 'liftChoice' is useful for converting a 'Choice' to an 'AccValidation'
+  let liftResult (f:('b -> 'e)) : (Result<'a,'b>->Validation<'e,'a>) = function | Error e-> Failure (f e) | Ok a-> Success a
+  /// 'liftChoice' is useful for converting a 'Choice' to an 'Validation'
   /// when the 'Choice2Of2' of the 'Choice' needs to be lifted into a 'Semigroup'.
-  let liftChoice (f:('b -> 'e)) : (Choice<'a,'b>->AccValidation<'e,'a>) = Choice.either (AccFailure << f) AccSuccess
+  let liftChoice (f:('b -> 'e)) : (Choice<'a,'b>->Validation<'e,'a>) = Choice.either (Failure << f) Success
 
-  let appAccValidation (m:'err -> 'err -> 'err) (e1':AccValidation<'err,'a>) (e2':AccValidation<'err,'a>) =
+  let appValidation (m:'err -> 'err -> 'err) (e1':Validation<'err,'a>) (e2':Validation<'err,'a>) =
     match e1',e2' with
-    |AccFailure e1 , AccFailure e2 -> AccFailure (m e1 e2)
-    |AccFailure _  , AccSuccess a2 -> AccSuccess a2
-    |AccSuccess a1 , AccFailure _  -> AccSuccess a1
-    |AccSuccess a1 , AccSuccess _  -> AccSuccess a1
+    |Failure e1 , Failure e2 -> Failure (m e1 e2)
+    |Failure _  , Success a2 -> Success a2
+    |Success a1 , Failure _  -> Success a1
+    |Success a1 , Success _  -> Success a1
 
-  let toResult x :Result<_,_> = match x with AccSuccess a -> Ok a | AccFailure e -> Error e
-  let fromResult (x :Result<_,_>) = match x with Ok a -> AccSuccess a | Error e -> AccFailure e
-  let inline either f g         = function AccSuccess v      -> f v      | AccFailure e                 -> g e
+  let toResult x :Result<_,_> = match x with Success a -> Ok a | Failure e -> Error e
+  let ofResult (x :Result<_,_>) = match x with Ok a -> Success a | Error e -> Failure e
+  let inline either f g         = function Success v      -> f v      | Failure e                 -> g e
 
-type AccValidation<'err,'a> with
+  /// Validate's the [a] with the given predicate, returning [e] if the predicate does not hold.
+  ///
+  /// This can be thought of as having the less general type:
+  ///
+  /// validate : 'e -> ('a -> bool) -> 'a -> Validation<'e, 'a>
+  ///
+  let validate (e:'e) (p:('a -> bool)) (a:'a) : Validation<'e,'a> = if p a then Success a else Failure e
+
+  /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
+  /// This is 'liftError' specialized to 'NonEmptyList', since
+  /// they are a common semigroup to use.
+  let validationNel (x:Result<_,_>) : (Validation<NonEmptyList<'e>,'a>)= (liftResult result) x
+
+  /// Leaves the validation unchanged when the predicate holds, or
+  /// fails with [e] otherwise.
+  ///
+  /// This can be thought of as having the less general type:
+  ///
+  /// ensure : 'e -> ('a -> 'bool) -> Validation<'a,'e> -> Validation<'a,'e>
+  let inline ensure (e:'e) (p:'a-> bool) =
+    function
+    |Failure x -> Failure x
+    |Success a -> validate e p a
+
+
+  let inline _Success    x = (prism Success <| either Ok (Error << Failure)) x
+  let inline _Failure    x = (prism Failure <| either (Error << Failure) Ok ) x
+
+  let inline isoAccValidationResult x = x |> iso toResult ofResult
+
+
+
+type Validation<'err,'a> with
 
   // as Applicative
-  static member Return            x = AccSuccess x
-  static member inline (<*>)      (f:AccValidation<_,'T->'U>, x:AccValidation<_,'T>) : AccValidation<_,_> = 
-        AccValidation.apply f x
+  static member Return            x = Success x
+  static member inline (<*>)      (f:Validation<_,'T->'U>, x:Validation<_,'T>) : Validation<_,_> = 
+        Validation.apply f x
   // as Alternative (inherits from Applicative)
-  static member inline get_Empty () = AccFailure ( getEmpty() )
-  static member inline (<|>) (x:AccValidation<_,_>, y:AccValidation<_,_>) = AccValidation.appAccValidation Control.Append.Invoke x y
+  static member inline get_Empty () = Failure ( getEmpty() )
+  static member inline (<|>) (x:Validation<_,_>, y:Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
 
   // as Functor
-  static member Map        (x : AccValidation<_,_>, f) = AccValidation.map f x
+  static member Map        (x : Validation<_,_>, f) = Validation.map f x
   // as Bifunctor
-  static member Bimap (x:AccValidation<'T,'V>, f:'T->'U, g:'V->'W) :AccValidation<'U,'W> = AccValidation.bimap f g x
+  static member Bimap (x:Validation<'T,'V>, f:'T->'U, g:'V->'W) :Validation<'U,'W> = Validation.bimap f g x
   // as Traversable
-  static member inline Traverse (t:AccValidation<'err,'a>, f : 'a->'b) : 'c=AccValidation.traverse f t
+  static member inline Traverse (t:Validation<'err,'a>, f : 'a->'b) : 'c=Validation.traverse f t
 
-
-/// Validate's the [a] with the given predicate, returning [e] if the predicate does not hold.
-///
-/// This can be thought of as having the less general type:
-///
-/// validate : 'e -> ('a -> bool) -> 'a -> AccValidation<'e, 'a>
-///
-let validate (e:'e) (p:('a -> bool)) (a:'a) : AccValidation<'e,'a> = if p a then AccSuccess a else AccFailure e
-
-/// validationNel : Choice<'a,'e> -> AccValidation (NonEmptyList<'e>) a
-/// This is 'liftError' specialized to 'NonEmptyList', since
-/// they are a common semigroup to use.
-let validationNel (x:Result<_,_>) : (AccValidation<NonEmptyList<'e>,'a>)= (AccValidation.liftResult result) x
-
-/// Leaves the validation unchanged when the predicate holds, or
-/// fails with [e] otherwise.
-///
-/// This can be thought of as having the less general type:
-///
-/// ensure : 'e -> ('a -> 'bool) -> AccValidation<'a,'e> -> AccValidation<'a,'e>
-let inline ensure (e:'e) (p:'a-> bool) =
-  function
-  |AccFailure x -> AccFailure x
-  |AccSuccess a -> validate e p a
-
-
-let inline _Success    x = (prism AccSuccess    <| AccValidation.either Ok (Error << AccFailure)) x
-let inline _Failure    x = (prism AccFailure <| AccValidation.either (Error << AccFailure) Ok ) x
-
-let inline isoAccValidationResult x = x |> iso AccValidation.toResult AccValidation.fromResult
