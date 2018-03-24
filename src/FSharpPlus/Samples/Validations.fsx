@@ -76,7 +76,7 @@ module Person=
     let asResultGood = validPerson ^. Validation.isoValidationResult
     // Ok ({name = {unName = "Bob"}; email = {unEmail = "bob@gmail.com"}; age = {unAge = 25}})
 
-    let asResultBad = badEverything ^. isoValidationResult
+    let asResultBad = badEverything ^. Validation.isoValidationResult
     // Error [NameBetween1And50;EmailMustContainAtChar;AgeBetween0and120]
 
 module Email=
