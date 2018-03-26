@@ -3,6 +3,7 @@ namespace FSharpPlus.Data
 open FSharpPlus
 open FSharpPlus.Lens
 open FSharpPlus.Data
+open System.ComponentModel
 
 // Validation is based on AccValidation from https://github.com/qfpl/validation
 
@@ -20,7 +21,7 @@ type Validation<'err,'a> =
   | Success of 'a
 
 module Validation=
-  let inline map (f:'T->'U)=function
+  let map (f:'T->'U)=function
     |Failure e -> Failure e
     |Success a -> Success (f a) 
   let inline apply e1' e2' = 
@@ -38,11 +39,11 @@ module Validation=
     |Success a -> Success <!> f a
     |Failure e -> result (Failure e)
 
-  let inline bimap f g = function
+  let bimap f g = function
     |Failure e -> Failure (f e)
     |Success a -> Success (g a)
 
-  let inline biFoldBack f g state x =
+  let biFoldBack f g state x =
     match state with
     |Success a -> g a x
     |Failure e -> f e x
@@ -59,13 +60,13 @@ module Validation=
   ///
   /// There is nothing wrong with using this function, it just does not make a
   /// valid Monad instance.
-  let inline bind (f:'T->Validation<_,_>) x :Validation<_,_>=
+  let bind (f:'T->Validation<_,_>) x :Validation<_,_>=
       match x with 
       | Failure e -> Failure e
       | Success a -> f a
 
   /// orElse v a returns 'a when v is Failure, and the a in Success a.
-  let inline orElse v (a:'a) = 
+  let orElse v (a:'a) = 
       match v with
       |Failure _ -> a
       |Success x -> x
@@ -79,7 +80,7 @@ module Validation=
   let liftResult (f:('b -> 'e)) : (Result<'a,'b>->Validation<'e,'a>) = function | Error e-> Failure (f e) | Ok a-> Success a
   /// 'liftChoice' is useful for converting a 'Choice' to an 'Validation'
   /// when the 'Choice2Of2' of the 'Choice' needs to be lifted into a 'Semigroup'.
-  let liftChoice (f:('b -> 'e)) : (Choice<'a,'b>->Validation<'e,'a>) = Choice.either (Failure << f) Success
+  let liftChoice (f:('b -> 'e)) : (Choice<'b,'a>->Validation<'e,'a>) = Choice.either (Failure << f) Success
 
   let appValidation (m:'err -> 'err -> 'err) (e1':Validation<'err,'a>) (e2':Validation<'err,'a>) =
     match e1',e2' with
@@ -90,7 +91,7 @@ module Validation=
 
   let toResult x :Result<_,_> = match x with Success a -> Ok a | Failure e -> Error e
   let ofResult (x :Result<_,_>) = match x with Ok a -> Success a | Error e -> Failure e
-  let inline either f g         = function Success v      -> f v      | Failure e                 -> g e
+  let either f g         = function Success v      -> f v      | Failure e                 -> g e
 
   /// Validate's the [a] with the given predicate, returning [e] if the predicate does not hold.
   ///
@@ -111,7 +112,7 @@ module Validation=
   /// This can be thought of as having the less general type:
   ///
   /// ensure : 'e -> ('a -> 'bool) -> Validation<'a,'e> -> Validation<'a,'e>
-  let inline ensure (e:'e) (p:'a-> bool) =
+  let ensure (e:'e) (p:'a-> bool) =
     function
     |Failure x -> Failure x
     |Success a -> validate e p a
@@ -135,9 +136,12 @@ type Validation<'err,'a> with
   static member inline (<|>) (x:Validation<_,_>, y:Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
 
   // as Functor
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
   static member Map        (x : Validation<_,_>, f) = Validation.map f x
   // as Bifunctor
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
   static member Bimap (x:Validation<'T,'V>, f:'T->'U, g:'V->'W) :Validation<'U,'W> = Validation.bimap f g x
   // as Traversable
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
   static member inline Traverse (t:Validation<'err,'a>, f : 'a->'b) : 'c=Validation.traverse f t
 
