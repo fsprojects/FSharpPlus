@@ -13,7 +13,7 @@ open FSharpPlus.Data
 /// A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
 /// that would violate monad rules.
 ///
-/// An example of typical usage can be found <https://github.com/qfpl/validation/blob/master/examples/src/Email.hs here>.
+/// An example of typical usage can be found <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Samples/Validations.fsx">here</a>.
 ///
 type Validation<'err,'a> =
   | Failure of 'err
