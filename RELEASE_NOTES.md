@@ -1,3 +1,19 @@
+#### 1.0.0-RC1  - March 26 2018
+* Accumulative Validations
+* DList<'T> implementation changed
+* C# Extension Methods removed
+* Require operators instead of named methods: 
+	* (>>=) instead of Bind
+	* (=>>) instead of Extend
+	* (<|>) instead of Append
+* Custom operations:	
+ 	* sortBy renamed to orderBy
+ 	* first and nth removed
+ 	* top operator added
+* Unify Second with Map
+* Defaults improved
+* Identity<'T> is now in FSharpPlus.Data
+
 #### 1.0.0-CI00148  - February 17 2018
 * More flexibility in Computation Expressions
 * Dictionary extensions
