@@ -20,7 +20,7 @@ module Writer =
     let inline apply  (Writer (f, a)) (Writer (x:'T, b))       = Writer (f x, plus a b)      : Writer<'Monoid,'U>
 
     /// Extract the output from a writer computation.
-    let exec (Writer m:Writer<_,'T>) = snd m                                                 : Writer<'Monoid,'U>
+    let exec (Writer m:Writer<'Monoid,'T>) = snd m                                           : 'Monoid
 
     /// Embeds a simple writer action.
     let tell w = Writer((), w)                                                               : Writer<'Monoid,unit>
