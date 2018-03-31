@@ -103,26 +103,36 @@ type Choose =
 
 type Distinct =
     inherit Default1
-    static member inline Distinct (x:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.distinct |> OfSeq.Invoke : '``Foldable<'T>``
-    static member        Distinct (x:list<'T>         , [<Optional>]_impl:Distinct) = Seq.distinct x |> Seq.toList
-    static member        Distinct (x:'T []            , [<Optional>]_impl:Distinct) = Seq.distinct x |> Seq.toArray
 
-    static member inline Invoke (source:'``Collection<'T>``) =
+    static member        Distinct (x:list<'a>   , [<Optional>]_impl:Distinct  ) = List.distinct x
+    static member        Distinct (x:'a []      , [<Optional>]_impl:Distinct  ) = Array.distinct x
+
+    static member inline Invoke (source:'``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Distinct: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Distinct>, source)  : '``Collection<'T>``
+        call (Unchecked.defaultof<Distinct>, source)
+    static member inline InvokeOnInstance (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member Distinct: _->_) source) : ^``Collection<'T>``
+
+    static member inline Distinct (x:'``Foldable<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.distinct |> OfSeq.Invoke      : '``Foldable<'T>``
+    static member inline Distinct (x:^``Foldable<'T>``, [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member Distinct: _->_) x) : '``Foldable<'T>``
+    static member inline Distinct (_ : ^t when ^t : null and ^t : struct, _mthd : Default1) = id
 
 
 type DistinctBy =
     inherit Default1
-    static member inline DistinctBy (x:'``Foldable<'T>``, f, [<Optional>]_impl:Default1  ) = x |> ToSeq.Invoke |> Seq.distinctBy f |> OfSeq.Invoke : '``Foldable<'T>``
-    static member        DistinctBy (x:list<'T>         , f, [<Optional>]_impl:DistinctBy) = Seq.distinctBy f x |> Seq.toList
-    static member        DistinctBy (x:'T []            , f, [<Optional>]_impl:DistinctBy) = Seq.distinctBy f x |> Seq.toArray
 
-    static member inline Invoke (projection:'T->'Key) (source:'``Collection<'T>``) =
-        let inline call_2 (a:^a, b:^b, p) = ((^a or ^b) : (static member DistinctBy: _*_*_ -> _) b, p, a)
-        let inline call (a:'a, b:'b, p) = call_2 (a, b, p)
-        call (Unchecked.defaultof<DistinctBy>, source, projection) : '``Collection<'T>``
+    static member        DistinctBy (x:list<'a>   , f      , [<Optional>]_impl:DistinctBy  ) = List.distinctBy  f x
+    static member        DistinctBy (x:'a []      , f      , [<Optional>]_impl:DistinctBy  ) = Array.distinctBy f x
+
+    static member inline Invoke (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` =
+        let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member DistinctBy: _*_*_ -> _) b, f, a)
+        let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
+        call (Unchecked.defaultof<DistinctBy>, source, projection)
+    static member inline InvokeOnInstance (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member DistinctBy: _*_->_) projection, source) : ^``Collection<'T>``
+
+    static member inline DistinctBy (x:'``Foldable<'T>``, f      , [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.distinctBy f |> OfSeq.Invoke         : '``Foldable<'T>``
+    static member inline DistinctBy (x:^``Foldable<'T>``, f      , [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member DistinctBy: _*_->_) f, x) : '``Foldable<'T>``
+    static member inline DistinctBy (_ : ^t when ^t : null and ^t : struct, _ : 'T -> 'U, _mthd : Default1) = id
 
 
 type GroupBy =
@@ -237,14 +247,19 @@ type Replace =
 
 type Rev =
     inherit Default1
-    static member inline Rev (x:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.toArray |> Array.rev |> Array.toSeq |> OfSeq.Invoke : '``Foldable<'T>``
-    static member        Rev (x:list<'a>         , [<Optional>]_impl:Rev     ) = List.rev  x
-    static member        Rev (x:'a []            , [<Optional>]_impl:Rev     ) = Array.rev x
 
-    static member inline Invoke  (source: '``Collection<'T>``) =
+    static member        Rev (x:list<'a>   , [<Optional>]_impl:Rev  ) = List.rev x
+    static member        Rev (x:'a []      , [<Optional>]_impl:Rev  ) = Array.rev x
+
+    static member inline Invoke (source:'``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Rev: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Rev>, source)  : '``Collection<'T>``
+        call (Unchecked.defaultof<Rev>, source)
+    static member inline InvokeOnInstance (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member Rev: _->_) source) : ^``Collection<'T>``
+
+    static member inline Rev (x:'``Foldable<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.rev |> OfSeq.Invoke      : '``Foldable<'T>``
+    static member inline Rev (x:^``Foldable<'T>``, [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member Rev: _->_) x) : '``Foldable<'T>``
+    static member inline Rev (_ : ^t when ^t : null and ^t : struct, _mthd : Default1) = id
 
 
 type Scan =
