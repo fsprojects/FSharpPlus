@@ -261,15 +261,19 @@ type Scan =
 
 type Sort =
     inherit Default1
-    static member inline Sort (x:'``Foldable<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke      : '``Foldable<'T>``
-    static member inline Sort (x:^``Foldable<'T>``, [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member Sort: _->_) x) : '``Foldable<'T>``
-    static member        Sort (x:list<'a>         , [<Optional>]_impl:Sort    ) = List.sort  x
-    static member        Sort (x:'a []            , [<Optional>]_impl:Sort    ) = Array.sort x
 
-    static member inline Invoke (source: '``Collection<'T>``) =
+    static member        Sort (x:list<'a>   , [<Optional>]_impl:Sort  ) = List.sort x
+    static member        Sort (x:'a []      , [<Optional>]_impl:Sort  ) = Array.sort x
+
+    static member inline Invoke (source:'``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Sort: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Sort>, source) : '``Collection<'T>``
+        call (Unchecked.defaultof<Sort>, source)
+    static member inline InvokeOnInstance (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member Sort: _->_) source) : ^``Collection<'T>``
+
+    static member inline Sort (x:'``Foldable<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke      : '``Foldable<'T>``
+    static member inline Sort (x:^``Foldable<'T>``, [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member Sort: _->_) x) : '``Foldable<'T>``
+    static member inline Sort (_ : ^t when ^t : null and ^t : struct, _mthd : Default1) = id
 
 
 type SortBy =

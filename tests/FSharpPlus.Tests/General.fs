@@ -405,6 +405,16 @@ module Collections =
 
         ()
 
+    let testSorts =
+        let r1 = [4..1] |> sort
+        let r2 = [4..1] |> sortBy string
+        let r3 = seq [4..1] |> sort
+        let r4 = seq [4..1] |> sortBy string
+        let r5 = ResizeArray [4..1] |> sort
+        let r6 = ResizeArray [4..1] |> sortBy string
+
+        ()
+
     let testGeneralizableValues() =
         let a:list<_> = empty
         let b =  0 ::a
