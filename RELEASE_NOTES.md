@@ -1,3 +1,7 @@
+#### 1.0.0-RC2  - March 31 2018
+* A hoist function was added to some Monad Transformers
+* Bug Fixes
+
 #### 1.0.0-RC1  - March 26 2018
 * Accumulative Validations
 * DList<'T> implementation changed
