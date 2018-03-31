@@ -18,6 +18,7 @@ type OptionT<'``monad<option<'t>>``> = OptionT of '``monad<option<'t>>``
 [<RequireQualifiedAccess>]
 module OptionT =
     let run   (OptionT m) = m : '``Monad<option<'T>>``
+    let inline hoist (x:option<'T>) = OptionT (result x) : OptionT<'``Monad<option<'T>>``>
     let inline bind (f:'T-> OptionT<'``Monad<option<'U>``>) (OptionT m : OptionT<'``Monad<option<'T>``>)               = (OptionT <| (m  >>= (fun maybe_value -> match maybe_value with Some value -> run (f value) | _ -> result None)))
     let inline apply (OptionT f : OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x : OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x)  : OptionT<'``Monad<option<'U>``>
     let inline map  (f:'T->'U) (OptionT m : OptionT<'``Monad<option<'T>``>)                                            = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>

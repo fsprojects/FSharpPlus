@@ -48,6 +48,7 @@ type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
 [<RequireQualifiedAccess>]
 module ReaderT =
     let  run (ReaderT x) = x    : 'R -> '``Monad<'T>``
+    let inline hoist (x:Reader<'R, 'T>) = (ReaderT << (fun a -> result << a) << Reader.run) x : ReaderT<'R, '``Monad<'T>``>
     let inline map   (f:'T->'U) (ReaderT m : ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m)                               : ReaderT<'R, '``Monad<'U>``>
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x:_->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
     let inline bind  (f:'T->_) (ReaderT (m:_->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))             : ReaderT<'R, '``Monad<'U>``>

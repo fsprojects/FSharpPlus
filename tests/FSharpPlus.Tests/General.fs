@@ -811,6 +811,22 @@ module MonadTransformers =
         // Test MonadError
         let err1Layers   = catch (Error "Invalid Value") (fun s -> Error ["the error was: " + s]) : Result<int, _>
 
+        
+        let someResultFunction foo = if foo = "foo" then Result.Ok foo else Result.Error "not good"
+
+        let doSomeOperation x = ResultT <| async {
+            if x < 10 then return Result.Ok 10
+            else return Result.Error "failure"   }
+
+        let okFoo10Comp: ResultT<_> =
+            monad {
+                let! resFoo = ResultT.hoist <| someResultFunction "foo"
+                let! res10  = doSomeOperation 0
+                return (resFoo, res10) } 
+            </catch/> (fun s -> throw ("The error was: " + s))
+
+        let okFoo10 = okFoo10Comp |> ResultT.run |> Async.RunSynchronously
+
         ()
 
 module ProfunctorDefaults =

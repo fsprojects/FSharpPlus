@@ -35,6 +35,7 @@ type ResultT<'``monad<'result<'t,'e>>``> = ResultT of '``monad<'result<'t,'e>>``
 [<RequireQualifiedAccess>]
 module ResultT =
     let run (ResultT x) = x : '``Monad<'Result<'T,'E>>``
+    let inline hoist (x:Result<'T,'TError>) = ResultT (result x) : ResultT<'``Monad<Result<'T,'TError>>``>
     let inline bind (f:'T->ResultT<'``Monad<'Result<'U,'E>>``>) (ResultT m:ResultT<'``Monad<'Result<'T,'E>>``>) = (ResultT (m >>= (fun a -> match a with Error l -> result (Error l) | Ok r -> run (f r))))
     let inline apply  (ResultT f:ResultT<'``Monad<'Result<('T -> 'U),'E>>``>) (ResultT x:ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT(map Result.apply f <*> x) : ResultT<'``Monad<'Result<'U,'E>>``>
     let inline map  (f:'T->'U) (ResultT m:ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (map (Result.map f) m) :ResultT<'``Monad<'Result<('T -> 'U),'E>>``>

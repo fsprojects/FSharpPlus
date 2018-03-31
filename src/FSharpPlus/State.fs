@@ -45,6 +45,7 @@ type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 [<RequireQualifiedAccess>]
 module StateT =
     let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``
+    let inline hoist (x:State<'S, 'T>) = (StateT << (fun a -> result << a) << State.run) x : StateT<'S, '``Monad<'T * 'S>``>
     let inline map  (f :'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s')))     : StateT<'S,'``Monad<'U * 'S>``>
     let inline apply (StateT f : StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a :StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z, u) -> (g z, u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
     let inline bind (f :'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
