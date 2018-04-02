@@ -805,6 +805,17 @@ module Alternative =
         Assert.AreEqual (v, y)
         Assert.AreEqual (v, z)
 
+    [<Test>]
+    let testOptionTAppliesFunctionOnce() =
+        SideEffects.reset()
+        let x = OptionT <| async { SideEffects.add "hello"; return Some 1 }
+        let y = OptionT <| async { SideEffects.add "good bye"; return Some 2 }
+
+        let z = (x <|> y) |> OptionT.run |> Async.RunSynchronously
+
+        Assert.AreEqual (SideEffects.get(), ["hello"])
+        Assert.AreEqual (z, Some 1)
+
 
 module MonadTransformers =
     let testCompile() =
