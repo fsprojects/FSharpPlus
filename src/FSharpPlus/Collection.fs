@@ -310,13 +310,29 @@ type SortBy =
 
 type Split =
     inherit Default1
-    static member Split (x:seq<'T>      , e:seq<seq<'T>>      , [<Optional>]_impl:Split) = x |> Seq.split e
-    static member Split (x:list<'T>     , e:seq<list<'T>>     , [<Optional>]_impl:Split) = x |> List.split e
-    static member Split (x:'T []        , e:seq<'T []>        , [<Optional>]_impl:Split) = x |> Array.split e
-    static member Split (x:string       , e:seq<string>       , [<Optional>]_impl:Split) = x |> String.split e
-    static member Split (x:StringBuilder, e:seq<StringBuilder>, [<Optional>]_impl:Split) = x.ToString().Split(e |> Seq.map (fun x -> x.ToString()) |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder :> seq<_>
+    
+    static member Split ((e:seq<seq<'T>>      , x:seq<'T>      ), [<Optional>]_impl:Split) = x |> Seq.split e
+    static member Split ((e:array<seq<'T>>    , x:seq<'T>      ), [<Optional>]_impl:Split) = x |> Seq.split e |> Seq.toArray
+    static member Split ((e:list<seq<'T>>     , x:seq<'T>      ), [<Optional>]_impl:Split) = x |> Seq.split e |> Seq.toList
+    static member Split ((e:seq<list<'T>>     , x:list<'T>     ), [<Optional>]_impl:Split) = x |> List.split e
+    static member Split ((e:array<list<'T>>   , x:list<'T>     ), [<Optional>]_impl:Split) = x |> List.split e |> Seq.toArray
+    static member Split ((e:list<list<'T>>    , x:list<'T>     ), [<Optional>]_impl:Split) = x |> List.split e |> Seq.toList
+    static member Split ((e:seq<'T []>        , x:'T []        ), [<Optional>]_impl:Split) = x |> Array.split e
+    static member Split ((e:array<'T []>      , x:'T []        ), [<Optional>]_impl:Split) = x |> Array.split e |> Seq.toArray
+    static member Split ((e:list<'T []>       , x:'T []        ), [<Optional>]_impl:Split) = x |> Array.split e |> Seq.toList
+    static member Split ((e:seq<string>       , x:string       ), [<Optional>]_impl:Split) = x |> String.split e
+    static member Split ((e:array<string>     , x:string       ), [<Optional>]_impl:Split) = x.Split (Seq.toArray e, StringSplitOptions.None)
+    static member Split ((e:list<string>      , x:string       ), [<Optional>]_impl:Split) = x.Split (Seq.toArray e, StringSplitOptions.None) |> Array.toList
+    static member Split ((e:seq<StringBuilder>, x:StringBuilder), [<Optional>]_impl:Split) = x.ToString().Split(e |> Seq.map (fun x -> x.ToString()) |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder :> seq<_>
+    static member Split ((e:StringBuilder []  , x:StringBuilder), [<Optional>]_impl:Split) = x.ToString().Split(e |> Seq.map (fun x -> x.ToString()) |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder
+    static member Split ((e:StringBuilder list, x:StringBuilder), [<Optional>]_impl:Split) = x.ToString().Split(e |> Seq.map (fun x -> x.ToString()) |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder |> Array.toList
  
-    static member inline Invoke (sep: seq<'Collection>) (source: 'Collection) =
-        let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Split: _*_*_ -> _) b, s, a)
+    static member inline Invoke (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection) =
+        let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Split: (_*_)*_ -> _) (s, b), a)
         let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
-        call (Unchecked.defaultof<Split>, source,sep) : seq<'Collection>
+        call (Unchecked.defaultof<Split>, source, sep) : '``'Collection<'OrderedCollection>``
+
+ type Split with
+    static member inline Split ((e:'``'Collection<'OrderedCollection>``, x:'``'OrderedCollection``), [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.split (ToSeq.Invoke e) |> Seq.map OfSeq.Invoke |> OfSeq.Invoke :'``'Collection<'OrderedCollection>``
+    static member inline Split ((e:'``'Collection<'OrderedCollection>``, x:'``'OrderedCollection``), [<Optional>]_impl:Default1) = (^``'OrderedCollection`` : (static member Split: _*_->_) e, x) : '``'Collection<'OrderedCollection>``
+    static member inline Split ((_ : ^t when ^t : null and ^t : struct, _), _mthd : Default1) = id
