@@ -394,7 +394,7 @@ module Operators =
 
     let inline sort                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Sort.Invoke source 
     let inline sortBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
-    let inline split (sep:seq<'Collection>) (source:'Collection) = Split.Invoke sep source : seq<'Collection>
+    let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection)  = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
     let inline toSeq (source:'``Collection<'T>``) = ToSeq.Invoke source  :seq<'T>
 
 
