@@ -1014,6 +1014,7 @@ module Splits =
 
         Assert.IsTrue((toList a1 = toList a2))
         Assert.IsTrue((toList b1 = toList b2))
+        Assert.IsInstanceOf<Option<string []>> (Some a1)
 
     [<Test>]
     let replaceArraysAndStrings() = 
