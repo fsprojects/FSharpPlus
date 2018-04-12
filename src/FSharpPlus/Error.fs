@@ -77,7 +77,7 @@ type ChoiceT<'``monad<'choice<'t,'e>>``> = ChoiceT of '``monad<'choice<'t,'e>>``
 [<RequireQualifiedAccess>]
 module ChoiceT =
     let run (ChoiceT x) = x : '``Monad<'Choice<'T,'E>>``
-    let inline hoist (x:Choice<'TError,'T>) = ChoiceT (result x) : ChoiceT<'``Monad<Choice<'TError,'T>>``>
+    let inline hoist (x:Choice<'T,'TError>) = ChoiceT (result x) : ChoiceT<'``Monad<Choice<'T,'TError>>``>
     let inline bind (f:'T->ChoiceT<'``Monad<'ChoiceT<'U,'E>>``>) (ChoiceT m:ChoiceT<'``Monad<'Choice<'T,'E>>``>) = (ChoiceT (m >>= (fun a -> match a with Choice2Of2 l -> result (Choice2Of2 l) | Choice1Of2 r -> run (f r))))
     let inline apply  (ChoiceT f:ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>) (ChoiceT x:ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT(map Choice.apply f <*> x) : ChoiceT<'``Monad<'Choice<'U,'E>>``>
     let inline map  (f:'T->'U) (ChoiceT m:ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT (map (Choice.map f) m) :ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>
