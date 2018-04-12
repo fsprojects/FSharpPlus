@@ -68,3 +68,60 @@ type ResultT<'``monad<'result<'t,'e>>``> with
 
     static member inline get_Get()  = lift get         : '``ResultT<'MonadState<'S,Result<_,'E>>>``
     static member inline Put (x:'S) = x |> put |> lift : '``ResultT<'MonadState<'S,Result<_,'E>>>``
+
+
+[<RequireQualifiedAccess>]
+module ChoiceError =
+    let map f = function Choice1Of2 x -> Choice1Of2(f x) | Choice2Of2 x -> Choice2Of2 x
+    let apply f x =
+        match (f,x) with
+        | (Choice1Of2 a, Choice1Of2 b) -> Choice1Of2 (a b)
+        | (Choice2Of2 a, _)            -> Choice2Of2 a
+        | (_, Choice2Of2 b)            -> Choice2Of2 b :Choice<'b,'e>
+    let inline result x = Choice1Of2 x
+    let inline throw  x = Choice2Of2 x
+    let inline bind  (f:'t -> Choice<'v,'e>) = function Choice1Of2 v -> f v | Choice2Of2 e -> Choice2Of2 e
+    let inline catch (f:'t -> Choice<'v,'e>) = function Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> f e
+
+
+
+[<Struct>]
+type ChoiceT<'``monad<'choice<'t,'e>>``> = ChoiceT of '``monad<'choice<'t,'e>>``
+
+
+[<RequireQualifiedAccess>]
+module ChoiceT =
+    let run (ChoiceT x) = x : '``Monad<'Choice<'T,'E>>``
+    let inline hoist (x:Choice<'TError,'T>) = ChoiceT (result x) : ChoiceT<'``Monad<Choice<'TError,'T>>``>
+    let inline bind (f:'T->ChoiceT<'``Monad<'ChoiceT<'U,'E>>``>) (ChoiceT m:ChoiceT<'``Monad<'Choice<'T,'E>>``>) = (ChoiceT (m >>= (fun a -> match a with Choice2Of2 l -> result (Choice2Of2 l) | Choice1Of2 r -> run (f r))))
+    let inline apply  (ChoiceT f:ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>) (ChoiceT x:ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT(map ChoiceError.apply f <*> x) : ChoiceT<'``Monad<'Choice<'U,'E>>``>
+    let inline map  (f:'T->'U) (ChoiceT m:ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT (map (ChoiceError.map f) m) :ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>
+
+type ChoiceT<'``monad<'choice<'t,'e>>``> with
+    static member inline Return (x : 'T) = ChoiceT (result (Ok x))                                                                            : ChoiceT<'``Monad<'Choice<'T,'E>>``>
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Map    (x : ChoiceT<'``Monad<'Choice<'T,'E>>``>, f : 'T->'U) = ChoiceT.map f x                                       : ChoiceT<'``Monad<'Choice<'U,'E>>``>
+    static member inline (<*>)  (f : ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>, x : ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT.apply f x: ChoiceT<'``Monad<'Choice<'U,'E>>``>
+    static member inline (>>=)  (x : ChoiceT<'``Monad<'Choice<'T,'E>>``>, f : 'T->ChoiceT<'``Monad<'Choice<'U,'E>>``>)     = ChoiceT.bind f x
+
+    static member inline Lift (x:'``Monad<'T>``) = x |> liftM Ok |> ChoiceT : ChoiceT<'``Monad<Choice<'T,'E>>``>
+
+    static member inline Throw (x:'E) =  x |> Error |> result |> ChoiceT : ChoiceT<'``Monad<Choice<'T,'E>>``>
+    static member inline Catch (ChoiceT x :ChoiceT<'``MonadError<'E1,'T>``>, f: 'E1 -> _) = (ChoiceT (x >>= (fun a -> match a with Error l -> ChoiceT.run (f l) | Ok r -> result (Ok r)))) : ChoiceT<'``Monad<Choice<'T,'E2>>``>
+
+    static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x) : '``ChoiceT<'MonadAsync<'T>>``
+
+    static member inline CallCC (f:('T -> ChoiceT<'``MonadCont<'R,Choice<'U,'E>>``>) -> _) :ChoiceT<'``MonadCont<'R, Choice<'T,'E>>``> = ChoiceT(callCC <| fun c -> ChoiceT.run(f (ChoiceT << c << Ok)))
+
+    static member inline get_Ask () = (ChoiceT << (map Ok)) ask : ChoiceT<'``MonadReader<'R,Choice<'R,'E>>``>
+    static member inline Local (ChoiceT m : ChoiceT<'``MonadReader<'R2,Choice<'R2,'E>>``>, f:'R1->'R2) = ChoiceT (local f m)
+
+    static member inline Tell (w:'Monoid) = w |> tell |> lift : '``ChoiceT<Writer<'Monoid,Choice<unit,'E>>>``
+    static member inline Listen m : ChoiceT<'``MonadWriter<'Monoid,Choice<'T*'Monoid,'E>>``> =
+        let liftError (m, w) = Choice.map (fun x -> (x, w)) m
+        ChoiceT (listen (ChoiceT.run m) >>= (result << liftError))
+
+    static member inline Pass m = ChoiceT (ChoiceT.run m >>= either (map Ok << pass << result) (result << Error)) : ChoiceT<'``MonadWriter<'Monoid,Choice<'T,'E>>``>
+
+    static member inline get_Get()  = lift get         : '``ChoiceT<'MonadState<'S,Choice<_,'E>>>``
+    static member inline Put (x:'S) = x |> put |> lift : '``ChoiceT<'MonadState<'S,Choice<_,'E>>>``
