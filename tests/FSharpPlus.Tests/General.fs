@@ -818,11 +818,11 @@ module Alternative =
 
 
 module MonadTransformers =
-    let testCompile() =
+    let testCompileResultT() =
         // Test MonadError
         let err1Layers   = catch (Error "Invalid Value") (fun s -> Error ["the error was: " + s]) : Result<int, _>
 
-        
+
         let someResultFunction foo = if foo = "foo" then Result.Ok foo else Result.Error "not good"
 
         let doSomeOperation x = ResultT <| async {
@@ -837,6 +837,27 @@ module MonadTransformers =
             </catch/> (fun s -> throw ("The error was: " + s))
 
         let okFoo10 = okFoo10Comp |> ResultT.run |> Async.RunSynchronously
+
+        ()
+    let testCompileChoiceT() =
+        // Test MonadError
+        let err1Layers   = catch (Choice2Of2 "Invalid Value") (fun s -> Choice2Of2 ["the error was: " + s]) : Choice<int, _>
+
+
+        let someErrorFunction foo = if foo = "foo" then Choice1Of2 foo else Choice2Of2 "not good"
+
+        let doSomeOperation x = ChoiceT <| async {
+            if x < 10 then return Choice1Of2 10
+            else return Choice2Of2 "failure"   }
+
+        let okFoo10Comp: ChoiceT<_> =
+            monad {
+                let! resFoo = ChoiceT.hoist <| someErrorFunction "foo"
+                let! res10  = doSomeOperation 0
+                return (resFoo, res10) }
+            </catch/> (fun s -> throw ("The error was: " + s))
+
+        let okFoo10 = okFoo10Comp |> ChoiceT.run |> Async.RunSynchronously
 
         ()
 
