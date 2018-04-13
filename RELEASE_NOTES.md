@@ -1,3 +1,8 @@
+#### 1.0.0-RC3  - April 13 2018
+* Re-introduce Choice based monad transformers with ChoiceT
+* Generic split function is now bigeneric
+* Bug fix in OptionT execution
+
 #### 1.0.0-RC2  - March 31 2018
 * A hoist function was added to some Monad Transformers
 * Bug Fixes
