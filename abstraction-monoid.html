@@ -77,34 +77,34 @@
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
 <li><p><a href="abstraction-semigroup.html">Semigroup</a>: A monoid is a Semigroup with an additional <code>zero</code> operation</p></li>
-<li>
-<p>MonadPlus: Monads that are also Monoids</p>
+<li><p><a href="abstraction-alternative.html">Alternative / MonadPlus</a>: Applicatives/Monads that are also Monoids. Though their monoidal definition could be different.</p></li>
+</ul>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
 <p>From .Net/F#</p>
-</li>
-<li><p><code>list&lt;'T&gt;</code></p></li>
-<li><p><code>option&lt;'T&gt;</code></p></li>
-<li><p><code>array&lt;'T&gt;</code></p></li>
-<li><p><code>string</code></p></li>
-<li><p><code>StringBuilder</code></p></li>
-<li><p><code>unit</code></p></li>
-<li><p><code>Set&lt;'T&gt;</code></p></li>
-<li><p><code>Map&lt;'T,'U&gt;</code></p></li>
-<li><p><code>TimeSpan</code></p></li>
-<li><p><code>'T*'U</code></p></li>
-<li><p><code>'T*'U*'V</code></p></li>
-<li><p><code>'T*'U*'V*'W</code></p></li>
-<li><p><code>'T*'U*'V*'W*'X</code></p></li>
-<li><p><code>Task&lt;'T&gt;</code></p></li>
-<li><p><code>'T-&gt;'Monoid</code></p></li>
-<li><p><code>Async&lt;'T&gt;</code></p></li>
-<li><p><code>Expr&lt;'T&gt;</code></p></li>
-<li><p><code>Lazy&lt;'T&gt;</code></p></li>
-<li><p><code>Dictionary&lt;'T,'U&gt;</code></p></li>
-<li><p><code>IDictionary&lt;'T,'U&gt;</code></p></li>
-<li><p><code>ResizeArray&lt;'T&gt;</code></p></li>
-<li><p><code>seq&lt;'T&gt;</code></p></li>
-<li><p><code>IEnumerator&lt;'T&gt;</code></p></li>
+<ul>
+<li><code>list&lt;'T&gt;</code></li>
+<li><code>option&lt;'T&gt;</code></li>
+<li><code>array&lt;'T&gt;</code></li>
+<li><code>string</code></li>
+<li><code>StringBuilder</code></li>
+<li><code>unit</code></li>
+<li><code>Set&lt;'T&gt;</code></li>
+<li><code>Map&lt;'T,'U&gt;</code></li>
+<li><code>TimeSpan</code></li>
+<li><code>'T*'U</code></li>
+<li><code>'T*'U*'V</code></li>
+<li><code>'T*'U*'V*'W</code></li>
+<li><code>'T*'U*'V*'W*'X</code></li>
+<li><code>Task&lt;'T&gt;</code></li>
+<li><code>'T-&gt;'Monoid</code></li>
+<li><code>Async&lt;'T&gt;</code></li>
+<li><code>Expr&lt;'T&gt;</code></li>
+<li><code>Lazy&lt;'T&gt;</code></li>
+<li><code>Dictionary&lt;'T,'U&gt;</code></li>
+<li><code>IDictionary&lt;'T,'U&gt;</code></li>
+<li><code>ResizeArray&lt;'T&gt;</code></li>
+<li><code>seq&lt;'T&gt;</code></li>
+<li><code>IEnumerator&lt;'T&gt;</code></li>
 </ul>
 <p>From F#+</p>
 <ul>
@@ -283,7 +283,7 @@
 <div class="tip" id="fs43">val resHi : string</div>
 <div class="tip" id="fs44">val resGT : Ordering</div>
 <div class="tip" id="fs45">val resLT : Ordering</div>
-<div class="tip" id="fs46">Multiple items<br />union case Dual.Dual: &#39;t -&gt; Dual&lt;&#39;t&gt;<br /><br />--------------------<br />module Dual<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Dual&lt;&#39;t&gt; =<br />&#160;&#160;| Dual of &#39;t<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Dual&lt;&#39;T&gt; (requires member Zero)<br />&#160;&#160;&#160;&#160;static member ( + ) : Dual&lt;&#39;T&gt; * Dual&lt;&#39;T&gt; -&gt; Dual&lt;&#39;T&gt; (requires member Plus)</div>
+<div class="tip" id="fs46">Multiple items<br />union case Dual.Dual: &#39;t -&gt; Dual&lt;&#39;t&gt;<br /><br />--------------------<br />module Dual<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Dual&lt;&#39;t&gt; =<br />&#160;&#160;| Dual of &#39;t<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Dual&lt;&#39;T&gt; (requires member Zero)<br />&#160;&#160;&#160;&#160;static member ( + ) : Dual&lt;&#39;T&gt; * Dual&lt;&#39;T&gt; -&gt; Dual&lt;&#39;T&gt; (requires member ( + ))</div>
 <div class="tip" id="fs47">[&lt;Struct&gt;]<br />val resBA : Dual&lt;string&gt;</div>
 <div class="tip" id="fs48">val resEl00 : int list * float</div>
 <div class="tip" id="fs49">Multiple items<br />val float : value:&#39;T -&gt; float (requires member op_Explicit)<br /><br />--------------------<br />type float = System.Double<br /><br />--------------------<br />type float&lt;&#39;Measure&gt; = float</div>

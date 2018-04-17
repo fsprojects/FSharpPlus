@@ -321,11 +321,11 @@ Requires only Map</p>
 <div class="tip" id="fs26">val area1 : float</div>
 <div class="tip" id="fs27">val area2 : float32</div>
 <div class="tip" id="fs28">val area3 : decimal</div>
-<div class="tip" id="fs29">Multiple items<br />union case Vector2d.Vector2d: &#39;T * &#39;T -&gt; Vector2d&lt;&#39;T&gt;<br /><br />--------------------<br />type Vector2d&lt;&#39;T&gt; =<br />&#160;&#160;| Vector2d of &#39;T * &#39;T<br />&#160;&#160;&#160;&#160;static member FromBigInt : x:bigint -&gt; Vector2d&lt;&#39;a1&gt; (requires member FromBigInt)<br />&#160;&#160;&#160;&#160;static member Map : Vector2d&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; &#39;a2) -&gt; Vector2d&lt;&#39;a2&gt;<br />&#160;&#160;&#160;&#160;static member Return : x:&#39;a1 -&gt; Vector2d&lt;&#39;a1&gt;<br />&#160;&#160;&#160;&#160;static member ( + ) : Vector2d&lt;&#39;t&gt; * Vector2d&lt;&#39;t&gt; -&gt; Vector2d&lt;&#39;t&gt; (requires member Plus)<br />&#160;&#160;&#160;&#160;static member ( * ) : Vector2d&lt;&#39;t&gt; * Vector2d&lt;&#39;t&gt; -&gt; Vector2d&lt;&#39;t&gt; (requires member ( * ))<br />&#160;&#160;&#160;&#160;static member ( - ) : Vector2d&lt;&#39;t&gt; * Vector2d&lt;&#39;t&gt; -&gt; Vector2d&lt;&#39;t&gt; (requires member ( - ))</div>
-<div class="tip" id="fs30">val a : &#39;t (requires member Plus)</div>
-<div class="tip" id="fs31">val b : &#39;t (requires member Plus)</div>
-<div class="tip" id="fs32">val c : &#39;t (requires member Plus)</div>
-<div class="tip" id="fs33">val d : &#39;t (requires member Plus)</div>
+<div class="tip" id="fs29">Multiple items<br />union case Vector2d.Vector2d: &#39;T * &#39;T -&gt; Vector2d&lt;&#39;T&gt;<br /><br />--------------------<br />type Vector2d&lt;&#39;T&gt; =<br />&#160;&#160;| Vector2d of &#39;T * &#39;T<br />&#160;&#160;&#160;&#160;static member FromBigInt : x:bigint -&gt; Vector2d&lt;&#39;a1&gt; (requires member FromBigInt)<br />&#160;&#160;&#160;&#160;static member Map : Vector2d&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; &#39;a2) -&gt; Vector2d&lt;&#39;a2&gt;<br />&#160;&#160;&#160;&#160;static member Return : x:&#39;a1 -&gt; Vector2d&lt;&#39;a1&gt;<br />&#160;&#160;&#160;&#160;static member ( + ) : Vector2d&lt;&#39;t&gt; * Vector2d&lt;&#39;t&gt; -&gt; Vector2d&lt;&#39;t&gt; (requires member ( + ))<br />&#160;&#160;&#160;&#160;static member ( * ) : Vector2d&lt;&#39;t&gt; * Vector2d&lt;&#39;t&gt; -&gt; Vector2d&lt;&#39;t&gt; (requires member ( * ))<br />&#160;&#160;&#160;&#160;static member ( - ) : Vector2d&lt;&#39;t&gt; * Vector2d&lt;&#39;t&gt; -&gt; Vector2d&lt;&#39;t&gt; (requires member ( - ))</div>
+<div class="tip" id="fs30">val a : &#39;t (requires member ( + ))</div>
+<div class="tip" id="fs31">val b : &#39;t (requires member ( + ))</div>
+<div class="tip" id="fs32">val c : &#39;t (requires member ( + ))</div>
+<div class="tip" id="fs33">val d : &#39;t (requires member ( + ))</div>
 <div class="tip" id="fs34">val a : &#39;t (requires member ( - ))</div>
 <div class="tip" id="fs35">val b : &#39;t (requires member ( - ))</div>
 <div class="tip" id="fs36">val c : &#39;t (requires member ( - ))</div>
@@ -375,10 +375,10 @@ Requires only Map</p>
 <div class="tip" id="fs80">static member Ratio.FromBigInt : x:bigint -&gt; Ratio</div>
 <div class="tip" id="fs81">val some3_2 : &#39;a</div>
 <div class="tip" id="fs82"></div>
-<div class="tip" id="fs83">val quadratic : a:&#39;a -&gt; b:&#39;a -&gt; c:&#39;a -&gt; &#39;b (requires member FromInt32 and member ( - ) and member Plus and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
-<div class="tip" id="fs84">val a : &#39;a (requires member FromInt32 and member ( - ) and member Plus and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
-<div class="tip" id="fs85">val b : &#39;a (requires member FromInt32 and member ( - ) and member Plus and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
-<div class="tip" id="fs86">val c : &#39;a (requires member FromInt32 and member ( - ) and member Plus and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
+<div class="tip" id="fs83">val quadratic : a:&#39;a -&gt; b:&#39;a -&gt; c:&#39;a -&gt; &#39;b (requires member FromInt32 and member ( - ) and member ( + ) and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
+<div class="tip" id="fs84">val a : &#39;a (requires member FromInt32 and member ( - ) and member ( + ) and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
+<div class="tip" id="fs85">val b : &#39;a (requires member FromInt32 and member ( - ) and member ( + ) and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
+<div class="tip" id="fs86">val c : &#39;a (requires member FromInt32 and member ( - ) and member ( + ) and member ( / ) and member ( ~- ) and member Sqrt and member ( * ))</div>
 <div class="tip" id="fs87">val sqrt : x:&#39;a -&gt; &#39;a (requires member Sqrt)</div>
 <div class="tip" id="fs88">val noRes : &#39;a</div>
 <div class="tip" id="fs89">val res30_15 : &#39;a</div>

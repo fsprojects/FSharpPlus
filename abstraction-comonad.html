@@ -39,13 +39,13 @@
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
 <li><p><code>extract s</code></p></li>
-<li><p><code>extend g s</code> / <code>(=&gt;&gt;) x f</code></p></li>
+<li><p><code>extend g s</code> / <code>(=&gt;&gt;) s g</code></p></li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Extract</span> <span class="pn">(</span><span class="id">s</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Comonad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">T</span>
-<span class="k">static</span> <span class="k">member</span> <span class="id">Extend</span> <span class="pn">(</span><span class="id">s</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Comonad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Comonad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">U</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">Applicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
+<span class="k">static</span> <span class="k">member</span> <span class="pn">(</span><span class="o">=&gt;&gt;</span><span class="pn">)</span>   <span class="pn">(</span><span class="id">s</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Comonad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Comonad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">U</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">Applicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -166,7 +166,7 @@
 <div class="tip" id="fs7">val tails : NonEmptyList&lt;NonEmptyList&lt;int&gt;&gt;</div>
 <div class="tip" id="fs8">val duplicate : x:&#39;Comonad&lt;&#39;T&gt; -&gt; &#39;Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt; (requires member Duplicate)</div>
 <div class="tip" id="fs9">val lst&#39; : NonEmptyList&lt;int&gt;</div>
-<div class="tip" id="fs10">val extend : g:(&#39;Comonad&lt;&#39;T&gt; -&gt; &#39;U) -&gt; s:&#39;Comonad&lt;&#39;T&gt; -&gt; &#39;Comonad&lt;&#39;U&gt; (requires member Extend)</div>
+<div class="tip" id="fs10">val extend : g:(&#39;Comonad&lt;&#39;T&gt; -&gt; &#39;U) -&gt; s:&#39;Comonad&lt;&#39;T&gt; -&gt; &#39;Comonad&lt;&#39;U&gt; (requires member ( =&gt;&gt; ))</div>
 <div class="tip" id="fs11">val ct1 : int list list</div>
 <div class="tip" id="fs12">val ct2 : string * (string * int)</div>
 <div class="tip" id="fs13">val ct3 : (string -&gt; string -&gt; int)</div>

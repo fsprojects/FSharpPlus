@@ -55,31 +55,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
-            GetSlice
-          </code>
-          <div class="tip" id="42">
-            <strong>Signature:</strong> int option * int option -&gt; IEnumerable&lt;&#39;T&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L641-641" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>IEnumerable`1.get_GetSlice</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
           <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
             GetSlice
           </code>
           <div class="tip" id="43">
             <strong>Signature:</strong> int option * int option -&gt; IEnumerable&lt;&#39;T&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -98,16 +78,17 @@
             GetSlice
           </code>
           <div class="tip" id="44">
-            <strong>Signature:</strong> int option * int option -&gt; List&lt;&#39;T&gt;<br />
+            <strong>Signature:</strong> int option * int option -&gt; IEnumerable&lt;&#39;T&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L650-650" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L641-641" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           
-              <p>CompiledName: <code>List`1.get_GetSlice</code></p>
+              <p>CompiledName: <code>IEnumerable`1.get_GetSlice</code></p>
         </td>
       </tr>
       <tr>
@@ -133,21 +114,19 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            Sequence(t)
+            GetSlice
           </code>
           <div class="tip" id="46">
-            <strong>Signature:</strong> t:seq&lt;Async&lt;&#39;?18195&gt;&gt; -&gt; Async&lt;seq&lt;&#39;?18195&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?18195          </div>
+            <strong>Signature:</strong> int option * int option -&gt; List&lt;&#39;T&gt;<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L700-700" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L650-650" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Combine all asyncs in one, chaining them in sequence order.</p>
-
-
-              <p>CompiledName: <code>Async`1.Sequence.Static</code></p>
+          
+              <p>CompiledName: <code>List`1.get_GetSlice</code></p>
         </td>
       </tr>
       <tr>
@@ -157,11 +136,11 @@
             Sequence(t)
           </code>
           <div class="tip" id="47">
-            <strong>Signature:</strong> (t:Async&lt;&#39;?18198&gt; list) -&gt; Async&lt;&#39;?18198 list&gt;<br />
-                          <strong>Type parameters:</strong> '?18198          </div>
+            <strong>Signature:</strong> t:seq&lt;Async&lt;&#39;?18869&gt;&gt; -&gt; Async&lt;seq&lt;&#39;?18869&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?18869          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L708-708" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L700-700" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -178,11 +157,11 @@
             Sequence(t)
           </code>
           <div class="tip" id="48">
-            <strong>Signature:</strong> (t:Async&lt;&#39;?18201&gt; array) -&gt; Async&lt;&#39;?18201 array&gt;<br />
-                          <strong>Type parameters:</strong> '?18201          </div>
+            <strong>Signature:</strong> (t:Async&lt;&#39;?18872&gt; list) -&gt; Async&lt;&#39;?18872 list&gt;<br />
+                          <strong>Type parameters:</strong> '?18872          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L715-715" class="github-link">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L708-708" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -199,6 +178,27 @@
             Sequence(t)
           </code>
           <div class="tip" id="49">
+            <strong>Signature:</strong> (t:Async&lt;&#39;?18875&gt; array) -&gt; Async&lt;&#39;?18875 array&gt;<br />
+                          <strong>Type parameters:</strong> '?18875          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L715-715" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Combine all asyncs in one, chaining them in sequence order.</p>
+
+
+              <p>CompiledName: <code>Async`1.Sequence.Static</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
+            Sequence(t)
+          </code>
+          <div class="tip" id="50">
             <strong>Signature:</strong> (t:seq&lt;&#39;T option&gt;) -&gt; seq&lt;&#39;T&gt; option<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
@@ -216,10 +216,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
+          <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
             WhenAll(tasks, ?cancellationToken)
           </code>
-          <div class="tip" id="50">
+          <div class="tip" id="51">
             <strong>Signature:</strong> (tasks:Task&lt;&#39;a&gt; [] * cancellationToken:CancellationToken option) -&gt; Task&lt;&#39;a []&gt;<br />
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
