@@ -20,14 +20,26 @@ Documentation
   <div class="span1"></div>
 </div>
 
-Example
--------
+Example 1
+---------
 
-This example demonstrates using a generic function defined in this sample library.
+This example demonstrates using a function defined in this library.
 
 *)
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 open FSharpPlus
+
+let x = String.replace "old" "new" "Good old days"
+// val x : string = "Good new days"
+
+(**
+
+Example 2
+---------
+
+This example demonstrates using a generic function defined in this library.
+
+*)
 
 map string [|2;3;4;5|]
 // val it : string [] = [|"2"; "3"; "4"; "5"|]
@@ -41,6 +53,7 @@ map string (NonEmptyList.create 2 [3;4;5])
 // val it : NonEmptyList<string> = {Head = "2"; Tail = ["3"; "4"; "5"];}
 
 (**
+
 Some more info
 
 Samples & documentation
