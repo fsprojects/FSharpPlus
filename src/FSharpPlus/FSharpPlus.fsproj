@@ -17,6 +17,7 @@
     <Authors>Gusty</Authors>
     <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gusty/FSharpPlus</PackageProjectUrl>
+    <PackageIconUrl>https://raw.github.com/gusty/FSharpPlus/master/docs/files/img/logo.png</PackageIconUrl>
     <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading
       </PackageTags>
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
