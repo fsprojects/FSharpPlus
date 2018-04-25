@@ -1,0 +1,34 @@
+
+<svg width="556px" height="526px" viewBox="0 0 556 526" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0.5" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.5" offset="100%"></stop>
+        </linearGradient>
+        <path d="M91,111 L91,301 L281,301 L372,392 L0,392 L0,20 L91,111 Z" id="path-2"></path>
+        <path d="M301,281 L301,91 L111,91 L20,0 L392,0 L392,372 L301,281 Z" id="path-3"></path>
+        <path d="M196,176.20101 L170.544156,150.745166 L150.745166,170.544156 L176.20101,196 L150.745166,221.455844 L170.544156,241.254834 L196,215.79899 L221.455844,241.254834 L241.254834,221.455844 L215.79899,196 L241.254834,170.544156 L221.455844,150.745166 L196,176.20101 Z M119,119 L273,119 L273,273 L119,273 L119,119 Z" id="path-4"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-122.000000, -137.000000)">
+            <g id="Group-3" transform="translate(204.000000, 204.000000)">
+                <g id="Group-2" transform="translate(196.000000, 196.000000) rotate(45.000000) translate(-196.000000, -196.000000) ">
+                    <g id="Group">
+                        <g id="Combined-Shape">
+                            <use fill="#3F96C2" xlink:href="#path-2"></use>
+                            <use fill="url(#linearGradient-1)" style="mix-blend-mode: overlay;" xlink:href="#path-2"></use>
+                        </g>
+                        <g id="Combined-Shape">
+                            <use fill="#37C1E0" xlink:href="#path-3"></use>
+                            <use fill="url(#linearGradient-1)" style="mix-blend-mode: overlay;" xlink:href="#path-3"></use>
+                        </g>
+                    </g>
+                    <g id="Combined-Shape">
+                        <use fill="#6BDF83" xlink:href="#path-4"></use>
+                        <use fill="url(#linearGradient-1)" style="mix-blend-mode: soft-light;" xlink:href="#path-4"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
