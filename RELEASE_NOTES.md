@@ -1,3 +1,6 @@
+#### 1.0.0  - April 27 2018
+* Public 1.0.0 release that includes a better architected API and numerous bug fixes
+
 #### 1.0.0-RC3  - April 13 2018
 * Re-introduce Choice based monad transformers with ChoiceT
 * Generic split function is now bigeneric
