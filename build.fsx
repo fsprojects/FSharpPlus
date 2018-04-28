@@ -131,6 +131,7 @@ let vsProjProps = [
      ("Platform", "Any CPU") 
 #endif
      ("Configuration", configuration)
+     ("PackageReleaseNotes", release.Notes |> List.head)
      ("VersionSuffix", nugetVersionSuffix)
      ("VersionPrefix", nugetVersionPrefix)
 ]
