@@ -15,7 +15,7 @@
     <Description>A complete and extensible base library for F#.
       </Description>
     <Authors>Gusty</Authors>
-    <Copyright>Gusty Copyright 2015</Copyright>
+    <Copyright>2012-2018 Gustavo P. Leon (and contributors https://github.com/gusty/FSharpPlus/graphs/contributors)</Copyright>
     <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/gusty/FSharpPlus</PackageProjectUrl>
     <PackageIconUrl>https://raw.github.com/gusty/FSharpPlus/master/docsrc/files/img/logo.png</PackageIconUrl>
