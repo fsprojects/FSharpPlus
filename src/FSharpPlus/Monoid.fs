@@ -45,6 +45,14 @@ type Plus with
                     | Error _, Ok b    -> Ok b
                     | x       , _      -> x
 
+type Plus with
+    static member inline ``+`` (x:Choice<_,_>,y , [<Optional>]_mthd : Plus  ) =
+                    match (x,y) with
+                    | Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (Plus.Invoke a b)
+                    | Choice1Of2 a, Choice2Of2 _ -> Choice1Of2 a
+                    | Choice2Of2 _, Choice1Of2 b -> Choice1Of2 b
+                    | x           , _            -> x
+
 type Plus with 
     static member inline ``+`` ((x1,x2         ), (y1,y2         ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                         ) :'a*'b
 type Plus with 

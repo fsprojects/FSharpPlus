@@ -293,8 +293,9 @@ type Append =
     static member        ``<|>`` (x: 'T seq              , y         , [<Optional>]_mthd: Default2) = Seq.append   x y
     static member inline ``<|>`` (x: '``Alt<'T>``, y: '``Alt<'T>``   , [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member (<|>) : _*_ -> _) x, y) : '``Alt<'T>``
     static member inline ``<|>`` (_: ^t when ^t:null and ^t:struct, _,             _mthd: Default1) = ()
-    static member        ``<|>`` (x: Result<_,_>         , y         , [<Optional>]_mthd: Append  ) = match x with Error _ -> y | xs -> xs
-    static member        ``<|>`` (x: 'T option           , y         , [<Optional>]_mthd: Append  ) = match x with None    -> y | xs -> xs
+    static member        ``<|>`` (x: Result<_,_>         , y         , [<Optional>]_mthd: Append  ) = match x with Error _      -> y | xs -> xs
+    static member        ``<|>`` (x: Choice<_,_>         , y         , [<Optional>]_mthd: Append  ) = match x with Choice2Of2 _ -> y | xs -> xs
+    static member        ``<|>`` (x: 'T option           , y         , [<Optional>]_mthd: Append  ) = match x with None         -> y | xs -> xs
     static member        ``<|>`` (x: 'T list             , y         , [<Optional>]_mthd: Append  ) = x @ y
     static member        ``<|>`` (x: 'T []               , y         , [<Optional>]_mthd: Append  ) = Array.append x y
 
