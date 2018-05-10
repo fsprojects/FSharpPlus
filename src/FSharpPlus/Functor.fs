@@ -293,7 +293,10 @@ type Append =
     static member        ``<|>`` (x: 'T seq              , y         , [<Optional>]_mthd: Default2) = Seq.append   x y
     static member inline ``<|>`` (x: '``Alt<'T>``, y: '``Alt<'T>``   , [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member (<|>) : _*_ -> _) x, y) : '``Alt<'T>``
     static member inline ``<|>`` (_: ^t when ^t:null and ^t:struct, _,             _mthd: Default1) = ()
-    static member        ``<|>`` (x: 'T option           , y         , [<Optional>]_mthd: Append  ) = match x with None -> y | xs -> xs
+    static member inline ``<|>`` (x: Result<_,_>         , y         , [<Optional>]_mthd: Append  ) = match x, y with Ok _        , _ -> x | Error x     , Error y      -> Error      (Plus.Invoke x y) | _, _ -> y
+    static member inline ``<|>`` (x: Choice<_,_>         , y         , [<Optional>]_mthd: Append  ) = match x, y with Choice1Of2 _, _ -> x | Choice2Of2 x, Choice2Of2 y -> Choice1Of2 (Plus.Invoke x y) | _, _ -> y
+    static member inline ``<|>`` (x: Either<_,_>         , y         , [<Optional>]_mthd: Append  ) = match x with Left _ -> y | xs -> xs
+    static member        ``<|>`` (x: 'T option           , y         , [<Optional>]_mthd: Append  ) = match x with None   -> y | xs -> xs
     static member        ``<|>`` (x: 'T list             , y         , [<Optional>]_mthd: Append  ) = x @ y
     static member        ``<|>`` (x: 'T []               , y         , [<Optional>]_mthd: Append  ) = Array.append x y
 
