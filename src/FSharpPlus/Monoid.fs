@@ -37,6 +37,13 @@ type Plus with
                     | (None   , Some b) -> Some b
                     | _                 -> None
 
+type Plus with
+    static member inline ``+`` (x:Result<_,_>,y , [<Optional>]_mthd : Plus  ) =
+                    match (x,y) with
+                    | Ok a   , Ok b    -> Ok (Plus.Invoke a b)
+                    | Ok a   , Error _ -> Ok a
+                    | Error _, Ok b    -> Ok b
+                    | x       , _      -> x
 
 type Plus with 
     static member inline ``+`` ((x1,x2         ), (y1,y2         ), [<Optional>]_mthd : Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                         ) :'a*'b
