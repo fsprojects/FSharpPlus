@@ -72,6 +72,10 @@ type Id0(v:string) =
    let value = v
    member this.getValue = value
 
+type Either<'t,'u> =
+    | Left of 't
+    | Right of 'u
+
 type DmStruct = struct end
 
 
