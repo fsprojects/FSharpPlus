@@ -278,4 +278,16 @@ module Tests=
     let expected = Failure three
     areEqual expected subject
 
- 
+  [<Test>]
+  let testValidateWithExceptions () = 
+    let subject = 
+        fun a b c d -> a + b + c + d
+        <!> Failure (exn "Failure receiving first parameter") 
+        <*> Success 4 
+        <*> Failure (exn "Failure receiving third parameter") 
+        <*> Failure (exn "Failure receiving last parameter")
+    let expected : Validation<exn,int> = Failure ((new AggregateException ([exn "Failure receiving first parameter"; exn "Failure receiving third parameter"; exn "Failure receiving last parameter"])) :> exn)
+    let f = function
+        | Success _ -> failwith "unexpected"
+        | Failure (e: exn) -> (e :?> AggregateException).InnerExceptions |> Seq.map (fun x -> x.Message) |> toList
+    areEqual (f subject) (f expected)

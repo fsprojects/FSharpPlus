@@ -25,7 +25,10 @@ type Plus =
     static member        ``+`` (x:Set<_>       , y                    , [<Optional>]_mthd : Plus    ) = Set.union x y
     static member        ``+`` (x:StringBuilder, y:StringBuilder      , [<Optional>]_mthd : Plus    ) = StringBuilder().Append(x).Append(y)    
     static member        ``+`` (x:AggregateException, y:AggregateException, [<Optional>]_mthd : Plus    ) = new AggregateException (seq {yield! x.InnerExceptions; yield! y.InnerExceptions})
-    static member        ``+`` (_:Id0               , _:Id0               , [<Optional>]_mthd : Plus    ) = Id0 ""
+    static member        ``+`` (_:Id0               , _:Id0               , [<Optional>]_mthd : Plus    ) = Id0 ""    
+    static member        ``+`` (x:exn               , y:exn               , [<Optional>]_mthd : Plus    ) =
+        let f (e:exn) = match e with :? AggregateException as a -> a.InnerExceptions :> seq<_> | _ -> Seq.singleton e
+        new AggregateException (seq {yield! f x; yield! f y}) :> exn
 
     static member inline Invoke (x:'Plus) (y:'Plus)  : 'Plus =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member ``+``: _*_*_ -> _) input1, input2, mthd)
