@@ -14,7 +14,9 @@ module Operators =
     let inline uncurry f (x, y) = f x y
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
+    /// Case analysis for the Result type. If the value is Ok a, apply the first function to a; if it is Error b, apply the second function to b.
     let inline either f g = function Ok x   -> f x | Error x -> g x
+    /// The option function takes a function, a default value and a option value. If the option value is None, the function returns the default value. Otherwise, it applies the function to the value inside Some and returns the result.
     let inline option f n = function Some x -> f x | None    -> n
     let inline tuple2 a b             = a,b
     let inline tuple3 a b c           = a,b,c
