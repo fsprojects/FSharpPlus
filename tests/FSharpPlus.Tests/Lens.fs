@@ -8,12 +8,12 @@ open FsCheck
 open Helpers
 [<Test>]
 let ok_prism() =
-  areEqual (None) (preview _Ok (Error None))
+  areEqual (None) (preview _Ok (Error 1))
   areEqual (Some 1) (preview _Ok (Ok 1))
 
 [<Test>]
 let error_prism() =
-  areEqual (Some None) (preview _Error (Error None))
+  areEqual (Some 1) (preview _Error (Error 1))
   areEqual (None) (preview _Error (Ok 1))
 
 [<Test>]
@@ -23,5 +23,5 @@ let some_prism() =
 
 [<Test>]
 let none_prism() =
-  areEqual (Some None) (preview _None None)
+  areEqual (Some ()) (preview _None None)
   areEqual (None) (preview _None (Some 1))
