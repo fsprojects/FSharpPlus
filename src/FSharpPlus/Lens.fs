@@ -39,9 +39,7 @@ module Lens =
 
     /// Build a Prism using Result instead of Option to permit the types of 's and 't to differ.
     let inline prism (bt:'b->'t) (seta:'s->Result<'a,'t>) = dimap seta (either (map bt) result) << (fun g -> either (Ok << g) Error)
-    //let inline prism (bt:'b->'t) (seta:'s->Result<'t, 'a>) = dimap seta (either (map bt) result) << (fun g -> either (Ok << g) Error)
     let inline prism' (bs:'b->'s) (sma:'s->Option<'a>) = prism bs (fun s -> option Ok (Error s) (sma s))
-    //let inline prism' (bs:'b->'a) (sma:'s->Option<'a>) = prism bs (fun s -> option Ok (Error s) (sma s))
 
     /// Build an iso from a pair of inverse functions.
     let inline iso (sa:'s->'a) (bt:'b->'t) = dimap sa (map bt)
@@ -73,7 +71,6 @@ module Lens =
     let inline _Error x = (prism Error <| either (Error << Ok) Ok) x
     let inline _Some x = (prism Some <| option Ok (Error None)) x
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
-    //let inline _None x = (prism (konst None) <| option (konst (Error None)) (Ok None)) x
 
     // Traversal
     let inline _all ref f s =
