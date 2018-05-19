@@ -5,10 +5,12 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helpers.fs" />
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="ComputationExpressions.fs" />
+    <Compile Include="Lens.fs" />
     <None Include="paket.references" />
     <Content Include="App.config" />
   </ItemGroup>
