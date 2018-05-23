@@ -6,9 +6,6 @@ open FSharpPlus.Data
 open FSharpPlus.Control
 open NUnit.Framework
 
-module Helpers =
-    let areEqual (x:'t) (y:'t) = Assert.AreEqual (x, y)
-
 module SideEffects =
     let private effects = ResizeArray<string> []
     let reset() = effects.Clear()

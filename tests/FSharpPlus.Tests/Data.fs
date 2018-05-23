@@ -4,11 +4,9 @@ open System
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
+open FSharpPlus.Tests
 open NUnit.Framework
 open FsCheck
-
-module Helpers =
-    let areEqual (x:'t) (y:'t) = Assert.AreEqual (x, y)
 
 module DList=
     open FSharpPlus.Data.DList
