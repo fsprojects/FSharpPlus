@@ -16,6 +16,9 @@ type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq    (WrappedListA lst) = List.toSeq lst
     static member OfSeq  lst = WrappedListA (Seq.toList lst)
     static member TryItem (i, WrappedListA x) = List.tryItem i x
+    static member TryParse x =
+        if x = "[1;2;3]" then Some (WrappedListA [1;2;3])
+        else None
 
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return   (x) = WrappedListB [x]
@@ -1111,7 +1114,13 @@ module Parsing =
         let r120 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;|]                + 100
         let r121 = parse "121" : string
         let r122 = parse "122" : Text.StringBuilder
-        ()
+        
+        let (r66: float option) = tryParse "66.0"
+        Assert.IsTrue((r66 = Some 66.0))
+
+        let (r123: WrappedListA<int> option) = tryParse "[1;2;3]"
+        Assert.IsTrue((r123 = Some (WrappedListA [1; 2; 3])))
+
 
 module Conversions =
     let test =

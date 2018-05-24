@@ -79,10 +79,18 @@ type ToBytes =
 open System.Globalization
 
 type TryParse =
-    static member inline TryParse (_:'R, _:TryParse) = fun x ->
-        let mutable r = Unchecked.defaultof< ^R>
-        if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
+    inherit Default1
 
+    static member TryParse (_:decimal       , _:TryParse) = fun x -> Decimal.TryParse (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<decimal>
+    static member TryParse (_:float32       , _:TryParse) = fun x -> Single.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float32>
+    static member TryParse (_:float         , _:TryParse) = fun x -> Double.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float>
+    static member TryParse (_:uint16        , _:TryParse) = fun x -> UInt16.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<uint16>
+    static member TryParse (_:uint32        , _:TryParse) = fun x -> UInt32.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<uint32>
+    static member TryParse (_:uint64        , _:TryParse) = fun x -> UInt64.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<uint64>
+    static member TryParse (_:int16         , _:TryParse) = fun x -> Int16.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int16>
+    static member TryParse (_:int           , _:TryParse) = fun x -> Int32.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int>
+    static member TryParse (_:int64         , _:TryParse) = fun x -> Int64.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int64>
+    
     static member TryParse (_:string        , _:TryParse) = fun x -> Some x                             :option<string>
     static member TryParse (_:StringBuilder , _:TryParse) = fun x -> Some (new StringBuilder(x:string)) :option<StringBuilder>
     static member TryParse (_:DateTime      , _:TryParse) = fun x -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
@@ -92,6 +100,14 @@ type TryParse =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member TryParse: _*_ -> _) b, a)
         let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r option
         call Unchecked.defaultof<TryParse> value
+
+type TryParse with
+    static member inline TryParse (_:'R, _:Default2) = fun x ->
+        let mutable r = Unchecked.defaultof< ^R>
+        if (^R: (static member TryParse: _ * _ -> _) (x, &r)) then Some r else None
+
+    static member inline TryParse (_:^t when ^t: null and ^t: struct, _:Default1) = id
+    static member inline TryParse (_:'R, _:Default1) = fun x -> (^R: (static member TryParse: string -> 'R option) x)
 
 
 type Parse =
