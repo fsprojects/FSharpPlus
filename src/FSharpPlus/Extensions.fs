@@ -231,9 +231,10 @@ module Dict =
 
     let map2 f (x: IDictionary<'Key, 'T1>) (y: IDictionary<'Key, 'T2>) =
            let dct = Dictionary<'Key, 'U> ()
+           let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
            for KeyValue(k, vx) in x do
                match tryGetValue k y with
-               | Some vy -> dct.Add (k, f vx vy)
+               | Some vy -> dct.Add (k, f.Invoke (vx, vy))
                | None    -> ()
            dct :> IDictionary<'Key, 'U>
 

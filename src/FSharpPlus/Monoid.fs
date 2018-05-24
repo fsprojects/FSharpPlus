@@ -83,8 +83,9 @@ type Plus with
 
     static member inline ``+`` (x:Dictionary<'Key,'Value>, y:Dictionary<'Key,'Value>, [<Optional>]_mthd : Plus    ) =
                     let d = Dictionary<'Key,'Value>()
+                    let plus = OptimizedClosures.FSharpFunc<_,_,_>.Adapt Plus.Invoke
                     for KeyValue(k, v ) in x do d.[k] <- v
-                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Plus.Invoke v v' | _ -> v'
+                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> plus.Invoke (v, v') | _ -> v'
                     d
 
     static member inline ``+`` (f:'T->'Monoid, g:'T->'Monoid, [<Optional>]_mthd : Plus    ) = (fun x -> Plus.Invoke (f x) (g x)) :'T->'Monoid
@@ -104,10 +105,11 @@ type Plus with
     static member        ``+`` (x:_ IObservable, y              , [<Optional>]_mthd : Default3) = Observable.merge x y
     static member        ``+`` (x:_ seq        , y              , [<Optional>]_mthd : Default3) = Seq.append x y
     static member        ``+`` (x:_ IEnumerator, y              , [<Optional>]_mthd : Default3) = FSharpPlus.Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator()
-    static member inline ``+`` (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>, [<Optional>]_mthd : Default3) =
+    static member inline ``+`` (x:IDictionary<'Key,'Value>, y:IDictionary<'Key,'Value>, [<Optional>]_mthd : Default3) =                    
                     let d = Dictionary<'Key,'Value>()
+                    let plus = OptimizedClosures.FSharpFunc<_,_,_>.Adapt Plus.Invoke
                     for KeyValue(k, v ) in x do d.[k] <- v
-                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> Plus.Invoke v v' | _ -> v'
+                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> plus.Invoke (v, v') | _ -> v'
                     d :> IDictionary<'Key,'Value>
 
 
@@ -116,16 +118,18 @@ type Sum =
     inherit Default1
     static member inline Sum (x:seq<Dictionary<'a,'b>>, [<Optional>]_output:Dictionary<'a,'b>, [<Optional>]_impl:Sum) =
                     let dct = Dictionary<'a,'b>()
+                    let plus = OptimizedClosures.FSharpFunc<_,_,_>.Adapt Plus.Invoke
                     for d in x do
                         for KeyValue(k, u) in d do
-                            dct.[k] <- match dct.TryGetValue k with true, v -> Plus.Invoke v u | _ -> u
+                            dct.[k] <- match dct.TryGetValue k with true, v -> plus.Invoke (v, u) | _ -> u
                     dct
 
     static member inline Sum (x:seq<IDictionary<'a,'b>>, [<Optional>]_output:IDictionary<'a,'b>, [<Optional>]_impl:Sum) =
                     let dct = Dictionary<'a,'b>()
+                    let plus = OptimizedClosures.FSharpFunc<_,_,_>.Adapt Plus.Invoke
                     for d in x do
                         for KeyValue(k, u) in d do
-                            dct.[k] <- match dct.TryGetValue k with true, v -> Plus.Invoke v u | _ -> u
+                            dct.[k] <- match dct.TryGetValue k with true, v -> plus.Invoke (v, u) | _ -> u
                     dct :> IDictionary<'a,'b>
 
     static member inline Sum (x:seq<ResizeArray<'a>>, [<Optional>]_output:'a ResizeArray, [<Optional>]_impl:Sum) = ResizeArray (Seq.concat x)

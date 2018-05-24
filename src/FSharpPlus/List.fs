@@ -10,8 +10,9 @@ module List =
     let inline traverse (f:'T->'``Applicative<'U>``) (xs:list<'T>) :'``Applicative<list<'U>>`` = traverse f xs
     
     let inline foldM (f:'T->'U->'``Monad<'T>``) (a:'T) (bx:list<'U>) : '``Monad<'T>`` =
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         let rec loopM a = function
-            | x::xs -> (f a x) >>= fun fax -> loopM fax xs 
+            | x::xs -> (f.Invoke (a, x)) >>= fun fax -> loopM fax xs 
             | [] -> result a
         loopM a bx
 

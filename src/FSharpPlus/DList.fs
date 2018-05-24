@@ -63,10 +63,11 @@ type DList<'T>(length : int , data : DListData<'T> ) =
 
     // making only a small adjustment to Ramsey's algorithm we get a left to right fold
     static member  fold (f : ('State -> 'T -> 'State)) (state : 'State) (l:DList<'T>)  =
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         let rec walk rights l xs =
             match l with
             | Nil       -> finish rights xs
-            | Unit x    -> finish rights <| f xs x
+            | Unit x    -> finish rights <| f.Invoke (xs, x)
             | Join(x,y) -> walk (y::rights) x xs
         and finish rights xs =
             match rights with
