@@ -25,7 +25,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
@@ -119,7 +119,7 @@
 -  <code>StringBuilder</code>
 -  <code>Set&lt;'T&gt;</code>
 -  <code>IEnumerator&lt;'T&gt;</code>
-<a href="https://github.com/gusty/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -296,7 +296,7 @@
 <div class="tip" id="fs34">val t : Tree&lt;&#39;a&gt;</div>
 <div class="tip" id="fs35">val t1 : Tree&lt;&#39;a&gt;</div>
 <div class="tip" id="fs36">val t2 : Tree&lt;&#39;a&gt;</div>
-<div class="tip" id="fs37">Multiple items<br />static member Tree.Map : x:Tree&lt;&#39;a0&gt; * f:(&#39;a0 -&gt; &#39;b) -&gt; Tree&lt;&#39;b&gt;<br /><br />--------------------<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;override Equals : obj -&gt; bool<br />&#160;&#160;member Remove : key:&#39;Key -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="tip" id="fs37">Multiple items<br />static member Tree.Map : x:Tree&lt;&#39;a0&gt; * f:(&#39;a0 -&gt; &#39;b) -&gt; Tree&lt;&#39;b&gt;<br /><br />--------------------<br />module Map<br /><br />from FSharpPlus<br /><br />--------------------<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;override Equals : obj -&gt; bool<br />&#160;&#160;member Remove : key:&#39;Key -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="tip" id="fs38">val x : Tree&lt;&#39;a&gt;</div>
 <div class="tip" id="fs39">val f : (&#39;a -&gt; &#39;b)</div>
 <div class="tip" id="fs40">val myTree : Tree&lt;int&gt;</div>
@@ -324,7 +324,7 @@
             <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
             <li><a href="/FSharpPlus/license.html">License</a></li>
             <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
@@ -338,6 +338,6 @@
         </div>
       </div>
     </div>
-    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>

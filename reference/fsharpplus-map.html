@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Tell - FSharpPlus</title>
+    <title>Map - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,30 +35,71 @@
 
 
 
-<h1>Tell</h1>
+<h1>Map</h1>
 <p>
-  <span>Namespace: FSharpPlus.Control</span><br />
+  <span>Namespace: FSharpPlus</span><br />
 </p>
 <div class="xmldoc">
+<p>Additional operations on Map<'Key, 'Value></p>
+
 </div>
-  <h3>Static members</h3>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1240', 1240)" onmouseover="showTip(event, '1240', 1240)">
-            Invoke(w)
+          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
+            mapValues(f x)
           </code>
-          <div class="tip" id="1240">
-            <strong>Signature:</strong> w:&#39;Monoid -&gt; ^MonadWriter&lt;&#39;Monoid,unit&gt;<br />
-                          <strong>Type parameters:</strong> 'Monoid, ^MonadWriter<'Monoid,unit>          </div>
+          <div class="tip" id="98">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;?18794) -&gt; x:Map&lt;&#39;Key,&#39;T&gt; -&gt; Map&lt;&#39;Key,&#39;?18794&gt;<br />
+                          <strong>Type parameters:</strong> 'T, '?18794, 'Key          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/MonadTrans.fs#L66-66" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L220-220" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
+            mapValues2(f x y)
+          </code>
+          <div class="tip" id="99">
+            <strong>Signature:</strong> f:(&#39;T1 -&gt; &#39;T2 -&gt; &#39;?18799) -&gt; x:Map&lt;&#39;Key,&#39;T1&gt; -&gt; y:Map&lt;&#39;Key,&#39;T2&gt; -&gt; Map&lt;&#39;Key,&#39;?18799&gt;<br />
+                          <strong>Type parameters:</strong> 'T1, 'T2, '?18799, 'Key          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L222-222" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
+            zip(x y)
+          </code>
+          <div class="tip" id="100">
+            <strong>Signature:</strong> x:Map&lt;&#39;Key,&#39;T1&gt; -&gt; y:Map&lt;&#39;Key,&#39;T2&gt; -&gt; Map&lt;&#39;Key,(&#39;T1 * &#39;T2)&gt;<br />
+                          <strong>Type parameters:</strong> 'Key, 'T1, 'T2          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L229-229" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Tell - FSharpPlus</title>
+    <title>Either<'t, 'u> - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,30 +35,48 @@
 
 
 
-<h1>Tell</h1>
+<h1>Either<'t, 'u></h1>
 <p>
-  <span>Namespace: FSharpPlus.Control</span><br />
+  <span>Namespace: FSharpPlus.Internals</span><br />
 </p>
 <div class="xmldoc">
 </div>
-  <h3>Static members</h3>
+  <h3>Union Cases</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
+      <tr><td>Union Case</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1240', 1240)" onmouseover="showTip(event, '1240', 1240)">
-            Invoke(w)
+          <code onmouseout="hideTip(event, '1726', 1726)" onmouseover="showTip(event, '1726', 1726)">
+            Left(&#39;t)
           </code>
-          <div class="tip" id="1240">
-            <strong>Signature:</strong> w:&#39;Monoid -&gt; ^MonadWriter&lt;&#39;Monoid,unit&gt;<br />
-                          <strong>Type parameters:</strong> 'Monoid, ^MonadWriter<'Monoid,unit>          </div>
+          <div class="tip" id="1726">
+            <strong>Signature:</strong> &#39;t<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/MonadTrans.fs#L66-66" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Internals.fs#L76-76" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1727', 1727)" onmouseover="showTip(event, '1727', 1727)">
+            Right(&#39;u)
+          </code>
+          <div class="tip" id="1727">
+            <strong>Signature:</strong> &#39;u<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Internals.fs#L77-77" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

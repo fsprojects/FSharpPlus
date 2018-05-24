@@ -24,7 +24,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
@@ -45,7 +45,7 @@ the 'Applicative' instance for 'Validation' /accumulates/ errors using a 'Semigr
 In contrast, the Applicative for 'Result' returns only the first error.</p>
 <p>A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
 that would violate monad rules.</p>
-<p>An example of typical usage can be found <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Samples/Validations.fsx">here</a>.</p>
+<p>An example of typical usage can be found <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples/Validations.fsx">here</a>.</p>
 
 </div>
   <h3>Union Cases</h3>
@@ -57,15 +57,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1506', 1506)" onmouseover="showTip(event, '1506', 1506)">
+          <code onmouseout="hideTip(event, '1657', 1657)" onmouseover="showTip(event, '1657', 1657)">
             Failure(&#39;err)
           </code>
-          <div class="tip" id="1506">
+          <div class="tip" id="1657">
             <strong>Signature:</strong> &#39;err<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L20-20" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L20-20" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -75,15 +75,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1507', 1507)" onmouseover="showTip(event, '1507', 1507)">
+          <code onmouseout="hideTip(event, '1658', 1658)" onmouseover="showTip(event, '1658', 1658)">
             Success(&#39;a)
           </code>
-          <div class="tip" id="1507">
+          <div class="tip" id="1658">
             <strong>Signature:</strong> &#39;a<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L21-21" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L21-21" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -101,15 +101,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1508', 1508)" onmouseover="showTip(event, '1508', 1508)">
+          <code onmouseout="hideTip(event, '1659', 1659)" onmouseover="showTip(event, '1659', 1659)">
             ( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="1508">
+          <div class="tip" id="1659">
             <strong>Signature:</strong> (f:Validation&lt;^?7805,(&#39;T -&gt; &#39;U)&gt; * x:Validation&lt;^?7805,&#39;T&gt;) -&gt; Validation&lt;^?7805,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L132-132" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L132-132" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -120,15 +120,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1509', 1509)" onmouseover="showTip(event, '1509', 1509)">
+          <code onmouseout="hideTip(event, '1660', 1660)" onmouseover="showTip(event, '1660', 1660)">
             ( &lt;|&gt; )(x, y)
           </code>
-          <div class="tip" id="1509">
+          <div class="tip" id="1660">
             <strong>Signature:</strong> (x:Validation&lt;^?7816,&#39;?7817&gt; * y:Validation&lt;^?7816,&#39;?7817&gt;) -&gt; Validation&lt;^?7816,&#39;?7817&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L136-136" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L136-136" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -139,15 +139,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1510', 1510)" onmouseover="showTip(event, '1510', 1510)">
+          <code onmouseout="hideTip(event, '1661', 1661)" onmouseover="showTip(event, '1661', 1661)">
             Bimap(x, f, g)
           </code>
-          <div class="tip" id="1510">
+          <div class="tip" id="1661">
             <strong>Signature:</strong> (x:Validation&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U) * g:(&#39;V -&gt; &#39;W)) -&gt; Validation&lt;&#39;U,&#39;W&gt;<br />
                           <strong>Type parameters:</strong> 'U, 'W          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L143-143" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L143-143" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -157,15 +157,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1511', 1511)" onmouseover="showTip(event, '1511', 1511)">
+          <code onmouseout="hideTip(event, '1662', 1662)" onmouseover="showTip(event, '1662', 1662)">
             get_Empty()
           </code>
-          <div class="tip" id="1511">
+          <div class="tip" id="1662">
             <strong>Signature:</strong> unit -&gt; Validation&lt;^?7811,&#39;?7812&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L135-135" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L135-135" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -175,15 +175,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1512', 1512)" onmouseover="showTip(event, '1512', 1512)">
+          <code onmouseout="hideTip(event, '1663', 1663)" onmouseover="showTip(event, '1663', 1663)">
             Map(x, f)
           </code>
-          <div class="tip" id="1512">
+          <div class="tip" id="1663">
             <strong>Signature:</strong> (x:Validation&lt;&#39;?7821,&#39;?7822&gt; * f:(&#39;?7822 -&gt; &#39;?7823)) -&gt; Validation&lt;&#39;?7821,&#39;?7823&gt;<br />
                           <strong>Type parameters:</strong> '?7823          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L140-140" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L140-140" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -193,15 +193,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1513', 1513)" onmouseover="showTip(event, '1513', 1513)">
+          <code onmouseout="hideTip(event, '1664', 1664)" onmouseover="showTip(event, '1664', 1664)">
             Return(x)
           </code>
-          <div class="tip" id="1513">
+          <div class="tip" id="1664">
             <strong>Signature:</strong> x:&#39;?7800 -&gt; Validation&lt;&#39;?7801,&#39;?7800&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L131-131" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L131-131" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -211,15 +211,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1514', 1514)" onmouseover="showTip(event, '1514', 1514)">
+          <code onmouseout="hideTip(event, '1665', 1665)" onmouseover="showTip(event, '1665', 1665)">
             Traverse(t, f)
           </code>
-          <div class="tip" id="1514">
+          <div class="tip" id="1665">
             <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;a -&gt; ^b)) -&gt; ^c<br />
                           <strong>Type parameters:</strong> '?7836, '?7837, '?7838          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/gusty/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L146-146" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L146-146" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -237,7 +237,7 @@ that would violate monad rules.</p>
             <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
             <li><a href="/FSharpPlus/license.html">License</a></li>
             <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
@@ -251,6 +251,6 @@ that would violate monad rules.</p>
         </div>
       </div>
     </div>
-    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>

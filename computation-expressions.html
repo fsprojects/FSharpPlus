@@ -25,7 +25,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
@@ -130,13 +130,13 @@ F# comes with async and seq computation expressions, both are delayed.</p>
     <span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 34)" onmouseover="showTip(event, 'fs18', 34)" class="id">defaultValue</span> <span class="o">=</span> <span class="n">42</span>
     <span class="k">let</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="mv">i</span> <span class="o">=</span> <span class="n">0</span>
     <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs15', 36)" onmouseover="showTip(event, 'fs15', 36)" class="uc">None</span>
-    <span class="k">while</span> <span onmouseout="hideTip(event, 'fs19', 37)" onmouseover="showTip(event, 'fs19', 37)" class="mv">i</span> <span class="o">&lt;</span> <span class="n">5</span> <span class="k">do</span>
-        <span onmouseout="hideTip(event, 'fs4', 38)" onmouseover="showTip(event, 'fs4', 38)" class="fn">printfn</span> <span class="s">&quot;looping </span><span class="pf">%i</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs19', 39)" onmouseover="showTip(event, 'fs19', 39)" class="mv">i</span>
-        <span onmouseout="hideTip(event, 'fs19', 40)" onmouseover="showTip(event, 'fs19', 40)" class="mv">i</span> <span class="k">&lt;-</span> <span onmouseout="hideTip(event, 'fs19', 41)" onmouseover="showTip(event, 'fs19', 41)" class="mv">i</span> <span class="o">+</span> <span class="n">1</span>
-        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs14', 42)" onmouseover="showTip(event, 'fs14', 42)" class="id">lst</span><span class="pn">.</span><span class="pn">[</span><span onmouseout="hideTip(event, 'fs19', 43)" onmouseover="showTip(event, 'fs19', 43)" class="mv">i</span><span class="pn">]</span>
-    <span onmouseout="hideTip(event, 'fs4', 44)" onmouseover="showTip(event, 'fs4', 44)" class="fn">printfn</span> <span class="s">&quot;halfway&quot;</span>
-    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs15', 45)" onmouseover="showTip(event, 'fs15', 45)" class="uc">None</span>
-    <span onmouseout="hideTip(event, 'fs4', 46)" onmouseover="showTip(event, 'fs4', 46)" class="fn">printfn</span> <span class="s">&quot;near the end&quot;</span>
+    <span class="k">while</span> <span onmouseout="hideTip(event, 'fs19', 37)" onmouseover="showTip(event, 'fs19', 37)" class="id">i</span> <span class="pn">&lt;</span> <span class="n">5</span> <span class="k">do</span>
+        <span onmouseout="hideTip(event, 'fs4', 38)" onmouseover="showTip(event, 'fs4', 38)" class="id">printfn</span> <span class="s">&quot;looping %i&quot;</span> <span onmouseout="hideTip(event, 'fs19', 39)" onmouseover="showTip(event, 'fs19', 39)" class="id">i</span>
+        <span onmouseout="hideTip(event, 'fs19', 40)" onmouseover="showTip(event, 'fs19', 40)" class="id">i</span> <span class="k">&lt;-</span> <span onmouseout="hideTip(event, 'fs19', 41)" onmouseover="showTip(event, 'fs19', 41)" class="id">i</span> <span class="o">+</span> <span class="n">1</span>
+        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs14', 42)" onmouseover="showTip(event, 'fs14', 42)" class="id">lst</span><span class="pn">.</span><span class="pn">[</span><span onmouseout="hideTip(event, 'fs19', 43)" onmouseover="showTip(event, 'fs19', 43)" class="id">i</span><span class="pn">]</span>
+    <span onmouseout="hideTip(event, 'fs4', 44)" onmouseover="showTip(event, 'fs4', 44)" class="id">printfn</span> <span class="s">&quot;halfway&quot;</span>
+    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs15', 45)" onmouseover="showTip(event, 'fs15', 45)" class="id">None</span>
+    <span onmouseout="hideTip(event, 'fs4', 46)" onmouseover="showTip(event, 'fs4', 46)" class="id">printfn</span> <span class="s">&quot;near the end&quot;</span>
     <span class="k">return</span> <span onmouseout="hideTip(event, 'fs18', 47)" onmouseover="showTip(event, 'fs18', 47)" class="id">defaultValue</span> <span class="pn">}</span>
 
 <span class="c">// val maybeManyTimes : int option = Some 2</span>
@@ -159,7 +159,7 @@ F# comes with async and seq computation expressions, both are delayed.</p>
 <div class="tip" id="fs13">val incr : cell:int ref -&gt; unit</div>
 <div class="tip" id="fs14">val lst : int option list</div>
 <div class="tip" id="fs15">union case Option.None: Option&lt;&#39;T&gt;</div>
-<div class="tip" id="fs16">val maybeManyTimes : int option</div>
+<div class="tip" id="fs16">val maybeManyTimes : obj option</div>
 <div class="tip" id="fs17">property MonadFxBuilder.plus&#39;: MonadPlusStrictBuilder</div>
 <div class="tip" id="fs18">val defaultValue : int</div>
 <div class="tip" id="fs19">val mutable i : int</div>
@@ -172,7 +172,7 @@ F# comes with async and seq computation expressions, both are delayed.</p>
             <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
             <li><a href="/FSharpPlus/license.html">License</a></li>
             <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
@@ -186,6 +186,6 @@ F# comes with async and seq computation expressions, both are delayed.</p>
         </div>
       </div>
     </div>
-    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>

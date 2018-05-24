@@ -25,7 +25,7 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/gusty/FSharpPlus">github page</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
         </ul>
         <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
       </div>
@@ -758,7 +758,7 @@ A: Yes, they are, and this is the general definition of <code>map</code> based o
 <div class="tip" id="fs14">val map : f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)</div>
 <div class="tip" id="fs15">val x : &#39;a (requires member ( + ))</div>
 <div class="tip" id="fs16">Multiple items<br />union case Id.Id: &#39;t -&gt; Id&lt;&#39;t&gt;<br /><br />--------------------<br />type Id&lt;&#39;t&gt; =<br />&#160;&#160;| Id of &#39;t<br />&#160;&#160;&#160;&#160;static member Map : Id&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;b) -&gt; Id&lt;&#39;b&gt;</div>
-<div class="tip" id="fs17">Multiple items<br />static member Id.Map : Id&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;b) -&gt; Id&lt;&#39;b&gt;<br /><br />--------------------<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;override Equals : obj -&gt; bool<br />&#160;&#160;member Remove : key:&#39;Key -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="tip" id="fs17">Multiple items<br />static member Id.Map : Id&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;b) -&gt; Id&lt;&#39;b&gt;<br /><br />--------------------<br />module Map<br /><br />from FSharpPlus<br /><br />--------------------<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;override Equals : obj -&gt; bool<br />&#160;&#160;member Remove : key:&#39;Key -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="tip" id="fs18">val x : &#39;a</div>
 <div class="tip" id="fs19">val f : (&#39;a -&gt; &#39;b)</div>
 <div class="tip" id="fs20">val async5 : Async&lt;int&gt;</div>
@@ -894,7 +894,7 @@ A: Yes, they are, and this is the general definition of <code>map</code> based o
 <div class="tip" id="fs150">val r29&#39; : string list</div>
 <div class="tip" id="fs151">val r30 : int list</div>
 <div class="tip" id="fs152">val f : Map&lt;&#39;k,(&#39;a -&gt; &#39;b)&gt; (requires comparison)</div>
-<div class="tip" id="fs153">Multiple items<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;override Equals : obj -&gt; bool<br />&#160;&#160;member Remove : key:&#39;Key -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="tip" id="fs153">Multiple items<br />module Map<br /><br />from FSharpPlus<br /><br />--------------------<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;override Equals : obj -&gt; bool<br />&#160;&#160;member Remove : key:&#39;Key -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="tip" id="fs154">val x : Map&lt;&#39;k,&#39;a&gt; (requires comparison)</div>
 <div class="tip" id="fs155">active recognizer KeyValue: System.Collections.Generic.KeyValuePair&lt;&#39;Key,&#39;Value&gt; -&gt; &#39;Key * &#39;Value</div>
 <div class="tip" id="fs156">val k : &#39;k (requires comparison)</div>
@@ -935,7 +935,7 @@ A: Yes, they are, and this is the general definition of <code>map</code> based o
             <li><a href="/FSharpPlus/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/gusty/FSharpPlus">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
             <li><a href="/FSharpPlus/license.html">License</a></li>
             <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
             
@@ -949,6 +949,6 @@ A: Yes, they are, and this is the general definition of <code>map</code> based o
         </div>
       </div>
     </div>
-    <a href="https://github.com/gusty/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
   </body>
   </html>
