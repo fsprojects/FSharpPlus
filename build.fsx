@@ -52,14 +52,14 @@ let testAssemblies = "tests/**/bin" </> configuration </> "net45" </> "*Tests*.d
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
-let gitOwner = "gusty"
+let gitOwner = "fsprojects"
 let gitHome = sprintf "%s/%s" "https://github.com" gitOwner
 
 // The name of the project on GitHub
 let gitName = "FSharpPlus"
 
 // The url for the raw files hosted
-let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/gusty"
+let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 
 // --------------------------------------------------------------------------------------
 // END TODO: The rest of the file includes standard build steps

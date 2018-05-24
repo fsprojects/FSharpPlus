@@ -84,7 +84,7 @@ From F#+
  -  ``Last<'T>``
  -  ``DList<'T>``
  
- [Suggest another](https://github.com/gusty/FSharpPlus/issues/new) concrete implementation
+ [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
 Examples
 --------

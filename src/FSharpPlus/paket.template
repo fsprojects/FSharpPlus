@@ -6,11 +6,11 @@ owners
 authors 
     Gusty
 projectUrl
-    https://github.com/gusty/FSharpPlus
+    https://github.com/fsprojects/FSharpPlus
 iconUrl
-    https://raw.github.com/gusty/FSharpPlus/master/docs/files/img/logo.png
+    https://raw.github.com/fsprojects/FSharpPlus/master/docs/files/img/logo.png
 licenseUrl
-    https://github.com/gusty/FSharpPlus/blob/master/LICENSE.txt
+    https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.txt
 requireLicenseAcceptance
     false
 copyright
