@@ -402,7 +402,8 @@ type Zip =
 
     static member Zip ((x: IEnumerator<'T>     , y: IEnumerator<'U>   , _output: IEnumerator<'T*'U>   ) , _mthd: Zip) = Enumerator.zip x y
     static member Zip ((x: seq<'T>             , y: seq<'U>           , _output: seq<'T*'U>           ) , _mthd: Zip) = Seq.zip        x y
-    static member Zip ((x: IDictionary<'K, 'T> , y: IDictionary<'K,'U>, _output: IDictionary<'K,'T*'U>) , _mthd: Zip) = Dict.zip       x y    
+    static member Zip ((x: IDictionary<'K, 'T> , y: IDictionary<'K,'U>, _output: IDictionary<'K,'T*'U>) , _mthd: Zip) = Dict.zip       x y
+    static member Zip ((x: Map<'K, 'T>         , y: Map<'K,'U>        , _output: Map<'K,'T*'U>)         , _mthd: Zip) = Map.zip        x y
     static member Zip ((x: list<'T>            , y: list<'U>          , _output: list<'T*'U>          ) , _mthd: Zip) = List.zip       x y
     static member Zip ((x: 'T []               , y: 'U []             , _output: ('T*'U) []           ) , _mthd: Zip) = Array.zip      x y
 
