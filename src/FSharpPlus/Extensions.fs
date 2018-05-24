@@ -213,6 +213,26 @@ module String =
 
 
 
+/// Additional operations on Map<'Key, 'Value>
+[<RequireQualifiedAccess>]
+module Map =
+
+    let mapValues f (x: Map<'Key, 'T>) = Map.map (fun _ -> f) x
+
+    let mapValues2 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map.ofSeq <| seq {
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+        for KeyValue(k, vx) in x do
+            match Map.tryFind k y with
+            | Some vy -> yield (k, f.Invoke (vx, vy))
+            | None    -> () }
+
+    let zip (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map.ofSeq <| seq {
+        for KeyValue(k, vx) in x do
+            match Map.tryFind k y with
+            | Some vy -> yield (k, (vx, vy))
+            | None    -> () }
+
+
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Dict =
