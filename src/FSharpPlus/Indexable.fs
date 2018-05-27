@@ -31,7 +31,9 @@ type Item =
 
 type TryItem =
     inherit Default1
-    static member        TryItem (x: IDictionary<'K,'T>, k        , [<Optional>]_impl: Default2) = tupleToOption (x.TryGetValue k)                                  : 'T option
+    static member inline TryItem (x: '``Indexable<'T>``, k, [<Optional>]_impl: Default2) =
+        let mutable r = Unchecked.defaultof< ^R>
+        if (^``Indexable<'T>``: (member TryGetValue: _ * _ -> _) (x, k, &r)) then Some r else None
     static member inline TryItem (x: '``Indexable<'T>``, k        , [<Optional>]_impl: Default1) = (^``Indexable<'T>`` : (static member TryItem : _ * _ -> _) k, x) : 'T option
     static member inline TryItem (_: 'T when 'T: null and 'T: struct, _       , _impl: Default1) = ()
     static member        TryItem (x: string            , n        , [<Optional>]_impl: TryItem ) = if n >= 0 && n < x.Length then Some (x.[n]) else None
@@ -42,6 +44,8 @@ type TryItem =
     static member        TryItem (x: 'a [,,,]          , (i,j,k,l), [<Optional>]_impl: TryItem ) = if (i, j, k, l) >= (x.GetLowerBound 0, x.GetLowerBound 1, x.GetLowerBound 2, x.GetLowerBound 3) && (i, j, k, l) <= (x.GetUpperBound 0, x.GetUpperBound 1, x.GetUpperBound 2, x.GetUpperBound 3) then Some x.[i,j,k,l] else None : 'a option
     static member        TryItem (x: 'a ResizeArray    , n        , [<Optional>]_impl: TryItem ) = if n >= 0 && n < x.Count then Some x.[n] else None
     static member        TryItem (x: list<'a>          , n        , [<Optional>]_impl: TryItem ) = List.tryItem n x
+    static member        TryItem (x: IList<'a>         , n        , [<Optional>]_impl: Default2) = if n >= 0 && n < x.Count then Some x.[n] else None
+    static member        TryItem (x: IReadOnlyList<'a> , n        , [<Optional>]_impl: Default3) = if n >= 0 && n < x.Count then Some x.[n] else None
     static member        TryItem (x: Map<'K,'T>        , k        , [<Optional>]_impl: TryItem ) = x.TryFind k : 'T option
 
     static member inline Invoke (n: 'K) (source: '``Indexed<'T>``) : 'T option =

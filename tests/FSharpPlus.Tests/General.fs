@@ -1,6 +1,7 @@
 ﻿namespace FSharpPlus.Tests
 
 open System
+open System.Collections.ObjectModel
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
@@ -125,7 +126,33 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member ToList (WrappedSeqD x) = Seq.toList x
 
 open System.Collections.Generic
+open System.Collections
 open System.Threading.Tasks
+
+type ListOnlyIndex<'s> (l: 'a list) = 
+    interface IList<'s> with 
+        member this.Count = List.length l 
+        member this.IsReadOnly with get() = true
+        member this.Item with 
+            get(index) = List.item index l
+            and set index value = failwith "set"
+        member this.Add(i) = failwith "Add"
+        member this.Clear() = failwith "Clear"
+        member this.Contains(i) = failwith "Contains"
+        member this.CopyTo(t,i) = failwith "CopyTo"
+        member this.GetEnumerator() : IEnumerator<'s> = failwith "ListOnlyIndex.GetEnumerator"
+        member this.GetEnumerator() : IEnumerator = failwith "ListOnlyIndex.GetEnumerator"
+        member this.IndexOf(i) = failwith "IndexOf"
+        member this.Insert (index:int,item:'s)= failwithf "Insert %i %A" index item
+        member this.Remove(t) = failwith "Remove"
+        member this.RemoveAt(i) = failwith "RemoveAt"
+type ReadOnlyListOnlyIndex<'s> (l: 'a list) = 
+    interface IReadOnlyList<'s> with 
+        member this.Count = List.length l 
+        member this.Item with 
+            get(index) = List.item index l
+        member this.GetEnumerator() : IEnumerator<'s> = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
+        member this.GetEnumerator() : IEnumerator = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
 
 module Monoid =
 
@@ -433,6 +460,20 @@ module Collections =
         let f = WrappedSeqA ['0'] <|> d
          
         ()
+    [<Test>]
+    let readOnlyNth() =
+        let readOnlyCollection = ReadOnlyCollection( [|1..10|] )
+        let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
+        Assert.AreEqual (2, nth 1 [1..10])
+        Assert.AreEqual (2, nth 1 readOnlyCollection)
+        Assert.AreEqual (2, nth 1 iReadOnlyList)
+
+    [<Test>]
+    let readOnlyNthIndex() =
+        let l = ListOnlyIndex [1..10]
+        Assert.AreEqual (2, nth 1 l)
+        let rl = ReadOnlyListOnlyIndex [1..10]
+        Assert.AreEqual (2, nth 1 rl)
 
 module Foldable =
 
@@ -511,6 +552,41 @@ module Foldable =
         Assert.IsInstanceOf<Option<list<int>>> (Some sortedList)
         Assert.IsInstanceOf<Option<seq<int>>> (Some sortedSeq)
 
+    [<Test>]
+    let intersperse() =
+        Assert.AreEqual ("a,b,c,d,e", intersperse ',' "abcde")
+        Assert.AreEqual (["a";",";"b";",";"c";",";"d";",";"e"], intersperse "," ["a";"b";"c";"d";"e"])
+
+    [<Test>]
+    let readOnlyIntercalate() =
+        Assert.AreEqual ("Lorem, ipsum, dolor", intercalate ", " ["Lorem"; "ipsum"; "dolor"])
+        Assert.AreEqual ("Lorem, ipsum, dolor", intercalate ", " (ReadOnlyCollection( [|"Lorem"; "ipsum"; "dolor"|] )))
+
+
+    [<Test>]
+    let readOnlyTryPick() =
+        let readOnlyCollection = ReadOnlyCollection( [|1..10|] )
+        let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>        
+        let picker i = if i % 3 = 0 then Some i else None
+        Assert.AreEqual (Some 3, tryPick picker [1..10])
+        Assert.AreEqual (Some 3, tryPick picker readOnlyCollection)
+        Assert.AreEqual (Some 3, tryPick picker iReadOnlyList)
+
+    [<Test>]
+    let readOnlyTryFind() =
+        let predicate i = i % 3 = 0
+        let readOnlyCollection = ReadOnlyCollection( [|1..10|] )
+        let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
+        Assert.AreEqual (Some 3, tryFind predicate [1..10])
+        Assert.AreEqual (Some 3, tryFind predicate readOnlyCollection)
+        Assert.AreEqual (Some 3, tryFind predicate iReadOnlyList)
+
+    [<Test>]
+    let readOnlyfoldMap() =
+        let readOnlyCollection = ReadOnlyCollection( [|1..4|] )
+        let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
+        Assert.AreEqual (50, foldMap ((+) 10) readOnlyCollection)
+        Assert.AreEqual (50, foldMap ((+) 10) iReadOnlyList)
 
 module Indexable = 
     [<Test>]
@@ -591,6 +667,23 @@ module Indexable =
 
         ()
 
+    [<Test>]
+    let tryItemReadonly() =
+        let d = ReadOnlyDictionary (dict [1, "one"; 2, "two"])
+        let iReadOnlyDict = d :> IReadOnlyDictionary<_,_>
+        let l = ReadOnlyCollection [|1..10|]
+        let iReadOnlyList = l :> IReadOnlyList<_>
+        let rarr = ResizeArray [|1..10|]
+        Assert.AreEqual (Some "one", tryItem 1 d)
+        Assert.AreEqual (Some "one", tryItem 1 iReadOnlyDict)
+        Assert.AreEqual ("one", item 1 d)
+        Assert.AreEqual ("one", item 1 iReadOnlyDict)
+        Assert.AreEqual (2, item 1 l)
+        Assert.AreEqual (2, item 1 rarr)
+        Assert.AreEqual (2, item 1 iReadOnlyList)
+        Assert.AreEqual (Some 2, tryItem 1 l)
+        Assert.AreEqual (Some 2, tryItem 1 iReadOnlyList)
+        Assert.AreEqual (Some 2, tryItem 1 rarr)
 
 module Monad = 
     [<Test>]

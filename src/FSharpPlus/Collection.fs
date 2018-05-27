@@ -3,6 +3,7 @@
 open System
 open System.Text
 open System.Runtime.CompilerServices
+open System.Collections.Generic
 open System.Runtime.InteropServices
 open FSharpPlus
 open FSharpPlus.Internals
@@ -10,11 +11,13 @@ open FSharpPlus.Internals
 
 type Nth =
     inherit Default1
-    static member inline Nth (x:'``Foldable<'T>``, n, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head : 'T
+    static member inline Nth (x:'``Foldable<'T>``, n, [<Optional>]_impl:Default3) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head : 'T
     static member        Nth (x:string           , n, [<Optional>]_impl:Nth     ) = x.[n]
     static member        Nth (x:StringBuilder    , n, [<Optional>]_impl:Nth     ) = x.ToString().[n]
     static member        Nth (x:'a []            , n, [<Optional>]_impl:Nth     ) = x.[n] : 'a
     static member        Nth (x:'a ResizeArray   , n, [<Optional>]_impl:Nth     ) = x.[n]
+    static member        Nth (x:IList<'a>        , n, [<Optional>]_impl:Default1) = x.[n]
+    static member        Nth (x:IReadOnlyList<'a>, n, [<Optional>]_impl:Default2) = x.[n]
     static member        Nth (x:list<'a>         , n, [<Optional>]_impl:Nth     ) = x.[n]
     static member        Nth (x:'a Id            , _, [<Optional>]_impl:Nth     ) = x.getValue
 
