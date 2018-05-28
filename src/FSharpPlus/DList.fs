@@ -162,6 +162,9 @@ type DList<'T>(length : int , data : DListData<'T> ) =
     interface IEnumerable<'T> with
         member s.GetEnumerator() = s.toSeq()
 
+    interface IReadOnlyCollection<'T> with
+        member s.Count = s.Length
+
     interface System.Collections.IEnumerable with
         override s.GetEnumerator() = (s.toSeq() :> System.Collections.IEnumerator)
             
