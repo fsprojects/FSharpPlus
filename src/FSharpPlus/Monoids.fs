@@ -50,7 +50,7 @@ type Const<'t,'u> = Const of 't with
     static member Map (Const x : Const<_,'T>, _:'T->'U) = Const x : Const<'C,'U>
 
     // Applicative
-    static member inline Return (_:'U) = Const (getZero ()) : Const<'T,'U>
+    static member inline Return (_: 'U) = Const (getZero ()) : Const<'T,'U>
     static member inline (<*>) (Const f : Const<'C,'T->'U>, Const x : Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
 
     // Contravariant
@@ -100,7 +100,7 @@ type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
     static member inline (<*>)  (Compose (f: '``F<'G<'T->'U>>``), Compose (x: '``F<'G<'T>>``)) = Compose ((<*>) <!> f <*> x: '``F<'G<'U>>``)
 
     // Alternative
-    static member inline get_Empty ()                  = Compose (getEmpty ()) : Compose<'``F<'G<'T>``>
+    static member inline get_Empty ()                 = Compose (getEmpty ()) : Compose<'``F<'G<'T>``>
     static member inline (<|>) (Compose x, Compose y) = Compose (x <|> y)     : Compose<'``F<'G<'T>``>
 
 

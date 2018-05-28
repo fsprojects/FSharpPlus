@@ -19,20 +19,20 @@ open FSharpPlus
 // Monad class ------------------------------------------------------------
 
 type Bind =
-    static member (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
-    static member (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
+    static member        (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
+    static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
 #if NET35
 #else
-    static member (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
+    static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
 #endif
-    static member (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
-    static member (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
-    static member (>>=) (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []     
-    static member (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
-    static member inline       (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
-    static member (>>=) (source             , f: 'T -> _           ) = async.Bind(source, f)                                         : Async<'U>
-    static member (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
-    static member (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
+    static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
+    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
+    static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []     
+    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
+    static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
+    static member        (>>=) (source             , f: 'T -> _           ) = async.Bind(source, f)                                         : Async<'U>
+    static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
+    static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
 
     static member (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
                    for KeyValue(k, v) in source do
@@ -403,8 +403,8 @@ type Zip =
     static member Zip ((x: IEnumerator<'T>     , y: IEnumerator<'U>   , _output: IEnumerator<'T*'U>   ) , _mthd: Zip) = Enumerator.zip x y
     static member Zip ((x: seq<'T>             , y: seq<'U>           , _output: seq<'T*'U>           ) , _mthd: Zip) = Seq.zip        x y
     static member Zip ((x: IDictionary<'K, 'T> , y: IDictionary<'K,'U>, _output: IDictionary<'K,'T*'U>) , _mthd: Zip) = Dict.zip       x y
-    static member Zip ((x: Dictionary<'K, 'T>  , y: Dictionary<'K,'U> , _output: Dictionary<'K,'T*'U>)  , _mthd: Zip) = Dict.zip       x y :?> Dictionary<'K,'T*'U>
-    static member Zip ((x: Map<'K, 'T>         , y: Map<'K,'U>        , _output: Map<'K,'T*'U>)         , _mthd: Zip) = Map.zip        x y
+    static member Zip ((x: Dictionary<'K, 'T>  , y: Dictionary<'K,'U> , _output: Dictionary<'K,'T*'U> ) , _mthd: Zip) = Dict.zip       x y :?> Dictionary<'K,'T*'U>
+    static member Zip ((x: Map<'K, 'T>         , y: Map<'K,'U>        , _output: Map<'K,'T*'U>        ) , _mthd: Zip) = Map.zip        x y
     static member Zip ((x: list<'T>            , y: list<'U>          , _output: list<'T*'U>          ) , _mthd: Zip) = List.zip       x y
     static member Zip ((x: 'T []               , y: 'U []             , _output: ('T*'U) []           ) , _mthd: Zip) = Array.zip      x y
 

@@ -6,7 +6,7 @@ open System
 [<RequireQualifiedAccess>]
 module Option =
     let apply f x =
-        match (f, x) with 
+        match f, x with
         | Some f, Some x -> Some (f x) 
         | _              -> None
 
@@ -16,10 +16,10 @@ module Option =
 module Result =
     let result x = Ok x
     let throw  x = Error x
-    let apply f x = match (f, x) with (Ok a, Ok b)     -> Ok (a b) | Error e, _ | _, Error e -> Error e: Result<'b, 'e>
-    let flatten                   = function Ok (Ok v) -> Ok v     | Ok (Error e) | Error e  -> Error e
-    let inline catch (f:'t -> _)  = function Ok v      -> Ok v     | Error e                 -> f e    : Result<'v,'e>
-    let inline either f g         = function Ok v      -> f v      | Error e                 -> g e
+    let apply f x = match f, x with   Ok a, Ok b      -> Ok (a b) | Error e, _ | _, Error e -> Error e: Result<'b, 'e>
+    let flatten                  = function Ok (Ok v) -> Ok v     | Ok (Error e)  | Error e -> Error e
+    let inline catch f           = function Ok v      -> Ok v     | Error e                 -> (f: 't->_) e: Result<'v,'e>
+    let inline either f g        = function Ok v      -> f v      | Error e                 -> g e
 
 
 /// Additional operations on Choice
@@ -27,12 +27,12 @@ module Result =
 module Choice =
     let result x = Choice1Of2 x
     let throw  x = Choice2Of2 x
-    let apply f x = match (f, x) with Choice1Of2 a, Choice1Of2 b              -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e        -> Choice2Of2 e: Choice<'b,'e>
-    let map   f                          = function Choice1Of2 v              -> Choice1Of2 (f v) | Choice2Of2 e                             -> Choice2Of2 e
-    let flatten                          = function Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v     | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
-    let bind (f:'t -> _)                 = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e: Choice<'v,'e>
-    let inline catch (f:'t -> _)         = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e         : Choice<'v,'e>
-    let inline either f g                = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
+    let apply f x = match f, x with Choice1Of2 a, Choice1Of2 b              -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e        -> Choice2Of2 e: Choice<'b,'e>
+    let map   f                        = function Choice1Of2 v              -> Choice1Of2 (f v) | Choice2Of2 e                             -> Choice2Of2 e
+    let flatten                        = function Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v     | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
+    let bind (f:'t -> _)               = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e: Choice<'v,'e>
+    let inline catch (f:'t -> _)       = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e         : Choice<'v,'e>
+    let inline either f g              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
 
 
 /// Additional operations on Seq
@@ -99,7 +99,7 @@ module Seq =
                 if options = StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
         split StringSplitOptions.None
 
-    let replace (oldValue:seq<'t>) (newValue:seq<'t>) (source:seq<'t>) : seq<'t> = seq {
+    let replace (oldValue: seq<'t>) (newValue: seq<'t>) (source: seq<'t>) : seq<'t> = seq {
         let old = oldValue |> Seq.toList
         if old.Length = 0 then
             yield! source
@@ -128,7 +128,7 @@ module Seq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let drop i (source:seq<_>) =
+    let drop i (source: seq<_>) =
         let mutable count = i
         use e = source.GetEnumerator ()
         while (count > 0 && e.MoveNext ()) do count <- count-1
@@ -163,23 +163,23 @@ module List =
     /// <returns>The result list.</returns>
     let drop i list = 
         let rec loop i lst = 
-            match (lst, i) with
-            | ([] as x, _) | (x, 0) -> x
+            match lst, i with
+            | [] as x, _ | x, 0 -> x
             | x, n -> loop (n-1) (List.tail x)
         if i > 0 then loop i list else list
 
-    let intercalate (separator:list<_>) (source:seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
+    let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
     let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList                              : list<'T>
-    let split (separators:seq<list<_>>) (source:list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
+    let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
     let replace oldValue newValue source = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList                  : list<'T>
 
 
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
 module Array =
-    let intercalate (separator:_ []) (source:seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
+    let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
     let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray                            : 'T []
-    let split (separators:seq<_ []>) (source:_ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
+    let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
     let replace oldValue newValue source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray                : 'T []
 
 
@@ -189,21 +189,21 @@ module String =
     open System.Text
     open System.Globalization
 
-    let intercalate (separator:string) (source:seq<string>) = String.Join(separator, source)
-    let intersperse (element: char) (source: string) = String.Join("", Array.ofSeq (source |> Seq.intersperse element))
-    let split (separators:seq<string>) (source:string) = source.Split(Seq.toArray separators, StringSplitOptions.None) :> seq<_>
-    let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace(oldValue, newValue)
+    let intercalate (separator: string) (source: seq<string>) = String.Join (separator, source)
+    let intersperse (element: char) (source: string) = String.Join ("", Array.ofSeq (source |> Seq.intersperse element))
+    let split (separators: seq<string>) (source: string) = source.Split (Seq.toArray separators, StringSplitOptions.None) :> seq<_>
+    let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace (oldValue, newValue)
 
-    let isSubString subString (source:string) = source.Contains subString
-    let startsWith  subString (source:string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
-    let endsWith    subString (source:string) = source.EndsWith   (subString, false, CultureInfo.InvariantCulture)
-    let contains    char      (source:string) = Seq.contains char source
-    let toUpper (source:string) = if isNull source then source else source.ToUpperInvariant()
-    let toLower (source:string) = if isNull source then source else source.ToLowerInvariant()    
-    let trimWhiteSpaces (source:string) = source.Trim()
+    let isSubString subString (source: string) = source.Contains subString
+    let startsWith  subString (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
+    let endsWith    subString (source: string) = source.EndsWith   (subString, false, CultureInfo.InvariantCulture)
+    let contains    char      (source: string) = Seq.contains char source
+    let toUpper (source: string) = if isNull source then source else source.ToUpperInvariant ()
+    let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
+    let trimWhiteSpaces (source: string) = source.Trim ()
 
-    let normalize normalizationForm (source:string) = if isNull source then source else source.Normalize normalizationForm
-    let removeDiacritics (source:string) =
+    let normalize normalizationForm (source: string) = if isNull source then source else source.Normalize normalizationForm
+    let removeDiacritics (source: string) =
         if isNull source then source
         else 
             source 
@@ -239,32 +239,32 @@ module Dict =
     open System.Collections.Generic
 
     let tryGetValue k (dct: IDictionary<'Key, 'Value>) =
-               match dct.TryGetValue k with
-               | true, v -> Some v
-               | _       -> None
+        match dct.TryGetValue k with
+        | true, v -> Some v
+        | _       -> None
 
     let map f (x: IDictionary<'Key, 'T>) =
-           let dct = Dictionary<'Key, 'U> ()           
-           for KeyValue(k, v) in x do
-               dct.Add (k, f v)
-           dct :> IDictionary<'Key, 'U>
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in x do
+            dct.Add (k, f v)
+        dct :> IDictionary<'Key, 'U>
 
     let map2 f (x: IDictionary<'Key, 'T1>) (y: IDictionary<'Key, 'T2>) =
-           let dct = Dictionary<'Key, 'U> ()
-           let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
-           for KeyValue(k, vx) in x do
-               match tryGetValue k y with
-               | Some vy -> dct.Add (k, f.Invoke (vx, vy))
-               | None    -> ()
-           dct :> IDictionary<'Key, 'U>
+        let dct = Dictionary<'Key, 'U> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+        for KeyValue(k, vx) in x do
+            match tryGetValue k y with
+            | Some vy -> dct.Add (k, f.Invoke (vx, vy))
+            | None    -> ()
+        dct :> IDictionary<'Key, 'U>
 
     let zip (x: IDictionary<'Key, 'T1>) (y: IDictionary<'Key, 'T2>) =
-           let dct = Dictionary<'Key, 'T1 * 'T2> ()
-           for KeyValue(k, vx) in x do
-               match tryGetValue k y with
-               | Some vy -> dct.Add (k, (vx, vy))
-               | None    -> ()
-           dct :> IDictionary<'Key, 'T1 * 'T2>
+        let dct = Dictionary<'Key, 'T1 * 'T2> ()
+        for KeyValue(k, vx) in x do
+            match tryGetValue k y with
+            | Some vy -> dct.Add (k, (vx, vy))
+            | None    -> ()
+        dct :> IDictionary<'Key, 'T1 * 'T2>
 
 
 
@@ -272,15 +272,15 @@ module Dict =
 [<RequireQualifiedAccess>]
 module Enumerator =
         
-    let inline invalidArgFmt (arg:string) (format:string) paramArray =    
+    let inline invalidArgFmt (arg: string) (format: string) paramArray =    
         let msg = String.Format (format,paramArray)
-        raise (new ArgumentException (msg,arg))
+        raise (new ArgumentException (msg, arg))
     
-    let noReset()         = raise (new System.NotSupportedException ("Reset is not supported on this enumerator."))
-    let notStarted()      = invalidOp "Enumeration has not started. Call MoveNext."
-    let alreadyFinished() = invalidOp "Enumeration already finished."
-    let check started = if not started then notStarted()
-    let dispose (r : System.IDisposable) = r.Dispose ()
+    let noReset ()         = raise (new System.NotSupportedException ("Reset is not supported on this enumerator."))
+    let notStarted ()      = invalidOp "Enumeration has not started. Call MoveNext."
+    let alreadyFinished () = invalidOp "Enumeration already finished."
+    let check started = if not started then notStarted ()
+    let dispose (r: System.IDisposable) = r.Dispose ()
     
     open System.Collections
     open System.Collections.Generic
@@ -290,20 +290,20 @@ module Enumerator =
     type EmptyEnumerator<'T>() =
         let mutable started = false
         interface IEnumerator<'T> with
-            member x.Current =
+            member __.Current =
                 check started
-                (alreadyFinished() : 'T)
+                (alreadyFinished () : 'T)
     
         interface IEnumerator with
-            member x.Current =
+            member __.Current =
                 check started
-                (alreadyFinished() : obj)
-            member x.MoveNext () =
+                (alreadyFinished () : obj)
+            member __.MoveNext () =
                 if not started then started <- true
                 false
-            member x.Reset() = noReset()
+            member __.Reset() = noReset ()
         interface System.IDisposable with
-            member x.Dispose () = ()
+            member __.Dispose () = ()
               
     let Empty<'T> () = new EmptyEnumerator<'T>() :> IEnumerator<'T>
 
@@ -314,7 +314,7 @@ module Enumerator =
     [<Sealed>]
     type ConcatEnumerator<'T>(sources: IEnumerator<IEnumerator<'T>>) =
         let mutable outerEnum = sources
-        let mutable currInnerEnum = Empty()
+        let mutable currInnerEnum = Empty ()
         let mutable started  = false
         let mutable finished = false
         let mutable compensations = []
@@ -344,9 +344,8 @@ module Enumerator =
                 finally
                     let rec iter comps =
                         match comps with
-                        |   [] -> ()
-                        |   h::t ->
-                                try h() finally iter t
+                        | [] -> ()
+                        | h::t -> try h () finally iter t
                     try
                         compensations |> List.rev |> iter
                     finally
@@ -354,18 +353,17 @@ module Enumerator =
 
         member x.GetCurrent() =
             check started
-            if finished then alreadyFinished() else x.currElement
+            if finished then alreadyFinished () else x.currElement
 
         interface IFinallyEnumerator with
-            member x.AppendFinallyAction(f) =
+            member __.AppendFinallyAction f =
                 compensations <- f :: compensations
 
         interface IEnumerator<'T> with
-            member x.Current = 
-                x.GetCurrent()
+            member x.Current = x.GetCurrent ()
 
         interface IEnumerator with
-            member x.Current = box (x.GetCurrent())
+            member x.Current = box (x.GetCurrent ())
 
             member x.MoveNext () =
                 if not started then (started <- true)
@@ -378,14 +376,14 @@ module Enumerator =
                         true
                     else
                         // check outer
-                        let rec takeOuter() =
+                        let rec takeOuter () =
                             if outerEnum.MoveNext () then
                                 let ie = outerEnum.Current
                                 // Optimization to detect the statically-allocated empty IEnumerators
                                 match box ie with
                                 | :? EmptyEnumerator<'T> ->
                                         // This one is empty, just skip, don't call GetEnumerator, try again
-                                        takeOuter()
+                                        takeOuter ()
                                 | _ ->
                                         // OK, this one may not be empty.
                                         // Don't forget to dispose of the inner enumerator now we're done with it
@@ -394,26 +392,24 @@ module Enumerator =
                                         takeInner ()
                             else
                                 // We're done
-                                x.Finish()
+                                x.Finish ()
                                 false
-                        takeOuter()
+                        takeOuter ()
                   takeInner ()
 
-            member x.Reset() = noReset()
+            member __.Reset () = noReset ()
 
         interface System.IDisposable with
-            member x.Dispose () =
-                if not finished then
-                    x.Finish()
+            member x.Dispose () = if not finished then x.Finish ()
 
     let concat sources = new ConcatEnumerator<_>(sources) :> IEnumerator<_>
     
-    let rec tryItem index (e : IEnumerator<'T>) =
+    let rec tryItem index (e: IEnumerator<'T>) =
         if not (e.MoveNext ()) then None
         elif index = 0 then Some(e.Current)
         else tryItem (index-1) e
     
-    let rec nth index (e : IEnumerator<'T>) =
+    let rec nth index (e: IEnumerator<'T>) =
         if not (e.MoveNext ()) then
             let shortBy = index + 1
             invalidArgFmt "index"
@@ -436,8 +432,8 @@ module Enumerator =
     
         member this.GetCurrent () =
             match state with
-            | NotStarted -> notStarted()
-            | Finished   -> alreadyFinished()
+            | NotStarted -> notStarted ()
+            | Finished   -> alreadyFinished ()
             | InProcess  -> ()
             this.curr
     
@@ -445,90 +441,90 @@ module Enumerator =
         abstract Dispose : unit -> unit
     
         interface IEnumerator<'T> with
-            member this.Current = this.GetCurrent()
+            member this.Current = this.GetCurrent ()
     
         interface IEnumerator with
-            member this.Current = box(this.GetCurrent())
+            member this.Current = box (this.GetCurrent ())
             member this.MoveNext () =
                 state <- InProcess
-                if this.DoMoveNext(&this.curr) then
+                if this.DoMoveNext (&this.curr) then
                     true
                 else
                     state <- Finished
                     false
-            member this.Reset() = noReset()
+            member __.Reset () = noReset ()
         interface System.IDisposable with
             member this.Dispose () = this.Dispose ()
     
     let map f (e: IEnumerator<_>) : IEnumerator<_> =
         upcast
             { new MapEnumerator<_>() with
-                  member this.DoMoveNext (curr : byref<_>) =
+                  member __.DoMoveNext (curr: byref<_>) =
                       if e.MoveNext () then
-                          curr <- (f e.Current)
+                          curr <- f e.Current
                           true
                       else
                           false
-                  member this.Dispose () = e.Dispose ()
+                  member __.Dispose () = e.Dispose ()
             }
     
     let mapi f (e: IEnumerator<_>) : IEnumerator<_> =
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(f)
-        let i = ref (-1)
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+        let i = ref -1
         upcast {  
-            new MapEnumerator<_>() with
-                member this.DoMoveNext curr =
+            new MapEnumerator<_> () with
+                member __.DoMoveNext curr =
                     i := !i + 1
                     if e.MoveNext () then
-                        curr <- f.Invoke(!i, e.Current)
+                        curr <- f.Invoke (!i, e.Current)
                         true
                     else false
-                member this.Dispose () = e.Dispose () }
+                member __.Dispose () = e.Dispose () }
     
-    let map2 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_>=
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(f)
+    let map2 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_> =
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         upcast {
-            new MapEnumerator<_>() with
-                member this.DoMoveNext curr =
+            new MapEnumerator<_> () with
+                member __.DoMoveNext curr =
                     let n1 = e1.MoveNext ()
                     let n2 = e2.MoveNext ()
                     if n1 && n2 then
-                        curr <- f.Invoke(e1.Current, e2.Current)
+                        curr <- f.Invoke (e1.Current, e2.Current)
                         true
                     else false
-                member this.Dispose () =
+                member __.Dispose () =
                     try e1.Dispose ()
                     finally e2.Dispose () }
     
     let mapi2 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_> =
-        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt(f)
-        let i = ref (-1)
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
+        let i = ref -1
         upcast {
-            new MapEnumerator<_>() with
-                member this.DoMoveNext curr =
+            new MapEnumerator<_> () with
+                member __.DoMoveNext curr =
                     i := !i + 1
-                    if (e1.MoveNext () && e2.MoveNext ()) then
-                        curr <- f.Invoke(!i, e1.Current, e2.Current)
+                    if e1.MoveNext () && e2.MoveNext () then
+                        curr <- f.Invoke (!i, e1.Current, e2.Current)
                         true
                     else false
-                member this.Dispose () =
+                member __.Dispose () =
                     try e1.Dispose ()
                     finally e2.Dispose () }
     
     let map3 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) (e3: IEnumerator<_>) : IEnumerator<_> =
-        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt(f)
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
         upcast {
             new MapEnumerator<_>() with
-                member this.DoMoveNext curr =
+                member __.DoMoveNext curr =
                     let n1 = e1.MoveNext ()
                     let n2 = e2.MoveNext ()
                     let n3 = e3.MoveNext ()
                    
                     if n1 && n2 && n3 then
-                        curr <- f.Invoke(e1.Current, e2.Current, e3.Current)
+                        curr <- f.Invoke (e1.Current, e2.Current, e3.Current)
                         true
                     else false
-                member this.Dispose () =
+                member __.Dispose () =
                     try e1.Dispose ()
                     finally
                         try e2.Dispose ()
@@ -539,50 +535,50 @@ module Enumerator =
         let curr = ref None
         let get () =  check !started; (match !curr with None -> alreadyFinished () | Some x -> x)
         { new IEnumerator<'U> with
-              member x.Current = get()
+              member __.Current = get ()
           interface IEnumerator with
-              member x.Current = box (get ())
-              member x.MoveNext () =
+              member __.Current = box (get ())
+              member __.MoveNext () =
                   if not !started then started := true
                   curr := None
-                  while ((!curr).IsNone && e.MoveNext ()) do
+                  while (!curr).IsNone && e.MoveNext () do
                       curr := f e.Current
                   Option.isSome !curr
-              member x.Reset() = noReset()
+              member __.Reset() = noReset ()
           interface System.IDisposable with
-              member x.Dispose () = e.Dispose () }
+              member __.Dispose () = e.Dispose () }
     
     let filter f (e: IEnumerator<'T>) =
         let started = ref false
         { new IEnumerator<'T> with
-                member x.Current = check !started; e.Current
+                member __.Current = check !started; e.Current
             interface IEnumerator with
-                member x.Current = check !started; box e.Current
-                member x.MoveNext () =
+                member __.Current = check !started; box e.Current
+                member __.MoveNext () =
                     let rec next () =
                         if not !started then started := true
                         e.MoveNext () && (f e.Current || next ())
-                    next()
-                member x.Reset () = noReset ()
+                    next ()
+                member __.Reset () = noReset ()
             interface System.IDisposable with
-                member x.Dispose () = e.Dispose () }
+                member __.Dispose () = e.Dispose () }
     
     let unfold f x : IEnumerator<_> =
         let state = ref x
         upcast {
-            new MapEnumerator<_>() with
-                member this.DoMoveNext curr =
+            new MapEnumerator<_> () with
+                member __.DoMoveNext curr =
                     match f !state with
                     |   None -> false
                     |   Some (r, s) ->
                             curr <- r
                             state := s
                             true
-                member this.Dispose () = () }
+                member __.Dispose () = () }
     
     let upto lastOption f =
         match lastOption with
-        | Some b when b < 0 -> Empty()    // a request for -ve length returns empty sequence
+        | Some b when b < 0 -> Empty ()    // a request for -ve length returns empty sequence
         | _ ->
             let unstarted   = -1  // index value means unstarted (and no valid index)
             let completed   = -2  // index value means completed (and no valid index)
@@ -598,21 +594,21 @@ module Enumerator =
             // state
             let index   = ref unstarted
             // a Lazy node to cache the result/exception
-            let current = ref (Unchecked.defaultof<_>)
-            let setIndex i = index := i; current := (Unchecked.defaultof<_>) // cache node unprimed, initialised on demand.
-            let getCurrent() =
-                if !index = unstarted then notStarted()
-                if !index = completed then alreadyFinished()
+            let current = ref Unchecked.defaultof<_>
+            let setIndex i = index := i; current := Unchecked.defaultof<_> // cache node unprimed, initialised on demand.
+            let getCurrent () =
+                if !index = unstarted then notStarted ()
+                if !index = completed then alreadyFinished ()
                 match box !current with
-                | null -> current := Lazy<_>.Create(fun () -> f !index)
+                | null -> current := Lazy<_>.Create (fun () -> f !index)
                 | _ ->  ()
                 // forced or re-forced immediately.
-                (!current).Force()
+                (!current).Force ()
             { new IEnumerator<'U> with
-                  member x.Current = getCurrent()
+                  member __.Current = getCurrent ()
               interface IEnumerator with
-                  member x.Current = box (getCurrent())
-                  member x.MoveNext () =
+                  member __.Current = box (getCurrent ())
+                  member __.MoveNext () =
                       if !index = completed then false
                       elif !index = unstarted then
                           setIndex 0
@@ -623,14 +619,14 @@ module Enumerator =
                           else
                               setIndex (!index + 1)
                               true )
-                  member self.Reset() = noReset()
+                  member __.Reset () = noReset ()
               interface System.IDisposable with
-                  member x.Dispose () = () }
+                  member __.Dispose () = () }
 
-    let zip (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_>=
+    let zip (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_> =
         upcast {
-            new MapEnumerator<_>() with
-                member this.DoMoveNext curr =
+            new MapEnumerator<_> () with
+                member __.DoMoveNext curr =
                     let n1 = e1.MoveNext ()
                     let n2 = e2.MoveNext ()
                     if n1 && n2 then curr <- (e1.Current, e2.Current); true
@@ -641,14 +637,14 @@ module Enumerator =
 
     let zip3 (e1: IEnumerator<_>) (e2: IEnumerator<_>) (e3: IEnumerator<_>) : IEnumerator<_> =
         upcast {
-            new MapEnumerator<_>() with
-                member this.DoMoveNext curr =
+            new MapEnumerator<_> () with
+                member __.DoMoveNext curr =
                     let n1 = e1.MoveNext ()
                     let n2 = e2.MoveNext ()
                     let n3 = e3.MoveNext ()
                     if n1 && n2 && n3 then curr <- (e1.Current, e2.Current, e3.Current); true
                     else false
-                member this.Dispose () =
+                member __.Dispose () =
                     try e1.Dispose ()
                     finally
                         try e2.Dispose ()
@@ -690,25 +686,25 @@ module Extensions =
 
     let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
         if t.IsCanceled then Canceled
-        else if t.IsFaulted then Faulted(t.Exception)
-        else Completed(t.Result)
+        else if t.IsFaulted then Faulted t.Exception
+        else Completed t.Result
 
     type Task<'t> with
         static member WhenAll(tasks: Task<'a>[], ?cancellationToken: CancellationToken) =
             let tcs = TaskCompletionSource<'a[]>()
             let cancellationToken = defaultArg cancellationToken CancellationToken.None
             cancellationToken.Register((fun () -> tcs.TrySetCanceled() |> ignore)) |> ignore
-            let results = Array.zeroCreate<'a>(tasks.Length)
+            let results = Array.zeroCreate<'a> tasks.Length
             let pending = ref results.Length
             tasks 
             |> Seq.iteri (fun i t ->
                 let continuation = function
-                | Canceled -> tcs.TrySetCanceled() |> ignore
-                | Faulted(e) -> tcs.TrySetException(e) |> ignore
+                | Canceled -> tcs.TrySetCanceled () |> ignore
+                | Faulted(e) -> tcs.TrySetException (e) |> ignore
                 | Completed(r) -> 
                     results.[i] <- r
-                    if Interlocked.Decrement(pending) = 0 then 
-                        tcs.SetResult(results)
+                    if Interlocked.Decrement pending = 0 then 
+                        tcs.SetResult results
                 t.ContinueWith(continuation, cancellationToken,
                                TaskContinuationOptions.ExecuteSynchronously,
                                TaskScheduler.Default) |> ignore)
