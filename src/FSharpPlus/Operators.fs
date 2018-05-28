@@ -187,8 +187,6 @@ module Operators =
 
     // Foldable
 
-    let inline ofList (source :list<'T>) = OfList.Invoke source
-    let inline ofSeq  (source :seq<'T> ) = OfSeq.Invoke  source
     let inline foldBack (folder:'T->'State->'State) (foldable:'``Foldable<'T>``) (state:'State) : 'State = FoldBack.Invoke folder state foldable
     let inline fold     (folder:'State->'T->'State) (state:'State) (foldable:'``Foldable<'T>``) : 'State = Fold.Invoke folder state foldable
     let inline foldMap (f:'T->'Monoid) (x:'``Foldable<'T>``) : 'Monoid = FoldMap.Invoke f x
@@ -200,9 +198,13 @@ module Operators =
     let inline tryFind    (predicate :'T->bool) (source:'``Foldable<'T>``)   = TryFind.Invoke predicate source  :'T option
     let inline pick     (chooser:'T->'U option) (source:'``Foldable<'T>``)   = Pick.Invoke    chooser   source  :'U
     let inline tryPick  (chooser:'T->'U option) (source:'``Foldable<'T>``)   = TryPick.Invoke chooser   source  :'U option
-    let inline filter (predicate:_->bool) (x:'``Foldable<'a>``) :'``Foldable<'a>`` =  Filter.Invoke predicate x
-    let inline intercalate      (sep:'Monoid)   (source:'``Foldable<'Monoid>``)    = Intercalate.Invoke sep source : 'Monoid
-    let inline intersperse      (sep:'T)        (source:'``Foldable<'T>``)         = Intersperse.Invoke sep source : '``Foldable<'T>``
+    let inline intercalate      (sep:'Monoid)   (source:'``Foldable<'Monoid>``)    = Intercalate.Invoke sep source : 'Monoid    
+    let inline head                             (source:'``Foldable<'T>``)        = Head.Invoke source    :'T
+    let inline tryHead                          (source:'``Foldable<'T>``)        = TryHead.Invoke source :'T option
+    let inline length (source:'``Foldable<'T>``) :int                             = Length.Invoke source
+    let inline maxBy (projection:'T->'U) (source:'``Foldable<'T>``)               = MaxBy.Invoke projection  source    : 'T
+    let inline minBy (projection:'T->'U) (source:'``Foldable<'T>``)               = MinBy.Invoke projection  source    : 'T
+    let inline nth (n:int) (source:'``Foldable<'T>``) : 'T = Nth.Invoke n source
        
 
     // Traversable
@@ -295,7 +297,9 @@ module Operators =
 
     // Collection
 
-    let inline nth (n:int) (source:'``Collection<'T>``) : 'T = Nth.Invoke n source
+    let inline ofList (source: list<'T>) = OfList.Invoke source
+    let inline ofSeq  (source: seq<'T> ) = OfSeq.Invoke  source : 'Collection
+    let inline filter (predicate:_->bool) (x: 'Collection) : 'Collection = Filter.Invoke predicate x
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
@@ -379,17 +383,11 @@ module Operators =
 
     let inline choose (chooser:'T->'U option)   (source:'``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source        
 
-    let inline distinct                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Distinct.Invoke              source 
-    let inline distinctBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = DistinctBy.Invoke projection source 
+    let inline distinct                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Distinct.Invoke              source
+    let inline distinctBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = DistinctBy.Invoke projection source
+
+    let inline intersperse      (sep:'T)        (source:'``Collection<'T>``) : '``Collection<'T>`` = Intersperse.Invoke sep       source
     
-    let inline head                             (source:'``Collection<'T>``)        = Head.Invoke source    :'T
-    let inline tryHead                          (source:'``Collection<'T>``)        = TryHead.Invoke source :'T option
-
-    let inline length (source:'``Collection<'T>``) :int                             = Length.Invoke source
-
-    let inline maxBy (projection:'T->'U) (source:'``Collection<'T>``)               = MaxBy.Invoke projection  source    : 'T
-    let inline minBy (projection:'T->'U) (source:'``Collection<'T>``)               = MinBy.Invoke projection  source    : 'T
-
     let inline replace (oldValue:'Collection) (newValue:'Collection) (source:'Collection) = Replace.Invoke oldValue newValue source : 'Collection
     let inline rev  (source:'``Collection<'T>``)                                    = Rev.Invoke source :'``Collection<'T>``
     let inline scan (folder:'State'->'T->'State) state (source:'``Collection<'T>``) = Scan.Invoke folder (state:'State) source : '``Collection<'State>``

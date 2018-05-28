@@ -40,9 +40,7 @@ Rules
 -----
 *)
 (**
-    foldBack f t z = appEndo (foldMap (Endo << f) t ) z
-    fold     f z t = appEndo (getDual (foldMap (Dual << Endo << flip f) t)) z
-    fold = foldMap id
+    foldMap (f >> g) = foldMap f >> g
 *)
 (**
 
@@ -63,6 +61,9 @@ From .Net/F#
  -  ``'T []``
  -  ``option<'T>`` 
  -  ``ResizeArray<'T>`` 
+ -  ``ReadOnlyCollection<'T>`` 
+ -  ``IReadOnlyCollection<'T>``
+ -  ``IReadOnlyList<'T>``
 
  
 From F#+

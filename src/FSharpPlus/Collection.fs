@@ -3,28 +3,89 @@
 open System
 open System.Text
 open System.Runtime.CompilerServices
+open System.Collections
 open System.Collections.Generic
 open System.Runtime.InteropServices
 open FSharpPlus
 open FSharpPlus.Internals
 
 
-type Nth =
+type OfSeq =
     inherit Default1
-    static member inline Nth (x:'``Foldable<'T>``, n, [<Optional>]_impl:Default3) = x |> ToSeq.Invoke |> Seq.skip n |> Seq.head : 'T
-    static member        Nth (x:string           , n, [<Optional>]_impl:Nth     ) = x.[n]
-    static member        Nth (x:StringBuilder    , n, [<Optional>]_impl:Nth     ) = x.ToString().[n]
-    static member        Nth (x:'a []            , n, [<Optional>]_impl:Nth     ) = x.[n] : 'a
-    static member        Nth (x:'a ResizeArray   , n, [<Optional>]_impl:Nth     ) = x.[n]
-    static member        Nth (x:IList<'a>        , n, [<Optional>]_impl:Default1) = x.[n]
-    static member        Nth (x:IReadOnlyList<'a>, n, [<Optional>]_impl:Default2) = x.[n]
-    static member        Nth (x:list<'a>         , n, [<Optional>]_impl:Nth     ) = x.[n]
-    static member        Nth (x:'a Id            , _, [<Optional>]_impl:Nth     ) = x.getValue
+    static member inline OfSeq (x:seq<'t>                 , _:'``Foldable'<T>``               , _:Default5) = x |> Seq.map Return.Invoke |> Sum.Invoke : '``Foldable'<T>``
+    static member        OfSeq (x:seq<'t>                 , _:seq<'t>                         , _:Default4) = x
+    static member        OfSeq (x:seq<'t>                 , _:ICollection<'t>                 , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> ICollection<'t>
+    static member        OfSeq (x:seq<'t>                 , _:IList<'t>                       , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> IList<'t>
+    static member        OfSeq (x:seq<'t>                 , _:IList                           , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> IList
+    static member        OfSeq (x:seq<'k*'v>              , _:IDictionary<'k,'v>              , _:Default4) = dict x
+    static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:IDictionary<'k,'v>              , _:Default4) = x |> Seq.map (function (KeyValue x) -> x) |> dict
+    static member        OfSeq (x:seq<'k*'v>              , _:IDictionary                     , _:Default4) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
+    static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:IDictionary                     , _:Default4) = let d = Hashtable() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    static member inline OfSeq (x:seq<'t>                 , _:'R                              , _:Default3) = (^R : (new : seq<'t> -> ^R) x) : 'R
+    static member inline OfSeq (x:seq<KeyValuePair<'k,'v>>, _:'R                              , _:Default3) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (function (KeyValue x) -> x) x)) : 'R
+    static member inline OfSeq (x:seq<'t>                 , _:'F                              , _:Default2) = let c = new 'F() in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
+    static member        OfSeq (x:seq<'t>                 , _:'T when 'T :> ICollection<'t>   , _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        OfSeq (x:seq<'k*'v>              , _:'T when 'T :> IDictionary       , _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:'T when 'T :> IDictionary       , _:Default1) = let d = new 'T() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d
+    static member        OfSeq (x:seq<'k*'v>              , _:'T when 'T :> IDictionary<'k,'v>, _:OfSeq   ) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:'T when 'T :> IDictionary<'k,'v>, _:OfSeq   ) = let d = new 'T() in x |> Seq.iter d.Add; d
+    static member inline OfSeq (x:seq<'t>                 , _:'UserType                       , _:OfSeq   ) = ((^UserType) : (static member OfSeq: seq<'t> -> ^UserType) x)
+    static member        OfSeq (x                         , _:'t []                           , _:OfSeq   ) = Array.ofSeq<'t> x
+    static member        OfSeq (x                         , _:'t list                         , _:OfSeq   ) = List.ofSeq<'t> x
+    static member        OfSeq (x:seq<char>               , _:string                          , _:OfSeq   ) = String.Join ("", Array.ofSeq x)
+    static member        OfSeq (x:seq<char>               , _:Text.StringBuilder              , _:OfSeq   ) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    static member        OfSeq (x:seq<'t>                 , _:Stack<'t>                       , _:OfSeq   ) = Generic.Stack x
 
-    static member inline Invoke (n:int) (source:'``Collection<'T>``) : 'T =
-        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Nth: _*_*_ -> _) b, n, a)
-        let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
-        call (Unchecked.defaultof<Nth>, source, n)
+    static member inline Invoke  (value :seq<'t>) = 
+        let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member OfSeq: _*_*_ -> _) s, b, a)
+        let inline call (a:'a, s) = call_2 (a, Unchecked.defaultof<'r>, s) :'r
+        call (Unchecked.defaultof<OfSeq>, value)
+
+
+type OfList =
+
+#if NET35
+    static member OfList (_:string        , _:OfList) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList |> Array.map string)
+    static member OfList (_:StringBuilder , _:OfList) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList |> Array.map string))
+#else
+    static member OfList (_:string        , _:OfList) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList)
+    static member OfList (_:StringBuilder , _:OfList) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList))
+#endif
+    static member OfList (_:'a []         , _:OfList) = Array.ofList<'a>
+    static member OfList (_:'a ResizeArray, _:OfList) = fun (x:list<'a>)   -> ResizeArray x
+    static member OfList (_:list<'a>      , _:OfList) = id<list<'a>>
+    static member OfList (_:Set<'a>       , _:OfList) = Set.ofList<'a>
+    static member OfList (_:seq<'a>       , _:OfList) = Seq.ofList<'a>
+
+    static member inline Invoke (value :list<'t>) = 
+        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member OfList: _*_ -> _) b, a)
+        let inline call (a:'a) = fun (x:'x) -> call_2 (a, Unchecked.defaultof<'r>) x :'r
+        call Unchecked.defaultof<OfList> value
+
+
+type Filter =
+    inherit Default1
+    static member        Filter (x:'t Set           , p, [<Optional>]_impl:Filter  ) = Set.filter p x
+    static member        Filter (x:'t option        , p, [<Optional>]_impl:Filter  ) = match x with None -> None | Some a -> if p a then x else None
+    static member        Filter (x:'t list          , p, [<Optional>]_impl:Filter  ) = List.filter  p x
+    static member        Filter (x:'t []            , p, [<Optional>]_impl:Filter  ) = Array.filter p x
+    static member        Filter (x:'t IObservable   , p, [<Optional>]_impl:Filter  ) = Observable.filter p x
+    static member        Filter (x:'t ResizeArray   , p, [<Optional>]_impl:Filter  ) = ResizeArray (Seq.filter p x)
+
+    static member inline Invoke (predicate:'T->bool) (x:'``Collection<'T>``) : '``Collection<'T>`` =
+        let inline call_2 (i:^i, b:^b, f) = ((^i or ^b) : (static member Filter: _*_*_ -> ^b) b, f, i)
+        let inline call (i:'i, b:'b, f:'f) = call_2 (i, b, f)
+        call (Unchecked.defaultof<Filter>, x, predicate)
+
+    static member inline InvokeOnInstance (predicate:'T->bool) (source:'``Collection<'T>``) : '``Collection<'T>`` =
+        (^``Collection<'T>``: (static member Filter: _*_ -> _) predicate, source)
+
+type Filter with
+    static member        Filter (x:'t seq           , p, [<Optional>]_impl:Default3) = Seq.filter p x
+    static member inline Filter (x:'``Collection'<T>``, p, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.filter p |> OfSeq.Invoke : '``Collection'<T>``
+    static member inline Filter (x:'``Collection'<T>``, p, [<Optional>]_impl:Default1) = Filter.InvokeOnInstance p x : '``Collection'<T>``
+    static member inline Filter (_:^t when ^t: null and ^t: struct, _, _:Default1) = ()
+
 
 type Skip =
     inherit Default1
@@ -110,14 +171,14 @@ type Distinct =
     static member        Distinct (x:list<'a>   , [<Optional>]_impl:Distinct  ) = List.distinct x
     static member        Distinct (x:'a []      , [<Optional>]_impl:Distinct  ) = Array.distinct x
 
-    static member inline Invoke (source:'``Collection<'T>``) : '``Collection<'T>`` =
+    static member inline Invoke (source:'``C<'T>``) : '``C<'T>`` =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Distinct: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Distinct>, source)
-    static member inline InvokeOnInstance (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member Distinct: _->_) source) : ^``Collection<'T>``
+    static member inline InvokeOnInstance (source:'``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member Distinct: _->_) source) : ^``C<'T>``
 
-    static member inline Distinct (x:'``Foldable<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.distinct |> OfSeq.Invoke      : '``Foldable<'T>``
-    static member inline Distinct (x:^``Foldable<'T>``, [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member Distinct: _->_) x) : '``Foldable<'T>``
+    static member inline Distinct (x:'``Collection<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.distinct |> OfSeq.Invoke      : '``Collection<'T>``
+    static member inline Distinct (x:^``Collection<'T>``, [<Optional>]_impl:Default1) = (^``Collection<'T>`` : (static member Distinct: _->_) x) : '``Collection<'T>``
     static member inline Distinct (_ : ^t when ^t : null and ^t : struct, _mthd : Default1) = id
 
 
@@ -127,14 +188,14 @@ type DistinctBy =
     static member        DistinctBy (x:list<'a>   , f      , [<Optional>]_impl:DistinctBy  ) = List.distinctBy  f x
     static member        DistinctBy (x:'a []      , f      , [<Optional>]_impl:DistinctBy  ) = Array.distinctBy f x
 
-    static member inline Invoke (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` =
+    static member inline Invoke (projection:'T->'Key) (source:'``C<'T>``) : '``C<'T>`` =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member DistinctBy: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<DistinctBy>, source, projection)
-    static member inline InvokeOnInstance (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member DistinctBy: _*_->_) projection, source) : ^``Collection<'T>``
+    static member inline InvokeOnInstance (projection:'T->'Key) (source:'``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member DistinctBy: _*_->_) projection, source) : ^``C<'T>``
 
-    static member inline DistinctBy (x:'``Foldable<'T>``, f      , [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.distinctBy f |> OfSeq.Invoke         : '``Foldable<'T>``
-    static member inline DistinctBy (x:^``Foldable<'T>``, f      , [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member DistinctBy: _*_->_) f, x) : '``Foldable<'T>``
+    static member inline DistinctBy (x:'``Collection<'T>``, f      , [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.distinctBy f |> OfSeq.Invoke         : '``Collection<'T>``
+    static member inline DistinctBy (x:^``Collection<'T>``, f      , [<Optional>]_impl:Default1) = (^``Collection<'T>`` : (static member DistinctBy: _*_->_) f, x) : '``Collection<'T>``
     static member inline DistinctBy (_ : ^t when ^t : null and ^t : struct, _ : 'T -> 'U, _mthd : Default1) = id
 
 
@@ -144,7 +205,7 @@ type GroupBy =
     static member GroupBy (x:list<'T>, f:'T->'Key, _:list<'Key*list<'T>>, [<Optional>]_impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
     static member GroupBy (x:'T []   , f:'T->'Key, _:('Key*('T [])) []  , [<Optional>]_impl:GroupBy) = Seq.groupBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
-    static member inline Invoke    (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = 
+    static member inline Invoke    (projection:'T->'Key) (source:'``C<'T>``) : '``C<'Key * 'C<'T>>`` = 
         let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member GroupBy: _*_*_*_ -> _) b, p, c, a)
         let inline call (a:'a, b:'b, p) = call_3 (a, b, Unchecked.defaultof<'r>, p) :'r
         call (Unchecked.defaultof<GroupBy>, source, projection)
@@ -160,77 +221,6 @@ type ChunkBy =
         let inline call_3 (a:^a, b:^b, c:^c, p) = ((^a or ^b or ^c) : (static member ChunkBy: _*_*_*_ -> _) b, p, c, a)
         let inline call (a:'a, b:'b, p) = call_3 (a, b, Unchecked.defaultof<'r>, p) :'r
         call (Unchecked.defaultof<ChunkBy>, source, projection)
-
-
-type Length =
-    inherit Default1
-    static member inline Length (x:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.length   
-    static member        Length (_:Id<'T>           , [<Optional>]_impl:Length) = 1
-    static member        Length (x:seq<'T>          , [<Optional>]_impl:Length) = Seq.length   x
-    static member        Length (x:list<'T>         , [<Optional>]_impl:Length) = List.length  x
-    static member        Length (x:'T []            , [<Optional>]_impl:Length) = Array.length x
-
-    static member inline Invoke (source:'``Collection<'T>``)                                  =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Length: _*_ -> _) b, a)
-        let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Length>, source)            :int
-
-
-
-type Max =
-    inherit Default1
-    static member inline Max (x:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.max : 'T
-    static member        Max (x:Id<'T>           , [<Optional>]_impl:Max) = x.getValue
-    static member        Max (x:seq<'T>          , [<Optional>]_impl:Max) = Seq.max   x
-    static member        Max (x:list<'T>         , [<Optional>]_impl:Max) = List.max  x
-    static member        Max (x:'T []            , [<Optional>]_impl:Max) = Array.max x
-
-    static member inline Invoke (source: '``Collection<'T>``)                                  =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Max: _*_ -> _) b, a)
-        let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Max>, source)  : 'T
-
-
-type MaxBy =
-    inherit Default1
-    static member inline MaxBy (x:'``Foldable<'T>``, f       , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.maxBy f : 'T
-    static member        MaxBy (x:Id<'T>           , _:'T->'U, [<Optional>]_impl:MaxBy) = x.getValue
-    static member        MaxBy (x:seq<'T>          , f       , [<Optional>]_impl:MaxBy) = Seq.maxBy   f x
-    static member        MaxBy (x:list<'T>         , f       , [<Optional>]_impl:MaxBy) = List.maxBy  f x
-    static member        MaxBy (x:'T []            , f       , [<Optional>]_impl:MaxBy) = Array.maxBy f x
-
-    static member inline Invoke (projection:'T->'U) (source:'``Collection<'T>``) =
-        let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member MaxBy: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
-        call (Unchecked.defaultof<MaxBy>, source, projection) :'T
-
-
-type Min =
-    inherit Default1
-    static member inline Min (x:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.min : 'T
-    static member        Min (x:Id<'T>           , [<Optional>]_impl:Min     ) = x.getValue
-    static member        Min (x:seq<'T>          , [<Optional>]_impl:Min     ) = Seq.min   x
-    static member        Min (x:list<'T>         , [<Optional>]_impl:Min     ) = List.min  x
-    static member        Min (x:'T []            , [<Optional>]_impl:Min     ) = Array.min x
-
-    static member inline Invoke (source:'``Collection<'T>``) =
-        let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Min: _*_ -> _) b, a)
-        let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Min>, source) :'T
-
-
-type MinBy =
-    inherit Default1
-    static member inline MinBy (x:'``Foldable<'T>``, f       , [<Optional>]_impl:Default1) = x |> ToSeq.Invoke |> Seq.minBy f : 'T
-    static member        MinBy (x:Id<'T>           , _:'T->'U, [<Optional>]_impl:MinBy   ) = x.getValue
-    static member        MinBy (x:seq<'T>          , f       , [<Optional>]_impl:MinBy   ) = Seq.minBy   f x
-    static member        MinBy (x:list<'T>         , f       , [<Optional>]_impl:MinBy   ) = List.minBy  f x
-    static member        MinBy (x:'T []            , f       , [<Optional>]_impl:MinBy   ) = Array.minBy f x
-
-    static member inline Invoke (projection:'T->'U) (source:'``Collection<'T>``) =
-        let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member MinBy: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
-        call (Unchecked.defaultof<MinBy>, source, projection) :'T
 
 
 type Replace =
@@ -254,14 +244,14 @@ type Rev =
     static member        Rev (x:list<'a>   , [<Optional>]_impl:Rev  ) = List.rev x
     static member        Rev (x:'a []      , [<Optional>]_impl:Rev  ) = Array.rev x
 
-    static member inline Invoke (source:'``Collection<'T>``) : '``Collection<'T>`` =
+    static member inline Invoke (source:'``C<'T>``) : '``C<'T>`` =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Rev: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Rev>, source)
-    static member inline InvokeOnInstance (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member Rev: _->_) source) : ^``Collection<'T>``
+    static member inline InvokeOnInstance (source:'``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member Rev: _->_) source) : ^``C<'T>``
 
-    static member inline Rev (x:'``Foldable<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.rev |> OfSeq.Invoke      : '``Foldable<'T>``
-    static member inline Rev (x:^``Foldable<'T>``, [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member Rev: _->_) x) : '``Foldable<'T>``
+    static member inline Rev (x:'``Collection<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.rev |> OfSeq.Invoke      : '``Collection<'T>``
+    static member inline Rev (x:^``Collection<'T>``, [<Optional>]_impl:Default1) = (^``Collection<'T>`` : (static member Rev: _->_) x) : '``Collection<'T>``
     static member inline Rev (_ : ^t when ^t : null and ^t : struct, _mthd : Default1) = id
 
 
@@ -283,14 +273,14 @@ type Sort =
     static member        Sort (x:list<'a>   , [<Optional>]_impl:Sort  ) = List.sort x
     static member        Sort (x:'a []      , [<Optional>]_impl:Sort  ) = Array.sort x
 
-    static member inline Invoke (source:'``Collection<'T>``) : '``Collection<'T>`` =
+    static member inline Invoke (source:'``C<'T>``) : '``C<'T>`` =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Sort: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
         call (Unchecked.defaultof<Sort>, source)
-    static member inline InvokeOnInstance (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member Sort: _->_) source) : ^``Collection<'T>``
+    static member inline InvokeOnInstance (source:'``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member Sort: _->_) source) : ^``C<'T>``
 
-    static member inline Sort (x:'``Foldable<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke      : '``Foldable<'T>``
-    static member inline Sort (x:^``Foldable<'T>``, [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member Sort: _->_) x) : '``Foldable<'T>``
+    static member inline Sort (x:'``Collection<'T>``, [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke      : '``Collection<'T>``
+    static member inline Sort (x:^``Collection<'T>``, [<Optional>]_impl:Default1) = (^``Collection<'T>`` : (static member Sort: _->_) x) : '``Collection<'T>``
     static member inline Sort (_ : ^t when ^t : null and ^t : struct, _mthd : Default1) = id
 
 
@@ -300,14 +290,14 @@ type SortBy =
     static member        SortBy (x:list<'a>   , f      , [<Optional>]_impl:SortBy  ) = List.sortBy  f x
     static member        SortBy (x:'a []      , f      , [<Optional>]_impl:SortBy  ) = Array.sortBy f x
 
-    static member inline Invoke (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` =
+    static member inline Invoke (projection:'T->'Key) (source:'``C<'T>``) : '``C<'T>`` =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member SortBy: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<SortBy>, source, projection)
-    static member inline InvokeOnInstance (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = (^``Collection<'T>`` : (static member SortBy: _*_->_) projection, source) : ^``Collection<'T>``
+    static member inline InvokeOnInstance (projection:'T->'Key) (source:'``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member SortBy: _*_->_) projection, source) : ^``C<'T>``
 
-    static member inline SortBy (x:'``Foldable<'T>``, f      , [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sortBy f |> OfSeq.Invoke         : '``Foldable<'T>``
-    static member inline SortBy (x:^``Foldable<'T>``, f      , [<Optional>]_impl:Default1) = (^``Foldable<'T>`` : (static member SortBy: _*_->_) f, x) : '``Foldable<'T>``
+    static member inline SortBy (x:'``Collection<'T>``, f      , [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.sortBy f |> OfSeq.Invoke         : '``Collection<'T>``
+    static member inline SortBy (x:^``Collection<'T>``, f      , [<Optional>]_impl:Default1) = (^``Collection<'T>`` : (static member SortBy: _*_->_) f, x) : '``Collection<'T>``
     static member inline SortBy (_ : ^t when ^t : null and ^t : struct, _ : 'T -> 'U, _mthd : Default1) = id
 
 
@@ -339,3 +329,33 @@ type Split =
     static member inline Split ((e:'``'Collection<'OrderedCollection>``, x:'``'OrderedCollection``), [<Optional>]_impl:Default2) = x |> ToSeq.Invoke |> Seq.split (ToSeq.Invoke e) |> Seq.map OfSeq.Invoke |> OfSeq.Invoke :'``'Collection<'OrderedCollection>``
     static member inline Split ((e:'``'Collection<'OrderedCollection>``, x:'``'OrderedCollection``), [<Optional>]_impl:Default1) = (^``'OrderedCollection`` : (static member Split: _*_->_) e, x) : '``'Collection<'OrderedCollection>``
     static member inline Split ((_ : ^t when ^t : null and ^t : struct, _), _mthd : Default1) = id
+
+
+type Intersperse =
+    inherit Default1
+    static member inline Intersperse (x:'``Collection<'T>``, e:'T, [<Optional>]_impl:Default1   ) = x |> ToSeq.Invoke |> Seq.intersperse e |> OfSeq.Invoke : '``Collection<'T>``
+    static member        Intersperse (x:list<'T>         , e:'T, [<Optional>]_impl:Intersperse) = List.intersperse  e x
+    static member        Intersperse (x:'T []            , e:'T, [<Optional>]_impl:Intersperse) = Array.intersperse e x
+ 
+    static member inline Invoke (sep:'T) (source:'``Collection<'T>``) =
+        let inline call_2 (a:^a, b:^b, s) = ((^a or ^b) : (static member Intersperse: _*_*_ -> _) b, s, a)
+        let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
+        call (Unchecked.defaultof<Intersperse>, source,sep) : '``Collection<'T>``
+
+
+// More Foldables
+
+type Intercalate =
+    inherit Default1
+    static member inline Intercalate (x:'``Foldable<'Monoid>``, e:'Monoid, [<Optional>]_impl:Default2) = let f t x = match (t, x) with (true, _) , x -> (false, x) | (_, acc ) , x -> (false, Plus.Invoke (Plus.Invoke acc e) x) in Fold.Invoke f (true, Zero.Invoke()) x |> snd
+    static member inline Intercalate (x:seq<'``Foldable<'T>``>, e:'``Foldable<'T>``, [<Optional>]_impl:Default1) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke :'``Foldable<'T>``
+    static member inline Intercalate (_:seq<'``Foldable<'T>``>, _ : ^t when ^t : null and ^t : struct, [<Optional>]_impl:Default1) = id
+    static member        Intercalate (x:seq<list<'T>>         , e:list<'T>         , [<Optional>]_impl:Intercalate) = List.intercalate  e x
+    static member        Intercalate (x:seq<'T []>            , e:'T []            , [<Optional>]_impl:Intercalate) = Array.intercalate e x
+    static member        Intercalate (x:seq<string>           , e:string           , [<Optional>]_impl:Intercalate) = String.Join (e, x)
+    static member        Intercalate (x:seq<StringBuilder>    , e:StringBuilder    , [<Optional>]_impl:Intercalate) = StringBuilder (String.Join (string e, Seq.map string x))
+ 
+    static member inline Invoke (sep:'Monoid) (source:'``Foldable<'Monoid>``) =
+        let inline call_2 (a:^a, b:^b, s:^c) = ((^a or ^c) : (static member Intercalate: _*_*_ -> _) b, s, a)
+        let inline call (a:'a, b:'b, s) = call_2 (a, b, s)
+        call (Unchecked.defaultof<Intercalate>, source,sep) :'Monoid
