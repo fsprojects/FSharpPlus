@@ -291,6 +291,36 @@ module IReadOnlyDictionary =
 
     open System.Collections.Generic
 
+    let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map.ofSeq |> Map.add key value :> IReadOnlyDictionary<_,_>
+
+    let tryGetValue k (dct: IReadOnlyDictionary<'Key, 'Value>) =
+        match dct.TryGetValue k with
+        | true, v -> Some v
+        | _       -> None
+
+    let map f (x: IReadOnlyDictionary<'Key, 'T>) =
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in x do
+            dct.Add (k, f v)
+        dct :> IReadOnlyDictionary<'Key, 'U>
+
+    let map2 f (x: IReadOnlyDictionary<'Key, 'T1>) (y: IReadOnlyDictionary<'Key, 'T2>) =
+        let dct = Dictionary<'Key, 'U> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+        for KeyValue(k, vx) in x do
+            match tryGetValue k y with
+            | Some vy -> dct.Add (k, f.Invoke (vx, vy))
+            | None    -> ()
+        dct :> IReadOnlyDictionary<'Key, 'U>
+
+    let zip (x: IReadOnlyDictionary<'Key, 'T1>) (y: IReadOnlyDictionary<'Key, 'T2>) =
+        let dct = Dictionary<'Key, 'T1 * 'T2> ()
+        for KeyValue(k, vx) in x do
+            match tryGetValue k y with
+            | Some vy -> dct.Add (k, (vx, vy))
+            | None    -> ()
+        dct :> IReadOnlyDictionary<'Key, 'T1 * 'T2>
+
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IReadOnlyDictionary<'Key, 'Value>) (source2: IReadOnlyDictionary<'Key, 'Value>) =
         let d = Dictionary<'Key,'Value> ()
