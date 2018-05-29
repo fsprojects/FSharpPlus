@@ -232,6 +232,13 @@ module Map =
             | Some vy -> yield (k, (vx, vy))
             | None    -> () }
 
+    /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
+    let unionWith combiner (source1: Map<'Key, 'Value>) (source2: Map<'Key, 'Value>) =
+        Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> combiner v v' | None -> v') m) source1 source2
+
+    /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
+    let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
+
 
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
@@ -266,6 +273,34 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'T1 * 'T2>
 
+    /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
+    let unionWith combiner (source1: IDictionary<'Key, 'Value>) (source2: IDictionary<'Key, 'Value>) =
+        let d = Dictionary<'Key,'Value> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
+        for KeyValue(k, v ) in source1 do d.[k] <- v
+        for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
+        d :> IDictionary<'Key,'Value>
+
+    /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
+    let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
+
+
+/// Additional operations on IReadOnlyDictionary<'Key, 'Value>
+[<RequireQualifiedAccess>]
+module IReadOnlyDictionary =
+
+    open System.Collections.Generic
+
+    /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
+    let unionWith combiner (source1: IReadOnlyDictionary<'Key, 'Value>) (source2: IReadOnlyDictionary<'Key, 'Value>) =
+        let d = Dictionary<'Key,'Value> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
+        for KeyValue(k, v ) in source1 do d.[k] <- v
+        for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
+        d :> IReadOnlyDictionary<'Key,'Value>
+
+    /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
+    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
 
 
 /// Additional operations on IEnumerator

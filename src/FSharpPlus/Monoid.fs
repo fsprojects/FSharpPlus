@@ -10,6 +10,7 @@ open Microsoft.FSharp.Quotations
 #else
 open System.Threading.Tasks
 #endif
+open FSharpPlus
 open FSharpPlus.Internals
 
 
@@ -78,8 +79,7 @@ type Plus with
                                 Plus.Invoke a u.Result)) t.Result).Unwrap ()
 #endif
 
-    static member inline ``+`` (x: Map<'a,'b>, y, [<Optional>]_mthd: Plus) =
-                    Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> Plus.Invoke v v' | None -> v') m) x y
+    static member inline ``+`` (x: Map<'a,'b>, y, [<Optional>]_mthd: Plus) = Map.unionWith Plus.Invoke x y
 
     static member inline ``+`` (x: Dictionary<'Key,'Value>, y: Dictionary<'Key,'Value>, [<Optional>]_mthd: Plus) =
                     let d = Dictionary<'Key,'Value> ()
@@ -104,13 +104,8 @@ type Plus with
     static member        ``+`` (x: _ ResizeArray     , y:_ ResizeArray      , [<Optional>]_mthd: Plus    ) = ResizeArray (Seq.append x y)
     static member        ``+`` (x: _ IObservable     , y                    , [<Optional>]_mthd: Default3) = Observable.merge x y
     static member        ``+`` (x: _ seq             , y                    , [<Optional>]_mthd: Default3) = Seq.append x y
-    static member        ``+`` (x: _ IEnumerator     , y                    , [<Optional>]_mthd: Default3) = FSharpPlus.Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator ()
-    static member inline ``+`` (x: IDictionary<'K,'V>, y: IDictionary<'K,'V>, [<Optional>]_mthd: Default3) =                    
-                    let d = Dictionary<'K,'V> ()
-                    let plus = OptimizedClosures.FSharpFunc<_,_,_>.Adapt Plus.Invoke
-                    for KeyValue(k, v ) in x do d.[k] <- v
-                    for KeyValue(k, v') in y do d.[k] <- match d.TryGetValue k with true, v -> plus.Invoke (v, v') | _ -> v'
-                    d :> IDictionary<'K,'V>
+    static member        ``+`` (x: _ IEnumerator     , y                    , [<Optional>]_mthd: Default3) = Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator ()
+    static member inline ``+`` (x: IDictionary<'K,'V>, y: IDictionary<'K,'V>, [<Optional>]_mthd: Default3) = Dict.unionWith Plus.Invoke x y
 
 
 [<Extension; Sealed>]
