@@ -76,6 +76,25 @@ type DList<'T>(length : int, data : DListData<'T> ) =
             | t::ts -> walk ts t xs
         walk [] l.dc state
 
+    static member private tryFindi (f : (int -> 'T -> bool)) (l:DList<'T>)  =
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+        let rec walk rights l i =
+            match l with
+            | Nil       -> finish rights i
+            | Unit x    -> 
+                if f.Invoke (i, x) then
+                    Some x
+                else
+                    finish rights (i+1)
+            | Join(x,y) -> walk (y::rights) x i
+        and finish rights xs =
+            match rights with
+            | []    -> None
+            | t::ts -> walk ts t xs
+        walk [] l.dc 0
+    static member private findi (f : (int -> 'T -> bool)) (l:DList<'T>) =
+        match DList.tryFindi f l with | Some v ->v | None -> raise (System.Collections.Generic.KeyNotFoundException()) 
+
     static member append (left, right) =
         match left, right with
         | Nil, _ -> right
@@ -141,6 +160,10 @@ type DList<'T>(length : int, data : DListData<'T> ) =
         | Some x -> Some (x, this.Tail)
         | None   -> None
 
+    member s.Item with get(index:int) = let withIndex i _ = i=index
+                                        if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException())
+                                        DList.findi withIndex s
+
     member this.toSeq() =
         //adaptation of right-hand side of Norman Ramsey's "fold"
         let rec walk rights l = seq {
@@ -163,6 +186,9 @@ type DList<'T>(length : int, data : DListData<'T> ) =
 
     interface IReadOnlyCollection<'T> with
         member s.Count = s.Length
+
+    interface IReadOnlyList<'T> with
+        member s.Item with get(index) = s.Item index
 
     interface System.Collections.IEnumerable with
         override s.GetEnumerator() = (s.toSeq() :> System.Collections.IEnumerator)
