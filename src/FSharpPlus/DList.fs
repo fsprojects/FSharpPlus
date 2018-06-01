@@ -76,7 +76,7 @@ type DList<'T>(length : int, data : DListData<'T> ) =
             | t::ts -> walk ts t xs
         walk [] l.dc state
 
-    private static member tryFindi (f : (int -> 'T -> bool)) (l:DList<'T>)  =
+    static member private tryFindi (f : (int -> 'T -> bool)) (l:DList<'T>)  =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         let rec walk rights l i =
             match l with
@@ -92,7 +92,7 @@ type DList<'T>(length : int, data : DListData<'T> ) =
             | []    -> None
             | t::ts -> walk ts t xs
         walk [] l.dc 0
-    private static member findi (f : (int -> 'T -> bool)) (l:DList<'T>) =
+    static member private findi (f : (int -> 'T -> bool)) (l:DList<'T>) =
         match DList.tryFindi f l with | Some v ->v | None -> raise (System.Collections.Generic.KeyNotFoundException()) 
 
     static member append (left, right) =
