@@ -76,7 +76,7 @@ type DList<'T>(length : int, data : DListData<'T> ) =
             | t::ts -> walk ts t xs
         walk [] l.dc state
 
-    static member findi (f : (int -> 'T -> bool)) (l:DList<'T>)  =
+    static member tryFindi (f : (int -> 'T -> bool)) (l:DList<'T>)  =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         let rec walk rights l i =
             match l with
@@ -92,6 +92,8 @@ type DList<'T>(length : int, data : DListData<'T> ) =
             | []    -> None
             | t::ts -> walk ts t xs
         walk [] l.dc 0
+    static member findi (f : (int -> 'T -> bool)) (l:DList<'T>) =
+        match DList.tryFindi f l with | Some v ->v | None -> raise (System.Collections.Generic.KeyNotFoundException()) 
 
     static member append (left, right) =
         match left, right with
@@ -158,9 +160,9 @@ type DList<'T>(length : int, data : DListData<'T> ) =
         | Some x -> Some (x, this.Tail)
         | None   -> None
 
-    member s.Item with get(index:int) = let withIndex i _= i=index
-                                        if index < 0 then raise (System.IndexOutOfRangeException())
-                                        match DList.findi withIndex s with | Some v->v | None -> raise (System.IndexOutOfRangeException())
+    member s.Item with get(index:int) = let withIndex i _ = i=index
+                                        if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException())
+                                        DList.findi withIndex s
 
     member this.toSeq() =
         //adaptation of right-hand side of Norman Ramsey's "fold"

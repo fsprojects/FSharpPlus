@@ -301,5 +301,13 @@ module DList=
                  |>  DList.ofSeq
         for i1 in [0..99] do
             let v= toString (i1+1)
-            shouldEqual (Some (v)) (DList.findi (fun i _ -> i = i1) l1)
+            shouldEqual v l1.[i1]
 
+    let assertThrowsIndexOutOfRange fn = Assert.Throws<System.IndexOutOfRangeException> (fun ()-> fn()|> ignore) |> ignore
+    [<Test>]
+    let ``get [i] outside of range``() =
+        let l1 = [1..100]
+                 |> List.map toString
+                 |>  DList.ofSeq
+        assertThrowsIndexOutOfRange (fun _ -> l1.[100])
+        assertThrowsIndexOutOfRange (fun _ -> l1.[-1])
