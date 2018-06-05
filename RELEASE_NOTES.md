@@ -1,3 +1,11 @@
+#### 1.1.0-CI00204  - June 5 2018
+* Fix culture neutrality of TryParse functions
+* More integration with ReadOnly Collections
+* More extensions for Map, IDictionary and ReadOnly collections
+* Map and Dictionary as ZipFunctor
+* Result and Choice as Semigroup and Alt
+* Exceptions and AggregateExceptions as Semigroup
+
 #### 1.0.0  - April 27 2018
 * Public 1.0.0 release that includes a better architected API and numerous bug fixes
 
