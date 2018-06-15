@@ -318,6 +318,7 @@ module Functor =
         let g = zip ((seq [1;2;3]).GetEnumerator()) ((seq [1. .. 3. ]).GetEnumerator())
         let h = zip (Map.ofSeq [1,'1' ; 2,'2' ; 4,'4']) (Map.ofSeq [1,'1' ; 2,'2' ; 3,'3'])
         let i = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
+        let j = zip (async {return 1}) (async {return '2'})
 
         let fa a = zip a (seq [1. .. 3. ])
         let fb a = zip a (WrappedListD [1. .. 3. ])
@@ -327,6 +328,7 @@ module Functor =
         let fg a = zip a ((seq [1. .. 3. ]).GetEnumerator())
         let fh a = zip a (Map.ofSeq [1,'1' ; 2,'2' ; 3,'3'])
         let fi a = zip a (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
+        let fj a = zip a (async {return '2'})
 
         let ga b = zip (seq [1;2;3]) b
         let gb b = zip (WrappedListD [1;2;3]) b
@@ -336,6 +338,7 @@ module Functor =
         let gg b = zip ((seq [1;2;3]).GetEnumerator()) b
         let gh b = zip (Map.ofSeq [1,'1' ; 2,'2' ; 4,'4']) b
         let gi b = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) b
+        let gj b = zip (async {return 1}) b
 
         let ha : _ -> _ -> _ seq            = zip
         let hb : _ -> _ -> _ WrappedListD   = zip
@@ -345,6 +348,7 @@ module Functor =
         let hg : _ -> _ -> _ IEnumerator    = zip
         let hh : _ -> _ -> Map<_,_>         = zip
         let hi : _ -> _ -> Dictionary<_,_>  = zip
+        let hj : _ -> _ -> Async<_>         = zip
 
         ()
 
