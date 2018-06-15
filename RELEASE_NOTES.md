@@ -1,3 +1,7 @@
+#### 1.1.0-CI00208  - June 15 2018
+* Async as ZipFunctor
+* More Async extensions
+
 #### 1.1.0-CI00204  - June 5 2018
 * Fix culture neutrality of TryParse functions
 * More integration with ReadOnly Collections
