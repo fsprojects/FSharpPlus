@@ -726,6 +726,22 @@ module Enumerator =
                         finally e3.Dispose () }
 
 
+module Async =
+
+    let map f x = async.Bind (x, async.Return << f)
+    let map2 f x y = async {
+        let! a = x
+        let! b = y
+        return f a b}
+    let zip x y = async {
+        let! a = x
+        let! b = y
+        return a, b}
+    let join x = async.Bind (x, id)
+    let apply f x = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2}))
+    let raise<'T> (ex: exn) : Async<'T> = Async.FromContinuations (fun (_, errK, _) -> errK ex)
+
+
 /// Module containing F#+ Extension Methods  
 module Extensions =
 

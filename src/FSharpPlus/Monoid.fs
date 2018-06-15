@@ -90,10 +90,7 @@ type Plus with
 
     static member inline ``+`` (f: 'T->'Monoid, g: 'T->'Monoid, [<Optional>]_mthd: Plus) = (fun x -> Plus.Invoke (f x) (g x)) : 'T->'Monoid
 
-    static member inline ``+`` (x: 'S Async, y: 'S Async, [<Optional>]_mthd: Plus) = async {
-                    let! a = x
-                    let! b = y
-                    return Plus.Invoke a b}
+    static member inline ``+`` (x: 'S Async, y: 'S Async, [<Optional>]_mthd: Plus) = Async.map2 Plus.Invoke x y
 
     static member inline ``+`` (x: 'a Expr, y: 'a Expr, [<Optional>]_mthd: Plus) : 'a Expr =
                     let inline f (x:'a)  :'a -> 'a = Plus.Invoke x
