@@ -79,8 +79,8 @@ module DList=
     // NUnit TestCaseSource does not understand array of tuples at runtime
     let intGens start =
         let v = Array.create 3 (box (DListIntGen, "DList"))
-        v.[1] <- box ((DListIntOfSeqGen |> Gen.suchThat (fun (q, l) -> l.Length >= start)), "DList OfSeq")
-        v.[2] <- box ((DListIntAddGen |> Gen.suchThat (fun (q, l) -> l.Length >= start)), "DList addDList") 
+        v.[1] <- box ((DListIntOfSeqGen |> Gen.where (fun (_, l) -> l.Length >= start)), "DList OfSeq")
+        v.[2] <- box ((DListIntAddGen |> Gen.where (fun (_, l) -> l.Length >= start)), "DList addDList") 
         v
 
     let intGensStart1 =
@@ -157,25 +157,25 @@ module DList=
     [<TestCaseSource("intGensStart1")>]
     let ``get head from DList``(x : obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (head q) = (List.nth l 0) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (head q) = (List.item 0 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
     let ``get head from DList safely``(x : obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (tryHead q).Value = (List.nth l 0) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (tryHead q).Value = (List.item 0 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart2")>]
     let ``get tail from DList``(x : obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun ((q : DList<int>), l) -> q.Tail.Head = (List.nth l 1) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun ((q : DList<int>), l) -> q.Tail.Head = (List.item 1 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart2")>]
     let ``get tail from DList safely``(x : obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> q.TryTail.Value.Head = (List.nth l 1) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> q.TryTail.Value.Head = (List.item 1 l) ))
 
     [<Test>]
     let ``give None if there is no head in the DList``() =

@@ -177,6 +177,9 @@ module ``EXAMPLE nth`` =
     nth_k i1 ls (fun x->assertEqual (nth i1 ls) x)
 
     nth_k i2 ls (fun x->assertEqual (nth i2 ls) x)
+
+
+#nowarn "0064"
 module ``EXAMPLE nth in FSharpPlus`` =
 
     let rec nth_k n (ls : 'a list) = monad {
