@@ -258,7 +258,7 @@ type Scan =
     static member Scan (x: list<'T>, f ,z: 'S, [<Optional>]_output: list<'S>, [<Optional>]_impl: Scan) = List.scan  f z x
     static member Scan (x: 'T []   , f ,z: 'S, [<Optional>]_output: 'S []   , [<Optional>]_impl: Scan) = Array.scan f z x
 
-    static member inline Invoke (folder: 'State'->'T->'State) (state: 'State) (source: '``Collection<'T>``) =
+    static member inline Invoke (folder: 'State->'T->'State) (state: 'State) (source: '``Collection<'T>``) =
         let inline call_3 (a:^a, b:^b, c:^c, f, z) = ((^a or ^b or ^c) : (static member Scan: _*_*_*_*_ -> _) b, f, z, c, a)
         let inline call (a:'a, b:'b, f, z) = call_3 (a, b, Unchecked.defaultof<'r>, f, z) :'r
         call (Unchecked.defaultof<Scan>, source, folder, state) : '``Collection<'State>``
