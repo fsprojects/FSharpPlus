@@ -27,8 +27,6 @@ module Operators =
     let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
 
-    // BEGIN region copied from FsControl
-
     // Functor ----------------------------------------------------------------
 
     /// Lift a function into a Functor.
@@ -114,19 +112,27 @@ module Operators =
 
    
     // Contravariant/Bifunctor/Profunctor -------------------------------------
+
+    /// Maps over the input.
     let inline contramap (f : 'U->'T) (x:'``Contravariant<'T>``) : '``Contravariant<'U>`` = Contramap.Invoke f x
-    /// Map over both arguments of the Bifunctor at the same time.
+
+    /// Maps over both arguments of the Bifunctor at the same time.
     let inline bimap  (f : 'T->'U) (g : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` = Bimap.Invoke  f g source
-    /// Map covariantly over the first argument of the Bifunctor.
+
+    /// Maps covariantly over the first argument of the Bifunctor.
     let inline first  (f : 'T->'V) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = MapFirst.Invoke  f source
-    /// Map covariantly over the second argument of the Bifunctor.
+
+    /// Maps covariantly over the second argument of the Bifunctor.
     let inline second (f : 'V->'W) (source : '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = Map.Invoke f source
-    /// Map over both arguments at the same time of a Profunctor.
+
+    /// Maps over both arguments at the same time of a Profunctor.
     let inline dimap  (f : 'A->'B) ( g: 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
-    /// Can be thought of as mapping the left part of a Profunctor
+
+    /// Can be thought of as mapping the left part of a Profunctor.
     /// For instance (Error) when working on Result<_,_>
     let inline lmap   (f : 'A->'B) (source : ^``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` = Contramap.Invoke f source
-    /// Can be thought of as mapping the right part of a Profunctor 
+
+    /// Can be thought of as mapping the right part of a Profunctor. 
     /// For instance (Ok) when working on Result<_,_>
     let inline rmap   (f : 'C->'D) (source : '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = Map.Invoke f source
 
@@ -198,7 +204,9 @@ module Operators =
     let inline tryFind    (predicate :'T->bool) (source:'``Foldable<'T>``)   = TryFind.Invoke predicate source  :'T option
     let inline pick     (chooser:'T->'U option) (source:'``Foldable<'T>``)   = Pick.Invoke    chooser   source  :'U
     let inline tryPick  (chooser:'T->'U option) (source:'``Foldable<'T>``)   = TryPick.Invoke chooser   source  :'U option
-    let inline intercalate      (sep:'Monoid)   (source:'``Foldable<'Monoid>``)    = Intercalate.Invoke sep source : 'Monoid    
+
+    /// Folds the source, inserting a separator between each element.
+    let inline intercalate      (sep:'Monoid)   (source:'``Foldable<'Monoid>``)   = Intercalate.Invoke sep source : 'Monoid
     let inline head                             (source:'``Foldable<'T>``)        = Head.Invoke source    :'T
     let inline tryHead                          (source:'``Foldable<'T>``)        = TryHead.Invoke source :'T option
     let inline length (source:'``Foldable<'T>``) :int                             = Length.Invoke source
@@ -381,11 +389,12 @@ module Operators =
     let inline chunkBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = ChunkBy.Invoke projection source
 
 
-    let inline choose (chooser:'T->'U option)   (source:'``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source        
+    let inline choose (chooser:'T->'U option)   (source:'``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source
 
     let inline distinct                         (source:'``Collection<'T>``) : '``Collection<'T>`` = Distinct.Invoke              source
     let inline distinctBy (projection:'T->'Key) (source:'``Collection<'T>``) : '``Collection<'T>`` = DistinctBy.Invoke projection source
 
+    /// Inserts a separator between each element
     let inline intersperse      (sep:'T)        (source:'``Collection<'T>``) : '``Collection<'T>`` = Intersperse.Invoke sep       source
     
     let inline replace (oldValue:'Collection) (newValue:'Collection) (source:'Collection) = Replace.Invoke oldValue newValue source : 'Collection
@@ -531,8 +540,6 @@ module Operators =
     ///           Works also for unsigned types. 
     /// <para/>   Rule: signum x * abs x = x        </summary>
     let inline abs'   (x:'Num): 'Num = Abs'.Invoke x
-
-    // END region copied from FsControl.
 
 
 

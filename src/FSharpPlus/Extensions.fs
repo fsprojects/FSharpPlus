@@ -5,6 +5,10 @@ open System
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
 module Option =
+    /// <summary>If both value are Some, returns the result of applying the second value to the first one. Otherwise it returns None.</summary>
+    /// <param name="f">The function.</param>
+    /// <param name="x">The value.</param>
+    /// <returns>The result sequence.</returns>
     let apply f x =
         match f, x with
         | Some f, Some x -> Some (f x) 
@@ -66,6 +70,7 @@ module Seq =
             yield element
             notFirst <- true }
 
+    /// Inserts a separator between each element in the source sequence.
     let intercalate separator source = seq {
         let mutable notFirst = false
         for element in source do
@@ -73,6 +78,7 @@ module Seq =
             yield! element
             notFirst <- true }
 
+    /// Creates a sequence of sequences by splitting the source sequence on any of the given separators.
     let split separators source =
         let split options = seq {
             match separators |> Seq.map Seq.toList |> Seq.toList with
@@ -140,10 +146,16 @@ module Seq =
 /// Additional operations on List
 [<RequireQualifiedAccess>]
 module List =
+
+    /// Creates a list with a single element.
     let singleton x = [x]
+
     let cons x y = x :: y
     let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
+
+    /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
+
     let take i list = Seq.take i list |> Seq.toList
 
     let skip i list =
@@ -169,18 +181,30 @@ module List =
         if i > 0 then loop i list else list
 
     let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
-    let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList                              : list<'T>
+
+    /// Inserts a separator between each element in the source list.
+    let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList : list<'T>
+
+    /// Creates a sequence of lists by splitting the source list on any of the given separators.
     let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
-    let replace oldValue newValue source = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList                  : list<'T>
+
+    /// Replace a subsequence of the source list with the given replacement list.
+    let replace oldValue (newValue: _ list) (source: _ list) = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList : list<'T>
 
 
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
 module Array =
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
-    let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray                            : 'T []
+
+    /// Inserts a separator between each element in the source array.
+    let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
+
+    /// Creates a sequence of arrays by splitting the source array on any of the given separators.
     let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
-    let replace oldValue newValue source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray                : 'T []
+
+    /// Replace a subsequence of the source array with the given replacement array.
+    let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
 
 
 /// Additional operations on String
@@ -189,9 +213,16 @@ module String =
     open System.Text
     open System.Globalization
 
+    /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: string) (source: seq<string>) = String.Join (separator, source)
+
+    /// Inserts a separator between each char in the source string.
     let intersperse (element: char) (source: string) = String.Join ("", Array.ofSeq (source |> Seq.intersperse element))
+
+    /// Creates a sequence of strings by splitting the srouce string on any of the given separators.
     let split (separators: seq<string>) (source: string) = source.Split (Seq.toArray separators, StringSplitOptions.None) :> seq<_>
+
+    /// Replace a substring with the given replacement string.
     let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace (oldValue, newValue)
 
     let isSubString subString (source: string) = source.Contains subString
@@ -227,8 +258,21 @@ module IReadOnlyCollection =
 [<RequireQualifiedAccess>]
 module Map =
 
+    /// <summary>Map values of the original Map.</summary>
+    /// <remarks>Keys remain unchanged.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input Map.</param>
+    ///
+    /// <returns>The mapped Map.</returns>
     let mapValues f (x: Map<'Key, 'T>) = Map.map (fun _ -> f) x
 
+    /// <summary>Map values of two Maps.</summary>
+    /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The first input Map.</param>
+    /// <param name="y">The second input Map.</param>
+    ///
+    /// <returns>The mapped Map.</returns>
     let mapValues2 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map.ofSeq <| seq {
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         for KeyValue(k, vx) in x do
@@ -236,6 +280,12 @@ module Map =
             | Some vy -> yield (k, f.Invoke (vx, vy))
             | None    -> () }
 
+    /// <summary>Tuple values of two Maps.</summary>
+    /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
+    /// <param name="x">The first input Map.</param>
+    /// <param name="y">The second input Map.</param>
+    ///
+    /// <returns>The tupled Map.</returns>
     let zip (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map.ofSeq <| seq {
         for KeyValue(k, vx) in x do
             match Map.tryFind k y with
@@ -275,6 +325,12 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'U>
 
+    /// <summary>Tuple values of two dictionaries.</summary>
+    /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
+    /// <param name="x">The first input dictionary.</param>
+    /// <param name="y">The second input dictionary.</param>
+    ///
+    /// <returns>The tupled dictionary.</returns>
     let zip (x: IDictionary<'Key, 'T1>) (y: IDictionary<'Key, 'T2>) =
         let dct = Dictionary<'Key, 'T1 * 'T2> ()
         for KeyValue(k, vx) in x do
@@ -323,6 +379,12 @@ module IReadOnlyDictionary =
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'U>
 
+    /// <summary>Tuple values of two dictionaries.</summary>
+    /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
+    /// <param name="x">The first input dictionary.</param>
+    /// <param name="y">The second input dictionary.</param>
+    ///
+    /// <returns>The tupled dictionary.</returns>
     let zip (x: IReadOnlyDictionary<'Key, 'T1>) (y: IReadOnlyDictionary<'Key, 'T2>) =
         let dct = Dictionary<'Key, 'T1 * 'T2> ()
         for KeyValue(k, vx) in x do
@@ -726,19 +788,37 @@ module Enumerator =
                         finally e3.Dispose () }
 
 
+/// Additional operations on IEnumerator
 module Async =
 
+    /// <summary>Creates an async workflow from another workflow 'x', mapping its result with 'f'.</summary>
     let map f x = async.Bind (x, async.Return << f)
+
+    /// <summary>Creates an async workflow from two workflows 'x' and 'y', mapping it results with 'f'.</summary>
+    /// <remarks>Workflows are run in sequence.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First async workflow.</param>
+    /// <param name="y">Second async workflow.</param>
     let map2 f x y = async {
         let! a = x
         let! b = y
         return f a b}
+
+    /// <summary>Creates an async workflow from two workflows 'x' and 'y', tupling it results.</summary>
     let zip x y = async {
         let! a = x
         let! b = y
         return a, b}
+
+    /// Flatten two nested asyncs into one.
     let join x = async.Bind (x, id)
+
+    /// <summary>Create an async workflow that is the result of applying the resulting function of an async workflow to the resulting value of another async workflow.</summary>
+    /// <param name="f">Async workflow returning a function.</param>
+    /// <param name="x">Async workflow returning a value.</param>
     let apply f x = async.Bind (f, fun x1 -> async.Bind (x, fun x2 -> async {return x1 x2}))
+
+    /// Raise an exception in the async workflow
     let raise<'T> (ex: exn) : Async<'T> = Async.FromContinuations (fun (_, errK, _) -> errK ex)
 
 

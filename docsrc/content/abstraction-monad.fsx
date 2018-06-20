@@ -21,8 +21,8 @@ Minimal complete definition
  * ``(>>=) x f``
 *)
 (**
-    static member Return (x:'T) : 'Monad<'T>
-    static member (>>=) (x:Monad<'T>, f:'T->Monad<'U>) : Monad<'U>
+    static member Return (x: 'T) : 'Monad<'T>
+    static member (>>=) (x: Monad<'T>, f: 'T->Monad<'U>) : Monad<'U>
 *)
 (**
 
@@ -119,7 +119,7 @@ let lst11n21n12n22 =
     monad {
         let! x1 = [1;   2]
         let! x2 = [10; 20]
-        return ((+) x1 x2)}
+        return ((+) x1 x2) }
 
 // This is the same example but with a non-empty list
 let neLst11n21n12n22 = 
@@ -133,7 +133,7 @@ let some14 =
     monad {
         let! x1 = Some 4
         let! x2 = tryParse "10"
-        return ((+) x1 x2)}
+        return ((+) x1 x2) }
 
 
 // Monads do not compose well, we need to use Monad Transformers

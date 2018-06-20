@@ -6,7 +6,6 @@ module Samples.Validations
 open System
 open FSharpPlus
 open FSharpPlus.Data
-open FSharpPlus.Operators
 
 module Person=
     type Name = { unName : String } 
@@ -23,32 +22,32 @@ module Person=
 
 
     type Error = 
-               | NameBetween1And50
-               | EmailMustContainAtChar
-               | AgeBetween0and120
+        | NameBetween1And50
+        | EmailMustContainAtChar
+        | AgeBetween0and120
 
     // Smart constructors
     let mkName s = 
-      let l = length s
-      in if (l >= 1 && l <= 50)
+        let l = length s
+        if (l >= 1 && l <= 50)
         then Success <| Name.create s
         else Failure  [ NameBetween1And50 ]
 
     let mkEmail s = 
-      if String.contains '@' s
+        if String.contains '@' s
         then Success <| Email.create s
         else Failure [ EmailMustContainAtChar ]
 
     let mkAge a = 
-      if (a >= 0 && a <= 120)
+        if (a >= 0 && a <= 120)
         then Success <| Age.create a
         else Failure [ AgeBetween0and120 ]
 
     let mkPerson pName pEmail pAge =
-      Person.create
-      <!> (mkName pName)
-      <*> (mkEmail pEmail)
-      <*> (mkAge pAge)
+        Person.create
+        <!> mkName pName
+        <*> mkEmail pEmail
+        <*> mkAge pAge
 
     // Examples
 
@@ -79,8 +78,8 @@ module Person=
     let asResultBad = badEverything ^. Validation.isoValidationResult
     // Error [NameBetween1And50;EmailMustContainAtChar;AgeBetween0and120]
 
-module Email=
 
+module Email =
 
     // ***** Types *****
     type AtString = AtString of string 
@@ -96,27 +95,27 @@ module Email=
     // ***** Base smart constructors *****
     // String must contain an '@' character
     let atString (x:string) : Validation<VError list,AtString> =
-      if String.contains '@' x then Success <| AtString x
-      else Failure [MustContainAt]
+        if String.contains '@' x then Success <| AtString x
+        else Failure [MustContainAt]
 
     // String must contain an '.' character
     let periodString (x:string) : Validation<VError list,PeriodString> = 
-      if String.contains '.' x
-      then Success <| PeriodString x
-      else Failure [MustContainPeriod]
+        if String.contains '.' x
+        then Success <| PeriodString x
+        else Failure [MustContainPeriod]
 
     // String must not be empty
     let nonEmptyString (x:string) : Validation<VError list,NonEmptyString> = 
-      if not <| String.IsNullOrEmpty x 
-      then Success <| NonEmptyString x
-      else Failure [MustNotBeEmpty]
+        if not <| String.IsNullOrEmpty x 
+        then Success <| NonEmptyString x
+        else Failure [MustNotBeEmpty]
 
     // ***** Combining smart constructors *****
     let email (x:string) : Validation<VError list, Email> = 
-      result (Email x)   <*
-      nonEmptyString x <*
-      atString       x <*
-      periodString   x
+        result (Email x) <*
+        nonEmptyString x <*
+        atString       x <*
+        periodString   x
 
     // ***** Example usage *****
     let success = email "bob@gmail.com"

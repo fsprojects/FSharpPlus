@@ -60,6 +60,7 @@ From .Net/F#
  -  ``ResizeArray<'T>``
  
 From F#+
+
  -  ``Cont<'R,'T>`` 
  -  ``ContT<'R,'T>``
  -  ``Reader<'R,'T>`` 
@@ -113,6 +114,12 @@ let resSing22 : list<_>   = result 22
 let resLazy22 : Lazy<_>   = result 22
 let (quot5 : Microsoft.FSharp.Quotations.Expr<int>) = result 5
 
+// Example
+type Person = { name: string; age: int } with static member create n a = {name = n; age = a}
+
+let person1 = Person.create <!> tryHead ["gus"] <*> tryParse "42"
+let person2 = Person.create <!> tryHead ["gus"] <*> tryParse "fourty two"
+let person3 = Person.create <!> tryHead ["gus"] <*> (tryHead ["42"] >>= tryParse)
 
 // Another way to write applicative expressions
 open FSharpPlus.Builders
@@ -131,6 +138,11 @@ let optFalse = tryParse "30" .< 29
 // Composing applicatives
 open FSharpPlus.Data
 let res4 = (+) <!> Compose [Some 3] <*> Compose [Some 1]
+
+let getName s = async { return tryHead s }
+let getAge  s = async { return tryParse s }
+
+let person4 = Person.create <!> Compose (getName ["gus"]) <*> Compose (getAge "42")
 
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets

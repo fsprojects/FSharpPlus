@@ -64,6 +64,7 @@ From .Net/F#
  -  ``ResizeArray<'T>``
  
 From F#+
+
  -  ``Cont<'R,'T>`` 
  -  ``ContT<'R,'T>``
  -  ``Reader<'R,'T>`` 

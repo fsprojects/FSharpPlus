@@ -117,10 +117,19 @@ module Builders =
     type MonadFxBuilder () =
         inherit DelayedBuilder ()
         member        __.strict  = new MonadFxStrictBuilder ()
+
+        /// Makes it a (lazy) monadplus computation expression.
         member        __.plus    = new MonadPlusBuilder ()
+
+        /// Makes it a strict monadplus computation expression.
         member        __.plus'   = new MonadPlusStrictBuilder ()
+
+        /// Makes it a (lazy) monadic computation expression with side-effects
         member        this.fx    = this
+
+        /// Makes it a strict monadic computation expression with side-effects
         member        __.fx'     = new MonadFxStrictBuilder ()
+
         member inline __.Zero () = result ()                                    : '``Monad<unit>``
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
         member inline __.While (guard, body: '``Monad<unit>``)                  : '``Monad<unit>`` =
@@ -137,5 +146,8 @@ module Builders =
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
 
+    /// Creates a (lazy) monadic computation expression with side-effects
     let monad = new MonadFxBuilder ()
+
+    /// Creates a strict monadic computation expression with side-effects
     let monad' = new MonadFxStrictBuilder ()
