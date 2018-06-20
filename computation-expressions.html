@@ -96,6 +96,24 @@ F# comes with async and seq computation expressions, both are delayed.</p>
 <span class="l">41: </span>
 <span class="l">42: </span>
 <span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
+<span class="l">53: </span>
+<span class="l">54: </span>
+<span class="l">55: </span>
+<span class="l">56: </span>
+<span class="l">57: </span>
+<span class="l">58: </span>
+<span class="l">59: </span>
+<span class="l">60: </span>
+<span class="l">61: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
@@ -114,8 +132,8 @@ F# comes with async and seq computation expressions, both are delayed.</p>
     <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">a</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="uc">Some</span> <span class="n">3</span>
     <span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="mv">b</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="fn">ref</span> <span class="n">0</span>
     <span class="k">while</span> <span class="o">!</span><span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="mv">b</span> <span class="o">&lt;</span> <span class="n">10</span> <span class="k">do</span> 
-      <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="id">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="uc">Some</span> <span class="pn">(</span><span class="pn">)</span>
-      <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="fn">incr</span> <span onmouseout="hideTip(event, 'fs10', 19)" onmouseover="showTip(event, 'fs10', 19)" class="mv">b</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="id">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="uc">Some</span> <span class="pn">(</span><span class="pn">)</span>
+        <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="fn">incr</span> <span onmouseout="hideTip(event, 'fs10', 19)" onmouseover="showTip(event, 'fs10', 19)" class="mv">b</span>
     <span class="k">if</span> <span onmouseout="hideTip(event, 'fs8', 20)" onmouseover="showTip(event, 'fs8', 20)" class="id">a</span> <span class="o">=</span> <span class="n">3</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs4', 21)" onmouseover="showTip(event, 'fs4', 21)" class="fn">printfn</span> <span class="s">&quot;got 3&quot;</span>
     <span class="k">else</span> <span onmouseout="hideTip(event, 'fs4', 22)" onmouseover="showTip(event, 'fs4', 22)" class="fn">printfn</span> <span class="s">&quot;got something else (will never print this)&quot;</span>
     <span class="k">return</span> <span onmouseout="hideTip(event, 'fs8', 23)" onmouseover="showTip(event, 'fs8', 23)" class="id">a</span> <span class="pn">}</span>
@@ -140,6 +158,24 @@ F# comes with async and seq computation expressions, both are delayed.</p>
     <span class="k">return</span> <span onmouseout="hideTip(event, 'fs18', 47)" onmouseover="showTip(event, 'fs18', 47)" class="id">defaultValue</span> <span class="pn">}</span>
 
 <span class="c">// val maybeManyTimes : int option = Some 2</span>
+
+
+<span class="k">let</span> <span class="pn">(</span><span class="id">asnNumber</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs20', 48)" onmouseover="showTip(event, 'fs20', 48)" class="rt">Async</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 49)" onmouseover="showTip(event, 'fs2', 49)" class="id">monad</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 50)" onmouseover="showTip(event, 'fs21', 50)" class="id">fx</span> <span class="pn">{</span>
+    <span class="k">let</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs22', 51)" onmouseover="showTip(event, 'fs22', 51)" class="mv">m</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 52)" onmouseover="showTip(event, 'fs23', 52)" class="rt">ResizeArray</span> <span class="pn">(</span><span class="pn">)</span>
+    <span class="k">try</span>
+        <span class="k">for</span> <span onmouseout="hideTip(event, 'fs24', 53)" onmouseover="showTip(event, 'fs24', 53)" class="id">i</span> <span class="o">=</span> <span class="n">1</span> <span class="k">to</span> <span class="n">10</span> <span class="k">do</span>
+            <span onmouseout="hideTip(event, 'fs22', 54)" onmouseover="showTip(event, 'fs22', 54)" class="mv">m</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 55)" onmouseover="showTip(event, 'fs25', 55)" class="id">Add</span> <span onmouseout="hideTip(event, 'fs24', 56)" onmouseover="showTip(event, 'fs24', 56)" class="id">i</span>
+        <span class="k">return</span> <span onmouseout="hideTip(event, 'fs22', 57)" onmouseover="showTip(event, 'fs22', 57)" class="id">m</span><span class="pn">.</span><span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">]</span>
+    <span class="k">with</span> <span onmouseout="hideTip(event, 'fs26', 58)" onmouseover="showTip(event, 'fs26', 58)" class="id">e</span> <span class="k">-&gt;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">3</span> <span class="pn">}</span>
+
+
+<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs27', 59)" onmouseover="showTip(event, 'fs27', 59)" class="id">lstNumber</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs28', 60)" onmouseover="showTip(event, 'fs28', 60)" class="rt">list</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 61)" onmouseover="showTip(event, 'fs2', 61)" class="id">monad</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 62)" onmouseover="showTip(event, 'fs17', 62)" class="id">plus&#39;</span> <span class="pn">{</span>
+    <span class="k">try</span>
+        <span class="k">for</span> <span class="id">i</span> <span class="o">=</span> <span class="n">1</span> <span class="k">to</span> <span class="n">10</span> <span class="k">do</span>
+            <span class="k">return</span> <span class="id">i</span>
+    <span class="k">with</span> <span onmouseout="hideTip(event, 'fs26', 63)" onmouseover="showTip(event, 'fs26', 63)" class="id">e</span> <span class="k">-&gt;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">3</span> <span class="pn">}</span>
 </code></pre></td>
 </tr>
 </table>
@@ -163,26 +199,37 @@ F# comes with async and seq computation expressions, both are delayed.</p>
 <div class="tip" id="fs17">property MonadFxBuilder.plus&#39;: MonadPlusStrictBuilder</div>
 <div class="tip" id="fs18">val defaultValue : int</div>
 <div class="tip" id="fs19">val mutable i : int</div>
+<div class="tip" id="fs20">Multiple items<br />module Async<br /><br />from FSharpPlus<br /><br />--------------------<br />type Async =<br />&#160;&#160;static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />&#160;&#160;static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />&#160;&#160;static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member AwaitTask : task:Task -&gt; Async&lt;unit&gt;<br />&#160;&#160;static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member CancelDefaultToken : unit -&gt; unit<br />&#160;&#160;static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />&#160;&#160;static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;...<br /><br />--------------------<br />type Async&lt;&#39;T&gt; =</div>
+<div class="tip" id="fs21">property MonadFxBuilder.fx: MonadFxBuilder</div>
+<div class="tip" id="fs22">val mutable m : System.Collections.Generic.List&lt;int&gt;</div>
+<div class="tip" id="fs23">type ResizeArray&lt;&#39;T&gt; = System.Collections.Generic.List&lt;&#39;T&gt;</div>
+<div class="tip" id="fs24">val i : int</div>
+<div class="tip" id="fs25">System.Collections.Generic.List.Add(item: int) : unit</div>
+<div class="tip" id="fs26">val e : exn</div>
+<div class="tip" id="fs27">val lstNumber : obj list</div>
+<div class="tip" id="fs28">type &#39;T list = List&lt;&#39;T&gt;</div>
 
         </div>
         <div class="span3">
           <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-            
-            <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
-          </ul>
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
         </div>
       </div>
     </div>

@@ -59,7 +59,7 @@
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="id">foldMap</span> <span class="pn">(</span><span class="id">g</span> <span class="pn">.</span> <span class="id">f</span><span class="pn">)</span> <span class="o">=</span> <span class="id">g</span> <span class="pn">.</span> <span class="id">foldMap</span> <span class="id">f</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="id">foldMap</span> <span class="pn">(</span><span class="id">f</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="id">g</span><span class="pn">)</span> <span class="o">=</span> <span class="id">foldMap</span> <span class="id">f</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="id">g</span>
 </code></pre></td>
 </tr>
 </table>
@@ -281,22 +281,24 @@
         </div>
         <div class="span3">
           <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-            
-            <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
-          </ul>
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
         </div>
       </div>
     </div>

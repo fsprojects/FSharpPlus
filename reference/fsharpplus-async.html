@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Identity<'t> - FSharpPlus</title>
+    <title>Async - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,126 +35,141 @@
 
 
 
-<h1>Identity<'t></h1>
+<h1>Async</h1>
 <p>
-  <span>Namespace: FSharpPlus.Data</span><br />
+  <span>Namespace: FSharpPlus</span><br />
 </p>
 <div class="xmldoc">
-<p>Computation type: Simple function application.
-Binding strategy: The bound function is applied to the input value. Identity x &gt;&gt;= f = Identity (f x)
-Useful for: Lens setters and updaters - Monads can be derived from monad transformers applied to the Identity monad.
-The Identity monad is a monad that does not embody any computational strategy.
-It simply applies the bound function to its input without any modification.
-Computationally, there is no reason to use the Identity monad instead of the much simpler act of simply applying functions to their arguments.
-The purpose of the Identity monad is its fundamental role in the theory of monad transformers.
-Any monad transformer applied to the Identity monad yields a non-transformer version of that monad.
-Its applicative instance plays a fundamental role in Lens.</p>
+<p>Additional operations on IEnumerator</p>
 
 </div>
-  <h3>Union Cases</h3>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Union Case</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1541', 1541)" onmouseover="showTip(event, '1541', 1541)">
-            Identity(&#39;t)
+          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+            apply f x
           </code>
-          <div class="tip" id="1541">
-            <strong>Signature:</strong> &#39;t<br />
-                      </div>
+          <div class="tip" id="5">
+            <strong>Signature:</strong> f:Async&lt;(&#39;a -&gt; &#39;b)&gt; -&gt; x:Async&lt;&#39;a&gt; -&gt; Async&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'a, 'b          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Identity.fs#L16-16" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L819-819" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3>Static members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
+          <p>Create an async workflow that is the result of applying the resulting function of an async workflow to the resulting value of another async workflow.</p>
 
-          <code onmouseout="hideTip(event, '1542', 1542)" onmouseover="showTip(event, '1542', 1542)">
-            ( &lt;*&gt; )(arg1, arg2)
-          </code>
-          <div class="tip" id="1542">
-            <strong>Signature:</strong> (Identity&lt;(&#39;T -&gt; &#39;U)&gt; * Identity&lt;&#39;T&gt;) -&gt; Identity&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Identity.fs#L19-19" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>op_LessMultiplyGreater</code></p>
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1543', 1543)" onmouseover="showTip(event, '1543', 1543)">
-            ( &gt;&gt;= )(arg1, f)
+          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
+            join x
           </code>
-          <div class="tip" id="1543">
-            <strong>Signature:</strong> (Identity&lt;&#39;T&gt; * f:(&#39;T -&gt; Identity&lt;&#39;U&gt;)) -&gt; Identity&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
+          <div class="tip" id="6">
+            <strong>Signature:</strong> x:Async&lt;Async&lt;&#39;?19068&gt;&gt; -&gt; Async&lt;&#39;?19068&gt;<br />
+                          <strong>Type parameters:</strong> '?19068          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Identity.fs#L18-18" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L814-814" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
-              <p>CompiledName: <code>op_GreaterGreaterEquals</code></p>
+          <p>Flatten two nested asyncs into one.</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1544', 1544)" onmouseover="showTip(event, '1544', 1544)">
-            Map(arg1, f)
+          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+            map f x
           </code>
-          <div class="tip" id="1544">
-            <strong>Signature:</strong> (Identity&lt;&#39;T&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Identity&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
+          <div class="tip" id="7">
+            <strong>Signature:</strong> f:(&#39;?19058 -&gt; &#39;?19059) -&gt; x:Async&lt;&#39;?19058&gt; -&gt; Async&lt;&#39;?19059&gt;<br />
+                          <strong>Type parameters:</strong> '?19058, '?19059          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Identity.fs#L20-20" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L795-795" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Creates an async workflow from another workflow 'x', mapping its result with 'f'.</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1545', 1545)" onmouseover="showTip(event, '1545', 1545)">
-            Return(x)
+          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
+            map2 f x y
           </code>
-          <div class="tip" id="1545">
-            <strong>Signature:</strong> x:&#39;T -&gt; Identity&lt;&#39;T&gt;<br />
-                      </div>
+          <div class="tip" id="8">
+            <strong>Signature:</strong> f:(&#39;a -&gt; &#39;b -&gt; &#39;c) -&gt; x:Async&lt;&#39;a&gt; -&gt; y:Async&lt;&#39;b&gt; -&gt; Async&lt;&#39;c&gt;<br />
+                          <strong>Type parameters:</strong> 'a, 'b, 'c          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Identity.fs#L17-17" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L802-802" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Creates an async workflow from two workflows 'x' and 'y', mapping it results with 'f'.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
+            raise ex
+          </code>
+          <div class="tip" id="9">
+            <strong>Signature:</strong> ex:exn -&gt; Async&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L822-822" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Raise an exception in the async workflow</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
+            zip x y
+          </code>
+          <div class="tip" id="10">
+            <strong>Signature:</strong> x:Async&lt;&#39;a&gt; -&gt; y:Async&lt;&#39;b&gt; -&gt; Async&lt;&#39;a * &#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'a, 'b          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L808-808" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates an async workflow from two workflows 'x' and 'y', tupling it results.</p>
+
+
         </td>
       </tr>
     </tbody>

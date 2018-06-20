@@ -55,15 +55,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '17', 17)" onmouseover="showTip(event, '17', 17)">
+          <code onmouseout="hideTip(event, '23', 23)" onmouseover="showTip(event, '23', 23)">
             map(f x)
           </code>
-          <div class="tip" id="17">
+          <div class="tip" id="23">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:IDictionary&lt;&#39;Key,&#39;T&gt; -&gt; IDictionary&lt;&#39;Key,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, 'Key          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L246-246" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L313-313" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -73,15 +73,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '18', 18)" onmouseover="showTip(event, '18', 18)">
+          <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
             map2(f x y)
           </code>
-          <div class="tip" id="18">
+          <div class="tip" id="24">
             <strong>Signature:</strong> f:(&#39;T1 -&gt; &#39;T2 -&gt; &#39;U) -&gt; x:IDictionary&lt;&#39;Key,&#39;T1&gt; -&gt; y:IDictionary&lt;&#39;Key,&#39;T2&gt; -&gt; IDictionary&lt;&#39;Key,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T1, 'T2, 'U, 'Key          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L252-252" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L319-319" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -91,15 +91,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '19', 19)" onmouseover="showTip(event, '19', 19)">
+          <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
             tryGetValue(k dct)
           </code>
-          <div class="tip" id="19">
+          <div class="tip" id="25">
             <strong>Signature:</strong> k:&#39;Key -&gt; dct:IDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; &#39;Value option<br />
                           <strong>Type parameters:</strong> 'Key, 'Value          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L241-241" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L308-308" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -109,19 +109,61 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '20', 20)" onmouseover="showTip(event, '20', 20)">
+          <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
+            union(source altSource)
+          </code>
+          <div class="tip" id="26">
+            <strong>Signature:</strong> source:IDictionary&lt;&#39;Key,&#39;T&gt; -&gt; altSource:IDictionary&lt;&#39;Key,&#39;T&gt; -&gt; IDictionary&lt;&#39;Key,&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'Key, 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L351-351" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
+            unionWith(combiner source1 source2)
+          </code>
+          <div class="tip" id="27">
+            <strong>Signature:</strong> combiner:(&#39;Value -&gt; &#39;Value -&gt; &#39;Value) -&gt; source1:IDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; source2:IDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; IDictionary&lt;&#39;Key,&#39;Value&gt;<br />
+                          <strong>Type parameters:</strong> 'Value, 'Key          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L343-343" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Returns the union of two dictionaries, using the combiner function for duplicate keys.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
             zip(x y)
           </code>
-          <div class="tip" id="20">
+          <div class="tip" id="28">
             <strong>Signature:</strong> x:IDictionary&lt;&#39;Key,&#39;T1&gt; -&gt; y:IDictionary&lt;&#39;Key,&#39;T2&gt; -&gt; IDictionary&lt;&#39;Key,(&#39;T1 * &#39;T2)&gt;<br />
                           <strong>Type parameters:</strong> 'Key, 'T1, 'T2          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L261-261" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L334-334" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Tuple values of two dictionaries.</p>
+
+
         </td>
       </tr>
     </tbody>
@@ -130,22 +172,24 @@
         </div>
         <div class="span3">
           <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-            
-            <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
-          </ul>
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
         </div>
       </div>
     </div>

@@ -51,10 +51,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '497', 497)" onmouseover="showTip(event, '497', 497)">
+          <code onmouseout="hideTip(event, '518', 518)" onmouseover="showTip(event, '518', 518)">
             new()
           </code>
-          <div class="tip" id="497">
+          <div class="tip" id="518">
             <strong>Signature:</strong> unit -&gt; MonadFxBuilder<br />
                       </div>
         </td>
@@ -78,15 +78,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '498', 498)" onmouseover="showTip(event, '498', 498)">
+          <code onmouseout="hideTip(event, '519', 519)" onmouseover="showTip(event, '519', 519)">
             Combine(a, b)
           </code>
-          <div class="tip" id="498">
+          <div class="tip" id="519">
             <strong>Signature:</strong> (a:^Monad&lt;unit&gt; * b:^Monad&lt;&#39;T&gt;) -&gt; ^Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<unit>, ^Monad<'T>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L125-125" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L134-134" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -96,29 +96,71 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '499', 499)" onmouseover="showTip(event, '499', 499)">
+          <code onmouseout="hideTip(event, '520', 520)" onmouseover="showTip(event, '520', 520)">
             For(p, rest)
           </code>
-          <div class="tip" id="499">
-            <strong>Signature:</strong> (p:&#39;?12026 * rest:(&#39;T -&gt; ^Monad&lt;unit&gt;)) -&gt; ^Monad&lt;unit&gt;<br />
-                          <strong>Type parameters:</strong> '?12026, 'T, ^Monad<unit>          </div>
+          <div class="tip" id="520">
+            <strong>Signature:</strong> (p:&#39;?12047 * rest:(&#39;T -&gt; ^Monad&lt;unit&gt;)) -&gt; ^Monad&lt;unit&gt;<br />
+                          <strong>Type parameters:</strong> '?12047, 'T, ^Monad<unit>          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L140-140" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '521', 521)" onmouseover="showTip(event, '521', 521)">
+            fx
+          </code>
+          <div class="tip" id="521">
+            <strong>Signature:</strong> MonadFxBuilder<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L128-128" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Makes it a (lazy) monadic computation expression with side-effects</p>
+
+
+              <p>CompiledName: <code>get_fx</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '522', 522)" onmouseover="showTip(event, '522', 522)">
+            fx&#39;
+          </code>
+          <div class="tip" id="522">
+            <strong>Signature:</strong> MonadFxStrictBuilder<br />
+                      </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L131-131" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Makes it a strict monadic computation expression with side-effects</p>
+
+
+              <p>CompiledName: <code>get_fx'</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '500', 500)" onmouseover="showTip(event, '500', 500)">
-            fx
+          <code onmouseout="hideTip(event, '523', 523)" onmouseover="showTip(event, '523', 523)">
+            plus
           </code>
-          <div class="tip" id="500">
-            <strong>Signature:</strong> MonadFxBuilder<br />
+          <div class="tip" id="523">
+            <strong>Signature:</strong> MonadPlusBuilder<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -126,74 +168,40 @@
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
-              <p>CompiledName: <code>get_fx</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
+          <p>Makes it a (lazy) monadplus computation expression.</p>
 
-          <code onmouseout="hideTip(event, '501', 501)" onmouseover="showTip(event, '501', 501)">
-            fx&#39;
-          </code>
-          <div class="tip" id="501">
-            <strong>Signature:</strong> MonadFxStrictBuilder<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L123-123" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-              <p>CompiledName: <code>get_fx'</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
 
-          <code onmouseout="hideTip(event, '502', 502)" onmouseover="showTip(event, '502', 502)">
-            plus
-          </code>
-          <div class="tip" id="502">
-            <strong>Signature:</strong> MonadPlusBuilder<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L120-120" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
               <p>CompiledName: <code>get_plus</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '503', 503)" onmouseover="showTip(event, '503', 503)">
+          <code onmouseout="hideTip(event, '524', 524)" onmouseover="showTip(event, '524', 524)">
             plus&#39;
           </code>
-          <div class="tip" id="503">
+          <div class="tip" id="524">
             <strong>Signature:</strong> MonadPlusStrictBuilder<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L121-121" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L125-125" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Makes it a strict monadplus computation expression.</p>
+
+
               <p>CompiledName: <code>get_plus'</code></p>
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '504', 504)" onmouseover="showTip(event, '504', 504)">
+          <code onmouseout="hideTip(event, '525', 525)" onmouseover="showTip(event, '525', 525)">
             strict
           </code>
-          <div class="tip" id="504">
+          <div class="tip" id="525">
             <strong>Signature:</strong> MonadFxStrictBuilder<br />
                       </div>
         </td>
@@ -209,15 +217,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '505', 505)" onmouseover="showTip(event, '505', 505)">
+          <code onmouseout="hideTip(event, '526', 526)" onmouseover="showTip(event, '526', 526)">
             While(guard, body)
           </code>
-          <div class="tip" id="505">
+          <div class="tip" id="526">
             <strong>Signature:</strong> (guard:(unit -&gt; bool) * body:^Monad&lt;unit&gt;) -&gt; ^Monad&lt;unit&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<unit>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L126-126" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L135-135" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -227,15 +235,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '506', 506)" onmouseover="showTip(event, '506', 506)">
+          <code onmouseout="hideTip(event, '527', 527)" onmouseover="showTip(event, '527', 527)">
             Zero()
           </code>
-          <div class="tip" id="506">
+          <div class="tip" id="527">
             <strong>Signature:</strong> unit -&gt; ^Monad&lt;unit&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<unit>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L124-124" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L133-133" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -248,22 +256,24 @@
         </div>
         <div class="span3">
           <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-            
-            <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
-          </ul>
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
         </div>
       </div>
     </div>

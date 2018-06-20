@@ -50,11 +50,29 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '675', 675)" onmouseover="showTip(event, '675', 675)">
+          <code onmouseout="hideTip(event, '696', 696)" onmouseover="showTip(event, '696', 696)">
             Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="675">
+          <div class="tip" id="696">
             <strong>Signature:</strong> (s:&#39;T array * _mthd:Duplicate) -&gt; &#39;T [] []<br />
+                          <strong>Type parameters:</strong> 'T          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L475-475" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '697', 697)" onmouseover="showTip(event, '697', 697)">
+            Duplicate(s, _mthd)
+          </code>
+          <div class="tip" id="697">
+            <strong>Signature:</strong> (s:&#39;T list * _mthd:Duplicate) -&gt; &#39;T list list<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
@@ -68,15 +86,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '676', 676)" onmouseover="showTip(event, '676', 676)">
-            Duplicate(s, _mthd)
+          <code onmouseout="hideTip(event, '698', 698)" onmouseover="showTip(event, '698', 698)">
+            Duplicate(f, _mthd)
           </code>
-          <div class="tip" id="676">
-            <strong>Signature:</strong> (s:&#39;T list * _mthd:Duplicate) -&gt; &#39;T list list<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="698">
+            <strong>Signature:</strong> (f:(^Monoid -&gt; &#39;T) * _mthd:Duplicate) -&gt; ^Monoid -&gt; ^Monoid -&gt; &#39;T<br />
+                          <strong>Type parameters:</strong> ^Monoid, 'T          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L473-473" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L471-471" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -86,12 +104,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '677', 677)" onmouseover="showTip(event, '677', 677)">
-            Duplicate(f, _mthd)
+          <code onmouseout="hideTip(event, '699', 699)" onmouseover="showTip(event, '699', 699)">
+            Duplicate(arg1, _mthd)
           </code>
-          <div class="tip" id="677">
-            <strong>Signature:</strong> (f:(^Monoid -&gt; &#39;T) * _mthd:Duplicate) -&gt; ^Monoid -&gt; ^Monoid -&gt; &#39;T<br />
-                          <strong>Type parameters:</strong> ^Monoid, 'T          </div>
+          <div class="tip" id="699">
+            <strong>Signature:</strong> ((&#39;W * &#39;T) * _mthd:Duplicate) -&gt; &#39;W * (&#39;W * &#39;T)<br />
+                          <strong>Type parameters:</strong> 'W, 'T          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L470-470" class="github-link">
@@ -104,12 +122,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '678', 678)" onmouseover="showTip(event, '678', 678)">
-            Duplicate(arg1, _mthd)
+          <code onmouseout="hideTip(event, '700', 700)" onmouseover="showTip(event, '700', 700)">
+            Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="678">
-            <strong>Signature:</strong> ((&#39;W * &#39;T) * _mthd:Duplicate) -&gt; &#39;W * (&#39;W * &#39;T)<br />
-                          <strong>Type parameters:</strong> 'W, 'T          </div>
+          <div class="tip" id="700">
+            <strong>Signature:</strong> (s:Id&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Id&lt;Id&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L469-469" class="github-link">
@@ -122,11 +140,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '679', 679)" onmouseover="showTip(event, '679', 679)">
+          <code onmouseout="hideTip(event, '701', 701)" onmouseover="showTip(event, '701', 701)">
             Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="679">
-            <strong>Signature:</strong> (s:Id&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Id&lt;Id&lt;&#39;T&gt;&gt;<br />
+          <div class="tip" id="701">
+            <strong>Signature:</strong> (s:Lazy&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Lazy&lt;Lazy&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
@@ -140,11 +158,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '680', 680)" onmouseover="showTip(event, '680', 680)">
+          <code onmouseout="hideTip(event, '702', 702)" onmouseover="showTip(event, '702', 702)">
             Duplicate(s, _mthd)
           </code>
-          <div class="tip" id="680">
-            <strong>Signature:</strong> (s:Lazy&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Lazy&lt;Lazy&lt;&#39;T&gt;&gt;<br />
+          <div class="tip" id="702">
+            <strong>Signature:</strong> (s:Async&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
@@ -158,12 +176,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '681', 681)" onmouseover="showTip(event, '681', 681)">
-            Duplicate(s, _mthd)
+          <code onmouseout="hideTip(event, '703', 703)" onmouseover="showTip(event, '703', 703)">
+            Duplicate(x, _mthd)
           </code>
-          <div class="tip" id="681">
-            <strong>Signature:</strong> (s:Async&lt;&#39;T&gt; * _mthd:Duplicate) -&gt; Async&lt;Async&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="703">
+            <strong>Signature:</strong> (x:^Comonad&lt;&#39;T&gt; * _mthd:Default1) -&gt; ^Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Comonad<'T>, ^Comonad<'Comonad<'T>>          </div>
         </td>
         <td class="xmldoc">
             <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L466-466" class="github-link">
@@ -176,33 +194,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '682', 682)" onmouseover="showTip(event, '682', 682)">
-            Duplicate(x, _mthd)
-          </code>
-          <div class="tip" id="682">
-            <strong>Signature:</strong> (x:^Comonad&lt;&#39;T&gt; * _mthd:Default1) -&gt; ^Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Comonad<'T>, ^Comonad<'Comonad<'T>>          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L465-465" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '683', 683)" onmouseover="showTip(event, '683', 683)">
+          <code onmouseout="hideTip(event, '704', 704)" onmouseover="showTip(event, '704', 704)">
             Invoke(x)
           </code>
-          <div class="tip" id="683">
+          <div class="tip" id="704">
             <strong>Signature:</strong> x:^Comonad&lt;&#39;T&gt; -&gt; ^Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Comonad<'T>, ^Comonad<'Comonad<'T>>          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L476-476" class="github-link">
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Functor.fs#L477-477" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -215,22 +215,24 @@
         </div>
         <div class="span3">
           <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-            
-            <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
-          </ul>
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
         </div>
       </div>
     </div>

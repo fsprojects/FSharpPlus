@@ -765,7 +765,7 @@ A: Yes, they are, and this is the general definition of <code>map</code> based o
 <div class="tip" id="fs21">val async : AsyncBuilder</div>
 <div class="tip" id="fs22">member AsyncBuilder.Return : value:&#39;T -&gt; Async&lt;&#39;T&gt;</div>
 <div class="tip" id="fs23">val r05&#39; : obj</div>
-<div class="tip" id="fs24">Multiple items<br />type Async =<br />&#160;&#160;static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />&#160;&#160;static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />&#160;&#160;static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member AwaitTask : task:Task -&gt; Async&lt;unit&gt;<br />&#160;&#160;static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member CancelDefaultToken : unit -&gt; unit<br />&#160;&#160;static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />&#160;&#160;static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;...<br /><br />--------------------<br />type Async&lt;&#39;T&gt; =</div>
+<div class="tip" id="fs24">Multiple items<br />module Async<br /><br />from FSharpPlus<br /><br />--------------------<br />type Async =<br />&#160;&#160;static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />&#160;&#160;static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />&#160;&#160;static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member AwaitTask : task:Task -&gt; Async&lt;unit&gt;<br />&#160;&#160;static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member CancelDefaultToken : unit -&gt; unit<br />&#160;&#160;static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />&#160;&#160;static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;...<br /><br />--------------------<br />type Async&lt;&#39;T&gt; =</div>
 <div class="tip" id="fs25">static member Async.RunSynchronously : computation:Async&lt;&#39;T&gt; * ?timeout:int * ?cancellationToken:System.Threading.CancellationToken -&gt; &#39;T</div>
 <div class="tip" id="fs26">val r06&#39; : obj</div>
 <div class="tip" id="fs27">val map : f:(&#39;a -&gt; &#39;b) -&gt; a:&#39;a * b:&#39;c -&gt; &#39;b * &#39;c</div>
@@ -860,7 +860,7 @@ A: Yes, they are, and this is the general definition of <code>map</code> based o
 <div class="tip" id="fs116">member AsyncBuilder.Bind : computation:Async&lt;&#39;T&gt; * binder:(&#39;T -&gt; Async&lt;&#39;U&gt;) -&gt; Async&lt;&#39;U&gt;</div>
 <div class="tip" id="fs117">val x1 : (&#39;a -&gt; &#39;b)</div>
 <div class="tip" id="fs118">val x2 : &#39;a</div>
-<div class="tip" id="fs119">Multiple items<br />module Async<br /><br />from Applicative-functors<br /><br />--------------------<br />type Async =<br />&#160;&#160;static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />&#160;&#160;static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />&#160;&#160;static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member AwaitTask : task:Task -&gt; Async&lt;unit&gt;<br />&#160;&#160;static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member CancelDefaultToken : unit -&gt; unit<br />&#160;&#160;static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />&#160;&#160;static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;...<br /><br />--------------------<br />type Async&lt;&#39;T&gt; =</div>
+<div class="tip" id="fs119">Multiple items<br />module Async<br /><br />from Applicative-functors<br /><br />--------------------<br />module Async<br /><br />from FSharpPlus<br /><br />--------------------<br />type Async =<br />&#160;&#160;static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />&#160;&#160;static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />&#160;&#160;static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member AwaitTask : task:Task -&gt; Async&lt;unit&gt;<br />&#160;&#160;static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member CancelDefaultToken : unit -&gt; unit<br />&#160;&#160;static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />&#160;&#160;static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member FromBeginEnd : arg:&#39;Arg1 * beginAction:(&#39;Arg1 * AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;...<br /><br />--------------------<br />type Async&lt;&#39;T&gt; =</div>
 <div class="tip" id="fs120">val r23 : Async&lt;int&gt;</div>
 <div class="tip" id="fs121">val r23&#39; : Async&lt;int&gt;</div>
 <div class="tip" id="fs122">val getLine : Async&lt;int&gt;</div>
@@ -930,22 +930,24 @@ A: Yes, they are, and this is the general definition of <code>map</code> based o
         </div>
         <div class="span3">
           <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-            
-            <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
-          </ul>
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
         </div>
       </div>
     </div>

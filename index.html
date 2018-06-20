@@ -119,28 +119,30 @@ redistribution for both commercial and non-commercial purposes. For more informa
 <div class="tip" id="fs6">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
 <div class="tip" id="fs7">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
 <div class="tip" id="fs8">namespace FSharpPlus.Data</div>
-<div class="tip" id="fs9">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member head : &#39;t<br />&#160;&#160;&#160;&#160;member tail : &#39;t list<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;static member Extract : NonEmptyList&lt;&#39;t&gt; -&gt; &#39;t<br />&#160;&#160;&#160;&#160;static member FoldBack : NonEmptyList&lt;&#39;a1&gt; * f:(&#39;a1 -&gt; &#39;a2 -&gt; &#39;a2) * z:&#39;a2 -&gt; &#39;a2<br />&#160;&#160;&#160;&#160;static member Replace : source:NonEmptyList&lt;&#39;T&gt; * oldValue:NonEmptyList&lt;&#39;T&gt; * newValue:NonEmptyList&lt;&#39;T&gt; * _impl:Replace -&gt; NonEmptyList&lt;&#39;T&gt; (requires equality)<br />&#160;&#160;&#160;&#160;...</div>
+<div class="tip" id="fs9">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member head : &#39;t<br />&#160;&#160;&#160;&#160;member tail : &#39;t list<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;static member Extract : NonEmptyList&lt;&#39;t&gt; -&gt; &#39;t<br />&#160;&#160;&#160;&#160;...</div>
 <div class="tip" id="fs10">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;</div>
 
         </div>
         <div class="span3">
           <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li class="nav-header">FSharpPlus</li>
-            <li><a href="/FSharpPlus/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-            <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-            <li><a href="/FSharpPlus/license.html">License</a></li>
-            <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-            
-            <li class="nav-header">Getting started</li>
-            <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-            <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>			
-          </ul>
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
         </div>
       </div>
     </div>
