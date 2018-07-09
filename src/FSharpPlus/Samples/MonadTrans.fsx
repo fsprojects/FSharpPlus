@@ -44,7 +44,10 @@ module Suave=
         type HttpContext = { request:HttpRequest; response:HttpResponse }
     module Successful=
         open Http
-        let OK s = OptionT << fun ctx -> { ctx with response = { ctx.response with status = 200; content = s }} |> succeed
+        let private withStatusCode statusCode s=
+            OptionT << fun ctx -> { ctx with response = { ctx.response with status = statusCode; content = s }} |> succeed 
+        let OK s = withStatusCode 200 s
+        let BAD_REQUEST s = withStatusCode 400 s
     module Filters=
         open Http
         let ``method`` (m : string) =
@@ -54,20 +57,45 @@ module Suave=
   
         let path s =
             OptionT << fun (x : HttpContext) -> async.Return (if (s = x.request.url.AbsolutePath) then Some x else None)
-    
+    // Stub implementations:
+    let toJson o :string= failwith "this would be toJson from for instance Fleece"
+    let inline ofJson s = failwith "this would be ofJson from for instance Fleece"
+    module Request=
+        let tryGet s (r:Http.HttpRequest) = Ok "FORM VALUE"
+    let authenticated (f:Http.HttpContext -> int -> OptionT<Async<'a option>>) =
+        // we assume that authenticated executes f only if auth, otherwise returns 401
+        // we fake it as:
+        fun (ctx:Http.HttpContext) -> f ctx -1
+
+    // Usage:
     open Successful
     open Filters
-    let app() =
+    type Note = { id:int; text: string }
+    type NoteList = { notes: Note list; offset:int; chunk:int; total:int }
+    type IDb =
+        abstract member getUserNotes: int -> Async<NoteList>
+        abstract member addUserNote: int -> string -> Async<Note>
+    type OverviewViewModel = { myNotes: Note list }
+    let app (db:IDb) =
         let overview =
-            GET >=> (fun (ctx) ->
+            GET >=> (authenticated <| fun ctx userId ->
                 monad {
-                  return! OK "overview" ctx
+                  let! res = lift (db.getUserNotes userId)
+                  let ovm = toJson { myNotes = res.notes }
+                  return! OK ovm ctx
                 })
         let register =
-            POST >=> fun (ctx) ->
+            POST >=> (authenticated <| fun ctx userId ->
                 monad {
-                  return! OK "register" ctx
-                }
+                  match ctx.request |> Request.tryGet "text" with 
+                  | Ok text ->
+                      let! newNote = lift (db.addUserNote userId text)
+                      let rvm = toJson newNote
+                      return! OK rvm ctx
+                  | Error msg -> 
+                      return! BAD_REQUEST msg ctx
+                })
         WebPart.choose [ path "/" >=> (OK "/")
                          path "/note" >=> register
                          path "/notes" >=> overview ]
+
