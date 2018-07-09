@@ -15,7 +15,7 @@ let fn : ResultT<Reader<int,Result<_,string>>> =
         if x1 > 0 then 
             result 1
             else ResultT (result (Error "Negative value")) 
-       return ((+) x1 x2)
+       return x1 + x2
     }
 
 let x = (fn |> ResultT.run |> Reader.run) 10
