@@ -6,6 +6,7 @@ open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
 open NUnit.Framework
+open Helpers
 
 module SideEffects =
     let private effects = ResizeArray<string> []
@@ -14,12 +15,16 @@ module SideEffects =
     let get() = effects |> Seq.toList
 
 type WrappedListA<'s> = WrappedListA of 's list with
-    static member ToSeq    (WrappedListA lst) = List.toSeq lst
+    static member ToSeq    (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
     static member OfSeq  lst = WrappedListA (Seq.toList lst)
     static member TryItem (i, WrappedListA x) = List.tryItem i x
     static member TryParse x =
         if x = "[1;2;3]" then Some (WrappedListA [1;2;3])
         else None
+    member this.Length =
+        SideEffects.add "Using WrappedListA's Length"
+        let (WrappedListA lst) = this
+        List.length lst
 
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return   (x) = WrappedListB [x]
@@ -269,6 +274,8 @@ module Monoid =
 module Functor =
     [<Test>]
     let mapDefaultCustom() = 
+
+        SideEffects.reset()
 
         // NonEmptyList<_> has Map but at the same time is a seq<_>
         let testVal1 = map ((+) 1) {Head = 10; Tail = [20;30]}
@@ -591,6 +598,16 @@ module Foldable =
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
         Assert.AreEqual (50, foldMap ((+) 10) readOnlyCollection)
         Assert.AreEqual (50, foldMap ((+) 10) iReadOnlyList)
+
+    [<Test>]
+    let length() =
+        SideEffects.reset()
+        let a = length [1..3]
+        let b = length (WrappedListA [1..3])
+        let c = length (System.Text.StringBuilder "abc")
+        areEqual (SideEffects.get()) ["Using WrappedListA's Length"]
+        ()
+
 
 module Indexable = 
     [<Test>]
