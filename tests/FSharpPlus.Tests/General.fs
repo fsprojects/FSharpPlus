@@ -134,48 +134,46 @@ open System.Collections.Generic
 open System.Collections
 open System.Threading.Tasks
 
-type ListOnlyIndex<'s> (l: 'a list) = 
+type ListOnlyIndex<'s> (l: 's list) = 
     interface IList<'s> with 
-        member this.Count = List.length l 
-        member this.IsReadOnly with get() = true
-        member this.Item with 
-            get(index) = List.item index l
-            and set index value = failwith "set"
-        member this.Add(i) = failwith "Add"
-        member this.Clear() = failwith "Clear"
-        member this.Contains(i) = failwith "Contains"
-        member this.CopyTo(t,i) = failwith "CopyTo"
-        member this.GetEnumerator() : IEnumerator<'s> = failwith "ListOnlyIndex.GetEnumerator"
-        member this.GetEnumerator() : IEnumerator = failwith "ListOnlyIndex.GetEnumerator"
-        member this.IndexOf(i) = failwith "IndexOf"
-        member this.Insert (index:int,item:'s)= failwithf "Insert %i %A" index item
-        member this.Remove(t) = failwith "Remove"
-        member this.RemoveAt(i) = failwith "RemoveAt"
-type ReadOnlyListOnlyIndex<'s> (l: 'a list) = 
+        member __.Count = List.length l 
+        member __.IsReadOnly with get() = true
+        member __.Item with get index = List.item index l and set _ _ = failwith "set"
+        member __.Add(_) = failwith "Add"
+        member __.Clear() = failwith "Clear"
+        member __.Contains(_) = failwith "Contains"
+        member __.CopyTo(_, _) = failwith "CopyTo"
+        member __.GetEnumerator() : IEnumerator<'s> = failwith "ListOnlyIndex.GetEnumerator"
+        member __.GetEnumerator() : IEnumerator = failwith "ListOnlyIndex.GetEnumerator"
+        member __.IndexOf(_) = failwith "IndexOf"
+        member __.Insert (index:int, item:'s)= failwithf "Insert %i %A" index item
+        member __.Remove(_) = failwith "Remove"
+        member __.RemoveAt(_) = failwith "RemoveAt"
+
+type ReadOnlyListOnlyIndex<'s> (l: 's list) = 
     interface IReadOnlyList<'s> with 
-        member this.Count = List.length l 
-        member this.Item with 
-            get(index) = List.item index l
-        member this.GetEnumerator() : IEnumerator<'s> = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
-        member this.GetEnumerator() : IEnumerator = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
+        member __.Count = List.length l 
+        member __.Item with get(index) = List.item index l
+        member __.GetEnumerator() : IEnumerator<'s> = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
+        member __.GetEnumerator() : IEnumerator = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
 
 module Monoid =
 
     type ZipList<'s> = ZipList of 's seq with
         static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
         static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
-        static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList<'b>
+        static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList<'b>
         static member inline get_Zero() = result zero                      :ZipList<'a>
         static member inline (+) (x:ZipList<'a>, y:ZipList<'a>) = liftA2 plus x y :ZipList<'a>
         static member ToSeq    (ZipList lst)     = lst
 
     type ZipList'<'s> = ZipList' of 's seq with
-        static member Return (x:'a)                              = ZipList' (Seq.initInfinite (konst x))
-        static member Map   (ZipList' x, f:'a->'b)                = ZipList' (Seq.map f x)
-        static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) :ZipList'<'b>
+        static member Return (x:'a)                                = ZipList' (Seq.initInfinite (konst x))
+        static member Map   (ZipList' x, f: 'a->'b)                = ZipList' (Seq.map f x)
+        static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList'<'b>
         static member inline get_Zero() = result zero                      :ZipList'<'a>
         static member inline (+) (x:ZipList'<'a>, y:ZipList'<'a>) = liftA2 plus x y :ZipList'<'a>
-        static member inline Sum (x:seq<ZipList'<'a>>) = SideEffects.add "Using optimized Sum"; List.foldBack plus (Seq.toList x) zero:ZipList'<'a>
+        static member inline Sum (x:seq<ZipList'<'a>>) = SideEffects.add "Using optimized Sum"; List.foldBack plus (Seq.toList x) zero: ZipList'<'a>
         static member ToSeq    (ZipList' lst)     = lst
 
     type MyList<'t> = MyList of list<'t> with
