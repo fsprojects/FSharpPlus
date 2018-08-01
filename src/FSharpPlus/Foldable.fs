@@ -361,7 +361,7 @@ type Length =
     static member inline Length (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.length
     static member inline Length (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Length: int) x)
     static member        Length (_: Id<'T>           , [<Optional>]_impl: Length  ) = 1
-    static member        Length (x: seq<'T>          , [<Optional>]_impl: Length  ) = Seq.length   x
+    static member        Length (x: ResizeArray<'T>  , [<Optional>]_impl: Length  ) = x.Count
     static member        Length (x: list<'T>         , [<Optional>]_impl: Length  ) = List.length  x
     static member        Length (x: 'T []            , [<Optional>]_impl: Length  ) = Array.length x
 

@@ -54,6 +54,10 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using optimized foldMap"
         Seq.fold (fun x y -> x ++ (f y)) zero x
     static member Zip (WrappedListD x, WrappedListD y) = SideEffects.add "Using WrappedListD's zip"; WrappedListD (List.zip x y)
+    member this.Length =
+        SideEffects.add "Using WrappedListD's Length"
+        let (WrappedListD lst) = this
+        List.length lst
 
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return  (x) = WrappedListE [x]
@@ -601,9 +605,10 @@ module Foldable =
     let length() =
         SideEffects.reset()
         let a = length [1..3]
-        let b = length (WrappedListA [1..3])
-        let c = length (System.Text.StringBuilder "abc")
-        areEqual (SideEffects.get()) ["Using WrappedListA's Length"]
+        let b = length (System.Text.StringBuilder "abc")
+        let c = length (WrappedListA [1..3])
+        let d = length (WrappedListD [1..3])        
+        areEqual (SideEffects.get()) ["Using WrappedListA's Length"; "Using WrappedListD's Length"]
         ()
 
 
