@@ -8,16 +8,22 @@ module Operators =
 
 
     // Common combinators
+
+    /// Creates a new function with first two arguments flipped
     let inline flip f x y = f y x
+
     let inline konst k _ = k
     let inline curry f x y = f (x, y)
     let inline uncurry f (x, y) = f x y
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
+
     /// Case analysis for the Result type. If the value is Ok a, apply the first function to a; if it is Error b, apply the second function to b.
     let inline either f g = function Ok x   -> f x | Error x -> g x
+
     /// The option function takes a function, a default value and a option value. If the option value is None, the function returns the default value. Otherwise, it applies the function to the value inside Some and returns the result.
     let inline option f n = function Some x -> f x | None    -> n
+
     let inline tuple2 a b             = a,b
     let inline tuple3 a b c           = a,b,c
     let inline tuple4 a b c d         = a,b,c,d
@@ -46,7 +52,10 @@ module Operators =
     /// Like map but ignoring the results.
     let inline iter   (action :'T->unit) (source :'``Functor<'T>``) :unit = Iterate.Invoke action source
 
+    // Un-zips (un-tuple) two functors.
     let inline unzip (source: '``Functor<'T1 * 'T2>``) = Unzip.Invoke source : '``Functor<'T1>`` * '``Functor<'T2>``
+
+    // Zips (tuple) two functors.
     let inline zip (source1:'``ZipFunctor<'T1>``) (source2:'``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
    
 
@@ -76,6 +85,8 @@ module Operators =
     let inline (=<<) (f:'T->'``Monad<'U>``) (x:'``Monad<'T>``) :'``Monad<'U>`` = Bind.Invoke x f
     /// Kleisli composition (fish) operator
     let inline (>=>) (f:'T->'``Monad<'U>``) (g:'U->'``Monad<'V>``) (x:'T) : '``Monad<'V>`` = Bind.Invoke (f x) g
+
+    /// Reverse Kleisli composition operator.
     let inline (<=<) (g:'b->'``Monad<'V>``) (f:'T->'``Monad<'U>``) (x:'T) : '``Monad<'V>`` = Bind.Invoke (f x) g
 
     /// Flattens two layers of monadic information into one.
@@ -84,13 +95,16 @@ module Operators =
 
     // Monoid -----------------------------------------------------------------
 
-    /// Gets a value that represents the 0 element.
-    let inline getZero () :'Monoid = Zero.Invoke ()
+    /// Gets a value that represents the 0 element of a Monoid.
+    let inline getZero () : 'Monoid = Zero.Invoke ()
 
-    /// A value that represents the 0 element.
+    /// A value that represents the 0 element of a Monoid.
     let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke ()
 
+    /// Combine two monoids in one.
     let inline (++) (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
+
+    /// Combine two monoids in one.
     let inline plus (x:'Monoid) (y:'Monoid): 'Monoid = Plus.Invoke x y
 
     module Seq =
@@ -100,9 +114,11 @@ module Operators =
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
 
+    /// Gets a functor representing the emtpy value
     let inline getEmpty () :'``Functor<'T>`` = Empty.Invoke ()
 
-    [<GeneralizableValue>]
+    /// A functor representing the emtpy value
+    [<GeneralizableValue>]    
     let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke ()
 
     /// Combines two Alternatives
@@ -305,8 +321,12 @@ module Operators =
 
     // Collection
 
+    /// Converts to a Collection from a list.
     let inline ofList (source: list<'T>) = OfList.Invoke source
+
+    /// Converts to a Collection from a seq.
     let inline ofSeq  (source: seq<'T> ) = OfSeq.Invoke  source : 'Collection
+
     let inline filter (predicate:_->bool) (x: 'Collection) : 'Collection = Filter.Invoke predicate x
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
