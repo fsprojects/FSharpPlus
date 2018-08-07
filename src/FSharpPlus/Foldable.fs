@@ -302,9 +302,10 @@ type Nth =
 
 type Max =
     inherit Default1
-    static member inline Max (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.max : 'T
+    static member inline Max (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.max : 'T
+    static member inline Max (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Max: '``Foldable<'T>``-> 'T) x)
     static member        Max (x: Id<'T>           , [<Optional>]_impl: Max     ) = x.getValue
-    static member        Max (x: seq<'T>          , [<Optional>]_impl: Max     ) = Seq.max   x
+    static member        Max (x: ResizeArray<'T>  , [<Optional>]_impl: Max     ) = Seq.max   x
     static member        Max (x: list<'T>         , [<Optional>]_impl: Max     ) = List.max  x
     static member        Max (x: 'T []            , [<Optional>]_impl: Max     ) = Array.max x
 
@@ -330,9 +331,10 @@ type MaxBy =
 
 type Min =
     inherit Default1
-    static member inline Min (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.min : 'T
+    static member inline Min (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.min : 'T
+    static member inline Min (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Min: '``Foldable<'T>``-> 'T) x)
     static member        Min (x: Id<'T>           , [<Optional>]_impl: Min     ) = x.getValue
-    static member        Min (x: seq<'T>          , [<Optional>]_impl: Min     ) = Seq.min   x
+    static member        Min (x: ResizeArray<'T>  , [<Optional>]_impl: Min     ) = Seq.min   x
     static member        Min (x: list<'T>         , [<Optional>]_impl: Min     ) = List.min  x
     static member        Min (x: 'T []            , [<Optional>]_impl: Min     ) = Array.min x
 
