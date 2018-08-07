@@ -24,6 +24,8 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
         | None  , Some b 
         | Some 0, Some b -> let {Head = x; Tail = xs} = this in {Head = x       ; Tail = xs.[ ..b-1]}
         | Some a, Some b -> let {Head = _; Tail = xs} = this in {Head = xs.[a-1]; Tail = xs.[a..b-1]}
+    member this.Length = 1 + List.length this.Tail
+
 
 /// Basic operations on NonEmptyList
 [<RequireQualifiedAccess>]
