@@ -224,13 +224,14 @@ type TryFind =
 
 type Head =
     inherit Default1
-    static member inline Head (x               , [<Optional>]_impl: Default1) = Seq.head (ToSeq.Invoke x) :'T
-    static member        Head (x: 't list      , [<Optional>]_impl: Head    ) = List.head x
-    static member        Head (x: 't []        , [<Optional>]_impl: Head    ) = x.[0]
-    static member        Head (x: Id<'T>       , [<Optional>]_impl: Head    ) = x.getValue
-    static member        Head (x: string       , [<Optional>]_impl: Head    ) = x.[0]
-    static member        Head (x: StringBuilder, [<Optional>]_impl: Head    ) = x.ToString().[0]
-    static member        Head (x: 't seq       , [<Optional>]_impl: Head    ) = Seq.head x
+    static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = Seq.head (ToSeq.Invoke x) : 'T
+    static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Head: 'T) x)
+    static member        Head (x: 'T option        , [<Optional>]_impl: Head    ) = x.Value
+    static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]    
+    static member        Head (x: Id<'T>           , [<Optional>]_impl: Head    ) = x.getValue
+    static member        Head (x: ResizeArray<'T>  , [<Optional>]_impl: Head    ) = x.[0]
+    static member        Head (x: string           , [<Optional>]_impl: Head    ) = x.[0]
+    static member        Head (x: StringBuilder    , [<Optional>]_impl: Head    ) = x.ToString().[0]
 
     static member inline Invoke (source: '``Foldable'<T>``)        =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Head: _*_ -> _) b, a)
