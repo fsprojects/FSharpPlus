@@ -318,9 +318,10 @@ type Max =
 
 type MaxBy =
     inherit Default1
-    static member inline MaxBy (x: '``Foldable<'T>``, f        , [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.maxBy f : 'T
+    static member inline MaxBy (x: '``Foldable<'T>``, f        , [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.maxBy f : 'T
+    static member inline MaxBy (x: '``Foldable<'T>``, f: 'T->'U, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member MaxBy: '``Foldable<'T>``-> _ -> 'T) (x, f))
     static member        MaxBy (x: Id<'T>           , _: 'T->'U, [<Optional>]_impl: MaxBy   ) = x.getValue
-    static member        MaxBy (x: seq<'T>          , f        , [<Optional>]_impl: MaxBy   ) = Seq.maxBy   f x
+    static member        MaxBy (x: ResizeArray<'T>  , f        , [<Optional>]_impl: MaxBy   ) = Seq.maxBy   f x
     static member        MaxBy (x: list<'T>         , f        , [<Optional>]_impl: MaxBy   ) = List.maxBy  f x
     static member        MaxBy (x: 'T []            , f        , [<Optional>]_impl: MaxBy   ) = Array.maxBy f x
 
@@ -347,9 +348,10 @@ type Min =
 
 type MinBy =
     inherit Default1
-    static member inline MinBy (x: '``Foldable<'T>``, f        , [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.minBy f : 'T
+    static member inline MinBy (x: '``Foldable<'T>``, f        , [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.minBy f : 'T
+    static member inline MinBy (x: '``Foldable<'T>``, f: 'T->'U, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member MinBy: '``Foldable<'T>``-> _ -> 'T) (x, f))
     static member        MinBy (x: Id<'T>           , _: 'T->'U, [<Optional>]_impl: MinBy   ) = x.getValue
-    static member        MinBy (x: seq<'T>          , f        , [<Optional>]_impl: MinBy   ) = Seq.minBy   f x
+    static member        MinBy (x: ResizeArray<'T>  , f        , [<Optional>]_impl: MinBy   ) = Seq.minBy   f x
     static member        MinBy (x: list<'T>         , f        , [<Optional>]_impl: MinBy   ) = List.minBy  f x
     static member        MinBy (x: 'T []            , f        , [<Optional>]_impl: MinBy   ) = Array.minBy f x
 

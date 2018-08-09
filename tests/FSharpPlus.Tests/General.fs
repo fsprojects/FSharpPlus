@@ -25,6 +25,10 @@ type WrappedListA<'s> = WrappedListA of 's list with
         SideEffects.add "Using WrappedListA's Min"
         let (WrappedListA lst) = x
         List.min lst
+    static member MaxBy (x, f) =
+        SideEffects.add "Using WrappedListA's MaxBy"
+        let (WrappedListA lst) = x
+        List.maxBy f lst
     member this.Length =
         SideEffects.add "Using WrappedListA's Length"
         let (WrappedListA lst) = this
@@ -62,6 +66,10 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using WrappedListD's Min"
         let (WrappedListD lst) = x
         List.min lst
+    static member MaxBy (x, f) =
+        SideEffects.add "Using WrappedListD's MaxBy"
+        let (WrappedListD lst) = x
+        List.maxBy f lst
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -615,8 +623,18 @@ module Foldable =
         let a = minimum [1..3]
         let b = minimum (System.Text.StringBuilder "abc")
         let c = minimum (WrappedListA [1..3])
-        let d = minimum (WrappedListD [1..3])        
+        let d = minimum (WrappedListD [1..3])
         areEqual (SideEffects.get()) ["Using WrappedListA's Min"; "Using WrappedListD's Min"]
+        ()
+
+    [<Test>]
+    let maxBy() =
+        SideEffects.reset()
+        let a = maxBy id [1..3]
+        let b = maxBy id (System.Text.StringBuilder "abc")
+        let c = maxBy id (WrappedListA [1..3])
+        let d = maxBy id (WrappedListD [1..3])
+        areEqual (SideEffects.get()) ["Using WrappedListA's MaxBy"; "Using WrappedListD's MaxBy"]
         ()
 
     [<Test>]
@@ -625,7 +643,7 @@ module Foldable =
         let a = length [1..3]
         let b = length (System.Text.StringBuilder "abc")
         let c = length (WrappedListA [1..3])
-        let d = length (WrappedListD [1..3])        
+        let d = length (WrappedListD [1..3])
         areEqual (SideEffects.get()) ["Using WrappedListA's Length"; "Using WrappedListD's Length"]
         ()
 
