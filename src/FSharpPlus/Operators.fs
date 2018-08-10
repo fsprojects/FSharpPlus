@@ -226,10 +226,10 @@ module Operators =
     let inline head                             (source:'``Foldable<'T>``)        = Head.Invoke source    :'T
     let inline tryHead                          (source:'``Foldable<'T>``)        = TryHead.Invoke source :'T option
     let inline length (source:'``Foldable<'T>``) :int                             = Length.Invoke source    
-    let inline maximum (source:'``Foldable<'T>``)                                 = Max.Invoke source    : 'T
-    let inline minimum (source:'``Foldable<'T>``)                                 = Min.Invoke source    : 'T
-    let inline maxBy (projection:'T->'U) (source:'``Foldable<'T>``)               = MaxBy.Invoke projection  source    : 'T
-    let inline minBy (projection:'T->'U) (source:'``Foldable<'T>``)               = MinBy.Invoke projection  source    : 'T
+    let inline maximum (source:'``Foldable<'T>``)                                 = Max.Invoke source    : 'T when 'T : comparison
+    let inline minimum (source:'``Foldable<'T>``)                                 = Min.Invoke source    : 'T when 'T : comparison
+    let inline maxBy (projection:'T->'U when 'U : comparison) (source:'``Foldable<'T>``)               = MaxBy.Invoke projection  source    : 'T
+    let inline minBy (projection:'T->'U when 'U : comparison) (source:'``Foldable<'T>``)               = MinBy.Invoke projection  source    : 'T
     let inline nth (n:int) (source:'``Foldable<'T>``) : 'T = Nth.Invoke n source
        
 

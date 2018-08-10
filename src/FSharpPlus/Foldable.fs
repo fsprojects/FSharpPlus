@@ -303,29 +303,29 @@ type Nth =
 
 type Max =
     inherit Default1
-    static member inline Max (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.max : 'T
-    static member inline Max (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Max: '``Foldable<'T>``-> 'T) x)
-    static member        Max (x: Id<'T>           , [<Optional>]_impl: Max     ) = x.getValue
-    static member        Max (x: ResizeArray<'T>  , [<Optional>]_impl: Max     ) = Seq.max   x
-    static member        Max (x: list<'T>         , [<Optional>]_impl: Max     ) = List.max  x
-    static member        Max (x: 'T []            , [<Optional>]_impl: Max     ) = Array.max x
+    static member inline Max (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.max : 'T when 'T : comparison
+    static member inline Max (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Max: '``Foldable<'T>``-> 'T) x) : 'T when 'T : comparison
+    static member        Max (x: Id<'T>           , [<Optional>]_impl: Max     ) = x.getValue  : 'T when 'T : comparison
+    static member        Max (x: ResizeArray<'T>  , [<Optional>]_impl: Max     ) = Seq.max   x : 'T when 'T : comparison
+    static member        Max (x: list<'T>         , [<Optional>]_impl: Max     ) = List.max  x : 'T when 'T : comparison
+    static member        Max (x: 'T []            , [<Optional>]_impl: Max     ) = Array.max x : 'T when 'T : comparison
 
     static member inline Invoke (source: '``Foldable<'T>``) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Max: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Max>, source) : 'T
+        call (Unchecked.defaultof<Max>, source) : 'T when 'T : comparison
 
 
 type MaxBy =
     inherit Default1
-    static member inline MaxBy (x: '``Foldable<'T>``, f        , [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.maxBy f : 'T
-    static member inline MaxBy (x: '``Foldable<'T>``, f: 'T->'U, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member MaxBy: '``Foldable<'T>``-> _ -> 'T) (x, f))
-    static member        MaxBy (x: Id<'T>           , _: 'T->'U, [<Optional>]_impl: MaxBy   ) = x.getValue
-    static member        MaxBy (x: ResizeArray<'T>  , f        , [<Optional>]_impl: MaxBy   ) = Seq.maxBy   f x
-    static member        MaxBy (x: list<'T>         , f        , [<Optional>]_impl: MaxBy   ) = List.maxBy  f x
-    static member        MaxBy (x: 'T []            , f        , [<Optional>]_impl: MaxBy   ) = Array.maxBy f x
+    static member inline MaxBy (x: '``Foldable<'T>``, f: 'T->'U when 'U : comparison, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.maxBy f : 'T
+    static member inline MaxBy (x: '``Foldable<'T>``, f: 'T->'U when 'U : comparison, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member MaxBy: '``Foldable<'T>``-> _ -> 'T) (x, f))
+    static member        MaxBy (x: Id<'T>           , _: 'T->'U when 'U : comparison, [<Optional>]_impl: MaxBy   ) = x.getValue
+    static member        MaxBy (x: ResizeArray<'T>  , f: 'T->'U when 'U : comparison, [<Optional>]_impl: MaxBy   ) = Seq.maxBy   f x
+    static member        MaxBy (x: list<'T>         , f: 'T->'U when 'U : comparison, [<Optional>]_impl: MaxBy   ) = List.maxBy  f x
+    static member        MaxBy (x: 'T []            , f: 'T->'U when 'U : comparison, [<Optional>]_impl: MaxBy   ) = Array.maxBy f x
 
-    static member inline Invoke (projection: 'T->'U) (source: '``Foldable<'T>``) =
+    static member inline Invoke (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member MaxBy: _*_*_ -> _) b, f, a)
         let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<MaxBy>, source, projection) :'T
@@ -333,17 +333,17 @@ type MaxBy =
 
 type Min =
     inherit Default1
-    static member inline Min (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.min : 'T
-    static member inline Min (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Min: '``Foldable<'T>``-> 'T) x)
-    static member        Min (x: Id<'T>           , [<Optional>]_impl: Min     ) = x.getValue
-    static member        Min (x: ResizeArray<'T>  , [<Optional>]_impl: Min     ) = Seq.min   x
-    static member        Min (x: list<'T>         , [<Optional>]_impl: Min     ) = List.min  x
-    static member        Min (x: 'T []            , [<Optional>]_impl: Min     ) = Array.min x
+    static member inline Min (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.min : 'T when 'T : comparison
+    static member inline Min (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Min: '``Foldable<'T>``-> 'T) x) : 'T when 'T : comparison
+    static member        Min (x: Id<'T>           , [<Optional>]_impl: Min     ) = x.getValue  : 'T when 'T : comparison
+    static member        Min (x: ResizeArray<'T>  , [<Optional>]_impl: Min     ) = Seq.min   x : 'T when 'T : comparison
+    static member        Min (x: list<'T>         , [<Optional>]_impl: Min     ) = List.min  x : 'T when 'T : comparison
+    static member        Min (x: 'T []            , [<Optional>]_impl: Min     ) = Array.min x : 'T when 'T : comparison
 
     static member inline Invoke (source: '``Foldable<'T>``) =
         let inline call_2 (a:^a, b:^b) = ((^a or ^b) : (static member Min: _*_ -> _) b, a)
         let inline call (a:'a, b:'b) = call_2 (a, b)
-        call (Unchecked.defaultof<Min>, source) :'T
+        call (Unchecked.defaultof<Min>, source) : 'T when 'T : comparison
 
 
 type MinBy =
