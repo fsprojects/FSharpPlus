@@ -257,11 +257,12 @@ type TryHead =
 
 type Pick =
     inherit Default1
-    static member inline Pick (x          , f: _->'U option, [<Optional>]_impl: Default1) = Seq.pick   f (ToSeq.Invoke x) : 'U
-    static member        Pick (x: Id<'T>  , f: _->'U option, [<Optional>]_impl: Pick    ) = List.pick  f [x.getValue]
-    static member        Pick (x: seq<'T> , f: _->'U option, [<Optional>]_impl: Pick    ) = Seq.pick   f x
-    static member        Pick (x: list<'T>, f: _->'U option, [<Optional>]_impl: Pick    ) = List.pick  f x
-    static member        Pick (x: 'T []   , f: _->'U option, [<Optional>]_impl: Pick    ) = Array.pick f x
+    static member inline Pick (x: '``Foldable<'T>``, f: 'T->'U option, [<Optional>]_impl: Default2) = Seq.pick f (ToSeq.Invoke x) : 'U
+    static member inline Pick (x: '``Foldable<'T>``, f: 'T->'U option, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Pick: '``Foldable<'T>``-> _ -> 'T) (x, f))
+    static member        Pick (x: Id<'T>           , f: 'T->'U option, [<Optional>]_impl: Pick    ) = List.pick  f [x.getValue]
+    static member        Pick (x: ResizeArray<'T>  , f: 'T->'U option, [<Optional>]_impl: Pick    ) = Seq.pick   f x
+    static member        Pick (x: list<'T>         , f: 'T->'U option, [<Optional>]_impl: Pick    ) = List.pick  f x
+    static member        Pick (x: 'T []            , f: 'T->'U option, [<Optional>]_impl: Pick    ) = Array.pick f x
 
     static member inline Invoke (chooser: 'T->'U option) (source: '``Foldable'<T>``) =
         let inline call_2 (a:^a, b:^b, x) = ((^a or ^b ) : (static member Pick: _*_*_ -> _) b, x, a)

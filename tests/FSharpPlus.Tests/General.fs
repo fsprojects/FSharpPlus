@@ -21,6 +21,10 @@ type WrappedListA<'s> = WrappedListA of 's list with
     static member TryParse x =
         if x = "[1;2;3]" then Some (WrappedListA [1;2;3])
         else None
+    static member Pick (x, f) =
+        SideEffects.add "Using WrappedListA's Pick"
+        let (WrappedListA lst) = x
+        List.pick f lst
     static member Min x =
         SideEffects.add "Using WrappedListA's Min"
         let (WrappedListA lst) = x
@@ -62,6 +66,10 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using optimized foldMap"
         Seq.fold (fun x y -> x ++ (f y)) zero x
     static member Zip (WrappedListD x, WrappedListD y) = SideEffects.add "Using WrappedListD's zip"; WrappedListD (List.zip x y)
+    static member Pick (x, f) =
+        SideEffects.add "Using WrappedListD's Pick"
+        let (WrappedListD lst) = x
+        List.pick f lst
     static member Min x =
         SideEffects.add "Using WrappedListD's Min"
         let (WrappedListD lst) = x
@@ -616,6 +624,16 @@ module Foldable =
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
         Assert.AreEqual (50, foldMap ((+) 10) readOnlyCollection)
         Assert.AreEqual (50, foldMap ((+) 10) iReadOnlyList)
+
+    [<Test>]
+    let pick() =
+        SideEffects.reset()
+        let a = pick Some [1..3]
+        let b = pick Some (System.Text.StringBuilder "abc")
+        let c = pick Some (WrappedListA [1..3])
+        let d = pick Some (WrappedListD [1..3])
+        areEqual (SideEffects.get()) ["Using WrappedListA's Pick"; "Using WrappedListD's Pick"]
+        ()
 
     [<Test>]
     let minimum() =
