@@ -160,15 +160,15 @@ type Fold =
  
 type Exists =
     inherit Default1
-    static member inline Exists (x                , f, [<Optional>]_impl: Default1) = Seq.exists    f (ToSeq.Invoke x) : bool
-    static member        Exists (x: Id<'T>        , f, [<Optional>]_impl: Exists  ) = f x.getValue : bool
-    static member        Exists (x: seq<'a>       , f, [<Optional>]_impl: Exists  ) = Seq.exists    f x
-    static member        Exists (x: list<'a>      , f, [<Optional>]_impl: Exists  ) = List.exists   f x
-    static member        Exists (x: 'a []         , f, [<Optional>]_impl: Exists  ) = Array.exists  f x
-    static member        Exists (x: Set<'a>       , f, [<Optional>]_impl: Exists  ) = Set.exists    f x
-    static member        Exists (x: string        , f, [<Optional>]_impl: Exists  ) = String.exists f x
-    static member        Exists (x: 'a ResizeArray, f, [<Optional>]_impl: Exists  ) = Seq.exists    f x
-    static member        Exists (x: StringBuilder , f, [<Optional>]_impl: Exists  ) = x.ToString() |> String.exists f
+    static member inline Exists (x                   , f          , [<Optional>]_impl: Default2) = Seq.exists    f (ToSeq.Invoke x) : bool
+    static member inline Exists (x: '``Foldable<'T>``, f: 'T->bool, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Exists: '``Foldable<'T>``-> _ -> bool) (x, f))
+    static member        Exists (x: Id<'T>           , f          , [<Optional>]_impl: Exists  ) = f x.getValue : bool
+    static member        Exists (x: list<'a>         , f          , [<Optional>]_impl: Exists  ) = List.exists   f x
+    static member        Exists (x: 'a []            , f          , [<Optional>]_impl: Exists  ) = Array.exists  f x
+    static member        Exists (x: Set<'a>          , f          , [<Optional>]_impl: Exists  ) = Set.exists    f x
+    static member        Exists (x: 'a ResizeArray   , f          , [<Optional>]_impl: Exists  ) = Seq.exists    f x
+    static member        Exists (x: string           , f          , [<Optional>]_impl: Exists  ) = String.exists f x    
+    static member        Exists (x: StringBuilder    , f          , [<Optional>]_impl: Exists  ) = x.ToString() |> String.exists f
 
     static member inline Invoke (predicate: 'T->bool) (source: '``Foldable'<T>``) =
         let inline call_3 (a:^a, b:^b, f) = ((^a or ^b) : (static member Exists: _*_*_ -> _) b, f, a)
@@ -178,15 +178,15 @@ type Exists =
 
 type ForAll =
     inherit Default1
-    static member inline ForAll (x                , f, [<Optional>]_impl: Default1) = Seq.forall    f (ToSeq.Invoke x) : bool
-    static member        ForAll (x: Id<'T>        , f, [<Optional>]_impl: ForAll  ) = f x.getValue                     : bool
-    static member        ForAll (x: seq<'a>       , f, [<Optional>]_impl: ForAll  ) = Seq.forall    f x
-    static member        ForAll (x: list<'a>      , f, [<Optional>]_impl: ForAll  ) = List.forall   f x
-    static member        ForAll (x: 'a []         , f, [<Optional>]_impl: ForAll  ) = Array.forall  f x
-    static member        ForAll (x: Set<'a>       , f, [<Optional>]_impl: ForAll  ) = Set.forall    f x
-    static member        ForAll (x: string        , f, [<Optional>]_impl: ForAll  ) = String.forall f x
-    static member        ForAll (x: 'a ResizeArray, f, [<Optional>]_impl: ForAll  ) = Seq.forall    f x
-    static member        ForAll (x: StringBuilder , f, [<Optional>]_impl: ForAll  ) = x.ToString() |> String.forall f
+    static member inline ForAll (x                   , f          , [<Optional>]_impl: Default2) = Seq.forall    f (ToSeq.Invoke x) : bool
+    static member inline ForAll (x: '``Foldable<'T>``, f: 'T->bool, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member ForAll: '``Foldable<'T>``-> _ -> bool) (x, f))
+    static member        ForAll (x: Id<'T>           , f          , [<Optional>]_impl: ForAll  ) = f x.getValue : bool
+    static member        ForAll (x: list<'a>         , f          , [<Optional>]_impl: ForAll  ) = List.forall   f x
+    static member        ForAll (x: 'a []            , f          , [<Optional>]_impl: ForAll  ) = Array.forall  f x
+    static member        ForAll (x: Set<'a>          , f          , [<Optional>]_impl: ForAll  ) = Set.forall    f x
+    static member        ForAll (x: string           , f          , [<Optional>]_impl: ForAll  ) = String.forall f x
+    static member        ForAll (x: 'a ResizeArray   , f          , [<Optional>]_impl: ForAll  ) = Seq.forall    f x
+    static member        ForAll (x: StringBuilder    , f          , [<Optional>]_impl: ForAll  ) = x.ToString() |> String.forall f
 
     static member inline Invoke (predicate: 'T->bool) (source: '``Foldable'<T>``) =
         let inline call_3 (a:^a, b:^b, f) = ((^a or ^b) : (static member ForAll: _*_*_ -> _) b, f, a)
@@ -196,11 +196,12 @@ type ForAll =
 
 type Find =
     inherit Default1
-    static member inline Find (x          , f, [<Optional>]_impl: Default1) = Seq.find   f (ToSeq.Invoke x) :'T
-    static member        Find (x: Id<'T>  , f, [<Optional>]_impl: Find    ) = List.find  f [x.getValue]
-    static member        Find (x: seq<'T> , f, [<Optional>]_impl: Find    ) = Seq.find   f x
-    static member        Find (x: list<'T>, f, [<Optional>]_impl: Find    ) = List.find  f x
-    static member        Find (x: 'T []   , f, [<Optional>]_impl: Find    ) = Array.find f x
+    static member inline Find (x                   , f          , [<Optional>]_impl: Default2) = Seq.find   f (ToSeq.Invoke x) : 'T
+    static member inline Find (x: '``Foldable<'T>``, f: 'T->bool, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (static member Find: '``Foldable<'T>``-> _ -> 'T) (x, f))
+    static member        Find (x: Id<'T>           , f          , [<Optional>]_impl: Find    ) = List.find  f [x.getValue]
+    static member        Find (x: ResizeArray<'T>  , f          , [<Optional>]_impl: Find    ) = Seq.find   f x
+    static member        Find (x: list<'T>         , f          , [<Optional>]_impl: Find    ) = List.find  f x
+    static member        Find (x: 'T []            , f          , [<Optional>]_impl: Find    ) = Array.find f x
 
     static member inline Invoke (predicate: 'T->bool) (source: '``Foldable'<T>``) =
         let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member Find: _*_*_ -> _) b, f, a)

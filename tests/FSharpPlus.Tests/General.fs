@@ -21,6 +21,10 @@ type WrappedListA<'s> = WrappedListA of 's list with
     static member TryParse x =
         if x = "[1;2;3]" then Some (WrappedListA [1;2;3])
         else None
+    static member Exists (x, f) =
+        SideEffects.add "Using WrappedListA's Exists"
+        let (WrappedListA lst) = x
+        List.exists f lst
     static member Pick (x, f) =
         SideEffects.add "Using WrappedListA's Pick"
         let (WrappedListA lst) = x
@@ -66,6 +70,10 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using optimized foldMap"
         Seq.fold (fun x y -> x ++ (f y)) zero x
     static member Zip (WrappedListD x, WrappedListD y) = SideEffects.add "Using WrappedListD's zip"; WrappedListD (List.zip x y)
+    static member Exists (x, f) =
+        SideEffects.add "Using WrappedListD's Exists"
+        let (WrappedListD lst) = x
+        List.exists f lst    
     static member Pick (x, f) =
         SideEffects.add "Using WrappedListD's Pick"
         let (WrappedListD lst) = x
@@ -624,6 +632,16 @@ module Foldable =
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
         Assert.AreEqual (50, foldMap ((+) 10) readOnlyCollection)
         Assert.AreEqual (50, foldMap ((+) 10) iReadOnlyList)
+
+    [<Test>]
+    let exists() =
+        SideEffects.reset()
+        let a = exists ((=) 2) [1..3]
+        let b = exists ((=) '2') (System.Text.StringBuilder "abc")
+        let c = exists ((=) 2) (WrappedListA [1..3])
+        let d = exists ((=) 2) (WrappedListD [1..3])
+        areEqual (SideEffects.get()) ["Using WrappedListA's Exists"; "Using WrappedListD's Exists"]
+        ()
 
     [<Test>]
     let pick() =
