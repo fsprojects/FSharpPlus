@@ -5,6 +5,7 @@ module Samples.Lens
 #endif
 
 
+open System
 open FSharpPlus
 
 // from https://github.com/ekmett/lens/wiki/Examples
@@ -46,3 +47,28 @@ let r8 = ((), "world") |> _1 .-> "hello"
 // Conversely view, can be used as an prefix alias for (^.).
 let r9 = view _2 (10,20)
 // val it : int = 20
+
+// From Mauricio Scheffer: https://gist.github.com/mausch/4260932
+
+type Person = {
+    Name: string
+    DateOfBirth: DateTime
+}
+module Person=
+    let inline name f { Name = a; DateOfBirth = b } = map (fun a' -> { Name = a'; DateOfBirth = b }) (f a)
+
+type Book = {
+    Title: string
+    Author: Person
+}
+module Book =
+    let inline author f { Author = a; Title = b } = map (fun a' -> { Author = a'; Title = b }) (f a)
+let bookAuthorName = Book.author << Person.name
+let rayuela =
+    { Book.Title = "Rayuela"
+      Author = { Person.Name = "Julio Cortázar"
+                 DateOfBirth = DateTime(1914, 8, 26) } }
+// read book author name:
+let authorName1 = view bookAuthorName rayuela
+//  you can also write the read operation as:
+let authorName2 = rayuela ^. bookAuthorName
