@@ -69,6 +69,8 @@ The API reference is automatically generated from Markdown comments in the libra
 
  * [Computation Expressions](computation-expressions.html) contains information about the generic computation expressions.
 
+ * [Lens](lens.html) contains information and samples about lens and other optics.
+
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library. This includes additional brief samples on using most of the
    functions.

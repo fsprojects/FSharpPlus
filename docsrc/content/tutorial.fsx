@@ -188,5 +188,9 @@ let r9 = view _2 (10,20)
 
 (**
 
+For more details:
+
+Here's a full tour of [lens and all other optics](lens.html)
+
 Have a look at all [lens functions](reference\fsharpplus-lens.html)
 *)
