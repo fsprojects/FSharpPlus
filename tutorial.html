@@ -266,6 +266,8 @@
 </code></pre></td>
 </tr>
 </table>
+<p>For more details:</p>
+<p>Here's a full tour of <a href="lens.html">lens and all other optics</a></p>
 <p>Have a look at all <a href="reference\fsharpplus-lens.html">lens functions</a></p>
 
 <div class="tip" id="fs1">namespace FSharpPlus</div>
@@ -273,7 +275,7 @@
 <div class="tip" id="fs3">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
 <div class="tip" id="fs4">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
 <div class="tip" id="fs5">namespace FSharpPlus.Data</div>
-<div class="tip" id="fs6">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member head : &#39;t<br />&#160;&#160;&#160;&#160;member tail : &#39;t list<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;static member Extract : NonEmptyList&lt;&#39;t&gt; -&gt; &#39;t<br />&#160;&#160;&#160;&#160;...</div>
+<div class="tip" id="fs6">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{Head: &#39;t;<br />&#160;&#160;&#160;Tail: &#39;t list;}<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member Length : int<br />&#160;&#160;&#160;&#160;member head : &#39;t<br />&#160;&#160;&#160;&#160;member tail : &#39;t list<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;...</div>
 <div class="tip" id="fs7">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;</div>
 <div class="tip" id="fs8">Multiple items<br />union case Tree.Tree: &#39;t * Tree&lt;&#39;t&gt; * Tree&lt;&#39;t&gt; -&gt; Tree&lt;&#39;t&gt;<br /><br />--------------------<br />type Tree&lt;&#39;t&gt; =<br />&#160;&#160;| Tree of &#39;t * Tree&lt;&#39;t&gt; * Tree&lt;&#39;t&gt;<br />&#160;&#160;| Leaf of &#39;t<br />&#160;&#160;&#160;&#160;static member Map : x:Tree&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;a2) -&gt; Tree&lt;&#39;a2&gt;</div>
 <div class="tip" id="fs9">union case Tree.Leaf: &#39;t -&gt; Tree&lt;&#39;t&gt;</div>
