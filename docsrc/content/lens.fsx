@@ -153,3 +153,32 @@ let i2 = view (from' isoTupleOption) (Some 42)
 // Iso composed with a Lens -> Lens
 let i3 = view (_1 << isoTupleOption) (System.Int32.TryParse "42", ())
 // val i3 : int option = Some 42
+
+(**
+Example usage of lenses with business objects
+===
+
+*)
+open System
+// From Mauricio Scheffer: https://gist.github.com/mausch/4260932
+type Person = {
+    Name: string
+    DateOfBirth: DateTime
+}
+module Person=
+    let inline name f { Name = a; DateOfBirth = b } = map (fun a' -> { Name = a'; DateOfBirth = b }) (f a)
+ type Book = {
+    Title: string
+    Author: Person
+}
+module Book =
+    let inline author f { Author = a; Title = b } = map (fun a' -> { Author = a'; Title = b }) (f a)
+    let inline authorName b = author << Person.name <| b
+let rayuela =
+    { Book.Title = "Rayuela"
+      Author = { Person.Name = "Julio Cortázar"
+                 DateOfBirth = DateTime(1914, 8, 26) } }
+// read book author name:
+let authorName1 = view Book.authorName rayuela
+//  you can also write the read operation as:
+let authorName2 = rayuela ^. Book.authorName
