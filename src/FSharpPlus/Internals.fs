@@ -7,10 +7,13 @@ type Default3 = class inherit Default4 end
 type Default2 = class inherit Default3 end
 type Default1 = class inherit Default2 end
 
+#nowarn "0042" // retype
+
 module internal Prelude =
     let inline flip f x y = f y x
     let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
+    let inline retype (x: 'T) : 'U = (# "" x : 'U #)
 
 
 

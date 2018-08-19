@@ -452,7 +452,7 @@ module Operators =
     let inline mapItem2 mapping tuple = MapItem2.Invoke mapping tuple
     let inline mapItem3 mapping tuple = MapItem3.Invoke mapping tuple
     let inline mapItem4 mapping tuple = MapItem4.Invoke mapping tuple
-    let        mapItem5 mapping tuple = MapItem5.MapItem5 (tuple, mapping)
+    let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
     
     
     

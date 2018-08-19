@@ -134,7 +134,7 @@ open System.Threading.Tasks
 #endif
 open System.Collections.Generic
 open Microsoft.FSharp.Quotations
-
+open FSharpPlus.Internals.Prelude
 
 
 type Zero =
@@ -161,10 +161,28 @@ type Zero =
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<Zero>
 
+type Zero with
+    static member inline Zero (t: 't, _:Zero)  :'t =
+        let (tr: 'tr) = if false then (^t : (member Rest : 'tr) t) else Zero.Invoke ()
+        let (t7: 't7) = if false then (^t : (member Item7: 't7) t) else Zero.Invoke ()
+        let (t6: 't6) = if false then (^t : (member Item6: 't6) t) else Zero.Invoke ()
+        let (t5: 't5) = if false then (^t : (member Item5: 't5) t) else Zero.Invoke ()
+        let (t4: 't4) = if false then (^t : (member Item4: 't4) t) else Zero.Invoke ()
+        let (t3: 't3) = if false then (^t : (member Item3: 't3) t) else Zero.Invoke ()
+        let (t2: 't2) = if false then (^t : (member Item2: 't2) t) else Zero.Invoke ()
+        let (t1: 't1) = if false then (^t : (member Item1: 't1) t) else Zero.Invoke ()
+        Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+
+type Zero with
+    static member inline Zero (_: Tuple<'a>, _:Zero) = Tuple<_> (Zero.Invoke ()) : Tuple<'a>
+    static member inline Zero (_: Id<'a>   , _:Zero) = Id<_>    (Zero.Invoke ())
+    
 type Zero with static member inline Zero (_ : 'a*'b         , _:Zero) = (Zero.Invoke(), Zero.Invoke()                                             ): 'a*'b
 type Zero with static member inline Zero (_ : 'a*'b*'c      , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke()                              ): 'a*'b*'c
 type Zero with static member inline Zero (_ : 'a*'b*'c*'d   , _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke()               ): 'a*'b*'c*'d
 type Zero with static member inline Zero (_ : 'a*'b*'c*'d*'e, _:Zero) = (Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke(), Zero.Invoke()): 'a*'b*'c*'d*'e
+type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f   , _:Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ): 'a*'b*'c*'d*'e*'f
+type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f*'g, _:Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()): 'a*'b*'c*'d*'e*'f*'g
 
 #if NET35
 #else
@@ -479,6 +497,7 @@ type Sqrt with
 // Bounded class ----------------------------------------------------------
 
 open System
+open FSharpPlus.Internals.Prelude
 // TODO: can we have a (working) default ? It's a field, maybe we should call to a property.
 
 type MinValue =
@@ -505,13 +524,26 @@ type MinValue =
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<MinValue>
 
+    static member inline MinValue (t: 't, _:MinValue) :'t =
+        let (tr: 'tr) = if false then (^t : (member Rest : 'tr) t) else MinValue.Invoke ()
+        let (t7: 't7) = if false then (^t : (member Item7: 't7) t) else MinValue.Invoke ()
+        let (t6: 't6) = if false then (^t : (member Item6: 't6) t) else MinValue.Invoke ()
+        let (t5: 't5) = if false then (^t : (member Item5: 't5) t) else MinValue.Invoke ()
+        let (t4: 't4) = if false then (^t : (member Item4: 't4) t) else MinValue.Invoke ()
+        let (t3: 't3) = if false then (^t : (member Item3: 't3) t) else MinValue.Invoke ()
+        let (t2: 't2) = if false then (^t : (member Item2: 't2) t) else MinValue.Invoke ()
+        let (t1: 't1) = if false then (^t : (member Item1: 't1) t) else MinValue.Invoke ()
+        Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+
+    static member inline MinValue (_: Tuple<'a>, _:MinValue) = Tuple<_> (MinValue.Invoke ()) : Tuple<'a>
+    static member inline MinValue (_: Id<'a>   , _:MinValue) = Id<_>    (MinValue.Invoke ())
+
     static member inline MinValue ((_:'a*'b                  ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke())
     static member inline MinValue ((_:'a*'b*'c               ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
     static member inline MinValue ((_:'a*'b*'c*'d            ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
     static member inline MinValue ((_:'a*'b*'c*'d*'e         ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
     static member inline MinValue ((_:'a*'b*'c*'d*'e*'f      ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
     static member inline MinValue ((_:'a*'b*'c*'d*'e*'f*'g   ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
-    static member inline MinValue ((_:'a*'b*'c*'d*'e*'f*'g*'h), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
 
 type MaxValue =
     static member MaxValue (_:unit          , _:MaxValue) = ()
@@ -537,10 +569,23 @@ type MaxValue =
         let inline call (a:'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
         call Unchecked.defaultof<MaxValue>
 
+    static member inline MaxValue (t: 't, _:MaxValue) :'t =
+        let (tr: 'tr) = if false then (^t : (member Rest : 'tr) t) else MaxValue.Invoke ()
+        let (t7: 't7) = if false then (^t : (member Item7: 't7) t) else MaxValue.Invoke ()
+        let (t6: 't6) = if false then (^t : (member Item6: 't6) t) else MaxValue.Invoke ()
+        let (t5: 't5) = if false then (^t : (member Item5: 't5) t) else MaxValue.Invoke ()
+        let (t4: 't4) = if false then (^t : (member Item4: 't4) t) else MaxValue.Invoke ()
+        let (t3: 't3) = if false then (^t : (member Item3: 't3) t) else MaxValue.Invoke ()
+        let (t2: 't2) = if false then (^t : (member Item2: 't2) t) else MaxValue.Invoke ()
+        let (t1: 't1) = if false then (^t : (member Item1: 't1) t) else MaxValue.Invoke ()
+        Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+
+    static member inline MaxValue (_: Tuple<'a>, _:MaxValue) = Tuple<_> (MaxValue.Invoke ()) : Tuple<'a>
+    static member inline MaxValue (_: Id<'a>   , _:MaxValue) = Id<_>    (MaxValue.Invoke ())
+
     static member inline MaxValue ((_:'a*'b                  ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke())
     static member inline MaxValue ((_:'a*'b*'c               ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke())
     static member inline MaxValue ((_:'a*'b*'c*'d            ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke())
     static member inline MaxValue ((_:'a*'b*'c*'d*'e         ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke())
     static member inline MaxValue ((_:'a*'b*'c*'d*'e*'f      ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke())
     static member inline MaxValue ((_:'a*'b*'c*'d*'e*'f*'g   ), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke())
-    static member inline MaxValue ((_:'a*'b*'c*'d*'e*'f*'g*'h), _:MaxValue) = (MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke(), MaxValue.Invoke())
