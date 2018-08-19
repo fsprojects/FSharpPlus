@@ -42,10 +42,8 @@ From .Net/F#
  -  ``Set<'T>``
  -  ``Map<'T,'U>``
  -  ``TimeSpan`` 
- -  ``'T*'U``
- -  ``'T*'U*'V``
- -  ``'T*'U*'V*'W``
- -  ``'T*'U*'V*'W*'X``
+ -  ``Tuple<*>``
+ -  ``'T1* ... *'Tn``
  -  ``Task<'T>``
  -  ``'T->'Semigroup``
  -  ``Async<'T>``

@@ -6,6 +6,13 @@ open FSharpPlus.Lens
 open NUnit.Framework
 open FsCheck
 open Helpers
+
+
+[<Test>]
+let simple_lens() =
+  areEqual 1 (view _1 (1, '2'))
+  areEqual 2 (view _2 ('1', 2))
+
 [<Test>]
 let ok_prism() =
   areEqual (None) (preview _Ok (Error 1))

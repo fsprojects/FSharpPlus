@@ -12,6 +12,7 @@ open System.Threading.Tasks
 #endif
 open FSharpPlus
 open FSharpPlus.Internals
+open FSharpPlus.Internals.Prelude
 
 
 [<Extension; Sealed>]
@@ -60,6 +61,19 @@ type Plus with
                     | Choice2Of2 a, Choice2Of2 b -> Choice2Of2 (Plus.Invoke a b)
 
 type Plus with 
+    static member inline ``+`` (x, y, _mthd: Plus)  :'t =
+        let xr, yr = (^t : (member Rest : 'tr) x), (^t : (member Rest : 'tr) y)
+        let x7, y7 = (^t : (member Item7: 't7) x), (^t : (member Item7: 't7) y)
+        let x6, y6 = (^t : (member Item6: 't6) x), (^t : (member Item6: 't6) y)
+        let x5, y5 = (^t : (member Item5: 't5) x), (^t : (member Item5: 't5) y)
+        let x4, y4 = (^t : (member Item4: 't4) x), (^t : (member Item4: 't4) y)
+        let x3, y3 = (^t : (member Item3: 't3) x), (^t : (member Item3: 't3) y)
+        let x2, y2 = (^t : (member Item2: 't2) x), (^t : (member Item2: 't2) y)
+        let x1, y1 = (^t : (member Item1: 't1) x), (^t : (member Item1: 't1) y)
+        Tuple<_,_,_,_,_,_,_,_>(Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7, Plus.Invoke xr yr) |> retype : 't
+
+    static member inline ``+`` (x1: Tuple<'a>, y1: Tuple<'a>, _mthd: Plus) = Tuple<'a> (Plus.Invoke x1.Item1 y1.Item1) : Tuple<'a>
+type Plus with 
     static member inline ``+`` ((x1,x2         ), (y1,y2         ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                         ) :'a*'b
 type Plus with 
     static member inline ``+`` ((x1,x2,x3      ), (y1,y2,y3      ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3                                      ) :'a*'b*'c
@@ -67,7 +81,12 @@ type Plus with
     static member inline ``+`` ((x1,x2,x3,x4   ), (y1,y2,y3,y4   ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4                   ) :'a*'b*'c*'d
 type Plus with 
     static member inline ``+`` ((x1,x2,x3,x4,x5), (y1,y2,y3,y4,y5), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5) :'a*'b*'c*'d*'e
-    
+type Plus with 
+    static member inline ``+`` ((x1,x2,x3,x4,x5,x6)   , (y1,y2,y3,y4,y5,y6)   , [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6)                    :'a*'b*'c*'d*'e*'f
+type Plus with 
+    static member inline ``+`` ((x1,x2,x3,x4,x5,x6,x7), (y1,y2,y3,y4,y5,y6,y7), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7) :'a*'b*'c*'d*'e*'f*'g
+
+
 type Plus with    
     
 #if NET35

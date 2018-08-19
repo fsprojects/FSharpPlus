@@ -234,6 +234,8 @@ module Monoid =
         let lzy2 = plus (zero) lzy1
         let asy1 = plus (async.Return [1]) (async.Return [2;3])
         let asy2 = plus (zero) asy1
+        let bigNestedTuple1 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (2, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (3, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20))
+        let bigNestedTuple2 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (zero, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ zero
 
         let mapA = Map.empty 
                     |> Map.add 1 (async.Return "Hey")
@@ -1222,6 +1224,8 @@ module Numerics =
         let res17 = abs' argComplex    
         let res18 = abs' argComplex32  
         let res19 = abs' argBigRational
+
+        let (res20: int * char * int * char * int * char * int * char * int * char) = maxValue
 
         Assert.AreEqual(res09 * res19, argBigRational)
 
