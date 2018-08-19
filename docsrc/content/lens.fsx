@@ -155,7 +155,7 @@ let i3 = view (_1 << isoTupleOption) (System.Int32.TryParse "42", ())
 // val i3 : int option = Some 42
 
 (**
-Iso
+Example usage of lenses with business objects
 ===
 
 *)
