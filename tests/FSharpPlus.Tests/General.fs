@@ -1192,6 +1192,8 @@ module NumericLiteralG =
 
 open MathNet.Numerics
 
+type TypeWithMax = TypeWithMax with static member MaxValue = TypeWithMax
+
 module Numerics = 
     [<Test>]
     let genericMath() = 
@@ -1225,7 +1227,7 @@ module Numerics =
         let res18 = abs' argComplex32  
         let res19 = abs' argBigRational
 
-        let (res20: int * char * int * char * int * char * int * char * int * char) = maxValue
+        let (res20: int * char * int * char * TypeWithMax * int * char * int * char * int * char) = maxValue
 
         Assert.AreEqual(res09 * res19, argBigRational)
 

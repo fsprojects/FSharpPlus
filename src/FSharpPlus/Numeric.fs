@@ -501,6 +501,8 @@ open FSharpPlus.Internals.Prelude
 // TODO: can we have a (working) default ? It's a field, maybe we should call to a property.
 
 type MinValue =
+    inherit Default1
+    static member inline MinValue (_:'t     , _:Default1) = (^t: (static member MinValue: ^t) ()) : 't
     static member MinValue (_:unit          , _:MinValue) = ()
     static member MinValue (_:bool          , _:MinValue) = false
     static member MinValue (_:char          , _:MinValue) = Char.MinValue
@@ -546,6 +548,8 @@ type MinValue =
     static member inline MinValue ((_:'a*'b*'c*'d*'e*'f*'g   ), _:MinValue) = (MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke(), MinValue.Invoke())
 
 type MaxValue =
+    inherit Default1
+    static member inline MaxValue (_:'t     , _:Default1) = (^t: (static member MaxValue: ^t) ()) : 't
     static member MaxValue (_:unit          , _:MaxValue) = ()
     static member MaxValue (_:bool          , _:MaxValue) = true
     static member MaxValue (_:char          , _:MaxValue) = Char.MaxValue
