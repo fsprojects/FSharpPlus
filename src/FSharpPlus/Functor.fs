@@ -390,6 +390,7 @@ type Unzip =
     static member inline Unzip ( _    : ^t when ^t: null and ^t: struct     , _                                          , _                         ) = ()
     static member        Unzip (source: list<'T * 'U>         , [<Optional>]_output: list<'T> * list<'U>                 , [<Optional>]_mthd:Unzip   ) = List.unzip  source
     static member        Unzip (source: ('T * 'U) []          , [<Optional>]_output: 'T [] * 'U []                       , [<Optional>]_mthd:Unzip   ) = Array.unzip source
+    static member        Unzip (source: option<'T * 'U>       , [<Optional>]_output: option<'T> * option<'U>             , [<Optional>]_mthd:Unzip   ) = Option.unzip  source
 
     static member inline Invoke (source:'``Functor<'T1 * 'T2>``)  =
         let inline call_3 (a:^a, b:^b, d:^d) = ((^a or ^b or ^d) : (static member Unzip: _*_*_ -> _) b, d, a)
@@ -407,6 +408,7 @@ type Zip =
     static member Zip ((x: Map<'K, 'T>         , y: Map<'K,'U>        , _output: Map<'K,'T*'U>        ) , _mthd: Zip) = Map.zip        x y
     static member Zip ((x: list<'T>            , y: list<'U>          , _output: list<'T*'U>          ) , _mthd: Zip) = List.zip       x y
     static member Zip ((x: 'T []               , y: 'U []             , _output: ('T*'U) []           ) , _mthd: Zip) = Array.zip      x y
+    static member Zip ((x: option<'T>          , y: option<'U>        , _output: option<'T*'U>        ) , _mthd: Zip) = Option.zip     x y
     static member Zip ((x: Async<'T>           , y: Async<'U>         , _output: Async<'T*'U>         ) , _mthd: Zip) = Async.zip      x y
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =

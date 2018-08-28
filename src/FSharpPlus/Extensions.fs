@@ -11,7 +11,24 @@ module Option =
     /// <returns>The result sequence.</returns>
     let apply f x =
         match f, x with
-        | Some f, Some x -> Some (f x) 
+        | Some f, Some x -> Some (f x)
+        | _              -> None
+
+    /// <summary>If value is Some, returns both of them tupled. Otherwise it returns None tupled.</summary>
+    /// <param name="v">The value.</param>
+    /// <returns>The resulting tuple.</returns>
+    let unzip v =
+        match v with
+        | Some (x, y) -> Some x, Some y
+        | _           -> None, None
+
+    /// <summary>If both value are Some, returns both of them tupled. Otherwise it returns None.</summary>
+    /// <param name="x">The first value.</param>
+    /// <param name="y">The second value.</param>
+    /// <returns>The resulting option.</returns>
+    let zip x y =
+        match x, y with
+        | Some x, Some y -> Some (x, y)
         | _              -> None
 
 
