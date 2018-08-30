@@ -1,3 +1,13 @@
+#### 1.1.0-CI00230  - August 30 2018
+* Option as ZipFunctor
+* More Async extensions
+* More clean signatures supported
+* Removed tuple size limitations
+* Add generic functions 'maximum' and 'minimum' for Foldable
+* Fix: generic 'scan' signature
+* Fix: bug in '<|>' for Choice
+* Optimized Foldable/Collection generic functions by adding specific overloads
+
 #### 1.1.0-CI00208  - June 15 2018
 * Async as ZipFunctor
 * More Async extensions
