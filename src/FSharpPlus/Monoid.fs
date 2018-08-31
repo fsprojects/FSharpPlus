@@ -122,6 +122,7 @@ type Plus with
     static member        ``+`` (x: _ seq             , y                    , [<Optional>]_mthd: Default3) = Seq.append x y
     static member        ``+`` (x: _ IEnumerator     , y                    , [<Optional>]_mthd: Default3) = Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator ()
     static member inline ``+`` (x: IDictionary<'K,'V>, y: IDictionary<'K,'V>, [<Optional>]_mthd: Default3) = Dict.unionWith Plus.Invoke x y
+    static member inline ``+`` (x: IReadOnlyDictionary<'K,'V>, y: IReadOnlyDictionary<'K,'V>, [<Optional>]_mthd: Default3) = IReadOnlyDictionary.unionWith Plus.Invoke x y
 
 
 [<Extension; Sealed>]

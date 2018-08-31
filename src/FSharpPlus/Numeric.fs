@@ -203,6 +203,7 @@ type Zero with
     static member        Zero (_:seq<'a>           , _:Zero) = Seq.empty     : seq<'a>
     static member        Zero (_:IEnumerator<'a>   , _:Zero) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
     static member        Zero (_:IDictionary<'a,'b>, _:Zero) = Dictionary<'a,'b>() :> IDictionary<'a,'b>
+    static member        Zero (_:IReadOnlyDictionary<'a,'b>, _:Zero) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
 
 
 

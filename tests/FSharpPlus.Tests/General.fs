@@ -258,6 +258,8 @@ module Monoid =
         dicB.["keyb"] <- (result " World": Task<_>)
 
         let dicAB = plus dicA dicB
+        let iDicAb   = plus (dicA :> IDictionary<_,_>)         (dicB :> IDictionary<_,_>)
+        let iroDicAb = plus (dicA :> IReadOnlyDictionary<_,_>) (dicB :> IReadOnlyDictionary<_,_>)
 
         let greeting3 = extract dicAB.["keyb"]
         let greeting4 = extract (Seq.sum [dicA; zero; dicB]).["keyb"]
