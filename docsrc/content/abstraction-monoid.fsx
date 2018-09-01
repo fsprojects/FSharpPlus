@@ -66,6 +66,7 @@ From .Net/F#
  -  ``Lazy<'T>``
  -  ``Dictionary<'T,'U>``
  -  ``IDictionary<'T,'U>``
+ -  ``IReadOnlyDictionary<'T,'U>``
  -  ``ResizeArray<'T>``
  -  ``seq<'T>``
  -  ``IEnumerator<'T>``

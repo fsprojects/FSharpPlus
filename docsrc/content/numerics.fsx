@@ -25,9 +25,9 @@ let qr2  = divRem 7. 3. //val qr2 : float * float = (2.333333333, 0.0) -> using 
 Numeric constants
 =================
 
-Apart from typical math constants, bounded types comes with minValue and maxValue constants.
+Apart from typical math constants, bounded types comes with <code>minValue</code> and <code>maxValue</code> constants.
 
-Here's an example how can this be used to implement an efficient findMin function
+Here's an example how can this be used to implement an efficient <code>findMin</code> function
 
 *)
 
@@ -56,11 +56,11 @@ Using this library it becomes an easy task, but it's important to understand the
 
 In order to have a reasonable type inference over generic types we need strict operations.
 
-For example the F# definition of (+) can take 2 different types, this makes possible to interact with some .NET types that have defined the (+) operator in a very arbitrary way.
+For example the F# definition of <code>(+)</code> can take 2 different types, this makes possible to interact with some .NET types that have defined the <code>(+)</code> operator in a very arbitrary way.
 
-For instance you can add a float to a DateTime with the (+) operator, and that float will be interpreted as seconds.
+For instance you can add a <code>float</code> to a <code>DateTime</code> with the <code>(+)</code> operator, and that <code>float</code> will be interpreted as seconds.
 
-By opening the FSharpPlus.Math.Generic namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.
+By opening the <code>FSharpPlus.Math.Generic</code> namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.
 
 
 
@@ -131,7 +131,7 @@ let x1' = result 7 + Vector2d (32,5)
 (**
 Option 2, use Generic Numbers
 
-Requires FromBigInt and (+,-,*,/)
+Requires <code>FromBigInt</code> and (+,-,*,/)
 *)
 
 open FSharpPlus.Math.Generic
@@ -140,7 +140,7 @@ let x2' = 7G + Vector2d (32,5)
 
 (**
 Option 3, use Applicative Math Operators
-Requires only Map
+Requires only <code>Map</code>
 *)
 
 open FSharpPlus.Math.Applicative
