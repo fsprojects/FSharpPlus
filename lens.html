@@ -82,6 +82,12 @@
 <span class="l">44: </span>
 <span class="l">45: </span>
 <span class="l">46: </span>
+<span class="l">47: </span>
+<span class="l">48: </span>
+<span class="l">49: </span>
+<span class="l">50: </span>
+<span class="l">51: </span>
+<span class="l">52: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="rt">Team</span>   <span class="o">=</span> <span class="pn">{</span><span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">name</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="rt">string</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="id">victories</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="vt">int</span><span class="pn">}</span>
 <span class="k">let</span> <span class="k">inline</span> <span class="id">_name</span>      <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="fn">f</span> <span class="pn">{</span><span class="id">name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="id">a</span><span class="pn">;</span> <span class="id">victories</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="id">b</span><span class="pn">}</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="fn">map</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, 'fs12', 13)" onmouseover="showTip(event, 'fs12', 13)" class="id">a&#39;</span> <span class="k">-&gt;</span> <span class="pn">{</span><span class="id">name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="id">a&#39;</span><span class="pn">;</span> <span class="id">victories</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="id">b</span> <span class="pn">}</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 16)" onmouseover="showTip(event, 'fs8', 16)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="id">a</span><span class="pn">)</span>
@@ -103,7 +109,13 @@
 <span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs38', 96)" onmouseover="showTip(event, 'fs38', 96)" class="fn">_winner_team</span> <span onmouseout="hideTip(event, 'fs39', 97)" onmouseover="showTip(event, 'fs39', 97)" class="id">x</span> <span class="o">=</span> <span class="pn">(</span><span class="id">_players</span> <span class="o">&lt;&lt;</span> <span class="id">_winner</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs40', 98)" onmouseover="showTip(event, 'fs40', 98)" class="fn">_Some</span> <span class="o">&lt;&lt;</span> <span class="id">_team</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs39', 99)" onmouseover="showTip(event, 'fs39', 99)" class="id">x</span>
 
 <span class="c">// initial state</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs41', 100)" onmouseover="showTip(event, 'fs41', 100)" class="id">match0</span> <span class="o">=</span> <span class="pn">{</span><span class="id">players</span> <span class="o">=</span> <span class="pn">(</span><span class="pn">{</span><span class="id">team</span> <span class="o">=</span> <span class="pn">{</span><span class="id">name</span> <span class="o">=</span> <span class="s">&quot;The A Team&quot;</span><span class="pn">;</span> <span class="id">victories</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span><span class="pn">;</span> <span class="id">score</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span><span class="pn">,</span> <span class="pn">{</span><span class="id">team</span> <span class="o">=</span> <span class="pn">{</span><span class="id">name</span> <span class="o">=</span> <span class="s">&quot;The B Team&quot;</span><span class="pn">;</span> <span class="id">victories</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span><span class="pn">;</span> <span class="id">score</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span><span class="pn">)</span> <span class="pn">;</span> <span class="id">finished</span> <span class="o">=</span> <span class="k">false</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs41', 100)" onmouseover="showTip(event, 'fs41', 100)" class="id">match0</span> <span class="o">=</span>
+    <span class="pn">{</span>
+        <span class="id">players</span> <span class="o">=</span> 
+            <span class="pn">{</span><span class="id">team</span> <span class="o">=</span> <span class="pn">{</span><span class="id">name</span> <span class="o">=</span> <span class="s">&quot;The A Team&quot;</span><span class="pn">;</span> <span class="id">victories</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span><span class="pn">;</span> <span class="id">score</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span><span class="pn">,</span>
+            <span class="pn">{</span><span class="id">team</span> <span class="o">=</span> <span class="pn">{</span><span class="id">name</span> <span class="o">=</span> <span class="s">&quot;The B Team&quot;</span><span class="pn">;</span> <span class="id">victories</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span><span class="pn">;</span> <span class="id">score</span> <span class="o">=</span> <span class="n">0</span><span class="pn">}</span>
+        <span class="id">finished</span> <span class="o">=</span> <span class="k">false</span>
+    <span class="pn">}</span>
 
 
 <span class="c">// Team 1 scores</span>
@@ -152,7 +164,7 @@
 <span class="l">17: </span>
 <span class="l">18: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="id">t1</span> <span class="o">=</span> <span class="pn">[|</span><span class="s">&quot;Something&quot;</span><span class="pn">;</span> <span class="s">&quot;&quot;</span><span class="pn">;</span> <span class="s">&quot;Something Else&quot;</span><span class="pn">;</span> <span class="s">&quot;&quot;</span><span class="pn">;</span><span class="pn">|]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs48', 138)" onmouseover="showTip(event, 'fs48', 138)" class="fn">setl</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs59', 139)" onmouseover="showTip(event, 'fs59', 139)" class="fn">_all</span> <span class="s">&quot;&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="s">&quot;Nothing&quot;</span><span class="pn">)</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="id">t1</span> <span class="o">=</span> <span class="pn">[|</span><span class="s">&quot;Something&quot;</span><span class="pn">;</span> <span class="s">&quot;&quot;</span><span class="pn">;</span> <span class="s">&quot;Something Else&quot;</span><span class="pn">;</span> <span class="s">&quot;&quot;</span><span class="pn">|]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs48', 138)" onmouseover="showTip(event, 'fs48', 138)" class="fn">setl</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs59', 139)" onmouseover="showTip(event, 'fs59', 139)" class="fn">_all</span> <span class="s">&quot;&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="s">&quot;Nothing&quot;</span><span class="pn">)</span>
 <span class="c">// val t1 : string [] = [|&quot;Something&quot;; &quot;Nothing&quot;; &quot;Something Else&quot;; &quot;Nothing&quot;|]</span>
 
 <span class="c">// we can preview it</span>
@@ -228,8 +240,59 @@
 <span class="c">// val i2 : bool * int = (true, 42)</span>
 
 <span class="c">// Iso composed with a Lens -&gt; Lens</span>
-<span class="k">let</span> <span class="id">i3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs61', 189)" onmouseover="showTip(event, 'fs61', 189)" class="fn">view</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs44', 190)" onmouseover="showTip(event, 'fs44', 190)" class="fn">_1</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs74', 191)" onmouseover="showTip(event, 'fs74', 191)" class="fn">isoTupleOption</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs78', 192)" onmouseover="showTip(event, 'fs78', 192)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs79', 193)" onmouseover="showTip(event, 'fs79', 193)" class="vt">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs80', 194)" onmouseover="showTip(event, 'fs80', 194)" class="id">TryParse</span> <span class="s">&quot;42&quot;</span><span class="pn">,</span> <span class="pn">(</span><span class="pn">)</span><span class="pn">)</span>
+<span class="k">let</span> <span class="id">i3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs61', 189)" onmouseover="showTip(event, 'fs61', 189)" class="fn">view</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs44', 190)" onmouseover="showTip(event, 'fs44', 190)" class="fn">_1</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs74', 191)" onmouseover="showTip(event, 'fs74', 191)" class="fn">isoTupleOption</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs78', 192)" onmouseover="showTip(event, 'fs78', 192)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs79', 193)" onmouseover="showTip(event, 'fs79', 193)" class="id">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs80', 194)" onmouseover="showTip(event, 'fs80', 194)" class="id">TryParse</span> <span class="s">&quot;42&quot;</span><span class="pn">,</span> <span class="pn">(</span><span class="pn">)</span><span class="pn">)</span>
 <span class="c">// val i3 : int option = Some 42</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Example-usage-of-lenses-with-business-objects" class="anchor" href="#Example-usage-of-lenses-with-business-objects">Example usage of lenses with business objects</a></h1>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs78', 195)" onmouseover="showTip(event, 'fs78', 195)" class="id">System</span>
+<span class="c">// From Mauricio Scheffer: https://gist.github.com/mausch/4260932</span>
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs83', 196)" onmouseover="showTip(event, 'fs83', 196)" class="rt">Person</span> <span class="o">=</span> <span class="pn">{</span>
+    <span onmouseout="hideTip(event, 'fs84', 197)" onmouseover="showTip(event, 'fs84', 197)" class="id">Name</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs85', 198)" onmouseover="showTip(event, 'fs85', 198)" class="rt">string</span>
+    <span onmouseout="hideTip(event, 'fs86', 199)" onmouseover="showTip(event, 'fs86', 199)" class="id">DateOfBirth</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs87', 200)" onmouseover="showTip(event, 'fs87', 200)" class="vt">DateTime</span>
+<span class="pn">}</span>
+<span class="k">module</span> <span onmouseout="hideTip(event, 'fs83', 201)" onmouseover="showTip(event, 'fs83', 201)" class="m">Person</span><span class="o">=</span>
+    <span class="k">let</span> <span class="k">inline</span> <span class="id">name</span> <span onmouseout="hideTip(event, 'fs8', 202)" onmouseover="showTip(event, 'fs8', 202)" class="fn">f</span> <span class="pn">{</span> <span class="id">Name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 203)" onmouseover="showTip(event, 'fs9', 203)" class="id">a</span><span class="pn">;</span> <span class="id">DateOfBirth</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs88', 204)" onmouseover="showTip(event, 'fs88', 204)" class="id">b</span> <span class="pn">}</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 205)" onmouseover="showTip(event, 'fs11', 205)" class="fn">map</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, 'fs12', 206)" onmouseover="showTip(event, 'fs12', 206)" class="id">a&#39;</span> <span class="k">-&gt;</span> <span class="pn">{</span> <span class="id">Name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 207)" onmouseover="showTip(event, 'fs12', 207)" class="id">a&#39;</span><span class="pn">;</span> <span class="id">DateOfBirth</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs88', 208)" onmouseover="showTip(event, 'fs88', 208)" class="id">b</span> <span class="pn">}</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 209)" onmouseover="showTip(event, 'fs8', 209)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs9', 210)" onmouseover="showTip(event, 'fs9', 210)" class="id">a</span><span class="pn">)</span>
+ <span class="k">type</span> <span onmouseout="hideTip(event, 'fs89', 211)" onmouseover="showTip(event, 'fs89', 211)" class="rt">Book</span> <span class="o">=</span> <span class="pn">{</span>
+    <span onmouseout="hideTip(event, 'fs90', 212)" onmouseover="showTip(event, 'fs90', 212)" class="id">Title</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs85', 213)" onmouseover="showTip(event, 'fs85', 213)" class="rt">string</span>
+    <span onmouseout="hideTip(event, 'fs91', 214)" onmouseover="showTip(event, 'fs91', 214)" class="id">Author</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs83', 215)" onmouseover="showTip(event, 'fs83', 215)" class="rt">Person</span>
+<span class="pn">}</span>
+<span class="k">module</span> <span onmouseout="hideTip(event, 'fs89', 216)" onmouseover="showTip(event, 'fs89', 216)" class="m">Book</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">inline</span> <span class="id">author</span> <span onmouseout="hideTip(event, 'fs92', 217)" onmouseover="showTip(event, 'fs92', 217)" class="fn">f</span> <span class="pn">{</span> <span class="id">Author</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs93', 218)" onmouseover="showTip(event, 'fs93', 218)" class="id">a</span><span class="pn">;</span> <span class="id">Title</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs94', 219)" onmouseover="showTip(event, 'fs94', 219)" class="id">b</span> <span class="pn">}</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 220)" onmouseover="showTip(event, 'fs11', 220)" class="fn">map</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, 'fs95', 221)" onmouseover="showTip(event, 'fs95', 221)" class="id">a&#39;</span> <span class="k">-&gt;</span> <span class="pn">{</span> <span class="id">Author</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs95', 222)" onmouseover="showTip(event, 'fs95', 222)" class="id">a&#39;</span><span class="pn">;</span> <span class="id">Title</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs94', 223)" onmouseover="showTip(event, 'fs94', 223)" class="id">b</span> <span class="pn">}</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs92', 224)" onmouseover="showTip(event, 'fs92', 224)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs93', 225)" onmouseover="showTip(event, 'fs93', 225)" class="id">a</span><span class="pn">)</span>
+    <span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs96', 226)" onmouseover="showTip(event, 'fs96', 226)" class="fn">authorName</span> <span onmouseout="hideTip(event, 'fs97', 227)" onmouseover="showTip(event, 'fs97', 227)" class="id">b</span> <span class="o">=</span> <span class="id">author</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs83', 228)" onmouseover="showTip(event, 'fs83', 228)" class="id">Person</span><span class="pn">.</span><span class="id">name</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs97', 229)" onmouseover="showTip(event, 'fs97', 229)" class="id">b</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs98', 230)" onmouseover="showTip(event, 'fs98', 230)" class="id">rayuela</span> <span class="o">=</span>
+    <span class="pn">{</span> <span onmouseout="hideTip(event, 'fs99', 231)" onmouseover="showTip(event, 'fs99', 231)" class="rt">Book</span><span class="pn">.</span><span class="id">Title</span> <span class="o">=</span> <span class="s">&quot;Rayuela&quot;</span>
+      <span class="id">Author</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, 'fs83', 232)" onmouseover="showTip(event, 'fs83', 232)" class="rt">Person</span><span class="pn">.</span><span class="id">Name</span> <span class="o">=</span> <span class="s">&quot;Julio Cort&#225;zar&quot;</span>
+                 <span class="id">DateOfBirth</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs87', 233)" onmouseover="showTip(event, 'fs87', 233)" class="vt">DateTime</span><span class="pn">(</span><span class="n">1914</span><span class="pn">,</span> <span class="n">8</span><span class="pn">,</span> <span class="n">26</span><span class="pn">)</span> <span class="pn">}</span> <span class="pn">}</span>
+<span class="c">// read book author name:</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs100', 234)" onmouseover="showTip(event, 'fs100', 234)" class="id">authorName1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs61', 235)" onmouseover="showTip(event, 'fs61', 235)" class="fn">view</span> <span onmouseout="hideTip(event, 'fs99', 236)" onmouseover="showTip(event, 'fs99', 236)" class="m">Book</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs96', 237)" onmouseover="showTip(event, 'fs96', 237)" class="id">authorName</span> <span onmouseout="hideTip(event, 'fs98', 238)" onmouseover="showTip(event, 'fs98', 238)" class="id">rayuela</span>
+<span class="c">//  you can also write the read operation as:</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs101', 239)" onmouseover="showTip(event, 'fs101', 239)" class="id">authorName2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs98', 240)" onmouseover="showTip(event, 'fs98', 240)" class="id">rayuela</span> <span class="o">^.</span> <span onmouseout="hideTip(event, 'fs99', 241)" onmouseover="showTip(event, 'fs99', 241)" class="m">Book</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs96', 242)" onmouseover="showTip(event, 'fs96', 242)" class="id">authorName</span>
 </code></pre></td>
 </tr>
 </table>
@@ -277,9 +340,9 @@
 <div class="tip" id="fs41">val match0 : Match&lt;Player * Player&gt;</div>
 <div class="tip" id="fs42">val match1 : &#39;a</div>
 <div class="tip" id="fs43">val over : lens:((&#39;a -&gt; Data.Identity&lt;&#39;b&gt;) -&gt; &#39;c -&gt; Data.Identity&lt;&#39;d&gt;) -&gt; f:(&#39;a -&gt; &#39;b) -&gt; (&#39;c -&gt; &#39;d)</div>
-<div class="tip" id="fs44">val _1 : f:(&#39;a -&gt; &#39;b) -&gt; t:&#39;f -&gt; &#39;c (requires member Map and member MapItem1 and member Item1)</div>
+<div class="tip" id="fs44">val _1 : f:(&#39;a -&gt; &#39;b) -&gt; t:&#39;f -&gt; &#39;c (requires member Map and member MapItem1 and member get_Item1)</div>
 <div class="tip" id="fs45">val match2 : &#39;a</div>
-<div class="tip" id="fs46">val _2 : f:(&#39;a -&gt; &#39;b) -&gt; t:&#39;f -&gt; &#39;c (requires member Map and member MapItem2 and member Item2)</div>
+<div class="tip" id="fs46">val _2 : f:(&#39;a -&gt; &#39;b) -&gt; t:&#39;f -&gt; &#39;c (requires member Map and member MapItem2 and member get_Item2)</div>
 <div class="tip" id="fs47">val matchResult0 : &#39;a</div>
 <div class="tip" id="fs48">val setl : lens:((&#39;a -&gt; Data.Identity&lt;&#39;b&gt;) -&gt; &#39;c -&gt; Data.Identity&lt;&#39;d&gt;) -&gt; v:&#39;b -&gt; (&#39;c -&gt; &#39;d)</div>
 <div class="tip" id="fs49">union case Option.None: Option&lt;&#39;T&gt;</div>
@@ -316,6 +379,25 @@
 <div class="tip" id="fs80">System.Int32.TryParse(s: string, result: byref&lt;int&gt;) : bool<br />System.Int32.TryParse(s: string, style: System.Globalization.NumberStyles, provider: System.IFormatProvider, result: byref&lt;int&gt;) : bool</div>
 <div class="tip" id="fs81">val i2 : &#39;a</div>
 <div class="tip" id="fs82">val from&#39; : l:(Internals.Exchange&lt;(&#39;a -&gt; &#39;a),(&#39;b -&gt; Data.Identity&lt;&#39;b&gt;)&gt; -&gt; Internals.Exchange&lt;(&#39;c -&gt; &#39;d),(&#39;e -&gt; Data.Identity&lt;&#39;f&gt;)&gt;) -&gt; (&#39;g -&gt; &#39;h) (requires member Dimap and member Map)</div>
+<div class="tip" id="fs83">type Person =<br />&#160;&#160;{Name: string;<br />&#160;&#160;&#160;DateOfBirth: DateTime;}</div>
+<div class="tip" id="fs84">Person.Name: string</div>
+<div class="tip" id="fs85">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = String</div>
+<div class="tip" id="fs86">Person.DateOfBirth: DateTime</div>
+<div class="tip" id="fs87">Multiple items<br />type DateTime =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : ticks:int64 -&gt; DateTime + 10 overloads<br />&#160;&#160;&#160;&#160;member Add : value:TimeSpan -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddDays : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddHours : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMilliseconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMinutes : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMonths : months:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddSeconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddTicks : value:int64 -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddYears : value:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+<div class="tip" id="fs88">val b : DateTime</div>
+<div class="tip" id="fs89">type Book =<br />&#160;&#160;{Title: string;<br />&#160;&#160;&#160;Author: Person;}</div>
+<div class="tip" id="fs90">Book.Title: string</div>
+<div class="tip" id="fs91">Book.Author: Person</div>
+<div class="tip" id="fs92">val f : (Person -&gt; &#39;a) (requires member Map)</div>
+<div class="tip" id="fs93">val a : Person</div>
+<div class="tip" id="fs94">val b : string</div>
+<div class="tip" id="fs95">val a&#39; : Person</div>
+<div class="tip" id="fs96">val authorName : b:&#39;a -&gt; &#39;b</div>
+<div class="tip" id="fs97">val b : &#39;a</div>
+<div class="tip" id="fs98">val rayuela : Book</div>
+<div class="tip" id="fs99">Multiple items<br />module Book<br /><br />from Lens<br /><br />--------------------<br />type Book =<br />&#160;&#160;{Title: string;<br />&#160;&#160;&#160;Author: Person;}</div>
+<div class="tip" id="fs100">val authorName1 : &#39;a</div>
+<div class="tip" id="fs101">val authorName2 : &#39;a</div>
 
         </div>
         <div class="span3">

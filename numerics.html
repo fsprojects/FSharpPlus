@@ -47,8 +47,8 @@
 </tr>
 </table>
 <h1><a name="Numeric-constants" class="anchor" href="#Numeric-constants">Numeric constants</a></h1>
-<p>Apart from typical math constants, bounded types comes with minValue and maxValue constants.</p>
-<p>Here's an example how can this be used to implement an efficient findMin function</p>
+<p>Apart from typical math constants, bounded types comes with <code>minValue</code> and <code>maxValue</code> constants.</p>
+<p>Here's an example how can this be used to implement an efficient <code>findMin</code> function</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -75,9 +75,9 @@
 <p>Writing code that is generic over different numeric types can be really tedious in F#.</p>
 <p>Using this library it becomes an easy task, but it's important to understand the numeric abstractions and its limitations.</p>
 <p>In order to have a reasonable type inference over generic types we need strict operations.</p>
-<p>For example the F# definition of (+) can take 2 different types, this makes possible to interact with some .NET types that have defined the (+) operator in a very arbitrary way.</p>
-<p>For instance you can add a float to a DateTime with the (+) operator, and that float will be interpreted as seconds.</p>
-<p>By opening the FSharpPlus.Math.Generic namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.</p>
+<p>For example the F# definition of <code>(+)</code> can take 2 different types, this makes possible to interact with some .NET types that have defined the <code>(+)</code> operator in a very arbitrary way.</p>
+<p>For instance you can add a <code>float</code> to a <code>DateTime</code> with the <code>(+)</code> operator, and that <code>float</code> will be interpreted as seconds.</p>
+<p>By opening the <code>FSharpPlus.Math.Generic</code> namespace this will no longer be possible, because that's the tradeoff in order to get decent type inference.</p>
 <h1><a name="Generic-number-literals" class="anchor" href="#Generic-number-literals">Generic number literals</a></h1>
 <p>Numbers with a G suffix are generics.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -152,7 +152,7 @@ Since there is no way to define generic decimal literals in F# at the moment of 
 </tr>
 </table>
 <p>Option 2, use Generic Numbers</p>
-<p>Requires FromBigInt and (+,-,*,/)</p>
+<p>Requires <code>FromBigInt</code> and (+,-,*,/)</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -164,7 +164,7 @@ Since there is no way to define generic decimal literals in F# at the moment of 
 </tr>
 </table>
 <p>Option 3, use Applicative Math Operators
-Requires only Map</p>
+Requires only <code>Map</code></p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
