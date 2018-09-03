@@ -38,11 +38,11 @@ module Lens =
 
 
     /// Build a Prism using Result instead of Option to permit the types of 's and 't to differ.
-    let inline prism (bt:'b->'t) (seta:'s->Result<'a,'t>) = dimap seta (either (map bt) result) << (fun g -> either (Ok << g) Error)
-    let inline prism' (bs:'b->'s) (sma:'s->Option<'a>) = prism bs (fun s -> option Ok (Error s) (sma s))
+    let inline prism (bt: 'b->'t) (seta: 's->Result<'a,'t>) = dimap seta (either (map bt) result) << (fun g -> either (Ok << g) Error)
+    let inline prism' (bs: 'b->'s) (sma: 's->Option<'a>) = prism bs (fun s -> option Ok (Error s) (sma s))
 
     /// Build an iso from a pair of inverse functions.
-    let inline iso (sa:'s->'a) (bt:'b->'t) = dimap sa (map bt)
+    let inline iso (sa: 's->'a) (bt: 'b->'t) = dimap sa (map bt)
 
     /// Merge two lenses, getters, setters, folds or traversals.
     let inline choosing l r f = function

@@ -11,7 +11,7 @@ open System.ComponentModel
 /// end-insertion (add), and O(1) append. Ordering is by insertion history.
 /// DList is an implementation of [John Hughes' append list](http://dl.acm.org/citation.cfm?id=8475).
 [<Sealed>]
-type DList<'T>(length : int, data : DListData<'T> ) =
+type DList<'T> (length: int, data: DListData<'T>) =
 
     let mutable hashCode = None
     member internal this.dc = data
@@ -43,7 +43,7 @@ type DList<'T>(length : int, data : DListData<'T> ) =
                 else Seq.forall2 Unchecked.equals this y
         | _ -> false
 
-    ///O(1). Returns the count of elememts.
+    /// O(1). Returns the count of elememts.
     member __.Length = length
 
     // O(n). FoldBack walks the DList using constant stack space. Implementation is from Norman Ramsey.
@@ -76,7 +76,7 @@ type DList<'T>(length : int, data : DListData<'T> ) =
             | t::ts -> walk ts t xs
         walk [] l.dc state
 
-    static member private tryFindi (f : (int -> 'T -> bool)) (l:DList<'T>)  =
+    static member private tryFindi (f: (int -> 'T -> bool)) (l: DList<'T>)  =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         let rec walk rights l i =
             match l with
@@ -92,8 +92,8 @@ type DList<'T>(length : int, data : DListData<'T> ) =
             | []    -> None
             | t::ts -> walk ts t xs
         walk [] l.dc 0
-    static member private findi (f : (int -> 'T -> bool)) (l:DList<'T>) =
-        match DList.tryFindi f l with | Some v ->v | None -> raise (System.Collections.Generic.KeyNotFoundException()) 
+    static member private findi (f: (int -> 'T -> bool)) (l: DList<'T>) =
+        match DList.tryFindi f l with | Some v ->v | None -> raise (System.Collections.Generic.KeyNotFoundException ()) 
 
     static member append (left, right) =
         match left, right with
@@ -115,25 +115,25 @@ type DList<'T>(length : int, data : DListData<'T> ) =
         | Join (x', _) -> DList<'T>.tryHead x'
         | _            -> None
 
-    ///O(1). Returns a new DList with the element added to the front.
+    /// O(1). Returns a new DList with the element added to the front.
     member __.Cons (hd: 'T) =
         match data with
         | Nil -> DList (1, Unit hd)
         | _   -> DList (length + 1, Join (Unit hd, data))
 
-    ///O(log n). Returns the first element.
+    /// O(log n). Returns the first element.
     member __.Head = DList<'T>.head data
 
-    ///O(log n). Returns option first element
+    /// O(log n). Returns option first element
     member __.TryHead = DList<'T>.tryHead data
 
-    ///O(1). Returns true if the DList has no elements.
+    /// O(1). Returns true if the DList has no elements.
     member __.IsEmpty = match data with Nil -> true | _ -> false
 
-    ///O(1). Returns a new DList with the element added to the end.
-    member __.Add (x:'T) = DList(length + 1, DList<'T>.append (data, Unit x))
+    /// O(1). Returns a new DList with the element added to the end.
+    member __.Add (x: 'T) = DList(length + 1, DList<'T>.append (data, Unit x))
 
-    ///O(log n). Returns a new DList of the elements trailing the first element.
+    /// O(log n). Returns a new DList of the elements trailing the first element.
     member this.Tail =
         let rec step (xs: DListData<'T>) (acc: DListData<'T>) =
             match xs with
@@ -142,7 +142,7 @@ type DList<'T>(length : int, data : DListData<'T> ) =
         if this.IsEmpty then failwith "DList.tail: empty DList"
         else DList (length - 1, step data Nil)
 
-    ///O(log n). Returns option DList of the elements trailing the first element.
+    /// O(log n). Returns option DList of the elements trailing the first element.
     member this.TryTail =
         let rec step (xs: DListData<'T>) (acc: DListData<'T>) =
             match xs with
@@ -151,47 +151,48 @@ type DList<'T>(length : int, data : DListData<'T> ) =
         if this.IsEmpty then None
         else Some (DList (length - 1, step data Nil))
 
-    ///O(log n). Returns the first element and tail.
+    /// O(log n). Returns the first element and tail.
     member this.Uncons = (DList<'T>.head data, this.Tail)
 
-    ///O(log n). Returns option first element and tail.
+    /// O(log n). Returns option first element and tail.
     member this.TryUncons =
         match DList<'T>.tryHead data with
         | Some x -> Some (x, this.Tail)
         | None   -> None
 
-    member s.Item with get(index:int) = let withIndex i _ = i=index
-                                        if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException())
-                                        DList.findi withIndex s
+    member s.Item with get (index: int) =
+                        let withIndex i _ = (i = index)
+                        if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException ())
+                        DList.findi withIndex s
 
-    member this.toSeq() =
+    member __.toSeq () =
         //adaptation of right-hand side of Norman Ramsey's "fold"
         let rec walk rights l = seq {
             match l with
-            | Nil       -> 
+            | Nil ->
                 match rights with
                 | []    -> () 
-                | t::ts -> yield! walk ts t 
-            | Unit x    -> 
+                | t::ts -> yield! walk ts t
+            | Unit x ->
                 yield x
                 match rights with
-                | []    -> () 
-                | t::ts -> yield! walk ts t 
+                | []    -> ()
+                | t::ts -> yield! walk ts t
             | Join (x, y) -> yield! walk (y::rights) x}
                
-        (walk [] data).GetEnumerator()
+        (walk [] data).GetEnumerator ()
 
     interface IEnumerable<'T> with
-        member s.GetEnumerator() = s.toSeq()
+        member s.GetEnumerator () = s.toSeq ()
 
     interface IReadOnlyCollection<'T> with
         member s.Count = s.Length
 
     interface IReadOnlyList<'T> with
-        member s.Item with get(index) = s.Item index
+        member s.Item with get index = s.Item index
 
     interface System.Collections.IEnumerable with
-        override s.GetEnumerator() = (s.toSeq() :> System.Collections.IEnumerator)
+        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)
             
 and 
     DListData<'T> =
@@ -201,62 +202,62 @@ and
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module DList =
-    ///O(1). Returns a new DList of two lists.
+    /// O(1). Returns a new DList of two lists.
     let append left right = DList<'T>.appendLists(left, right)
 
-    ///O(1). Returns a new DList with the element added to the beginning.
+    /// O(1). Returns a new DList with the element added to the beginning.
     let cons hd (l: DList<'T>) = 
         match l.Length with
         | 0 -> DList (1, Unit hd)
         | _ -> DList (l.Length + 1, Join (Unit hd, l.dc))
 
-    ///O(1). Returns DList of no elements.
+    /// O(1). Returns DList of no elements.
     [<GeneralizableValue>]
     let empty<'T> : DList<'T> = DList(0, Nil)
 
-    ///O(n). Fold walks the DList using constant stack space. Implementation is from Norman Ramsey.
+    /// O(n). Fold walks the DList using constant stack space. Implementation is from Norman Ramsey.
     /// See http://stackoverflow.com/questions/5324623/functional-o1-append-and-on-iteration-from-first-element-list-data-structure/5334068#5334068
     let foldBack (f: 'T -> 'State -> 'State) (l: DList<'T>) (state: 'State) = DList<'T>.foldBack f l state
 
     let fold (f: 'State -> 'T -> 'State) (state: 'State) (l: DList<'T>) = DList<'T>.fold f state l
 
-    ///O(log n). Returns the first element.
-    let inline head (l:DList<'T>) = l.Head
+    /// O(log n). Returns the first element.
+    let inline head (l: DList<'T>) = l.Head
 
-    ///O(log n). Returns option first element.
+    /// O(log n). Returns option first element.
     let inline tryHead (l: DList<'T>) = l.TryHead
 
-    ///O(1). Returns true if the DList has no elements.
+    /// O(1). Returns true if the DList has no elements.
     let inline isEmpty (l: DList<'T>) = l.IsEmpty
 
-    ///O(1). Returns the count of elememts.
+    /// O(1). Returns the count of elememts.
     let inline length (l: DList<'T>) = l.Length
 
-    ///O(1). Returns DList of one elements.
+    /// O(1). Returns DList of one elements.
     let singleton x = DList (1, Unit x )
 
-    ///O(1). Returns a new DList with the element added to the end.
+    /// O(1). Returns a new DList with the element added to the end.
     let inline add x (l: DList<'T>) = l.Add x
 
-    ///O(log n). Returns a new DList of the elements trailing the first element.
+    /// O(log n). Returns a new DList of the elements trailing the first element.
     let inline tail (l: DList<'T>) = l.Tail
 
-    ///O(log n). Returns option DList of the elements trailing the first element.
+    /// O(log n). Returns option DList of the elements trailing the first element.
     let inline tryTail (l: DList<'T>) = l.TryTail
 
-    ///O(log n). Returns the first element and tail.
+    /// O(log n). Returns the first element and tail.
     let inline uncons (l: DList<'T>) = l.Uncons
 
-    ///O(log n). Returns option first element and tail.
+    /// O(log n). Returns option first element and tail.
     let inline tryUncons (l: DList<'T>) = l.TryUncons
 
-    ///O(n). Returns a DList of the seq.
+    /// O(n). Returns a DList of the seq.
     let ofSeq s = DList<'T>.ofSeq s
 
-    ///O(n). Returns a list of the DList elements.
+    /// O(n). Returns a list of the DList elements.
     let inline toList l = foldBack List.cons l []
 
-    ///O(n). Returns a seq of the DList elements.
+    /// O(n). Returns a seq of the DList elements.
     let inline toSeq (l: DList<'T>) = l :> seq<'T>
 
     // additions to fit f#+ :
@@ -267,9 +268,9 @@ module DList =
 
 type DList<'T> with
     static member get_Zero = DList (0, Nil)
-    static member (+) (x:DList<_>, y:DList<_>) = DList.append x y
+    static member (+) (x: DList<_>, y: DList<_>) = DList.append x y
     static member get_Empty = DList (0, Nil)
-    static member (<|>) (x:DList<_>, y:DList<_>) = DList.append x y
+    static member (<|>) (x: DList<_>, y: DList<_>) = DList.append x y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToSeq  x = DList.toSeq  x

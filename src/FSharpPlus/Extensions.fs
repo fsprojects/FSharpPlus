@@ -20,7 +20,7 @@ module Option =
     let unzip v =
         match v with
         | Some (x, y) -> Some x, Some y
-        | _           -> None, None
+        | _           -> None  , None
 
     /// <summary>If both value are Some, returns both of them tupled. Otherwise it returns None.</summary>
     /// <param name="x">The first value.</param>
@@ -37,9 +37,9 @@ module Option =
 module Result =
     let result x = Ok x
     let throw  x = Error x
-    let apply f x = match f, x with   Ok a, Ok b      -> Ok (a b) | Error e, _ | _, Error e -> Error e: Result<'b, 'e>
+    let apply f x = match f, x with   Ok a, Ok b      -> Ok (a b) | Error e, _ | _, Error e -> Error e      : Result<'b,'e>
     let flatten                  = function Ok (Ok v) -> Ok v     | Ok (Error e)  | Error e -> Error e
-    let inline catch f           = function Ok v      -> Ok v     | Error e                 -> (f: 't->_) e: Result<'v,'e>
+    let inline catch f           = function Ok v      -> Ok v     | Error e                 -> (f: 't->_) e : Result<'v,'e>
     let inline either f g        = function Ok v      -> f v      | Error e                 -> g e
 
 
@@ -48,23 +48,23 @@ module Result =
 module Choice =
     let result x = Choice1Of2 x
     let throw  x = Choice2Of2 x
-    let apply f x = match f, x with Choice1Of2 a, Choice1Of2 b              -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e        -> Choice2Of2 e: Choice<'b,'e>
+    let apply f x = match f, x with Choice1Of2 a, Choice1Of2 b              -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e        -> Choice2Of2 e : Choice<'b,'e>
     let map   f                        = function Choice1Of2 v              -> Choice1Of2 (f v) | Choice2Of2 e                             -> Choice2Of2 e
     let flatten                        = function Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v     | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
-    let bind (f:'t -> _)               = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e: Choice<'v,'e>
-    let inline catch (f:'t -> _)       = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e         : Choice<'v,'e>
+    let bind (f: 't -> _)              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e : Choice<'v,'e>
+    let inline catch (f: 't -> _)      = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e          : Choice<'v,'e>
     let inline either f g              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
 
 
 /// Additional operations on Seq
 [<RequireQualifiedAccess>]
 module Seq =
-    let bind (f:'a->seq<'b>) x = Seq.collect f x
+    let bind (f: 'a->seq<'b>) x = Seq.collect f x
     let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
     let foldBack f x z = Array.foldBack f (Seq.toArray x) z
 
-    let chunkBy projection (source : _ seq) = seq {
-        use e = source.GetEnumerator()
+    let chunkBy projection (source: _ seq) = seq {
+        use e = source.GetEnumerator ()
         if e.MoveNext () then
             let mutable g = projection e.Current
             let mutable members = ResizeArray ()
@@ -253,8 +253,8 @@ module String =
     let normalize normalizationForm (source: string) = if isNull source then source else source.Normalize normalizationForm
     let removeDiacritics (source: string) =
         if isNull source then source
-        else 
-            source 
+        else
+            source
             |> normalize NormalizationForm.FormD
             |> String.filter (fun ch -> CharUnicodeInfo.GetUnicodeCategory ch <> UnicodeCategory.NonSpacingMark)
             |> normalize NormalizationForm.FormC
@@ -290,7 +290,7 @@ module Map =
     /// <param name="y">The second input Map.</param>
     ///
     /// <returns>The mapped Map.</returns>
-    let mapValues2 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map.ofSeq <| seq {
+    let mapValues2 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map <| seq {
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         for KeyValue(k, vx) in x do
             match Map.tryFind k y with
@@ -303,7 +303,7 @@ module Map =
     /// <param name="y">The second input Map.</param>
     ///
     /// <returns>The tupled Map.</returns>
-    let zip (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map.ofSeq <| seq {
+    let zip (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map <| seq {
         for KeyValue(k, vx) in x do
             match Map.tryFind k y with
             | Some vy -> yield (k, (vx, vy))
@@ -374,7 +374,7 @@ module IReadOnlyDictionary =
 
     open System.Collections.Generic
 
-    let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map.ofSeq |> Map.add key value :> IReadOnlyDictionary<_,_>
+    let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
 
     let tryGetValue k (dct: IReadOnlyDictionary<'Key, 'Value>) =
         match dct.TryGetValue k with
@@ -441,7 +441,7 @@ module Enumerator =
     
     /// A concrete implementation of an enumerator that returns no values
     [<Sealed>]
-    type EmptyEnumerator<'T>() =
+    type EmptyEnumerator<'T> () =
         let mutable started = false
         interface IEnumerator<'T> with
             member __.Current =
@@ -466,7 +466,7 @@ module Enumerator =
     type IFinallyEnumerator = abstract AppendFinallyAction : (unit -> unit) -> unit
 
     [<Sealed>]
-    type ConcatEnumerator<'T>(sources: IEnumerator<IEnumerator<'T>>) =
+    type ConcatEnumerator<'T> (sources: IEnumerator<IEnumerator<'T>>) =
         let mutable outerEnum = sources
         let mutable currInnerEnum = Empty ()
         let mutable started  = false
@@ -476,7 +476,7 @@ module Enumerator =
         [<DefaultValue(false)>]
         val mutable private currElement : 'T
 
-        member x.Finish() =
+        member __.Finish () =
             finished <- true
             try
                 match currInnerEnum with
@@ -505,7 +505,7 @@ module Enumerator =
                     finally
                         compensations <- []
 
-        member x.GetCurrent() =
+        member x.GetCurrent () =
             check started
             if finished then alreadyFinished () else x.currElement
 
@@ -556,11 +556,11 @@ module Enumerator =
         interface System.IDisposable with
             member x.Dispose () = if not finished then x.Finish ()
 
-    let concat sources = new ConcatEnumerator<_>(sources) :> IEnumerator<_>
+    let concat sources = new ConcatEnumerator<_> (sources) :> IEnumerator<_>
     
     let rec tryItem index (e: IEnumerator<'T>) =
         if not (e.MoveNext ()) then None
-        elif index = 0 then Some(e.Current)
+        elif index = 0 then Some e.Current
         else tryItem (index-1) e
     
     let rec nth index (e: IEnumerator<'T>) =
@@ -668,7 +668,7 @@ module Enumerator =
     let map3 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) (e3: IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
         upcast {
-            new MapEnumerator<_>() with
+            new MapEnumerator<_> () with
                 member __.DoMoveNext curr =
                     let n1 = e1.MoveNext ()
                     let n2 = e2.MoveNext ()
@@ -737,25 +737,26 @@ module Enumerator =
             let unstarted   = -1  // index value means unstarted (and no valid index)
             let completed   = -2  // index value means completed (and no valid index)
             let unreachable = -3  // index is unreachable from 0,1,2,3,...
-            let finalIndex  = match lastOption with
-                              | Some b -> b             // here b>=0, a valid end value.
-                              | None   -> unreachable   // run "forever", well as far as Int32.MaxValue since indexing with a bounded type.
+            let finalIndex  = 
+                match lastOption with
+                | Some b -> b             // here b>=0, a valid end value.
+                | None   -> unreachable   // run "forever", well as far as Int32.MaxValue since indexing with a bounded type.
             // The Current value for a valid index is "f i".
             // Lazy<_> values are used as caches, to store either the result or an exception if thrown.
             // These "Lazy<_>" caches are created only on the first call to current and forced immediately.
             // The lazy creation of the cache nodes means enumerations that skip many Current values are not delayed by GC.
             // For example, the full enumeration of Seq.initInfinite in the tests.
             // state
-            let index   = ref unstarted
+            let index = ref unstarted
             // a Lazy node to cache the result/exception
             let current = ref Unchecked.defaultof<_>
-            let setIndex i = index := i; current := Unchecked.defaultof<_> // cache node unprimed, initialised on demand.
+            let setIndex i = index := i; current := Unchecked.defaultof<_> // cache node unprimed, initialized on demand.
             let getCurrent () =
                 if !index = unstarted then notStarted ()
                 if !index = completed then alreadyFinished ()
                 match box !current with
                 | null -> current := Lazy<_>.Create (fun () -> f !index)
-                | _ ->  ()
+                | _    ->  ()
                 // forced or re-forced immediately.
                 (!current).Force ()
             { new IEnumerator<'U> with
@@ -785,7 +786,7 @@ module Enumerator =
                     let n2 = e2.MoveNext ()
                     if n1 && n2 then curr <- (e1.Current, e2.Current); true
                     else false
-                member this.Dispose () =
+                member __.Dispose () =
                     try e1.Dispose ()
                     finally e2.Dispose () }
 
@@ -878,31 +879,29 @@ module Extensions =
         else Completed t.Result
 
     type Task<'t> with
-        static member WhenAll(tasks: Task<'a>[], ?cancellationToken: CancellationToken) =
-            let tcs = TaskCompletionSource<'a[]>()
+        static member WhenAll (tasks: Task<'a>[], ?cancellationToken: CancellationToken) =
+            let tcs = TaskCompletionSource<'a[]> ()
             let cancellationToken = defaultArg cancellationToken CancellationToken.None
-            cancellationToken.Register((fun () -> tcs.TrySetCanceled() |> ignore)) |> ignore
+            cancellationToken.Register (fun () -> tcs.TrySetCanceled () |> ignore) |> ignore
             let results = Array.zeroCreate<'a> tasks.Length
             let pending = ref results.Length
             tasks 
             |> Seq.iteri (fun i t ->
                 let continuation = function
-                | Canceled -> tcs.TrySetCanceled () |> ignore
-                | Faulted(e) -> tcs.TrySetException (e) |> ignore
-                | Completed(r) -> 
+                | Canceled    -> tcs.TrySetCanceled () |> ignore
+                | Faulted e   -> tcs.TrySetException e |> ignore
+                | Completed r -> 
                     results.[i] <- r
                     if Interlocked.Decrement pending = 0 then 
                         tcs.SetResult results
-                t.ContinueWith(continuation, cancellationToken,
-                               TaskContinuationOptions.ExecuteSynchronously,
-                               TaskScheduler.Default) |> ignore)
+                t.ContinueWith (continuation, cancellationToken, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default) |> ignore)
             tcs.Task
 
 
     type Async<'t> with
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
+        static member Sequence (t: seq<Async<_>>) : Async<seq<_>> = async {
             use enum = t.GetEnumerator ()
             let rec loop () =
                 if enum.MoveNext () then async.Bind (enum.Current, fun x -> async.Bind (loop (), fun y -> async.Return (seq {yield x; yield! y})))

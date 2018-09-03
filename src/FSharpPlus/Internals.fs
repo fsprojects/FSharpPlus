@@ -13,15 +13,15 @@ module internal Prelude =
     let inline flip f x y = f y x
     let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
-    let inline retype (x: 'T) : 'U = (# "" x : 'U #)
+    let inline retype (x: 'T) : 'U = (# "" x: 'U #)
 
 
 
 [<RequireQualifiedAccess>]
-module internal Implicit = let inline Invoke (x : ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) :^R
+module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
 
 module Errors =
-    let exnDivByZero      = new System.DivideByZeroException() :> exn
+    let exnDivByZero      = new System.DivideByZeroException () :> exn
     let exnNoDivision     = new System.Exception "These numbers are not divisible in this domain."
     let exnSqrtOfNegative = new System.Exception "Cannot calculate square root of a negative number"
     let exnNoSqrt         = new System.Exception "No square root defined for this value in this domain."
@@ -39,8 +39,8 @@ module Decimal =
             x |> float |> sqrt |> decimal |> loop |> Ok
 
 module Rational =
-    let inline numerator   x = (^F: (member Numerator  : 'R) x)
-    let inline denominator x = (^F: (member Denominator: 'R) x)
+    let inline numerator   x = (^F : (member Numerator   : 'R) x)
+    let inline denominator x = (^F : (member Denominator : 'R) x)
 
 module BigInteger =
     open System.Numerics
@@ -61,19 +61,19 @@ module BigInteger =
 
 // Dummy types
 
-type Id<'t>(v:'t) =
+type Id<'t> (v: 't) =
    let value = v
-   member this.getValue = value
+   member __.getValue = value
 
 [<RequireQualifiedAccess>]
 module Id =
-    let run   (x:Id<_>) = x.getValue
-    let map f (x:Id<_>) = Id (f x.getValue)
-    let create x = Id (x)
+    let run   (x: Id<_>) = x.getValue
+    let map f (x: Id<_>) = Id (f x.getValue)
+    let create x = Id x
 
-type Id0(v:string) =
+type Id0 (v: string) =
    let value = v
-   member this.getValue = value
+   member __.getValue = value
 
 type Either<'t,'u> =
     | Left of 't

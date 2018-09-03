@@ -27,7 +27,7 @@ module Validation=
         | Success a -> Success (f a) 
 
     let inline apply e1' e2' = 
-        match e1',e2' with
+        match e1', e2' with
         | Failure e1, Failure e2 -> Failure (plus e1 e2)
         | Failure e1, Success _  -> Failure e1
         | Success _ , Failure e2 -> Failure e2
@@ -55,7 +55,7 @@ module Validation=
         | Success a -> Success <!> g a
         | Failure e -> Failure <!> f e
 
-    /// 'bind' binds through a Validation, which is useful for
+    /// Binds through a Validation, which is useful for
     /// composing Validations sequentially. Note that despite having a bind
     /// function of the correct type, Validation is not a monad.
     /// The reason is, this bind does not accumulate errors, so it does not
@@ -89,7 +89,7 @@ module Validation=
     let liftChoice (f: 'b -> 'e) : (Choice<'b,'a>->Validation<'e,'a>) = Choice.either (Failure << f) Success
 
     let appValidation (m: 'err -> 'err -> 'err) (e1': Validation<'err,'a>) (e2': Validation<'err,'a>) =
-        match e1',e2' with
+        match e1', e2' with
         | Failure e1 , Failure e2 -> Failure (m e1 e2)
         | Failure _  , Success a2 -> Success a2
         | Success a1 , Failure _  -> Success a1
@@ -97,7 +97,7 @@ module Validation=
 
     let toResult x : Result<_,_>  = match x with Success a -> Ok a | Failure e -> Error e
     let ofResult (x :Result<_,_>) = match x with Ok a -> Success a | Error e -> Failure e
-    let either f g           = function Success v      -> f v      | Failure e     -> g e
+    let either f g                = function Success v -> f v      | Failure e     -> g e
 
     /// Validate's the [a] with the given predicate, returning [e] if the predicate does not hold.
     ///
@@ -105,7 +105,7 @@ module Validation=
     ///
     /// validate : 'e -> ('a -> bool) -> 'a -> Validation<'e, 'a>
     ///
-    let validate (e:'e) (p: 'a -> bool) (a:'a) : Validation<'e,'a> = if p a then Success a else Failure e
+    let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
@@ -118,7 +118,7 @@ module Validation=
     /// This can be thought of as having the less general type:
     ///
     /// ensure : 'e -> ('a -> 'bool) -> Validation<'a,'e> -> Validation<'a,'e>
-    let ensure (e:'e) (p:'a-> bool) = function
+    let ensure (e: 'e) (p: 'a-> bool) = function
         | Failure x -> Failure x
         | Success a -> validate e p a
 
@@ -132,12 +132,12 @@ module Validation=
 type Validation<'err,'a> with
 
     // as Applicative
-    static member Return        x = Success x
+    static member Return x = Success x
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
 
     // as Alternative (inherits from Applicative)
-    static member inline get_Empty () = Failure ( getEmpty() )
-    static member inline (<|>) (x:Validation<_,_>, y:Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
+    static member inline get_Empty () = Failure (getEmpty ())
+    static member inline (<|>) (x: Validation<_,_>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
 
     // as Functor
     [<EditorBrowsable(EditorBrowsableState.Never)>]

@@ -23,9 +23,9 @@ type Item =
     static member        Item (x: 'T [,,]            , (i,j,k)  , [<Optional>]_impl: Item    ) = x.[i,j,k]   : 'T
     static member        Item (x: 'T [,,,]           , (i,j,k,l), [<Optional>]_impl: Item    ) = x.[i,j,k,l] : 'T
 
-    static member inline Invoke (n:'K) (source:'``Indexed<'T>``)  :'T =
-        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)
-        let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
+    static member inline Invoke (n: 'K) (source: '``Indexed<'T>``) : 'T =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
         call (Unchecked.defaultof<Item>, source, n)
 
 
@@ -49,8 +49,8 @@ type TryItem =
     static member        TryItem (x: Map<'K,'T>        , k        , [<Optional>]_impl: TryItem ) = x.TryFind k : 'T option
 
     static member inline Invoke (n: 'K) (source: '``Indexed<'T>``) : 'T option =
-        let inline call_2 (a:^a, b:^b, n) = ((^a or ^b) : (static member TryItem: _*_*_ -> _) b, n, a)
-        let inline call (a:'a, b:'b, n) = call_2 (a, b, n)
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryItem : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
         call (Unchecked.defaultof<TryItem>, source, n)
 
 
@@ -65,9 +65,9 @@ type MapIndexed =
     static member MapIndexed (x: Map<'K,'T> , f            , [<Optional>]_impl: MapIndexed) = Map.map f x : Map<'K,'U>
 
     static member inline Invoke (mapping: 'K->'T->'U) (source: '``Indexable<'T>``) =
-        let inline call_3 (a:^a, b:^b, _:^c, f) = ((^a or ^b or ^c) : (static member MapIndexed: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) :'r
-        call (Unchecked.defaultof<MapIndexed>,   source, mapping)   : '``Indexable<'U>``
+        let inline call_3 (a: ^a, b: ^b, _: ^c, f) = ((^a or ^b or ^c) : (static member MapIndexed : _*_*_ -> _) b, f, a)
+        let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) : 'r
+        call (Unchecked.defaultof<MapIndexed>,   source, mapping) : '``Indexable<'U>``
 
 
 type IterateIndexed =
@@ -78,8 +78,8 @@ type IterateIndexed =
     static member IterateIndexed (x: Map<'K,'T>, f             , [<Optional>]_impl: IterateIndexed) = Map.iter f x
 
     static member inline Invoke (action: 'K->'T->unit) (source: '``Indexable<'T>``)        =
-        let inline call_2 (a:^a, b:^b, f) = ((^a or ^b) : (static member IterateIndexed: _*_*_ -> _) b, f, a)
-        let inline call (a:'a, b:'b, f) = call_2 (a, b, f)
+        let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member IterateIndexed : _*_*_ -> _) b, f, a)
+        let inline call (a: 'a, b: 'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<IterateIndexed>,  source, action) : unit
 
 
@@ -90,9 +90,9 @@ type FoldIndexed =
     static member FoldIndexed (x: _ []      , f, z, _impl: FoldIndexed) = x |> Array.fold (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
     static member FoldIndexed (_: Map<'k,'t>, f, z, _impl: FoldIndexed) = Map.fold f z
 
-    static member inline Invoke (folder:'State->'Key->'T->'State) (state:'State) (foldable:'``Foldable<'T>``) : 'State =
-        let inline call_2 (a:^a, b:^b, f, z) = ((^a or ^b) : (static member FoldIndexed: _*_*_*_ -> _) b, f, z, a)
-        let inline call (a:'a, b:'b, f, z) = call_2 (a, b, f, z)
+    static member inline Invoke (folder: 'State->'Key->'T->'State) (state: 'State) (foldable: '``Foldable<'T>``) : 'State =
+        let inline call_2 (a: ^a, b: ^b, f, z) = ((^a or ^b) : (static member FoldIndexed : _*_*_*_ -> _) b, f, z, a)
+        let inline call (a: 'a, b: 'b, f, z) = call_2 (a, b, f, z)
         call (Unchecked.defaultof<FoldIndexed>, foldable, folder, state)
 
 
@@ -101,6 +101,6 @@ type TraverseIndexed =
     static member inline TraverseIndexed (a: Tuple<_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke Tuple (f () a.Item1)
 
     static member inline Invoke f t =
-        let inline call_3 (a:^a, b:^b, c:^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed: _*_*_*_ -> _) b, f, c, a)
-        let inline call (a:'a, b:'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) : 'r
+        let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed : _*_*_*_ -> _) b, f, c, a)
+        let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) : 'r
         call (Unchecked.defaultof<TraverseIndexed>, t, f)

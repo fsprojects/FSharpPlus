@@ -29,10 +29,10 @@ module Builders =
     open FSharpPlus.Control
 
     type Builder () =
-        member        __.ReturnFrom (expr) = expr                                       : '``Monad<'T>``
-        member inline __.Return (x: 'T) = result x                                      : '``Monad<'T>``
-        member inline __.Yield  (x: 'T) = result x                                      : '``Monad<'T>``
-        member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest: '``Monad<'U>``
+        member        __.ReturnFrom (expr) = expr                                        : '``Monad<'T>``
+        member inline __.Return (x: 'T) = result x                                       : '``Monad<'T>``
+        member inline __.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
+        member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
 
         [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.Select (x, [<ProjectionParameter>] f) = map f x
@@ -68,7 +68,7 @@ module Builders =
         member        __.Run f = f                                           : '``Monad<'T>``
         member inline __.TryWith    (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
         member inline __.TryFinally (expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
-        member inline __.Using (disposable:#IDisposable, body) = Using.Invoke disposable body  : '``Monad<'T>``
+        member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body : '``Monad<'T>``
 
     type MonadPlusStrictBuilder () =
         inherit StrictBuilder ()

@@ -10,13 +10,13 @@ open Helpers
 
 module SideEffects =
     let private effects = ResizeArray<string> []
-    let reset() = effects.Clear()
-    let add x = effects.Add(x)
-    let get() = effects |> Seq.toList
+    let reset () = effects.Clear ()
+    let add x = effects.Add (x)
+    let get () = effects |> Seq.toList
 
 type WrappedListA<'s> = WrappedListA of 's list with
-    static member ToSeq    (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
-    static member OfSeq  lst = WrappedListA (Seq.toList lst)
+    static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
+    static member OfSeq lst = WrappedListA (Seq.toList lst)
     static member TryItem (i, WrappedListA x) = List.tryItem i x
     static member TryParse x =
         if x = "[1;2;3]" then Some (WrappedListA [1;2;3])
@@ -43,10 +43,10 @@ type WrappedListA<'s> = WrappedListA of 's list with
         List.length lst
 
 type WrappedListB<'s> = WrappedListB of 's list with
-    static member Return   (x) = WrappedListB [x]
-    static member (+)  (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
-    static member Zero   = WrappedListB List.empty
-    static member ToSeq    (WrappedListB lst)     = List.toSeq lst
+    static member Return x = WrappedListB [x]
+    static member (+) (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
+    static member Zero = WrappedListB List.empty
+    static member ToSeq (WrappedListB lst)     = List.toSeq lst
     static member FoldBack (WrappedListB x, f, z) = List.foldBack f x z
 
 type WrappedListB'<'s> = WrappedListB' of 's list with // Same as B but without clean signatures
@@ -57,13 +57,13 @@ type WrappedListB'<'s> = WrappedListB' of 's list with // Same as B but without 
     static member FoldBack (WrappedListB' x, f, z) = List.foldBack f x z
 
 type WrappedListC<'s> = WrappedListC of 's list with
-    static member (+)  (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
-    static member Zero   = WrappedListC List.empty
-    static member Sum  (lst: seq<WrappedListC<_>>)  = Seq.head lst
+    static member (+) (WrappedListC l, WrappedListC x) = WrappedListC (l @ x)
+    static member Zero = WrappedListC List.empty
+    static member Sum (lst: seq<WrappedListC<_>>) = Seq.head lst
 
 type WrappedListD<'s> = WrappedListD of 's list with
-    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator()
-    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator () :> Collections.IEnumerator
     static member Return  (x) = SideEffects.add "Using WrappedListD's Return"; WrappedListD [x]
     static member (>>=) ((WrappedListD x):WrappedListD<'T>, f) = SideEffects.add "Using WrappedListD's Bind"; WrappedListD (List.collect (f >> (fun (WrappedListD x) -> x)) x)
     static member inline FoldMap (WrappedListD x, f) =
@@ -92,49 +92,49 @@ type WrappedListD<'s> = WrappedListD of 's list with
         List.length lst
 
 type WrappedListE<'s> = WrappedListE of 's list with
-    static member Return  (x) = WrappedListE [x]
+    static member Return x = WrappedListE [x]
     static member (>>=)  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
-    static member get_Empty() = WrappedListE List.empty
+    static member get_Empty () = WrappedListE List.empty
     static member (<|>) (WrappedListE l, WrappedListE x) = WrappedListE (l @ x)
     
 type WrappedListF<'s> = WrappedListF of 's list with
-    static member Return  (x) = WrappedListF [x]
-    static member (>>=)  (WrappedListF x: WrappedListF<'T>, f) = WrappedListF (List.collect (f >> (fun (WrappedListF x) -> x)) x)
+    static member Return x = WrappedListF [x]
+    static member (>>=) (WrappedListF x: WrappedListF<'T>, f) = WrappedListF (List.collect (f >> (fun (WrappedListF x) -> x)) x)
     static member Join  (WrappedListF wlst) = SideEffects.add "Join";  WrappedListF wlst >>= id
-    static member get_Empty() = WrappedListF List.empty
+    static member get_Empty () = WrappedListF List.empty
     static member (<|>) (WrappedListF l, WrappedListF x) = WrappedListF (l @ x)
 
 type WrappedListG<'s> = WrappedListG of 's list with
-    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator()
-    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator() :> Collections.IEnumerator
-    static member Return  (x) = WrappedListG [x]
-    static member (>>=)  (WrappedListG x: WrappedListG<'T>, f) = WrappedListG (List.collect (f >> (fun (WrappedListG x) -> x)) x)
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedListG x) = x in x :> _ seq).GetEnumerator () :> Collections.IEnumerator
+    static member Return x = WrappedListG [x]
+    static member (>>=) (WrappedListG x: WrappedListG<'T>, f) = WrappedListG (List.collect (f >> (fun (WrappedListG x) -> x)) x)
     static member Join  (WrappedListG wlst) = (*SideEffects.add "Join";*)  WrappedListG wlst >>= id
-    static member get_Empty() = WrappedListG List.empty
+    static member get_Empty () = WrappedListG List.empty
     static member (<|>) (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
-    static member Delay (f: unit -> WrappedListD<_>) = SideEffects.add "Using WrappedListG's Delay"; f()
+    static member Delay (f: unit -> WrappedListD<_>) = SideEffects.add "Using WrappedListG's Delay"; f ()
     static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
 
 type WrappedSeqA<'s> = WrappedSeqA of 's seq with
-    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqA x) = x in x).GetEnumerator()
-    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqA x) = x in x).GetEnumerator() :> Collections.IEnumerator
-    static member Return  (x) = WrappedSeqA [x]
-    static member (>>=)  (WrappedSeqA x: WrappedSeqA<'T>, f) = WrappedSeqA (Seq.collect (f >> (fun (WrappedSeqA x) -> x)) x)
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqA x) = x in x).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedSeqA x) = x in x).GetEnumerator () :> Collections.IEnumerator
+    static member Return x = WrappedSeqA [x]
+    static member (>>=) (WrappedSeqA x: WrappedSeqA<'T>, f) = WrappedSeqA (Seq.collect (f >> (fun (WrappedSeqA x) -> x)) x)
     static member Join  (WrappedSeqA wlst) = WrappedSeqA wlst >>= id
-    static member get_Empty() = WrappedSeqA List.empty
+    static member get_Empty () = WrappedSeqA List.empty
     static member (<|>) (WrappedSeqA l, WrappedSeqA x) = WrappedSeqA (Seq.append l x)
     static member Delay (f: unit -> WrappedSeqA<_>) =
                     let run (WrappedSeqA s) = s
                     WrappedSeqA (Seq.delay (f >> run))
 
 type WrappedSeqB<'s> = WrappedSeqB of 's seq with
-    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqB x) = x in x).GetEnumerator()
-    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqB x) = x in x).GetEnumerator() :> Collections.IEnumerator
-    static member Return  (x) = WrappedSeqB [x]
-    static member (>>=)  (WrappedSeqB x: WrappedSeqB<'T>, f) = WrappedSeqB (Seq.collect (f >> (fun (WrappedSeqB x) -> x)) x)
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqB x) = x in x).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedSeqB x) = x in x).GetEnumerator () :> Collections.IEnumerator
+    static member Return x = WrappedSeqB [x]
+    static member (>>=) (WrappedSeqB x: WrappedSeqB<'T>, f) = WrappedSeqB (Seq.collect (f >> (fun (WrappedSeqB x) -> x)) x)
     static member Join  (WrappedSeqB wlst) = WrappedSeqB wlst >>= id
-    static member get_Empty() = WrappedSeqB List.empty
+    static member get_Empty () = WrappedSeqB List.empty
     static member (<|>) (WrappedSeqB l, WrappedSeqB x) = WrappedSeqB (Seq.append l x)
     static member Delay (f: unit -> WrappedSeqB<_>) =
                     let run (WrappedSeqB s) = s
@@ -147,12 +147,12 @@ type WrappedSeqB<'s> = WrappedSeqB of 's seq with
                     using resource body
 
 type WrappedSeqC<'s> = WrappedSeqC of 's seq with
-    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator() = (let (WrappedSeqC x) = x in x).GetEnumerator()
-    interface Collections.IEnumerable             with member x.GetEnumerator() = (let (WrappedSeqC x) = x in x).GetEnumerator() :> Collections.IEnumerator
-    static member Return  (x) = WrappedSeqC [x]
-    static member (>>=)  (WrappedSeqC x: WrappedSeqC<'T>, f) = WrappedSeqC (Seq.collect (f >> (fun (WrappedSeqC x) -> x)) x)
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqC x) = x in x).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedSeqC x) = x in x).GetEnumerator () :> Collections.IEnumerator
+    static member Return x = WrappedSeqC [x]
+    static member (>>=) (WrappedSeqC x: WrappedSeqC<'T>, f) = WrappedSeqC (Seq.collect (f >> (fun (WrappedSeqC x) -> x)) x)
     static member Join  (WrappedSeqC wlst) = WrappedSeqC wlst >>= id
-    static member get_Empty() = WrappedSeqC List.empty
+    static member get_Empty () = WrappedSeqC List.empty
     static member (<|>) (WrappedSeqC l, WrappedSeqC x) = WrappedSeqC (Seq.append l x)
     static member Delay (f: unit -> WrappedSeqC<_>) =
                     let run (WrappedSeqC s) = s
@@ -162,7 +162,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
                     try computation finally compensation ()
 
 type WrappedSeqD<'s> = WrappedSeqD of 's seq with
-    static member Return  (x) = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
+    static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (f <*> x)
     static member ToList (WrappedSeqD x) = Seq.toList x
 
@@ -173,43 +173,43 @@ open System.Threading.Tasks
 type ListOnlyIndex<'s> (l: 's list) = 
     interface IList<'s> with 
         member __.Count = List.length l 
-        member __.IsReadOnly with get() = true
+        member __.IsReadOnly with get () = true
         member __.Item with get index = List.item index l and set _ _ = failwith "set"
-        member __.Add(_) = failwith "Add"
-        member __.Clear() = failwith "Clear"
-        member __.Contains(_) = failwith "Contains"
-        member __.CopyTo(_, _) = failwith "CopyTo"
-        member __.GetEnumerator() : IEnumerator<'s> = failwith "ListOnlyIndex.GetEnumerator"
-        member __.GetEnumerator() : IEnumerator = failwith "ListOnlyIndex.GetEnumerator"
-        member __.IndexOf(_) = failwith "IndexOf"
-        member __.Insert (index:int, item:'s)= failwithf "Insert %i %A" index item
-        member __.Remove(_) = failwith "Remove"
-        member __.RemoveAt(_) = failwith "RemoveAt"
+        member __.Add _ = failwith "Add"
+        member __.Clear () = failwith "Clear"
+        member __.Contains _ = failwith "Contains"
+        member __.CopyTo (_, _) = failwith "CopyTo"
+        member __.GetEnumerator () : IEnumerator<'s> = failwith "ListOnlyIndex.GetEnumerator"
+        member __.GetEnumerator () : IEnumerator = failwith "ListOnlyIndex.GetEnumerator"
+        member __.IndexOf _ = failwith "IndexOf"
+        member __.Insert (index: int, item:'s) = failwithf "Insert %i %A" index item
+        member __.Remove _ = failwith "Remove"
+        member __.RemoveAt _ = failwith "RemoveAt"
 
 type ReadOnlyListOnlyIndex<'s> (l: 's list) = 
     interface IReadOnlyList<'s> with 
         member __.Count = List.length l 
-        member __.Item with get(index) = List.item index l
-        member __.GetEnumerator() : IEnumerator<'s> = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
-        member __.GetEnumerator() : IEnumerator = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
+        member __.Item with get index = List.item index l
+        member __.GetEnumerator () : IEnumerator<'s> = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
+        member __.GetEnumerator () : IEnumerator = failwith "ReadOnlyListOnlyIndex.GetEnumerator"
 
 module Monoid =
 
     type ZipList<'s> = ZipList of 's seq with
-        static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
-        static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
-        static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList<'b>
-        static member inline get_Zero() = result zero                      :ZipList<'a>
+        static member Return (x:'a)                               = ZipList (Seq.initInfinite (konst x))
+        static member Map   (ZipList x, f: 'a->'b)                = ZipList (Seq.map f x)
+        static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList<'b>
+        static member inline get_Zero () = result zero            : ZipList<'a>
         static member inline (+) (x:ZipList<'a>, y:ZipList<'a>) = liftA2 plus x y :ZipList<'a>
         static member ToSeq    (ZipList lst)     = lst
 
     type ZipList'<'s> = ZipList' of 's seq with
-        static member Return (x:'a)                                = ZipList' (Seq.initInfinite (konst x))
-        static member Map   (ZipList' x, f: 'a->'b)                = ZipList' (Seq.map f x)
-        static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList'<'b>
-        static member inline get_Zero() = result zero                      :ZipList'<'a>
-        static member inline (+) (x:ZipList'<'a>, y:ZipList'<'a>) = liftA2 plus x y :ZipList'<'a>
-        static member inline Sum (x:seq<ZipList'<'a>>) = SideEffects.add "Using optimized Sum"; List.foldBack plus (Seq.toList x) zero: ZipList'<'a>
+        static member Return (x: 'a)                                = ZipList' (Seq.initInfinite (konst x))
+        static member Map   (ZipList' x, f: 'a->'b)                 = ZipList' (Seq.map f x)
+        static member (<*>) (ZipList' (f: seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList'<'b>
+        static member inline get_Zero () = result zero              : ZipList'<'a>
+        static member inline (+) (x: ZipList'<'a>, y: ZipList'<'a>) = liftA2 plus x y :ZipList'<'a>
+        static member inline Sum (x: seq<ZipList'<'a>>) = SideEffects.add "Using optimized Sum"; List.foldBack plus (Seq.toList x) zero : ZipList'<'a>
         static member ToSeq    (ZipList' lst)     = lst
 
     type MyList<'t> = MyList of list<'t> with
@@ -225,10 +225,10 @@ module Monoid =
         let res1n2 = MyList [1] ++ MyList [2] ++ zero
         let res0 : MyNum = zero 
 
-        let asQuotation = plus    <@ ResizeArray(["1"]) @> <@ ResizeArray(["2;3"]) @>
-        let quot123     = plus    <@ ResizeArray([1])   @> <@ ResizeArray([2;3])   @>
-        let quot1       = plus    <@ ResizeArray([1])   @>      (zero)
-        let quot23      = plus       (zero)         <@ ResizeArray([2;3])   @>
+        let asQuotation = plus    <@ ResizeArray (["1"]) @> <@ ResizeArray (["2;3"]) @>
+        let quot123     = plus    <@ ResizeArray ([1])   @> <@ ResizeArray ([2;3])   @>
+        let quot1       = plus    <@ ResizeArray ([1])   @>      (zero)
+        let quot23      = plus       (zero)         <@ ResizeArray ([2;3])   @>
         let quot13      = plus       (zero)         <@ ("1","3") @>
         let lzy1 = plus (lazy [1]) (lazy [2;3])
         let lzy2 = plus (zero) lzy1
@@ -249,11 +249,11 @@ module Monoid =
         let greeting1 = Async.RunSynchronously mapAB.[2]
         let greeting2 = Async.RunSynchronously (Seq.sum [mapA; zero; mapB]).[2]
 
-        let dicA = new Dictionary<string,Task<string>>()
+        let dicA = new Dictionary<string,Task<string>> ()
         dicA.["keya"] <- (result "Hey"  : Task<_>)
         dicA.["keyb"] <- (result "Hello": Task<_>)
 
-        let dicB = new Dictionary<string,Task<string>>()
+        let dicB = new Dictionary<string,Task<string>> ()
         dicB.["keyc"] <- (result " You"  : Task<_>)
         dicB.["keyb"] <- (result " World": Task<_>)
 
@@ -270,7 +270,7 @@ module Monoid =
 
 
     [<Test>]
-    let seqSumDefaultCustom() =
+    let seqSumDefaultCustom () =
         let (WrappedListB x) = Seq.sum [WrappedListB [10] ;WrappedListB [15]]
         let (WrappedListC y) = Seq.sum [WrappedListC [10] ;WrappedListC [15]]
         Assert.AreEqual (x, [10;15])
@@ -282,17 +282,17 @@ module Monoid =
         Assert.IsInstanceOf<Option< Dictionary<string,int list>>> (Some y)
         Assert.IsInstanceOf<Option<IDictionary<string,int list>>> (Some z)
 
-        SideEffects.reset()
+        SideEffects.reset ()
 
         let quotLst123  = plus zero (ZipList [ [1];[2];[3] ])
 
         Assert.AreEqual (quotLst123 |> toList, [[1]; [2]; [3]])
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (SideEffects.get (), [])
 
         let quotLst123' = Seq.sum [zero; zero; ZipList' [ [1];[2];[3] ]]
 
         Assert.AreEqual (quotLst123' |> toList, [[1]; [2]; [3]])
-        Assert.AreEqual (SideEffects.get(), ["Using optimized Sum"])
+        Assert.AreEqual (SideEffects.get (), ["Using optimized Sum"])
 
         let wl = WrappedListB  [2..10]
 
@@ -311,9 +311,9 @@ module Monoid =
 
 module Functor =
     [<Test>]
-    let mapDefaultCustom() = 
+    let mapDefaultCustom () = 
 
-        SideEffects.reset()
+        SideEffects.reset ()
 
         // NonEmptyList<_> has Map but at the same time is a seq<_>
         let testVal1 = map ((+) 1) {Head = 10; Tail = [20;30]}
@@ -326,41 +326,41 @@ module Functor =
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
 
         // WrappedSeqD is Applicative. Applicatives are Functors => map should work
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (SideEffects.get (), [])
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
-        Assert.AreEqual (SideEffects.get(), ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"])
-        SideEffects.reset()
+        Assert.AreEqual (SideEffects.get (), ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"])
+        SideEffects.reset ()
         
         // WrappedListE is a Monad. Monads are Functors => map should work
         let testVal5 = map ((+) 1) (WrappedListE [1..3])
         Assert.IsInstanceOf<Option<WrappedListE<int>>> (Some testVal5)
 
         // Same with WrappedListD but WrappedListD is also IEnumerable<_>
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (SideEffects.get (), [])
         let testVal6 = map ((+) 1) (WrappedListD [1..3])
         Assert.IsInstanceOf<Option<WrappedListD<int>>> (Some testVal6)
-        Assert.AreEqual (SideEffects.get(), ["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"])
+        Assert.AreEqual (SideEffects.get (), ["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"])
 
     [<Test>]
-    let unzip() = 
+    let unzip () = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
 
     [<Test>]
-    let zipTest() =
+    let zipTest () =
 
-        SideEffects.reset()
+        SideEffects.reset ()
         let a = zip (seq [1;2;3]) (seq [1. .. 3. ])
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (SideEffects.get (), [])
 
         let b = zip (WrappedListD [1;2;3]) (WrappedListD [1. .. 3. ])
-        Assert.AreEqual (SideEffects.get(), ["Using WrappedListD's zip"])
+        Assert.AreEqual (SideEffects.get (), ["Using WrappedListD's zip"])
 
         let c = zip (dict [1,'1' ; 2,'2' ; 4,'4']) (dict [1,'1' ; 2,'2' ; 3,'3'])
         let d = zip [ 1;2;3 ] [ 1. .. 3. ]
         let e = zip [|1;2;3|] [|1. .. 3.|]
-        let g = zip ((seq [1;2;3]).GetEnumerator()) ((seq [1. .. 3. ]).GetEnumerator())
+        let g = zip ((seq [1;2;3]).GetEnumerator ()) ((seq [1. .. 3. ]).GetEnumerator ())
         let h = zip (Map.ofSeq [1,'1' ; 2,'2' ; 4,'4']) (Map.ofSeq [1,'1' ; 2,'2' ; 3,'3'])
         let i = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let j = zip (async {return 1}) (async {return '2'})
@@ -370,7 +370,7 @@ module Functor =
         let fc a = zip a (dict [1,'1' ; 2,'2' ; 3,'3'])
         let fd a = zip a [ 1. .. 3. ]
         let fe a = zip a [|1. .. 3.|]
-        let fg a = zip a ((seq [1. .. 3. ]).GetEnumerator())
+        let fg a = zip a ((seq [1. .. 3. ]).GetEnumerator ())
         let fh a = zip a (Map.ofSeq [1,'1' ; 2,'2' ; 3,'3'])
         let fi a = zip a (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let fj a = zip a (async {return '2'})
@@ -380,7 +380,7 @@ module Functor =
         let gc b = zip (dict [1,'1' ; 2,'2' ; 4,'4']) b
         let gd b = zip  [ 1;2;3 ] b
         let ge b = zip  [|1;2;3|] b
-        let gg b = zip ((seq [1;2;3]).GetEnumerator()) b
+        let gg b = zip ((seq [1;2;3]).GetEnumerator ()) b
         let gh b = zip (Map.ofSeq [1,'1' ; 2,'2' ; 4,'4']) b
         let gi b = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) b
         let gj b = zip (async {return 1}) b
@@ -425,9 +425,9 @@ module Collections =
 
         // From sequence
 
-        let sk :Generic.Stack<_>          = ofSeq { 1 .. 3 }
-        let sg :string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
-        let sb :Text.StringBuilder        = ofSeq {'1'..'3'}  // but it will come back as seq<char>
+        let sk: Generic.Stack<_>          = ofSeq { 1 .. 3 }
+        let sg: string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
+        let sb: Text.StringBuilder        = ofSeq {'1'..'3'}  // but it will come back as seq<char>
         let sq1:_ seq                     = ofSeq { 1 .. 3 }
         let sq2:_ seq                     = ofSeq (seq [(1, "One"); (2, "Two")])
         let sq3:_ seq                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
@@ -436,22 +436,22 @@ module Collections =
         let ls2:_ list                    = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
         let st1:_ Set                     = ofSeq {'1'..'3'}
         let st2:_ Set                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
-        let ss :Generic.SortedSet<_>      = ofSeq (seq [3..6])
-        let ra :Generic.List<_>           = ofSeq (seq [1..3])
-        let sl :Generic.SortedList<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+        let ss: Generic.SortedSet<_>      = ofSeq (seq [3..6])
+        let ra: Generic.List<_>           = ofSeq (seq [1..3])
+        let sl: Generic.SortedList<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
         let sl2:Generic.SortedList<_,_>   = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let dc :Generic.Dictionary<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as kKeyValuePair
         let mp :Map<_,_>                  = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
         let mp2:Map<_,_>                  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        let d  :Generic.IDictionary<_,_>  = ofSeq (seq [("One", 1)])             // but it will come back as ...
-        let d2 :Generic.IDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        let ut :Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
-        let al :ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
-        let us :SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
-        let cc :BlockingCollection<_>     = ofSeq {'1'..'3'}                     // but it will come back as seq<obj>
-        let cd :ConcurrentDictionary<_,_> = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
+        let d : Generic.IDictionary<_,_>  = ofSeq (seq [("One", 1)])             // but it will come back as ...
+        let d2: Generic.IDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let ut: Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+        let al: ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
+        let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
+        let cc: BlockingCollection<_>     = ofSeq {'1'..'3'}                     // but it will come back as seq<obj>
+        let cd: ConcurrentDictionary<_,_> = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
         let cd2:ConcurrentDictionary<_,_> = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        let cb :ConcurrentBag<_>          = ofSeq {'1'..'3'}
+        let cb: ConcurrentBag<_>          = ofSeq {'1'..'3'}
 
         // now go back
         let sk'  = toSeq sk
@@ -481,7 +481,7 @@ module Collections =
         // there are some 'one-way' collections that can only be converted toSeq
 
         let columns = 
-            let d = new Data.DataTable() 
+            let d = new Data.DataTable () 
             [|new Data.DataColumn "id";new Data.DataColumn "column1";new Data.DataColumn "column2"|] |> d.Columns.AddRange
             d.Columns
         let col1 = columns |> find (fun x -> x.ColumnName = "column1")
@@ -499,7 +499,7 @@ module Collections =
 
         ()
 
-    let testGeneralizableValues() =
+    let testGeneralizableValues () =
         let a:list<_> = empty
         let b =  0 ::a
         let c = '0'::a
@@ -510,7 +510,7 @@ module Collections =
          
         ()
     [<Test>]
-    let readOnlyNth() =
+    let readOnlyNth () =
         let readOnlyCollection = ReadOnlyCollection( [|1..10|] )
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
         Assert.AreEqual (2, nth 1 [1..10])
@@ -518,7 +518,7 @@ module Collections =
         Assert.AreEqual (2, nth 1 iReadOnlyList)
 
     [<Test>]
-    let readOnlyNthIndex() =
+    let readOnlyNthIndex () =
         let l = ListOnlyIndex [1..10]
         Assert.AreEqual (2, nth 1 l)
         let rl = ReadOnlyListOnlyIndex [1..10]
@@ -533,19 +533,19 @@ module Foldable =
         ()
 
     [<Test>]
-    let foldMapDefaultCustom() =
-        SideEffects.reset()
+    let foldMapDefaultCustom () =
+        SideEffects.reset ()
         let x = foldMap ((+) 10) (WrappedListD [1..4]) //= 50 w side effect
         Assert.AreEqual (x, 50)
-        Assert.AreEqual (SideEffects.get(), ["Using optimized foldMap"])
+        Assert.AreEqual (SideEffects.get (), ["Using optimized foldMap"])
 
-        SideEffects.reset()
+        SideEffects.reset ()
         let y = foldMap ((+) 10) {1..4}  //= 50 w/o side effect
         Assert.AreEqual (x, 50)
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (SideEffects.get (), [])
 
     [<Test>]
-    let filterDefaultCustom() = 
+    let filterDefaultCustom () = 
         let wlA1 = WrappedListA [1..10]
         let testVal = filter ((=)2) wlA1
         Assert.AreEqual (testVal, WrappedListA [2])
@@ -558,14 +558,14 @@ module Foldable =
         ()
 
     [<Test>]
-    let foldAternatives() = 
+    let foldAternatives () = 
         let x = choice [None; Some 3; Some 4; None]
         let y = choice [| []; [3]; [4]; [] |]
         Assert.AreEqual (x, Some 3)
         Assert.AreEqual (y, [3;4])
 
     [<Test>]
-    let fromToSeq() =
+    let fromToSeq () =
         let s = (seq [Collections.Generic.KeyValuePair(1, "One"); Collections.Generic.KeyValuePair(2, "Two")])
         let t = {'a'..'d'}
 
@@ -579,16 +579,16 @@ module Foldable =
         let t' = toSeq str 
 
         Assert.AreEqual (toList s, toList s')
-        Assert.AreEqual (toList s , toList s'')
-        Assert.AreEqual (toList t , toList t')
+        Assert.AreEqual (toList s, toList s'')
+        Assert.AreEqual (toList t, toList t')
 
-        Assert.IsInstanceOf ((Some s').GetType(), Some s)
-        Assert.IsInstanceOf ((Some s'').GetType(), Some s)
-        Assert.IsInstanceOf ((Some t'  ).GetType(), Some t)
+        Assert.IsInstanceOf ((Some s' ).GetType (), Some s)
+        Assert.IsInstanceOf ((Some s'').GetType (), Some s)
+        Assert.IsInstanceOf ((Some t' ).GetType (), Some t)
 
 
     [<Test>]
-    let sortBy() =
+    let sortBy () =
         let l  = [10;4;6;89]
         let l' = sortBy id l
         let s  = WrappedListB [10;4;6;89]
@@ -602,18 +602,18 @@ module Foldable =
         Assert.IsInstanceOf<Option<seq<int>>> (Some sortedSeq)
 
     [<Test>]
-    let intersperse() =
+    let intersperse () =
         Assert.AreEqual ("a,b,c,d,e", intersperse ',' "abcde")
         Assert.AreEqual (["a";",";"b";",";"c";",";"d";",";"e"], intersperse "," ["a";"b";"c";"d";"e"])
 
     [<Test>]
-    let readOnlyIntercalate() =
+    let readOnlyIntercalate () =
         Assert.AreEqual ("Lorem, ipsum, dolor", intercalate ", " ["Lorem"; "ipsum"; "dolor"])
         Assert.AreEqual ("Lorem, ipsum, dolor", intercalate ", " (ReadOnlyCollection( [|"Lorem"; "ipsum"; "dolor"|] )))
 
 
     [<Test>]
-    let readOnlyTryPick() =
+    let readOnlyTryPick () =
         let readOnlyCollection = ReadOnlyCollection( [|1..10|] )
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>        
         let picker i = if i % 3 = 0 then Some i else None
@@ -622,7 +622,7 @@ module Foldable =
         Assert.AreEqual (Some 3, tryPick picker iReadOnlyList)
 
     [<Test>]
-    let readOnlyTryFind() =
+    let readOnlyTryFind () =
         let predicate i = i % 3 = 0
         let readOnlyCollection = ReadOnlyCollection( [|1..10|] )
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
@@ -631,66 +631,66 @@ module Foldable =
         Assert.AreEqual (Some 3, tryFind predicate iReadOnlyList)
 
     [<Test>]
-    let readOnlyfoldMap() =
+    let readOnlyfoldMap () =
         let readOnlyCollection = ReadOnlyCollection( [|1..4|] )
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
         Assert.AreEqual (50, foldMap ((+) 10) readOnlyCollection)
         Assert.AreEqual (50, foldMap ((+) 10) iReadOnlyList)
 
     [<Test>]
-    let exists() =
-        SideEffects.reset()
+    let exists () =
+        SideEffects.reset ()
         let a = exists ((=) 2) [1..3]
         let b = exists ((=) '2') (System.Text.StringBuilder "abc")
         let c = exists ((=) 2) (WrappedListA [1..3])
         let d = exists ((=) 2) (WrappedListD [1..3])
-        areEqual (SideEffects.get()) ["Using WrappedListA's Exists"; "Using WrappedListD's Exists"]
+        areEqual (SideEffects.get ()) ["Using WrappedListA's Exists"; "Using WrappedListD's Exists"]
         ()
 
     [<Test>]
-    let pick() =
-        SideEffects.reset()
+    let pick () =
+        SideEffects.reset ()
         let a = pick Some [1..3]
         let b = pick Some (System.Text.StringBuilder "abc")
         let c = pick Some (WrappedListA [1..3])
         let d = pick Some (WrappedListD [1..3])
-        areEqual (SideEffects.get()) ["Using WrappedListA's Pick"; "Using WrappedListD's Pick"]
+        areEqual (SideEffects.get ()) ["Using WrappedListA's Pick"; "Using WrappedListD's Pick"]
         ()
 
     [<Test>]
-    let minimum() =
-        SideEffects.reset()
+    let minimum () =
+        SideEffects.reset ()
         let a = minimum [1..3]
         let b = minimum (System.Text.StringBuilder "abc")
         let c = minimum (WrappedListA [1..3])
         let d = minimum (WrappedListD [1..3])
-        areEqual (SideEffects.get()) ["Using WrappedListA's Min"; "Using WrappedListD's Min"]
+        areEqual (SideEffects.get ()) ["Using WrappedListA's Min"; "Using WrappedListD's Min"]
         ()
 
     [<Test>]
-    let maxBy() =
-        SideEffects.reset()
+    let maxBy () =
+        SideEffects.reset ()
         let a = maxBy id [1..3]
         let b = maxBy id (System.Text.StringBuilder "abc")
         let c = maxBy id (WrappedListA [1..3])
         let d = maxBy id (WrappedListD [1..3])
-        areEqual (SideEffects.get()) ["Using WrappedListA's MaxBy"; "Using WrappedListD's MaxBy"]
+        areEqual (SideEffects.get ()) ["Using WrappedListA's MaxBy"; "Using WrappedListD's MaxBy"]
         ()
 
     [<Test>]
-    let length() =
-        SideEffects.reset()
+    let length () =
+        SideEffects.reset ()
         let a = length [1..3]
         let b = length (System.Text.StringBuilder "abc")
         let c = length (WrappedListA [1..3])
         let d = length (WrappedListD [1..3])
-        areEqual (SideEffects.get()) ["Using WrappedListA's Length"; "Using WrappedListD's Length"]
+        areEqual (SideEffects.get ()) ["Using WrappedListA's Length"; "Using WrappedListD's Length"]
         ()
 
 
 module Indexable = 
     [<Test>]
-    let testCompileAndExecuteItem() =
+    let testCompileAndExecuteItem () =
 
         let a = Map.ofSeq [1, "one"; 2, "two"]
         let a1 = item 1 a
@@ -729,7 +729,7 @@ module Indexable =
         ()
 
     [<Test>]
-    let testCompileAndExecuteTryItem() =
+    let testCompileAndExecuteTryItem () =
 
         let a = Map.ofSeq [1, "one"; 2, "two"]
         let a1 = tryItem 1 a
@@ -768,7 +768,7 @@ module Indexable =
         ()
 
     [<Test>]
-    let tryItemReadonly() =
+    let tryItemReadonly () =
         let d = ReadOnlyDictionary (dict [1, "one"; 2, "two"])
         let iReadOnlyDict = d :> IReadOnlyDictionary<_,_>
         let l = ReadOnlyCollection [|1..10|]
@@ -787,31 +787,31 @@ module Indexable =
 
 module Monad = 
     [<Test>]
-    let joinDefaultCustom() = 
+    let joinDefaultCustom () = 
         let x = join [[1];[2]]
         Assert.AreEqual (x, [1;2])
         let y : WrappedListE<_> = join (WrappedListE [WrappedListE [1];WrappedListE [2]])
         Assert.AreEqual (y, WrappedListE [1;2])
-        SideEffects.reset()
+        SideEffects.reset ()
         let z = join (WrappedListF [WrappedListF [1];WrappedListF [2]])
         Assert.AreEqual (z, WrappedListF [1;2])
-        Assert.AreEqual (SideEffects.get(), ["Join"])
+        Assert.AreEqual (SideEffects.get (), ["Join"])
 
     [<Test>]
-    let workFlow() =       
+    let workFlow () =       
         let testVal = 
             monad {
                 let! x1 = WrappedListD [1;2]
                 let! x2 = WrappedListD [10;20]
                 return ((+) x1 x2) }
-        Assert.IsInstanceOf<WrappedListD<int>>(testVal)
+        Assert.IsInstanceOf<WrappedListD<int>> (testVal)
 
     [<Test>]
-    let DelayForCont() = 
+    let DelayForCont () = 
         // If Delay is not properly implemented this will stack-overflow
         // See http://stackoverflow.com/questions/11188779/stackoverflow-in-continuation-monad
 #if MONO
-        Assert.Ignore()
+        Assert.Ignore ()
 #else
         let map f xs =
             let rec loop xs =
@@ -823,7 +823,7 @@ module Monad =
                         return f x :: xs }
             Cont.run (loop xs) id
         let q = [1..100000] |> map ((+) 1)
-        Assert.Pass()
+        Assert.Pass ()
 #endif
 
 
@@ -833,13 +833,13 @@ module Traversable =
         ()
 
     [<Test>]
-    let sequence_Default_Primitive() = 
+    let sequence_Default_Primitive () = 
         let testVal = sequence [|Some 1; Some 2|]
         Assert.AreEqual (Some [|1;2|], testVal)
         Assert.IsInstanceOf<Option<array<int>>> testVal
 
     [<Test>]
-    let sequence_Specialization() =
+    let sequence_Specialization () =
         
         let inline seqSeq (x:_ seq ) = sequence x
         let inline seqArr (x:_ []  ) = sequence x
@@ -856,7 +856,7 @@ module Traversable =
         Assert.IsInstanceOf<list<list<int>>> c
 
     [<Test>]
-    let traversableForNonPrimitive() =
+    let traversableForNonPrimitive () =
         let nel = NonEmptyList.create (Some 1) [Some 2]
         let rs1  = traverse id nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
@@ -864,7 +864,7 @@ module Traversable =
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
 
     [<Test>]
-    let traverseInfiniteOptions() =
+    let traverseInfiniteOptions () =
         let toOptions x = if x <> 4 then Some x       else None
         let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
         let toLists   x = if x <> 4 then [x; x]       else []
@@ -883,19 +883,19 @@ module Traversable =
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
-    static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList<'b>
+    static member (<*>) (ZipList (f:seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
     
 type ZipList'<'s> = ZipList' of 's seq with
     static member Return (x:'a)                                = ZipList' (Seq.initInfinite (konst x))
-    static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) :ZipList'<'b>
+    static member (<*>) (ZipList' (f:seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList'<'b>
 
 module Applicative = 
     [<Test>]
-    let applicativeMath() = 
-        let inline (+) (a:'T) (b:'T) :'T = a + b
-        let inline ( .+  ) (x :'Functor't)     (y :'t)             = map ((+)/> y) x :'Functor't
-        let inline (  +. ) (x :'t)             (y :'Functor't)     = map ((+)   x) y :'Functor't
-        let inline ( .+. ) (x :'Applicative't) (y :'Applicative't) = (+) <!> x <*> y :'Applicative't
+    let applicativeMath () = 
+        let inline (+) (a: 'T) (b: 'T) : 'T = a + b
+        let inline ( .+  ) (x: 'Functor't)     (y: 't)             = map ((+)/> y) x : 'Functor't
+        let inline (  +. ) (x: 't)             (y: 'Functor't)     = map ((+)   x) y : 'Functor't
+        let inline ( .+. ) (x: 'Applicative't) (y: 'Applicative't) = (+) <!> x <*> y : 'Applicative't
 
         let testVal = [1;2] .+. [10;20] .+. [100;200] .+  2
         Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
@@ -903,7 +903,7 @@ module Applicative =
 
 
     [<Test>]
-    let applicatives() = 
+    let applicatives () = 
 
         let run (ZipList x) = x
         let run' (ZipList' x) = x
@@ -935,7 +935,7 @@ type Idiomatic = Idiomatic with
 
 module IdiomBrackets =
     [<Test>]
-    let idiomBrackets() =    
+    let idiomBrackets () =    
         let inline idiomatic a b = (Idiomatic $ b) a
         let inline iI x = (idiomatic << result) x
 
@@ -945,8 +945,8 @@ module IdiomBrackets =
         Assert.AreEqual ([3;4], res3n4''')
 
 
-        let output = System.Text.StringBuilder()
-        let append (x:string) = output.Append x |> ignore
+        let output = System.Text.StringBuilder ()
+        let append (x: string) = output.Append x |> ignore
 
         let v5: Lazy<_> = lazy (append "5"; 5)
         Assert.AreEqual (0, output.Length)
@@ -954,24 +954,24 @@ module IdiomBrackets =
         Assert.AreEqual (0, output.Length)
         let v5plus10    = v5 >>= fPlus10
         Assert.AreEqual (0, output.Length)
-        let v15 = v5plus10.Force()
-        Assert.AreEqual ("5 + 10", output.ToString())
+        let v15 = v5plus10.Force ()
+        Assert.AreEqual ("5 + 10", string output)
         Assert.AreEqual (15, v15)
 
-        output.Clear() |> ignore
+        output.Clear () |> ignore
 
         let v4ll: Lazy<_> = lazy (append "outer"; lazy (append "inner"; 4))
         Assert.AreEqual (0, output.Length)
         let v4l = join v4ll
         Assert.AreEqual (0, output.Length)
         let v4  = v4l.Force()
-        Assert.AreEqual ("outerinner", output.ToString())
+        Assert.AreEqual ("outerinner", string output)
         Assert.AreEqual (4, v4)
  
 
 module Alternative =
     
-    let testEmpty() =
+    let testEmpty () =
         let (v: WrappedListE<int>) = empty
         let (w: list<int>)         = empty
         let (x: WrappedListG<int>) = empty
@@ -982,7 +982,7 @@ module Alternative =
         // let (z: WrappedListD<int>) = empty
         ()
 
-    let testAppend() =
+    let testAppend () =
         let v = WrappedListE [1;2] <|> WrappedListE [3;4]
         let w = [1;2] <|> [3;4]
         let x = WrappedListG [1;2] <|> WrappedListG [3;4]
@@ -994,7 +994,7 @@ module Alternative =
         ()
 
     [<Test>]
-    let testEmptyAndAppendForCustomType() =
+    let testEmptyAndAppendForCustomType () =
         let u = WrappedListE [1;2]
         let v = WrappedListG [1;2]
         let w = u <|> empty
@@ -1007,19 +1007,19 @@ module Alternative =
         Assert.AreEqual (v, z)
 
     [<Test>]
-    let testOptionTAppliesFunctionOnce() =
-        SideEffects.reset()
+    let testOptionTAppliesFunctionOnce () =
+        SideEffects.reset ()
         let x = OptionT <| async { SideEffects.add "hello"; return Some 1 }
         let y = OptionT <| async { SideEffects.add "good bye"; return Some 2 }
 
         let z = (x <|> y) |> OptionT.run |> Async.RunSynchronously
 
-        Assert.AreEqual (SideEffects.get(), ["hello"])
+        Assert.AreEqual (SideEffects.get (), ["hello"])
         Assert.AreEqual (z, Some 1)
 
 
 module MonadTransformers =
-    let testCompileResultT() =
+    let testCompileResultT () =
         // Test MonadError
         let err1Layers   = catch (Error "Invalid Value") (fun s -> Error ["the error was: " + s]) : Result<int, _>
 
@@ -1028,7 +1028,7 @@ module MonadTransformers =
 
         let doSomeOperation x = ResultT <| async {
             if x < 10 then return Result.Ok 10
-            else return Result.Error "failure"   }
+            else return Result.Error "failure" }
 
         let okFoo10Comp: ResultT<_> =
             monad {
@@ -1040,7 +1040,7 @@ module MonadTransformers =
         let okFoo10 = okFoo10Comp |> ResultT.run |> Async.RunSynchronously
 
         ()
-    let testCompileChoiceT() =
+    let testCompileChoiceT () =
         // Test MonadError
         let err1Layers   = catch (Choice2Of2 "Invalid Value") (fun s -> Choice2Of2 ["the error was: " + s]) : Choice<int, _>
 
@@ -1104,22 +1104,22 @@ module Categories =
         static member inline (|||) (Kleisli f, Kleisli g) = Kleisli (FSharpPlus.Choice.either g f)
 
         static member inline (+++) (Kleisli (f:'T->'u), Kleisli (g:'v->'w)) =
-            Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) result Choice2Of2))) (Kleisli (g >=> ((<<) result Choice1Of2))) :Kleisli<Choice<'v,'T>,'z>
+            Fanin.InvokeOnInstance (Kleisli (f >=> ((<<) result Choice2Of2))) (Kleisli (g >=> ((<<) result Choice1Of2))) : Kleisli<Choice<'v,'T>,'z>
 
         static member inline Left (Kleisli f) =
             let inline (+++) a b = AcMerge.Invoke a b
-            AcMerge.Invoke (Kleisli f) (Arr.Invoke (Id.Invoke()))
+            AcMerge.Invoke (Kleisli f) (Arr.Invoke (Id.Invoke ()))
         static member inline Right (Kleisli f) =
             let inline (+++) a b = AcMerge.Invoke a b
-            (+++) (Arr.Invoke (Id.Invoke())) (Kleisli f)
+            (+++) (Arr.Invoke (Id.Invoke ())) (Kleisli f)
         static member get_App () = Kleisli (fun (Kleisli f, x) -> f x)
     
         // ArrowPlus
-        static member inline Empty (output :Kleisli<'T,'``Monad<'U>``>, mthd :Empty) = Kleisli (fun _ -> Empty.Invoke ())
+        static member inline Empty (output: Kleisli<'T,'``Monad<'U>``>, mthd: Empty) = Kleisli (fun _ -> Empty.Invoke ())
         static member inline ``<|>`` (Kleisli f, Kleisli g, mthd:Append) = Kleisli (fun x -> Append.Invoke (f x) (g x))
 
     let runKleisli (Kleisli f) = f
-    let runFunc (f : System.Func<_,_>) = f.Invoke
+    let runFunc (f: System.Func<_,_>) = f.Invoke
 
 
     type MapTuple = MapTuple with
@@ -1128,27 +1128,27 @@ module Categories =
     let inline mapTuple f t = (?<-) MapTuple f t
     
 
-    let testCompile() =
+    let testCompile () =
 
         // Arrows
 
-        let inline id'() = FSharpPlus.Operators.getCatId()
+        let inline id' () = FSharpPlus.Operators.getCatId ()
         let inline (<<<) f g = FSharpPlus.Operators.catComp f g
         let inline (>>>) f g = FSharpPlus.Operators.catComp g f
         let inline ( *** ) f g = FSharpPlus.Operators.( *** ) f g
         let inline ( &&& ) f g = FSharpPlus.Operators.fanout f g
         let inline (|||) f g = FSharpPlus.Operators.fanin f g
         let inline (+++) f g = FSharpPlus.Operators.(+++) f g
-        let inline app() = FSharpPlus.Operators.getApp()
-        let inline zeroArrow() = FSharpPlus.Operators.getEmpty()
-        let inline (<+>)   f g = FSharpPlus.Operators.(<|>) f g
+        let inline app () = FSharpPlus.Operators.getApp ()
+        let inline zeroArrow () = FSharpPlus.Operators.getEmpty ()
+        let inline (<+>) f g = FSharpPlus.Operators.(<|>) f g
 
         // Test Categories
-        let r5:List<_>  = (runKleisli (id'())) 5
+        let r5: List<_> = (runKleisli (id' ())) 5
         let k = Kleisli (fun y -> [y; y * 2 ; y * 3]) <<< Kleisli (fun x -> [x + 3; x * 2])
         let r8n16n24n10n20n30 = runKleisli k  5
 
-        let res1 = (System.Func<_,_>string >>> System.Func<_,_>int).Invoke '1'
+        let res1 = (System.Func<_,_> string >>> System.Func<_,_> int).Invoke '1'
 
 
 
@@ -1175,76 +1175,74 @@ module Categories =
         let resLeft5n10n15 = runKleisli (Kleisli (fun y -> [y; y * 2; y * 3]) +++ Kleisli (fun x -> [x + 3; x *  2] )) (Choice2Of2 5)
 
         // Test Arrow Apply
-        let res7      = app() ( (+) 3 , 4)
-        let res4n8n12 = runKleisli (app()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
+        let res7      = app () ( (+) 3 , 4)
+        let res4n8n12 = runKleisli (app ()) (Kleisli (fun y -> [y; y * 2 ; y * 3]) , 4)
 
         // Test Arrow Plus
-        let resSomeX = Kleisli(fun x -> Some x)
-        let (resSomeXPlusZero:option<_>) = runKleisli (resSomeX <+> zeroArrow()) 10
+        let resSomeX = Kleisli (fun x -> Some x)
+        let (resSomeXPlusZero: option<_>) = runKleisli (resSomeX <+> zeroArrow ()) 10
 
         ()
 
 module NumericLiteralG =
     open FSharpPlus.Control
-    let inline FromZero() = Zero.Invoke()
-    let inline FromOne () = One.Invoke()
-    let inline FromInt32  (i:int   ) = FromInt32.Invoke i
-    let inline FromInt64  (i:int64 ) = FromInt64.Invoke i
-    let inline FromString (i:string) = fromBigInt <| System.Numerics.BigInteger.Parse i
+    let inline FromZero () = Zero.Invoke ()
+    let inline FromOne  () = One.Invoke  ()
+    let inline FromInt32  (i: int   ) = FromInt32.Invoke i
+    let inline FromInt64  (i: int64 ) = FromInt64.Invoke i
+    let inline FromString (i: string) = fromBigInt <| System.Numerics.BigInteger.Parse i
 
 open MathNet.Numerics
 
-type TypeWithMax = TypeWithMax with static member MaxValue = TypeWithMax
-
 module Numerics = 
     [<Test>]
-    let genericMath() = 
-        let argUint        :uint32       =              42G
+    let genericMath () = 
+        let argUint        : uint32      =              42G
         let argInt         :    int      =         -424242G
         let argBigInt      : bigint      = -42424242424242G
         let argFloat       : float       = -(42G + (42G/100G))  // -42.42
         let argFloat32     : float32     = -(42G + (42G/100G))  // -42.4199982f
         let argDecimal     : decimal     = -(42G + (42G/100G))
-        let argComplex                   = Complex.mkRect(-42.42, 24.24)
-        let argComplex32                 = Complex32.mkRect(-42.42f, 24.24f)
+        let argComplex                   = Complex.mkRect (-42.42, 24.24)
+        let argComplex32                 = Complex32.mkRect (-42.42f, 24.24f)
         let argBigRational : BigRational = -42424242424242G / 42424G
 
-        let res01 = signum' argUint       
-        let res02 = signum' argInt        
-        let res03 = signum' argBigInt     
-        let res04 = signum' argFloat      
-        let res05 = signum' argFloat32    
-        let res06 = signum' argDecimal    
-        let res07 = signum' argComplex    
-        let res08 = signum' argComplex32  
+        let res01 = signum' argUint
+        let res02 = signum' argInt
+        let res03 = signum' argBigInt
+        let res04 = signum' argFloat
+        let res05 = signum' argFloat32
+        let res06 = signum' argDecimal
+        let res07 = signum' argComplex
+        let res08 = signum' argComplex32
         let res09 = signum' argBigRational
 
-        let res11 = abs' argUint       
-        let res12 = abs' argInt        
-        let res13 = abs' argBigInt     
-        let res14 = abs' argFloat      
-        let res15 = abs' argFloat32    
-        let res16 = abs' argDecimal    
-        let res17 = abs' argComplex    
-        let res18 = abs' argComplex32  
+        let res11 = abs' argUint
+        let res12 = abs' argInt
+        let res13 = abs' argBigInt
+        let res14 = abs' argFloat
+        let res15 = abs' argFloat32
+        let res16 = abs' argDecimal
+        let res17 = abs' argComplex
+        let res18 = abs' argComplex32
         let res19 = abs' argBigRational
 
-        let (res20: int * char * int * char * TypeWithMax * int * char * int * char * int * char) = maxValue
+        let (res20: int * char * int * char * int * char * int * char * int * char) = maxValue
 
-        Assert.AreEqual(res09 * res19, argBigRational)
+        Assert.AreEqual (res09 * res19, argBigRational)
 
 
 
 type Sum<'a> = Sum of 'a with
-    static member inline get_Zero() = Sum 0G
-    static member inline (+) (Sum (x:'n), Sum(y:'n)) = Sum (x + y)
+    static member inline get_Zero () = Sum 0G
+    static member inline (+) (Sum (x:'n), Sum (y:'n)) = Sum (x + y)
 
 
 module Splits = 
     [<Test>]
-    let splitArraysAndStrings() = 
+    let splitArraysAndStrings () = 
         let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
-        let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|]  |> Seq.map System.Text.Encoding.ASCII.GetString
+        let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|] |> Seq.map System.Text.Encoding.ASCII.GetString
 
         let b1 = "this.is.a.t...est"  |> split [|"." ; "..." |]
         let b2 = "this.is.a.t...est"B |> split [|"."B; "..."B|] |> Seq.map System.Text.Encoding.ASCII.GetString
@@ -1254,20 +1252,20 @@ module Splits =
         Assert.IsInstanceOf<Option<string []>> (Some a1)
 
     [<Test>]
-    let replaceArraysAndStrings() = 
+    let replaceArraysAndStrings () = 
         let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
-        let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B  |> System.Text.Encoding.ASCII.GetString
+        let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B |> System.Text.Encoding.ASCII.GetString
 
         let b1 = "this.is.a.t...est"  |> replace "."  "..."
         let b2 = "this.is.a.t...est"B |> replace "."B "..."B |> System.Text.Encoding.ASCII.GetString
 
-        Assert.IsTrue((a1 = a2))
-        Assert.IsTrue((b1 = b2))
+        Assert.IsTrue ((a1 = a2))
+        Assert.IsTrue ((b1 = b2))
 
     [<Test>]
-    let intercalateArraysAndStrings() = 
+    let intercalateArraysAndStrings () = 
         let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
-        let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B  |> System.Text.Encoding.ASCII.GetString
+        let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B |> System.Text.Encoding.ASCII.GetString
 
         let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
 
@@ -1285,16 +1283,16 @@ module Splits =
 
 module Parsing = 
     [<Test>]
-    let parseDateTime() =
+    let parseDateTime () =
 #if MONO
         let v1 : DateTime = parse "2011-03-04T15:42:19+03:00"
         Assert.IsTrue((v1 = DateTime(2011,3,4,12,42,19)))
 #else
-        Assert.Ignore("Depends on how it's executed...")
+        Assert.Ignore ("Depends on how it's executed...")
 #endif
 
     [<Test>]
-    let parse() = 
+    let parse () = 
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
 
         Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))
@@ -1313,10 +1311,10 @@ module Parsing =
         let r122 = parse "122" : Text.StringBuilder
         
         let (r66: float option) = tryParse "66.0"
-        Assert.IsTrue((r66 = Some 66.0))
+        Assert.IsTrue ((r66 = Some 66.0))
 
         let (r123: WrappedListA<int> option) = tryParse "[1;2;3]"
-        Assert.IsTrue((r123 = Some (WrappedListA [1; 2; 3])))
+        Assert.IsTrue ((r123 = Some (WrappedListA [1; 2; 3])))
 
 
 module Conversions =
@@ -1354,12 +1352,12 @@ module BitConverter =
 module Sequences =
     open FSharpPlus.Builders
     let test =
-        let stack = new Collections.Generic.Stack<_>([1;2;3])
+        let stack = new Collections.Generic.Stack<_> ([1;2;3])
 
         let twoSeqs = plus (seq [1;2;3]) (seq [4;5;6])
-        let sameSeq = plus (getZero()  ) (seq [4;5;6])
+        let sameSeq = plus (getZero () ) (seq [4;5;6])
 
-        let seqFromLst:_ seq = ofList [1;2;3;4]
+        let seqFromLst: _ seq = ofList [1;2;3;4]
         let seqFromLst' = toSeq [1;2;3;4]
         let seqFromOpt  = toSeq (Some 1)
 
@@ -1392,7 +1390,7 @@ module Sequences =
         let lst'  = extend head lst
 
         // Test MonadPlus
-        let getLine    = async { return System.Console.ReadLine() }
+        let getLine    = async { return System.Console.ReadLine () }
         let putStrLn x = async { printfn "%s" x}
 
         let inline sequence ms =
@@ -1423,7 +1421,7 @@ module Sequences =
 
 
 module ShouldNotCompile =
-    let stack = new Collections.Generic.Stack<_>([1;2;3])
+    let stack = new Collections.Generic.Stack<_> ([1;2;3])
 
     // This should not compile. TODO find out how to test that it keeps failing
     (*
@@ -1443,7 +1441,7 @@ module ShouldNotCompile =
     let r123 = toList stack
 
     // This should not compile (but it does)
-    let resNone'' = sequence (new Collections.Generic.Stack<_>([Some 3;None  ;Some 1]))
+    let resNone'' = sequence (new Collections.Generic.Stack<_>([Some 3; None; Some 1]))
 
     // this compiles but it requires a type annotation, but
     // thanks to https://github.com/Microsoft/visualfsharp/pull/4170
@@ -1503,14 +1501,14 @@ module ApplicativeInference =
 module Ratio =
     open FSharpPlus.Control
     // Strict version of math operators
-    let inline internal ( +.) (a:'Num) (b:'Num) :'Num = a + b
-    let inline internal ( -.) (a:'Num) (b:'Num) :'Num = a - b
-    let inline internal ( *.) (a:'Num) (b:'Num) :'Num = a * b
+    let inline internal ( +.) (a: 'Num) (b: 'Num) : 'Num = a + b
+    let inline internal ( -.) (a: 'Num) (b: 'Num) : 'Num = a - b
+    let inline internal ( *.) (a: 'Num) (b: 'Num) : 'Num = a * b
 
     let inline whenIntegral a = let _ = if false then toBigInt a else 0I in ()
 
-    let inline internal gcd x y :'Integral =
-        let zero = getZero()
+    let inline internal gcd x y : 'Integral =
+        let zero = getZero ()
         let rec loop a b =
             if b = zero then a
             else loop b (a % b)
@@ -1519,35 +1517,35 @@ module Ratio =
 
     type Ratio<'Integral> =
         struct
-            val Numerator   :'Integral
-            val Denominator :'Integral
+            val Numerator   : 'Integral
+            val Denominator : 'Integral
             new (numerator: 'Integral, denominator: 'Integral) = {Numerator = numerator; Denominator = denominator}
         end
-        override this.ToString() = this.Numerator.ToString() + " % " + this.Denominator.ToString()
+        override this.ToString () = this.Numerator.ToString () + " % " + this.Denominator.ToString ()
 
-    let inline internal ratio (a:'Integral) (b:'Integral) :Ratio<'Integral> =
+    let inline internal ratio (a: 'Integral) (b: 'Integral) : Ratio<'Integral> =
         whenIntegral a
-        let zero = getZero()
+        let zero = getZero ()
         if b = zero then failwith "Ratio.%: zero denominator"
         let (a, b) = if b < zero then (-a, -b) else (a, b)
         let gcd = gcd a b
         Ratio (a / gcd, b / gcd)
 
-    let inline internal Ratio (x,y) = x </ratio/> y
+    let inline internal Ratio (x, y) = x </ratio/> y
 
-    let inline internal numerator   (r:Ratio<_>) = r.Numerator
-    let inline internal denominator (r:Ratio<_>) = r.Denominator
+    let inline internal numerator   (r: Ratio<_>) = r.Numerator
+    let inline internal denominator (r: Ratio<_>) = r.Denominator
 
     type Ratio<'Integral> with
-        static member inline (/) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator) </ratio/> (a.Denominator *. b.Numerator)                                              
-        static member inline (+) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator +. b.Numerator *. a.Denominator) </ratio/> (a.Denominator *. b.Denominator)
-        static member inline (-) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Denominator -. b.Numerator *. a.Denominator) </ratio/> (a.Denominator *. b.Denominator)
-        static member inline (*) (a:Ratio<_>, b:Ratio<_>) = (a.Numerator *. b.Numerator) </ratio/> (a.Denominator *. b.Denominator)
+        static member inline (/) (a: Ratio<_>, b: Ratio<_>) = (a.Numerator *. b.Denominator) </ratio/> (a.Denominator *. b.Numerator)                                              
+        static member inline (+) (a: Ratio<_>, b: Ratio<_>) = (a.Numerator *. b.Denominator +. b.Numerator *. a.Denominator) </ratio/> (a.Denominator *. b.Denominator)
+        static member inline (-) (a: Ratio<_>, b: Ratio<_>) = (a.Numerator *. b.Denominator -. b.Numerator *. a.Denominator) </ratio/> (a.Denominator *. b.Denominator)
+        static member inline (*) (a: Ratio<_>, b: Ratio<_>) = (a.Numerator *. b.Numerator) </ratio/> (a.Denominator *. b.Denominator)
 
-        static member inline Abs        (r:Ratio<_>) = (Abs.Invoke    (numerator r)) </ratio/> (denominator r)
-        static member inline Signum     (r:Ratio<_>) = (Signum.Invoke (numerator r)) </ratio/> (One.Invoke())
-        static member inline FromBigInt (x:bigint) = FromBigInt.Invoke x </ratio/> (One.Invoke())
-        static member inline (~-)       (r:Ratio<_>) = -(numerator r) </ratio/> (denominator r)
+        static member inline Abs        (r: Ratio<_>) = (Abs.Invoke    (numerator r)) </ratio/> (denominator r)
+        static member inline Signum     (r: Ratio<_>) = (Signum.Invoke (numerator r)) </ratio/> (One.Invoke ())
+        static member inline FromBigInt (x: bigint) = FromBigInt.Invoke x </ratio/> (One.Invoke ())
+        static member inline (~-)       (r: Ratio<_>) = -(numerator r) </ratio/> (denominator r)
 
 
     let (|Ratio|) (ratio:Ratio<_>) = (ratio.Numerator, ratio.Denominator)
@@ -1568,11 +1566,11 @@ module testCompileOldCode =
         let (a,b) = if b < 0G then (-a,-b) else (a,b)
         (if a < 0G then (a - b + 1G) else a) / b
 
-    let inline quot (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a / b
-    let inline rem  (a:'Integral) (b:'Integral) :'Integral = whenIntegral a; a % b
-    let inline quotRem a b :'Integral * 'Integral = whenIntegral a; FSharpPlus.Operators.divRem a b
-    let inline mod'   a b :'Integral = whenIntegral a; ((a % b) + b) % b  
-    let inline divMod D d :'Integral * 'Integral =
+    let inline quot (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; a / b
+    let inline rem  (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; a % b
+    let inline quotRem a b : 'Integral * 'Integral = whenIntegral a; FSharpPlus.Operators.divRem a b
+    let inline mod'   a b : 'Integral = whenIntegral a; ((a % b) + b) % b  
+    let inline divMod D d : 'Integral * 'Integral =
         let q, r = quotRem D d
         if (r < 0G) then
             if (d > 0G) then (q - 1G, r + d)
@@ -1587,7 +1585,7 @@ module testCompileOldCode =
     let inline recip x :'Fractional = 1G / x
 
     // Exp functions
-    let inline ( **^ ) (x:'Num) (n:'Integral)  = 
+    let inline ( **^ ) (x: 'Num) (n: 'Integral)  = 
         whenIntegral n
         let rec f a b n = if n == 0G then a else f (b * a) b (n - 1G)
         if (n < 0G) then failwith "Negative exponent" else f 1G x n

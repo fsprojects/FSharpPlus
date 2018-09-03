@@ -12,10 +12,10 @@ module DList=
     open FSharpPlus.Data.DList
     open Helpers
     // tests from FSharpx.Collections DList
-    let shouldEqual (x:'t) (y:'t) = Assert.AreEqual (x, y)
-    let shouldThrow (exnT:Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate( x)) |> ignore
-    let fsCheck s x= Check.Quick( s , x )
-    let toString x = x.ToString()
+    let shouldEqual (x: 't) (y: 't) = Assert.AreEqual (x, y)
+    let shouldThrow (exnT: Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate (x)) |> ignore
+    let fsCheck s x = Check.Quick (s, x)
+    let toString x = x.ToString ()
 
     module Gen = // FSharpx.Collections extension of Gen
         let listInt n  = Gen.listOfLength n Arb.generate<int>
@@ -25,8 +25,8 @@ module DList=
         let length2thru12 = Gen.choose (2, 12)
     let emptyDList = DList.empty
 
-    let enDListThruList l q  =
-        let rec loop (q' : 'a DList) (l' : 'a list) = 
+    let enDListThruList l q =
+        let rec loop (q': 'a DList) (l': 'a list) = 
             match l' with
             | hd :: [] -> q'.Add hd
             | hd :: tl -> loop (q'.Add hd) tl
@@ -90,35 +90,35 @@ module DList=
         intGens 2 // this will accept 11 out of 12
 
     [<Test>]
-    let ``allow to tail to work``() =
+    let ``allow to tail to work`` () =
         emptyDList |> add 1 |> tail |> isEmpty |> shouldEqual true
 
     [<Test>]
-    let ``add to work``() =
+    let ``add to work`` () =
         emptyDList |> add 1 |> add 2 |> isEmpty |> shouldEqual false
 
     [<Test>]
-    let ``cons to work``() =
+    let ``cons to work`` () =
         emptyDList |> cons 1 |> cons 2 |> length |> shouldEqual 2
 
     [<Test>]
-    let ``allow to cons and add to work``() =
+    let ``allow to cons and add to work`` () =
         emptyDList |> cons 1 |> cons 2 |> add 3 |> length |> shouldEqual 3
 
     [<Test>]
-    let ``empty DList should be empty``() =
+    let ``empty DList should be empty`` () =
         emptyDList |> isEmpty |> shouldEqual true
 
     [<Test>]
-    let ``fail if there is no head in the DList``() =
+    let ``fail if there is no head in the DList`` () =
         (fun () -> emptyDList |> head |> ignore) |> shouldThrow typeof<System.Exception>
 
     [<Test>]
-    let ``fail if there is no tail in the DList``() =
+    let ``fail if there is no tail in the DList`` () =
         (fun () -> emptyDList |> tail |> ignore) |> shouldThrow typeof<System.Exception>
 
     [<Test>]
-    let ``fold matches build list rev``() =
+    let ``fold matches build list rev`` () =
 
         fsCheck "DList" (Prop.forAll (Arb.fromGen DListIntGen) 
             (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
@@ -130,7 +130,7 @@ module DList=
              (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
 
     [<Test>]
-    let ``foldBack matches build list``() =
+    let ``foldBack matches build list`` () =
 
         fsCheck "DList" (Prop.forAll (Arb.fromGen DListIntGen) 
             (fun ((q :DList<int>), (l : int list)) -> foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
@@ -142,65 +142,65 @@ module DList=
              (fun ((q :DList<int>), (l : int list)) -> foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
 
     [<Test>]
-    let ``foldBack matches build list 2``() =
+    let ``foldBack matches build list 2`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"]
         let lq = foldBack (fun (elem : string) (l' : string list) -> elem::l') q []
         lq |> shouldEqual (DList.toList q)
 
     [<Test>]
-    let ``fold matches build list rev 2``() =
+    let ``fold matches build list rev 2`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"]
         let lq = fold (fun (l' : string list) (elem : string) -> elem::l') [] q
         lq |> shouldEqual (List.rev (DList.toList q))
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
-    let ``get head from DList``(x : obj) =
+    let ``get head from DList`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (head q) = (List.item 0 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
-    let ``get head from DList safely``(x : obj) =
+    let ``get head from DList safely`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (tryHead q).Value = (List.item 0 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart2")>]
-    let ``get tail from DList``(x : obj) =
+    let ``get tail from DList`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun ((q : DList<int>), l) -> q.Tail.Head = (List.item 1 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart2")>]
-    let ``get tail from DList safely``(x : obj) =
+    let ``get tail from DList safely`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> q.TryTail.Value.Head = (List.item 1 l) ))
 
     [<Test>]
-    let ``give None if there is no head in the DList``() =
+    let ``give None if there is no head in the DList`` () =
         emptyDList |> tryHead |> shouldEqual None
 
     [<Test>]
-    let ``give None if there is no tail in the DList``() =
+    let ``give None if there is no tail in the DList`` () =
         emptyDList |> tryTail |> shouldEqual None
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
-    let ``int DList builds and serializes``(x : obj) =
+    let ``int DList builds and serializes`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> q |> Seq.toList = l ))
 
     [<Test>]
-    let ``obj DList builds and serializes``() =
+    let ``obj DList builds and serializes`` () =
         fsCheck "obj DList" (Prop.forAll (Arb.fromGen DListObjGen) (fun (q : DList<obj>, l) -> q |> Seq.toList = l ))
 
     [<Test>]
-    let ``string DList builds and serializes``() =
+    let ``string DList builds and serializes`` () =
         fsCheck "string DList" (Prop.forAll (Arb.fromGen DListStringGen) (fun (q : DList<string>, l) -> q |> Seq.toList = l ))
 
     [<Test>]
-    let ``TryUncons wind-down to None``() =
+    let ``TryUncons wind-down to None`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
 
         let rec loop (q' : DList<string>) = 
@@ -213,12 +213,12 @@ module DList=
         true |> shouldEqual true
 
     [<Test>]
-    let ``Uncons wind-down to None``() =
+    let ``Uncons wind-down to None`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
 
         let rec loop (q' : DList<string>) = 
             match (q'.Uncons) with
-            | hd, tl when tl.IsEmpty ->  ()
+            | hd, tl when tl.IsEmpty -> ()
             | hd, tl ->  loop tl
 
         loop q
@@ -226,35 +226,35 @@ module DList=
         true |> shouldEqual true
 
     [<Test>]
-    let ``test length should return 6``() =
+    let ``test length should return 6`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
         length q |> shouldEqual 6
 
     [<Test>]
-    let ``singleton length 1``() =
+    let ``singleton length 1`` () =
         singleton 1 |> length |> shouldEqual 1
 
     [<Test>]
-    let ``empty length 0``() =
+    let ``empty length 0`` () =
         empty |> length |> shouldEqual 0
 
     [<Test>]
-    let ``test ofSeq should create a DList from a list``() =
+    let ``test ofSeq should create a DList from a list`` () =
         let test = [ for i in 0..4 -> i ]
         let x = DList.ofSeq test 
         x :> seq<_> |> shouldEqual (List.toSeq test) 
 
     [<Test>]
-    let ``test ofSeq should create a DList from an array``() =
+    let ``test ofSeq should create a DList from an array`` () =
         let test = [| for i in 0..4 -> i |]
         DList.ofSeq test :> seq<_> |> shouldEqual (Array.toSeq test) 
 
     [<Test>]
-    let ``test singleton should return a Unit containing the solo value``() =
+    let ``test singleton should return a Unit containing the solo value`` () =
         singleton 1 |> head |> shouldEqual 1
 
     [<Test>]
-    let ``test append should join two DLists together``() =
+    let ``test append should join two DLists together`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"]
         let q2 = ofSeq ["1";"2";"3";"4";"5";"6"]
         let q3 =  append q q2
@@ -262,28 +262,28 @@ module DList=
         q3 |> head |> shouldEqual "f"
 
     [<Test>]
-    let ``test toSeq``() =
+    let ``test toSeq`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
         List.ofSeq (DList.toSeq q) |> shouldEqual ["f";"e";"d";"c";"b";"a"]
 
     [<Test>]
-    let ``test toList``() =
+    let ``test toList`` () =
         let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
         DList.toList q |> shouldEqual ["f";"e";"d";"c";"b";"a"]
 
     type DListGen =
-        static member DList() =
-            let rec dListGen() = 
+        static member DList () =
+            let rec dListGen () = 
                 gen {
                     let! xs = Arb.generate
                     return DList.ofSeq (Seq.ofList xs)
                 }
-            Arb.fromGen (dListGen())
+            Arb.fromGen (dListGen ())
 
-    let registerGen = lazy (Arb.register<DListGen>() |> ignore)
+    let registerGen = lazy (Arb.register<DListGen> () |> ignore)
 
     [<Test>]
-    let ``structural equality``() =
+    let ``structural equality`` () =
 
         let l1 = ofSeq [1..100]
         let l2 = ofSeq [1..100]
@@ -295,7 +295,7 @@ module DList=
         l1 = l3 |> shouldEqual false
 
     [<Test>]
-    let ``get [i]``() =
+    let ``get [i]`` () =
         let l1 = [1..100]
                  |> List.map toString
                  |>  DList.ofSeq
@@ -303,9 +303,9 @@ module DList=
             let v= toString (i1+1)
             shouldEqual v l1.[i1]
 
-    let assertThrowsIndexOutOfRange fn = Assert.Throws<System.IndexOutOfRangeException> (fun ()-> fn()|> ignore) |> ignore
+    let assertThrowsIndexOutOfRange fn = Assert.Throws<System.IndexOutOfRangeException> (fun () -> fn () |> ignore) |> ignore
     [<Test>]
-    let ``get [i] outside of range``() =
+    let ``get [i] outside of range`` () =
         let l1 = [1..100]
                  |> List.map toString
                  |>  DList.ofSeq
