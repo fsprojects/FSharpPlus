@@ -309,6 +309,8 @@ module Map =
             | Some vy -> yield (k, (vx, vy))
             | None    -> () }
 
+    let unzip (source: Map<'Key, 'T1 * 'T2>) = mapValues fst source, mapValues snd source
+
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: Map<'Key, 'Value>) (source2: Map<'Key, 'Value>) =
         Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> combiner v v' | None -> v') m) source1 source2
@@ -355,6 +357,14 @@ module Dict =
             | Some vy -> dct.Add (k, (vx, vy))
             | None    -> ()
         dct :> IDictionary<'Key, 'T1 * 'T2>
+
+    let unzip (source: IDictionary<'Key, 'T1 * 'T2>) =
+        let dct1 = Dictionary<'Key, 'T1> ()
+        let dct2 = Dictionary<'Key, 'T2> ()
+        for KeyValue(k, (vx, vy)) in source do
+            dct1.Add (k, vx)
+            dct2.Add (k, vy)
+        dct1 :> IDictionary<'Key, 'T1>, dct2 :> IDictionary<'Key, 'T2>
 
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IDictionary<'Key, 'Value>) (source2: IDictionary<'Key, 'Value>) =
@@ -409,6 +419,14 @@ module IReadOnlyDictionary =
             | Some vy -> dct.Add (k, (vx, vy))
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'T1 * 'T2>
+
+    let unzip (source: IReadOnlyDictionary<'Key, 'T1 * 'T2>) =
+        let dct1 = Dictionary<'Key, 'T1> ()
+        let dct2 = Dictionary<'Key, 'T2> ()
+        for KeyValue(k, (vx, vy)) in source do
+            dct1.Add (k, vx)
+            dct2.Add (k, vy)
+        dct1 :> IReadOnlyDictionary<'Key, 'T1>, dct2 :> IReadOnlyDictionary<'Key, 'T2>
 
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IReadOnlyDictionary<'Key, 'Value>) (source2: IReadOnlyDictionary<'Key, 'Value>) =

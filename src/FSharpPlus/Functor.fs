@@ -392,6 +392,9 @@ type Unzip =
     static member        Unzip (source: list<'T * 'U>                     , [<Optional>]_output: list<'T> * list<'U>                                    , [<Optional>]_mthd: Unzip   ) = List.unzip   source
     static member        Unzip (source: ('T * 'U) []                      , [<Optional>]_output: 'T [] * 'U []                                          , [<Optional>]_mthd: Unzip   ) = Array.unzip  source
     static member        Unzip (source: option<'T * 'U>                   , [<Optional>]_output: option<'T> * option<'U>                                , [<Optional>]_mthd: Unzip   ) = Option.unzip source
+    static member        Unzip (source: Map<'Key, 'T * 'U>                , [<Optional>]_output: Map<_, 'T> * Map<_, 'U>                                , [<Optional>]_mthd: Unzip   ) = Map.unzip    source
+    static member        Unzip (source: IDictionary<'Key, 'T * 'U>        , [<Optional>]_output: IDictionary<_, 'T> * IDictionary<_, 'U>                , [<Optional>]_mthd: Unzip   ) = Dict.unzip   source
+    static member        Unzip (source: IReadOnlyDictionary<'Key, 'T * 'U>, [<Optional>]_output: IReadOnlyDictionary<_, 'T> * IReadOnlyDictionary<_, 'U>, [<Optional>]_mthd: Unzip   ) = IReadOnlyDictionary.unzip source
 
     static member inline Invoke (source: '``Functor<'T1 * 'T2>``) =
         let inline call_3 (a: ^a, b: ^b, d: ^d) = ((^a or ^b or ^d) : (static member Unzip : _*_*_ -> _) b, d, a)
