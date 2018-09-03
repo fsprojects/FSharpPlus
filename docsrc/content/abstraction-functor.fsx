@@ -61,6 +61,7 @@ From .Net/F#
  -  ``Expr<'T>``
  -  ``Dictionary<'Key,'T>``
  -  ``IDictionary<'Key,'T>``
+ -  ``IReadOnlyDictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
  
 From F#+
