@@ -528,6 +528,11 @@ module Collections =
         let l = [ (2,1); (1,1); (3,1); (1,2); (4,1) ]
         let expected = [ (1,1); (1,2) ]
         Assert.AreEqual (expected, minimaBy fst l)
+    [<Test>]
+    let collectionMaximaBy () =
+        let l = [ (2,1); (4,1); (1,1); (3,1); (4,2) ]
+        let expected = [ (4,1); (4,2) ]
+        Assert.AreEqual (expected, maximaBy fst l)
 
 module Foldable =
 
