@@ -453,7 +453,7 @@ module Operators =
         let sorted = SortByDescending.Invoke projection source
         match TryHead.Invoke sorted with
         | None -> sorted
-        | Some max -> TakeWhile.Invoke ((compare <| projection max) >> (=) 0 << projection) sorted |> Rev.Invoke
+        | Some max -> TakeWhile.Invoke ((compare <| projection max) >> (=) 0 << projection) sorted
 
     let inline choose (chooser: 'T->'U option)   (source: '``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source
 
