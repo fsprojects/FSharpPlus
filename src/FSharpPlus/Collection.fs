@@ -117,6 +117,18 @@ type Take =
         let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
         call (Unchecked.defaultof<Take>, source, n)
 
+type TakeWhile =
+    inherit Default1
+    static member inline TakeWhile (x: '``Foldable<'T>``, p, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.takeWhile p |> OfSeq.Invoke : '``Foldable<'T>``
+    static member        TakeWhile (x: 'a []            , p, [<Optional>]_impl: TakeWhile) = Array.takeWhile p x
+    static member        TakeWhile (x: 'a ResizeArray   , p, [<Optional>]_impl: TakeWhile) = ResizeArray<'a> (Seq.takeWhile p x)
+    static member        TakeWhile (x: list<'a>         , p, [<Optional>]_impl: TakeWhile) = List.takeWhile p x
+    static member        TakeWhile (x: 'a Id            , _, [<Optional>]_impl: TakeWhile) = x
+
+    static member inline Invoke (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TakeWhile : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<TakeWhile>, source, predicate)
 
 type Drop =
     inherit Default1

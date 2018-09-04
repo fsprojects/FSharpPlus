@@ -523,6 +523,11 @@ module Collections =
         Assert.AreEqual (2, nth 1 l)
         let rl = ReadOnlyListOnlyIndex [1..10]
         Assert.AreEqual (2, nth 1 rl)
+    [<Test>]
+    let collectionMinimaBy () =
+        let l = [ (2,1); (1,1); (3;1); (1,2); (4,1) ]
+        let expected = [ (1,1); (1,2) ]
+        Assert.AreEqual (expected, minimaBy fst l)
 
 module Foldable =
 
