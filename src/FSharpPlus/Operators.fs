@@ -411,6 +411,27 @@ module Operators =
     /// <returns>The result collection.</returns>
     let inline chunkBy (projection: 'T->'Key)    (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = ChunkBy.Invoke projection source
 
+    /// <summary>Returns a collection that contains all elements of the original collection while the
+    /// given predicate returns True, and then returns no further elements.</summary>
+    ///
+    /// <param name="predicate">A function that evaluates to false when no more items should be returned.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    ///
+    /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
+    let inline takeWhile (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = TakeWhile.Invoke predicate source
+
+    /// <summary>Bypasses elements in a collection while the given predicate returns True, and then returns
+    /// the remaining elements of the collection.</summary>
+    ///
+    /// <param name="predicate">A function that evaluates to false when no more items should be skipped.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    ///
+    /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
+    let inline skipWhile (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = SkipWhile.Invoke predicate source
 
     let inline choose (chooser: 'T->'U option)   (source: '``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source
 
@@ -426,6 +447,7 @@ module Operators =
 
     let inline sort                          (source: '``Collection<'T>``) : '``Collection<'T>`` = Sort.Invoke source 
     let inline sortBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
+    let inline sortByDescending (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortByDescending.Invoke projection source
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection)  = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
     let inline toSeq (source: '``Collection<'T>``) = ToSeq.Invoke source  : seq<'T>
 

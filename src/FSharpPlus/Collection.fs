@@ -117,6 +117,31 @@ type Take =
         let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
         call (Unchecked.defaultof<Take>, source, n)
 
+type TakeWhile =
+    inherit Default1
+    static member inline TakeWhile (x: '``Foldable<'T>``, p, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.takeWhile p |> OfSeq.Invoke : '``Foldable<'T>``
+    static member        TakeWhile (x: 'a []            , p, [<Optional>]_impl: TakeWhile) = Array.takeWhile p x
+    static member        TakeWhile (x: 'a ResizeArray   , p, [<Optional>]_impl: TakeWhile) = ResizeArray<'a> (Seq.takeWhile p x)
+    static member        TakeWhile (x: list<'a>         , p, [<Optional>]_impl: TakeWhile) = List.takeWhile p x
+    static member        TakeWhile (x: 'a Id            , _, [<Optional>]_impl: TakeWhile) = x
+
+    static member inline Invoke (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TakeWhile : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<TakeWhile>, source, predicate)
+
+type SkipWhile =
+    inherit Default1
+    static member inline SkipWhile (x: '``Foldable<'T>``, p, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.skipWhile p |> OfSeq.Invoke : '``Foldable<'T>``
+    static member        SkipWhile (x: 'a []            , p, [<Optional>]_impl: SkipWhile) = Array.skipWhile p x
+    static member        SkipWhile (x: 'a ResizeArray   , p, [<Optional>]_impl: SkipWhile) = ResizeArray<'a> (Seq.skipWhile p x)
+    static member        SkipWhile (x: list<'a>         , p, [<Optional>]_impl: SkipWhile) = List.skipWhile p x
+    static member        SkipWhile (x: 'a Id            , _, [<Optional>]_impl: SkipWhile) = x
+
+    static member inline Invoke (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member SkipWhile : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<SkipWhile>, source, predicate)
 
 type Drop =
     inherit Default1
@@ -297,6 +322,21 @@ type SortBy =
     static member inline SortBy (x: ^``Collection<'T>``, f        , [<Optional>]_impl: Default1) = (^``Collection<'T>`` : (static member SortBy : _*_->_) f, x) : '``Collection<'T>``
     static member inline SortBy (_: ^t when ^t: null and ^t: struct, _: 'T->'U, _mthd: Default1) = id
 
+type SortByDescending =
+    inherit Default1
+
+    static member        SortByDescending (x: list<'a>, f, [<Optional>]_impl: SortBy) = List.sortByDescending  f x
+    static member        SortByDescending (x: 'a []   , f, [<Optional>]_impl: SortBy) = Array.sortByDescending f x
+
+    static member inline Invoke (projection: 'T->'Key) (source: '``C<'T>``) : '``C<'T>`` =
+        let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member SortByDescending : _*_*_ -> _) b, f, a)
+        let inline call (a: 'a, b: 'b, f) = call_2 (a, b, f)
+        call (Unchecked.defaultof<SortByDescending>, source, projection)
+    static member inline InvokeOnInstance (projection: 'T->'Key) (source: '``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member SortByDescending : _*_->_) projection, source) : ^``C<'T>``
+
+    static member inline SortByDescending (x: '``Collection<'T>``, f        , [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.sortByDescending f |> OfSeq.Invoke            : '``Collection<'T>``
+    static member inline SortByDescending (x: ^``Collection<'T>``, f        , [<Optional>]_impl: Default1) = (^``Collection<'T>`` : (static member SortByDescending : _*_->_) f, x) : '``Collection<'T>``
+    static member inline SortByDescending (_: ^t when ^t: null and ^t: struct, _: 'T->'U, _mthd: Default1) = id
 
 type Split =
     inherit Default1
