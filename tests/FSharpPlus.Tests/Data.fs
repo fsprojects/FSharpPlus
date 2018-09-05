@@ -15,7 +15,6 @@ module DList=
     let shouldEqual (x: 't) (y: 't) = Assert.AreEqual (x, y)
     let shouldThrow (exnT: Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate (x)) |> ignore
     let fsCheck s x = Check.Quick (s, x)
-    let toString x = x.ToString ()
 
     module Gen = // FSharpx.Collections extension of Gen
         let listInt n  = Gen.listOfLength n Arb.generate<int>
@@ -297,23 +296,25 @@ module DList=
     [<Test>]
     let ``get [i]`` () =
         let l1 = [1..100]
-                 |> List.map toString
+                 |> List.map string
                  |>  DList.ofSeq
         for i1 in [0..99] do
-            let v= toString (i1+1)
+            let v= string (i1+1)
             shouldEqual v l1.[i1]
 
     let assertThrowsIndexOutOfRange fn = Assert.Throws<System.IndexOutOfRangeException> (fun () -> fn () |> ignore) |> ignore
     [<Test>]
     let ``get [i] outside of range`` () =
         let l1 = [1..100]
-                 |> List.map toString
+                 |> List.map string
                  |>  DList.ofSeq
         assertThrowsIndexOutOfRange (fun _ -> l1.[100])
         assertThrowsIndexOutOfRange (fun _ -> l1.[-1])
 
 
 module List=
+    let shouldEqual (x: 't) (y: 't) = Assert.AreEqual (x, y)
+
     [<Test>]
     let minimaBy () =
         let l = [ (2,1); (1,1); (3,1); (1,2); (4,1) ]
