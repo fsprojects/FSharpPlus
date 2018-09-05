@@ -311,3 +311,16 @@ module DList=
                  |>  DList.ofSeq
         assertThrowsIndexOutOfRange (fun _ -> l1.[100])
         assertThrowsIndexOutOfRange (fun _ -> l1.[-1])
+
+
+module List=
+    [<Test>]
+    let minimaBy () =
+        let l = [ (2,1); (1,1); (3,1); (1,2); (4,1) ]
+        let expected = [ (1,1); (1,2) ]
+        shouldEqual expected (List.minimaBy fst l)
+    [<Test>]
+    let maximaBy () =
+        let l = [ (2,1); (4,1); (1,1); (3,1); (4,2) ]
+        let expected = [ (4,1); (4,2) ]
+        shouldEqual expected (List.maximaBy fst l)

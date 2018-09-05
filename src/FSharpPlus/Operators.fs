@@ -433,28 +433,6 @@ module Operators =
     /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
     let inline skipWhile (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = SkipWhile.Invoke predicate source
 
-    /// <summary>This function finds the minima of a collection of values, preserving the sequence of retained values from the supplied collection.</summary>
-    /// <param name="projection">A function that transforms an element of the collection into a comparable key.</param>
-    /// <param name="source">The input collection.</param>
-    ///
-    /// <returns>The result collection.</returns>
-    let inline minimaBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>``=
-        let sorted = SortBy.Invoke projection source
-        match TryHead.Invoke sorted with
-        | None -> sorted
-        | Some min -> TakeWhile.Invoke ((compare <| projection min) >> (=) 0 << projection) sorted
-
-    /// <summary>This function finds the maxima of a collection of values, preserving the sequence of retained values from the supplied collection.</summary>
-    /// <param name="projection">A function that transforms an element of the collection into a comparable key.</param>
-    /// <param name="source">The input collection.</param>
-    ///
-    /// <returns>The result collection.</returns>
-    let inline maximaBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>``=
-        let sorted = SortByDescending.Invoke projection source
-        match TryHead.Invoke sorted with
-        | None -> sorted
-        | Some max -> TakeWhile.Invoke ((compare <| projection max) >> (=) 0 << projection) sorted
-
     let inline choose (chooser: 'T->'U option)   (source: '``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source
 
     let inline distinct                          (source: '``Collection<'T>``) : '``Collection<'T>`` = Distinct.Invoke              source
