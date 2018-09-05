@@ -27,26 +27,6 @@ module List =
         loopM xs
 
     let inline replicateM count (initial: '``Applicative<'T>``)  = sequence (List.replicate count initial)
-    /// <summary>This function finds the maxima of a list of values, preserving the sequence of retained values from the supplied list.</summary>
-    /// <param name="projection">A function that transforms an element of the list into a comparable key.</param>
-    /// <param name="source">The input list.</param>
-    ///
-    /// <returns>The resulting maxima list.</returns>
-    let maximaBy projection source=
-        let sorted = List.sortByDescending projection source
-        match sorted with
-        | []|[_] -> sorted
-        | max::_ -> List.takeWhile ((compare <| projection max) >> (=) 0 << projection) sorted
-    /// <summary>This function finds the minima of a list of values, preserving the sequence of retained values from the supplied list.</summary>
-    /// <param name="projection">A function that transforms an element of the list into a comparable key.</param>
-    /// <param name="source">The input list.</param>
-    ///
-    /// <returns>The resulting minima list.</returns>
-    let minimaBy projection source=
-        let sorted = List.sortBy projection source
-        match sorted with
-        | []|[_] -> sorted
-        | min::_ -> List.takeWhile ((compare <| projection min) >> (=) 0 << projection) sorted
 
 open FSharpPlus.Control
 
