@@ -210,23 +210,119 @@ module Operators =
 
     // Foldable
 
+    /// <summary>Applies a function to each element of the foldable, starting from the end, threading an accumulator argument
+    /// through the computation. If the input function is <c>f</c> and the elements are <c>i0...iN</c> then 
+    /// computes <c>f i0 (...(f iN s))</c>.</summary>
+    /// <param name="folder">The function to update the state given the input elements.</param>
+    /// <param name="foldable">The input foldable.</param>
+    /// <param name="state">The initial state.</param>
+    /// <returns>The state object after the folding function is applied to each element of the foldable.</returns>
     let inline foldBack (folder: 'T->'State->'State) (foldable: '``Foldable<'T>``) (state: 'State) : 'State = FoldBack.Invoke folder state foldable
+
+    /// <summary>Applies a function to each element of the foldable, threading an accumulator argument
+    /// through the computation. Take the second argument, and apply the function to it
+    /// and the first element of the foldable. Then feed this result into the function along
+    /// with the second element and so on. Return the final result.
+    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> then 
+    /// computes <c>f (... (f s i0) i1 ...) iN</c>.</summary>
+    /// <param name="folder">The function to update the state given the input elements.</param>
+    /// <param name="state">The initial state.</param>
+    /// <param name="foldable">The input foldable.</param>
+    /// <returns>The final state value.</returns>
     let inline fold     (folder: 'State->'T->'State) (state: 'State) (foldable: '``Foldable<'T>``) : 'State = Fold.Invoke folder state foldable
+
     let inline foldMap (f: 'T->'Monoid) (x: '``Foldable<'T>``) : 'Monoid = FoldMap.Invoke f x
+
+    /// <summary>Builds a list from the given foldable.</summary>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The list of foldable elements.</returns>
     let inline toList  value : 'T list = ToList.Invoke  value
+
+    /// <summary>Builds an array from the given foldable.</summary>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The array of foldable elements.</returns>
     let inline toArray value : 'T []   = ToArray.Invoke value
+
+    /// <summary>Views the given foldable as a sequence.</summary>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The sequence of elements in the foldable.</returns>
+    let inline toSeq (source: '``Foldable<'T>``) = ToSeq.Invoke source  : seq<'T>
+
+    /// <summary>Tests if any element of the list satisfies the given predicate.</summary>
+    ///
+    /// <remarks>The predicate is applied to the elements of the input foldable. If any application 
+    /// returns true then the overall result is true and no further elements are tested. 
+    /// Otherwise, false is returned.</remarks>
+    /// <param name="predicate">The function to test the input elements.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>True if any element satisfies the predicate.</returns>
     let inline exists     (predicate: 'T->bool) (source: '``Foldable<'T>``) = Exists.Invoke  predicate source : bool
+
+    /// <summary>Tests if all elements of the collection satisfy the given predicate.</summary>
+    ///
+    /// <remarks>The predicate is applied to the elements of the input foldable. If any application 
+    /// returns false then the overall result is false and no further elements are tested. 
+    /// Otherwise, true is returned.</remarks>
+    /// <param name="predicate">The function to test the input elements.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>True if all of the elements satisfy the predicate.</returns>
     let inline forall     (predicate: 'T->bool) (source: '``Foldable<'T>``) = ForAll.Invoke  predicate source : bool
+
+    /// <summary>Returns the first element for which the given function returns true.
+    /// Raises <c>KeyNotFoundException</c> if no such element exists.</summary>
+    /// <param name="predicate">The function to test the input elements.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <exception cref="System.Collections.Generic.KeyNotFoundException">Thrown if the predicate evaluates to false for
+    /// all the elements of the foldable.</exception>
+    /// <returns>The first element that satisfies the predicate.</returns>
     let inline find       (predicate: 'T->bool) (source: '``Foldable<'T>``) = Find.Invoke    predicate source : 'T
+
+    /// <summary>Returns the first element for which the given function returns true.
+    /// Return None if no such element exists.</summary>
+    /// <param name="predicate">The function to test the input elements.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The first element for which the predicate returns true, or None if
+    /// every element evaluates to false.</returns>
     let inline tryFind    (predicate: 'T->bool) (source: '``Foldable<'T>``) = TryFind.Invoke predicate source : 'T option
+
+    /// <summary>Applies the given function to successive elements, returning the first
+    /// result where function returns <c>Some(x)</c> for some x. If no such
+    /// element exists then raise <c>System.Collections.Generic.KeyNotFoundException</c></summary>
+    /// <param name="chooser">The function to generate options from the elements.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <exception cref="System.Collections.Generic.KeyNotFoundException">Thrown when the foldable is empty.</exception>
+    /// <returns>The first resulting value.</returns>
     let inline pick    (chooser: 'T->'U option) (source: '``Foldable<'T>``) = Pick.Invoke    chooser   source : 'U
+
+    /// <summary>Applies the given function to successive elements, returning <c>Some(x)</c> the first
+    /// result where function returns <c>Some(x)</c> for some x. If no such element 
+    /// exists then return <c>None</c>.</summary>
+    /// <param name="chooser">The function to generate options from the elements.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The first resulting value or None.</returns>
     let inline tryPick (chooser: 'T->'U option) (source: '``Foldable<'T>``) = TryPick.Invoke chooser   source : 'U option
 
     /// Folds the source, inserting a separator between each element.
     let inline intercalate     (sep: 'Monoid)   (source: '``Foldable<'Monoid>``)   = Intercalate.Invoke sep source : 'Monoid
+
+    /// <summary>Returns the first element of the foldable.</summary>
+    ///
+    /// <param name="source">The input flodable.</param>
+    /// <exception cref="System.ArgumentException">Thrown when the foldable is empty.</exception>
+    /// <returns>The first element of the foldable.</returns>
     let inline head                             (source: '``Foldable<'T>``)        = Head.Invoke source    : 'T
+
+    /// <summary>Returns the first element of the foldable, or
+    /// <c>None</c> if the foldable is empty.</summary>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The first element of the foldable or None.</returns>
     let inline tryHead                          (source: '``Foldable<'T>``)        = TryHead.Invoke source : 'T option
+
+    /// <summary>Returns the number of elements in the foldable.</summary>
+    /// <param name="list">The input foldable.</param>
+    /// <returns>The length of the foldable.</returns>
     let inline length  (source: '``Foldable<'T>``) : int                           = Length.Invoke source
+
     let inline maximum (source: '``Foldable<'T>``)                                 = Max.Invoke source     : 'T when 'T : comparison
     let inline minimum (source: '``Foldable<'T>``)                                 = Min.Invoke source     : 'T when 'T : comparison
     let inline maxBy (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) = MaxBy.Invoke projection  source : 'T
@@ -412,7 +508,7 @@ module Operators =
     let inline chunkBy (projection: 'T->'Key)    (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = ChunkBy.Invoke projection source
 
     /// <summary>Returns a collection that contains all elements of the original collection while the
-    /// given predicate returns True, and then returns no further elements.</summary>
+    /// given predicate returns true, and then returns no further elements.</summary>
     ///
     /// <param name="predicate">A function that evaluates to false when no more items should be returned.</param>
     /// <param name="source">The input collection.</param>
@@ -422,7 +518,7 @@ module Operators =
     /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
     let inline takeWhile (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = TakeWhile.Invoke predicate source
 
-    /// <summary>Bypasses elements in a collection while the given predicate returns True, and then returns
+    /// <summary>Bypasses elements in a collection while the given predicate returns true, and then returns
     /// the remaining elements of the collection.</summary>
     ///
     /// <param name="predicate">A function that evaluates to false when no more items should be skipped.</param>
@@ -449,7 +545,6 @@ module Operators =
     let inline sortBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
     let inline sortByDescending (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortByDescending.Invoke projection source
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection)  = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
-    let inline toSeq (source: '``Collection<'T>``) = ToSeq.Invoke source  : seq<'T>
 
 
 
