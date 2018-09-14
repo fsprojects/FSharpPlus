@@ -10,6 +10,7 @@ module Lens =
     module Internals =
         let lmap' ab p = ab >> p
         let rmap' cd p = p >> cd
+        let dimap' ab cd  p = ab >> p >> cd
         let getAny (Any p) = p
         let getAll (All p) = p
 
@@ -18,6 +19,7 @@ module Lens =
             static member Dimap (Exchange (sa, bt), f, g) = Exchange (sa << f, g << bt)
 
     open Internals
+    open FSharpPlus.Control
 
     // Basic operations
 
@@ -53,7 +55,7 @@ module Lens =
     /// <param name="setter">The setter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The lens.</returns>
-    let inline lens getter setter f = fun s -> setter s <!> f (getter s)
+    let inline lens getter setter f = fun s -> setter s </Map.InvokeOnInstance/> f (getter s)
 
 
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
@@ -63,7 +65,7 @@ module Lens =
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
-    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) f = f |> (fun g -> either (Ok << g) Error) |> dimap getter (either (map constructor) result)
+    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) f = f |> (fun g -> either (Ok << g) Error) |> dimap' getter (either (Map.InvokeOnInstance constructor) Return.InvokeOnInstance)
 
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
@@ -78,7 +80,7 @@ module Lens =
     /// <param name="func">The transform function.</param>
     /// <param name="inv">The inverse of the transform function.</param>
     /// <returns>The iso.</returns>
-    let inline iso (func: 's -> 'a) (inv: 'b -> 't) = dimap func (map inv)
+    let inline iso (func: 's -> 'a) (inv: 'b -> 't) = dimap func (Map.InvokeOnInstance inv)
 
     /// Merge two lenses, getters, setters, folds or traversals.
     /// <param name="optic1">The first optic.</param>
@@ -86,25 +88,25 @@ module Lens =
     /// <param name="f">The free parameter.</param>
     /// <returns>An optic for a Result which uses the first optic for the Ok and the second for the Error.</returns>
     let inline choosing optic1 optic2 f = function
-        | Error x -> Error <!> optic1 f x
-        | Ok    x -> Ok    <!> optic2 f x
+        | Error x -> Error </Map.InvokeOnInstance/> optic1 f x
+        | Ok    x -> Ok    </Map.InvokeOnInstance/> optic2 f x
 
     // Some common Lens
 
     /// Lens for the first element of a tuple
-    let inline _1 f t = map (fun x -> mapItem1 (fun _ -> x) t) (f (item1 t))
+    let inline _1 f t = Map.InvokeOnInstance (fun x -> mapItem1 (fun _ -> x) t) (f (item1 t))
 
     /// Lens for the second element of a tuple
-    let inline _2 f t = map (fun x -> mapItem2 (fun _ -> x) t) (f (item2 t))
+    let inline _2 f t = Map.InvokeOnInstance (fun x -> mapItem2 (fun _ -> x) t) (f (item2 t))
 
     /// Lens for the third element of a tuple
-    let inline _3 f t = map (fun x -> mapItem3 (fun _ -> x) t) (f (item3 t))
+    let inline _3 f t = Map.InvokeOnInstance (fun x -> mapItem3 (fun _ -> x) t) (f (item3 t))
 
     /// Lens for the fourth element of a tuple
-    let inline _4 f t = map (fun x -> mapItem4 (fun _ -> x) t) (f (item4 t))
+    let inline _4 f t = Map.InvokeOnInstance (fun x -> mapItem4 (fun _ -> x) t) (f (item4 t))
 
     /// Lens for the fifth element of a tuple
-    let inline _5 f t = map (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
+    let inline _5 f t = Map.InvokeOnInstance (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
 
     // Prism
     let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x
@@ -114,11 +116,11 @@ module Lens =
 
     // Traversal
     let inline _all ref f s =
-        let update old = if old = ref then f old else result old
+        let update old = if old = ref then f old else Return.InvokeOnInstance old
         traverse update s
 
     // functions
-    let inline to' k = dimap k (contramap k)
+    let inline to' k = dimap k (Contramap.InvokeOnInstance k)
 
     let foldMapOf l f = Const.run </rmap'/> l (Const </rmap'/> f)
     let foldOf    l   = Const.run </rmap'/> l Const
@@ -133,12 +135,12 @@ module Lens =
     let elemOf l = anyOf l << (=)
     let inline items x = traverse x
 
-    let inline filtered p f s = if p s then f s else result s
-    let inline both f (a, b) = tuple2 <!> f a <*> f b
+    let inline filtered p f s = if p s then f s else Return.InvokeOnInstance s
+    let inline both f (a, b) = tuple2 </Map.InvokeOnInstance/> f a </Apply.InvokeOnInstance/> f b
 
     let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run </rmap'/> bt)
     let inline from' l   = withIso l <| fun sa bt -> iso bt sa
-    let inline mapping k = withIso k <| fun sa bt -> iso (map sa) (map bt)
+    let inline mapping k = withIso k <| fun sa bt -> iso (Map.InvokeOnInstance sa) (Map.InvokeOnInstance bt)
 
     // Operators
 
@@ -168,3 +170,9 @@ module Lens =
 
     /// Extract a list of the targets of a Fold. Same as ``toListOf`` but with the arguments flipped.
     let (^..) s l = toListOf l s
+
+    /// <summary>An infix flipped map, restricted to non-primitive types.</summary>
+    /// <param name="x">The functor.</param>
+    /// <param name="f">The mapper function.</param>
+    /// <returns>The mapped Functor.</returns>
+    let inline (<&>) (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.InvokeOnInstance f x
