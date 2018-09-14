@@ -57,8 +57,8 @@ type Const<'t,'u> = Const of 't with
     static member Contramap (Const x: Const<'C,'T>, _: 'U->'T) = Const x     : Const<'C,'U>
 
     // Bifunctor
+    static member Bimap     (Const x: Const<'T,'V>, f: 'T->'U, _: 'V->'W) = Const (f x) : Const<'U,'W>
     static member First     (Const x: Const<'T,'V>, f: 'T->'U) = Const (f x) : Const<'U,'V>
-    static member Second    (Const x: Const<'T,'V>, _: 'V->'W) = Const x     : Const<'T,'W>
 
 /// Basic operations on Const
 [<RequireQualifiedAccess>]
