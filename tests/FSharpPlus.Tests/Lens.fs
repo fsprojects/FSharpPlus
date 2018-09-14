@@ -32,3 +32,24 @@ let some_prism() =
 let none_prism() =
   areEqual (Some ()) (preview _None None)
   areEqual (None) (preview _None (Some 1))
+
+
+type NotAMonoid = N0 | N1 | N2 | N3 | N4
+
+[<Test>]
+let all () =
+    areEqual [|"Something"; "Nothing"; "Something Else"|] ([|"Something"; "x"; "Something Else"|] |> setl (_all "x") "Nothing")
+    areEqual [| N1; N4; N2; N3; N4 |] ([| N1; N0; N2; N3; N0 |] |> setl (_all N0) N4)
+
+[<Test>]
+let filtered () =
+    areEqual [12; 5; 20] (['a',-10; 'b',12; 'c',5; 'd',-3; 'e',20]^..(items << _2 << filtered (fun x -> x > 0)))
+    areEqual [12; 5; 20] ([N0,-10; N1,12; N2,5; N3,-3; N4,20]^..(items << _2 << filtered (fun x -> x > 0)))
+    areEqual [N2; N2]    ([N0,N2; N1,N1; N2,N2; N3,N3; N4,N4]^..(items << _2 << filtered (fun x -> x = N2)))
+
+let iso () =
+    let toOption (isSome, v) = if isSome then Some v else None
+    let fromOption = function Some (x:'t) -> (true, x) | None -> (false, Unchecked.defaultof<'t>)
+    let inline isoTupleOption x = x |> iso toOption fromOption
+    areEqual (true, 42) (view (from' isoTupleOption) (Some 42))
+    areEqual (Some 42) (view (_1 << isoTupleOption) (System.Int32.TryParse "42", ()))
