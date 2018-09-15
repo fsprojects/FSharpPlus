@@ -1,3 +1,8 @@
+#### 1.1.0-CI00240  - September 15 2018
+* Lens with less constraints (speed up compile time)
+* More generic Foldable functions
+* More extensions and abstractions with IReadOnlyDictionary
+
 #### 1.1.0-CI00230  - August 30 2018
 * Option as ZipFunctor
 * More Async extensions
