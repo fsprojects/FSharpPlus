@@ -11,10 +11,18 @@ module Operators =
 
     /// Creates a new function with first two arguments flipped
     let inline flip f x y = f y x
+    
+    /// <summary> Creates a constant function.</summary>
+    /// <param name="k">The constant value.</param>
+    /// <returns>The constant value function.</returns>
+    let inline konst k = fun _ -> k
 
-    let inline konst k _ = k
+    /// Takes a function expecting a tuple of two arguments and returns a function expecting two arguments.
     let inline curry f x y = f (x, y)
+
+    /// Takes a function expecting two curried arguments and returns a function expecting a tuple. Same as (<||).
     let inline uncurry f (x, y) = f x y
+
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
 
@@ -22,7 +30,7 @@ module Operators =
     let inline either f g = function Ok x   -> f x | Error x -> g x
 
     /// The option function takes a function, a default value and a option value. If the option value is None, the function returns the default value. Otherwise, it applies the function to the value inside Some and returns the result.
-    let inline option f n = function Some x -> f x | None    -> n
+    let inline option f n = function Some x -> f x | None -> n
 
     let inline tuple2 a b             = a,b
     let inline tuple3 a b c           = a,b,c
@@ -566,11 +574,20 @@ module Operators =
     /// Gets the value of the fifth component of a tuple.
     let inline item5 tuple = Item5.Invoke tuple
 
-    let inline mapItem1 mapping tuple = MapItem1.Invoke mapping tuple
-    let inline mapItem2 mapping tuple = MapItem2.Invoke mapping tuple
-    let inline mapItem3 mapping tuple = MapItem3.Invoke mapping tuple
-    let inline mapItem4 mapping tuple = MapItem4.Invoke mapping tuple
-    let inline mapItem5 mapping tuple = MapItem5.Invoke mapping tuple
+    /// Maps the first value of a tuple.
+    let inline mapItem1 (mapping: 'T -> 'U) (tuple: '``('T * ..)``) = MapItem1.Invoke mapping tuple : '``('U * ..)``
+
+    /// Maps the second value of a tuple.
+    let inline mapItem2 (mapping: 'T -> 'U) tuple = MapItem2.Invoke mapping tuple
+
+    /// Maps the third value of a tuple.
+    let inline mapItem3 (mapping: 'T -> 'U) tuple = MapItem3.Invoke mapping tuple
+
+    /// Maps the fourth value of a tuple.
+    let inline mapItem4 (mapping: 'T -> 'U) tuple = MapItem4.Invoke mapping tuple
+
+    /// Maps the fifth value of a tuple.
+    let inline mapItem5 (mapping: 'T -> 'U) tuple = MapItem5.Invoke mapping tuple
     
     
     
