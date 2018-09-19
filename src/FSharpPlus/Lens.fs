@@ -18,28 +18,36 @@ module Lens =
         type Exchange<'T,'U> = Exchange of 'T * 'U with
             static member Dimap (Exchange (sa, bt), f, g) = Exchange (sa << f, g << bt)
 
-        type ConstIdType =
-            | TUndefined
-            | TIdentity
-            | TConst
-            with static member (&&&) (x, y) = 
+        type ConstId<'monoid,'t> =
+            | Undef of ('t * 'monoid)
+            | Konst of ('t * 'monoid)
+            | Ident of  't    with
+            static member inline Return x = Undef (x, getZero ())   : ConstId<'Monoid,'T>
+            static member inline (<*>) (x, y) : ConstId<'Monoid,'U> =
                     match x, y with
-                    | v         , v' when v = v'    -> v
-                    | TUndefined, v | v, TUndefined -> v
-                    | _         , _                 -> failwithf "Unexpected %A %A" x y
+                    | Undef (f, wf) , Undef (t, wt) -> Undef (f t                   , plus wf wt)
+                    | Undef (_, wf) , Konst (_, wt)
+                    | Konst (_, wf) , Undef (_, wt)
+                    | Konst (_, wf) , Konst (_, wt) -> Konst (Unchecked.defaultof<_>, plus wf wt)
+                    | Undef (f, _ ) , Ident  t
+                    | Ident  f      , Undef (t, _ )
+                    | Ident  f      , Ident  t      -> Ident (f t)
+                    | x             , y             -> failwithf "Unexpected %A %A" x y
 
-        type ConstId<'monoid,'t> = ConstId of ('t * 'monoid * ConstIdType) with
-            static member inline Return x = ConstId (x, getZero (), TUndefined)   : ConstId<'Monoid,'T>
-            static member inline (<*>) (ConstId (f, wf, vf), ConstId (t, wx, vx)) : ConstId<'Monoid,'U> =
-                let v = vf &&& vx
-                ConstId ((if v = TConst then Unchecked.defaultof<_> else f t), (if v = TIdentity then Unchecked.defaultof<_> else plus wf wx), v)
-
-        module ConstId =
-            let map f (ConstId (t: 'T, w, v)) : ConstId<'Monoid,'U> = ConstId ((if v = TConst then Unchecked.defaultof<_> else f t), w, v)
-            let asId x = ConstId (x, (), TIdentity) : ConstId<unit, 't>
-            let runId (ConstId (t, _, v) : ConstId<'Monoid,'T>) = if v = TConst then failwith "Identity expected, but got Const" else t
-            let asConst x = ConstId (Unchecked.defaultof<_>, x, TConst)
-            let runConst (ConstId (_, w, v)) : 'T = if v = TIdentity then failwith "Const expected, but got Identity" else w
+        let Konst x = Konst (Unchecked.defaultof<_>, x)        
+        module ConstId =            
+            let map f = function
+                | Undef (t: 'T, w) -> Undef (f t, w)
+                | Konst (_: 'T, w) -> Konst w
+                | Ident (t: 'T)    -> Ident (f t)
+            let runT : ConstId<'m,'t> -> _ = function
+                | Undef (t, _) | Ident t -> t
+                | Konst (_, _) -> failwith "Undefined"
+            let runM : ConstId<'m,'t> -> _ = function
+                | Undef (_, w) | Konst (_, w) -> w
+                | Ident (_)    -> failwith "Undefined"
+        let inline Undef x = Undef (x, getZero ())
+        let        Ident x = Ident x : ConstId<unit, 't>
 
     open Internals
     open FSharpPlus.Control
@@ -55,26 +63,26 @@ module Lens =
     /// <param name="value">The value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let setl (optic: Lens<'s,'t,'a,'b, _>) value source = ConstId.runId (optic (fun _ -> ConstId.asId value) source)
+    let setl (optic: Lens<'s,'t,'a,'b, _>) value source = ConstId.runT (optic (fun _ -> Ident value) source)
 
     /// <summary>Update a value in a lens.</summary>
     /// <param name="optic">The lens.</param>
     /// <param name="updater">A function that converts the value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let over (optic: Lens<'s,'t,'a,'b, _>) updater source = ConstId.runId (optic (ConstId.asId << updater) source)
+    let over (optic: Lens<'s,'t,'a,'b, _>) updater source = ConstId.runT (optic (Ident << updater) source)
 
     /// <summary>Read from a lens.</summary>
     /// <param name="optic">The lens.</param>
     /// <param name="source">The object.</param>
     /// <returns>The part the lens is targeting.</returns>
-    let view (optic: Lens<'s,'t,'a,'b, _>) source = ConstId.runConst (optic ConstId.asConst source)
+    let view (optic: Lens<'s,'t,'a,'b, _>) source = ConstId.runM (optic Konst source)
 
     /// <summary>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). See also (^?).</summary>
     /// <param name="optic">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    let preview (optic: Lens<'s,'t,'a,'b, _>) source = source |> optic (fun x -> ConstId.asConst (FSharpPlus.Data.First (Some x))) |> ConstId.runConst |> First.run
+    let preview (optic: Lens<'s,'t,'a,'b, _>) source = source |> optic (fun x -> Konst (FSharpPlus.Data.First (Some x))) |> ConstId.runM |> First.run
 
     /// <summary>Build a 'Lens' from a getter and a setter.</summary>
     /// <remarks>The lens should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
@@ -92,7 +100,7 @@ module Lens =
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
-    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) : Lens<'s,'t,'a,'b, _> = (fun g -> either (Ok << g) Error) >> dimap' getter (either (ConstId.map constructor) ConstId.Return)
+    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) : Lens<'s,'t,'a,'b, _> = (fun g -> either (Ok << g) Error) >> dimap' getter (either (ConstId.map constructor) Undef)
 
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
@@ -145,14 +153,14 @@ module Lens =
 
     // Traversal
     let inline _all ref f s =
-        let update old = if old = ref then f old else ConstId.Return old
+        let update old = if old = ref then f old else Undef old
         traverse update s
 
     // functions
     let inline to' k = dimap k (Contramap.InvokeOnInstance k)
 
-    let foldMapOf l f = ConstId.runConst </rmap'/> l (ConstId.asConst </rmap'/> f)
-    let foldOf    l   = ConstId.runConst </rmap'/> l ConstId.asConst
+    let foldMapOf l f = ConstId.runM </rmap'/> l (Konst </rmap'/> f)
+    let foldOf    l   = ConstId.runM </rmap'/> l  Konst
     let foldrOf l f z = flip Endo.run z << foldMapOf l (Endo </rmap'/> f)
     let foldlOf l f z = (flip Endo.run z </lmap'/> Dual.run) </rmap'/> foldMapOf l (Dual </rmap'/> Endo </rmap'/> flip f)
 
@@ -164,10 +172,10 @@ module Lens =
     let elemOf l = anyOf l << (=)
     let inline items x = traverse x
 
-    let inline filtered p : Lens<'s,'s,_> = fun f s -> if p s then f s else ConstId.Return s
+    let inline filtered p : Lens<'s,'s,_> = fun f s -> if p s then f s else Undef s
     let inline both (f:'a -> ConstId< ^m,'b>) (a, b) = tuple2 </ConstId.map/> f a </curry ConstId.(<*>)/> f b : ConstId< ^m,('b * 'b)>
 
-    let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, ConstId.asId)) in k sa (ConstId.runId </rmap'/> bt)
+    let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Ident)) in k sa (ConstId.runT </rmap'/> bt)
     let inline from' l   = withIso l <| fun sa bt -> iso bt sa
     let inline mapping k = withIso k <| fun sa bt -> iso (Map.InvokeOnInstance sa) (Map.InvokeOnInstance bt)
 
