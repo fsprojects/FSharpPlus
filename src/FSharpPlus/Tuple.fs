@@ -51,6 +51,7 @@ type MapItem2 =
         let x1 = (^t : (member Item1: 't1) t)
         Tuple<_,_,_,_,_,_,_,_> (x1, fn x2, x3, x4, x5, x6, x7, xr)
 
+    static member MapItem2 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
     static member MapItem2 ((a, b)               , fn) = (a, fn b)
     static member MapItem2 ((a, b, c)            , fn) = (a, fn b, c)
     static member MapItem2 ((a, b, c, d)         , fn) = (a, fn b, c, d)
@@ -75,6 +76,7 @@ type MapItem3 =
         let x1 = (^t : (member Item1: 't1) t)
         Tuple<_,_,_,_,_,_,_,_>(x1, x2, fn x3, x4, x5, x6, x7, xr)
 
+    static member MapItem3 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
     static member MapItem3 ((a, b, c)            , fn) = (a, b, fn c)
     static member MapItem3 ((a, b, c, d)         , fn) = (a, b, fn c, d)
     static member MapItem3 ((a, b, c, d, e)      , fn) = (a, b, fn c, d, e)
@@ -98,6 +100,7 @@ type MapItem4 =
         let x1 = (^t : (member Item1 : 't1) t)
         Tuple<_,_,_,_,_,_,_,_>(x1, x2, x3, fn x4, x5, x6, x7, xr)
 
+    static member MapItem4 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
     static member MapItem4 ((a, b, c, d)         , fn) = (a, b, c, fn d)
     static member MapItem4 ((a, b, c, d, e)      , fn) = (a, b, c, fn d, e)
     static member MapItem4 ((a, b, c, d, e, f)   , fn) = (a, b, c, fn d, e, f)
@@ -120,6 +123,7 @@ type MapItem5 =
         let x1 = (^t : (member Item1 : 't1) t)
         Tuple<_,_,_,_,_,_,_,_>(x1, x2, x3, x4, fn x5, x6, x7, xr)
 
+    static member MapItem5 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
     static member MapItem5 ((a, b, c, d, e)      , fn) = (a, b, c, d, fn e)
     static member MapItem5 ((a, b, c, d, e, f)   , fn) = (a, b, c, d, fn e, f)
     static member MapItem5 ((a, b, c, d, e, f, g), fn) = (a, b, c, d, fn e, f, g)

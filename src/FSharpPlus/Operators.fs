@@ -578,16 +578,16 @@ module Operators =
     let inline mapItem1 (mapping: 'T -> 'U) (tuple: '``('T * ..)``) = MapItem1.Invoke mapping tuple : '``('U * ..)``
 
     /// Maps the second value of a tuple.
-    let inline mapItem2 (mapping: 'T -> 'U) tuple = MapItem2.Invoke mapping tuple
+    let inline mapItem2 (mapping: 'T -> 'U) (tuple: '``('A * 'T * ..)``) = MapItem2.Invoke mapping tuple : '``('A * 'U * ..)``
 
     /// Maps the third value of a tuple.
-    let inline mapItem3 (mapping: 'T -> 'U) tuple = MapItem3.Invoke mapping tuple
+    let inline mapItem3 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'T * ..)``) = MapItem3.Invoke mapping tuple : '``('A * 'B * 'U * ..)``
 
     /// Maps the fourth value of a tuple.
-    let inline mapItem4 (mapping: 'T -> 'U) tuple = MapItem4.Invoke mapping tuple
+    let inline mapItem4 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'T * ..)``) = MapItem4.Invoke mapping tuple : '``('A * 'B * 'C * 'U * ..)``
 
     /// Maps the fifth value of a tuple.
-    let inline mapItem5 (mapping: 'T -> 'U) tuple = MapItem5.Invoke mapping tuple
+    let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
     
