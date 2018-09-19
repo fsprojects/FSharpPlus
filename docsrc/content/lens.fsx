@@ -23,20 +23,20 @@ Prism
 *)
 
 type Team   = {name: string; victories: int}
-let inline _name      f {name = a; victories = b} = f a <&> fun a' -> {name = a'; victories = b }
-let inline _victories f {name = a; victories = b} = f b <&> fun b' -> {name = a ; victories = b'}
+let (_name     : Lens<Team,string, _>) = fun f {name = a; victories = b} -> f a <&> fun a' -> {name = a'; victories = b }
+let (_victories: Lens<Team,int   , _>) = fun f {name = a; victories = b} -> f b <&> fun b' -> {name = a ; victories = b'}
 
 type Player = {team: Team; score: int}
-let inline _team  f {team = a; score = b} = f a <&> fun a' -> {team = a'; score = b }
-let inline _score f {team = a; score = b} = f b <&> fun b' -> {team = a ; score = b'}
+let (_team : Lens<Player,Team, _>) = fun f {team = a; score = b} -> f a <&> fun a' -> {team = a'; score = b }
+let (_score: Lens<Player,int , _>) = fun f {team = a; score = b} -> f b <&> fun b' -> {team = a ; score = b'}
 
 type Result = {winner: Player option; started: bool}
-let inline _winner   f {winner = a; started = b} = f a <&> fun a' -> {winner = a'; started = b }
-let inline _started  f {winner = a; started = b} = f b <&> fun b' -> {winner = a ; started = b'}
+let (_winner : Lens<Result,Player option, _>) = fun f {winner = a; started = b} -> f a <&> fun a' -> {winner = a'; started = b }
+let (_started: Lens<Result,bool         , _>) = fun f {winner = a; started = b} -> f b <&> fun b' -> {winner = a ; started = b'}
 
-type Match<'t>  = {players: 't; finished: bool}
-let inline _players  f {players = a; finished = b} = f a <&> fun a' -> {players = a'; finished = b }
-let inline _finished f {players = a; finished = b} = f b <&> fun b' -> {players = a ; finished = b'}
+type Match<'a>  = {players: 'a; finished: bool}
+let (_players : Lens<Match<'a>,Match<'b>,'a,'b, _>) = fun f {players = a; finished = b} -> f a <&> fun a' -> {players = a'; finished = b }
+let (_finished: Lens<Match<'a>,bool, _>) = fun f {players = a; finished = b} -> f b <&> fun b' -> {players = a ; finished = b'}
 
 // Lens composed with Prism -> Prism
 let inline _winner_team x = (_players << _winner << _Some << _team) x

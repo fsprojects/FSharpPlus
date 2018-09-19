@@ -44,6 +44,10 @@ module Lens =
     open Internals
     open FSharpPlus.Control
 
+    type Lens<'s,'t,'a,'b,'__>  = (('a -> ConstId<'__,'b>) -> 's -> ConstId<'__,'t>)
+    type Lens<'s,'a,'__>        = Lens<'s,'s,'a,'a,'__>
+    type Prism<'s,'t,'a,'b,'__> = Result<ConstId<'__,'b>, 'a> -> Result<ConstId<'__,'t>,'s>
+
     // Basic operations
 
     /// <summary>Write to a lens.</summary>
@@ -51,26 +55,26 @@ module Lens =
     /// <param name="value">The value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let setl optic value source = ConstId.runId (optic (fun _ -> ConstId.asId value) source)
+    let setl (optic: Lens<'s,'t,'a,'b, _>) value source = ConstId.runId (optic (fun _ -> ConstId.asId value) source)
 
     /// <summary>Update a value in a lens.</summary>
     /// <param name="optic">The lens.</param>
     /// <param name="updater">A function that converts the value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let over optic updater source = ConstId.runId (optic (ConstId.asId << updater) source)
+    let over (optic: Lens<'s,'t,'a,'b, _>) updater source = ConstId.runId (optic (ConstId.asId << updater) source)
 
     /// <summary>Read from a lens.</summary>
     /// <param name="optic">The lens.</param>
     /// <param name="source">The object.</param>
     /// <returns>The part the lens is targeting.</returns>
-    let view optic source = ConstId.runConst (optic ConstId.asConst source)
+    let view (optic: Lens<'s,'t,'a,'b, _>) source = ConstId.runConst (optic ConstId.asConst source)
 
     /// <summary>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). See also (^?).</summary>
     /// <param name="optic">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    let preview optic source = source |> optic (fun x -> ConstId.asConst (FSharpPlus.Data.First (Some x))) |> ConstId.runConst |> First.run
+    let preview (optic: Lens<'s,'t,'a,'b, _>) source = source |> optic (fun x -> ConstId.asConst (FSharpPlus.Data.First (Some x))) |> ConstId.runConst |> First.run
 
     /// <summary>Build a 'Lens' from a getter and a setter.</summary>
     /// <remarks>The lens should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
@@ -78,7 +82,7 @@ module Lens =
     /// <param name="setter">The setter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The lens.</returns>
-    let lens getter setter f = fun s -> setter s </ConstId.map/> f (getter s)
+    let lens getter setter : Lens<'s,'t,'a,'b, _> = fun f s -> setter s </ConstId.map/> f (getter s)
 
 
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
@@ -88,7 +92,7 @@ module Lens =
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
-    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) f = f |> (fun g -> either (Ok << g) Error) |> dimap' getter (either (ConstId.map constructor) ConstId.Return)
+    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) : Lens<'s,'t,'a,'b, _> = (fun g -> either (Ok << g) Error) >> dimap' getter (either (ConstId.map constructor) ConstId.Return)
 
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
@@ -97,7 +101,7 @@ module Lens =
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
-    let inline prism' (constructor: 'b -> 's) (getter: 's -> Option<'a>) f = prism constructor (fun s -> option Ok (Error s) (getter s)) f
+    let inline prism' (constructor: 'b -> 's) (getter: 's -> Option<'a>) : Lens<'s,'s, 'a, 'b, _> = prism constructor (fun s -> option Ok (Error s) (getter s))
 
     /// <summary>Build an 'Iso' from a pair of inverse functions.</summary>
     /// <param name="func">The transform function.</param>
@@ -110,32 +114,34 @@ module Lens =
     /// <param name="optic2">The second optic.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>An optic for a Result which uses the first optic for the Ok and the second for the Error.</returns>
-    let choosing optic1 optic2 f = function
-        | Error x -> Error </ConstId.map/> optic1 f x
-        | Ok    x -> Ok    </ConstId.map/> optic2 f x
+    let choosing (optic1: Lens<'s1,'t1,'a,'b, _>) (optic2: Lens<'s2,'t2,'a,'b, _>) : Lens<Result<'s2,'s1>, Result<'t2,'t1>,'a,'b,_> = 
+        fun f a ->
+            match a with
+            | Error x -> Error </ConstId.map/> optic1 f x
+            | Ok    x -> Ok    </ConstId.map/> optic2 f x
 
     // Some common Lens
 
     /// Lens for the first element of a tuple
-    let inline _1 f t = ConstId.map (fun x -> mapItem1 (fun _ -> x) t) (f (item1 t))
+    let inline _1< ^s,'t,'a,'b,'m when ^s : (member Item1 : 'a) and (MapItem1 or ^s) : (static member MapItem1 : ^s * ('a -> 'b) -> 't)> : Lens<'s,'t,'a,'b,_> = fun (f: 'a -> ConstId<'m,'b>) t -> ConstId.map (fun x -> mapItem1 (fun (_: 'a) -> x) t) (f (item1 t))
 
     /// Lens for the second element of a tuple
-    let inline _2 f t = ConstId.map (fun x -> mapItem2 (fun _ -> x) t) (f (item2 t))
+    let inline _2< ^s,'t,'a,'b,'m when ^s : (member Item2 : 'a) and (MapItem2 or ^s) : (static member MapItem2 : ^s * ('a -> 'b) -> 't)> : Lens<'s,'t,'a,'b,_> = fun (f: 'a -> ConstId<'m,'b>) t -> ConstId.map (fun x -> mapItem2 (fun (_: 'a) -> x) t) (f (item2 t))
 
     /// Lens for the third element of a tuple
-    let inline _3 f t = ConstId.map (fun x -> mapItem3 (fun _ -> x) t) (f (item3 t))
+    let inline _3< ^s,'t,'a,'b,'m when ^s : (member Item3 : 'a) and (MapItem3 or ^s) : (static member MapItem3 : ^s * ('a -> 'b) -> 't)> : Lens<'s,'t,'a,'b,_> = fun (f: 'a -> ConstId<'m,'b>) t -> ConstId.map (fun x -> mapItem3 (fun (_: 'a) -> x) t) (f (item3 t))
 
     /// Lens for the fourth element of a tuple
-    let inline _4 f t = ConstId.map (fun x -> mapItem4 (fun _ -> x) t) (f (item4 t))
+    let inline _4< ^s,'t,'a,'b,'m when ^s : (member Item4 : 'a) and (MapItem4 or ^s) : (static member MapItem4 : ^s * ('a -> 'b) -> 't)> : Lens<'s,'t,'a,'b,_> = fun (f: 'a -> ConstId<'m,'b>) t -> ConstId.map (fun x -> mapItem4 (fun (_: 'a) -> x) t) (f (item4 t))
 
     /// Lens for the fifth element of a tuple
-    let inline _5 f t = ConstId.map (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
+    let inline _5< ^s,'t,'a,'b,'m when ^s : (member Item5 : 'a) and (MapItem5 or ^s) : (static member MapItem5 : ^s * ('a -> 'b) -> 't)> : Lens<'s,'t,'a,'b,_> = fun (f: 'a -> ConstId<'m,'b>) t -> ConstId.map (fun x -> mapItem5 (fun (_: 'a) -> x) t) (f (item5 t))
 
     // Prism
-    let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x
-    let inline _Error x = (prism Error <| either (Error << Ok) Ok) x
-    let inline _Some x = (prism Some <| option Ok (Error None)) x
-    let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
+    let inline _Ok<'a,'b,^m,'e    when (Zero or ^m) : (static member Zero : ^m * Zero -> ^m)> : Lens<Result<'a,'e>,Result<'b,'e>,'a,'b,_> = prism Ok <| either Ok (Error << Error)               : (_ -> ConstId<'m,'b>) -> _ -> _
+    let inline _Error<'a,'b,^m,'c when (Zero or ^m) : (static member Zero : ^m * Zero -> ^m)> : Lens<Result<'c,'a>,Result<'c,'b>,'a,'b,_> = prism Error <| either (Error << Ok) Ok               : (_ -> ConstId<'m,'b>) -> _ -> _
+    let inline _Some<'a,'b, ^m    when (Zero or ^m) : (static member Zero : ^m * Zero -> ^m)> : Lens<option<'a>,option<'b>,'a,'b,_>       = prism Some <| option Ok (Error None)                 : (_ -> ConstId<'m,'b>) -> _ -> _
+    let inline _None<'b, ^m       when (Zero or ^m) : (static member Zero : ^m * Zero -> ^m)> : Lens<option<'b>,option<'b>,unit,'b,_>     = prism' (konst None) <| option (konst None) (Some ()) : (_ -> ConstId<'m,'b>) -> _ -> _
 
     // Traversal
     let inline _all ref f s =
@@ -158,8 +164,8 @@ module Lens =
     let elemOf l = anyOf l << (=)
     let inline items x = traverse x
 
-    let inline filtered p f s = if p s then f s else ConstId.Return s
-    let inline both f (a, b) = tuple2 </ConstId.map/> f a </curry ConstId.(<*>)/> f b
+    let inline filtered p : Lens<'s,'s,_> = fun f s -> if p s then f s else ConstId.Return s
+    let inline both (f:'a -> ConstId< ^m,'b>) (a, b) = tuple2 </ConstId.map/> f a </curry ConstId.(<*>)/> f b : ConstId< ^m,('b * 'b)>
 
     let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, ConstId.asId)) in k sa (ConstId.runId </rmap'/> bt)
     let inline from' l   = withIso l <| fun sa bt -> iso bt sa
@@ -194,7 +200,7 @@ module Lens =
     /// Extract a list of the targets of a Fold. Same as ``toListOf`` but with the arguments flipped.
     let (^..) s l = toListOf l s
 
-    /// <summary>An infix flipped map, restricted to non-primitive types.</summary>
+    /// <summary>An infix flipped map for ConstId.</summary>
     /// <param name="x">The functor.</param>
     /// <param name="f">The mapper function.</param>
     /// <returns>The mapped Functor.</returns>
