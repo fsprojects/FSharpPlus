@@ -47,7 +47,7 @@ module Operators =
     let inline map    (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map.
-    /// To by used in Applicative Style expressions, combined with <*>
+    /// To be used in Applicative Style expressions, combined with <*>
     let inline (<!>)  (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map.
