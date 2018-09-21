@@ -28,26 +28,26 @@ module Lens =
     /// <param name="value">The value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let setl optic value source = Identity.run (optic (fun _ -> Identity value) source)
+    let setl optic value (source: 's) : 't = Identity.run (optic (fun _ -> Identity value) source)
 
     /// <summary>Update a value in a lens.</summary>
     /// <param name="optic">The lens.</param>
     /// <param name="updater">A function that converts the value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let over optic updater source = Identity.run (optic (Identity << updater) source)
+    let over optic updater (source: 's) : 't = Identity.run (optic (Identity << updater) source)
 
     /// <summary>Read from a lens.</summary>
     /// <param name="optic">The lens.</param>
     /// <param name="source">The object.</param>
     /// <returns>The part the lens is targeting.</returns>
-    let view optic source = Const.run (optic Const source)
+    let view (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a = Const.run (optic Const source)
 
     /// <summary>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). See also (^?).</summary>
     /// <param name="optic">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    let preview optic source = source |> optic (fun x -> Const (FSharpPlus.Data.First (Some x))) |> Const.run |> First.run
+    let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (FSharpPlus.Data.First (Some x))) |> Const.run |> First.run
 
     /// <summary>Build a 'Lens' from a getter and a setter.</summary>
     /// <remarks>The lens should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
@@ -55,7 +55,7 @@ module Lens =
     /// <param name="setter">The setter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The lens.</returns>
-    let inline lens getter setter f = fun s -> setter s </Map.InvokeOnInstance/> f (getter s)
+    let inline lens (getter: 's -> 'a) (setter: 's -> 'b -> 't) (f: 'a -> '``F<'b>``) = fun s -> setter s </Map.InvokeOnInstance/> f (getter s) : '``F<'t>``
 
 
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
@@ -65,7 +65,7 @@ module Lens =
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
-    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) f = f |> (fun g -> either (Ok << g) Error) |> dimap' getter (either (Map.InvokeOnInstance constructor) Return.InvokeOnInstance)
+    let inline prism (constructor: 'b -> 't) (getter: 's -> Result<'a,'t>) (f: 'a -> '``F<'b>``) = f |> (fun g -> either (Ok << g) Error) |> dimap' getter (either (Map.InvokeOnInstance constructor) Return.InvokeOnInstance) : 's -> '``F<'t>``
 
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
@@ -74,7 +74,7 @@ module Lens =
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
-    let inline prism' (constructor: 'b -> 's) (getter: 's -> Option<'a>) f = prism constructor (fun s -> option Ok (Error s) (getter s)) f
+    let inline prism' (constructor: 'b -> 's) (getter: 's -> Option<'a>) (f: 'a -> '``F<'b>``) = prism constructor (fun s -> option Ok (Error s) (getter s)) f : 's -> '``F<'t>``
 
     /// <summary>Build an 'Iso' from a pair of inverse functions.</summary>
     /// <param name="func">The transform function.</param>
@@ -87,9 +87,12 @@ module Lens =
     /// <param name="optic2">The second optic.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>An optic for a Result which uses the first optic for the Ok and the second for the Error.</returns>
-    let inline choosing optic1 optic2 f = function
-        | Error x -> Error </Map.InvokeOnInstance/> optic1 f x
-        | Ok    x -> Ok    </Map.InvokeOnInstance/> optic2 f x
+    let inline choosing<'s1,'t1,'s2,'t2,'a,'b,'``F<'t1>``,'``F<'t2>``,'``F<'b>``,'``F<Result<'t2,'t1>>``
+        when  ^``F<'t1>`` : (static member Map : ^``F<'t1>`` * ('t1 -> Result<'t2,'t1>) -> '``F<Result<'t2,'t1>>``)
+        and   ^``F<'t2>`` : (static member Map : ^``F<'t2>`` * ('t2 -> Result<'t2,'t1>) -> '``F<Result<'t2,'t1>>``)>
+            (optic1: ('a -> '``F<'b>``) -> 's1 -> '``F<'t1>``) (optic2: ('a -> '``F<'b>``) -> 's2 -> '``F<'t2>``) f : _ -> '``F<Result<'t2,'t1>>`` = function
+            | Error x -> Error </Map.InvokeOnInstance/> optic1 f x
+            | Ok    x -> Ok    </Map.InvokeOnInstance/> optic2 f x
 
     // Some common Lens
 
@@ -148,25 +151,25 @@ module Lens =
     /// <param name="lens">The lens.</param>
     /// <param name="source">The object.</param>
     /// <returns>The part the lens is targeting.</returns>
-    let (^.) source lens = view lens source
+    let (^.) (source: 's) (lens: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) = view lens source
 
     /// <summary>Write to a lens. Same as ``setl``.</summary>
     /// <param name="lens">The lens.</param>
     /// <param name="value">The value we want to write in the part targeted by the lens.</param>
     /// <returns>The new object with the value modified.</returns>
-    let (.->) lens value = setl lens value
+    let (.->) lens value = setl lens value : 's -> 't
 
     /// <summary>Update a value in a lens. Same as ``over``.</summary>
     /// <param name="lens">The lens.</param>
     /// <param name="updater">A function that converts the value we want to write in the part targeted by the lens.</param>
     /// <returns>The new object with the value modified.</returns>
-    let (%->) lens updater = over lens updater
+    let (%->) lens updater = over lens updater : 's -> 't
 
     /// <summary>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). Same as ``preview`` but with the arguments flipped.</summary>
     /// <param name="prism">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    let (^?) source prism = preview  prism source
+    let (^?) (source: 's) (prism: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) = preview prism source
 
     /// Extract a list of the targets of a Fold. Same as ``toListOf`` but with the arguments flipped.
     let (^..) s l = toListOf l s
@@ -175,4 +178,4 @@ module Lens =
     /// <param name="x">The functor.</param>
     /// <param name="f">The mapper function.</param>
     /// <returns>The mapped Functor.</returns>
-    let inline (<&>) (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.InvokeOnInstance f x
+    let inline (<&>) (x: '``F<'t>``) (f: 't -> 'u) : '``F<'u>`` = Map.InvokeOnInstance f x
