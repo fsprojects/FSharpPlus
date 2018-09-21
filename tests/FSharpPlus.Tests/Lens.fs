@@ -47,6 +47,13 @@ let filtered () =
     areEqual [12; 5; 20] ([N0,-10; N1,12; N2,5; N3,-3; N4,20]^..(items << _2 << filtered (fun x -> x > 0)))
     areEqual [N2; N2]    ([N0,N2; N1,N1; N2,N2; N3,N3; N4,N4]^..(items << _2 << filtered (fun x -> x = N2)))
 
+[<Test>]
+let choosing () =
+    let f x = if x then Result<_,string*int>.Ok (1,'2',3) else Error ("Not success", -1)
+    areEqual (Ok (1, '2', "x")          ) (setl (choosing _2 _3) "x" (f true) )
+    areEqual (Error ("Not success", "x")) (setl (choosing _2 _3) "x" (f false))
+
+[<Test>]
 let iso () =
     let toOption (isSome, v) = if isSome then Some v else None
     let fromOption = function Some (x:'t) -> (true, x) | None -> (false, Unchecked.defaultof<'t>)
