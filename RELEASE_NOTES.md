@@ -1,3 +1,7 @@
+#### 1.1.0-CI00245  - September 22 2018
+* Fix some type inference problems
+* More Xml docs and type annotations
+
 #### 1.1.0-CI00240  - September 15 2018
 * Lens with less constraints (speed up compile time)
 * More generic Foldable functions
