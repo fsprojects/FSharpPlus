@@ -1324,6 +1324,7 @@ module Conversions =
         let r303:float  = explicit "303"
         let r304:char   = explicit "F"
         let a : unativeint = explicit 2147483648I
+        let inline h () : 't = if true then explicit 42M else explicit 42.0f
         ()
 
 module BitConverter =

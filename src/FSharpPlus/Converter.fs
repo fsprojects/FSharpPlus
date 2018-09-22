@@ -34,7 +34,7 @@ type Explicit =
     static member inline Explicit (_: char      , _: Explicit) = fun x -> char            x
 
     static member inline Invoke value : 'T      =
-        let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Explicit : _*_ -> _) b, a)
+        let inline call_2 (a: ^a, b: ^r) = ((^a or ^r or ^t) : (static member Explicit : _*_ -> ('t  -> ^r)) b, a)
         let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r
         call Unchecked.defaultof<Explicit> value
 
