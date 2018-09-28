@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus
+namespace FSharpPlus
 
 open System
 
@@ -159,6 +159,18 @@ module Seq =
 
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
 
+    open System.Collections.ObjectModel
+    open System.Collections.Generic
+    let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
+
+
+/// Additional operations IList<'T>
+[<RequireQualifiedAccess>]
+module IList =
+    open System.Collections.ObjectModel
+    open System.Collections.Generic
+    let toIReadOnlyList (source: IList<_>) = ReadOnlyCollection source :> IReadOnlyList<_>
+
 
 /// Additional operations on List
 [<RequireQualifiedAccess>]
@@ -207,6 +219,13 @@ module List =
 
     /// Replace a subsequence of the source list with the given replacement list.
     let replace oldValue (newValue: _ list) (source: _ list) = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList : list<'T>
+
+    let toIReadOnlyList (source: _ list) =
+        { new System.Collections.Generic.IReadOnlyList<_> with
+            member __.Count = source.Length
+            member __.Item with get index = source.[index]
+            member __.GetEnumerator () = (source :> _ seq).GetEnumerator ()
+            member __.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
 
 /// Additional operations on Array
@@ -271,9 +290,32 @@ module IReadOnlyCollection =
     let map mapping (source: IReadOnlyCollection<'T>) = Seq.map mapping source |> Seq.toArray :> IReadOnlyCollection<'U>
 
 
+/// Additional operations on ReadOnlyList<'T>
+[<RequireQualifiedAccess>]
+module IReadOnlyList =
+    open System.Collections.Generic
+
+    let ofArray (source: _ array) = IList.toIReadOnlyList source
+    let toArray (source: IReadOnlyList<_>) = Array.ofSeq source
+
+    /// Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.
+    let add i value (source: IReadOnlyList<_>) =
+        let setNth i v (source: _ array) = source.[i] <- v; source
+        if 0 <= i && i < source.Count then
+            source |> Array.ofSeq |> setNth i value |> ofArray |> Some
+        else None
+
+    let tryItem i (source: IReadOnlyList<_>) =
+        if 0 <= i && i < source.Count then Some source.[i]
+        else None
+
+
 /// Additional operations on Map<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Map =
+
+    let keys   (source: Map<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
+    let values (source: Map<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     /// <summary>Map values of the original Map.</summary>
     /// <remarks>Keys remain unchanged.</remarks>
@@ -323,11 +365,17 @@ module Map =
 [<RequireQualifiedAccess>]
 module Dict =
     open System.Collections.Generic
+    open System.Collections.ObjectModel
+
+    let toIReadOnlyDictionary source = ReadOnlyDictionary source :> IReadOnlyDictionary<_,_>
 
     let tryGetValue k (dct: IDictionary<'Key, 'Value>) =
         match dct.TryGetValue k with
         | true, v -> Some v
         | _       -> None
+
+    let keys   (source: IDictionary<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
+    let values (source: IDictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     let map f (x: IDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
@@ -390,6 +438,9 @@ module IReadOnlyDictionary =
         match dct.TryGetValue k with
         | true, v -> Some v
         | _       -> None
+
+    let keys   (source: IReadOnlyDictionary<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
+    let values (source: IReadOnlyDictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     let map f (x: IReadOnlyDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
