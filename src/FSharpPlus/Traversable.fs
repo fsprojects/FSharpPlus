@@ -2,15 +2,37 @@
 
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
+open System.ComponentModel
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus.Internals.MonadOps
 open FSharpPlus
 
 
+type Sequence =
+    inherit Default1
+    static member inline InvokeOnInstance (t: ^a) = (^a : (static member Sequence : _ -> 'R) t)
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline ForInfiniteSequences (t: seq<_>, isFailure) =
+        let mutable failure = None
+        let buf = Seq.toArray (seq {
+            use e = t.GetEnumerator ()
+            while e.MoveNext () && failure.IsNone do
+                if isFailure e.Current then failure <- Some e.Current
+                else yield e.Current })
+        let buf = match failure with None -> buf | Some e -> [|e|]
+        let cons x y = Array.append [|x|] y
+        let cons_f x ys = Map.Invoke cons x <*> ys
+        let r = Array.foldBack cons_f buf (result [||])
+        Map.Invoke Array.toSeq r
+    
+
 type Traverse =
     inherit Default1
-    static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) = Map.Invoke f (^a : (static member Sequence: _ -> 'R) t)
+    static member inline InvokeOnInstance f (t: ^a) = (^a : (static member Traverse : _*_ -> 'R) t, f)
+
+    static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) = Map.Invoke f (Sequence.InvokeOnInstance t) : 'R
     static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) = Map.Invoke Id.create (f (Id.run t))
     static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
        let cons x y = seq {yield x; yield! y}
@@ -34,7 +56,7 @@ type Traverse =
             else async.Return Seq.empty
         return! loop () }
 
-    static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = (^a : (static member Traverse : _*_ -> 'R) t, f)
+    static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
 
     static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
@@ -55,21 +77,7 @@ type Traverse =
         call (Unchecked.defaultof<Traverse>, t, f)
     
 
-type Sequence =
-    inherit Default1
-
-    static member inline ForInfiniteSequences (t: seq<_>, isFailure) =
-        let mutable failure = None
-        let buf = Seq.toArray (seq {
-            use e = t.GetEnumerator ()
-            while e.MoveNext () && failure.IsNone do
-                if isFailure e.Current then failure <- Some e.Current
-                else yield e.Current })
-        let buf = match failure with None -> buf | Some e -> [|e|]
-        let cons x y = Array.append [|x|] y
-        let cons_f x ys = Map.Invoke cons x <*> ys
-        let r = Array.foldBack cons_f buf (result [||])
-        Map.Invoke Array.toSeq r
+type Sequence with
 
     static member inline Sequence (t:_ seq         , [<Optional>]_output: 'R, [<Optional>]_impl:Default4 ) : 'R =
                         let cons x y = seq {yield x; yield! y}
@@ -82,8 +90,8 @@ type Sequence =
     static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty)                                 : list<seq<'t>>
     static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty)                                : seq<'t> []
 
-    static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default2) = (^a : (static member Traverse : _*_ -> 'R) t, id)                                     : 'R
-    static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = (^a : (static member Sequence : _ -> 'R) t)                                           : 'R
+    static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default2) = Traverse.InvokeOnInstance id t                                                        : 'R
+    static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                                           : 'R
     static member inline Sequence (t: option<_>         , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with Some x -> Map.Invoke Some x | _ -> result None                           : 'R
     static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = let cons_f x ys = Map.Invoke List.cons x <*> ys in List.foldBack cons_f t (result []) : 'R
     static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = let cons x y = Array.append [|x|] y in let cons_f x ys = Map.Invoke cons x <*> ys in Array.foldBack cons_f t (result [||]) : 'R
