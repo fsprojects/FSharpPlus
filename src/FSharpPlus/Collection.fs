@@ -45,24 +45,37 @@ type OfSeq =
 
 
 type OfList =
-
-#if NET35
-    static member OfList (_: string        , _: OfList) = fun (x: list<char>) -> String.Join ("", x |> Array.ofList |> Array.map string)
-    static member OfList (_: StringBuilder , _: OfList) = fun (x: list<char>) -> new StringBuilder (String.Join ("", x |> Array.ofList |> Array.map string))
-#else
-    static member OfList (_: string        , _: OfList) = fun (x: list<char>) -> String.Join ("", x |> Array.ofList)
-    static member OfList (_: StringBuilder , _: OfList) = fun (x: list<char>) -> new StringBuilder (String.Join ("", x |> Array.ofList))
-#endif
-    static member OfList (_: 'a []         , _: OfList) = Array.ofList<'a>
-    static member OfList (_: 'a ResizeArray, _: OfList) = fun (x: list<'a>)  -> ResizeArray x
-    static member OfList (_: list<'a>      , _: OfList) = id<list<'a>>
-    static member OfList (_: Set<'a>       , _: OfList) = Set.ofList<'a>
-    static member OfList (_: seq<'a>       , _: OfList) = Seq.ofList<'a>
+    inherit Default1
+    static member inline OfList (x: list<'t>                 , _: '``Foldable'<T>``               , _: Default5) = x |> List.map Return.Invoke |> Sum.Invoke : '``Foldable'<T>``
+    static member        OfList (x: list<'t>                 , _: seq<'t>                         , _: Default4) = List.toSeq x
+    static member        OfList (x: list<'t>                 , _: ICollection<'t>                 , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> ICollection<'t>
+    static member        OfList (x: list<'t>                 , _: IList<'t>                       , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> IList<'t>
+    static member        OfList (x: list<'t>                 , _: IList                           , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> IList
+    static member        OfList (x: list<'k*'v>              , _: IReadOnlyDictionary<'k,'v>      , _: Default4) = Dict.toIReadOnlyDictionary (dict x)
+    static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IReadOnlyDictionary<'k,'v>      , _: Default4) = x |> List.map (|KeyValue|) |> dict |> Dict.toIReadOnlyDictionary
+    static member        OfList (x: list<'k*'v>              , _: IDictionary<'k,'v>              , _: Default4) = dict x
+    static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              , _: Default4) = x |> List.map (|KeyValue|) |> dict
+    static member        OfList (x: list<'k*'v>              , _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> List.iter d.Add; d :> IDictionary
+    static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> List.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    static member inline OfList (x: list<'t>                 , _: 'R                              , _: Default3) = (^R : (new : seq<'t> -> ^R) (List.toSeq x)) : 'R
+    static member inline OfList (x: list<KeyValuePair<'k,'v>>, _: 'R                              , _: Default3) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
+    static member inline OfList (x: list<'t>                 , _: 'F                              , _: Default2) = let c = new 'F () in (List.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
+    static member        OfList (x: list<'t>                 , _: 'T when 'T :> ICollection<'t>   , _: Default1) = let d = new 'T () in x |> List.iter d.Add; d
+    static member        OfList (x: list<'k*'v>              , _: 'T when 'T :> IDictionary       , _: Default1) = let d = new 'T () in x |> List.iter d.Add; d
+    static member        OfList (x: list<KeyValuePair<'k,'v>>, _: 'T when 'T :> IDictionary       , _: Default1) = let d = new 'T () in x |> List.iter (function (KeyValue x) -> d.Add x); d
+    static member        OfList (x: list<'k*'v>              , _: 'T when 'T :> IDictionary<'k,'v>, _: OfList  ) = let d = new 'T () in x |> List.iter d.Add; d
+    static member        OfList (x: list<KeyValuePair<'k,'v>>, _: 'T when 'T :> IDictionary<'k,'v>, _: OfList  ) = let d = new 'T () in x |> List.iter d.Add; d
+    static member inline OfList (x: list<'t>                 , _: 'UserType                       , _: OfList  ) = (^UserType : (static member OfList : list<'t> -> ^UserType) x)
+    static member        OfList (x                           , _: 't []                           , _: OfList  ) = Array.ofList<'t> x
+    static member        OfList (x                           , _: 't list                         , _: OfList  ) = x
+    static member        OfList (x: list<char>               , _: string                          , _: OfList  ) = String.Join ("", Array.ofList x)
+    static member        OfList (x: list<char>               , _: Text.StringBuilder              , _: OfList  ) = (StringBuilder (), x) ||> List.fold (fun x -> x.Append)
+    static member        OfList (x: list<'t>                 , _: Stack<'t>                       , _: OfList  ) = Generic.Stack x
 
     static member inline Invoke (value: list<'t>) = 
-        let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member OfList : _*_ -> _) b, a)
-        let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r
-        call Unchecked.defaultof<OfList> value
+        let inline call_2 (a: ^a, b: ^b, s) = ((^a or ^b) : (static member OfList : _*_*_ -> _) s, b, a)
+        let inline call (a: 'a, s) = call_2 (a, Unchecked.defaultof<'r>, s) : 'r
+        call (Unchecked.defaultof<OfList>, value)
 
 
 type Filter =

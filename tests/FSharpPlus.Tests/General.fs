@@ -421,9 +421,9 @@ module Collections =
         let e = "hello world" |> skip 6 |> toList
         let h = ofList ['h';'e';'l';'l';'o';' '] + "world"
         let j = item 2 "hello"
+        ()
 
-
-        // From sequence
+    let testSeqConversions =
 
         let sk: Generic.Stack<_>          = ofSeq { 1 .. 3 }
         let sg: string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
@@ -489,6 +489,68 @@ module Collections =
             d.Columns
         let col1 = columns |> find (fun x -> x.ColumnName = "column1")
         let cols = columns |> toList |> map  (fun x -> x.ColumnName)
+
+        ()
+
+    let testListConversions =
+
+        // From sequence
+
+        let sk: Generic.Stack<_>          = ofList [ 1 .. 3 ]
+        let sg: string                    = ofList ['1'..'3']  // but it will come back as seq<char>
+        let sb: Text.StringBuilder        = ofList ['1'..'3']  // but it will come back as seq<char>
+        let sq1:_ seq                     = ofList [ 1 .. 3 ]
+        let sq2:_ seq                     = ofList ([(1, "One"); (2, "Two")])
+        let sq3:_ seq                     = ofList ([(1, "One", '1'); (2, "Two", '2')])
+        let sq4:_ seq                     = ofList ([(1, "One", '1', 1M); (2, "Two", '2', 2M)])
+        let ls1:_ list                    = ofList ['1'..'3']
+        let ls2:_ list                    = ofList ([(1, "One", '1'); (2, "Two", '2')])
+        let st1:_ Set                     = ofList ['1'..'3']
+        let st2:_ Set                     = ofList ([(1, "One", '1'); (2, "Two", '2')])
+        let ss: Generic.SortedSet<_>      = ofList ([3..6])
+        let ra: Generic.List<_>           = ofList ([1..3])
+        let sl: Generic.SortedList<_,_>   = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
+        let sl2:Generic.SortedList<_,_>   = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let dc :Generic.Dictionary<_,_>   = ofList ([(1, "One"); (2, "Two")]) // but it will come back as KeyValuePair
+        let mp :Map<_,_>                  = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
+        let mp2:Map<_,_>                  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let d : Generic.IDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
+        let d2: Generic.IDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let r : IReadOnlyDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
+        let r2: IReadOnlyDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let ut: Hashtable                 = ofList ([1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+        let al: ArrayList                 = ofList (["1";"2";"3"])            // but it will come back as seq<obj>
+        let us: SortedList                = ofList ([4,'2';3,'4'])            // but it will come back as seq<obj>
+        let cc: BlockingCollection<_>     = ofList ['1'..'3']                     // but it will come back as seq<obj>
+        let cd: ConcurrentDictionary<_,_> = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
+        let cd2:ConcurrentDictionary<_,_> = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let cb: ConcurrentBag<_>          = ofList ['1'..'3']
+
+        // now go back
+        let sk'  = toList sk
+        let sg'  = toList sg
+        let sb'  = toList sb
+        let sq1' = toList sq1
+        let sq2' = toList sq2
+        let sq3' = toList sq3
+        let sq4' = toList sq4
+        let ls1' = toList ls1
+        let ls2' = toList ls2
+        let st1' = toList st1
+        let st2' = toList st2
+        let ss'  = toList ss
+        let ra'  = toList ra
+        let sl'  = toList sl
+        let dc'  = toList dc
+        let mp'  = toList mp
+        let d'   = toList d
+        let r'   = toList r
+        let ut'  = toList ut
+        let al'  = toList al
+        let us'  = toList us
+        let cc'  = toList cc
+        let cd'  = toList cd
+        let cb'  = toList cb
 
         ()
 

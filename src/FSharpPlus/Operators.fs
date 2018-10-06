@@ -429,7 +429,7 @@ module Operators =
     // Collection
 
     /// Converts to a Collection from a list.
-    let inline ofList (source: list<'T>) = OfList.Invoke source
+    let inline ofList (source: list<'T>) = OfList.Invoke source : 'Collection
 
     /// Converts to a Collection from a seq.
     let inline ofSeq  (source: seq<'T> ) = OfSeq.Invoke  source : 'Collection
