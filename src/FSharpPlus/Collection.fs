@@ -18,11 +18,11 @@ type OfSeq =
     static member        OfSeq (x: seq<'t>                 , _: IList<'t>                       , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> IList<'t>
     static member        OfSeq (x: seq<'t>                 , _: IList                           , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> IList
     static member        OfSeq (x: seq<'k*'v>              , _: IDictionary<'k,'v>              , _: Default4) = dict x
-    static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              , _: Default4) = x |> Seq.map (function (KeyValue x) -> x) |> dict
+    static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              , _: Default4) = x |> Seq.map (|KeyValue|) |> dict
     static member        OfSeq (x: seq<'k*'v>              , _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> Seq.iter d.Add; d :> IDictionary
     static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
     static member inline OfSeq (x: seq<'t>                 , _: 'R                              , _: Default3) = (^R : (new : seq<'t> -> ^R) x) : 'R
-    static member inline OfSeq (x: seq<KeyValuePair<'k,'v>>, _: 'R                              , _: Default3) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (function (KeyValue x) -> x) x)) : 'R
+    static member inline OfSeq (x: seq<KeyValuePair<'k,'v>>, _: 'R                              , _: Default3) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
     static member inline OfSeq (x: seq<'t>                 , _: 'F                              , _: Default2) = let c = new 'F () in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
     static member        OfSeq (x: seq<'t>                 , _: 'T when 'T :> ICollection<'t>   , _: Default1) = let d = new 'T () in x |> Seq.iter d.Add; d
     static member        OfSeq (x: seq<'k*'v>              , _: 'T when 'T :> IDictionary       , _: Default1) = let d = new 'T () in x |> Seq.iter d.Add; d
