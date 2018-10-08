@@ -61,7 +61,7 @@ module Lens =
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
     /// <remarks>Using Result instead of Option to permit the types of 's and 't to differ.</remarks>
-    /// <param name="constructor">The getter function.</param>
+    /// <param name="constructor">The constructor function.</param>
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
@@ -70,7 +70,7 @@ module Lens =
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
     /// <remarks>Using Option which makes 's and 't the same type.</remarks>
-    /// <param name="constructor">The getter function.</param>
+    /// <param name="constructor">The constructor function.</param>
     /// <param name="getter">The getter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
