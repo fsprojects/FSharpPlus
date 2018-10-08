@@ -1,3 +1,10 @@
+#### 1.1.0-CI00252  - October 8 2018
+* Add Invariant Abstraction
+* Some convenient conversion functions between Option and Result
+* OfSeq for IReadOnlyDictionary
+* OfList for all same instances as OfSeq
+* Add some ReadOnly CSollections related functions
+
 #### 1.1.0-CI00245  - September 22 2018
 * Fix some type inference problems
 * More Xml docs and type annotations
