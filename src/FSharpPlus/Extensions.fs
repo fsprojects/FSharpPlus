@@ -31,6 +31,23 @@ module Option =
         | Some x, Some y -> Some (x, y)
         | _              -> None
 
+    /// <summary>Converts an option to a Result.</summary>
+    /// <param name="source">The option value.</param>
+    /// <returns>The resulting Result value.</returns>
+    let toResult source = match source with Some x -> Ok x | None -> Error ()
+
+    /// <summary>Converts an option to a Result.</summary>
+    /// <param name="errorValue">The error value to be used in case of None.</param>
+    /// <param name="source">The option value.</param>
+    /// <returns>The resulting Result value.</returns>
+    let toResultWith (errorValue: 'Error) (source: 'T option) = match source with Some x -> Ok x | None -> Error errorValue
+
+    /// <summary>Converts a Result to an option.</summary>
+    /// <remarks>The error value (if any) is lost.</remarks>
+    /// <param name="source">The Result value.</param>
+    /// <returns>The resulting option value.</returns>
+    let ofResult source = match source with Ok x -> Some x | Error _ -> None
+
 
 /// Additional operations on Result<'Ok,'Error>
 [<RequireQualifiedAccess>]
