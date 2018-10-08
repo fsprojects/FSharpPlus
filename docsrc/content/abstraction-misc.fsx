@@ -42,3 +42,21 @@ let (x, y) = zip (async { return 1 }) (async { return '2' }) |> Async.RunSynchro
 
 let a = skip 3 [1..10]
 let b = chunkBy fst [1, "a"; 1, "b"; 2, "c"; 1, "d"]
+
+
+// Invariant Functor
+type StringConverter<'t> = StringConverter of (string -> 't) * ('t -> string) with
+    static member Invmap (StringConverter (f, g), f',g') = StringConverter (f' << f, g << g')
+
+let ofString (StringConverter (f, _)) = f
+let toString (StringConverter (_, f)) = f
+
+let floatConv = StringConverter (float<string>, string<float>)
+
+let floatParsed  = ofString floatConv "1.8"
+let floatEncoded = toString floatConv 1.5
+
+let intConv = invmap int<float> float<int> floatConv
+
+let oneParsed  = ofString intConv "1"
+let tenEncoded = toString intConv 10

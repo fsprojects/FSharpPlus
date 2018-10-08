@@ -135,7 +135,7 @@ module Operators =
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
    
-    // Contravariant/Bifunctor/Profunctor -------------------------------------
+    // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
 
     /// Maps over the input.
     let inline contramap (f: 'U->'T) (x: '``Contravariant<'T>``) : '``Contravariant<'U>`` = Contramap.Invoke f x
@@ -159,6 +159,9 @@ module Operators =
     /// Can be thought of as mapping the right part of a Profunctor. 
     /// For instance (Ok) when working on Result<_,_>
     let inline rmap   (f: 'C->'D) (source: '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = Map.Invoke f source
+
+    /// Maps a pair of functions over an Invariant Functor
+    let inline invmap (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = Invmap.Invoke f g source : '``InvariantFunctor<'U>``
 
 
     // Category ---------------------------------------------------------------

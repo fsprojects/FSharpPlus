@@ -1145,6 +1145,28 @@ module BifunctorDefaults =
     let b' =  map  string (Tup (1, '2'))
     ()
 
+module Invariant =
+
+    type StringCodec<'t> = StringCodec of ReaderT<string, Result<'t,string>> * ('t -> Const<string, unit>) with
+        static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (map f d, contramap g e)
+    module StringCodec =
+        let decode (StringCodec (d,_)) x = ReaderT.run d x
+        let encode (StringCodec (_,e)) x = Const.run (e x)
+
+    [<Test>]
+    let testStringToIntDerivedFromFloat() =
+        let floatCodec = StringCodec (ReaderT (tryParse >> Option.toResultWith "Parse error"), string<float> >> Const)
+        let floatParsed  = StringCodec.decode floatCodec "1.8"
+        let floatEncoded = StringCodec.encode floatCodec 1.5
+        Assert.AreEqual (floatParsed, Result<float, string>.Ok 1.8)
+        Assert.AreEqual (floatEncoded, "1.5")
+
+        let intCodec = invmap int<float> float<int> floatCodec
+        let oneParsed  = StringCodec.decode intCodec "1"
+        let tenEncoded = StringCodec.encode intCodec 10
+        Assert.AreEqual (oneParsed, Result<int, string>.Ok 1)
+        Assert.AreEqual (tenEncoded, "10")
+
 module Categories =
 
     // Kleisli (slightly different definition)
