@@ -62,6 +62,24 @@
 <span class="l">23: </span>
 <span class="l">24: </span>
 <span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
@@ -88,6 +106,24 @@
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 48)" onmouseover="showTip(event, 'fs30', 48)" class="id">a</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs31', 49)" onmouseover="showTip(event, 'fs31', 49)" class="fn">skip</span> <span class="n">3</span> <span class="pn">[</span><span class="n">1..</span><span class="n">10</span><span class="pn">]</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs32', 50)" onmouseover="showTip(event, 'fs32', 50)" class="id">b</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs33', 51)" onmouseover="showTip(event, 'fs33', 51)" class="fn">chunkBy</span> <span onmouseout="hideTip(event, 'fs34', 52)" onmouseover="showTip(event, 'fs34', 52)" class="fn">fst</span> <span class="pn">[</span><span class="n">1</span><span class="pn">,</span> <span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="n">1</span><span class="pn">,</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="n">2</span><span class="pn">,</span> <span class="s">&quot;c&quot;</span><span class="pn">;</span> <span class="n">1</span><span class="pn">,</span> <span class="s">&quot;d&quot;</span><span class="pn">]</span>
+
+
+<span class="c">// Invariant Functor</span>
+<span class="k">type</span> <span class="rt">StringConverter</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs35', 53)" onmouseover="showTip(event, 'fs35', 53)" class="uc">StringConverter</span> <span class="k">of</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 54)" onmouseover="showTip(event, 'fs8', 54)" class="rt">string</span> <span class="k">-&gt;</span> <span class="ta">&#39;</span><span class="id">t</span><span class="pn">)</span> <span class="pn">*</span> <span class="pn">(</span><span class="ta">&#39;</span><span class="id">t</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs8', 55)" onmouseover="showTip(event, 'fs8', 55)" class="rt">string</span><span class="pn">)</span> <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs36', 56)" onmouseover="showTip(event, 'fs36', 56)" class="fn">Invmap</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs35', 57)" onmouseover="showTip(event, 'fs35', 57)" class="uc">StringConverter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs37', 58)" onmouseover="showTip(event, 'fs37', 58)" class="fn">f</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs38', 59)" onmouseover="showTip(event, 'fs38', 59)" class="fn">g</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs39', 60)" onmouseover="showTip(event, 'fs39', 60)" class="fn">f&#39;</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs40', 61)" onmouseover="showTip(event, 'fs40', 61)" class="fn">g&#39;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs35', 62)" onmouseover="showTip(event, 'fs35', 62)" class="uc">StringConverter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs39', 63)" onmouseover="showTip(event, 'fs39', 63)" class="fn">f&#39;</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs37', 64)" onmouseover="showTip(event, 'fs37', 64)" class="fn">f</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs38', 65)" onmouseover="showTip(event, 'fs38', 65)" class="fn">g</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs40', 66)" onmouseover="showTip(event, 'fs40', 66)" class="fn">g&#39;</span><span class="pn">)</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs41', 67)" onmouseover="showTip(event, 'fs41', 67)" class="fn">ofString</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs35', 68)" onmouseover="showTip(event, 'fs35', 68)" class="uc">StringConverter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs37', 69)" onmouseover="showTip(event, 'fs37', 69)" class="fn">f</span><span class="pn">,</span> <span class="id">_</span><span class="pn">)</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs37', 70)" onmouseover="showTip(event, 'fs37', 70)" class="fn">f</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs42', 71)" onmouseover="showTip(event, 'fs42', 71)" class="fn">toString</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs35', 72)" onmouseover="showTip(event, 'fs35', 72)" class="uc">StringConverter</span> <span class="pn">(</span><span class="id">_</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs43', 73)" onmouseover="showTip(event, 'fs43', 73)" class="fn">f</span><span class="pn">)</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs43', 74)" onmouseover="showTip(event, 'fs43', 74)" class="fn">f</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs44', 75)" onmouseover="showTip(event, 'fs44', 75)" class="id">floatConv</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs35', 76)" onmouseover="showTip(event, 'fs35', 76)" class="uc">StringConverter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs45', 77)" onmouseover="showTip(event, 'fs45', 77)" class="fn">float</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs8', 78)" onmouseover="showTip(event, 'fs8', 78)" class="rt">string</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs8', 79)" onmouseover="showTip(event, 'fs8', 79)" class="fn">string</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs45', 80)" onmouseover="showTip(event, 'fs45', 80)" class="vt">float</span><span class="pn">&gt;</span><span class="pn">)</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs46', 81)" onmouseover="showTip(event, 'fs46', 81)" class="id">floatParsed</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 82)" onmouseover="showTip(event, 'fs41', 82)" class="fn">ofString</span> <span onmouseout="hideTip(event, 'fs44', 83)" onmouseover="showTip(event, 'fs44', 83)" class="id">floatConv</span> <span class="s">&quot;1.8&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs47', 84)" onmouseover="showTip(event, 'fs47', 84)" class="id">floatEncoded</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs42', 85)" onmouseover="showTip(event, 'fs42', 85)" class="fn">toString</span> <span onmouseout="hideTip(event, 'fs44', 86)" onmouseover="showTip(event, 'fs44', 86)" class="id">floatConv</span> <span class="n">1.5</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs48', 87)" onmouseover="showTip(event, 'fs48', 87)" class="id">intConv</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs49', 88)" onmouseover="showTip(event, 'fs49', 88)" class="fn">invmap</span> <span onmouseout="hideTip(event, 'fs50', 89)" onmouseover="showTip(event, 'fs50', 89)" class="fn">int</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs45', 90)" onmouseover="showTip(event, 'fs45', 90)" class="vt">float</span><span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs45', 91)" onmouseover="showTip(event, 'fs45', 91)" class="fn">float</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs50', 92)" onmouseover="showTip(event, 'fs50', 92)" class="vt">int</span><span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs44', 93)" onmouseover="showTip(event, 'fs44', 93)" class="id">floatConv</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs51', 94)" onmouseover="showTip(event, 'fs51', 94)" class="id">oneParsed</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 95)" onmouseover="showTip(event, 'fs41', 95)" class="fn">ofString</span> <span onmouseout="hideTip(event, 'fs48', 96)" onmouseover="showTip(event, 'fs48', 96)" class="id">intConv</span> <span class="s">&quot;1&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs52', 97)" onmouseover="showTip(event, 'fs52', 97)" class="id">tenEncoded</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs42', 98)" onmouseover="showTip(event, 'fs42', 98)" class="fn">toString</span> <span onmouseout="hideTip(event, 'fs48', 99)" onmouseover="showTip(event, 'fs48', 99)" class="id">intConv</span> <span class="n">10</span>
 </code></pre></td>
 </tr>
 </table>
@@ -126,6 +162,24 @@
 <div class="tip" id="fs32">val b : (int * (int * string) list) list</div>
 <div class="tip" id="fs33">val chunkBy : projection:(&#39;T -&gt; &#39;Key) -&gt; source:&#39;Collection&lt;&#39;T&gt; -&gt; &#39;Collection&lt;&#39;Key * &#39;Collection&lt;&#39;T&gt;&gt; (requires member ChunkBy)</div>
 <div class="tip" id="fs34">val fst : tuple:(&#39;T1 * &#39;T2) -&gt; &#39;T1</div>
+<div class="tip" id="fs35">Multiple items<br />union case StringConverter.StringConverter: (string -&gt; &#39;t) * (&#39;t -&gt; string) -&gt; StringConverter&lt;&#39;t&gt;<br /><br />--------------------<br />type StringConverter&lt;&#39;t&gt; =<br />&#160;&#160;| StringConverter of (string -&gt; &#39;t) * (&#39;t -&gt; string)<br />&#160;&#160;&#160;&#160;static member Invmap : StringConverter&lt;&#39;a&gt; * f&#39;:(&#39;a -&gt; &#39;b) * g&#39;:(&#39;b -&gt; &#39;a) -&gt; StringConverter&lt;&#39;b&gt;</div>
+<div class="tip" id="fs36">static member StringConverter.Invmap : StringConverter&lt;&#39;a&gt; * f&#39;:(&#39;a -&gt; &#39;b) * g&#39;:(&#39;b -&gt; &#39;a) -&gt; StringConverter&lt;&#39;b&gt;</div>
+<div class="tip" id="fs37">val f : (string -&gt; &#39;a)</div>
+<div class="tip" id="fs38">val g : (&#39;a -&gt; string)</div>
+<div class="tip" id="fs39">val f&#39; : (&#39;a -&gt; &#39;b)</div>
+<div class="tip" id="fs40">val g&#39; : (&#39;b -&gt; &#39;a)</div>
+<div class="tip" id="fs41">val ofString : StringConverter&lt;&#39;a&gt; -&gt; (string -&gt; &#39;a)</div>
+<div class="tip" id="fs42">val toString : StringConverter&lt;&#39;a&gt; -&gt; (&#39;a -&gt; string)</div>
+<div class="tip" id="fs43">val f : (&#39;a -&gt; string)</div>
+<div class="tip" id="fs44">val floatConv : StringConverter&lt;float&gt;</div>
+<div class="tip" id="fs45">Multiple items<br />val float : value:&#39;T -&gt; float (requires member op_Explicit)<br /><br />--------------------<br />type float = Double<br /><br />--------------------<br />type float&lt;&#39;Measure&gt; = float</div>
+<div class="tip" id="fs46">val floatParsed : float</div>
+<div class="tip" id="fs47">val floatEncoded : string</div>
+<div class="tip" id="fs48">val intConv : StringConverter&lt;int&gt;</div>
+<div class="tip" id="fs49">val invmap : f:(&#39;T -&gt; &#39;U) -&gt; g:(&#39;U -&gt; &#39;T) -&gt; source:&#39;InvariantFunctor&lt;&#39;T&gt; -&gt; &#39;InvariantFunctor&lt;&#39;U&gt; (requires member Invmap)</div>
+<div class="tip" id="fs50">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
+<div class="tip" id="fs51">val oneParsed : int</div>
+<div class="tip" id="fs52">val tenEncoded : string</div>
 
         </div>
         <div class="span3">
