@@ -12,7 +12,7 @@ The following diagram illustrates some common FP abstractions that can be repres
 
 Click on the abstraction name for a full description:
 
-<object data="//www.plantuml.com/plantuml/svg/{plantUMLDiag}" type="image/svg+xml"></object>
+<object style="width: 100%" data="//www.plantuml.com/plantuml/svg/{plantUMLDiag}" type="image/svg+xml"></object>
  
 
 Some more abstractions [here](abstraction-misc.html).
