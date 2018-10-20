@@ -1,4 +1,6 @@
 @startuml
+skinparam svgDimensionStyle false
+
 together {
 	abstract class Semigroup [[http://fsprojects.github.io/FSharpPlus/abstraction-semigroup.html]] {
 	  + (+) x y [[[http://fsprojects.github.io/FSharpPlus/abstraction-semigroup.html#plus {Appends two semigroups} ]]]
