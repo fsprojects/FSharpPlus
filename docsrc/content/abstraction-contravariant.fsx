@@ -20,7 +20,7 @@ Minimal complete definition
  * ``contramap f x``
 *)
 (**
-    static member Contramap (x:'Functor<'T>, f:'U->'T) :'Functor<'U>
+    static member Contramap (x:'Contravariant<'T>, f:'U->'T) :'Contravariant<'U>
 *)
 (**
 

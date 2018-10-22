@@ -24,7 +24,7 @@ Minimal complete definition
 *)
 (**
     static member Extract (s:'Comonad<'T>) : 'T
-    static member (=>>)   (s:'Comonad<'T>, f:'Comonad<'T> -> 'U) : Applicative<'U>
+    static member (=>>)   (s:'Comonad<'T>, f:'Comonad<'T> -> 'U) : Comonad<'U>
 *)
 (**
 
