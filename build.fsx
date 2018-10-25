@@ -68,6 +68,10 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 // Read additional information from the release notes document
 let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
+// Patch build version if on AppVeyor
+if BuildServerHelper.buildServer = AppVeyor then
+    AppVeyor.UpdateBuildVersion  (release.AssemblyVersion + "." + AppVeyor.AppVeyorEnvironment.BuildNumber)
+
 // Helper active pattern for project types
 let (|Fsproj|Csproj|Vbproj|Shproj|) (projFileName:string) =
     match projFileName with
@@ -164,6 +168,10 @@ Target "RunTests" (fun _ ->
             DisableShadowCopy = true
             TimeOut = TimeSpan.FromMinutes 20.
             OutputFile = "TestResults.xml" })
+
+    // Import test result file if on AppVeyor
+    if BuildServerHelper.buildServer = AppVeyor then
+        AppVeyor.UploadTestResultsFile AppVeyor.TestResultsType.NUnit "TestResults.xml"
 )
 
 
