@@ -1,5 +1,4 @@
 FSharpPlus [![Build Status](https://api.travis-ci.org/fsprojects/FSharpPlus.svg?branch=master)](https://travis-ci.org/fsprojects/FSharpPlus) [![Build status](https://ci.appveyor.com/api/projects/status/25ukpc0lamyf7pdx/branch/master?svg=true)](https://ci.appveyor.com/project/wallymathieu/fsharpplus/branch/master)
-
 ==========
 
 A complete and extensible base library for F#.
