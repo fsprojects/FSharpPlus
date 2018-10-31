@@ -1584,6 +1584,49 @@ module ApplicativeInference =
 
 
 
+
+
+module Memoization =
+
+    [<Test>]
+    let memoization () =
+        let effs = ResizeArray ()
+
+        let f x                       = printfn "calculating"; effs.Add "f"; string x
+        let g x (y:string) z : uint32 = printfn "calculating"; effs.Add "g"; uint32 (x * int y + int z)
+        let h x y z                   = printfn "calculating"; effs.Add "h"; new System.DateTime (x, y, z)
+        let sum2 (a:int)       = printfn "calculating"; effs.Add "sum2"; (+) a
+        let sum3 a (b:int) c   = printfn "calculating"; effs.Add "sum3"; a + b + c
+        let sum4 a b c d : int = printfn "calculating"; effs.Add "sum4"; a + b + c + d
+
+        // memoize them
+        let msum2 = memoize sum2
+        let msum3 = memoize sum3
+        let msum4 = memoize sum4
+        let mf    = memoize f
+        let mg    = memoize g
+        let mh    = memoize h
+
+        // check memoization really happens
+        let v1  = msum2 1 1
+        let v2  = msum2 1 1
+        let v3  = msum2 2 1
+        let v4  = msum3 1 2 3
+        let v5  = msum3 1 2 3
+        let v6  = msum4 3 1 2 3
+        let v7  = msum4 3 1 2 3
+        let v8  = msum4 3 5 2 3
+        let v9  = mf 3M
+        let v10 = mf 3M
+        let v11 = mg 4 "2" 3M
+        let v12 = mg 4 "2" 3M
+        let v13 = mh 2010 1 1
+        let v14 = mh 2010 1 1
+
+        Assert.AreEqual(effs.ToArray(), [|"sum2"; "sum2"; "sum3"; "sum4"; "sum4"; "f"; "g"; "h"|])
+
+
+
 // Old code, no longer used but still interesting to see if it still compiles
 
 module Ratio =
