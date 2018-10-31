@@ -1626,6 +1626,14 @@ module Memoization =
         Assert.AreEqual(effs.ToArray(), [|"sum2"; "sum2"; "sum3"; "sum4"; "sum4"; "f"; "g"; "h"|])
 
 
+    [<Test>]
+    let memoizeAcceptsNullArgument () =
+        let f x y = ""
+        let mf = memoize f
+        let _ = mf null null  // should not throw
+        ()
+
+
 
 // Old code, no longer used but still interesting to see if it still compiles
 
