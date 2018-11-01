@@ -24,10 +24,17 @@ There is a single computation expression: ``monad`` but it comes in 4 flavours:
 
    Side effect workflows don't have any additional requirement over the type (apart from the monad operations), but monadplus requires the additional [get_Empty and (<|>)](abstraction-alternative.html) methods.
 
-  The generic computation expression ``monad`` is a side-effect one, but it can be turned into a monadplus by accessing the ``.plus`` property.
+  The generic computation expression ``monad`` is a side-effect one, but it can be turned into a monadplus by accessing the ``.plus`` property. 
+  Note that ``monad.fx`` is an alias for ``monad``: fx is used as an abbreviation for side-effects.
 
   These computations are lazy by default, but they can be made strict by adding ``.strict`` or using a ``'``, ie ``monad.plus'``.
 
+In other words:
+
+ - ``monad.fx`` is the same as ``monad``: Lazy monadic builder. Use when you want to use side-effects instead of the additive behavior of monad plus.
+ - ``monad.fx'`` is the strict version of ``monad``
+ - ``monad.plus`` Lazy additive monadic builder. Use when you expect one or more results.
+ - ``monad.plus'`` is the strict version of ``monad.plus``
 
 Examples
 ========
@@ -98,3 +105,9 @@ let (lstNumber: list<_>) = monad.plus' {
             return i
     with e ->
         return -3 }
+
+
+(*
+For more information about computation expressions you can read the paper : The F# Computation Expression Zoo
+http://tomasp.net/academic/papers/computation-zoo/computation-zoo.pdf
+*)
