@@ -130,6 +130,17 @@ let f3 = anyOf both ((=)'x') ('x','y')
 let f4 = (1,2)^..both
 // val f4 : int list = [1; 2]
 
+let f5 = over items length ["hello";"world"]
+// val f5 : int list = [5; 5]
+
+let f6 = ["hello";"world"]^.items
+// val f6 : string = "helloworld"
+
+let f7 = anyOf items ((=)'x') ['x';'y']
+// val f7 : bool = true
+
+let f8 = [1;2]^..items
+// val f8 : int list = [1; 2]
 
 
 (**
