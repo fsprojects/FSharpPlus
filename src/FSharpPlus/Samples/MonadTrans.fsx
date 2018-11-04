@@ -102,3 +102,26 @@ module Suave=
         WebPart.choose [ path "/" >=> (OK "/")
                          path "/note" >=> register
                          path "/notes" >=> overview ]
+
+
+module CombineWriterWithResult =
+    // From https://stackoverflow.com/a/37900264
+    let divide5By = function
+        |0.0 -> Error "Divide by zero"
+        |x   -> Ok (5.0/x)
+
+    let eitherConv logSuccessF logFailF f v = 
+        ResultT (
+            match f v with
+            | Ok a -> Writer(Ok a, ["Success: " + logSuccessF a])
+            | Error b -> Writer(Error b, ["ERROR: "   + logFailF b]  ))
+
+    let ew = monad {
+        let! x = eitherConv (sprintf "%f") (sprintf "%s") divide5By 6.0
+        let! y = eitherConv (sprintf "%f") (sprintf "%s") divide5By 3.0
+        let! z = eitherConv (sprintf "%f") (sprintf "%s") divide5By 0.0
+        return (x, y, z)
+    }
+
+    let (_, log) = ew |> ResultT.run |> Writer.run
+
