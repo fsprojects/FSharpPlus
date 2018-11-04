@@ -83,7 +83,7 @@ module Builders =
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``)
-    
+
     type MonadFxStrictBuilder () =
         inherit StrictBuilder ()
         member inline __.Zero () = result ()                                       : '``Monad<unit>``
@@ -97,7 +97,7 @@ module Builders =
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<unit>``)
- 
+
     type MonadPlusBuilder () =
         inherit DelayedBuilder()
         member        __.strict = new MonadPlusStrictBuilder ()
@@ -146,8 +146,8 @@ module Builders =
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
 
-    /// Creates a (lazy) monadic computation expression with side-effects
+    /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad = new MonadFxBuilder ()
 
-    /// Creates a strict monadic computation expression with side-effects
+    /// Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad' = new MonadFxStrictBuilder ()
