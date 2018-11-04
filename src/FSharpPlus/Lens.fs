@@ -111,6 +111,17 @@ module Lens =
     /// Lens for the fifth element of a tuple
     let inline _5 f t = Map.InvokeOnInstance (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
 
+    [<RequireQualifiedAccess>]
+    module Set=
+        let inline _contains i f t = Map.InvokeOnInstance (fun b -> if b then Set.add i t else Set.remove i t) (f (Set.contains i t))
+
+    [<RequireQualifiedAccess>]
+    module Map=
+        let inline _item i f t = Map.InvokeOnInstance (fun x -> Map.add i x t) (f (Map.tryFind i t))
+    [<RequireQualifiedAccess>]
+    module IReadOnlyDictionary=
+        let inline _item i f t = Map.InvokeOnInstance (fun x -> IReadOnlyDictionary.add i x t) (f (IReadOnlyDictionary.tryGetValue i t))
+
     // Prism
     let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x
     let inline _Error x = (prism Error <| either (Error << Ok) Ok) x
