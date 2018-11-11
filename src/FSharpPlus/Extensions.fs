@@ -1,6 +1,8 @@
 namespace FSharpPlus
 
 open System
+open System.Collections.Generic
+open System.Linq
 
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
@@ -370,13 +372,36 @@ module Map =
 
     let unzip (source: Map<'Key, 'T1 * 'T2>) = mapValues fst source, mapValues snd source
 
-    /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
+    /// Returns the union of two maps, using the combiner function for duplicate keys.
     let unionWith combiner (source1: Map<'Key, 'Value>) (source2: Map<'Key, 'Value>) =
         Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> combiner v v' | None -> v') m) source1 source2
 
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
-    let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
+    let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = 
+        Enumerable
+          .Union(
+            source, 
+            altSource,
+            { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
+                      member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
+                      member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) 
 
+    /// Returns the intersection of two maps, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) =
+        Enumerable
+          .Join(
+            source1, 
+            source2, 
+            (fun (x:KeyValuePair<'Key, 'T>) -> x.Key), 
+            (fun (y:KeyValuePair<'Key, 'T>) -> y.Key), 
+            (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) -> 
+              KeyValuePair<'Key, 'Value>(x.Key, combiner (x.Value) (y.Value))))
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value))  
+
+    // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
+    let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
+        intersectWith (fun a _ -> a) source1 source2
 
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
@@ -439,9 +464,32 @@ module Dict =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IDictionary<'Key,'Value>
 
-    /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
-    let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
+    // Returns the union of two maps, preferring values from the first in case of duplicate keys.
+    let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = 
+        Enumerable
+          .Union(
+            source, 
+            altSource,
+            { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
+                      member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
+                      member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) 
 
+    /// Returns the intersection of two maps, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) =
+        Enumerable
+          .Join(
+            source1, 
+            source2, 
+            (fun (x:KeyValuePair<'Key, 'T>) -> x.Key), 
+            (fun (y:KeyValuePair<'Key, 'T>) -> y.Key), 
+            (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) -> 
+              KeyValuePair<'Key, 'Value>(x.Key, combiner (x.Value) (y.Value))))
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value))  
+
+    // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
+    let intersect (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) = 
+        intersectWith (fun a _ -> a) source1 source2
 
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
