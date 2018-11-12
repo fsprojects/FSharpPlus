@@ -456,7 +456,7 @@ module Dict =
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
-
+    open System.Linq
     open System.Collections.Generic
 
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
@@ -515,7 +515,15 @@ module IReadOnlyDictionary =
         d :> IReadOnlyDictionary<'Key,'Value>
 
     /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
-    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
+    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = 
+        Enumerable
+          .Union(
+            source, 
+            altSource,
+            { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
+                      member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
+                      member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
 
 /// Additional operations on IEnumerator
