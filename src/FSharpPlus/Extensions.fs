@@ -378,14 +378,7 @@ module Map =
 
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = 
-        Enumerable
-          .Union(
-            source, 
-            altSource,
-            { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
-                      member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
-                      member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
-          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) 
+        unionWith (fun x _ -> x) source altSource
 
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
@@ -458,7 +451,7 @@ module Dict =
             { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
                       member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
                       member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
-          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) 
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
