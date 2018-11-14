@@ -377,8 +377,7 @@ module Map =
         Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> combiner v v' | None -> v') m) source1 source2
 
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
-    let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = 
-        unionWith (fun x _ -> x) source altSource
+    let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun x _ -> x) source altSource
 
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
