@@ -330,6 +330,8 @@ module IReadOnlyList =
 /// Additional operations on Map<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Map =
+    open System.Collections.Generic
+    open System.Linq
 
     let keys   (source: Map<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
     let values (source: Map<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
@@ -370,19 +372,19 @@ module Map =
 
     let unzip (source: Map<'Key, 'T1 * 'T2>) = mapValues fst source, mapValues snd source
 
-    /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
+    /// Returns the union of two maps, using the combiner function for duplicate keys.
     let unionWith combiner (source1: Map<'Key, 'Value>) (source2: Map<'Key, 'Value>) =
         Map.fold (fun m k v' -> Map.add k (match Map.tryFind k m with Some v -> combiner v v' | None -> v') m) source1 source2
 
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
-    let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
-
+    let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun x _ -> x) source altSource
 
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Dict =
     open System.Collections.Generic
     open System.Collections.ObjectModel
+    open System.Linq
 
     let toIReadOnlyDictionary source = ReadOnlyDictionary source :> IReadOnlyDictionary<_,_>
 
@@ -439,14 +441,21 @@ module Dict =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IDictionary<'Key,'Value>
 
-    /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
-    let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
-
+    // Returns the union of two maps, preferring values from the first in case of duplicate keys.
+    let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = 
+        Enumerable
+          .Union(
+            source, 
+            altSource,
+            { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
+                      member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
+                      member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
-
+    open System.Linq
     open System.Collections.Generic
 
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
@@ -505,7 +514,15 @@ module IReadOnlyDictionary =
         d :> IReadOnlyDictionary<'Key,'Value>
 
     /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
-    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = unionWith (fun k _ -> k) source altSource
+    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = 
+        Enumerable
+          .Union(
+            source, 
+            altSource,
+            { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
+                      member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
+                      member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
 
 /// Additional operations on IEnumerator

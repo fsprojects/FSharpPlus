@@ -15,6 +15,7 @@
     <Compile Include="Validations.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Lens.fs" />
+    <Compile Include="Extensions.fs" />
     <None Include="paket.references" />
     <Content Include="App.config" />
   </ItemGroup>
