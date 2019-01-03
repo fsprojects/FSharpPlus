@@ -392,6 +392,7 @@ module Dict =
         match dct.TryGetValue k with
         | true, v -> Some v
         | _       -> None
+    let containsKey k (dct: IDictionary<'Key, 'Value>) = dct.ContainsKey k
 
     let keys   (source: IDictionary<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
     let values (source: IDictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
@@ -464,6 +465,7 @@ module IReadOnlyDictionary =
         match dct.TryGetValue k with
         | true, v -> Some v
         | _       -> None
+    let containsKey k (dct: IReadOnlyDictionary<'Key, 'Value>) = dct.ContainsKey k
 
     let keys   (source: IReadOnlyDictionary<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
     let values (source: IReadOnlyDictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
