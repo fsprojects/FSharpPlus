@@ -7,4 +7,4 @@ before_install:
   - chmod +x build.sh
  
 script: 
-  - ./build.sh All
+  - ./build.sh GenerateDocs # this will run 'RunTests' as well
