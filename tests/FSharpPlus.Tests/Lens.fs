@@ -6,6 +6,7 @@ open FSharpPlus.Lens
 open NUnit.Framework
 open FsCheck
 open Helpers
+open System.Collections.Generic
 
 
 [<Test>]
@@ -60,3 +61,21 @@ let iso () =
     let inline isoTupleOption x = x |> iso toOption fromOption
     areEqual (true, 42) (view (from' isoTupleOption) (Some 42))
     areEqual (Some 42) (view (_1 << isoTupleOption) (System.Int32.TryParse "42", ()))
+
+[<Test>]
+let lens_map_item () =
+    let m = Map.ofList [("hello","there")]
+    areEqual (Some "there") (m ^. Map._item "hello")
+    areEqual (Map.ofList [("hello","world")]) (m |> setl (Map._item "hello") "world")
+
+[<Test>]
+let lens_readonlydictionary_item () =
+    let r = Map.ofList [("hello","there")] :> IReadOnlyDictionary<_,_>
+    areEqual (Some "there") (r ^. IReadOnlyDictionary._item "hello")
+    areEqual (Map.ofList [("hello","world")] :> IReadOnlyDictionary<_,_>) (r |> setl (IReadOnlyDictionary._item "hello") "world")
+
+[<Test>]
+let lens_set_contains () =
+    let s = set [1;2]
+    areEqual (true) (s ^. Set._contains 1)
+    areEqual (set [1;2;3]) (s |> Set._contains 3 .-> true)
