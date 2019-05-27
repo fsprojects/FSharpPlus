@@ -72,6 +72,7 @@
     <Compile Include="Validations.fs" />
     <Compile Include="Kleisli.fs" />
     <Compile Include="Memoization.fs" />
+    <Compile Include="Parsing.fs" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Split-Join.fsx" />
     <None Include="Samples\Conversions.fsx" />
