@@ -1402,6 +1402,40 @@ module Parsing =
 
         let (r123: WrappedListA<int> option) = tryParse "[1;2;3]"
         Assert.IsTrue ((r123 = Some (WrappedListA [1; 2; 3])))
+        
+    [<Test>]
+    let scanfParsing () =
+        let (ccx : int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int) = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
+        
+        let t = sscanf "(%i-%i-%f-%i-%i-%i-%i-%i-%i)" "(32-66-888-4-5-6-7-8-9)"
+        let (a,b) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
+        let (x,y,z) = sscanf "%s-%s-%s" "test-this-string"
+        let (j,k,l,m,n,o,p) = sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"
+        
+        let (r1,r2,r3,r4,r5,r6,r7,r8)        = sscanf "%f %F %g %G %e %E %c %c"    "1 2.1 3.4 .3 43.2e32 0 f f"
+        let (s1,s2,s3,s4,s5,s6,s7,s8,s9)     = sscanf "%f %F %g %G %e %E %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f"
+        let (t1,t2,t3,t4,t5,t6,t7,t8,t9,t10) = sscanf "%f %F %g %G %e %E %c %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f f"
+        let (u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,u11,u12,u13,u14,u15)         = sscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c"       "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f"
+        let (v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16)     = sscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i"    "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16"
+        let (w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15,w16,w17) = sscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
+        
+        
+        let (zzz) = sscanf "(%%%s)" "(%hello)"
+        let (x1,y1,z1) = sscanf "%s--%s-%s" "test--this-string"
+        
+        
+        let f1 = trySscanf "(%%%s)" "(%hello)"
+        let f2 = trySscanf "%s--%s-%s" "test--this-gg"
+        let f3 = trySscanf "%f %F %g %G %e %E %c %c"    "1 2.1 3.4 .3 43.2e32 0 f f"
+        let f4 = trySscanf "%f %F %g %G %e %E %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f"
+        let f5 = trySscanf "%f %F %g %G %e %E %c %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f f"
+        let f6 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c"       "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f"
+        let f7 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i"    "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16"
+        let f8 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
+        
+        let (date : (DayOfWeek * string * uint16 * int) option) = trySscanf "%A %A %A %A" "Saturday March 25 1989"
+
+        ()
 
 
 module Conversions =
