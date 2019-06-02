@@ -490,7 +490,6 @@ module Dict =
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
     open System.Linq
-    open System.Collections
     open System.Collections.Generic
 
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
