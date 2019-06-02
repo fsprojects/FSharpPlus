@@ -470,10 +470,27 @@ module Dict =
                       member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
           .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
+    /// Returns the intersection of two Dicts, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) =
+        Enumerable
+          .Join(
+            source1, 
+            source2, 
+            (fun (x:KeyValuePair<'Key, 'T>) -> x.Key), 
+            (fun (y:KeyValuePair<'Key, 'T>) -> y.Key), 
+            (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) -> 
+              KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
+
+    // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
+    let intersect (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) = 
+        intersectWith (fun a _ -> a) source1 source2
+
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
     open System.Linq
+    open System.Collections
     open System.Collections.Generic
 
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
@@ -543,20 +560,20 @@ module IReadOnlyDictionary =
                       member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
           .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
-    /// Returns the intersection of two maps, using the combiner function for duplicate keys.
-    let intersectWith combiner (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) =
+    /// Returns the intersection of two read-only dictionaries, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) =
         Enumerable
-          .Join(
+            .Join(
             source1, 
             source2, 
             (fun (x:KeyValuePair<'Key, 'T>) -> x.Key), 
             (fun (y:KeyValuePair<'Key, 'T>) -> y.Key), 
             (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) -> 
-              KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
-          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IReadOnlyDictionary<'Key, 'T>
+                KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
+            .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IReadOnlyDictionary<'Key, 'T>
 
-    /// Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
-    let intersect (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) = 
+    /// Returns the intersection of two readonly dictionaries, preferring values from the first in case of duplicate keys.
+    let intersect (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
 
 /// Additional operations on IEnumerator
