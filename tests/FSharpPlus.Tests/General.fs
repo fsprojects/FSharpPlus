@@ -911,13 +911,13 @@ module Traversable =
         let inline seqLst (x:_ list) = sequence x
 
         let a : list<_> = seqSeq (seq [[1];[3]])
-        Assert.AreEqual ([seq [1; 3]], a)
+        CollectionAssert.AreEqual ([seq [1; 3]], a)
         Assert.IsInstanceOf<list<seq<int>>> a
         let b = seqArr ( [|[1];[3]|])
-        Assert.AreEqual ([[|1; 3|]], b)
+        CollectionAssert.AreEqual ([[|1; 3|]], b)
         Assert.IsInstanceOf<list<array<int>>> b
         let c = seqLst ( [ [1];[3] ])
-        Assert.AreEqual ([[1; 3]], c)
+        CollectionAssert.AreEqual ([[1; 3]], c)
         Assert.IsInstanceOf<list<list<int>>> c
 
     [<Test>]

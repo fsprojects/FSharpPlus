@@ -2,7 +2,7 @@ image: Visual Studio 2017
 init:
   - git config --global core.autocrlf input
 build_script:
-  - cmd: build.cmd RunTests
+  - cmd: build.cmd -t RunTests
 test: off
 artifacts:
   - path: bin
