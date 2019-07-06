@@ -557,7 +557,7 @@ module IReadOnlyDictionary =
             { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
                       member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
                       member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
-          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IReadOnlyDictionary<'Key, 'T>
 
     /// Returns the intersection of two read-only dictionaries, using the combiner function for duplicate keys.
     let intersectWith combiner (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) =
