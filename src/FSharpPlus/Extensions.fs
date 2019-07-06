@@ -524,7 +524,7 @@ module IReadOnlyDictionary =
             { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
                       member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
                       member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
-          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
+          .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IReadOnlyDictionary<'Key, 'T>
 
 
 /// Additional operations on IEnumerator
