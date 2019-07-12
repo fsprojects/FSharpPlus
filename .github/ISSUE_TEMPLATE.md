@@ -1,3 +1,5 @@
+Note: the following is not mandatory, just a guideline. Feel free to describe your bug report or suggestion in another way.
+
 ### Description
 
 Please provide a succinct description of your issue.
