@@ -3,8 +3,7 @@
 
 F#+ is an F# base library intended for production use, so the design of this library should be adjusted to the following guidelines:
 
-### Considerations before adding
--new functionality
+### Considerations before adding new functionality
 
  - Does it belong to this F#+ or to a separate library, dependent or not on F#+?
  Most likely if it's something technology specific it will not have a place here, whereas if it's something related to a language extension this might be a good place. There are situations that fall in the middle. Parsing is one example, at the moment we consider Json or other format parsing not part of this library but we're dealing with F# values parsing.
