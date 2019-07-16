@@ -28,5 +28,14 @@ F#+ is an F# base library intended for production use, so the design of this lib
  
 ### Modules
 
- - Generic operators and functions should go in the FSharpPlus.Operators module unless they conflict each other or with existing F# functionality, in which case they should go in a module that requires explicit opening.
+ - Generic operators and functions should go into the `FSharpPlus.Operators` module unless they conflict each other or with existing F# functionality, in which case they should go in a module that requires explicit opening.
  - New types/collections should be added in a separate file, ideally having a module with let-bound functions as it's in general more F# idiomatic. Some static members, required to satistfy static constraints for generic abstractions should be added when the type implement that abstraction, but if it expose a let-bound function with the same functionality, the static member can be hidden from the tooling with an attribute.
+ - Unary/binary operators: Adding an operator to the auto opened `FSharpPlus.Operators` module should be really justified as the amount of operators is limited and because of the increasing chance to clash with another library's operator. Adding operators to manually opened modules is the alternative.
+
+### Overloaded Static members
+
+- Default overloads are and should be available for the end user of the library, but internally we should avoid relying on them. It's better to duplicate code or eventually to factor out some portions than relying on default implementations. This provides less complicated type inference (more control over the code) and faster compile time.
+
+- Careful must be taken when using interfaces, there are scenarios where it is desired to provide overloads for an explicit interface (ie: `seq<_>`) but not to implicit  types implementing that interface, which will otherwise become a default overload. As an example an explicitely `seq<_>` instance has an overload for `>>=` but it's not good that all types that implement `seq<_>` defaults to that overload (not all `IEnumerables<_>` are monads), while for methods like `skip` it's just fine to have `seq<_>` as a default.
+
+- New abstractions should consider using well known operators as static members, specially if it exists a generic global operator. As an example `>>=` exists as a global operator, so it's better to use it also as convention for the monadic bind operation by requiring a `>>=` (instead of a named `bind`) static member. This has 2 advantages: It allows the operator on the type to be used without this library as a non-generic one, and it also increase the chance of finding 3rd party types that have that operator already defined.
