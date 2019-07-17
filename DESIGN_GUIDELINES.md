@@ -25,6 +25,7 @@ F#+ is an F# base library intended for production use, so the design of this lib
  - Generic functions should ideally have a corresponding non-generic counterparts, ie `map3` ==> `Option.map3` - `Result.map3`.
  - Generic functions should ideally relate to rules, not neccesary Category Theory.
  - Remember to design related functions in a consitent way across different types, even if that lead to a function that is not as efficient. Performance is a priority but we don't assure performance by hiding away stuff.
+ - Functions should be as referential transparent as practicable, namely things like culture should be either neutral or explicit.
  
 ### Modules
 
