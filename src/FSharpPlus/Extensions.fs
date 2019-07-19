@@ -346,6 +346,20 @@ module String =
             if i = 0 then ""
             else source |> skip i
 
+    /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
+    let toCodePoints (encoding : System.Text.Encoding option) (source : string) : seq<int> =
+        let mapper i c =
+            // Ignore the low-surrogate because it's already been converted
+            if c |> Char.IsLowSurrogate then None
+            else Char.ConvertToUtf32 (source, i) |> Some
+        source |> Seq.mapi mapper |> Seq.choose id
+    /// Converts the array of Int32 code-points (the actual Unicode Code Point number) to a string.
+    let fromCodePoints (source: seq<int>) : string =
+        source |> Seq.map Char.ConvertFromUtf32 |> String.concat String.Empty
+
+    /// Converts a string to a byte-array using the specified encoding.
+    let getBytes (encoding: System.Text.Encoding) (source: string) : byte [] = encoding.GetBytes source
+
 
 /// Additional operations on IReadOnlyCollection<'T>
 [<RequireQualifiedAccess>]
