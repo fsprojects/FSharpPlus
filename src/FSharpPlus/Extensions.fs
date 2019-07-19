@@ -295,6 +295,57 @@ module String =
             |> String.filter (fun ch -> CharUnicodeInfo.GetUnicodeCategory ch <> UnicodeCategory.NonSpacingMark)
             |> normalize NormalizationForm.FormC
 
+    /// Pads the beginning of the given string with spaces so that it has a specified total length.
+    let padLeft totalLength (source: string) = source.PadLeft totalLength
+    /// Pads the beginning of the given string with a specified character so that it has a specified total length.
+    let padLeftWith totalLength paddingChar (source: string) = source.PadLeft (totalLength, paddingChar)
+    /// Pads the end of the given string with spaces so that it has a specified total length.
+    let padRight totalLength (source: string) = source.PadRight totalLength
+    /// Pads the end of the given string with a specified character so that it has a specified total length.
+    let padRightWith totalLength paddingChar (source: string) = source.PadRight (totalLength, paddingChar)
+
+    /// Removes all leading and trailing occurrences of specified characters from the given string.
+    let trim      (trimChars: char seq) (source: string) = source.Trim (Seq.toArray trimChars)
+    /// Removes all leading occurrences of specified characters from the given string.
+    let trimStart (trimChars: char seq) (source: string) = source.TrimStart (Seq.toArray trimChars)
+    /// Removes all trailing occurrences of specified characters from the given string.
+    let trimEnd   (trimChars: char seq) (source: string) = source.TrimEnd (Seq.toArray trimChars)
+
+    let toArray (source: string)    = source.ToCharArray ()
+    let ofArray (source: char [])   = new String (source)
+    let toList  (source: string)    = toArray source |> List.ofArray
+    let ofList  (source: char list) = new String (source |> Array.ofList)
+    let toSeq   (source: string)    = source :> seq<char>
+    let ofSeq   (source: seq<char>) = String.Join (String.Empty, source)
+
+    let item    (index: int) (source: string) = source.[index]
+    let tryItem (index: int) (source: string) = if index >= 0 && index < source.Length then Some source.[index] else None
+
+    let rev (source: string) = new String (source.ToCharArray () |> Array.rev)
+
+    let take count (source: string) = source.[..count-1]
+    let skip count (source: string) = source.[count..]
+    let takeWhile (predicate: char -> bool) (source: string) =
+        if String.IsNullOrEmpty source then
+            String.Empty
+        else
+            let mutable i = 0
+            let length = String.length source
+            while i < length && predicate source.[i] do
+                i <- i + 1
+            if i = 0 then ""
+            else source |> take i
+    let skipWhile (predicate: char -> bool) (source: string) =
+        if String.IsNullOrEmpty source then
+            String.Empty
+        else
+            let mutable i = 0
+            let length = String.length source
+            while i < length && predicate source.[i] do
+                i <- i + 1
+            if i = 0 then ""
+            else source |> skip i
+
 
 /// Additional operations on IReadOnlyCollection<'T>
 [<RequireQualifiedAccess>]
