@@ -358,14 +358,24 @@ module String =
         else if String.length source >= count then String.Empty
         else skip count source
 
-    let findIndex    (char: char) (source: string) = source.IndexOf char
+    let findIndex    (char: char) (source: string) =
+        let index = source.IndexOf char
+        if index = -1 then
+            ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
+        else
+            index
     let tryFindIndex (char: char) (source: string) =
-        let index = findIndex char source
+        let index = source.IndexOf char
         if index = -1 then None else Some index
 
-    let findSliceIndex    (slice: string) (source: string) = source.IndexOf slice
+    let findSliceIndex    (slice: string) (source: string) =
+        let index = source.IndexOf slice
+        if index = -1 then
+            ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
+        else
+            index
     let tryFindSliceIndex (slice: string) (source: string) =
-        let index = findSliceIndex slice source
+        let index = source.IndexOf slice
         if index = -1 then None else Some index
 
     /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
