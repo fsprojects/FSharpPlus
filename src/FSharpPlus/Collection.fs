@@ -34,7 +34,7 @@ type OfSeq =
     static member inline OfSeq (x: seq<'t>                 , _: 'UserType                       , _: OfSeq   ) = (^UserType : (static member OfSeq : seq<'t> -> ^UserType) x)
     static member        OfSeq (x                          , _: 't []                           , _: OfSeq   ) = Array.ofSeq<'t> x
     static member        OfSeq (x                          , _: 't list                         , _: OfSeq   ) = List.ofSeq<'t> x
-    static member        OfSeq (x: seq<char>               , _: string                          , _: OfSeq   ) = String.Join ("", Array.ofSeq x)
+    static member        OfSeq (x: seq<char>               , _: string                          , _: OfSeq   ) = String.ofSeq x
     static member        OfSeq (x: seq<char>               , _: Text.StringBuilder              , _: OfSeq   ) = (StringBuilder (), x) ||> Seq.fold (fun x -> x.Append)
     static member        OfSeq (x: seq<'t>                 , _: Stack<'t>                       , _: OfSeq   ) = Generic.Stack x
 
@@ -68,7 +68,7 @@ type OfList =
     static member inline OfList (x: list<'t>                 , _: 'UserType                       , _: OfList  ) = (^UserType : (static member OfList : list<'t> -> ^UserType) x)
     static member        OfList (x                           , _: 't []                           , _: OfList  ) = Array.ofList<'t> x
     static member        OfList (x                           , _: 't list                         , _: OfList  ) = x
-    static member        OfList (x: list<char>               , _: string                          , _: OfList  ) = String.Join ("", Array.ofList x)
+    static member        OfList (x: list<char>               , _: string                          , _: OfList  ) = String.ofList x
     static member        OfList (x: list<char>               , _: Text.StringBuilder              , _: OfList  ) = (StringBuilder (), x) ||> List.fold (fun x -> x.Append)
     static member        OfList (x: list<'t>                 , _: Stack<'t>                       , _: OfList  ) = Generic.Stack x
 
@@ -104,7 +104,7 @@ type Filter with
 type Skip =
     inherit Default1
     static member inline Skip (x: '``Foldable<'T>``, n, [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.skip n |> OfSeq.Invoke : '``Foldable<'T>``
-    static member        Skip (x: string           , n, [<Optional>]_impl: Skip    ) = x.[n..]
+    static member        Skip (x: string           , n, [<Optional>]_impl: Skip    ) = String.skip n x
     static member        Skip (x: StringBuilder    , n, [<Optional>]_impl: Skip    ) = new StringBuilder(x.ToString().[n..])
     static member        Skip (x: 'a []            , n, [<Optional>]_impl: Skip    ) = x.[n..] : 'a []
     static member        Skip (x: 'a ResizeArray   , n, [<Optional>]_impl: Skip    ) = ResizeArray<'a> (Seq.skip n x)
@@ -120,7 +120,7 @@ type Skip =
 type Take =
     inherit Default1
     static member inline Take (x: '``Foldable<'T>``, n, [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.take n |> OfSeq.Invoke : '``Foldable<'T>``
-    static member        Take (x: string           , n, [<Optional>]_impl: Take    ) = x.[..n-1]
+    static member        Take (x: string           , n, [<Optional>]_impl: Take    ) = String.take n x
     static member        Take (x: StringBuilder    , n, [<Optional>]_impl: Take    ) = new StringBuilder(x.ToString().[..n-1])
     static member        Take (x: 'a []            , n, [<Optional>]_impl: Take    ) = x.[..n-1] : 'a []
     static member        Take (x: 'a ResizeArray   , n, [<Optional>]_impl: Take    ) = ResizeArray<'a> (Seq.take n x)
@@ -135,6 +135,7 @@ type Take =
 type TakeWhile =
     inherit Default1
     static member inline TakeWhile (x: '``Foldable<'T>``, p, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.takeWhile p |> OfSeq.Invoke : '``Foldable<'T>``
+    static member        TakeWhile (x: string           , p, [<Optional>]_impl: TakeWhile) = String.takeWhile p x
     static member        TakeWhile (x: 'a []            , p, [<Optional>]_impl: TakeWhile) = Array.takeWhile p x
     static member        TakeWhile (x: 'a ResizeArray   , p, [<Optional>]_impl: TakeWhile) = ResizeArray<'a> (Seq.takeWhile p x)
     static member        TakeWhile (x: list<'a>         , p, [<Optional>]_impl: TakeWhile) = List.takeWhile p x
@@ -148,6 +149,7 @@ type TakeWhile =
 type SkipWhile =
     inherit Default1
     static member inline SkipWhile (x: '``Foldable<'T>``, p, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.skipWhile p |> OfSeq.Invoke : '``Foldable<'T>``
+    static member        SkipWhile (x: string           , p, [<Optional>]_impl: SkipWhile) = String.skipWhile p x
     static member        SkipWhile (x: 'a []            , p, [<Optional>]_impl: SkipWhile) = Array.skipWhile p x
     static member        SkipWhile (x: 'a ResizeArray   , p, [<Optional>]_impl: SkipWhile) = ResizeArray<'a> (Seq.skipWhile p x)
     static member        SkipWhile (x: list<'a>         , p, [<Optional>]_impl: SkipWhile) = List.skipWhile p x
@@ -161,7 +163,7 @@ type SkipWhile =
 type Drop =
     inherit Default1
     static member inline Drop (x: '``Foldable<'T>``, n, [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.drop n |> OfSeq.Invoke : '``Foldable<'T>``
-    static member        Drop (x: string           , n, [<Optional>]_impl: Drop    ) = if n > 0 then (if x.Length > n then x.[n..] else "") else x
+    static member        Drop (x: string           , n, [<Optional>]_impl: Drop    ) = String.drop n x
     static member        Drop (x: StringBuilder    , n, [<Optional>]_impl: Drop    ) = if n > 0 then (if x.Length > n then new StringBuilder(x.ToString().[n..]) else new StringBuilder ()) else new StringBuilder (string x)
     static member        Drop (x: 'a []            , n, [<Optional>]_impl: Drop    ) = if n > 0 then (if x.Length > n then x.[n..] else [||]) else x : 'a []
     static member        Drop (x: 'a ResizeArray   , n, [<Optional>]_impl: Drop    ) = ResizeArray<'a> (Seq.drop n x)
@@ -177,7 +179,7 @@ type Drop =
 type Limit =
     inherit Default1
     static member inline Limit (x: '``Foldable<'T>``, n, [<Optional>]_impl: Default1) = x |> ToSeq.Invoke |> Seq.truncate n |> OfSeq.Invoke : '``Foldable<'T>``
-    static member        Limit (x: string           , n, [<Optional>]_impl: Limit   ) = if n < 1 then  ""  elif n < x.Length then x.[..n-1] else x
+    static member        Limit (x: string           , n, [<Optional>]_impl: Limit   ) = String.truncate n x
     static member        Limit (x: StringBuilder    , n, [<Optional>]_impl: Limit   ) = new StringBuilder(x.ToString().[..n-1])
     static member        Limit (x: 'a []            , n, [<Optional>]_impl: Limit   ) = if n < 1 then [||] elif n < x.Length then x.[..n-1] else x : 'a []
     static member        Limit (x: 'a ResizeArray   , n, [<Optional>]_impl: Limit   ) = ResizeArray<'a> (Seq.truncate n x)

@@ -348,11 +348,15 @@ module String =
     /// Returns a string that have at most N characters from the beginning of the original string.
     /// It returns the original string if it is shorter than count.
     let truncate count (source: string) =
-        if String.length source <= count then source else take count source
+        if count < 1 then String.Empty
+        else if String.length source <= count then source
+        else take count source
     /// Returns a string that drops first N characters of the original string.
     /// When count exceeds the length of the string it returns an empty string.
     let drop     count (source: string) =
-        if String.length source >= count then String.Empty else skip count source
+        if count < 1 then source
+        else if String.length source >= count then String.Empty
+        else skip count source
 
     let findIndex    (char: char) (source: string) = source.IndexOf char
     let tryFindIndex (char: char) (source: string) =
@@ -365,7 +369,7 @@ module String =
         if index = -1 then None else Some index
 
     /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
-    let toCodePoints (encoding : System.Text.Encoding option) (source : string) : seq<int> =
+    let toCodePoints (source : string) : seq<int> =
         let mapper i c =
             // Ignore the low-surrogate because it's already been converted
             if c |> Char.IsLowSurrogate then None
