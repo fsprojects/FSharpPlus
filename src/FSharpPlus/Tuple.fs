@@ -134,6 +134,8 @@ type MapItem5 =
         call (Unchecked.defaultof<MapItem5>, value)
 
 
+open FSharpPlus.Internals.Prelude
+
 type Curry =
     static member inline Invoke f =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Curry: _*_ -> _) b, a)
