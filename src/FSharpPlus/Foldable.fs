@@ -42,7 +42,7 @@ type ToSeq =
     inherit Default1
     static member ToSeq (x: seq<'T>   , [<Optional>]_impl: ToSeq) = x
     static member ToSeq (x: Text.StringBuilder,         _: ToSeq) = string x :> seq<char>
-    static member ToSeq (x: string    ,                 _: ToSeq) = x        :> seq<char>
+    static member ToSeq (x: string    ,                 _: ToSeq) = String.toSeq x
     static member ToSeq (x: option<'T>, [<Optional>]_impl: ToSeq) = match x with Some x -> Seq.singleton x | _ -> Seq.empty
     static member ToSeq (x: Id<'T>    , [<Optional>]_impl: ToSeq) = Seq.singleton x.getValue
 
@@ -65,7 +65,7 @@ type ToList =
     static member        ToList (x: seq<'a>       , [<Optional>]_impl: Default2) = Seq.toList x
     static member inline ToList (x                , [<Optional>]_impl: Default1) = (^Foldable : (static member ToList : 'Foldable->list<_>) x)
     static member        ToList (x: Set<'a>       , [<Optional>]_impl: ToList  ) = Set.toList x
-    static member        ToList (x: string        , [<Optional>]_impl: ToList  ) = x.ToCharArray () |> Array.toList
+    static member        ToList (x: string        , [<Optional>]_impl: ToList  ) = String.toList x
     static member        ToList (x: StringBuilder , [<Optional>]_impl: ToList  ) = x.ToString().ToCharArray() |> Array.toList
     static member        ToList (x: 'a []         , [<Optional>]_impl: ToList  ) = Array.toList x
     static member        ToList (x: 'a ResizeArray, [<Optional>]_impl: ToList  ) = Seq.toList x
@@ -83,7 +83,7 @@ type ToArray =
     static member        ToArray (x: seq<'a>       , [<Optional>]_impl: Default2) = Seq.toArray x
     static member inline ToArray (x                , [<Optional>]_impl: Default1) = (^Foldable : (static member ToArray : 'Foldable->array<_>) x)
     static member        ToArray (x: Set<'a>       , [<Optional>]_impl: ToArray ) = Set.toArray x
-    static member        ToArray (x: string        , [<Optional>]_impl: ToArray ) = x.ToCharArray ()
+    static member        ToArray (x: string        , [<Optional>]_impl: ToArray ) = String.toArray x
     static member        ToArray (x: StringBuilder , [<Optional>]_impl: ToArray ) = x.ToString().ToCharArray ()
     static member        ToArray (x: 'a []         , [<Optional>]_impl: ToArray ) = x
     static member        ToArray (x: 'a ResizeArray, [<Optional>]_impl: ToArray ) = Seq.toArray x
