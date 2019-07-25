@@ -386,7 +386,7 @@ module String =
             else Char.ConvertToUtf32 (source, i) |> Some
         source |> Seq.mapi mapper |> Seq.choose id
     /// Converts the array of Int32 code-points (the actual Unicode Code Point number) to a string.
-    let fromCodePoints (source: seq<int>) : string =
+    let ofCodePoints (source: seq<int>) : string =
         source |> Seq.map Char.ConvertFromUtf32 |> String.concat String.Empty
 
     /// Converts a string to a byte-array using the specified encoding.
