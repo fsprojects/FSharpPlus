@@ -17,11 +17,17 @@ module Operators =
     /// <returns>The constant value function.</returns>
     let inline konst k = fun _ -> k
 
-    /// Takes a function expecting a tuple of two arguments and returns a function expecting two arguments.
+    /// Takes a function expecting a tuple of two elements and returns a function expecting two curried arguments.
     let inline curry f x y = f (x, y)
+    
+    /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
+    let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'TResult) : 'T1 -> '``T2 -> ... -> 'Tn -> 'TResult`` = fun t -> Curry.Invoke f t
 
-    /// Takes a function expecting two curried arguments and returns a function expecting a tuple. Same as (<||).
+    /// Takes a function expecting two curried arguments and returns a function expecting a tuple of two elements. Same as (<||).
     let inline uncurry f (x, y) = f x y
+    
+    /// Takes a function expecting any N number of curried arguments and returns a function expecting a tuple of N elements.
+    let inline uncurryN (f: 'T1 -> '``T2 -> ... -> 'Tn -> 'TResult``) (t: (^``T1 * ^T2 * ... * ^Tn``)) = Uncurry.Invoke f t : 'TResult
 
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
