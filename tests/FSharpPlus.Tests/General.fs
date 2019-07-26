@@ -1105,6 +1105,7 @@ module MonadTransformers =
         let okFoo10 = okFoo10Comp |> ResultT.run |> Async.RunSynchronously
 
         ()
+
     let testCompileChoiceT () =
         // Test MonadError
         let err1Layers   = catch (Choice2Of2 "Invalid Value") (fun s -> Choice2Of2 ["the error was: " + s]) : Choice<int, _>
@@ -1617,6 +1618,55 @@ module ApplicativeInference =
     // *2 F# 4.1 regression
 
 
+
+module Curry =
+
+    [<Test>]
+    let curryTest () =
+        let f1  (x: Tuple<_>) = [x.Item1]
+        let f2  (x, y)    = [x + y]
+        let f3  (x, y, z) = [x + y + z]
+        let f7  (t1, t2, t3, t4, t5, t6, t7) = [t1+t2+t3+t4+t5+t6+t7]
+        let f8  (t1, t2, t3, t4, t5, t6, t7: float, t8: char) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8]
+        let f9  (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9]
+        let f15 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15]
+        let f16 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15, t16) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16]
+        let f17 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15, t16, t17) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16+t17]
+
+        let x1  = curryN f1 100
+        let x2  = curryN f2 1 2
+        let x3  = curryN f3 1 2 3
+        let x7  = curryN f7 1 2 3 4 5 6 7
+        let x8  = curryN f8 1 2 3 4 5 6 7. '8'
+        let x9  = curryN f9 1 2 3 4 5 6 7. '8' 9M
+        let x15 = curryN f15 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15
+        let x16 = curryN f16 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15 16
+        let x17 = curryN f17 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15 16 17
+
+        Assert.Pass ()
+
+    [<Test>]
+    let uncurryTest () =
+        let g2  x y   = [x + y]
+        let g3  x y z = [x + y + z]
+        let g7  a b c d e f g = [a + b + c + d + e + f + g]
+        let g8  t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8]
+        let g9  t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal)  = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9]
+        let g12 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12]
+        let g15 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 t13 t14 t15 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15]
+        let g16 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 t13 t14 t15 t16 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16]
+
+        let y1  = uncurryN string (Tuple<_> 1)
+        let y2  = uncurryN g2 (1, 2)
+        let y3  = uncurryN g3 (1, 2, 3)
+        let y7  = uncurryN g7 (1, 2, 3, 4, 5, 6, 7)
+        let y8  = uncurryN g8 (1, 2, 3, 4, 5, 6, 7. , '8')
+        let y9  = uncurryN g9 (1, 2, 3, 4, 5, 6, 7. , '8', 9M)
+        let y12 = uncurryN g12 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12)
+        let y15 = uncurryN g15 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12, 13, 14, 15)
+        let y16 = uncurryN g16 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12, 13, 14, 15, 16)
+
+        Assert.Pass ()
 
 
 
