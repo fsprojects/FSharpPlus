@@ -1684,12 +1684,12 @@ module Memoization =
         let sum4 a b c d : int = printfn "calculating"; effs.Add "sum4"; a + b + c + d
 
         // memoize them
-        let msum2 = memoize sum2
-        let msum3 = memoize sum3
-        let msum4 = memoize sum4
-        let mf    = memoize f
-        let mg    = memoize g
-        let mh    = memoize h
+        let msum2 = memoizeN sum2
+        let msum3 = memoizeN sum3
+        let msum4 = memoizeN sum4
+        let mf    = memoizeN f
+        let mg    = memoizeN g
+        let mh    = memoizeN h
 
         // check memoization really happens
         let v1  = msum2 1 1
@@ -1713,7 +1713,7 @@ module Memoization =
     [<Test>]
     let memoizeAcceptsNullArgument () =
         let f x y = ""
-        let mf = memoize f
+        let mf = memoizeN f
         let _ = mf null null  // should not throw
         ()
 

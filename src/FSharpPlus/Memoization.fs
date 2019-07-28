@@ -16,11 +16,11 @@ module Memoization =
         static member getOrAdd (cd:ConcurrentDictionary<MemoizationKeyWrapper<'a>,'b>) (f:'a -> 'b) k =
             cd.GetOrAdd (MemoizationKeyWrapper k, (fun (MemoizationKeyWrapper x) -> x) >> f)
 
-    let inline memoize (f:'``(T1 -> T2 -> ... -> Tn)``): '``(T1 -> T2 -> ... -> Tn)`` =
+    let inline memoizeN (f:'``(T1 -> T2 -> ... -> Tn)``): '``(T1 -> T2 -> ... -> Tn)`` =
         (MemoizeConcurrentHelper $ Unchecked.defaultof<'``(T1 -> T2 -> ... -> Tn)``>) f
 
     type MemoizeConcurrentHelper with
         static member ($) (_:obj,  _: 'a -> 'b) =
             MemoizeConcurrentHelper.getOrAdd (ConcurrentDictionary ())
         static member inline ($) (MemoizeConcurrentHelper, _:'t -> 'a -> 'b) =
-            MemoizeConcurrentHelper.getOrAdd (ConcurrentDictionary ()) << (<<) memoize
+            MemoizeConcurrentHelper.getOrAdd (ConcurrentDictionary ()) << (<<) memoizeN
