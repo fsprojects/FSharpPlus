@@ -718,7 +718,7 @@ module Operators =
     let inline mfilter (predicate: 't->bool) (m: '``MonadZero<'t>``) : '``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke ()
 
     /// Returns the sum of the monoid elements in the Foldable.
-    let inline sum (x: 'Foldable'Num) : 'Num = fold (+) (getZero () : 'Num) x
+    let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
 
     /// Converts using the implicit operator. 
     let inline implicit (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
