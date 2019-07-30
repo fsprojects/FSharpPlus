@@ -268,7 +268,7 @@ module ComputationExpressions =
             monad {
                 use somethingDisposable = new AsyncOfOptionDisposable ()
                 let! (result: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
-                SideEffects.add "I'm doing something async" result
+                SideEffects.add (sprintf "Unpacked async option: %A" result)
                 return result
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
