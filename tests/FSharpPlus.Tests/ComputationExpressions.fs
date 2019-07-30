@@ -253,3 +253,22 @@ module ComputationExpressions =
 
         let effA, effB = List.partition (String.startsWith "A") (SideEffects.get())
         areEqual (List.last effA, List.last effB) ("A: Disposed properly", "B: Disposed properly")
+
+    type AsyncOfOptionDisposable () =
+        interface IDisposable with
+            member __.Dispose() = SideEffects.add "I'm disposed"
+        member __.AsyncSomeOption() : Async<int option> = async { 
+            SideEffects.add "I'm doing something async"
+            return Some 1 }
+
+    [<Test>]
+    let usingInOptionT () =
+        SideEffects.reset ()
+        let reproducePrematureDisposal : Async<int option> = monad {
+            use somethingDisposable = new AsyncOfOptionDisposable ()
+            let! (result: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
+            SideEffects.add "I'm doing something async" result
+            return result } |> OptionT.run
+
+        let _ = reproducePrematureDisposal |> Async.RunSynchronously
+        areEqual (SideEffects.get()) ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
