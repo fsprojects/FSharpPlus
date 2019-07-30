@@ -49,6 +49,11 @@ type ResultT<'``monad<'result<'t,'e>>``> with
     static member inline (<*>) (f: ResultT<'``Monad<'Result<('T -> 'U),'E>>``>, x: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT.apply f x : ResultT<'``Monad<'Result<'U,'E>>``>
     static member inline (>>=) (x: ResultT<'``Monad<'Result<'T,'E>>``>, f: 'T->ResultT<'``Monad<'Result<'U,'E>>``>)     = ResultT.bind  f x
 
+    static member inline TryWith (source: ResultT<'``Monad<'Result<'T,'E>>``>, f: exn -> ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (TryWith.Invoke (ResultT.run source) (ResultT.run << f))
+    static member inline TryFinally (computation: ResultT<'``Monad<'Result<'T,'E>>``>, f) = ResultT (TryFinally.Invoke     (ResultT.run computation) f)
+    static member inline Using (resource, f: _ -> ResultT<'``Monad<'Result<'T,'E>>``>)    = ResultT (Using.Invoke resource (ResultT.run << f))
+    static member inline Delay (body : unit   ->  ResultT<'``Monad<'Result<'T,'E>>``>)    = ResultT (Delay.Invoke (fun _ -> ResultT.run (body ())))
+
     static member inline Lift (x: '``Monad<'T>``) = x |> liftM Ok |> ResultT : ResultT<'``Monad<Result<'T,'E>>``>
 
     static member inline Throw (x: 'E) = x |> Error |> result |> ResultT : ResultT<'``Monad<Result<'T,'E>>``>

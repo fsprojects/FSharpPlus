@@ -65,6 +65,11 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline get_Empty () = StateT (fun _ -> getEmpty ()) : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
 
+    static member inline TryWith (source: StateT<'S,'``Monad<'T * 'S>``>, f: exn -> StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> TryWith.Invoke (StateT.run source s) (fun x -> StateT.run (f x) s))
+    static member inline TryFinally (computation: StateT<'S,'``Monad<'T * 'S>``>, f) = StateT (fun s -> TryFinally.Invoke     (StateT.run computation s) f)
+    static member inline Using (resource, f: _ -> StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Using.Invoke resource (fun x -> StateT.run (f x) s))
+    static member inline Delay (body : unit   ->  StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Delay.Invoke (fun _ -> StateT.run (body ()) s)) : StateT<'S,'``Monad<'T * 'S>``>
+
     static member inline Lift (m: '``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> = StateT <| fun s -> m >>= fun a -> result (a, s)
 
     static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x) : '``StateT<'S,'MonadAsync<'T>>``
@@ -75,8 +80,3 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Throw (x: 'E) = x |> throw |> lift
     static member inline Catch (m: StateT<'S,'``MonadError<'E1,'T * 'S>``>, h: 'E1 -> _) =
         StateT (fun s -> catch (StateT.run m s) (fun e -> StateT.run (h e) s)) : StateT<'S,'``MonadError<'E2, 'T * 'S>``>
-
-    static member inline Delay (f: unit -> StateT<'S,'``Monad<'T * 'S>``>) =
-        StateT (fun s ->
-            let d () = StateT.run (f ()) s
-            Delay.Invoke d) : StateT<'S,'``Monad<'T * 'S>``>
