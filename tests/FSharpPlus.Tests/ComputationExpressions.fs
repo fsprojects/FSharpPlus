@@ -264,11 +264,12 @@ module ComputationExpressions =
     [<Test>]
     let usingInOptionT () =
         SideEffects.reset ()
-        let reproducePrematureDisposal : Async<int option> = monad {
-            use somethingDisposable = new AsyncOfOptionDisposable ()
-            let! (result: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
-            SideEffects.add "I'm doing something async" result
-            return result } |> OptionT.run
-
+        let reproducePrematureDisposal : Async<int option> =
+            monad {
+                use somethingDisposable = new AsyncOfOptionDisposable ()
+                let! (result: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add "I'm doing something async" result
+                return result
+            } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         areEqual (SideEffects.get()) ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
