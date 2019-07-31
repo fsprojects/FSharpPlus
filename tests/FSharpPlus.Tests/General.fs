@@ -943,6 +943,11 @@ module Traversable =
         Assert.AreEqual ([], d)
         let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
         ()
+
+    let traverseTask () =
+        let a = traverse Task.FromResult [1;2]
+        Assert.AreEqual([1;2], a.RunSynchronously())
+        ()
         
         
 type ZipList<'s> = ZipList of 's seq with
