@@ -15,7 +15,7 @@ F#+ is an F# base library intended for production use, so the design of this lib
 ### Naming
 
  - General F# guidelines and naming conventions apply here.
- - For new functions or operators, try to match first existing de-facto conventions in F# (ie: `map2` instead of `unzip`).
+ - For new functions or operators, try to match first existing de-facto conventions in F# (ie: `foldBack` instead of `foldRight`).
  - If there is no possibility to relate the name with an existing F# function name, we look in other languages, prefereably FP first languages.
  - Generic functions should be named the same as module specific ones, ie: `map`, not `fmap`.
  
@@ -35,8 +35,8 @@ F#+ is an F# base library intended for production use, so the design of this lib
 
 ### Overloaded Static members
 
-- Default overloads are and should be available for the end user of the library, but internally we should avoid relying on them. It's better to duplicate code or eventually to factor out some portions than relying on default implementations. This provides less complicated type inference (more control over the code) and faster compile time.
+- Default overloads (fallback mechanism) are and should be available for the end user of the library but internally we should avoid relying on them. It's better to duplicate code or eventually to factor out some portions than relying on default implementations. This provides less complicated type inference (more control over the code) and faster compile time. At the same time this decision doesn't affects the end user as long as we don't forget any overload (which would be considered a bug) and in most cases it provides an additional benefit of improving performance, by having specialized functions.
 
 - Careful must be taken when using interfaces, there are scenarios where it is desired to provide overloads for an explicit interface (ie: `seq<_>`) but not to implicit  types implementing that interface, which will otherwise become a default overload. As an example an explicitely `seq<_>` instance has an overload for `>>=` but it's not good that all types that implement `seq<_>` defaults to that overload (not all `IEnumerables<_>` are monads), while for methods like `skip` it's just fine to have `seq<_>` as a default.
 
-- New abstractions should consider using well known operators as static members, specially if it exists a generic global operator. As an example `>>=` exists as a global operator, so it's better to use it also as convention for the monadic bind operation by requiring a `>>=` (instead of a named `bind`) static member. This has 2 advantages: It allows the operator on the type to be used without this library as a non-generic one, and it also increase the chance of finding 3rd party types that have that operator already defined.
+- New abstractions should consider using well known operators as static members, specially if it exists a generic global operator. As an example `>>=` exists as a global operator, so it's better to use it also as convention for the monadic bind operation by requiring a `>>=` (instead of a named `bind`) static member. This has 2 advantages: It allows the operator on the type to be used without this library as a non-generic one, and it also increases the chance of finding 3rd party types that have that operator already defined.
