@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus
 
+open FSharpPlus.Internals
 
 [<AutoOpen>]
 module Memoization =
@@ -12,15 +13,19 @@ module Memoization =
     [<Struct>]
     type MemoizationKeyWrapper<'a> = MemoizationKeyWrapper of 'a
 
-    type MemoizeConcurrentHelper = MemoizeConcurrentHelper with
-        static member getOrAdd (cd:ConcurrentDictionary<MemoizationKeyWrapper<'a>,'b>) (f:'a -> 'b) k =
+    type MemoizeN = MemoizeN with
+        static member getOrAdd (cd: ConcurrentDictionary<MemoizationKeyWrapper<'a>,'b>) (f: 'a -> 'b) k =
             cd.GetOrAdd (MemoizationKeyWrapper k, (fun (MemoizationKeyWrapper x) -> x) >> f)
 
     let inline memoizeN (f:'``(T1 -> T2 -> ... -> Tn)``): '``(T1 -> T2 -> ... -> Tn)`` =
-        (MemoizeConcurrentHelper $ Unchecked.defaultof<'``(T1 -> T2 -> ... -> Tn)``>) f
+        let inline call_2 (a: ^MemoizeN, b: ^b) = ((^MemoizeN or ^b) : (static member MemoizeN : ^MemoizeN * 'b -> _ ) (a, b))
+        call_2 (Unchecked.defaultof<MemoizeN>, Unchecked.defaultof<'``(T1 -> T2 -> ... -> Tn)``>) f
 
-    type MemoizeConcurrentHelper with
-        static member ($) (_:obj,  _: 'a -> 'b) =
-            MemoizeConcurrentHelper.getOrAdd (ConcurrentDictionary ())
-        static member inline ($) (MemoizeConcurrentHelper, _:'t -> 'a -> 'b) =
-            MemoizeConcurrentHelper.getOrAdd (ConcurrentDictionary ()) << (<<) memoizeN
+    type MemoizeN with
+        static member inline Invoke (f:'``(T1 -> T2 -> ... -> Tn)``): '``(T1 -> T2 -> ... -> Tn)`` =
+            let inline call_2 (a: ^MemoizeN, b: ^b) = ((^MemoizeN or ^b) : (static member MemoizeN : ^MemoizeN * 'b -> _ ) (a, b))
+            call_2 (Unchecked.defaultof<MemoizeN>, Unchecked.defaultof<'``(T1 -> T2 -> ... -> Tn)``>) f
+
+    type MemoizeN with
+        static member        MemoizeN (_: Default1, _:   'a -> 'b) = MemoizeN.getOrAdd (ConcurrentDictionary ())
+        static member inline MemoizeN (MemoizeN, _:'t -> 'a -> 'b) = MemoizeN.getOrAdd (ConcurrentDictionary ()) << (<<) MemoizeN.Invoke
