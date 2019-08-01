@@ -433,10 +433,10 @@ open Fake.Core.TargetOperators
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
-  ==> "GenerateReferenceDocs"
-  ==> "GenerateDocs"
   ==> "NuGet"
   ==> "CopyNuGet"
+  ==> "GenerateReferenceDocs"
+  ==> "GenerateDocs"
   ==> "BuildPackage"
   ==> "All"
   =?> ("ReleaseDocs",BuildServer.isLocalBuild)
