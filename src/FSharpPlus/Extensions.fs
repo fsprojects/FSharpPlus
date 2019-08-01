@@ -1,7 +1,6 @@
 namespace FSharpPlus
 
 open System
-open System.Threading.Tasks
 
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
@@ -673,6 +672,7 @@ module IReadOnlyDictionary =
     let intersect (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
 
+
 /// Additional operations on IEnumerator
 [<RequireQualifiedAccess>]
 module Enumerator =
@@ -1056,7 +1056,12 @@ module Enumerator =
                         try e2.Dispose ()
                         finally e3.Dispose () }
 
+
+/// Additional operations on Task<'T>
+[<RequireQualifiedAccess>]
 module Task =
+
+    open System.Threading.Tasks
 
     /// <summary>Creates a task workflow from another workflow 'x', mapping its result with 'f'.</summary>
     let map (f : 'T -> 'U) (t : Task<'T>) : Task<'U> = t.ContinueWith(fun (t' : Task<'T>) -> f (t'.Result))
@@ -1086,11 +1091,11 @@ module Task =
             y.ContinueWith(fun (y' : Task<'U>) ->
                 (x'.Result, y'.Result))).Unwrap()
 
-    /// flatten two nested tasks into one.
-    let join (t : Task<Task<'T>>) : Task<'T> =
-        t.Unwrap()
+    /// Flatten two nested tasks into one.
+    let join (t : Task<Task<'T>>) : Task<'T> = t.Unwrap()
 
-/// Additional operations on IEnumerator
+/// Additional operations on Async
+[<RequireQualifiedAccess>]
 module Async =
 
     /// <summary>Creates an async workflow from another workflow 'x', mapping its result with 'f'.</summary>
@@ -1122,6 +1127,7 @@ module Async =
 
     /// Raise an exception in the async workflow
     let raise<'T> (ex: exn) : Async<'T> = Async.FromContinuations (fun (_, errK, _) -> errK ex)
+
 
 
 /// Module containing F#+ Extension Methods  
