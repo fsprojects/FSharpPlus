@@ -4,7 +4,7 @@ source https://api.nuget.org/v3/index.json
 
 nuget FSharp.Core ~> 4.1 redirects: force
 
-nuget FSharp.Formatting ~> 3.0.0-beta08
+nuget FSharp.Formatting ~> 3.1.0
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
 
