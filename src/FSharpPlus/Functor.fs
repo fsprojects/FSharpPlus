@@ -415,6 +415,7 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zip      x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip     x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip      x y
+    static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip       x y
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =
         let inline call_4 (a: ^a, b: ^b, c: ^c, d: ^d) = ((^a or ^b or ^c or ^d) : (static member Zip : (_*_*_)*_ -> _) (b, c, d), a)
