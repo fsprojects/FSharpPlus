@@ -418,6 +418,7 @@ Target.create "Release" (fun _ ->
     |> Async.RunSynchronously
 )
 
+Target.create "BuildDocs" ignore
 Target.create "BuildPackage" ignore
 
 // --------------------------------------------------------------------------------------
@@ -435,9 +436,8 @@ open Fake.Core.TargetOperators
   ==> "RunTests"
   ==> "NuGet"
   ==> "CopyNuGet"
-  ==> "GenerateReferenceDocs"
-  ==> "GenerateDocs"
   ==> "BuildPackage"
+  ==> "BuildDocs"
   ==> "All"
   =?> ("ReleaseDocs",BuildServer.isLocalBuild)
 
@@ -445,6 +445,10 @@ open Fake.Core.TargetOperators
   ==> "GenerateHelp"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
+
+"GenerateReferenceDocs"
+  ==> "GenerateDocs"
+  ==> "BuildDocs"
 
 //"GenerateHelpDebug"
 //  ==> "KeepRunning"
@@ -456,7 +460,8 @@ open Fake.Core.TargetOperators
   ==> "PublishNuget"
   ==> "Release"
 
-"ReleaseDocs"
+"BuildDocs"
+  ==> "ReleaseDocs"
   ==> "Release"
 
 Target.runOrDefault "All"
