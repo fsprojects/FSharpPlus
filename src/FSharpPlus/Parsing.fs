@@ -39,15 +39,16 @@ module Parsing =
                 call Unchecked.defaultof<ParseArray>
 
             static member inline ParseArray (t: 't, _: ParseArray) = fun (g: string [])  ->
-                let (t1: 't1) = if false then (^t : (member Item1 : 't1) t) else parse (g.[0])
-                let (t2: 't2) = if false then (^t : (member Item2 : 't2) t) else parse (g.[1])
-                let (t3: 't3) = if false then (^t : (member Item3 : 't3) t) else parse (g.[2])
-                let (t4: 't4) = if false then (^t : (member Item4 : 't4) t) else parse (g.[3])
-                let (t5: 't5) = if false then (^t : (member Item5 : 't5) t) else parse (g.[4])
-                let (t6: 't6) = if false then (^t : (member Item6 : 't6) t) else parse (g.[5])
-                let (t7: 't7) = if false then (^t : (member Item7 : 't7) t) else parse (g.[6])
-                let (tr: 'tr) = if false then (^t : (member Rest  : 'tr) t) else ParseArray.Invoke (g.[7..])
-                Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+                let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
+                let (t1: 't1) = parse (g.[0])
+                let (t2: 't2) = parse (g.[1])
+                let (t3: 't3) = parse (g.[2])
+                let (t4: 't4) = parse (g.[3])
+                let (t5: 't5) = parse (g.[4])
+                let (t6: 't6) = parse (g.[5])
+                let (t7: 't7) = parse (g.[6])
+                let (tr: 'tr) = ParseArray.Invoke (g.[7..])
+                Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
             static member inline ParseArray (_: unit                        , _: ParseArray) = fun (_: string []) -> ()
             static member inline ParseArray (_: Tuple<'t1>                  , _: ParseArray) = fun (g: string []) -> Tuple<_> (parse g.[0]) : Tuple<'t1>
@@ -72,16 +73,17 @@ module Parsing =
                 call Unchecked.defaultof<TryParseArray>
 
             static member inline TryParseArray (t: 't, _: TryParseArray) = fun (g: string [])  ->
-                let (t1: 't1 option) = if false then Some (^t : (member Item1 : 't1) t) else tryParseElemAt 0 g
-                let (t2: 't2 option) = if false then Some (^t : (member Item2 : 't2) t) else tryParseElemAt 1 g
-                let (t3: 't3 option) = if false then Some (^t : (member Item3 : 't3) t) else tryParseElemAt 2 g
-                let (t4: 't4 option) = if false then Some (^t : (member Item4 : 't4) t) else tryParseElemAt 3 g
-                let (t5: 't5 option) = if false then Some (^t : (member Item5 : 't5) t) else tryParseElemAt 4 g
-                let (t6: 't6 option) = if false then Some (^t : (member Item6 : 't6) t) else tryParseElemAt 5 g
-                let (t7: 't7 option) = if false then Some (^t : (member Item7 : 't7) t) else tryParseElemAt 6 g
-                let (tr: 'tr option) = if false then Some (^t : (member Rest  : 'tr) t) elif g.Length > 7 then TryParseArray.Invoke (g.[7..]) else None
+                let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
+                let (t1: 't1 option) = tryParseElemAt 0 g
+                let (t2: 't2 option) = tryParseElemAt 1 g
+                let (t3: 't3 option) = tryParseElemAt 2 g
+                let (t4: 't4 option) = tryParseElemAt 3 g
+                let (t5: 't5 option) = tryParseElemAt 4 g
+                let (t6: 't6 option) = tryParseElemAt 5 g
+                let (t7: 't7 option) = tryParseElemAt 6 g
+                let (tr: 'tr option) = if g.Length > 7 then TryParseArray.Invoke (g.[7..]) else None
                 match t1, t2, t3, t4, t5, t6, t7, tr with
-                |  Some t1, Some t2, Some t3, Some t4, Some t5, Some t6, Some t7, Some tr -> Some (Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't)
+                |  Some t1, Some t2, Some t3, Some t4, Some t5, Some t6, Some t7, Some tr -> Some (Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't)
                 | _ -> None
 
             static member inline TryParseArray (_: unit                        , _: TryParseArray) = fun (_: string []) -> ()
