@@ -154,11 +154,12 @@ Target.create "CopyBinaries" (fun _ ->
 
 // --------------------------------------------------------------------------------------
 // Clean build results
-let (nugetVersionPrefix,nugetVersionSuffix) = 
-  match release.NugetVersion.Split('-') |> Array.toList with
-  | prefix::[]->(prefix,"")
-  | prefix::suffix::[]->(prefix,suffix)
-  | _-> failwith "failed to recognise version"
+let (nugetVersionPrefix,nugetVersionSuffix) =
+    match release.NugetVersion.Split('-') |> Array.toList with
+    | prefix::_ when BuildServer.AppVeyor.detect() -> (prefix, Git.Information.getCurrentHash())
+    | prefix::[]->(prefix,"")
+    | prefix::suffix::[]->(prefix,suffix)
+    | _-> failwith "failed to recognise version"
 
 let vsProjProps = [
 #if MONO
