@@ -202,8 +202,8 @@ module Seq =
             index
 
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source if found.
-    /// Otherwise, returns None.
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
     /// </summary>
     /// <remarks>
     /// It is assumed that 1) the slice is finite and 2) either the source is finite or actually contains the slice, otherwise it will not return forever.
@@ -211,7 +211,7 @@ module Seq =
     /// The source will be iterated until the slice is found or it reaches the end.
     /// </remarks>
     /// <returns>
-    /// The index of the slice or None.
+    /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: seq<_>) (source: seq<_>) =
         let index = Internals.FindSliceIndex.seqImpl slice source
@@ -298,11 +298,11 @@ module List =
             index
 
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source if found.
-    /// Otherwise, returns None.
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
     /// </summary>
     /// <returns>
-    /// The index of the slice or None.
+    /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: _ list) (source: _ list) =
         let index = Internals.FindSliceIndex.listImpl slice source
@@ -340,11 +340,11 @@ module Array =
             index
 
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source if found.
-    /// Otherwise, returns None.
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
     /// </summary>
     /// <returns>
-    /// The index of the slice or None.
+    /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
@@ -479,11 +479,11 @@ module String =
         else
             index
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source if found.
-    /// Otherwise, returns None.
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
     /// </summary>
     /// <returns>
-    /// The index of the slice or None.
+    /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: string) (source: string) =
         let index = source.IndexOf slice

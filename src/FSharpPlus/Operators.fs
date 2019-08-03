@@ -345,7 +345,30 @@ module Operators =
     let inline maxBy (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) = MaxBy.Invoke projection  source : 'T
     let inline minBy (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) = MinBy.Invoke projection  source : 'T
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
-       
+
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// </summary>
+    /// <param name="slice">The slice foldable to be searched.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let inline findSliceIndex (slice: '``Foldable<'T>``) (source: '``Foldable<'T>``) : int = FindSliceIndex.Invoke slice source
+
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <param name="slice">The slice foldable to be searched.</param>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let inline tryFindSliceIndex (slice: '``Foldable<'T>``) (source: '``Foldable<'T>``) : int option = TryFindSliceIndex.Invoke slice source
 
     // Traversable
 

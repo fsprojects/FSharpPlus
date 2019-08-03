@@ -376,3 +376,33 @@ type Length =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Length : _*_ -> _) b, a)
         let inline call (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<Length>, source) : int
+
+
+type FindSliceIndex =
+    inherit Default1
+    static member inline FindSliceIndex (x: '``Foldable<'T>``, e: '``Foldable<T>`` , [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.findSliceIndex (ToSeq.Invoke e)
+    static member        FindSliceIndex (x: string           , e                   , [<Optional>]_impl: FindSliceIndex) = String.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
+    static member        FindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex [e.getValue] [x.getValue]
+
+    static member inline Invoke (slice: '``Foldable<'T>``) (source: '``Foldable<'T>``) : int =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindSliceIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<FindSliceIndex>, source, slice)
+
+type TryFindSliceIndex =
+    inherit Default1
+    static member inline TryFindSliceIndex (x: '``Foldable<'T>``, e: '``Foldable<T>`` , [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.tryFindSliceIndex (ToSeq.Invoke e)
+    static member        TryFindSliceIndex (x: string           , e                   , [<Optional>]_impl: TryFindSliceIndex) = String.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: TryFindSliceIndex) = Array.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex [e.getValue] [x.getValue]
+
+    static member inline Invoke (slice: '``Foldable<'T>``) (source: '``Foldable<'T>``) : int option =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindSliceIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<TryFindSliceIndex>, source, slice)
+
