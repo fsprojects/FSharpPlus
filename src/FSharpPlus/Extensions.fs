@@ -299,18 +299,49 @@ module List =
             member __.Item with get index = source.[index]
             member __.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member __.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
+   
+    open System.Linq
+    open System.Collections.Generic
+    let private findSliceIndexBase (slice: _ list) (source: _ list) =
+        let cache = Queue<_>()
+        let rec go index source =
+            match source with
+            | h :: t ->
+                cache.Enqueue h
+                if cache.Count = slice.Length then
+                    if cache.SequenceEqual slice then index - slice.Length + 1
+                    else
+                        cache.Dequeue() |> ignore
+                        go (index + 1) t
+                else go (index + 1) t
+            | [] -> -1
+        go 0 source
 
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
     let findSliceIndex (slice: _ list) (source: _ list) =
-        let index =
-            MemoryExtensions.IndexOf(ReadOnlySpan(List.toArray source), ReadOnlySpan(List.toArray slice))
+        let index = findSliceIndexBase slice source
         if index = -1 then
-            ArgumentException("The specified slice was not found in the list.") |> raise
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
         else
             index
 
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source if found.
+    /// Otherwise, returns None.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or None.
+    /// </returns>
     let tryFindSliceIndex (slice: _ list) (source: _ list) =
-        let index =
-            MemoryExtensions.IndexOf(ReadOnlySpan(List.toArray source), ReadOnlySpan(List.toArray slice))
+        let index = findSliceIndexBase slice source
         if index = -1 then None else Some index
 
 
@@ -328,17 +359,49 @@ module Array =
     /// Replace a subsequence of the source array with the given replacement array.
     let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
 
+    open System.Linq
+    open System.Collections.Generic
+    let private findSliceIndexBase (slice: _ []) (source: _ []) =
+        let cache = Queue<_>()
+        let rec go index =
+            if index < source.Length then
+                let h = source.[index]
+                cache.Enqueue h
+                if cache.Count = slice.Length then
+                    if cache.SequenceEqual slice then index - slice.Length + 1
+                    else
+                        cache.Dequeue() |> ignore
+                        go (index + 1)
+                else go (index + 1)
+            else -1
+        go 0
+
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
     let findSliceIndex (slice: _ []) (source: _ []) =
-        let index = MemoryExtensions.IndexOf(ReadOnlySpan(source), ReadOnlySpan(slice))
+        let index = findSliceIndexBase slice source
         if index = -1 then
-            ArgumentException("The specified slice was not found in the array.") |> raise
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
         else
             index
 
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source if found.
+    /// Otherwise, returns None.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or None.
+    /// </returns>
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
-        let index = MemoryExtensions.IndexOf(ReadOnlySpan(source), ReadOnlySpan(slice))
-        if index = -1 then None
-        else Some index
+        let index = findSliceIndexBase slice source
+        if index = -1 then None else Some index
 
 
 /// Additional operations on String
@@ -453,12 +516,28 @@ module String =
             else go (index + 1)
         go 0
 
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
     let findSliceIndex    (slice: string) (source: string) =
         let index = source.IndexOf slice
         if index = -1 then
             ArgumentException("The specified substring was not found in the string.") |> raise
         else
             index
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source if found.
+    /// Otherwise, returns None.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or None.
+    /// </returns>
     let tryFindSliceIndex (slice: string) (source: string) =
         let index = source.IndexOf slice
         if index = -1 then None else Some index
