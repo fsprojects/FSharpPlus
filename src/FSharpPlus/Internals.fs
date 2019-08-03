@@ -282,12 +282,14 @@ module FindSliceIndex =
 
     let listImpl (slice: _ list) (source: _ list) =
         let cache = Queue<_>()
+        // List.length is O(n)
+        let sliceLength = slice.Length
         let rec go index source =
             match source with
             | h :: t ->
                 cache.Enqueue h
-                if cache.Count = slice.Length then
-                    if cache.SequenceEqual slice then index - slice.Length + 1
+                if cache.Count = sliceLength then
+                    if cache.SequenceEqual slice then index - sliceLength + 1
                     else
                         cache.Dequeue() |> ignore
                         go (index + 1) t
