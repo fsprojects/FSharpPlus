@@ -40,8 +40,8 @@
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Extensions.fs" />
     <Compile Include="Internals.fs" />
+    <Compile Include="Extensions.fs" />
     <Compile Include="Converter.fs" />
     <Compile Include="Numeric.fs" />
     <Compile Include="Monoid.fs" />

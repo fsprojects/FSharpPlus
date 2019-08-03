@@ -256,3 +256,58 @@ type BitConverter =
     static member ToString (value: byte [], startIndex) =
         if isNull value then nullArg "value"
         BitConverter.ToString (value, startIndex, value.Length - startIndex)
+
+// findSliceIndex
+module FindSliceIndex =
+    open System.Linq
+    open System.Collections.Generic
+
+    let seqImpl (slice: seq<_>) (source: seq<_>) =
+        let cache = Queue<_>()
+        // we assume the slice is finite (otherwise it cannot be searched)
+        let slice = slice |> Seq.toArray
+        use sourceEnumerator = source.GetEnumerator()
+        // we also assume either the source is finite or it actually contains the slice.
+        let rec go index =
+            if sourceEnumerator.MoveNext() then
+                cache.Enqueue sourceEnumerator.Current
+                if cache.Count = slice.Length then
+                    if cache.SequenceEqual slice then index - slice.Length + 1
+                    else
+                        cache.Dequeue() |> ignore
+                        go (index + 1)
+                else go (index + 1)
+            else -1
+        go 0
+
+    let listImpl (slice: _ list) (source: _ list) =
+        let cache = Queue<_>()
+        let rec go index source =
+            match source with
+            | h :: t ->
+                cache.Enqueue h
+                if cache.Count = slice.Length then
+                    if cache.SequenceEqual slice then index - slice.Length + 1
+                    else
+                        cache.Dequeue() |> ignore
+                        go (index + 1) t
+                else go (index + 1) t
+            | [] -> -1
+        go 0 source
+
+    let arrayImpl (slice: _ []) (source: _ []) =
+        let cache = Queue<_>()
+        let rec go index =
+            if index < source.Length then
+                let h = source.[index]
+                cache.Enqueue h
+                if cache.Count = slice.Length then
+                    if cache.SequenceEqual slice then index - slice.Length + 1
+                    else
+                        cache.Dequeue() |> ignore
+                        go (index + 1)
+                else go (index + 1)
+            else -1
+        go 0
+
+
