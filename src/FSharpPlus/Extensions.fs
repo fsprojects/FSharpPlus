@@ -244,6 +244,19 @@ module List =
             member __.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member __.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
+    let findSliceIndex (slice: _ list) (source: _ list) =
+      let index =
+        MemoryExtensions.IndexOf(ReadOnlySpan(List.toArray source), ReadOnlySpan(List.toArray slice))
+      if index = -1 then
+          ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
+      else
+          index
+
+    let tryFindSliceIndex (slice: _ list) (source: _ list) =
+      let index =
+        MemoryExtensions.IndexOf(ReadOnlySpan(List.toArray source), ReadOnlySpan(List.toArray slice))
+      if index = -1 then None else Some index
+
 
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
@@ -258,6 +271,18 @@ module Array =
 
     /// Replace a subsequence of the source array with the given replacement array.
     let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
+
+    let findSliceIndex (slice: _ []) (source: _ []) =
+      let index = MemoryExtensions.IndexOf(ReadOnlySpan(source), ReadOnlySpan(slice))
+      if index = -1 then
+          ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
+      else
+          index
+
+    let tryFindSliceIndex (slice: _ []) (source: _ []) =
+      let index = MemoryExtensions.IndexOf(ReadOnlySpan(source), ReadOnlySpan(slice))
+      if index = -1 then None
+      else Some index
 
 
 /// Additional operations on String
