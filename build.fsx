@@ -154,11 +154,12 @@ Target.create "CopyBinaries" (fun _ ->
 
 // --------------------------------------------------------------------------------------
 // Clean build results
-let (nugetVersionPrefix,nugetVersionSuffix) = 
-  match release.NugetVersion.Split('-') |> Array.toList with
-  | prefix::[]->(prefix,"")
-  | prefix::suffix::[]->(prefix,suffix)
-  | _-> failwith "failed to recognise version"
+let (nugetVersionPrefix,nugetVersionSuffix) =
+    match release.NugetVersion.Split('-') |> Array.toList with
+    | prefix::_ when BuildServer.AppVeyor.detect() -> (prefix, Git.Information.getCurrentHash())
+    | prefix::[]->(prefix,"")
+    | prefix::suffix::[]->(prefix,suffix)
+    | _-> failwith "failed to recognise version"
 
 let vsProjProps = [
 #if MONO
@@ -418,6 +419,7 @@ Target.create "Release" (fun _ ->
     |> Async.RunSynchronously
 )
 
+Target.create "BuildDocs" ignore
 Target.create "BuildPackage" ignore
 
 // --------------------------------------------------------------------------------------
@@ -433,11 +435,10 @@ open Fake.Core.TargetOperators
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
-  ==> "GenerateReferenceDocs"
-  ==> "GenerateDocs"
   ==> "NuGet"
   ==> "CopyNuGet"
   ==> "BuildPackage"
+  ==> "BuildDocs"
   ==> "All"
   =?> ("ReleaseDocs",BuildServer.isLocalBuild)
 
@@ -445,6 +446,10 @@ open Fake.Core.TargetOperators
   ==> "GenerateHelp"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
+
+"GenerateReferenceDocs"
+  ==> "GenerateDocs"
+  ==> "BuildDocs"
 
 //"GenerateHelpDebug"
 //  ==> "KeepRunning"
@@ -456,7 +461,8 @@ open Fake.Core.TargetOperators
   ==> "PublishNuget"
   ==> "Release"
 
-"ReleaseDocs"
+"BuildDocs"
+  ==> "ReleaseDocs"
   ==> "Release"
 
 Target.runOrDefault "All"
