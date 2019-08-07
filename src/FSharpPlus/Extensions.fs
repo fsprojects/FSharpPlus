@@ -358,15 +358,19 @@ module String =
         else if String.length source >= count then String.Empty
         else skip count source
 
-    let findIndex    (char: char) (source: string) =
-        let index = source.IndexOf char
-        if index = -1 then
-            ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
-        else
-            index
-    let tryFindIndex (char: char) (source: string) =
-        let index = source.IndexOf char
-        if index = -1 then None else Some index
+    let findIndex    (predicate: char -> bool) (source: string) =
+        let rec go index =
+            if index >= source.Length then
+                ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
+            else if predicate source.[index] then index
+            else go (index + 1)
+        go 0
+    let tryFindIndex (predicate: char -> bool) (source: string) =
+        let rec go index =
+            if index >= source.Length then None
+            else if predicate source.[index] then Some index
+            else go (index + 1)
+        go 0
 
     let findSliceIndex    (slice: string) (source: string) =
         let index = source.IndexOf slice
