@@ -50,11 +50,11 @@ type Traverse =
        if ok.Value then Some (Array.toSeq res) else None
 
     static member Traverse (t: 't seq, f: 't->Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Default2) : Async<seq<_>> = async {
-        use enum = t.GetEnumerator ()
-        let rec loop () =
-            if enum.MoveNext () then async.Bind (f enum.Current, fun x -> async.Bind (loop (), fun y -> async.Return (seq {yield x; yield! y})))
-            else async.Return Seq.empty
-        return! loop () }
+        let! ct = Async.CancellationToken
+        return seq {
+            use enum = t.GetEnumerator ()
+            while enum.MoveNext() do
+                yield Async.RunSynchronously (Async.map f enum.Current, cancellationToken = ct) }}
 
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
