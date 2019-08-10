@@ -948,6 +948,15 @@ module Traversable =
         let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
         ()
 
+    [<Test>]
+    let traverseInfiniteAsyncSequences =
+        let s = Seq.initInfinite async.Return
+        let s' = sequence s
+        let l = s' |> Async.RunSynchronously |> Seq.take 10 |> Seq.toList
+        Assert.AreEqual([0;1;2;3;4;5;6;7;8;9], l)
+        ()
+
+    [<Test>]
     let traverseTask () =
         let a = traverse Task.FromResult [1;2]
         Assert.AreEqual([1;2], a.RunSynchronously())
