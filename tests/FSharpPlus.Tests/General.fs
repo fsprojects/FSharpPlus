@@ -954,13 +954,11 @@ module Traversable =
         let s' = sequence s
         let l = s' |> Async.RunSynchronously |> Seq.take 10 |> Seq.toList
         CollectionAssert.AreEqual ([0;1;2;3;4;5;6;7;8;9], l)
-        ()
 
     [<Test>]
     let traverseTask () =
         let a = traverse Task.FromResult [1;2]
-        CollectionAssert.AreEqual ([1;2], a.RunSynchronously())
-        ()
+        CollectionAssert.AreEqual ([1;2], a.Result)
         
         
 type ZipList<'s> = ZipList of 's seq with
