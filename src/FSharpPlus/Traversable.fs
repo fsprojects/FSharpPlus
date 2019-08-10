@@ -54,7 +54,7 @@ type Traverse =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (Async.map f enum.Current, cancellationToken = ct) }}
+                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
 
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
