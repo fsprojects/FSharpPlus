@@ -347,12 +347,42 @@ module Operators =
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
 
     /// <summary>
+    /// Returns the index of the first element in the foldable
+    /// that satisfies the given predicate.
+    /// </summary>
+    /// <param name="predicate">
+    /// The function to test the input elements.
+    /// </param>
+    /// <param name="source">The input foldable.</param>
+    /// <returns> 
+    /// The index of the first element that satisfies the predicate.
+    /// </returns>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown if the predicate evaluates to false for all the elements of the source.
+    /// </exception>
+    let inline findIndex (predicate: 'T -> bool) (source: '``Foldable<'T>``) : int = FindIndex.Invoke predicate source
+
+    /// <summary>
+    /// Returns the index of the first element in the foldable
+    /// that satisfies the given predicate.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <param name="predicate">
+    /// The function to test the input elements.
+    /// </param>
+    /// <param name="source">The input foldable.</param>
+    /// <returns> 
+    /// The index of the first element that satisfies the predicate, or <c>None</c>.
+    /// </returns>
+    let inline tryFindIndex (predicate: 'T -> bool) (source: '``Foldable<'T>``) : int option = TryFindIndex.Invoke predicate source
+
+    /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
     /// </summary>
     /// <param name="slice">The slice foldable to be searched.</param>
     /// <param name="source">The input foldable.</param>
     /// <exception cref="System.ArgumentException">
-    /// Thrown when the slice was not found in the sequence.
+    /// Thrown when the slice was not found in the source.
     /// </exception>
     /// <returns>
     /// The index of the slice.

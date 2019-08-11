@@ -378,9 +378,38 @@ type Length =
         call (Unchecked.defaultof<Length>, source) : int
 
 
+type FindIndex =
+    inherit Default1
+    static member inline FindIndex (x: '``Foldable<'T>``, p: 'T -> bool, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.findIndex p
+    static member        FindIndex (x: string           , p            , [<Optional>]_impl: FindIndex) = String.findIndex p x
+    static member        FindIndex (x: 'a []            , p            , [<Optional>]_impl: FindIndex) = Array.findIndex p x
+    static member        FindIndex (x: 'a ResizeArray   , p: 'a -> bool, [<Optional>]_impl: FindIndex) = Seq.findIndex p x
+    static member        FindIndex (x: list<'a>         , p            , [<Optional>]_impl: FindIndex) = List.findIndex p x
+    static member        FindIndex (x: 'a Id            , p: 'a -> bool, [<Optional>]_impl: FindIndex) = List.findIndex p [x.getValue]
+
+    static member inline Invoke (p: 'T -> bool) (source: '``Foldable<'T>``) : int =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<FindIndex>, source, p)
+
+type TryFindIndex =
+    inherit Default1
+    static member inline TryFindIndex (x: '``Foldable<'T>``, p: 'T -> bool, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.tryFindIndex p
+    static member        TryFindIndex (x: string           , p            , [<Optional>]_impl: TryFindIndex) = String.tryFindIndex p x
+    static member        TryFindIndex (x: 'a []            , p            , [<Optional>]_impl: TryFindIndex) = Array.tryFindIndex p x
+    static member        TryFindIndex (x: 'a ResizeArray   , p: 'a -> bool, [<Optional>]_impl: TryFindIndex) = Seq.tryFindIndex p x
+    static member        TryFindIndex (x: list<'a>         , p            , [<Optional>]_impl: TryFindIndex) = List.tryFindIndex p x
+    static member        TryFindIndex (x: 'a Id            , p: 'a -> bool, [<Optional>]_impl: TryFindIndex) = List.tryFindIndex p [x.getValue]
+
+    static member inline Invoke (p: 'T -> bool) (source: '``Foldable<'T>``) : int option =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<TryFindIndex>, source, p)
+
+
 type FindSliceIndex =
     inherit Default1
-    static member inline FindSliceIndex (x: '``Foldable<'T>``, e: '``Foldable<T>`` , [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.findSliceIndex (ToSeq.Invoke e)
+    static member inline FindSliceIndex (x: '``Foldable<'T>``, e: '``Foldable<'T>``, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.findSliceIndex (ToSeq.Invoke e)
     static member        FindSliceIndex (x: string           , e                   , [<Optional>]_impl: FindSliceIndex) = String.findSliceIndex e x
     static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
     static member        FindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
@@ -394,7 +423,7 @@ type FindSliceIndex =
 
 type TryFindSliceIndex =
     inherit Default1
-    static member inline TryFindSliceIndex (x: '``Foldable<'T>``, e: '``Foldable<T>`` , [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.tryFindSliceIndex (ToSeq.Invoke e)
+    static member inline TryFindSliceIndex (x: '``Foldable<'T>``, e: '``Foldable<'T>``, [<Optional>]_impl: Default1 ) = x |> ToSeq.Invoke |> Seq.tryFindSliceIndex (ToSeq.Invoke e)
     static member        TryFindSliceIndex (x: string           , e                   , [<Optional>]_impl: TryFindSliceIndex) = String.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: TryFindSliceIndex) = Array.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
