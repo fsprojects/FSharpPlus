@@ -58,6 +58,10 @@ module BigInteger =
             | 1 -> let root = r - 1I in Ok (root, x - root * root)
             | _ -> Ok (r, x - r2)
 
+module Constraints =
+    /// Constrain 't to be a nested tuple of <'t1,'t2,'t3,'t4,'t5,'t6,'t7,'tr>
+    let inline whenNestedTuple (t: 't) = 
+        (^t: (member Item1: 't1) t), (^t: (member Item2: 't2) t), (^t: (member Item3: 't3) t), (^t: (member Item4: 't4) t), (^t: (member Item5: 't5) t), (^t: (member Item6: 't6) t), (^t: (member Item7: 't7) t), (^t: (member Rest: 'tr) t)
 
 // Dummy types
 
