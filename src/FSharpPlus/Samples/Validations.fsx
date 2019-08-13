@@ -131,3 +131,55 @@ module Email =
 
     let failureAll = email ""
     // Failure [MustNotBeEmpty;MustContainAt;MustContainPeriod]
+
+module MovieValidations=
+    type VError= | MustNotBeEmpty
+                 | MustBeAtLessThanChars of int
+                 | MustBeADate
+                 | MustBeOlderThan of int
+                 | MustBeWithingRange of int*int
+    module String=
+        let nonEmpty (x:string) : Validation<VError list,string> = 
+            if not <| String.IsNullOrEmpty x 
+            then Success <| x
+            else Failure [MustNotBeEmpty]
+        let mustBeLessThan (i:int) (x:string) : Validation<VError list,string> = 
+            if not <| isNull x && x.Length<=i
+            then Success <| x
+            else Failure [MustBeAtLessThanChars i]
+    module Number=
+        let inline mustBeWithin (from,to') (x)=
+            if from<= x && x <= to'
+            then Success <| x
+            else Failure [MustBeWithingRange ((int from),(int to'))]
+    module DateTime=
+        let classicMovie year (d:DateTime)=
+            if d.Year < year
+            then Success <| d
+            else Failure [MustBeOlderThan year]
+        let date (d:DateTime)=
+            if d.Hour = 0 && d.Minute =0 && d.Second = 0
+            then Success <| d
+            else Failure [MustBeADate]
+    type Genre=
+        |Classic
+        |PostClassic
+        |Modern
+        |PostModern
+        |Contemporary
+    type Movie = {
+        Id: int
+        Title: String
+        ReleaseDate: DateTime
+        Description: String
+        Price: decimal
+        Genre: Genre
+    }
+    with static member Mk(id,title,releaseDate,description,price,genre): Validation<VError list,Movie> =
+            fun title releaseDate description price->{ Id=id;Title=title;ReleaseDate=releaseDate;Description=description;Price=price;Genre=genre }
+            <!> ((String.nonEmpty title) <* (String.mustBeLessThan 100 title))
+            <*> ((DateTime.classicMovie 1960 releaseDate) <* (DateTime.date releaseDate))
+            <*> (String.nonEmpty description) <* (String.mustBeLessThan 1000 description)
+            <*> (Number.mustBeWithin (0.0m, 999.99m) price)
+
+    // Movie.Mk(1,"test",DateTime(1950,1,1),"test",1m,Classic);; 
