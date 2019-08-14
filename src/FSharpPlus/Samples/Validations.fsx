@@ -158,7 +158,7 @@ module MovieValidations=
             then Success d
             else Failure [MustBeOlderThan year]
         let date (d:DateTime)=
-            if d.Hour = 0 && d.Minute =0 && d.Second = 0
+            if d.Date = d
             then Success d
             else Failure [MustBeADate]
     type Genre=
