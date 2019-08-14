@@ -148,7 +148,7 @@ module MovieValidations=
             then Failure [MustBeAtLessThanChars i]
             else Success x
     module Number=
-        let inline mustBeWithin (from,to') (x)=
+        let mustBeWithin (from,to') (x)=
             if from<= x && x <= to'
             then Success x
             else Failure [MustBeWithingRange (from,to')]
