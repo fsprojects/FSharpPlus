@@ -137,7 +137,7 @@ module MovieValidations=
                  | MustBeAtLessThanChars of int
                  | MustBeADate
                  | MustBeOlderThan of int
-                 | MustBeWithingRange of int*int
+                 | MustBeWithingRange of decimal*decimal
     module String=
         let nonEmpty (x:string) : Validation<VError list,string> = 
             if not <| String.IsNullOrEmpty x 
@@ -151,7 +151,7 @@ module MovieValidations=
         let inline mustBeWithin (from,to') (x)=
             if from<= x && x <= to'
             then Success <| x
-            else Failure [MustBeWithingRange ((int from),(int to'))]
+            else Failure [MustBeWithingRange (from,to')]
     module DateTime=
         let classicMovie year (d:DateTime)=
             if d.Year < year
@@ -182,6 +182,6 @@ module MovieValidations=
             <*> (String.nonEmpty description) <* (String.mustBeLessThan 1000 description)
             <*> (Number.mustBeWithin (0.0m, 999.99m) price)
 
-    let newRelease = Movie.Mk(1,"Midsommar",DateTime(2019,6,24),"Midsommar is a 2019 folk horror film written and directed by Ari Aster and starring Florence Pugh, Jack Reynor, William Jackson Harper, Vilhelm Blomgren, and Will Poulter. It follows a group of friends who travel to Sweden for a festival that occurs once every ninety years and find themselves in the clutches of a pagan cult.",1m,Classic) //Failure [MustBeOlderThan 1960]
-    let oldie = Movie.Mk(2,"Münchhausen",DateTime(1943,1,1),"Münchhausen is a 1943 fantasy comedy film directed by Josef von Báky. Science fiction author David Wingrove has commented that this work \"sidesteps immediate political issues whilst conjuring up marvellous visual images of an ageless pastoral Germany.",1m,Classic) // Success..
-    let titleToLong = Movie.Mk(3, String.Concat (seq{  1..110 }), DateTime(1943,1,1),"11",1m,Classic) //Failure [MustBeAtLessThanChars 100]
+    let newRelease = Movie.Mk(1,"Midsommar",DateTime(2019,6,24),"Midsommar is a 2019 folk horror film written...",1m,Classic) //Failure [MustBeOlderThan 1960]
+    let oldie = Movie.Mk(2,"Modern Times",DateTime(1936,2,5),"Modern Times is a 1936 American comedy film...",1m,Classic) // Success..
+    let titleToLong = Movie.Mk(3, String.Concat (seq{  1..110 }), DateTime(1950,1,1),"11",1m,Classic) //Failure [MustBeAtLessThanChars 100]
