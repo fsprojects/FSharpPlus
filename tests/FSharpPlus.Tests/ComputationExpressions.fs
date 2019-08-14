@@ -273,3 +273,17 @@ module ComputationExpressions =
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         areEqual (SideEffects.get()) ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
+        
+        
+
+    let testCompileUsingInOptionTStrict () =
+        SideEffects.reset ()
+        let reproducePrematureDisposal : Async<int option> =
+            monad.strict {
+                use somethingDisposable = new AsyncOfOptionDisposable ()
+                let! (result: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add (sprintf "Unpacked async option: %A" result)
+                return result
+            } |> OptionT.run
+        let _ = reproducePrematureDisposal |> Async.RunSynchronously
+        ()
