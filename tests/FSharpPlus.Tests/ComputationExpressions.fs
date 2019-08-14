@@ -290,3 +290,4 @@ module ComputationExpressions =
                     let! (html: string) = x
                     yield url, html.Length 
                 with _ -> yield url, -1 }
+        ()
