@@ -273,3 +273,20 @@ module ComputationExpressions =
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         areEqual (SideEffects.get()) ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
+
+
+    // Compile test
+    open System
+    open System.Net
+    open System.Threading.Tasks
+
+    let compileListTofTask () =
+        let urls = ["http://bing.com"; "http://yahoo.com"; "shouldBreakHerehttp://google.com"; "http://msn.com"]
+        let pages : ListT<Task<_>> = monad.plus {
+            use wc = new WebClient ()
+            for url in urls do
+                try
+                    let x =  lift <| (wc.AsyncDownloadString(Uri(url)) |> Async.StartAsTask<_>)
+                    let! (html: string) = x
+                    yield url, html.Length 
+                with _ -> yield url, -1 }
