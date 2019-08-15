@@ -1,9 +1,25 @@
+#### 1.1.0-CI00271  - August 15 2019
+
+* Add intersect functions for Map/Dictionaries
+* Add polyvariadic memoizationN, curryN/uncurryN functions
+* Add polyvariadic parsing functions (scanf family)
+* Add Dict.containsKey, IReadOnlyDictionary.containsKey
+* More lens for Map and Set
+* Extend String and Task modules
+* Task as ZipFunctor and Applicative
+* Improve performace for union on dictionaries and maps
+* Add unary negation operator for applicative maths
+* Fix: add missing CE members to Monad Transformers
+* Fix: infinite seq of asyncs can now be traversed
+* Fix: generic sum function works with any monoid
+* Fix 'use' for strict builders
+
 #### 1.1.0-CI00252  - October 8 2018
 * Add Invariant Abstraction
 * Some convenient conversion functions between Option and Result
 * OfSeq for IReadOnlyDictionary
 * OfList for all same instances as OfSeq
-* Add some ReadOnly CSollections related functions
+* Add some ReadOnly Collections related functions
 
 #### 1.1.0-CI00245  - September 22 2018
 * Fix some type inference problems
