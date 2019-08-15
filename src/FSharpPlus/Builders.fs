@@ -59,7 +59,7 @@ module Builders =
         member        __.TryWith    (expr, handler)      = try expr () with e -> handler e
         member        __.TryFinally (expr, compensation) = try expr () finally compensation ()
         member        rs.Using (disposable: #IDisposable, body) =
-            let body = fun () -> (body ()) disposable
+            let body = fun () -> body disposable
             rs.TryFinally (body, fun () -> dispose disposable)
 
     type DelayedBuilder () =
