@@ -1195,12 +1195,12 @@ module Extensions =
     type Async<'t> with
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t: seq<Async<_>>) : Async<seq<_>> = async {
-            use enum = t.GetEnumerator ()
-            let rec loop () =
-                if enum.MoveNext () then async.Bind (enum.Current, fun x -> async.Bind (loop (), fun y -> async.Return (seq {yield x; yield! y})))
-                else async.Return Seq.empty
-            return! loop () }
+        static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
+            let! ct = Async.CancellationToken
+            return seq {
+                use enum = t.GetEnumerator ()
+                while enum.MoveNext() do
+                    yield Async.RunSynchronously (enum.Current, cancellationToken = ct) }}
 
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t: list<Async<_>>) : Async<list<_>> =

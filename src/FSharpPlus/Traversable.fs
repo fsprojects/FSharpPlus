@@ -7,6 +7,7 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus.Internals.MonadOps
 open FSharpPlus
+open FSharpPlus.Extensions
 
 
 type Sequence =
@@ -50,11 +51,11 @@ type Traverse =
        if ok.Value then Some (Array.toSeq res) else None
 
     static member Traverse (t: 't seq, f: 't->Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Default2) : Async<seq<_>> = async {
-        use enum = t.GetEnumerator ()
-        let rec loop () =
-            if enum.MoveNext () then async.Bind (f enum.Current, fun x -> async.Bind (loop (), fun y -> async.Return (seq {yield x; yield! y})))
-            else async.Return Seq.empty
-        return! loop () }
+        let! ct = Async.CancellationToken
+        return seq {
+            use enum = t.GetEnumerator ()
+            while enum.MoveNext() do
+                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
 
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
@@ -89,6 +90,7 @@ type Sequence with
     static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, function (Choice2Of2 _) -> true | _ -> false) : Choice<seq<'t>, 'e>
     static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty)                                 : list<seq<'t>>
     static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty)                                : seq<'t> []
+    static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) = Async.Sequence t                                                               : Async<seq<'t>>
 
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default2) = Traverse.InvokeOnInstance id t                                                        : 'R
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                                           : 'R
