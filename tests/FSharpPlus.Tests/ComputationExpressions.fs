@@ -270,8 +270,8 @@ module ComputationExpressions =
         let reproducePrematureDisposal : Async<int option> =
             monad {
                 use somethingDisposable = new AsyncOfOptionDisposable ()
-                let! (result: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
-                SideEffects.add (sprintf "Unpacked async option: %A" result)
+                let! (res: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add (sprintf "Unpacked async option: %A" res)
                 return result
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
@@ -283,8 +283,8 @@ module ComputationExpressions =
         let reproducePrematureDisposal : Async<int option> =
             monad.strict {
                 use somethingDisposable = new AsyncOfOptionDisposable ()
-                let! (result: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
-                SideEffects.add (sprintf "Unpacked async option: %A" result)
+                let! (res: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add (sprintf "Unpacked async option: %A" res)
                 return result
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
@@ -296,7 +296,7 @@ module ComputationExpressions =
             monad.strict {
                 use somethingDisposable = new AsyncOfOptionDisposable ()
                 let! (res: int) = OptionT <| somethingDisposable.IdSomeOption ()
-                SideEffects.add (sprintf "Unpacked id option: %A" result)
+                SideEffects.add (sprintf "Unpacked id option: %A" res)
                 return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Identity.run
