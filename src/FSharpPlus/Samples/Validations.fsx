@@ -131,3 +131,57 @@ module Email =
 
     let failureAll = email ""
     // Failure [MustNotBeEmpty;MustContainAt;MustContainPeriod]
+
+module MovieValidations=
+    type VError= | MustNotBeEmpty
+                 | MustBeAtLessThanChars of int
+                 | MustBeADate
+                 | MustBeOlderThan of int
+                 | MustBeWithingRange of decimal*decimal
+    module String=
+        let nonEmpty (x:string) : Validation<VError list,string> = 
+            if String.IsNullOrEmpty x 
+            then Failure [MustNotBeEmpty]
+            else Success x
+        let mustBeLessThan (i:int) (x:string) : Validation<VError list,string> = 
+            if isNull x || x.Length > i
+            then Failure [MustBeAtLessThanChars i]
+            else Success x
+    module Number=
+        let mustBeWithin (from,to') (x)=
+            if from<= x && x <= to'
+            then Success x
+            else Failure [MustBeWithingRange (from,to')]
+    module DateTime=
+        let classicMovie year (d:DateTime)=
+            if d.Year < year
+            then Success d
+            else Failure [MustBeOlderThan year]
+        let date (d:DateTime)=
+            if d.Date = d
+            then Success d
+            else Failure [MustBeADate]
+    type Genre=
+        |Classic
+        |PostClassic
+        |Modern
+        |PostModern
+        |Contemporary
+    type Movie = {
+        Id: int
+        Title: String
+        ReleaseDate: DateTime
+        Description: String
+        Price: decimal
+        Genre: Genre
+    }
+    with static member Create(id,title,releaseDate,description,price,genre): Validation<VError list,Movie> =
+            fun title releaseDate description price->{ Id=id;Title=title;ReleaseDate=releaseDate;Description=description;Price=price;Genre=genre }
+            <!> String.nonEmpty title <* String.mustBeLessThan 100 title
+            <*> DateTime.classicMovie 1960 releaseDate <* DateTime.date releaseDate
+            <*> String.nonEmpty description <* String.mustBeLessThan 1000 description
+            <*> Number.mustBeWithin (0.0m, 999.99m) price
+
+    let newRelease = Movie.Create(1,"Midsommar",DateTime(2019,6,24),"Midsommar is a 2019 folk horror film written...",1m,Classic) //Failure [MustBeOlderThan 1960]
+    let oldie = Movie.Create(2,"Modern Times",DateTime(1936,2,5),"Modern Times is a 1936 American comedy film...",1m,Classic) // Success..
+    let titleToLong = Movie.Create(3, String.Concat (seq{  1..110 }), DateTime(1950,1,1),"11",1m,Classic) //Failure [MustBeAtLessThanChars 100]
