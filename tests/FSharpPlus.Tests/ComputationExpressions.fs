@@ -292,6 +292,7 @@ module ComputationExpressions =
         
     [<Test>]
     let UsingInOptionTStrict () = // this is the way to use it with a strict monad
+        SideEffects.reset ()
         let reproducePrematureDisposal : Identity<int option> =
             monad.strict {
                 use somethingDisposable = new AsyncOfOptionDisposable ()
