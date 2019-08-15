@@ -272,7 +272,7 @@ module ComputationExpressions =
                 use somethingDisposable = new AsyncOfOptionDisposable ()
                 let! (res: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
                 SideEffects.add (sprintf "Unpacked async option: %A" res)
-                return result
+                return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         areEqual (SideEffects.get()) ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
@@ -285,7 +285,7 @@ module ComputationExpressions =
                 use somethingDisposable = new AsyncOfOptionDisposable ()
                 let! (res: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
                 SideEffects.add (sprintf "Unpacked async option: %A" res)
-                return result
+                return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         areEqual (SideEffects.get()) ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"]
