@@ -1,14 +1,40 @@
 source https://nuget.org/api/v2
 source https://ci.appveyor.com/nuget/fsharp-formatting
+source https://api.nuget.org/v3/index.json
 
 nuget FSharp.Core ~> 4.1 redirects: force
 
-nuget FAKE
-nuget FSharp.Formatting ~> 3.0.0-beta08
+nuget FSharp.Formatting ~> 3.1.0
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
 
 nuget MathNet.Numerics.FSharp redirects: force
-nuget NUnit ~> 2
-nuget NUnit.Runners ~> 2
+nuget NUnit ~> 3.11.0
+nuget NUnit.ConsoleRunner ~> 3.10.0
 nuget FsCheck
+nuget NUnit3TestAdapter ~> 3.11.0
+nuget Microsoft.NET.Test.Sdk ~> 15.9.0
+# docs:
+
+group docs
+    source https://api.nuget.org/v3/index.json
+    nuget NuGet.CommandLine
+    nuget FSharp.Compiler.Tools 10.2.3
+    nuget FAKE ~> 4.63.2
+
+group buildfsx
+    source https://api.nuget.org/v3/index.json
+    nuget Fake.DotNet.Cli 
+    nuget Fake.Tools.Git
+    nuget Fake.DotNet.AssemblyInfoFile
+    nuget Fake.Core.ReleaseNotes
+    nuget Fake.Core.UserInput
+    nuget Fake.Core.Target
+    nuget Fake.DotNet.MSBuild
+    nuget Fake.IO.FileSystem
+    nuget Fake.DotNet.Fsc
+    nuget Fake.Api.GitHub
+    nuget Fake.DotNet.Paket
+    nuget Fake.DotNet.Testing.NUnit
+    nuget Fake.BuildServer.AppVeyor
+    nuget Octokit

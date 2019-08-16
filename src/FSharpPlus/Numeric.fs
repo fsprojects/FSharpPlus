@@ -162,15 +162,16 @@ type Zero =
 
 type Zero with
     static member inline Zero (t: 't, _:Zero) : 't =
-        let (tr: 'tr) = if false then (^t : (member Rest  : 'tr) t) else Zero.Invoke ()
-        let (t7: 't7) = if false then (^t : (member Item7 : 't7) t) else Zero.Invoke ()
-        let (t6: 't6) = if false then (^t : (member Item6 : 't6) t) else Zero.Invoke ()
-        let (t5: 't5) = if false then (^t : (member Item5 : 't5) t) else Zero.Invoke ()
-        let (t4: 't4) = if false then (^t : (member Item4 : 't4) t) else Zero.Invoke ()
-        let (t3: 't3) = if false then (^t : (member Item3 : 't3) t) else Zero.Invoke ()
-        let (t2: 't2) = if false then (^t : (member Item2 : 't2) t) else Zero.Invoke ()
-        let (t1: 't1) = if false then (^t : (member Item1 : 't1) t) else Zero.Invoke ()
-        Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+        let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
+        let (tr: 'tr) = Zero.Invoke ()
+        let (t7: 't7) = Zero.Invoke ()
+        let (t6: 't6) = Zero.Invoke ()
+        let (t5: 't5) = Zero.Invoke ()
+        let (t4: 't4) = Zero.Invoke ()
+        let (t3: 't3) = Zero.Invoke ()
+        let (t2: 't2) = Zero.Invoke ()
+        let (t1: 't1) = Zero.Invoke ()
+        Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
 type Zero with
     static member inline Zero (_: Tuple<'a>, _: Zero) = Tuple<_> (Zero.Invoke ()) : Tuple<'a>
@@ -527,15 +528,16 @@ type MinValue =
         call Unchecked.defaultof<MinValue>
 
     static member inline MinValue (t: 't, _: MinValue) : 't =
-        let (tr: 'tr) = if false then (^t : (member Rest  : 'tr) t) else MinValue.Invoke ()
-        let (t7: 't7) = if false then (^t : (member Item7 : 't7) t) else MinValue.Invoke ()
-        let (t6: 't6) = if false then (^t : (member Item6 : 't6) t) else MinValue.Invoke ()
-        let (t5: 't5) = if false then (^t : (member Item5 : 't5) t) else MinValue.Invoke ()
-        let (t4: 't4) = if false then (^t : (member Item4 : 't4) t) else MinValue.Invoke ()
-        let (t3: 't3) = if false then (^t : (member Item3 : 't3) t) else MinValue.Invoke ()
-        let (t2: 't2) = if false then (^t : (member Item2 : 't2) t) else MinValue.Invoke ()
-        let (t1: 't1) = if false then (^t : (member Item1 : 't1) t) else MinValue.Invoke ()
-        Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+        let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
+        let (tr: 'tr) = MinValue.Invoke ()
+        let (t7: 't7) = MinValue.Invoke ()
+        let (t6: 't6) = MinValue.Invoke ()
+        let (t5: 't5) = MinValue.Invoke ()
+        let (t4: 't4) = MinValue.Invoke ()
+        let (t3: 't3) = MinValue.Invoke ()
+        let (t2: 't2) = MinValue.Invoke ()
+        let (t1: 't1) = MinValue.Invoke ()
+        Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
     static member inline MinValue (_: Tuple<'a>, _: MinValue) = Tuple<_> (MinValue.Invoke ()) : Tuple<'a>
     static member inline MinValue (_: Id<'a>   , _: MinValue) = Id<_>    (MinValue.Invoke ())
@@ -574,15 +576,16 @@ type MaxValue =
         call Unchecked.defaultof<MaxValue>
 
     static member inline MaxValue (t: 't, _: MaxValue) : 't =
-        let (tr: 'tr) = if false then (^t : (member Rest  : 'tr) t) else MaxValue.Invoke ()
-        let (t7: 't7) = if false then (^t : (member Item7 : 't7) t) else MaxValue.Invoke ()
-        let (t6: 't6) = if false then (^t : (member Item6 : 't6) t) else MaxValue.Invoke ()
-        let (t5: 't5) = if false then (^t : (member Item5 : 't5) t) else MaxValue.Invoke ()
-        let (t4: 't4) = if false then (^t : (member Item4 : 't4) t) else MaxValue.Invoke ()
-        let (t3: 't3) = if false then (^t : (member Item3 : 't3) t) else MaxValue.Invoke ()
-        let (t2: 't2) = if false then (^t : (member Item2 : 't2) t) else MaxValue.Invoke ()
-        let (t1: 't1) = if false then (^t : (member Item1 : 't1) t) else MaxValue.Invoke ()
-        Tuple<_,_,_,_,_,_,_,_>(t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+        let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
+        let (tr: 'tr) = MaxValue.Invoke ()
+        let (t7: 't7) = MaxValue.Invoke ()
+        let (t6: 't6) = MaxValue.Invoke ()
+        let (t5: 't5) = MaxValue.Invoke ()
+        let (t4: 't4) = MaxValue.Invoke ()
+        let (t3: 't3) = MaxValue.Invoke ()
+        let (t2: 't2) = MaxValue.Invoke ()
+        let (t1: 't1) = MaxValue.Invoke ()
+        Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
     static member inline MaxValue (_: Tuple<'a>, _: MaxValue) = Tuple<_> (MaxValue.Invoke ()) : Tuple<'a>
     static member inline MaxValue (_: Id<'a>   , _: MaxValue) = Id<_>    (MaxValue.Invoke ())

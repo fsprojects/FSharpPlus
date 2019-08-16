@@ -17,11 +17,17 @@ module Operators =
     /// <returns>The constant value function.</returns>
     let inline konst k = fun _ -> k
 
-    /// Takes a function expecting a tuple of two arguments and returns a function expecting two arguments.
+    /// Takes a function expecting a tuple of two elements and returns a function expecting two curried arguments.
     let inline curry f x y = f (x, y)
+    
+    /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
+    let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'TResult) : 'T1 -> '``T2 -> ... -> 'Tn -> 'TResult`` = fun t -> Curry.Invoke f t
 
-    /// Takes a function expecting two curried arguments and returns a function expecting a tuple. Same as (<||).
+    /// Takes a function expecting two curried arguments and returns a function expecting a tuple of two elements. Same as (<||).
     let inline uncurry f (x, y) = f x y
+    
+    /// Takes a function expecting any N number of curried arguments and returns a function expecting a tuple of N elements.
+    let inline uncurryN (f: 'T1 -> '``T2 -> ... -> 'Tn -> 'TResult``) (t: (^``T1 * ^T2 * ... * ^Tn``)) = Uncurry.Invoke f t : 'TResult
 
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
@@ -712,7 +718,7 @@ module Operators =
     let inline mfilter (predicate: 't->bool) (m: '``MonadZero<'t>``) : '``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke ()
 
     /// Returns the sum of the monoid elements in the Foldable.
-    let inline sum (x: 'Foldable'Num) : 'Num = fold (+) (getZero () : 'Num) x
+    let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
 
     /// Converts using the implicit operator. 
     let inline implicit (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R

@@ -253,3 +253,52 @@ module ComputationExpressions =
 
         let effA, effB = List.partition (String.startsWith "A") (SideEffects.get())
         areEqual (List.last effA, List.last effB) ("A: Disposed properly", "B: Disposed properly")
+
+    type AsyncOfOptionDisposable () =
+        interface IDisposable with
+            member __.Dispose() = SideEffects.add "I'm disposed"
+        member __.AsyncSomeOption() : Async<int option> = async { 
+            SideEffects.add "I'm doing something async"
+            return Some 1 }
+        member __.IdSomeOption() : Identity<int option> = monad { 
+            SideEffects.add "I'm doing something id"
+            return Some 1 }
+
+    [<Test>]
+    let usingInOptionT () =
+        SideEffects.reset ()
+        let reproducePrematureDisposal : Async<int option> =
+            monad {
+                use somethingDisposable = new AsyncOfOptionDisposable ()
+                let! (res: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add (sprintf "Unpacked async option: %A" res)
+                return res
+            } |> OptionT.run
+        let _ = reproducePrematureDisposal |> Async.RunSynchronously
+        areEqual (SideEffects.get()) ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
+   
+    [<Test>]
+    let testCompileUsingInOptionTStrict () = // wrong results, Async is not strict
+        SideEffects.reset ()
+        let reproducePrematureDisposal : Async<int option> =
+            monad.strict {
+                use somethingDisposable = new AsyncOfOptionDisposable ()
+                let! (res: int) = OptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add (sprintf "Unpacked async option: %A" res)
+                return res
+            } |> OptionT.run
+        let _ = reproducePrematureDisposal |> Async.RunSynchronously
+        areEqual (SideEffects.get()) ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"]
+        
+    [<Test>]
+    let UsingInOptionTStrict () = // this is the way to use it with a strict monad
+        SideEffects.reset ()
+        let reproducePrematureDisposal : Identity<int option> =
+            monad.strict {
+                use somethingDisposable = new AsyncOfOptionDisposable ()
+                let! (res: int) = OptionT <| somethingDisposable.IdSomeOption ()
+                SideEffects.add (sprintf "Unpacked id option: %A" res)
+                return res
+            } |> OptionT.run
+        let _ = reproducePrematureDisposal |> Identity.run
+        areEqual (SideEffects.get()) ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"]

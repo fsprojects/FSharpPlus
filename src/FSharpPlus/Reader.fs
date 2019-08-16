@@ -67,6 +67,11 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline get_Empty () = ReaderT (fun _ -> getEmpty ()) : ReaderT<'R, '``MonadPlus<'T>``>
     static member inline (<|>) (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
 
+    static member inline TryWith (source: ReaderT<'R,'``Monad<'T>``>, f: exn -> ReaderT<'R,'``Monad<'T>``>) = ReaderT (fun s -> TryWith.Invoke (ReaderT.run source s) (fun x -> ReaderT.run (f x) s))
+    static member inline TryFinally (computation: ReaderT<'R,'``Monad<'T>``>, f) = ReaderT (fun s -> TryFinally.Invoke     (ReaderT.run computation s) f)
+    static member inline Using (resource, f: _ -> ReaderT<'R,'``Monad<'T>``>)    = ReaderT (fun s -> Using.Invoke resource (fun x -> ReaderT.run (f x) s))
+    static member inline Delay (body : unit   ->  ReaderT<'R,'``Monad<'T>``>)    = ReaderT (fun s -> Delay.Invoke (fun _ -> ReaderT.run (body ()) s))
+
     static member        Lift m = ReaderT (fun _ -> m)                                  : ReaderT<'R,'``Monad<'T>``>
 
     static member inline LiftAsync (x: Async<'T>) = (lift (liftAsync x)                 : ReaderT<'R,'``MonadAsync<'T>``>)
@@ -87,8 +92,3 @@ type ReaderT<'r,'``monad<'t>``> with
 
     static member inline get_Get () = lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
     static member inline Put x      = x |> put |> lift : ReaderT<'R, '``MonadState<'S, unit>``>
-
-    static member inline Delay (f: unit -> ReaderT<'R,'``Monad<'T>``>) =
-        ReaderT (fun s ->
-            let d () = ReaderT.run (f ()) s
-            Delay.Invoke d) : ReaderT<'R,'``Monad<'T>``>

@@ -1,5 +1,5 @@
 FSharp.Core
 MathNet.Numerics.FSharp
 NUnit
-NUnit.Runners
 FsCheck
+Microsoft.NET.Test.Sdk

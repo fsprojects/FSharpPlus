@@ -32,6 +32,11 @@ type OptionT<'``monad<option<'t>>``> with
 
     static member inline get_Empty () = OptionT <| result None : OptionT<'``MonadPlus<option<'T>``>
     static member inline (<|>) (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> result (Some value) | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>
+  
+    static member inline TryWith (source: OptionT<'``Monad<option<'T>>``>, f: exn -> OptionT<'``Monad<option<'T>>``>) = OptionT (TryWith.Invoke (OptionT.run source) (OptionT.run << f))
+    static member inline TryFinally (computation: OptionT<'``Monad<option<'T>>``>, f) = OptionT (TryFinally.Invoke     (OptionT.run computation) f)
+    static member inline Using (resource, f: _ -> OptionT<'``Monad<option<'T>>``>)    = OptionT (Using.Invoke resource (OptionT.run << f))
+    static member inline Delay (body : unit   ->  OptionT<'``Monad<option<'T>>``>)    = OptionT (Delay.Invoke (fun _ -> OptionT.run (body ()))) : OptionT<'``Monad<option<'T>>``>
 
     static member inline Lift (x: '``Monad<'T>``) = x |> liftM Some |> OptionT : OptionT<'``Monad<option<'T>>``>
 

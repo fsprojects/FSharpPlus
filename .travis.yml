@@ -1,5 +1,5 @@
 language: csharp
-dotnet: 2.0.0
+dotnet: 2.2.301
 
 sudo: false  # use the new container-based Travis infrastructure 
 
@@ -7,4 +7,7 @@ before_install:
   - chmod +x build.sh
  
 script: 
-  - ./build.sh GenerateDocs # this will run 'RunTests' as well
+  - ./build.sh -t GenerateDocs # this will run 'RunTests' as well
+env:
+  FSHARP_FORMATTING_LOG=NONE
+  

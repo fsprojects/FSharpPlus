@@ -67,7 +67,7 @@ type Join =
     static member        Join (x: Id<_>                 , [<Optional>]_output: Id<'T>          , [<Optional>]_mthd: Join    ) = x.getValue                 : Id<'T>
 #if NET35
 #else                                                                                                                              
-    static member        Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = x.Unwrap ()                : Task<'T>
+    static member        Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
 #endif                                                                                                                                    
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
     static member        Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x              : list<'T>
@@ -150,6 +150,7 @@ type Apply =
     static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
     static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
     static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , [<Optional>]_output: 'Monoid * 'U         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
+    static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
     static member        ``<*>`` (f: option<_>        , x: option<'T>           , [<Optional>]_output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
     static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , [<Optional>]_output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
@@ -223,7 +224,7 @@ type Map =
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value) : Lazy<'U>
     #if NET35
     #else
-    static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = x.ContinueWith (fun (x: Task<_>) -> f x.Result) : Task<'U>
+    static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
@@ -414,6 +415,7 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zip      x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip     x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip      x y
+    static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip       x y
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =
         let inline call_4 (a: ^a, b: ^b, c: ^c, d: ^d) = ((^a or ^b or ^c or ^d) : (static member Zip : (_*_*_)*_ -> _) (b, c, d), a)

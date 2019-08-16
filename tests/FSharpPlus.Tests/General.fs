@@ -364,6 +364,7 @@ module Functor =
         let h = zip (Map.ofSeq [1,'1' ; 2,'2' ; 4,'4']) (Map.ofSeq [1,'1' ; 2,'2' ; 3,'3'])
         let i = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let j = zip (async {return 1}) (async {return '2'})
+        let h = zip (Task.FromResult 1) (Task.FromResult '2')
 
         let fa a = zip a (seq [1. .. 3. ])
         let fb a = zip a (WrappedListD [1. .. 3. ])
@@ -374,6 +375,7 @@ module Functor =
         let fh a = zip a (Map.ofSeq [1,'1' ; 2,'2' ; 3,'3'])
         let fi a = zip a (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let fj a = zip a (async {return '2'})
+        let fh a = zip a (Task.FromResult '2')
 
         let ga b = zip (seq [1;2;3]) b
         let gb b = zip (WrappedListD [1;2;3]) b
@@ -384,6 +386,7 @@ module Functor =
         let gh b = zip (Map.ofSeq [1,'1' ; 2,'2' ; 4,'4']) b
         let gi b = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) b
         let gj b = zip (async {return 1}) b
+        let gh b = zip (Task.FromResult 1) b
 
         let ha : _ -> _ -> _ seq            = zip
         let hb : _ -> _ -> _ WrappedListD   = zip
@@ -394,6 +397,7 @@ module Functor =
         let hh : _ -> _ -> Map<_,_>         = zip
         let hi : _ -> _ -> Dictionary<_,_>  = zip
         let hj : _ -> _ -> Async<_>         = zip
+        let hh : _ -> _ -> Task<_>          = zip
 
         ()
 
@@ -911,13 +915,13 @@ module Traversable =
         let inline seqLst (x:_ list) = sequence x
 
         let a : list<_> = seqSeq (seq [[1];[3]])
-        Assert.AreEqual ([seq [1; 3]], a)
+        CollectionAssert.AreEqual ([seq [1; 3]], a)
         Assert.IsInstanceOf<list<seq<int>>> a
         let b = seqArr ( [|[1];[3]|])
-        Assert.AreEqual ([[|1; 3|]], b)
+        CollectionAssert.AreEqual ([[|1; 3|]], b)
         Assert.IsInstanceOf<list<array<int>>> b
         let c = seqLst ( [ [1];[3] ])
-        Assert.AreEqual ([[1; 3]], c)
+        CollectionAssert.AreEqual ([[1; 3]], c)
         Assert.IsInstanceOf<list<list<int>>> c
 
     [<Test>]
@@ -943,6 +947,18 @@ module Traversable =
         Assert.AreEqual ([], d)
         let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
         ()
+
+    [<Test>]
+    let traverseInfiniteAsyncSequences =
+        let s = Seq.initInfinite async.Return
+        let s' = sequence s
+        let l = s' |> Async.RunSynchronously |> Seq.take 10 |> Seq.toList
+        CollectionAssert.AreEqual ([0;1;2;3;4;5;6;7;8;9], l)
+
+    [<Test>]
+    let traverseTask () =
+        let a = traverse Task.FromResult [1;2]
+        CollectionAssert.AreEqual ([1;2], a.Result)
         
         
 type ZipList<'s> = ZipList of 's seq with
@@ -1105,6 +1121,7 @@ module MonadTransformers =
         let okFoo10 = okFoo10Comp |> ResultT.run |> Async.RunSynchronously
 
         ()
+
     let testCompileChoiceT () =
         // Test MonadError
         let err1Layers   = catch (Choice2Of2 "Invalid Value") (fun s -> Choice2Of2 ["the error was: " + s]) : Choice<int, _>
@@ -1618,6 +1635,55 @@ module ApplicativeInference =
 
 
 
+module Curry =
+
+    [<Test>]
+    let curryTest () =
+        let f1  (x: Tuple<_>) = [x.Item1]
+        let f2  (x, y)    = [x + y]
+        let f3  (x, y, z) = [x + y + z]
+        let f7  (t1, t2, t3, t4, t5, t6, t7) = [t1+t2+t3+t4+t5+t6+t7]
+        let f8  (t1, t2, t3, t4, t5, t6, t7: float, t8: char) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8]
+        let f9  (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9]
+        let f15 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15]
+        let f16 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15, t16) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16]
+        let f17 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15, t16, t17) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16+t17]
+
+        let x1  = curryN f1 100
+        let x2  = curryN f2 1 2
+        let x3  = curryN f3 1 2 3
+        let x7  = curryN f7 1 2 3 4 5 6 7
+        let x8  = curryN f8 1 2 3 4 5 6 7. '8'
+        let x9  = curryN f9 1 2 3 4 5 6 7. '8' 9M
+        let x15 = curryN f15 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15
+        let x16 = curryN f16 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15 16
+        let x17 = curryN f17 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15 16 17
+
+        Assert.Pass ()
+
+    [<Test>]
+    let uncurryTest () =
+        let g2  x y   = [x + y]
+        let g3  x y z = [x + y + z]
+        let g7  a b c d e f g = [a + b + c + d + e + f + g]
+        let g8  t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8]
+        let g9  t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal)  = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9]
+        let g12 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12]
+        let g15 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 t13 t14 t15 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15]
+        let g16 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 t13 t14 t15 t16 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16]
+
+        let y1  = uncurryN string (Tuple<_> 1)
+        let y2  = uncurryN g2 (1, 2)
+        let y3  = uncurryN g3 (1, 2, 3)
+        let y7  = uncurryN g7 (1, 2, 3, 4, 5, 6, 7)
+        let y8  = uncurryN g8 (1, 2, 3, 4, 5, 6, 7. , '8')
+        let y9  = uncurryN g9 (1, 2, 3, 4, 5, 6, 7. , '8', 9M)
+        let y12 = uncurryN g12 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12)
+        let y15 = uncurryN g15 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12, 13, 14, 15)
+        let y16 = uncurryN g16 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12, 13, 14, 15, 16)
+
+        Assert.Pass ()
+
 
 
 module Memoization =
@@ -1634,12 +1700,12 @@ module Memoization =
         let sum4 a b c d : int = printfn "calculating"; effs.Add "sum4"; a + b + c + d
 
         // memoize them
-        let msum2 = memoize sum2
-        let msum3 = memoize sum3
-        let msum4 = memoize sum4
-        let mf    = memoize f
-        let mg    = memoize g
-        let mh    = memoize h
+        let msum2 = memoizeN sum2
+        let msum3 = memoizeN sum3
+        let msum4 = memoizeN sum4
+        let mf    = memoizeN f
+        let mg    = memoizeN g
+        let mh    = memoizeN h
 
         // check memoization really happens
         let v1  = msum2 1 1
@@ -1663,7 +1729,7 @@ module Memoization =
     [<Test>]
     let memoizeAcceptsNullArgument () =
         let f x y = ""
-        let mf = memoize f
+        let mf = memoizeN f
         let _ = mf null null  // should not throw
         ()
 

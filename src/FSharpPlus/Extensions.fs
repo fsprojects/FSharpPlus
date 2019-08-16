@@ -310,6 +310,108 @@ module String =
             |> normalize NormalizationForm.FormC
     #endif
 
+    /// Pads the beginning of the given string with spaces so that it has a specified total length.
+    let padLeft totalLength (source: string) = source.PadLeft totalLength
+    /// Pads the beginning of the given string with a specified character so that it has a specified total length.
+    let padLeftWith totalLength paddingChar (source: string) = source.PadLeft (totalLength, paddingChar)
+    /// Pads the end of the given string with spaces so that it has a specified total length.
+    let padRight totalLength (source: string) = source.PadRight totalLength
+    /// Pads the end of the given string with a specified character so that it has a specified total length.
+    let padRightWith totalLength paddingChar (source: string) = source.PadRight (totalLength, paddingChar)
+
+    /// Removes all leading and trailing occurrences of specified characters from the given string.
+    let trim      (trimChars: char seq) (source: string) = source.Trim (Seq.toArray trimChars)
+    /// Removes all leading occurrences of specified characters from the given string.
+    let trimStart (trimChars: char seq) (source: string) = source.TrimStart (Seq.toArray trimChars)
+    /// Removes all trailing occurrences of specified characters from the given string.
+    let trimEnd   (trimChars: char seq) (source: string) = source.TrimEnd (Seq.toArray trimChars)
+
+    let toArray (source: string)    = source.ToCharArray ()
+    let ofArray (source: char [])   = new String (source)
+    let toList  (source: string)    = toArray source |> List.ofArray
+    let ofList  (source: char list) = new String (source |> Array.ofList)
+    let toSeq   (source: string)    = source :> seq<char>
+    let ofSeq   (source: seq<char>) = String.Join (String.Empty, source)
+
+    let item    (index: int) (source: string) = source.[index]
+    let tryItem (index: int) (source: string) = if index >= 0 && index < source.Length then Some source.[index] else None
+
+    let rev (source: string) = new String (source.ToCharArray () |> Array.rev)
+
+    let take count (source: string) = source.[..count-1]
+    let skip count (source: string) = source.[count..]
+    let takeWhile (predicate: char -> bool) (source: string) =
+        if String.IsNullOrEmpty source then
+            String.Empty
+        else
+            let mutable i = 0
+            let length = String.length source
+            while i < length && predicate source.[i] do
+                i <- i + 1
+            if i = 0 then ""
+            else source |> take i
+    let skipWhile (predicate: char -> bool) (source: string) =
+        if String.IsNullOrEmpty source then
+            String.Empty
+        else
+            let mutable i = 0
+            let length = String.length source
+            while i < length && predicate source.[i] do
+                i <- i + 1
+            if i = 0 then ""
+            else source |> skip i
+    /// Returns a string that have at most N characters from the beginning of the original string.
+    /// It returns the original string if it is shorter than count.
+    let truncate count (source: string) =
+        if count < 1 then String.Empty
+        else if String.length source <= count then source
+        else take count source
+    /// Returns a string that drops first N characters of the original string.
+    /// When count exceeds the length of the string it returns an empty string.
+    let drop     count (source: string) =
+        if count < 1 then source
+        else if String.length source >= count then String.Empty
+        else skip count source
+
+    let findIndex    (predicate: char -> bool) (source: string) =
+        let rec go index =
+            if index >= source.Length then
+                ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
+            else if predicate source.[index] then index
+            else go (index + 1)
+        go 0
+    let tryFindIndex (predicate: char -> bool) (source: string) =
+        let rec go index =
+            if index >= source.Length then None
+            else if predicate source.[index] then Some index
+            else go (index + 1)
+        go 0
+
+    let findSliceIndex    (slice: string) (source: string) =
+        let index = source.IndexOf slice
+        if index = -1 then
+            ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
+        else
+            index
+    let tryFindSliceIndex (slice: string) (source: string) =
+        let index = source.IndexOf slice
+        if index = -1 then None else Some index
+
+    /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
+    let toCodePoints (source : string) : seq<int> =
+        let mapper i c =
+            // Ignore the low-surrogate because it's already been converted
+            if c |> Char.IsLowSurrogate then None
+            else Char.ConvertToUtf32 (source, i) |> Some
+        source |> Seq.mapi mapper |> Seq.choose id
+    /// Converts the array of Int32 code-points (the actual Unicode Code Point number) to a string.
+    let ofCodePoints (source: seq<int>) : string =
+        source |> Seq.map Char.ConvertFromUtf32 |> String.concat String.Empty
+
+    /// Converts a string to a byte-array using the specified encoding.
+    let getBytes (encoding: System.Text.Encoding) (source: string) : byte [] = encoding.GetBytes source
+
+
 /// Additional operations on IReadOnlyCollection<'T>
 [<RequireQualifiedAccess>]
 module IReadOnlyCollection =
@@ -613,6 +715,7 @@ module IReadOnlyDictionary =
 
 
 #if !FABLE_COMPILER
+
 
 /// Additional operations on IEnumerator
 [<RequireQualifiedAccess>]
@@ -998,7 +1101,45 @@ module Enumerator =
                         finally e3.Dispose () }
 #endif
 
-/// Additional operations on IEnumerator
+/// Additional operations on Task<'T>
+[<RequireQualifiedAccess>]
+module Task =
+
+    open System.Threading.Tasks
+
+    /// <summary>Creates a task workflow from another workflow 'x', mapping its result with 'f'.</summary>
+    let map (f : 'T -> 'U) (t : Task<'T>) : Task<'U> = t.ContinueWith(fun (t' : Task<'T>) -> f (t'.Result))
+
+    /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping it results with 'f'.</summary>
+    /// <remarks>Workflows are run in sequence.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First task workflow.</param>
+    /// <param name="y">Second task workflow.</param>
+    let map2 (f : 'T -> 'U -> 'V) (x : Task<'T>) (y : Task<'U>) : Task<'V> =
+        x.ContinueWith(fun (x' : Task<'T>) ->
+            y.ContinueWith(fun (y' : Task<'U>) ->
+                (f x'.Result y'.Result))).Unwrap()
+
+    /// <summary>Create a task workflow that is the result of applying the resulting function of a task workflow
+    /// to the resulting value of another task workflow</summary>
+    /// <param name="f">Task workflow returning a function</param>
+    /// <param name="x">Task workflow returning a value</param>
+    let apply (f : Task<'T -> 'U>) (t : Task<'T>) : Task<'U> =
+        f.ContinueWith(fun (f' : Task<'T -> 'U>) ->
+            t.ContinueWith(fun (t' : Task<'T>) ->
+                f'.Result t'.Result)).Unwrap()
+
+    /// <summary>Creates a task workflow from two workflows 'x' and 'y', tupling it results.</summary>
+    let zip (x : Task<'T>) (y : Task<'U>) : Task<'T * 'U> =
+        x.ContinueWith(fun (x' : Task<'T>) ->
+            y.ContinueWith(fun (y' : Task<'U>) ->
+                (x'.Result, y'.Result))).Unwrap()
+
+    /// Flatten two nested tasks into one.
+    let join (t : Task<Task<'T>>) : Task<'T> = t.Unwrap()
+
+/// Additional operations on Async
+[<RequireQualifiedAccess>]
 module Async =
 
     /// <summary>Creates an async workflow from another workflow 'x', mapping its result with 'f'.</summary>
@@ -1030,6 +1171,7 @@ module Async =
 
     /// Raise an exception in the async workflow
     let raise<'T> (ex: exn) : Async<'T> = Async.FromContinuations (fun (_, errK, _) -> errK ex)
+
 
 
 /// Module containing F#+ Extension Methods  
@@ -1093,12 +1235,12 @@ module Extensions =
     type Async<'t> with
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t: seq<Async<_>>) : Async<seq<_>> = async {
-            use enum = t.GetEnumerator ()
-            let rec loop () =
-                if enum.MoveNext () then async.Bind (enum.Current, fun x -> async.Bind (loop (), fun y -> async.Return (seq {yield x; yield! y})))
-                else async.Return Seq.empty
-            return! loop () }
+        static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
+            let! ct = Async.CancellationToken
+            return seq {
+                use enum = t.GetEnumerator ()
+                while enum.MoveNext() do
+                    yield Async.RunSynchronously (enum.Current, cancellationToken = ct) }}
 
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t: list<Async<_>>) : Async<list<_>> =

@@ -5,6 +5,7 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
+open FSharpPlus
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -16,7 +17,7 @@ type Item =
     inherit Default1
     static member inline Item (x: '``Indexable<'T>`` , k        , [<Optional>]_impl: Default1) = (^``Indexable<'T>`` : (member get_Item : _ -> 'T) x, k) : 'T
     static member inline Item (_: 'T when 'T: null and 'T: struct, _,         _impl: Default1) = ()
-    static member        Item (x: string             , n        , [<Optional>]_impl: Item    ) = x.[n]
+    static member        Item (x: string             , n        , [<Optional>]_impl: Item    ) = String.item n x
     static member        Item (x: StringBuilder      , n        , [<Optional>]_impl: Item    ) = x.ToString().[n]
     static member        Item (x: 'T []              , n        , [<Optional>]_impl: Item    ) = x.[n]       : 'T
     static member        Item (x: 'T [,]             , (i,j)    , [<Optional>]_impl: Item    ) = x.[i,j]     : 'T
@@ -36,7 +37,7 @@ type TryItem =
         if (^``Indexable<'T>``: (member TryGetValue: _ * _ -> _) (x, k, &r)) then Some r else None
     static member inline TryItem (x: '``Indexable<'T>``, k        , [<Optional>]_impl: Default1) = (^``Indexable<'T>`` : (static member TryItem : _ * _ -> _) k, x) : 'T option
     static member inline TryItem (_: 'T when 'T: null and 'T: struct, _       , _impl: Default1) = ()
-    static member        TryItem (x: string            , n        , [<Optional>]_impl: TryItem ) = if n >= 0 && n < x.Length then Some (x.[n]) else None
+    static member        TryItem (x: string            , n        , [<Optional>]_impl: TryItem ) = String.tryItem n x
     static member        TryItem (x: StringBuilder     , n        , [<Optional>]_impl: TryItem ) = if n >= 0 && n < x.Length then Some ((string x).[n]) else None
     static member        TryItem (x: 'a []             , n        , [<Optional>]_impl: TryItem ) = if n >= x.GetLowerBound 0 && n <= x.GetUpperBound 0 then Some x.[n] else None : 'a option
     static member        TryItem (x: 'a [,]            , (i,j)    , [<Optional>]_impl: TryItem ) = if (i, j)       >= (x.GetLowerBound 0, x.GetLowerBound 1                                      ) && (i, j)       <= (x.GetUpperBound 0, x.GetUpperBound 1                                      ) then Some x.[i,j]     else None : 'a option

@@ -231,3 +231,35 @@ let ``IReadOnlyDictionary.union provides same end result as Dict.unionWith picki
   let r2 = m1 |> IReadOnlyDictionary.unionWith konst m2 |> Seq.toList
 
   areEqual r1 r2
+
+[<Test>]
+let ``String.toCodePoints >> String.ofCodePoints should preserve the original string`` () =
+  // some naughty strings adopted from https://github.com/minimaxir/big-list-of-naughty-strings
+  // The MIT License (MIT), Copyright (c) 2015 Max Woolf
+  let testStrings = [
+    "田中さんにあげて下さい"
+    "パーティーへ行かないか"
+    "和製漢語"
+    "部落格"
+    "사회과학원 어학연구소"
+    "찦차를 타고 온 펲시맨과 쑛다리 똠방각하"
+    "社會科學院語學研究所"
+    "울란바토르"
+    "𠜎𠜱𠝹𠱓𠱸𠲖𠳏"
+    "ヽ༼ຈل͜ຈ༽ﾉ ヽ༼ຈل͜ຈ༽ﾉ"
+    "(｡◕ ∀ ◕｡)"
+    "｀ｨ(´∀｀∩"
+    "__ﾛ(_*)"
+    "・(￣∀￣)・:*:"
+    "ﾟ･✿ヾ╲(｡◕‿◕｡)╱✿･ﾟ"
+    "表ポあA鷗ŒéＢ逍Üßªąñ丂㐀𠀀"
+    "0️⃣ 1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣ 🔟"
+    "🇺🇸🇷🇺🇸 🇦🇫🇦🇲🇸"
+    "🇺🇸🇷🇺🇸🇦🇫🇦🇲"
+    "🇺🇸🇷🇺🇸🇦"
+    "If you're reading this, you've been in a coma for almost 20 years now. We're trying a new technique. We don't know where this message will end up in your dream, but we hope it works. Please wake up, we miss you."
+  ]
+  
+  for s in testStrings do
+    areEqual s (s |> String.toCodePoints |> String.ofCodePoints)
+

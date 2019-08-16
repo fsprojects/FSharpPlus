@@ -15,7 +15,7 @@ Minimal complete definition
 *)
 (**
     static member Return (x:'T) : 'Applicative<'T>
-    static member (<*>) (f:'T->'U, x:Applicative<'T>) : Applicative<'U>
+    static member (<*>) (f: Applicative<'T->'U>, x: Applicative<'T>) : Applicative<'U>
 *)
 (**
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
