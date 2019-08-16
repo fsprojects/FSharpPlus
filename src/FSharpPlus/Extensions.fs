@@ -174,21 +174,21 @@ module Seq =
         while (count > 0 && e.MoveNext ()) do count <- count-1
         seq { while e.MoveNext () do yield e.Current }
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
     #endif
 
     open System.Collections.ObjectModel
     open System.Collections.Generic
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
     #endif
 
-#if FABLE_COMPILER
-#else
+#if !FABLE_COMPILER
+
 /// Additional operations IList<'T>
 [<RequireQualifiedAccess>]
 module IList =
@@ -288,8 +288,8 @@ module String =
 
     let isSubString (subString: string) (source: string) = source.Contains subString
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     let startsWith  (subString: string) (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
     #endif
     let endsWith    subString (source: string) = source.EndsWith   (subString, false, CultureInfo.InvariantCulture)
@@ -298,8 +298,8 @@ module String =
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
     let trimWhiteSpaces (source: string) = source.Trim ()
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     let normalize normalizationForm (source: string) = if isNull source then source else source.Normalize normalizationForm
     let removeDiacritics (source: string) =
         if isNull source then source
@@ -326,14 +326,14 @@ module IReadOnlyCollection =
 module IReadOnlyList =
     open System.Collections.Generic
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     let ofArray (source: _ array) = IList.toIReadOnlyList source
     #endif
     let toArray (source: IReadOnlyList<_>) = Array.ofSeq source
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     /// Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.
     let add i value (source: IReadOnlyList<_>) =
         let setNth i v (source: _ array) = source.[i] <- v; source
@@ -351,8 +351,8 @@ module IReadOnlyList =
 [<RequireQualifiedAccess>]
 module Map =
     open System.Collections.Generic
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     open System.Linq
     #endif
 
@@ -402,8 +402,8 @@ module Map =
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun x _ -> x) source altSource
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     /// Returns the intersection of two maps, using the combiner function for duplicate keys.
     let intersectWith combiner (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) =
         Enumerable
@@ -427,8 +427,7 @@ module Dict =
     open System.Collections.Generic
     open System.Collections.ObjectModel
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
     open System.Linq
     
 
@@ -489,8 +488,7 @@ module Dict =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IDictionary<'Key,'Value>
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
     // Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = 
         Enumerable
@@ -521,8 +519,8 @@ module Dict =
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     open System.Linq
     #endif
     open System.Collections.Generic
@@ -583,8 +581,8 @@ module IReadOnlyDictionary =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IReadOnlyDictionary<'Key,'Value>
 
-    #if FABLE_COMPILER
-    #else
+    #if !FABLE_COMPILER
+    
     /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
     let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = 
         Enumerable
@@ -614,8 +612,8 @@ module IReadOnlyDictionary =
     #endif
 
 
-#if FABLE_COMPILER
-#else
+#if !FABLE_COMPILER
+
 /// Additional operations on IEnumerator
 [<RequireQualifiedAccess>]
 module Enumerator =
@@ -1063,7 +1061,7 @@ module Extensions =
          
 
     // http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.whenall.aspx 
-    #if FABLE_COMPILER
+    #if !FABLE_COMPILER
     open System.Threading
     open System.Threading.Tasks
 
