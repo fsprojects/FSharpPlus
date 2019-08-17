@@ -21,7 +21,7 @@ F#+ is an F# base library intended for production use, so the design of this lib
  
 ### Addition of new functions
 
- - In contrast to F# core, we don't apply the principle of encouraging good practices by hiding away stuff, namely useful functions that are at evil at the same time, ie: `curry`. The end user is responsibe for good use of the functions.
+ - In contrast to F# core, we don't apply the principle of encouraging good practices by hiding away stuff, namely useful functions that are evil at the same time, ie: `curry`. The end user is responsibe for good use of the functions.
  - Generic functions should ideally have a corresponding non-generic counterparts, ie `map3` ==> `Option.map3` - `Result.map3`.
  - Generic functions should ideally relate to rules, not neccesary Category Theory.
  - Remember to design related functions in a consitent way across different types, even if that lead to a function that is not as efficient. Performance is a priority but we don't assure performance by hiding away stuff.
