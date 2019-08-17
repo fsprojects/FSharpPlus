@@ -36,6 +36,8 @@ type State<'s,'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                      : State<'S,unit>
+    
+    static member Delay (body: unit -> State<'S,'T>) = State (State.run (body ()) s)
 
 open FSharpPlus.Control
 open FSharpPlus
