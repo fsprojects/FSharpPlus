@@ -71,6 +71,7 @@
     <Compile Include="DList.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="Kleisli.fs" />
+    <Compile Include="Free.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <None Include="Samples\Collections.fsx" />
