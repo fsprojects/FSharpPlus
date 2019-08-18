@@ -402,6 +402,14 @@ module Functor =
         ()
 
 
+module Free =
+    // compile tests only for now
+    
+    // primitive functor types
+    let aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]
+    let aFreeOfListFloat = aFreeOfListInt >>= (fun x -> Roll [ Pure "99" ]) >>= (fun x -> Roll [ Pure 90.4 ])
+    
+    
 module Collections =
 
     open System.Collections
