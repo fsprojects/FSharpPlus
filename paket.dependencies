@@ -5,6 +5,7 @@ source https://api.nuget.org/v3/index.json
 nuget FSharp.Core ~> 4.1 redirects: force
 
 nuget FSharp.Formatting ~> 3.1.0
+nuget MathNet.Numerics.FSharp redirects: force
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
 
