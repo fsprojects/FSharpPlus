@@ -180,6 +180,7 @@ temp/
 
 # Test results produced by build
 TestResults.xml
+TestResult.xml
 
 # Nuget outputs
 nuget/*.nupkg
