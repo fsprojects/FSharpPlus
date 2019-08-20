@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus.Data
+namespace FSharpPlus.Data
 
 open FSharpPlus
 open FSharpPlus.Control
@@ -11,13 +11,13 @@ type Free<'``functor<'t>``,'t> = Pure of 't | Roll of obj
 module FreePrimitives =
 
     let inline Roll (f: '``Functor<Free<'Functor<'T>>>``) : Free<'``Functor<'T>``,'T> =
-        let (_: '``Functor<'T>``) = Map.Invoke (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
+        let (_: '``Functor<'T>``) = Map.InvokeOnInstance (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
         Free<'``Functor<'T>``,'T>.Roll f
 
     let inline (|Pure|Roll|) (f: Free<'``Functor<'T>``,'T>) =
         match f with
         | Pure x -> Choice1Of2 x
-        | Roll x -> Choice2Of2 (unbox x: '``Functor<Free<'Functor<'T>>>`` when (Map or ^``Functor<'T>`` or ^``Functor<Free<'Functor<'T>>>``) : (static member Map : (^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>)) * Map -> ^``Functor<Free<'Functor<'T>>>``))
+        | Roll x -> Choice2Of2 (unbox x: '``Functor<Free<'Functor<'T>>>`` when ^``Functor<'T>`` : (static member Map : ^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>) -> ^``Functor<Free<'Functor<'T>>>``))
 
 /// Basic operations on Free Monads
 [<RequireQualifiedAccess>]
@@ -26,7 +26,7 @@ module Free =
     let inline bind (f: 'T -> Free<'``Functor<'U>``,'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
         let rec loop f = function
             | Pure r -> f r
-            | Roll (x: '``Functor<Free<'Functor<'T>>>``) -> Roll (Map.Invoke (loop f) x) : Free<'``Functor<'U>``,'U>
+            | Roll (x: '``Functor<Free<'Functor<'T>>>``) -> Roll (Map.InvokeOnInstance (loop f) x) : Free<'``Functor<'U>``,'U>
         loop f x
 
 type Free<'FT,'T> with
