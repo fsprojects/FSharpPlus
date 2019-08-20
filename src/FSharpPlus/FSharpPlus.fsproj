@@ -82,9 +82,9 @@
     <None Include="Samples\Cont.fsx" />
     <None Include="Samples\Validations.fsx" />
     <None Include="Samples\MonadTrans.fsx" />
-    <None Include="paket.references" />
-    <None Include="paket.template" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+  </ItemGroup>
 </Project>

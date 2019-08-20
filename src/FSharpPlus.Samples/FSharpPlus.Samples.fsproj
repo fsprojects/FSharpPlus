@@ -25,6 +25,6 @@
       <Project>{4364a3ea-06d8-4493-be44-e22d5370cca1}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -7,7 +7,11 @@ before_install:
   - chmod +x build.sh
  
 script: 
-  - ./build.sh -t GenerateDocs # this will run 'RunTests' as well
+  - dotnet build -c Release
+  - mono ./.paket/paket.bootstrapper.exe
+  - mono ./.paket/paket.exe restore # the docs depend on paket right now
+  - ./docsrc/tools/generate.sh --define:RELEASE --define:REFERENCE
+  - ./docsrc/tools/generate.sh --define:RELEASE --define:HELP
+  - dotnet test -c Release
 env:
   FSHARP_FORMATTING_LOG=NONE
-  
