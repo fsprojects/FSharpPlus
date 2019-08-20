@@ -14,10 +14,10 @@ module FreePrimitives =
         let (_: '``Functor<'T>``) = Map.Invoke (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
         Free<'``Functor<'T>``,'T>.Roll f
 
-    let inline (|Roll|) (f: Free<'``Functor<'T>``,'T>) : '``Functor<Free<'Functor<'T>>>`` when (Map or ^``Functor<'T>`` or ^``Functor<Free<'Functor<'T>>>``) : (static member Map : (^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>)) * Map -> ^``Functor<Free<'Functor<'T>>>``) =
+    let inline (|Pure|Roll|) (f: Free<'``Functor<'T>``,'T>) =
         match f with
-        | Pure _ -> failwith "Roll expected."
-        | Roll s -> unbox s
+        | Pure x -> Choice1Of2 x
+        | Roll x -> Choice2Of2 (unbox x: '``Functor<Free<'Functor<'T>>>`` when (Map or ^``Functor<'T>`` or ^``Functor<Free<'Functor<'T>>>``) : (static member Map : (^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>)) * Map -> ^``Functor<Free<'Functor<'T>>>``))
 
 /// Basic operations on Free Monads
 [<RequireQualifiedAccess>]
