@@ -345,7 +345,6 @@ module Operators =
     let inline maxBy (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) = MaxBy.Invoke projection  source : 'T
     let inline minBy (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) = MinBy.Invoke projection  source : 'T
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
-       
 
     // Traversable
 
@@ -372,10 +371,63 @@ module Operators =
 
     /// Left-associative fold of an indexed container with access to the index i.
     let inline foldi (folder: 'State->'K->'T->'State) (state: 'State) (source: '``FoldableWithIndex<'T>``) : 'State = FoldIndexed.Invoke folder state source
-    
-    /// Traverse an indexed container. Behaves exactly like a regular traverse except that the traversing function also has access to the key associated with a value.
-    let inline traversei (f: 'K->'T->'``Applicative<'U>``) (t: '``Traversable<'T>>``) : '``Applicative<'Traversable<'U>>`` = TraverseIndexed.Invoke f t  
 
+    /// Traverse an indexed container. Behaves exactly like a regular traverse except that the traversing function also has access to the key associated with a value.
+    let inline traversei (f: 'K->'T->'``Applicative<'U>``) (t: '``Traversable<'T>>``) : '``Applicative<'Traversable<'U>>`` = TraverseIndexed.Invoke f t
+
+    /// <summary>
+    /// Returns the index of the first element in the source
+    /// that satisfies the given predicate.
+    /// </summary>
+    /// <param name="predicate">
+    /// The function to test the input elements.
+    /// </param>
+    /// <param name="source">The input collection.</param>
+    /// <returns> 
+    /// The index of the first element that satisfies the predicate.
+    /// </returns>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown if the predicate evaluates to false for all the elements of the source.
+    /// </exception>
+    let inline findIndex (predicate: 'T -> bool) (source: '``Indexable<'T>``) : 'Index = FindIndex.Invoke predicate source
+
+    /// <summary>
+    /// Returns the index of the first element in the source
+    /// that satisfies the given predicate.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <param name="predicate">
+    /// The function to test the input elements.
+    /// </param>
+    /// <param name="source">The input collection.</param>
+    /// <returns> 
+    /// The index of the first element that satisfies the predicate, or <c>None</c>.
+    /// </returns>
+    let inline tryFindIndex (predicate: 'T -> bool) (source: '``Indexable<'T>``) : 'Index option = TryFindIndex.Invoke predicate source
+
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// </summary>
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the source.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let inline findSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index = FindSliceIndex.Invoke slice source
+
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let inline tryFindSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindSliceIndex.Invoke slice source
 
     // Comonads
 
@@ -562,7 +614,6 @@ module Operators =
     let inline sortBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
     let inline sortByDescending (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortByDescending.Invoke projection source
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection)  = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
-
 
 
 

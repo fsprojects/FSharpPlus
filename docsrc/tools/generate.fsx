@@ -31,6 +31,7 @@ let info =
 #I "../../packages/docs/FAKE/tools/"
 #I "../../packages/FSharp.Core/lib/net45/"
 #I "../../bin/FSharpPlus/net45/"
+#I @"../../src/FSharpPlus/bin/Release/net45/"
 
 #r "FSharp.Core.dll"
 #r "FSharpPlus.dll"
@@ -53,7 +54,7 @@ let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../../docs")
 #endif
 
 // Paths with template/source/output locations
-let bin        = __SOURCE_DIRECTORY__ @@ "../../bin"
+let bin        = __SOURCE_DIRECTORY__ @@ "../../src/FSharpPlus/bin/Release/net45/"
 let content    = __SOURCE_DIRECTORY__ @@ "../content"
 let output     = __SOURCE_DIRECTORY__ @@ "../../docs"
 let files      = __SOURCE_DIRECTORY__ @@ "../files"

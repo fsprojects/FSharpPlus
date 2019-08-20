@@ -413,3 +413,4 @@ type Intercalate =
         let inline call_2 (a: ^a, b: ^b, s: ^c) = ((^a or ^c) : (static member Intercalate : _*_*_ -> _) b, s, a)
         let inline call (a: 'a, b: 'b, s) = call_2 (a, b, s)
         call (Unchecked.defaultof<Intercalate>, source, sep) : 'Monoid
+
