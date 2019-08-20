@@ -35,36 +35,23 @@ module Sample1 =
             | Get (k,    c) -> Get (k,      c >> f)
             | Set (k, v, c) -> Set (k, v, f c     )
 
-    type FreeDSL<'a> =
-        | Free   of DSL<FreeDSL<'a>>
-        | Return of 'a
+    type DSL<'next> with
+        static member Map (x, f) = mapDSL f x
 
-    let rec bindFree: ('a -> FreeDSL<'b>) -> (FreeDSL<'a>) -> FreeDSL<'b> =
-        fun           f                   ->
-           function
-           | Return a   -> f a
-           | Free   dsl -> Free (mapDSL (bindFree f) dsl)
+    type FreeDSL<'a> = Free<DSL<'a>,'a>
 
     let ex1  = Set ("alma", "bela", (Get ("alma", id)))
-    let exF1 = Free (Set ("alma", "bela", (Free (Get ("alma", (fun s -> Return s))))))
-
-    type FreeDSLBuilder () =
-        member this.Return     x = Return x
-        member this.ReturnFrom x = x
-        member this.Zero      () = Return ()
-        member this.Bind (ma, f) = bindFree f ma
-
-    let domain = FreeDSLBuilder ()
+    let exF1 = Roll (Set ("alma", "bela", (Roll (Get ("alma", (fun s -> Pure s))))))
 
     let liftFree: DSL<'a> -> FreeDSL<'a> =
-        fun       action  -> Free (mapDSL Return action)
+        fun       action  -> Roll (mapDSL Pure action)
 
     let get key       = liftFree (Get (key, id))
     let set key value = liftFree (Set (key, value, ()))
 
-    let exF2 = domain.Bind(set "foo" "bar", (fun _ -> get "foo"))
+    let exF2 = set "foo" "bar" >>= fun _ -> get "foo"
 
-    let exF3 = domain {
+    let exF3 = monad {
         let! value  = get "foo"
         do! set "bar" value
         get "bar" |> ignore
@@ -74,12 +61,14 @@ module Sample1 =
     let rec interpreter: ('a -> unit) -> FreeDSL<'a> -> unit =
         fun              receiver        free        ->
             match free with
-            | Free(Get(key,        nextF)) -> printfn "Get %s" key
-                                              nextF (sprintf "'get.%s'" key) |> interpreter receiver
-            | Free(Set(key, value, next )) -> printfn "Set %s = %s" key value
-                                              next                           |> interpreter receiver
-            | Return v                     -> printfn "return(%A)" v
-                                              receiver v
+
+            | Roll (Get(key,        nextF)) -> printfn "Get %s" key
+                                               nextF (sprintf "'get.%s'" key) |> interpreter receiver
+            | Roll (Set(key, value, next )) -> printfn "Set %s = %s" key value
+                                               next                           |> interpreter receiver
+            | Pure v                        -> printfn "return(%A)" v
+                                               receiver v
+
 
     interpreter (printfn "Received: %A") exF1
     interpreter (printfn "Received: %A") exF2
