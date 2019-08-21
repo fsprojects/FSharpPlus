@@ -1,6 +1,6 @@
-namespace FSharpPlus.Data	
+namespace FSharpPlus.Data
 
-open FSharpPlus	
+open FSharpPlus
 open FSharpPlus.Control
 
 type FreeNode<'ft,'t> = Pure of 't | Roll of obj
