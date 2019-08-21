@@ -959,7 +959,15 @@ module Traversable =
     let traverseTask () =
         let a = traverse Task.FromResult [1;2]
         CollectionAssert.AreEqual ([1;2], a.Result)
-        
+
+    [<Test>]
+    let traverseMap () =
+        let m = Map.ofList [("a", 1); ("b", 2); ("c", 3)]
+        let r1 = traverse (fun i -> if i = 2 then None else Some i) m
+        let r2 = traverse Some m
+        Assert.AreEqual(None, r1)
+        CollectionAssert.AreEqual (r2.Value, m)
+
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
