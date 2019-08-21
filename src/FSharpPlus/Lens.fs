@@ -142,6 +142,22 @@ module Lens =
     /// Extract a list of the targets of a Fold. See also (^..).
     let toListOf  l   = let cons x y = x :: y in foldrOf l cons []
 
+    /// Get the largest target of a Fold.
+    let maximumOf l =
+        let mf o y =
+            match o with
+            | Some x -> Some (max x y)
+            | None -> Some y
+        foldlOf l mf None
+
+    /// Get the smallest target of a Fold.
+    let minimumOf l =
+        let mf o y =
+            match o with
+            | Some x -> Some (min x y)
+            | None -> Some y
+        foldlOf l mf None
+
     let anyOf  l f = getAny << foldMapOf l (Any << f)
     let allOf  l f = getAll << foldMapOf l (All << f)
     let elemOf l = anyOf l << (=)
