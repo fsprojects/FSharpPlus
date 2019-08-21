@@ -13,10 +13,8 @@ module Free =
     // compile tests only for now
     
     // primitive functor types
-    (*
     let aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]
     let aFreeOfListFloat = aFreeOfListInt >>= (fun x -> Roll [ Pure "99" ]) >>= (fun x -> Roll [ Pure 90.4 ])
-    *)
     
     // user defined functor types
     let aFreeOfIdentityInt = Roll (Identity (Pure 1)) >>= (fun x -> Roll (Identity (Pure 42)))
