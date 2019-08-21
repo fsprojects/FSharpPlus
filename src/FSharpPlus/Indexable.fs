@@ -7,6 +7,7 @@ open System.Text
 open System.Collections.Generic
 open FSharpPlus
 open FSharpPlus.Internals
+open FSharpPlus.Internals.MonadOps
 open FSharpPlus.Internals.Prelude
 
 #nowarn "77"
@@ -100,6 +101,9 @@ type FoldIndexed =
 type TraverseIndexed =
     static member inline TraverseIndexed ((k: 'K, a: 'T), f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
     static member inline TraverseIndexed (a: Tuple<_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke Tuple (f () a.Item1)
+    static member inline TraverseIndexed (t: Map<_,_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R =
+        let insert_f k x ys = Map.Invoke (Map.add) (f k x) <*> ys
+        Map.foldBack insert_f t (result Map.empty)
 
     static member inline Invoke f t =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed : _*_*_*_ -> _) b, f, c, a)
