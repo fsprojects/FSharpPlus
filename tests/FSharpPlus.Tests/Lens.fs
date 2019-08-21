@@ -38,6 +38,11 @@ let none_prism() =
 type NotAMonoid = N0 | N1 | N2 | N3 | N4
 
 [<Test>]
+let maximumOf () =
+    areEqual (Some 3) (maximumOf traverse [1;3;2;1])
+    areEqual None (maximumOf traverse [])
+
+[<Test>]
 let all () =
     areEqual [|"Something"; "Nothing"; "Something Else"|] ([|"Something"; "x"; "Something Else"|] |> setl (_all "x") "Nothing")
     areEqual [| N1; N4; N2; N3; N4 |] ([| N1; N0; N2; N3; N0 |] |> setl (_all N0) N4)
