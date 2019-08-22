@@ -102,7 +102,7 @@ type TraverseIndexed =
     static member inline TraverseIndexed ((k: 'K, a: 'T), f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
     static member inline TraverseIndexed (a: Tuple<_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke Tuple (f () a.Item1)
     static member inline TraverseIndexed (t: Map<_,_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R =
-        let insert_f k x ys = Map.Invoke (Map.add) (f k x) <*> ys
+        let insert_f k x ys = Map.Invoke (Map.add k) (f k x) <*> ys
         Map.foldBack insert_f t (result Map.empty)
 
     static member inline Invoke f t =
