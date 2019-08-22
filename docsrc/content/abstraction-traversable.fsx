@@ -56,6 +56,7 @@ From .Net/F#
  -  ``array<'T>``
  -  ``option<'T>`` 
  -  ``ResizeArray<'T>``
+ -  ``Map<'K, 'T>``
 
  
 From F#+

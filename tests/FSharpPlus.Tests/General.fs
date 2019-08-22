@@ -968,6 +968,12 @@ module Traversable =
         Assert.AreEqual(None, r1)
         CollectionAssert.AreEqual (r2.Value, m)
 
+        let m1 = Map.ofList [('a', "aaa"); ('b', "bbb")]
+        let r1 = traversei (fun _ _ -> None) m1
+        let r2 = traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None) m1
+        Assert.AreEqual(None, r1)
+        CollectionAssert.AreEqual (r2.Value, Map.ofList [('a', "aaaa"); ('b', "bbbb")])
+
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
