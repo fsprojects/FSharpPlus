@@ -3,6 +3,9 @@ init:
   - git config --global core.autocrlf input
 build_script:
   - cmd: build.cmd -t BuildPackage
+  - ps: .\docsrc\tools\generate.ps1 --define:RELEASE --define:REFERENCE
+  - ps: .\docsrc\tools\generate.ps1 --define:RELEASE --define:HELP
+
 test: off
 artifacts:
   - path: bin
