@@ -63,6 +63,10 @@ type Traverse =
     static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
 
+    static member inline Traverse (t:Map<_,_>  , f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
+       let insert_f k x ys = Map.Invoke (Map.add k) (f x) <*> ys
+       Map.foldBack insert_f t (result Map.empty)
+
     static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
        let cons_f x ys = Map.Invoke List.cons (f x) <*> ys
        List.foldBack cons_f t (result [])
