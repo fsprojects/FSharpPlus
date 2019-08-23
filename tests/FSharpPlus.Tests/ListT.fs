@@ -11,7 +11,7 @@ open System.Collections.Generic
 module BasicTests =
     [<Test>]
     let wrap_unwrap () =
-        let c = listT (lazy (['a'..'g']))
+        let c = listT (async.Return (['a'..'g']))
         let res = c |> ListT.run |> listT |> ListT.run |> extract
         let exp = c |> ListT.run |> extract
         CollectionAssert.AreEqual (res, exp)
