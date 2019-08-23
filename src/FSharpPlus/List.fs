@@ -58,10 +58,10 @@ module ListT =
         loop l1 l2 : ListT<'mt>
 
     let inline bind f (source: ListT<'mt>) : ListT<'mu> =
-        let _mnil _  = (result Unchecked.defaultof<'t> : 'mt) >>= fun (_: 't) -> (result Unchecked.defaultof<'u>) : 'mu
-        let rec loop f (ListT input) =
+        let _mnil = (result Unchecked.defaultof<'t> : 'mt) >>= fun (_: 't) -> (result Unchecked.defaultof<'u>) : 'mu
+        let rec loop f input =
             ListT (
-                (unbox input : 'mit) >>= function
+                (unwrap input : 'mit) >>= function
                         | Nil -> result <| (Nil : ListTNode<'mu,'u>) : 'miu
                         | Cons (h:'t, t: ListT<'mt>) ->
                             let res = concat (f h: ListT<'mu>) (loop f t)

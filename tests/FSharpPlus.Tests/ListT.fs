@@ -27,11 +27,11 @@ module BasicTests =
     // Compile tests
     let binds () =
         let res1 = listT [| [1..4] |] >>= fun x -> listT [| [x * 2] |]
-        let res2 = listT (Task.FromResult [1..4]) |> ListT.bind (fun x -> listT (Task.FromResult  [x * 2]))
-        let res3 = listT (ResizeArray [ [1..4] ]) |> ListT.bind (fun x -> listT (ResizeArray [ [x * 2] ]))
-        let res4 = listT (lazy [1..4]) |> ListT.bind (fun x -> listT (lazy ( [x * 2])))
-        let (res5: ListT<_ seq>) = listT (seq [ [1..4] ]) |> ListT.bind (fun x -> listT (seq [ [x * 2] ]))
-        () // Note: seq needs type annotation, the non-sealead types don't work with generic >>= (internal error, unsolved type var)
+        let res2 = listT (Task.FromResult [1..4]) >>= (fun x -> listT (Task.FromResult  [x * 2]))
+        let res3 = listT (ResizeArray [ [1..4] ]) >>= (fun x -> listT (ResizeArray [ [x * 2] ]))
+        let res4 = listT (lazy [1..4]) >>= (fun x -> listT (lazy ( [x * 2])))
+        let (res5: ListT<_ seq>) = listT (seq [ [1..4] ]) >>= (fun x -> listT (seq [ [x * 2] ]))
+        () // Note: seq needs type annotation.
         
     let bind_for_ideantity () =
         let res = listT (Identity [1..4]) >>= fun x -> listT (Identity [x * 2])
