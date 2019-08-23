@@ -13,6 +13,7 @@
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
     <Compile Include="Validations.fs" />
+    <Compile Include="ListT.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
