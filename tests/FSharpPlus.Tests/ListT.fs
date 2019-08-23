@@ -17,8 +17,30 @@ module BasicTests =
         CollectionAssert.AreEqual (res, exp)
   
     [<Test>]
-    let infiniteLists =
+    let infiniteLists () =
         let (infinite: ListT<Lazy<_>>) = ListT.unfold (fun x -> monad { return (Some (x, x + 1) ) }) 0
         let finite = take 12 infinite
         let res = finite <|> infinite
         CollectionAssert.AreEqual (res |> take 13 |> ListT.run |> extract, [0;1;2;3;4;5;6;7;8;9;10;11;0])
+        
+    // Compile tests
+    let binds () =
+        let res = listT ( [| [1..4] |]) >>= fun x -> listT ( [| [x * 2] |])
+        () // but for some reason it doesn't work for Task, ResizeArray, Lazy and seq
+        
+    let bind_for_ideantity () =
+        let res = listT (Identity [1..4]) >>= fun x -> listT (Identity [x * 2])
+        ()    
+        
+    let computation_expressions () =
+        let oneTwoThree : ListT<_> = monad.plus { 
+            do! lift <| Async.Sleep 10
+            yield 1
+            do! lift <| Async.Sleep 50
+            yield 2 
+            yield 3}
+        ()
+
+    let applicative_with_options () =
+        let x = (+) <!> listT None <*> listT (Some [1;2;3;4])
+        () // It doesn't work with asyncs
