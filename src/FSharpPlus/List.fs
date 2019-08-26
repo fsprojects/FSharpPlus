@@ -125,7 +125,7 @@ module ListT =
         loop count (input: ListT<'MT>)
         
     let inline filterM (f: 'T -> ListT<'``M<bool>``>) (input: ListT<'MT>) : ListT<'MT> =
-        input |> ListT.bind (fun v -> f v |> ListT.bind (fun b -> if b then singleton v else empty ()))
+        input |> bind (fun v -> f v |> bind (fun b -> if b then singleton v else empty ()))
 
     let inline filter f (input: ListT<'MT>) : ListT<'MT> = filterM (f >> singleton) input
 
