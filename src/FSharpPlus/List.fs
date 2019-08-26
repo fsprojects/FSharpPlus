@@ -110,7 +110,7 @@ module ListT =
                 | Cons (h, t) -> action h >>= (fun () -> loop t action)
         loop lst action
         
-    let inline iter (action: 'T -> unit) (lst: ListT<'MT>) = iterM (action >> singleton) lst
+    let inline iter (action: 'T -> unit) (lst: ListT<'MT>) : '``M<unit>`` = iterM (action >> result) lst
 
     let inline lift (x: '``Monad<'T>``) = wrap (x >>= (result << (fun x -> Cons (x, empty () )))) : ListT<'``Monad<'T>``>
 
