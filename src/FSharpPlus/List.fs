@@ -84,7 +84,7 @@ module ListT =
                         result res  : 'miu)
         collect f (input: ListT<'mt>) : ListT<'mu>
 
-    let inline singleton (v:'t) =
+    let inline singleton (v: 't) =
         let mresult x = result x
         let _mnil  = (result Unchecked.defaultof<'t> : 'mt) >>= konst (mresult ListTNode<'mt,'t>.Nil ) : 'mit
         wrap ((mresult <| ListTNode<'mt,'t>.Cons (v, (wrap (mresult ListTNode<'mt,'t>.Nil): ListT<'mt> ))) : 'mit) : ListT<'mt>
@@ -103,12 +103,14 @@ module ListT =
         | Nil -> failwith "empty list"
         | Cons (_: 't, tail) -> unwrap tail) |> wrap
 
-    let inline iter action lst =
-        let rec loop (seq: ListT<'MT>) (action: 'T -> '``M<unit>``) : '``M<unit>`` =
-            unwrap seq >>= function
+    let inline iterM (action: 'T -> '``M<unit>``) (lst: ListT<'MT>) : '``M<unit>`` =
+        let rec loop lst action =
+            unwrap lst >>= function
                 | Nil         -> result ()
                 | Cons (h, t) -> action h >>= (fun () -> loop t action)
         loop lst action
+        
+    let inline iter (action: 'T -> unit) (lst: ListT<'MT>) = iterM (action >> singleton) lst
 
     let inline lift (x: '``Monad<'T>``) = wrap (x >>= (result << (fun x -> Cons (x, empty () )))) : ListT<'``Monad<'T>``>
 
