@@ -124,10 +124,10 @@ module ListT =
             else return Nil }
         loop count (input: ListT<'MT>)
         
-    let inline filterM (f: 'T -> ListT<'``M<bool>``>) (input: ListT<'MT>) : ListT<'MT> =
-        input |> bind (fun v -> f v |> bind (fun b -> if b then singleton v else empty ()))
+    let inline filterM (f: 'T -> '``M<bool>``) (input: ListT<'MT>) : ListT<'MT> =
+        input |> bind (fun v -> lift (f v) |> bind (fun b -> if b then singleton v else empty ()))
 
-    let inline filter f (input: ListT<'MT>) : ListT<'MT> = filterM (f >> singleton) input
+    let inline filter f (input: ListT<'MT>) : ListT<'MT> = filterM (f >> result) input
 
     let inline run (lst: ListT<'MT>) : '``Monad<list<'T>>`` =
         let rec loop acc x = unwrap x >>= function
