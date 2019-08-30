@@ -196,3 +196,8 @@ docsrc/tools/FSharp.Formatting.svclog
 
 .idea/
 .ionide/
+
+
+
+tests/FableTesting/node_modules/
+.paket/Paket.Restore.targets
