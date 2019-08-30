@@ -1,8 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "build": "fable-splitter src -o build --commonjs",
-    "testApp": "node build/App.js",
     "pretest": "fable-splitter tests -o build --commonjs",
     "test": "mocha build -t 10000"
   },
