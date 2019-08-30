@@ -397,6 +397,7 @@ module String =
         let index = source.IndexOf slice
         if index = -1 then None else Some index
 
+    #if !FABLE_COMPILER
     /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
     let toCodePoints (source : string) : seq<int> =
         let mapper i c =
@@ -407,6 +408,7 @@ module String =
     /// Converts the array of Int32 code-points (the actual Unicode Code Point number) to a string.
     let ofCodePoints (source: seq<int>) : string =
         source |> Seq.map Char.ConvertFromUtf32 |> String.concat String.Empty
+    #endif
 
     /// Converts a string to a byte-array using the specified encoding.
     let getBytes (encoding: System.Text.Encoding) (source: string) : byte [] = encoding.GetBytes source
@@ -504,8 +506,12 @@ module Map =
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun x _ -> x) source altSource
 
-    #if !FABLE_COMPILER
+    #if FABLE_COMPILER
+    /// Returns the intersection of two maps, using the combiner function for duplicate keys.    
+    let intersectWith combiner (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) =
+        mapValues2 combiner source1 source2
     
+    #else
     /// Returns the intersection of two maps, using the combiner function for duplicate keys.
     let intersectWith combiner (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) =
         Enumerable
@@ -518,11 +524,12 @@ module Map =
                 KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
         |> Seq.map (fun kv -> (kv.Key, kv.Value))  
         |> Map.ofSeq      
+    #endif
 
     // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
-    #endif
+
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Dict =
@@ -590,7 +597,15 @@ module Dict =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IDictionary<'Key,'Value>
 
-    #if !FABLE_COMPILER
+    #if FABLE_COMPILER
+    // Returns the union of two maps, preferring values from the first in case of duplicate keys.
+    let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) : IDictionary<'Key, 'Value> = unionWith (fun x _ -> x) source altSource
+
+    /// Returns the intersection of two Dicts, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:IDictionary<'Key, 'Value>) (source2:IDictionary<'Key, 'Value>) : IDictionary<'Key, 'Value> =
+        map2 (fun x y -> combiner x y) source1 source2
+
+    #else
     // Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = 
         Enumerable
@@ -614,10 +629,12 @@ module Dict =
               KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
           .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
+    #endif
     // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
-    #endif
+
+
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
@@ -683,8 +700,16 @@ module IReadOnlyDictionary =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IReadOnlyDictionary<'Key,'Value>
 
-    #if !FABLE_COMPILER
-    
+    #if FABLE_COMPILER
+        /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.    
+    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) : IReadOnlyDictionary<'Key, 'T> = 
+        unionWith (fun x _ -> x) source altSource
+
+    /// Returns the intersection of two read-only dictionaries, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) =
+         map2 (fun x y -> combiner x y) source1 source2
+
+    #else
     /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
     let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = 
         Enumerable
@@ -707,11 +732,11 @@ module IReadOnlyDictionary =
             (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) -> 
                 KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
             .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IReadOnlyDictionary<'Key, 'T>
+    #endif
 
     /// Returns the intersection of two readonly dictionaries, preferring values from the first in case of duplicate keys.
     let intersect (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
-    #endif
 
 
 #if !FABLE_COMPILER
@@ -1101,6 +1126,7 @@ module Enumerator =
                         finally e3.Dispose () }
 #endif
 
+#if !FABLE_COMPILER
 /// Additional operations on Task<'T>
 [<RequireQualifiedAccess>]
 module Task =
@@ -1137,6 +1163,7 @@ module Task =
 
     /// Flatten two nested tasks into one.
     let join (t : Task<Task<'T>>) : Task<'T> = t.Unwrap()
+#endif
 
 /// Additional operations on Async
 [<RequireQualifiedAccess>]

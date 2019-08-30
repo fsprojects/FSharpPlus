@@ -5,6 +5,8 @@ open FSharpPlus
 open System.Collections.Generic
 
 
+
+
 let ExtensionTest = testList "Extension Tests" [
               testCase "Dict.union gives same dictionary when joined with an empty dictionary (identity)" 
                                           (fun () -> let m1 = dict [1, "2"; 2,"4"; 4,"8"]
@@ -84,13 +86,12 @@ let ExtensionTest = testList "Extension Tests" [
                                                      let r2 = m1 |> Map.intersectWith konst m2
                                                      equalSeq r1 r2)
 
-
-              #if !FABLE_COMPILER
               testCase "Dict.intersect returns any dictionary when intersected with the empty dictionary (identity)" 
                                           (fun () -> let m1 = dict [1, "2"; 2,"4"; 4,"8"]
                                                      let m2 = Dictionary<int,string>() :> IDictionary<int,string>
                                                      let r1 = m1 |> Dict.intersect m2 |> Seq.toList
                                                      equalSeq [] r1)
+
 
               testCase "Dict.intersect returns same results independent of the order (commutative)" 
                                           (fun () -> let m1 = dict [1, "1"; 2,"2"; 3,"3"]
@@ -113,7 +114,6 @@ let ExtensionTest = testList "Extension Tests" [
                                                      let r1 = m1 |> Dict.intersect m2 |> Seq.toList
                                                      let r2 = m1 |> Dict.intersectWith konst m2 |> Seq.toList
                                                      equalSeq r1 r2)
-              #endif
 
 
               testCase "IReadOnlyDictionary.intersect returns any dictionary when intersected with the empty dictionary (identity)" 
