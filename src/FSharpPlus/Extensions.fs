@@ -177,6 +177,7 @@ module Seq =
     #if !FABLE_COMPILER
     
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
+
     #endif
 
     open System.Collections.ObjectModel
@@ -185,6 +186,7 @@ module Seq =
     #if !FABLE_COMPILER
     
     let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
+
     #endif
 
 #if !FABLE_COMPILER
@@ -291,7 +293,9 @@ module String =
     #if !FABLE_COMPILER
     
     let startsWith  (subString: string) (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
+
     #endif
+    
     let endsWith    subString (source: string) = source.EndsWith   (subString, false, CultureInfo.InvariantCulture)
     let contains    char      (source: string) = Seq.contains char source
     let toUpper (source: string) = if isNull source then source else source.ToUpperInvariant ()
@@ -308,6 +312,7 @@ module String =
             |> normalize NormalizationForm.FormD
             |> String.filter (fun ch -> CharUnicodeInfo.GetUnicodeCategory ch <> UnicodeCategory.NonSpacingMark)
             |> normalize NormalizationForm.FormC
+
     #endif
 
     /// Pads the beginning of the given string with spaces so that it has a specified total length.
@@ -433,7 +438,9 @@ module IReadOnlyList =
     #if !FABLE_COMPILER
     
     let ofArray (source: _ array) = IList.toIReadOnlyList source
+
     #endif
+
     let toArray (source: IReadOnlyList<_>) = Array.ofSeq source
 
     #if !FABLE_COMPILER
@@ -537,6 +544,7 @@ module Dict =
     open System.Collections.ObjectModel
 
     #if !FABLE_COMPILER
+    
     open System.Linq
     
 
