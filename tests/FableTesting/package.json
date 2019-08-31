@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "pretest": "fable-splitter tests -o build --commonjs",
+    "pretest": "fable-splitter -o build --commonjs",
     "test": "mocha build -t 10000"
   },
   "dependencies": {

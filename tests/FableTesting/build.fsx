@@ -80,14 +80,14 @@ let logfn fmt = Printf.ksprintf log fmt
 
 
     /// Runs dotnet.exe with the given command in the given repository directory.
-let runDotnetCommand com repositoryDir command =
+let runCommand com repositoryDir command =
         let processResult = executeProcess (com, command, Some repositoryDir)
         processResult.ExitCode = 0, [processResult.stdout], processResult.stderr
 
     /// Runs the dotnet command and returns the first line of the result.
-let runSimpleDotnetCommand com repositoryDir command =
+let runSimpleCommand com repositoryDir command =
         try
-            let _,msg,errors = runDotnetCommand com repositoryDir command
+            let _,msg,errors = runCommand com repositoryDir command
             let errorText = toLines msg + System.Environment.NewLine + errors
             if errorText.Contains "fatal: " then failwith errorText
             if msg.Length = 0 then "" else
@@ -100,18 +100,11 @@ let runSimpleDotnetCommand com repositoryDir command =
 
 
 match args.[0] with
-| "npminstall" -> printfn "%s" (runSimpleDotnetCommand "npm" "." "install")
-| "runscriptbuild" -> printfn "%s" (runSimpleDotnetCommand "npm" "." "run-script build")
+| "npminstall" -> printfn "%s" (runSimpleCommand "npm" "." "install")
+| "runscriptbuild" -> printfn "%s" (runSimpleCommand "npm" "." "run-script build")
+| "fabletest" -> printfn "%s" (runSimpleCommand "npm" "." "run pretest --verbose")
+                 printfn "%s" (runSimpleCommand "npm" "." "test --verbose")
 
-//NOT USED
-//| "runfableapp" -> printfn "%s" (runSimpleDotnetCommand "npm" "." "run-script build")
-//                   printfn "%s" (runSimpleDotnetCommand "node" "." "build/Tests.js")
-
-
-//USE THIS ONE.....
-| "fabletest" -> printfn "%s" (runSimpleDotnetCommand "npm" "." "run pretest --verbose")
-                 printfn "%s" (runSimpleDotnetCommand "npm" "." "test --verbose")
-
-| "fsharptest" -> printfn "%s" (runSimpleDotnetCommand "dotnet" "tests" "build")
-                  printfn "%s" (runSimpleDotnetCommand "dotnet" "tests" "run")           
+| "fsharptest" -> printfn "%s" (runSimpleCommand "dotnet" "." "build")
+                  printfn "%s" (runSimpleCommand "dotnet" "." "run")           
 | _ -> printfn "Command not recognised"
