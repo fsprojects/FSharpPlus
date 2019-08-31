@@ -199,5 +199,5 @@ docsrc/tools/FSharp.Formatting.svclog
 
 
 
-tests/FableTesting/node_modules/
+tests/Fable.Tests/node_modules/
 .paket/Paket.Restore.targets
