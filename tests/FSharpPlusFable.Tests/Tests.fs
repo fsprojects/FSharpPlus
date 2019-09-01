@@ -1,13 +1,13 @@
 module Tests
 
-
 open ExtensionTests
+open FSharpPlus.Tests.Data
 open Testing
-// Learn more about F# at http://fsharp.org
 
 
-
-let AllTests =  testList "AllTests" [ExtensionTest]
+let AllTests =  testList "AllTests" [
+                            ExtensionTest
+                            ]
 
 let private firstDiff s1 s2 =
     let s1 = Seq.append (Seq.map Some s1) (Seq.initInfinite (fun _ -> None))
@@ -18,31 +18,27 @@ let private firstDiff s1 s2 =
 let private sequenceEqual actual expected =
     match firstDiff actual expected with
     | _,None,None -> ()
-    | i,Some a, Some e -> failwithf "Sequence does not match at position %i. Expected item: %A, but got %A. Actual %A : Expected %A" i e a actual expected
-    | i,None, Some e -> failwithf "Sequence actual shorter than expected, at pos %i for expected item %A. Actual %A : Expected %A" i e actual expected
-    | i,Some a, None -> failwithf "Sequence actual longer than expected, at pos %i found item %A. Actual %A : Expected %A" i a actual expected
+    | i,Some a, Some e -> failwithf "Sequence does not match at position %i. Expected item: %A, but got %A." i e a
+    | i,None, Some e -> failwithf "Sequence actual shorter than expected, at pos %i for expected item %A." i e
+    | i,Some a, None -> failwithf "Sequence actual longer than expected, at pos %i found item %A." i a
 
 
 
 
 #if FABLE_COMPILER
+
 open Fable.Core
 open Fable.Core.JsInterop
 
-
-printfn "FABLE COMPILER"
 flattenTest AllTests
+
 #else
 
 open Expecto
 open Expecto.TestResults
 
-
-
-
 [<EntryPoint>]
     let main args =
-        printfn "FSHARPCOMPILER"
         printfn "Result: %i" (runTestsWithArgs defaultConfig args AllTests)
         0
 
