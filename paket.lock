@@ -681,6 +681,9 @@ GITHUB
   remote: fsharp/FAKE
     modules/Octokit/Octokit.fsx (b588a7081be4a3793a310a5bb7ec5f2e89d8601b)
       Octokit (>= 0.20)
+  remote: fsprojects/FSharp.TypeProviders.SDK
+    src/ProvidedTypes.fs (322cbb6be787f6f849ba5d5ff483c8f3639cd15c)
+    src/ProvidedTypes.fsi (322cbb6be787f6f849ba5d5ff483c8f3639cd15c)
 GROUP buildfsx
 NUGET
   remote: https://api.nuget.org/v3/index.json

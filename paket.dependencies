@@ -9,6 +9,9 @@ nuget MathNet.Numerics.FSharp redirects: force
 nuget NUnit.ConsoleRunner ~> 3.10.0
 github fsharp/FAKE modules/Octokit/Octokit.fsx
 
+github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
+github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
+
 # docs:
 
 group docs

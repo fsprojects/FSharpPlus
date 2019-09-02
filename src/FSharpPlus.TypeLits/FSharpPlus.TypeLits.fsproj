@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
+    <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
+    <Compile Include="TypeLevelOperators.fs" />
+    <Compile Include="TypeBool.fs" />
+    <Compile Include="TypeNat.fs" />
+    <Compile Include="TypeNat.Provider.fs" />
+  </ItemGroup>
+</Project>
