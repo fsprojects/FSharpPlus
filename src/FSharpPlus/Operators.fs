@@ -92,6 +92,9 @@ module Operators =
 
     // Monad -----------------------------------------------------------
     
+    /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
+    let inline bind (f:'T->'``Monad<'U>``) (x:'``Monad<'T>``) :'``Monad<'U>`` = Bind.Invoke x f
+    
     /// Takes a monadic value and a function from a plain type to a monadic value, and returns a new monadic value.
     let inline (>>=) (x: '``Monad<'T>``) (f: 'T->'``Monad<'U>``) : '``Monad<'U>`` = Bind.Invoke x f
 
