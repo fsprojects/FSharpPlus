@@ -2,6 +2,7 @@ module Testing
 
 
 #if FABLE_COMPILER
+
     type TestKind =
     | TestList of string * TestKind seq
     | TestCase of (string*obj)
@@ -13,8 +14,9 @@ module Testing
     let testCase (msg: string) (test: unit->unit) = TestCase( msg, box test )
 
 
-
-    //Mocha equal does not provide equality between the values of sequences
+    //Assert.AreEqual does not provide value equality between two strings.
+    //The following functions implement equality between sequences
+    //This is adapted from Expecto
 
     let private firstDiff s1 s2 =
         let s1 = Seq.append (Seq.map Some s1) (Seq.initInfinite (fun _ -> None))
@@ -28,6 +30,7 @@ module Testing
         | i,Some a, Some e -> failwithf "Sequence does not match at position %i. Expected item: %A, but got %A. Actual %A : Expected %A" i e a actual expected
         | i,None, Some e -> failwithf "Sequence actual shorter than expected, at pos %i for expected item %A. Actual %A : Expected %A" i e actual expected
         | i,Some a, None -> failwithf "Sequence actual longer than expected, at pos %i found item %A. Actual %A : Expected %A" i a actual expected
+
 
 
     let equal expected actual: unit = Assert.AreEqual(actual, expected)
@@ -48,7 +51,6 @@ module Testing
             it name (unbox test)
 
 #else 
-
 
     open Expecto
 
