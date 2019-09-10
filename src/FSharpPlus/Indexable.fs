@@ -7,6 +7,7 @@ open System.Text
 open System.Collections.Generic
 open FSharpPlus
 open FSharpPlus.Internals
+open FSharpPlus.Internals.MonadOps
 open FSharpPlus.Internals.Prelude
 
 #nowarn "77"
@@ -100,8 +101,71 @@ type FoldIndexed =
 type TraverseIndexed =
     static member inline TraverseIndexed ((k: 'K, a: 'T), f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
     static member inline TraverseIndexed (a: Tuple<_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke Tuple (f () a.Item1)
+    static member inline TraverseIndexed (t: Map<_,_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R =
+        let insert_f k x ys = Map.Invoke (Map.add k) (f k x) <*> ys
+        Map.foldBack insert_f t (result Map.empty)
 
     static member inline Invoke f t =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed : _*_*_*_ -> _) b, f, c, a)
         let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) : 'r
         call (Unchecked.defaultof<TraverseIndexed>, t, f)
+
+
+
+type FindIndex =
+    inherit Default1
+    static member        FindIndex (x: string           , p            , [<Optional>]_impl: FindIndex) = String.findIndex p x
+    static member        FindIndex (x: 'a []            , p            , [<Optional>]_impl: FindIndex) = Array.findIndex p x
+    static member        FindIndex (x: 'a ResizeArray   , p: 'a -> bool, [<Optional>]_impl: FindIndex) = Seq.findIndex p x
+    static member        FindIndex (x: list<'a>         , p            , [<Optional>]_impl: FindIndex) = List.findIndex p x
+    static member        FindIndex (x: seq<'a>          , p            , [<Optional>]_impl: FindIndex) = Seq.findIndex p x
+    static member        FindIndex (x: 'a Id            , p: 'a -> bool, [<Optional>]_impl: FindIndex) = List.findIndex p [x.getValue]
+
+    static member inline Invoke (p: 'T -> bool) (source: '``Collection<'T>``) : 'Index =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<FindIndex>, source, p)
+
+type TryFindIndex =
+    inherit Default1
+    static member        TryFindIndex (x: string           , p            , [<Optional>]_impl: TryFindIndex) = String.tryFindIndex p x
+    static member        TryFindIndex (x: 'a []            , p            , [<Optional>]_impl: TryFindIndex) = Array.tryFindIndex p x
+    static member        TryFindIndex (x: 'a ResizeArray   , p: 'a -> bool, [<Optional>]_impl: TryFindIndex) = Seq.tryFindIndex p x
+    static member        TryFindIndex (x: list<'a>         , p            , [<Optional>]_impl: TryFindIndex) = List.tryFindIndex p x
+    static member        TryFindIndex (x: seq<'a>          , p            , [<Optional>]_impl: TryFindIndex) = Seq.tryFindIndex p x
+    static member        TryFindIndex (x: 'a Id            , p: 'a -> bool, [<Optional>]_impl: TryFindIndex) = List.tryFindIndex p [x.getValue]
+
+    static member inline Invoke (p: 'T -> bool) (source: '``Collection<'T>``) : 'Index option =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<TryFindIndex>, source, p)
+
+
+type FindSliceIndex =
+    inherit Default1
+    static member        FindSliceIndex (x: string           , e                   , [<Optional>]_impl: FindSliceIndex) = String.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
+    static member        FindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex e x
+    static member        FindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex [e.getValue] [x.getValue]
+
+    static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindSliceIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<FindSliceIndex>, source, slice)
+
+type TryFindSliceIndex =
+    inherit Default1
+    static member        TryFindSliceIndex (x: string           , e                   , [<Optional>]_impl: TryFindSliceIndex) = String.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: TryFindSliceIndex) = Array.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex [e.getValue] [x.getValue]
+
+    static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindSliceIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<TryFindSliceIndex>, source, slice)
+

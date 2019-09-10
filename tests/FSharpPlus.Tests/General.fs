@@ -959,7 +959,21 @@ module Traversable =
     let traverseTask () =
         let a = traverse Task.FromResult [1;2]
         CollectionAssert.AreEqual ([1;2], a.Result)
-        
+
+    [<Test>]
+    let traverseMap () =
+        let m = Map.ofList [("a", 1); ("b", 2); ("c", 3)]
+        let r1 = traverse (fun i -> if i = 2 then None else Some i) m
+        let r2 = traverse Some m
+        Assert.AreEqual(None, r1)
+        CollectionAssert.AreEqual (r2.Value, m)
+
+        let m1 = Map.ofList [(1, [1;1;1]); (2, [2;2;2])]
+        let r1 = m1 |> traversei (fun _ _ -> None)
+        let r2 = m1 |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        Assert.AreEqual(None, r1)
+        CollectionAssert.AreEqual (r2.Value, Map.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])])
+
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)

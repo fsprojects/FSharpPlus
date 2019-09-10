@@ -8,8 +8,6 @@ module Lens =
 
     /// [omit]
     module Internals =
-        let lmap' ab p = ab >> p
-        let rmap' cd p = p >> cd
         let dimap' ab cd  p = ab >> p >> cd
         let getAny (Any p) = p
         let getAll (All p) = p
@@ -136,23 +134,39 @@ module Lens =
     // functions
     let inline to' k = dimap k (Contramap.InvokeOnInstance k)
 
-    let foldMapOf l f = Const.run </rmap'/> l (Const </rmap'/> f)
-    let foldOf    l   = Const.run </rmap'/> l Const
-    let foldrOf l f z = flip Endo.run z << foldMapOf l (Endo </rmap'/> f)
-    let foldlOf l f z = (flip Endo.run z </lmap'/> Dual.run) </rmap'/> foldMapOf l (Dual </rmap'/> Endo </rmap'/> flip f)
+    let foldMapOf l f = Const.run << l (Const << f)
+    let foldOf    l   = Const.run << l Const
+    let foldrOf l f z = flip Endo.run z << foldMapOf l (Endo << f)
+    let foldlOf l f z = (flip Endo.run z << Dual.run) << foldMapOf l (Dual << Endo << flip f)
 
     /// Extract a list of the targets of a Fold. See also (^..).
     let toListOf  l   = let cons x y = x :: y in foldrOf l cons []
 
-    let anyOf  l f = getAny </rmap'/> foldMapOf l (Any </rmap'/> f)
-    let allOf  l f = getAll </rmap'/> foldMapOf l (All </rmap'/> f)
+    /// Get the largest target of a Fold.
+    let maximumOf l =
+        let mf o y =
+            match o with
+            | Some x -> Some (max x y)
+            | None -> Some y
+        foldlOf l mf None
+
+    /// Get the smallest target of a Fold.
+    let minimumOf l =
+        let mf o y =
+            match o with
+            | Some x -> Some (min x y)
+            | None -> Some y
+        foldlOf l mf None
+
+    let anyOf  l f = getAny << foldMapOf l (Any << f)
+    let allOf  l f = getAll << foldMapOf l (All << f)
     let elemOf l = anyOf l << (=)
     let inline items x = traverse x
 
     let inline filtered p f s = if p s then f s else Return.InvokeOnInstance s
     let inline both f (a, b) = tuple2 </Map.InvokeOnInstance/> f a </Apply.InvokeOnInstance/> f b
 
-    let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run </rmap'/> bt)
+    let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run << bt)
     let inline from' l   = withIso l <| fun sa bt -> iso bt sa
     let inline mapping k = withIso k <| fun sa bt -> iso (Map.InvokeOnInstance sa) (Map.InvokeOnInstance bt)
 
