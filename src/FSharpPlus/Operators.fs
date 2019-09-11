@@ -60,7 +60,7 @@ module Operators =
     let inline (<<|)  (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
     /// Lift a function into a Functor. Same as map but with flipped arguments.
-    /// To be used in pipe-forward stlye expressions
+    /// To be used in pipe-forward style expressions
     let inline (|>>)  (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.Invoke f x
 
     /// Like map but ignoring the results.
