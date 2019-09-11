@@ -174,10 +174,16 @@ module Seq =
         while (count > 0 && e.MoveNext ()) do count <- count-1
         seq { while e.MoveNext () do yield e.Current }
 
+    #if !FABLE_COMPILER
+    
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
+    #endif
 
     open System.Collections.ObjectModel
     open System.Collections.Generic
+
+    #if !FABLE_COMPILER
+    
     let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
 
     /// <summary>
@@ -216,15 +222,16 @@ module Seq =
     let tryFindSliceIndex (slice: seq<_>) (source: seq<_>) =
         let index = Internals.FindSliceIndex.seqImpl slice source
         if index = -1 then None else Some index
+    #endif
 
-
+#if !FABLE_COMPILER
 /// Additional operations IList<'T>
 [<RequireQualifiedAccess>]
 module IList =
     open System.Collections.ObjectModel
     open System.Collections.Generic
     let toIReadOnlyList (source: IList<_>) = ReadOnlyCollection source :> IReadOnlyList<_>
-
+#endif
 
 /// Additional operations on List
 [<RequireQualifiedAccess>]
@@ -369,14 +376,20 @@ module String =
     /// Replace a substring with the given replacement string.
     let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace (oldValue, newValue)
 
-    let isSubString subString (source: string) = source.Contains subString
-    let startsWith  subString (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
+    let isSubString (subString: string) (source: string) = source.Contains subString
+
+    #if !FABLE_COMPILER
+    
+    let startsWith  (subString: string) (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
+    #endif
     let endsWith    subString (source: string) = source.EndsWith   (subString, false, CultureInfo.InvariantCulture)
     let contains    char      (source: string) = Seq.contains char source
     let toUpper (source: string) = if isNull source then source else source.ToUpperInvariant ()
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
     let trimWhiteSpaces (source: string) = source.Trim ()
 
+    #if !FABLE_COMPILER
+    
     let normalize normalizationForm (source: string) = if isNull source then source else source.Normalize normalizationForm
     let removeDiacritics (source: string) =
         if isNull source then source
@@ -385,6 +398,7 @@ module String =
             |> normalize NormalizationForm.FormD
             |> String.filter (fun ch -> CharUnicodeInfo.GetUnicodeCategory ch <> UnicodeCategory.NonSpacingMark)
             |> normalize NormalizationForm.FormC
+    #endif
 
     /// Pads the beginning of the given string with spaces so that it has a specified total length.
     let padLeft totalLength (source: string) = source.PadLeft totalLength
@@ -520,15 +534,21 @@ module IReadOnlyCollection =
 module IReadOnlyList =
     open System.Collections.Generic
 
+    #if !FABLE_COMPILER
+    
     let ofArray (source: _ array) = IList.toIReadOnlyList source
+    #endif
     let toArray (source: IReadOnlyList<_>) = Array.ofSeq source
 
+    #if !FABLE_COMPILER
+    
     /// Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.
     let add i value (source: IReadOnlyList<_>) =
         let setNth i v (source: _ array) = source.[i] <- v; source
         if 0 <= i && i < source.Count then
             source |> Array.ofSeq |> setNth i value |> ofArray |> Some
         else None
+    #endif
 
     let tryItem i (source: IReadOnlyList<_>) =
         if 0 <= i && i < source.Count then Some source.[i]
@@ -539,7 +559,10 @@ module IReadOnlyList =
 [<RequireQualifiedAccess>]
 module Map =
     open System.Collections.Generic
+    #if !FABLE_COMPILER
+    
     open System.Linq
+    #endif
 
     let keys   (source: Map<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
     let values (source: Map<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
@@ -587,6 +610,8 @@ module Map =
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: Map<'Key, 'T>) (altSource: Map<'Key, 'T>) = unionWith (fun x _ -> x) source altSource
 
+    #if !FABLE_COMPILER
+    
     /// Returns the intersection of two maps, using the combiner function for duplicate keys.
     let intersectWith combiner (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) =
         Enumerable
@@ -603,15 +628,19 @@ module Map =
     // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
-
+    #endif
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Dict =
     open System.Collections.Generic
     open System.Collections.ObjectModel
+
+    #if !FABLE_COMPILER
     open System.Linq
+    
 
     let toIReadOnlyDictionary source = ReadOnlyDictionary source :> IReadOnlyDictionary<_,_>
+    #endif
 
     let tryGetValue k (dct: IDictionary<'Key, 'Value>) =
         match dct.TryGetValue k with
@@ -667,6 +696,7 @@ module Dict =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IDictionary<'Key,'Value>
 
+    #if !FABLE_COMPILER
     // Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = 
         Enumerable
@@ -693,11 +723,14 @@ module Dict =
     // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
-
+    #endif
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
+    #if !FABLE_COMPILER
+    
     open System.Linq
+    #endif
     open System.Collections.Generic
 
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
@@ -756,6 +789,8 @@ module IReadOnlyDictionary =
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IReadOnlyDictionary<'Key,'Value>
 
+    #if !FABLE_COMPILER
+    
     /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
     let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = 
         Enumerable
@@ -782,6 +817,10 @@ module IReadOnlyDictionary =
     /// Returns the intersection of two readonly dictionaries, preferring values from the first in case of duplicate keys.
     let intersect (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
+    #endif
+
+
+#if !FABLE_COMPILER
 
 
 /// Additional operations on IEnumerator
@@ -1166,7 +1205,7 @@ module Enumerator =
                     finally
                         try e2.Dispose ()
                         finally e3.Dispose () }
-
+#endif
 
 /// Additional operations on Task<'T>
 [<RequireQualifiedAccess>]
@@ -1270,7 +1309,7 @@ module Extensions =
          
 
     // http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.whenall.aspx 
-
+    #if !FABLE_COMPILER
     open System.Threading
     open System.Threading.Tasks
 
@@ -1298,7 +1337,7 @@ module Extensions =
                 t.ContinueWith (continuation, cancellationToken, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default) |> ignore)
             tcs.Task
 
-
+    #endif
     type Async<'t> with
 
         /// Combine all asyncs in one, chaining them in sequence order.
