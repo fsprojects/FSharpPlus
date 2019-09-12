@@ -358,7 +358,6 @@ module Array =
     /// <returns>
     /// The index of the slice or <c>None</c>.
     /// </returns>
-
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
@@ -1325,7 +1324,7 @@ module Extensions =
 
     // http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.whenall.aspx 
     #if !FABLE_COMPILER
-    
+
     open System.Threading
     open System.Threading.Tasks
 
