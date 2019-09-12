@@ -287,7 +287,9 @@ module List =
             member __.Item with get index = source.[index]
             member __.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member __.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
-   
+
+    #if !FABLE_COMPILER
+
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
     /// </summary>
@@ -314,6 +316,7 @@ module List =
     let tryFindSliceIndex (slice: _ list) (source: _ list) =
         let index = Internals.FindSliceIndex.listImpl slice source
         if index = -1 then None else Some index
+    #endif
 
 
 /// Additional operations on Array
@@ -339,6 +342,8 @@ module Array =
     /// <returns>
     /// The index of the slice.
     /// </returns>
+    #if !FABLE_COMPILER
+
     let findSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then
@@ -353,9 +358,11 @@ module Array =
     /// <returns>
     /// The index of the slice or <c>None</c>.
     /// </returns>
+
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
+    #endif
 
 
 /// Additional operations on String
@@ -503,6 +510,8 @@ module String =
         let index = source.IndexOf slice
         if index = -1 then None else Some index
 
+    #if !FABLE_COMPILER
+
     /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
     let toCodePoints (source : string) : seq<int> =
         let mapper i c =
@@ -513,7 +522,8 @@ module String =
     /// Converts the array of Int32 code-points (the actual Unicode Code Point number) to a string.
     let ofCodePoints (source: seq<int>) : string =
         source |> Seq.map Char.ConvertFromUtf32 |> String.concat String.Empty
-
+    #endif
+    
     /// Converts a string to a byte-array using the specified encoding.
     let getBytes (encoding: System.Text.Encoding) (source: string) : byte [] = encoding.GetBytes source
 
@@ -1207,6 +1217,10 @@ module Enumerator =
                         finally e3.Dispose () }
 #endif
 
+
+
+#if !FABLE_COMPILER
+
 /// Additional operations on Task<'T>
 [<RequireQualifiedAccess>]
 module Task =
@@ -1243,6 +1257,7 @@ module Task =
 
     /// Flatten two nested tasks into one.
     let join (t : Task<Task<'T>>) : Task<'T> = t.Unwrap()
+#endif
 
 /// Additional operations on Async
 [<RequireQualifiedAccess>]
@@ -1310,6 +1325,7 @@ module Extensions =
 
     // http://msdn.microsoft.com/en-us/library/system.threading.tasks.task.whenall.aspx 
     #if !FABLE_COMPILER
+    
     open System.Threading
     open System.Threading.Tasks
 
@@ -1336,8 +1352,8 @@ module Extensions =
                         tcs.SetResult results
                 t.ContinueWith (continuation, cancellationToken, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default) |> ignore)
             tcs.Task
-
     #endif
+
     type Async<'t> with
 
         /// Combine all asyncs in one, chaining them in sequence order.
