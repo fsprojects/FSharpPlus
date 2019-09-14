@@ -1,5 +1,10 @@
-#### 1.1.0-CI00271  - August 15 2019
+#### 1.1.0-CI00272  - September 14 2019
+* Initial Fable support for Extensions
+* Add generic bind, try/findIndex and try/findSliceIndex functions
+* Traverse and TraverseIndexed for Map<_,_>
+* Lens: fix foldOf and add maximumOf/minimumOf
 
+#### 1.1.0-CI00271  - August 15 2019
 * Add intersect functions for Map/Dictionaries
 * Add polyvariadic memoizationN, curryN/uncurryN functions
 * Add polyvariadic parsing functions (scanf family)
