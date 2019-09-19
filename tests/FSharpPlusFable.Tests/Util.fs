@@ -18,11 +18,10 @@ module Testing
 
     let equal expected actual: unit = Assert.AreEqual(actual, expected)
     let notEqual expected actual: unit = Assert.NotEqual(actual, expected)
+    let deepEqual expected actual: unit = import "deepEqual" "./deepEqual.js"
 
-    let private equalObj expected actual: unit = import "EqualObj" "./ObjCompare.js"
-
-    let equalSeq expected actual: unit = equalObj expected actual
-    let equalMap expected actual: unit = equalObj (Map.toSeq expected) (Map.toSeq actual)
+    let equalSeq expected actual: unit = deepEqual expected actual
+    let equalMap expected actual: unit = deepEqual (Map.toSeq expected) (Map.toSeq actual)
 
 
     //Code required to run the tests
