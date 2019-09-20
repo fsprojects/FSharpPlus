@@ -408,6 +408,7 @@ module Operators =
     /// </returns>
     let inline tryFindIndex (predicate: 'T -> bool) (source: '``Indexable<'T>``) : 'Index option = TryFindIndex.Invoke predicate source
 
+    #if !FABLE_COMPILER
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
     /// </summary>
@@ -420,6 +421,7 @@ module Operators =
     /// The index of the slice.
     /// </returns>
     let inline findSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index = FindSliceIndex.Invoke slice source
+    #endif
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
@@ -653,25 +655,25 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
-    
     // Converter
 
     /// Convert using the explicit operator.
     let inline explicit (value: 'T) : 'U = Explicit.Invoke value
 
+    #if !FABLE_COMPILER
     let inline ofBytesWithOptions (isLtEndian: bool) (startIndex: int) (value: byte[]) = OfBytes.Invoke isLtEndian startIndex value
     let inline ofBytes   (value: byte[]) = OfBytes.Invoke true 0 value
     let inline ofBytesBE (value: byte[]) = OfBytes.Invoke false 0 value
 
     let inline toBytes   value : byte[] = ToBytes.Invoke true value
     let inline toBytesBE value : byte[] = ToBytes.Invoke false value
+    #endif
      
     /// Converts to a value from its string representation.
     let inline parse (value: string) = Parse.Invoke value
 
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     let inline tryParse (value: string) = TryParse.Invoke value
-
 
     // Numerics
 
