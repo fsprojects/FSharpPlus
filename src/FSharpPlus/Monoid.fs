@@ -61,6 +61,7 @@ type Plus with
                     | Choice2Of2 a, Choice2Of2 b -> Choice2Of2 (Plus.Invoke a b)
 
 type Plus with 
+    #if !FABLE_COMPILER
     static member inline ``+`` (x, y, _mthd: Plus) : 't =
         let xr, yr = (^t : (member Rest : 'tr) x), (^t : (member Rest : 'tr) y)
         let x7, y7 = (^t : (member Item7: 't7) x), (^t : (member Item7: 't7) y)
@@ -71,6 +72,7 @@ type Plus with
         let x2, y2 = (^t : (member Item2: 't2) x), (^t : (member Item2: 't2) y)
         let x1, y1 = (^t : (member Item1: 't1) x), (^t : (member Item1: 't1) y)
         Tuple<_,_,_,_,_,_,_,_> (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7, Plus.Invoke xr yr) |> retype : 't
+    #endif
 
     static member inline ``+`` ( x: Tuple<'a>         ,  y: Tuple<'a>         , [<Optional>]_mthd: Plus) = Tuple<'a> (Plus.Invoke x.Item1 y.Item1) : Tuple<'a>
     static member inline ``+`` ((x1,x2               ), (y1,y2               ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                                                               ) :'a*'b

@@ -25,38 +25,38 @@ type SeqT<'``monad<seq<'t>>``> = SeqT of '``monad<seq<'t>>``
 module SeqT =
     let run (SeqT m) = m
 
+    #if !FABLE_COMPILER
     let inline internal sequence ms =
         let k m m' = m >>= fun (x: 'a) -> m' >>= fun (xs: seq<'a>) -> (result: seq<'a> -> 'M) (seq {yield x; yield! xs})
         Seq.foldBack k ms ((result: seq<'a> -> 'M) Seq.empty)
-
     let inline internal mapM f as' = sequence (Seq.map f as')
 
     let inline bind (f: 'T-> SeqT<'``Monad<seq<'U>``>) (SeqT m: SeqT<'``Monad<seq<'T>``>)          = SeqT (m >>= (mapM : _->seq<_>->_) (run << f) >>= ((Seq.concat: seq<seq<_>>->_) >> result))
-    #if !FABLE_COMPILER
     let inline apply (SeqT f: SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x: SeqT<'``Monad<seq<'T>``>) = SeqT (map (Seq.apply : seq<_->_>->seq<_>->seq<_>) f <*> x) : SeqT<'``Monad<seq<'U>``>
     let inline map (f: 'T->'U) (SeqT m: SeqT<'``Monad<seq<'T>``>)                                  = SeqT <| map (Seq.map f : (seq<_>->_)) m                    : SeqT<'``Monad<seq<'U>``>
     #endif
 
 type SeqT<'``monad<seq<'t>>``> with
+    #if !FABLE_COMPILER
     static member inline Return (x: 'T) = x |> Seq.singleton |> result |> SeqT                                     : SeqT<'``Monad<seq<'T>``>
 
-    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: SeqT<'``Monad<seq<'T>``>, f: 'T->'U) = SeqT.map f x                             : SeqT<'``Monad<seq<'U>``>
 
     static member inline (<*>) (f: SeqT<'``Monad<seq<('T -> 'U)>``>, x: SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x : SeqT<'``Monad<seq<'U>``>
-    #endif
     static member inline (>>=) (x: SeqT<'``Monad<seq<'T>``>, f: 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind  f x
 
     static member inline get_Empty () = SeqT <| result Seq.empty : SeqT<'``MonadPlus<seq<'T>``>
     static member inline (<|>) (SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>
-
+    #endif
     static member inline TryWith (source: SeqT<'``Monad<seq<'T>>``>, f: exn -> SeqT<'``Monad<seq<'T>>``>) = SeqT (TryWith.Invoke (SeqT.run source) (SeqT.run << f))
     static member inline TryFinally (computation: SeqT<'``Monad<seq<'T>>``>, f) = SeqT (TryFinally.Invoke     (SeqT.run computation) f)
     static member inline Using (resource, f: _ -> SeqT<'``Monad<seq<'T>>``>)    = SeqT (Using.Invoke resource (SeqT.run << f))
     static member inline Delay (body : unit   ->  SeqT<'``Monad<seq<'T>>``>)    = SeqT (Delay.Invoke (fun _ -> SeqT.run (body ()))) : SeqT<'``Monad<seq<'T>>``>
     
+    #if !FABLE_COMPILER
     static member inline Lift (x: '``Monad<'T>``) = x |> liftM Seq.singleton |> SeqT : SeqT<'``Monad<seq<'T>>``>
+    #endif
     
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``SeqT<'MonadAsync<'T>>``
     

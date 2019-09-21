@@ -52,10 +52,11 @@ type NonEmptyList<'t> with
         {Head = y; Tail = (ys @ ys')}
 
     static member Return (x: 'a) = {Head = x; Tail = []}
+    #if !FABLE_COMPILER
     static member (<*>)  (f: NonEmptyList<'T->'U>, x: NonEmptyList<'T>) =
         let r = NonEmptyList.toList f <*> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
-
+    #endif
     static member Extract   {Head = h; Tail = _} = h : 't
     static member Duplicate (s: NonEmptyList<'a>, [<Optional>]_impl: Duplicate) = NonEmptyList.tails s
     static member (=>>)     (s, g) = NonEmptyList.map g (NonEmptyList.tails s) : NonEmptyList<'b>

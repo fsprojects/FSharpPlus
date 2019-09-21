@@ -3,14 +3,13 @@
 open FSharpPlus
 open System.ComponentModel
 
+#if !FABLE_COMPILER
 /// Additional operations on List
 module List =
 
-    #if !FABLE_COMPILER
     let inline sequence (ms: list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequence ms
 
     let inline traverse (f: 'T->'``Applicative<'U>``) (xs:list<'T>) : '``Applicative<list<'U>>`` = traverse f xs
-    #endif
     
     let inline foldM (f: 'T->'U->'``Monad<'T>``) (a: 'T) (bx:list<'U>) : '``Monad<'T>`` =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
@@ -28,9 +27,8 @@ module List =
                         result (if flg then (h::ys) else ys)))
         loopM xs
 
-    #if !FABLE_COMPILER
     let inline replicateM count (initial: '``Applicative<'T>``)  = sequence (List.replicate count initial)
-    #endif
+#endif
 
 open FSharpPlus.Control
 
@@ -43,38 +41,40 @@ type ListT<'``monad<list<'t>>``> = ListT of '``monad<list<'t>>``
 module ListT =
     let run (ListT m) = m : '``Monad<list<'T>>``
 
+    #if !FABLE_COMPILER
     let inline internal sequence ms =
         let k m m' = m >>= fun (x: 'a) -> m' >>= fun xs -> (result: list<'a> -> 'M) (x::xs)
         List.foldBack k ms ((result :list<'a> -> 'M) [])
-    
+
     let inline internal mapM f as' = sequence (List.map f as')
 
     let inline bind (f: 'T-> ListT<'``Monad<list<'U>``>) (ListT m: ListT<'``Monad<list<'T>``>) = (ListT (m >>= mapM (run << f) >>= ((List.concat: list<_>->_) >> result)))
-    #if !FABLE_COMPILER
     let inline apply (ListT f: ListT<'``Monad<list<('T -> 'U)>``>) (ListT x: ListT<'``Monad<list<'T>``>) = ListT (map List.apply f <*> x) : ListT<'``Monad<list<'U>``>
     let inline map  (f: 'T->'U) (ListT m: ListT<'``Monad<list<'T>``>) =  ListT (map (List.map f) m) : ListT<'``Monad<list<'U>``>
     #endif
 
 type ListT<'``monad<list<'t>>``> with
+    #if !FABLE_COMPILER
     static member inline Return (x: 'T) = [x] |> result |> ListT                                                      : ListT<'``Monad<seq<'T>``>
 
-    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: ListT<'``Monad<seq<'T>``>, f: 'T->'U) = ListT.map f x                              : ListT<'``Monad<seq<'U>``>
 
     static member inline (<*>) (f: ListT<'``Monad<seq<('T -> 'U)>``>, x: ListT<'``Monad<seq<'T>``>) = ListT.apply f x : ListT<'``Monad<seq<'U>``>
-    #endif
     static member inline (>>=) (x: ListT<'``Monad<seq<'T>``>, f: 'T -> ListT<'``Monad<seq<'U>``>)   = ListT.bind f x
 
     static member inline get_Empty () = ListT <| result [] : ListT<'``MonadPlus<list<'T>``>
     static member inline (<|>) (ListT x, ListT y) = ListT (x >>= (fun a -> y >>= (fun b -> result (a @ b)))) : ListT<'``MonadPlus<list<'T>``>
+    #endif
 
     static member inline TryWith (source: ListT<'``Monad<list<'T>>``>, f: exn -> ListT<'``Monad<list<'T>>``>) = ListT (TryWith.Invoke (ListT.run source) (ListT.run << f))
     static member inline TryFinally (computation: ListT<'``Monad<list<'T>>``>, f) = ListT (TryFinally.Invoke     (ListT.run computation) f)
     static member inline Using (resource, f: _ -> ListT<'``Monad<list<'T>>``>)    = ListT (Using.Invoke resource (ListT.run << f))
     static member inline Delay (body : unit   ->  ListT<'``Monad<list<'T>>``>)    = ListT (Delay.Invoke (fun _ -> ListT.run (body ()))) : ListT<'``Monad<list<'T>>``>
 
+    #if !FABLE_COMPILER
     static member inline Lift (x: '``Monad<'T>``) = x |> liftM List.singleton |> ListT : ListT<'``Monad<list<'T>>``>
+    #endif
     
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``ListT<'MonadAsync<'T>>``
     

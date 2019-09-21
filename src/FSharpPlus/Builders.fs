@@ -16,7 +16,10 @@ module Builders =
         static member inline ($) (Idiomatic, si) = fun sfi x -> (Idiomatic $ x) (sfi <*> si)
         static member        ($) (Idiomatic, Ii) = id
     let inline idiomatic a b = (Idiomatic $ b) a
+    #if !FABLE_COMPILER
     let inline iI x = (idiomatic << result) x
+    #endif
+    
     type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
     type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idiomatic $ x) (join fii)
 
@@ -30,17 +33,19 @@ module Builders =
 
     type Builder () =
         member        __.ReturnFrom (expr) = expr                                        : '``Monad<'T>``
+        #if !FABLE_COMPILER
         member inline __.Return (x: 'T) = result x                                       : '``Monad<'T>``
         member inline __.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
+        #endif
         member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
 
         #if !FABLE_COMPILER
         [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.Select (x, [<ProjectionParameter>] f) = map f x
-        #endif
 
         [<CustomOperation("where", MaintainsVariableSpaceUsingBind=true)>]
         member inline __.Where (x, [<ProjectionParameter>] p) = mfilter p x
+        #endif
 
         [<CustomOperation("top", MaintainsVariableSpaceUsingBind=true)>]
         member inline __.Top (source, n) = limit n source
@@ -88,8 +93,11 @@ module Builders =
 
     type MonadFxStrictBuilder () =
         inherit StrictBuilder ()
+        #if !FABLE_COMPILER
         member inline __.Zero () = result ()                                       : '``Monad<unit>``
+        #endif
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b ()) : '``Monad<'T>``
+        #if !FABLE_COMPILER
         member inline __.While (guard, body: unit -> '``Monad<unit>``)             : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body () >>= fun () -> loop guard body
@@ -99,6 +107,7 @@ module Builders =
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<unit>``)
+        #endif
 
     type MonadPlusBuilder () =
         inherit DelayedBuilder()
@@ -132,8 +141,11 @@ module Builders =
         /// Makes it a strict monadic computation expression with side-effects
         member        __.fx'     = new MonadFxStrictBuilder ()
 
+        #if !FABLE_COMPILER
         member inline __.Zero () = result ()                                    : '``Monad<unit>``
+        #endif
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
+        #if !FABLE_COMPILER
         member inline __.While (guard, body: '``Monad<unit>``)                  : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body >>= (fun () -> loop guard body)
@@ -146,6 +158,7 @@ module Builders =
                 let enum = enum :?> IEnumerator<_>
                 if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
+        #endif
 
 
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)

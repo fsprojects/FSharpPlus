@@ -77,11 +77,13 @@ module Operators =
 
     // Applicative ------------------------------------------------------------
 
+    #if !FABLE_COMPILER
     /// Lift a value into a Functor. Same as return in Computation Expressions.
     let inline result (x: 'T) : '``Functor<'T>`` = Return.Invoke x
 
     /// Apply a lifted argument to a lifted function.
     let inline (<*>) (x: '``Applicative<'T -> 'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke x y : '``Applicative<'U>``
+    #endif
 
     /// Apply 2 lifted arguments to a lifted function.
     let inline liftA2 (f: 'T->'U->'V) (a: '``Applicative<'T>``) (b: '``Applicative<'U>``) : '``Applicative<'V>`` = f <!> a <*> b
@@ -89,8 +91,9 @@ module Operators =
     let inline (  *>)   (x: '``Applicative<'T>``) : '``Applicative<'U>``->'``Applicative<'U>`` = x |> liftA2 (fun   _ -> id)
     let inline (<*  )   (x: '``Applicative<'T>``) : '``Applicative<'U>``->'``Applicative<'T>`` = x |> liftA2 (fun k _ -> k )
     let inline (<**>)   (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = x |> liftA2 (|>)
+    #if !FABLE_COMPILER
     let inline optional (v: '``Applicative<'T>``) : '``Applicative<Option'T>`` = Some <!> v <|> result None
-
+    #endif
 
     // Monad -----------------------------------------------------------
     
@@ -123,9 +126,10 @@ module Operators =
     /// Combine two monoids in one.
     let inline (++) (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
 
+    #if !FABLE_COMPILER
     /// Combine two monoids in one.
     let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
-
+    #endif
     module Seq =
         /// Fold all values in the sequence using the monoidal addition
         let inline sum (x:seq<'Monoid>) : 'Monoid = Sum.Invoke x
@@ -500,15 +504,18 @@ module Operators =
 
 
     // Collection
-
+    #if !FABLE_COMPILER
     /// Converts to a Collection from a list.
     let inline ofList (source: list<'T>) = OfList.Invoke source : 'Collection
+    #endif
 
     /// Converts to a Collection from a seq.
     let inline ofSeq  (source: seq<'T> ) = OfSeq.Invoke  source : 'Collection
 
+    #if !FABLE_COMPILER
     let inline filter (predicate: _->bool) (x: 'Collection) : 'Collection = Filter.Invoke predicate x
-
+    #endif
+    
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
     /// <remarks>Throws <c>InvalidOperationException</c>
@@ -777,8 +784,10 @@ module Operators =
     /// Fold using alternative operator `<|>`
     let inline choice (x: '``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getEmpty ()) : '``Alternative<'t>>``
 
+    #if !FABLE_COMPILER
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
     let inline mfilter (predicate: 't->bool) (m: '``MonadZero<'t>``) : '``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke ()
+    #endif
 
     /// Returns the sum of the monoid elements in the Foldable.
     let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
@@ -789,8 +798,10 @@ module Operators =
     /// An active recognizer for a generic value parser.
     let inline (|Parse|_|) str : 'T option = tryParse str
 
+    #if !FABLE_COMPILER
     /// Equivalent to map but only for Monads.
     let inline liftM  (f: 'T->'U) (m1: '``Monad<'T>``) : '``Monad<'U>``= m1 >>= (result << f)
+    #endif
 
     /// Safely dispose a resource (includes null-checking).
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()

@@ -26,21 +26,25 @@ module Validation=
         | Failure e -> Failure e
         | Success a -> Success (f a) 
 
+    #if !FABLE_COMPILER
     let inline apply e1' e2' = 
         match e1', e2' with
         | Failure e1, Failure e2 -> Failure (plus e1 e2)
         | Failure e1, Success _  -> Failure e1
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
-
+    #endif
+    
     let inline foldBack f state x =
         match state with
         | Success a -> f a x
         | Failure _ -> x
 
+    #if !FABLE_COMPILER
     let inline traverse f = function 
         | Success a -> Success <!> f a
         | Failure e -> result (Failure e)
+    #endif
 
     let bimap f g = function
         | Failure e -> Failure (f e)
@@ -107,10 +111,12 @@ module Validation=
     ///
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
+    #if !FABLE_COMPILER
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
     /// they are a common semigroup to use.
     let validationNel (x: Result<_,_>) : (Validation<NonEmptyList<'e>,'a>) = (liftResult result) x
+    #endif
 
     /// Leaves the validation unchanged when the predicate holds, or
     /// fails with [e] otherwise.
@@ -133,8 +139,10 @@ type Validation<'err,'a> with
 
     // as Applicative
     static member Return x = Success x
+    #if !FABLE_COMPILER
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
-
+    #endif
+    
     // as Alternative (inherits from Applicative)
     static member inline get_Empty () = Failure (getEmpty ())
     static member inline (<|>) (x: Validation<_,_>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
@@ -147,6 +155,8 @@ type Validation<'err,'a> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Bimap (x: Validation<'T,'V>, f: 'T->'U, g: 'V->'W) : Validation<'U,'W> = Validation.bimap f g x
 
+    #if !FABLE_COMPILER
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (t: Validation<'err,'a>, f: 'a->'b) : 'c = Validation.traverse f t
+    #endif
