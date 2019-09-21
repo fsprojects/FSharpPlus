@@ -40,16 +40,23 @@ type Explicit =
 
 type OfBytes =
     static member OfBytes (_: bool   , _: OfBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
+    
+    #if !FABLE_COMPILER
     static member OfBytes (_: char   , _: OfBytes) = fun (x, i, e) -> BitConverter.ToChar   (x, i, e)
     static member OfBytes (_: float  , _: OfBytes) = fun (x, i, e) -> BitConverter.ToDouble (x, i, e)
     static member OfBytes (_: int16  , _: OfBytes) = fun (x, i, e) -> BitConverter.ToInt16  (x, i, e)
     static member OfBytes (_: int    , _: OfBytes) = fun (x, i, e) -> BitConverter.ToInt32  (x, i, e)
     static member OfBytes (_: int64  , _: OfBytes) = fun (x, i, e) -> BitConverter.ToInt64  (x, i, e)
     static member OfBytes (_: float32, _: OfBytes) = fun (x, i, e) -> BitConverter.ToSingle (x, i, e)
+    #endif
+
     static member OfBytes (_: string , _: OfBytes) = fun (x, i, _) -> BitConverter.ToString (x, i)
+    
+    #if !FABLE_COMPILER
     static member OfBytes (_: uint16 , _: OfBytes) = fun (x, i, e) -> BitConverter.ToUInt16 (x, i, e)
     static member OfBytes (_: uint32 , _: OfBytes) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
     static member OfBytes (_: uint64 , _: OfBytes) = fun (x, i, e) -> BitConverter.ToUInt64 (x, i, e)
+    #endif
 
     static member inline Invoke (isLtEndian: bool) (startIndex: int) (value: byte[]) =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member OfBytes : _*_ -> _) b, a)
@@ -59,16 +66,23 @@ type OfBytes =
 
 type ToBytes =
     static member ToBytes (x: bool   , _, _: ToBytes) = BitConverter.GetBytes (x)
+    
+    #if !FABLE_COMPILER
     static member ToBytes (x: char   , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: float  , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: int16  , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: int    , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: int64  , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: float32, e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
+    #endif
+
     static member ToBytes (x: string , _, _: ToBytes) = Array.map byte (x.ToCharArray ())
+    
+    #if !FABLE_COMPILER
     static member ToBytes (x: uint16 , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: uint32 , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: uint64 , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
+    #endif
 
     static member inline Invoke (isLittleEndian: bool) value : byte[] =
         let inline call_2 (a: ^a, b: ^b, e) = ((^a or ^b) : (static member ToBytes : _*_*_ -> _) b, e, a)
@@ -90,9 +104,10 @@ type TryParse =
     static member TryParse (_: int16         , _: TryParse) = fun x -> Int16.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int16>
     static member TryParse (_: int           , _: TryParse) = fun x -> Int32.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int>
     static member TryParse (_: int64         , _: TryParse) = fun x -> Int64.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int64>
-    
+
     static member TryParse (_: string        , _: TryParse) = fun x -> Some x                               : option<string>
     static member TryParse (_: StringBuilder , _: TryParse) = fun x -> Some (new StringBuilder (x: string)) : option<StringBuilder>
+    
     static member TryParse (_: DateTime      , _: TryParse) = fun x -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
     static member TryParse (_: DateTimeOffset, _: TryParse) = fun x -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
 
@@ -109,7 +124,6 @@ type TryParse with
     static member inline TryParse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
     static member inline TryParse (_: 'R, _: Default1) = fun x -> (^R: (static member TryParse : string -> 'R option) x)
 
-
 type Parse =
     inherit Default1
     static member inline Parse (_: ^R                  , _: Default1) = fun (x:string) -> (^R: (static member Parse : _ -> ^R) x)
@@ -122,6 +136,7 @@ type Parse =
             | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")
         ) : 'enum
 #endif
+    
     static member Parse (_: bool         , _: Parse) = fun x -> Boolean.Parse (x)
     static member Parse (_: char         , _: Parse) = fun x -> Char   .Parse (x)
     static member Parse (_: string       , _: Parse) = id : string->_
