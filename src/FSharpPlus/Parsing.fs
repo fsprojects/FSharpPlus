@@ -87,6 +87,8 @@ module Parsing =
                 | _ -> None
 
             static member inline TryParseArray (_: unit                        , _: TryParseArray) = fun (_: string []) -> ()
+            
+            #if !FABLE_COMPILER
             static member inline TryParseArray (_: Tuple<'t1>                  , _: TryParseArray) = fun (g: string []) -> Tuple<_> <!> tryParseElemAt 0 g : Tuple<'t1> option
             static member inline TryParseArray (_: Id<'t1>                     , _: TryParseArray) = fun (g: string []) -> Id<_>    <!> tryParseElemAt 0 g
             static member inline TryParseArray (_: 't1*'t2                     , _: TryParseArray) = fun (g: string []) -> tuple2 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g
@@ -95,7 +97,7 @@ module Parsing =
             static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5        , _: TryParseArray) = fun (g: string []) -> tuple5 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g
             static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6    , _: TryParseArray) = fun (g: string []) -> tuple6 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g
             static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6*'t7, _: TryParseArray) = fun (g: string []) -> tuple7 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g <*> tryParseElemAt 6 g
-
+            #endif
 
     open Internals
     open System

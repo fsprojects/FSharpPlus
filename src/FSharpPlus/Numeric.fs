@@ -201,7 +201,11 @@ type Zero with
     static member        Zero (_: Dictionary<'a,'b>         , _: Zero) = Dictionary<'a,'b> ()
     static member        Zero (_: ResizeArray<'a>           , _: Zero) = ResizeArray () : ResizeArray<'a>
     static member        Zero (_: seq<'a>                   , _: Zero) = Seq.empty      : seq<'a>
+    
+    #if !FABLE_COMPILER
     static member        Zero (_: IEnumerator<'a>           , _: Zero) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
+    #endif
+    
     static member        Zero (_: IDictionary<'a,'b>        , _: Zero) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
     static member        Zero (_: IReadOnlyDictionary<'a,'b>, _: Zero) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
 

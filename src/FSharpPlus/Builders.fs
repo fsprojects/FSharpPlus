@@ -34,8 +34,10 @@ module Builders =
         member inline __.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
         member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
 
+        #if !FABLE_COMPILER
         [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.Select (x, [<ProjectionParameter>] f) = map f x
+        #endif
 
         [<CustomOperation("where", MaintainsVariableSpaceUsingBind=true)>]
         member inline __.Where (x, [<ProjectionParameter>] p) = mfilter p x

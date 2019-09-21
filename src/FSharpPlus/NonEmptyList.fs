@@ -71,9 +71,11 @@ type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToSeq    (s: NonEmptyList<'a>, [<Optional>]_impl: ToSeq ) = NonEmptyList.toList s |> List.toSeq
 
+    #if !FABLE_COMPILER
     static member inline Traverse (s: NonEmptyList<'T>, f: 'T->'``Functor<'U>``) =
         let lst = traverse f (toList s) : '``Functor<'List<'U>>``
         (NonEmptyList.create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<'NonEmptyList<'U>>``
+    #endif
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
         let lst = source |> NonEmptyList.toSeq  |> Seq.replace oldValue newValue |> Seq.toList

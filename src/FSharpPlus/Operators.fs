@@ -49,6 +49,7 @@ module Operators =
 
     // Functor ----------------------------------------------------------------
 
+    #if !FABLE_COMPILER
     /// Lift a function into a Functor.
     let inline map    (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
@@ -62,6 +63,7 @@ module Operators =
     /// Lift a function into a Functor. Same as map but with flipped arguments.
     /// To be used in pipe-forward style expressions
     let inline (|>>)  (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.Invoke f x
+    #endif
 
     /// Like map but ignoring the results.
     let inline iter   (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
@@ -152,11 +154,13 @@ module Operators =
     /// Maps over both arguments of the Bifunctor at the same time.
     let inline bimap  (f: 'T->'U) (g: 'V->'W) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` = Bimap.Invoke  f g source
 
+    #if !FABLE_COMPILER
     /// Maps covariantly over the first argument of the Bifunctor.
     let inline first  (f: 'T->'V) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = MapFirst.Invoke  f source
 
     /// Maps covariantly over the second argument of the Bifunctor.
     let inline second (f: 'V->'W) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = Map.Invoke f source
+    #endif
 
     /// Maps over both arguments at the same time of a Profunctor.
     let inline dimap  (f: 'A->'B) (g: 'C->'D) (source: '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
@@ -165,9 +169,11 @@ module Operators =
     /// For instance (Error) when working on Result<_,_>
     let inline lmap   (f: 'A->'B) (source: ^``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` = Contramap.Invoke f source
 
+    #if !FABLE_COMPILER
     /// Can be thought of as mapping the right part of a Profunctor. 
     /// For instance (Ok) when working on Result<_,_>
     let inline rmap   (f: 'C->'D) (source: '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = Map.Invoke f source
+    #endif
 
     /// Maps a pair of functions over an Invariant Functor
     let inline invmap (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = Invmap.Invoke f g source : '``InvariantFunctor<'U>``
@@ -812,46 +818,66 @@ namespace FSharpPlus.Math
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
     module Applicative =
 
+        #if !FABLE_COMPILER
         let inline ( ~-. ) (x: '``Functor<'T>``)                               = map ((~-)) x    : '``Functor<'T>``
 
         let inline ( .+  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((+)/> y) x : '``Functor<'T>``
         let inline (  +. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((+)   x) y : '``Functor<'T>``
+        #endif
         let inline ( .+. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (+) <!> x <*> y : '``Applicative<'T>``
 
+        #if !FABLE_COMPILER
         let inline ( .-  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((-)/> y) x : '``Functor<'T>``
         let inline (  -. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((-)   x) y : '``Functor<'T>``
+        #endif
         let inline ( .-. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (-) <!> x <*> y : '``Applicative<'T>``
 
+        #if !FABLE_COMPILER
         let inline ( .*  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((*)/> y) x : '``Functor<'T>``
         let inline (  *. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((*)   x) y : '``Functor<'T>``
+        #endif
         let inline ( .*. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (*) <!> x <*> y : '``Applicative<'T>``
 
+        #if !FABLE_COMPILER
         let inline ( .%  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((%)/> y) x : '``Functor<'T>``
         let inline (  %. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((%)   x) y : '``Functor<'T>``
+        #endif
         let inline ( .%. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (%) <!> x <*> y : '``Applicative<'T>``
 
+        #if !FABLE_COMPILER
         let inline ( ./  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((/)/> y) x : '``Functor<'T>``
         let inline (  /. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((/)   x) y : '``Functor<'T>``
+        #endif
         let inline ( ./. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (/) <!> x <*> y : '``Applicative<'T>``
 
+        #if !FABLE_COMPILER
         let inline ( .=  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((=)/> y) x : '``Functor<bool>``
         let inline (  =. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((=)   x) y : '``Functor<bool>``
+        #endif
         let inline ( .=. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (=) <!> x <*> y : '``Applicative<bool>``
 
+        #if !FABLE_COMPILER
         let inline ( .>  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((>)/> y) x : '``Functor<bool>``
         let inline (  >. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((>)   x) y : '``Functor<bool>``
+        #endif
         let inline ( .>. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (>) <!> x <*> y : '``Applicative<bool>``
 
+        #if !FABLE_COMPILER
         let inline ( .<  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((<)/> y) x : '``Functor<bool>``
         let inline (  <. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((<)   x) y : '``Functor<bool>``
+        #endif
         let inline ( .<. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (<) <!> x <*> y : '``Applicative<bool>``
 
+        #if !FABLE_COMPILER
         let inline (.|| ) (x: '``Functor<bool>``)     (y: bool)                   = map ((||)/> y) x : '``Functor<bool>``
         let inline ( ||.) (x: bool)                   (y: '``Functor<bool>``)     = map ((||)   x) y : '``Functor<bool>``
+        #endif
         let inline (.||.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (||) <!> x <*> y : '``Applicative<bool>``
 
+        #if !FABLE_COMPILER
         let inline (.&& ) (x: '``Functor<bool>``)     (y: bool)                   = map ((&&)/> y) x : '``Functor<bool>``
         let inline ( &&.) (x: bool)                   (y: '``Functor<bool>``)     = map ((&&)   x) y : '``Functor<bool>``
+        #endif
         let inline (.&&.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (&&) <!> x <*> y : '``Applicative<bool>``
 
     /// <summary>

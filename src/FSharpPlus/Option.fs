@@ -4,11 +4,12 @@ open FSharpPlus.Control
 open FSharpPlus
 open System.ComponentModel
 
+#if !FABLE_COMPILER
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
 module Option =
     let inline traverse f = function Some x -> Map.Invoke Some (f x) | _ -> result None   
-
+#endif
 
 /// Monad Transformer for Option<'T>
 [<Struct>]
@@ -20,14 +21,17 @@ module OptionT =
     let run   (OptionT m) = m : '``Monad<option<'T>>``
     let inline hoist (x: option<'T>) = OptionT (result x) : OptionT<'``Monad<option<'T>>``>
     let inline bind (f: 'T-> OptionT<'``Monad<option<'U>``>) (OptionT m: OptionT<'``Monad<option<'T>``>)             = (OptionT <| (m  >>= (fun maybe_value -> match maybe_value with Some value -> run (f value) | _ -> result None)))
+    #if !FABLE_COMPILER
     let inline apply (OptionT f: OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x: OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x) : OptionT<'``Monad<option<'U>``>
     let inline map  (f: 'T->'U) (OptionT m: OptionT<'``Monad<option<'T>``>)                                          = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
-
+    #endif
 type OptionT<'``monad<option<'t>>``> with
     static member inline Return (x: 'T) = Some x |> result |> OptionT                                                        : OptionT<'``Monad<seq<'T>``>
+    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x: OptionT<'``Monad<seq<'T>``>, f: 'T->'U) = OptionT.map f x                                : OptionT<'``Monad<seq<'U>``>
     static member inline (<*>)  (f: OptionT<'``Monad<seq<('T -> 'U)>``>, x: OptionT<'``Monad<seq<'T>``>) = OptionT.apply f x : OptionT<'``Monad<seq<'U>``>
+    #endif
     static member inline (>>=)  (x: OptionT<'``Monad<seq<'T>``>, f: 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind  f x
 
     static member inline get_Empty () = OptionT <| result None : OptionT<'``MonadPlus<option<'T>``>
@@ -58,4 +62,6 @@ type OptionT<'``monad<option<'t>>``> with
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
         OptionT (listen (OptionT.run m) >>= (result << liftMaybe))
 
+    #if !FABLE_COMPILER
     static member inline Pass m : OptionT<'``MonadWriter<'Monoid, option<'T>>``> = OptionT (OptionT.run m >>= option (map Some << pass << result) (result None))
+    #endif

@@ -92,8 +92,10 @@ type Mult<'a> = Mult of 'a with
 [<Struct>]
 type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
 
+    #if !FABLE_COMPILER
     // Functor
     static member inline Map (Compose x, f: 'T->'U) = Compose (map (map f) x)
+    #endif
 
     // Applicative
     static member inline Return (x: 'T) = Compose (result (result x)) : Compose<'``F<'G<'T>``>
