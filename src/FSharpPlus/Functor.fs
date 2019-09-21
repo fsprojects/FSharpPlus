@@ -23,7 +23,9 @@ type Bind =
     static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
 #if NET35
 #else
+    #if !FABLE_COMPILER
     static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
+    #endif
 #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
     static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
@@ -121,11 +123,13 @@ type Return =
 
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
 #if NET35
-#else        
+#else  
+    #if !FABLE_COMPILER      
     static member        Return (_: 'a Task        , _: Return  ) = fun x -> 
         let s = TaskCompletionSource ()
         s.SetResult x
         s.Task : 'a Task
+    #endif
 #endif        
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
@@ -135,7 +139,9 @@ type Return =
     static member        Return (_: 'a Async       , _: Return  ) = fun (x: 'a) -> async.Return x
     static member        Return (_: Result<'a,'e>  , _: Return  ) = fun x -> Ok x                                 : Result<'a,'e>
     static member        Return (_: Choice<'a,'e>  , _: Return  ) = fun x -> Choice1Of2 x                         : Choice<'a,'e>
+    #if !FABLE_COMPILER
     static member        Return (_: Expr<'a>       , _: Return  ) = fun x -> Expr.Cast<'a> (Expr.Value (x: 'a))
+    #endif
     static member        Return (_: ResizeArray<'a>, _: Return  ) = fun x -> ResizeArray<'a> (Seq.singleton x)
 
     //Restricted
@@ -185,8 +191,9 @@ type Apply =
            | _        -> ()
        dct
     
+    #if !FABLE_COMPILER
     static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, [<Optional>]_output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
-
+    #endif
     static member        ``<*>`` (f: ('T->'U) ResizeArray, x: 'T ResizeArray, [<Optional>]_output: 'U ResizeArray, [<Optional>]_mthd: Apply) =
        ResizeArray (Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) : 'U ResizeArray
 
@@ -207,6 +214,7 @@ type Iterate =
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
+    #if !FABLE_COMPILER
     static member Iterate (x: 'T [,]     , action) = Array2D.iter action x
     static member Iterate (x: 'T [,,]    , action) = Array3D.iter action x
     static member Iterate (x: 'T [,,,]   , action) =
@@ -215,6 +223,7 @@ type Iterate =
                             for k = 0 to Array4D.length3 x - 1 do
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
+    #endif
     static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
     static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
@@ -248,16 +257,20 @@ type Map =
     static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U> (g.Invoke >> f)
     static member Map (((m: 'Monoid, a)        , f: 'T->'U), _mthd: Map) = (m, f a)
     static member Map ((x: _ []                , f: 'T->'U), _mthd: Map) = Array.map   f x
+    #if !FABLE_COMPILER
     static member Map ((x: _ [,]               , f: 'T->'U), _mthd: Map) = Array2D.map f x
     static member Map ((x: _ [,,]              , f: 'T->'U), _mthd: Map) = Array3D.map f x
     static member Map ((x: _ [,,,]             , f: 'T->'U), _mthd: Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
+    #endif
     static member Map ((x: Async<_>            , f: 'T->'U), _mthd: Map) = async.Bind (x, async.Return << f)
     static member Map ((x: Result<_,'E>        , f: 'T->'U), _mthd: Map) = Result.map f x
     static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
     static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
     static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
     static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d : Dictionary<'Key,'U>
+    #if !FABLE_COMPILER
     static member Map ((x: Expr<'T>            , f: 'T->'U), _mthd: Map) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
+    #endif
     static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray (Seq.map f x) : ResizeArray<'U>
 
     // Restricted
@@ -471,7 +484,9 @@ type Extract =
 
 #if NET35
 #else
+#if !FABLE_COMPILER
     static member        Extract (f: Task<'T>     ) = f.Result
+#endif
 #endif
 
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
@@ -487,7 +502,9 @@ type Extend =
 
 #if NET35
 #else
+#if !FABLE_COMPILER
     static member        (=>>) (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith (f)
+#endif
 #endif
 
     // Restricted Comonads
@@ -598,7 +615,9 @@ type Contramap =
 
     static member Contramap (k: 'T -> 'C            , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = f >> k : 'U->'C
     static member Contramap (k: Func<'T, 'C>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Func<'U, 'C> (f >> k.Invoke)
+    #if !FABLE_COMPILER
     static member Contramap (p: Predicate<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Predicate (fun x -> p.Invoke (f x))
+    #endif
     static member Contramap (c: IComparer<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { new IComparer<'U> with member __.Compare (x, y) = c.Compare (f x, f y) }
     static member Contramap (c: IEqualityComparer<_>, f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { 
                     new IEqualityComparer<'U> with

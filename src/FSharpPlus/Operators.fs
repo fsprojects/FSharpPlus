@@ -360,9 +360,10 @@ module Operators =
     /// Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
     let inline traverse (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = Traverse.Invoke f t
 
+    #if !FABLE_COMPILER
     /// Evaluate each action in the structure from left to right, and and collect the results.
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
-
+    #endif
 
     // Indexable
 
