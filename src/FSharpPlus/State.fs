@@ -50,23 +50,20 @@ module StateT =
     let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``
     #if !FABLE_COMPILER
     let inline hoist (x: State<'S, 'T>) = (StateT << (fun a -> result << a) << State.run) x : StateT<'S, '``Monad<'T * 'S>``>
-    
+    #endif
     let inline map (f: 'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s'))) : StateT<'S,'``Monad<'U * 'S>``>
     let inline apply (StateT f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a :StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z, u) -> (g z, u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
-    #endif
-    
     let inline bind (f: 'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
 
 type StateT<'s,'``monad<'t * 's>``> with
     #if !FABLE_COMPILER
     static member inline Return (x: 'T) = StateT (fun s -> result (x, s))                                                         : StateT<'S,'``Monad<'T * 'S>``>
+    #endif
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x: StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
 
     static member inline (<*>)  (f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x: StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
-    #endif
-
     static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>)     = StateT.bind  f x
 
     static member inline get_Empty () = StateT (fun _ -> getEmpty ()) : StateT<'S,'``MonadPlus<'T * 'S>``>

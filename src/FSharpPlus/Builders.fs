@@ -18,11 +18,9 @@ module Builders =
     let inline idiomatic a b = (Idiomatic $ b) a
     #if !FABLE_COMPILER
     let inline iI x = (idiomatic << result) x
-    #endif
-    
     type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
     type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idiomatic $ x) (join fii)
-
+    #endif
 
     
     // Workflows
@@ -45,7 +43,6 @@ module Builders =
 
         [<CustomOperation("where", MaintainsVariableSpaceUsingBind=true)>]
         member inline __.Where (x, [<ProjectionParameter>] p) = mfilter p x
-        #endif
 
         [<CustomOperation("top", MaintainsVariableSpaceUsingBind=true)>]
         member inline __.Top (source, n) = limit n source
@@ -58,6 +55,7 @@ module Builders =
 
         [<CustomOperation("orderBy", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.OrderBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
+        #endif
 
     type StrictBuilder () =
         inherit Builder ()
@@ -65,9 +63,11 @@ module Builders =
         member        __.Run f = f ()              : '``Monad<'T>``
         member        __.TryWith    (expr, handler)      = try expr () with e -> handler e
         member        __.TryFinally (expr, compensation) = try expr () finally compensation ()
+        #if !FABLE_COMPILER
         member        rs.Using (disposable: #IDisposable, body) =
             let body = fun () -> body disposable
             rs.TryFinally (body, fun () -> dispose disposable)
+        #endif
 
     type DelayedBuilder () =
         inherit Builder ()

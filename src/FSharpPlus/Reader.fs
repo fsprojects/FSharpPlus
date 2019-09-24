@@ -53,18 +53,17 @@ module ReaderT =
     let  run (ReaderT x) = x : 'R -> '``Monad<'T>``
     #if !FABLE_COMPILER
     let inline hoist (x: Reader<'R, 'T>) = (ReaderT << (fun a -> result << a) << Reader.run) x : ReaderT<'R, '``Monad<'T>``>
-    let inline map   (f: 'T->'U) (ReaderT m: ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m)                                : ReaderT<'R, '``Monad<'U>``>
     #endif
+    let inline map   (f: 'T->'U) (ReaderT m: ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m)                                : ReaderT<'R, '``Monad<'U>``>
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x: _->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
     let inline bind  (f: 'T->_) (ReaderT (m: _->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))            : ReaderT<'R, '``Monad<'U>``>
 
 type ReaderT<'r,'``monad<'t>``> with
     #if !FABLE_COMPILER
     static member inline Return (x: 'T) = ReaderT (fun _ -> result x)                                                 : ReaderT<'R, '``Monad<'T>``>
-    
+    #endif
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: ReaderT<'R, '``Monad<'T>``>, f: 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
-    #endif
 
     static member inline (<*>) (f: ReaderT<_,'``Monad<'T -> 'U>``>, x: ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x : ReaderT<'R, '``Monad<'U>``>
     static member inline (>>=) (x: ReaderT<_,'``Monad<'T>``>, f: 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>

@@ -6,9 +6,8 @@ open FSharpPlus.Operators
 [<Struct>]
 type Dual<'t> = Dual of 't with
     static member inline get_Zero () = Dual (getZero ())        : Dual<'T>
-    #if !FABLE_COMPILER
     static member inline (+) (Dual x, Dual y) = Dual (plus y x) : Dual<'T>
-    #endif
+
 /// Basic operations on Dual
 [<RequireQualifiedAccess>]
 module Dual = let run (Dual x) = x : 'T
@@ -45,18 +44,15 @@ type Const<'t,'u> = Const of 't with
 
     // Monoid
     static member inline get_Zero () = Const (getZero ()) : Const<'T,'U>
-    #if !FABLE_COMPILER
     static member inline (+) (Const x: Const<'T,'U>, Const y: Const<'T,'U>) = Const (plus x y) : Const<'T,'U>
-    #endif
 
     // Functor
     static member Map (Const x: Const<_,'T>, _: 'T->'U) = Const x : Const<'C,'U>
 
     // Applicative
     static member inline Return (_: 'U) = Const (getZero ()) : Const<'T,'U>
-    #if !FABLE_COMPILER
     static member inline (<*>) (Const f: Const<'C,'T->'U>, Const x: Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
-    #endif
+
     // Contravariant
     static member Contramap (Const x: Const<'C,'T>, _: 'U->'T) = Const x     : Const<'C,'U>
 
@@ -88,7 +84,9 @@ type Last<'t> = Last of Option<'t> with
 /// Numeric wrapper for multiplication monoid (*, 1)
 [<Struct>]
 type Mult<'a> = Mult of 'a with
+    #if !FABLE_COMPILER
     static member inline get_Zero () = Mult one
+    #endif
     static member inline (+) (Mult (x: 'n), Mult (y: 'n)) = Mult (x * y)
 
 
@@ -96,10 +94,10 @@ type Mult<'a> = Mult of 'a with
 [<Struct>]
 type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
 
-    #if !FABLE_COMPILER
     // Functor
     static member inline Map (Compose x, f: 'T->'U) = Compose (map (map f) x)
 
+    #if !FABLE_COMPILER
     // Applicative
     static member inline Return (x: 'T) = Compose (result (result x)) : Compose<'``F<'G<'T>``>
     #endif

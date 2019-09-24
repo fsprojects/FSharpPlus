@@ -35,9 +35,9 @@ type Traverse =
     inherit Default1
     static member inline InvokeOnInstance f (t: ^a) = (^a : (static member Traverse : _*_ -> 'R) t, f)
 
-    #if !FABLE_COMPILER
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) = Map.Invoke f (Sequence.InvokeOnInstance t) : 'R
     static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) = Map.Invoke Id.create (f (Id.run t))
+    #if !FABLE_COMPILER
     static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
        let cons x y = seq {yield x; yield! y}
        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
@@ -61,11 +61,12 @@ type Traverse =
             while enum.MoveNext() do
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
 
+    #if !FABLE_COMPILER
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
-
-    static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
+    #endif
     
+    static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
     #if !FABLE_COMPILER
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
 
@@ -87,7 +88,7 @@ type Traverse =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
         let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'R>, f) : 'R
         call (Unchecked.defaultof<Traverse>, t, f)
-    
+
 
 type Sequence with
 
@@ -108,19 +109,19 @@ type Sequence with
 
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default2) = Traverse.InvokeOnInstance id t                                                        : 'R
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                                           : 'R
-    
+
     #if !FABLE_COMPILER
     static member inline Sequence (t: option<_>         , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with Some x -> Map.Invoke Some x | _ -> result None                           : 'R
     static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = let cons_f x ys = Map.Invoke List.cons x <*> ys in List.foldBack cons_f t (result []) : 'R
     static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = let cons x y = Array.append [|x|] y in let cons_f x ys = Map.Invoke cons x <*> ys in Array.foldBack cons_f t (result [||]) : 'R
     #endif
-
+ 
     static member inline Sequence (t: Id<_>             , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Traverse.Invoke id t                                                                  : 'R
-    
+ 
     #if !FABLE_COMPILER
     static member inline Sequence (t: _ ResizeArray     , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Traverse.Invoke id t                                                                  : 'R
     #endif
-    
+
     static member inline Invoke (t: '``Traversable<'Applicative<'T>>``) : '``Applicative<'Traversable<'T>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member Sequence : _*_*_ -> _) b, c, a)
         let inline call (a: 'a, b: 'b) = call_3 (a, b, Unchecked.defaultof<'R>) : 'R

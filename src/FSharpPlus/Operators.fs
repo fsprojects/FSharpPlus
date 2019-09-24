@@ -49,7 +49,6 @@ module Operators =
 
     // Functor ----------------------------------------------------------------
 
-    #if !FABLE_COMPILER
     /// Lift a function into a Functor.
     let inline map    (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
@@ -63,7 +62,6 @@ module Operators =
     /// Lift a function into a Functor. Same as map but with flipped arguments.
     /// To be used in pipe-forward style expressions
     let inline (|>>)  (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.Invoke f x
-    #endif
 
     /// Like map but ignoring the results.
     let inline iter   (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
@@ -80,10 +78,10 @@ module Operators =
     #if !FABLE_COMPILER
     /// Lift a value into a Functor. Same as return in Computation Expressions.
     let inline result (x: 'T) : '``Functor<'T>`` = Return.Invoke x
+    #endif
 
     /// Apply a lifted argument to a lifted function.
     let inline (<*>) (x: '``Applicative<'T -> 'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke x y : '``Applicative<'U>``
-    #endif
 
     /// Apply 2 lifted arguments to a lifted function.
     let inline liftA2 (f: 'T->'U->'V) (a: '``Applicative<'T>``) (b: '``Applicative<'U>``) : '``Applicative<'V>`` = f <!> a <*> b
@@ -94,6 +92,7 @@ module Operators =
     #if !FABLE_COMPILER
     let inline optional (v: '``Applicative<'T>``) : '``Applicative<Option'T>`` = Some <!> v <|> result None
     #endif
+
 
     // Monad -----------------------------------------------------------
     
@@ -126,10 +125,9 @@ module Operators =
     /// Combine two monoids in one.
     let inline (++) (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
 
-    #if !FABLE_COMPILER
     /// Combine two monoids in one.
     let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
-    #endif
+
     module Seq =
         /// Fold all values in the sequence using the monoidal addition
         let inline sum (x:seq<'Monoid>) : 'Monoid = Sum.Invoke x
@@ -140,14 +138,18 @@ module Operators =
     /// Gets a functor representing the emtpy value
     let inline getEmpty () : '``Functor<'T>`` = Empty.Invoke ()
 
+    #if !FABLE_COMPILER
     /// A functor representing the emtpy value
     [<GeneralizableValue>]    
     let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke ()
+    #endif
 
     /// Combines two Alternatives
     let inline (<|>) (x: '``Functor<'T>``) (y: '``Functor<'T>``) : '``Functor<'T>`` = Append.Invoke x y
 
+    #if !FABLE_COMPILER
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
+    #endif
 
    
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
@@ -158,13 +160,11 @@ module Operators =
     /// Maps over both arguments of the Bifunctor at the same time.
     let inline bimap  (f: 'T->'U) (g: 'V->'W) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` = Bimap.Invoke  f g source
 
-    #if !FABLE_COMPILER
     /// Maps covariantly over the first argument of the Bifunctor.
     let inline first  (f: 'T->'V) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` = MapFirst.Invoke  f source
 
     /// Maps covariantly over the second argument of the Bifunctor.
     let inline second (f: 'V->'W) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'T,'W>`` = Map.Invoke f source
-    #endif
 
     /// Maps over both arguments at the same time of a Profunctor.
     let inline dimap  (f: 'A->'B) (g: 'C->'D) (source: '``Profunctor<'B,'C>``) : '``Profunctor<'A,'D>`` = Dimap.Invoke  f g source
@@ -173,11 +173,9 @@ module Operators =
     /// For instance (Error) when working on Result<_,_>
     let inline lmap   (f: 'A->'B) (source: ^``Profunctor<'B,'C>``) : '``Profunctor<'A,'C>`` = Contramap.Invoke f source
 
-    #if !FABLE_COMPILER
     /// Can be thought of as mapping the right part of a Profunctor. 
     /// For instance (Ok) when working on Result<_,_>
     let inline rmap   (f: 'C->'D) (source: '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = Map.Invoke f source
-    #endif
 
     /// Maps a pair of functions over an Invariant Functor
     let inline invmap (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = Invmap.Invoke f g source : '``InvariantFunctor<'U>``
@@ -364,10 +362,9 @@ module Operators =
     /// Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
     let inline traverse (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = Traverse.Invoke f t
 
-    #if !FABLE_COMPILER
     /// Evaluate each action in the structure from left to right, and and collect the results.
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
-    #endif
+
 
     // Indexable
 
@@ -419,7 +416,6 @@ module Operators =
     /// </returns>
     let inline tryFindIndex (predicate: 'T -> bool) (source: '``Indexable<'T>``) : 'Index option = TryFindIndex.Invoke predicate source
 
-    #if !FABLE_COMPILER
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
     /// </summary>
@@ -432,7 +428,6 @@ module Operators =
     /// The index of the slice.
     /// </returns>
     let inline findSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index = FindSliceIndex.Invoke slice source
-    #endif
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
@@ -504,18 +499,15 @@ module Operators =
 
 
     // Collection
-    #if !FABLE_COMPILER
+
     /// Converts to a Collection from a list.
     let inline ofList (source: list<'T>) = OfList.Invoke source : 'Collection
-    #endif
 
     /// Converts to a Collection from a seq.
     let inline ofSeq  (source: seq<'T> ) = OfSeq.Invoke  source : 'Collection
 
-    #if !FABLE_COMPILER
     let inline filter (predicate: _->bool) (x: 'Collection) : 'Collection = Filter.Invoke predicate x
-    #endif
-    
+
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
     /// <remarks>Throws <c>InvalidOperationException</c>
@@ -669,19 +661,18 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
+    
     // Converter
 
     /// Convert using the explicit operator.
     let inline explicit (value: 'T) : 'U = Explicit.Invoke value
 
-    #if !FABLE_COMPILER
     let inline ofBytesWithOptions (isLtEndian: bool) (startIndex: int) (value: byte[]) = OfBytes.Invoke isLtEndian startIndex value
     let inline ofBytes   (value: byte[]) = OfBytes.Invoke true 0 value
     let inline ofBytesBE (value: byte[]) = OfBytes.Invoke false 0 value
 
     let inline toBytes   value : byte[] = ToBytes.Invoke true value
     let inline toBytesBE value : byte[] = ToBytes.Invoke false value
-    #endif
      
     /// Converts to a value from its string representation.
     let inline parse (value: string) = Parse.Invoke value
@@ -689,16 +680,19 @@ module Operators =
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     let inline tryParse (value: string) = TryParse.Invoke value
 
+
     // Numerics
 
     /// Gets a value that represents the number 1 (one).
     let inline getOne () = One.Invoke ()
 
+    #if !FABLE_COMPILER
     /// A value that represents the 1 element.
     let inline one< ^Num when (One or ^Num) : (static member One : ^Num * One -> ^Num) > : ^Num = One.Invoke ()
 
     /// Divides one number by another, returns a tuple with the result and the remainder.
     let inline divRem (D: 'T) (d: 'T) : 'T*'T = DivRem.Invoke D d
+    #endif
 
     /// Returns the smallest possible value.
     let inline getMinValue () = MinValue.Invoke ()
@@ -724,6 +718,7 @@ module Operators =
     /// The pi number.
     let inline pi< ^Num when (Pi or ^Num) : (static member Pi : ^Num * Pi -> ^Num) > : ^Num = Pi.Invoke ()
 
+    #if !FABLE_COMPILER
     /// Returns the additive inverse of the number.
     let inline negate (x: 'Num) : 'Num = x |> TryNegate.Invoke |> function Ok x -> x | Error e -> raise e
 
@@ -737,13 +732,16 @@ module Operators =
 
     /// Returns the subtraction between two numbers. Throws an error if the result is negative on unsigned types.
     let inline subtract (x: 'Num) (y: 'Num) : 'Num = Subtract.Invoke x y
+    #endif
 
     /// Returns the subtraction between two numbers. Returns None if the result is negative on unsigned types.
     let inline trySubtract (x: 'Num) (y: 'Num) : 'Num option = y |> TrySubtract.Invoke x |> function Ok x -> Some x | Error _ -> None
 
+    #if !FABLE_COMPILER
     /// Returns the division between two numbers. If the numbers are not divisible throws an error.
     let inline div (dividend: 'Num) (divisor: 'Num) : 'Num = Divide.Invoke dividend divisor
-
+    #endif
+    
     /// Returns the division between two numbers. Returns None if the numbers are not divisible.
     let inline tryDiv (dividend: 'Num) (divisor: 'Num) : 'Num option = divisor |> TryDivide.Invoke dividend |> function Ok x -> Some x | Error _ -> None
 
@@ -763,10 +761,12 @@ module Operators =
     /// <para/>   Rule: signum x * abs x = x        </summary>
     let inline signum (x: 'Num) : 'Num = Signum.Invoke x
 
+    #if !FABLE_COMPILER
     /// <summary> Returns a number which represents the sign.
     ///           Works also for unsigned types. 
     /// <para/>   Rule: signum x * abs x = x        </summary>
     let inline signum' (x: 'Num) : 'Num = Signum'.Invoke x
+    #endif
 
     /// <summary> Gets the absolute value of a number.
     /// <para/>   Rule: signum x * abs x = x        </summary>
@@ -787,10 +787,10 @@ module Operators =
     #if !FABLE_COMPILER
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
     let inline mfilter (predicate: 't->bool) (m: '``MonadZero<'t>``) : '``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke ()
-    #endif
 
     /// Returns the sum of the monoid elements in the Foldable.
     let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
+    #endif
 
     /// Converts using the implicit operator. 
     let inline implicit (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
@@ -830,66 +830,46 @@ namespace FSharpPlus.Math
     /// <summary>Math Operators ready to use over Applicative Functors.</summary>
     module Applicative =
 
-        #if !FABLE_COMPILER
         let inline ( ~-. ) (x: '``Functor<'T>``)                               = map ((~-)) x    : '``Functor<'T>``
 
         let inline ( .+  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((+)/> y) x : '``Functor<'T>``
         let inline (  +. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((+)   x) y : '``Functor<'T>``
-        #endif
         let inline ( .+. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (+) <!> x <*> y : '``Applicative<'T>``
 
-        #if !FABLE_COMPILER
         let inline ( .-  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((-)/> y) x : '``Functor<'T>``
         let inline (  -. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((-)   x) y : '``Functor<'T>``
-        #endif
         let inline ( .-. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (-) <!> x <*> y : '``Applicative<'T>``
 
-        #if !FABLE_COMPILER
         let inline ( .*  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((*)/> y) x : '``Functor<'T>``
         let inline (  *. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((*)   x) y : '``Functor<'T>``
-        #endif
         let inline ( .*. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (*) <!> x <*> y : '``Applicative<'T>``
 
-        #if !FABLE_COMPILER
         let inline ( .%  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((%)/> y) x : '``Functor<'T>``
         let inline (  %. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((%)   x) y : '``Functor<'T>``
-        #endif
         let inline ( .%. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (%) <!> x <*> y : '``Applicative<'T>``
 
-        #if !FABLE_COMPILER
         let inline ( ./  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((/)/> y) x : '``Functor<'T>``
         let inline (  /. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((/)   x) y : '``Functor<'T>``
-        #endif
         let inline ( ./. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (/) <!> x <*> y : '``Applicative<'T>``
 
-        #if !FABLE_COMPILER
         let inline ( .=  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((=)/> y) x : '``Functor<bool>``
         let inline (  =. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((=)   x) y : '``Functor<bool>``
-        #endif
         let inline ( .=. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (=) <!> x <*> y : '``Applicative<bool>``
 
-        #if !FABLE_COMPILER
         let inline ( .>  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((>)/> y) x : '``Functor<bool>``
         let inline (  >. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((>)   x) y : '``Functor<bool>``
-        #endif
         let inline ( .>. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (>) <!> x <*> y : '``Applicative<bool>``
 
-        #if !FABLE_COMPILER
         let inline ( .<  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((<)/> y) x : '``Functor<bool>``
         let inline (  <. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((<)   x) y : '``Functor<bool>``
-        #endif
         let inline ( .<. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (<) <!> x <*> y : '``Applicative<bool>``
 
-        #if !FABLE_COMPILER
         let inline (.|| ) (x: '``Functor<bool>``)     (y: bool)                   = map ((||)/> y) x : '``Functor<bool>``
         let inline ( ||.) (x: bool)                   (y: '``Functor<bool>``)     = map ((||)   x) y : '``Functor<bool>``
-        #endif
         let inline (.||.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (||) <!> x <*> y : '``Applicative<bool>``
 
-        #if !FABLE_COMPILER
         let inline (.&& ) (x: '``Functor<bool>``)     (y: bool)                   = map ((&&)/> y) x : '``Functor<bool>``
         let inline ( &&.) (x: bool)                   (y: '``Functor<bool>``)     = map ((&&)   x) y : '``Functor<bool>``
-        #endif
         let inline (.&&.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (&&) <!> x <*> y : '``Applicative<bool>``
 
     /// <summary>
@@ -919,11 +899,13 @@ namespace FSharpPlus.Math
         /// Integer division. Same as (/) for Integral types.
         let inline div (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; a / b
 
+        #if !FABLE_COMPILER
         /// Euclidean integer division, following the mathematical convention where the mod is always positive.
         let inline divE (a: 'Integral) b : 'Integral =
             whenIntegral a
             let (a, b) = if b < 0G then (-a, -b) else (a, b)
             (if a < 0G then (a - b + 1G) else a) / b
+        #endif
 
         /// Remainder of Integer division. Same as (%).
         let inline rem (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; a % b
@@ -931,6 +913,7 @@ namespace FSharpPlus.Math
         /// Euclidean remainder of integer division, following the mathematical convention where the mod is always positive.
         let inline remE (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; ((a % b) + b) % b
 
+        #if !FABLE_COMPILER
         /// Euclidean division-remainder, following the mathematical convention where the mod is always positive.
         let inline divRemE D d =
             let q, r = divRem D d
@@ -938,7 +921,8 @@ namespace FSharpPlus.Math
                 if d > 0G then q - 1G, r + d
                 else           q + 1G, r - d
             else q, r
- 
+        #endif
+
         /// Greatest Common Divisor
         let inline gcd x y : 'Integral =
             let zero = getZero ()

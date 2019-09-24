@@ -26,15 +26,13 @@ module Validation=
         | Failure e -> Failure e
         | Success a -> Success (f a) 
 
-    #if !FABLE_COMPILER
     let inline apply e1' e2' = 
         match e1', e2' with
         | Failure e1, Failure e2 -> Failure (plus e1 e2)
         | Failure e1, Success _  -> Failure e1
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
-    #endif
-    
+
     let inline foldBack f state x =
         match state with
         | Success a -> f a x
@@ -139,10 +137,8 @@ type Validation<'err,'a> with
 
     // as Applicative
     static member Return x = Success x
-    #if !FABLE_COMPILER
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
-    #endif
-    
+
     // as Alternative (inherits from Applicative)
     static member inline get_Empty () = Failure (getEmpty ())
     static member inline (<|>) (x: Validation<_,_>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y

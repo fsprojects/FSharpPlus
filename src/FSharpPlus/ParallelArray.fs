@@ -16,6 +16,7 @@ module ParallelArray =
         | Bounded a -> a
         | _         -> invalidOp "Resulting array would be infinite."
 
+    #if !FABLE_COMPILER
     let map f = function
         | Infinite s -> Infinite (f s)
         | Bounded  a -> Bounded (Array.Parallel.map f a)
@@ -28,6 +29,7 @@ module ParallelArray =
         | Bounded  f, Bounded  x ->
             if f.LongLength < x.LongLength then Bounded (Array.Parallel.mapi (fun i f -> f x.[i]) f)
             else                                Bounded (Array.Parallel.mapi (fun i x -> f.[i] x) x)
+    #endif
 
     //let inline append (a:ParallelArray<'m>) (b:ParallelArray<'m>) = liftA2 mappend a b :ParallelArray<'m>
 
@@ -41,11 +43,15 @@ module ParallelArrayOperators =
 
 type ParallelArray<'t> with
 
+    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: parray<_>, f) = ParallelArray.map f x
+    #endif
 
     static member Return (x: 'a) = Infinite x
+    #if !FABLE_COMPILER
     static member (<*>) (f: parray<'a->'b>, x: parray<_>) = ParallelArray.ap f x : parray<'b>
+    #endif
     static member inline get_Zero () = Bounded (getZero ()) : parray<'m>
     #if !FABLE_COMPILER
     static member inline (+) (x: parray<'m>, y: parray<'m>) = liftA2 plus x y : parray<'m>

@@ -6,7 +6,6 @@ open System.ComponentModel
 #if !FABLE_COMPILER
 /// Additional operations on List
 module List =
-
     let inline sequence (ms: list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequence ms
 
     let inline traverse (f: 'T->'``Applicative<'U>``) (xs:list<'T>) : '``Applicative<list<'U>>`` = traverse f xs
@@ -29,6 +28,7 @@ module List =
 
     let inline replicateM count (initial: '``Applicative<'T>``)  = sequence (List.replicate count initial)
 #endif
+
 
 open FSharpPlus.Control
 
@@ -74,13 +74,14 @@ type ListT<'``monad<list<'t>>``> with
 
     #if !FABLE_COMPILER
     static member inline Lift (x: '``Monad<'T>``) = x |> liftM List.singleton |> ListT : ListT<'``Monad<list<'T>>``>
-    #endif
     
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``ListT<'MonadAsync<'T>>``
     
     static member inline Throw (x: 'E) = x |> throw |> lift
+    #endif
     static member inline Catch (m: ListT<'``MonadError<'E1,'T>``>, h: 'E1 -> ListT<'``MonadError<'E2,'T>``>) = ListT ((fun v h -> Catch.Invoke v h) (ListT.run m) (ListT.run << h)) : ListT<'``MonadError<'E2,'T>``>
     
+    #if !FABLE_COMPILER
     static member inline CallCC (f: (('T -> ListT<'``MonadCont<'R,list<'U>>``>) -> _)) = ListT (callCC <| fun c -> ListT.run (f (ListT << c << List.singleton))) : ListT<'``MonadCont<'R, list<'T>>``>
     
     static member inline get_Get ()  = lift get         : '``ListT<'MonadState<'S,'S>>``
@@ -88,3 +89,4 @@ type ListT<'``monad<list<'t>>``> with
     
     static member inline get_Ask () = lift ask          : '``ListT<'MonadReader<'R,  list<'R>>>``
     static member inline Local (ListT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = ListT (local f m)
+    #endif

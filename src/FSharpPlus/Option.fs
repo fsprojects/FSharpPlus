@@ -25,6 +25,7 @@ module OptionT =
     let inline apply (OptionT f: OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x: OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x) : OptionT<'``Monad<option<'U>``>
     let inline map  (f: 'T->'U) (OptionT m: OptionT<'``Monad<option<'T>``>)                                          = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
     #endif
+
 type OptionT<'``monad<option<'t>>``> with
     #if !FABLE_COMPILER
     static member inline Return (x: 'T) = Some x |> result |> OptionT                                                        : OptionT<'``Monad<seq<'T>``>
@@ -45,7 +46,7 @@ type OptionT<'``monad<option<'t>>``> with
     #if !FABLE_COMPILER
     static member inline Lift (x: '``Monad<'T>``) = x |> liftM Some |> OptionT : OptionT<'``Monad<option<'T>>``>
     #endif
-    
+
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x) : '``OptionT<'MonadAsync<'T>>``
 
     static member inline Throw (x: 'E) = x |> throw |> lift
