@@ -94,6 +94,7 @@ open System.Globalization
 type TryParse =
     inherit Default1
 
+    #if !FABLE_COMPILER
     static member TryParse (_: decimal       , _: TryParse) = fun x -> Decimal.TryParse (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<decimal>
     static member TryParse (_: float32       , _: TryParse) = fun x -> Single.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float32>
     static member TryParse (_: float         , _: TryParse) = fun x -> Double.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float>
@@ -103,11 +104,14 @@ type TryParse =
     static member TryParse (_: int16         , _: TryParse) = fun x -> Int16.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int16>
     static member TryParse (_: int           , _: TryParse) = fun x -> Int32.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int>
     static member TryParse (_: int64         , _: TryParse) = fun x -> Int64.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int64>
-    
+    #endif
+
     static member TryParse (_: string        , _: TryParse) = fun x -> Some x                               : option<string>
     static member TryParse (_: StringBuilder , _: TryParse) = fun x -> Some (new StringBuilder (x: string)) : option<StringBuilder>
+    #if !FABLE_COMPILER
     static member TryParse (_: DateTime      , _: TryParse) = fun x -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
     static member TryParse (_: DateTimeOffset, _: TryParse) = fun x -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
+    #endif
 
     static member inline Invoke (value: string) =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member TryParse : _*_ -> _) b, a)
