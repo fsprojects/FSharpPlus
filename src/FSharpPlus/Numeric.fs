@@ -22,16 +22,6 @@ type FromBigInt =
     static member        FromBigInt (_: unativeint, _: FromBigInt) = fun (x: bigint) -> unativeint (int x)
     static member        FromBigInt (_: bigint    , _: FromBigInt) = fun (x: bigint) ->                 x
     static member        FromBigInt (_: float     , _: FromBigInt) = fun (x: bigint) -> float           x
-#if NET35
-    static member        FromBigInt (_: sbyte     , _: FromBigInt) = fun (x: bigint) -> sbyte      (int x)
-    static member        FromBigInt (_: int16     , _: FromBigInt) = fun (x: bigint) -> int16      (int x)
-    static member        FromBigInt (_: byte      , _: FromBigInt) = fun (x: bigint) -> byte       (int x)
-    static member        FromBigInt (_: uint16    , _: FromBigInt) = fun (x: bigint) -> uint16     (int x)
-    static member        FromBigInt (_: uint32    , _: FromBigInt) = fun (x: bigint) -> uint32     (int x)
-    static member        FromBigInt (_: uint64    , _: FromBigInt) = fun (x: bigint) -> uint64     (int64 x)
-    static member        FromBigInt (_: float32   , _: FromBigInt) = fun (x: bigint) -> float32    (int x)
-    static member        FromBigInt (_: decimal   , _: FromBigInt) = fun (x: bigint) -> decimal    (int x)
-#else
     static member        FromBigInt (_: sbyte     , _: FromBigInt) = fun (x: bigint) -> sbyte           x
     static member        FromBigInt (_: int16     , _: FromBigInt) = fun (x: bigint) -> int16           x
     static member        FromBigInt (_: byte      , _: FromBigInt) = fun (x: bigint) -> byte            x
@@ -40,7 +30,6 @@ type FromBigInt =
     static member        FromBigInt (_: uint64    , _: FromBigInt) = fun (x: bigint) -> uint64          x
     static member        FromBigInt (_: float32   , _: FromBigInt) = fun (x: bigint) -> float32         x
     static member        FromBigInt (_: decimal   , _: FromBigInt) = fun (x: bigint) -> decimal         x
-#endif
 
     static member inline Invoke (x: bigint) : 'Num =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member FromBigInt : _*_ -> _) b, a)
@@ -60,15 +49,6 @@ type FromInt64 =
     static member        FromInt64 (_: unativeint, _: FromInt64) = fun (x: int64) -> unativeint (int x)
     static member        FromInt64 (_: bigint    , _: FromInt64) = fun (x: int64) -> bigint          x
     static member        FromInt64 (_: float     , _: FromInt64) = fun (x: int64) -> float           x
-#if NET35
-    static member        FromInt64 (_: float32   , _: FromInt64) = fun (x: int64) -> float32    (int x)
-    static member        FromInt64 (_: decimal   , _: FromInt64) = fun (x: int64) -> decimal    (int x)
-    static member        FromInt64 (_: sbyte     , _: FromInt64) = fun (x: int64) -> sbyte      (int x)
-    static member        FromInt64 (_: int16     , _: FromInt64) = fun (x: int64) -> int16      (int x)
-    static member        FromInt64 (_: byte      , _: FromInt64) = fun (x: int64) -> byte       (int x)
-    static member        FromInt64 (_: uint16    , _: FromInt64) = fun (x: int64) -> uint16     (int x)
-    static member        FromInt64 (_: uint32    , _: FromInt64) = fun (x: int64) -> uint32     (int x)
-#else
     static member        FromInt64 (_: float32   , _: FromInt64) = fun (x: int64) -> float32         x
     static member        FromInt64 (_: decimal   , _: FromInt64) = fun (x: int64) -> decimal         x
     static member        FromInt64 (_: sbyte     , _: FromInt64) = fun (x: int64) -> sbyte           x
@@ -76,7 +56,6 @@ type FromInt64 =
     static member        FromInt64 (_: byte      , _: FromInt64) = fun (x: int64) -> byte            x
     static member        FromInt64 (_: uint16    , _: FromInt64) = fun (x: int64) -> uint16          x
     static member        FromInt64 (_: uint32    , _: FromInt64) = fun (x: int64) -> uint32          x
-#endif
     static member        FromInt64 (_: uint64    , _: FromInt64) = fun (x: int64) -> uint64          x
 
     static member inline Invoke (x: int64) : 'Num =
@@ -128,10 +107,7 @@ type One =
 
 open System
 open System.Text
-#if NET35
-#else
 open System.Threading.Tasks
-#endif
 open System.Collections.Generic
 open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals.Prelude
@@ -184,15 +160,12 @@ type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e      , _: Zero) = (Z
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f   , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ) : 'a*'b*'c*'d*'e*'f
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f*'g, _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : 'a*'b*'c*'d*'e*'f*'g
 
-#if NET35
-#else
 type Zero with
     static member inline Zero (_: Task<'a>, _: Zero) =
         let (v: 'a) = Zero.Invoke ()
         let s = TaskCompletionSource ()
         s.SetResult v
         s.Task
-#endif
 
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
@@ -303,13 +276,8 @@ type ToBigInt =
     static member ToBigInt (x: uint16    ) = bigint (int x)
     static member ToBigInt (x: unativeint) = bigint (int x)
     static member ToBigInt (x: bigint    ) =             x
-#if NET35
-    static member ToBigInt (x: uint32    ) = bigint (int x)
-    static member ToBigInt (x: uint64    ) = bigint (int64 x)
-#else
     static member ToBigInt (x: uint32    ) = bigint      x
     static member ToBigInt (x: uint64    ) = bigint      x
-#endif
 
     static member inline Invoke (x: 'Integral) : bigint =
         let inline call_2 (_: ^a, b: ^b) = ((^a or ^b) : (static member ToBigInt : _ -> _) b)
