@@ -21,11 +21,8 @@ open FSharpPlus
 type Bind =
     static member        (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
     static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
-#if NET35
-#else
 #if !FABLE_COMPILER
     static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
-#endif
 #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
     static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
@@ -67,12 +64,9 @@ type Join =
     static member        Join (x: Lazy<Lazy<_>>         , [<Optional>]_output: Lazy<'T>        , [<Optional>]_mthd: Join    ) = lazy x.Value.Value         : Lazy<'T>
     static member        Join (x: seq<seq<_>>           , [<Optional>]_output: seq<'T>         , [<Optional>]_mthd: Join    ) = Seq.concat x               : seq<'T>
     static member        Join (x: Id<_>                 , [<Optional>]_output: Id<'T>          , [<Optional>]_mthd: Join    ) = x.getValue                 : Id<'T>
-#if NET35
-#else 
 #if !FABLE_COMPILER                                                                                                                             
     static member        Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
 #endif
-#endif                                                                                                                                    
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
     static member        Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x              : list<'T>
     static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
@@ -122,14 +116,11 @@ type Return =
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
 
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
-#if NET35
-#else 
 #if !FABLE_COMPILER       
     static member        Return (_: 'a Task        , _: Return  ) = fun x -> 
         let s = TaskCompletionSource ()
         s.SetResult x
         s.Task : 'a Task
-#endif
 #endif        
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
@@ -241,11 +232,8 @@ type Map =
     inherit Default1
 
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value) : Lazy<'U>
-    #if NET35
-    #else
     #if !FABLE_COMPILER
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
-    #endif
     #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
@@ -479,11 +467,8 @@ type Extract =
     static member inline Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
     static member        Extract (f: 'T Id        ) = f
 
-#if NET35
-#else
 #if !FABLE_COMPILER
     static member        Extract (f: Task<'T>     ) = f.Result
-#endif
 #endif
 
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
@@ -497,11 +482,8 @@ type Extend =
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
     static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
 
-#if NET35
-#else
 #if !FABLE_COMPILER
     static member        (=>>) (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith (f)
-#endif
 #endif
 
     // Restricted Comonads
