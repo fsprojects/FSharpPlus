@@ -5,10 +5,7 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
-#if NET35
-#else
 open System.Threading.Tasks
-#endif
 open Microsoft.FSharp.Quotations
 
 open FSharpPlus.Internals
@@ -121,7 +118,7 @@ type Return =
         let s = TaskCompletionSource ()
         s.SetResult x
         s.Task : 'a Task
-#endif        
+#endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []

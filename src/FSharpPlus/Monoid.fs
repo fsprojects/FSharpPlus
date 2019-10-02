@@ -6,10 +6,7 @@ open System.Collections.Generic
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open Microsoft.FSharp.Quotations
-#if NET35
-#else
 open System.Threading.Tasks
-#endif
 open FSharpPlus
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
@@ -88,14 +85,11 @@ type Plus with
 
 type Plus with    
     
-#if NET35
-#else
     static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) =
                     x.ContinueWith(fun (t: Task<_>) -> 
                         (fun a -> 
                             y.ContinueWith(fun (u: Task<_>) -> 
                                 Plus.Invoke a u.Result)) t.Result).Unwrap ()
-#endif
 
     static member inline ``+`` (x: Map<'a,'b>             , y                         , [<Optional>]_mthd: Plus) = Map.unionWith Plus.Invoke x y
 
