@@ -11,5 +11,6 @@
     <Compile Include="TypeBool.fs" />
     <Compile Include="TypeNat.fs" />
     <Compile Include="TypeNat.Provider.fs" />
+    <Compile Include="Matrix.fs" />
   </ItemGroup>
 </Project>

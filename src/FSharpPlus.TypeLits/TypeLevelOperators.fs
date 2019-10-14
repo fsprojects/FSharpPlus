@@ -19,7 +19,7 @@ type ITypeLiteral = interface end
 /// For every type (kind) of type-level literals, the corresponding type-error class should be created
 /// and it should provide all the methods the literals have to offer.
 ///
-/// TyITypeLiteral should not implement `ITypeLits` but should provide `Singleton` and `RuntimeValue`.
+/// TypeError should not implement `ITypeLits` but should provide `Singleton` and `RuntimeValue`.
 /// This is important for making type-level error-handling work correctly.
 type TypeError<'a>() =
   static member inline Singleton _ = Unchecked.defaultof<'a>

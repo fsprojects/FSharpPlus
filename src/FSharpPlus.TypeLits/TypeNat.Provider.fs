@@ -1,14 +1,10 @@
 namespace FSharpPlus.TypeLits
 
-open System
-open System.IO
 open System.Reflection
 open FSharp.Core.CompilerServices
-open Microsoft.FSharp.Control
 open Microsoft.FSharp.Collections
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Reflection
-open ProviderImplementation
 open ProviderImplementation.ProvidedTypes
 
 module internal ProviderUtils =

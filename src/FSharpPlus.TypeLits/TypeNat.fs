@@ -1,5 +1,4 @@
 namespace FSharpPlus.TypeLits
-open System
 
 
 type NatTypeError<'a>() =
@@ -55,7 +54,7 @@ type S< 'n > = S of 'n with
       let x': ^X = x -^ y
       (^X: (static member ( %^ ): _*_->_) x', y)
     )
-  static member inline Match (x: S<_>, caseZ, caseSn) = caseSn x
+  static member inline Match (x: S<_>, _caseZ, caseSn) = caseSn x
 
 and  Z = Z with
   interface ITypeNat
@@ -80,7 +79,7 @@ and  Z = Z with
   static member inline ( <=^ ) (S _, Z) = False
   static member inline ( >=^ ) (_, Z)   = True
   static member inline ( >=^ ) (Z, S _) = False
-  static member inline Match (Z, caseZ, caseSn) = caseZ Z
+  static member inline Match (Z, caseZ, _caseSn) = caseZ Z
 
 module TypeNat =
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =

@@ -50,4 +50,5 @@ and  False = False with
 module TypeBool =
   let inline Not (b: ^Bool) = (^Bool: (static member Not: _->_) b)
   let inline IfThenElse (cond: ^Bool) a b = (^Bool: (static member IfThenElse: _*_*_->_) cond,a,b)
+  let inline Assert (b: True) = ()
 
