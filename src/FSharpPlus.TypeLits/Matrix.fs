@@ -3,8 +3,11 @@ namespace FSharpPlus.TypeLits
 open TypeLevelOperators
 open System.Runtime.CompilerServices
 
+#nowarn "0042" // retype
+
 module MatrixHelpers =
   open System
+  let inline internal retype (x: 'T) : 'U = (# "" x: 'U #)
 
   type NatToArguments =
     static member inline Invoke (x: ^X, f: _ list -> _) =
@@ -58,6 +61,45 @@ module MatrixHelpers =
     static member TupleToList ((x1,x2,x3,x4,x5,x6), _: TupleToList) = [x1;x2;x3;x4;x5;x6]
     static member TupleToList ((x1,x2,x3,x4,x5,x6,x7), _: TupleToList) = [x1;x2;x3;x4;x5;x6;x7]
 
+  type AssertTupleType =
+    static member inline Invoke (xs, ty, n) : unit =
+      let inline call_2 (_a: ^a, b: ^b) = ((^a or ^b) : (static member AssertTupleType: _*_*_ -> _) b,ty,n)
+      let inline call (a: 'a, b: 'b) = call_2 (a, b)
+      call (Unchecked.defaultof<AssertTupleType>, xs)
+
+    static member inline AssertTupleType (xs: 't, x: 'x, S(S(S(S(S(S(S(S(n))))))))) =
+      let _,_,_,_,_,_,_,tr : 'x*'x*'x*'x*'x*'x*'x*_ = Constraints.whenNestedTuple xs
+      AssertTupleType.Invoke (tr, x, S n)
+
+    static member AssertTupleType (_: Tuple<'x>, _:'x,S Z) = ()
+    static member AssertTupleType ((_:'x,_:'x),_:'x,S (S Z)) = ()
+    static member AssertTupleType ((_:'x,_:'x,_:'x),_:'x, S(S(S Z))) = ()
+    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S Z)))) = ()
+    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(Z)))))) = ()
+    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(S(Z))))))) = ()
+    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(S(S(Z)))))))) = ()
+
+  type ArrayToTuple =
+    static member inline Invoke (xs: 'x[], n, ?index) =
+      let inline call_2 (_a: ^a, b: ^b) = ((^a or ^b): (static member ArrayToTuple:_*_*_->_) xs,b,defaultArg index 0)
+      let inline call (a: 'a, b: 'b) = call_2 (a, b)
+      call (Unchecked.defaultof<ArrayToTuple>, n)
+
+    static member inline ArrayToTuple (xs:_[],S(S(S(S(S(S(S(n))))))), i) =
+      TypeBool.Assert(n >^ Z)
+      Tuple<_,_,_,_,_,_,_,_>(
+        xs.[i],xs.[i+1],xs.[i+2],xs.[i+3],xs.[i+4],xs.[i+5],xs.[i+6],
+        ArrayToTuple.Invoke(xs,n,i+7)
+      )
+
+    static member ArrayToTuple (xs:_[], S Z, i) = Tuple<_>(xs.[i])
+    static member ArrayToTuple (xs:_[], S (S Z), i) = (xs.[i], xs.[i+1])
+    static member ArrayToTuple (xs:_[], S (S (S Z)), i) = (xs.[i], xs.[i+1], xs.[i+2])
+    static member ArrayToTuple (xs:_[], S (S (S (S Z))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3])
+    static member ArrayToTuple (xs:_[], S (S (S (S (S Z)))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4])
+    static member ArrayToTuple (xs:_[], S (S (S (S (S (S Z))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5])
+    static member ArrayToTuple (xs:_[], S (S (S (S (S (S (S Z)))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5], xs.[i+6])
+
 open MatrixHelpers
 
 // Items : 'Item[ 'Column, 'Row ]
@@ -93,11 +135,13 @@ module Matrix =
 
   let inline length1 (_: Matrix<'a, 'm, 'n>) : 'm = Singleton<'m>
   let inline length2 (_: Matrix<'a, 'm, 'n>) : 'n = Singleton<'n>
-
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let length1' (mtx: Matrix<'a, 'm, 'n>) = mtx.Items |> Array2D.length1
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let length2' (mtx: Matrix<'a, 'm, 'n>) = mtx.Items |> Array2D.length2
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let toArray2D (m: Matrix<'a, 'm, 'n>) = m.Items
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let unsafeCreate (_row: 'm) (_column: 'n) (items: _[,]) : Matrix<_, 'm, 'n> =
@@ -169,8 +213,52 @@ module Matrix =
 
   let inline hadamardProduct (m1: Matrix<'t, 'm, 'n>) (m2: Matrix<'t, 'm, 'n>) : Matrix<'t, 'm, 'n> =
     unsafeCreate Singleton Singleton <| failwith "TODO"
-
+ 
 module Vector =
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let map (f: 'a -> 'b) (vec: Vector<'a, 'n>) : Vector<'b, 'n> =
+    { Items = Array.map f vec.Items }
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let mapi (f: int -> 'a -> 'b) (vec: Vector<'a, 'n>) : Vector<'b, 'n> =
+    { Items = Array.mapi f vec.Items }
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let map2 (f: 'a -> 'b -> 'c) (vec1: Vector<'a, 'n>) (vec2: Vector<'b, 'n>) : Vector<'c, 'n> =
+    { Items = Array.map2 f vec1.Items vec2.Items }
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let mapi2 (f: int -> 'a -> 'b -> 'c) (vec1: Vector<'a, 'n>) (vec2: Vector<'b, 'n>) : Vector<'c, 'n> =
+    { Items = Array.mapi2 f vec1.Items vec2.Items }
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let map3 (f: 'a -> 'b -> 'c -> 'd) (vec1: Vector<'a, 'n>) (vec2: Vector<'b, 'n>) (vec3: Vector<'c, 'n>) : Vector<'d, 'n> =
+    { Items = Array.map3 f vec1.Items vec2.Items vec3.Items }
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let iter (f: 'a -> unit) (vec: Vector<'a, 'n>) : unit =
+    vec.Items |> Array.iter f
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let iteri (f: int -> 'a -> unit) (vec: Vector<'a, 'n>) : unit =
+    vec.Items |> Array.iteri f
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let iter2 (f: 'a -> 'b -> unit) (vec1: Vector<'a, 'n>) (vec2: Vector<'b, 'n>) : unit =
+    Array.iter2 f vec1.Items vec2.Items
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let iteri2 (f: int -> 'a -> 'b -> unit) (vec1: Vector<'a, 'n>) (vec2: Vector<'b, 'n>) : unit =
+    Array.iteri2 f vec1.Items vec2.Items
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let zip (vec1: Vector<'a, 'n>) (vec2: Vector<'b, 'n>) : Vector<'a * 'b, 'n> =
+    { Items = Array.zip vec1.Items vec2.Items }
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let zip3 (vec1: Vector<'a, 'n>) (vec2: Vector<'b, 'n>) (vec3: Vector<'c, 'n>) : Vector<'a*'b*'c, 'n> =
+    { Items = Array.zip3 vec1.Items vec2.Items vec3.Items }
+
   let inline length (_vec: Vector<'a, 'n>) : 'n = Singleton<'n>
   
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
@@ -189,7 +277,21 @@ module Vector =
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let unsafeGet index (vec: Vector<'a, 'n>) = vec.Items.[index]
 
-  let inline concat (v1: Vector<'a, ^n1>) (v2: Vector<'a, ^n2>) : Vector<'a, ^``n1 + ^n2``> =
+  let inline get (index: ^``i when ^i < ^n``) (vec: Vector<'a, ^n>) =
+    let n = Singleton< ^n >
+    TypeBool.Assert (index <^ n)
+    vec |> unsafeGet (RuntimeValue index)
+
+  let inline zeroCreate (n: 'n) : Vector<'a, 'n> =
+    Array.zeroCreate (RuntimeValue n) |> unsafeCreate n
+
+  let inline replicate (n: 'n) (value: 'a) : Vector<'a, 'n> =
+    Array.replicate (RuntimeValue n) value |> unsafeCreate n
+
+  let inline init (n: 'n) (f: int -> 'a) : Vector<'a, 'n > =
+    Array.init (RuntimeValue n) f |> unsafeCreate n
+
+  let inline append (v1: Vector<'a, ^n1>) (v2: Vector<'a, ^n2>) : Vector<'a, ^``n1 + ^n2``> =
     let len = Singleton< ^n1 > +^ Singleton< ^n2 >
     unsafeCreate len [| yield! toArray v1; yield! toArray v2 |]
 
@@ -204,6 +306,30 @@ module MatrixOperators =
   let inline vector (definition: '``a * 'a * .. * 'a``) : Vector<'a, 'n> =
     Vector.create definition
 
+  let inline (|Vector|) (vect: Vector<'a, 'n>) =
+    let n = Singleton<'n>
+    let t = ArrayToTuple.Invoke(Vector.toArray vect, n) |> MatrixHelpers.retype
+    AssertTupleType.Invoke(t, Unchecked.defaultof<'a>, n)
+    t
+
+  let inline (|Matrix|) (mtx: Matrix<'a, 'm, 'n>) =
+    let m = Singleton<'m>
+    let n = Singleton<'n>
+    let items = Matrix.toArray2D mtx
+    let xs : 'ta[] = [|
+      for i = 0 to Array2D.length1 items - 1 do
+        let col = [| for j = 0 to Array2D.length2 items - 1 do yield items.[i, j] |]
+        let t = ArrayToTuple.Invoke(col, n) |> MatrixHelpers.retype
+        AssertTupleType.Invoke(t, Unchecked.defaultof<'t>, n)
+        yield t
+    |]
+    let t = ArrayToTuple.Invoke(xs, m) |> MatrixHelpers.retype
+    AssertTupleType.Invoke(t, Unchecked.defaultof<'ta>, m)
+    t
+
+(*
+let (Vector(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o)) = vector(1,2,3,4,5,6,7,8,9,0,1,2,3,4,5);;
+*)
   let m2 =
     matrix (
       (1,0,0,0),
@@ -212,3 +338,4 @@ module MatrixOperators =
     )
 
   let v2 = vector (1,2,3,4,5)
+  

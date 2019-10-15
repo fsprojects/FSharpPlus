@@ -1,5 +1,4 @@
 namespace FSharpPlus.TypeLits
-open System
 
 
 type BoolTypeError<'a>() =
