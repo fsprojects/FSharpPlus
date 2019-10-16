@@ -36,8 +36,9 @@ type S< 'n > = S of 'n with
   static member inline RuntimeValue (S x: S< ^X >) = 1 + (^X: (static member RuntimeValue: ^X -> int) x)
   static member inline Singleton (_: S< ^X >) =
     S (^X: (static member Singleton: ^X -> ^X) Unchecked.defaultof< ^X >)
-  static member inline ( +^ ) (S x: S< ^X >, y) = S (x +^ y)
-  static member inline ( -^ ) (S x, S y) = x -^ y
+  static member inline ( +^ ) (S x: S< ^X >, y) = S (^X: (static member ( +^ ):_*_->_) x,y)
+  static member inline ( -^ ) (S x, S y: S< ^Y >) = (^Y: (static member ( -^ ):_*_->_) x,y)
+  static member inline ( -^ ) (Z, S _) = Unchecked.defaultof<OverflowError>
   static member inline ( *^ ) (S x, y) = x *^ y +^ y
   static member inline ( =^ ) (S x, S y) = x =^ y
   static member inline ( >^ ) (S x, S y) = x >^ y
@@ -62,7 +63,6 @@ and  Z = Z with
   static member inline Singleton (_: Z) = Z
   static member inline ( +^ ) (Z, y) = y
   static member inline ( -^ ) (x, Z) = x
-  static member inline ( -^ ) (Z, S _) = Unchecked.defaultof<OverflowError>
   static member inline ( *^ ) (Z, _) = Z
   static member inline ( /^ ) (Z, S _) = Z
   static member inline ( /^ ) (_, Z) = Unchecked.defaultof<DividedByZeroError>
@@ -80,6 +80,11 @@ and  Z = Z with
   static member inline ( >=^ ) (_, Z)   = True
   static member inline ( >=^ ) (Z, S _) = False
   static member inline Match (Z, caseZ, _caseSn) = caseZ Z
+
+[<AutoOpen>]
+module NatOp =
+  let inline ( ?+^ ) (x: ^X) y = (^X: (static member ( +^ ):_*_->_) x,y)
+  let inline ( -^? ) x (y: ^Y) = (^Y: (static member ( -^ ):_*_->_) x,y)
 
 module TypeNat =
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =
