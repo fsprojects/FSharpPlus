@@ -84,7 +84,9 @@ type Last<'t> = Last of Option<'t> with
 /// Numeric wrapper for multiplication monoid (*, 1)
 [<Struct>]
 type Mult<'a> = Mult of 'a with
+    #if !FABLE_COMPILER
     static member inline get_Zero () = Mult one
+    #endif
     static member inline (+) (Mult (x: 'n), Mult (y: 'n)) = Mult (x * y)
 
 
@@ -95,8 +97,10 @@ type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
     // Functor
     static member inline Map (Compose x, f: 'T->'U) = Compose (map (map f) x)
 
+    #if !FABLE_COMPILER
     // Applicative
     static member inline Return (x: 'T) = Compose (result (result x)) : Compose<'``F<'G<'T>``>
+    #endif
     static member inline (<*>) (Compose (f: '``F<'G<'T->'U>>``), Compose (x: '``F<'G<'T>>``)) = Compose ((<*>) <!> f <*> x: '``F<'G<'U>>``)
 
     // Alternative

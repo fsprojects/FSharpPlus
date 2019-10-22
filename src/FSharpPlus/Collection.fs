@@ -12,31 +12,44 @@ open FSharpPlus.Internals
 
 type OfSeq =
     inherit Default1
+    #if !FABLE_COMPILER
     static member inline OfSeq (x: seq<'t>                 , _: '``Foldable'<T>``               , _: Default5) = x |> Seq.map Return.Invoke |> Sum.Invoke : '``Foldable'<T>``
+    #endif
     static member        OfSeq (x: seq<'t>                 , _: seq<'t>                         , _: Default4) = x
     static member        OfSeq (x: seq<'t>                 , _: ICollection<'t>                 , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> ICollection<'t>
     static member        OfSeq (x: seq<'t>                 , _: IList<'t>                       , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> IList<'t>
     static member        OfSeq (x: seq<'t>                 , _: IList                           , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> IList
+    
+    #if !FABLE_COMPILER
     static member        OfSeq (x: seq<'k*'v>              , _: IReadOnlyDictionary<'k,'v>      , _: Default4) = Dict.toIReadOnlyDictionary (dict x)
     static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IReadOnlyDictionary<'k,'v>      , _: Default4) = x |> Seq.map (|KeyValue|) |> dict |> Dict.toIReadOnlyDictionary
+    #endif
+    
     static member        OfSeq (x: seq<'k*'v>              , _: IDictionary<'k,'v>              , _: Default4) = dict x
     static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              , _: Default4) = x |> Seq.map (|KeyValue|) |> dict
+    #if !FABLE_COMPILER
     static member        OfSeq (x: seq<'k*'v>              , _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> Seq.iter d.Add; d :> IDictionary
     static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    #endif
     static member inline OfSeq (x: seq<'t>                 , _: 'R                              , _: Default3) = (^R : (new : seq<'t> -> ^R) x) : 'R
     static member inline OfSeq (x: seq<KeyValuePair<'k,'v>>, _: 'R                              , _: Default3) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
     static member inline OfSeq (x: seq<'t>                 , _: 'F                              , _: Default2) = let c = new 'F () in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
+    #if !FABLE_COMPILER
     static member        OfSeq (x: seq<'t>                 , _: 'T when 'T :> ICollection<'t>   , _: Default1) = let d = new 'T () in x |> Seq.iter d.Add; d
     static member        OfSeq (x: seq<'k*'v>              , _: 'T when 'T :> IDictionary       , _: Default1) = let d = new 'T () in x |> Seq.iter d.Add; d
     static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: 'T when 'T :> IDictionary       , _: Default1) = let d = new 'T () in x |> Seq.iter (function (KeyValue x) -> d.Add x); d
     static member        OfSeq (x: seq<'k*'v>              , _: 'T when 'T :> IDictionary<'k,'v>, _: OfSeq   ) = let d = new 'T () in x |> Seq.iter d.Add; d
     static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: 'T when 'T :> IDictionary<'k,'v>, _: OfSeq   ) = let d = new 'T () in x |> Seq.iter d.Add; d
+    #endif
+
     static member inline OfSeq (x: seq<'t>                 , _: 'UserType                       , _: OfSeq   ) = (^UserType : (static member OfSeq : seq<'t> -> ^UserType) x)
     static member        OfSeq (x                          , _: 't []                           , _: OfSeq   ) = Array.ofSeq<'t> x
     static member        OfSeq (x                          , _: 't list                         , _: OfSeq   ) = List.ofSeq<'t> x
     static member        OfSeq (x: seq<char>               , _: string                          , _: OfSeq   ) = String.ofSeq x
     static member        OfSeq (x: seq<char>               , _: Text.StringBuilder              , _: OfSeq   ) = (StringBuilder (), x) ||> Seq.fold (fun x -> x.Append)
+    #if !FABLE_COMPILER
     static member        OfSeq (x: seq<'t>                 , _: Stack<'t>                       , _: OfSeq   ) = Generic.Stack x
+    #endif
 
     static member inline Invoke (value: seq<'t>) = 
         let inline call_2 (a: ^a, b: ^b, s) = ((^a or ^b) : (static member OfSeq : _*_*_ -> _) s, b, a)
@@ -46,31 +59,44 @@ type OfSeq =
 
 type OfList =
     inherit Default1
+    #if !FABLE_COMPILER
     static member inline OfList (x: list<'t>                 , _: '``Foldable'<T>``               , _: Default5) = x |> List.map Return.Invoke |> Sum.Invoke : '``Foldable'<T>``
+    #endif
     static member        OfList (x: list<'t>                 , _: seq<'t>                         , _: Default4) = List.toSeq x
     static member        OfList (x: list<'t>                 , _: ICollection<'t>                 , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> ICollection<'t>
     static member        OfList (x: list<'t>                 , _: IList<'t>                       , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> IList<'t>
     static member        OfList (x: list<'t>                 , _: IList                           , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> IList
+
+    #if !FABLE_COMPILER
     static member        OfList (x: list<'k*'v>              , _: IReadOnlyDictionary<'k,'v>      , _: Default4) = Dict.toIReadOnlyDictionary (dict x)
     static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IReadOnlyDictionary<'k,'v>      , _: Default4) = x |> List.map (|KeyValue|) |> dict |> Dict.toIReadOnlyDictionary
+    #endif
+
     static member        OfList (x: list<'k*'v>              , _: IDictionary<'k,'v>              , _: Default4) = dict x
     static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              , _: Default4) = x |> List.map (|KeyValue|) |> dict
+    #if !FABLE_COMPILER
     static member        OfList (x: list<'k*'v>              , _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> List.iter d.Add; d :> IDictionary
     static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> List.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    #endif
     static member inline OfList (x: list<'t>                 , _: 'R                              , _: Default3) = (^R : (new : seq<'t> -> ^R) (List.toSeq x)) : 'R
     static member inline OfList (x: list<KeyValuePair<'k,'v>>, _: 'R                              , _: Default3) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
     static member inline OfList (x: list<'t>                 , _: 'F                              , _: Default2) = let c = new 'F () in (List.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
+    #if !FABLE_COMPILER
     static member        OfList (x: list<'t>                 , _: 'T when 'T :> ICollection<'t>   , _: Default1) = let d = new 'T () in x |> List.iter d.Add; d
     static member        OfList (x: list<'k*'v>              , _: 'T when 'T :> IDictionary       , _: Default1) = let d = new 'T () in x |> List.iter d.Add; d
     static member        OfList (x: list<KeyValuePair<'k,'v>>, _: 'T when 'T :> IDictionary       , _: Default1) = let d = new 'T () in x |> List.iter (function (KeyValue x) -> d.Add x); d
     static member        OfList (x: list<'k*'v>              , _: 'T when 'T :> IDictionary<'k,'v>, _: OfList  ) = let d = new 'T () in x |> List.iter d.Add; d
     static member        OfList (x: list<KeyValuePair<'k,'v>>, _: 'T when 'T :> IDictionary<'k,'v>, _: OfList  ) = let d = new 'T () in x |> List.iter d.Add; d
+    #endif
+
     static member inline OfList (x: list<'t>                 , _: 'UserType                       , _: OfList  ) = (^UserType : (static member OfList : list<'t> -> ^UserType) x)
     static member        OfList (x                           , _: 't []                           , _: OfList  ) = Array.ofList<'t> x
     static member        OfList (x                           , _: 't list                         , _: OfList  ) = x
     static member        OfList (x: list<char>               , _: string                          , _: OfList  ) = String.ofList x
     static member        OfList (x: list<char>               , _: Text.StringBuilder              , _: OfList  ) = (StringBuilder (), x) ||> List.fold (fun x -> x.Append)
+    #if !FABLE_COMPILER
     static member        OfList (x: list<'t>                 , _: Stack<'t>                       , _: OfList  ) = Generic.Stack x
+    #endif
 
     static member inline Invoke (value: list<'t>) = 
         let inline call_2 (a: ^a, b: ^b, s) = ((^a or ^b) : (static member OfList : _*_*_ -> _) s, b, a)
@@ -217,9 +243,10 @@ type Distinct =
     static member inline InvokeOnInstance (source: '``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member Distinct : _->_) source) : ^``C<'T>``
 
     static member inline Distinct (x: '``Collection<'T>``  , [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.distinct |> OfSeq.Invoke         : '``Collection<'T>``
+    #if !FABLE_COMPILER
     static member inline Distinct (x: ^``Collection<'T>``  , [<Optional>]_impl: Default1) = (^``Collection<'T>`` : (static member Distinct : _->_) x) : '``Collection<'T>``
     static member inline Distinct (_: ^t when ^t : null and ^t : struct, _mthd: Default1) = id
-
+    #endif
 
 type DistinctBy =
     inherit Default1
@@ -290,9 +317,10 @@ type Rev =
     static member inline InvokeOnInstance (source: '``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member Rev : _->_) source) : ^``C<'T>``
 
     static member inline Rev (x: '``Collection<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.rev |> OfSeq.Invoke         : '``Collection<'T>``
+    #if !FABLE_COMPILER
     static member inline Rev (x: ^``Collection<'T>``, [<Optional>]_impl: Default1) = (^``Collection<'T>`` : (static member Rev : _->_) x) : '``Collection<'T>``
     static member inline Rev (_: ^t when ^t: null and ^t: struct, _mthd: Default1) = id
-
+    #endif
 
 type Scan =
     static member Scan (x: Id<'T>  , f ,z: 'S, [<Optional>]_output: Id<'S>  , [<Optional>]_impl: Scan) = Id.create (f z x.getValue)
@@ -319,9 +347,10 @@ type Sort =
     static member inline InvokeOnInstance (source: '``C<'T>``) : '``C<'T>`` = (^``C<'T>`` : (static member Sort : _->_) source) : ^``C<'T>``
 
     static member inline Sort (x: '``Collection<'T>``, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.sort |> OfSeq.Invoke         : '``Collection<'T>``
+    #if !FABLE_COMPILER
     static member inline Sort (x: ^``Collection<'T>``, [<Optional>]_impl: Default1) = (^``Collection<'T>`` : (static member Sort : _->_) x) : '``Collection<'T>``
     static member inline Sort (_: ^t when ^t: null and ^t: struct, _mthd: Default1) = id
-
+    #endif
 
 type SortBy =
     inherit Default1
@@ -374,6 +403,7 @@ type Split =
     static member Split ((e: StringBuilder []  , x: StringBuilder), [<Optional>]_impl: Split) = x.ToString().Split (e |> Seq.map string |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder
     static member Split ((e: StringBuilder list, x: StringBuilder), [<Optional>]_impl: Split) = x.ToString().Split (e |> Seq.map string |> Seq.toArray, StringSplitOptions.None) |> Array.map StringBuilder |> Array.toList
  
+
     static member inline Invoke (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection) =
         let inline call_2 (a: ^a, b: ^b, s) = ((^a or ^b) : (static member Split : (_*_)*_ -> _) (s, b), a)
         let inline call (a: 'a, b: 'b, s) = call_2 (a, b, s)
@@ -381,8 +411,10 @@ type Split =
 
  type Split with
     static member inline Split ((e: '``'Collection<'OrderedCollection>``, x: '``'OrderedCollection``), [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.split (ToSeq.Invoke e) |> Seq.map OfSeq.Invoke |> OfSeq.Invoke : '``'Collection<'OrderedCollection>``
+    #if !FABLE_COMPILER
     static member inline Split ((e: '``'Collection<'OrderedCollection>``, x: '``'OrderedCollection``), [<Optional>]_impl: Default1) = (^``'OrderedCollection`` : (static member Split : _*_->_) e, x)                          : '``'Collection<'OrderedCollection>``
     static member inline Split ((_: ^t when ^t: null and ^t: struct, _                              ),             _mthd: Default1) = id
+    #endif
 
 
 type Intersperse =
@@ -401,9 +433,11 @@ type Intersperse =
 
 type Intercalate =
     inherit Default1
+    #if !FABLE_COMPILER
     static member inline Intercalate (x: '``Foldable<'Monoid>``, e: 'Monoid          , [<Optional>]_impl: Default2   ) = let f t x = match t, x with (true, _), x -> false, x | (_, acc ), x -> (false, Plus.Invoke (Plus.Invoke acc e) x) in Fold.Invoke f (true, Zero.Invoke ()) x |> snd
     static member inline Intercalate (x: seq<'``Foldable<'T>``>, e: '``Foldable<'T>``, [<Optional>]_impl: Default1   ) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke : '``Foldable<'T>``
     static member inline Intercalate (_: seq<'``Foldable<'T>``>, _: ^t when ^t: null and ^t: struct  , _: Default1   ) = id
+    #endif
     static member        Intercalate (x: seq<list<'T>>         , e: list<'T>         , [<Optional>]_impl: Intercalate) = List.intercalate  e x
     static member        Intercalate (x: seq<'T []>            , e: 'T []            , [<Optional>]_impl: Intercalate) = Array.intercalate e x
     static member        Intercalate (x: seq<string>           , e: string           , [<Optional>]_impl: Intercalate) = String.Join (e, x)

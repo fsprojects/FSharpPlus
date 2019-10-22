@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "buildFSharpPlus": "fable-splitter ../../src/FSharpPlus -o FSharpPlusFable --commonjs --allFiles",
     "pretest": "fable-splitter -o build --commonjs",
     "test": "mocha build -t 10000"
   },

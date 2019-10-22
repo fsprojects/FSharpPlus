@@ -51,13 +51,17 @@ type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
 [<RequireQualifiedAccess>]
 module ReaderT =
     let  run (ReaderT x) = x : 'R -> '``Monad<'T>``
+    #if !FABLE_COMPILER
     let inline hoist (x: Reader<'R, 'T>) = (ReaderT << (fun a -> result << a) << Reader.run) x : ReaderT<'R, '``Monad<'T>``>
+    #endif
     let inline map   (f: 'T->'U) (ReaderT m: ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m)                                : ReaderT<'R, '``Monad<'U>``>
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x: _->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
     let inline bind  (f: 'T->_) (ReaderT (m: _->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))            : ReaderT<'R, '``Monad<'U>``>
 
 type ReaderT<'r,'``monad<'t>``> with
+    #if !FABLE_COMPILER
     static member inline Return (x: 'T) = ReaderT (fun _ -> result x)                                                 : ReaderT<'R, '``Monad<'T>``>
+    #endif
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: ReaderT<'R, '``Monad<'T>``>, f: 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
 
@@ -78,8 +82,10 @@ type ReaderT<'r,'``monad<'t>``> with
 
     static member inline CallCC (f: ('T -> ReaderT<'R, Cont<_,'U>>) -> _)               : ReaderT<'R,'``MonadCont<'C,'T>``> =
         ReaderT (fun r -> callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
-            
+          
+    #if !FABLE_COMPILER  
     static member inline get_Ask () = ReaderT result                                    : ReaderT<'R,'``Monad<'T>``>
+    #endif
     static member        Local (ReaderT m, f: _->'R2) = ReaderT (fun r -> m (f r))      : ReaderT<'R1,'``Monad<'T>``>
 
     static member inline Throw (x: 'E) = x |> throw |> lift : ReaderT<'R,'``MonadError<'E,'T>``>

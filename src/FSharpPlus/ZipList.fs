@@ -24,10 +24,14 @@ type ZipList<'s> with
 
     static member Return (x: 'a)     = ZipList (Seq.initInfinite (konst x))
     static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
+    #if !FABLE_COMPILER
     static member inline get_Zero () = result (getZero ()) : ZipList<'a>
+    #endif
     static member inline (+) (x: ZipList<'a>, y: ZipList<'a>) = liftA2 plus x y : ZipList<'a>
     static member ToSeq (ZipList x) = x
 
+    #if !FABLE_COMPILER
     static member inline Traverse (ZipList (x: seq<'T>), f: 'T->'``Functor<'U>``) =
         let lst = traverse f x : '``Functor<List<'U>>``
         ZipList <!> lst : '``Functor<ZipList<'U>>``
+    #endif

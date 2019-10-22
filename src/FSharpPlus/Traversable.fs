@@ -14,6 +14,7 @@ type Sequence =
     inherit Default1
     static member inline InvokeOnInstance (t: ^a) = (^a : (static member Sequence : _ -> 'R) t)
 
+    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline ForInfiniteSequences (t: seq<_>, isFailure) =
         let mutable failure = None
@@ -27,6 +28,7 @@ type Sequence =
         let cons_f x ys = Map.Invoke cons x <*> ys
         let r = Array.foldBack cons_f buf (result [||])
         Map.Invoke Array.toSeq r
+    #endif
     
 
 type Traverse =
@@ -35,10 +37,12 @@ type Traverse =
 
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) = Map.Invoke f (Sequence.InvokeOnInstance t) : 'R
     static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) = Map.Invoke Id.create (f (Id.run t))
+    #if !FABLE_COMPILER
     static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
        let cons x y = seq {yield x; yield! y}
        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result Seq.empty)
+    #endif
 
     static member Traverse (t: 't seq, f: 't->'u option, [<Optional>]_output: option<seq<'u>>, [<Optional>]_impl: Default2) =
        let ok = ref true
@@ -57,10 +61,13 @@ type Traverse =
             while enum.MoveNext() do
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
 
+    #if !FABLE_COMPILER
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
-
+    #endif
+    
     static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
+    #if !FABLE_COMPILER
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
 
     static member inline Traverse (t:Map<_,_>  , f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
@@ -75,15 +82,17 @@ type Traverse =
        let cons x y = Array.append [|x|] y
        let cons_f x ys = Map.Invoke cons (f x) <*> ys
        Array.foldBack cons_f t (result [||])
+    #endif
 
     static member inline Invoke f t =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
         let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'R>, f) : 'R
         call (Unchecked.defaultof<Traverse>, t, f)
-    
+
 
 type Sequence with
 
+    #if !FABLE_COMPILER
     static member inline Sequence (t:_ seq         , [<Optional>]_output: 'R, [<Optional>]_impl:Default4 ) : 'R =
                         let cons x y = seq {yield x; yield! y}
                         let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) x <*> ys
@@ -94,15 +103,24 @@ type Sequence with
     static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, function (Choice2Of2 _) -> true | _ -> false) : Choice<seq<'t>, 'e>
     static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty)                                 : list<seq<'t>>
     static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty)                                : seq<'t> []
+    #endif
+
     static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) = Async.Sequence t                                                               : Async<seq<'t>>
 
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default2) = Traverse.InvokeOnInstance id t                                                        : 'R
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                                           : 'R
+
+    #if !FABLE_COMPILER
     static member inline Sequence (t: option<_>         , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with Some x -> Map.Invoke Some x | _ -> result None                           : 'R
     static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = let cons_f x ys = Map.Invoke List.cons x <*> ys in List.foldBack cons_f t (result []) : 'R
     static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = let cons x y = Array.append [|x|] y in let cons_f x ys = Map.Invoke cons x <*> ys in Array.foldBack cons_f t (result [||]) : 'R
+    #endif
+ 
     static member inline Sequence (t: Id<_>             , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Traverse.Invoke id t                                                                  : 'R
+ 
+    #if !FABLE_COMPILER
     static member inline Sequence (t: _ ResizeArray     , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Traverse.Invoke id t                                                                  : 'R
+    #endif
 
     static member inline Invoke (t: '``Traversable<'Applicative<'T>>``) : '``Applicative<'Traversable<'T>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member Sequence : _*_*_ -> _) b, c, a)

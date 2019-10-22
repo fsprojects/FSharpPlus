@@ -126,10 +126,12 @@ module Lens =
     let inline _Some x = (prism Some <| option Ok (Error None)) x
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
 
+    #if !FABLE_COMPILER
     // Traversal
     let inline _all ref f s =
         let update old = if old = ref then f old else Return.InvokeOnInstance old
         traverse update s
+    #endif
 
     // functions
     let inline to' k = dimap k (Contramap.InvokeOnInstance k)

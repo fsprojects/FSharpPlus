@@ -43,8 +43,11 @@ type Cont<'r,'t> with
 
     static member inline Lift (m: '``Monad<'T>``) = Cont ((>>=) m) : ContT<'``Monad<'R>``,'T>    
 
-    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
 
+    #if !FABLE_COMPILER
+    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
+    #endif
+    
     static member inline get_Ask () = lift ask             : '``ContT<'MonadReader<'R,'T>,'R>``
     static member inline Local (Cont m, f: 'R1 -> 'R2)     : ContT<_,'``MonadReader<R1,'T>,'U``> =
         Cont <| fun c -> (ask >>= (fun r -> local f (m (local (konst r) << c))))
