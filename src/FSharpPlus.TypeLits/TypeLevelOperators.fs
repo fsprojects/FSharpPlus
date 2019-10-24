@@ -26,15 +26,19 @@ type TypeError<'a>() =
   static member inline RuntimeValue _ = failwithf "type error: %A" typeof<'a>
 
 type TryWithImpl =
-  static member inline TryWith (x: 'a when 'a :> ITypeLiteral, _) = x
-  static member inline TryWith (x: 'a when 'a :> TypeError<_>, y) = y
-  static member inline Invoke (x: ^X, y) =
-    let inline call_2 (a: ^a, b: ^b) = ((^a or ^b): (static member TryWith:_*_->_) x,y)
+  static member inline TryWith (x: 'a when 'a :> ITypeLiteral, _, f) = f x
+  static member inline TryWith (_x: 'a when 'a :> TypeError<_>, y, _) = y
+  static member inline Invoke (x: ^X, y, f) =
+    let inline call_2 (_a: ^a, _b: ^b) = ((^a or ^b): (static member TryWith:_*_*_->_) x,y,f)
     let inline call (a: 'a, b: 'b) = call_2 (a, b)
     call (Unchecked.defaultof<TryWithImpl>, x)
 
 /// Marker interface for getting the corresponding type-level error class of a type-level literal.
 type IErrorLiftable<'a> = interface end
+
+[<AutoOpen>]
+module TypeOp =
+  let inline ( =^ ) (x: ^X) y = (^X: (static member ( =^ ):_*_->_) x,y)
 
 module TypeLevelOperators =
   /// Gets a singleton value of given type-level literal.
@@ -45,4 +49,7 @@ module TypeLevelOperators =
   let inline RuntimeValue (x: ^X) = (^X: (static member RuntimeValue: ^X -> _) x)
 
   /// If `x` is a type-level error, returns `onError`. Otherwise, returns `x`.
-  let inline TryWith (x: ^X) onError = TryWithImpl.Invoke (x, onError)
+  let inline TryWith (x: ^X) onError = TryWithImpl.Invoke (x, onError, id)
+  
+  /// If `x` is a type-level error, returns `onError`. Otherwise, returns `f x`.
+  let inline TryWithCont (x: ^X) (f: _ -> _) onError = TryWithImpl.Invoke (x, onError, f)
