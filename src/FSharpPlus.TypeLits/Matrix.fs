@@ -131,14 +131,34 @@ module Matrix =
   let map (f: 'a -> 'b) (m: Matrix<'a, 'm, 'n>) : Matrix<'b, 'm, 'n> =
     { Items = Array2D.map f m.Items }
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let map2 (f: 'a -> 'b -> 'c) (m1: Matrix<'a, 'm, 'n>) (m2: Matrix<'b, 'm, 'n>) : Matrix<'c, 'm, 'n> =
+    { Items =
+        Array2D.init (Array2D.length1 m1.Items) (Array2D.length2 m1.Items)
+          (fun i j -> f m1.Items.[i, j] m2.Items.[i, j] ) }
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let mapi (f: int -> int -> 'a -> 'b) (m: Matrix<'a, 'm, 'n>) : Matrix<'b, 'm, 'n> =
     { Items = Array2D.mapi (fun i j -> f i j) m.Items }
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let mapi2 (f: int -> int -> 'a -> 'b -> 'c) (m1: Matrix<'a, 'm, 'n>) (m2: Matrix<'b, 'm, 'n>) : Matrix<'c, 'm, 'n> =
+    { Items =
+        Array2D.init (Array2D.length1 m1.Items) (Array2D.length2 m1.Items)
+          (fun i j -> f i j m1.Items.[i, j] m2.Items.[i, j] ) }
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let iter (f: 'a -> unit) (m: Matrix<'a, 'm, 'n>) : unit =
     Array2D.iter f m.Items
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let iter2 (f: 'a -> 'b -> unit) (m1: Matrix<'a, 'm, 'n>) (m2: Matrix<'b, 'm, 'n>) : unit =
+    for i = 0 to Array2D.length1 m1.Items - 1 do
+      for j = 0 to Array2D.length2 m1.Items - 1 do
+        f m1.Items.[i, j] m2.Items.[i, j]
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let iteri (f: int -> int -> 'a -> unit) (m: Matrix<'a, 'm, 'n>) : unit =
     Array2D.iteri (fun i j -> f i j) m.Items
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let iteri2 (f: int -> int -> 'a -> 'b -> unit) (m1: Matrix<'a, 'm, 'n>) (m2: Matrix<'b, 'm, 'n>) : unit =
+    for i = 0 to Array2D.length1 m1.Items - 1 do
+      for j = 0 to Array2D.length2 m1.Items - 1 do
+        f i j m1.Items.[i, j] m2.Items.[i, j]
 
   let inline length1 (_: Matrix<'a, 'm, 'n>) : 'm = Singleton<'m>
   let inline length2 (_: Matrix<'a, 'm, 'n>) : 'n = Singleton<'n>
@@ -166,8 +186,15 @@ module Matrix =
         ys.[i, j] <- xs.[i].[j]
     unsafeCreate rowLength columnLength ys
 
+  let inline zeroCreate (m: 'm) (n: 'n) : Matrix<'a, 'm, 'n> =
+    Array2D.zeroCreate (RuntimeValue m) (RuntimeValue n) |> unsafeCreate m n
+  let inline replicate (m: 'm) (n: 'n) (value: 'a) : Matrix<'a, 'm, 'n> =
+    Array2D.create (RuntimeValue m) (RuntimeValue n) value |> unsafeCreate m n
+  let inline init (m: 'm) (n: 'n) (f: int -> int -> 'a) : Matrix<'a, 'm, 'n> =
+    Array2D.init (RuntimeValue m) (RuntimeValue n) f |> unsafeCreate m n
+
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
-  let unsafeGet (i, j) (m: Matrix<'a, 'm, 'n>) = m.Items.[i,j]
+  let unsafeGet i j (m: Matrix<'a, 'm, 'n>) = m.Items.[i,j]
 
   let inline ofVectors (xs: Vector<Vector<'a, 'm>, 'n>) : Matrix<'a, 'm, 'n> =
     let m = Singleton<'m> |> RuntimeValue
@@ -183,7 +210,7 @@ module Matrix =
     let n = Singleton<'n>
     TypeBool.Assert (row <^ m)
     TypeBool.Assert (column <^ n)
-    unsafeGet (RuntimeValue row, RuntimeValue column) mat
+    unsafeGet (RuntimeValue row) (RuntimeValue column) mat
 
   let transpose (mtx: Matrix<'t, 'm, 'n>) : Matrix<'t, 'n, 'm> =
     let m = mtx |> length1'
@@ -194,9 +221,15 @@ module Matrix =
         ys.[j, i] <- mtx.Items.[i, j]
     { Items = ys }
 
-  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
-  let matrixProduct (m1: Matrix<'t, 'm, 'n>) (m2: Matrix<'t, 'n, 'p>) : Matrix<'t, 'm, 'p> =
-    { Items = failwith "TODO" }
+  let inline matrixProduct (m1: Matrix<'t, 'm, 'n>) (m2: Matrix<'t, 'n, 'p>) : Matrix<'t, 'm, 'p> =
+    let m, n, p = Singleton<'m>, Singleton<'n>, Singleton<'p>
+    let xs =
+      Array2D.init (RuntimeValue m) (RuntimeValue p) (fun m p ->
+        [ 0 .. RuntimeValue n - 1 ]
+        |> List.map (fun n -> (unsafeGet m n m1) * (unsafeGet n p m2))
+        |> List.sum
+      )
+    unsafeCreate m p xs
 
   let inline tensorProduct (m1: Matrix<'t, ^m1, ^n1>) (m2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 * ^m2``, ^``n1 * ^n2``> =
     let m1m2 = Singleton< ^m1 > *^ Singleton< ^m2 >
@@ -391,16 +424,30 @@ module Vector =
   let toRowVector (v: Vector<'a, 'n>) : Matrix<'a, S<Z>, 'n> = { Items = array2D [ v.Items ] }
   let toColumnVector (v: Vector<'a, 'n>) : Matrix<'a, 'n, S<Z>> = { Items = array2D [ for x in v.Items -> [x] ] }
 
+type Matrix<'Item, 'Row, 'Column> with
+  static member inline Item (mtx: Matrix<'a, 'm, 'n>, (m, n)) = Matrix.get m n mtx
+  static member inline Map  (mtx: Matrix<'a, 'm, 'n>, f: 'a -> 'b) = Matrix.map f mtx
+  static member inline Return (x: 'x) : Matrix<'x, 'm, 'n> = Matrix.replicate Singleton Singleton x
+  static member inline ( <*> ) (f: Matrix<'x -> 'y, 'm, 'n>, x: Matrix<'x, 'm, 'n>) = Matrix.map2 id f x
+  static member inline get_Zero () : Matrix<'a, 'm, 'n> = Matrix.zeroCreate Singleton Singleton
+  static member inline ( + ) (m1, m2) = Matrix.map2 (+) m1 m2
+  static member inline ( - ) (m1, m2) = Matrix.map2 (-) m1 m2
+  static member inline ( * ) (m1, m2) = Matrix.map2 (*) m1 m2
+  static member inline ( / ) (m1, m2) = Matrix.map2 (/) m1 m2
+  static member inline ( * ) (m, s) = Matrix.map ((*) s) m
+  static member inline ( / ) (m, s) = Matrix.map (fun x -> x / s) m
+  static member inline ( ~- ) m = Matrix.map ((~-)) m
+
 type Vector<'Item, 'Length> with
   static member inline Item (v: Vector<'a, 'n>, i) = Vector.get i v
   static member inline Map (v: Vector<'a, 'n>, f: 'a -> 'b) : Vector<'b, 'n> = Vector.map f v
   static member inline Return (x: 'x) : Vector<'x, 'n> = Vector.replicate Singleton x
   static member inline ( <*> ) (f: Vector<'x -> 'y, 'n>, x: Vector<'x, 'n>) : Vector<'y, 'n> = Vector.apply f x
   static member inline get_Zero () : Vector<'x, 'n> = Vector.zeroCreate Singleton
-  static member inline ( + ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (fun x y -> x + y) v1 v2
-  static member inline ( - ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (fun x y -> x - y) v1 v2
-  static member inline ( * ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (fun x y -> x * y) v1 v2
-  static member inline ( / ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (fun x y -> x / y) v1 v2
+  static member inline ( + ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (+) v1 v2
+  static member inline ( - ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (-) v1 v2
+  static member inline ( * ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (*) v1 v2
+  static member inline ( / ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (/) v1 v2
   static member inline ( * ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x * s) v
   static member inline ( / ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x / s) v
   static member inline ( ~- ) (v: Vector<_, 'n>) = v |> Vector.map ((~-))

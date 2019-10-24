@@ -134,6 +134,7 @@ module private NatTests =
   let inline f6 x = two *^ x
   Assert (f6 Z =^ Z); Assert (f6 (S Z) =^ two); Assert (f6 two =^ S (S two))
 
+  (*
   let inline f71  x = x =^ two
   Assert (Not (f71 Z)); Assert (Not (f71 (S Z))); Assert (f71 two); Assert (Not (f71 (S two)))
   let inline f72 x = x =^ Z
@@ -196,4 +197,5 @@ module private NatTests =
   Assert (fd (S Z) =^ Z)
   Assert (fd two =^ Z)
   Assert (fd (S two) =^ two)
+  *)
 #endif
