@@ -22,8 +22,27 @@ type IErrorLiftable<'a> = interface end
 /// For every type (kind) of type-level literals, the corresponding type-error class should be created
 /// and it should provide all the methods the literals have to offer.
 ///
-/// TypeError should not implement `ITypeLits` but should provide `Singleton` and `RuntimeValue`.
+/// TypeError should not implement `ITypeLiteral` but should provide `Singleton` and `RuntimeValue`.
 /// This is important for making type-level error-handling work correctly.
+///
+/// TypeError should implement the same `IErrorLiftable<TypeErrorLifter>` as the corresponding kind do.
+/// For example, if `TypeFoo` implements `IErrorLiftable<FooTypeErrorLifter>`, `FooTypeError` should also implement it.
+/// So, the implementation will look like below:
+///
+///     type FooTypeError<'a> =
+///       inherit TypeError<'a>
+///       interface IErrorLiftable<FooTypeErrorLifter>
+///       (* members related to Foo *)
+///
+///     and AggregatedFooTypeError<'a>() =
+///       inherit FooTypeError<AggregatedFooTypeError<'a>>()
+///    
+///     and FooTypeErrorLifter =
+///       static member inline Lift (_: 'Error) = Unchecked.defaultof<AggregatedFooTypeError<'Error>>
+///
+///     type ITypeFoo =
+///       inherit ITypeLiteral
+///       inherit IErrorLiftable<FooTypeErrorLifter>
 type TypeError<'a>() =
   static member inline Singleton _ = Unchecked.defaultof<'a>
   static member inline RuntimeValue _ = failwithf "type error: %A" typeof<'a>
