@@ -3,6 +3,7 @@ namespace FSharpPlus.TypeLits
 
 type BoolTypeError<'a>() =
   inherit TypeError<'a>()
+  interface IErrorLiftable<BoolTypeErrorLifter>
   static member inline ( &&^ ) (_, _) = Unchecked.defaultof<'a>
   static member inline ( ||^ ) (_, _) = Unchecked.defaultof<'a>
   static member inline ( =^ ) (_, _) = Unchecked.defaultof<'a>
@@ -10,10 +11,10 @@ type BoolTypeError<'a>() =
   static member inline IfThenElse (_, _, _: 'result when 'result :> IErrorLiftable< ^Lifter >) =
     (^Lifter: (static member Lift: _ -> _) Unchecked.defaultof<'a>)
 
-type AggregatedBoolTypeError<'a>() =
+and AggregatedBoolTypeError<'a>() =
   inherit BoolTypeError<AggregatedBoolTypeError<'a>>()
 
-type BoolTypeErrorLifter =
+and BoolTypeErrorLifter =
   static member inline Lift (_: 'Error) = Unchecked.defaultof<AggregatedBoolTypeError<'Error>>
 
 type ITypeBool =

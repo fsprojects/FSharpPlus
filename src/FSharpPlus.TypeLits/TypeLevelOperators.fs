@@ -14,6 +14,9 @@ namespace FSharpPlus.TypeLits
 /// the method should return value-level boolean `true`.
 type ITypeLiteral = interface end
 
+/// Marker interface for getting the corresponding type-level error class of a type-level literal.
+type IErrorLiftable<'a> = interface end
+
 /// Base class for type-level errors.
 ///
 /// For every type (kind) of type-level literals, the corresponding type-error class should be created
@@ -32,9 +35,6 @@ type TryWithImpl =
     let inline call_2 (_a: ^a, _b: ^b) = ((^a or ^b): (static member TryWith:_*_*_->_) x,y,f)
     let inline call (a: 'a, b: 'b) = call_2 (a, b)
     call (Unchecked.defaultof<TryWithImpl>, x)
-
-/// Marker interface for getting the corresponding type-level error class of a type-level literal.
-type IErrorLiftable<'a> = interface end
 
 [<AutoOpen>]
 module TypeOp =

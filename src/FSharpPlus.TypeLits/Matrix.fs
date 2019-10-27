@@ -254,6 +254,12 @@ module Vector =
     let len = m -^ n
     TypeBool.Assert (len >^ Z)
     v |> toArray |> Array.skip (RuntimeValue n) |> unsafeCreate len
+
+  let inline slice (startIndex: ^``i when ^i < ^n``) (endIndex: ^``j when ^i <= ^j < ^n``) (v: Vector<'a, ^n>) : Vector<'a, S< ^``j - ^i`` >> =
+    TypeBool.Assert (startIndex <=^ endIndex)
+    TypeBool.Assert (endIndex <^ Singleton< ^n >)
+    let len = S (endIndex -^ startIndex)
+    (toArray v).[RuntimeValue startIndex .. RuntimeValue endIndex] |> unsafeCreate len
     
   let inline allPairs (v1: Vector<'a, 'm>) (v2: Vector<'b, 'n>) : Vector<'a*'b, '``m * 'n``> =
     let len = Singleton<'m> *^ Singleton<'n>

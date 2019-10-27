@@ -3,6 +3,7 @@ namespace FSharpPlus.TypeLits
 
 type NatTypeError<'a>() =
   inherit TypeError<'a>()
+  interface IErrorLiftable<NatTypeErrorLifter>
   static member inline Succ _ = Unchecked.defaultof<'a>
   static member inline Pred _ = Unchecked.defaultof<'a>
   static member inline IsZero = Unchecked.defaultof<AggregatedBoolTypeError<'a>>
@@ -17,16 +18,16 @@ type NatTypeError<'a>() =
   static member inline Match (_, _, _: _ -> 'result when 'result :> IErrorLiftable< ^Lifter >) =
     (^Lifter: (static member Lift: _ -> _) Unchecked.defaultof<'a>)
 
-type AggregatedNatTypeError<'a>() =
+and AggregatedNatTypeError<'a>() =
   inherit NatTypeError<AggregatedNatTypeError<'a>>()
+
+and NatTypeErrorLifter =
+  static member inline Lift (_: 'Error) = Unchecked.defaultof<AggregatedNatTypeError<'Error>>
 
 type OverflowError() =
   inherit NatTypeError<OverflowError>()
 type DividedByZeroError() =
   inherit NatTypeError<DividedByZeroError>()
-
-type NatTypeErrorLifter =
-  static member inline Lift (_: 'Error) = Unchecked.defaultof<AggregatedNatTypeError<'Error>>
 
 type ITypeNat =
   inherit ITypeLiteral
@@ -46,22 +47,26 @@ type S< 'n > = S of 'n with
   static member inline MultImpl (S x: S< ^X >, y, sum: ^Sum) =
     (^X: (static member MultImpl:_*_*_->_) x, y, (^Sum: (static member ( +^ ):_*_->_) sum, y))
   static member inline ( =^ ) (S x: S< ^X >, y: ^Y) =
-    TypeLevelOperators.TryWith (^X: (static member (=^):_*_->_)x,(^Y:(static member Pred:_->_)y)) False
+    TypeBool.IfThenElse (^Y: (static member IsZero: _) ())
+      False
+      (^X: (static member (=^):_*_->_)x,(^Y:(static member Pred:_->_)y))
   static member inline ( <^ ) (S x: S< ^X >, y: ^Y) =
-    TypeLevelOperators.TryWith (^X: (static member (<^):_*_->_)x,(^Y:(static member Pred:_->_)y)) False
+    TypeBool.IfThenElse (^Y: (static member IsZero: _) ())
+      False
+      (^X: (static member (<^):_*_->_)x,(^Y:(static member Pred:_->_)y))
   static member inline ( <=^ ) (S x: S< ^X >, y: ^Y) =
     TypeBool.IfThenElse (^Y: (static member IsZero: _) ())
       False
       (^X: (static member (<=^):_*_->_)x,(^Y:(static member Pred:_->_)y))
   static member inline ( /^ ) (x, y) =
     TypeBool.IfThenElse (x <^ y) Z (
-      let x': ^X = x -^ y
-      S (^X: (static member ( /^ ): _*_->_) x', y)
+      let x': ^X' = x -^ y
+      S (^X': (static member ( /^ ): _*_->_) x', y)
     )
   static member inline ( %^ ) (x, y) =
     TypeBool.IfThenElse (x <^ y) x (
-      let x': ^X = x -^ y
-      (^X: (static member ( %^ ): _*_->_) x', y)
+      let x': ^X' = x -^ y
+      (^X': (static member ( %^ ): _*_->_) x', y)
     )
   static member inline Match (x: S<_>, _caseZ, caseSn) = caseSn x
 
@@ -100,17 +105,17 @@ module TypeNat =
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =
     (^Nat: (static member Match: _*_*_->_) n, caseZ, caseSn)
 
-  type N0 = Z
-  type N1 = S<N0>
-  type N2 = S<N1>
-  type N3 = S<N2>
-  type N4 = S<N3>
-  type N5 = S<N4>
-  type N6 = S<N5>
-  type N7 = S<N6>
-  type N8 = S<N7>
-  type N9 = S<N8>
-  type N10 = S<N9>
+  type ``0`` = Z
+  type ``1`` = S<``0``>
+  type ``2`` = S<``1``>
+  type ``3`` = S<``2``>
+  type ``4`` = S<``3``>
+  type ``5`` = S<``4``>
+  type ``6`` = S<``5``>
+  type ``7`` = S<``6``>
+  type ``8`` = S<``7``>
+  type ``9`` = S<``8``>
+  type ``10`` = S<``9``>
 
 #if DEBUG
 module private NatTests =
@@ -134,7 +139,6 @@ module private NatTests =
   let inline f6 x = two *^ x
   Assert (f6 Z =^ Z); Assert (f6 (S Z) =^ two); Assert (f6 two =^ S (S two))
 
-  (*
   let inline f71  x = x =^ two
   Assert (Not (f71 Z)); Assert (Not (f71 (S Z))); Assert (f71 two); Assert (Not (f71 (S two)))
   let inline f72 x = x =^ Z
@@ -197,5 +201,4 @@ module private NatTests =
   Assert (fd (S Z) =^ Z)
   Assert (fd two =^ Z)
   Assert (fd (S two) =^ two)
-  *)
 #endif
