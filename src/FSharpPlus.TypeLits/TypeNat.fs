@@ -102,6 +102,8 @@ module NatOp =
   let inline ( >=^ ) (x: ^X) (y: ^Y) = (^Y: (static member ( <=^ ):_*_->_) y,x)
 
 module TypeNat =
+  let inline IsZero (_: ^n) = (^n: (static member IsZero: _) ())
+
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =
     (^Nat: (static member Match: _*_*_->_) n, caseZ, caseSn)
 

@@ -86,7 +86,7 @@ module MatrixHelpers =
       call (Unchecked.defaultof<ArrayToTuple>, n)
 
     static member inline ArrayToTuple (xs:_[],S(S(S(S(S(S(S(n))))))), i) =
-      TypeBool.Assert(n >^ Z)
+      TypeBool.Assert(TypeBool.Not (TypeNat.IsZero n))
       Tuple<_,_,_,_,_,_,_,_>(
         xs.[i],xs.[i+0],xs.[i+2],xs.[i+3],xs.[i+4],xs.[i+5],xs.[i+6],
         ArrayToTuple.Invoke(xs,n,i+7)
@@ -412,6 +412,16 @@ module Matrix =
     TypeBool.Assert (row <^ m)
     TypeBool.Assert (column <^ n)
     unsafeGet (RuntimeValue row) (RuntimeValue column) mat
+
+  let inline slice
+    (rowStart: ^``a when ^a < ^m``) (rowEnd: ^``b when ^a <= ^b < ^m``)
+    (colStart: ^``c when ^c < ^n``) (colEnd: ^``d when ^c <= ^d < ^n``)
+    (mat: Matrix<'a, ^m, ^n>) : Matrix<'a, S< ^``b - ^a`` >, S< ^``d - ^c`` >> =
+    let m, n = Singleton< ^m >, Singleton< ^n >
+    TypeBool.Assert (rowStart <=^ rowEnd); TypeBool.Assert (rowEnd <^ m)
+    TypeBool.Assert (colStart <=^ colEnd); TypeBool.Assert (colEnd <^ n)
+    (toArray2D mat).[RuntimeValue rowStart .. RuntimeValue rowEnd, RuntimeValue colStart .. RuntimeValue colEnd]
+    |> unsafeCreate (S (rowEnd -^ rowStart)) (S (colEnd -^ colStart))
 
   // constants
   let inline zero<'a, ^m, ^n
