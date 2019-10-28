@@ -442,6 +442,12 @@ module Matrix =
       else LanguagePrimitives.GenericZero
     )
 
+  let diagonal (mtx: Matrix<'a, 'n, 'n>) : Vector<'a, 'n> =
+    let n' = length1' mtx
+    { Items = Array.init n' (fun i -> unsafeGet i i mtx) }
+
+  let inline trace (mtx: Matrix<'a, 'n, 'n>) = diagonal mtx |> Vector.toArray |> Array.sum
+
   let inline rowVec  (i: ^``i when ^i < ^m``) (mtx: Matrix<'a, 'm, 'n>) : Vector<'a, 'n> =
     TypeBool.Assert (i <^ Singleton<'m>)
     Vector.init Singleton<'n> (fun j -> mtx |> unsafeGet (RuntimeValue i) j)
@@ -508,6 +514,46 @@ module Matrix =
         |> List.sum
       )
     unsafeCreate m p xs
+
+  /// returns `(L - E + U, P, swapCount)`. `P ** A = L ** U`.
+  let inline decomposeLU (mtx: Matrix<'a, 'n, 'n>) : Matrix<'a, 'n, 'n> * _ * int =
+    let n, n' = length1 mtx, length1' mtx
+    let zero, one = LanguagePrimitives.GenericZero<'a>, LanguagePrimitives.GenericOne<'a>
+    let swapRows k l (xs: _[,]) =
+      let tmp = xs.[k, 0..]
+      xs.[k, 0..] <- xs.[l, 0..]
+      xs.[l, 0..] <- tmp
+
+    let xs = mtx |> toArray2D |> Array2D.copy
+    let pivot = Array2D.init n' n' (fun i j -> if i = j then one else zero)
+    let mutable swapCount = 0
+
+    for i = 0 to n' - 2 do
+      let rec go k max row =
+        if k >= n' then row
+        else
+          let x = abs xs.[k, i]
+          if x > max then go (k+1) x k
+          else go (k+1) max row
+      let row = go i zero i
+      if row <> i then
+        swapCount <- swapCount + 1
+        swapRows i row xs
+        swapRows i row pivot
+      for j = i + 1 to n' - 1 do
+        xs.[j,i] <- xs.[j,i] / xs.[i,i]
+        for k = i + 1 to n' - 1 do
+          xs.[j,k] <- xs.[j,k] - xs.[j,i] * xs.[i,k]
+
+    unsafeCreate n n xs, unsafeCreate n n pivot, swapCount
+
+  let inline det (mtx: Matrix<'a, 'n, 'n>) =
+    let n' = length1' mtx
+    let one = LanguagePrimitives.GenericOne<'a>
+    let lu, _, s = decomposeLU mtx
+    let detLU =
+      { 0..n'-1 } |> Seq.map (fun i -> unsafeGet i i lu) |> Seq.fold (*) one
+    pown (-one) s * detLU 
 
   let inline tensorProduct (m1: Matrix<'t, ^m1, ^n1>) (m2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 * ^m2``, ^``n1 * ^n2``> =
     let m1m2 = Singleton< ^m1 > *^ Singleton< ^m2 >
