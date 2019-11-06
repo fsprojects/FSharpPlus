@@ -100,6 +100,23 @@ module MatrixHelpers =
     static member ArrayToTuple (xs:_[], S (S (S (S (S (S Z))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5])
     static member ArrayToTuple (xs:_[], S (S (S (S (S (S (S Z)))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5], xs.[i+6])
 
+  let inline foldiRange initValue startIndex endIndex f =
+    let mutable result = initValue
+    for i = startIndex to endIndex do
+      result <- f i result
+    result
+  
+  let inline solveImpl (lu:'a[,]) (b:'a[]) =
+    let n = Array2D.length1 lu
+    let x = Array.copy b
+    for i = 1 to n - 1 do
+      x.[i] <- foldiRange x.[i] 0 (i-1) (fun j sum -> sum - lu.[i, j] * x.[j])
+    x.[n-1] <- x.[n-1] / lu.[n-1, n-1]
+    for i in n-2 .. -1 .. 0 do
+      let sum = foldiRange x.[i] (i+1) (n-1) (fun j sum -> sum - lu.[i, j] * x.[j])
+      x.[i] <- sum / lu.[i, i]
+    x
+
 open MatrixHelpers
 
 // Items : 'Item[ 'Column, 'Row ]
@@ -443,8 +460,7 @@ module Matrix =
     )
 
   let diagonal (mtx: Matrix<'a, 'n, 'n>) : Vector<'a, 'n> =
-    let n' = length1' mtx
-    { Items = Array.init n' (fun i -> unsafeGet i i mtx) }
+    { Items = Array.init (length1' mtx) (fun i -> mtx.Items.[i,i]) }
 
   let inline trace (mtx: Matrix<'a, 'n, 'n>) = diagonal mtx |> Vector.toArray |> Array.sum
 
@@ -462,70 +478,49 @@ module Matrix =
     init Singleton<'m> (S Z) (fun i _ -> mtx |> unsafeGet i (RuntimeValue j))
 
   let inline ofRows (xs: Vector<Vector<'a, 'n>, 'm>) : Matrix<'a, 'm, 'n> =
-    let m = Singleton<'m> |> RuntimeValue
-    let n = Singleton<'n> |> RuntimeValue
-    let ys = Array2D.zeroCreate m n
-    for i = 0 to m - 1 do
-      for j = 0 to n - 1 do
-        ys.[i, j] <- xs.UnsafeGet(i).UnsafeGet(j)
-    unsafeCreate Singleton Singleton ys
+    init Singleton<'m> Singleton<'n> (fun i j -> xs.UnsafeGet(i).UnsafeGet(j))
   let inline toRows (mtx: Matrix<'a, 'm, 'n>) : Vector<Vector<'a, 'n>, 'm> =
-    let m, n = Singleton<'m>, Singleton<'n>
-    Vector.unsafeCreate m [|
-      for j = 0 to RuntimeValue m - 1 do
-        yield Vector.unsafeCreate n [|
-          for i = 0 to RuntimeValue n - 1 do
-            yield mtx |> unsafeGet i j
-        |]
-    |]
+    let m,  n  = Singleton<'m>, Singleton<'n>
+    Vector.init m (fun i ->
+      Vector.init n (fun j ->
+        mtx |> unsafeGet i j
+      )
+    )
   let inline ofCols (xs: Vector<Vector<'a, 'm>, 'n>) : Matrix<'a, 'm, 'n> =
-    let m = Singleton<'m> |> RuntimeValue
-    let n = Singleton<'n> |> RuntimeValue
-    let ys = Array2D.zeroCreate m n
-    for i = 0 to m - 1 do
-      for j = 0 to n - 1 do
-        ys.[i, j] <- xs.UnsafeGet(j).UnsafeGet(i)
-    unsafeCreate Singleton Singleton ys
+    init Singleton<'m> Singleton<'n> (fun i j -> xs.UnsafeGet(j).UnsafeGet(i))
   let inline toCols (mtx: Matrix<'a, 'm, 'n>) : Vector<Vector<'a, 'm>, 'n> =
-    let m, n = Singleton<'m>, Singleton<'n>
-    Vector.unsafeCreate n [|
-      for j = 0 to RuntimeValue n - 1 do
-        yield Vector.unsafeCreate m [|
-          for i = 0 to RuntimeValue m - 1 do
-            yield mtx |> unsafeGet i j
-        |]
-    |]
+    let m,  n  = Singleton<'m>, Singleton<'n>
+    Vector.init n (fun j ->
+      Vector.init m (fun i ->
+        mtx |> unsafeGet i j
+      )
+    )
 
   let transpose (mtx: Matrix<'t, 'm, 'n>) : Matrix<'t, 'n, 'm> =
     let m = mtx |> length1'
     let n = mtx |> length2'
-    let ys = Array2D.zeroCreate n m
-    for i = 0 to m - 1 do
-      for j = 0 to n - 1 do
-        ys.[j, i] <- mtx.Items.[i, j]
+    let ys = Array2D.init n m (fun j i -> mtx.Items.[i, j])
     { Items = ys }
 
   let inline matrixProduct (m1: Matrix<'t, 'm, 'n>) (m2: Matrix<'t, 'n, 'p>) : Matrix<'t, 'm, 'p> =
-    let m, n, p = Singleton<'m>, Singleton<'n>, Singleton<'p>
-    let xs =
-      Array2D.init (RuntimeValue m) (RuntimeValue p) (fun m p ->
-        [ 0 .. RuntimeValue n - 1 ]
-        |> List.map (fun n -> (unsafeGet m n m1) * (unsafeGet n p m2))
-        |> List.sum
+    let n' = length2' m1
+    Array2D.init (length1' m1) (length2' m2) (fun m p ->
+      foldiRange LanguagePrimitives.GenericZero<'t> 0 (n' - 1) (fun n result ->
+        result + unsafeGet m n m1 * unsafeGet n p m2
       )
-    unsafeCreate m p xs
+    ) |> unsafeCreate Singleton Singleton
 
   /// returns `(L - E + U, P, swapCount)`. `P ** A = L ** U`.
   let inline decomposeLU (mtx: Matrix<'a, 'n, 'n>) : Matrix<'a, 'n, 'n> * _ * int =
     let n, n' = length1 mtx, length1' mtx
-    let zero, one = LanguagePrimitives.GenericZero<'a>, LanguagePrimitives.GenericOne<'a>
-    let swapRows k l (xs: _[,]) =
+    let zero = LanguagePrimitives.GenericZero<'a>
+    let inline swapRows k l (xs: _[,]) =
       let tmp = xs.[k, 0..]
       xs.[k, 0..] <- xs.[l, 0..]
       xs.[l, 0..] <- tmp
 
     let xs = mtx |> toArray2D |> Array2D.copy
-    let pivot = Array2D.init n' n' (fun i j -> if i = j then one else zero)
+    let pivot = Array.init n' id
     let mutable swapCount = 0
 
     for i = 0 to n' - 2 do
@@ -539,31 +534,63 @@ module Matrix =
       if row <> i then
         swapCount <- swapCount + 1
         swapRows i row xs
-        swapRows i row pivot
+        let tmp = pivot.[row]
+        pivot.[row] <- pivot.[i]
+        pivot.[i] <- tmp
       for j = i + 1 to n' - 1 do
         xs.[j,i] <- xs.[j,i] / xs.[i,i]
         for k = i + 1 to n' - 1 do
           xs.[j,k] <- xs.[j,k] - xs.[j,i] * xs.[i,k]
 
-    unsafeCreate n n xs, unsafeCreate n n pivot, swapCount
+    unsafeCreate n n xs, pivot, swapCount
 
   let inline det (mtx: Matrix<'a, 'n, 'n>) =
     let n' = length1' mtx
     let one = LanguagePrimitives.GenericOne<'a>
     let lu, _, s = decomposeLU mtx
-    let detLU =
-      { 0..n'-1 } |> Seq.map (fun i -> unsafeGet i i lu) |> Seq.fold (*) one
+    let detLU = foldiRange one 0 (n'-1) (fun i result -> result * unsafeGet i i lu)
     pown (-one) s * detLU 
 
-  let inline tensorProduct (m1: Matrix<'t, ^m1, ^n1>) (m2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 * ^m2``, ^``n1 * ^n2``> =
-    let m1m2 = Singleton< ^m1 > *^ Singleton< ^m2 >
-    let n1n2 = Singleton< ^n1 > *^ Singleton< ^n2 >
-    unsafeCreate m1m2 n1n2 <| failwith "TODO"
+  let inline inverse (mtx: Matrix<'t, 'n, 'n>) =
+    let lu, perm, _ = decomposeLU mtx
+    let n, n' = length1 mtx, length1' mtx
+    let b = Array.zeroCreate n'
+    let res = Array2D.zeroCreate n' n'
+    let lu' = toArray2D lu
+    for i = 0 to n' - 1 do
+      for j = 0 to n' - 1 do
+        b.[j] <-
+          if i = perm.[j] then
+            LanguagePrimitives.GenericOne<'t>
+          else
+            LanguagePrimitives.GenericZero<'t>
+      res.[0.., i] <- solveImpl lu' b
+    unsafeCreate n n res
 
-  let inline directSum (m1: Matrix<'t, ^m1, ^n1>) (m2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 + ^m2``, ^``n1 + ^n2``> =
-    let m1m2 = Singleton< ^m1 > +^ Singleton< ^m2 >
-    let n1n2 = Singleton< ^n1 > +^ Singleton< ^n2 >
-    unsafeCreate m1m2 n1n2 <| failwith "TODO"
+  let inline kroneckerProduct (mtx1: Matrix<'t, ^m1, ^n1>) (mtx2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 * ^m2``, ^``n1 * ^n2``> =
+    let m1,  n1,  m2,  n2  = length1  mtx1, length2  mtx1, length1  mtx2, length2  mtx2
+    let m1', n1', m2', n2' = length1' mtx1, length2' mtx1, length1' mtx2, length2' mtx2
+    let m1m2, n1n2 = m1 *^ m2, n1 *^ n2
+    Array2D.init (m1' * m2') (n1' * n2') (fun i1i2 j1j2 ->
+      let i1, i2 = i1i2 / m2', i1i2 % m2'
+      let j1, j2 = j1j2 / n2', j1j2 % n2'
+      unsafeGet i1 j1 mtx1 * unsafeGet i2 j2 mtx2
+    ) |> unsafeCreate m1m2 n1n2
+
+  let inline kroneckerSum (mtx1: Matrix<'t, ^m, ^m>) (mtx2: Matrix<'t, ^n, ^n>) : Matrix<'t, ^``m * ^n``, ^``m * ^n``> =
+    map2 (+) (kroneckerProduct mtx1 identity<'t, ^n>) (kroneckerProduct identity<'t, ^m> mtx2)
+
+  let inline directSum (mtx1: Matrix<'t, ^m1, ^n1>) (mtx2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 + ^m2``, ^``n1 + ^n2``> =
+    let m1,  n1,  m2,  n2  = length1  mtx1, length2  mtx1, length1  mtx2, length2  mtx2
+    let m1', n1', m2', n2' = length1' mtx1, length2' mtx1, length1' mtx2, length2' mtx2
+    let xs = Array2D.zeroCreate (m1' + m2') (n1' + n2')
+    for i = 0 to m1' - 1 do
+      for j = 0 to n1' - 1 do
+        xs.[i,j] <- unsafeGet i j mtx1
+    for i = 0 to m2' - 1 do
+      for j = 0 to n2' - 1 do
+        xs.[m1'+i, n1'+j] <- unsafeGet i j mtx2
+    unsafeCreate (m1 +^ m2) (n1 +^ n2) xs
 
   let inline verticalSum (m1: Matrix<'t, ^m1, ^n>) (m2: Matrix<'t, ^m2, ^n>) : Matrix<'t, ^``m1 + ^m2``, ^n> =
     let m1m2 = Singleton< ^m1 > +^ Singleton< ^m2 >
@@ -588,9 +615,9 @@ type Matrix<'Item, 'Row, 'Column> with
   static member inline ( - ) (m1, m2) = Matrix.map2 (-) m1 m2
   static member inline ( * ) (m1, m2) = Matrix.map2 (*) m1 m2
   static member inline ( / ) (m1, m2) = Matrix.map2 (/) m1 m2
-  static member inline ( * ) (m, s) = Matrix.map ((*) s) m
-  static member inline ( * ) (s, m) = Matrix.map ((*) s) m
-  static member inline ( / ) (m, s) = Matrix.map (fun x -> x / s) m
+  static member inline ( *. ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map ((*) s) m
+  static member inline ( .* ) (s: 'a, m: Matrix<'a,_,_>) = Matrix.map ((*) s) m
+  static member inline ( /. ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map (fun x -> x / s) m
   static member inline ( ~- ) m = Matrix.map ((~-)) m
 
 type Vector<'Item, 'Length> with
@@ -603,9 +630,9 @@ type Vector<'Item, 'Length> with
   static member inline ( - ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (-) v1 v2
   static member inline ( * ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (*) v1 v2
   static member inline ( / ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (/) v1 v2
-  static member inline ( * ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x * s) v
-  static member inline ( * ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> x * s) v
-  static member inline ( / ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x / s) v
+  static member inline ( *. ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x * s) v
+  static member inline ( .* ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> x * s) v
+  static member inline ( /. ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x / s) v
   static member inline ( ~- ) (v: Vector<_, 'n>) = v |> Vector.map ((~-))
   static member inline ToSeq (v: Vector<'x, 'n>) = v |> Vector.toSeq
   static member inline FoldBack (v: Vector<'x, 'n>, f, z) = Array.foldBack f (Vector.toArray v) z
