@@ -510,63 +510,6 @@ module Matrix =
       )
     ) |> unsafeCreate Singleton Singleton
 
-  /// returns `(L - E + U, P, swapCount)`. `P ** A = L ** U`.
-  let inline decomposeLU (mtx: Matrix<'a, 'n, 'n>) : Matrix<'a, 'n, 'n> * _ * int =
-    let n, n' = length1 mtx, length1' mtx
-    let zero = LanguagePrimitives.GenericZero<'a>
-    let inline swapRows k l (xs: _[,]) =
-      let tmp = xs.[k, 0..]
-      xs.[k, 0..] <- xs.[l, 0..]
-      xs.[l, 0..] <- tmp
-
-    let xs = mtx |> toArray2D |> Array2D.copy
-    let pivot = Array.init n' id
-    let mutable swapCount = 0
-
-    for i = 0 to n' - 2 do
-      let rec go k max row =
-        if k >= n' then row
-        else
-          let x = abs xs.[k, i]
-          if x > max then go (k+1) x k
-          else go (k+1) max row
-      let row = go i zero i
-      if row <> i then
-        swapCount <- swapCount + 1
-        swapRows i row xs
-        let tmp = pivot.[row]
-        pivot.[row] <- pivot.[i]
-        pivot.[i] <- tmp
-      for j = i + 1 to n' - 1 do
-        xs.[j,i] <- xs.[j,i] / xs.[i,i]
-        for k = i + 1 to n' - 1 do
-          xs.[j,k] <- xs.[j,k] - xs.[j,i] * xs.[i,k]
-
-    unsafeCreate n n xs, pivot, swapCount
-
-  let inline det (mtx: Matrix<'a, 'n, 'n>) =
-    let n' = length1' mtx
-    let one = LanguagePrimitives.GenericOne<'a>
-    let lu, _, s = decomposeLU mtx
-    let detLU = foldiRange one 0 (n'-1) (fun i result -> result * unsafeGet i i lu)
-    pown (-one) s * detLU 
-
-  let inline inverse (mtx: Matrix<'t, 'n, 'n>) =
-    let lu, perm, _ = decomposeLU mtx
-    let n, n' = length1 mtx, length1' mtx
-    let b = Array.zeroCreate n'
-    let res = Array2D.zeroCreate n' n'
-    let lu' = toArray2D lu
-    for i = 0 to n' - 1 do
-      for j = 0 to n' - 1 do
-        b.[j] <-
-          if i = perm.[j] then
-            LanguagePrimitives.GenericOne<'t>
-          else
-            LanguagePrimitives.GenericZero<'t>
-      res.[0.., i] <- solveImpl lu' b
-    unsafeCreate n n res
-
   let inline kroneckerProduct (mtx1: Matrix<'t, ^m1, ^n1>) (mtx2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 * ^m2``, ^``n1 * ^n2``> =
     let m1,  n1,  m2,  n2  = length1  mtx1, length2  mtx1, length1  mtx2, length2  mtx2
     let m1', n1', m2', n2' = length1' mtx1, length2' mtx1, length1' mtx2, length2' mtx2
