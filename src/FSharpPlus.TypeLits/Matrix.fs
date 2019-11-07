@@ -35,13 +35,13 @@ module MatrixHelpers =
       ((^TR or ^CountTuple): (static member CountTuple: _*_->_) tr,ct)
       |> S |> S |> S |> S |> S |> S |> S
 
-    static member CountTuple (_: Tuple<_>, _: CountTuple) = S Z
-    static member CountTuple ((_, _), _: CountTuple) = S Z |> S
-    static member CountTuple ((_, _, _), _: CountTuple) = S Z |> S |> S
-    static member CountTuple ((_, _, _, _), _: CountTuple) = S Z |> S |> S |> S
-    static member CountTuple ((_, _, _, _, _), _: CountTuple) = S Z |> S |> S |> S |> S
-    static member CountTuple ((_, _, _, _, _, _), _: CountTuple) = S Z |> S |> S |> S |> S |> S
-    static member CountTuple ((_, _, _, _, _, _, _), _: CountTuple) = S Z |> S |> S |> S |> S |> S |> S
+    static member inline CountTuple (_: Tuple<_>, _: CountTuple) = S Z
+    static member inline CountTuple ((_, _), _: CountTuple) = S Z |> S
+    static member inline CountTuple ((_, _, _), _: CountTuple) = S Z |> S |> S
+    static member inline CountTuple ((_, _, _, _), _: CountTuple) = S Z |> S |> S |> S
+    static member inline CountTuple ((_, _, _, _, _), _: CountTuple) = S Z |> S |> S |> S |> S
+    static member inline CountTuple ((_, _, _, _, _, _), _: CountTuple) = S Z |> S |> S |> S |> S |> S
+    static member inline CountTuple ((_, _, _, _, _, _, _), _: CountTuple) = S Z |> S |> S |> S |> S |> S |> S
     
   type TupleToList =
     static member inline Invoke xs : 'x list =
@@ -53,13 +53,13 @@ module MatrixHelpers =
       let t1,t2,t3,t4,t5,t6,t7,tr : _*_*_*_*_*_*_* ^TR = Constraints.whenNestedTuple t
       t1::t2::t3::t4::t5::t6::t7::((^TR or ^TupleToList): (static member TupleToList: _*_->_) tr,ct)
 
-    static member TupleToList (x: Tuple<_>, _: TupleToList) = [x.Item1]
-    static member TupleToList ((x1,x2), _: TupleToList) = [x1;x2]
-    static member TupleToList ((x1,x2,x3), _: TupleToList) = [x1;x2;x3]
-    static member TupleToList ((x1,x2,x3,x4), _: TupleToList) = [x1;x2;x3;x4]
-    static member TupleToList ((x1,x2,x3,x4,x5), _: TupleToList) = [x1;x2;x3;x4;x5]
-    static member TupleToList ((x1,x2,x3,x4,x5,x6), _: TupleToList) = [x1;x2;x3;x4;x5;x6]
-    static member TupleToList ((x1,x2,x3,x4,x5,x6,x7), _: TupleToList) = [x1;x2;x3;x4;x5;x6;x7]
+    static member inline TupleToList (x: Tuple<_>, _: TupleToList) = [x.Item1]
+    static member inline TupleToList ((x1,x2), _: TupleToList) = [x1;x2]
+    static member inline TupleToList ((x1,x2,x3), _: TupleToList) = [x1;x2;x3]
+    static member inline TupleToList ((x1,x2,x3,x4), _: TupleToList) = [x1;x2;x3;x4]
+    static member inline TupleToList ((x1,x2,x3,x4,x5), _: TupleToList) = [x1;x2;x3;x4;x5]
+    static member inline TupleToList ((x1,x2,x3,x4,x5,x6), _: TupleToList) = [x1;x2;x3;x4;x5;x6]
+    static member inline TupleToList ((x1,x2,x3,x4,x5,x6,x7), _: TupleToList) = [x1;x2;x3;x4;x5;x6;x7]
 
   type AssertTupleType =
     static member inline Invoke (xs, ty, n) : unit =
@@ -71,13 +71,13 @@ module MatrixHelpers =
       let _,_,_,_,_,_,_,tr : 'x*'x*'x*'x*'x*'x*'x*_ = Constraints.whenNestedTuple xs
       AssertTupleType.Invoke (tr, x, S n)
 
-    static member AssertTupleType (_: Tuple<'x>, _:'x,S Z) = ()
-    static member AssertTupleType ((_:'x,_:'x),_:'x,S (S Z)) = ()
-    static member AssertTupleType ((_:'x,_:'x,_:'x),_:'x, S(S(S Z))) = ()
-    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S Z)))) = ()
-    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(Z)))))) = ()
-    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(S(Z))))))) = ()
-    static member AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(S(S(Z)))))))) = ()
+    static member inline AssertTupleType (_: Tuple<'x>, _:'x,S Z) = ()
+    static member inline AssertTupleType ((_:'x,_:'x),_:'x,S (S Z)) = ()
+    static member inline AssertTupleType ((_:'x,_:'x,_:'x),_:'x, S(S(S Z))) = ()
+    static member inline AssertTupleType ((_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S Z)))) = ()
+    static member inline AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(Z)))))) = ()
+    static member inline AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(S(Z))))))) = ()
+    static member inline AssertTupleType ((_:'x,_:'x,_:'x,_:'x,_:'x,_:'x,_:'x),_:'x,S(S(S(S(S(S(S(Z)))))))) = ()
 
   type ArrayToTuple =
     static member inline Invoke (xs: 'x[], n, ?index) =
@@ -92,30 +92,13 @@ module MatrixHelpers =
         ArrayToTuple.Invoke(xs,n,i+7)
       )
 
-    static member ArrayToTuple (xs:_[], S Z, i) = Tuple<_>(xs.[i])
-    static member ArrayToTuple (xs:_[], S (S Z), i) = (xs.[i], xs.[i+1])
-    static member ArrayToTuple (xs:_[], S (S (S Z)), i) = (xs.[i], xs.[i+1], xs.[i+2])
-    static member ArrayToTuple (xs:_[], S (S (S (S Z))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3])
-    static member ArrayToTuple (xs:_[], S (S (S (S (S Z)))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4])
-    static member ArrayToTuple (xs:_[], S (S (S (S (S (S Z))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5])
-    static member ArrayToTuple (xs:_[], S (S (S (S (S (S (S Z)))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5], xs.[i+6])
-
-  let inline foldiRange initValue startIndex endIndex f =
-    let mutable result = initValue
-    for i = startIndex to endIndex do
-      result <- f i result
-    result
-  
-  let inline solveImpl (lu:'a[,]) (b:'a[]) =
-    let n = Array2D.length1 lu
-    let x = Array.copy b
-    for i = 1 to n - 1 do
-      x.[i] <- foldiRange x.[i] 0 (i-1) (fun j sum -> sum - lu.[i, j] * x.[j])
-    x.[n-1] <- x.[n-1] / lu.[n-1, n-1]
-    for i in n-2 .. -1 .. 0 do
-      let sum = foldiRange x.[i] (i+1) (n-1) (fun j sum -> sum - lu.[i, j] * x.[j])
-      x.[i] <- sum / lu.[i, i]
-    x
+    static member inline ArrayToTuple (xs:_[], S Z, i) = Tuple<_>(xs.[i])
+    static member inline ArrayToTuple (xs:_[], S (S Z), i) = (xs.[i], xs.[i+1])
+    static member inline ArrayToTuple (xs:_[], S (S (S Z)), i) = (xs.[i], xs.[i+1], xs.[i+2])
+    static member inline ArrayToTuple (xs:_[], S (S (S (S Z))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3])
+    static member inline ArrayToTuple (xs:_[], S (S (S (S (S Z)))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4])
+    static member inline ArrayToTuple (xs:_[], S (S (S (S (S (S Z))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5])
+    static member inline ArrayToTuple (xs:_[], S (S (S (S (S (S (S Z)))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5], xs.[i+6])
 
 open MatrixHelpers
 
@@ -173,10 +156,9 @@ module Vector =
   let unzip3 (vec: Vector<'a*'b*'c, 'n>) : Vector<'a,'n> * Vector<'b,'n> * Vector<'c, 'n> =
     let xs, ys, zs = Array.unzip3 vec.Items in { Items = xs }, { Items = ys }, { Items = zs }
 
-  let inline length (_vec: Vector<'a, 'n>) : 'n = Singleton<'n>
+  let inline length  (_: Vector<'a, 'n>) : 'n  = Singleton<'n>
   
-  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
-  let length' (xs: Vector<'a, 'n>) = xs.Items.Length
+  let inline length' (_: Vector<'a, ^n>) : int = RuntimeValue (Singleton< ^n >)
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let toArray (vec: Vector<'a, 'n>) : 'a[] = vec.Items
@@ -375,10 +357,8 @@ module Matrix =
 
   let inline length1 (_: Matrix<'a, 'm, 'n>) : 'm = Singleton<'m>
   let inline length2 (_: Matrix<'a, 'm, 'n>) : 'n = Singleton<'n>
-  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
-  let length1' (mtx: Matrix<'a, 'm, 'n>) = mtx.Items |> Array2D.length1
-  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
-  let length2' (mtx: Matrix<'a, 'm, 'n>) = mtx.Items |> Array2D.length2
+  let inline length1' (_: Matrix<'a, ^m, 'n>) : int = RuntimeValue (Singleton< ^m >)
+  let inline length2' (_: Matrix<'a, 'm, ^n>) : int = RuntimeValue (Singleton< ^n >)
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let toArray2D (m: Matrix<'a, 'm, 'n>) = m.Items
@@ -392,10 +372,7 @@ module Matrix =
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let indexed (m: Matrix<'a, 'm, 'n>) : Matrix<int * int * 'a, 'm, 'n> =
-    { Items =
-        Array2D.init (Array2D.length1 m.Items) (Array2D.length2 m.Items)
-          (fun i j -> i,j,m.Items.[i,j])
-    }
+    { Items = Array2D.mapi (fun i j x -> i,j,x) m.Items }
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let unsafeCreate (_row: 'm) (_column: 'n) (items: _[,]) : Matrix<_, 'm, 'n> =
@@ -460,7 +437,7 @@ module Matrix =
     )
 
   let diagonal (mtx: Matrix<'a, 'n, 'n>) : Vector<'a, 'n> =
-    { Items = Array.init (length1' mtx) (fun i -> mtx.Items.[i,i]) }
+    { Items = Array.init (Array2D.length1 mtx.Items) (fun i -> mtx.Items.[i,i]) }
 
   let inline trace (mtx: Matrix<'a, 'n, 'n>) = diagonal mtx |> Vector.toArray |> Array.sum
 
@@ -496,11 +473,16 @@ module Matrix =
       )
     )
 
-  let transpose (mtx: Matrix<'t, 'm, 'n>) : Matrix<'t, 'n, 'm> =
-    let m = mtx |> length1'
-    let n = mtx |> length2'
-    let ys = Array2D.init n m (fun j i -> mtx.Items.[i, j])
-    { Items = ys }
+  let inline transpose (mtx: Matrix<'t, 'm, 'n>) : Matrix<'t, 'n, 'm> =
+    let m = mtx |> length1
+    let n = mtx |> length2
+    init n m (fun j i -> unsafeGet i j mtx)
+
+  let inline private foldiRange initValue startIndex endIndex f =
+    let mutable result = initValue
+    for i = startIndex to endIndex do
+      result <- f i result
+    result
 
   let inline matrixProduct (m1: Matrix<'t, 'm, 'n>) (m2: Matrix<'t, 'n, 'p>) : Matrix<'t, 'm, 'p> =
     let n' = length2' m1
@@ -537,13 +519,21 @@ module Matrix =
 
   let inline verticalSum (m1: Matrix<'t, ^m1, ^n>) (m2: Matrix<'t, ^m2, ^n>) : Matrix<'t, ^``m1 + ^m2``, ^n> =
     let m1m2 = Singleton< ^m1 > +^ Singleton< ^m2 >
+    let m1' = length1' m1
     let n = Singleton< ^n >
-    unsafeCreate m1m2 n <| failwith "TODO"
+    init m1m2 n (fun i j ->
+      if i < m1' then unsafeGet i j m1
+      else unsafeGet (i - m1') j m2
+    )
 
   let inline horizontalSum (m1: Matrix<'t, ^m, ^n1>) (m2: Matrix<'t, ^m, ^n2>) : Matrix<'t, ^m, ^``n1 + ^n2``> =
     let m = Singleton< ^m >
     let n1n2 = Singleton< ^n1 > +^ Singleton< ^n2 >
-    unsafeCreate m n1n2 <| failwith "TODO"
+    let n1' = length1' m1
+    init m n1n2 (fun i j ->
+      if j < n1' then unsafeGet i j m1
+      else unsafeGet i (j - n1') m2
+    )
 
   let inline hadamardProduct (m1: Matrix<'t, 'm, 'n>) (m2: Matrix<'t, 'm, 'n>) : Matrix<'t, 'm, 'n> =
     map2 (*) m1 m2
@@ -639,3 +629,4 @@ module MatrixTests =
   let (Matrix(_y1: int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int,_y2,_y3,_y4,_y5,_y6,_y7,_y8)) = m2
 
 #endif 
+
