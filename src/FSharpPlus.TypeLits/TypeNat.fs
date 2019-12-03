@@ -58,13 +58,13 @@ type S< 'n > = S of 'n with
     TypeBool.IfThenElse (^Y: (static member IsZero: _) ())
       False
       (^X: (static member (<=^):_*_->_)x,(^Y:(static member Pred:_->_)y))
-  static member inline ( /^ ) (x, y) =
-    TypeBool.IfThenElse (x <^ y) Z (
+  static member inline ( /^ ) (x, y: S<_>) =
+    TypeBool.IfThenElse (TypeBool.Not (y <=^ x)) Z (
       let x': ^X' = x -^ y
       S (^X': (static member ( /^ ): _*_->_) x', y)
     )
-  static member inline ( %^ ) (x, y) =
-    TypeBool.IfThenElse (x <^ y) x (
+  static member inline ( %^ ) (x, y: S<_>) =
+    TypeBool.IfThenElse (TypeBool.Not (y <=^ x)) x (
       let x': ^X' = x -^ y
       (^X': (static member ( %^ ): _*_->_) x', y)
     )
@@ -94,8 +94,8 @@ module NatOp =
   let inline ( +^ ) (x: ^X) (y: ^Y) = (^X: (static member ( +^ ): _*_->_) x,y)
   let inline ( -^ ) (x: ^X) (y: ^Y) = (^Y: (static member ( -^ ):_*_->_) x,y)
   let inline ( *^ ) (x: ^X) (y: ^Y) = (^X: (static member MultImpl: _*_*_->_) x,y,Z)
-  let inline ( /^ ) (x: ^X) (y: ^Y) = (^X: (static member ( /^ ):_*_->_) x,y)
-  let inline ( %^ ) (x: ^X) (y: ^Y) = (^X: (static member ( %^ ):_*_->_) x,y)
+  let inline ( /^ ) (x: ^X) (y: ^Y) = (^Y: (static member ( /^ ):_*_->_) x,y)
+  let inline ( %^ ) (x: ^X) (y: ^Y) = (^Y: (static member ( %^ ):_*_->_) x,y)
   let inline ( <^ ) (x: ^X) (y: ^Y) = (^X: (static member ( <^ ):_*_->_) x,y)
   let inline ( >^ ) (x: ^X) (y: ^Y) = (^Y: (static member ( <^ ):_*_->_) y,x)
   let inline ( <=^ ) (x: ^X) (y: ^Y) = (^X: (static member ( <=^ ):_*_->_) x,y)
@@ -123,8 +123,10 @@ module TypeNat =
 
 #if DEBUG
 module private NatTests =
-  open TypeLevelOperators
   open TypeBool
+
+  let inline hasType<'t> (_: 't) = True
+
   let two = S (S Z)
   let inline f1 x = x +^ two
   Assert (f1 Z =^ two); Assert (f1 (S Z) =^ S two); Assert (f1 (S (S Z)) =^ S (S two))
@@ -132,11 +134,11 @@ module private NatTests =
   Assert (f2 Z =^ two); Assert (f2 (S Z) =^ S two); Assert (f2 (S (S Z)) =^ S (S two))
   
   let inline f3 x = x -^ two
-  Assert (TryWith (f3 Z) True); Assert (TryWith (f3 (S Z)) True)
+  Assert (hasType<OverflowError> (f3 Z)); Assert (hasType<OverflowError> (f3 (S Z)))
   Assert (f3 two =^ Z); Assert (f3 (S two) =^ S Z); Assert (f3 (S (S two)) =^ two)
   let inline f4 x = two -^ x
   Assert (f4 Z =^ two); Assert (f4 (S Z) =^ S Z); Assert (f4 (S (S Z)) =^ Z)
-  Assert (TryWith (f4 (S (S (S Z)))) True)
+  Assert (hasType<OverflowError> (f4 (S (S (S Z)))))
   
   let inline f5 x = x *^ two
   Assert (f5 Z =^ Z); Assert (f5 (S Z) =^ two); Assert (f5 two =^ S (S two))
@@ -190,8 +192,7 @@ module private NatTests =
   Assert (fa (S Z) =^ Z)
   Assert (fa two =^ S Z)
   let inline fb x = S (S Z) /^ x
-  // TODO: make this compile
-  // Assert (TryWith (fb Z) True)
+  Assert (hasType<DividedByZeroError> (fb Z))
   Assert (fb (S Z) =^ two)
   Assert (fb two =^ (S Z))
   
@@ -200,8 +201,7 @@ module private NatTests =
   Assert (fc (S Z) =^ (S Z))
   Assert (fc two =^ Z)
   let inline fd x = S (S Z) %^ x
-  // TODO: make this compile
-  // Assert (TryWith (fd Z) True)
+  Assert (hasType<DividedByZeroError> (fd Z))
   Assert (fd (S Z) =^ Z)
   Assert (fd two =^ Z)
   Assert (fd (S two) =^ two)
