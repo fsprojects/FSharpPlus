@@ -552,7 +552,7 @@ module IReadOnlyList =
     #if !FABLE_COMPILER
     
     /// Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.
-    let add i value (source: IReadOnlyList<_>) =
+    let setItem i value (source: IReadOnlyList<_>) =
         let setNth i v (source: _ array) = source.[i] <- v; source
         if 0 <= i && i < source.Count then
             source |> Array.ofSeq |> setNth i value |> ofArray |> Some
@@ -741,9 +741,11 @@ module IReadOnlyDictionary =
     open System.Linq
     #endif
     open System.Collections.Generic
+    /// Replaces or sets the item associated with a specified key with the specified value.
 
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
 
+    /// Gets the value associated with the specified key. Returns None if a value associated with the key is not found.
     let tryGetValue k (dct: IReadOnlyDictionary<'Key, 'Value>) =
         match dct.TryGetValue k with
         | true, v -> Some v
