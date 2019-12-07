@@ -26,7 +26,6 @@ let info =
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
-
 #load "../../packages/FSharp.Formatting/FSharp.Formatting.fsx"
 #I "../../packages/docs/FAKE/tools/"
 #I "../../packages/FSharp.Core/lib/net45/"
@@ -38,9 +37,7 @@ let info =
 #r "FakeLib.dll"
 open Fake
 open System.IO
-open Fake.FileHelper
 open FSharp.Literate
-open FSharp.MetadataFormat
 open FSharp.Markdown
 open FSharp.Formatting.Razor
 open FSharpPlus
