@@ -552,7 +552,7 @@ module IReadOnlyList =
     #if !FABLE_COMPILER
     
     /// Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.
-    let setItem i value (source: IReadOnlyList<_>) =
+    let trySetItem i value (source: IReadOnlyList<_>) =
         let setNth i v (source: _ array) = source.[i] <- v; source
         if 0 <= i && i < source.Count then
             source |> Array.ofSeq |> setNth i value |> ofArray |> Some
