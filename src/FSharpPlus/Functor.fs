@@ -157,7 +157,6 @@ type Apply =
     static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , _output: Option<Result<'b,'E>>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
     static member        ``<*>`` (f: Choice<_,'E>     , x: Choice<'T,'E>        , _output: Option<Choice<'b,'E>>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
     static member inline ``<*>`` (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T), _output: Option<KeyValuePair<'Key,'U>>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (FSharpPlus.Control.Plus.Invoke a b, f x)
-    static member inline ``<*>`` (struct (a: 'Monoid, f), struct (b: 'Monoid, x: 'T), _output: Option<struct ('Monoid * 'U)>, [<Optional>]_mthd: Apply) = struct (FSharpPlus.Control.Plus.Invoke a b, f x)
 
     static member        ``<*>`` (f: Map<'Key,_>      , x: Map<'Key,'T>         , _output: Option<Map<'Key,'U>>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
        for KeyValue(k, vf) in f do
