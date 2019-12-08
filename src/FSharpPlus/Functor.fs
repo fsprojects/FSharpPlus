@@ -148,7 +148,7 @@ type Apply =
     static member        ``<*>`` (f: list<_>          , x: list<'T>             , _output: Option<list<'U>>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
     static member        ``<*>`` (f: _ []             , x: 'T []                , _output: Option<'U []>                , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
     static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , _output: Option< 'r -> 'U>            , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
-    static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , _output: Option<'Monoid * 'U>         , [<Optional>]_mthd: Apply) = (FSharpPlus.Control.Plus.Invoke a b, f x)                       : 'Monoid *'U
+    static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , _output: Option<'Monoid * 'U>         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
     #if !FABLE_COMPILER
     static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , _output: Option<Task<'U>>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
@@ -156,7 +156,7 @@ type Apply =
     static member        ``<*>`` (f: option<_>        , x: option<'T>           , _output: Option<option<'U>>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
     static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , _output: Option<Result<'b,'E>>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
     static member        ``<*>`` (f: Choice<_,'E>     , x: Choice<'T,'E>        , _output: Option<Choice<'b,'E>>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
-    static member inline ``<*>`` (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T), _output: Option<KeyValuePair<'Key,'U>>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (FSharpPlus.Control.Plus.Invoke a b, f x)
+    static member inline ``<*>`` (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T), _output: Option<KeyValuePair<'Key,'U>>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
 
     static member        ``<*>`` (f: Map<'Key,_>      , x: Map<'Key,'T>         , _output: Option<Map<'Key,'U>>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
        for KeyValue(k, vf) in f do
@@ -179,17 +179,16 @@ type Apply =
        ResizeArray (Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) : 'U ResizeArray
 
     static member inline Invoke (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
-        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, output: ^R) =
-            ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : _*_*_*_ -> _) input1, input2, Some output, mthd)
-        call(Unchecked.defaultof<Apply>, f, x, Unchecked.defaultof<'``Applicative<'U>``>)
+        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, output: ^R) = ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : _*_*_*_ -> _) input1, input2, output, mthd)
+        call(Unchecked.defaultof<Apply>, f, x, Unchecked.defaultof<Option<'``Applicative<'U>``>>)
 
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) (f, x))
 
 type Apply with
-    static member inline ``<*>`` (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``      , _output: Option<'``Monad<'U>``>     , _mthd:Default2) : '``Monad<'U>`` = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
+    static member inline ``<*>`` (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``      , _output: Option<'``Monad<'U>``>      , _mthd:Default2) : '``Monad<'U>`` = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
+    static member inline ``<*>`` (f: '``Applicative<'T->'U>``, x: '``Applicative<'T>``, _output: Option<'``Applicative<'U>``>, _mthd:Default1) : '``Applicative<'U>`` = Apply.InvokeOnInstance f x
     static member inline ``<*>`` (_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _output: Option< ^r> when ^r : null and ^r: struct, _mthd: Default1) = id
-    static member inline ``<*>`` (f: '``Applicative<'T->'U>``, x: '``Applicative<'T>``  , _output: Option<'``Applicative<'U>`` >   , _mthd:Default1) : '``Applicative<'U>`` = Apply.InvokeOnInstance f x
 
 // Functor class ----------------------------------------------------------
 
