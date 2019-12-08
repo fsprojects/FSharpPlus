@@ -1018,6 +1018,10 @@ module Applicative =
         Assert.AreEqual (606, res606)
         Assert.AreEqual (508, res508)
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
+        
+        // WrappedSeqC is Monad. Monads are Applicatives => (<*>) should work
+        let (res2: WrappedSeqC<_>) = WrappedSeqC [(+) 1] <*> WrappedSeqC [2]
+        Assert.AreEqual (WrappedSeqC [3], res2)
 
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
