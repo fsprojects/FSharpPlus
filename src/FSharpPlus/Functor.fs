@@ -179,7 +179,8 @@ type Apply =
        ResizeArray (Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) : 'U ResizeArray
 
     static member inline Invoke (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
-        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, output: ^R) = ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : _*_*_*_ -> _) input1, input2, ref output, mthd)
+        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, output: ^R) =
+            ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : _*_*_*_ -> _) input1, input2, ref output, mthd)
         call(Unchecked.defaultof<Apply>, f, x, Unchecked.defaultof<'``Applicative<'U>``>)
 
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
