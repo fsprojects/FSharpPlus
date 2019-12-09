@@ -140,31 +140,31 @@ type Return =
 type Apply =
     inherit Default1
 
-    static member        ``<*>`` (f: Lazy<'T->'U>     , x: Lazy<'T>             , _output: ref<Lazy<'U>>             , [<Optional>]_mthd: Apply) = Lazy<_>.Create (fun () -> f.Value x.Value)   : Lazy<'U>
-    static member        ``<*>`` (f: seq<_>           , x: seq<'T>              , _output: ref<seq<'U>>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
+    static member        ``<*>`` (f: Lazy<'T->'U>     , x: Lazy<'T>             , [<Optional>]_output: ref<Lazy<'U>>             , [<Optional>]_mthd: Apply) = Lazy<_>.Create (fun () -> f.Value x.Value)   : Lazy<'U>
+    static member        ``<*>`` (f: seq<_>           , x: seq<'T>              , [<Optional>]_output: ref<seq<'U>>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
     #if !FABLE_COMPILER
-    static member        ``<*>`` (f: IEnumerator<_>   , x: IEnumerator<'T>      , _output: ref<IEnumerator<'U>>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
+    static member        ``<*>`` (f: IEnumerator<_>   , x: IEnumerator<'T>      , [<Optional>]_output: ref<IEnumerator<'U>>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
     #endif
-    static member        ``<*>`` (f: list<_>          , x: list<'T>             , _output: ref<list<'U>>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
-    static member        ``<*>`` (f: _ []             , x: 'T []                , _output: ref<'U []>                , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
-    static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , _output: ref< 'r -> 'U>            , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
-    static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , _output: ref<'Monoid * 'U>         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
+    static member        ``<*>`` (f: list<_>          , x: list<'T>             , [<Optional>]_output: ref<list<'U>>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
+    static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: ref<'U []>                , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
+    static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output: ref< 'r -> 'U>            , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
+    static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , [<Optional>]_output: ref<'Monoid * 'U>         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
     #if !FABLE_COMPILER
-    static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , _output: ref<Task<'U>>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
+    static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , [<Optional>]_output: ref<Task<'U>>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
-    static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , _output: ref<Async<'U>>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
-    static member        ``<*>`` (f: option<_>        , x: option<'T>           , _output: ref<option<'U>>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
-    static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , _output: ref<Result<'b,'E>>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
-    static member        ``<*>`` (f: Choice<_,'E>     , x: Choice<'T,'E>        , _output: ref<Choice<'b,'E>>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
-    static member inline ``<*>`` (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T), _output: ref<KeyValuePair<'Key,'U>>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
+    static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: ref<Async<'U>>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
+    static member        ``<*>`` (f: option<_>        , x: option<'T>           , [<Optional>]_output: ref<option<'U>>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
+    static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , [<Optional>]_output: ref<Result<'b,'E>>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
+    static member        ``<*>`` (f: Choice<_,'E>     , x: Choice<'T,'E>        , [<Optional>]_output: ref<Choice<'b,'E>>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
+    static member inline ``<*>`` (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T), [<Optional>]_output: ref<KeyValuePair<'Key,'U>>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
 
-    static member        ``<*>`` (f: Map<'Key,_>      , x: Map<'Key,'T>         , _output: ref<Map<'Key,'U>>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
+    static member        ``<*>`` (f: Map<'Key,_>      , x: Map<'Key,'T>         , [<Optional>]_output: ref<Map<'Key,'U>>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
        for KeyValue(k, vf) in f do
            match Map.tryFind k x with
            | Some vx -> yield k, vf vx
            | _       -> () })
 
-    static member        ``<*>`` (f: Dictionary<'Key,_>, x: Dictionary<'Key,'T> , _output: ref<Dictionary<'Key,'U>>  , [<Optional>]_mthd: Apply) : Dictionary<'Key,'U> =
+    static member        ``<*>`` (f: Dictionary<'Key,_>, x: Dictionary<'Key,'T> , [<Optional>]_output: ref<Dictionary<'Key,'U>>  , [<Optional>]_mthd: Apply) : Dictionary<'Key,'U> =
        let dct = Dictionary ()
        for KeyValue(k, vf) in f do
            match x.TryGetValue k with
@@ -173,9 +173,9 @@ type Apply =
        dct
     
     #if !FABLE_COMPILER
-    static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, _output: ref<Expr<'U>>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
+    static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, [<Optional>]_output: ref<Expr<'U>>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     #endif
-    static member        ``<*>`` (f: ('T->'U) ResizeArray, x: 'T ResizeArray, _output: ref<'U ResizeArray>, [<Optional>]_mthd: Apply) =
+    static member        ``<*>`` (f: ('T->'U) ResizeArray, x: 'T ResizeArray, [<Optional>]_output: ref<'U ResizeArray>, [<Optional>]_mthd: Apply) =
        ResizeArray (Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) : 'U ResizeArray
 
     static member inline Invoke (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
