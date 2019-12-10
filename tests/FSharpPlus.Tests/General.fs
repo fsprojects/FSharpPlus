@@ -1032,8 +1032,8 @@ module Applicative =
         CollectionAssert.AreEqual (WrappedSeqC [3], res3)
         
         // Check user defined types implementing IEnumerable don't default to seq<_>
-        let res4 = WrappedSeqD [(+) 1] <*> WrappedSeqD [3]
-        CollectionAssert.AreEqual (WrappedSeqC [4], res4)
+        let res4 = WrappedSeqE [(+) 1] <*> WrappedSeqE [3]
+        CollectionAssert.AreEqual (WrappedSeqE [4], res4)
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
 type Ii = Ii
