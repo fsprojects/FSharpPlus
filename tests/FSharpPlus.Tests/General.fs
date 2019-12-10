@@ -165,6 +165,14 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (f <*> x)
     static member ToList (WrappedSeqD x) = Seq.toList x
+    
+type WrappedSeqE<'s> = WrappedSeqE of 's seq with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqE x) = x in x).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedSeqE x) = x in x).GetEnumerator () :> Collections.IEnumerator    
+    static member Return x = SideEffects.add "Using WrappedSeqE's Return"; WrappedSeqE (Seq.singleton x)
+    static member (<*>)  (WrappedSeqE f, WrappedSeqE x) = SideEffects.add "Using WrappedSeqE's Apply"; WrappedSeqE (f <*> x)
+    static member ToList (WrappedSeqE x) = Seq.toList x
+
 
 open System.Collections.Generic
 open System.Collections
@@ -1020,9 +1028,12 @@ module Applicative =
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
         
         // WrappedSeqC is Monad. Monads are Applicatives => (<*>) should work
-        let (res2: WrappedSeqC<_>) = WrappedSeqC [(+) 1] <*> WrappedSeqC [2]
-        CollectionAssert.AreEqual (WrappedSeqC [3], res2)
-
+        let (res3: WrappedSeqC<_>) = WrappedSeqC [(+) 1] <*> WrappedSeqC [2]
+        CollectionAssert.AreEqual (WrappedSeqC [3], res3)
+        
+        // Check user defined types implementing IEnumerable don't default to seq<_>
+        let res4 = WrappedSeqD [(+) 1] <*> WrappedSeqD [3]
+        CollectionAssert.AreEqual (WrappedSeqC [4], res4)
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
 type Ii = Ii
