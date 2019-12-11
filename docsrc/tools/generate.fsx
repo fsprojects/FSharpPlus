@@ -251,9 +251,9 @@ let buildDocumentation () =
   |> Seq.iter (processFile Path.output)
 // Generate
 copyFiles()
-//#if HELP
+#if HELP
 buildDocumentation()
-//#endif
+#endif
 #if REFERENCE
 buildReference()
 #endif
