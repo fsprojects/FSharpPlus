@@ -35,41 +35,38 @@ let properties:PropertyMeta =
 // --------------------------------------------------------------------------------------
 #load "../../.paket/load/netstandard2.0/docs/FSharp.Literate.fsx"
 #load "../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
-#I "../../packages/docs/FAKE/tools/"
+#load "../../.paket/load/netstandard2.0/docs/MathNet.Numerics.FSharp.fsx"
 #I "../../packages/FSharp.Core/lib/net45/"
 #I "../../bin/FSharpPlus/net45/"
 #I @"../../src/FSharpPlus/bin/Release/net45/"
 
 #r "FSharp.Core.dll"
 #r "FSharpPlus.dll"
-#r "FakeLib.dll"
-open Fake
 open System
-open Fake.FileHelper
 open FSharp.Literate
 open FSharp.Markdown
 open FSharpPlus
+let (</>) x y = IO.Path.Combine(x,y)
 
 // When called from 'build.fsx', use the public project URL as <root>
 // otherwise, use the current 'output' directory.
 #if RELEASE
 let root = website
 #else
-let root = "file://" + (__SOURCE_DIRECTORY__ @@ "../../docs")
+let root = "file://" + (__SOURCE_DIRECTORY__ </> "../../docs")
 #endif
 
 
 // Copy static files and CSS + JS from F# Formatting
 
-let (</>) x y = IO.Path.Combine(x,y)
 module Path =
     // Paths with template/source/output locations
-    let bin        = __SOURCE_DIRECTORY__ @@ "../../src/FSharpPlus/bin/Release/net45/"
-    let content    = __SOURCE_DIRECTORY__ @@ "../content"
-    let output     = __SOURCE_DIRECTORY__ @@ "../../docs"
-    let files      = __SOURCE_DIRECTORY__ @@ "../files"
-    let templates      = __SOURCE_DIRECTORY__ @@ "./templates"
-    let formatting = __SOURCE_DIRECTORY__ @@ "../../packages/FSharp.Formatting/"
+    let bin        = __SOURCE_DIRECTORY__ </> "../../src/FSharpPlus/bin/Release/net45/"
+    let content    = __SOURCE_DIRECTORY__ </> "../content"
+    let output     = __SOURCE_DIRECTORY__ </> "../../docs"
+    let files      = __SOURCE_DIRECTORY__ </> "../files"
+    let templates      = __SOURCE_DIRECTORY__ </> "./templates"
+    let formatting = __SOURCE_DIRECTORY__ </> "../../packages/FSharp.Formatting/"
 
     let dir p = IO.Path.GetDirectoryName(p: string)
     let filename p = IO.Path.GetFileName(p: string)
@@ -177,46 +174,23 @@ let processFile outdir path  =
     |> write outfile
 
 let copyFiles () =
-  CopyRecursive Path.files Path.output true |> Log "Copying file: "
-  ensureDirectory (Path.output @@ "content")
-  CopyRecursive (Path.formatting @@ "styles") (Path.output @@ "content") true 
-    |> Log "Copying styles and scripts: "
-
-let binaries =
-    let manuallyAdded = 
-        referenceBinaries 
-        |> List.map (fun b -> Path.bin @@ b)
-    
-    let conventionBased = 
-        directoryInfo Path.bin 
-        |> subDirectories
-        |> Array.map (fun d -> d.FullName @@ "net45" @@(sprintf "%s.dll" d.Name))
-        |> List.ofArray
-
-    conventionBased @ manuallyAdded
-
-let libDirs =
-    let conventionBasedbinDirs =
-        directoryInfo Path.bin 
-        |> subDirectories
-        |> Array.map (fun d -> d.FullName)
-        |> List.ofArray
-
-    conventionBasedbinDirs @ [Path.bin]
+  Directory.copyRecursive Path.files Path.output
+  Directory.ensure (Path.output </> "content")
+  Directory.copyRecursive (Path.formatting </> "styles") (Path.output </> "content")  
 
 // Build API reference from XML comments
 let buildReference () =
-  CleanDir (Path.output @@ "reference")
+  //Directory.clean (Path.output </> "reference")
   (*
   RazorMetadataFormat.Generate
-    ( binaries, output @@ "reference", layoutRootsAll.["en"],
+    ( binaries, output </> "reference", layoutRootsAll.["en"],
       parameters = ("root", root)::info,
-      sourceRepo = githubLink @@ "tree/master",
-      sourceFolder = __SOURCE_DIRECTORY__ @@ ".." @@ "..",
+      sourceRepo = githubLink </> "tree/master",
+      sourceFolder = __SOURCE_DIRECTORY__ </> ".." </> "..",
       publicOnly = true,libDirs = libDirs )
     *)
   // Exclude some Namespaces from the index
-  let pathIndex = Path.output @@ "reference" @@ "index.html"
+  let pathIndex = Path.output </> "reference" </> "index.html"
   printfn "%s" pathIndex
   let ndx = 
     IO.File.ReadAllLines pathIndex
@@ -231,22 +205,7 @@ let buildReference () =
 
 // Build documentation from `fsx` and `md` files in `docs/content`
 let buildDocumentation () =
-
-  // First, process files which are placed in the content root directory.
-    (*
-  RazorLiterate.ProcessDirectory
-    ( content, docTemplate, output, replacements = ("root", root)::info,
-      layoutRoots = layoutRootsAll.["en"],
-      generateAnchors = true,
-      processRecursive = false,
-      customizeDocument = customize
-      )
-    *)
-  // And then process files which are placed in the sub directories
-  // (some sub directories might be for specific language).
   Directory.copyRecursive Path.files Path.output
-  //let subdirs = IO.Directory.EnumerateDirectories(content, "*", IO.SearchOption.TopDirectoryOnly)
-  //printfn "Processing directories: %A" subdirs
   IO.Directory.EnumerateFiles Path.content
   |> Seq.iter (processFile Path.output)
 // Generate
