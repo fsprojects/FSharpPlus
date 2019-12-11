@@ -19,6 +19,8 @@ let githubLink = "https://github.com/fsprojects/FSharpPlus"
 open Template
 #load "./templates/plantuml.fsx"
 open Plantuml
+#load "./tools.fsx"
+open Tools
 // Specify more information about your project
 
 let properties:PropertyMeta =
@@ -46,7 +48,6 @@ open System
 open FSharp.Literate
 open FSharp.Markdown
 open FSharpPlus
-let (</>) x y = IO.Path.Combine(x,y)
 
 // When called from 'build.fsx', use the public project URL as <root>
 // otherwise, use the current 'output' directory.
@@ -57,42 +58,6 @@ let root = "file://" + (__SOURCE_DIRECTORY__ </> "../../docs")
 #endif
 
 
-// Copy static files and CSS + JS from F# Formatting
-
-module Path =
-    // Paths with template/source/output locations
-    let bin        = __SOURCE_DIRECTORY__ </> "../../src/FSharpPlus/bin/Release/net45/"
-    let content    = __SOURCE_DIRECTORY__ </> "../content"
-    let output     = __SOURCE_DIRECTORY__ </> "../../docs"
-    let files      = __SOURCE_DIRECTORY__ </> "../files"
-    let templates      = __SOURCE_DIRECTORY__ </> "./templates"
-    let formatting = __SOURCE_DIRECTORY__ </> "../../packages/FSharp.Formatting/"
-
-    let dir p = IO.Path.GetDirectoryName(p: string)
-    let filename p = IO.Path.GetFileName(p: string)
-    let changeExt ext p = IO.Path.ChangeExtension(p, ext)
-
-module Directory =
-    let ensure dir =
-        if not (IO.Directory.Exists dir) then
-            IO.Directory.CreateDirectory dir |> ignore
-
-    let copyRecursive (path: string) dest =
-        let path =
-            if not (path.EndsWith(string IO.Path.DirectorySeparatorChar)) then
-                path + string IO.Path.DirectorySeparatorChar
-            else
-                path
-        let trim (p: string) =
-            if p.StartsWith(path) then
-                p.Substring(path.Length)
-            else
-                failwithf "Cannot find path root"
-        IO.Directory.EnumerateFiles(path, "*", IO.SearchOption.AllDirectories)
-        |> Seq.iter (fun p ->
-            let target = dest </> trim p
-            ensure(Path.dir target)
-            IO.File.Copy(p, target, true))
 
 let write path html =
     use writer = System.IO.File.CreateText(path)
@@ -178,31 +143,6 @@ let copyFiles () =
   Directory.ensure (Path.output </> "content")
   Directory.copyRecursive (Path.formatting </> "styles") (Path.output </> "content")  
 
-// Build API reference from XML comments
-let buildReference () =
-  //Directory.clean (Path.output </> "reference")
-  (*
-  RazorMetadataFormat.Generate
-    ( binaries, output </> "reference", layoutRootsAll.["en"],
-      parameters = ("root", root)::info,
-      sourceRepo = githubLink </> "tree/master",
-      sourceFolder = __SOURCE_DIRECTORY__ </> ".." </> "..",
-      publicOnly = true,libDirs = libDirs )
-    *)
-  // Exclude some Namespaces from the index
-  let pathIndex = Path.output </> "reference" </> "index.html"
-  printfn "%s" pathIndex
-  let ndx = 
-    IO.File.ReadAllLines pathIndex
-    |> split [[|System.String.Empty|]]
-    |> filter (fun x -> not (x |> exists (fun e -> e.Contains("FSharpPlus.Control"))))
-    |> filter (fun x -> not (x |> exists (fun e -> e.Contains("FSharpPlus.Internals Namespace"))))
-    |> intercalate [|System.String.Empty|]
-  IO.File.WriteAllLines(pathIndex, ndx)
-
-
-
-
 // Build documentation from `fsx` and `md` files in `docs/content`
 let buildDocumentation () =
   Directory.copyRecursive Path.files Path.output
@@ -210,9 +150,4 @@ let buildDocumentation () =
   |> Seq.iter (processFile Path.output)
 // Generate
 copyFiles()
-#if HELP
 buildDocumentation()
-#endif
-#if REFERENCE
-buildReference()
-#endif

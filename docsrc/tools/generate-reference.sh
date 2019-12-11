@@ -2,4 +2,4 @@
 pushd $(dirname "${0}") > /dev/null
 BASEDIR=$(pwd -L)
 
-dotnet fsi --exec generate.fsx "$@" 
+dotnet fsi --exec generate-reference.fsx "$@" 
