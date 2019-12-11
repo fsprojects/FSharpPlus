@@ -11,8 +11,12 @@ github fsharp/FAKE modules/Octokit/Octokit.fsx
 # docs:
 
 group docs
+    frameworks: netstandard2.0
+    generate_load_scripts: true
     source https://api.nuget.org/v3/index.json
-    nuget NuGet.CommandLine
+    nuget FSharp.Literate 
+    nuget Fable.React
+    nuget Fable.Core 3.0.0
     nuget FSharp.Compiler.Tools 10.2.3
     nuget FAKE ~> 5
 
