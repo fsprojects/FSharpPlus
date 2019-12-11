@@ -9,9 +9,6 @@
 // for binaries output to root bin folder please add the filename only to the 
 // referenceBinaries list below in order to generate documentation for the binaries.
 // (This is the original behaviour of ProjectScaffold prior to multi project support)
-let referenceBinaries = []
-// Web site location for the generated documentation
-let website = "/FSharpPlus"
 
 let githubLink = "https://github.com/fsprojects/FSharpPlus"
 
@@ -48,16 +45,6 @@ open System
 open FSharp.Literate
 open FSharp.Markdown
 open FSharpPlus
-
-// When called from 'build.fsx', use the public project URL as <root>
-// otherwise, use the current 'output' directory.
-#if RELEASE
-let root = website
-#else
-let root = "file://" + (__SOURCE_DIRECTORY__ </> "../../docs")
-#endif
-
-
 
 let write path html =
     use writer = System.IO.File.CreateText(path)
