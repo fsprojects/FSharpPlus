@@ -140,31 +140,31 @@ type Return =
 type Apply =
     inherit Default1
 
-    static member        ``<*>`` (f: Lazy<'T->'U>     , _: ref<Lazy<'T->'U>>  , x: Lazy<'T>       , [<Optional>]_output: Lazy<'U>        , [<Optional>]_mthd: Apply) = Lazy<_>.Create (fun () -> f.Value x.Value)   : Lazy<'U>
-    static member        ``<*>`` (f: seq<_>           , _: ref<seq<_>>        , x: seq<'T>        , [<Optional>]_output: seq<'U>         , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
+    static member        ``<*>`` (f: Lazy<'T->'U>     , _: ref<Lazy<'T->'U>>  , x: Lazy<'T>       , [<Optional>]_output: ref<Lazy<'U>>        , [<Optional>]_mthd: Apply) = Lazy<_>.Create (fun () -> f.Value x.Value)   : Lazy<'U>
+    static member        ``<*>`` (f: seq<_>           , _: ref<seq<_>>        , x: seq<'T>        , [<Optional>]_output: ref<seq<'U>>         , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
     #if !FABLE_COMPILER
-    static member        ``<*>`` (f: IEnumerator<_>   , _: ref<IEnumerator<_>>, x: IEnumerator<'T>, [<Optional>]_output: IEnumerator<'U> , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
+    static member        ``<*>`` (f: IEnumerator<_>   , _: ref<IEnumerator<_>>, x: IEnumerator<'T>, [<Optional>]_output: ref<IEnumerator<'U>> , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
     #endif
-    static member        ``<*>`` (f: list<_>          , _: ref<list<_>>    , x: list<'T>          , [<Optional>]_output: list<'U>        , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
-    static member        ``<*>`` (f: _ []             , _: ref<_ []>       , x: 'T []             , [<Optional>]_output: 'U []           , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
-    static member        ``<*>`` (f: 'r -> _          , _: ref<'r -> _>    , g: _ -> 'T           , [<Optional>]_output: 'r -> 'U        , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
-    static member inline ``<*>`` ((a: 'Monoid, f)     , _: ref<'Monoid * _>, (b: 'Monoid, x: 'T)  , [<Optional>]_output: 'Monoid * 'U    , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
+    static member        ``<*>`` (f: list<_>          , _: ref<list<_>>    , x: list<'T>          , [<Optional>]_output: ref<list<'U>>        , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
+    static member        ``<*>`` (f: _ []             , _: ref<_ []>       , x: 'T []             , [<Optional>]_output: ref<'U []>           , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
+    static member        ``<*>`` (f: 'r -> _          , _: ref<'r -> _>    , g: _ -> 'T           , [<Optional>]_output: ref<'r -> 'U>        , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
+    static member inline ``<*>`` ((a: 'Monoid, f)     , _: ref<'Monoid * _>, (b: 'Monoid, x: 'T)  , [<Optional>]_output: ref<'Monoid * 'U>    , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
     #if !FABLE_COMPILER
-    static member        ``<*>`` (f: Task<_>          , _: ref<Task<_>>              , x: Task<'T>             , [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
+    static member        ``<*>`` (f: Task<_>          , _: ref<Task<_>>              , x: Task<'T>             , [<Optional>]_output: ref<Task<'U>>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
-    static member        ``<*>`` (f: Async<_>         , _: ref<Async<_>>             , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
-    static member        ``<*>`` (f: option<_>        , _: ref<option<_>>            , x: option<'T>           , [<Optional>]_output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
-    static member        ``<*>`` (f: Result<_,'E>     , _: ref<Result<_,'E>>         , x: Result<'T,'E>        , [<Optional>]_output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
-    static member        ``<*>`` (f: Choice<_,'E>     , _: ref<Choice<_,'E>>         , x: Choice<'T,'E>        , [<Optional>]_output: Choice<'b,'E>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
-    static member inline ``<*>`` (KeyValue(a: 'Key, f), _: ref<KeyValuePair<'Key, _>>, KeyValue(b: 'Key, x: 'T), [<Optional>]_output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
+    static member        ``<*>`` (f: Async<_>         , _: ref<Async<_>>             , x: Async<'T>            , [<Optional>]_output: ref<Async<'U>>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
+    static member        ``<*>`` (f: option<_>        , _: ref<option<_>>            , x: option<'T>           , [<Optional>]_output: ref<option<'U>>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
+    static member        ``<*>`` (f: Result<_,'E>     , _: ref<Result<_,'E>>         , x: Result<'T,'E>        , [<Optional>]_output: ref<Result<'b,'E>>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
+    static member        ``<*>`` (f: Choice<_,'E>     , _: ref<Choice<_,'E>>         , x: Choice<'T,'E>        , [<Optional>]_output: ref<Choice<'b,'E>>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
+    static member inline ``<*>`` (KeyValue(a: 'Key, f), _: ref<KeyValuePair<'Key, _>>, KeyValue(b: 'Key, x: 'T), [<Optional>]_output: ref<KeyValuePair<'Key,'U>>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
 
-    static member        ``<*>`` (f: Map<'Key,_>      , _: ref<Map<'Key,_>>, x: Map<'Key,'T>         , [<Optional>]_output: Map<'Key,'U>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
+    static member        ``<*>`` (f: Map<'Key,_>      , _: ref<Map<'Key,_>>, x: Map<'Key,'T>         , [<Optional>]_output: ref<Map<'Key,'U>>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
        for KeyValue(k, vf) in f do
            match Map.tryFind k x with
            | Some vx -> yield k, vf vx
            | _       -> () })
 
-    static member        ``<*>`` (f: Dictionary<'Key,_>, _: ref<Dictionary<'Key,_>>, x: Dictionary<'Key,'T> , [<Optional>]_output: Dictionary<'Key,'U> , [<Optional>]_mthd: Apply) : Dictionary<'Key,'U> =
+    static member        ``<*>`` (f: Dictionary<'Key,_>, _: ref<Dictionary<'Key,_>>, x: Dictionary<'Key,'T> , [<Optional>]_output: ref<Dictionary<'Key,'U>> , [<Optional>]_mthd: Apply) : Dictionary<'Key,'U> =
        let dct = Dictionary ()
        for KeyValue(k, vf) in f do
            match x.TryGetValue k with
@@ -173,23 +173,23 @@ type Apply =
        dct
     
     #if !FABLE_COMPILER
-    static member        ``<*>`` (f: Expr<'T->'U>, _: ref<Expr<'T->'U>>, x: Expr<'T>, [<Optional>]_output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
+    static member        ``<*>`` (f: Expr<'T->'U>, _: ref<Expr<'T->'U>>, x: Expr<'T>, [<Optional>]_output: ref<Expr<'U>>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     #endif
-    static member        ``<*>`` (f: ('T->'U) ResizeArray, _: ref<('T->'U) ResizeArray>, x: 'T ResizeArray, [<Optional>]_output: 'U ResizeArray, [<Optional>]_mthd: Apply) =
+    static member        ``<*>`` (f: ('T->'U) ResizeArray, _: ref<('T->'U) ResizeArray>, x: 'T ResizeArray, [<Optional>]_output: ref<'U ResizeArray>, [<Optional>]_mthd: Apply) =
        ResizeArray (Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) : 'U ResizeArray
 
     static member inline Invoke (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         let inline call (mthd : ^M, input1: ^I1, input2: ^I2, output: ^R) =
-            ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : _*_*_*_*_ -> _) input1, ref input1, input2, output, mthd)
+            ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : _*_*_*_*_ -> _) input1, ref input1, input2, ref output, mthd)
         call(Unchecked.defaultof<Apply>, f, x, Unchecked.defaultof<'``Applicative<'U>``>)
 
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) (f, x))
 
 type Apply with
-    static member inline ``<*>`` (f: '``Monad<'T->'U>``      , _: ref<'``Monad<'T->'U>``>      , x: '``Monad<'T>``      , _output: '``Monad<'U>``      , _mthd:Default2) : '``Monad<'U>`` = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
-    static member inline ``<*>`` (f: '``Applicative<'T->'U>``, _: ref<'``Applicative<'T->'U>``>, x: '``Applicative<'T>``, _output: '``Applicative<'U>``, _mthd:Default1) : '``Applicative<'U>`` = Apply.InvokeOnInstance f x
-    static member inline ``<*>`` (_: ^t when ^t : null and ^t: struct, _, _: ^u when ^u : null and ^u: struct, _output: ^r when ^r : null and ^r: struct, _mthd: Default1) = id
+    static member inline ``<*>`` (f: '``Monad<'T->'U>``      , _: ref<'``Monad<'T->'U>``>      , x: '``Monad<'T>``      , _output: ref<'``Monad<'U>``      >, _mthd:Default2) : '``Monad<'U>`` = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
+    static member inline ``<*>`` (f: '``Applicative<'T->'U>``, _: ref<'``Applicative<'T->'U>``>, x: '``Applicative<'T>``, _output: ref<'``Applicative<'U>``>, _mthd:Default1) : '``Applicative<'U>`` = Apply.InvokeOnInstance f x
+    static member inline ``<*>`` (_: ^t when ^t : null and ^t: struct, _, _: ^u when ^u : null and ^u: struct, _output: ref< ^r> when ^r : null and ^r: struct, _mthd: Default1) = id
 
 // Functor class ----------------------------------------------------------
 
