@@ -1018,7 +1018,7 @@ module Applicative =
 
         // Test Applicative (ZipList)
         let res9n5   = map ((+) 1) (ZipList [8;4])
-        let res20n30 = result (+) <*> result 10 <*> ZipList [10;20]
+        // let res20n30 = result (+) <*> result 10 <*> ZipList [10;20]  doesn't work with simple applicative signature
         let res18n14 = result (+) <*> ZipList [8;4] <*> result 10
         let res9n5'  = map ((+) 1) (ZipList' [8;4])
 
@@ -1027,9 +1027,13 @@ module Applicative =
         Assert.AreEqual (508, res508)
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
         
-        // WrappedSeqC is Monad. Monads are Applicatives => (<*>) should work
-        let (res3: WrappedSeqC<_>) = WrappedSeqC [(+) 1] <*> WrappedSeqC [2]
-        CollectionAssert.AreEqual (WrappedSeqC [3], res3)
+        // WrappedSeqC is Monad. Monads are Applicatives => (<*>) should work ...
+        // let (res3: WrappedSeqC<_>) = WrappedSeqC [(+) 1] <*> WrappedSeqC [2]
+        // CollectionAssert.AreEqual (WrappedSeqC [3], res3)
+        // .. but it doesn't because it's also seq<_> so type inference get's confused
+        // In these cases we are forced to implement <*>
+        let (res3: WrappedListE<_>) = WrappedListE [(+) 1] <*> WrappedListE [2]
+        CollectionAssert.AreEqual (WrappedListE [3], res3)
         
         // Check user defined types implementing IEnumerable don't default to seq<_>
         let res4 = WrappedSeqE [(+) 1] <*> WrappedSeqE [3]
