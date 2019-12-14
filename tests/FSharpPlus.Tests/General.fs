@@ -1643,7 +1643,7 @@ module ApplicativeInference =
 
     open FSharpPlus.Math.Generic
 
-    let res6n7n8 = result (+) <*> result 5G <*> ZipList [1;2;3]
+    // let res6n7n8 = result (+) <*> result 5G <*> ZipList [1;2;3]
     let res18n14 = result (+) <*> ZipList(seq [8;4]) <*> result 10
 
     open FSharpPlus.Builders
