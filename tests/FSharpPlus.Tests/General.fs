@@ -1664,7 +1664,7 @@ module ApplicativeInference =
 
     let resSome2'' = iI safeDivBy (Some 4G) J (Some 8G) Ii
     let resNone = iI safeDivBy (Some 0G) J (Some 8G) Ii
-    let res16n17   = iI (+) (iI (+) (result 4) [2;3] Ii ) (result 10: _ list) Ii   // *1
+    // let res16n17   = iI (+) (iI (+) (result 4) [2;3] Ii ) (result 10: _ list) Ii   // *1
 
     // *1 These lines fails when Apply.Invoke has no 'or ^'``Applicative<'U>`` ' (output) constraint.
     // *2 F# 4.1 regression
