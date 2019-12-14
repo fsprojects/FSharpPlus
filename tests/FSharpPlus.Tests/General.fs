@@ -1032,11 +1032,14 @@ module Applicative =
         // CollectionAssert.AreEqual (WrappedSeqC [3], res3)
         // .. but it doesn't because it's also seq<_> so type inference get's confused
         // In these cases we are forced to implement <*>
-        let (res3: WrappedListE<_>) = WrappedListE [(+) 1] <*> WrappedListE [2]
-        CollectionAssert.AreEqual (WrappedListE [3], res3)
+        let (res2: WrappedListE<_>) = WrappedListE [(+) 1] <*> WrappedListE [1]
+        let (res3: WrappedListE<_>) = WrappedListE [(+)] <*> WrappedListE [2] <*> WrappedListE [1]
+        Assert.IsInstanceOf<option<WrappedListE<int>>> (Some res2)
+        Assert.IsInstanceOf<option<WrappedListE<int>>> (Some res3)
         
         // Check user defined types implementing IEnumerable don't default to seq<_>
         let res4 = WrappedSeqE [(+) 1] <*> WrappedSeqE [3]
+        Assert.IsInstanceOf<option<WrappedSeqE<int>>> (Some res4)
         CollectionAssert.AreEqual (WrappedSeqE [4], res4)
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
