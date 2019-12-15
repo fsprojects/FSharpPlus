@@ -1646,22 +1646,22 @@ module ApplicativeInference =
     open FSharpPlus.Builders
 
     let res3n4''  = iI ((+) 2) [1;2] Ii
-    let res3n4''' = iI (+) (result 2) [1;2] Ii                               // *1
-    let res18n24' = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
+    // let res3n4''' = iI (+) (result 2) [1;2] Ii                               // *1
+    // let res18n24' = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
     // let res6n7n8' = iI (+) (result 5G          ) (ZipList [1;2;3]     ) Ii   // *1, *2
     let res18n14' = iI (+) (ZipList(seq [8;4])) (result 10            ) Ii
 
     let safeDiv x y = if y = 0 then None else Some (x </div/> y)
-    let resSome3    = join (iI safeDiv (Some 6) (Some 2) Ii)
-    let resSome3'   =       iI safeDiv (Some 6) (Some 2) Ji
+    // let resSome3    = join (iI safeDiv (Some 6) (Some 2) Ii)
+    // let resSome3'   =       iI safeDiv (Some 6) (Some 2) Ji
 
     let safeDivBy y = if y = 0 then None else Some (fun x -> x </div/> y)
     let resSome2  = join (result safeDivBy  <*> Some 4G) <*> Some 8G
-    let resSome2' = join (   iI safeDivBy (Some 4G) Ii) <*> Some 8G
+    // let resSome2' = join (   iI safeDivBy (Some 4G) Ii) <*> Some 8G
 
-    let resSome2'' = iI safeDivBy (Some 4G) J (Some 8G) Ii
-    let resNone = iI safeDivBy (Some 0G) J (Some 8G) Ii
-    let res16n17   = iI (+) (iI (+) (result 4) [2;3] Ii ) (result 10: _ list) Ii   // *1
+    // let resSome2'' = iI safeDivBy (Some 4G) J (Some 8G) Ii
+    // let resNone = iI safeDivBy (Some 0G) J (Some 8G) Ii
+    // let res16n17   = iI (+) (iI (+) (result 4) [2;3] Ii ) (result 10: _ list) Ii   // *1
 
     // *1 These lines fails when Apply.Invoke has no 'or ^'``Applicative<'U>`` ' (output) constraint.
     // *2 F# 4.1 regression
