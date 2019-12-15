@@ -1035,7 +1035,7 @@ module Applicative =
         let res4 = WrappedSeqE [(+) 1] <*> WrappedSeqE [3]
         Assert.IsInstanceOf<Option<WrappedSeqE<int>>> (Some res4)
         CollectionAssert.AreEqual (WrappedSeqE [4], res4)
-        let (res5: WrappedSeqE<_>) = WrappedSeqE [(+)] <*> WrappedSeqE [3] <*> WrappedSeqE [2]
+        let res5 = WrappedSeqE [(+)] <*> WrappedSeqE [3] <*> WrappedSeqE [2]
         Assert.IsInstanceOf<Option<WrappedSeqE<int>>> (Some res5)
         CollectionAssert.AreEqual (WrappedSeqE [5], res5)
 
