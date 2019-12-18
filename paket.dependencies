@@ -13,6 +13,7 @@ group docs
     frameworks: netstandard2.0
     generate_load_scripts: true
     source https://api.nuget.org/v3/index.json
+    nuget FSharp.Core ~> 4.6
     nuget FSharp.Literate 
     nuget Fable.React
     nuget Fable.Core 3.0.0

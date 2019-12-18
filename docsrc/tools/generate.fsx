@@ -32,12 +32,13 @@ let properties:PropertyMeta =
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
+#load "../../.paket/load/netstandard2.0/docs/FSharp.Core.fsx"
 #load "../../.paket/load/netstandard2.0/docs/FSharp.Literate.fsx"
 #load "../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
 #load "../../.paket/load/netstandard2.0/docs/MathNet.Numerics.FSharp.fsx"
-#I "../../packages/FSharp.Core/lib/net45/"
-#I "../../bin/FSharpPlus/net45/"
-#I @"../../src/FSharpPlus/bin/Release/net45/"
+#I "../../packages/FSharp.Core/lib/netstandard2.0/"
+#I "../../bin/FSharpPlus/netstandard2.0/"
+#I @"../../src/FSharpPlus/bin/Release/netstandard2.0/"
 
 #r "FSharp.Core.dll"
 #r "FSharpPlus.dll"
@@ -128,7 +129,7 @@ let processFile outdir path  =
 let copyFiles () =
   Directory.copyRecursive Path.files Path.output
   Directory.ensure (Path.output </> "content")
-  Directory.copyRecursive (Path.formatting </> "styles") (Path.output </> "content")  
+  //Directory.copyRecursive (Path.formatting </> "styles") (Path.output </> "content")  
 
 // Build documentation from `fsx` and `md` files in `docs/content`
 let buildDocumentation () =
