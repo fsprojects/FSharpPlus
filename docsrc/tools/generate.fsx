@@ -32,7 +32,6 @@ let properties:PropertyMeta =
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
-#load "../../.paket/load/netstandard2.0/docs/FSharp.Core.fsx"
 #load "../../.paket/load/netstandard2.0/docs/FSharp.Literate.fsx"
 #load "../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
 #load "../../.paket/load/netstandard2.0/docs/MathNet.Numerics.FSharp.fsx"
