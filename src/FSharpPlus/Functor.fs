@@ -252,7 +252,7 @@ type Map =
     static member Map ((x: string              , f        ), _mthd: Map) = String.map f x
     static member Map ((x: StringBuilder       , f        ), _mthd: Map) = new StringBuilder (String.map f (string x))
     static member Map ((x: Set<_>              , f        ), _mthd: Map) = Set.map f x
-    static member Map ((x: Set2<'T>            , f: 'T->'U), _mthd: Map) = Set2<'U>()
+    static member Map ((_: Set2<'T>            , _: 'T->'U), _mthd: Map) = Set2<'U>()
 
 
     static member inline Invoke (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
