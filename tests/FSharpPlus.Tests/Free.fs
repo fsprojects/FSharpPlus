@@ -10,7 +10,6 @@ open Helpers
 open SideEffects
 
 module Free =
-    // compile tests only for now
     
     // primitive functor types
     let aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]
@@ -18,6 +17,9 @@ module Free =
     
     // user defined functor types
     let aFreeOfIdentityInt = Roll (Identity (Pure 1)) >>= (fun x -> Roll (Identity (Pure 42)))
+
+    // Structural Equality
+    Assert.IsTrue ((aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]))
 
 
 module Sample1 =

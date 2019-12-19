@@ -3,15 +3,20 @@ namespace FSharpPlus.Data
 open FSharpPlus
 open FSharpPlus.Control
 
+[<NoComparison>]
 type FreeNode<'ft,'t> = Pure of 't | Roll of obj
 type FreeParent<'ft,'t> (f: FreeNode<'ft,'t>) =
     let free = f
     member __.getFree () = free
 
 /// Free Monad
-[<NoEquality; NoComparison>]
-type Free<'ft,'t> (f: FreeNode<'ft,'t>) =
+type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'ft,'t> (f: FreeNode<'ft,'t>) =
     inherit FreeParent<'ft,'t> (f)
+    override x.GetHashCode () = Unchecked.hash (x.getFree ())
+    override x.Equals o =
+        match o with
+        | :? Free<'ft,'t> as y -> Unchecked.equals (x.getFree ()) (y.getFree ())
+        | _                    -> false
 
 
 module FreeInternals =
