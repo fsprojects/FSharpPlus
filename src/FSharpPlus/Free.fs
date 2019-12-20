@@ -5,13 +5,14 @@ open FSharpPlus.Control
 
 [<NoComparison>]
 type FreeNode<'ft,'t> = Pure of 't | Roll of obj
-type FreeParent<'ft,'t> (f: FreeNode<'ft,'t>) =
+
+type FreeBase<'ft,'t> (f: FreeNode<'ft,'t>) =
     let free = f
     member __.getFree () = free
 
 /// Free Monad
 type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'ft,'t> (f: FreeNode<'ft,'t>) =
-    inherit FreeParent<'ft,'t> (f)
+    inherit FreeBase<'ft,'t> (f)
     override x.GetHashCode () = Unchecked.hash (x.getFree ())
     override x.Equals o =
         match o with
@@ -32,7 +33,7 @@ module FreeInternals =
             | Roll s -> unbox s
             | Pure _ -> failwith "It was Pure"
 
-        let rec loop f (x:Free<_,_>) =
+        let rec loop f (x: Free<_,_>) =
             match x.getFree () with
             | Pure r -> f r
             | _ -> let x = unroll x in Roll (Map.InvokeOnInstance (loop f) x) : Free<'``Functor<'U>``,'U>
@@ -55,23 +56,22 @@ module FreePrimitives =
 
     let inline (|Pure|Roll|) (f: Free<_,_>) =
         match f.getFree () with
-        | FreeNode.Pure x -> Choice1Of2 x
-        | FreeNode.Roll _ -> let x = unroll f in Choice2Of2 x
+        | FreeNode.Pure x -> Pure x
+        | FreeNode.Roll _ -> let x = unroll f in Roll x
 
 /// Basic operations on Free Monads
 [<RequireQualifiedAccess>]
 module Free =
 
     let inline bind (f: 'T -> Free<'``Functor<'U>``,'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
-        let rec loop f (x:Free<_,_>) =
+        let rec loop f (x: Free<_,_>) =
             match x.getFree () with
             | FreeNode.Pure r -> f r
             | _ -> let x = unroll x in Roll (Map.Invoke(loop f) x) : Free<'``Functor<'U>``,'U>
         loop f x
 
-
-type FreeParent<'FT,'T> with
-    static member inline (>>=) (x: FreeParent<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = Free.bind f ( x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
+type FreeBase<'FT,'T> with
+    static member inline (>>=) (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = Free.bind f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
 
 type Free<'FT,'T> with
     static member Return x = Pure x
