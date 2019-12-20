@@ -48,11 +48,8 @@ module Sample1 =
     let ex1  = Set ("alma", "bela", (Get ("alma", id)))
     let exF1 = Roll (Set ("alma", "bela", (Roll (Get ("alma", (fun s -> Pure s))))))
 
-    let liftFree: DSL<'a> -> FreeDSL<'a> =
-        fun       action  -> Roll (mapDSL Pure action)
-
-    let get key       = liftFree (Get (key, id))
-    let set key value = liftFree (Set (key, value, ()))
+    let get key       = Free.liftF (Get (key, id))
+    let set key value = Free.liftF (Set (key, value, ()))
 
     let exF2 = set "foo" "bar" >>= fun _ -> get "foo"
 

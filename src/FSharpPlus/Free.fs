@@ -42,7 +42,7 @@ module FreeInternals =
         let rec loop f (x: Free<_,_>) =
             match x.getFree () with
             | Pure r -> f r
-            | _ -> let x = _unroll x in _roll (Map.InvokeOnInstance (loop f) x) : Free<'``Functor<'U>``,'U>
+            | _      -> let x = _unroll x in _roll (Map.InvokeOnInstance (loop f) x) : Free<'``Functor<'U>``,'U>
         loop f x
 
     let inline unroll (f: Free<'``Functor<'T>``,'T>) : '``Functor<Free<'Functor<'T>,'T>>`` when (Map or ^``Functor<'T>`` or ^``Functor<Free<'Functor<'T>,'T>>``) : (static member Map : (^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>)) * Map -> ^``Functor<Free<'Functor<'T>,'T>>``) =
@@ -82,6 +82,17 @@ module Free =
             | FreeNode.Pure r -> f r
             | _ -> let x = unroll x in Roll (Map.Invoke(loop f) x) : Free<'``Functor<'U>``,'U>
         loop f x
+
+    /// Folds the Free structure into a Monad
+    let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
+        let rec loop f = function
+            | Roll x -> f x >>= loop f
+            | Pure a -> result a
+        loop f x
+
+    /// Lift any Functor into a Free structure
+    let inline liftF (x: '``Functor<'T>``) : Free<'``Functor<'T>``,'T> = Roll (Map.InvokeOnInstance (Pure: 'T -> Free<'``Functor<'T>``,'T>) x)
+
 
 type FreeBase<'FT,'T> with
     static member inline Map   (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> 'U) = Free.map f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
