@@ -1,5 +1,5 @@
 language: csharp
-dotnet: 2.2.301
+dotnet: 3.0.101
 
 sudo: false  # use the new container-based Travis infrastructure 
 
@@ -8,10 +8,6 @@ before_install:
  
 script: 
   - dotnet build -c Release
-  - mono ./.paket/paket.bootstrapper.exe
-  - mono ./.paket/paket.exe restore # the docs depend on paket right now
-  - ./docsrc/tools/generate.sh --define:RELEASE --define:REFERENCE
-  - ./docsrc/tools/generate.sh --define:RELEASE --define:HELP
   - dotnet test -c Release
 env:
   FSHARP_FORMATTING_LOG=NONE

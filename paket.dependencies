@@ -2,9 +2,7 @@ source https://nuget.org/api/v2
 source https://ci.appveyor.com/nuget/fsharp-formatting
 source https://api.nuget.org/v3/index.json
 
-nuget FSharp.Core ~> 4.1 redirects: force
-
-nuget FSharp.Formatting ~> 3.1.0
+nuget FSharp.Core ~> 4.6
 nuget MathNet.Numerics.FSharp redirects: force
 nuget NUnit.ConsoleRunner ~> 3.10.0
 github fsharp/FAKE modules/Octokit/Octokit.fsx
@@ -12,11 +10,16 @@ github fsharp/FAKE modules/Octokit/Octokit.fsx
 # docs:
 
 group docs
+    frameworks: netstandard2.0
+    generate_load_scripts: true
     source https://api.nuget.org/v3/index.json
-    nuget NuGet.CommandLine
+    nuget FSharp.Core ~> 4.6
+    nuget FSharp.Literate 
+    nuget Fable.React
+    nuget Fable.Core 3.0.0
     nuget FSharp.Compiler.Tools 10.2.3
-    nuget FAKE ~> 4.63.2
-
+    nuget MathNet.Numerics.FSharp
+    nuget FSharp.Formatting ~> 3.1.0
 group buildfsx
     source https://api.nuget.org/v3/index.json
     nuget Fake.DotNet.Cli 

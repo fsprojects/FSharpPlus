@@ -287,18 +287,16 @@ let buildDocumentationTarget fsiargs target =
         (sprintf "Building documentation, (%s) this could take some time, please wait..." target)
         (sprintf "generating documentation %s failed" target)
         (fun p -> { p with 
-                       FileName = if Environment.isWindows then fsiExe else "mono"
-                       Arguments = (if Environment.isWindows then "" else fsiExe + " ") + sprintf " %s --exec generate.fsx" fsiargs
+                       FileName = "dotnet"
+                       Arguments = sprintf " fsi --exec generate.fsx %s" fsiargs
                        WorkingDirectory = __SOURCE_DIRECTORY__ @@ "docsrc" @@ "tools" } )
 
-Target.create "GenerateReferenceDocs" (fun _ ->
-    buildDocumentationTarget "--define:RELEASE --define:REFERENCE" "Default"
-)
+Target.create "GenerateReferenceDocs" ignore // not currently implemented
 
 let generateHelp' fail debug =
     let args =
-        if debug then "--define:HELP"
-        else "--define:RELEASE --define:HELP"
+        if debug then ""
+        else "--define:RELEASE "
     try
         buildDocumentationTarget args "Default"
         Trace.log "Help generated"
