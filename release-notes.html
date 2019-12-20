@@ -1,44 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>release-notes</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="F#+ is a base library for F#."/>
-    <meta name="author" content="Gusty"/>
-
-    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
-    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
-
-    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
-    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="container">
-      <div class="masthead">
-        <ul class="nav nav-pills pull-right">
-          <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
-        </ul>
-        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="span9" id="main">
-          
+<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h4><a name="1-1-0-CI00272-September-14-2019" class="anchor" href="#1-1-0-CI00272-September-14-2019">1.1.0-CI00272  - September 14 2019</a></h4>
+<ul>
+<li>Initial Fable support for Extensions</li>
+<li>Add generic bind, try/findIndex and try/findSliceIndex functions</li>
+<li>Traverse and TraverseIndexed for Map<_,_></li>
+<li>Lens: fix foldOf and add maximumOf/minimumOf</li>
+</ul>
+<h4><a name="1-1-0-CI00271-August-15-2019" class="anchor" href="#1-1-0-CI00271-August-15-2019">1.1.0-CI00271  - August 15 2019</a></h4>
+<ul>
+<li>Add intersect functions for Map/Dictionaries</li>
+<li>Add polyvariadic memoizationN, curryN/uncurryN functions</li>
+<li>Add polyvariadic parsing functions (scanf family)</li>
+<li>Add Dict.containsKey, IReadOnlyDictionary.containsKey</li>
+<li>More lens for Map and Set</li>
+<li>Extend String and Task modules</li>
+<li>Task as ZipFunctor and Applicative</li>
+<li>Improve performace for union on dictionaries and maps</li>
+<li>Add unary negation operator for applicative maths</li>
+<li>Fix: add missing CE members to Monad Transformers</li>
+<li>Fix: infinite seq of asyncs can now be traversed</li>
+<li>Fix: generic sum function works with any monoid</li>
+<li>Fix 'use' for strict builders</li>
+</ul>
 <h4><a name="1-1-0-CI00252-October-8-2018" class="anchor" href="#1-1-0-CI00252-October-8-2018">1.1.0-CI00252  - October 8 2018</a></h4>
 <ul>
 <li>Add Invariant Abstraction</li>
 <li>Some convenient conversion functions between Option and Result</li>
 <li>OfSeq for IReadOnlyDictionary</li>
 <li>OfList for all same instances as OfSeq</li>
-<li>Add some ReadOnly CSollections related functions</li>
+<li>Add some ReadOnly Collections related functions</li>
 </ul>
 <h4><a name="1-1-0-CI00245-September-22-2018" class="anchor" href="#1-1-0-CI00245-September-22-2018">1.1.0-CI00245  - September 22 2018</a></h4>
 <ul>
@@ -198,32 +188,4 @@ Rename:
 <ul>
 <li>Initial release using ProjectScaffold</li>
 </ul>
-
-
-        </div>
-        <div class="span3">
-          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-		  	<li class="nav-header">FSharpPlus</li>
-		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
-		  <li class="divider"></li>
-		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-		  <li><a href="/FSharpPlus/license.html">License</a></li>
-		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
-
-		  <li class="nav-header">Getting started</li>
-		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
-
-		  <li class="nav-header">Documentation</li>
-		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
-		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
-		  </ul>
-        </div>
-      </div>
-    </div>
-    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
-  </body>
-  </html>
+</div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>
