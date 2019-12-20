@@ -31,9 +31,9 @@ let template (m:PropertyMeta) =
                          Rel "stylesheet" ]
                   link [ Type "text/css"
                          Rel "stylesheet"
-                         Href <| m.Root "/content/style.css" ]
+                         Href <| m.Root "/style.css" ]
                   script [ Type "text/javascript"
-                           Src <| m.Root "/content/tips.js" ]
+                           Src <| m.Root "/tips.js" ]
                     [ ] ]
               body [ ]
                 [ div [ Class "container" ]
