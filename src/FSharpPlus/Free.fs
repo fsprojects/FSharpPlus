@@ -22,21 +22,27 @@ type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'ft,'t> (f: FreeNod
 
 module FreeInternals =
 
+    let inline _roll (f: 'fFreeFT)  : Free<'ft,'t> =
+        let (_: 'ft) = Map.InvokeOnInstance (fun (_: Free<'ft,'t>) -> Unchecked.defaultof<'t> ) f
+        Free (FreeNode<'ft,'t>.Roll f)  
+
+    let inline _unroll (f: Free<'ft,'t>) : 'fFreeFT when ^ft : (static member Map : ^ft * ('t -> Free< ^ft, 't>) -> ^fFreeFT) =
+        match f.getFree () with
+        | Roll s -> unbox s
+        | Pure _ -> failwith "It was Pure"
+
+    let inline mapWithMapOnInstance (f: 'T -> 'U) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
+        let rec loop f (x: Free<_,_>) =
+            match x.getFree () with
+            | Pure x -> Free (Pure (f x))
+            | _      -> let x = _unroll x in _roll (Map.InvokeOnInstance (loop f) x) : Free<'``Functor<'U>``,'U>
+        loop f x
+
     let inline bindWithMapOnInstance (f: 'T -> Free<'``Functor<'U>``,'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
-
-        let inline Roll (f: 'fFreeFT)  : Free<'ft,'t> =
-            let (_: 'ft) = Map.InvokeOnInstance (fun (_: Free<'ft,'t>) -> Unchecked.defaultof<'t> ) f
-            Free (FreeNode<'ft,'t>.Roll f)  
-
-        let inline unroll (f: Free<'ft,'t>) : 'fFreeFT when ^ft : (static member Map : ^ft * ('t -> Free< ^ft, 't>) -> ^fFreeFT) =
-            match f.getFree () with
-            | Roll s -> unbox s
-            | Pure _ -> failwith "It was Pure"
-
         let rec loop f (x: Free<_,_>) =
             match x.getFree () with
             | Pure r -> f r
-            | _ -> let x = unroll x in Roll (Map.InvokeOnInstance (loop f) x) : Free<'``Functor<'U>``,'U>
+            | _ -> let x = _unroll x in _roll (Map.InvokeOnInstance (loop f) x) : Free<'``Functor<'U>``,'U>
         loop f x
 
     let inline unroll (f: Free<'``Functor<'T>``,'T>) : '``Functor<Free<'Functor<'T>,'T>>`` when (Map or ^``Functor<'T>`` or ^``Functor<Free<'Functor<'T>,'T>>``) : (static member Map : (^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>)) * Map -> ^``Functor<Free<'Functor<'T>,'T>>``) =
@@ -63,6 +69,13 @@ module FreePrimitives =
 [<RequireQualifiedAccess>]
 module Free =
 
+    let inline map f x =
+        let rec loop f (x: Free<_,_>) =
+            match x.getFree () with
+            | FreeNode.Pure x  -> Pure (f x)
+            | _ -> let x = unroll x in Roll (map (loop f) x)
+        loop f x
+
     let inline bind (f: 'T -> Free<'``Functor<'U>``,'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
         let rec loop f (x: Free<_,_>) =
             match x.getFree () with
@@ -71,8 +84,11 @@ module Free =
         loop f x
 
 type FreeBase<'FT,'T> with
+    static member inline Map   (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> 'U) = Free.map f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
     static member inline (>>=) (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = Free.bind f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
+
 
 type Free<'FT,'T> with
     static member Return x = Pure x
+    static member inline Map   (x: Free<'``Functor<'T>``,'T>, f: 'T -> 'U) = mapWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
     static member inline (>>=) (x: Free<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = bindWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
