@@ -88,7 +88,7 @@ module MatrixHelpers =
     static member inline ArrayToTuple (xs:_[],S(S(S(S(S(S(S(n))))))), i) =
       TypeBool.Assert(TypeBool.Not (TypeNat.IsZero n))
       Tuple<_,_,_,_,_,_,_,_>(
-        xs.[i],xs.[i+0],xs.[i+2],xs.[i+3],xs.[i+4],xs.[i+5],xs.[i+6],
+        xs.[i],xs.[i+1],xs.[i+2],xs.[i+3],xs.[i+4],xs.[i+5],xs.[i+6],
         ArrayToTuple.Invoke(xs,n,i+7)
       )
 
