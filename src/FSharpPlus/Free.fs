@@ -97,9 +97,11 @@ module Free =
 type FreeBase<'FT,'T> with
     static member inline Map   (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> 'U) = Free.map f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
     static member inline (>>=) (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = Free.bind f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
+    static member inline (<*>) (f: Free<_,_>, x: FreeBase<_,_>) = Free.bind (fun (x1: 'T->'U) -> Free.bind (fun x2 -> Pure (x1 x2)) (x :?> Free<'``Functor<'T>``,'T>)) f
 
 
 type Free<'FT,'T> with
     static member Return x = Pure x
     static member inline Map   (x: Free<'``Functor<'T>``,'T>, f: 'T -> 'U) = mapWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
     static member inline (>>=) (x: Free<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = bindWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
+    static member inline (<*>) (f: Free<_,_>, x: Free<_,_>) = bindWithMapOnInstance (fun (x1: 'T->'U) -> bindWithMapOnInstance (fun x2 -> Pure (x1 x2)) x) f

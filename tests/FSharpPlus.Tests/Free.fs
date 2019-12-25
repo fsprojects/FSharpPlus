@@ -75,3 +75,76 @@ module Sample1 =
     interpreter (printfn "Received: %A") exF1
     interpreter (printfn "Received: %A") exF2
     interpreter (printfn "Received: %A") exF3
+
+
+module Sample2 =
+    // 
+    // Free monad-interpreter in F# from https://blog.ploeh.dk/2017/07/17/a-pure-command-line-wizard/
+
+    type CmdLine<'t> =
+        | ReadLine  of (string -> 't)
+        | WriteLine of  string  * 't
+    with static member Map (x, f) =
+            match x with
+            | ReadLine   g     -> ReadLine  (f << g)
+            | WriteLine (s, g) -> WriteLine (s, f g)
+
+    let readLine    = Free.liftF (ReadLine id)
+    let writeLine s = Free.liftF (WriteLine (s, ()))
+
+
+    let rec interpret = function
+        | Pure x -> x
+        | Roll (ReadLine      next)  -> Console.ReadLine () |> next |> interpret
+        | Roll (WriteLine (s, next)) ->
+            Console.WriteLine s
+            next |> interpret
+
+    let rec readQuantity = monad {
+        do! writeLine "Please enter number of diners:"
+        let! l = readLine
+        match tryParse l with
+        | Some dinerCount -> return dinerCount
+        | None ->
+            do! writeLine "Not an integer."
+            return! readQuantity }
+
+    let rec readDate = monad {
+        do! writeLine "Please enter your desired date:"
+        let! l = readLine
+        match DateTimeOffset.TryParse l with
+        | true, dt -> return dt
+        | _ ->
+            do! writeLine "Not a date."
+            return! readDate }
+
+    let readName = monad {
+        do! writeLine "Please enter your name:"
+        return! readLine }
+ 
+    let readEmail = monad {
+        do! writeLine "Please enter your email address:"
+        return! readLine }
+
+
+    type Reservation = {
+        Date : DateTimeOffset
+        Name : string
+        Email : string
+        Quantity : int }
+        with static member Create (Quantity, Date, Name, Email) = { Date = Date; Name = Name; Email = Email; Quantity = Quantity }
+
+    let readReservationRequest =
+        curryN Reservation.Create
+        <!> readQuantity
+        <*> readDate
+        <*> readName
+        <*> readEmail
+
+
+
+    let mainFunc () =
+        readReservationRequest
+        >>= (writeLine << (sprintf "%A"))
+        |> interpret
+        0
