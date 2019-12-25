@@ -197,3 +197,13 @@ docsrc/tools/FSharp.Formatting.svclog
 
 .idea/
 .ionide/
+
+
+# Node install directory
+
+tests/FSharpPlusFable.Tests/node_modules/
+
+
+# Fable compilation files
+
+tests/FSharpPlusFable.Tests/FSharpPlusFable

@@ -17,21 +17,13 @@ type FromBigInt =
     static member inline FromBigInt (_: ^R        , _: Default1  ) = fun (x: bigint) -> (^R : (static member FromBigInt : _ -> ^R) x)
     static member inline FromBigInt (_: Default1  , _: Default1  ) = fun (x: bigint) -> (^R : (static member FromBigInt : _ -> ^R) x)
     static member        FromBigInt (_: int32     , _: FromBigInt) = fun (x: bigint) -> int             x
+    #if !FABLE_COMPILER
     static member        FromBigInt (_: int64     , _: FromBigInt) = fun (x: bigint) -> int64           x
     static member        FromBigInt (_: nativeint , _: FromBigInt) = fun (x: bigint) -> nativeint  (int x)
     static member        FromBigInt (_: unativeint, _: FromBigInt) = fun (x: bigint) -> unativeint (int x)
+    #endif
     static member        FromBigInt (_: bigint    , _: FromBigInt) = fun (x: bigint) ->                 x
     static member        FromBigInt (_: float     , _: FromBigInt) = fun (x: bigint) -> float           x
-#if NET35
-    static member        FromBigInt (_: sbyte     , _: FromBigInt) = fun (x: bigint) -> sbyte      (int x)
-    static member        FromBigInt (_: int16     , _: FromBigInt) = fun (x: bigint) -> int16      (int x)
-    static member        FromBigInt (_: byte      , _: FromBigInt) = fun (x: bigint) -> byte       (int x)
-    static member        FromBigInt (_: uint16    , _: FromBigInt) = fun (x: bigint) -> uint16     (int x)
-    static member        FromBigInt (_: uint32    , _: FromBigInt) = fun (x: bigint) -> uint32     (int x)
-    static member        FromBigInt (_: uint64    , _: FromBigInt) = fun (x: bigint) -> uint64     (int64 x)
-    static member        FromBigInt (_: float32   , _: FromBigInt) = fun (x: bigint) -> float32    (int x)
-    static member        FromBigInt (_: decimal   , _: FromBigInt) = fun (x: bigint) -> decimal    (int x)
-#else
     static member        FromBigInt (_: sbyte     , _: FromBigInt) = fun (x: bigint) -> sbyte           x
     static member        FromBigInt (_: int16     , _: FromBigInt) = fun (x: bigint) -> int16           x
     static member        FromBigInt (_: byte      , _: FromBigInt) = fun (x: bigint) -> byte            x
@@ -40,7 +32,6 @@ type FromBigInt =
     static member        FromBigInt (_: uint64    , _: FromBigInt) = fun (x: bigint) -> uint64          x
     static member        FromBigInt (_: float32   , _: FromBigInt) = fun (x: bigint) -> float32         x
     static member        FromBigInt (_: decimal   , _: FromBigInt) = fun (x: bigint) -> decimal         x
-#endif
 
     static member inline Invoke (x: bigint) : 'Num =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member FromBigInt : _*_ -> _) b, a)
@@ -56,19 +47,12 @@ type FromInt64 =
     static member inline FromInt64 (_: Default1  , _: Default1 ) = fun (x: int64) -> (^R : (static member FromInt64 : _ -> ^R) x)
     static member        FromInt64 (_: int32     , _: FromInt64) = fun (x: int64) -> int32           x
     static member        FromInt64 (_: int64     , _: FromInt64) = fun (x: int64) ->                 x
+    #if !FABLE_COMPILER
     static member        FromInt64 (_: nativeint , _: FromInt64) = fun (x: int64) -> nativeint  (int x)
     static member        FromInt64 (_: unativeint, _: FromInt64) = fun (x: int64) -> unativeint (int x)
+    #endif
     static member        FromInt64 (_: bigint    , _: FromInt64) = fun (x: int64) -> bigint          x
     static member        FromInt64 (_: float     , _: FromInt64) = fun (x: int64) -> float           x
-#if NET35
-    static member        FromInt64 (_: float32   , _: FromInt64) = fun (x: int64) -> float32    (int x)
-    static member        FromInt64 (_: decimal   , _: FromInt64) = fun (x: int64) -> decimal    (int x)
-    static member        FromInt64 (_: sbyte     , _: FromInt64) = fun (x: int64) -> sbyte      (int x)
-    static member        FromInt64 (_: int16     , _: FromInt64) = fun (x: int64) -> int16      (int x)
-    static member        FromInt64 (_: byte      , _: FromInt64) = fun (x: int64) -> byte       (int x)
-    static member        FromInt64 (_: uint16    , _: FromInt64) = fun (x: int64) -> uint16     (int x)
-    static member        FromInt64 (_: uint32    , _: FromInt64) = fun (x: int64) -> uint32     (int x)
-#else
     static member        FromInt64 (_: float32   , _: FromInt64) = fun (x: int64) -> float32         x
     static member        FromInt64 (_: decimal   , _: FromInt64) = fun (x: int64) -> decimal         x
     static member        FromInt64 (_: sbyte     , _: FromInt64) = fun (x: int64) -> sbyte           x
@@ -76,7 +60,6 @@ type FromInt64 =
     static member        FromInt64 (_: byte      , _: FromInt64) = fun (x: int64) -> byte            x
     static member        FromInt64 (_: uint16    , _: FromInt64) = fun (x: int64) -> uint16          x
     static member        FromInt64 (_: uint32    , _: FromInt64) = fun (x: int64) -> uint32          x
-#endif
     static member        FromInt64 (_: uint64    , _: FromInt64) = fun (x: int64) -> uint64          x
 
     static member inline Invoke (x: int64) : 'Num =
@@ -94,8 +77,10 @@ type FromInt32 =
     static member inline FromInt32 (_: Default1  , _: Default1 ) = fun (x: int32) -> (^R : (static member FromInt32 : _ -> ^R) x)
     static member        FromInt32 (_: int32     , _: FromInt32) = fun (x: int32) ->                 x
     static member        FromInt32 (_: int64     , _: FromInt32) = fun (x: int32) -> int64           x
+    #if !FABLE_COMPILER
     static member        FromInt32 (_: nativeint , _: FromInt32) = fun (x: int32) -> nativeint  (int x)
     static member        FromInt32 (_: unativeint, _: FromInt32) = fun (x: int32) -> unativeint (int x)
+    #endif
     static member        FromInt32 (_: bigint    , _: FromInt32) = fun (x: int32) -> bigint          x
     static member        FromInt32 (_: float     , _: FromInt32) = fun (x: int32) -> float           x
     static member        FromInt32 (_: sbyte     , _: FromInt32) = fun (x: int32) -> sbyte           x
@@ -119,7 +104,9 @@ type One =
     inherit Default1
     static member inline One (_: 't, _: Default1) = FromInt32.Invoke 1            : 't
     static member inline One (_: 't, _: One     ) = LanguagePrimitives.GenericOne : 't
+    #if !FABLE_COMPILER
     static member inline One (_: ^t when ^t: null and ^t: struct, _: One) = id
+    #endif
 
     static member inline Invoke () : 'Num =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member One : _*_ -> _) b, a)
@@ -128,10 +115,7 @@ type One =
 
 open System
 open System.Text
-#if NET35
-#else
 open System.Threading.Tasks
-#endif
 open System.Collections.Generic
 open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals.Prelude
@@ -140,10 +124,12 @@ open FSharpPlus.Internals.Prelude
 type Zero =
     inherit Default1
     static member inline Zero (_: 't                             , _: Default3) = (^t : (static member Empty : ^t) ()) : 't
+    #if !FABLE_COMPILER
     static member inline Zero (_: 't                             , _: Default2) = FromInt32.Invoke 0             : 't
     static member inline Zero (_: ^t when ^t: null and ^t: struct, _: Default2) = id
     static member inline Zero (_: 't                             , _: Default1) = LanguagePrimitives.GenericZero : 't
     static member inline Zero (_: ^t when ^t: null and ^t: struct, _: Default1) = id
+    #endif
     static member        Zero (_: System.TimeSpan                , _: Zero    ) = System.TimeSpan ()
     static member        Zero (_: DmStruct                       , _: Zero    ) = Unchecked.defaultof<DmStruct>
     static member        Zero (_: list<'a>                       , _: Zero    ) = []   :   list<'a>
@@ -184,15 +170,12 @@ type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e      , _: Zero) = (Z
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f   , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ) : 'a*'b*'c*'d*'e*'f
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f*'g, _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : 'a*'b*'c*'d*'e*'f*'g
 
-#if NET35
-#else
 type Zero with
     static member inline Zero (_: Task<'a>, _: Zero) =
         let (v: 'a) = Zero.Invoke ()
         let s = TaskCompletionSource ()
         s.SetResult v
         s.Task
-#endif
 
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
@@ -201,7 +184,11 @@ type Zero with
     static member        Zero (_: Dictionary<'a,'b>         , _: Zero) = Dictionary<'a,'b> ()
     static member        Zero (_: ResizeArray<'a>           , _: Zero) = ResizeArray () : ResizeArray<'a>
     static member        Zero (_: seq<'a>                   , _: Zero) = Seq.empty      : seq<'a>
+    
+    #if !FABLE_COMPILER
     static member        Zero (_: IEnumerator<'a>           , _: Zero) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
+    #endif
+    
     static member        Zero (_: IDictionary<'a,'b>        , _: Zero) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
     static member        Zero (_: IReadOnlyDictionary<'a,'b>, _: Zero) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
 
@@ -238,13 +225,16 @@ type Signum =
         let zero = Zero.Invoke ()
         if x = zero then zero
         else x / Abs.Invoke x :'t
+    #if !FABLE_COMPILER
     static member inline Signum (_: ^t when ^t: null and ^t: struct, _: Default1) = id
     static member inline Signum (x: 't                             , _: Default1) = FromInt32.Invoke (sign x) : 't
+    #endif
 
     static member inline Invoke (x: 'Num) : 'Num =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Signum : _*_ -> _) b, a)
         call_2 (Unchecked.defaultof<Signum>, x)
 
+#if !FABLE_COMPILER
 type Signum' =
     inherit Signum
     static member        Signum (x: byte      , _: Signum') = if x = 0uy then 0uy else 1uy
@@ -288,6 +278,7 @@ type DivRem =
         let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member DivRem : _*_*_ -> _) b, c, a)
         let inline call (a: 'a, b: 'b, c: 'c) = call_3 (a, b, c)
         call (Unchecked.defaultof<DivRem>, D, d)
+#endif
 
 
 
@@ -303,13 +294,8 @@ type ToBigInt =
     static member ToBigInt (x: uint16    ) = bigint (int x)
     static member ToBigInt (x: unativeint) = bigint (int x)
     static member ToBigInt (x: bigint    ) =             x
-#if NET35
-    static member ToBigInt (x: uint32    ) = bigint (int x)
-    static member ToBigInt (x: uint64    ) = bigint (int64 x)
-#else
     static member ToBigInt (x: uint32    ) = bigint      x
     static member ToBigInt (x: uint64    ) = bigint      x
-#endif
 
     static member inline Invoke (x: 'Integral) : bigint =
         let inline call_2 (_: ^a, b: ^b) = ((^a or ^b) : (static member ToBigInt : _ -> _) b)
@@ -355,10 +341,12 @@ type Pi =
 
 type Subtract =
     static member inline Subtract (x, y) = x - y
+    #if !FABLE_COMPILER
     static member inline Subtract (x, y) =
             match (^Num : (static member TrySubtract : ^Num * ^Num -> Result<'Num, exn>) x, y) with
             | Ok x    -> x
             | Error e -> raise e
+    #endif
 
     static member        Subtract (x: byte      , y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
     static member        Subtract (x: uint16    , y) = if y > x then raise Errors.exnNoSubtraction else (x-y) 
@@ -389,10 +377,12 @@ type TrySubtract =
 
 type Divide =
     static member inline Divide (x, y) = let c = x / y in if c * y = x then c else raise Errors.exnNoDivision
+    #if !FABLE_COMPILER
     static member inline Divide (x, y) =
             match (^Num : (static member TryDivide : ^Num * ^Num -> Result< ^Num, exn>) (x, y)) with
             | Ok x    -> x
             | Error e -> raise e
+    #endif
     static member        Divide (x: float  , y) = (/) x y
     static member        Divide (x: float32, y) = (/) x y
     static member inline Invoke (x: 'Num) (y: 'Num) : 'Num =
@@ -424,9 +414,14 @@ type TrySqrtRem =
     static member TrySqrtRem (x: uint16    ) = let c = x |> float |> sqrt |> uint16     in Ok (c, x - c*c)
     static member TrySqrtRem (x: uint32    ) = let c = x |> float |> sqrt |> uint32     in Ok (c, x - c*c)
     static member TrySqrtRem (x: uint64    ) = let c = x |> float |> sqrt |> uint64     in Ok (c, x - c*c)
+    #if !FABLE_COMPILER
     static member TrySqrtRem (x: nativeint ) = let c = x |> float |> sqrt |> nativeint  in Ok (c, x - c*c)
+    #endif
     static member TrySqrtRem (x: byte      ) = let c = x |> float |> sqrt |> byte       in Ok (c, x - c*c)
+    #if !FABLE_COMPILER
     static member TrySqrtRem (x: unativeint) = let c = x |> float |> sqrt |> unativeint in c, x - c*c
+    #endif
+
 
     static member inline Invoke (x: 'Integral) : Result<'Integral*'Integral, exn> =
         let inline call_2 (_: ^a, b: ^b) = ((^a or ^b) : (static member TrySqrtRem : _ -> _) b)
@@ -438,6 +433,7 @@ type TrySqrt =
         let inline call_2 (_: ^a, b: ^b) = ((^a or ^b) : (static member TrySqrt : _ -> _) b)
         call_2 (Unchecked.defaultof<TrySqrt>, x)
 
+    #if !FABLE_COMPILER
     static member inline TrySqrt (x: 'T) = 
         try Ok (sqrt x)
         with e -> Error e
@@ -456,6 +452,7 @@ type TrySqrt =
             match TrySqrt.Invoke n, TrySqrt.Invoke d with
             | Ok n, Ok d -> Ok (toRational n / toRational d)
             | _          -> Error Errors.exnNoSqrt
+    #endif
 
     static member inline TrySqrt (x: float    ) = if x < 0.  then Error Errors.exnSqrtOfNegative else let c = sqrt x in Ok c //if Double.IsNaN c then Error exnNoSqrt else Ok c
     static member inline TrySqrt (x: float32  ) = if x < 0.f then Error Errors.exnSqrtOfNegative else let c = sqrt x in Ok c //if Single.IsNaN c then Error exnNoSqrt else Ok c
@@ -468,6 +465,7 @@ type Sqrt =
             | Ok x    -> x
             | Error e -> raise e
 
+    #if !FABLE_COMPILER
     static member inline Sqrt (x: 'T, _: Default1) = sqrt x
     static member inline Sqrt (x: 'Z, _: Default1) =
         if x < Zero.Invoke () then raise Errors.exnSqrtOfNegative
@@ -475,6 +473,7 @@ type Sqrt =
             match TrySqrtRem.Invoke x with
             | Ok (c, r) -> if r = Zero.Invoke () then c else raise Errors.exnNoSqrt
             | Error x   -> raise x
+    #endif
 
     static member inline Sqrt (x: float32, _:Sqrt) = sqrt x
     static member inline Sqrt (x: decimal, _:Sqrt) = x |> Decimal.trySqrt |> function Ok x -> x | Error e ->  raise e
@@ -520,7 +519,10 @@ type MinValue =
     static member        MinValue (_: decimal       , _: MinValue) = Decimal.MinValue
     static member        MinValue (_: DateTime      , _: MinValue) = DateTime.MinValue
     static member        MinValue (_: DateTimeOffset, _: MinValue) = DateTimeOffset.MinValue
+    #if !FABLE_COMPILER
     static member        MinValue (_: TimeSpan      , _: MinValue) = TimeSpan.MinValue
+    #endif
+
 
     static member inline Invoke () =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member MinValue : _*_ -> _) b, a)
@@ -568,7 +570,9 @@ type MaxValue =
     static member        MaxValue (_: decimal       , _: MaxValue) = Decimal.MaxValue
     static member        MaxValue (_: DateTime      , _: MaxValue) = DateTime.MaxValue
     static member        MaxValue (_: DateTimeOffset, _: MaxValue) = DateTimeOffset.MaxValue
+    #if !FABLE_COMPILER
     static member        MaxValue (_: TimeSpan      , _: MaxValue) = TimeSpan.MaxValue
+    #endif
 
     static member inline Invoke () =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member MaxValue : _*_ -> _) b, a)

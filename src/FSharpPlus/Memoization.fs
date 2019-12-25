@@ -2,6 +2,7 @@
 
 open FSharpPlus.Internals
 
+#if !FABLE_COMPILER
 [<AutoOpen>]
 module Memoization =
 
@@ -24,3 +25,4 @@ module Memoization =
     type MemoizeN with
         static member        MemoizeN (_: Default1, _:      'a -> 'b) = MemoizeN.getOrAdd (ConcurrentDictionary ())
         static member inline MemoizeN (_: MemoizeN, _:'t -> 'a -> 'b) = MemoizeN.getOrAdd (ConcurrentDictionary ()) << (<<) memoizeN
+#endif

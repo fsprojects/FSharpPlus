@@ -97,6 +97,7 @@ type BitConverter =
     /// Converts a byte into an array of bytes with length one.
     static member GetBytes (value: bool) = Array.singleton (if value then 1uy else 0uy)
 
+    #if !FABLE_COMPILER
     /// Converts a char into an array of bytes with length two.
     static member GetBytes (value: char, isLittleEndian: bool) = BitConverter.GetBytes (int16 value, isLittleEndian)
 
@@ -223,6 +224,7 @@ type BitConverter =
     static member ToDouble (value: byte [], startIndex, isLittleEndian) : float =
         let mutable value = BitConverter.ToInt64 (value, startIndex, isLittleEndian)
         &&value |> NativePtr.toNativeInt |> NativePtr.ofNativeInt |> NativePtr.read
+    #endif
 
     static member private GetHexValue (i: int) =
         Diagnostics.Debug.Assert (i >= 0 && i < 16, "i is out of range.")
@@ -261,6 +263,7 @@ type BitConverter =
         if isNull value then nullArg "value"
         BitConverter.ToString (value, startIndex, value.Length - startIndex)
 
+#if !FABLE_COMPILER
 // findSliceIndex
 module FindSliceIndex =
     open System.Linq
@@ -315,5 +318,4 @@ module FindSliceIndex =
                 else go (index + 1)
             else -1
         go 0
-
-
+#endif

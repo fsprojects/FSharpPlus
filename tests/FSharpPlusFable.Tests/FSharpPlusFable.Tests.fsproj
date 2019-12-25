@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Util.fs" />
+    <Compile Include="FSharpTests/Extensions.fs" />
+    <Compile Include="Tests.fs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Fable.Core" Version="3.0.0" />
+    <PackageReference Include="Fable.Promise" Version="2.0.0-beta-001" />
+    <PackageReference Include="Fable.Fetch" Version="2.0.0-beta-001" />
+    <PackageReference Include="Expecto" Version="8.11.0" /> 
+    <PackageReference Include="Expecto.TestResults" Version="8.11.0" /> 
+ </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+  </ItemGroup>
+</Project>

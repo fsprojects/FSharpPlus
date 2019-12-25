@@ -5,10 +5,7 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
-#if NET35
-#else
 open System.Threading.Tasks
-#endif
 open Microsoft.FSharp.Quotations
 
 open FSharpPlus.Internals
@@ -21,8 +18,7 @@ open FSharpPlus
 type Bind =
     static member        (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
     static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
-#if NET35
-#else
+#if !FABLE_COMPILER
     static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
 #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
@@ -65,10 +61,9 @@ type Join =
     static member        Join (x: Lazy<Lazy<_>>         , [<Optional>]_output: Lazy<'T>        , [<Optional>]_mthd: Join    ) = lazy x.Value.Value         : Lazy<'T>
     static member        Join (x: seq<seq<_>>           , [<Optional>]_output: seq<'T>         , [<Optional>]_mthd: Join    ) = Seq.concat x               : seq<'T>
     static member        Join (x: Id<_>                 , [<Optional>]_output: Id<'T>          , [<Optional>]_mthd: Join    ) = x.getValue                 : Id<'T>
-#if NET35
-#else                                                                                                                              
+#if !FABLE_COMPILER                                                                                                                             
     static member        Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
-#endif                                                                                                                                    
+#endif
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
     static member        Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x              : list<'T>
     static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
@@ -103,24 +98,27 @@ type Join =
 type Return =
     inherit Default1
 
+    #if !FABLE_COMPILER
     static member inline Invoke (x: 'T) : '``Applicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Return : _*_ -> _) output, mthd)
         call (Unchecked.defaultof<Return>, Unchecked.defaultof<'``Applicative<'T>``>) x
- 
+    #endif
+    
     static member inline InvokeOnInstance (x: 'T) = (^``Applicative<'T>`` : (static member Return : ^T -> ^``Applicative<'T>``) x)
 
     static member        Return (_: seq<'a>        , _: Default2) = fun  x      -> Seq.singleton x : seq<'a>
+    #if !FABLE_COMPILER
     static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
+    #endif
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
 
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
-#if NET35
-#else        
+#if !FABLE_COMPILER       
     static member        Return (_: 'a Task        , _: Return  ) = fun x -> 
         let s = TaskCompletionSource ()
         s.SetResult x
         s.Task : 'a Task
-#endif        
+#endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []
@@ -129,7 +127,9 @@ type Return =
     static member        Return (_: 'a Async       , _: Return  ) = fun (x: 'a) -> async.Return x
     static member        Return (_: Result<'a,'e>  , _: Return  ) = fun x -> Ok x                                 : Result<'a,'e>
     static member        Return (_: Choice<'a,'e>  , _: Return  ) = fun x -> Choice1Of2 x                         : Choice<'a,'e>
+    #if !FABLE_COMPILER
     static member        Return (_: Expr<'a>       , _: Return  ) = fun x -> Expr.Cast<'a> (Expr.Value (x: 'a))
+    #endif
     static member        Return (_: ResizeArray<'a>, _: Return  ) = fun x -> ResizeArray<'a> (Seq.singleton x)
 
     //Restricted
@@ -145,12 +145,16 @@ type Apply =
 
     static member        ``<*>`` (f: Lazy<'T->'U>     , x: Lazy<'T>             , [<Optional>]_output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy<_>.Create (fun () -> f.Value x.Value)   : Lazy<'U>
     static member        ``<*>`` (f: seq<_>           , x: seq<'T>              , [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
+    #if !FABLE_COMPILER
     static member        ``<*>`` (f: IEnumerator<_>   , x: IEnumerator<'T>      , [<Optional>]_output: IEnumerator<'U>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
+    #endif
     static member        ``<*>`` (f: list<_>          , x: list<'T>             , [<Optional>]_output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
     static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
     static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
     static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , [<Optional>]_output: 'Monoid * 'U         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
+    #if !FABLE_COMPILER
     static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
+    #endif
     static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
     static member        ``<*>`` (f: option<_>        , x: option<'T>           , [<Optional>]_output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
     static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , [<Optional>]_output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
@@ -171,8 +175,9 @@ type Apply =
            | _        -> ()
        dct
     
+    #if !FABLE_COMPILER
     static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, [<Optional>]_output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
-
+    #endif
     static member        ``<*>`` (f: ('T->'U) ResizeArray, x: 'T ResizeArray, [<Optional>]_output: 'U ResizeArray, [<Optional>]_mthd: Apply) =
        ResizeArray (Seq.collect (fun x1 -> Seq.collect (fun x2 -> Seq.singleton (x1 x2)) x) f) : 'U ResizeArray
 
@@ -193,6 +198,7 @@ type Iterate =
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
+    #if !FABLE_COMPILER
     static member Iterate (x: 'T [,]     , action) = Array2D.iter action x
     static member Iterate (x: 'T [,,]    , action) = Array3D.iter action x
     static member Iterate (x: 'T [,,,]   , action) =
@@ -201,6 +207,7 @@ type Iterate =
                             for k = 0 to Array4D.length3 x - 1 do
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
+    #endif
     static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
     static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
@@ -222,8 +229,7 @@ type Map =
     inherit Default1
 
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value) : Lazy<'U>
-    #if NET35
-    #else
+    #if !FABLE_COMPILER
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
@@ -232,16 +238,20 @@ type Map =
     static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U> (g.Invoke >> f)
     static member Map (((m: 'Monoid, a)        , f: 'T->'U), _mthd: Map) = (m, f a)
     static member Map ((x: _ []                , f: 'T->'U), _mthd: Map) = Array.map   f x
+    #if !FABLE_COMPILER
     static member Map ((x: _ [,]               , f: 'T->'U), _mthd: Map) = Array2D.map f x
     static member Map ((x: _ [,,]              , f: 'T->'U), _mthd: Map) = Array3D.map f x
     static member Map ((x: _ [,,,]             , f: 'T->'U), _mthd: Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
+    #endif
     static member Map ((x: Async<_>            , f: 'T->'U), _mthd: Map) = async.Bind (x, async.Return << f)
     static member Map ((x: Result<_,'E>        , f: 'T->'U), _mthd: Map) = Result.map f x
     static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
     static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
     static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
     static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d : Dictionary<'Key,'U>
+    #if !FABLE_COMPILER
     static member Map ((x: Expr<'T>            , f: 'T->'U), _mthd: Map) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
+    #endif
     static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray (Seq.map f x) : ResizeArray<'U>
 
     // Restricted
@@ -267,20 +277,25 @@ type Map with
                                                           , f: 'T->'U), [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
 
     static member        Map ((x: seq<_>                  , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
+    #if !FABLE_COMPILER
     static member        Map ((x: IEnumerator<_>          , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
+    #endif
     static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d :> IDictionary<'Key,'U>
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.map f x : IReadOnlyDictionary<'Key,_>
     static member        Map ((x: IObservable<'T>         , f: 'T->'U), _mthd: Default2) = Observable.map f x       : IObservable<'U>
+    #if !FABLE_COMPILER
     static member inline Map ((x: '``Functor<'T>``        , f: 'T->'U), _mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
     static member inline Map ((_: ^t when ^t: null and ^t: struct, _ ), _mthd: Default1) = ()
-        
+    #endif    
 
 
 type Empty =
     inherit Default1
     static member        Empty ([<Optional>]_output: seq<'T>             , [<Optional>]_mthd: Default2) = Seq.empty    : seq<'T>
+    #if !FABLE_COMPILER
     static member inline Empty ([<Optional>]_output: '``Alternative<'T>``, [<Optional>]_mthd: Default1) = (^``Alternative<'T>`` : (static member Empty : ^``Alternative<'T>``) ()) : '``Alternative<'T>``
     static member inline Empty (_output: ^t when ^t: null and ^t: struct ,             _mthd: Default1) = id    
+    #endif
     static member        Empty ([<Optional>]_output: option<'T>          , [<Optional>]_mthd: Empty   ) = None         : option<'T>
     static member        Empty ([<Optional>]_output: list<'T>            , [<Optional>]_mthd: Empty   ) = [  ]         : list<'T>
     static member        Empty ([<Optional>]_output: 'T []               , [<Optional>]_mthd: Empty   ) = [||]         : 'T []    
@@ -293,8 +308,10 @@ type Empty =
 type Append =
     inherit Default1
     static member        ``<|>`` (x: 'T seq              , y              , [<Optional>]_mthd: Default2) = Seq.append   x y
+    #if !FABLE_COMPILER
     static member inline ``<|>`` (x: '``Alt<'T>``        , y: '``Alt<'T>``, [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member (<|>) : _*_ -> _) x, y) : '``Alt<'T>``
     static member inline ``<|>`` (_: ^t when ^t: null and ^t: struct   , _,             _mthd: Default1) = ()
+    #endif
     static member inline ``<|>`` (x: Result<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x, y with Ok _        , _ -> x | Error x     , Error y      -> Error      (Plus.Invoke x y) | _, _ -> y
     static member inline ``<|>`` (x: Choice<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x, y with Choice1Of2 _, _ -> x | Choice2Of2 x, Choice2Of2 y -> Choice2Of2 (Plus.Invoke x y) | _, _ -> y
     static member inline ``<|>`` (x: Either<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x with Left _ -> y | xs -> xs
@@ -328,8 +345,10 @@ type TryWith =
     inherit Default1
 
     static member        TryWith (computation: '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3) = try computation with e -> catchHandler e
+    #if !FABLE_COMPILER
     static member inline TryWith (computation: '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation, catchHandler) : '``Monad<'T>``
     static member inline TryWith (_: ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1) = ()
+    #endif
 
     static member        TryWith (computation: seq<_>        , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))
     static member        TryWith (computation: Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith ) = async.TryWith (computation, catchHandler)
@@ -379,9 +398,10 @@ type Using with
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``:     struct , _: Default3) = using resource body
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``: not struct , _: Default2) = using resource body
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _: Default1) = TryFinally.InvokeOnInstance (body resource) (fun () -> if not (isNull (box resource)) then resource.Dispose ()) : '``Monad<'U>``
+    #if !FABLE_COMPILER
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _: Using   ) = Using.InvokeOnInstance resource body : '``Monad<'U>``
     static member inline Using (_                                  , _   : 'a -> ^t when ^t : null and ^t: struct               , _: Using   ) = ()
-
+    #endif
 
 
 
@@ -405,7 +425,9 @@ type Unzip =
 
 type Zip =
     inherit Default1
+    #if !FABLE_COMPILER
     static member Zip ((x: IEnumerator<'T>            , y: IEnumerator<'U>           , _output: IEnumerator<'T*'U>           ), _mthd: Zip) = Enumerator.zip x y
+    #endif
     static member Zip ((x: seq<'T>                    , y: seq<'U>                   , _output: seq<'T*'U>                   ), _mthd: Zip) = Seq.zip        x y
     static member Zip ((x: IDictionary<'K, 'T>        , y: IDictionary<'K,'U>        , _output: IDictionary<'K,'T*'U>        ), _mthd: Zip) = Dict.zip       x y
     static member Zip ((x: IReadOnlyDictionary<'K, 'T>, y: IReadOnlyDictionary<'K,'U>, _output: IReadOnlyDictionary<'K,'T*'U>), _mthd: Zip) = IReadOnlyDictionary.zip x y
@@ -415,7 +437,9 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zip      x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip     x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip      x y
+    #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip       x y
+    #endif
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =
         let inline call_4 (a: ^a, b: ^b, c: ^c, d: ^d) = ((^a or ^b or ^c or ^d) : (static member Zip : (_*_*_)*_ -> _) (b, c, d), a)
@@ -425,10 +449,11 @@ type Zip =
     static member inline InvokeOnInstance (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` =
         ((^``ZipFunctor<'T1>`` or ^``ZipFunctor<'T2>`` or  ^``ZipFunctor<'T1 * 'T2>``) : (static member Zip : _*_ -> _) source1, source2)
 
+#if !FABLE_COMPILER
 type Zip with    
     static member inline Zip ((_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _output: ^r when ^r : null and ^r: struct), _mthd: Default1) = id
     static member inline Zip ((x: '``ZipFunctor<'T1>``            , y: '``ZipFunctor<'T2>``            , _output: '``ZipFunctor<'T1 * 'T2>``      ), _mthd: Default1) = Zip.InvokeOnInstance x y : '``ZipFunctor<'T1 * 'T2>``
-
+#endif
 
 // Comonad class ----------------------------------------------------------
 
@@ -439,8 +464,7 @@ type Extract =
     static member inline Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
     static member        Extract (f: 'T Id        ) = f
 
-#if NET35
-#else
+#if !FABLE_COMPILER
     static member        Extract (f: Task<'T>     ) = f.Result
 #endif
 
@@ -455,8 +479,7 @@ type Extend =
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
     static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
 
-#if NET35
-#else
+#if !FABLE_COMPILER
     static member        (=>>) (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith (f)
 #endif
 
@@ -522,8 +545,10 @@ type MapFirst =
 
 type MapFirst with
     static member inline First (x: '``Bifunctor<'T,'V>``, f: 'T->'U, [<Optional>]_mthd: Default2) = Bimap.InvokeOnInstance f id x  : '``Bifunctor<'U,'V>``
+    #if !FABLE_COMPILER
     static member inline First (x: '``Bifunctor<'T,'V>``, f: 'T->'U, [<Optional>]_mthd: Default1) = MapFirst.InvokeOnInstance f x  : '``Bifunctor<'U,'V>``
     static member inline First (_: ^t when ^t: null and ^t: struct, _ : 'T->'U,  _mthd: Default1) = ()
+    #endif
 
 
 type Map with
@@ -532,8 +557,10 @@ type Map with
 
 type Bimap with
     static member inline Bimap (x: '``Bifunctor<'T,'V>``, f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Default2) = x |> MapFirst.InvokeOnInstance f |> Map.InvokeOnInstance g : '``Bifunctor<'U,'W>``
+    #if !FABLE_COMPILER
     static member inline Bimap (x: '``Bifunctor<'T,'V>``, f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Default1) = Bimap.InvokeOnInstance f g x                               : '``Bifunctor<'U,'W>``
     static member inline Bimap (_: ^t when ^t: null and ^t: struct, _: 'T->'U, _: 'V->'W,   _mthd: Default1) = ()
+    #endif
 
 
 // Profunctor class -------------------------------------------------------
@@ -566,7 +593,9 @@ type Contramap =
 
     static member Contramap (k: 'T -> 'C            , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = f >> k : 'U->'C
     static member Contramap (k: Func<'T, 'C>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Func<'U, 'C> (f >> k.Invoke)
+    #if !FABLE_COMPILER
     static member Contramap (p: Predicate<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Predicate (fun x -> p.Invoke (f x))
+    #endif
     static member Contramap (c: IComparer<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { new IComparer<'U> with member __.Compare (x, y) = c.Compare (f x, f y) }
     static member Contramap (c: IEqualityComparer<_>, f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { 
                     new IEqualityComparer<'U> with
@@ -575,8 +604,11 @@ type Contramap =
     
 type Contramap with
     static member inline Contramap (x: '``Profunctor<'B,'C>``, f: 'A->'B, [<Optional>]_mthd: Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
+    #if !FABLE_COMPILER
     static member inline Contramap (x: '``Contravariant<'T>``, f: 'U->'T, [<Optional>]_mthd: Default1) = Contramap.InvokeOnInstance f x: '``Contravariant<'U>``
     static member inline Contramap (_: ^t when ^t: null and ^t: struct  , _: 'A->'B,  _mthd: Default1) = ()
+    #endif
+
 
 type Map with
     static member inline Map ((x: '``Profunctor<'B,'C>``, cd: 'C->'D), [<Optional>]_mthd: Default5) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
@@ -584,9 +616,10 @@ type Map with
 
 type Dimap with
     static member inline Dimap (x: '``Profunctor<'B,'C>``, ab: 'A->'B, cd: 'C->'D, [<Optional>]_mthd: Default2) = x |> Map.InvokeOnInstance cd |> Contramap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
+    #if !FABLE_COMPILER
     static member inline Dimap (x: '``Profunctor<'B,'C>``, ab: 'A->'B, cd: 'C->'D, [<Optional>]_mthd: Default1) = Dimap.InvokeOnInstance ab cd x                                : '``Profunctor<'A,'D>``
     static member inline Dimap (_: ^t when ^t: null and ^t: struct,     _: 'T->'U, _: 'V->'W,  _mthd: Default1) = ()
-
+    #endif
 
 // Invariant functor
 
@@ -598,8 +631,10 @@ type Invmap = static member inline Invoke (f: 'T -> 'U) (g: 'U -> 'T) (source: '
 type Invoke =
     inherit Default1
 
+    #if !FABLE_COMPILER
     static member inline Invoke (_: ^t when ^t : null and ^t : struct, _, _output: ^O, _mthd: Default1) = id
     static member inline Invoke (_: 'T, x, _output: ^O, _mthd: Default1) = (^T : (static member Invoke : _ -> _) x)
+    #endif
     static member        Invoke (g:  'T -> 'U  , x: 'T, _output: 'U, _mthd: Invoke) = g x        : 'U
     static member        Invoke (g: Func<'T,'U>, x: 'T, _output: 'U, _mthd: Invoke) = g.Invoke x : 'U
 
@@ -633,9 +668,11 @@ type Id =
 
     static member inline InvokeOnInstance () : '``Category<'T,'T>`` = (^``Category<'T,'T>`` : (static member Id : _) ())
 
+#if !FABLE_COMPILER
 type Id with
     static member inline Id (_output:  '``Category<'T,'T>``        , _mthd: Default1) = Id.InvokeOnInstance () : '``Category<'T,'T>``
     static member inline Id (_output: ^t when ^t:null and ^t:struct, _mthd: Default1) = id                       
+#endif
 
 
 type Comp =
@@ -650,6 +687,7 @@ type Comp =
     static member inline InvokeOnInstance  (f: '``Category<'U,'V>``) (g: '``Category<'T,'U>``) : '``Category<'T,'V>`` = ( ^``Category<'T,'V>`` : (static member (<<<) : _*_ -> _) f, g)
     static member inline InvokeOnInstance' (f: '``Category<'U,'V>``) (g: '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'U,'V>`` or ^``Category<'T,'U>``) : (static member (<<<) : _*_ -> _) f, g) : '``Category<'T,'V>``
 
+#if !FABLE_COMPILER
 type Comp with
     static member inline ``<<<`` (f: '``Category<'U,'V>``, g: '``Category<'T,'U>``, _output (* : '``Category<'T,'V>``   *) , _mthd : Default1) = Comp.InvokeOnInstance' f g : '``Category<'T,'V>``
     static member inline ``<<<`` (f: 'F, g: 'G, _, _mthd: Default1) =         
@@ -659,6 +697,7 @@ type Comp with
             ivk g i
         let _ = h f g
         Unchecked.defaultof<ComposedStaticInvokable<'F, 'G>>
+#endif
 
 
 // Arrow class ------------------------------------------------------------
@@ -674,9 +713,11 @@ type Arr =
 
     static member inline InvokeOnInstance (f: 'T -> 'U) : '``Arrow<'T,'U>`` = (^``Arrow<'T,'U>`` : (static member Arr: _ -> _) f)
 
+#if !FABLE_COMPILER
 type Arr with
     static member inline Arr (f: 'T -> 'U, _output: '``Arrow<'T,'U>``                , _mthd: Default1) = Arr.InvokeOnInstance f : '``Arrow<'T,'U>``
     static member inline Arr (_: 'T -> 'U, _output: ^t when ^t : null and ^t : struct, _mthd: Default1) = id
+#endif
 
 
 type ArrFirst =
@@ -690,9 +731,11 @@ type ArrFirst =
 
     static member inline InvokeOnInstance (f: '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` = ((^``Arrow<'T,'U>`` or ^``Arrow<('T * 'V),('U * 'V)>``) : (static member First : _ -> _) f)
 
+#if !FABLE_COMPILER
 type ArrFirst with
     static member inline First (f: '``Arrow<'T,'U>``, _output: '``Arrow<('T * 'V),('U * 'V)>``, _mthd: Default1) = ArrFirst.InvokeOnInstance f  : '``Arrow<('T * 'V),('U * 'V)>``
     static member inline First (_: ^t when ^t : null and ^t : struct  , _output               , _mthd: Default1) = id
+#endif
 
 
 type ArrSecond =
@@ -711,9 +754,10 @@ type ArrSecond with
         let arrSwap = Arr.InvokeOnInstance (fun (x, y) -> (y, x))
         Comp.InvokeOnInstance arrSwap (Comp.InvokeOnInstance (ArrFirst.InvokeOnInstance f) arrSwap)
 
+    #if !FABLE_COMPILER
     static member inline Second (f: '``Arrow<'T,'U>``, _output: '``Arrow<('V * 'T),('V * 'U)>``, _mthd: Default1) = ArrSecond.InvokeOnInstance f : '``Arrow<('V * 'T),('V * 'U)>``
     static member inline Second (_: ^t when ^t : null and ^t : struct  , _output               , _mthd: Default1) = id
-
+    #endif
 
 type ArrCombine =
     inherit Default1
@@ -728,8 +772,10 @@ type ArrCombine =
 
 type ArrCombine with
     static member inline ``***`` (f: '``Arrow<'T1,'U1>``, g: '``Arrow<'T2,'U2>``, _output: '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, _mthd: Default2) = Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
+    #if !FABLE_COMPILER
     static member inline ``***`` (f: '``Arrow<'T1,'U1>``, g: '``Arrow<'T2,'U2>``, _output: '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, _mthd: Default1) = ArrCombine.InvokeOnInstance f g                                                    : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
     static member inline ``***`` (_: '``Arrow<'T1,'U1>``, _: '``Arrow<'T2,'U2>``, _output: ^t when ^t : null and ^t : struct  , _mthd: Default1) = id
+    #endif
 
 
 type Fanout =
@@ -746,9 +792,10 @@ type Fanout =
 type Fanout with
     static member inline ``&&&`` (f: '``Arrow<'T,'U1>``, g: '``Arrow<'T,'U2>``, _output: '``Arrow<'T,('U1 * 'U2)>``,    _mthd: Default3) = Comp.InvokeOnInstance (Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)) (Arr.InvokeOnInstance (fun b -> (b, b))) : '``Arrow<'T,('U1 * 'U2)>``
     static member inline ``&&&`` (f: '``Arrow<'T,'U1>``, g: '``Arrow<'T,'U2>``, _output: '``Arrow<'T,('U1 * 'U2)>``,    _mthd: Default2) = Comp.InvokeOnInstance (ArrCombine.InvokeOnInstance f g) (Arr.InvokeOnInstance (fun b -> (b, b)))                                                    : '``Arrow<'T,('U1 * 'U2)>``
+    #if !FABLE_COMPILER
     static member inline ``&&&`` (f: '``Arrow<'T,'U1>``, g: '``Arrow<'T,'U2>``, _output: '``Arrow<'T,('U1 * 'U2)>``,    _mthd: Default1) = Fanout.InvokeOnInstance f g                                                                                                                         : '``Arrow<'T,('U1 * 'U2)>``
     static member inline ``&&&`` (_: '``Arrow<'T,'U1>``, _: '``Arrow<'T,'U2>``, _output: ^t when ^t:null and ^t:struct, _mthd: Default1) = id
-
+    #endif
 
 // ArrowChoice class ------------------------------------------------------
 
@@ -763,9 +810,11 @@ type Fanin =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = (^``ArrowChoice<Choice<'U,'T>,'V>`` : (static member (|||) : _*_ -> _) f, g)
 
+#if !FABLE_COMPILER
 type Fanin with
     static member inline ``|||`` (f: '``ArrowChoice<'T,'V>``, g: '``ArrowChoice<'U,'V>``, _output: '``ArrowChoice<Choice<'U,'T>,'V>``, _mthd: Default1) = Fanin.InvokeOnInstance f g : '``ArrowChoice<Choice<'U,'T>,'V>``
     static member inline ``|||`` (_: '``ArrowChoice<'T,'V>``, _: '``ArrowChoice<'U,'V>``, _output: ^t when ^t : null and ^t : struct , _mthd: Default1) = id
+#endif
 
 
 type AcMerge =
@@ -779,9 +828,11 @@ type AcMerge =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T1,'U1>``) (g: '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` = (^``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` : (static member (+++) : _*_ -> _) f, g)
 
+#if !FABLE_COMPILER
 type AcMerge with
     static member inline ``+++`` (f: '``ArrowChoice<'T1,'U1>``, g: '``ArrowChoice<'T2,'U2>``, _output: '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``, _mthd: Default1) = AcMerge.InvokeOnInstance f g : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``
     static member inline ``+++`` (_: '``ArrowChoice<'T1,'U1>``, _: '``ArrowChoice<'T2,'U2>``, _output: ^t when ^t : null and ^t : struct                , _mthd: Default1) = id
+#endif
 
 
 type AcLeft =
@@ -795,10 +846,11 @@ type AcLeft =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``) : (static member Left : _ -> _) f)
 
+#if !FABLE_COMPILER
 type AcLeft with
     static member inline Left (f: '``ArrowChoice<'T,'U>``, _output: '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``, _mthd: Default1) = AcLeft.InvokeOnInstance f: '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``
     static member inline Left (_: '``ArrowChoice<'T,'U>``, _output: ^t when ^t : null and ^t : struct            , _mthd: Default1) = id
-
+#endif
 
 type AcRight =
     inherit Default1
@@ -811,10 +863,11 @@ type AcRight =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``) : (static member Right : _ -> _) f)
 
+#if !FABLE_COMPILER
 type AcRight with
     static member inline Right (f: '``ArrowChoice<'T,'U>``, _output: '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``, _mthd: Default1) = AcRight.InvokeOnInstance f : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``
     static member inline Right (_: '``ArrowChoice<'T,'U>``, _output: ^t when ^t : null and ^t : struct            , _mthd: Default1) = id
-
+#endif
 
 
 // ArrowApply class -------------------------------------------------------
@@ -830,10 +883,11 @@ type App =
 
     static member inline InvokeOnInstance () : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` = (^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` : (static member App : _) ())
 
+#if !FABLE_COMPILER
 type App with
     static member inline App (_output: '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``, _mthd: Default1) = App.InvokeOnInstance () : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
     static member inline App (_output: ^t when ^t : null and ^t : struct              , _mthd: Default1) = id
-
+#endif
 
 
 namespace FSharpPlus.Internals
@@ -841,7 +895,9 @@ module internal MonadOps =
     open FSharpPlus.Control
 
     let inline (>>=) x f = Bind.Invoke x f
+    #if !FABLE_COMPILER
     let inline result  x = Return.Invoke x
+    #endif
     let inline (<*>) f x = Apply.Invoke f x
     let inline (<|>) x y = Append.Invoke x y
     let inline (>=>) (f: 'a->'``Monad<'b>``) (g: 'b->'``Monad<'c>``) (x: 'a) : '``Monad<'c>`` = f x >>= g
