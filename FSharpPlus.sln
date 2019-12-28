@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B98-5CED-492C-A5B7-A5B4F73CF142}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus", "src\FSharpPlus\FSharpPlus.fsproj", "{1368368E-D2F4-4FEF-BB2F-492E05156E0F}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus", "src\FSharpPlus\FSharpPlus.fsproj", "{1368368E-D2F4-4FEF-BB2F-492E05156E0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60BC93-E09B-4E5F-9D85-95A519479D54}"
 	ProjectSection(SolutionItems) = preProject
@@ -36,78 +36,66 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\abstraction-contravariant.fsx = docsrc\content\abstraction-contravariant.fsx
 		docsrc\content\abstraction-foldable.fsx = docsrc\content\abstraction-foldable.fsx
 		docsrc\content\abstraction-functor.fsx = docsrc\content\abstraction-functor.fsx
-		docsrc\content\abstraction-misc.fsx = docsrc\content\abstraction-misc.fsx
 		docsrc\content\abstraction-monad.fsx = docsrc\content\abstraction-monad.fsx
 		docsrc\content\abstraction-monoid.fsx = docsrc\content\abstraction-monoid.fsx
 		docsrc\content\abstraction-profunctor.fsx = docsrc\content\abstraction-profunctor.fsx
 		docsrc\content\abstraction-semigroup.fsx = docsrc\content\abstraction-semigroup.fsx
 		docsrc\content\abstraction-traversable.fsx = docsrc\content\abstraction-traversable.fsx
 		docsrc\content\abstractions.fsx = docsrc\content\abstractions.fsx
+		docsrc\content\abstraction-misc.fsx = docsrc\content\abstraction-misc.fsx
 		docsrc\content\abstractions.plantuml = docsrc\content\abstractions.plantuml
 		docsrc\content\applicative-functors.fsx = docsrc\content\applicative-functors.fsx
 		docsrc\content\computation-expressions.fsx = docsrc\content\computation-expressions.fsx
 		docsrc\content\extension-methods.fsx = docsrc\content\extension-methods.fsx
 		docsrc\content\generic-doc.fsx = docsrc\content\generic-doc.fsx
-		docsrc\content\index.fsx = docsrc\content\index.fsx
 		docsrc\content\lens.fsx = docsrc\content\lens.fsx
+		docsrc\content\index.fsx = docsrc\content\index.fsx
 		docsrc\content\numerics.fsx = docsrc\content\numerics.fsx
 		docsrc\content\tutorial.fsx = docsrc\content\tutorial.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ED8079DD-2B06-4030-9F0F-DC548F98E1C4}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Tests", "tests\FSharpPlus.Tests\FSharpPlus.Tests.fsproj", "{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Tests", "tests\FSharpPlus.Tests\FSharpPlus.Tests.fsproj", "{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{81F5F559-FD23-4E90-9EE6-3E2A2C1A7F96}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Samples", "src\FSharpPlus.Samples\FSharpPlus.Samples.fsproj", "{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Samples", "src\FSharpPlus.Samples\FSharpPlus.Samples.fsproj", "{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|x64.Build.0 = Debug|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|x86.Build.0 = Debug|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|x64.ActiveCfg = Release|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|x64.Build.0 = Release|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|x86.ActiveCfg = Release|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|x86.Build.0 = Release|Any CPU
+		{1B99DF98-65AC-4038-8BE5-E72B0882F420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B99DF98-65AC-4038-8BE5-E72B0882F420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B99DF98-65AC-4038-8BE5-E72B0882F420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B99DF98-65AC-4038-8BE5-E72B0882F420}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|x64.Build.0 = Debug|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|x86.Build.0 = Debug|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|x64.ActiveCfg = Release|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|x64.Build.0 = Release|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|x86.ActiveCfg = Release|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|x86.Build.0 = Release|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x64.Build.0 = Debug|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x86.Build.0 = Debug|Any CPU
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x64.ActiveCfg = Debug|x64
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x64.Build.0 = Debug|x64
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x86.ActiveCfg = Debug|x86
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|x86.Build.0 = Debug|x86
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x64.ActiveCfg = Release|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x64.Build.0 = Release|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x86.ActiveCfg = Release|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x86.Build.0 = Release|Any CPU
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x64.ActiveCfg = Release|x64
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x64.Build.0 = Release|x64
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x86.ActiveCfg = Release|x86
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,8 +105,5 @@ Global
 		{8E6D5255-776D-4B61-85F9-73C37AA1FB9A} = {A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF} = {81F5F559-FD23-4E90-9EE6-3E2A2C1A7F96}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {03FB7C52-2C65-4AED-A679-591C512A8E68}
 	EndGlobalSection
 EndGlobal
