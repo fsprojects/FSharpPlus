@@ -19,3 +19,4 @@ type BifoldMap =
 
 type BifoldMap with
     static member inline BifoldMap (x: 'BF         , f: _ -> 'b, g: _ -> 'b, [<Optional>]_impl: Default1)  = (^BF : (static member BifoldMap : ^BF -> _ -> _ -> ^b) x, f, g)
+    static member inline BifoldMap (_: 'BF when 'BF : null and 'BF: struct, f, g, _impl: Default1) = failwithf "impossible to be called"
