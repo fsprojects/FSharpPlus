@@ -365,6 +365,10 @@ module Operators =
     /// Evaluate each action in the structure from left to right, and and collect the results.
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
+    // Bifoldable
+
+    /// Combines the elements of a structure, given ways of mapping them to a common monoid.
+    let inline bifoldMap f g = BifoldMap.Invoke f g
 
     // Indexable
 
@@ -822,9 +826,7 @@ module Operators =
         let inline (|||) (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g    
 
 
-    module Bifold =
-        
-        let inline bifoldMap f g = BifoldMap.Invoke f g
+
 
 namespace FSharpPlus.Math
 
