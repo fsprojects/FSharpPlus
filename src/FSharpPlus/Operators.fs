@@ -822,6 +822,10 @@ module Operators =
         let inline (|||) (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g    
 
 
+    module Bifold =
+        
+        let inline bifoldMap f g = BifoldMap.Invoke f g
+
 namespace FSharpPlus.Math
 
     open FSharpPlus
