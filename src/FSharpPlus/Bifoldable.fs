@@ -25,8 +25,9 @@ type BifoldMap with
 type BifoldBack =
     inherit Default1
 
-    static member BifoldBack (x: Result<_,_>, f, g, z, _impl: BifoldBack) = match x with Ok x -> f x z | Error x -> g x z
-    static member BifoldBack (x: Choice<_,_>, f: 'a->'s->'s, g : 'b->'s->'s, z: 's, _impl: BifoldBack) = match x with Choice1Of2 x -> f x z | Choice2Of2 x -> g x z
+    static member inline BifoldBack (x: Result<_,_>, f, g, z, _impl: BifoldBack) = match x with Ok x -> f x z | Error x -> g x z
+    static member inline BifoldBack (x: Choice<_,_>, f: 'a->'s->'s, g : 'b->'s->'s, z: 's, _impl: BifoldBack) = match x with Choice1Of2 x -> f x z | Choice2Of2 x -> g x z
+    static member inline BifoldBack ((x,y)          , f: 'a->'s->'s, g : 'b->'s->'s, z: 's, _impl: BifoldBack) = (f x (g y z))
 
     static member inline Invoke (fold1: 'T1->'S->'S) (fold2: 'T2->'S->'S) (z: 'S) (bifoldback: '``BifoldBack<'T1,'T2>``) : 'S =
         let inline call_2 (a: ^a, b: ^b, f, g, z) = ((^a or ^b) : (static member BifoldBack : _*_*_*_*_ -> _) b,f,g,z,a)

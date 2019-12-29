@@ -63,17 +63,58 @@ let ``bifoldMap over rank 2 tuples`` () =
     Assert.AreEqual(7, r1)
 
 // bifoldBack
-(*
+
 open FSharpPlus.Control
 [<Test>]
 let ``bifoldBack over Choice`` () =
     
     let c1 : Choice<int list,string list> = Choice1Of2 [1..2]
     let c2 : Choice<int list,string list> = Choice2Of2 ["a";"bbbb"]
-    let r1 = bifoldBack Plus.Invoke Plus.Invoke [0] c1
-    //let r2 = bifoldBack listMapTimes2 listMapSeqLength [0] c2
-    let e1 = [1;2;0]
-    //let e2 = [1;4;0]
+
+    let r1 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c1
+    let r2 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2
+    let e1 = [2;4;0]
+    let e2 = [1;4;0]
 
     Assert.AreEqual(e1, r1)
-    //Assert.AreEqual(e2, r2)*)
+    Assert.AreEqual(e2, r2)
+
+[<Test>]
+let ``bifoldBack over Result`` () =
+    
+    let c1 : Result<int list,string list> = Ok [1..2]
+    let c2 : Result<int list,string list> = Error ["a";"bbbb"]
+
+    let r1 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c1
+    let r2 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2
+    let e1 = [2;4;0]
+    let e2 = [1;4;0]
+
+    Assert.AreEqual(e1, r1)
+    Assert.AreEqual(e2, r2)
+
+[<Test>]
+let ``bifoldBack over rank 2 tuples`` () =
+    let t = ("b","c")
+    let r = bifoldBack Plus.Invoke Plus.Invoke "a" t
+    Assert.AreEqual("bca", r)
+
+type MyEither<'a,'b> with
+    static member inline BifoldBack (x: MyEither<_,_>, f, g, z, [<Optional>]_impl: Default1) =
+      match x with
+      | MyLeft a -> f a z
+      | MyRight a -> g a z
+
+[<Test>]
+let ``bifoldBack picks up on external type defining it`` () =
+
+    let l : MyEither<int list, string list> = MyLeft [1..2]
+    let r : MyEither<int list, string list> = MyRight ["a";"bbbb"]
+
+    let r1 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] l
+    let r2 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] r
+    let e1 = [2;4;0]
+    let e2 = [1;4;0]
+
+    Assert.AreEqual(e1, r1)
+    Assert.AreEqual(e2, r2)
