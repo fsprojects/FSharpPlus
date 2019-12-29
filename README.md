@@ -22,3 +22,9 @@ Users of this library have the option to use their functions in different styles
 In the [Sample folder](//github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples) you can find scripts showing how to use F#+ in your code.
 
 See the [documentation](//fsprojects.github.io/FSharpPlus) for more details.
+
+## Contribute
+
+* The [Developer Guide](DEVELOPER_GUIDE.md) contains details about idioms of implementation in terms of how the type class concept translates in the implementation.
+* The [Design Guidelines](DESIGN_GUIDELINES.md) contains details about design choices guiding the implementation with regard to naming, and choices impacting runtime and compile time performance.
+* Opening issues for discussion or asking questions is welcome, don't hesitate to fill the [New Issue](issues/new) form!
