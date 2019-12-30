@@ -12,9 +12,9 @@ type BifoldMap =
     static member        BifoldMap (x: Choice<_,_>, f, g, _impl: BifoldMap) = match x with Choice1Of2 x -> f x | Choice2Of2 x -> g x
     static member inline BifoldMap ((x,y)         , f, g, _impl: BifoldMap) = Plus.Invoke (f x) (g y)
     
-    static member inline Invoke (map1: 'T1->'U) (map2: 'T2->'U) (bifoldmap: '``BifoldMap<T1,T2>``) : 'U =
+    static member inline Invoke (map1: 'T1->'U) (map2: 'T2->'U) (bifoldable: '``Bifoldable<T1,T2>``) : 'U =
         let inline call (a: ^a, b: ^b, f, g) = ((^a or ^b) : (static member BifoldMap : _*_*_*_ -> _) b,f,g,a)
-        call (Unchecked.defaultof<BifoldMap>, bifoldmap, map1, map2)
+        call (Unchecked.defaultof<BifoldMap>, bifoldable, map1, map2)
 
 type BifoldMap with
     static member inline BifoldMap (x: '``Bifoldable<'T1,'T2>``, f: _ -> 'b, g: _ -> 'b, [<Optional>]_impl: Default1)  = (^``Bifoldable<'T1,'T2>`` : (static member BifoldMap : ^``Bifoldable<'T1,'T2>`` -> _ -> _ -> ^b) x, f, g)
@@ -28,9 +28,9 @@ type BifoldBack =
     static member inline BifoldBack (x: Choice<_,_>, f: 'a->'s->'s, g : 'b->'s->'s, z: 's, _impl: BifoldBack) = match x with Choice1Of2 x -> f x z | Choice2Of2 x -> g x z
     static member inline BifoldBack ((x,y)          , f: 'a->'s->'s, g : 'b->'s->'s, z: 's, _impl: BifoldBack) = (f x (g y z))
 
-    static member inline Invoke (fold1: 'T1->'S->'S) (fold2: 'T2->'S->'S) (z: 'S) (bifoldback: '``BifoldBack<'T1,'T2>``) : 'S =
+    static member inline Invoke (fold1: 'T1->'S->'S) (fold2: 'T2->'S->'S) (z: 'S) (bifoldbable: '``Bifoldable<'T1,'T2>``) : 'S =
         let inline call (a: ^a, b: ^b, f, g, z) = ((^a or ^b) : (static member BifoldBack : _*_*_*_*_ -> _) b,f,g,z,a)
-        call (Unchecked.defaultof<BifoldBack>, bifoldback, fold1, fold2, z)
+        call (Unchecked.defaultof<BifoldBack>, bifoldbable, fold1, fold2, z)
 
 (*
 type BifoldBack with
@@ -38,7 +38,17 @@ type BifoldBack with
     static member inline BifoldBack (x: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _, _, _, _: Default1) = failwithf "impossible to be called"
 *)
 
-(*
 type Bifold =
-  //
-*)
+    inherit Default1
+
+    static member        Bifold (x: Result<_,_>, _impl: Bifold) = match x with Ok x -> x | Error x -> x 
+    static member        Bifold (x: Choice<_,_>, _impl: Bifold) = match x with Choice1Of2 x -> x | Choice2Of2 x -> x
+    static member inline Bifold ((x,y)         , _impl: Bifold) = Plus.Invoke x y
+
+    static member inline Invoke (bifoldable: '``Bifoldable<'T1,'T2>``) : 'U =
+        let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member Bifold : _*_ -> _) b,a)
+        call (Unchecked.defaultof<Bifold>, bifoldable)
+        
+type Bifold with
+    static member inline Bifold (x: '``Bifoldable<'T1,'T2>``, [<Optional>]_impl: Default1) = (^``Bifoldable<'T1,'T2>`` : (static member BifoldMap : ^``Bifoldable<'T1,'T2>``->_->_->_-> ^b) x, id, id, Unchecked.defaultof<BifoldMap>)
+    static member inline Bifold (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _: Default1) = failwithf "impossible to be called"

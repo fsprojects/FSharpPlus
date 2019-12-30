@@ -372,6 +372,8 @@ module Operators =
     
     let inline bifoldBack f g z = BifoldBack.Invoke f g z
 
+    let inline bifold x = Bifold.Invoke x
+
     // Indexable
 
     /// Get an item from the given index.

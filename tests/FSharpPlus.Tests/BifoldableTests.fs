@@ -118,3 +118,12 @@ let ``bifoldBack picks up on external type defining it`` () =
 
     Assert.AreEqual(e1, r1)
     Assert.AreEqual(e2, r2)
+
+[<Test>]
+let ``bifold checks`` () =
+    Assert.AreEqual("a", bifold (Choice1Of2 "a"))
+    Assert.AreEqual("b", bifold (Choice1Of2 "b"))
+    Assert.AreEqual("a", bifold (Ok "a"))
+    Assert.AreEqual("b", bifold (Error "b"))
+    Assert.AreEqual("ab", bifold ("a","b"))
+    Assert.AreEqual("a", bifold (MyEither.MyLeft "a"))
