@@ -54,7 +54,7 @@ module FreeInternals =
 
     let inline unroll (f: Free<'``Functor<'T>``,'T>) : '``Functor<Free<'Functor<'T>,'T>>`` when (Map or ^``Functor<'T>`` or ^``Functor<Free<'Functor<'T>,'T>>``) : (static member Map : (^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>)) * Map -> ^``Functor<Free<'Functor<'T>,'T>>``) =
         match f.getFree () with
-        | Pure _ -> failwith "It was Pure"
+        | Pure _ -> failwith "F#+ internal error: Roll case was expected but it was Pure."
         | Roll x -> unbox x
 
 
