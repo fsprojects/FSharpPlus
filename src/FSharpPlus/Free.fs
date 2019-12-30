@@ -22,8 +22,10 @@ type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'ft,'t> (f: FreeNod
 
 module FreeInternals =
 
-    let inline _roll (f: 'fFreeFT)  : Free<'ft,'t> =
-        let (_: 'ft) = Map.InvokeOnInstance (fun (_: Free<'ft,'t>) -> Unchecked.defaultof<'t> ) f
+    let inline _roll (f: 'fFreeFT) : Free<'ft,'t> =
+        if konst false () then
+            let (_: 'ft) = Map.InvokeOnInstance (fun (_: Free<'ft,'t>) -> Unchecked.defaultof<'t>) f
+            ()
         Free (FreeNode<'ft,'t>.Roll f)  
 
     let inline _unroll (f: Free<'ft,'t>) : 'fFreeFT when ^ft : (static member Map : ^ft * ('t -> Free< ^ft, 't>) -> ^fFreeFT) =
@@ -64,7 +66,9 @@ open FreeInternals
 module FreePrimitives =
     let inline Pure x = Free (Pure x)
     let inline Roll (f: '``Functor<Free<'Functor<'T>,'T>>``) : Free<'``Functor<'T>``,'T> =
-        let (_: '``Functor<'T>``) = Map.Invoke (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
+        if konst false () then
+            let (_: '``Functor<'T>``) = Map.Invoke (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
+            ()
         Free (FreeNode<'``Functor<'T>``,'T>.Roll f)
 
     let inline (|Pure|Roll|) (f: Free<_,_>) =
