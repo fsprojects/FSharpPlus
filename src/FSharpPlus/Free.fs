@@ -1,37 +1,38 @@
 namespace FSharpPlus.Data
+open System.ComponentModel
 
 open FSharpPlus
 open FSharpPlus.Control
 
 [<NoComparison>]
-type FreeNode<'ft,'t> = Pure of 't | Roll of obj
+type FreeNode<'``functor<'t>``,'t> = Pure of 't | Roll of obj
 
-type FreeBase<'ft,'t> (f: FreeNode<'ft,'t>) =
+type FreeBase<'``functor<'t>``,'t> (f: FreeNode<'``functor<'t>``,'t>) =
     let free = f
     member __.getFree () = free
 
 /// Free Monad
-type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'ft,'t> (f: FreeNode<'ft,'t>) =
-    inherit FreeBase<'ft,'t> (f)
+type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'``functor<'t>``,'t> (f: FreeNode<'``functor<'t>``,'t>) =
+    inherit FreeBase<'``functor<'t>``,'t> (f)
     override x.GetHashCode () = Unchecked.hash (x.getFree ())
     override x.Equals o =
         match o with
-        | :? Free<'ft,'t> as y -> Unchecked.equals (x.getFree ()) (y.getFree ())
+        | :? Free<'``functor<'t>``,'t> as y -> Unchecked.equals (x.getFree ()) (y.getFree ())
         | _                    -> false
 
 
 module FreeInternals =
 
-    let inline internal _roll (f: 'fFreeFT) : Free<'ft,'t> =
+    let inline internal _roll (f: '``functor<Free<'functor<'t>,'t>>``) : Free<'``functor<'t>``,'t> =
         if konst false () then
-            let (_: 'ft) = Map.InvokeOnInstance (fun (_: Free<'ft,'t>) -> Unchecked.defaultof<'t>) f
+            let (_: '``functor<'t>``) = Map.InvokeOnInstance (fun (_: Free<'``functor<'t>``,'t>) -> Unchecked.defaultof<'t>) f
             ()
-        Free (FreeNode<'ft,'t>.Roll f)  
+        Free (FreeNode<'``functor<'t>``,'t>.Roll f)  
 
-    let inline internal _unroll (f: Free<'ft,'t>) : 'fFreeFT when ^ft : (static member Map : ^ft * ('t -> Free< ^ft, 't>) -> ^fFreeFT) =
+    let inline internal _unroll (f: Free<'``Functor<'T>``,'T>) : ^``Functor<Free<'Functor<'T>,'T>>`` when ^``Functor<'T>`` : (static member Map : ^``Functor<'T>`` * ('T -> Free< ^``Functor<'T>``, 'T>) -> ^``Functor<Free<'Functor<'T>,'T>>``) =
         match f.getFree () with
+        | Pure _ -> failwith "F#+ internal error: Roll case was expected but it was Pure."
         | Roll s -> unbox s
-        | Pure _ -> failwith "It was Pure"
 
     let inline internal mapWithMapOnInstance (f: 'T -> 'U) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
         let rec loop f (x: Free<_,_>) =
@@ -104,22 +105,25 @@ module Free =
     /// Folds the Free structure into a Monad
     let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
         let rec loop f = function
+            | Pure a -> Return.Invoke a
             | Roll x -> f x >>= loop f
-            | Pure a -> result a
         loop f x
 
     /// Lift any Functor into a Free structure
     let inline liftF (x: '``Functor<'T>``) : Free<'``Functor<'T>``,'T> = Roll (Map.InvokeOnInstance (Pure: 'T -> Free<'``Functor<'T>``,'T>) x)
 
 
-type FreeBase<'FT,'T> with
+type FreeBase<'``functor<'t>``,'t> with
     static member inline Map   (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> 'U) = Free.map f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
     static member inline (>>=) (x: FreeBase<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = Free.bind f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
     static member inline (<*>) (f: Free<'``Functor<'T->'U>``,'T->'U>, x: FreeBase<'``Functor<'T>``,'T>) = Free.apply f (x :?> Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U>
 
 
-type Free<'FT,'T> with
+type Free<'``functor<'t>``,'t> with
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Map (x: Free<'``Functor<'T>``,'T>, f: 'T -> 'U) = mapWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
+
     static member Return x = Pure x
-    static member inline Map   (x: Free<'``Functor<'T>``,'T>, f: 'T -> 'U) = mapWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
     static member inline (>>=) (x: Free<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>) = bindWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
     static member inline (<*>) (f: Free<'``Functor<'T->'U>``,'T->'U>, x: Free<'``Functor<'T>``,'T>) = applyWithMapOnInstance f x : Free<'``Functor<'U>``,'U>
