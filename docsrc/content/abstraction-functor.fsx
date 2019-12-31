@@ -77,6 +77,7 @@ From F#+
  -  ``OptionT<'Monad<option<'T>>``
  -  ``ResultT<'Monad<Result<'T,'TError>>``
  -  ``ChoiceT<'Monad<Choice<'T,'TError>>``
+ -  ``Free<'Functor<'T>,'T>``
  -  ``NonEmptyList<'T>``
  -  ``ZipList<'T>``
  -  ``ParallelArray<'T>``

@@ -12,6 +12,9 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
+[<Sealed>]
+type Set2<'T when 'T: comparison >() = class end
+
 
 // Monad class ------------------------------------------------------------
 
@@ -136,6 +139,7 @@ type Return =
     static member        Return (_: string         , _: Return  ) = fun (x: char) -> string x : string
     static member        Return (_: StringBuilder  , _: Return  ) = fun (x: char) -> new StringBuilder (string x) : StringBuilder
     static member        Return (_: 'a Set         , _: Return  ) = fun (x: 'a  ) -> Set.singleton x
+    static member        Return (_: 'a Set2        , _: Return  ) = fun (_: 'a  ) -> Set2() : 'a Set2
 
 type Apply =
     inherit Default1
@@ -258,6 +262,7 @@ type Map =
     static member Map ((x: string              , f        ), _mthd: Map) = String.map f x
     static member Map ((x: StringBuilder       , f        ), _mthd: Map) = new StringBuilder (String.map f (string x))
     static member Map ((x: Set<_>              , f        ), _mthd: Map) = Set.map f x
+    static member Map ((_: Set2<'T>            , _: 'T->'U), _mthd: Map) = Set2<'U>()
 
 
     static member inline Invoke (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
