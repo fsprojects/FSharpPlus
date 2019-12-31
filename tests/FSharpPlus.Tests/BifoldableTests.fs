@@ -35,7 +35,7 @@ type MyEither<'a,'b> = MyLeft of 'a | MyRight of 'b
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
 type MyEither<'a,'b> with
-    static member inline BifoldMap (x: MyEither<_,_>, f, g, [<Optional>]_impl: Default1) =
+    static member inline BifoldMap (x: MyEither<_,_>, f, g) = //, [<Optional>]_impl: Default1) =
       match x with
       | MyLeft a -> f a
       | MyRight a -> g a
@@ -100,7 +100,7 @@ let ``bifoldBack over rank 2 tuples`` () =
     Assert.AreEqual("bca", r)
 
 type MyEither<'a,'b> with
-    static member inline BifoldBack (x: MyEither<_,_>, f, g, z, [<Optional>]_impl: Default1) =
+    static member inline BifoldBack (x: MyEither<_,_>, f, g, z) = //, [<Optional>]_impl: Default1) =
       match x with
       | MyLeft a -> f a z
       | MyRight a -> g a z
