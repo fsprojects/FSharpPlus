@@ -14,12 +14,12 @@ module Free =
     // primitive functor types
     let aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]
     let mFreeOfListString = map string aFreeOfListInt
-    let aFreeOfListFloat = aFreeOfListInt >>= (fun x -> let a = Roll [ Pure "99" ] in a) >>= (fun x -> Roll [ Pure 90.4 ])
+    let aFreeOfListFloat = aFreeOfListInt >>= (fun x -> let a = Roll [ Pure (string x) ] in a) >>= (fun x -> Roll [ Pure (float (x+".5")) ])
     
     // user defined functor types
     let aFreeOfIdentityInt = Roll (Identity (Pure 1))
     let aFreeOfIdentityString = map string aFreeOfIdentityInt
-    let aFreeOfIdentityFloat = aFreeOfIdentityInt >>= (fun x -> Roll (Identity (Pure 42.)))
+    let aFreeOfIdentityFloat = aFreeOfIdentityInt >>= (fun x -> Roll (Identity (Pure (float x))))
 
     // Structural Equality
     Assert.IsTrue ((aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]))
@@ -33,15 +33,11 @@ module Sample1 =
     type DSL<'next> =
         | Get of key: string *       (string -> 'next)
         | Set of key: string * value: string *  'next
-
-    let mapDSL: ('a -> 'b) -> DSL<'a> -> DSL<'b> = 
-        fun     f          ->
-            function
+    with
+        static member Map (x: DSL<'a>, f: 'a -> 'b) =
+            match x with
             | Get (k,    c) -> Get (k,      c >> f)
             | Set (k, v, c) -> Set (k, v, f c     )
-
-    type DSL<'next> with
-        static member Map (x, f) = mapDSL f x
 
     type FreeDSL<'a> = Free<DSL<'a>,'a>
 
@@ -81,7 +77,7 @@ module Sample2 =
     // 
     // Free monad-interpreter in F# from https://blog.ploeh.dk/2017/07/17/a-pure-command-line-wizard/
 
-    type CmdLine<'t> =
+    type CommandLineInstruction<'t> =
         | ReadLine  of (string -> 't)
         | WriteLine of  string  * 't
     with static member Map (x, f) =
@@ -93,12 +89,12 @@ module Sample2 =
     let writeLine s = Free.liftF (WriteLine (s, ()))
 
 
-    let rec interpret = function
+    let rec interpretCommandLine = function
         | Pure x -> x
-        | Roll (ReadLine      next)  -> Console.ReadLine () |> next |> interpret
+        | Roll (ReadLine      next)  -> Console.ReadLine () |> next |> interpretCommandLine
         | Roll (WriteLine (s, next)) ->
             Console.WriteLine s
-            next |> interpret
+            next |> interpretCommandLine
 
     let rec readQuantity = monad {
         do! writeLine "Please enter number of diners:"
@@ -146,5 +142,5 @@ module Sample2 =
     let mainFunc () =
         readReservationRequest
         >>= (writeLine << (sprintf "%A"))
-        |> interpret
+        |> interpretCommandLine
         0
