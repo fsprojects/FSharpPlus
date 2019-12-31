@@ -69,6 +69,7 @@ From F#+
  -  ``WriterT<Monad<'T * 'Monoid>>``
  -  ``State<'S,'T * 'S>`` 
  -  ``StateT<'S,'Monad<'T * 'S>>``
+ -  ``Free<'Functor<'T>,'T>``
  -  ``NonEmptyList<'T>``
  -  ``ZipList<'T>``
  -  ``ParallelArray<'T>``
