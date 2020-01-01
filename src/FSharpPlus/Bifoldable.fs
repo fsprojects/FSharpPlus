@@ -41,20 +41,21 @@ type BifoldBack with
     static member inline BifoldBack (x: '``Bifoldable<'T1,'T2>``, f, g, z, [<Optional>]_impl: Default1) = BifoldBack.InvokeOnInstance f g z x
     static member inline BifoldBack (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _, _, _, _: Default1) = id
 
-type Bifold =
+type Bisum =
     inherit Default1
 
-    static member        Bifold (x: Result<_,_>, _impl: Bifold) = match x with Ok x -> x | Error x -> x 
-    static member        Bifold (x: Choice<_,_>, _impl: Bifold) = match x with Choice1Of2 x -> x | Choice2Of2 x -> x
-    static member inline Bifold ((x,y)         , _impl: Bifold) = Plus.Invoke x y
+    static member        Bisum (x: Result<_,_>, _impl: Bisum) = match x with Ok x -> x | Error x -> x 
+    static member        Bisum (x: Choice<_,_>, _impl: Bisum) = match x with Choice1Of2 x -> x | Choice2Of2 x -> x
+    static member inline Bisum ((x,y)         , _impl: Bisum) = Plus.Invoke x y
 
     static member inline Invoke (source: '``Bifoldable<'T1,'T2>``) : 'U =
-        let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member Bifold : _*_ -> _) b,a)
-        call (Unchecked.defaultof<Bifold>, source)
-    static member inline InvokeOnInstance (source: '``Bifoldable<'T1,'T2>``) : 'U =
-        (^``Bifoldable<'T1,'T2>`` : (static member Bifold : _ -> _) source)
+        let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member Bisum : _*_ -> _) b,a)
+        call (Unchecked.defaultof<Bisum>, source)
 
-type Bifold with
-    static member inline Bifold (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default2) = BifoldMap.InvokeOnInstance id id x : 'T
-    static member inline Bifold (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default1) = Bifold.InvokeOnInstance x : 'T
-    static member inline Bifold (_: '``Bifoldable<'T,'T>`` when '``Bifoldable<'T,'T>`` : null and '``Bifoldable<'T,'T>``: struct, _: Default1) = ()
+    static member inline InvokeOnInstance (source: '``Bifoldable<'T1,'T2>``) : 'U =
+        (^``Bifoldable<'T1,'T2>`` : (static member Bisum : _ -> _) source)
+
+type Bisum with
+    static member inline Bisum (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default2) = BifoldMap.InvokeOnInstance id id x : 'T
+    static member inline Bisum (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default1) = Bisum.InvokeOnInstance x : 'T
+    static member inline Bisum (_: '``Bifoldable<'T,'T>`` when '``Bifoldable<'T,'T>`` : null and '``Bifoldable<'T,'T>``: struct, _: Default1) = ()

@@ -38,10 +38,10 @@ Minimal complete definition
 Other operations
 ----------------
 
- * ``bifold x``
+ * ``bisum x``
 *)
 (**
-    static member Bifold (x:Bifunctor<'T,'T>) :'T
+    static member Bisum (x:Bifunctor<'T,'T>) :'T
 *)
 
 (**
@@ -53,7 +53,7 @@ Rules
 -----
 *)
 (**
-    bifold x = bifoldMap id id x
+    bisum x = bifoldMap id id x
 *)
 (**
 
@@ -120,4 +120,4 @@ type MyEither<'a,'b> with
         | MyLeft a -> f a z
         | MyRight a -> g a z
 
-bifold (MyEither.MyLeft "a") // = "a"
+bisum (MyEither.MyLeft "a") // = "a"

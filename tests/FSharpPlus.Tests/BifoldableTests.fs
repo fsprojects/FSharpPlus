@@ -123,24 +123,24 @@ let ``bifoldBack picks up on external type defining it`` () =
     Assert.AreEqual(e1, r1)
     Assert.AreEqual(e2, r2)
     
-// bifold
+// bisum
 type MyEither2<'a,'b> =
     | MyLeft2 of 'a 
     | MyRight2 of 'b
-    static member BifoldMap (x: MyEither2<_,_>, f, g) =
+    static member Bisum (x: MyEither2<_,_>) =
         match x with
-        | MyLeft2 a -> f a
-        | MyRight2 a -> g a
+        | MyLeft2 a -> a
+        | MyRight2 a -> a
 
 [<Test>]
-let ``bifold checks`` () =
-    Assert.AreEqual("a", bifold (Choice1Of2 "a"))
-    Assert.AreEqual("b", bifold (Choice1Of2 "b"))
-    Assert.AreEqual("a", bifold (Ok "a"))
-    Assert.AreEqual("b", bifold (Error "b"))
-    Assert.AreEqual("ab", bifold ("a","b"))
-    Assert.AreEqual("a", bifold (MyEither.MyLeft "a"))
-    Assert.AreEqual("a", bifold (MyEither2.MyLeft2 "a"))
+let ``bisum checks`` () =
+    Assert.AreEqual("a", bisum (Choice1Of2 "a"))
+    Assert.AreEqual("b", bisum (Choice1Of2 "b"))
+    Assert.AreEqual("a", bisum (Ok "a"))
+    Assert.AreEqual("b", bisum (Error "b"))
+    Assert.AreEqual("ab", bisum ("a","b"))
+    Assert.AreEqual("a", bisum (MyEither.MyLeft "a"))
+    Assert.AreEqual("a", bisum (MyEither2.MyLeft2 "a"))
 
 open FSharpPlus.Data
 
@@ -152,7 +152,7 @@ let ``Const instance`` () =
     let c3 = Const 1
     Assert.AreEqual(2, bifoldMap ((*) 2) Seq.length c1)
     Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c2)
-    Assert.AreEqual(1, bifold c3)
+    Assert.AreEqual(1, bisum c3)
 
 // Bifoldable instance for Validation<'err,'a>
 [<Test>]
@@ -162,6 +162,6 @@ let ``Validation instance`` () =
     let v3 = Failure 1
     Assert.AreEqual(2, bifoldMap ((*) 2) Seq.length v1)
     Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] v2)
-    Assert.AreEqual(1, bifold v3)
+    Assert.AreEqual(1, bisum v3)
 
 

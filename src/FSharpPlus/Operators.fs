@@ -369,10 +369,12 @@ module Operators =
 
     /// Combines the elements of a structure, given ways of mapping them to a common monoid.
     let inline bifoldMap f g (source: '``Bifoldable<'T1,'T2>``) = BifoldMap.Invoke f g source
-    
+
+    /// Combines the elements of a structure in a right associative manner.
     let inline bifoldBack f g z (source: '``Bifoldable<'T1,'T2>``) = BifoldBack.Invoke f g z source
 
-    let inline bifold (source: '``Bifoldable<'T1,'T2>``) = Bifold.Invoke source
+    /// Combines the elements of a structure using a monoid.
+    let inline bisum (source: '``Bifoldable<'T1,'T2>``) = Bisum.Invoke source
 
     // Indexable
 
