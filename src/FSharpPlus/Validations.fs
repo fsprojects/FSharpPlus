@@ -156,3 +156,17 @@ type Validation<'err,'a> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (t: Validation<'err,'a>, f: 'a->'b) : 'c = Validation.traverse f t
     #endif
+
+    // as Bifoldable
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline BifoldMap (t: Validation<'err,'a>, f: 'err->'b, g: 'a->'b) : 'b =
+        match t with
+        | Failure a -> f a
+        | Success a -> g a
+        
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline BifoldBack (t: Validation<'err,'a>, f: 'err->'b->'b, g: 'a->'b->'b, z: 'b) : 'b =
+        match t with
+        | Failure a -> f a z
+        | Success a -> g a z
+        

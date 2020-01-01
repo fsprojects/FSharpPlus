@@ -153,3 +153,15 @@ let ``Const instance`` () =
     Assert.AreEqual(2, bifoldMap ((*) 2) Seq.length c1)
     Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2)
     Assert.AreEqual(1, bifold c3)
+
+// Bifoldable instance for Validation<'err,'a>
+[<Test>]
+let ``Validation instance`` () =
+    let v1 = Failure 1
+    let v2 : Validation<int list,string list> = Success ["22";"4444"]
+    let v3 = Failure 1
+    Assert.AreEqual(2, bifoldMap ((*) 2) Seq.length v1)
+    Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] v2)
+    Assert.AreEqual(1, bifold v3)
+
+
