@@ -96,13 +96,13 @@ let listMapTimes2 = List.map ((*) 2)
 let c1 : Choice<int list,string list> = Choice1Of2 [1..2]
 let c2 : Choice<int list,string list> = Choice2Of2 ["a";"bbbb"]
 
-bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c1 // = [2;4;0]
-bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2 // = [1;4;0]
+bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c1 // = [2;4;0]
+bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c2 // = [1;4;0]
 bifoldMap listMapTimes2 listMapSeqLength c1 // = [2;4]
 bifoldMap listMapTimes2 listMapSeqLength c2 // = [1;4]
 
 let t = ("b","c")
-bifoldBack Plus.Invoke Plus.Invoke "a" t // = "bca"
+bifoldBack (++) (++) "a" t // = "bca"
 
 // implementing on custom type:
 type MyEither<'a,'b> = 

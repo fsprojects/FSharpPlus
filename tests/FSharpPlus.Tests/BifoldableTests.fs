@@ -79,8 +79,8 @@ let ``bifoldBack over Choice`` () =
     let c1 : Choice<int list,string list> = Choice1Of2 [1..2]
     let c2 : Choice<int list,string list> = Choice2Of2 ["a";"bbbb"]
 
-    let r1 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c1
-    let r2 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2
+    let r1 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c1
+    let r2 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c2
     let e1 = [2;4;0]
     let e2 = [1;4;0]
 
@@ -93,8 +93,8 @@ let ``bifoldBack over Result`` () =
     let c1 : Result<int list,string list> = Ok [1..2]
     let c2 : Result<int list,string list> = Error ["a";"bbbb"]
 
-    let r1 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c1
-    let r2 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2
+    let r1 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c1
+    let r2 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c2
     let e1 = [2;4;0]
     let e2 = [1;4;0]
 
@@ -104,7 +104,7 @@ let ``bifoldBack over Result`` () =
 [<Test>]
 let ``bifoldBack over rank 2 tuples`` () =
     let t = ("b","c")
-    let r = bifoldBack Plus.Invoke Plus.Invoke "a" t
+    let r = bifoldBack (++) (++) "a" t
     Assert.AreEqual("bca", r)
 
     
@@ -115,8 +115,8 @@ let ``bifoldBack picks up on external type defining it`` () =
     let l : MyEither<int list, string list> = MyLeft [1..2]
     let r : MyEither<int list, string list> = MyRight ["a";"bbbb"]
 
-    let r1 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] l
-    let r2 = bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] r
+    let r1 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] l
+    let r2 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] r
     let e1 = [2;4;0]
     let e2 = [1;4;0]
 
@@ -151,7 +151,7 @@ let ``Const instance`` () =
     let c2 = Const [1..2]
     let c3 = Const 1
     Assert.AreEqual(2, bifoldMap ((*) 2) Seq.length c1)
-    Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2)
+    Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c2)
     Assert.AreEqual(1, bifold c3)
 
 // Bifoldable instance for Validation<'err,'a>
@@ -161,7 +161,7 @@ let ``Validation instance`` () =
     let v2 : Validation<int list,string list> = Success ["22";"4444"]
     let v3 = Failure 1
     Assert.AreEqual(2, bifoldMap ((*) 2) Seq.length v1)
-    Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] v2)
+    Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] v2)
     Assert.AreEqual(1, bifold v3)
 
 
