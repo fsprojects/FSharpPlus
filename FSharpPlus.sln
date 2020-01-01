@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\abstraction-alternative.fsx = docsrc\content\abstraction-alternative.fsx
 		docsrc\content\abstraction-applicative.fsx = docsrc\content\abstraction-applicative.fsx
 		docsrc\content\abstraction-arrow.fsx = docsrc\content\abstraction-arrow.fsx
+		docsrc\content\abstraction-bifoldable.fsx = docsrc\content\abstraction-bifoldable.fsx
 		docsrc\content\abstraction-bifunctor.fsx = docsrc\content\abstraction-bifunctor.fsx
 		docsrc\content\abstraction-category.fsx = docsrc\content\abstraction-category.fsx
 		docsrc\content\abstraction-comonad.fsx = docsrc\content\abstraction-comonad.fsx
