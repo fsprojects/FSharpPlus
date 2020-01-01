@@ -55,6 +55,6 @@ type Bifold =
         (^``Bifoldable<'T1,'T2>`` : (static member Bifold : _ -> _) source)
 
 type Bifold with
-    static member inline Bifold (x: '``Bifoldable<'T1,'T2>``, [<Optional>]_impl: Default2) = BifoldMap.InvokeOnInstance id id x : '``Bifoldable<'T1,'T2>``
-    static member inline Bifold (x: '``Bifoldable<'T1,'T2>``, [<Optional>]_impl: Default1) = Bifold.InvokeOnInstance x : '``Bifoldable<'T1,'T2>``
-    static member inline Bifold (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _: Default1) = id
+    static member inline Bifold (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default2) = BifoldMap.InvokeOnInstance id id x : 'T
+    static member inline Bifold (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default1) = Bifold.InvokeOnInstance x : 'T
+    static member inline Bifold (_: '``Bifoldable<'T,'T>`` when '``Bifoldable<'T,'T>`` : null and '``Bifoldable<'T,'T>``: struct, _: Default1) = ()
