@@ -60,6 +60,10 @@ type Const<'t,'u> = Const of 't with
     static member Bimap     (Const x: Const<'T,'V>, f: 'T->'U, _: 'V->'W) = Const (f x) : Const<'U,'W>
     static member First     (Const x: Const<'T,'V>, f: 'T->'U) = Const (f x) : Const<'U,'V>
 
+    // Bifoldable
+    static member BifoldMap  (Const x: Const<'T,'V>, f: 'T->'U, _: 'V->'W) = f x
+    static member BifoldBack (Const x: Const<'T,'V>, f: 'T->'U->'U, _: 'V->'W->'W, z: 'U) = f x z
+
 /// Basic operations on Const
 [<RequireQualifiedAccess>]
 module Const =

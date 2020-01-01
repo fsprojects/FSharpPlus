@@ -123,7 +123,7 @@ let ``bifoldBack picks up on external type defining it`` () =
     Assert.AreEqual(e1, r1)
     Assert.AreEqual(e2, r2)
     
-
+// bifold
 type MyEither2<'a,'b> =
     | MyLeft2 of 'a 
     | MyRight2 of 'b
@@ -141,3 +141,15 @@ let ``bifold checks`` () =
     Assert.AreEqual("ab", bifold ("a","b"))
     Assert.AreEqual("a", bifold (MyEither.MyLeft "a"))
     Assert.AreEqual("a", bifold (MyEither2.MyLeft2 "a"))
+
+open FSharpPlus.Data
+
+// Bifoldable instance for Const<'T,'U>
+[<Test>]
+let ``Const instance`` () =
+    let c1 : Const<int, string> = Const 1
+    let c2 = Const [1..2]
+    let c3 = Const 1
+    Assert.AreEqual(2, bifoldMap ((*) 2) Seq.length c1)
+    Assert.AreEqual([2;4;0], bifoldBack (listMapTimes2 >> Plus.Invoke) (listMapSeqLength >> Plus.Invoke) [0] c2)
+    Assert.AreEqual(1, bifold c3)

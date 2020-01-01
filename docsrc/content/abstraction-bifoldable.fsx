@@ -76,6 +76,7 @@ From .Net/F#
  
 From F#+
 
+ -  ``Const<'C,'T>``
  -  ``Validation<'C,'T>`` TODO
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
