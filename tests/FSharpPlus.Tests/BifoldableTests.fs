@@ -31,14 +31,22 @@ let ``bifoldMap over Result`` () =
     Assert.AreEqual(e1, r1)
     Assert.AreEqual(e2, r2)
 
-type MyEither<'a,'b> = MyLeft of 'a | MyRight of 'b
+
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
-type MyEither<'a,'b> with
-    static member inline BifoldMap (x: MyEither<_,_>, f, g) = //, [<Optional>]_impl: Default1) =
-      match x with
-      | MyLeft a -> f a
-      | MyRight a -> g a
+
+type MyEither<'a,'b> =
+    | MyLeft of 'a 
+    | MyRight of 'b
+    static member BifoldMap (x: MyEither<_,_>, f, g) =
+        match x with
+        | MyLeft a -> f a
+        | MyRight a -> g a
+
+    static member BifoldBack (x: MyEither<_,_>, f, g, z) =
+        match x with
+        | MyLeft a -> f a z
+        | MyRight a -> g a z
 
 [<Test>]
 let ``bifoldMap picks up on external type defining it`` () =
@@ -78,7 +86,7 @@ let ``bifoldBack over Choice`` () =
 
     Assert.AreEqual(e1, r1)
     Assert.AreEqual(e2, r2)
-
+    
 [<Test>]
 let ``bifoldBack over Result`` () =
     
@@ -92,18 +100,14 @@ let ``bifoldBack over Result`` () =
 
     Assert.AreEqual(e1, r1)
     Assert.AreEqual(e2, r2)
-
+    
 [<Test>]
 let ``bifoldBack over rank 2 tuples`` () =
     let t = ("b","c")
     let r = bifoldBack Plus.Invoke Plus.Invoke "a" t
     Assert.AreEqual("bca", r)
 
-type MyEither<'a,'b> with
-    static member inline BifoldBack (x: MyEither<_,_>, f, g, z) = //, [<Optional>]_impl: Default1) =
-      match x with
-      | MyLeft a -> f a z
-      | MyRight a -> g a z
+    
 
 [<Test>]
 let ``bifoldBack picks up on external type defining it`` () =
@@ -118,7 +122,7 @@ let ``bifoldBack picks up on external type defining it`` () =
 
     Assert.AreEqual(e1, r1)
     Assert.AreEqual(e2, r2)
-
+    
 [<Test>]
 let ``bifold checks`` () =
     Assert.AreEqual("a", bifold (Choice1Of2 "a"))
