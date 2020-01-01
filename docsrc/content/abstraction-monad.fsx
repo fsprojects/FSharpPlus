@@ -62,7 +62,7 @@ Related Abstractions
 Concrete implementations
 ------------------------
 
-From .Net/F#
+From F#
  
  -  ``seq<'T>``
  -  ``list<'T>``
@@ -72,11 +72,9 @@ From .Net/F#
  -  ``Async<'T>``
  -  ``Result<'T,'U>`` 
  -  ``Choice<'T,'U>``
- -  ``Map<'Key,'T>``
  -  ``'Monoid * 'T``
  -  ``Task<'T>``
  -  ``'R->'T``
- -  ``Dictionary<'Key,'T>``
  -  ``ResizeArray<'T>``
 
  
@@ -88,14 +86,11 @@ From F#+
  -  ``Reader<'R,'T>`` 
  -  ``ReaderT<'R,'Monad<'T>>``
  -  ``Writer<'Monoid,'T>``
- -  ``WriterT<Monad<'T * 'Monoid>>``
+ -  ``WriterT<'Monad<'T * 'Monoid>>``
  -  ``State<'S,'T * 'S>`` 
  -  ``StateT<'S,'Monad<'T * 'S>>``
  -  ``Free<'Functor<'T>,'T>``
  -  ``NonEmptyList<'T>``
- -  ``ZipList<'T>``
- -  ``ParallelArray<'T>``
- -  ``Const<'C,'T>``
  -  ``DList<'T>``
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
