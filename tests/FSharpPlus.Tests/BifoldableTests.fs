@@ -42,14 +42,10 @@ type MyEither<'a,'b> =
         match x with
         | MyLeft a -> f a
         | MyRight a -> g a
-
-    //static member BifoldBack (x: MyEither<'a,'b>, f: 'r->'a->'r, g: 't->'b->'r, z: 'r) : 'r =
     static member Bifold (x: MyEither<_,_>, f,g,z) =
         match x with
         | MyLeft a -> f z a
         | MyRight a -> g z a
-    
-    //static member Bifold (x: MyEither<_,_>, f, g, z: 'r) : 'r =
     static member inline BifoldBack (x: MyEither<_,_>, f, g, z) =
         match x with
         | MyLeft a -> f a z
