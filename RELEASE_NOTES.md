@@ -1,3 +1,8 @@
+#### 1.1.0- January x 2020
+
+* deprecating `Validation.biFoldBack`
+* Bifoldable abstraction: http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html
+
 #### 1.1.0-CI00272  - September 14 2019
 * Initial Fable support for Extensions
 * Add generic bind, try/findIndex and try/findSliceIndex functions
