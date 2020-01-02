@@ -61,7 +61,7 @@ Rules
 *)
 (**
     bisum x = bifoldMap id id x
-    bifoldMap f g = bifoldr ((++) >> f) ((++) >> g) zero
+    //TODO: bifoldMap f g = bifoldr ((++) >> f) ((++) >> g) zero
     //TODO: bifoldr f g z t = appEndo (bifoldMap (Endo . f) (Endo . g) t) z
 *)
 (**
@@ -118,8 +118,6 @@ bifold (++) (++) "a" t // = "abc"
 type MyEither<'a,'b> = 
     | MyLeft of 'a 
     | MyRight of 'b
-
-type MyEither<'a,'b> with
     static member inline BifoldMap (x: MyEither<_,_>, f, g) =
       match x with
       | MyLeft a -> f a
@@ -132,3 +130,16 @@ type MyEither<'a,'b> with
 
 bisum (MyEither.MyLeft "a") // = "a"
 bisum (1,2) // = 3
+
+
+let inline law1 x =
+  bisum x = bifoldMap id id x
+
+law1 (1,1) // = true
+law1 (Ok [1;2;3]) // = true
+law1 (Error [1;2;3]) // = true
+law1 (Choice1Of2 [1;2;3]) // = true
+law1 (Choice2Of2 [1;2;3]) // = true
+law1 (MyLeft [1;2;3]) // = true
+law1 (MyRight [1;2;3]) // = true
+
