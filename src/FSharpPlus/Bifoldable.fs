@@ -28,7 +28,7 @@ type Bifold =
 
     static member inline Bifold (x: Result<_,_>, f            , g             , z    , _impl: Bifold) = match x with Ok x -> f z x | Error x -> g z x
     static member inline Bifold (x: Choice<_,_>, f: 's->'a->'s, g : 's->'b->'s, z: 's, _impl: Bifold) = match x with Choice1Of2 x -> f z x | Choice2Of2 x -> g z x
-    static member inline Bifold ((x,y)         , f: 's->'a->'s, g : 's->'a->'s, z: 's, _impl: Bifold) = (f z (g x y))
+    static member inline Bifold ((x,y)         , f: 's->'a->'s, g : 's->'a->'s, z: 's, _impl: Bifold) = g (f z x) y
 
     static member inline Invoke (f: 'S->'T1->'S) (g: 'S->'T2->'S) (z: 'S) (source: '``Bifoldable<'T1,'T2>``) : 'S =
         let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member Bifold : _*_*_*_*_ -> _) b,f,g,z,a)
