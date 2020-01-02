@@ -371,7 +371,10 @@ module Operators =
     let inline bifoldMap f g (source: '``Bifoldable<'T1,'T2>``) = BifoldMap.Invoke f g source
 
     /// Combines the elements of a structure in a right associative manner.
-    let inline bifoldBack f g z (source: '``Bifoldable<'T1,'T2>``) = BifoldBack.Invoke f g z source
+    let inline bifold (leftFolder: 'State -> 'a -> 'State) (rightFolder: 'State -> 'b -> 'State) (state: 'State) (source: '``Bifoldable<'T1,'T2>``) = Bifold.Invoke leftFolder rightFolder state source
+    
+    /// Combines the elements of a structure in a left associative manner.
+    let inline bifoldBack (leftFolder: 'a -> 'State -> 'State) (rightFolder: 'b -> 'State -> 'State) (source: '``Bifoldable<'T1,'T2>``) (state: 'State) : 'State = BifoldBack.Invoke leftFolder rightFolder state source
 
     /// Combines the elements of a structure using a monoid.
     let inline bisum (source: '``Bifoldable<'T1,'T2>``) = Bisum.Invoke source
@@ -830,8 +833,6 @@ module Operators =
 
         /// Split the input between the two argument arrows and merge their outputs. Also known as fanin.
         let inline (|||) (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g    
-
-
 
 
 namespace FSharpPlus.Math

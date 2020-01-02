@@ -169,4 +169,10 @@ type Validation<'err,'a> with
         match t with
         | Failure a -> f a z
         | Success a -> g a z
+         
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Bifold (t: Validation<'err,'a>, f: 'b->'err->'b, g: 'b->'a->'b, z: 'b) : 'b =
+        match t with
+        | Failure a -> f z a
+        | Success a -> g z a
         

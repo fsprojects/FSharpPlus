@@ -27,7 +27,14 @@ Minimal complete definition
 *)
 (**
 
-* ``bifoldBack f g z x``
+* ``bifold f g z x``
+*)
+(**
+    static member Bifold (x:'Bifoldable<'T,'V>, f:'T->'Monoid, g:'V->'Monoid, z: 'Monoid) :'Monoid
+*)
+(**
+
+* ``bifoldBack f g x z``
 *)
 (**
     static member BifoldBack (x:'Bifoldable<'T,'V>, f:'T->'Monoid, g:'V->'Monoid, z: 'Monoid) :'Monoid
@@ -54,6 +61,8 @@ Rules
 *)
 (**
     bisum x = bifoldMap id id x
+    bifoldMap f g = bifoldr ((++) >> f) ((++) >> g) zero
+    //TODO: bifoldr f g z t = appEndo (bifoldMap (Endo . f) (Endo . g) t) z
 *)
 (**
 
@@ -96,13 +105,14 @@ let listMapTimes2 = List.map ((*) 2)
 let c1 : Choice<int list,string list> = Choice1Of2 [1..2]
 let c2 : Choice<int list,string list> = Choice2Of2 ["a";"bbbb"]
 
-bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c1 // = [2;4;0]
-bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) [0] c2 // = [1;4;0]
+bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) c1 [0] // = [2;4;0]
+bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) c2 [0] // = [1;4;0]
 bifoldMap listMapTimes2 listMapSeqLength c1 // = [2;4]
 bifoldMap listMapTimes2 listMapSeqLength c2 // = [1;4]
 
 let t = ("b","c")
-bifoldBack (++) (++) "a" t // = "bca"
+bifoldBack (++) (++) t "a" // = "bca"
+bifold (++) (++) "a" t // = "abc"
 
 // implementing on custom type:
 type MyEither<'a,'b> = 
@@ -121,3 +131,4 @@ type MyEither<'a,'b> with
         | MyRight a -> g a z
 
 bisum (MyEither.MyLeft "a") // = "a"
+bisum (1,2) // = 3

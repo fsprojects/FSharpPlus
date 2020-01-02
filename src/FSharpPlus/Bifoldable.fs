@@ -23,10 +23,28 @@ type BifoldMap with
     static member inline BifoldMap (x: '``Bifoldable<'T1,'T2>``, f: _ -> 'b, g: _ -> 'b, [<Optional>]_impl: Default1) = BifoldMap.InvokeOnInstance f g x : 'b
     static member inline BifoldMap (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _, _, _: Default1) = id
 
+type Bifold =
+    inherit Default1
+
+    static member inline Bifold (x: Result<_,_>, f            , g             , z    , _impl: Bifold) = match x with Ok x -> f z x | Error x -> g z x
+    static member inline Bifold (x: Choice<_,_>, f: 's->'a->'s, g : 's->'b->'s, z: 's, _impl: Bifold) = match x with Choice1Of2 x -> f z x | Choice2Of2 x -> g z x
+    static member inline Bifold ((x,y)         , f: 's->'a->'s, g : 's->'a->'s, z: 's, _impl: Bifold) = (f z (g x y))
+
+    static member inline Invoke (f: 'S->'T1->'S) (g: 'S->'T2->'S) (z: 'S) (source: '``Bifoldable<'T1,'T2>``) : 'S =
+        let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member Bifold : _*_*_*_*_ -> _) b,f,g,z,a)
+        call (Unchecked.defaultof<Bifold>, source)
+
+    static member inline InvokeOnInstance (f: 'S->'T1->'S) (g: 'S->'T2->'S) (z: 'S) (source: '``Bifoldable<'T1,'T2>``) : 'S =
+      (^``Bifoldable<'T1,'T2>`` : (static member Bifold : _*_*_*_ -> _) source, f, g, z)
+      
+type Bifold with
+    static member inline Bifold (x: '``Bifoldable<'T1,'T2>``, f, g, z, [<Optional>]_impl: Default1) = Bifold.InvokeOnInstance f g z x
+    static member inline Bifold (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _, _, _, _: Default1) = id
+
 type BifoldBack =
     inherit Default1
 
-    static member inline BifoldBack (x: Result<_,_>, f, g, z, _impl: BifoldBack) = match x with Ok x -> f x z | Error x -> g x z
+    static member inline BifoldBack (x: Result<_,_>, f            , g             , z    , _impl: BifoldBack) = match x with Ok x -> f x z | Error x -> g x z
     static member inline BifoldBack (x: Choice<_,_>, f: 'a->'s->'s, g : 'b->'s->'s, z: 's, _impl: BifoldBack) = match x with Choice1Of2 x -> f x z | Choice2Of2 x -> g x z
     static member inline BifoldBack ((x,y)         , f: 'a->'s->'s, g : 'b->'s->'s, z: 's, _impl: BifoldBack) = (f x (g y z))
 
