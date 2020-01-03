@@ -61,7 +61,7 @@ Rules
 *)
 (**
     bisum x = bifoldMap id id x
-    //TODO: bifoldMap f g = bifoldr ((++) >> f) ((++) >> g) zero
+    bifoldMap f g x = bifoldBack (f >> (++)) (g >> (++)) x zero
     //TODO: bifoldr f g z t = appEndo (bifoldMap (Endo . f) (Endo . g) t) z
 *)
 (**
@@ -143,3 +143,10 @@ law1 (Choice2Of2 [1;2;3]) // = true
 law1 (MyLeft [1;2;3]) // = true
 law1 (MyRight [1;2;3]) // = true
 
+
+let inline law2 x f g =
+  bifoldMap f g x = bifoldBack (f >> (++)) (g >> (++)) x zero
+
+law2 (1,1) ((+) 1) ((+) 2) // = true
+law2 (Ok [1;2;3]) ((++) [1]) ((++) [2]) // = true
+law2 ("a","b") ((+) "bbbb") ((+) "aaaa") // = true
