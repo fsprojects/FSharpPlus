@@ -62,7 +62,7 @@ Rules
 (**
     bisum x = bifoldMap id id x
     bifoldMap f g x = bifoldBack (f >> (++)) (g >> (++)) x zero
-    //TODO: bifoldr f g z t = appEndo (bifoldMap (Endo . f) (Endo . g) t) z
+    bifoldBack f g x z = Endo.run (bifoldMap (f >> Endo) (g >> Endo) x) z
 *)
 (**
 
@@ -150,3 +150,11 @@ let inline law2 x f g =
 law2 (1,1) ((+) 1) ((+) 2) // = true
 law2 (Ok [1;2;3]) ((++) [1]) ((++) [2]) // = true
 law2 ("a","b") ((+) "bbbb") ((+) "aaaa") // = true
+
+open FSharpPlus.Data
+let inline law3 x f g z =
+  bifoldBack f g x z = Endo.run (bifoldMap (f >> Endo) (g >> Endo) x) z
+
+law3 (1,1) (++) (++) 5 // = true
+law3 ("a","b") (++) (++) "abcd" // = true
+law3 (Ok [1;2;3]) (++) (++) [0;1;2;3;4] // = true
