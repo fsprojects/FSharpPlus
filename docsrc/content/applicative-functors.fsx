@@ -69,10 +69,16 @@ let r06' = r06 3
 (**
 For functions ``map`` is equivalent to ``(<<)`` this means that mapping over a function is the same as composing the functions with the mapper
 
-You can think of the List functor as a particular case of a function ``f: Naturals -> 't``
+A List functor can be thought of as a function which takes an integer index to return a value: ``f: Naturals -> 't``
+So, you can think of ``map`` on a List functor as composing a function:
 
+**)
+let listFunc = function 0 -> 1 | 1 -> 2 | 2 -> 3 // [1;2;3]
+let r01'' = map (fun x -> string (x + 10)) listFunc
+
+(**
 What about tuples?
-*)
+**)
 
 module TupleFst = let map f (a,b) = (f a, b)
 module TupleSnd = let map f (a,b) = (a, f b)
