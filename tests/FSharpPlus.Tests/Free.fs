@@ -58,7 +58,7 @@ module Sample1 =
 
     let rec interpreter: ('a -> unit) -> FreeDSL<'a> -> unit =
         fun              receiver        free        ->
-            match free with
+            match Free.run free with
 
             | Roll (Get(key,        nextF)) -> printfn "Get %s" key
                                                nextF (sprintf "'get.%s'" key) |> interpreter receiver
@@ -89,7 +89,7 @@ module Sample2 =
     let writeLine s = Free.liftF (WriteLine (s, ()))
 
 
-    let rec interpretCommandLine = function
+    let rec interpretCommandLine = Free.run >> function
         | Pure x -> x
         | Roll (ReadLine      next)  -> Console.ReadLine () |> next |> interpretCommandLine
         | Roll (WriteLine (s, next)) ->

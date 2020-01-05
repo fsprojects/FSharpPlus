@@ -18,7 +18,7 @@ type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'``functor<'t>``,'t
     override x.Equals o =
         match o with
         | :? Free<'``functor<'t>``,'t> as y -> Unchecked.equals (x.getFree ()) (y.getFree ())
-        | _                    -> false
+        | _ -> false
 
 
 module FreeInternals =
@@ -71,15 +71,16 @@ module FreePrimitives =
             let (_: '``Functor<'T>``) = Map.Invoke (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
             ()
         Free (FreeNode<'``Functor<'T>``,'T>.Roll f)
-
-    let inline (|Pure|Roll|) (f: Free<_,_>) =
-        match f.getFree () with
-        | FreeNode.Pure x -> Pure x
-        | FreeNode.Roll _ -> let x = unroll f in Roll x
+    let (|Pure|Roll|) x = match x with Choice1Of2 x -> Pure x | Choice2Of2 x -> Roll x
 
 /// Basic operations on Free Monads
 [<RequireQualifiedAccess>]
 module Free =
+
+    let inline run (f: Free<_,_>) =
+        match f.getFree () with
+        | FreeNode.Pure x -> Choice1Of2 x
+        | FreeNode.Roll _ -> let x = unroll f in Choice2Of2 x
 
     let inline map f x =
         let rec loop f (x: Free<_,_>) =
@@ -96,7 +97,7 @@ module Free =
         loop f x
 
     let inline apply (f: Free<'``Functor<'T->'U>``,'T->'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
-        let rec loop (f: Free<_,_>) (x: Free<_,_>)  =
+        let rec loop (f: Free<_,_>) (x: Free<_,_>) =
             match f.getFree () with
             | FreeNode.Pure f -> map f x
             | _  -> let f = unroll f in Roll (flip loop x </Map.Invoke/> f)
@@ -104,7 +105,8 @@ module Free =
         
     /// Folds the Free structure into a Monad
     let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
-        let rec loop f = function
+        let rec loop f x =
+            match run x with
             | Pure a -> Return.Invoke a
             | Roll x -> f x >>= loop f
         loop f x
