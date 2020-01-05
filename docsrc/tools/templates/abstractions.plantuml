@@ -70,8 +70,9 @@ abstract class Foldable [[http://fsprojects.github.io/FSharpPlus/abstraction-fol
 
 abstract class Bifoldable [[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html]] {
   {static} + bifoldMap f g x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifoldMap]]]
-  {static} + bifoldBack f g z x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifoldBack]]]
-  + bifold x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifold]]]
+  {static} + bifold f g z x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifold]]]
+  {static} + bifoldBack f g x z [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifoldBack]]]
+  + bisum x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bisum]]]
 }
 
 abstract class Traversable [[http://fsprojects.github.io/FSharpPlus/abstraction-traversable.html]] {
