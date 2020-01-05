@@ -48,6 +48,12 @@ module Option =
     /// <returns>The resulting option value.</returns>
     let ofResult source = match source with Ok x -> Some x | Error _ -> None
 
+    /// Creates a safe version of the supplied function, which returns an option<'t> instead of throwing exceptions.
+    let protect f x =
+        try
+            Some (f x)
+        with _ -> None
+
 
 /// Additional operations on Result<'Ok,'Error>
 [<RequireQualifiedAccess>]
@@ -58,6 +64,12 @@ module Result =
     let flatten                  = function Ok (Ok v) -> Ok v     | Ok (Error e)  | Error e -> Error e
     let inline catch f           = function Ok v      -> Ok v     | Error e                 -> (f: 't->_) e : Result<'v,'e>
     let inline either f g        = function Ok v      -> f v      | Error e                 -> g e
+
+    /// Creates a safe version of the supplied function, which returns a Result<'t,exn> instead of throwing exceptions.
+    let protect f x =
+        try
+            Ok (f x)
+        with e -> Error e
 
 
 /// Additional operations on Choice
@@ -71,6 +83,12 @@ module Choice =
     let bind (f: 't -> _)              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e : Choice<'v,'e>
     let inline catch (f: 't -> _)      = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e          : Choice<'v,'e>
     let inline either f g              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
+
+    /// Creates a safe version of the supplied function, which returns a Choice<'t,exn> instead of throwing exceptions.
+    let protect f x =
+        try
+            Choice1Of2 (f x)
+        with e -> Choice2Of2 e
 
 
 /// Additional operations on Seq
