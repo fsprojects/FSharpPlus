@@ -120,7 +120,7 @@
 <li>
 <p><a href="abstraction-monad.html">Monad</a> : Monads are functors with an additional <code>Join</code> operation,</p>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
-<p>From .Net/F#</p>
+<p>From F#</p>
 </li>
 <li><p><code>seq&lt;'T&gt;</code></p></li>
 <li><p><code>list&lt;'T&gt;</code></p></li>
@@ -135,12 +135,10 @@
 <li><p><code>Result&lt;'T,'U&gt;</code></p></li>
 <li><p><code>Choice&lt;'T,'U&gt;</code></p></li>
 <li><p><code>KeyValuePair&lt;'Key,'T&gt;</code></p></li>
-<li><p><code>Map&lt;'Key,'T&gt;</code></p></li>
 <li><p><code>'Monoid * 'T</code></p></li>
 <li><p><code>Task&lt;'T&gt;</code></p></li>
 <li><p><code>'R-&gt;'T</code></p></li>
 <li><p><code>Expr&lt;'T&gt;</code></p></li>
-<li><p><code>Dictionary&lt;'Key,'T&gt;</code></p></li>
 <li><p><code>ResizeArray&lt;'T&gt;</code></p></li>
 </ul>
 <p>From F#+</p>
@@ -150,7 +148,7 @@
 <li><code>Reader&lt;'R,'T&gt;</code></li>
 <li><code>ReaderT&lt;'R,'Monad&lt;'T&gt;&gt;</code></li>
 <li><code>Writer&lt;'Monoid,'T&gt;</code></li>
-<li><code>WriterT&lt;Monad&lt;'T * 'Monoid&gt;&gt;</code></li>
+<li><code>WriterT&lt;'Monad&lt;'T * 'Monoid&gt;&gt;</code></li>
 <li><code>State&lt;'S,'T * 'S&gt;</code></li>
 <li><code>StateT&lt;'S,'Monad&lt;'T * 'S&gt;&gt;</code></li>
 <li><code>Free&lt;'Functor&lt;'T&gt;,'T&gt;</code></li>

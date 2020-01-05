@@ -81,7 +81,7 @@
 <li><p><a href="abstraction-applicative.html">Applicative</a> : Monads are automatically applicatives.</p></li>
 </ul>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
-<p>From .Net/F#</p>
+<p>From F#</p>
 <ul>
 <li><code>seq&lt;'T&gt;</code></li>
 <li><code>list&lt;'T&gt;</code></li>
@@ -91,11 +91,9 @@
 <li><code>Async&lt;'T&gt;</code></li>
 <li><code>Result&lt;'T,'U&gt;</code></li>
 <li><code>Choice&lt;'T,'U&gt;</code></li>
-<li><code>Map&lt;'Key,'T&gt;</code></li>
 <li><code>'Monoid * 'T</code></li>
 <li><code>Task&lt;'T&gt;</code></li>
 <li><code>'R-&gt;'T</code></li>
-<li><code>Dictionary&lt;'Key,'T&gt;</code></li>
 <li><code>ResizeArray&lt;'T&gt;</code></li>
 </ul>
 <p>From F#+</p>
@@ -106,14 +104,11 @@
 <li><p><code>Reader&lt;'R,'T&gt;</code></p></li>
 <li><p><code>ReaderT&lt;'R,'Monad&lt;'T&gt;&gt;</code></p></li>
 <li><p><code>Writer&lt;'Monoid,'T&gt;</code></p></li>
-<li><p><code>WriterT&lt;Monad&lt;'T * 'Monoid&gt;&gt;</code></p></li>
+<li><p><code>WriterT&lt;'Monad&lt;'T * 'Monoid&gt;&gt;</code></p></li>
 <li><p><code>State&lt;'S,'T * 'S&gt;</code></p></li>
 <li><p><code>StateT&lt;'S,'Monad&lt;'T * 'S&gt;&gt;</code></p></li>
 <li><p><code>Free&lt;'Functor&lt;'T&gt;,'T&gt;</code></p></li>
 <li><p><code>NonEmptyList&lt;'T&gt;</code></p></li>
-<li><p><code>ZipList&lt;'T&gt;</code></p></li>
-<li><p><code>ParallelArray&lt;'T&gt;</code></p></li>
-<li><p><code>Const&lt;'C,'T&gt;</code></p></li>
 <li>
 <p><code>DList&lt;'T&gt;</code></p>
 <p><a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
