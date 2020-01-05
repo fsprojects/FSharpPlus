@@ -46,6 +46,7 @@
     <Compile Include="Monoid.fs" />
     <Compile Include="Functor.fs" />
     <Compile Include="Foldable.fs" />
+    <Compile Include="Bifoldable.fs" />
     <Compile Include="Traversable.fs" />
     <Compile Include="Indexable.fs" />
     <Compile Include="MonadTrans.fs" />

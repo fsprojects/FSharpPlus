@@ -365,6 +365,19 @@ module Operators =
     /// Evaluate each action in the structure from left to right, and and collect the results.
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
+    // Bifoldable
+
+    /// Combines the elements of a structure, given ways of mapping them to a common monoid.
+    let inline bifoldMap f g (source: '``Bifoldable<'T1,'T2>``) = BifoldMap.Invoke f g source
+
+    /// Combines the elements of a structure in a right associative manner.
+    let inline bifold (leftFolder: 'State -> 'a -> 'State) (rightFolder: 'State -> 'b -> 'State) (state: 'State) (source: '``Bifoldable<'T1,'T2>``) = Bifold.Invoke leftFolder rightFolder state source
+    
+    /// Combines the elements of a structure in a left associative manner.
+    let inline bifoldBack (leftFolder: 'a -> 'State -> 'State) (rightFolder: 'b -> 'State -> 'State) (source: '``Bifoldable<'T1,'T2>``) (state: 'State) : 'State = BifoldBack.Invoke leftFolder rightFolder state source
+
+    /// Combines the elements of a structure using a monoid.
+    let inline bisum (source: '``Bifoldable<'T1,'T2>``) = Bisum.Invoke source
 
     // Indexable
 

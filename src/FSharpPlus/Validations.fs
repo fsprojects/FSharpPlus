@@ -48,6 +48,12 @@ module Validation=
         | Failure e -> Failure (f e)
         | Success a -> Success (g a)
 
+    let bifoldBack f g x state =
+        match x with
+        | Success a -> g a state
+        | Failure e -> f e state
+
+    [<System.Obsolete("use bifoldBack from FSharpPlus.Operators (see: http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html)")>]
     let biFoldBack f g state x =
         match state with
         | Success a -> g a x
@@ -156,3 +162,20 @@ type Validation<'err,'a> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (t: Validation<'err,'a>, f: 'a->'b) : 'c = Validation.traverse f t
     #endif
+
+    // as Bifoldable
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline BifoldMap (t: Validation<'err,'a>, f: 'err->'b, g: 'a->'b) : 'b =
+        match t with
+        | Failure a -> f a
+        | Success a -> g a
+        
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline BifoldBack (t: Validation<'err,'a>, f: 'err->'b->'b, g: 'a->'b->'b, z: 'b) : 'b = Validation.bifoldBack f g t z
+         
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Bifold (t: Validation<'err,'a>, f: 'b->'err->'b, g: 'b->'a->'b, z: 'b) : 'b =
+        match t with
+        | Failure a -> f z a
+        | Success a -> g z a
+        
