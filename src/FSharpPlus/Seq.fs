@@ -58,7 +58,9 @@ type SeqT<'``monad<seq<'t>>``> with
     static member inline Delay (body : unit   ->  SeqT<'``Monad<seq<'T>>``>)    = SeqT (Delay.Invoke (fun _ -> SeqT.run (body ()))) : SeqT<'``Monad<seq<'T>>``>
     
     #if !FABLE_COMPILER
-    static member inline Lift (x: '``Monad<'T>``) = x |> liftM Seq.singleton |> SeqT : SeqT<'``Monad<seq<'T>>``>
+    static member inline Lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Seq.singleton |> SeqT
+        else x |> map Seq.singleton |> SeqT
     
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``SeqT<'MonadAsync<'T>>``
     

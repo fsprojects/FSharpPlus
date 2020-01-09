@@ -63,7 +63,9 @@ type ResultT<'``monad<'result<'t,'e>>``> with
     static member inline Delay (body : unit   ->  ResultT<'``Monad<'Result<'T,'E>>``>)    = ResultT (Delay.Invoke (fun _ -> ResultT.run (body ())))
 
     #if !FABLE_COMPILER
-    static member inline Lift (x: '``Monad<'T>``) = x |> liftM Ok |> ResultT : ResultT<'``Monad<Result<'T,'E>>``>
+    static member inline Lift (x: '``Monad<'T>``) : ResultT<'``Monad<Result<'T,'E>>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Ok |> ResultT
+        else x |> map Ok |> ResultT
 
     static member inline Throw (x: 'E) = x |> Error |> result |> ResultT : ResultT<'``Monad<Result<'T,'E>>``>
     static member inline Catch (ResultT x: ResultT<'``MonadError<'E1,'T>``>, f: 'E1 -> _) = (ResultT (x >>= (fun a -> match a with Error l -> ResultT.run (f l) | Ok r -> result (Ok r)))) : ResultT<'``Monad<Result<'T,'E2>>``>
@@ -115,7 +117,9 @@ type ChoiceT<'``monad<'choice<'t,'e>>``> with
     #if !FABLE_COMPILER
     static member inline (>>=) (x: ChoiceT<'``Monad<'Choice<'T,'E>>``>, f: 'T->ChoiceT<'``Monad<'Choice<'U,'E>>``>)     = ChoiceT.bind f x
 
-    static member inline Lift (x: '``Monad<'T>``) = x |> liftM Choice1Of2 |> ChoiceT : ChoiceT<'``Monad<Choice<'T,'E>>``>
+    static member inline Lift (x: '``Monad<'T>``) : ChoiceT<'``Monad<Choice<'T,'E>>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Choice1Of2 |> ChoiceT
+        else x |> map Choice1Of2 |> ChoiceT
 
     static member inline Throw (x: 'E) = x |> Choice2Of2 |> result |> ChoiceT : ChoiceT<'``Monad<Choice<'T,'E>>``>
     static member inline Catch (ChoiceT x: ChoiceT<'``MonadError<'E1,'T>``>, f: 'E1 -> _) = (ChoiceT (x >>= (fun a -> match a with Choice2Of2 l -> ChoiceT.run (f l) | Choice1Of2 r -> result (Choice1Of2 r)))) : ChoiceT<'``Monad<Choice<'T,'E2>>``>

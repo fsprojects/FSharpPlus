@@ -75,7 +75,9 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Delay (body : unit   ->  StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Delay.Invoke (fun _ -> StateT.run (body ()) s)) : StateT<'S,'``Monad<'T * 'S>``>
 
     #if !FABLE_COMPILER
-    static member inline Lift (m: '``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> = StateT <| fun s -> m >>= fun a -> result (a, s)
+    static member inline Lift (m: '``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then StateT <| fun s -> (m |> liftM (fun a -> (a, s)))
+        else StateT <| fun s -> (m |> map (fun a -> (a, s)))
     #endif
 
     static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x) : '``StateT<'S,'MonadAsync<'T>>``
