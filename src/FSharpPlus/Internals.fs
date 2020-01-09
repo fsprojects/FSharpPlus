@@ -15,6 +15,9 @@ module internal Prelude =
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
     let inline retype (x: 'T) : 'U = (# "" x: 'U #)
 
+module Helpers =
+    let alwaysFalse<'t> = false
+
 
 
 [<RequireQualifiedAccess>]

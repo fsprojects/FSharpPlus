@@ -44,7 +44,9 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline Delay (body : unit   ->  OptionT<'``Monad<option<'T>>``>)    = OptionT (Delay.Invoke (fun _ -> OptionT.run (body ()))) : OptionT<'``Monad<option<'T>>``>
 
     #if !FABLE_COMPILER
-    static member inline Lift (x: '``Monad<'T>``) = x |> liftM Some |> OptionT : OptionT<'``Monad<option<'T>>``>
+    static member inline Lift (x: '``Monad<'T>``) : OptionT<'``Monad<option<'T>>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Some |> OptionT
+        else x |> map Some |> OptionT
     #endif
 
     static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x) : '``OptionT<'MonadAsync<'T>>``

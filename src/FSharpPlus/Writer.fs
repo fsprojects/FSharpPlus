@@ -101,7 +101,9 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w))) : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
     static member inline Pass   (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))                          : WriterT<'``Monad<'T * 'Monoid>``>
 
-    static member inline Lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT (m >>= (fun a -> result (a, getZero ())))
+    static member inline Lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then m |> liftM (fun a -> (a, getZero ())) |> WriterT
+        else m |> map (fun a -> (a, getZero ())) |> WriterT
     #endif
     
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``WriterT<'MonadAsync<'T>>``

@@ -73,7 +73,9 @@ type ListT<'``monad<list<'t>>``> with
     static member inline Delay (body : unit   ->  ListT<'``Monad<list<'T>>``>)    = ListT (Delay.Invoke (fun _ -> ListT.run (body ()))) : ListT<'``Monad<list<'T>>``>
 
     #if !FABLE_COMPILER
-    static member inline Lift (x: '``Monad<'T>``) = x |> liftM List.singleton |> ListT : ListT<'``Monad<list<'T>>``>
+    static member inline Lift (x: '``Monad<'T>``) : ListT<'``Monad<list<'T>>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM List.singleton |> ListT
+        else x |> map List.singleton |> ListT
     
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``ListT<'MonadAsync<'T>>``
     

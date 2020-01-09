@@ -1156,6 +1156,11 @@ module MonadTransformers =
 
         let okFoo10 = okFoo10Comp |> ChoiceT.run |> Async.RunSynchronously
 
+        // test generic put (no unknown(1,1): error FS0073: internal error: Undefined or unsolved type variable:  ^_?51242)
+        let initialState = -1
+        let x = put initialState : ListT<State<int, unit list>>
+        let y = put initialState : ChoiceT<State<int, Choice<unit,string>>>
+
         ()
 
 module ProfunctorDefaults =
