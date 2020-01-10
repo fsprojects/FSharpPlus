@@ -26,7 +26,7 @@ module Free =
 
 
 module Sample1 =
-    // 
+
     // Free monad-interpreter in F# from http://www.fssnip.net/7SX/title/Freemonad-interpreter
     // (based on: http://programmers.stackexchange.com/a/242803/145941)
 
@@ -74,7 +74,7 @@ module Sample1 =
 
 
 module Sample2 =
-    // 
+
     // Free monad-interpreter in F# from https://blog.ploeh.dk/2017/07/17/a-pure-command-line-wizard/
 
     type CommandLineInstruction<'t> =
@@ -144,3 +144,120 @@ module Sample2 =
         >>= (writeLine << (sprintf "%A"))
         |> interpretCommandLine
         0
+
+
+module Sample3 =
+
+    // Combining free monads in Haskell from https://blog.ploeh.dk/2017/07/24/combining-free-monads-in-haskell/
+
+    type Slot = { Date : DateTimeOffset; SeatsLeft : int }
+
+    type Reservation = {
+        Date : DateTimeOffset
+        Name : string
+        Email : string
+        Quantity : int }
+        with static member Create count date name email = { Date = date; Name = name; Email = email; Quantity = count }
+
+    type CommandLineInstruction<'t> =
+        | ReadLine of (string -> 't)
+        | WriteLine of string * 't
+        with static member Map (x, f) =
+                match x with
+                | ReadLine g  -> ReadLine (f << g)
+                | WriteLine (s, g) -> WriteLine (s, f g)
+
+    type ReservationsApiInstruction<'a> =
+        | GetSlots of (DateTimeOffset * (Slot list -> 'a))
+        | PostReservation of Reservation * 'a
+        with static member Map (x, f) = x |> function
+                | GetSlots (x, next) -> GetSlots (x, next >> f)
+                | PostReservation (x, next) -> PostReservation (x, next |> f)
+
+    type Program<'t> = Free<Coproduct<CommandLineInstruction<'t>, ReservationsApiInstruction<'t>>,'t>
+
+
+    let readLine = (Free.liftF << InL) (ReadLine id) : Program<_>
+    let writeLine s = (Free.liftF << InL) (WriteLine (s, ())) : Program<_>
+
+    let rec readQuantity = monad {
+        do! writeLine "Please enter number of diners:"
+        let! l = readLine
+        match Int32.TryParse l with
+        | true, dinerCount -> return dinerCount
+        | _ ->
+            do! writeLine "Not an integer."
+            return! readQuantity }
+
+    let rec readDate = monad {
+        do! writeLine "Please enter your desired date:"
+        let! l = readLine
+        match DateTimeOffset.TryParse l with
+        | true, dt -> return dt
+        | _ ->
+            do! writeLine "Not a date."
+            return! readDate }
+
+    let readName = monad {
+        do! writeLine "Please enter your name:"
+        return! readLine }
+ 
+    let readEmail = monad {
+        do! writeLine "Please enter your email address:"
+        return! readLine }
+
+    let inline getSlots d = (Free.liftF << InR) (GetSlots (d, id)) : Program<_>
+ 
+    let inline postReservation r = (Free.liftF << InR) (PostReservation (r, ())) : Program<_>
+
+    let tryReserve : Program<_> = monad {
+        let! count = readQuantity
+        let! date  = readDate
+        let! availableSeats = getSlots date >>= (List.sumBy (fun slot -> slot.SeatsLeft) >> result)
+        if availableSeats < count
+        then 
+            do! sprintf "Only %i remaining seats." availableSeats |> writeLine
+        else
+            let! name  =  readName
+            let! email =  readEmail
+            do! postReservation { Date = date; Name = name; Email = email; Quantity = count }
+        }
+
+    /// Mock HttpClient
+    module ReservationHttpClient =
+        let getSlots (d: DateTimeOffset)     = async { return [{ Date = d; SeatsLeft = 10 }]}
+        let postReservation (r: Reservation) = async { return printfn "Posting reservation %A" r}
+
+    let interpretCommandLine = function
+        | ReadLine next          -> async { return Console.ReadLine ()} >>= next
+        | WriteLine (line, next) -> async { return Console.WriteLine line } >>= fun _ -> next
+
+    let interpretReservationsApi = function
+        | GetSlots (zt, next)       -> ReservationHttpClient.getSlots zt >>= next
+        | PostReservation (r, next) -> ReservationHttpClient.postReservation r >>= fun _ -> next
+
+    let inline iterM p x =
+        let rec loop p x =
+            match Free.run x with
+            | Pure x -> result x
+            | Roll f -> p (loop p <!> f)
+        loop p x
+
+    let rec interpret (program: Program<_>) = 
+        let go = function
+            | InL cmd -> interpretCommandLine cmd
+            | InR res -> interpretReservationsApi res
+        iterM go program
+
+    let interpretedProgram = interpret tryReserve
+
+
+module TestApplicatives =
+    open Sample3
+
+    let readReservationRequest =
+        Reservation.Create
+        <!> readQuantity
+        <*> readDate
+        <*> readName
+        <*> readEmail

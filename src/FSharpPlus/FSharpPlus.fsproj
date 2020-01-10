@@ -16,8 +16,9 @@
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <RepositoryUrl>https://github.com/gusty/FSharpPlus</RepositoryUrl>
-    <Description>A complete and extensible base library for F#.
-      </Description>
+    <Description>
+      A complete and extensible base library for F#.
+    </Description>
     <Authors>Gusty</Authors>
     <Copyright>2012-2018 Gustavo P. Leon (and contributors https://github.com/gusty/FSharpPlus/graphs/contributors)</Copyright>
     <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
@@ -72,6 +73,7 @@
     <Compile Include="Validations.fs" />
     <Compile Include="Kleisli.fs" />
     <Compile Include="Free.fs" />
+    <Compile Include="Coproduct.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <None Include="Samples\Collections.fsx" />
