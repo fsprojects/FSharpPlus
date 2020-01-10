@@ -56,11 +56,11 @@ module Free =
         loop f x
 
     let inline apply (f: Free<'``Functor<'T->'U>``,'T->'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
-        let rec loop (f: Free<_,_>) (x: Free<_,_>) =
+        let rec loop (x: Free<_,_>) (f: Free<_,_>) =
             match run f with
-            | Pure f -> map f x
-            | Roll f -> Roll (flip loop x </Map.Invoke/> f)
-        loop f x
+            | Pure f -> map<'T,'U,'``Functor<'T>``,'``Functor<Free<'Functor<'T>,'T>>``,'``Functor<Free<'Functor<'U>,'U>>``,'``Functor<'U>``> f x : Free<'``Functor<'U>``,'U>
+            | Roll (f: ^``Functor<Free<'Functor<'T->'U>,'T->'U>>``) -> Roll (Map.Invoke (loop x: Free<'``Functor<'T->'U>``,'T->'U> -> _) f: '``Functor<Free<'Functor<'U>,'U>>``)
+        loop x f
         
     /// Folds the Free structure into a Monad
     let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
@@ -71,7 +71,7 @@ module Free =
         loop f x
 
     /// Lift any Functor into a Free structure
-    let inline liftF (x: '``Functor<'T>``) : Free<'``Functor<'T>``,'T> = Roll (Map.Invoke (Pure: 'T -> Free<'``Functor<'T>``,'T>) x)
+    let inline liftF (x: '``Functor<'T>``) : Free<'``Functor<'T>``,'T> = Roll (Map.Invoke (Pure: 'T -> Free<'``Functor<'T>``,'T>) x : '``Functor<Free<'Functor<'T>,'T>>``)
 
 
 type Free<'``functor<'t>``,'t> with
