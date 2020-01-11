@@ -23,7 +23,7 @@ module CoproductPrimitives =
 
 
 type CoproductBase<'``functorL<'t>``,'``functorR<'t>``> with
-    static member inline Map (x: obj, f: 'T -> 'U) : Coproduct<'``FunctorL<'U>``,'``FunctorR<'U>``> =
+    static member inline Map (x: CoproductBase<'``FunctorL<'T>``,'``FunctorR<'T>``>, f: 'T -> 'U) : Coproduct<'``FunctorL<'U>``,'``FunctorR<'U>``> =
         let (l, r, isL) =  (x :?> Coproduct<'``FunctorL<'T>``,'``FunctorR<'T>``>).getContents ()
         if isL then InL (Map.Invoke f l)
         else        InR (Map.Invoke f r)

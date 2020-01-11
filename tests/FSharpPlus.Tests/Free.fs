@@ -252,7 +252,29 @@ module Sample3 =
     let interpretedProgram = interpret tryReserve
 
 
-module TestApplicatives =
+module TestCoproduct =
+
+    let a11 = if true  then InL (Some 1) else InR ([20])
+    let a12 = if false then InL (Some 1) else InR ([20])
+
+    let a14 = map ((+)10) a11
+    let a15 = map ((+)10) a12
+
+    let a16 = map string a11
+    let a17 = map string a12
+
+    let a31 = if true  then InL (Some 1) else InR (ZipList [20])
+    let a32 = if false then InL (Some 1) else InR (ZipList [20])
+
+    let a34 = map ((+)10) a31
+    let a35 = map ((+)10) a32
+
+    let a36 = map string a31
+    let a37 = map string a32
+
+    let a41 = InL [3] : Coproduct<_,_ list>
+    let a42 = map ((+)10 >> string) a41
+
     open Sample3
 
     let readReservationRequest =
