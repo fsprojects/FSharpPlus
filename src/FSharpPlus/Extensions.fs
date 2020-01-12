@@ -73,7 +73,7 @@ module Result =
 
     let getOk (source: Result<'T,'Error>) = match source with Ok x -> x | _ -> invalidArg "source" "Result value was Error"
     let defaultValue value   source = match source with Ok v -> v | _ -> value
-    let defaultWith defThunk source = match source with Ok v -> v | _ -> defThunk ()
+    let defaultWith f source = match source with Ok v -> v | e -> f e
 
     /// Converts a Result<'T,'U> to a Choice<'T,'U>.
     let toChoice (source: Result<'T,'U>) = match source with Ok x-> Choice1Of2 x | Error x -> Choice2Of2 x
