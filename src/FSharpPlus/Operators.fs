@@ -31,6 +31,9 @@ module Operators =
 
     let inline (</) x = (|>) x
     let inline (/>) x = flip x
+    
+    /// Executes a side-effect function and returns the original input value.
+    let tap (f: 'T -> unit) x = f x; x
 
     /// Case analysis for the Result type. If the value is Ok a, apply the first function to a; if it is Error b, apply the second function to b.
     let inline either f g = function Ok x   -> f x | Error x -> g x
