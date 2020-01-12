@@ -71,8 +71,9 @@ module Result =
             Ok (f x)
         with e -> Error e
 
-    let getOk (source: Result<'T,'Error>) = match source with Ok x -> x | _ -> invalidArg "source" "Result value was Error"
-    let defaultValue value   source = match source with Ok v -> v | _ -> value
+    /// Gets the 'Ok' value. If it's an 'Error' this function will throw an exception.
+    let get (source: Result<'T,'Error>) = match source with Ok x -> x | _ -> invalidArg "source" "Result value was Error"
+    let defaultValue value source = match source with Ok v -> v | _ -> value
     let defaultWith f source = match source with Ok v -> v | e -> f e
 
     /// Converts a Result<'T,'U> to a Choice<'T,'U>.
