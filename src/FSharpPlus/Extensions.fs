@@ -71,6 +71,16 @@ module Result =
             Ok (f x)
         with e -> Error e
 
+    let getOk (source: Result<'T,'Error>) = match source with Ok x -> x | _ -> invalidArg "source" "Result value was Error"
+    let defaultValue value   source = match source with Ok v -> v | _ -> value
+    let defaultWith defThunk source = match source with Ok v -> v | _ -> defThunk ()
+
+    /// Converts a Result<'T,'U> to a Choice<'T,'U>.
+    let toChoice (source: Result<'T,'U>) = match source with Ok x-> Choice1Of2 x | Error x -> Choice2Of2 x
+
+    /// Creates a Result<'T,'U> from a Choice<'T,'U>.
+    let ofChoice (source: Choice<'T,'U>) = match source with Choice1Of2 x-> Ok x | Choice2Of2 x -> Error x
+
 
 /// Additional operations on Choice
 [<RequireQualifiedAccess>]
@@ -336,6 +346,22 @@ module List =
         if index = -1 then None else Some index
     #endif
 
+    /// <summary>
+    /// Creates two lists by applying the mapper function to each element in the list
+    /// and classifying the transformed values depending on whether they were wrapped with Choice1Of2 or Choice2Of2.
+    /// </summary>
+    /// <returns>
+    /// A tuple with both resulting lists.
+    /// </returns>
+    let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: list<'T>) =
+        let rec loop ((acc1, acc2) as acc) = function
+            | [] -> acc
+            | x::xs ->
+                match mapper x with
+                | Choice1Of2 x -> loop (x::acc1, acc2) xs
+                | Choice2Of2 x -> loop (acc1, x::acc2) xs
+        loop ([], []) (List.rev source)
+
 
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
@@ -380,6 +406,18 @@ module Array =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
     #endif
+
+    /// <summary>
+    /// Creates two arrays by applying the mapper function to each element in the array
+    /// and classifying the transformed values depending on whether they were wrapped with Choice1Of2 or Choice2Of2.
+    /// </summary>
+    /// <returns>
+    /// A tuple with both resulting arrays.
+    /// </returns>    
+    let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: array<'T>) =
+        let (x, y) = ResizeArray (), ResizeArray ()
+        Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
+        x.ToArray (), y.ToArray ()
 
 
 /// Additional operations on String
