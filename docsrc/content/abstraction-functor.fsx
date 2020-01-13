@@ -84,6 +84,7 @@ From F#+
  -  ``Const<'C,'T>``
  -  ``Kleisli<'T, 'Monad<'U>>``
  -  ``Compose<'F<'G<'T>>>``
+ -  ``Coproduct<'FunctorL<'T>,'FunctorR<'T>>``
  -  ``DList<'T>``
 
 Restricted:
