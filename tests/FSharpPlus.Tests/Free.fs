@@ -236,18 +236,11 @@ module Sample3 =
         | GetSlots (zt, next)       -> ReservationHttpClient.getSlots zt >>= next
         | PostReservation (r, next) -> ReservationHttpClient.postReservation r >>= fun _ -> next
 
-    let inline iterM p x =
-        let rec loop p x =
-            match Free.run x with
-            | Pure x -> result x
-            | Roll f -> p (loop p <!> f)
-        loop p x
-
     let rec interpret (program: Program<_>) = 
         let go = function
             | InL cmd -> interpretCommandLine cmd
             | InR res -> interpretReservationsApi res
-        iterM go program
+        Free.iterM go program
 
     let interpretedProgram = interpret tryReserve
 

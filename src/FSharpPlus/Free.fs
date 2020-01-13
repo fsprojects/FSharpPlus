@@ -70,6 +70,14 @@ module Free =
             | Roll x -> f x >>= loop f
         loop f x
 
+    /// Tear down a Free monad using iteration.
+    let inline iterM (f: '``Functor<'Monad<'T>>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
+        let rec loop f x =
+            match run x with
+            | Pure  x -> Return.Invoke x
+            | Roll (x: ^``Functor<Free<'Functor<'T>,'T>>``) -> f (loop f <!> x)
+        loop f x
+
     /// Lift any Functor into a Free structure
     let inline liftF (x: '``Functor<'T>``) : Free<'``Functor<'T>``,'T> = Roll (Map.Invoke (Pure: 'T -> Free<'``Functor<'T>``,'T>) x : '``Functor<Free<'Functor<'T>,'T>>``)
 
