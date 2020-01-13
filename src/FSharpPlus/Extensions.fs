@@ -55,7 +55,7 @@ module Option =
         with _ -> None
 
 
-/// Additional operations on Result<'Ok,'Error>
+/// Additional operations on Result<'T,'Error>
 [<RequireQualifiedAccess>]
 module Result =
     let result x = Ok x
@@ -81,6 +81,21 @@ module Result =
 
     /// Creates a Result<'T,'U> from a Choice<'T,'U>.
     let ofChoice (source: Choice<'T,'U>) = match source with Choice1Of2 x-> Ok x | Choice2Of2 x -> Error x
+    
+    /// <summary>
+    /// Creates two lists by classifying the values depending on whether they were wrapped with Ok or Error.
+    /// </summary>
+    /// <returns>
+    /// A tuple with both resulting lists, Oks are in the first list.
+    /// </returns>
+    let partition (source: list<Result<'T,'Error>>) =
+        let rec loop ((acc1, acc2) as acc) = function
+            | [] -> acc
+            | x::xs ->
+                match x with
+                | Ok x -> loop (x::acc1, acc2) xs
+                | Error x -> loop (acc1, x::acc2) xs
+        loop ([], []) (List.rev source)
 
 
 /// Additional operations on Choice
