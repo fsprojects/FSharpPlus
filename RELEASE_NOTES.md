@@ -1,7 +1,13 @@
-#### 1.1.0- January x 2020
-
-* deprecating `Validation.biFoldBack`
+#### 1.1.0-RC1  - January 13 2020
+* More Fable support
+* Free Monad
+* Functor's Coproduct
 * Bifoldable abstraction: http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html
+* deprecating `Validation.biFoldBack`
+* Some Choice and Result functions
+* tap function
+* Rename IReadOnlyList.add to trySetItem
+* Improved lift for Monad Transformers
 
 #### 1.1.0-CI00272  - September 14 2019
 * Initial Fable support for Extensions
