@@ -65,6 +65,8 @@ The API reference is automatically generated from Markdown comments in the libra
 
  * [Tutorial](tutorial.html) contains a further explanation of this library.
 
+ * [Types](types.html) contains detailed information about all the types provided in this library.
+
  * [Abstractions](abstractions.html) contains detailed information about all the abstractions represented in this library.
 
  * [Computation Expressions](computation-expressions.html) contains information about the generic computation expressions.
