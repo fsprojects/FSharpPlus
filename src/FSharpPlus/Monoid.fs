@@ -23,6 +23,7 @@ type Plus =
     static member        ``+`` (x: list<_>           , y                    , [<Optional>]_mthd: Plus    ) = x @ y
     static member        ``+`` (x: array<_>          , y                    , [<Optional>]_mthd: Plus    ) = Array.append x y
     static member        ``+`` (()                   , ()                   , [<Optional>]_mthd: Plus    ) = ()
+    static member        ``+`` (x                    , y                    , [<Optional>]_mthd: Plus    ) = x || y
     static member        ``+`` (x: Set<_>            , y                    , [<Optional>]_mthd: Plus    ) = Set.union x y
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(x).Append(y)    
     #if !FABLE_COMPILER

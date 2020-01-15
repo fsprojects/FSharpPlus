@@ -138,6 +138,7 @@ type Zero =
     static member        Zero (_: string                         , _: Zero    ) = ""
     static member        Zero (_: StringBuilder                  , _: Zero    ) = new StringBuilder ()
     static member        Zero (_: unit                           , _: Zero    ) = ()
+    static member        Zero (_: bool                           , _: Zero    ) = false
     static member        Zero (_: Set<'a>                        , _: Zero    ) = Set.empty : Set<'a>
     static member        Zero (_: Map<'a,'b>                     , _: Zero    ) = Map.empty : Map<'a,'b>
 
