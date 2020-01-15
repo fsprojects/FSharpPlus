@@ -26,9 +26,9 @@ OS=${OS:-"unknown"}
 
 if [[ "$OS" != "Windows_NT" ]]
 then
-  mono "$PAKET_BOOTSTRAPPER_EXE" "5.209"
+  mono "$PAKET_BOOTSTRAPPER_EXE" "5.241.6"
 else
-  "$PAKET_BOOTSTRAPPER_EXE" 5.209
+  "$PAKET_BOOTSTRAPPER_EXE" 5.241.6 
 fi
 
 if ! [ -e "$FAKE" ]
