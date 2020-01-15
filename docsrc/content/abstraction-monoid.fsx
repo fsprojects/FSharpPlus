@@ -55,18 +55,18 @@ From .Net/F#
  -  ``StringBuilder``
  -  ``unit``
  -  ``Set<'T>``
- -  ``Map<'T,'U>``
+ -  ``Map<'T,'Monoid>``
  -  ``TimeSpan`` 
- -  ``Tuple<*>``
- -  ``'T1* ... *'Tn``
+ -  ``Tuple<'Monoid1* ... *'MonoidN>``
+ -  ``'Monoid1* ... *'MonoidN``
  -  ``Task<'T>``
  -  ``'T->'Monoid``
  -  ``Async<'T>``
  -  ``Expr<'T>``
  -  ``Lazy<'T>``
- -  ``Dictionary<'T,'U>``
- -  ``IDictionary<'T,'U>``
- -  ``IReadOnlyDictionary<'T,'U>``
+ -  ``Dictionary<'T,'Monoid>``
+ -  ``IDictionary<'T,'Monoid>``
+ -  ``IReadOnlyDictionary<'T,'Monoid>``
  -  ``ResizeArray<'T>``
  -  ``seq<'T>``
  -  ``IEnumerator<'T>``
@@ -74,14 +74,14 @@ From .Net/F#
 From F#+
  
  -  ``ZipList<'S>``
- -  ``Dual<'T>``
- -  ``Endo<'T>``
- -  ``All``
- -  ``Any``
- -  ``Const<'T,'U>``
- -  ``First<'T>``
- -  ``Last<'T>``
- -  ``DList<'T>``
+ -  [``Dual<'T>](type-dual.html)
+ -  [``Endo<'T>``](type-endo.html)
+ -  [``All``](type-all.html)
+ -  [``Any``](type-any.html)
+ -  [``Const<'T,'U>``](type-const.html)
+ -  [``First<'T>``](type-first.html)
+ -  [``Last<'T>``](type-last.html)
+ -  [``DList<'T>``](type-dlist.html)
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

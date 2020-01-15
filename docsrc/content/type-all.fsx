@@ -4,8 +4,27 @@
 #I "../../bin"
 
 (**
-TO-DO Add some docs here !
-=========================
+All
+===
+
+This is a wrapper type for booleans, with a specific set of monoidal operations.
+The contained bools would become true only if both (all) operands are true.
+
+Related Tyes
+------------
+
+ - [Any](type-any.html): Similar wrapper, but using the 'any' criteria.
+ 
+
+
+
+Abstractions
+------------
+
+ -  [Semigroup](abstraction-semigroup.html)
+ -  [Monoid](abstraction-monoid.html)
+
+
 
 Examples
 --------
