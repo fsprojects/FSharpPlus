@@ -114,18 +114,18 @@
 <li><code>StringBuilder</code></li>
 <li><code>unit</code></li>
 <li><code>Set&lt;'T&gt;</code></li>
-<li><code>Map&lt;'T,'U&gt;</code></li>
+<li><code>Map&lt;'T,'Monoid&gt;</code></li>
 <li><code>TimeSpan</code></li>
-<li><code>Tuple&lt;*&gt;</code></li>
-<li><code>'T1* ... *'Tn</code></li>
+<li><code>Tuple&lt;'Monoid1* ... *'MonoidN&gt;</code></li>
+<li><code>'Monoid1* ... *'MonoidN</code></li>
 <li><code>Task&lt;'T&gt;</code></li>
 <li><code>'T-&gt;'Monoid</code></li>
 <li><code>Async&lt;'T&gt;</code></li>
 <li><code>Expr&lt;'T&gt;</code></li>
 <li><code>Lazy&lt;'T&gt;</code></li>
-<li><code>Dictionary&lt;'T,'U&gt;</code></li>
-<li><code>IDictionary&lt;'T,'U&gt;</code></li>
-<li><code>IReadOnlyDictionary&lt;'T,'U&gt;</code></li>
+<li><code>Dictionary&lt;'T,'Monoid&gt;</code></li>
+<li><code>IDictionary&lt;'T,'Monoid&gt;</code></li>
+<li><code>IReadOnlyDictionary&lt;'T,'Monoid&gt;</code></li>
 <li><code>ResizeArray&lt;'T&gt;</code></li>
 <li><code>seq&lt;'T&gt;</code></li>
 <li><code>IEnumerator&lt;'T&gt;</code></li>
@@ -133,15 +133,15 @@
 <p>From F#+</p>
 <ul>
 <li><code>ZipList&lt;'S&gt;</code></li>
-<li><code>Dual&lt;'T&gt;</code></li>
-<li><code>Endo&lt;'T&gt;</code></li>
-<li><code>All</code></li>
-<li><code>Any</code></li>
-<li><code>Const&lt;'T,'U&gt;</code></li>
-<li><code>First&lt;'T&gt;</code></li>
-<li><code>Last&lt;'T&gt;</code></li>
+<li><a href="type-dual.html">``Dual<'T></a></li>
+<li><a href="type-endo.html"><code>Endo&lt;'T&gt;</code></a></li>
+<li><a href="type-all.html"><code>All</code></a></li>
+<li><a href="type-any.html"><code>Any</code></a></li>
+<li><a href="type-const.html"><code>Const&lt;'T,'U&gt;</code></a></li>
+<li><a href="type-first.html"><code>First&lt;'T&gt;</code></a></li>
+<li><a href="type-last.html"><code>Last&lt;'T&gt;</code></a></li>
 <li>
-<code>DList&lt;'T&gt;</code>
+<a href="type-dlist.html"><code>DList&lt;'T&gt;</code></a>
 
 <a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation
 </li>
