@@ -24,6 +24,9 @@ module State =
     /// Replace the state inside the monad.
     let put x = State (fun _ -> ((), x))                                                                          : State<'S,unit>
 
+    /// Modify the state inside the monad by applying a function.
+    let modify f = let f' s = ((), f s) in State f'                                                               : State<'S->'S,unit>
+
 type State<'s,'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
