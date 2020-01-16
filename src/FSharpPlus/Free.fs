@@ -6,27 +6,15 @@ open FSharpPlus.Control
 open FSharpPlus.Internals.Helpers
 
 [<NoComparison>]
-type FreeNode<'``functor<'t>``,'t> = Pure of 't | Roll of obj
-
-/// Free Monad
-type Free<[<EqualityConditionalOn; ComparisonConditionalOn >]'``functor<'t>``,'t> (f: FreeNode<'``functor<'t>``,'t>) =
-    let free = f
-    member __.getFree () = free
-    override x.GetHashCode () = Unchecked.hash (x.getFree ())
-    override x.Equals o =
-        match o with
-        | :? Free<'``functor<'t>``,'t> as y -> Unchecked.equals (x.getFree ()) (y.getFree ())
-        | _ -> false
-
+type Free<'``functor<'t>``,'t> = Pure of 't | Roll of obj
 
 [<AutoOpen>]
 module FreePrimitives =
-    let inline Pure x = Free (Pure x)
     let inline Roll (f: '``Functor<Free<'Functor<'T>,'T>>``) : Free<'``Functor<'T>``,'T> =
         if alwaysFalse<bool> then
             let (_: '``Functor<'T>``) = Map.Invoke (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
             ()
-        Free (FreeNode<'``Functor<'T>``,'T>.Roll f)
+        Free<'``Functor<'T>``,'T>.Roll f
     let (|Pure|Roll|) x = match x with Choice1Of2 x -> Pure x | Choice2Of2 x -> Roll x
 
 /// Basic operations on Free Monads
@@ -37,9 +25,9 @@ module Free =
         if alwaysFalse<bool> then
             let (_: ^``Functor<Free<'Functor<'T>,'T>>``) = Map.Invoke (fun (_: 'T) -> Unchecked.defaultof<Free<'``Functor<'T>``,'T>>) Unchecked.defaultof<'``Functor<'T>``>
             ()
-        match f.getFree () with
-        | FreeNode.Pure x -> Choice1Of2 x
-        | FreeNode.Roll x -> let x = unbox x in Choice2Of2 x
+        match f with
+        | Free.Pure x -> Choice1Of2 x
+        | Free.Roll x -> let x = unbox x in Choice2Of2 x
 
     let inline map f x =
         let rec loop (f: 'T->'U) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
