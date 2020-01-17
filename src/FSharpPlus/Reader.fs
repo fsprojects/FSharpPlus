@@ -58,6 +58,9 @@ module ReaderT =
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x: _->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
     let inline bind  (f: 'T->_) (ReaderT (m: _->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))            : ReaderT<'R, '``Monad<'U>``>
 
+    /// Embed a Monad<'T> into an ReaderT<'R, 'Monad<'T>>
+    let lift m = ReaderT (fun _ -> m)                                                                                           : ReaderT<'R, '``Monad<'T>``>
+
 type ReaderT<'r,'``monad<'t>``> with
     #if !FABLE_COMPILER
     static member inline Return (x: 'T) = ReaderT (fun _ -> result x)                                                 : ReaderT<'R, '``Monad<'T>``>
@@ -76,9 +79,10 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Using (resource, f: _ -> ReaderT<'R,'``Monad<'T>``>)    = ReaderT (fun s -> Using.Invoke resource (fun x -> ReaderT.run (f x) s))
     static member inline Delay (body : unit   ->  ReaderT<'R,'``Monad<'T>``>)    = ReaderT (fun s -> Delay.Invoke (fun _ -> ReaderT.run (body ()) s))
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Lift m = ReaderT (fun _ -> m)                                  : ReaderT<'R,'``Monad<'T>``>
 
-    static member inline LiftAsync (x: Async<'T>) = (lift (liftAsync x)                 : ReaderT<'R,'``MonadAsync<'T>``>)
+    static member inline LiftAsync (x: Async<'T>) = (ReaderT.lift (liftAsync x)         : ReaderT<'R,'``MonadAsync<'T>``>)
 
     static member inline CallCC (f: ('T -> ReaderT<'R, Cont<_,'U>>) -> _)               : ReaderT<'R,'``MonadCont<'C,'T>``> =
         ReaderT (fun r -> callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
@@ -88,13 +92,13 @@ type ReaderT<'r,'``monad<'t>``> with
     #endif
     static member        Local (ReaderT m, f: _->'R2) = ReaderT (fun r -> m (f r))      : ReaderT<'R1,'``Monad<'T>``>
 
-    static member inline Throw (x: 'E) = x |> throw |> lift : ReaderT<'R,'``MonadError<'E,'T>``>
+    static member inline Throw (x: 'E) = x |> throw |> ReaderT.lift                     : ReaderT<'R,'``MonadError<'E,'T>``>
     static member inline Catch (m: ReaderT<'R,'``MonadError<'E1,'T>``>, h: 'E1 -> _) =
         ReaderT (fun s -> catch (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s))     : ReaderT<'R,'``MonadError<'E2,'T>``>
 
-    static member inline Tell   w           = w |> tell |> lift                         : ReaderT<'R, '``MonadWriter<'Monoid,unit>``>
+    static member inline Tell   w           = w |> tell |> ReaderT.lift                 : ReaderT<'R, '``MonadWriter<'Monoid,unit>``>
     static member inline Listen (ReaderT m) = ReaderT (fun w -> listen (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T*'Monoid>``>
     static member inline Pass   (ReaderT m) = ReaderT (fun w -> pass   (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T>``>   
 
-    static member inline get_Get () = lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
-    static member inline Put x      = x |> put |> lift : ReaderT<'R, '``MonadState<'S, unit>``>
+    static member inline get_Get () = ReaderT.lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
+    static member inline Put x      = x |> put |> ReaderT.lift : ReaderT<'R, '``MonadState<'S, unit>``>

@@ -27,6 +27,11 @@ module SeqT =
     let run (SeqT m) = m
 
     #if !FABLE_COMPILER
+    /// Embed a Monad<'T> into a SeqT<'Monad<seq<'T>>>
+    let inline lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> =
+           if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Seq.singleton |> SeqT
+           else x |> map Seq.singleton |> SeqT
+
     let inline internal sequence ms =
         let k m m' = m >>= fun (x: 'a) -> m' >>= fun (xs: seq<'a>) -> (result: seq<'a> -> 'M) (seq {yield x; yield! xs})
         Seq.foldBack k ms ((result: seq<'a> -> 'M) Seq.empty)
@@ -58,20 +63,19 @@ type SeqT<'``monad<seq<'t>>``> with
     static member inline Delay (body : unit   ->  SeqT<'``Monad<seq<'T>>``>)    = SeqT (Delay.Invoke (fun _ -> SeqT.run (body ()))) : SeqT<'``Monad<seq<'T>>``>
     
     #if !FABLE_COMPILER
-    static member inline Lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Seq.singleton |> SeqT
-        else x |> map Seq.singleton |> SeqT
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> = SeqT.lift x
     
-    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``SeqT<'MonadAsync<'T>>``
+    static member inline LiftAsync (x: Async<'T>) = SeqT.lift (liftAsync x) : SeqT<'``MonadAsync<'T>``>
     
-    static member inline Throw (x: 'E) = x |> throw |> lift
+    static member inline Throw (x: 'E) = x |> throw |> SeqT.lift
     static member inline Catch (m: SeqT<'``MonadError<'E1,'T>``>, h: 'E1 -> SeqT<'``MonadError<'E2,'T>``>) = SeqT ((fun v h -> catch v h) (SeqT.run m) (SeqT.run << h)) : SeqT<'``MonadError<'E2,'T>``>
     
     static member inline CallCC (f: (('T -> SeqT<'``MonadCont<'R,seq<'U>>``>) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
     
-    static member inline get_Get ()  = lift get         : '``SeqT<'MonadState<'S,'S>>``
-    static member inline Put (x: 'T) = x |> put |> lift : '``SeqT<'MonadState<unit,'S>>``
+    static member inline get_Get ()  = SeqT.lift get         : SeqT<'``MonadState<'S,'S>``>
+    static member inline Put (x: 'T) = x |> put |> SeqT.lift : SeqT<'``MonadState<unit,'S>``>
     
-    static member inline get_Ask () = lift ask          : '``SeqT<'MonadReader<'R,seq<'R>>>``
+    static member inline get_Ask () = SeqT.lift ask          : SeqT<'``MonadReader<'R,seq<'R>>``>
     static member inline Local (SeqT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = SeqT (local f m)
     #endif
