@@ -22,13 +22,13 @@ module State =
     let get = State (fun s -> (s, s))                                                                             : State<'S,'S>
 
     /// Get a value which depends on the current state.
-    let gets f = State (fun s -> (f s, s))                                                                        : State<'S,'S>
+    let gets f = State (fun s -> (f s, s))                                                                        : State<'S,'T>
 
     /// Replace the state inside the monad.
     let put x = State (fun _ -> ((), x))                                                                          : State<'S,unit>
 
     /// Modify the state inside the monad by applying a function.
-    let modify f = let f' s = ((), f s) in State f'                                                               : State<'S->'S,unit>
+    let modify f = State (fun s -> ((), f s))                                                                     : State<'S->'S,unit>
 
 type State<'s,'t> with
 
@@ -42,6 +42,12 @@ type State<'s,'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                      : State<'S,unit>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Modify f  = State.modify f                   : State<'S->'S,unit>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Gets f    = State.gets f                     : State<'S,'T>
 
 open FSharpPlus.Control
 open FSharpPlus
@@ -89,8 +95,10 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline LiftAsync (x :Async<'T>) = lift (liftAsync x) : '``StateT<'S,'MonadAsync<'T>>``
     
     #if !FABLE_COMPILER
-    static member inline get_Get ()  = StateT (fun s -> result (s , s))  : StateT<'S, '``Monad<'S * 'S>``>
-    static member inline Put (x: 'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``Monad<unit * 'S>``>
+    static member inline get_Get ()  = StateT (fun s -> result (s , s))            : StateT<'S, '``Monad<'S * 'S>``>
+    static member inline Put (x: 'S) = StateT (fun _ -> result ((), x))            : StateT<'S, '``Monad<unit * 'S>``>
+    static member inline Modify (f: 'S -> 'S) = StateT (fun s -> result ((), f s)) : StateT<'S, '``Monad<unit * 'S>``>
+    static member inline Gets   (f: 'S -> 'T) = StateT (fun s -> result (f s, s))  : StateT<'S, '``Monad<'T * 'S>``>
     #endif
 
     static member inline Throw (x: 'E) = x |> throw |> lift

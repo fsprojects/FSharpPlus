@@ -49,20 +49,20 @@ type OptionT<'``monad<option<'t>>``> with
         else x |> map Some |> OptionT
     #endif
 
-    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x) : '``OptionT<'MonadAsync<'T>>``
+    static member inline LiftAsync (x : Async<'T>) = lift (liftAsync x) : OptionT<'``MonadAsync<'T>``>
 
     static member inline Throw (x: 'E) = x |> throw |> lift
     static member inline Catch (m: OptionT<'``MonadError<'E1,'T>``>, h: 'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> catch v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
 
     static member inline CallCC (f: (('T -> OptionT<'``MonadCont<'R,option<'U>>``>) -> _)) = OptionT (callCC <| fun c -> OptionT.run (f (OptionT << c << Some))) : OptionT<'``MonadCont<'R,option<'T>>``>
 
-    static member inline get_Get () = lift get           : '``OptionT<'MonadState<'S,'S>>``
-    static member inline Put (x: 'T) = x |> put |> lift  : '``OptionT<'MonadState<unit,'S>>``
+    static member inline get_Get () = lift get           : OptionT<'``MonadState<'S,'S>``>
+    static member inline Put (x: 'S) = x |> put |> lift  : OptionT<'``MonadState<unit,'S>``>
 
-    static member inline get_Ask () = lift ask           : '``OptionT<'MonadReader<'R,option<'R>>>``
+    static member inline get_Ask () = lift ask           : OptionT<'``MonadReader<'R,option<'R>>``>
     static member inline Local (OptionT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = OptionT (local f m)
 
-    static member inline Tell (w: 'Monoid) = w |> tell |> lift : '``OptionT<'MonadWriter<'Monoid, unit>>``
+    static member inline Tell (w: 'Monoid) = w |> tell |> lift : OptionT<'``MonadWriter<'Monoid, unit>``>
     #if !FABLE_COMPILER
     static member inline Listen m                              : OptionT<'``'MonadWriter<'Monoid, option<'T>>``> =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
