@@ -19,7 +19,10 @@ module State =
     let exec (State sa: State<'S,'A>) s = snd (sa s) : 'S
 
     /// Return the state from the internals of the monad.
-    let get   = State (fun s -> (s, s))                                                                           : State<'S,'S>
+    let get = State (fun s -> (s, s))                                                                             : State<'S,'S>
+
+    /// Get a value which depends on the current state.
+    let gets f = State (fun s -> (f s, s))                                                                        : State<'S,'S>
 
     /// Replace the state inside the monad.
     let put x = State (fun _ -> ((), x))                                                                          : State<'S,unit>
