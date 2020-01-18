@@ -74,7 +74,7 @@ type SeqT<'``monad<seq<'t>>``> with
     static member inline CallCC (f: (('T -> SeqT<'``MonadCont<'R,seq<'U>>``>) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
     
     static member inline get_Get ()  = SeqT.lift get         : SeqT<'``MonadState<'S,'S>``>
-    static member inline Put (x: 'T) = x |> put |> SeqT.lift : SeqT<'``MonadState<unit,'S>``>
+    static member inline Put (x: 'S) = x |> put |> SeqT.lift : SeqT<'``MonadState<unit,'S>``>
     
     static member inline get_Ask () = SeqT.lift ask          : SeqT<'``MonadReader<'R,seq<'R>>``>
     static member inline Local (SeqT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = SeqT (local f m)

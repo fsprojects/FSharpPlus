@@ -486,8 +486,14 @@ module Operators =
     /// Return the state from the internals of the monad.
     let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
 
+    /// Get a value which depends on the current state.
+    let inline gets f = map f get : '``MonadState<'T * 'S>``
+
     /// Replace the state inside the monad.
     let inline put (x: 'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
+
+    /// Modify the state inside the monad by applying a function.
+    let inline modify (f: 'S->'S) : '``MonadState<unit * ('S->'S)>`` = get >>= (Put.Invoke << f)
 
     /// Retrieves the monad environment.
     let inline ask< ^``MonadReader<'R,'T>`` when ^``MonadReader<'R,'T>`` : (static member Ask : ^``MonadReader<'R,'T>``)> = (^``MonadReader<'R,'T>`` : (static member Ask : _) ())
