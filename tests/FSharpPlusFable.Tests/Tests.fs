@@ -1,10 +1,11 @@
 module Tests
 
 open ExtensionsTests
+open GeneralTests
 open Testing
 
 
-let AllTests =  testList "AllTests" [ExtensionsTest]
+let AllTests =  testList "AllTests" [ExtensionsTest; GeneralTest]
 
 #if FABLE_COMPILER
 
