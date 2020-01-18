@@ -19,8 +19,17 @@ type OptionT<'``monad<option<'t>>``> = OptionT of '``monad<option<'t>>``
 [<RequireQualifiedAccess>]
 module OptionT =
     let run   (OptionT m) = m : '``Monad<option<'T>>``
+
     #if !FABLE_COMPILER
+
+    /// Embed a Monad<'T> into an OptionT<'Monad<option<'T>>>
+    let inline lift (x: '``Monad<'T>``) : OptionT<'``Monad<option<'T>>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Some |> OptionT
+        else x |> map Some |> OptionT
+
+    /// Transform an option<'T,'Error> to an OptionT<'Monad<option<'T,'Error>>>
     let inline hoist (x: option<'T>) = OptionT (result x) : OptionT<'``Monad<option<'T>>``>
+
     let inline bind (f: 'T-> OptionT<'``Monad<option<'U>``>) (OptionT m: OptionT<'``Monad<option<'T>``>)             = (OptionT <| (m  >>= (fun maybe_value -> match maybe_value with Some value -> run (f value) | _ -> result None)))
     let inline apply (OptionT f: OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x: OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x) : OptionT<'``Monad<option<'U>``>
     let inline map  (f: 'T->'U) (OptionT m: OptionT<'``Monad<option<'T>``>)                                          = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
@@ -29,8 +38,10 @@ module OptionT =
 type OptionT<'``monad<option<'t>>``> with
     #if !FABLE_COMPILER
     static member inline Return (x: 'T) = Some x |> result |> OptionT                                                        : OptionT<'``Monad<seq<'T>``>
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x: OptionT<'``Monad<seq<'T>``>, f: 'T->'U) = OptionT.map f x                                : OptionT<'``Monad<seq<'U>``>
+
     static member inline (<*>)  (f: OptionT<'``Monad<seq<('T -> 'U)>``>, x: OptionT<'``Monad<seq<'T>``>) = OptionT.apply f x : OptionT<'``Monad<seq<'U>``>
     static member inline (>>=)  (x: OptionT<'``Monad<seq<'T>``>, f: 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind  f x
 
@@ -44,14 +55,13 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline Delay (body : unit   ->  OptionT<'``Monad<option<'T>>``>)    = OptionT (Delay.Invoke (fun _ -> OptionT.run (body ()))) : OptionT<'``Monad<option<'T>>``>
 
     #if !FABLE_COMPILER
-    static member inline Lift (x: '``Monad<'T>``) : OptionT<'``Monad<option<'T>>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Some |> OptionT
-        else x |> map Some |> OptionT
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift (x: '``Monad<'T>``) : OptionT<'``Monad<option<'T>>``> = OptionT.lift x
     #endif
 
     static member inline LiftAsync (x : Async<'T>) = OptionT.Lift (liftAsync x) : OptionT<'``MonadAsync<'T>``>
 
-    static member inline Throw (x: 'E) = x |> throw |> lift
+    static member inline Throw (x: 'E) = x |> throw |> OptionT.lift
     static member inline Catch (m: OptionT<'``MonadError<'E1,'T>``>, h: 'E1 -> OptionT<'``MonadError<'E2,'T>``>) = OptionT ((fun v h -> catch v h) (OptionT.run m) (OptionT.run << h)) : OptionT<'``MonadError<'E2,'T>``>
 
     static member inline CallCC (f: (('T -> OptionT<'``MonadCont<'R,option<'U>>``>) -> _)) = OptionT (callCC <| fun c -> OptionT.run (f (OptionT << c << Some))) : OptionT<'``MonadCont<'R,option<'T>>``>

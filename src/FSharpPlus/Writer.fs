@@ -61,6 +61,13 @@ module WriterT =
 
     let run (WriterT x) = x : '``Monad<'T * 'Monoid>``
 
+    #if !FABLE_COMPILER
+    /// Embed a Monad<'T> into a WriterT<'Monad<'T * 'Monoid>>
+    let inline lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then m |> liftM (fun a -> (a, getZero ())) |> WriterT
+        else m |> map (fun a -> (a, getZero ())) |> WriterT
+    #endif
+
     let inline map (f: 'T->'U) (WriterT m:WriterT<'``Monad<'T * 'Monoid>``>) =
         let mapWriter f (a, m) = (f a, m)
         WriterT (map (mapWriter f) m) : WriterT<'``Monad<'U * 'Monoid>``>
@@ -101,22 +108,21 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w))) : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
     static member inline Pass   (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))                          : WriterT<'``Monad<'T * 'Monoid>``>
 
-    static member inline Lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then m |> liftM (fun a -> (a, getZero ())) |> WriterT
-        else m |> map (fun a -> (a, getZero ())) |> WriterT
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT.lift m
     #endif
     
-    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``WriterT<'MonadAsync<'T>>``
+    static member inline LiftAsync (x: Async<'T>) = WriterT.lift (liftAsync x) : WriterT<'``MonadAsync<'T>``>
 
-    static member inline Throw (x: 'E) = x |> throw |> lift
+    static member inline Throw (x: 'E) = x |> throw |> WriterT.lift
     static member inline Catch (m: WriterT<'``MonadError<'E2, 'T * 'Monoid>``>, h: 'E2 -> _) =
             WriterT (catch (WriterT.run m) (WriterT.run << h)) : WriterT<'``MonadChoice<'T * 'Monoid, 'E2>``>
 
     static member inline CallCC (f: ('a->WriterT<Cont<'r,'t>>)->_) : WriterT<'``MonadCont<'r,'a*'b>``> =
         WriterT (callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, getZero ()))))
        
-    static member inline get_Ask ()                     = lift ask            : '``WriterT<'MonadReader<'R,'R*'Monoid>>``
+    static member inline get_Ask ()                     = WriterT.lift ask    : WriterT<'``MonadReader<'R,'R*'Monoid>``>
     static member inline Local (WriterT m, f: 'R1->'R2) = WriterT (local f m) : WriterT<'``MonadReader<'R1,'T*'Monoid>``>
 
-    static member inline get_Get () = lift get          : '``WriterT<'MonadState<'S,'S*'Monoid>>``
-    static member inline Put (x: 'S) = x |> put |> lift : '``WriterT<'MonadState<'S,unit*'Monoid>>``
+    static member inline get_Get () = WriterT.lift get          : WriterT<'``MonadState<'S,'S*'Monoid>``>
+    static member inline Put (x: 'S) = x |> put |> WriterT.lift : WriterT<'``MonadState<'S,unit*'Monoid>``>

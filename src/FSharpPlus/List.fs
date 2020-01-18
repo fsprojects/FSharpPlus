@@ -42,6 +42,11 @@ module ListT =
     let run (ListT m) = m : '``Monad<list<'T>>``
 
     #if !FABLE_COMPILER
+    /// Embed a Monad<'T> into a ListT<'Monad<list<'T>>>
+    let inline lift (x: '``Monad<'T>``) : ListT<'``Monad<list<'T>>``> =
+        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM List.singleton |> ListT
+        else x |> map List.singleton |> ListT
+
     let inline internal sequence ms =
         let k m m' = m >>= fun (x: 'a) -> m' >>= fun xs -> (result: list<'a> -> 'M) (x::xs)
         List.foldBack k ms ((result :list<'a> -> 'M) [])
@@ -73,22 +78,21 @@ type ListT<'``monad<list<'t>>``> with
     static member inline Delay (body : unit   ->  ListT<'``Monad<list<'T>>``>)    = ListT (Delay.Invoke (fun _ -> ListT.run (body ()))) : ListT<'``Monad<list<'T>>``>
 
     #if !FABLE_COMPILER
-    static member inline Lift (x: '``Monad<'T>``) : ListT<'``Monad<list<'T>>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM List.singleton |> ListT
-        else x |> map List.singleton |> ListT
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift (x: '``Monad<'T>``) : ListT<'``Monad<list<'T>>``> = ListT.lift x
     
-    static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : '``ListT<'MonadAsync<'T>>``
+    static member inline LiftAsync (x: Async<'T>) = ListT.lift (liftAsync x) : ListT<'``MonadAsync<'T>``>
     
-    static member inline Throw (x: 'E) = x |> throw |> lift
+    static member inline Throw (x: 'E) = x |> throw |> ListT.lift
     #endif
     static member inline Catch (m: ListT<'``MonadError<'E1,'T>``>, h: 'E1 -> ListT<'``MonadError<'E2,'T>``>) = ListT ((fun v h -> Catch.Invoke v h) (ListT.run m) (ListT.run << h)) : ListT<'``MonadError<'E2,'T>``>
     
     #if !FABLE_COMPILER
     static member inline CallCC (f: (('T -> ListT<'``MonadCont<'R,list<'U>>``>) -> _)) = ListT (callCC <| fun c -> ListT.run (f (ListT << c << List.singleton))) : ListT<'``MonadCont<'R, list<'T>>``>
     
-    static member inline get_Get ()  = lift get         : '``ListT<'MonadState<'S,'S>>``
-    static member inline Put (x: 'T) = x |> put |> lift : '``ListT<'MonadState<unit,'S>>``
+    static member inline get_Get ()  = ListT.lift get         : ListT<'``MonadState<'S,'S>``>
+    static member inline Put (x: 'T) = x |> put |> ListT.lift : ListT<'``MonadState<unit,'S>``>
     
-    static member inline get_Ask () = lift ask          : '``ListT<'MonadReader<'R,  list<'R>>>``
+    static member inline get_Ask () = ListT.lift ask          : ListT<'``MonadReader<'R,  list<'R>>``>
     static member inline Local (ListT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = ListT (local f m)
     #endif
