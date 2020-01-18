@@ -5,7 +5,7 @@ open GeneralTests
 open Testing
 
 
-let AllTests =  testList "AllTests" [ExtensionsTest; GeneralTest]
+let AllTests =  testList "AllTests" [ExtensionsTest; GeneralTest; ]
 
 #if FABLE_COMPILER
 
