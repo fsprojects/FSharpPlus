@@ -98,8 +98,8 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline LiftAsync (x :Async<'T>) = StateT.lift (liftAsync x) : StateT<'S,'``MonadAsync<'T>``>
     
     #if !FABLE_COMPILER
-    static member inline get_Get ()  = StateT (fun s -> result (s , s))            : StateT<'S, '``Monad<'S * 'S>``>
-    static member inline Put (x: 'S) = StateT (fun _ -> result ((), x))            : StateT<'S, '``Monad<unit * 'S>``>
+    static member inline get_Get ()  = StateT (fun s -> result (s , s)) : StateT<'S, '``Monad<'S * 'S>``>
+    static member inline Put (x: 'S) = StateT (fun _ -> result ((), x)) : StateT<'S, '``Monad<unit * 'S>``>
     #endif
 
     static member inline Throw (x: 'E) = x |> throw |> StateT.lift
