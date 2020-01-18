@@ -116,6 +116,11 @@ module Operators =
     /// Flattens two layers of monadic information into one.
     let inline join  (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
 
+    #if !FABLE_COMPILER
+    /// Equivalent to map but only for Monads.
+    let inline liftM  (f: 'T->'U) (m1: '``Monad<'T>``) : '``Monad<'U>``= m1 >>= (result << f)
+    #endif
+
 
     // Monoid -----------------------------------------------------------------
 
@@ -487,7 +492,7 @@ module Operators =
     let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
 
     /// Get a value which depends on the current state.
-    let inline gets f = map f get : '``MonadState<'T * 'S>``
+    let inline gets (f: 'S->'T) : '``MonadState<'T * 'S>`` = get |> if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then liftM f else Map.InvokeOnInstance f
 
     /// Replace the state inside the monad.
     let inline put (x: 'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
@@ -819,11 +824,6 @@ module Operators =
 
     /// An active recognizer for a generic value parser.
     let inline (|Parse|_|) str : 'T option = tryParse str
-
-    #if !FABLE_COMPILER
-    /// Equivalent to map but only for Monads.
-    let inline liftM  (f: 'T->'U) (m1: '``Monad<'T>``) : '``Monad<'U>``= m1 >>= (result << f)
-    #endif
 
     /// Safely dispose a resource (includes null-checking).
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
