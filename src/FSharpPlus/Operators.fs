@@ -371,16 +371,16 @@ module Operators =
     // Bifoldable
 
     /// Combines the elements of a structure, given ways of mapping them to a common monoid.
-    let inline bifoldMap f g (source: '``Bifoldable<'T1,'T2>``) = BifoldMap.Invoke f g source
+    let inline bifoldMap (f: 'T1->'Monoid) (g: 'T2->'Monoid) (source: '``Bifoldable<'T1,'T2>``) = BifoldMap.Invoke f g source
 
     /// Combines the elements of a structure in a right associative manner.
-    let inline bifold (leftFolder: 'State -> 'a -> 'State) (rightFolder: 'State -> 'b -> 'State) (state: 'State) (source: '``Bifoldable<'T1,'T2>``) = Bifold.Invoke leftFolder rightFolder state source
+    let inline bifold (leftFolder: 'State -> 'T1 -> 'State) (rightFolder: 'State -> 'T2 -> 'State) (state: 'State) (source: '``Bifoldable<'T1,'T2>``) = Bifold.Invoke leftFolder rightFolder state source
     
     /// Combines the elements of a structure in a left associative manner.
-    let inline bifoldBack (leftFolder: 'a -> 'State -> 'State) (rightFolder: 'b -> 'State -> 'State) (source: '``Bifoldable<'T1,'T2>``) (state: 'State) : 'State = BifoldBack.Invoke leftFolder rightFolder state source
+    let inline bifoldBack (leftFolder: 'T1 -> 'State -> 'State) (rightFolder: 'T2 -> 'State -> 'State) (source: '``Bifoldable<'T1,'T2>``) (state: 'State) : 'State = BifoldBack.Invoke leftFolder rightFolder state source
 
     /// Combines the elements of a structure using a monoid.
-    let inline bisum (source: '``Bifoldable<'T1,'T2>``) = Bisum.Invoke source
+    let inline bisum (source: '``Bifoldable<'Monoid,'Monoid>``) : 'Monoid = Bisum.Invoke source
 
     // Indexable
 
