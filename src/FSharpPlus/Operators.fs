@@ -86,7 +86,7 @@ module Operators =
     /// Apply a lifted argument to a lifted function.
     let inline (<*>) (x: '``Applicative<'T -> 'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke x y : '``Applicative<'U>``
 
-    /// Apply 2 lifted arguments to a lifted function.
+    /// Apply 2 lifted arguments to a non-lifted function.
     let inline liftA2 (f: 'T->'U->'V) (a: '``Applicative<'T>``) (b: '``Applicative<'U>``) : '``Applicative<'V>`` = f <!> a <*> b
 
     let inline (  *>)   (x: '``Applicative<'T>``) : '``Applicative<'U>``->'``Applicative<'U>`` = x |> liftA2 (fun   _ -> id)
@@ -477,7 +477,7 @@ module Operators =
     /// Lift a computation from the inner monad to the constructed monad.
     let inline lift (x: '``Monad<'T>``) : '``MonadTrans<'Monad<'T>>`` = Lift.Invoke x
 
-    /// A lift specializaed for Async<'T> which is able to bring an Async value from any depth of monad-layers.
+    /// A specialized lift for Async<'T> which is able to bring an Async value from any depth of monad-layers.
     let inline liftAsync (x: Async<'T>) : '``MonadAsync<'T>`` = LiftAsync.Invoke x
 
     /// (call-with-current-continuation) calls a function with the current continuation as its argument.
