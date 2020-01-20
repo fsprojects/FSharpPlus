@@ -1163,6 +1163,22 @@ module MonadTransformers =
 
         ()
 
+    let testStateT () =
+        let lst1 : StateT<string,_> = StateT.lift [1;2]
+        let lst2 : StateT<string,_> = StateT.lift [4;5]
+
+        let m = monad { 
+            let! x =  lst1
+            let! y =  lst2
+            do! modify String.toUpper
+            let! st = gets String.length
+            return (x, y +  st)
+            }
+
+        CollectionAssert.AreEqual (StateT.run m "ok", [((1, 6), "OK"); ((1, 7), "OK"); ((2, 6), "OK"); ((2, 7), "OK")])
+
+        ()
+
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
         static member Dimap ((Fun f): Fun<'B,'C>, g: 'A->'B, h:'C->'D) = Fun (g >> f >> h)

@@ -67,13 +67,12 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline CallCC (f: (('T -> OptionT<'``MonadCont<'R,option<'U>>``>) -> _)) = OptionT (callCC <| fun c -> OptionT.run (f (OptionT << c << Some))) : OptionT<'``MonadCont<'R,option<'T>>``>
 
     static member inline get_Get () = OptionT.lift get           : OptionT<'``MonadState<'S,'S>``>
-    static member inline Put (x: 'T) = x |> put |> OptionT.lift  : OptionT<'``MonadState<unit,'S>``>
+    static member inline Put (x: 'S) = x |> put |> OptionT.lift  : OptionT<'``MonadState<unit,'S>``>
 
     static member inline get_Ask () = OptionT.lift ask           : OptionT<'``MonadReader<'R,option<'R>>``>
     static member inline Local (OptionT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = OptionT (local f m)
 
     static member inline Tell (w: 'Monoid) = w |> tell |> OptionT.lift : OptionT<'``MonadWriter<'Monoid, unit>``>
-
     #if !FABLE_COMPILER
     static member inline Listen m                              : OptionT<'``'MonadWriter<'Monoid, option<'T>>``> =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m

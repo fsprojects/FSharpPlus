@@ -19,10 +19,16 @@ module State =
     let exec (State sa: State<'S,'A>) s = snd (sa s) : 'S
 
     /// Return the state from the internals of the monad.
-    let get   = State (fun s -> (s, s))                                                                           : State<'S,'S>
+    let get = State (fun s -> (s, s))                                                                             : State<'S,'S>
+
+    /// Get a value which depends on the current state.
+    let gets f = State (fun s -> (f s, s))                                                                        : State<'S,'T>
 
     /// Replace the state inside the monad.
     let put x = State (fun _ -> ((), x))                                                                          : State<'S,unit>
+
+    /// Modify the state inside the monad by applying a function.
+    let modify f = State (fun s -> ((), f s))                                                                     : State<'S->'S,unit>
 
 type State<'s,'t> with
 
@@ -92,8 +98,8 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline LiftAsync (x :Async<'T>) = StateT.lift (liftAsync x) : StateT<'S,'``MonadAsync<'T>``>
     
     #if !FABLE_COMPILER
-    static member inline get_Get ()  = StateT (fun s -> result (s , s))  : StateT<'S, '``Monad<'S * 'S>``>
-    static member inline Put (x: 'S) = StateT (fun _ -> result ((), x))  : StateT<'S, '``Monad<unit * 'S>``>
+    static member inline get_Get ()  = StateT (fun s -> result (s , s)) : StateT<'S, '``Monad<'S * 'S>``>
+    static member inline Put (x: 'S) = StateT (fun _ -> result ((), x)) : StateT<'S, '``Monad<unit * 'S>``>
     #endif
 
     static member inline Throw (x: 'E) = x |> throw |> StateT.lift
