@@ -599,7 +599,7 @@ module Operators =
     /// <param name="source">The input collection.</param>
     ///
     /// <returns>The result collection.</returns>
-    let inline groupBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupBy.Invoke projection source
+    let inline groupBy (projection: 'T->'Key when 'Key : equality) (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = GroupBy.Invoke projection source
 
     /// <summary>Applies a key-generating function to each element of a collection and yields a collection of 
     /// keys. Each key contains a collection of all adjacent elements that match 
@@ -612,7 +612,7 @@ module Operators =
     /// <param name="source">The input collection.</param>
     ///
     /// <returns>The result collection.</returns>
-    let inline chunkBy (projection: 'T->'Key)    (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = ChunkBy.Invoke projection source
+    let inline chunkBy (projection: 'T->'Key when 'Key : equality)    (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = ChunkBy.Invoke projection source
 
     /// <summary>Returns a collection that contains all elements of the original collection while the
     /// given predicate returns true, and then returns no further elements.</summary>
@@ -638,8 +638,8 @@ module Operators =
 
     let inline choose (chooser: 'T->'U option)   (source: '``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source
 
-    let inline distinct                          (source: '``Collection<'T>``) : '``Collection<'T>`` = Distinct.Invoke              source
-    let inline distinctBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = DistinctBy.Invoke projection source
+    let inline distinct                          (source: '``Collection<'T> when 'T : equality``) : '``Collection<'T> when 'T : equality`` = Distinct.Invoke source
+    let inline distinctBy (projection: 'T->'Key when 'T : equality) (source: '``Collection<'T>``) : '``Collection<'T>`` = DistinctBy.Invoke projection source
 
     /// Inserts a separator between each element
     let inline intersperse      (sep: 'T)        (source: '``Collection<'T>``) : '``Collection<'T>`` = Intersperse.Invoke sep       source
@@ -648,9 +648,9 @@ module Operators =
     let inline rev  (source: '``Collection<'T>``)                                    = Rev.Invoke source : '``Collection<'T>``
     let inline scan (folder: 'State->'T->'State) state (source: '``Collection<'T>``) = Scan.Invoke folder (state: 'State) source : '``Collection<'State>``
 
-    let inline sort                          (source: '``Collection<'T>``) : '``Collection<'T>`` = Sort.Invoke source 
-    let inline sortBy (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
-    let inline sortByDescending (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortByDescending.Invoke projection source
+    let inline sort                          (source: '``Collection<'T> when 'T : comparison``) : '``Collection<'T> when 'T : comparison`` = Sort.Invoke source 
+    let inline sortBy (projection: 'T->'Key when 'Key : comparison) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortBy.Invoke projection source
+    let inline sortByDescending (projection: 'T->'Key when 'Key : comparison) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortByDescending.Invoke projection source
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection)  = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
 
 
