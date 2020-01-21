@@ -5,10 +5,10 @@ open System
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
 module Option =
-    /// <summary>If both value are Some, returns the result of applying the second value to the first one. Otherwise it returns None.</summary>
-    /// <param name="f">The function.</param>
-    /// <param name="x">The value.</param>
-    /// <returns>The result sequence.</returns>
+    /// <summary>Applies an option value to an option function.</summary>
+    /// <param name="f">The option function.</param>
+    /// <param name="x">The option value.</param>
+    /// <returns>An option of the value after applying the function, or <c>None</c> if either the function or the value is <c>None</c>.</returns>
     let apply f x =
         match f, x with
         | Some f, Some x -> Some (f x)
@@ -48,8 +48,8 @@ module Option =
     /// <returns>The resulting option value.</returns>
     let ofResult source = match source with Ok x -> Some x | Error _ -> None
 
-    /// Creates a safe version of the supplied function, which returns an option<'t> instead of throwing exceptions.
-    let protect f x =
+    /// Creates a safe version of the supplied function, which returns an option<'U> instead of throwing exceptions.
+    let protect (f: 'T->'U) x =
         try
             Some (f x)
         with _ -> None
@@ -65,8 +65,8 @@ module Result =
     let inline catch f           = function Ok v      -> Ok v     | Error e                 -> (f: 't->_) e : Result<'v,'e>
     let inline either f g        = function Ok v      -> f v      | Error e                 -> g e
 
-    /// Creates a safe version of the supplied function, which returns a Result<'t,exn> instead of throwing exceptions.
-    let protect f x =
+    /// Creates a safe version of the supplied function, which returns a Result<'U,exn> instead of throwing exceptions.
+    let protect (f: 'T->'U) x =
         try
             Ok (f x)
         with e -> Error e
@@ -110,8 +110,8 @@ module Choice =
     let inline catch (f: 't -> _)      = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e          : Choice<'v,'e>
     let inline either f g              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
 
-    /// Creates a safe version of the supplied function, which returns a Choice<'t,exn> instead of throwing exceptions.
-    let protect f x =
+    /// Creates a safe version of the supplied function, which returns a Choice<'U,exn> instead of throwing exceptions.
+    let protect (f: 'T->'U) x =
         try
             Choice1Of2 (f x)
         with e -> Choice2Of2 e
@@ -120,11 +120,37 @@ module Choice =
 /// Additional operations on Seq
 [<RequireQualifiedAccess>]
 module Seq =
-    let bind (f: 'a->seq<'b>) x = Seq.collect f x
+
+    /// <summary>Applies the given function to each element of the sequence and concatenates all the
+    /// results.</summary>
+    ///
+    /// <remarks>Remember sequence is lazy, effects are delayed until it is enumerated.</remarks>
+    /// <remarks>This is the same as Seq.collect but the type of the mapping function is not flexible.</remarks>
+    ///
+    /// <param name="mapping">A function to transform elements of the input sequence into the sequences
+    /// that will then be concatenated.</param>
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    ///
+    /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
+    let bind (mapping: 'T->seq<'U>) source = Seq.collect mapping source
+
     let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
     let foldBack f x z = Array.foldBack f (Seq.toArray x) z
 
-    let chunkBy projection (source: _ seq) = seq {
+    /// <summary>Applies a key-generating function to each element of a sequence and yields a sequence of 
+    /// keys tupled with values. Each key contains an array of all adjacent elements that match 
+    /// to this key, therefore keys are not unique but they can't be adjacent
+    /// as each time the key changes, a new group is yield.</summary>
+    /// 
+    /// <remarks>The ordering of the original sequence is respected.</remarks>
+    ///
+    /// <param name="projection">A function that transforms an element of the sequence into a comparable key.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    let chunkBy (projection: 'T -> 'Key) (source: _ seq) = seq {
         use e = source.GetEnumerator ()
         if e.MoveNext () then
             let mutable g = projection e.Current
@@ -183,7 +209,7 @@ module Seq =
                 if options = StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
         split StringSplitOptions.None
 
-    let replace (oldValue: seq<'t>) (newValue: seq<'t>) (source: seq<'t>) : seq<'t> = seq {
+    let replace (oldValue: seq<'T>) (newValue: seq<'T>) (source: seq<'T>) : seq<'T> = seq {
         let old = oldValue |> Seq.toList
         if old.Length = 0 then
             yield! source
@@ -231,7 +257,7 @@ module Seq =
     let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
 
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Gets the index of the first occurrence of the specified slice in the source.
     /// </summary>
     /// <remarks>
     /// It is assumed that 1) the slice is finite and 2) either the source is finite or actually contains the slice, otherwise it will not return forever.
@@ -252,7 +278,7 @@ module Seq =
             index
 
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Gets the index of the first occurrence of the specified slice in the source.
     /// Returns <c>None</c> if not found.
     /// </summary>
     /// <remarks>
@@ -335,7 +361,7 @@ module List =
     #if !FABLE_COMPILER
 
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Gets the index of the first occurrence of the specified slice in the source.
     /// </summary>
     /// <exception cref="System.ArgumentException">
     /// Thrown when the slice was not found in the sequence.
@@ -351,7 +377,7 @@ module List =
             index
 
     /// <summary>
-    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Gets the index of the first occurrence of the specified slice in the source.
     /// Returns <c>None</c> if not found.
     /// </summary>
     /// <returns>
@@ -363,17 +389,17 @@ module List =
     #endif
 
     /// <summary>
-    /// Creates two lists by applying the mapper function to each element in the list
+    /// Creates two lists by applying the mapping function to each element in the list
     /// and classifying the transformed values depending on whether they were wrapped with Choice1Of2 or Choice2Of2.
     /// </summary>
     /// <returns>
     /// A tuple with both resulting lists.
     /// </returns>
-    let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: list<'T>) =
+    let partitionMap (mapping: 'T -> Choice<'T1,'T2>) (source: list<'T>) =
         let rec loop ((acc1, acc2) as acc) = function
             | [] -> acc
             | x::xs ->
-                match mapper x with
+                match mapping x with
                 | Choice1Of2 x -> loop (x::acc1, acc2) xs
                 | Choice2Of2 x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
@@ -429,7 +455,7 @@ module Array =
     /// </summary>
     /// <returns>
     /// A tuple with both resulting arrays.
-    /// </returns>    
+    /// </returns>
     let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: array<'T>) =
         let (x, y) = ResizeArray (), ResizeArray ()
         Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
@@ -458,10 +484,10 @@ module String =
 
     #if !FABLE_COMPILER
     
-    let startsWith  (subString: string) (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
+    let startsWith (subString: string) (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
     #endif
-    let endsWith    subString (source: string) = source.EndsWith   (subString, false, CultureInfo.InvariantCulture)
-    let contains    char      (source: string) = Seq.contains char source
+    let endsWith subString (source: string) = source.EndsWith (subString, false, CultureInfo.InvariantCulture)
+    let contains char      (source: string) = Seq.contains char source
     let toUpper (source: string) = if isNull source then source else source.ToUpperInvariant ()
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
     let trimWhiteSpaces (source: string) = source.Trim ()
@@ -536,12 +562,12 @@ module String =
         else take count source
     /// Returns a string that drops first N characters of the original string.
     /// When count exceeds the length of the string it returns an empty string.
-    let drop     count (source: string) =
+    let drop count (source: string) =
         if count < 1 then source
         else if String.length source >= count then String.Empty
         else skip count source
 
-    let findIndex    (predicate: char -> bool) (source: string) =
+    let findIndex (predicate: char -> bool) (source: string) =
         let rec go index =
             if index >= source.Length then
                 ArgumentException("An index satisfying the predicate was not found in the string.") |> raise
@@ -564,7 +590,7 @@ module String =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    let findSliceIndex    (slice: string) (source: string) =
+    let findSliceIndex (slice: string) (source: string) =
         let index = source.IndexOf slice
         if index = -1 then
             ArgumentException("The specified substring was not found in the string.") |> raise
@@ -617,14 +643,14 @@ module IReadOnlyList =
 
     #if !FABLE_COMPILER
     
-    let ofArray (source: _ array) = IList.toIReadOnlyList source
+    let ofArray (source: 'T array) = IList.toIReadOnlyList source
     #endif
-    let toArray (source: IReadOnlyList<_>) = Array.ofSeq source
+    let toArray (source: IReadOnlyList<'T>) = Array.ofSeq source
 
     #if !FABLE_COMPILER
     
     /// Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.
-    let trySetItem i value (source: IReadOnlyList<_>) =
+    let trySetItem i value (source: IReadOnlyList<'T>) =
         let setNth i v (source: _ array) = source.[i] <- v; source
         if 0 <= i && i < source.Count then
             source |> Array.ofSeq |> setNth i value |> ofArray |> Some
@@ -645,8 +671,8 @@ module Map =
     open System.Linq
     #endif
 
-    let keys   (source: Map<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
-    let values (source: Map<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
+    let keys   (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(k, _)) -> k) source
+    let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     /// <summary>Map values of the original Map.</summary>
     /// <remarks>Keys remain unchanged.</remarks>
@@ -703,8 +729,8 @@ module Map =
               (fun (y:KeyValuePair<'Key, 'T>) -> y.Key), 
               (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) -> 
                 KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
-        |> Seq.map (fun kv -> (kv.Key, kv.Value))  
-        |> Map.ofSeq      
+        |> Seq.map (fun kv -> (kv.Key, kv.Value))
+        |> Map.ofSeq
 
     // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
@@ -824,8 +850,8 @@ module IReadOnlyDictionary =
         | _       -> None
     let containsKey k (dct: IReadOnlyDictionary<'Key, 'Value>) = dct.ContainsKey k
 
-    let keys   (source: IReadOnlyDictionary<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
-    let values (source: IReadOnlyDictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
+    let keys   (source: IReadOnlyDictionary<'Key, 'Value>) = Seq.map (fun (KeyValue(k, _)) -> k) source
+    let values (source: IReadOnlyDictionary<'Key, 'Value>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     let map f (x: IReadOnlyDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
@@ -910,7 +936,7 @@ module IReadOnlyDictionary =
 [<RequireQualifiedAccess>]
 module Enumerator =
         
-    let inline invalidArgFmt (arg: string) (format: string) paramArray =    
+    let inline invalidArgFmt (arg: string) (format: string) paramArray = 
         let msg = String.Format (format,paramArray)
         raise (new ArgumentException (msg, arg))
     
@@ -1240,7 +1266,7 @@ module Enumerator =
                 if !index = completed then alreadyFinished ()
                 match box !current with
                 | null -> current := Lazy<_>.Create (fun () -> f !index)
-                | _    ->  ()
+                | _    -> ()
                 // forced or re-forced immediately.
                 (!current).Force ()
             { new IEnumerator<'U> with
@@ -1368,10 +1394,10 @@ module Async =
 
 
 
-/// Module containing F#+ Extension Methods  
+/// Module containing F#+ Extension Methods
 module Extensions =
 
-    type Collections.Generic.IEnumerable<'T>  with
+    type Collections.Generic.IEnumerable<'T> with
         member this.GetSlice = function
             | None  , None   -> this
             | Some a, None   -> this |> Seq.skip a
