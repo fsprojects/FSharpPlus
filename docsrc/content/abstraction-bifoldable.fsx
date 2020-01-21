@@ -5,7 +5,7 @@
 
 (**
 Bifoldable
-=======
+==========
 
 Intuitively a bifoldable is a type with 2 arguments, each of them being foldable.
 
@@ -73,20 +73,20 @@ Related Abstractions
  - [Foldable](abstraction-foldable.html): All bifoldable contain up to two elements that are foldable to a single common type.
  - [Monoid](abstraction-monoid.html): For containers where the two elements are not disjoint, the same relation that foldable has to monoid applies.
 
-Concrete implementations
-------------------------
+Concrete implementations of Bifoldable<'T1,'T2>
+-----------------------------------------------
 
 From .Net/F#
  
- -  ``'T * 'U``
- -  ``Result<'T,'U>``
- -  ``Choice<'T,'U>``
+ -  ``'T1 * 'T2``
+ -  ``Result<'T2,'T1>``
+ -  ``Choice<'T2,'T1>``
 
  
 From F#+
 
- -  ``Const<'C,'T>``
- -  ``Validation<'err,'a>``
+ -  ``Const<'T1,'T2>``
+ -  ``Validation<'T1,'T2>``
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
