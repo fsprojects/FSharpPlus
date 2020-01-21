@@ -6,24 +6,50 @@
 (**
 FSharpPlus
 ======================
+F#+ is a base library that aims to take F# to the next level of functional
+programming. 
 
-Documentation
+*What if we imagine F# as more than it is?*
 
-<div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
-      The FSharpPlus library can be <a href="https://nuget.org/packages/FSharpPlus">installed from NuGet</a>:
-      <pre>PM> Install-Package FSharpPlus</pre>
-    </div>
-  </div>
-  <div class="span1"></div>
-</div>
+F#+ builds upon FSharp, with a special focus on generic programming.
+However, by naming conventions and signatures it can be seen to
+'enhance' rather than 'replace' existing patterns as much as possible.
+
+The additions can be summarised as:
+
+ * extensions to core types, such as [`String.toLower`](reference/fsharpplus-string.html)
+
+ * [Generic Functions and Operators](reference/fsharpplus-operators.html),
+   like `map`, which can be extended to support other types
+
+ * Generic and customizable [Computation Expressions](computation-expressions.html),
+   like `monad`
+
+ * A generic [Math Module](numerics.html)
+
+ * [Abstractions](abstractions.html) that capture common FP patterns, such as
+   the standard monads Cont, Reader, Writer, State and their Monad Transformers
+
+ * Some new types that work well with the abstractions, such as NonEmptyList,
+   DList and Validation
+
+ * A polymorphic [Lenses/Optics](tutorial.html#Lens) to easily read and update
+   parts of immutable data
+
+Note, however, that F#+ does not go into solving a specific thing for a specific
+technology, such as JSON parsing.
+
+Some functions are available as [extension methods](extension-methods.html)
+so are callable from C#. Note that this is not complete, or currently considered high priority.
+
+Getting started is easy since you can start with enjoying some of the extensions
+and generic functions, but you will find other parts of F#+ unfold before you
+and become useful the deeper in you get.
 
 Example 1
 ---------
 
-This example demonstrates using a function defined in this library.
+This example demonstrates using an extenstion function defined in this library.
 
 *)
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
@@ -54,42 +80,47 @@ map string (NonEmptyList.create 2 [3;4;5])
 
 (**
 
-Some more info
-
-Samples & documentation
------------------------
-
-The library comes with comprehensible documentation. 
-It include tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
-The API reference is automatically generated from Markdown comments in the library implementation.
+For a more hands on run through F#+ we recommend following the tutorial:
 
  * [Tutorial](tutorial.html) contains a further explanation of this library.
 
+
+Reference Documentation
+-----------------------
+
  * [Types](types.html) contains detailed information about all the types provided in this library.
-
- * [Abstractions](abstractions.html) contains detailed information about all the abstractions represented in this library.
-
- * [Computation Expressions](computation-expressions.html) contains information about the generic computation expressions.
-
- * [Lens](lens.html) contains information and samples about lens and other optics.
 
  * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
    and functions in the library. This includes additional brief samples on using most of the
    functions.
+
+Samples
+-----------------------
+
+This documentation is automatically generated from `*.fsx` files in [the content folder][content]. 
+It can be useful to clone a local copy to review.
+
+The [API reference](reference/index.html) is automatically generated from
+Markdown comments in the library implementation.
  
+Also of note is the [Sample folder](samples)
+which contains sample scripts showing how to use F#+ in your code.
+
 Contributing and copyright
 --------------------------
 
 The project is hosted on [GitHub][gh] where you can [report issues][issues], fork 
-the project and submit pull requests. If you're adding a new public API, please also 
-consider adding [samples][content] that can be turned into a documentation. You might
-also want to read the [library design notes][design] to understand how it works.
+the project and submit pull requests.
 
-The library is available under Public Domain license, which allows modification and 
+If you're adding a new public API, please also consider adding [documentation][content].
+You might also want to read the [library design notes][design] to understand how it works.
+
+The library is available under Apache License, Version 2.0, which allows modification and 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
   [content]: https://github.com/fsprojects/FSharpPlus/tree/master/docsrc/content
+  [samples]: https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples
   [gh]: https://github.com/fsprojects/FSharpPlus
   [issues]: https://github.com/fsprojects/FSharpPlus/issues
   [readme]: https://github.com/fsprojects/FSharpPlus/blob/master/README.md
