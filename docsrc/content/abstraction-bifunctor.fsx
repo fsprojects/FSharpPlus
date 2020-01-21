@@ -61,20 +61,20 @@ Related Abstractions
  - [Functor](abstraction-functor.html): All bifunctors are also functors over the second parameter.
 
 
-Concrete implementations
-------------------------
+Concrete implementations of Bifunctor<'T1,'T2>
+-----------------------------------------------
 
 From .Net/F#
  
- -  ``'T * 'U``
- -  ``Result<'T,'U>``
- -  ``Choice<'T,'U>``
- -  ``KeyValuePair<'T,'U>``
+ -  ``'T1 * 'T2``
+ -  ``Result<'T2,'T1>``
+ -  ``Choice<'T2,'T1>``
+ -  ``KeyValuePair<'T1,'T2>``
 
  
 From F#+
 
- -  ``Const<'C,'T>``
+ -  ``Const<'T1,'T2>``
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
