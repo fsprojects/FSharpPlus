@@ -97,20 +97,21 @@ type Mult<'a> = Mult of 'a with
 
 /// Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
 [<Struct>]
-type Compose<'``f<'g<'t>>``> = Compose of '``f<'g<'t>>`` with
+type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t>>`` with
 
     // Functor
-    static member inline Map (Compose x, f: 'T->'U) = Compose (map (map f) x)
+    static member inline Map (Compose (x: '``FunctorF<'FunctorG<'T>>``), f: 'T->'U) = Compose (map (map f: '``FunctorG<'T>`` -> '``FunctorG<'U>``) x : '``FunctorF<'FunctorG<'U>>``)
 
     #if !FABLE_COMPILER
     // Applicative
-    static member inline Return (x: 'T) = Compose (result (result x)) : Compose<'``F<'G<'T>``>
+    static member inline Return (x: 'T) = Compose (result (result x: '``ApplicativeG<'T>``)) : Compose<'``ApplicativeF<'ApplicativeG<'T>``>
     #endif
-    static member inline (<*>) (Compose (f: '``F<'G<'T->'U>>``), Compose (x: '``F<'G<'T>>``)) = Compose ((<*>) <!> f <*> x: '``F<'G<'U>>``)
+    static member inline (<*>) (Compose (f: '``ApplicativeF<'ApplicativeG<'T->'U>``), Compose (x: '``ApplicativeF<'ApplicativeG<'T>``)) =
+        Compose ((((<*>) : '``ApplicativeG<'T->'U>`` -> '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>``) <!> f: '``ApplicativeF<'ApplicativeG<'T>->'ApplicativeG<'U>`` ) <*> x: '``ApplicativeF<'ApplicativeG<'U>``)
 
     // Alternative
-    static member inline get_Empty ()                 = Compose (getEmpty ()) : Compose<'``F<'G<'T>``>
-    static member inline (<|>) (Compose x, Compose y) = Compose (x <|> y)     : Compose<'``F<'G<'T>``>
+    static member inline get_Empty ()                 = Compose (getEmpty ()) : Compose<'``AlternativeF<'ApplicativeG<'T>``>
+    static member inline (<|>) (Compose x, Compose y) = Compose (x <|> y)     : Compose<'``AlternativeF<'ApplicativeG<'T>``>
 
 
 /// Basic operations on Compose
