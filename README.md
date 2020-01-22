@@ -11,9 +11,10 @@ programming.
 
 *What if we imagine F# as more than it is?*
 
-F#+ builds upon FSharp, with a special focus on generic programming.
-However, by naming conventions and signatures it can be seen to
-'enhance' rather than 'replace' existing patterns as much as possible.
+F#+ builds upon FSharp, using generic programming techniques to help
+you avoid boiler plate code.  However, by naming conventions and signatures
+it can be seen to 'enhance' rather than 'replace' existing patterns as much
+as possible.
 
 Getting started is easy since you can start with enjoying some of the extensions
 and generic functions, but you will find other parts of F#+ unfold before you
