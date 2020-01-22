@@ -121,9 +121,17 @@ module Lens =
         let inline _item i f t = Map.InvokeOnInstance (fun x -> IReadOnlyDictionary.add i x t) (f (IReadOnlyDictionary.tryGetValue i t))
 
     // Prism
+
+    /// Prism providing a Traversal for targeting the 'Ok' part of a Result<'T,'Error>
     let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x
+
+    /// Prism providing a Traversal for targeting the 'Error' part of a Result<'T,'Error>
     let inline _Error x = (prism Error <| either (Error << Ok) Ok) x
+
+    /// Prism providing a Traversal for targeting the 'Some' part of an Option<'T>
     let inline _Some x = (prism Some <| option Ok (Error None)) x
+
+    /// Prism providing a Traversal for targeting the 'None' part of an Option<'T>
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
 
     #if !FABLE_COMPILER
