@@ -10,19 +10,46 @@
 &lt;div class=&quottip&quot id=&quot9&quot&gt;Multiple items&lt;br /&gt;module NonEmptyList&lt;br /&gt;&lt;br /&gt;from FSharpPlus.Data&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type NonEmptyList&amp;lt;&amp;#39;t&amp;gt; =&lt;br /&gt;&amp;#160;&amp;#160;{Head: &amp;#39;t;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;Tail: &amp;#39;t list;}&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;interface IReadOnlyList&amp;lt;&amp;#39;t&amp;gt;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;interface IReadOnlyCollection&amp;lt;&amp;#39;t&amp;gt;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;interface IEnumerable&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;interface IEnumerable&amp;lt;&amp;#39;t&amp;gt;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member GetSlice : (int option * int option -&amp;gt; NonEmptyList&amp;lt;&amp;#39;t&amp;gt;)&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member Item : (int -&amp;gt; &amp;#39;t)&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member Length : int&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member head : &amp;#39;t&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member tail : &amp;#39;t list&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member Duplicate : s:NonEmptyList&amp;lt;&amp;#39;a&amp;gt; * _impl:Duplicate -&amp;gt; NonEmptyList&amp;lt;NonEmptyList&amp;lt;&amp;#39;a&amp;gt;&amp;gt;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;...&lt;/div&gt;
 &lt;div class=&quottip&quot id=&quot10&quot&gt;val create : x:&amp;#39;a -&amp;gt; xs:&amp;#39;a list -&amp;gt; NonEmptyList&amp;lt;&amp;#39;a&amp;gt;&lt;/div&gt;
 </title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="FSharpPlus" class="anchor" href="#FSharpPlus">FSharpPlus</a></h1>
-<p>Documentation</p>
-<div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
-      The FSharpPlus library can be <a href="https://nuget.org/packages/FSharpPlus">installed from NuGet</a>:
-      <pre>PM> Install-Package FSharpPlus</pre>
-    </div>
-  </div>
-  <div class="span1"></div>
-</div>
+<p>F#+ is a base library that aims to take F# to the next level of functional
+programming.</p>
+<p><em>What if we imagine F# as more than it is?</em></p>
+<p>F#+ builds upon FSharp, with a special focus on generic programming.
+However, by naming conventions and signatures it can be seen to
+'enhance' rather than 'replace' existing patterns as much as possible.</p>
+<p>The additions can be summarised as:</p>
+<ul>
+<li><p>extensions to core types, such as <a href="reference/fsharpplus-string.html"><code>String.toLower</code></a></p></li>
+<li>
+<p><a href="reference/fsharpplus-operators.html">Generic Functions and Operators</a>,
+like <code>map</code>, which can be extended to support other types</p>
+</li>
+<li>
+<p>Generic and customizable <a href="computation-expressions.html">Computation Expressions</a>,
+like <code>monad</code></p>
+</li>
+<li><p>A generic <a href="numerics.html">Math Module</a></p></li>
+<li>
+<p><a href="abstractions.html">Abstractions</a> that capture common FP patterns, such as
+the standard monads Cont, Reader, Writer, State and their Monad Transformers</p>
+</li>
+<li>
+<p>Some new types that work well with the abstractions, such as NonEmptyList,
+DList and Validation</p>
+</li>
+<li>
+<p>A polymorphic <a href="tutorial.html#Lens">Lenses/Optics</a> to easily read and update
+parts of immutable data</p>
+</li>
+</ul>
+<p>Note, however, that F#+ does not go into solving a specific thing for a specific
+technology, such as JSON parsing.</p>
+<p>Some functions are available as <a href="extension-methods.html">extension methods</a>
+so are callable from C#. Note that this is not complete, or currently considered high priority.</p>
+<p>Getting started is easy since you can start with enjoying some of the extensions
+and generic functions, but you will find other parts of F#+ unfold before you
+and become useful the deeper in you get.</p>
 <h2><a name="Example-1" class="anchor" href="#Example-1">Example 1</a></h2>
-<p>This example demonstrates using a function defined in this library.</p>
+<p>This example demonstrates using an extenstion function defined in this library.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
@@ -63,29 +90,32 @@
 </code></pre></td>
 </tr>
 </table>
-<p>Some more info</p>
-<h2><a name="Samples-amp-documentation" class="anchor" href="#Samples-amp-documentation">Samples &amp; documentation</a></h2>
-<p>The library comes with comprehensible documentation.
-It include tutorials automatically generated from <code>*.fsx</code> files in <a href="https://github.com/fsprojects/FSharpPlus/tree/master/docsrc/content">the content folder</a>.
-The API reference is automatically generated from Markdown comments in the library implementation.</p>
+<p>For a more hands on run through F#+ we recommend following the tutorial:</p>
 <ul>
-<li><p><a href="tutorial.html">Tutorial</a> contains a further explanation of this library.</p></li>
+<li><a href="tutorial.html">Tutorial</a> contains a further explanation of this library.</li>
+</ul>
+<h2><a name="Reference-Documentation" class="anchor" href="#Reference-Documentation">Reference Documentation</a></h2>
+<ul>
 <li><p><a href="types.html">Types</a> contains detailed information about all the types provided in this library.</p></li>
-<li><p><a href="abstractions.html">Abstractions</a> contains detailed information about all the abstractions represented in this library.</p></li>
-<li><p><a href="computation-expressions.html">Computation Expressions</a> contains information about the generic computation expressions.</p></li>
-<li><p><a href="lens.html">Lens</a> contains information and samples about lens and other optics.</p></li>
 <li>
 <p><a href="reference/index.html">API Reference</a> contains automatically generated documentation for all types, modules
 and functions in the library. This includes additional brief samples on using most of the
 functions.</p>
 </li>
 </ul>
+<h2><a name="Samples" class="anchor" href="#Samples">Samples</a></h2>
+<p>This documentation is automatically generated from <code>*.fsx</code> files in <a href="https://github.com/fsprojects/FSharpPlus/tree/master/docsrc/content">the content folder</a>.
+It can be useful to clone a local copy to review.</p>
+<p>The <a href="reference/index.html">API reference</a> is automatically generated from
+Markdown comments in the library implementation.</p>
+<p>Also of note is the <a href="samples">Sample folder</a>
+which contains sample scripts showing how to use F#+ in your code.</p>
 <h2><a name="Contributing-and-copyright" class="anchor" href="#Contributing-and-copyright">Contributing and copyright</a></h2>
 <p>The project is hosted on <a href="https://github.com/fsprojects/FSharpPlus">GitHub</a> where you can <a href="https://github.com/fsprojects/FSharpPlus/issues">report issues</a>, fork
-the project and submit pull requests. If you're adding a new public API, please also
-consider adding <a href="https://github.com/fsprojects/FSharpPlus/tree/master/docsrc/content">samples</a> that can be turned into a documentation. You might
-also want to read the <a href="https://github.com/fsprojects/FSharpPlus/blob/master/DESIGN_GUIDELINES.md">library design notes</a> to understand how it works.</p>
-<p>The library is available under Public Domain license, which allows modification and
+the project and submit pull requests.</p>
+<p>If you're adding a new public API, please also consider adding <a href="https://github.com/fsprojects/FSharpPlus/tree/master/docsrc/content">documentation</a>.
+You might also want to read the <a href="https://github.com/fsprojects/FSharpPlus/blob/master/DESIGN_GUIDELINES.md">library design notes</a> to understand how it works.</p>
+<p>The library is available under Apache License, Version 2.0, which allows modification and
 redistribution for both commercial and non-commercial purposes. For more information see the
 <a href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
 </div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>
