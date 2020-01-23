@@ -169,15 +169,15 @@ let testEnsureRightTrue () =
   areEqual (Success seven) subject
 
 [<Test>]
-let testOrElseRight () =
-  let v = Success  seven
-  let subject = Validation.orElse v three
+let testDefaultValueSuccess () =
+  let v = Success seven
+  let subject = Validation.defaultValue three v
   areEqual seven subject
 
 [<Test>]
-let testOrElseLeft () =
+let testDefaultValueFailure () =
   let v = Failure seven
-  let subject = Validation.orElse v three
+  let subject = Validation.defaultValue three v
   areEqual three subject
 
 //testEnsureLeftFalse, testEnsureLeftTrue, testEnsureRightFalse, testEnsureRightTrue,

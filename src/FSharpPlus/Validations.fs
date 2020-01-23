@@ -80,9 +80,9 @@ module Validation=
     [<System.Obsolete("Use Validation.defaultValue instead.")>]
     let orElse v (a: 'a) = match v with | Failure _ -> a | Success x -> x
     /// defaultValue value source returns value when source is Failure, and the v in Success v.
-    let defaultValue value source = match source with Success v -> v | _ -> value
+    let defaultValue (value:'a) (source:Validation<'err,'a>) :'a = match source with Success v -> v | _ -> value
     /// defaultWith returns either x when the source is Success x, otherwise applies the function f on e if the source is Failure e.
-    let defaultWith f source = match source with | Success x -> x | Failure e -> f e
+    let defaultWith (f:'err->'a) (source:Validation<'err,'a>) :'a = match source with | Success x -> x | Failure e -> f e
 
     /// Return the 'a or run the given function over the 'e.
     [<System.Obsolete("Use Validation.defaultWith instead.")>]
