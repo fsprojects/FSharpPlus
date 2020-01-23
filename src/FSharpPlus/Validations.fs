@@ -78,17 +78,15 @@ module Validation=
 
     /// orElse v a returns 'a when v is Failure, and the a in Success a.
     [<System.Obsolete("Use Validation.defaultValue instead.")>]
-    let orElse v (a: 'a) = 
-        match v with
-        | Failure _ -> a
-        | Success x -> x
+    let orElse v (a: 'a) = match v with | Failure _ -> a | Success x -> x
+    /// defaultValue value source returns value when source is Failure, and the v in Success v.
+    let defaultValue value source = match source with Success v -> v | _ -> value
+    /// defaultWith returns either x when the source is Success x, otherwise applies the function f on e if the source is Failure e.
+    let defaultWith f source = match source with | Success x -> x | Failure e -> f e
 
     /// Return the 'a or run the given function over the 'e.
     [<System.Obsolete("Use Validation.defaultWith instead.")>]
-    let valueOr ea (v: Validation<'e,'a>) = 
-        match v with
-        | Failure e -> ea e
-        | Success a -> a
+    let valueOr ea (v: Validation<'e,'a>) = match v with | Failure e -> ea e | Success a -> a
 
     /// 'liftResult' is useful for converting a 'Result' to an 'Validation'
     /// when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.
