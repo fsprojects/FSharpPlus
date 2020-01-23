@@ -77,12 +77,14 @@ module Validation=
         | Success a -> f a
 
     /// orElse v a returns 'a when v is Failure, and the a in Success a.
+    [<System.Obsolete("Will not be supported in the future.")>]
     let orElse v (a: 'a) = 
         match v with
         | Failure _ -> a
         | Success x -> x
 
     /// Return the 'a or run the given function over the 'e.
+    [<System.Obsolete("Will not be supported in the future.")>]
     let valueOr ea (v: Validation<'e,'a>) = 
         match v with
         | Failure e -> ea e
@@ -113,7 +115,7 @@ module Validation=
     ///
     /// validate : 'e -> ('a -> bool) -> 'a -> Validation<'e, 'a>
     ///
-    [<System.Obsolete("The validate method is less generic than intended.")>]
+    [<System.Obsolete("Will not be supported in the future.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
     #if !FABLE_COMPILER
@@ -129,7 +131,7 @@ module Validation=
     /// This can be thought of as having the less general type:
     ///
     /// ensure : 'e -> ('a -> 'bool) -> Validation<'a,'e> -> Validation<'a,'e>
-    [<System.Obsolete("The ensure method is less generic than intended.")>]
+    [<System.Obsolete("Will not be supported in the future.")>]
     let ensure (e: 'e) (p: 'a-> bool) = function
         | Failure x -> Failure x
         | Success a -> validate e p a
