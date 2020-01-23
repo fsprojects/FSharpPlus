@@ -14,8 +14,8 @@ let ``bifoldMap over Choice`` () =
     
     let c1 : Choice<int list,string list> = Choice1Of2 [1..2]
     let c2 : Choice<int list,string list> = Choice2Of2 ["a";"bbbb"]
-    let r1 = bifoldMap listMapTimes2 listMapSeqLength c1
-    let r2 = bifoldMap listMapTimes2 listMapSeqLength c2
+    let r1 = bifoldMap listMapSeqLength listMapTimes2 c1
+    let r2 = bifoldMap listMapSeqLength listMapTimes2 c2
     let e1 = [2;4]
     let e2 = [1;4]
 
@@ -27,8 +27,8 @@ let ``bifoldMap over Result`` () =
     
     let c1 : Result<int list,string list> = Ok [1..2]
     let c2 : Result<int list,string list> = Error ["a";"bbbb"]
-    let r1 = bifoldMap listMapTimes2 listMapSeqLength c1
-    let r2 = bifoldMap listMapTimes2 listMapSeqLength c2
+    let r1 = bifoldMap listMapSeqLength listMapTimes2 c1
+    let r2 = bifoldMap listMapSeqLength listMapTimes2 c2
     let e1 = [2;4]
     let e2 = [1;4]
 
@@ -79,8 +79,8 @@ let ``bifoldBack over Choice`` () =
     let c1 : Choice<int list,string list> = Choice1Of2 [1..2]
     let c2 : Choice<int list,string list> = Choice2Of2 ["a";"bbbb"]
 
-    let r1 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) c1 [0] 
-    let r2 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) c2 [0] 
+    let r1 = bifoldBack (listMapSeqLength >> (++)) (listMapTimes2 >> (++)) c1 [0] 
+    let r2 = bifoldBack (listMapSeqLength >> (++)) (listMapTimes2 >> (++)) c2 [0] 
     let e1 = [2;4;0]
     let e2 = [1;4;0]
 
@@ -92,8 +92,8 @@ let ``bifoldBack over Result`` () =
     
     let c1 : Result<int list,string list> = Ok [1..2]
     let c2 : Result<int list,string list> = Error ["a";"bbbb"]
-    let r1 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) c1 [0]
-    let r2 = bifoldBack (listMapTimes2 >> (++)) (listMapSeqLength >> (++)) c2 [0]
+    let r1 = bifoldBack (listMapSeqLength >> (++)) (listMapTimes2 >> (++)) c1 [0]
+    let r2 = bifoldBack (listMapSeqLength >> (++)) (listMapTimes2 >> (++)) c2 [0]
     let e1 = [2;4;0]
     let e2 = [1;4;0]
 
@@ -127,8 +127,8 @@ let ``bifold over Choice`` () =
     let c1 : Choice<int list,string list> = Choice1Of2 [1..2]
     let c2 : Choice<int list,string list> = Choice2Of2 ["a";"bbbb"]
 
-    let r1 = bifold (listMapTimes2 >> (++)) (listMapSeqLength >> (++) |> flip) [4] c1
-    let r2 = bifold (listMapTimes2 >> (++)) (fun prepend v -> prepend ++ listMapSeqLength v) [3] c2
+    let r1 = bifold (listMapSeqLength >> (++) |> flip)               (listMapTimes2 >> (++)) [4] c1
+    let r2 = bifold (fun prepend v -> prepend ++ listMapSeqLength v) (listMapTimes2 >> (++)) [3] c2
     let e1 = [8;1;2]
     let e2 = [3;1;4]
 
@@ -141,8 +141,8 @@ let ``bifold over Result`` () =
     let c1 : Result<int list,string list> = Ok [1..2]
     let c2 : Result<int list,string list> = Error ["a";"bbbb"]
 
-    let r1 = bifold (listMapTimes2 >> (++)) (listMapSeqLength >> (++) |> flip) [4] c1
-    let r2 = bifold (listMapTimes2 >> (++)) (fun prepend v -> prepend ++ listMapSeqLength v) [3] c2
+    let r1 = bifold (listMapSeqLength >> (++) |> flip)               (listMapTimes2 >> (++)) [4] c1
+    let r2 = bifold (fun prepend v -> prepend ++ listMapSeqLength v) (listMapTimes2 >> (++)) [3] c2
     let e1 = [8;1;2]
     let e2 = [3;1;4]
 
