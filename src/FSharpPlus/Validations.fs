@@ -113,6 +113,7 @@ module Validation=
     ///
     /// validate : 'e -> ('a -> bool) -> 'a -> Validation<'e, 'a>
     ///
+    [Obsolete("The validate method is less generic than intended.")]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
     #if !FABLE_COMPILER
