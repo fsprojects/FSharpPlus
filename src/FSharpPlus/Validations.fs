@@ -77,14 +77,14 @@ module Validation=
         | Success a -> f a
 
     /// orElse v a returns 'a when v is Failure, and the a in Success a.
-    [<System.Obsolete("This function will not be supported in future versions.")>]
+    [<System.Obsolete("Use Validation.defaultValue instead.")>]
     let orElse v (a: 'a) = 
         match v with
         | Failure _ -> a
         | Success x -> x
 
     /// Return the 'a or run the given function over the 'e.
-    [<System.Obsolete("This function will not be supported in future versions.")>]
+    [<System.Obsolete("Use Validation.defaultWith instead.")>]
     let valueOr ea (v: Validation<'e,'a>) = 
         match v with
         | Failure e -> ea e
