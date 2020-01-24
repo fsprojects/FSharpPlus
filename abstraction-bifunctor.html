@@ -5,7 +5,7 @@
 &lt;div class=&quottip&quot id=&quot4&quot&gt;val bimap : f:(&amp;#39;T -&amp;gt; &amp;#39;U) -&amp;gt; g:(&amp;#39;V -&amp;gt; &amp;#39;W) -&amp;gt; source:&amp;#39;Bifunctor&amp;lt;&amp;#39;T,&amp;#39;V&amp;gt; -&amp;gt; &amp;#39;Bifunctor&amp;lt;&amp;#39;U,&amp;#39;W&amp;gt; (requires member Bimap)&lt;/div&gt;
 &lt;div class=&quottip&quot id=&quot5&quot&gt;Multiple items&lt;br /&gt;val int : value:&amp;#39;T -&amp;gt; int (requires member op_Explicit)&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type int = int32&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type int&amp;lt;&amp;#39;Measure&amp;gt; = int&lt;/div&gt;
 &lt;div class=&quottip&quot id=&quot6&quot&gt;Multiple items&lt;br /&gt;val string : value:&amp;#39;T -&amp;gt; string&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type string = System.String&lt;/div&gt;
-&lt;div class=&quottip&quot id=&quot7&quot&gt;[&amp;lt;Struct&amp;gt;]&lt;br /&gt;val resOk11 : Result&amp;lt;int,string&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot7&quot&gt;[&amp;lt;Struct&amp;gt;]&lt;br /&gt;val resOk11 : Result&amp;lt;string,int&amp;gt;&lt;/div&gt;
 &lt;div class=&quottip&quot id=&quot8&quot&gt;union case Result.Ok: ResultValue: &amp;#39;T -&amp;gt; Result&amp;lt;&amp;#39;T,&amp;#39;TError&amp;gt;&lt;/div&gt;
 &lt;div class=&quottip&quot id=&quot9&quot&gt;val rStrTrue : string * int&lt;/div&gt;
 &lt;div class=&quottip&quot id=&quot10&quot&gt;val first : f:(&amp;#39;T -&amp;gt; &amp;#39;V) -&amp;gt; source:&amp;#39;Bifunctor&amp;lt;&amp;#39;T,&amp;#39;V&amp;gt; -&amp;gt; &amp;#39;Bifunctor&amp;lt;&amp;#39;U,&amp;#39;V&amp;gt; (requires member First)&lt;/div&gt;
@@ -55,18 +55,18 @@
 <ul>
 <li><a href="abstraction-functor.html">Functor</a>: All bifunctors are also functors over the second parameter.</li>
 </ul>
-<h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
+<h2><a name="Concrete-implementations-of-Bifunctor-T1-T2" class="anchor" href="#Concrete-implementations-of-Bifunctor-T1-T2">Concrete implementations of Bifunctor<'T1,'T2></a></h2>
 <p>From .Net/F#</p>
 <ul>
-<li><code>'T * 'U</code></li>
-<li><code>Result&lt;'T,'U&gt;</code></li>
-<li><code>Choice&lt;'T,'U&gt;</code></li>
-<li><code>KeyValuePair&lt;'T,'U&gt;</code></li>
+<li><code>'T1 * 'T2</code></li>
+<li><code>Result&lt;'T2,'T1&gt;</code></li>
+<li><code>Choice&lt;'T2,'T1&gt;</code></li>
+<li><code>KeyValuePair&lt;'T1,'T2&gt;</code></li>
 </ul>
 <p>From F#+</p>
 <ul>
 <li>
-<code>Const&lt;'C,'T&gt;</code>
+<code>Const&lt;'T1,'T2&gt;</code>
 
 <a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation
 </li>
