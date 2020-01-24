@@ -81,12 +81,15 @@ module Validation =
 
     [<System.Obsolete("Use Validation.defaultValue instead.")>]
     let orElse v (a: 'a) = match v with | Failure _ -> a | Success x -> x
+    
+    /// Extracts the Success value or use the supplied default value when it's a Failure.
+    let defaultValue (value: 'T) (source: Validation<'Error,'T>) : 'T = match source with Success v -> v | _ -> value
+    
+    /// Extracts the Success value or applies the compensation function over the Failure.
+    let defaultWith (compensation: 'Error->'T) (source: Validation<'Error,'T>) : 'T = match source with | Success x -> x | Failure e -> compensation e
 
-    /// Unwraps the Success or applies the compensation function to the Error.
-    let valueOr compensation (source: Validation<'Error,'T>) = 
-        match source with
-        | Failure e -> compensation e
-        | Success a -> a
+    [<System.Obsolete("Use Validation.defaultWith instead.")>]
+    let valueOr ea (v: Validation<'e,'a>) = match v with | Failure e -> ea e | Success a -> a
 
     /// Converts a 'Result' to a 'Validation'
     /// when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.
