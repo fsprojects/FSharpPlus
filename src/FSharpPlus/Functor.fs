@@ -520,10 +520,10 @@ type Duplicate =
 type Bimap =
     inherit Default1
        
-    static member Bimap ((x, y)        , f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Bimap) = (f x, g y)
-    static member Bimap (x: Result<_,_>, f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Bimap) = Result.either (Ok << f)         (Error << g) x
-    static member Bimap (KeyValue(k, x), f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Bimap) = KeyValuePair (f k, g x)
-    static member Bimap (x: Choice<_,_>, f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Bimap) = Choice.either (Choice1Of2 << f) (Choice2Of2 << g) x
+    static member Bimap ((x: 'T1, y: 'T2)      , f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = (f x, g y)
+    static member Bimap (x: Result<'T2, 'T1>   , f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = Result.either (Ok << g) (Error << f) x
+    static member Bimap (KeyValue(k:'T1, x:'T2), f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = KeyValuePair (f k, g x)
+    static member Bimap (x: Choice<'T2, 'T1>   , f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = Choice.either (Choice1Of2 << g) (Choice2Of2 << f) x
 
     static member inline Invoke (f: 'T->'U) (g: 'V->'W) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'W>`` =
         let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Bimap : _*_*_*_ -> _) source, f, g, mthd)
@@ -536,10 +536,10 @@ type Bimap =
 type MapFirst =
     inherit Default1
 
-    static member First ((x, y)        , f: 'T->'U, [<Optional>]_mthd: MapFirst) = (f x, y)
-    static member First (x: Result<_,_>, f: 'T->'U, [<Optional>]_mthd: MapFirst) = Result.either (Ok         << f) Error      x
-    static member First (x: Choice<_,_>, f: 'T->'U, [<Optional>]_mthd: MapFirst) = Choice.either (Choice1Of2 << f) Choice2Of2 x
-    static member First (KeyValue(k, x), f: 'T->'U, [<Optional>]_mthd: MapFirst) = KeyValuePair(f k, x)
+    static member First ((x: 'T1, y: 'T2)        , f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = (f x, y)
+    static member First (x: Result<'T2, 'T1>     , f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = Result.either Ok         (Error      << f) x
+    static member First (x: Choice<'T2, 'T1>     , f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = Choice.either Choice1Of2 (Choice2Of2 << f) x
+    static member First (KeyValue(k: 'T1, x: 'T2), f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = KeyValuePair (f k, x)
 
     static member inline Invoke (f: 'T->'U) (source: '``Bifunctor<'T,'V>``) : '``Bifunctor<'U,'V>`` =
         let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member First : _*_*_ -> _) source, f, mthd)
