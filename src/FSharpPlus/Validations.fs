@@ -77,16 +77,16 @@ module Validation=
         | Success a -> f a
 
     /// orElse v a returns 'a when v is Failure, and the a in Success a.
-    let orElse v (a: 'a) = 
-        match v with
-        | Failure _ -> a
-        | Success x -> x
+    [<System.Obsolete("Use Validation.defaultValue instead.")>]
+    let orElse v (a: 'a) = match v with | Failure _ -> a | Success x -> x
+    /// defaultValue value source returns value when source is Failure, and the v in Success v.
+    let defaultValue (value:'a) (source:Validation<'err,'a>) :'a = match source with Success v -> v | _ -> value
+    /// defaultWith returns either x when the source is Success x, otherwise applies the function f on e if the source is Failure e.
+    let defaultWith (f:'err->'a) (source:Validation<'err,'a>) :'a = match source with | Success x -> x | Failure e -> f e
 
     /// Return the 'a or run the given function over the 'e.
-    let valueOr ea (v: Validation<'e,'a>) = 
-        match v with
-        | Failure e -> ea e
-        | Success a -> a
+    [<System.Obsolete("Use Validation.defaultWith instead.")>]
+    let valueOr ea (v: Validation<'e,'a>) = match v with | Failure e -> ea e | Success a -> a
 
     /// 'liftResult' is useful for converting a 'Result' to an 'Validation'
     /// when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.
@@ -113,6 +113,7 @@ module Validation=
     ///
     /// validate : 'e -> ('a -> bool) -> 'a -> Validation<'e, 'a>
     ///
+    [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
     #if !FABLE_COMPILER
@@ -128,6 +129,7 @@ module Validation=
     /// This can be thought of as having the less general type:
     ///
     /// ensure : 'e -> ('a -> 'bool) -> Validation<'a,'e> -> Validation<'a,'e>
+    [<System.Obsolete("This function will not be supported in future versions.")>]
     let ensure (e: 'e) (p: 'a-> bool) = function
         | Failure x -> Failure x
         | Success a -> validate e p a
