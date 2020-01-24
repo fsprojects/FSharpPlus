@@ -62,7 +62,10 @@ module Result =
     let throw  x = Error x
     let apply f x = match f, x with   Ok a, Ok b      -> Ok (a b) | Error e, _ | _, Error e -> Error e      : Result<'b,'e>
     let flatten                  = function Ok (Ok v) -> Ok v     | Ok (Error e)  | Error e -> Error e
+    
+    [<System.Obsolete("Use Result.defaultWith instead.")>]
     let inline catch f           = function Ok v      -> Ok v     | Error e                 -> (f: 't->_) e : Result<'v,'e>
+    
     let inline either f g        = function Ok v      -> f v      | Error e                 -> g e
 
     /// Creates a safe version of the supplied function, which returns a Result<'U,exn> instead of throwing exceptions.
@@ -107,7 +110,10 @@ module Choice =
     let map   f                        = function Choice1Of2 v              -> Choice1Of2 (f v) | Choice2Of2 e                             -> Choice2Of2 e
     let flatten                        = function Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v     | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
     let bind (f: 't -> _)              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e : Choice<'v,'e>
+    
+    [<System.Obsolete("This function will not be supported in future versions.")>]
     let inline catch (f: 't -> _)      = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e          : Choice<'v,'e>
+    
     let inline either f g              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
 
     /// Creates a safe version of the supplied function, which returns a Choice<'U,exn> instead of throwing exceptions.
