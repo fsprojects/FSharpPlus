@@ -12,7 +12,6 @@
 *.exe.mdb
 
 # Build results
-
 [Dd]ebug/
 [Rr]elease/
 x64/
@@ -67,9 +66,13 @@ ipch/
 # Guidance Automation Toolkit
 *.gpState
 
-# ReSharper is a .NET coding add-in
+# JetBrains ReSharper: .NET coding add-in
 _ReSharper*/
 *.[Rr]e[Ss]harper
+
+# JetBrains Rider
+.idea/
+*.sln.iml
 
 # TeamCity is a build add-in
 _TeamCity*
@@ -110,8 +113,10 @@ csx
 # Windows Store app package directory
 AppPackages/
 
-# VSCode
+# VSCode / ionide plugin
 .vscode/
+.ionide/
+
 
 # Others
 sql/
@@ -187,23 +192,20 @@ nuget/*.nupkg
 release.cmd
 release.sh
 localpackages/
-paket-files
 *.orig
-.paket/paket.exe
 docsrc/content/license.md
 docsrc/content/release-notes.md
 .fake
 docsrc/tools/FSharp.Formatting.svclog
 
-.idea/
-.ionide/
-
+# paket
+paket-files
+.paket/paket.exe
+.paket/Paket.Restore.targets
 
 # Node install directory
-
 tests/FSharpPlusFable.Tests/node_modules/
 
 
 # Fable compilation files
-
 tests/FSharpPlusFable.Tests/FSharpPlusFable

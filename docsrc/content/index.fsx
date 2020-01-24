@@ -11,9 +11,10 @@ programming.
 
 *What if we imagine F# as more than it is?*
 
-F#+ builds upon FSharp, with a special focus on generic programming.
-However, by naming conventions and signatures it can be seen to
-'enhance' rather than 'replace' existing patterns as much as possible.
+F#+ builds upon FSharp, using generic programming techniques to help
+you avoid boiler plate code.  However, by naming conventions and signatures
+it can be seen to 'enhance' rather than 'replace' existing patterns as much
+as possible.
 
 The additions can be summarised as:
 
@@ -49,7 +50,7 @@ and become useful the deeper in you get.
 Example 1
 ---------
 
-This example demonstrates using an extenstion function defined in this library.
+This example demonstrates using an extension function defined in this library.
 
 *)
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
@@ -103,7 +104,7 @@ It can be useful to clone a local copy to review.
 The [API reference](reference/index.html) is automatically generated from
 Markdown comments in the library implementation.
  
-Also of note is the [Sample folder](samples)
+Also of note is the [Sample folder][samples]
 which contains sample scripts showing how to use F#+ in your code.
 
 Contributing and copyright
