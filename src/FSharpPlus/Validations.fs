@@ -5,9 +5,9 @@ open FSharpPlus.Lens
 open FSharpPlus.Data
 open System.ComponentModel
 
-// Validation is based on AccValidation from https://github.com/qfpl/validation
+// Validation is based on https://github.com/qfpl/validation
 
-/// A 'Validation' is either a value of the type 'err or 'a, similar to 'Result'. However,
+/// A 'Validation' is either a value of the type 'err or 't, similar to 'Result'. However,
 /// the 'Applicative' instance for 'Validation' /accumulates/ errors using a 'Semigroup' on 'err.
 /// In contrast, the Applicative for 'Result' returns only the first error.
 ///
@@ -20,48 +20,51 @@ type Validation<'err, 'a> =
   | Failure of 'err
   | Success of 'a
 
-module Validation=
+module Validation =
 
-    let map (f: 'T->'U) = function
+    let map (f: 'T->'U) (source: Validation<'Error,'T>) =
+        match source with
         | Failure e -> Failure e
         | Success a -> Success (f a) 
 
-    let inline apply e1' e2' = 
-        match e1', e2' with
+    let inline apply f x : Validation<'Error,'U> = 
+        match f, (x: Validation<'Error,'T>) with
         | Failure e1, Failure e2 -> Failure (plus e1 e2)
         | Failure e1, Success _  -> Failure e1
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
 
-    let inline foldBack f state x =
-        match state with
-        | Success a -> f a x
-        | Failure _ -> x
+    let inline foldBack (folder: 'T->'State->'State) (source: Validation<'Error,'T>) (state: 'State) =
+        match source with
+        | Success a -> folder a state
+        | Failure _ -> state
 
     #if !FABLE_COMPILER
-    let inline traverse f = function 
-        | Success a -> Success <!> f a
-        | Failure e -> result (Failure e)
+    let inline traverse (f: 'T->'``Functor<'U>``) (source: Validation<'Error,'T>) : '``Functor<Validation<'Error,'U>>`` =
+        match source with
+        | Success a -> Validation<'Error,'U>.Success <!> f a
+        | Failure e -> result (Validation<'Error,'U>.Failure e)
     #endif
 
-    let bimap f g = function
+    let bimap (f: 'T1->'U1) (g: 'T2->'U2) = function
         | Failure e -> Failure (f e)
         | Success a -> Success (g a)
 
-    let bifoldBack f g x state =
-        match x with
+    let bifoldBack f g (source: Validation<'Error,'T>) (state: 'State) : 'State =
+        match source with
         | Success a -> g a state
         | Failure e -> f e state
 
-    [<System.Obsolete("use bifoldBack from FSharpPlus.Operators (see: http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html)")>]
+    [<System.Obsolete("Use Validation.bifoldBack instead.")>]
     let biFoldBack f g state x =
         match state with
         | Success a -> g a x
         | Failure e -> f e x
 
-    let inline bitraverse f g = function 
-        | Success a -> Success <!> g a
-        | Failure e -> Failure <!> f e
+    let inline bitraverse (f: 'T1->'``Functor<'U1>``) (g: 'T2->'``Functor<'U2>``) (source: Validation<'T1,'T2>) : '``Functor<Validation<'U1,'U2>>`` =
+        match source with
+        | Success a -> Validation<'U1,'U2>.Success <!> g a
+        | Failure e -> Validation<'U1,'U2>.Failure <!> f e
 
     /// Binds through a Validation, which is useful for
     /// composing Validations sequentially. Note that despite having a bind
@@ -71,30 +74,30 @@ module Validation=
     ///
     /// There is nothing wrong with using this function, it just does not make a
     /// valid Monad instance.
-    let bind (f: 'T->Validation<_,_>) x : Validation<_,_> =
+    let bind (f: 'T->Validation<'Error,_>) x : Validation<_,'U> =
         match x with 
         | Failure e -> Failure e
         | Success a -> f a
 
-    /// orElse v a returns 'a when v is Failure, and the a in Success a.
     [<System.Obsolete("Use Validation.defaultValue instead.")>]
     let orElse v (a: 'a) = match v with | Failure _ -> a | Success x -> x
-    /// defaultValue value source returns value when source is Failure, and the v in Success v.
-    let defaultValue (value:'a) (source:Validation<'err,'a>) :'a = match source with Success v -> v | _ -> value
-    /// defaultWith returns either x when the source is Success x, otherwise applies the function f on e if the source is Failure e.
-    let defaultWith (f:'err->'a) (source:Validation<'err,'a>) :'a = match source with | Success x -> x | Failure e -> f e
+    
+    /// Extracts the Success value or use the supplied default value when it's a Failure.
+    let defaultValue (value: 'T) (source: Validation<'Error,'T>) : 'T = match source with Success v -> v | _ -> value
+    
+    /// Extracts the Success value or applies the compensation function over the Failure.
+    let defaultWith (compensation: 'Error->'T) (source: Validation<'Error,'T>) : 'T = match source with | Success x -> x | Failure e -> compensation e
 
-    /// Return the 'a or run the given function over the 'e.
     [<System.Obsolete("Use Validation.defaultWith instead.")>]
     let valueOr ea (v: Validation<'e,'a>) = match v with | Failure e -> ea e | Success a -> a
 
-    /// 'liftResult' is useful for converting a 'Result' to an 'Validation'
+    /// Converts a 'Result' to a 'Validation'
     /// when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.
-    let liftResult (f: 'b -> 'e) : (Result<'a,'b> -> Validation<'e,'a>) = function | Error e-> Failure (f e) | Ok a-> Success a
+    let liftResult f : (Result<'T,'Error> -> Validation<'Semigroup,'T>) = function Error e -> Failure (f e) | Ok a -> Success a
 
-    /// 'liftChoice' is useful for converting a 'Choice' to an 'Validation'
+    /// Converting a 'Choice' to a 'Validation'
     /// when the 'Choice2Of2' of the 'Choice' needs to be lifted into a 'Semigroup'.
-    let liftChoice (f: 'b -> 'e) : (Choice<'b,'a>->Validation<'e,'a>) = Choice.either (Failure << f) Success
+    let liftChoice (f: 'b -> 'Semigroup) : (Choice<'b,'T>->Validation<'Semigroup,'T>) = Choice.either (Failure << f) Success
 
     let appValidation (m: 'err -> 'err -> 'err) (e1': Validation<'err,'a>) (e2': Validation<'err,'a>) =
         match e1', e2' with
@@ -103,16 +106,12 @@ module Validation=
         | Success a1 , Failure _  -> Success a1
         | Success a1 , Success _  -> Success a1
 
-    let toResult x : Result<_,_>  = match x with Success a -> Ok a | Failure e -> Error e
-    let ofResult (x :Result<_,_>) = match x with Ok a -> Success a | Error e -> Failure e
-    let either f g                = function Success v -> f v      | Failure e     -> g e
+    let toResult x : Result<'T,'Error>  = match x with Success a -> Ok a | Failure e -> Error e
+    let ofResult (x: Result<'T,'Error>) = match x with Ok a -> Success a | Error e -> Failure e
+    let toChoice x : Choice<'T,'Error>  = match x with Success a -> Choice1Of2 a | Failure e -> Choice2Of2 e
+    let ofChoice (x: Choice<'T,'Error>) = match x with Choice1Of2 a -> Success a | Choice2Of2 e -> Failure e
+    let either (f: 'T->'U) (g:'Error->'U) = function Success v -> f v    | Failure e     -> g e
 
-    /// Validate's the [a] with the given predicate, returning [e] if the predicate does not hold.
-    ///
-    /// This can be thought of as having the less general type:
-    ///
-    /// validate : 'e -> ('a -> bool) -> 'a -> Validation<'e, 'a>
-    ///
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
@@ -123,16 +122,16 @@ module Validation=
     let validationNel (x: Result<_,_>) : (Validation<NonEmptyList<'e>,'a>) = (liftResult result) x
     #endif
 
-    /// Leaves the validation unchanged when the predicate holds, or
-    /// fails with [e] otherwise.
-    ///
-    /// This can be thought of as having the less general type:
-    ///
-    /// ensure : 'e -> ('a -> 'bool) -> Validation<'a,'e> -> Validation<'a,'e>
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let ensure (e: 'e) (p: 'a-> bool) = function
         | Failure x -> Failure x
         | Success a -> validate e p a
+
+    /// Creates a safe version of the supplied function, which returns a Validation<exn,'U> instead of throwing exceptions.
+    let protect (f: 'T->'U) x =
+        try
+            Success (f x)
+        with e -> Failure e
 
 
     let inline _Success x = (prism Success <| either Ok (Error << Failure)) x
@@ -180,4 +179,3 @@ type Validation<'err,'a> with
         match t with
         | Failure a -> f z a
         | Success a -> g z a
-        
