@@ -41,6 +41,10 @@ module NonEmptyList =
         match xs with
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
+
+    let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
+        let lst = traverse f (toList s) : '``Functor<'List<'U>>``
+        (create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<NonEmptyList<'U>>``
          
 type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -72,9 +76,8 @@ type NonEmptyList<'t> with
     static member ToSeq    (s: NonEmptyList<'a>, [<Optional>]_impl: ToSeq ) = NonEmptyList.toList s |> List.toSeq
 
     #if !FABLE_COMPILER
-    static member inline Traverse (s: NonEmptyList<'T>, f: 'T->'``Functor<'U>``) =
-        let lst = traverse f (toList s) : '``Functor<'List<'U>>``
-        (NonEmptyList.create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<'NonEmptyList<'U>>``
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Traverse (s: NonEmptyList<'T>, f: 'T->'``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
     #endif
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
