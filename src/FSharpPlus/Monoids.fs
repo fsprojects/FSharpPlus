@@ -30,11 +30,11 @@ type All = All of bool with
     static member (+) (All x, All y) = All (x && y)
 
 /// Boolean monoid under disjunction.
-type Any = bool
-[<AutoOpen>]
-module AnyInternals =
-    let Any (x: bool) = x
-    let (|Any|) (x: bool) = x
+[<Struct>]
+type Any = Any of bool with
+    static member Zero = Any false
+    static member (+) (Any x, Any y) = Any (x || y)
+
 
 /// <summary> The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
 /// <para/>   Useful for: Lens getters.
