@@ -1,14 +1,503 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8" /><title>&lt;div class=&quottip&quot id=&quot1&quot&gt;namespace FSharpPlus&lt;/div&gt;
-</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="TO-DO-Add-some-docs-here" class="anchor" href="#TO-DO-Add-some-docs-here">TO-DO Add some docs here !</a></h1>
+<html lang="en"><head><meta charset="utf-8" /><title>&lt;div class=&quottip&quot id=&quot1&quot&gt;namespace System&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot2&quot&gt;namespace FSharpPlus&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot3&quot&gt;namespace FSharpPlus.Data&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot4&quot&gt;Name.unName: String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot5&quot&gt;Multiple items&lt;br /&gt;type String =&lt;br /&gt;&amp;#160;&amp;#160;new : value:char[] -&amp;gt; string + 8 overloads&lt;br /&gt;&amp;#160;&amp;#160;member Chars : int -&amp;gt; char&lt;br /&gt;&amp;#160;&amp;#160;member Clone : unit -&amp;gt; obj&lt;br /&gt;&amp;#160;&amp;#160;member CompareTo : value:obj -&amp;gt; int + 1 overload&lt;br /&gt;&amp;#160;&amp;#160;member Contains : value:string -&amp;gt; bool + 3 overloads&lt;br /&gt;&amp;#160;&amp;#160;member CopyTo : sourceIndex:int * destination:char[] * destinationIndex:int * count:int -&amp;gt; unit&lt;br /&gt;&amp;#160;&amp;#160;member EndsWith : value:string -&amp;gt; bool + 3 overloads&lt;br /&gt;&amp;#160;&amp;#160;member EnumerateRunes : unit -&amp;gt; StringRuneEnumerator&lt;br /&gt;&amp;#160;&amp;#160;member Equals : obj:obj -&amp;gt; bool + 2 overloads&lt;br /&gt;&amp;#160;&amp;#160;member GetEnumerator : unit -&amp;gt; CharEnumerator&lt;br /&gt;&amp;#160;&amp;#160;...&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;String(value: char []) : String&lt;br /&gt;String(value: nativeptr&amp;lt;char&amp;gt;) : String&lt;br /&gt;String(value: nativeptr&amp;lt;sbyte&amp;gt;) : String&lt;br /&gt;String(value: ReadOnlySpan&amp;lt;char&amp;gt;) : String&lt;br /&gt;String(c: char, count: int) : String&lt;br /&gt;String(value: char [], startIndex: int, length: int) : String&lt;br /&gt;String(value: nativeptr&amp;lt;char&amp;gt;, startIndex: int, length: int) : String&lt;br /&gt;String(value: nativeptr&amp;lt;sbyte&amp;gt;, startIndex: int, length: int) : String&lt;br /&gt;String(value: nativeptr&amp;lt;sbyte&amp;gt;, startIndex: int, length: int, enc: Text.Encoding) : String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot6&quot&gt;val s : String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot7&quot&gt;Email.unEmail: String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot8&quot&gt;Age.unAge: int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot9&quot&gt;Multiple items&lt;br /&gt;val int : value:&amp;#39;T -&amp;gt; int (requires member op_Explicit)&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type int = int32&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type int&amp;lt;&amp;#39;Measure&amp;gt; = int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot10&quot&gt;val i : int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot11&quot&gt;Person.name: Name&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot12&quot&gt;type Name =&lt;br /&gt;&amp;#160;&amp;#160;{unName: String;}&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member create : s:String -&amp;gt; Name&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot13&quot&gt;Person.email: Email&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot14&quot&gt;type Email =&lt;br /&gt;&amp;#160;&amp;#160;{unEmail: String;}&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member create : s:String -&amp;gt; Email&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot15&quot&gt;Person.age: Age&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot16&quot&gt;type Age =&lt;br /&gt;&amp;#160;&amp;#160;{unAge: int;}&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member create : i:int -&amp;gt; Age&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot17&quot&gt;val name : Name&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot18&quot&gt;val email : Email&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot19&quot&gt;val age : Age&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot20&quot&gt;Multiple items&lt;br /&gt;union case Result.Error: ErrorValue: &amp;#39;TError -&amp;gt; Result&amp;lt;&amp;#39;T,&amp;#39;TError&amp;gt;&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type Error =&lt;br /&gt;&amp;#160;&amp;#160;| NameBetween1And50&lt;br /&gt;&amp;#160;&amp;#160;| EmailMustContainAtChar&lt;br /&gt;&amp;#160;&amp;#160;| AgeBetween0and120&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot21&quot&gt;union case Error.NameBetween1And50: Error&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot22&quot&gt;union case Error.EmailMustContainAtChar: Error&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot23&quot&gt;union case Error.AgeBetween0and120: Error&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot24&quot&gt;val mkName : s:String -&amp;gt; Validation&amp;lt;Error list,Name&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot25&quot&gt;val l : int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot26&quot&gt;val length : source:&amp;#39;Foldable&amp;lt;&amp;#39;T&amp;gt; -&amp;gt; int (requires member Length)&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot27&quot&gt;union case Validation.Success: &amp;#39;t -&amp;gt; Validation&amp;lt;&amp;#39;error,&amp;#39;t&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot28&quot&gt;static member Name.create : s:String -&amp;gt; Name&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot29&quot&gt;union case Validation.Failure: &amp;#39;error -&amp;gt; Validation&amp;lt;&amp;#39;error,&amp;#39;t&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot30&quot&gt;val mkEmail : s:string -&amp;gt; Validation&amp;lt;Error list,Email&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot31&quot&gt;val s : string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot32&quot&gt;val contains : char:char -&amp;gt; source:string -&amp;gt; bool&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot33&quot&gt;static member Email.create : s:String -&amp;gt; Email&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot34&quot&gt;val mkAge : a:int -&amp;gt; Validation&amp;lt;Error list,Age&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot35&quot&gt;val a : int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot36&quot&gt;static member Age.create : i:int -&amp;gt; Age&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot37&quot&gt;val mkPerson : pName:String -&amp;gt; pEmail:string -&amp;gt; pAge:int -&amp;gt; Validation&amp;lt;Error list,Person&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot38&quot&gt;val pName : String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot39&quot&gt;val pEmail : string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot40&quot&gt;val pAge : int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot41&quot&gt;type Person =&lt;br /&gt;&amp;#160;&amp;#160;{name: Name;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;email: Email;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;age: Age;}&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member create : name:Name -&amp;gt; email:Email -&amp;gt; age:Age -&amp;gt; Person&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot42&quot&gt;static member Person.create : name:Name -&amp;gt; email:Email -&amp;gt; age:Age -&amp;gt; Person&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot43&quot&gt;val validPerson : Validation&amp;lt;Error list,Person&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot44&quot&gt;val badName : Validation&amp;lt;Error list,Person&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot45&quot&gt;val badEmail : Validation&amp;lt;Error list,Person&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot46&quot&gt;val badAge : Validation&amp;lt;Error list,Person&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot47&quot&gt;val badEverything : Validation&amp;lt;Error list,Person&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot48&quot&gt;module Lens&lt;br /&gt;&lt;br /&gt;from FSharpPlus&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot49&quot&gt;val asMaybeGood : Person option&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot50&quot&gt;Multiple items&lt;br /&gt;module Validation&lt;br /&gt;&lt;br /&gt;from FSharpPlus.Data&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type Validation&amp;lt;&amp;#39;error,&amp;#39;t&amp;gt; =&lt;br /&gt;&amp;#160;&amp;#160;| Failure of &amp;#39;error&lt;br /&gt;&amp;#160;&amp;#160;| Success of &amp;#39;t&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member Bifold : t:Validation&amp;lt;&amp;#39;err,&amp;#39;a&amp;gt; * f:(&amp;#39;b -&amp;gt; &amp;#39;err -&amp;gt; &amp;#39;b) * g:(&amp;#39;b -&amp;gt; &amp;#39;a -&amp;gt; &amp;#39;b) * z:&amp;#39;b -&amp;gt; &amp;#39;b&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member BifoldBack : t:Validation&amp;lt;&amp;#39;err,&amp;#39;a&amp;gt; * f:(&amp;#39;err -&amp;gt; &amp;#39;b -&amp;gt; &amp;#39;b) * g:(&amp;#39;a -&amp;gt; &amp;#39;b -&amp;gt; &amp;#39;b) * z:&amp;#39;b -&amp;gt; &amp;#39;b&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member BifoldMap : t:Validation&amp;lt;&amp;#39;err,&amp;#39;a&amp;gt; * f:(&amp;#39;err -&amp;gt; &amp;#39;b) * g:(&amp;#39;a -&amp;gt; &amp;#39;b) -&amp;gt; &amp;#39;b&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member Bimap : x:Validation&amp;lt;&amp;#39;T,&amp;#39;V&amp;gt; * f:(&amp;#39;T -&amp;gt; &amp;#39;U) * g:(&amp;#39;V -&amp;gt; &amp;#39;W) -&amp;gt; Validation&amp;lt;&amp;#39;U,&amp;#39;W&amp;gt;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member Map : x:Validation&amp;lt;&amp;#39;a2,&amp;#39;a3&amp;gt; * f:(&amp;#39;a3 -&amp;gt; &amp;#39;a4) -&amp;gt; Validation&amp;lt;&amp;#39;a2,&amp;#39;a4&amp;gt;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member Return : x:&amp;#39;a2 -&amp;gt; Validation&amp;lt;&amp;#39;a3,&amp;#39;a2&amp;gt;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member Traverse : t:Validation&amp;lt;&amp;#39;err,&amp;#39;a&amp;gt; * f:(&amp;#39;a -&amp;gt; &amp;#39;b) -&amp;gt; &amp;#39;c (requires member Map and member Return)&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member get_Empty : unit -&amp;gt; Validation&amp;lt;&amp;#39;a2,&amp;#39;a3&amp;gt; (requires member Empty)&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member ( &amp;lt;|&amp;gt; ) : x:Validation&amp;lt;&amp;#39;a2,&amp;#39;a3&amp;gt; * y:Validation&amp;lt;&amp;#39;a2,&amp;#39;a3&amp;gt; -&amp;gt; Validation&amp;lt;&amp;#39;a2,&amp;#39;a3&amp;gt; (requires member ( &amp;lt;|&amp;gt; ))&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member ( &amp;lt;*&amp;gt; ) : f:Validation&amp;lt;&amp;#39;a2,(&amp;#39;T -&amp;gt; &amp;#39;U)&amp;gt; * x:Validation&amp;lt;&amp;#39;a2,&amp;#39;T&amp;gt; -&amp;gt; Validation&amp;lt;&amp;#39;a2,&amp;#39;U&amp;gt; (requires member ( + ))&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot51&quot&gt;val _Success : x:(&amp;#39;a -&amp;gt; &amp;#39;b) -&amp;gt; (Validation&amp;lt;&amp;#39;d,&amp;#39;a&amp;gt; -&amp;gt; &amp;#39;e) (requires member Map and member Return)&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot52&quot&gt;val asMaybeBad : Person option&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot53&quot&gt;[&amp;lt;Struct&amp;gt;]&lt;br /&gt;val asResultGood : Result&amp;lt;Person,Error list&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot54&quot&gt;val isoValidationResult : x:&amp;#39;a -&amp;gt; &amp;#39;b (requires member Dimap and member Map)&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot55&quot&gt;[&amp;lt;Struct&amp;gt;]&lt;br /&gt;val asResultBad : Result&amp;lt;Person,Error list&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot56&quot&gt;Multiple items&lt;br /&gt;union case AtString.AtString: string -&amp;gt; AtString&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type AtString = | AtString of string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot57&quot&gt;Multiple items&lt;br /&gt;val string : value:&amp;#39;T -&amp;gt; string&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type string = String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot58&quot&gt;Multiple items&lt;br /&gt;union case PeriodString.PeriodString: string -&amp;gt; PeriodString&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type PeriodString = | PeriodString of string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot59&quot&gt;Multiple items&lt;br /&gt;union case NonEmptyString.NonEmptyString: string -&amp;gt; NonEmptyString&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type NonEmptyString = | NonEmptyString of string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot60&quot&gt;Multiple items&lt;br /&gt;union case Email.Email: string -&amp;gt; Email&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type Email = | Email of string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot61&quot&gt;type VError =&lt;br /&gt;&amp;#160;&amp;#160;| MustNotBeEmpty&lt;br /&gt;&amp;#160;&amp;#160;| MustContainAt&lt;br /&gt;&amp;#160;&amp;#160;| MustContainPeriod&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot62&quot&gt;union case VError.MustNotBeEmpty: VError&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot63&quot&gt;union case VError.MustContainAt: VError&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot64&quot&gt;union case VError.MustContainPeriod: VError&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot65&quot&gt;val atString : x:string -&amp;gt; Validation&amp;lt;VError list,AtString&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot66&quot&gt;val x : string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot67&quot&gt;type &amp;#39;T list = List&amp;lt;&amp;#39;T&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot68&quot&gt;val periodString : x:string -&amp;gt; Validation&amp;lt;VError list,PeriodString&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot69&quot&gt;val nonEmptyString : x:string -&amp;gt; Validation&amp;lt;VError list,NonEmptyString&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot70&quot&gt;val not : value:bool -&amp;gt; bool&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot71&quot&gt;String.IsNullOrEmpty(value: string) : bool&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot72&quot&gt;val email : x:string -&amp;gt; Validation&amp;lt;VError list,Email&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot73&quot&gt;val result : x:&amp;#39;T -&amp;gt; &amp;#39;Functor&amp;lt;&amp;#39;T&amp;gt; (requires member Return)&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot74&quot&gt;val success : Validation&amp;lt;VError list,Email&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot75&quot&gt;val failureAt : Validation&amp;lt;VError list,Email&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot76&quot&gt;val failurePeriod : Validation&amp;lt;VError list,Email&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot77&quot&gt;val failureAll : Validation&amp;lt;VError list,Email&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot78&quot&gt;module MovieValidations&lt;br /&gt;&lt;br /&gt;from Type-validation&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot79&quot&gt;type VError =&lt;br /&gt;&amp;#160;&amp;#160;| MustNotBeEmpty&lt;br /&gt;&amp;#160;&amp;#160;| MustBeAtLessThanChars of int&lt;br /&gt;&amp;#160;&amp;#160;| MustBeADate&lt;br /&gt;&amp;#160;&amp;#160;| MustBeOlderThan of int&lt;br /&gt;&amp;#160;&amp;#160;| MustBeWithingRange of decimal * decimal&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot80&quot&gt;union case VError.MustBeAtLessThanChars: int -&amp;gt; VError&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot81&quot&gt;union case VError.MustBeADate: VError&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot82&quot&gt;union case VError.MustBeOlderThan: int -&amp;gt; VError&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot83&quot&gt;union case VError.MustBeWithingRange: decimal * decimal -&amp;gt; VError&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot84&quot&gt;Multiple items&lt;br /&gt;val decimal : value:&amp;#39;T -&amp;gt; decimal (requires member op_Explicit)&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type decimal = Decimal&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type decimal&amp;lt;&amp;#39;Measure&amp;gt; = decimal&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot85&quot&gt;val nonEmpty : x:string -&amp;gt; Validation&amp;lt;VError list,string&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot86&quot&gt;val mustBeLessThan : i:int -&amp;gt; x:string -&amp;gt; Validation&amp;lt;VError list,string&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot87&quot&gt;val isNull : value:&amp;#39;T -&amp;gt; bool (requires &amp;#39;T : null)&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot88&quot&gt;property String.Length: int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot89&quot&gt;val mustBeWithin : from:decimal * to&amp;#39;:decimal -&amp;gt; x:decimal -&amp;gt; Validation&amp;lt;VError list,decimal&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot90&quot&gt;val from : decimal&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot91&quot&gt;val to&amp;#39; : decimal&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot92&quot&gt;val x : decimal&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot93&quot&gt;Multiple items&lt;br /&gt;type DateTime =&lt;br /&gt;&amp;#160;&amp;#160;struct&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;new : ticks:int64 -&amp;gt; DateTime + 10 overloads&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member Add : value:TimeSpan -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddDays : value:float -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddHours : value:float -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddMilliseconds : value:float -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddMinutes : value:float -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddMonths : months:int -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddSeconds : value:float -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddTicks : value:int64 -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;member AddYears : value:int -&amp;gt; DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;...&lt;br /&gt;&amp;#160;&amp;#160;end&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;DateTime ()&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(ticks: int64) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(ticks: int64, kind: DateTimeKind) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(year: int, month: int, day: int) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: DateTimeKind) : DateTime&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot94&quot&gt;val classicMovie : year:int -&amp;gt; d:DateTime -&amp;gt; Validation&amp;lt;VError list,DateTime&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot95&quot&gt;val year : int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot96&quot&gt;val d : DateTime&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot97&quot&gt;property DateTime.Year: int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot98&quot&gt;val date : d:DateTime -&amp;gt; Validation&amp;lt;VError list,DateTime&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot99&quot&gt;property DateTime.Date: DateTime&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot100&quot&gt;type Genre =&lt;br /&gt;&amp;#160;&amp;#160;| Classic&lt;br /&gt;&amp;#160;&amp;#160;| PostClassic&lt;br /&gt;&amp;#160;&amp;#160;| Modern&lt;br /&gt;&amp;#160;&amp;#160;| PostModern&lt;br /&gt;&amp;#160;&amp;#160;| Contemporary&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot101&quot&gt;union case Genre.Classic: Genre&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot102&quot&gt;union case Genre.PostClassic: Genre&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot103&quot&gt;union case Genre.Modern: Genre&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot104&quot&gt;union case Genre.PostModern: Genre&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot105&quot&gt;union case Genre.Contemporary: Genre&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot106&quot&gt;Movie.Id: int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot107&quot&gt;Movie.Title: String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot108&quot&gt;Movie.ReleaseDate: DateTime&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot109&quot&gt;Movie.Description: String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot110&quot&gt;Movie.Price: decimal&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot111&quot&gt;Multiple items&lt;br /&gt;Movie.Genre: Genre&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type Genre =&lt;br /&gt;&amp;#160;&amp;#160;| Classic&lt;br /&gt;&amp;#160;&amp;#160;| PostClassic&lt;br /&gt;&amp;#160;&amp;#160;| Modern&lt;br /&gt;&amp;#160;&amp;#160;| PostModern&lt;br /&gt;&amp;#160;&amp;#160;| Contemporary&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot112&quot&gt;val id : int&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot113&quot&gt;val title : string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot114&quot&gt;val releaseDate : DateTime&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot115&quot&gt;val description : string&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot116&quot&gt;val price : decimal&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot117&quot&gt;val genre : Genre&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot118&quot&gt;type Movie =&lt;br /&gt;&amp;#160;&amp;#160;{Id: int;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;Title: String;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;ReleaseDate: DateTime;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;Description: String;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;Price: decimal;&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;Genre: Genre;}&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&amp;#160;static member Create : id:int * title:string * releaseDate:DateTime * description:string * price:decimal * genre:Genre -&amp;gt; Validation&amp;lt;VError list,Movie&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot119&quot&gt;val title : String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot120&quot&gt;val description : String&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot121&quot&gt;module Number&lt;br /&gt;&lt;br /&gt;from Type-validation.MovieValidations&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot122&quot&gt;val newRelease : Validation&amp;lt;VError list,Movie&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot123&quot&gt;static member Movie.Create : id:int * title:string * releaseDate:DateTime * description:string * price:decimal * genre:Genre -&amp;gt; Validation&amp;lt;VError list,Movie&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot124&quot&gt;val oldie : Validation&amp;lt;VError list,Movie&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot125&quot&gt;val titleToLong : Validation&amp;lt;VError list,Movie&amp;gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot126&quot&gt;String.Concat([&amp;lt;ParamArray&amp;gt;] values: string []) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat(values: Collections.Generic.IEnumerable&amp;lt;string&amp;gt;) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat&amp;lt;&amp;#39;T&amp;gt;(values: Collections.Generic.IEnumerable&amp;lt;&amp;#39;T&amp;gt;) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat([&amp;lt;ParamArray&amp;gt;] args: obj []) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat(arg0: obj) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat(str0: ReadOnlySpan&amp;lt;char&amp;gt;, str1: ReadOnlySpan&amp;lt;char&amp;gt;) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat(str0: string, str1: string) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat(arg0: obj, arg1: obj) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat(str0: ReadOnlySpan&amp;lt;char&amp;gt;, str1: ReadOnlySpan&amp;lt;char&amp;gt;, str2: ReadOnlySpan&amp;lt;char&amp;gt;) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;br /&gt;String.Concat(str0: string, str1: string, str2: string) : string&lt;br /&gt;&amp;#160;&amp;#160;&amp;#160;&lt;em&gt;(+0 other overloads)&lt;/em&gt;&lt;/div&gt;
+&lt;div class=&quottip&quot id=&quot127&quot&gt;Multiple items&lt;br /&gt;val seq : sequence:seq&amp;lt;&amp;#39;T&amp;gt; -&amp;gt; seq&amp;lt;&amp;#39;T&amp;gt;&lt;br /&gt;&lt;br /&gt;--------------------&lt;br /&gt;type seq&amp;lt;&amp;#39;T&amp;gt; = Collections.Generic.IEnumerable&amp;lt;&amp;#39;T&amp;gt;&lt;/div&gt;
+</title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="Validation-Error-T" class="anchor" href="#Validation-Error-T">Validation<'Error,'T></a></h1>
+<p>This is similar to Result<'T,'Error> but with accumulative errors semantics, instead of short-circuit.</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">  1: </span>
+<span class="l">  2: </span>
+<span class="l">  3: </span>
+<span class="l">  4: </span>
+<span class="l">  5: </span>
+<span class="l">  6: </span>
+<span class="l">  7: </span>
+<span class="l">  8: </span>
+<span class="l">  9: </span>
+<span class="l"> 10: </span>
+<span class="l"> 11: </span>
+<span class="l"> 12: </span>
+<span class="l"> 13: </span>
+<span class="l"> 14: </span>
+<span class="l"> 15: </span>
+<span class="l"> 16: </span>
+<span class="l"> 17: </span>
+<span class="l"> 18: </span>
+<span class="l"> 19: </span>
+<span class="l"> 20: </span>
+<span class="l"> 21: </span>
+<span class="l"> 22: </span>
+<span class="l"> 23: </span>
+<span class="l"> 24: </span>
+<span class="l"> 25: </span>
+<span class="l"> 26: </span>
+<span class="l"> 27: </span>
+<span class="l"> 28: </span>
+<span class="l"> 29: </span>
+<span class="l"> 30: </span>
+<span class="l"> 31: </span>
+<span class="l"> 32: </span>
+<span class="l"> 33: </span>
+<span class="l"> 34: </span>
+<span class="l"> 35: </span>
+<span class="l"> 36: </span>
+<span class="l"> 37: </span>
+<span class="l"> 38: </span>
+<span class="l"> 39: </span>
+<span class="l"> 40: </span>
+<span class="l"> 41: </span>
+<span class="l"> 42: </span>
+<span class="l"> 43: </span>
+<span class="l"> 44: </span>
+<span class="l"> 45: </span>
+<span class="l"> 46: </span>
+<span class="l"> 47: </span>
+<span class="l"> 48: </span>
+<span class="l"> 49: </span>
+<span class="l"> 50: </span>
+<span class="l"> 51: </span>
+<span class="l"> 52: </span>
+<span class="l"> 53: </span>
+<span class="l"> 54: </span>
+<span class="l"> 55: </span>
+<span class="l"> 56: </span>
+<span class="l"> 57: </span>
+<span class="l"> 58: </span>
+<span class="l"> 59: </span>
+<span class="l"> 60: </span>
+<span class="l"> 61: </span>
+<span class="l"> 62: </span>
+<span class="l"> 63: </span>
+<span class="l"> 64: </span>
+<span class="l"> 65: </span>
+<span class="l"> 66: </span>
+<span class="l"> 67: </span>
+<span class="l"> 68: </span>
+<span class="l"> 69: </span>
+<span class="l"> 70: </span>
+<span class="l"> 71: </span>
+<span class="l"> 72: </span>
+<span class="l"> 73: </span>
+<span class="l"> 74: </span>
+<span class="l"> 75: </span>
+<span class="l"> 76: </span>
+<span class="l"> 77: </span>
+<span class="l"> 78: </span>
+<span class="l"> 79: </span>
+<span class="l"> 80: </span>
+<span class="l"> 81: </span>
+<span class="l"> 82: </span>
+<span class="l"> 83: </span>
+<span class="l"> 84: </span>
+<span class="l"> 85: </span>
+<span class="l"> 86: </span>
+<span class="l"> 87: </span>
+<span class="l"> 88: </span>
+<span class="l"> 89: </span>
+<span class="l"> 90: </span>
+<span class="l"> 91: </span>
+<span class="l"> 92: </span>
+<span class="l"> 93: </span>
+<span class="l"> 94: </span>
+<span class="l"> 95: </span>
+<span class="l"> 96: </span>
+<span class="l"> 97: </span>
+<span class="l"> 98: </span>
+<span class="l"> 99: </span>
+<span class="l">100: </span>
+<span class="l">101: </span>
+<span class="l">102: </span>
+<span class="l">103: </span>
+<span class="l">104: </span>
+<span class="l">105: </span>
+<span class="l">106: </span>
+<span class="l">107: </span>
+<span class="l">108: </span>
+<span class="l">109: </span>
+<span class="l">110: </span>
+<span class="l">111: </span>
+<span class="l">112: </span>
+<span class="l">113: </span>
+<span class="l">114: </span>
+<span class="l">115: </span>
+<span class="l">116: </span>
+<span class="l">117: </span>
+<span class="l">118: </span>
+<span class="l">119: </span>
+<span class="l">120: </span>
+<span class="l">121: </span>
+<span class="l">122: </span>
+<span class="l">123: </span>
+<span class="l">124: </span>
+<span class="l">125: </span>
+<span class="l">126: </span>
+<span class="l">127: </span>
+<span class="l">128: </span>
+<span class="l">129: </span>
+<span class="l">130: </span>
+<span class="l">131: </span>
+<span class="l">132: </span>
+<span class="l">133: </span>
+<span class="l">134: </span>
+<span class="l">135: </span>
+<span class="l">136: </span>
+<span class="l">137: </span>
+<span class="l">138: </span>
+<span class="l">139: </span>
+<span class="l">140: </span>
+<span class="l">141: </span>
+<span class="l">142: </span>
+<span class="l">143: </span>
+<span class="l">144: </span>
+<span class="l">145: </span>
+<span class="l">146: </span>
+<span class="l">147: </span>
+<span class="l">148: </span>
+<span class="l">149: </span>
+<span class="l">150: </span>
+<span class="l">151: </span>
+<span class="l">152: </span>
+<span class="l">153: </span>
+<span class="l">154: </span>
+<span class="l">155: </span>
+<span class="l">156: </span>
+<span class="l">157: </span>
+<span class="l">158: </span>
+<span class="l">159: </span>
+<span class="l">160: </span>
+<span class="l">161: </span>
+<span class="l">162: </span>
+<span class="l">163: </span>
+<span class="l">164: </span>
+<span class="l">165: </span>
+<span class="l">166: </span>
+<span class="l">167: </span>
+<span class="l">168: </span>
+<span class="l">169: </span>
+<span class="l">170: </span>
+<span class="l">171: </span>
+<span class="l">172: </span>
+<span class="l">173: </span>
+<span class="l">174: </span>
+<span class="l">175: </span>
+<span class="l">176: </span>
+<span class="l">177: </span>
+<span class="l">178: </span>
+<span class="l">179: </span>
+<span class="l">180: </span>
+<span class="l">181: </span>
+<span class="l">182: </span>
+<span class="l">183: </span>
+<span class="l">184: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)" class="id">System</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, '2', 3)" onmouseover="showTip(event, '2', 3)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, '3', 4)" onmouseover="showTip(event, '3', 4)" class="id">Data</span>
+
+<span class="k">module</span> <span class="m">Person</span><span class="o">=</span>
+    <span class="k">type</span> <span class="rt">Name</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '4', 5)" onmouseover="showTip(event, '4', 5)" class="id">unName</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '5', 6)" onmouseover="showTip(event, '5', 6)" class="rt">String</span> <span class="pn">}</span> 
+    <span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span class="fn">create</span> <span onmouseout="hideTip(event, '6', 7)" onmouseover="showTip(event, '6', 7)" class="id">s</span><span class="o">=</span><span class="pn">{</span><span class="id">unName</span><span class="o">=</span><span onmouseout="hideTip(event, '6', 8)" onmouseover="showTip(event, '6', 8)" class="id">s</span><span class="pn">}</span>
+    <span class="k">type</span> <span class="rt">Email</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '7', 9)" onmouseover="showTip(event, '7', 9)" class="id">unEmail</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '5', 10)" onmouseover="showTip(event, '5', 10)" class="rt">String</span> <span class="pn">}</span> 
+    <span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span class="fn">create</span> <span onmouseout="hideTip(event, '6', 11)" onmouseover="showTip(event, '6', 11)" class="id">s</span><span class="o">=</span><span class="pn">{</span><span class="id">unEmail</span><span class="o">=</span><span onmouseout="hideTip(event, '6', 12)" onmouseover="showTip(event, '6', 12)" class="id">s</span><span class="pn">}</span>
+    <span class="k">type</span> <span class="rt">Age</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '8', 13)" onmouseover="showTip(event, '8', 13)" class="id">unAge</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '9', 14)" onmouseover="showTip(event, '9', 14)" class="vt">int</span> <span class="pn">}</span>
+    <span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span class="fn">create</span> <span onmouseout="hideTip(event, '10', 15)" onmouseover="showTip(event, '10', 15)" class="id">i</span><span class="o">=</span><span class="pn">{</span><span class="id">unAge</span><span class="o">=</span><span onmouseout="hideTip(event, '10', 16)" onmouseover="showTip(event, '10', 16)" class="id">i</span><span class="pn">}</span>
+
+    <span class="k">type</span> <span class="rt">Person</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '11', 17)" onmouseover="showTip(event, '11', 17)" class="id">name</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '12', 18)" onmouseover="showTip(event, '12', 18)" class="rt">Name</span>
+                    <span onmouseout="hideTip(event, '13', 19)" onmouseover="showTip(event, '13', 19)" class="id">email</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '14', 20)" onmouseover="showTip(event, '14', 20)" class="rt">Email</span>
+                    <span onmouseout="hideTip(event, '15', 21)" onmouseover="showTip(event, '15', 21)" class="id">age</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '16', 22)" onmouseover="showTip(event, '16', 22)" class="rt">Age</span> <span class="pn">}</span>
+    <span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span class="fn">create</span> <span onmouseout="hideTip(event, '17', 23)" onmouseover="showTip(event, '17', 23)" class="id">name</span> <span onmouseout="hideTip(event, '18', 24)" onmouseover="showTip(event, '18', 24)" class="id">email</span> <span onmouseout="hideTip(event, '19', 25)" onmouseover="showTip(event, '19', 25)" class="id">age</span><span class="o">=</span><span class="pn">{</span><span onmouseout="hideTip(event, '17', 26)" onmouseover="showTip(event, '17', 26)" class="id">name</span><span class="o">=</span><span onmouseout="hideTip(event, '17', 27)" onmouseover="showTip(event, '17', 27)" class="id">name</span><span class="pn">;</span><span onmouseout="hideTip(event, '18', 28)" onmouseover="showTip(event, '18', 28)" class="id">email</span><span class="o">=</span><span onmouseout="hideTip(event, '18', 29)" onmouseover="showTip(event, '18', 29)" class="id">email</span><span class="pn">;</span><span onmouseout="hideTip(event, '19', 30)" onmouseover="showTip(event, '19', 30)" class="id">age</span><span class="o">=</span><span onmouseout="hideTip(event, '19', 31)" onmouseover="showTip(event, '19', 31)" class="id">age</span> <span class="pn">}</span>
+
+
+    <span class="k">type</span> <span onmouseout="hideTip(event, '20', 32)" onmouseover="showTip(event, '20', 32)" class="rt">Error</span> <span class="o">=</span> 
+        <span class="pn">|</span> <span onmouseout="hideTip(event, '21', 33)" onmouseover="showTip(event, '21', 33)" class="uc">NameBetween1And50</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, '22', 34)" onmouseover="showTip(event, '22', 34)" class="uc">EmailMustContainAtChar</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, '23', 35)" onmouseover="showTip(event, '23', 35)" class="uc">AgeBetween0and120</span>
+
+    <span class="c">// Smart constructors</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '24', 36)" onmouseover="showTip(event, '24', 36)" class="fn">mkName</span> <span onmouseout="hideTip(event, '6', 37)" onmouseover="showTip(event, '6', 37)" class="id">s</span> <span class="o">=</span> 
+        <span class="k">let</span> <span onmouseout="hideTip(event, '25', 38)" onmouseover="showTip(event, '25', 38)" class="id">l</span> <span class="o">=</span> <span onmouseout="hideTip(event, '26', 39)" onmouseover="showTip(event, '26', 39)" class="fn">length</span> <span onmouseout="hideTip(event, '6', 40)" onmouseover="showTip(event, '6', 40)" class="id">s</span>
+        <span class="k">if</span> <span class="pn">(</span><span onmouseout="hideTip(event, '25', 41)" onmouseover="showTip(event, '25', 41)" class="id">l</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">1</span> <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '25', 42)" onmouseover="showTip(event, '25', 42)" class="id">l</span> <span class="o">&lt;=</span> <span class="n">50</span><span class="pn">)</span>
+        <span class="k">then</span> <span onmouseout="hideTip(event, '27', 43)" onmouseover="showTip(event, '27', 43)" class="uc">Success</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '12', 44)" onmouseover="showTip(event, '12', 44)" class="rt">Name</span><span class="pn">.</span><span onmouseout="hideTip(event, '28', 45)" onmouseover="showTip(event, '28', 45)" class="id">create</span> <span onmouseout="hideTip(event, '6', 46)" onmouseover="showTip(event, '6', 46)" class="id">s</span>
+        <span class="k">else</span> <span onmouseout="hideTip(event, '29', 47)" onmouseover="showTip(event, '29', 47)" class="uc">Failure</span>  <span class="pn">[</span> <span onmouseout="hideTip(event, '21', 48)" onmouseover="showTip(event, '21', 48)" class="uc">NameBetween1And50</span> <span class="pn">]</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '30', 49)" onmouseover="showTip(event, '30', 49)" class="fn">mkEmail</span> <span onmouseout="hideTip(event, '31', 50)" onmouseover="showTip(event, '31', 50)" class="id">s</span> <span class="o">=</span> 
+        <span class="k">if</span> <span onmouseout="hideTip(event, '5', 51)" onmouseover="showTip(event, '5', 51)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '32', 52)" onmouseover="showTip(event, '32', 52)" class="id">contains</span> <span class="s">&#39;@&#39;</span> <span onmouseout="hideTip(event, '31', 53)" onmouseover="showTip(event, '31', 53)" class="id">s</span>
+        <span class="k">then</span> <span onmouseout="hideTip(event, '27', 54)" onmouseover="showTip(event, '27', 54)" class="uc">Success</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '14', 55)" onmouseover="showTip(event, '14', 55)" class="rt">Email</span><span class="pn">.</span><span onmouseout="hideTip(event, '33', 56)" onmouseover="showTip(event, '33', 56)" class="id">create</span> <span onmouseout="hideTip(event, '31', 57)" onmouseover="showTip(event, '31', 57)" class="id">s</span>
+        <span class="k">else</span> <span onmouseout="hideTip(event, '29', 58)" onmouseover="showTip(event, '29', 58)" class="uc">Failure</span> <span class="pn">[</span> <span onmouseout="hideTip(event, '22', 59)" onmouseover="showTip(event, '22', 59)" class="uc">EmailMustContainAtChar</span> <span class="pn">]</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '34', 60)" onmouseover="showTip(event, '34', 60)" class="fn">mkAge</span> <span onmouseout="hideTip(event, '35', 61)" onmouseover="showTip(event, '35', 61)" class="id">a</span> <span class="o">=</span> 
+        <span class="k">if</span> <span class="pn">(</span><span onmouseout="hideTip(event, '35', 62)" onmouseover="showTip(event, '35', 62)" class="id">a</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">0</span> <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '35', 63)" onmouseover="showTip(event, '35', 63)" class="id">a</span> <span class="o">&lt;=</span> <span class="n">120</span><span class="pn">)</span>
+        <span class="k">then</span> <span onmouseout="hideTip(event, '27', 64)" onmouseover="showTip(event, '27', 64)" class="uc">Success</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '16', 65)" onmouseover="showTip(event, '16', 65)" class="rt">Age</span><span class="pn">.</span><span onmouseout="hideTip(event, '36', 66)" onmouseover="showTip(event, '36', 66)" class="id">create</span> <span onmouseout="hideTip(event, '35', 67)" onmouseover="showTip(event, '35', 67)" class="id">a</span>
+        <span class="k">else</span> <span onmouseout="hideTip(event, '29', 68)" onmouseover="showTip(event, '29', 68)" class="uc">Failure</span> <span class="pn">[</span> <span onmouseout="hideTip(event, '23', 69)" onmouseover="showTip(event, '23', 69)" class="uc">AgeBetween0and120</span> <span class="pn">]</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '37', 70)" onmouseover="showTip(event, '37', 70)" class="fn">mkPerson</span> <span onmouseout="hideTip(event, '38', 71)" onmouseover="showTip(event, '38', 71)" class="id">pName</span> <span onmouseout="hideTip(event, '39', 72)" onmouseover="showTip(event, '39', 72)" class="id">pEmail</span> <span onmouseout="hideTip(event, '40', 73)" onmouseover="showTip(event, '40', 73)" class="id">pAge</span> <span class="o">=</span>
+        <span onmouseout="hideTip(event, '41', 74)" onmouseover="showTip(event, '41', 74)" class="rt">Person</span><span class="pn">.</span><span onmouseout="hideTip(event, '42', 75)" onmouseover="showTip(event, '42', 75)" class="id">create</span>
+        <span class="o">&lt;!&gt;</span> <span onmouseout="hideTip(event, '24', 76)" onmouseover="showTip(event, '24', 76)" class="fn">mkName</span> <span onmouseout="hideTip(event, '38', 77)" onmouseover="showTip(event, '38', 77)" class="id">pName</span>
+        <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, '30', 78)" onmouseover="showTip(event, '30', 78)" class="fn">mkEmail</span> <span onmouseout="hideTip(event, '39', 79)" onmouseover="showTip(event, '39', 79)" class="id">pEmail</span>
+        <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, '34', 80)" onmouseover="showTip(event, '34', 80)" class="fn">mkAge</span> <span onmouseout="hideTip(event, '40', 81)" onmouseover="showTip(event, '40', 81)" class="id">pAge</span>
+
+    <span class="c">// Examples</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '43', 82)" onmouseover="showTip(event, '43', 82)" class="id">validPerson</span> <span class="o">=</span> <span onmouseout="hideTip(event, '37', 83)" onmouseover="showTip(event, '37', 83)" class="fn">mkPerson</span> <span class="s">&quot;Bob&quot;</span> <span class="s">&quot;bob@gmail.com&quot;</span> <span class="n">25</span>
+    <span class="c">// Success ({name = {unName = &quot;Bob&quot;}; email = {unEmail = &quot;bob@gmail.com&quot;}; age = {unAge = 25}})</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '44', 84)" onmouseover="showTip(event, '44', 84)" class="id">badName</span> <span class="o">=</span> <span onmouseout="hideTip(event, '37', 85)" onmouseover="showTip(event, '37', 85)" class="fn">mkPerson</span> <span class="s">&quot;&quot;</span> <span class="s">&quot;bob@gmail.com&quot;</span> <span class="n">25</span>
+    <span class="c">// Failure [NameBetween1And50]</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '45', 86)" onmouseover="showTip(event, '45', 86)" class="id">badEmail</span> <span class="o">=</span> <span onmouseout="hideTip(event, '37', 87)" onmouseover="showTip(event, '37', 87)" class="fn">mkPerson</span> <span class="s">&quot;Bob&quot;</span> <span class="s">&quot;bademail&quot;</span> <span class="n">25</span>
+    <span class="c">// Failure [EmailMustContainAtChar]</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '46', 88)" onmouseover="showTip(event, '46', 88)" class="id">badAge</span> <span class="o">=</span> <span onmouseout="hideTip(event, '37', 89)" onmouseover="showTip(event, '37', 89)" class="fn">mkPerson</span> <span class="s">&quot;Bob&quot;</span> <span class="s">&quot;bob@gmail.com&quot;</span> <span class="n">150</span>
+    <span class="c">// Failure [AgeBetween0and120]</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '47', 90)" onmouseover="showTip(event, '47', 90)" class="id">badEverything</span> <span class="o">=</span> <span onmouseout="hideTip(event, '37', 91)" onmouseover="showTip(event, '37', 91)" class="fn">mkPerson</span> <span class="s">&quot;&quot;</span> <span class="s">&quot;bademail&quot;</span> <span class="n">150</span>
+    <span class="c">// Failure [NameBetween1And50;EmailMustContainAtChar;AgeBetween0and120]</span>
+
+    <span class="k">open</span> <span onmouseout="hideTip(event, '2', 92)" onmouseover="showTip(event, '2', 92)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, '48', 93)" onmouseover="showTip(event, '48', 93)" class="id">Lens</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '49', 94)" onmouseover="showTip(event, '49', 94)" class="id">asMaybeGood</span> <span class="o">=</span> <span onmouseout="hideTip(event, '43', 95)" onmouseover="showTip(event, '43', 95)" class="id">validPerson</span> <span class="o">^?</span> <span onmouseout="hideTip(event, '50', 96)" onmouseover="showTip(event, '50', 96)" class="m">Validation</span><span class="pn">.</span><span onmouseout="hideTip(event, '51', 97)" onmouseover="showTip(event, '51', 97)" class="id">_Success</span>
+    <span class="c">// Some ({name = {unName = &quot;Bob&quot;}; email = {unEmail = &quot;bob@gmail.com&quot;}; age = {unAge = 25}})</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '52', 98)" onmouseover="showTip(event, '52', 98)" class="id">asMaybeBad</span> <span class="o">=</span> <span onmouseout="hideTip(event, '47', 99)" onmouseover="showTip(event, '47', 99)" class="id">badEverything</span> <span class="o">^?</span> <span onmouseout="hideTip(event, '50', 100)" onmouseover="showTip(event, '50', 100)" class="m">Validation</span><span class="pn">.</span><span onmouseout="hideTip(event, '51', 101)" onmouseover="showTip(event, '51', 101)" class="id">_Success</span>
+    <span class="c">// None</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '53', 102)" onmouseover="showTip(event, '53', 102)" class="id">asResultGood</span> <span class="o">=</span> <span onmouseout="hideTip(event, '43', 103)" onmouseover="showTip(event, '43', 103)" class="id">validPerson</span> <span class="o">^.</span> <span onmouseout="hideTip(event, '50', 104)" onmouseover="showTip(event, '50', 104)" class="m">Validation</span><span class="pn">.</span><span onmouseout="hideTip(event, '54', 105)" onmouseover="showTip(event, '54', 105)" class="id">isoValidationResult</span>
+    <span class="c">// Ok ({name = {unName = &quot;Bob&quot;}; email = {unEmail = &quot;bob@gmail.com&quot;}; age = {unAge = 25}})</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '55', 106)" onmouseover="showTip(event, '55', 106)" class="id">asResultBad</span> <span class="o">=</span> <span onmouseout="hideTip(event, '47', 107)" onmouseover="showTip(event, '47', 107)" class="id">badEverything</span> <span class="o">^.</span> <span onmouseout="hideTip(event, '50', 108)" onmouseover="showTip(event, '50', 108)" class="m">Validation</span><span class="pn">.</span><span onmouseout="hideTip(event, '54', 109)" onmouseover="showTip(event, '54', 109)" class="id">isoValidationResult</span>
+    <span class="c">// Error [NameBetween1And50;EmailMustContainAtChar;AgeBetween0and120]</span>
+
+
+<span class="k">module</span> <span class="m">Email</span> <span class="o">=</span>
+
+    <span class="c">// ***** Types *****</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '56', 110)" onmouseover="showTip(event, '56', 110)" class="rt">AtString</span> <span class="o">=</span> <span onmouseout="hideTip(event, '56', 111)" onmouseover="showTip(event, '56', 111)" class="uc">AtString</span> <span class="k">of</span> <span onmouseout="hideTip(event, '57', 112)" onmouseover="showTip(event, '57', 112)" class="rt">string</span> 
+    <span class="k">type</span> <span onmouseout="hideTip(event, '58', 113)" onmouseover="showTip(event, '58', 113)" class="rt">PeriodString</span> <span class="o">=</span> <span onmouseout="hideTip(event, '58', 114)" onmouseover="showTip(event, '58', 114)" class="uc">PeriodString</span> <span class="k">of</span> <span onmouseout="hideTip(event, '57', 115)" onmouseover="showTip(event, '57', 115)" class="rt">string</span> 
+    <span class="k">type</span> <span onmouseout="hideTip(event, '59', 116)" onmouseover="showTip(event, '59', 116)" class="rt">NonEmptyString</span> <span class="o">=</span> <span onmouseout="hideTip(event, '59', 117)" onmouseover="showTip(event, '59', 117)" class="uc">NonEmptyString</span> <span class="k">of</span> <span onmouseout="hideTip(event, '57', 118)" onmouseover="showTip(event, '57', 118)" class="rt">string</span> 
+
+    <span class="k">type</span> <span onmouseout="hideTip(event, '60', 119)" onmouseover="showTip(event, '60', 119)" class="rt">Email</span> <span class="o">=</span> <span onmouseout="hideTip(event, '60', 120)" onmouseover="showTip(event, '60', 120)" class="uc">Email</span> <span class="k">of</span> <span onmouseout="hideTip(event, '57', 121)" onmouseover="showTip(event, '57', 121)" class="rt">string</span> 
+
+    <span class="k">type</span> <span onmouseout="hideTip(event, '61', 122)" onmouseover="showTip(event, '61', 122)" class="rt">VError</span> <span class="o">=</span> <span class="pn">|</span> <span onmouseout="hideTip(event, '62', 123)" onmouseover="showTip(event, '62', 123)" class="uc">MustNotBeEmpty</span>
+                  <span class="pn">|</span> <span onmouseout="hideTip(event, '63', 124)" onmouseover="showTip(event, '63', 124)" class="uc">MustContainAt</span>
+                  <span class="pn">|</span> <span onmouseout="hideTip(event, '64', 125)" onmouseover="showTip(event, '64', 125)" class="uc">MustContainPeriod</span>
+
+    <span class="c">// ***** Base smart constructors *****</span>
+    <span class="c">// String must contain an &#39;@&#39; character</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '65', 126)" onmouseover="showTip(event, '65', 126)" class="fn">atString</span> <span class="pn">(</span><span onmouseout="hideTip(event, '66', 127)" onmouseover="showTip(event, '66', 127)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, '57', 128)" onmouseover="showTip(event, '57', 128)" class="rt">string</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '50', 129)" onmouseover="showTip(event, '50', 129)" class="rt">Validation</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '61', 130)" onmouseover="showTip(event, '61', 130)" class="rt">VError</span> <span onmouseout="hideTip(event, '67', 131)" onmouseover="showTip(event, '67', 131)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, '56', 132)" onmouseover="showTip(event, '56', 132)" class="rt">AtString</span><span class="pn">&gt;</span> <span class="o">=</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '5', 133)" onmouseover="showTip(event, '5', 133)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '32', 134)" onmouseover="showTip(event, '32', 134)" class="id">contains</span> <span class="s">&#39;@&#39;</span> <span onmouseout="hideTip(event, '66', 135)" onmouseover="showTip(event, '66', 135)" class="id">x</span> <span class="k">then</span> <span onmouseout="hideTip(event, '27', 136)" onmouseover="showTip(event, '27', 136)" class="uc">Success</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '56', 137)" onmouseover="showTip(event, '56', 137)" class="uc">AtString</span> <span onmouseout="hideTip(event, '66', 138)" onmouseover="showTip(event, '66', 138)" class="id">x</span>
+        <span class="k">else</span> <span onmouseout="hideTip(event, '29', 139)" onmouseover="showTip(event, '29', 139)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '63', 140)" onmouseover="showTip(event, '63', 140)" class="uc">MustContainAt</span><span class="pn">]</span>
+
+    <span class="c">// String must contain an &#39;.&#39; character</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '68', 141)" onmouseover="showTip(event, '68', 141)" class="fn">periodString</span> <span class="pn">(</span><span onmouseout="hideTip(event, '66', 142)" onmouseover="showTip(event, '66', 142)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, '57', 143)" onmouseover="showTip(event, '57', 143)" class="rt">string</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '50', 144)" onmouseover="showTip(event, '50', 144)" class="rt">Validation</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '61', 145)" onmouseover="showTip(event, '61', 145)" class="rt">VError</span> <span onmouseout="hideTip(event, '67', 146)" onmouseover="showTip(event, '67', 146)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, '58', 147)" onmouseover="showTip(event, '58', 147)" class="rt">PeriodString</span><span class="pn">&gt;</span> <span class="o">=</span> 
+        <span class="k">if</span> <span onmouseout="hideTip(event, '5', 148)" onmouseover="showTip(event, '5', 148)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '32', 149)" onmouseover="showTip(event, '32', 149)" class="id">contains</span> <span class="s">&#39;.&#39;</span> <span onmouseout="hideTip(event, '66', 150)" onmouseover="showTip(event, '66', 150)" class="id">x</span>
+        <span class="k">then</span> <span onmouseout="hideTip(event, '27', 151)" onmouseover="showTip(event, '27', 151)" class="uc">Success</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '58', 152)" onmouseover="showTip(event, '58', 152)" class="uc">PeriodString</span> <span onmouseout="hideTip(event, '66', 153)" onmouseover="showTip(event, '66', 153)" class="id">x</span>
+        <span class="k">else</span> <span onmouseout="hideTip(event, '29', 154)" onmouseover="showTip(event, '29', 154)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '64', 155)" onmouseover="showTip(event, '64', 155)" class="uc">MustContainPeriod</span><span class="pn">]</span>
+
+    <span class="c">// String must not be empty</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '69', 156)" onmouseover="showTip(event, '69', 156)" class="fn">nonEmptyString</span> <span class="pn">(</span><span onmouseout="hideTip(event, '66', 157)" onmouseover="showTip(event, '66', 157)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, '57', 158)" onmouseover="showTip(event, '57', 158)" class="rt">string</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '50', 159)" onmouseover="showTip(event, '50', 159)" class="rt">Validation</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '61', 160)" onmouseover="showTip(event, '61', 160)" class="rt">VError</span> <span onmouseout="hideTip(event, '67', 161)" onmouseover="showTip(event, '67', 161)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, '59', 162)" onmouseover="showTip(event, '59', 162)" class="rt">NonEmptyString</span><span class="pn">&gt;</span> <span class="o">=</span> 
+        <span class="k">if</span> <span onmouseout="hideTip(event, '70', 163)" onmouseover="showTip(event, '70', 163)" class="fn">not</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '5', 164)" onmouseover="showTip(event, '5', 164)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '71', 165)" onmouseover="showTip(event, '71', 165)" class="id">IsNullOrEmpty</span> <span onmouseout="hideTip(event, '66', 166)" onmouseover="showTip(event, '66', 166)" class="id">x</span> 
+        <span class="k">then</span> <span onmouseout="hideTip(event, '27', 167)" onmouseover="showTip(event, '27', 167)" class="uc">Success</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '59', 168)" onmouseover="showTip(event, '59', 168)" class="uc">NonEmptyString</span> <span onmouseout="hideTip(event, '66', 169)" onmouseover="showTip(event, '66', 169)" class="id">x</span>
+        <span class="k">else</span> <span onmouseout="hideTip(event, '29', 170)" onmouseover="showTip(event, '29', 170)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '62', 171)" onmouseover="showTip(event, '62', 171)" class="uc">MustNotBeEmpty</span><span class="pn">]</span>
+
+    <span class="c">// ***** Combining smart constructors *****</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '72', 172)" onmouseover="showTip(event, '72', 172)" class="fn">email</span> <span class="pn">(</span><span onmouseout="hideTip(event, '66', 173)" onmouseover="showTip(event, '66', 173)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, '57', 174)" onmouseover="showTip(event, '57', 174)" class="rt">string</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '50', 175)" onmouseover="showTip(event, '50', 175)" class="rt">Validation</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '61', 176)" onmouseover="showTip(event, '61', 176)" class="rt">VError</span> <span onmouseout="hideTip(event, '67', 177)" onmouseover="showTip(event, '67', 177)" class="rt">list</span><span class="pn">,</span> <span onmouseout="hideTip(event, '60', 178)" onmouseover="showTip(event, '60', 178)" class="rt">Email</span><span class="pn">&gt;</span> <span class="o">=</span> 
+        <span onmouseout="hideTip(event, '73', 179)" onmouseover="showTip(event, '73', 179)" class="fn">result</span> <span class="pn">(</span><span onmouseout="hideTip(event, '60', 180)" onmouseover="showTip(event, '60', 180)" class="uc">Email</span> <span onmouseout="hideTip(event, '66', 181)" onmouseover="showTip(event, '66', 181)" class="id">x</span><span class="pn">)</span> <span class="o">&lt;*</span>
+        <span onmouseout="hideTip(event, '69', 182)" onmouseover="showTip(event, '69', 182)" class="fn">nonEmptyString</span> <span onmouseout="hideTip(event, '66', 183)" onmouseover="showTip(event, '66', 183)" class="id">x</span> <span class="o">&lt;*</span>
+        <span onmouseout="hideTip(event, '65', 184)" onmouseover="showTip(event, '65', 184)" class="fn">atString</span>       <span onmouseout="hideTip(event, '66', 185)" onmouseover="showTip(event, '66', 185)" class="id">x</span> <span class="o">&lt;*</span>
+        <span onmouseout="hideTip(event, '68', 186)" onmouseover="showTip(event, '68', 186)" class="fn">periodString</span>   <span onmouseout="hideTip(event, '66', 187)" onmouseover="showTip(event, '66', 187)" class="id">x</span>
+
+    <span class="c">// ***** Example usage *****</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '74', 188)" onmouseover="showTip(event, '74', 188)" class="id">success</span> <span class="o">=</span> <span onmouseout="hideTip(event, '72', 189)" onmouseover="showTip(event, '72', 189)" class="fn">email</span> <span class="s">&quot;bob@gmail.com&quot;</span>
+
+    <span class="c">// Success (Email &quot;bob@gmail.com&quot;)</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '75', 190)" onmouseover="showTip(event, '75', 190)" class="id">failureAt</span> <span class="o">=</span> <span onmouseout="hideTip(event, '72', 191)" onmouseover="showTip(event, '72', 191)" class="fn">email</span> <span class="s">&quot;bobgmail.com&quot;</span>
+    <span class="c">// Failure [MustContainAt]</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '76', 192)" onmouseover="showTip(event, '76', 192)" class="id">failurePeriod</span> <span class="o">=</span> <span onmouseout="hideTip(event, '72', 193)" onmouseover="showTip(event, '72', 193)" class="fn">email</span> <span class="s">&quot;bob@gmailcom&quot;</span>
+    <span class="c">// Failure [MustContainPeriod]</span>
+
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '77', 194)" onmouseover="showTip(event, '77', 194)" class="id">failureAll</span> <span class="o">=</span> <span onmouseout="hideTip(event, '72', 195)" onmouseover="showTip(event, '72', 195)" class="fn">email</span> <span class="s">&quot;&quot;</span>
+    <span class="c">// Failure [MustNotBeEmpty;MustContainAt;MustContainPeriod]</span>
+
+<span class="k">module</span> <span onmouseout="hideTip(event, '78', 196)" onmouseover="showTip(event, '78', 196)" class="m">MovieValidations</span><span class="o">=</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '79', 197)" onmouseover="showTip(event, '79', 197)" class="rt">VError</span><span class="o">=</span> <span class="pn">|</span> <span onmouseout="hideTip(event, '62', 198)" onmouseover="showTip(event, '62', 198)" class="uc">MustNotBeEmpty</span>
+                 <span class="pn">|</span> <span onmouseout="hideTip(event, '80', 199)" onmouseover="showTip(event, '80', 199)" class="uc">MustBeAtLessThanChars</span> <span class="k">of</span> <span onmouseout="hideTip(event, '9', 200)" onmouseover="showTip(event, '9', 200)" class="vt">int</span>
+                 <span class="pn">|</span> <span onmouseout="hideTip(event, '81', 201)" onmouseover="showTip(event, '81', 201)" class="uc">MustBeADate</span>
+                 <span class="pn">|</span> <span onmouseout="hideTip(event, '82', 202)" onmouseover="showTip(event, '82', 202)" class="uc">MustBeOlderThan</span> <span class="k">of</span> <span onmouseout="hideTip(event, '9', 203)" onmouseover="showTip(event, '9', 203)" class="vt">int</span>
+                 <span class="pn">|</span> <span onmouseout="hideTip(event, '83', 204)" onmouseover="showTip(event, '83', 204)" class="uc">MustBeWithingRange</span> <span class="k">of</span> <span onmouseout="hideTip(event, '84', 205)" onmouseover="showTip(event, '84', 205)" class="vt">decimal</span><span class="pn">*</span><span onmouseout="hideTip(event, '84', 206)" onmouseover="showTip(event, '84', 206)" class="vt">decimal</span>
+    <span class="k">module</span> <span onmouseout="hideTip(event, '5', 207)" onmouseover="showTip(event, '5', 207)" class="m">String</span><span class="o">=</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '85', 208)" onmouseover="showTip(event, '85', 208)" class="fn">nonEmpty</span> <span class="pn">(</span><span onmouseout="hideTip(event, '66', 209)" onmouseover="showTip(event, '66', 209)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, '57', 210)" onmouseover="showTip(event, '57', 210)" class="rt">string</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '50', 211)" onmouseover="showTip(event, '50', 211)" class="rt">Validation</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '79', 212)" onmouseover="showTip(event, '79', 212)" class="rt">VError</span> <span onmouseout="hideTip(event, '67', 213)" onmouseover="showTip(event, '67', 213)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, '57', 214)" onmouseover="showTip(event, '57', 214)" class="rt">string</span><span class="pn">&gt;</span> <span class="o">=</span> 
+            <span class="k">if</span> <span onmouseout="hideTip(event, '5', 215)" onmouseover="showTip(event, '5', 215)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '71', 216)" onmouseover="showTip(event, '71', 216)" class="id">IsNullOrEmpty</span> <span onmouseout="hideTip(event, '66', 217)" onmouseover="showTip(event, '66', 217)" class="id">x</span> 
+            <span class="k">then</span> <span onmouseout="hideTip(event, '29', 218)" onmouseover="showTip(event, '29', 218)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '62', 219)" onmouseover="showTip(event, '62', 219)" class="uc">MustNotBeEmpty</span><span class="pn">]</span>
+            <span class="k">else</span> <span onmouseout="hideTip(event, '27', 220)" onmouseover="showTip(event, '27', 220)" class="uc">Success</span> <span onmouseout="hideTip(event, '66', 221)" onmouseover="showTip(event, '66', 221)" class="id">x</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '86', 222)" onmouseover="showTip(event, '86', 222)" class="fn">mustBeLessThan</span> <span class="pn">(</span><span onmouseout="hideTip(event, '10', 223)" onmouseover="showTip(event, '10', 223)" class="id">i</span><span class="pn">:</span><span onmouseout="hideTip(event, '9', 224)" onmouseover="showTip(event, '9', 224)" class="vt">int</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '66', 225)" onmouseover="showTip(event, '66', 225)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, '57', 226)" onmouseover="showTip(event, '57', 226)" class="rt">string</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '50', 227)" onmouseover="showTip(event, '50', 227)" class="rt">Validation</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '79', 228)" onmouseover="showTip(event, '79', 228)" class="rt">VError</span> <span onmouseout="hideTip(event, '67', 229)" onmouseover="showTip(event, '67', 229)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, '57', 230)" onmouseover="showTip(event, '57', 230)" class="rt">string</span><span class="pn">&gt;</span> <span class="o">=</span> 
+            <span class="k">if</span> <span onmouseout="hideTip(event, '87', 231)" onmouseover="showTip(event, '87', 231)" class="fn">isNull</span> <span onmouseout="hideTip(event, '66', 232)" onmouseover="showTip(event, '66', 232)" class="id">x</span> <span class="o">||</span> <span onmouseout="hideTip(event, '66', 233)" onmouseover="showTip(event, '66', 233)" class="id">x</span><span class="pn">.</span><span onmouseout="hideTip(event, '88', 234)" onmouseover="showTip(event, '88', 234)" class="id">Length</span> <span class="o">&gt;</span> <span onmouseout="hideTip(event, '10', 235)" onmouseover="showTip(event, '10', 235)" class="id">i</span>
+            <span class="k">then</span> <span onmouseout="hideTip(event, '29', 236)" onmouseover="showTip(event, '29', 236)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '80', 237)" onmouseover="showTip(event, '80', 237)" class="uc">MustBeAtLessThanChars</span> <span onmouseout="hideTip(event, '10', 238)" onmouseover="showTip(event, '10', 238)" class="id">i</span><span class="pn">]</span>
+            <span class="k">else</span> <span onmouseout="hideTip(event, '27', 239)" onmouseover="showTip(event, '27', 239)" class="uc">Success</span> <span onmouseout="hideTip(event, '66', 240)" onmouseover="showTip(event, '66', 240)" class="id">x</span>
+    <span class="k">module</span> <span class="m">Number</span><span class="o">=</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '89', 241)" onmouseover="showTip(event, '89', 241)" class="fn">mustBeWithin</span> <span class="pn">(</span><span onmouseout="hideTip(event, '90', 242)" onmouseover="showTip(event, '90', 242)" class="id">from</span><span class="pn">,</span><span onmouseout="hideTip(event, '91', 243)" onmouseover="showTip(event, '91', 243)" class="id">to&#39;</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '92', 244)" onmouseover="showTip(event, '92', 244)" class="id">x</span><span class="pn">)</span><span class="o">=</span>
+            <span class="k">if</span> <span onmouseout="hideTip(event, '90', 245)" onmouseover="showTip(event, '90', 245)" class="id">from</span><span class="o">&lt;=</span> <span onmouseout="hideTip(event, '92', 246)" onmouseover="showTip(event, '92', 246)" class="id">x</span> <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '92', 247)" onmouseover="showTip(event, '92', 247)" class="id">x</span> <span class="o">&lt;=</span> <span onmouseout="hideTip(event, '91', 248)" onmouseover="showTip(event, '91', 248)" class="id">to&#39;</span>
+            <span class="k">then</span> <span onmouseout="hideTip(event, '27', 249)" onmouseover="showTip(event, '27', 249)" class="uc">Success</span> <span onmouseout="hideTip(event, '92', 250)" onmouseover="showTip(event, '92', 250)" class="id">x</span>
+            <span class="k">else</span> <span onmouseout="hideTip(event, '29', 251)" onmouseover="showTip(event, '29', 251)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '83', 252)" onmouseover="showTip(event, '83', 252)" class="uc">MustBeWithingRange</span> <span class="pn">(</span><span onmouseout="hideTip(event, '90', 253)" onmouseover="showTip(event, '90', 253)" class="id">from</span><span class="pn">,</span><span onmouseout="hideTip(event, '91', 254)" onmouseover="showTip(event, '91', 254)" class="id">to&#39;</span><span class="pn">)</span><span class="pn">]</span>
+    <span class="k">module</span> <span onmouseout="hideTip(event, '93', 255)" onmouseover="showTip(event, '93', 255)" class="m">DateTime</span><span class="o">=</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '94', 256)" onmouseover="showTip(event, '94', 256)" class="fn">classicMovie</span> <span onmouseout="hideTip(event, '95', 257)" onmouseover="showTip(event, '95', 257)" class="id">year</span> <span class="pn">(</span><span onmouseout="hideTip(event, '96', 258)" onmouseover="showTip(event, '96', 258)" class="id">d</span><span class="pn">:</span><span onmouseout="hideTip(event, '93', 259)" onmouseover="showTip(event, '93', 259)" class="vt">DateTime</span><span class="pn">)</span><span class="o">=</span>
+            <span class="k">if</span> <span onmouseout="hideTip(event, '96', 260)" onmouseover="showTip(event, '96', 260)" class="id">d</span><span class="pn">.</span><span onmouseout="hideTip(event, '97', 261)" onmouseover="showTip(event, '97', 261)" class="id">Year</span> <span class="o">&lt;</span> <span onmouseout="hideTip(event, '95', 262)" onmouseover="showTip(event, '95', 262)" class="id">year</span>
+            <span class="k">then</span> <span onmouseout="hideTip(event, '27', 263)" onmouseover="showTip(event, '27', 263)" class="uc">Success</span> <span onmouseout="hideTip(event, '96', 264)" onmouseover="showTip(event, '96', 264)" class="id">d</span>
+            <span class="k">else</span> <span onmouseout="hideTip(event, '29', 265)" onmouseover="showTip(event, '29', 265)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '82', 266)" onmouseover="showTip(event, '82', 266)" class="uc">MustBeOlderThan</span> <span onmouseout="hideTip(event, '95', 267)" onmouseover="showTip(event, '95', 267)" class="id">year</span><span class="pn">]</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '98', 268)" onmouseover="showTip(event, '98', 268)" class="fn">date</span> <span class="pn">(</span><span onmouseout="hideTip(event, '96', 269)" onmouseover="showTip(event, '96', 269)" class="id">d</span><span class="pn">:</span><span onmouseout="hideTip(event, '93', 270)" onmouseover="showTip(event, '93', 270)" class="vt">DateTime</span><span class="pn">)</span><span class="o">=</span>
+            <span class="k">if</span> <span onmouseout="hideTip(event, '96', 271)" onmouseover="showTip(event, '96', 271)" class="id">d</span><span class="pn">.</span><span onmouseout="hideTip(event, '99', 272)" onmouseover="showTip(event, '99', 272)" class="id">Date</span> <span class="o">=</span> <span onmouseout="hideTip(event, '96', 273)" onmouseover="showTip(event, '96', 273)" class="id">d</span>
+            <span class="k">then</span> <span onmouseout="hideTip(event, '27', 274)" onmouseover="showTip(event, '27', 274)" class="uc">Success</span> <span onmouseout="hideTip(event, '96', 275)" onmouseover="showTip(event, '96', 275)" class="id">d</span>
+            <span class="k">else</span> <span onmouseout="hideTip(event, '29', 276)" onmouseover="showTip(event, '29', 276)" class="uc">Failure</span> <span class="pn">[</span><span onmouseout="hideTip(event, '81', 277)" onmouseover="showTip(event, '81', 277)" class="uc">MustBeADate</span><span class="pn">]</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '100', 278)" onmouseover="showTip(event, '100', 278)" class="rt">Genre</span><span class="o">=</span>
+        <span class="pn">|</span><span onmouseout="hideTip(event, '101', 279)" onmouseover="showTip(event, '101', 279)" class="uc">Classic</span>
+        <span class="pn">|</span><span onmouseout="hideTip(event, '102', 280)" onmouseover="showTip(event, '102', 280)" class="uc">PostClassic</span>
+        <span class="pn">|</span><span onmouseout="hideTip(event, '103', 281)" onmouseover="showTip(event, '103', 281)" class="uc">Modern</span>
+        <span class="pn">|</span><span onmouseout="hideTip(event, '104', 282)" onmouseover="showTip(event, '104', 282)" class="uc">PostModern</span>
+        <span class="pn">|</span><span onmouseout="hideTip(event, '105', 283)" onmouseover="showTip(event, '105', 283)" class="uc">Contemporary</span>
+    <span class="k">type</span> <span class="rt">Movie</span> <span class="o">=</span> <span class="pn">{</span>
+        <span onmouseout="hideTip(event, '106', 284)" onmouseover="showTip(event, '106', 284)" class="id">Id</span><span class="pn">:</span> <span onmouseout="hideTip(event, '9', 285)" onmouseover="showTip(event, '9', 285)" class="vt">int</span>
+        <span onmouseout="hideTip(event, '107', 286)" onmouseover="showTip(event, '107', 286)" class="id">Title</span><span class="pn">:</span> <span onmouseout="hideTip(event, '5', 287)" onmouseover="showTip(event, '5', 287)" class="rt">String</span>
+        <span onmouseout="hideTip(event, '108', 288)" onmouseover="showTip(event, '108', 288)" class="id">ReleaseDate</span><span class="pn">:</span> <span onmouseout="hideTip(event, '93', 289)" onmouseover="showTip(event, '93', 289)" class="vt">DateTime</span>
+        <span onmouseout="hideTip(event, '109', 290)" onmouseover="showTip(event, '109', 290)" class="id">Description</span><span class="pn">:</span> <span onmouseout="hideTip(event, '5', 291)" onmouseover="showTip(event, '5', 291)" class="rt">String</span>
+        <span onmouseout="hideTip(event, '110', 292)" onmouseover="showTip(event, '110', 292)" class="id">Price</span><span class="pn">:</span> <span onmouseout="hideTip(event, '84', 293)" onmouseover="showTip(event, '84', 293)" class="vt">decimal</span>
+        <span onmouseout="hideTip(event, '111', 294)" onmouseover="showTip(event, '111', 294)" class="id">Genre</span><span class="pn">:</span> <span onmouseout="hideTip(event, '111', 295)" onmouseover="showTip(event, '111', 295)" class="rt">Genre</span>
+    <span class="pn">}</span>
+    <span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span class="fn">Create</span><span class="pn">(</span><span onmouseout="hideTip(event, '112', 296)" onmouseover="showTip(event, '112', 296)" class="id">id</span><span class="pn">,</span><span onmouseout="hideTip(event, '113', 297)" onmouseover="showTip(event, '113', 297)" class="id">title</span><span class="pn">,</span><span onmouseout="hideTip(event, '114', 298)" onmouseover="showTip(event, '114', 298)" class="id">releaseDate</span><span class="pn">,</span><span onmouseout="hideTip(event, '115', 299)" onmouseover="showTip(event, '115', 299)" class="id">description</span><span class="pn">,</span><span onmouseout="hideTip(event, '116', 300)" onmouseover="showTip(event, '116', 300)" class="id">price</span><span class="pn">,</span><span onmouseout="hideTip(event, '117', 301)" onmouseover="showTip(event, '117', 301)" class="id">genre</span><span class="pn">)</span><span class="pn">:</span> <span onmouseout="hideTip(event, '50', 302)" onmouseover="showTip(event, '50', 302)" class="rt">Validation</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '79', 303)" onmouseover="showTip(event, '79', 303)" class="rt">VError</span> <span onmouseout="hideTip(event, '67', 304)" onmouseover="showTip(event, '67', 304)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, '118', 305)" onmouseover="showTip(event, '118', 305)" class="rt">Movie</span><span class="pn">&gt;</span> <span class="o">=</span>
+            <span class="k">fun</span> <span onmouseout="hideTip(event, '119', 306)" onmouseover="showTip(event, '119', 306)" class="id">title</span> <span onmouseout="hideTip(event, '114', 307)" onmouseover="showTip(event, '114', 307)" class="id">releaseDate</span> <span onmouseout="hideTip(event, '120', 308)" onmouseover="showTip(event, '120', 308)" class="id">description</span> <span onmouseout="hideTip(event, '116', 309)" onmouseover="showTip(event, '116', 309)" class="id">price</span><span class="k">-&gt;</span><span class="pn">{</span> <span class="id">Id</span><span class="o">=</span><span onmouseout="hideTip(event, '112', 310)" onmouseover="showTip(event, '112', 310)" class="id">id</span><span class="pn">;</span><span class="id">Title</span><span class="o">=</span><span onmouseout="hideTip(event, '119', 311)" onmouseover="showTip(event, '119', 311)" class="id">title</span><span class="pn">;</span><span class="id">ReleaseDate</span><span class="o">=</span><span onmouseout="hideTip(event, '114', 312)" onmouseover="showTip(event, '114', 312)" class="id">releaseDate</span><span class="pn">;</span><span class="id">Description</span><span class="o">=</span><span onmouseout="hideTip(event, '120', 313)" onmouseover="showTip(event, '120', 313)" class="id">description</span><span class="pn">;</span><span class="id">Price</span><span class="o">=</span><span onmouseout="hideTip(event, '116', 314)" onmouseover="showTip(event, '116', 314)" class="id">price</span><span class="pn">;</span><span onmouseout="hideTip(event, '100', 315)" onmouseover="showTip(event, '100', 315)" class="id">Genre</span><span class="o">=</span><span onmouseout="hideTip(event, '117', 316)" onmouseover="showTip(event, '117', 316)" class="id">genre</span> <span class="pn">}</span>
+            <span class="o">&lt;!&gt;</span> <span onmouseout="hideTip(event, '5', 317)" onmouseover="showTip(event, '5', 317)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '85', 318)" onmouseover="showTip(event, '85', 318)" class="id">nonEmpty</span> <span onmouseout="hideTip(event, '119', 319)" onmouseover="showTip(event, '119', 319)" class="id">title</span> <span class="o">&lt;*</span> <span onmouseout="hideTip(event, '5', 320)" onmouseover="showTip(event, '5', 320)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '86', 321)" onmouseover="showTip(event, '86', 321)" class="id">mustBeLessThan</span> <span class="n">100</span> <span onmouseout="hideTip(event, '119', 322)" onmouseover="showTip(event, '119', 322)" class="id">title</span>
+            <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, '93', 323)" onmouseover="showTip(event, '93', 323)" class="m">DateTime</span><span class="pn">.</span><span onmouseout="hideTip(event, '94', 324)" onmouseover="showTip(event, '94', 324)" class="id">classicMovie</span> <span class="n">1960</span> <span onmouseout="hideTip(event, '114', 325)" onmouseover="showTip(event, '114', 325)" class="id">releaseDate</span> <span class="o">&lt;*</span> <span onmouseout="hideTip(event, '93', 326)" onmouseover="showTip(event, '93', 326)" class="m">DateTime</span><span class="pn">.</span><span onmouseout="hideTip(event, '98', 327)" onmouseover="showTip(event, '98', 327)" class="id">date</span> <span onmouseout="hideTip(event, '114', 328)" onmouseover="showTip(event, '114', 328)" class="id">releaseDate</span>
+            <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, '5', 329)" onmouseover="showTip(event, '5', 329)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '85', 330)" onmouseover="showTip(event, '85', 330)" class="id">nonEmpty</span> <span onmouseout="hideTip(event, '115', 331)" onmouseover="showTip(event, '115', 331)" class="id">description</span> <span class="o">&lt;*</span> <span onmouseout="hideTip(event, '5', 332)" onmouseover="showTip(event, '5', 332)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '86', 333)" onmouseover="showTip(event, '86', 333)" class="id">mustBeLessThan</span> <span class="n">1000</span> <span onmouseout="hideTip(event, '115', 334)" onmouseover="showTip(event, '115', 334)" class="id">description</span>
+            <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, '121', 335)" onmouseover="showTip(event, '121', 335)" class="m">Number</span><span class="pn">.</span><span onmouseout="hideTip(event, '89', 336)" onmouseover="showTip(event, '89', 336)" class="id">mustBeWithin</span> <span class="pn">(</span><span class="n">0.0m</span><span class="pn">,</span> <span class="n">999.99m</span><span class="pn">)</span> <span onmouseout="hideTip(event, '116', 337)" onmouseover="showTip(event, '116', 337)" class="id">price</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '122', 338)" onmouseover="showTip(event, '122', 338)" class="id">newRelease</span> <span class="o">=</span> <span onmouseout="hideTip(event, '118', 339)" onmouseover="showTip(event, '118', 339)" class="rt">Movie</span><span class="pn">.</span><span onmouseout="hideTip(event, '123', 340)" onmouseover="showTip(event, '123', 340)" class="id">Create</span><span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="s">&quot;Midsommar&quot;</span><span class="pn">,</span><span onmouseout="hideTip(event, '93', 341)" onmouseover="showTip(event, '93', 341)" class="vt">DateTime</span><span class="pn">(</span><span class="n">2019</span><span class="pn">,</span><span class="n">6</span><span class="pn">,</span><span class="n">24</span><span class="pn">)</span><span class="pn">,</span><span class="s">&quot;Midsommar is a 2019 folk horror film written...&quot;</span><span class="pn">,</span><span class="n">1m</span><span class="pn">,</span><span onmouseout="hideTip(event, '101', 342)" onmouseover="showTip(event, '101', 342)" class="uc">Classic</span><span class="pn">)</span> <span class="c">//Failure [MustBeOlderThan 1960]</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '124', 343)" onmouseover="showTip(event, '124', 343)" class="id">oldie</span> <span class="o">=</span> <span onmouseout="hideTip(event, '118', 344)" onmouseover="showTip(event, '118', 344)" class="rt">Movie</span><span class="pn">.</span><span onmouseout="hideTip(event, '123', 345)" onmouseover="showTip(event, '123', 345)" class="id">Create</span><span class="pn">(</span><span class="n">2</span><span class="pn">,</span><span class="s">&quot;Modern Times&quot;</span><span class="pn">,</span><span onmouseout="hideTip(event, '93', 346)" onmouseover="showTip(event, '93', 346)" class="vt">DateTime</span><span class="pn">(</span><span class="n">1936</span><span class="pn">,</span><span class="n">2</span><span class="pn">,</span><span class="n">5</span><span class="pn">)</span><span class="pn">,</span><span class="s">&quot;Modern Times is a 1936 American comedy film...&quot;</span><span class="pn">,</span><span class="n">1m</span><span class="pn">,</span><span onmouseout="hideTip(event, '101', 347)" onmouseover="showTip(event, '101', 347)" class="uc">Classic</span><span class="pn">)</span> <span class="c">// Success..</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '125', 348)" onmouseover="showTip(event, '125', 348)" class="id">titleToLong</span> <span class="o">=</span> <span onmouseout="hideTip(event, '118', 349)" onmouseover="showTip(event, '118', 349)" class="rt">Movie</span><span class="pn">.</span><span onmouseout="hideTip(event, '123', 350)" onmouseover="showTip(event, '123', 350)" class="id">Create</span><span class="pn">(</span><span class="n">3</span><span class="pn">,</span> <span onmouseout="hideTip(event, '5', 351)" onmouseover="showTip(event, '5', 351)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '126', 352)" onmouseover="showTip(event, '126', 352)" class="id">Concat</span> <span class="pn">(</span><span onmouseout="hideTip(event, '127', 353)" onmouseover="showTip(event, '127', 353)" class="k">seq</span><span class="pn">{</span>  <span class="n">1..</span><span class="n">110</span> <span class="pn">}</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, '93', 354)" onmouseover="showTip(event, '93', 354)" class="vt">DateTime</span><span class="pn">(</span><span class="n">1950</span><span class="pn">,</span><span class="n">1</span><span class="pn">,</span><span class="n">1</span><span class="pn">)</span><span class="pn">,</span><span class="s">&quot;11&quot;</span><span class="pn">,</span><span class="n">1m</span><span class="pn">,</span><span onmouseout="hideTip(event, '101', 355)" onmouseover="showTip(event, '101', 355)" class="uc">Classic</span><span class="pn">)</span> <span class="c">//Failure [MustBeAtLessThanChars 100]</span>
 </code></pre></td>
 </tr>
 </table>
