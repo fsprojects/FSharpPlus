@@ -1,3 +1,13 @@
+#### 1.1.0-RC2  - January 25 2020
+* Some tweaks to Free (internals)
+* Add functions gets and modify for stateful computations
+* Better type inference for lift
+* Some functions deprecated in Validation and Extensions
+* Fix: swap type parameteres of Bifunctor and Bifoldable for Choice / Result
+* Default Monoid for bool (xor)
+* Some minor bug fixes
+* Better signatures and xml descriptions
+
 #### 1.1.0-RC1  - January 13 2020
 * More Fable support
 * Free Monad
