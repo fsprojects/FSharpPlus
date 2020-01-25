@@ -13,9 +13,7 @@ open System.ComponentModel
 ///
 /// A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
 /// that would violate monad rules.
-///
-/// An example of typical usage can be found <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples/Validations.fsx">here</a>.
-///
+
 
 type Validation<'error, 't> =
   | Failure of 'error
