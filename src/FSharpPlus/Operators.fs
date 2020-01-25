@@ -41,11 +41,12 @@ module Operators =
     /// <summary> Extracts a value from either side of a Result<'T,'Error>.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
-    /// <param name="source">The source value, containing and Ok or an Error.</param>
-    /// <returns>The constant value function.</returns>
+    /// <param name="source">The source value, containing an Ok or an Error.</param>
+    /// <returns>The result of applying either functions.</returns>
     let inline either fOk fError (source: Result<'T,'Error>) : 'U = match source with Ok x -> fOk x | Error x -> fError x
 
-    /// Takes a function, a default value and a option value. If the option value is None, the function returns the default value. Otherwise, it applies the function to the value inside Some and returns the result.
+    /// Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
+    /// Otherwise, it applies the function to the value inside Some and returns the result.
     let inline option f n = function Some x -> f x | None -> n
 
     let inline tuple2 a b             = a,b

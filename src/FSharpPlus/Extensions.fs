@@ -8,8 +8,8 @@ module Option =
     /// <summary>Applies an option value to an option function.</summary>
     /// <param name="f">The option function.</param>
     /// <param name="x">The option value.</param>
-    /// <returns>An option of the value after applying the function, or <c>None</c> if either the function or the value is <c>None</c>.</returns>
-    let apply f x =
+    /// <returns>An option of the function applied to the value, or <c>None</c> if either the function or the value is <c>None</c>.</returns>
+    let apply f (x: option<'T>) : option<'U> =
         match f, x with
         | Some f, Some x -> Some (f x)
         | _              -> None
@@ -17,7 +17,7 @@ module Option =
     /// <summary>If value is Some, returns both of them tupled. Otherwise it returns None tupled.</summary>
     /// <param name="v">The value.</param>
     /// <returns>The resulting tuple.</returns>
-    let unzip v =
+    let unzip (v: option<'T * 'U>) =
         match v with
         | Some (x, y) -> Some x, Some y
         | _           -> None  , None
@@ -26,7 +26,7 @@ module Option =
     /// <param name="x">The first value.</param>
     /// <param name="y">The second value.</param>
     /// <returns>The resulting option.</returns>
-    let zip x y =
+    let zip x y : option<'T * 'U> =
         match x, y with
         | Some x, Some y -> Some (x, y)
         | _              -> None
@@ -34,7 +34,7 @@ module Option =
     /// <summary>Converts an option to a Result.</summary>
     /// <param name="source">The option value.</param>
     /// <returns>The resulting Result value.</returns>
-    let toResult source = match source with Some x -> Ok x | None -> Error ()
+    let toResult (source: option<'T>) = match source with Some x -> Ok x | None -> Error ()
 
     /// <summary>Converts an option to a Result.</summary>
     /// <param name="errorValue">The error value to be used in case of None.</param>
@@ -46,7 +46,7 @@ module Option =
     /// <remarks>The error value (if any) is lost.</remarks>
     /// <param name="source">The Result value.</param>
     /// <returns>The resulting option value.</returns>
-    let ofResult source = match source with Ok x -> Some x | Error _ -> None
+    let ofResult (source: Result<'T,'Error>) = match source with Ok x -> Some x | Error _ -> None
 
     /// Creates a safe version of the supplied function, which returns an option<'U> instead of throwing exceptions.
     let protect (f: 'T->'U) x =
@@ -58,15 +58,34 @@ module Option =
 /// Additional operations on Result<'T,'Error>
 [<RequireQualifiedAccess>]
 module Result =
-    let result x = Ok x
-    let throw  x = Error x
-    let apply f x = match f, x with   Ok a, Ok b      -> Ok (a b) | Error e, _ | _, Error e -> Error e      : Result<'b,'e>
-    let flatten                  = function Ok (Ok v) -> Ok v     | Ok (Error e)  | Error e -> Error e
+    
+    /// Creates an Ok with the supplied value.
+    let result value : Result<'T,'Error> = Ok value
+
+    /// Creates an Error With the supplied value.
+    let throw value : Result<'T,'Error> = Error value
+
+    /// Applies the wrapped value to the wrapped function when both are Ok and returns a wrapped result or the first Error.
+    /// <param name="f">The function wrapped in an Ok or an Error.</param>
+    /// <param name="x">The value wrapped in an Ok or an Error.</param>
+    /// <returns>An Ok of the function applied to the value, or the first <c>Error</c> if either the function or the value is <c>Error</c>.</returns>
+    let apply f (x: Result<'T,'Error>) : Result<'U,'Error> = match f, x with Ok a, Ok b -> Ok (a b) | Error e, _ | _, Error e -> Error e
+
+    /// <summary>Flattens two nested Results.</summary>
+    /// <param name="source">The nested Results.</param>
+    /// <returns>A single Ok of the value when it was nested with OKs, or the Error.</returns>
+    /// <remarks><c>flatten</c> is equivalent to <c>bind id</c>.</remarks>
+    let flatten x : Result<'T,'Error> = match x with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
     
     [<System.Obsolete("Use Result.defaultWith instead.")>]
-    let inline catch f           = function Ok v      -> Ok v     | Error e                 -> (f: 't->_) e : Result<'v,'e>
+    let inline catch f = function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
     
-    let inline either f g        = function Ok v      -> f v      | Error e                 -> g e
+    /// <summary> Extracts a value from either side of a Result<'T,'Error>.</summary>
+    /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
+    /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
+    /// <param name="source">The source value, containing an Ok or an Error.</param>
+    /// <returns>The result of applying either functions.</returns>
+    let inline either (fOk: 'T->'U) (fError: 'Error->'U) source = match source with Ok v -> fOk v | Error e -> fError e
 
     /// Creates a safe version of the supplied function, which returns a Result<'U,exn> instead of throwing exceptions.
     let protect (f: 'T->'U) x =
@@ -76,13 +95,17 @@ module Result =
 
     /// Gets the 'Ok' value. If it's an 'Error' this function will throw an exception.
     let get (source: Result<'T,'Error>) = match source with Ok x -> x | _ -> invalidArg "source" "Result value was Error"
-    let defaultValue (value:'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | _ -> value
-    let defaultWith (f:'Error->'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | Error e -> f e
 
-    /// Converts a Result<'T,'U> to a Choice<'T,'U>.
+    /// Extracts the Ok value or use the supplied default value when it's an Error.
+    let defaultValue (value:'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | _ -> value
+
+    /// Extracts the Ok value or applies the compensation function over the Error.
+    let defaultWith (compensation: 'Error->'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | Error e -> compensation e
+
+    /// Converts a Result<'T,'Error> to a Choice<'T,'Error>.
     let toChoice (source: Result<'T,'U>) = match source with Ok x-> Choice1Of2 x | Error x -> Choice2Of2 x
 
-    /// Creates a Result<'T,'U> from a Choice<'T,'U>.
+    /// Creates a Result<'T,'Error> from a Choice<'T,'Error>.
     let ofChoice (source: Choice<'T,'U>) = match source with Choice1Of2 x-> Ok x | Choice2Of2 x -> Error x
     
     /// <summary>
@@ -104,17 +127,47 @@ module Result =
 /// Additional operations on Choice
 [<RequireQualifiedAccess>]
 module Choice =
+    
+    /// Creates a Choice1Of2 with the supplied value.
     let result x = Choice1Of2 x
-    let throw  x = Choice2Of2 x
-    let apply f x = match f, x with Choice1Of2 a, Choice1Of2 b              -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e        -> Choice2Of2 e : Choice<'b,'e>
-    let map   f                        = function Choice1Of2 v              -> Choice1Of2 (f v) | Choice2Of2 e                             -> Choice2Of2 e
-    let flatten                        = function Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v     | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
-    let bind (f: 't -> _)              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> Choice2Of2 e : Choice<'v,'e>
+
+    /// Creates a Choice2Of2 with the supplied value.
+    let throw x = Choice2Of2 x
+
+    /// Applies the wrapped value to the wrapped function when both are Choice1Of2 and returns a wrapped result or the first Choice2Of2.
+    /// This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
+    /// <param name="f">The function wrapped in a Choice1Of2 or a Choice2Of2.</param>
+    /// <param name="x">The value wrapped in a Choice1Of2 or a Choice2Of2.</param>
+    /// <returns>A Choice1Of2 of the function applied to the value, or the first <c>Choice2Of2</c> if either the function or the value is <c>Choice2Of2</c>.</returns>
+    let apply f (x: Choice<'T,'Error>) : Choice<'U,'Error> = match f, x with Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (a b) | Choice2Of2 e, _ | _, Choice2Of2 e -> Choice2Of2 e
+
+    /// <summary>Maps the value on the Choice1Of2 if any.</summary>
+    /// <param name="mapping">A function to apply to the Choice1Of2 value.</param>
+    /// <param name="value">The source input value.</param>
+    /// <returns>A Choice1Of2 of the input value after applying the mapping function, or the original Choice2Of2 value if the input is Choice2Of2.</returns>
+    let map (mapping: 'T->'U) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 (mapping v) | Choice2Of2 e -> Choice2Of2 e
+
+    /// <summary>Flattens two nested Choice<'T1,'T2>.</summary>
+    /// <param name="source">The nested Choice.</param>
+    /// <returns>A single Choice1Of2 of the value when it was nested with Choice1Of2s, or the Choice2Of2.</returns>
+    /// <remarks><c>flatten</c> is equivalent to <c>bind id</c>.</remarks>
+    let flatten source : Choice<'T1,'T2> = match source with Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
+
+    /// <summary>If the input value is a Choice2Of2 leaves it unchanged, otherwise maps the value on the Choice1Of2 and flattens the resulting nested Choice<'T1,'T2>.</summary>
+    /// <param name="binder">A function that takes the value of type T and transforms it into a result containing (potentially) a value of type U.</param>
+    /// <param name="source">The source input value.</param>
+    /// <returns>A result of the output type of the binder.</returns>
+    let bind (binder: 'T->Choice<'U,'T2>) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> binder v | Choice2Of2 e -> Choice2Of2 e
     
     [<System.Obsolete("This function will not be supported in future versions.")>]
-    let inline catch (f: 't -> _)      = function Choice1Of2 v              -> Choice1Of2 v     | Choice2Of2 e                             -> f e          : Choice<'v,'e>
+    let inline catch (f: 't -> _) = function Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> f e : Choice<'v,'e>
     
-    let inline either f g              = function Choice1Of2 v              -> f v              | Choice2Of2 e                             -> g e
+    /// <summary> Extracts a value from either side of a Choice<'T1,'T2>.</summary>
+    /// <param name="fChoice1Of2">Function to be applied to source, if it contains a Choice1Of2 value.</param>
+    /// <param name="fChoice2Of2">Function to be applied to source, if it contains a Choice2Of2 value.</param>
+    /// <param name="source">The source value, containing a Choice1Of2 or a Choice2Of2.</param>
+    /// <returns>The result of applying either functions.</returns>
+    let inline either fChoice1Of2 fChoice2Of2 source = match source with Choice1Of2 v -> fChoice1Of2 v | Choice2Of2 e -> fChoice2Of2 e
 
     /// Creates a safe version of the supplied function, which returns a Choice<'U,exn> instead of throwing exceptions.
     let protect (f: 'T->'U) x =

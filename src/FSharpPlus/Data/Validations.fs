@@ -7,8 +7,8 @@ open System.ComponentModel
 
 // Validation is based on https://github.com/qfpl/validation
 
-/// A 'Validation' is either a value of the type 'err or 't, similar to 'Result'. However,
-/// the 'Applicative' instance for 'Validation' /accumulates/ errors using a 'Semigroup' on 'err.
+/// A 'Validation' is either a value of the type 'error or 't, similar to 'Result'. However,
+/// the 'Applicative' instance for 'Validation' accumulates errors using a 'Semigroup' on 'error.
 /// In contrast, the Applicative for 'Result' returns only the first error.
 ///
 /// A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
@@ -16,9 +16,10 @@ open System.ComponentModel
 ///
 /// An example of typical usage can be found <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples/Validations.fsx">here</a>.
 ///
-type Validation<'err, 'a> =
-  | Failure of 'err
-  | Success of 'a
+
+type Validation<'error, 't> =
+  | Failure of 'error
+  | Success of 't
 
 module Validation =
 
@@ -27,7 +28,11 @@ module Validation =
         | Failure e -> Failure e
         | Success a -> Success (f a) 
 
-    let inline apply f x : Validation<'Error,'U> = 
+    /// Applies the wrapped value to the wrapped function when both are Success and returns a wrapped result or the Failure(s).
+    /// <param name="f">The function wrapped in a Success or a Failure.</param>
+    /// <param name="x">The value wrapped in a Success or a Failure.</param>
+    /// <returns>A Success of the function applied to the value when both are Success, or the Failure(s) if more than one, combined with the Semigroup (++) operation of the Error type.</returns>
+    let inline apply f x : Validation<'Error,'U> =
         match f, (x: Validation<'Error,'T>) with
         | Failure e1, Failure e2 -> Failure (plus e1 e2)
         | Failure e1, Success _  -> Failure e1
@@ -99,18 +104,33 @@ module Validation =
     /// when the 'Choice2Of2' of the 'Choice' needs to be lifted into a 'Semigroup'.
     let liftChoice (f: 'b -> 'Semigroup) : (Choice<'b,'T>->Validation<'Semigroup,'T>) = Choice.either (Failure << f) Success
 
-    let appValidation (m: 'err -> 'err -> 'err) (e1': Validation<'err,'a>) (e2': Validation<'err,'a>) =
+    /// Takes two Validations and returns the first Success.
+    /// If both are Failures it returns both Failures combined with the supplied function.
+    let appValidation (combine: 'err -> 'err -> 'err) (e1': Validation<'err,'a>) (e2': Validation<'err,'a>) =
         match e1', e2' with
-        | Failure e1 , Failure e2 -> Failure (m e1 e2)
+        | Failure e1 , Failure e2 -> Failure (combine e1 e2)
         | Failure _  , Success a2 -> Success a2
         | Success a1 , Failure _  -> Success a1
         | Success a1 , Success _  -> Success a1
 
+    /// Converts a Validation<'Error,'T> to a Result<'T,'Error>.
     let toResult x : Result<'T,'Error>  = match x with Success a -> Ok a | Failure e -> Error e
+
+    /// Creates a Validation<'Error,'T> from a Result<'T,'Error>.
     let ofResult (x: Result<'T,'Error>) = match x with Ok a -> Success a | Error e -> Failure e
+
+    /// Converts a Validation<'Error,'T> to a Choice<'T,'Error>.
     let toChoice x : Choice<'T,'Error>  = match x with Success a -> Choice1Of2 a | Failure e -> Choice2Of2 e
+
+    /// Creates a Validation<'Error,'T> from a Choice<'T,'Error>.
     let ofChoice (x: Choice<'T,'Error>) = match x with Choice1Of2 a -> Success a | Choice2Of2 e -> Failure e
-    let either (f: 'T->'U) (g:'Error->'U) = function Success v -> f v    | Failure e     -> g e
+
+    /// <summary> Extracts a value from either side of a Validation<'Error,'T>.</summary>
+    /// <param name="fSuccess">Function to be applied to source, if it contains a Success value.</param>
+    /// <param name="fFailure">Function to be applied to source, if it contains a Failure value.</param>
+    /// <param name="source">The source value, containing a Success or a Failure.</param>
+    /// <returns>The result of applying either functions.</returns>
+    let either (fSuccess: 'T->'U) (fFailure: 'Error->'U) source = match source with Success v -> fSuccess v | Failure e -> fFailure e
 
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
