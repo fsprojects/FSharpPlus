@@ -1,4 +1,23 @@
-<Project>
+<Project ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <Authors>gusty</Authors>
+    <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus/</PackageProjectUrl>
+    <PackageTags>tracing;fsharp</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/fsprojects/FSharpPlus.git</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.txt</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RepoRootDir>$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory)"))</RepoRootDir>
+    <NupkgsDir>$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory)/bin/nupkg"))</NupkgsDir>
+    <MonoOrEmpty Condition=" '$(OS)' != 'Windows_NT' ">mono </MonoOrEmpty>
+
+    <!-- disable sourcelink on mono, to workaround https://github.com/dotnet/sourcelink/issues/155 -->
+    <EnableSourceLink Condition=" '$(OS)' != 'Windows_NT' AND '$(MSBuildRuntimeType)' != 'Core' ">false</EnableSourceLink>
+    <EnableSourceControlManagerQueries>$(EnableSourceLink)</EnableSourceControlManagerQueries>
+  </PropertyGroup>
 
   <!-- mono -->
   <PropertyGroup Condition="'$(OS)' == 'Unix'">
