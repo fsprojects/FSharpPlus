@@ -77,9 +77,15 @@ module Result =
     /// <remarks><c>flatten</c> is equivalent to <c>bind id</c>.</remarks>
     let flatten x : Result<'T,'Error> = match x with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
     
-    [<System.Obsolete("Use Result.defaultWith instead.")>]
+    [<System.Obsolete("Use Result.bindError instead.")>]
     let inline catch f = function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
-    
+
+    /// <summary>If the input value is an Ok leaves it unchanged, otherwise maps the Error value and flattens the resulting nested Result.</summary>
+    /// <param name="binder">A function that takes the error and transforms it into a result.</param>
+    /// <param name="source">The source input value.</param>
+    /// <returns>A result of the output type of the binder.</returns>
+    let inline bindError (binder: 'Error->Result<'T,'Error2>) (source: Result<'T,'Error>) = match source with Ok v -> Ok v | Error e -> binder e
+
     /// <summary> Extracts a value from either side of a Result.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
@@ -154,14 +160,20 @@ module Choice =
     let flatten source : Choice<'T1,'T2> = match source with Choice1Of2 (Choice1Of2 v) -> Choice1Of2 v | Choice1Of2 (Choice2Of2 e) | Choice2Of2 e -> Choice2Of2 e
 
     /// <summary>If the input value is a Choice2Of2 leaves it unchanged, otherwise maps the value on the Choice1Of2 and flattens the resulting nested Choice.</summary>
-    /// <param name="binder">A function that takes the value of type T and transforms it into a result containing (potentially) a value of type U.</param>
+    /// <param name="binder">A function that takes the value of type T and transforms it into a Choice containing (potentially) a value of type U.</param>
     /// <param name="source">The source input value.</param>
     /// <returns>A result of the output type of the binder.</returns>
     let bind (binder: 'T->Choice<'U,'T2>) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> binder v | Choice2Of2 e -> Choice2Of2 e
     
-    [<System.Obsolete("This function will not be supported in future versions.")>]
+    [<System.Obsolete("Use Choice.bindChoice2Of2")>]
     let inline catch (f: 't -> _) = function Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> f e : Choice<'v,'e>
     
+    /// <summary>If the input value is a Choice1Of2 leaves it unchanged, otherwise maps the value on the Choice2Of2 and flattens the resulting nested Choice.</summary>
+    /// <param name="binder">A function that takes the value of type T and transforms it into a Choice containing (potentially) a value of type U.</param>
+    /// <param name="source">The source input value.</param>
+    /// <returns>A result of the output type of the binder.</returns>
+    let bindChoice2Of2 (binder: 'T2->Choice<'T,'U2>) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> binder e
+
     /// <summary> Extracts a value from either side of a Choice.</summary>
     /// <param name="fChoice1Of2">Function to be applied to source, if it contains a Choice1Of2 value.</param>
     /// <param name="fChoice2Of2">Function to be applied to source, if it contains a Choice2Of2 value.</param>
