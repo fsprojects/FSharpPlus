@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Free - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Free</h1>
+<p>
+  <span>Namespace: FSharpPlus.Data</span><br />
+        <span>
+          Attributes:<br />
+[&lt;RequireQualifiedAccess&gt;]<br />
+          
+      </span>
+</p>
+<div class="xmldoc">
+<p>Basic operations on Free Monads</p>
+
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '492', 492)" onmouseover="showTip(event, '492', 492)">
+            apply(f x)
+          </code>
+          <div class="tip" id="492">
+            <strong>Signature:</strong> f:Free&lt;^Functor&lt;&#39;T-&gt;&#39;U&gt;,(&#39;T -&gt; &#39;U)&gt; -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T->'U>, ^Functor<Free<'Functor<'T->'U>,'T->'U>>, 'T, 'U, ^Functor<Free<'Functor<'U>,'U>>, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<'T>, ^Functor<'U>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L46-46" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '493', 493)" onmouseover="showTip(event, '493', 493)">
+            bind(f x)
+          </code>
+          <div class="tip" id="493">
+            <strong>Signature:</strong> f:(&#39;T -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Functor<'U>, ^Functor<Free<'Functor<'U>,'U>>, 'U, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L39-39" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '494', 494)" onmouseover="showTip(event, '494', 494)">
+            fold(f x)
+          </code>
+          <div class="tip" id="494">
+            <strong>Signature:</strong> f:(^Functor&lt;&#39;T&gt; -&gt; ^Monad&lt;&#39;T&gt;) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; ^Monad&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, 'T, ^Monad<'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L54-54" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Folds the Free structure into a Monad</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '495', 495)" onmouseover="showTip(event, '495', 495)">
+            iterM(f x)
+          </code>
+          <div class="tip" id="495">
+            <strong>Signature:</strong> f:(^Functor&lt;&#39;Monad&lt;&#39;T&gt;&gt; -&gt; ^Monad&lt;&#39;T&gt;) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; ^Monad&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'Monad<'T>>, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<'T>, 'T, ^Monad<'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L62-62" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Tear down a Free monad using iteration.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '496', 496)" onmouseover="showTip(event, '496', 496)">
+            liftF(x)
+          </code>
+          <div class="tip" id="496">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<Free<'Functor<'T>,'T>>, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L70-70" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Lift any Functor into a Free structure</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '497', 497)" onmouseover="showTip(event, '497', 497)">
+            map(f x)
+          </code>
+          <div class="tip" id="497">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, ^Functor<'T>, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<Free<'Functor<'U>,'U>>, ^Functor<'U>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '498', 498)" onmouseover="showTip(event, '498', 498)">
+            run(f)
+          </code>
+          <div class="tip" id="498">
+            <strong>Signature:</strong> f:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Choice&lt;&#39;T,^Functor&lt;Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<Free<'Functor<'T>,'T>>, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L24-24" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

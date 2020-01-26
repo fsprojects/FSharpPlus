@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Compose<'f<'g<'t>>> - FSharpPlus</title>
+    <title>Compose<'functorF<'functorG<'t>>> - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,9 +35,15 @@
 
 
 
-<h1>Compose<'f<'g<'t>>></h1>
+<h1>Compose<'functorF<'functorG<'t>>></h1>
 <p>
-  <span>Namespace: FSharpPlus.Data</span><br />
+
+    <span>Namespace: FSharpPlus.Data</span><br />
+            <span>
+            Attributes: <br />
+[&lt;Struct&gt;]<br />
+            
+        </span>
 </p>
 <div class="xmldoc">
 <p>Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.</p>
@@ -52,15 +58,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1530', 1530)" onmouseover="showTip(event, '1530', 1530)">
-            Compose(&#39;f&lt;&#39;g&lt;&#39;t&gt;&gt;)
+          <code onmouseout="hideTip(event, '2084', 2084)" onmouseover="showTip(event, '2084', 2084)">
+            Compose(&#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;)
           </code>
-          <div class="tip" id="1530">
-            <strong>Signature:</strong> &#39;f&lt;&#39;g&lt;&#39;t&gt;&gt;<br />
-                      </div>
+          <div class="tip" id="2084">
+            <strong>Signature:</strong> &#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L93-93" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L100-100" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -78,15 +84,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1531', 1531)" onmouseover="showTip(event, '1531', 1531)">
+          <code onmouseout="hideTip(event, '2085', 2085)" onmouseover="showTip(event, '2085', 2085)">
             ( &lt;*&gt; )(arg1, arg2)
           </code>
-          <div class="tip" id="1531">
-            <strong>Signature:</strong> (Compose&lt;^F&lt;&#39;G&lt;&#39;T-&gt;&#39;U&gt;&gt;&gt; * Compose&lt;^F&lt;&#39;G&lt;&#39;T&gt;&gt;&gt;) -&gt; Compose&lt;^F&lt;&#39;G&lt;&#39;U&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?8369, ^?8370, ^?8371, ^?8372, ^F<'G<'T>>, ^F<'G<'U>>          </div>
+          <div class="tip" id="2085">
+            <strong>Signature:</strong> (Compose&lt;^ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T-&gt;&#39;U&gt;&gt; * Compose&lt;^ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt;) -&gt; Compose&lt;^ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^ApplicativeF<'ApplicativeG<'T>->'ApplicativeG<'U>, ^ApplicativeF<'ApplicativeG<'T>, ^ApplicativeF<'ApplicativeG<'U>, ^ApplicativeG<'T->'U>, ^ApplicativeG<'T>, ^ApplicativeG<'U>                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L100-100" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L109-109" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -97,15 +103,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1532', 1532)" onmouseover="showTip(event, '1532', 1532)">
+          <code onmouseout="hideTip(event, '2086', 2086)" onmouseover="showTip(event, '2086', 2086)">
             ( &lt;|&gt; )(arg1, arg2)
           </code>
-          <div class="tip" id="1532">
-            <strong>Signature:</strong> (Compose&lt;^F&lt;&#39;G&lt;&#39;T&gt;&gt; * Compose&lt;^F&lt;&#39;G&lt;&#39;T&gt;&gt;) -&gt; Compose&lt;^F&lt;&#39;G&lt;&#39;T&gt;&gt;<br />
-                      </div>
+          <div class="tip" id="2086">
+            <strong>Signature:</strong> (Compose&lt;^AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;^AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt;) -&gt; Compose&lt;^AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt;<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L104-104" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L114-114" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -116,15 +122,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1533', 1533)" onmouseover="showTip(event, '1533', 1533)">
+          <code onmouseout="hideTip(event, '2087', 2087)" onmouseover="showTip(event, '2087', 2087)">
             get_Empty()
           </code>
-          <div class="tip" id="1533">
-            <strong>Signature:</strong> unit -&gt; Compose&lt;^F&lt;&#39;G&lt;&#39;T&gt;&gt;<br />
-                      </div>
+          <div class="tip" id="2087">
+            <strong>Signature:</strong> unit -&gt; Compose&lt;^AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt;<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L103-103" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L113-113" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -134,15 +140,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1534', 1534)" onmouseover="showTip(event, '1534', 1534)">
+          <code onmouseout="hideTip(event, '2088', 2088)" onmouseover="showTip(event, '2088', 2088)">
             Map(arg1, f)
           </code>
-          <div class="tip" id="1534">
-            <strong>Signature:</strong> (Compose&lt;^?8355&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Compose&lt;^?8356&gt;<br />
-                          <strong>Type parameters:</strong> ^?8356, ^?8357, ^?8358, 'T, 'U          </div>
+          <div class="tip" id="2088">
+            <strong>Signature:</strong> (Compose&lt;^FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Compose&lt;^FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^FunctorF<'FunctorG<'U>>, ^FunctorG<'T>, ^FunctorG<'U>, 'T, 'U                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L96-96" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L103-103" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -152,15 +158,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1535', 1535)" onmouseover="showTip(event, '1535', 1535)">
+          <code onmouseout="hideTip(event, '2089', 2089)" onmouseover="showTip(event, '2089', 2089)">
             Return(x)
           </code>
-          <div class="tip" id="1535">
-            <strong>Signature:</strong> x:&#39;T -&gt; Compose&lt;^F&lt;&#39;G&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^F<'G<'T>, ^?8365          </div>
+          <div class="tip" id="2089">
+            <strong>Signature:</strong> x:&#39;T -&gt; Compose&lt;^ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^ApplicativeF<'ApplicativeG<'T>, ^ApplicativeG<'T>                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Monoids.fs#L99-99" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L107-107" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -187,6 +193,7 @@
 
 		  <li class="nav-header">Documentation</li>
 		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
 		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
 		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
 		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>

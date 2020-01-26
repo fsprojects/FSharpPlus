@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Validation<'err, 'a> - FSharpPlus</title>
+    <title>Validation<'error, 't> - FSharpPlus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Gusty"/>
@@ -35,17 +35,17 @@
 
 
 
-<h1>Validation<'err, 'a></h1>
+<h1>Validation<'error, 't></h1>
 <p>
-  <span>Namespace: FSharpPlus.Data</span><br />
-</p>
+
+    <span>Namespace: FSharpPlus.Data</span><br />
+    </p>
 <div class="xmldoc">
-<p>A 'Validation' is either a value of the type 'err or 'a, similar to 'Result'. However,
-the 'Applicative' instance for 'Validation' /accumulates/ errors using a 'Semigroup' on 'err.
+<p>A 'Validation' is either a value of the type 'error or 't, similar to 'Result'. However,
+the 'Applicative' instance for 'Validation' accumulates errors using a 'Semigroup' on 'error.
 In contrast, the Applicative for 'Result' returns only the first error.</p>
 <p>A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
 that would violate monad rules.</p>
-<p>An example of typical usage can be found <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples/Validations.fsx">here</a>.</p>
 
 </div>
   <h3>Union Cases</h3>
@@ -57,15 +57,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1761', 1761)" onmouseover="showTip(event, '1761', 1761)">
-            Failure(&#39;err)
+          <code onmouseout="hideTip(event, '2369', 2369)" onmouseover="showTip(event, '2369', 2369)">
+            Failure(&#39;error)
           </code>
-          <div class="tip" id="1761">
-            <strong>Signature:</strong> &#39;err<br />
-                      </div>
+          <div class="tip" id="2369">
+            <strong>Signature:</strong> &#39;error<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L20-20" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L19-19" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -75,15 +75,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1762', 1762)" onmouseover="showTip(event, '1762', 1762)">
-            Success(&#39;a)
+          <code onmouseout="hideTip(event, '2370', 2370)" onmouseover="showTip(event, '2370', 2370)">
+            Success(&#39;t)
           </code>
-          <div class="tip" id="1762">
-            <strong>Signature:</strong> &#39;a<br />
-                      </div>
+          <div class="tip" id="2370">
+            <strong>Signature:</strong> &#39;t<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L21-21" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L20-20" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -101,15 +101,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1763', 1763)" onmouseover="showTip(event, '1763', 1763)">
+          <code onmouseout="hideTip(event, '2371', 2371)" onmouseover="showTip(event, '2371', 2371)">
             ( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="1763">
-            <strong>Signature:</strong> (f:Validation&lt;^?7805,(&#39;T -&gt; &#39;U)&gt; * x:Validation&lt;^?7805,&#39;T&gt;) -&gt; Validation&lt;^?7805,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
+          <div class="tip" id="2371">
+            <strong>Signature:</strong> (f:Validation&lt;^?8499,(&#39;T -&gt; &#39;U)&gt; * x:Validation&lt;^?8499,&#39;T&gt;) -&gt; Validation&lt;^?8499,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L136-136" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L165-165" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -120,15 +120,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1764', 1764)" onmouseover="showTip(event, '1764', 1764)">
+          <code onmouseout="hideTip(event, '2372', 2372)" onmouseover="showTip(event, '2372', 2372)">
             ( &lt;|&gt; )(x, y)
           </code>
-          <div class="tip" id="1764">
-            <strong>Signature:</strong> (x:Validation&lt;^?7816,&#39;?7817&gt; * y:Validation&lt;^?7816,&#39;?7817&gt;) -&gt; Validation&lt;^?7816,&#39;?7817&gt;<br />
-                      </div>
+          <div class="tip" id="2372">
+            <strong>Signature:</strong> (x:Validation&lt;^?8510,&#39;?8511&gt; * y:Validation&lt;^?8510,&#39;?8511&gt;) -&gt; Validation&lt;^?8510,&#39;?8511&gt;<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L140-140" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L169-169" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -139,15 +139,85 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1765', 1765)" onmouseover="showTip(event, '1765', 1765)">
+          <code onmouseout="hideTip(event, '2373', 2373)" onmouseover="showTip(event, '2373', 2373)">
+            Bifold(t, f, g, z)
+          </code>
+          <div class="tip" id="2373">
+            <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;b -&gt; &#39;err -&gt; &#39;b) * g:(&#39;b -&gt; &#39;a -&gt; &#39;b) * z:&#39;b) -&gt; &#39;b<br />
+                          <strong>Type parameters:</strong> 'b                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L196-196" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '2374', 2374)" onmouseover="showTip(event, '2374', 2374)">
+            BifoldBack(t, f, g, z)
+          </code>
+          <div class="tip" id="2374">
+            <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;err -&gt; &#39;b -&gt; &#39;b) * g:(&#39;a -&gt; &#39;b -&gt; &#39;b) * z:&#39;b) -&gt; &#39;b<br />
+                          <strong>Type parameters:</strong> 'b                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L193-193" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '2375', 2375)" onmouseover="showTip(event, '2375', 2375)">
+            BifoldMap(t, f, g)
+          </code>
+          <div class="tip" id="2375">
+            <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;err -&gt; &#39;b) * g:(&#39;a -&gt; &#39;b)) -&gt; &#39;b<br />
+                          <strong>Type parameters:</strong> 'b                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L187-187" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '2376', 2376)" onmouseover="showTip(event, '2376', 2376)">
             Bimap(x, f, g)
           </code>
-          <div class="tip" id="1765">
+          <div class="tip" id="2376">
             <strong>Signature:</strong> (x:Validation&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U) * g:(&#39;V -&gt; &#39;W)) -&gt; Validation&lt;&#39;U,&#39;W&gt;<br />
-                          <strong>Type parameters:</strong> 'U, 'W          </div>
+                          <strong>Type parameters:</strong> 'U, 'W                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L148-148" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L177-177" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -157,15 +227,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1766', 1766)" onmouseover="showTip(event, '1766', 1766)">
+          <code onmouseout="hideTip(event, '2377', 2377)" onmouseover="showTip(event, '2377', 2377)">
             get_Empty()
           </code>
-          <div class="tip" id="1766">
-            <strong>Signature:</strong> unit -&gt; Validation&lt;^?7811,&#39;?7812&gt;<br />
-                      </div>
+          <div class="tip" id="2377">
+            <strong>Signature:</strong> unit -&gt; Validation&lt;^?8505,&#39;?8506&gt;<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L139-139" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L168-168" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -175,15 +245,19 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1767', 1767)" onmouseover="showTip(event, '1767', 1767)">
+          <code onmouseout="hideTip(event, '2378', 2378)" onmouseover="showTip(event, '2378', 2378)">
             Map(x, f)
           </code>
-          <div class="tip" id="1767">
-            <strong>Signature:</strong> (x:Validation&lt;&#39;?7821,&#39;?7822&gt; * f:(&#39;?7822 -&gt; &#39;?7823)) -&gt; Validation&lt;&#39;?7821,&#39;?7823&gt;<br />
-                          <strong>Type parameters:</strong> '?7823          </div>
+          <div class="tip" id="2378">
+            <strong>Signature:</strong> (x:Validation&lt;&#39;?8515,&#39;?8516&gt; * f:(&#39;?8516 -&gt; &#39;?8517)) -&gt; Validation&lt;&#39;?8515,&#39;?8517&gt;<br />
+                          <strong>Type parameters:</strong> '?8517                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L144-144" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L173-173" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -193,15 +267,15 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1768', 1768)" onmouseover="showTip(event, '1768', 1768)">
+          <code onmouseout="hideTip(event, '2379', 2379)" onmouseover="showTip(event, '2379', 2379)">
             Return(x)
           </code>
-          <div class="tip" id="1768">
-            <strong>Signature:</strong> x:&#39;?7800 -&gt; Validation&lt;&#39;?7801,&#39;?7800&gt;<br />
-                      </div>
+          <div class="tip" id="2379">
+            <strong>Signature:</strong> x:&#39;?8494 -&gt; Validation&lt;&#39;?8495,&#39;?8494&gt;<br />
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L135-135" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L164-164" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -211,15 +285,19 @@ that would violate monad rules.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1769', 1769)" onmouseover="showTip(event, '1769', 1769)">
+          <code onmouseout="hideTip(event, '2380', 2380)" onmouseover="showTip(event, '2380', 2380)">
             Traverse(t, f)
           </code>
-          <div class="tip" id="1769">
+          <div class="tip" id="2380">
             <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;a -&gt; ^b)) -&gt; ^c<br />
-                          <strong>Type parameters:</strong> '?7836, '?7837, '?7838          </div>
+                          <strong>Type parameters:</strong> ^b, ^c, '?8532                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Validations.fs#L152-152" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L182-182" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -246,6 +324,7 @@ that would violate monad rules.</p>
 
 		  <li class="nav-header">Documentation</li>
 		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
 		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
 		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
 		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Validation - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Validation</h1>
+<p>
+  <span>Namespace: FSharpPlus.Data</span><br />
+  </p>
+<div class="xmldoc">
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '579', 579)" onmouseover="showTip(event, '579', 579)">
+            _Failure x
+          </code>
+          <div class="tip" id="579">
+            <strong>Signature:</strong> x:(&#39;?10867 -&gt; ^?10868) -&gt; Validation&lt;&#39;?10867,&#39;?10869&gt; -&gt; ^?10871<br />
+                          <strong>Type parameters:</strong> '?10867, ^?10868, '?10869, '?10870, ^?10871                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L156-156" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '580', 580)" onmouseover="showTip(event, '580', 580)">
+            _Success x
+          </code>
+          <div class="tip" id="580">
+            <strong>Signature:</strong> x:(&#39;?10861 -&gt; ^?10862) -&gt; Validation&lt;&#39;?10864,&#39;?10861&gt; -&gt; ^?10865<br />
+                          <strong>Type parameters:</strong> '?10861, ^?10862, '?10863, '?10864, ^?10865                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L155-155" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '581', 581)" onmouseover="showTip(event, '581', 581)">
+            apply f x
+          </code>
+          <div class="tip" id="581">
+            <strong>Signature:</strong> f:Validation&lt;^Error,(&#39;T -&gt; &#39;U)&gt; -&gt; x:Validation&lt;^Error,&#39;T&gt; -&gt; Validation&lt;^Error,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^Error, 'T, 'U                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L33-33" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Applies the wrapped value to the wrapped function when both are Success and returns a wrapped result or the Failure(s).
+<param name="f">The function wrapped in a Success or a Failure.</param>
+<param name="x">The value wrapped in a Success or a Failure.</param>
+<returns>A Success of the function applied to the value when both are Success, or the Failure(s) if more than one, combined with the Semigroup (++) operation of the Error type.</returns></p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '582', 582)" onmouseover="showTip(event, '582', 582)">
+            appValidation combine e1&#39; e2&#39;
+          </code>
+          <div class="tip" id="582">
+            <strong>Signature:</strong> combine:(&#39;err -&gt; &#39;err -&gt; &#39;err) -&gt; e1&#39;:Validation&lt;&#39;err,&#39;a&gt; -&gt; e2&#39;:Validation&lt;&#39;err,&#39;a&gt; -&gt; Validation&lt;&#39;err,&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'err, 'a                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L107-107" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Takes two Validations and returns the first Success.
+If both are Failures it returns both Failures combined with the supplied function.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '583', 583)" onmouseover="showTip(event, '583', 583)">
+            bifoldBack f g source state
+          </code>
+          <div class="tip" id="583">
+            <strong>Signature:</strong> f:(&#39;Error -&gt; &#39;State -&gt; &#39;State) -&gt; g:(&#39;T -&gt; &#39;State -&gt; &#39;State) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; state:&#39;State -&gt; &#39;State<br />
+                          <strong>Type parameters:</strong> 'Error, 'State, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L56-56" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '584', 584)" onmouseover="showTip(event, '584', 584)">
+            biFoldBack f g state x
+          </code>
+          <div class="tip" id="584">
+            <strong>Signature:</strong> f:(&#39;?10793 -&gt; &#39;?10794 -&gt; &#39;?10795) -&gt; g:(&#39;?10796 -&gt; &#39;?10794 -&gt; &#39;?10795) -&gt; state:Validation&lt;&#39;?10793,&#39;?10796&gt; -&gt; x:&#39;?10794 -&gt; &#39;?10795<br />
+                          <strong>Type parameters:</strong> '?10793, '?10794, '?10795, '?10796                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;Obsolete(&quot;Use Validation.bifoldBack instead.&quot;)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+              <div class="alert alert-warning">
+              <strong>WARNING: </strong> This API is obsolete
+              <p>Use Validation.bifoldBack instead.</p>
+              </div> 
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L62-62" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '585', 585)" onmouseover="showTip(event, '585', 585)">
+            bimap f g _arg1
+          </code>
+          <div class="tip" id="585">
+            <strong>Signature:</strong> f:(&#39;T1 -&gt; &#39;U1) -&gt; g:(&#39;T2 -&gt; &#39;U2) -&gt; _arg1:Validation&lt;&#39;T1,&#39;T2&gt; -&gt; Validation&lt;&#39;U1,&#39;U2&gt;<br />
+                          <strong>Type parameters:</strong> 'T1, 'U1, 'T2, 'U2                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L52-52" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '586', 586)" onmouseover="showTip(event, '586', 586)">
+            bind f x
+          </code>
+          <div class="tip" id="586">
+            <strong>Signature:</strong> f:(&#39;T -&gt; Validation&lt;&#39;Error,&#39;U&gt;) -&gt; x:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'Error, 'U                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L80-80" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Binds through a Validation, which is useful for
+composing Validations sequentially. Note that despite having a bind
+function of the correct type, Validation is not a monad.
+The reason is, this bind does not accumulate errors, so it does not
+agree with the Applicative instance.</p>
+<p>There is nothing wrong with using this function, it just does not make a
+valid Monad instance.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '587', 587)" onmouseover="showTip(event, '587', 587)">
+            bitraverse f g source
+          </code>
+          <div class="tip" id="587">
+            <strong>Signature:</strong> f:(&#39;T1 -&gt; ^Functor&lt;&#39;U1&gt;) -&gt; g:(&#39;T2 -&gt; ^Functor&lt;&#39;U2&gt;) -&gt; source:Validation&lt;&#39;T1,&#39;T2&gt; -&gt; ^Functor&lt;Validation&lt;&#39;U1,&#39;U2&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T1, ^Functor<'U1>, ^Functor<Validation<'U1,'U2>>, ^Functor<'U2>, 'U2, 'U1, 'T2                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L67-67" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '588', 588)" onmouseover="showTip(event, '588', 588)">
+            defaultValue value source
+          </code>
+          <div class="tip" id="588">
+            <strong>Signature:</strong> value:&#39;T -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; &#39;T<br />
+                          <strong>Type parameters:</strong> 'T, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L89-89" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Extracts the Success value or use the supplied default value when it's a Failure.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '589', 589)" onmouseover="showTip(event, '589', 589)">
+            defaultWith compensation source
+          </code>
+          <div class="tip" id="589">
+            <strong>Signature:</strong> compensation:(&#39;Error -&gt; &#39;T) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; &#39;T<br />
+                          <strong>Type parameters:</strong> 'Error, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L92-92" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Extracts the Success value or applies the compensation function over the Failure.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '590', 590)" onmouseover="showTip(event, '590', 590)">
+            either fSuccess fFailure source
+          </code>
+          <div class="tip" id="590">
+            <strong>Signature:</strong> fSuccess:(&#39;T -&gt; &#39;U) -&gt; fFailure:(&#39;Error -&gt; &#39;U) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; &#39;U<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L131-131" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Extracts a value from either side of a Validation.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '591', 591)" onmouseover="showTip(event, '591', 591)">
+            ensure e p _arg1
+          </code>
+          <div class="tip" id="591">
+            <strong>Signature:</strong> e:&#39;e -&gt; p:(&#39;a -&gt; bool) -&gt; _arg1:Validation&lt;&#39;e,&#39;a&gt; -&gt; Validation&lt;&#39;e,&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'e, 'a                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;Obsolete(&quot;This function will not be supported in future versions.&quot;)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+              <div class="alert alert-warning">
+              <strong>WARNING: </strong> This API is obsolete
+              <p>This function will not be supported in future versions.</p>
+              </div> 
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L144-144" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '592', 592)" onmouseover="showTip(event, '592', 592)">
+            foldBack folder source state
+          </code>
+          <div class="tip" id="592">
+            <strong>Signature:</strong> folder:(&#39;T -&gt; &#39;State -&gt; &#39;State) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; state:&#39;State -&gt; &#39;State<br />
+                          <strong>Type parameters:</strong> 'T, 'State, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L40-40" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '593', 593)" onmouseover="showTip(event, '593', 593)">
+            isoValidationResult x
+          </code>
+          <div class="tip" id="593">
+            <strong>Signature:</strong> x:^?10873 -&gt; ^?10874<br />
+                          <strong>Type parameters:</strong> ^?10873, ^?10874, '?10875, '?10876, ^?10877, '?10878, '?10879, '?10880                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L158-158" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '594', 594)" onmouseover="showTip(event, '594', 594)">
+            liftChoice f
+          </code>
+          <div class="tip" id="594">
+            <strong>Signature:</strong> f:(&#39;b -&gt; &#39;Semigroup) -&gt; Choice&lt;&#39;b,&#39;T&gt; -&gt; Validation&lt;&#39;Semigroup,&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'b, 'Semigroup, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L103-103" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Converting a 'Choice' to a 'Validation'
+when the 'Choice2Of2' of the 'Choice' needs to be lifted into a 'Semigroup'.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '595', 595)" onmouseover="showTip(event, '595', 595)">
+            liftResult f _arg1
+          </code>
+          <div class="tip" id="595">
+            <strong>Signature:</strong> f:(&#39;Error -&gt; &#39;Semigroup) -&gt; _arg1:Result&lt;&#39;T,&#39;Error&gt; -&gt; Validation&lt;&#39;Semigroup,&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'Error, 'Semigroup, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L99-99" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Converts a 'Result' to a 'Validation'
+when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '596', 596)" onmouseover="showTip(event, '596', 596)">
+            map f source
+          </code>
+          <div class="tip" id="596">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L24-24" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '597', 597)" onmouseover="showTip(event, '597', 597)">
+            ofChoice x
+          </code>
+          <div class="tip" id="597">
+            <strong>Signature:</strong> x:Choice&lt;&#39;T,&#39;Error&gt; -&gt; Validation&lt;&#39;Error,&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L124-124" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a Validation<'Error,'T> from a Choice<'T,'Error>.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '598', 598)" onmouseover="showTip(event, '598', 598)">
+            ofResult x
+          </code>
+          <div class="tip" id="598">
+            <strong>Signature:</strong> x:Result&lt;&#39;T,&#39;Error&gt; -&gt; Validation&lt;&#39;Error,&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L118-118" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a Validation<'Error,'T> from a Result<'T,'Error>.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '599', 599)" onmouseover="showTip(event, '599', 599)">
+            orElse v a
+          </code>
+          <div class="tip" id="599">
+            <strong>Signature:</strong> v:Validation&lt;&#39;?10810,&#39;a&gt; -&gt; a:&#39;a -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> '?10810, 'a                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;Obsolete(&quot;Use Validation.defaultValue instead.&quot;)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+              <div class="alert alert-warning">
+              <strong>WARNING: </strong> This API is obsolete
+              <p>Use Validation.defaultValue instead.</p>
+              </div> 
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L86-86" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '600', 600)" onmouseover="showTip(event, '600', 600)">
+            protect f x
+          </code>
+          <div class="tip" id="600">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;T -&gt; Validation&lt;exn,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L149-149" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a safe version of the supplied function, which returns a Validation<exn,'U> instead of throwing exceptions.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '601', 601)" onmouseover="showTip(event, '601', 601)">
+            toChoice x
+          </code>
+          <div class="tip" id="601">
+            <strong>Signature:</strong> x:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Choice&lt;&#39;T,&#39;Error&gt;<br />
+                          <strong>Type parameters:</strong> 'Error, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L121-121" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Converts a Validation<'Error,'T> to a Choice<'T,'Error>.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '602', 602)" onmouseover="showTip(event, '602', 602)">
+            toResult x
+          </code>
+          <div class="tip" id="602">
+            <strong>Signature:</strong> x:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Result&lt;&#39;T,&#39;Error&gt;<br />
+                          <strong>Type parameters:</strong> 'Error, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L115-115" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Converts a Validation<'Error,'T> to a Result<'T,'Error>.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '603', 603)" onmouseover="showTip(event, '603', 603)">
+            traverse f source
+          </code>
+          <div class="tip" id="603">
+            <strong>Signature:</strong> f:(&#39;T -&gt; ^Functor&lt;&#39;U&gt;) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; ^Functor&lt;Validation&lt;&#39;Error,&#39;U&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Functor<'U>, ^Functor<Validation<'Error,'U>>, 'U, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L46-46" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '604', 604)" onmouseover="showTip(event, '604', 604)">
+            validate e p a
+          </code>
+          <div class="tip" id="604">
+            <strong>Signature:</strong> e:&#39;e -&gt; p:(&#39;a -&gt; bool) -&gt; a:&#39;a -&gt; Validation&lt;&#39;e,&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'e, 'a                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;Obsolete(&quot;This function will not be supported in future versions.&quot;)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+              <div class="alert alert-warning">
+              <strong>WARNING: </strong> This API is obsolete
+              <p>This function will not be supported in future versions.</p>
+              </div> 
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L134-134" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '605', 605)" onmouseover="showTip(event, '605', 605)">
+            validationNel x
+          </code>
+          <div class="tip" id="605">
+            <strong>Signature:</strong> x:Result&lt;&#39;a,&#39;e&gt; -&gt; Validation&lt;NonEmptyList&lt;&#39;e&gt;,&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a, 'e                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L140-140" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>validationNel : Result<'a,'e> -&gt; Validation (NonEmptyList<'e>) a
+This is 'liftError' specialized to 'NonEmptyList', since
+they are a common semigroup to use.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '606', 606)" onmouseover="showTip(event, '606', 606)">
+            valueOr ea v
+          </code>
+          <div class="tip" id="606">
+            <strong>Signature:</strong> ea:(&#39;e -&gt; &#39;a) -&gt; v:Validation&lt;&#39;e,&#39;a&gt; -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> 'e, 'a                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;Obsolete(&quot;Use Validation.defaultWith instead.&quot;)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+              <div class="alert alert-warning">
+              <strong>WARNING: </strong> This API is obsolete
+              <p>Use Validation.defaultWith instead.</p>
+              </div> 
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L95-95" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

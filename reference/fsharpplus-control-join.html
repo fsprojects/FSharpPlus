@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Join - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Join</h1>
+<p>
+
+    <span>Namespace: FSharpPlus.Control</span><br />
+    </p>
+<div class="xmldoc">
+</div>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1286', 1286)" onmouseover="showTip(event, '1286', 1286)">
+            Invoke(source)
+          </code>
+          <div class="tip" id="1286">
+            <strong>Signature:</strong> source:^Monad&lt;Monad&lt;&#39;T&gt;&gt; -&gt; ^Monad&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<Monad<'T>>, ^Monad<'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L96-96" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1287', 1287)" onmouseover="showTip(event, '1287', 1287)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1287">
+            <strong>Signature:</strong> (x:ResizeArray&lt;ResizeArray&lt;&#39;T&gt;&gt; * _output:ResizeArray&lt;&#39;T&gt; * _mthd:Join) -&gt; ResizeArray&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L94-94" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1288', 1288)" onmouseover="showTip(event, '1288', 1288)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1288">
+            <strong>Signature:</strong> (x:Dictionary&lt;&#39;Key,Dictionary&lt;&#39;Key,&#39;Value&gt;&gt; * _output:Dictionary&lt;&#39;Key,&#39;Value&gt; * _mthd:Join) -&gt; Dictionary&lt;&#39;Key,&#39;Value&gt;<br />
+                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L86-86" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1289', 1289)" onmouseover="showTip(event, '1289', 1289)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1289">
+            <strong>Signature:</strong> (x:Map&lt;&#39;Key,Map&lt;&#39;Key,&#39;Value&gt;&gt; * _output:Map&lt;&#39;Key,&#39;Value&gt; * _mthd:Join) -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />
+                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L79-79" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1290', 1290)" onmouseover="showTip(event, '1290', 1290)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1290">
+            <strong>Signature:</strong> (x:Choice&lt;Choice&lt;&#39;T,&#39;E&gt;,&#39;E&gt; * _output:Choice&lt;&#39;T,&#39;E&gt; * _mthd:Join) -&gt; Choice&lt;&#39;T,&#39;E&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'E                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L77-77" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1291', 1291)" onmouseover="showTip(event, '1291', 1291)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1291">
+            <strong>Signature:</strong> (x:Result&lt;Result&lt;&#39;T,&#39;E&gt;,&#39;E&gt; * _output:Result&lt;&#39;T,&#39;E&gt; * _mthd:Join) -&gt; Result&lt;&#39;T,&#39;E&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'E                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L76-76" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1292', 1292)" onmouseover="showTip(event, '1292', 1292)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1292">
+            <strong>Signature:</strong> (x:Async&lt;Async&lt;&#39;T&gt;&gt; * _output:Async&lt;&#39;T&gt; * _mthd:Join) -&gt; Async&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L75-75" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1293', 1293)" onmouseover="showTip(event, '1293', 1293)">
+            Join(m1, arg2, _output, _mthd)
+          </code>
+          <div class="tip" id="1293">
+            <strong>Signature:</strong> (m1:^Monoid * (^Monoid * &#39;T) * _output:(^Monoid * &#39;T) * _mthd:Join) -&gt; ^Monoid * &#39;T<br />
+                          <strong>Type parameters:</strong> ^Monoid, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L74-74" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1294', 1294)" onmouseover="showTip(event, '1294', 1294)">
+            Join(g, _output, _mthd)
+          </code>
+          <div class="tip" id="1294">
+            <strong>Signature:</strong> (g:(&#39;R -&gt; &#39;R -&gt; &#39;T) * _output:(&#39;R -&gt; &#39;T) * _mthd:Join) -&gt; &#39;R -&gt; &#39;T<br />
+                          <strong>Type parameters:</strong> 'R, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L73-73" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1295', 1295)" onmouseover="showTip(event, '1295', 1295)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1295">
+            <strong>Signature:</strong> (x:&#39;T [] [] * _output:&#39;T [] * _mthd:Join) -&gt; &#39;T []<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L72-72" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1296', 1296)" onmouseover="showTip(event, '1296', 1296)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1296">
+            <strong>Signature:</strong> (x:&#39;T list list * _output:&#39;T list * _mthd:Join) -&gt; &#39;T list<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L71-71" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1297', 1297)" onmouseover="showTip(event, '1297', 1297)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1297">
+            <strong>Signature:</strong> (x:&#39;T option option * _output:&#39;T option * _mthd:Join) -&gt; &#39;T option<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L70-70" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1298', 1298)" onmouseover="showTip(event, '1298', 1298)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1298">
+            <strong>Signature:</strong> (x:Task&lt;Task&lt;&#39;T&gt;&gt; * _output:Task&lt;&#39;T&gt; * _mthd:Join) -&gt; Task&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L68-68" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1299', 1299)" onmouseover="showTip(event, '1299', 1299)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1299">
+            <strong>Signature:</strong> (x:Id&lt;Id&lt;&#39;T&gt;&gt; * _output:Id&lt;&#39;T&gt; * _mthd:Join) -&gt; Id&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L66-66" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1300', 1300)" onmouseover="showTip(event, '1300', 1300)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1300">
+            <strong>Signature:</strong> (x:seq&lt;seq&lt;&#39;T&gt;&gt; * _output:seq&lt;&#39;T&gt; * _mthd:Join) -&gt; seq&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L65-65" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1301', 1301)" onmouseover="showTip(event, '1301', 1301)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1301">
+            <strong>Signature:</strong> (x:Lazy&lt;Lazy&lt;&#39;T&gt;&gt; * _output:Lazy&lt;&#39;T&gt; * _mthd:Join) -&gt; Lazy&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L64-64" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1302', 1302)" onmouseover="showTip(event, '1302', 1302)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1302">
+            <strong>Signature:</strong> (x:^Monad&lt;&#39;Monad&lt;&#39;T&gt;&gt; * _output:^Monad&lt;&#39;T&gt; * _mthd:Default1) -&gt; ^Monad&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'Monad<'T>>, ^Monad<'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L63-63" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1303', 1303)" onmouseover="showTip(event, '1303', 1303)">
+            Join(x, _output, _mthd)
+          </code>
+          <div class="tip" id="1303">
+            <strong>Signature:</strong> (x:^Monad&lt;&#39;Monad&lt;&#39;T&gt;&gt; * _output:^Monad&lt;&#39;T&gt; * _mthd:Default2) -&gt; ^Monad&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'Monad<'T>>, ^Monad<'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Functor.fs#L62-62" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

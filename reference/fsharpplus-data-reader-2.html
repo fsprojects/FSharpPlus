@@ -37,7 +37,13 @@
 
 <h1>Reader<'r, 't></h1>
 <p>
-  <span>Namespace: FSharpPlus.Data</span><br />
+
+    <span>Namespace: FSharpPlus.Data</span><br />
+            <span>
+            Attributes: <br />
+[&lt;Struct&gt;]<br />
+            
+        </span>
 </p>
 <div class="xmldoc">
 <p>Computation type: Computations which read values from a shared environment.
@@ -54,15 +60,15 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1695', 1695)" onmouseover="showTip(event, '1695', 1695)">
+          <code onmouseout="hideTip(event, '2272', 2272)" onmouseover="showTip(event, '2272', 2272)">
             Reader(&#39;r -&gt; &#39;t)
           </code>
-          <div class="tip" id="1695">
+          <div class="tip" id="2272">
             <strong>Signature:</strong> &#39;r -&gt; &#39;t<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L10-10" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L10-10" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -80,15 +86,15 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1696', 1696)" onmouseover="showTip(event, '1696', 1696)">
+          <code onmouseout="hideTip(event, '2273', 2273)" onmouseover="showTip(event, '2273', 2273)">
             ( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="1696">
+          <div class="tip" id="2273">
             <strong>Signature:</strong> (f:Reader&lt;&#39;R,(&#39;T -&gt; &#39;U)&gt; * x:Reader&lt;&#39;R,&#39;T&gt;) -&gt; Reader&lt;&#39;R,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
+                          <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L35-35" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L35-35" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -99,15 +105,15 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1697', 1697)" onmouseover="showTip(event, '1697', 1697)">
+          <code onmouseout="hideTip(event, '2274', 2274)" onmouseover="showTip(event, '2274', 2274)">
             ( =&gt;&gt; )(arg1, f)
           </code>
-          <div class="tip" id="1697">
+          <div class="tip" id="2274">
             <strong>Signature:</strong> (Reader&lt;^Monoid,&#39;T&gt; * f:(Reader&lt;^Monoid,&#39;T&gt; -&gt; &#39;U)) -&gt; Reader&lt;^Monoid,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
+                          <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L43-43" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L43-43" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -118,15 +124,15 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1698', 1698)" onmouseover="showTip(event, '1698', 1698)">
+          <code onmouseout="hideTip(event, '2275', 2275)" onmouseover="showTip(event, '2275', 2275)">
             ( &gt;&gt;= )(x, f)
           </code>
-          <div class="tip" id="1698">
+          <div class="tip" id="2275">
             <strong>Signature:</strong> (x:Reader&lt;&#39;R,&#39;T&gt; * f:(&#39;T -&gt; Reader&lt;&#39;R,&#39;U&gt;)) -&gt; Reader&lt;&#39;R,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
+                          <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L34-34" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L34-34" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -137,15 +143,15 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1699', 1699)" onmouseover="showTip(event, '1699', 1699)">
+          <code onmouseout="hideTip(event, '2276', 2276)" onmouseover="showTip(event, '2276', 2276)">
             Extract(arg1)
           </code>
-          <div class="tip" id="1699">
+          <div class="tip" id="2276">
             <strong>Signature:</strong> Reader&lt;^Monoid,&#39;T&gt; -&gt; &#39;T<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L42-42" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -155,15 +161,15 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1700', 1700)" onmouseover="showTip(event, '1700', 1700)">
+          <code onmouseout="hideTip(event, '2277', 2277)" onmouseover="showTip(event, '2277', 2277)">
             get_Ask()
           </code>
-          <div class="tip" id="1700">
+          <div class="tip" id="2277">
             <strong>Signature:</strong> unit -&gt; Reader&lt;&#39;R,&#39;R&gt;<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L37-37" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L37-37" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -173,15 +179,19 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1701', 1701)" onmouseover="showTip(event, '1701', 1701)">
+          <code onmouseout="hideTip(event, '2278', 2278)" onmouseover="showTip(event, '2278', 2278)">
             Local(m, f)
           </code>
-          <div class="tip" id="1701">
+          <div class="tip" id="2278">
             <strong>Signature:</strong> (m:Reader&lt;&#39;R2,&#39;T&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; Reader&lt;&#39;R1,&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'R1          </div>
+                          <strong>Type parameters:</strong> 'R1                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L40-40" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L40-40" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -191,15 +201,19 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1702', 1702)" onmouseover="showTip(event, '1702', 1702)">
+          <code onmouseout="hideTip(event, '2279', 2279)" onmouseover="showTip(event, '2279', 2279)">
             Map(x, f)
           </code>
-          <div class="tip" id="1702">
+          <div class="tip" id="2279">
             <strong>Signature:</strong> (x:Reader&lt;&#39;R,&#39;T&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Reader&lt;&#39;R,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U          </div>
+                          <strong>Type parameters:</strong> 'U                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L31-31" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L31-31" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -209,15 +223,15 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '1703', 1703)" onmouseover="showTip(event, '1703', 1703)">
+          <code onmouseout="hideTip(event, '2280', 2280)" onmouseover="showTip(event, '2280', 2280)">
             Return(x)
           </code>
-          <div class="tip" id="1703">
+          <div class="tip" id="2280">
             <strong>Signature:</strong> x:&#39;T -&gt; Reader&lt;&#39;R,&#39;T&gt;<br />
-                      </div>
+                                  </div>
         </td>
         <td class="xmldoc">
-            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Reader.fs#L33-33" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L33-33" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -244,6 +258,7 @@ Useful for: Maintaining variable bindings, or other shared environment.</p>
 
 		  <li class="nav-header">Documentation</li>
 		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
 		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
 		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
 		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>

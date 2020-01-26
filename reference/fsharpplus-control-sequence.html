@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Sequence - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Sequence</h1>
+<p>
+
+    <span>Namespace: FSharpPlus.Control</span><br />
+    </p>
+<div class="xmldoc">
+</div>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1682', 1682)" onmouseover="showTip(event, '1682', 1682)">
+            ForInfiniteSequences(t, isFailure)
+          </code>
+          <div class="tip" id="1682">
+            <strong>Signature:</strong> (t:seq&lt;^?15634&gt; * isFailure:(^?15634 -&gt; bool)) -&gt; ^?15639<br />
+                          <strong>Type parameters:</strong> ^?15634, ^?15635, '?15636, ^?15637, '?15638, ^?15639, '?15640                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L19-19" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1683', 1683)" onmouseover="showTip(event, '1683', 1683)">
+            Invoke(t)
+          </code>
+          <div class="tip" id="1683">
+            <strong>Signature:</strong> t:^Traversable&lt;&#39;Applicative&lt;&#39;T&gt;&gt; -&gt; ^Applicative&lt;&#39;Traversable&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Traversable<'Applicative<'T>>, ^Applicative<'Traversable<'T>>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L125-125" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1684', 1684)" onmouseover="showTip(event, '1684', 1684)">
+            InvokeOnInstance(t)
+          </code>
+          <div class="tip" id="1684">
+            <strong>Signature:</strong> t:^a -&gt; &#39;R<br />
+                          <strong>Type parameters:</strong> ^a, 'R                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L15-15" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1685', 1685)" onmouseover="showTip(event, '1685', 1685)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1685">
+            <strong>Signature:</strong> (t:ResizeArray&lt;^?15770&gt; * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15770, ^?15771, '?15772, ^R, '?15781, ^?15782, '?15783                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L122-122" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1686', 1686)" onmouseover="showTip(event, '1686', 1686)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1686">
+            <strong>Signature:</strong> (t:Id&lt;^?15761&gt; * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15761, ^R, '?15768                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L119-119" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1687', 1687)" onmouseover="showTip(event, '1687', 1687)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1687">
+            <strong>Signature:</strong> (t:^?15755 [] * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15755, ^?15756, '?15757, ^R, '?15759                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L116-116" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1688', 1688)" onmouseover="showTip(event, '1688', 1688)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1688">
+            <strong>Signature:</strong> (t:^?15749 list * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15749, ^?15750, '?15751, ^R, '?15753                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L115-115" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1689', 1689)" onmouseover="showTip(event, '1689', 1689)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1689">
+            <strong>Signature:</strong> (t:^?15744 option * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15744, ^R, '?15746, '?15747                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L114-114" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1690', 1690)" onmouseover="showTip(event, '1690', 1690)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1690">
+            <strong>Signature:</strong> (t:^a * _output:&#39;R * _impl:Default1) -&gt; &#39;R<br />
+                          <strong>Type parameters:</strong> ^a, 'R                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L111-111" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1691', 1691)" onmouseover="showTip(event, '1691', 1691)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1691">
+            <strong>Signature:</strong> (t:^a * _output:&#39;R * _impl:Default2) -&gt; &#39;R<br />
+                          <strong>Type parameters:</strong> ^a, '?15738, 'R                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L110-110" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1692', 1692)" onmouseover="showTip(event, '1692', 1692)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1692">
+            <strong>Signature:</strong> (t:seq&lt;Async&lt;&#39;t&gt;&gt; * _output:Async&lt;seq&lt;&#39;t&gt;&gt; * _impl:Default3) -&gt; Async&lt;seq&lt;&#39;t&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L108-108" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1693', 1693)" onmouseover="showTip(event, '1693', 1693)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1693">
+            <strong>Signature:</strong> (t:seq&lt;&#39;t []&gt; * _output:seq&lt;&#39;t&gt; [] * _impl:Default3) -&gt; seq&lt;&#39;t&gt; []<br />
+                          <strong>Type parameters:</strong> 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L105-105" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1694', 1694)" onmouseover="showTip(event, '1694', 1694)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1694">
+            <strong>Signature:</strong> (t:seq&lt;&#39;t list&gt; * _output:seq&lt;&#39;t&gt; list * _impl:Default3) -&gt; seq&lt;&#39;t&gt; list<br />
+                          <strong>Type parameters:</strong> 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L104-104" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1695', 1695)" onmouseover="showTip(event, '1695', 1695)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1695">
+            <strong>Signature:</strong> (t:seq&lt;Choice&lt;&#39;t,&#39;e&gt;&gt; * _output:Choice&lt;seq&lt;&#39;t&gt;,&#39;e&gt; * _impl:Default3) -&gt; Choice&lt;seq&lt;&#39;t&gt;,&#39;e&gt;<br />
+                          <strong>Type parameters:</strong> 't, 'e                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L103-103" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1696', 1696)" onmouseover="showTip(event, '1696', 1696)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1696">
+            <strong>Signature:</strong> (t:seq&lt;Result&lt;&#39;t,&#39;e&gt;&gt; * _output:Result&lt;seq&lt;&#39;t&gt;,&#39;e&gt; * _impl:Default3) -&gt; Result&lt;seq&lt;&#39;t&gt;,&#39;e&gt;<br />
+                          <strong>Type parameters:</strong> 't, 'e                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L102-102" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1697', 1697)" onmouseover="showTip(event, '1697', 1697)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1697">
+            <strong>Signature:</strong> (t:seq&lt;&#39;t option&gt; * _output:seq&lt;&#39;t&gt; option * _impl:Default3) -&gt; seq&lt;&#39;t&gt; option<br />
+                          <strong>Type parameters:</strong> 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L101-101" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1698', 1698)" onmouseover="showTip(event, '1698', 1698)">
+            Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1698">
+            <strong>Signature:</strong> (t:seq&lt;^?15717&gt; * _output:^R * _impl:Default4) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15717, ^?15718, 'a, ^R, '?15721                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L96-96" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
