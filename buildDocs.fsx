@@ -14,6 +14,8 @@
 
 #load "docsrc/tools/doclib.fsx"
 
+#load "docsrc/tools/templates/plantuml.fsx"
+
 open Doclib
 
 
@@ -205,6 +207,20 @@ Target.create "Docs" (fun _ ->
                 ProjectParameters  = ("root", root)::info
                 Template = docTemplate } )
 )
+
+// --------------------------------------------------------------------------------------
+// Post process here:
+
+// Inject PlantUml
+    
+open Plantuml
+let plantUmlDiag = templates @@ "abstractions.plantuml"
+let abstractions = output    @@ "abstractions.html"
+let plantUMLDiag = toUrl (System.IO.File.ReadAllText plantUmlDiag)
+let abstractionsText = System.IO.File.ReadAllText abstractions
+System.IO.File.WriteAllText (abstractions, abstractionsText.Replace ("{plantUMLDiag}", plantUMLDiag))
+
+
 
 // --------------------------------------------------------------------------------------
 // Release Scripts
