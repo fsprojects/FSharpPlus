@@ -38,7 +38,7 @@ module Operators =
     /// Executes a side-effect function and returns the original input value.
     let tap (f: 'T -> unit) x = f x; x
 
-    /// <summary> Extracts a value from either side of a Result<'T,'Error>.</summary>
+    /// <summary> Extracts a value from either side of a Result.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
     /// <param name="source">The source value, containing an Ok or an Error.</param>

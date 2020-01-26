@@ -123,7 +123,7 @@ module Validation =
     /// Creates a Validation<'Error,'T> from a Choice<'T,'Error>.
     let ofChoice (x: Choice<'T,'Error>) = match x with Choice1Of2 a -> Success a | Choice2Of2 e -> Failure e
 
-    /// <summary> Extracts a value from either side of a Validation<'Error,'T>.</summary>
+    /// <summary> Extracts a value from either side of a Validation.</summary>
     /// <param name="fSuccess">Function to be applied to source, if it contains a Success value.</param>
     /// <param name="fFailure">Function to be applied to source, if it contains a Failure value.</param>
     /// <param name="source">The source value, containing a Success or a Failure.</param>
