@@ -3,9 +3,6 @@ dotnet: 3.0.101
 
 sudo: false  # use the new container-based Travis infrastructure 
 
-before_install:
-  - chmod +x build.sh
- 
 script: 
   - dotnet build -c Release
   - dotnet test -c Release
