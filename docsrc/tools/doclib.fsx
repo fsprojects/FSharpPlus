@@ -34,13 +34,13 @@ module String =
     let inline trim (x : string) = if String.IsNullOrEmpty x then x else x.Trim()
 
     /// Trims the given string
-    let inline trimChars chars (x : string) = if String.IsNullOrEmpty x then x else x.Trim chars
+    let inline trimChars (chars : char []) (x : string) = if String.IsNullOrEmpty x then x else x.Trim chars
 
     /// Trims the start of the given string
-    let inline trimStartChars chars (x : string) = if String.IsNullOrEmpty x then x else x.TrimStart chars
+    let inline trimStartChars (chars : char []) (x : string) = if String.IsNullOrEmpty x then x else x.TrimStart chars
 
     /// Trims the end of the given string
-    let inline trimEndChars chars (x : string) = if String.IsNullOrEmpty x then x else x.TrimEnd chars
+    let inline trimEndChars (chars : char []) (x : string) = if String.IsNullOrEmpty x then x else x.TrimEnd chars
 
     /// Removes all trailing .0 from a version string
     let rec NormalizeVersion(version : string) =
@@ -271,7 +271,7 @@ module SemVer =
         open System.Numerics
 
         /// Matches if str is convertible to Int and not less than zero, and returns the value as UInt.
-        let inline private (|Int|_|) str =
+        let inline private (|Int|_|) (str : string) =
             match Int32.TryParse (str, NumberStyles.Integer, null) with
             | true, num when num > -1 -> Some num
             | _ -> None
