@@ -135,6 +135,7 @@ Target.create "ReferenceDocs" (fun _ ->
    
         let conventionBased = 
             DirectoryInfo.getSubDirectories <| System.IO.DirectoryInfo bin
+            |> Array.filter (fun x -> not ( x.FullName.EndsWith("FSharpPlus.Samples")))
             |> Array.collect (fun d ->
                 let (name, d) =
                     let net45Bin = DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath (d.FullName @@ "bin" @@ "Release")) |> Array.filter (fun x -> x.FullName.ToLower().Contains("net45"))
@@ -172,8 +173,8 @@ Target.create "Docs" (fun _ ->
     Shell.rename "docsrc/content/release-notes.md" "docsrc/content/RELEASE_NOTES.md"
 
     System.IO.File.Delete "docsrc/content/license.md"
-    Shell.copyFile "docsrc/content/" "LICENSE"
-    Shell.rename "docsrc/content/license.md" "docsrc/content/LICENSE"
+    Shell.copyFile "docsrc/content/" "LICENSE.txt"
+    Shell.rename "docsrc/content/license.md" "docsrc/content/LICENSE.txt"
 
     
     DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath templates)
