@@ -82,7 +82,7 @@ Directory.ensure tempDocsDir
 System.IO.File.WriteAllText(tempDocsDir @@ "docs.proj", """
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net47</TargetFramework>
     <RestorePackagesPath>packages</RestorePackagesPath>
   </PropertyGroup>
 <ItemGroup>
