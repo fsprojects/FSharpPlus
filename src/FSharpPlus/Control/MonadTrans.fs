@@ -40,8 +40,8 @@ type Throw =
     static member        Throw (_: Choice<'T,'E>, x: 'E) = Choice2Of2 x: Choice<'T,'E>
 
 type Catch =
-    static member        Catch (x: Result<'a,'e1>, k: 'e1->Result<'a,'e2>) = Result.catch k x
-    static member        Catch (x: Choice<'a,'e1>, k: 'e1->Choice<'a,'e2>) = Choice.catch k x
+    static member        Catch (x: Result<'a,'e1>, k: 'e1->Result<'a,'e2>) = Result.bindError k x
+    static member        Catch (x: Choice<'a,'e1>, k: 'e1->Choice<'a,'e2>) = Choice.bindChoice2Of2 k x
 
     static member inline Invoke (x: '``MonadError<'E1,'T>``) (f: 'E1->'``MonadError<'E2,'T>``) : '``MonadError<'E2,'T>`` =
         let inline call_3 (_: ^a, b: ^b, _: ^c, f: ^f) = ((^a or ^b or ^c) : (static member Catch : _*_ -> _) b, f)
