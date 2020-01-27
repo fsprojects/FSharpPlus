@@ -14,10 +14,7 @@ module internal Prelude =
     let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
     let inline retype (x: 'T) : 'U = (# "" x: 'U #)
-
-module Helpers =
-    let alwaysFalse<'t> = false
-
+    let inline opaqueId x = Unchecked.defaultof<_>; x
 
 
 [<RequireQualifiedAccess>]

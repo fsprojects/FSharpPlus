@@ -2,6 +2,7 @@
 
 open FSharpPlus
 open System.ComponentModel
+open FSharpPlus.Internals.Prelude
 
 #if !FABLE_COMPILER
 /// Additional operations on List
@@ -44,7 +45,7 @@ module ListT =
     #if !FABLE_COMPILER
     /// Embed a Monad<'T> into a ListT<'Monad<list<'T>>>
     let inline lift (x: '``Monad<'T>``) : ListT<'``Monad<list<'T>>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM List.singleton |> ListT
+        if opaqueId false then x |> liftM List.singleton |> ListT
         else x |> map List.singleton |> ListT
 
     let inline internal sequence ms =

@@ -45,6 +45,7 @@ type State<'s,'t> with
 
 open FSharpPlus.Control
 open FSharpPlus
+open FSharpPlus.Internals.Prelude
 
 /// Monad Transformer for State<'S, 'T>
 [<Struct>]
@@ -59,7 +60,7 @@ module StateT =
 
     /// Embed a Monad<'T> into a StateT<'S,'``Monad<'T * 'S>``>
     let inline lift (m: '``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then StateT <| fun s -> (m |> liftM (fun a -> (a, s)))
+        if opaqueId false then StateT <| fun s -> (m |> liftM (fun a -> (a, s)))
         else StateT <| fun s -> (m |> map (fun a -> (a, s)))
 
     /// Transform a State<'S, 'T> to a StateT<'S, '``Monad<'T * 'S>``>

@@ -3,6 +3,7 @@
 open FSharpPlus.Control
 open FSharpPlus
 open System.ComponentModel
+open FSharpPlus.Internals.Prelude
 
 #if !FABLE_COMPILER
 /// Additional operations on Option
@@ -24,7 +25,7 @@ module OptionT =
 
     /// Embed a Monad<'T> into an OptionT<'Monad<option<'T>>>
     let inline lift (x: '``Monad<'T>``) : OptionT<'``Monad<option<'T>>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Some |> OptionT
+        if opaqueId false then x |> liftM Some |> OptionT
         else x |> map Some |> OptionT
 
     /// Transform an option<'T,'Error> to an OptionT<'Monad<option<'T,'Error>>>

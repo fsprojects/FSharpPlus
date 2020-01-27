@@ -7,6 +7,7 @@ open System.ComponentModel
 type Writer<'monoid,'t> = Writer of ('t * 'monoid)
 
 open FSharpPlus
+open FSharpPlus.Internals.Prelude
 
 /// Basic operations on Writer
 [<RequireQualifiedAccess>]
@@ -64,7 +65,7 @@ module WriterT =
     #if !FABLE_COMPILER
     /// Embed a Monad<'T> into a WriterT<'Monad<'T * 'Monoid>>
     let inline lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then m |> liftM (fun a -> (a, getZero ())) |> WriterT
+        if opaqueId false then m |> liftM (fun a -> (a, getZero ())) |> WriterT
         else m |> map (fun a -> (a, getZero ())) |> WriterT
     #endif
 

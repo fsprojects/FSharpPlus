@@ -4,6 +4,7 @@ open System
 open FSharpPlus.Control
 open FSharpPlus
 open System.ComponentModel
+open FSharpPlus.Internals.Prelude
 
 
 #if !FABLE_COMPILER
@@ -42,7 +43,7 @@ module ResultT =
 
     /// Embed a Monad<'T> into a ChoiceT<'Monad<Choice<'T,'Error>>>
     let inline lift (x: '``Monad<'T>``) : ResultT<'``Monad<Result<'T,'Error>>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Ok |> ResultT
+        if opaqueId false then x |> liftM Ok |> ResultT
         else x |> map Ok |> ResultT
 
     /// Transform a Result<'T,'Error> to a ResultT<'Monad<Result<'T,'Error>>>
@@ -112,7 +113,7 @@ module ChoiceT =
 
     /// Embed a Monad<'T> into a ChoiceT<'Monad<Choice<'T,'Error>>>
     let inline lift (x: '``Monad<'T>``) : ChoiceT<'``Monad<Choice<'T,'Error>>``> =
-        if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Choice1Of2 |> ChoiceT
+        if opaqueId false then x |> liftM Choice1Of2 |> ChoiceT
         else x |> map Choice1Of2 |> ChoiceT
 
     /// Transform a Choice<'T,'Error> to a ChoiceT<'Monad<Choice<'T,'Error>>>

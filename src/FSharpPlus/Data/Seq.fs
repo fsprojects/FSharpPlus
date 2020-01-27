@@ -2,6 +2,7 @@
 
 open FSharpPlus
 open System.ComponentModel
+open FSharpPlus.Internals.Prelude
 
 #if !FABLE_COMPILER
 /// Additional operations on Seq
@@ -29,7 +30,7 @@ module SeqT =
     #if !FABLE_COMPILER
     /// Embed a Monad<'T> into a SeqT<'Monad<seq<'T>>>
     let inline lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> =
-           if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then x |> liftM Seq.singleton |> SeqT
+           if opaqueId false then x |> liftM Seq.singleton |> SeqT
            else x |> map Seq.singleton |> SeqT
 
     let inline internal sequence ms =

@@ -505,7 +505,7 @@ module Operators =
     let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
 
     /// Gets a value which depends on the current state.
-    let inline gets (f: 'S->'T) : '``MonadState<'T * 'S>`` = get |> if FSharpPlus.Internals.Helpers.alwaysFalse<bool> then liftM f else Map.InvokeOnInstance f
+    let inline gets (f: 'S->'T) : '``MonadState<'T * 'S>`` = get |> if FSharpPlus.Internals.Prelude.opaqueId false then liftM f else Map.InvokeOnInstance f
 
     /// Replaces the state inside the monad.
     let inline put (x: 'S) : '``MonadState<unit * 'S>`` = Put.Invoke x

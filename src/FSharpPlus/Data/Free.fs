@@ -3,7 +3,7 @@ open System.ComponentModel
 
 open FSharpPlus
 open FSharpPlus.Control
-open FSharpPlus.Internals.Helpers
+open FSharpPlus.Internals.Prelude
 
 [<NoComparison>]
 type Free<'``functor<'t>``,'t> = Pure of 't | Roll of obj
@@ -11,7 +11,7 @@ type Free<'``functor<'t>``,'t> = Pure of 't | Roll of obj
 [<AutoOpen>]
 module FreePrimitives =
     let inline Roll (f: '``Functor<Free<'Functor<'T>,'T>>``) : Free<'``Functor<'T>``,'T> =
-        if alwaysFalse<bool> then
+        if opaqueId false then
             let (_: '``Functor<'T>``) = Map.Invoke (fun (_: Free<'``Functor<'T>``,'T>) -> Unchecked.defaultof<'T>) f
             ()
         Free<'``Functor<'T>``,'T>.Roll f
@@ -22,7 +22,7 @@ module FreePrimitives =
 module Free =
 
     let inline run (f: Free<'``Functor<'T>``,'T>) : Choice<_,'``Functor<Free<'Functor<'T>,'T>>``> =
-        if alwaysFalse<bool> then
+        if opaqueId false then
             let (_: ^``Functor<Free<'Functor<'T>,'T>>``) = Map.Invoke (fun (_: 'T) -> Unchecked.defaultof<Free<'``Functor<'T>``,'T>>) Unchecked.defaultof<'``Functor<'T>``>
             ()
         match f with
