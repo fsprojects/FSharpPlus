@@ -61,7 +61,15 @@
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
+    <Compile Include="Control/Monad.fs" />
     <Compile Include="Control/Functor.fs" />
+    <Compile Include="Control/Alternative.fs" />
+    <Compile Include="Control/Comonad.fs" />
+    <Compile Include="Control/Invokable.fs" />
+    <Compile Include="Control/Category.fs" />
+    <Compile Include="Control/Arrow.fs" />
+    <Compile Include="Control/ArrowChoice.fs" />
+    <Compile Include="Control/ArrowApply.fs" />
     <Compile Include="Control/Foldable.fs" />
     <Compile Include="Control/Bifoldable.fs" />
     <Compile Include="Control/Traversable.fs" />
