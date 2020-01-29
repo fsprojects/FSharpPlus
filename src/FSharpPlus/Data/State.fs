@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus.Data
 open System.ComponentModel
+open FSharpPlus
 
 /// <summary> Computation type: Computations which maintain state.
 /// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
@@ -30,6 +31,9 @@ module State =
     /// Modify the state inside the monad by applying a function.
     let modify f = State (fun s -> ((), f s))                                                                     : State<'S->'S,unit>
 
+    /// Zips two States into one.
+    let zip (x: State<'S,'T>) (y: State<'S,'U>) = liftA2 tuple2 x y : State<'S, ('T * 'U)>
+
 type State<'s,'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -43,8 +47,10 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                      : State<'S,unit>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Zip (x, y) = State.zip x y
+
 open FSharpPlus.Control
-open FSharpPlus
 open FSharpPlus.Internals.Prelude
 
 /// Monad Transformer for State<'S, 'T>
@@ -69,7 +75,12 @@ module StateT =
     #endif
 
     let inline map (f: 'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s'))) : StateT<'S,'``Monad<'U * 'S>``>
-    let inline apply (StateT f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a :StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z, u) -> (g z, u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
+
+    let inline apply (StateT f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a: StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z: 'T, u: 'S) -> ((g z: 'U), u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
+
+    /// Zips two StateTs into one.
+    let inline zip (x: StateT<'S,'``Monad<'T * 'S>``>) (y: StateT<'S,'``Monad<'U * 'S>``>) = apply (map tuple2 x) y : StateT<'S,'``Monad<('T * 'U) * 'S>``>
+
     let inline bind (f: 'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
 
 type StateT<'s,'``monad<'t * 's>``> with
@@ -85,6 +96,9 @@ type StateT<'s,'``monad<'t * 's>``> with
 
     static member inline get_Empty () = StateT (fun _ -> getEmpty ()) : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Zip (x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) = StateT.zip x y
 
     static member inline TryWith (source: StateT<'S,'``Monad<'T * 'S>``>, f: exn -> StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> TryWith.Invoke (StateT.run source s) (fun x -> StateT.run (f x) s))
     static member inline TryFinally (computation: StateT<'S,'``Monad<'T * 'S>``>, f) = StateT (fun s -> TryFinally.Invoke     (StateT.run computation s) f)

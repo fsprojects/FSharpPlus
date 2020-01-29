@@ -17,6 +17,9 @@ module Reader =
     let bind (f: 'T->_ ) (Reader m) = Reader (fun r -> run (f (m r)) r)    : Reader<'R,'U>
     let apply (Reader f) (Reader x) = Reader (fun a -> f a ((x: _->'T) a)) : Reader<'R,'U>
 
+    /// Zips two Readers into one.
+    let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = liftA2 tuple2 x y      : Reader<'R, 'T * 'U>
+
     /// Retrieves the monad environment.
     let ask = Reader id                                                    : Reader<'R,'R>
 
@@ -39,6 +42,9 @@ type Reader<'r,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Local (m, f: 'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Zip (x, y) = Reader.zip x y
+
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke ()) : 'T
     static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
 
@@ -56,6 +62,10 @@ module ReaderT =
     #endif
     let inline map   (f: 'T->'U) (ReaderT m: ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m)                                : ReaderT<'R, '``Monad<'U>``>
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x: _->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
+
+    /// Zips two ReaderTs into one.
+    let inline zip (x: ReaderT<'S,'``Monad<'T>``>) (y: ReaderT<'S,'``Monad<'U>``>) = apply (map tuple2 x) y : ReaderT<'S,'``Monad<'T * 'U>``>
+
     let inline bind  (f: 'T->_) (ReaderT (m: _->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))            : ReaderT<'R, '``Monad<'U>``>
 
     /// Embed a Monad<'T> into an ReaderT<'R, 'Monad<'T>>
@@ -73,6 +83,9 @@ type ReaderT<'r,'``monad<'t>``> with
     
     static member inline get_Empty () = ReaderT (fun _ -> getEmpty ()) : ReaderT<'R, '``MonadPlus<'T>``>
     static member inline (<|>) (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Zip (x: ReaderT<'S,'``Monad<'T>``>, y: ReaderT<'S,'``Monad<'U>``>) = ReaderT.zip x y
 
     static member inline TryWith (source: ReaderT<'R,'``Monad<'T>``>, f: exn -> ReaderT<'R,'``Monad<'T>``>) = ReaderT (fun s -> TryWith.Invoke (ReaderT.run source s) (fun x -> ReaderT.run (f x) s))
     static member inline TryFinally (computation: ReaderT<'R,'``Monad<'T>``>, f) = ReaderT (fun s -> TryFinally.Invoke     (ReaderT.run computation s) f)

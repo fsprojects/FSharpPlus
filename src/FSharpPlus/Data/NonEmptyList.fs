@@ -35,6 +35,13 @@ module NonEmptyList =
     let toList {Head = x; Tail = xs} = x::xs
     let toSeq  {Head = x; Tail = xs} = seq { yield x; yield! xs; }
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
+
+    /// <summary>Combines the two lists into a list of pairs. The two lists must have equal lengths.</summary>
+    /// <param name="list1">The first input list.</param>
+    /// <param name="list2">The second input list.</param>
+    /// <returns>A single list containing pairs of matching elements from the input lists.</returns>
+    let zip (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) = {Head = (list1.head, list2.head); Tail = List.zip list1.tail list2.tail}
+
     let cons e {Head = x; Tail = xs} = {Head = e  ; Tail = x::xs}
     let rec tails s =
         let {Tail = xs} = s
@@ -50,6 +57,9 @@ type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: NonEmptyList<'a>, f: 'a->'b) = NonEmptyList.map f x
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Zip (x, y) = NonEmptyList.zip x y
+
     static member (>>=) ({Head = x; Tail = xs}, f: _->NonEmptyList<'b>) =
         let {Head = y; Tail = ys} = f x
         let ys' = List.collect (NonEmptyList.toList << f) xs
