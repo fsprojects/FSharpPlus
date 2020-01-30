@@ -86,6 +86,9 @@ type Either<'t,'u> =
 type DmStruct = struct end
 
 
+[<Sealed>]
+type Set2<'T when 'T: comparison >() = class end
+
 // BitConverter
 
 #nowarn "9"
