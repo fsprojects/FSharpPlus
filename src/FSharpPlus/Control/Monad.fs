@@ -12,10 +12,6 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
-[<Sealed>]
-type Set2<'T when 'T: comparison >() = class end
-
-
 // Monad class ------------------------------------------------------------
 
 type Bind =

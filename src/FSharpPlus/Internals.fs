@@ -17,6 +17,9 @@ module internal Prelude =
     let inline opaqueId x = Unchecked.defaultof<_>; x
 
 
+[<Sealed>]
+type Set2<'T when 'T: comparison >() = class end
+
 [<RequireQualifiedAccess>]
 module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
 
