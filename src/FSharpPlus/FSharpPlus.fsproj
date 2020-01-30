@@ -65,6 +65,7 @@
     <Compile Include="Control/Applicative.fs" />
     <Compile Include="Control/Functor.fs" />
     <Compile Include="Control/Alternative.fs" />
+    <Compile Include="Control/MonadOps.fs" />
     <Compile Include="Control/Comonad.fs" />
     <Compile Include="Control/Invokable.fs" />
     <Compile Include="Control/Category.fs" />
