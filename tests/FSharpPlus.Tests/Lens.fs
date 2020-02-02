@@ -69,31 +69,38 @@ let iso () =
 
 [<Test>]
 let lens_map_item () =
-    let m = Map.ofList [("hello","there")]
-    areEqual (Some "there") (m ^. Map._item "hello")
-    areEqual (Map.ofList [("hello","world")]) (m |> setl (Map._item "hello") "world")
+    let m = Map.ofList [("Hello", 100); ("Hi", 200)]
+    areEqual (Some 100) (m ^. Map._item "Hello")
+    areEqual None (m ^. Map._item "Hey")
+    areEqual (Map.ofList [("Hello", 150); ("Hi", 200)]) (m |> Map._item "Hello" .-> Some 150)
+    areEqual (Map.ofList [("Hello", 150); ("Hi", 200)]) (m |> Map._item "Hello" %-> (function | None -> failwith "Unexpected None" | Some(x) -> Some(x+50)))
+    areEqual (Map.ofList [("Hi", 200)]) (m |> Map._item "Hello" .-> None)
+    areEqual (Map.ofList [("Hello", 100);("Hi", 200);("Hey", 300)]) (m |> Map._item "Hey" .-> Some 300)
+
+    areEqual (Map.ofList [("Hello", 100);("Hi", 200);("Hey", 50)]) (m |> (Map._item "Hey" << non 0) %-> (fun x -> x + 50))
+    areEqual (Map.ofList [("Hi", 200)]) (m |> (Map._item "Hello" << non 0) %-> (fun x -> x - 100))
 
 [<Test>]
 let lens_readonlydictionary_item () =
-    let r = Map.ofList [("hello","there")] :> IReadOnlyDictionary<_,_>
-    areEqual (Some "there") (r ^. IReadOnlyDictionary._item "hello")
-    areEqual (Map.ofList [("hello","world")] :> IReadOnlyDictionary<_,_>) (r |> setl (IReadOnlyDictionary._item "hello") "world")
+    let m = Map.ofList [("Hello", 100); ("Hi", 200)] :> IReadOnlyDictionary<_,_>
+    areEqual (Some 100) (m ^. IReadOnlyDictionary._item "Hello")
+    areEqual None (m ^. IReadOnlyDictionary._item "Hey")
+    areEqual (Map.ofList [("Hello", 150); ("Hi", 200)] :> IReadOnlyDictionary<_, _>)
+             (m |> IReadOnlyDictionary._item "Hello" .-> Some 150)
+    areEqual (Map.ofList [("Hello", 150); ("Hi", 200)] :> IReadOnlyDictionary<_, _>)
+             (m |> IReadOnlyDictionary._item "Hello" %-> (function | None -> failwith "Unexpected None" | Some(x) -> Some(x+50)))
+    areEqual (Map.ofList [("Hi", 200)] :> IReadOnlyDictionary<_, _>)
+             (m |> IReadOnlyDictionary._item "Hello" .-> None)
+    areEqual (Map.ofList [("Hello", 100);("Hi", 200);("Hey", 300)] :> IReadOnlyDictionary<_, _>)
+             (m |> IReadOnlyDictionary._item "Hey" .-> Some 300)
+
+    areEqual (Map.ofList [("Hello", 100);("Hi", 200);("Hey", 50)] :> IReadOnlyDictionary<_, _>)
+             (m |> (IReadOnlyDictionary._item "Hey" << non 0) %-> (fun x -> x + 50))
+    areEqual (Map.ofList [("Hi", 200)] :> IReadOnlyDictionary<_, _>)
+             (m |> (IReadOnlyDictionary._item "Hello" << non 0) %-> (fun x -> x - 100))
 
 [<Test>]
 let lens_set_contains () =
     let s = set [1;2]
     areEqual (true) (s ^. Set._contains 1)
     areEqual (set [1;2;3]) (s |> Set._contains 3 .-> true)
-
-[<Test>]
-let map_at () =
-  let m = Map.ofList [("Hello", 100); ("Hi", 200)]
-  areEqual (Some 100) (m ^. Map._at "Hello")
-  areEqual None (m ^. Map._at "Hey")
-  areEqual (Map.ofList [("Hello", 150); ("Hi", 200)]) (m |> Map._at "Hello" .-> Some 150)
-  areEqual (Map.ofList [("Hello", 150); ("Hi", 200)]) (m |> Map._at "Hello" %-> (function | None -> failwith "Unexpected None" | Some(x) -> Some(x+50)))
-  areEqual (Map.ofList [("Hi", 200)]) (m |> Map._at "Hello" .-> None)
-  areEqual (Map.ofList [("Hello", 100);("Hi", 200);("Hey", 300)]) (m |> Map._at "Hey" .-> Some 300)
-
-  areEqual (Map.ofList [("Hello", 100);("Hi", 200);("Hey", 50)]) (m |> (Map._at "Hey" << non 0) %-> (fun x -> x + 50))
-  areEqual (Map.ofList [("Hi", 200)]) (m |> (Map._at "Hello" << non 0) %-> (fun x -> x - 100))
