@@ -6,13 +6,14 @@ open System
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
     #if !FABLE_COMPILER
-    
+
     open System.Linq
     #endif
     open System.Collections.Generic
     /// Replaces or sets the item associated with a specified key with the specified value.
 
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
+    let remove key (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.filter (fun t -> t.Key <> key) |> Seq.map (|KeyValue|) |> Map :> IReadOnlyDictionary<_,_>
 
     /// Gets the value associated with the specified key. Returns None if a value associated with the key is not found.
     let tryGetValue k (dct: IReadOnlyDictionary<'Key, 'Value>) =
@@ -70,14 +71,14 @@ module IReadOnlyDictionary =
         d :> IReadOnlyDictionary<'Key,'Value>
 
     #if !FABLE_COMPILER
-    
+
     /// Returns the union of two dictionaries, preferring values from the first in case of duplicate keys.
-    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) = 
+    let union (source: IReadOnlyDictionary<'Key, 'T>) (altSource: IReadOnlyDictionary<'Key, 'T>) =
         Enumerable
           .Union(
-            source, 
+            source,
             altSource,
-            { new IEqualityComparer<KeyValuePair<'Key,'T>> with 
+            { new IEqualityComparer<KeyValuePair<'Key,'T>> with
                       member __.Equals ((a:KeyValuePair<'Key,'T>),(b:KeyValuePair<'Key,'T>)) : bool = a.Key = b.Key
                       member __.GetHashCode (a:KeyValuePair<'Key,'T>) = a.Key.GetHashCode () })
           .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IReadOnlyDictionary<'Key, 'T>
@@ -86,15 +87,15 @@ module IReadOnlyDictionary =
     let intersectWith combiner (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) =
         Enumerable
             .Join(
-            source1, 
-            source2, 
-            (fun (x:KeyValuePair<'Key, 'T>) -> x.Key), 
-            (fun (y:KeyValuePair<'Key, 'T>) -> y.Key), 
-            (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) -> 
+            source1,
+            source2,
+            (fun (x:KeyValuePair<'Key, 'T>) -> x.Key),
+            (fun (y:KeyValuePair<'Key, 'T>) -> y.Key),
+            (fun (x:KeyValuePair<'Key, 'T>) (y:KeyValuePair<'Key, 'T>) ->
                 KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
             .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IReadOnlyDictionary<'Key, 'T>
 
     /// Returns the intersection of two readonly dictionaries, preferring values from the first in case of duplicate keys.
-    let intersect (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) = 
+    let intersect (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) =
         intersectWith (fun a _ -> a) source1 source2
     #endif
