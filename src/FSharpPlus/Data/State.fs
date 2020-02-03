@@ -29,7 +29,7 @@ module State =
     let put x = State (fun _ -> ((), x))                                                                          : State<'S,unit>
 
     /// Modify the state inside the monad by applying a function.
-    let modify f = State (fun s -> ((), f s))                                                                     : State<'S->'S,unit>
+    let modify f = State (fun s -> ((), f s))                                                                     : State<'S,unit>
 
     /// Zips two States into one.
     let zip (x: State<'S,'T>) (y: State<'S,'U>) = liftA2 tuple2 x y : State<'S, ('T * 'U)>
