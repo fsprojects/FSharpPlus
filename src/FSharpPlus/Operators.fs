@@ -94,14 +94,18 @@ module Operators =
     #endif
 
     /// Apply a lifted argument to a lifted function.
-    let inline (<*>) (x: '``Applicative<'T -> 'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke x y : '``Applicative<'U>``
+    let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
     /// Apply 2 lifted arguments to a non-lifted function.
-    let inline liftA2 (f: 'T->'U->'V) (a: '``Applicative<'T>``) (b: '``Applicative<'U>``) : '``Applicative<'V>`` = f <!> a <*> b
+    let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = (f <!> x : '``Applicative<'U->'V>``) <*> y
 
-    let inline (  *>) (x: '``Applicative<'T>``) : '``Applicative<'U>``->'``Applicative<'U>`` = x |> liftA2 (fun   _ -> id)
-    let inline (<*  ) (x: '``Applicative<'T>``) : '``Applicative<'U>``->'``Applicative<'T>`` = x |> liftA2 (fun k _ -> k )
-    let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = x |> liftA2 (|>)
+    /// Sequences two applicatives left-to-right, discarding the value of the first argument.
+    let inline ( *>) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'U>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``Applicative<'U->'U>``) <*> y
+    
+    /// Sequences two applicatives left-to-right, discarding the value of the second argument.
+    let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``): '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
+
+    let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
     #if !FABLE_COMPILER
     let inline optional (v: '``Applicative<'T>``) : '``Applicative<Option'T>`` = Some <!> v <|> result None
@@ -908,18 +912,18 @@ module Operators =
     // Additional functions
 
     /// Folds using alternative operator `<|>`.
-    let inline choice (x: '``Foldable<'Alternative<'t>>``) = foldBack (<|>) x (getEmpty ()) : '``Alternative<'t>>``
+    let inline choice (x: '``Foldable<'Alternative<'T>>``) = foldBack (<|>) x (getEmpty ()) : '``Alternative<'T>>``
 
     #if !FABLE_COMPILER
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
-    let inline mfilter (predicate: 't->bool) (m: '``MonadZero<'t>``) : '``MonadZero<'t>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke ()
+    let inline mfilter (predicate: 'T->bool) (m: '``MonadZero<'T>``) : '``MonadZero<'T>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke ()
 
     /// Folds the sum of all monoid elements in the Foldable.
     let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
     #endif
 
     /// Converts using the implicit operator. 
-    let inline implicit (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
+    let inline implicit (x: ^T) = ((^R or ^T) : (static member op_Implicit : ^T -> ^R) x) : ^R
 
     /// An active recognizer for a generic value parser.
     let inline (|Parse|_|) str : 'T option = tryParse str
