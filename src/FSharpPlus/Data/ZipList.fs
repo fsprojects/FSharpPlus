@@ -39,7 +39,7 @@ type ZipList<'s> with
     #if !FABLE_COMPILER
     static member inline get_Zero () = result (getZero ()) : ZipList<'a>
     #endif
-    static member inline (+) (x: ZipList<'a>, y: ZipList<'a>) = liftA2 plus x y : ZipList<'a>
+    static member inline (+) (x: ZipList<'a>, y: ZipList<'a>) = lift2 plus x y : ZipList<'a>
     static member ToSeq (ZipList x) = x
 
     #if !FABLE_COMPILER

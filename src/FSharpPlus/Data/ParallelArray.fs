@@ -31,8 +31,6 @@ module ParallelArray =
             else                                Bounded (Array.Parallel.mapi (fun i x -> f.[i] x) x)
     #endif
 
-    //let inline append (a:ParallelArray<'m>) (b:ParallelArray<'m>) = liftA2 mappend a b :ParallelArray<'m>
-
 /// A type alias for ParallelArray<'T>
 type parray<'t> = ParallelArray<'t>
 
@@ -54,5 +52,5 @@ type ParallelArray<'t> with
     #endif
     static member inline get_Zero () = Bounded (getZero ()) : parray<'m>
     #if !FABLE_COMPILER
-    static member inline (+) (x: parray<'m>, y: parray<'m>) = liftA2 plus x y : parray<'m>
+    static member inline (+) (x: parray<'m>, y: parray<'m>) = lift2 plus x y : parray<'m>
     #endif
