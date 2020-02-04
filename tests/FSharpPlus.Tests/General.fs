@@ -365,6 +365,7 @@ module Functor =
         let i = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let j = zip (async {return 1}) (async {return '2'})
         let h = zip (Task.FromResult 1) (Task.FromResult '2')
+        let i = zip List.singleton<int> Array.singleton<int>
 
         let fa a = zip a (seq [1. .. 3. ])
         let fb a = zip a (WrappedListD [1. .. 3. ])
@@ -376,6 +377,7 @@ module Functor =
         let fi a = zip a (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let fj a = zip a (async {return '2'})
         let fh a = zip a (Task.FromResult '2')
+        let fi a = zip a Array.singleton<int>
 
         let ga b = zip (seq [1;2;3]) b
         let gb b = zip (WrappedListD [1;2;3]) b
@@ -387,6 +389,7 @@ module Functor =
         let gi b = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) b
         let gj b = zip (async {return 1}) b
         let gh b = zip (Task.FromResult 1) b
+        let gh b = zip List.singleton<int> b
 
         let ha : _ -> _ -> _ seq            = zip
         let hb : _ -> _ -> _ WrappedListD   = zip
@@ -398,6 +401,7 @@ module Functor =
         let hi : _ -> _ -> Dictionary<_,_>  = zip
         let hj : _ -> _ -> Async<_>         = zip
         let hh : _ -> _ -> Task<_>          = zip
+        let hi : _ -> _ -> (int -> _ )      = zip
 
         ()
 
