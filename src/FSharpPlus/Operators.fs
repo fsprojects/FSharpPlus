@@ -108,7 +108,14 @@ module Operators =
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
     #if !FABLE_COMPILER
-    let inline optional (v: '``Applicative<'T>``) : '``Applicative<Option'T>`` = Some <!> v <|> result None
+
+    [<System.Obsolete("Use opt instead.")>]
+    let inline optional v = Some <!> v </Append.Invoke/> result None
+
+    /// Transforms an alternative value (which has the notion of success/failure) to an alternative
+    /// that always succeed, wrapping the original value into an option to signify success/failure of the original alternative.
+    let inline opt (v: '``Alternative<'T>``) : '``Alternative<option<'T>>`` = (Some : 'T -> _) <!> v </Append.Invoke/> result (None: option<'T>)
+
     #endif
 
 
