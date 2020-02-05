@@ -18,7 +18,7 @@ as possible.
 
 The additions can be summarised as:
 
- * extensions to core types, such as [`String.toLower`](reference/fsharpplus-string.html)
+ * [Extensions](extensions.html) to core types, such as [`String.toLower`](reference/fsharpplus-string.html)
 
  * [Generic Functions and Operators](reference/fsharpplus-operators.html),
    like `map`, which can be extended to support other types
