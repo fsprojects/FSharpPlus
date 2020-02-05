@@ -8,20 +8,31 @@ open System
 [<RequireQualifiedAccess>]
 module Enumerator =
         
+    /// [omit]
     let inline invalidArgFmt (arg: string) (format: string) paramArray = 
         let msg = String.Format (format,paramArray)
         raise (new ArgumentException (msg, arg))
     
+    /// [omit]
     let noReset ()         = raise (new System.NotSupportedException ("Reset is not supported on this enumerator."))
+    
+    /// [omit]
     let notStarted ()      = invalidOp "Enumeration has not started. Call MoveNext."
+
+    /// [omit]
     let alreadyFinished () = invalidOp "Enumeration already finished."
+
+    /// [omit]
     let check started = if not started then notStarted ()
+
+    /// [omit]
     let dispose (r: System.IDisposable) = r.Dispose ()
     
     open System.Collections
     open System.Collections.Generic
     
     /// A concrete implementation of an enumerator that returns no values
+    /// [omit]
     [<Sealed>]
     type EmptyEnumerator<'T> () =
         let mutable started = false
@@ -45,8 +56,10 @@ module Enumerator =
 
     let singleton x = (Seq.singleton x).GetEnumerator()
 
+    /// [omit]
     type IFinallyEnumerator = abstract AppendFinallyAction : (unit -> unit) -> unit
 
+    /// [omit]
     [<Sealed>]
     type ConcatEnumerator<'T> (sources: IEnumerator<IEnumerator<'T>>) =
         let mutable outerEnum = sources
