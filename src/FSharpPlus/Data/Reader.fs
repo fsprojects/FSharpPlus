@@ -18,7 +18,7 @@ module Reader =
     let apply (Reader f) (Reader x) = Reader (fun a -> f a ((x: _->'T) a)) : Reader<'R,'U>
 
     /// Zips two Readers into one.
-    let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = liftA2 tuple2 x y      : Reader<'R, 'T * 'U>
+    let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = lift2 tuple2 x y      : Reader<'R, 'T * 'U>
 
     /// Retrieves the monad environment.
     let ask = Reader id                                                    : Reader<'R,'R>

@@ -97,7 +97,11 @@ module Operators =
     let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
     /// Apply 2 lifted arguments to a non-lifted function.
-    let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = (f <!> x : '``Applicative<'U->'V>``) <*> y
+    let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = (f <!> x : '``Applicative<'U->'V>``) <*> y
+
+    [<System.Obsolete("Use lift2 instead.")>]
+    /// Apply 2 lifted arguments to a non-lifted function.
+    let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
 
     /// Sequences two applicatives left-to-right, discarding the value of the first argument.
     let inline ( *>) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'U>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``Applicative<'U->'U>``) <*> y
