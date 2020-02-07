@@ -27,6 +27,8 @@ type Empty =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Empty : _*_ -> _) output, mthd)
         call (Unchecked.defaultof<Empty>, Unchecked.defaultof<'``Alternative<'T>``> )
 
+    static member inline InvokeOnInstance () : '``Alternative<'T>`` = (^``Alternative<'T>`` : (static member Empty : ^``Alternative<'T>``) ())
+
 
 type Append =
     inherit Default1

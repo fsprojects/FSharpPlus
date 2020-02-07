@@ -61,3 +61,30 @@ type Apply =
 
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) (f, x))
+
+
+type IsLeftZeroForApply =
+    inherit Default1
+
+    static member IsLeftZeroForApply (Lazy (t: seq<_>     ) , _mthd: IsLeftZeroForApply) = Seq.isEmpty t
+    static member IsLeftZeroForApply (Lazy (t: list<_>    ) , _mthd: IsLeftZeroForApply) = List.isEmpty t
+    static member IsLeftZeroForApply (Lazy (t: array<_>   ) , _mthd: IsLeftZeroForApply) = Array.isEmpty t
+    static member IsLeftZeroForApply (Lazy (t: option<_>  ) , _mthd: IsLeftZeroForApply) = Option.isNone t
+    static member IsLeftZeroForApply (Lazy (t: Result<_,_>) , _mthd: IsLeftZeroForApply) = match t with Error _      -> true | _ -> false
+    static member IsLeftZeroForApply (Lazy (t: Choice<_,_>) , _mthd: IsLeftZeroForApply) = match t with Choice2Of2 _ -> true | _ -> false
+
+    static member inline Invoke (x: '``Applicative<'T>``) : bool =
+        let inline call (mthd : ^M, input: ^I) =
+            ((^M or ^I) : (static member IsLeftZeroForApply : _*_ -> _) (lazy input), mthd)
+        call(Unchecked.defaultof<IsLeftZeroForApply>, x)
+
+    static member inline InvokeOnInstance (x: '``Applicative<'T>``) : bool =
+        ((^``Applicative<'T>``) : (static member IsLeftZeroForApply : _ -> _) x)
+
+type IsLeftZeroForApply with
+
+    // empty <*> f = empty  ==> empty is left zero for <*>
+    static member inline IsLeftZeroForApply (Lazy (t: '``Alternative<'T>``)       , _mthd: Default2) = (t = Empty.InvokeOnInstance ())
+
+    static member inline IsLeftZeroForApply (Lazy (t: '``Applicative<'T>``)       , _mthd: Default1) = ((^``Applicative<'T>``) : (static member IsLeftZeroForApply : _ -> _) t)
+    static member inline IsLeftZeroForApply (Lazy (_: ^t when ^t: null and ^t: struct), _: Default1) = ()
