@@ -1,3 +1,24 @@
+#### 1.1.0-RC2  - January 25 2020
+* Some tweaks to Free (internals)
+* Add functions gets and modify for stateful computations
+* Better type inference for lift
+* Some functions deprecated in Validation and Extensions
+* Fix: swap type parameteres of Bifunctor and Bifoldable for Choice / Result
+* Default Monoid for bool (xor)
+* Some minor bug fixes
+* Better signatures and xml descriptions
+
+#### 1.1.0-RC1  - January 13 2020
+* More Fable support
+* Free Monad
+* Functor's Coproduct
+* Bifoldable abstraction: http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html
+* deprecating `Validation.biFoldBack`
+* Some Choice and Result functions
+* tap function
+* Rename IReadOnlyList.add to trySetItem
+* Improved lift for Monad Transformers
+
 #### 1.1.0-CI00272  - September 14 2019
 * Initial Fable support for Extensions
 * Add generic bind, try/findIndex and try/findSliceIndex functions

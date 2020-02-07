@@ -31,7 +31,7 @@ let res14 = (+) <!> ((+) 3) <*> ((*) 100) <| 5                        // 508
 
 let res15 = (+) <!> (ZipList <| seq { 1..3 }) <*> (ZipList <| Seq.init 3 (fun _ -> 100)) |> ZipList.run  // seq [101; 102; 103]
 let res16 = (fun x -> [x]) <!> (Some 4)                               // Some [4]
-let res17 = liftA2 (fun x xs -> x::xs) (Some 3) (Some [4])            // [3; 4]
+let res17 = lift2 (fun x xs -> x::xs) (Some 3) (Some [4])            // [3; 4]
 
 let res18 = List.sequence [Some 3; Some 2; Some 1]                    // Some [3; 2; 1]
 

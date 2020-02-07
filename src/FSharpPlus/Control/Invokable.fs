@@ -1,0 +1,40 @@
+namespace FSharpPlus.Control
+
+open System
+open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
+open System.Text
+open System.Collections.Generic
+open System.Threading.Tasks
+open Microsoft.FSharp.Quotations
+
+open FSharpPlus.Internals
+open FSharpPlus.Internals.Prelude
+open FSharpPlus
+
+// Invokable class --------------------------------------------------------
+
+type Invoke =
+    inherit Default1
+
+    #if !FABLE_COMPILER
+    static member inline Invoke (_: ^t when ^t : null and ^t : struct, _, _output: ^O, _mthd: Default1) = id
+    static member inline Invoke (_: 'T, x, _output: ^O, _mthd: Default1) = (^T : (static member Invoke : _ -> _) x)
+    #endif
+    static member        Invoke (g:  'T -> 'U  , x: 'T, _output: 'U, _mthd: Invoke) = g x        : 'U
+    static member        Invoke (g: Func<'T,'U>, x: 'T, _output: 'U, _mthd: Invoke) = g.Invoke x : 'U
+
+    // No return type check
+    static member inline InvokeNRTC (f: '``Category<'T,'U>``, x : 'T) =
+        let inline call (_: ^I, x: 'TT) = ((^I or ^TT) : (static member Invoke : _-> _) x)
+        call (f, x)  
+
+    static member inline Invoke (f: '``Category<'T,'U>``, x: 'T) : 'U =
+        let inline call (mthd: ^M, f: ^I, output: ^R, x: 'TT) = ((^M or ^TT) : (static member Invoke : _*_*_*_ -> _) f, x, output, mthd)
+        call (Unchecked.defaultof<Invoke>, f, Unchecked.defaultof<'U>, x)
+
+type ComposedStaticInvokable< ^F, ^G>  =
+    static member inline Invoke x =
+        let i  =  Invoke.Invoke (Unchecked.defaultof<'G>, x)
+        Invoke.Invoke (Unchecked.defaultof<'F>, i)
+

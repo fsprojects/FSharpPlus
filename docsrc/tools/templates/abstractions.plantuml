@@ -68,6 +68,12 @@ abstract class Foldable [[http://fsprojects.github.io/FSharpPlus/abstraction-fol
   {static} + toSeq x [[[http://fsprojects.github.io/FSharpPlus/abstraction-foldable.html#toSeq {Converts to a seq} ]]]
 }
 
+abstract class Bifoldable [[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html]] {
+  {static} + bifoldMap f g x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifoldMap]]]
+  {static} + bifold f g z x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifold]]]
+  {static} + bifoldBack f g x z [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifoldBack]]]
+  + bisum x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bisum]]]
+}
 
 abstract class Traversable [[http://fsprojects.github.io/FSharpPlus/abstraction-traversable.html]] {
   {static} + traverse f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-traversable.html#traverse {Map each element of a structure to an action, evaluate them left to right and collect result }]]]
@@ -107,6 +113,7 @@ Applicative  --|> Monad
 Applicative  --|> Alternative
 Monoid ..|> Monad
 Monoid ..|> Foldable
+Monoid ..|> Bifoldable
 Functor --|> Comonad
 Functor --|> Traversable
 Foldable --|> Traversable

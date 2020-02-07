@@ -39,7 +39,7 @@ Related Abstractions
  - [Monad](abstraction-monad.html) : Monads are functors with an additional ``Join`` operation,
 Concrete implementations
 ------------------------
-From .Net/F#
+From F#
  
  -  ``seq<'T>``
  -  ``list<'T>``
@@ -71,18 +71,20 @@ From F#+
  -  ``Reader<'R,'T>`` 
  -  ``ReaderT<'R,'Monad<'T>>``
  -  ``Writer<'Monoid,'T>``
- -  ``WriterT<Monad<'T * 'Monoid>>``
- -  ``State<'S,'T * 'S>`` 
+ -  ``WriterT<'Monad<'T * 'Monoid>>``
+ -  ``State<'S,'T * 'S>``
  -  ``StateT<'S,'Monad<'T * 'S>>``
  -  ``OptionT<'Monad<option<'T>>``
  -  ``ResultT<'Monad<Result<'T,'TError>>``
  -  ``ChoiceT<'Monad<Choice<'T,'TError>>``
+ -  ``Free<'Functor<'T>,'T>``
  -  ``NonEmptyList<'T>``
  -  ``ZipList<'T>``
  -  ``ParallelArray<'T>``
  -  ``Const<'C,'T>``
  -  ``Kleisli<'T, 'Monad<'U>>``
  -  ``Compose<'F<'G<'T>>>``
+ -  ``Coproduct<'FunctorL<'T>,'FunctorR<'T>>``
  -  ``DList<'T>``
 
 Restricted:

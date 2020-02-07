@@ -42,7 +42,7 @@ map string (NonEmptyList.create 2 [3;4;5])
 // val it : NonEmptyList<string> = {Head = "2"; Tail = ["3"; "4"; "5"];}
 
 (**
-They're also available for your own types as long as they contain the appropiated method with the expected signature
+They're also available for your own types as long as they contain the appropriated method with the expected signature
 *)
 
 

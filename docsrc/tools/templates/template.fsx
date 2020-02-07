@@ -91,6 +91,9 @@ let template (m:PropertyMeta) =
                                     [ a [ Href <| m.Root "/reference/index.html" ]
                                         [ str "API Reference" ] ]*)
                                   li [ ]
+                                    [ a [ Href <| m.Root "/types.html" ]
+                                        [ str "Types" ] ]
+                                  li [ ]
                                     [ a [ Href <| m.Root "/abstractions.html" ]
                                         [ str "Abstractions" ] ]
                                   li [ ]

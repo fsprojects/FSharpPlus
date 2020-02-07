@@ -14,7 +14,7 @@ module internal Prelude =
     let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
     let inline retype (x: 'T) : 'U = (# "" x: 'U #)
-
+    let inline opaqueId x = Unchecked.defaultof<_>; x
 
 
 [<RequireQualifiedAccess>]
@@ -85,6 +85,9 @@ type Either<'t,'u> =
 
 type DmStruct = struct end
 
+
+[<Sealed>]
+type Set2<'T when 'T: comparison >() = class end
 
 // BitConverter
 

@@ -115,15 +115,36 @@ module Lens =
 
     [<RequireQualifiedAccess>]
     module Map=
-        let inline _item i f t = Map.InvokeOnInstance (fun x -> Map.add i x t) (f (Map.tryFind i t))
+        /// Given a specific key, produces a Lens from a Map<key, value> to an Option<value>.  When setting,
+        /// a Some(value) will insert or replace the value into the map at the given key.  Setting a value of
+        /// None will delete the value at the specified key.  Works well together with non.
+        let inline _item i f t = Map.InvokeOnInstance
+                                  (function | None -> Map.remove i t | Some(x) -> Map.add i x t)
+                                  (f (Map.tryFind i t))
     [<RequireQualifiedAccess>]
     module IReadOnlyDictionary=
-        let inline _item i f t = Map.InvokeOnInstance (fun x -> IReadOnlyDictionary.add i x t) (f (IReadOnlyDictionary.tryGetValue i t))
+        /// Given a specific key, produces a Lens from a IReadOnlyDictionary<key, value> to an Option<value>.  When setting,
+        /// a Some(value) will insert or replace the value into the dictionary at the given key.  Setting a value of
+        /// None will delete the value at the specified key.  Works well together with non.
+        let inline _item i f t = Map.InvokeOnInstance
+                                  (function | None -> IReadOnlyDictionary.remove i t | Some(x) -> IReadOnlyDictionary.add i x t)
+                                  (f (IReadOnlyDictionary.tryGetValue i t))
+
+    /// Lens for the value inside an Option or the given default value if the Option is None.  Works well when combined with Map._item
+    let inline non def f ma = Map.InvokeOnInstance (fun a' -> if a' = def then None else Some(a')) (f (Option.defaultValue def ma))
 
     // Prism
+
+    /// Prism providing a Traversal for targeting the 'Ok' part of a Result<'T,'Error>
     let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x
+
+    /// Prism providing a Traversal for targeting the 'Error' part of a Result<'T,'Error>
     let inline _Error x = (prism Error <| either (Error << Ok) Ok) x
+
+    /// Prism providing a Traversal for targeting the 'Some' part of an Option<'T>
     let inline _Some x = (prism Some <| option Ok (Error None)) x
+
+    /// Prism providing a Traversal for targeting the 'None' part of an Option<'T>
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
 
     #if !FABLE_COMPILER
