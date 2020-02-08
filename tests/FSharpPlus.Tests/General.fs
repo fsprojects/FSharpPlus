@@ -115,6 +115,13 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member Delay (f: unit -> WrappedListD<_>) = SideEffects.add "Using WrappedListG's Delay"; f ()
     static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
+type WrappedListH<'s> = WrappedListH of 's list with
+    static member Map (WrappedListH lst, f) = WrappedListH (List.map f lst)
+    static member inline Sequence (x: WrappedListH<'``Functor<'T>``>) =
+        let (WrappedListH lst) = x
+        let s = sequence lst : '``Functor<List<'T>>``
+        map WrappedListH s : '``Functor<WrappedListH<'T>>``
+
 
 type WrappedSeqA<'s> = WrappedSeqA of 's seq with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqA x) = x in x).GetEnumerator ()
@@ -910,6 +917,17 @@ module Traversable =
         let testVal = sequence [|Some 1; Some 2|]
         Assert.AreEqual (Some [|1;2|], testVal)
         Assert.IsInstanceOf<Option<array<int>>> testVal
+
+    [<Test>]
+    let traverseDerivedFromSequence () = 
+        let testVal = traverse (fun x -> [int16 x..int16 (x+2)]) (WrappedListH [1; 4])
+        Assert.AreEqual (
+            [
+                WrappedListH [1s; 4s]; WrappedListH [1s; 5s]; WrappedListH [1s; 6s];
+                WrappedListH [2s; 4s]; WrappedListH [2s; 5s]; WrappedListH [2s; 6s];
+                WrappedListH [3s; 4s]; WrappedListH [3s; 5s]; WrappedListH [3s; 6s]
+            ] , testVal)
+        Assert.IsInstanceOf<list<WrappedListH<int16>>> testVal
 
     [<Test>]
     let sequence_Specialization () =

@@ -12,7 +12,9 @@ open FSharpPlus.Extensions
 
 type Sequence =
     inherit Default1
-    static member inline InvokeOnInstance (t: ^a) = (^a : (static member Sequence : _ -> 'R) t)
+    static member inline InvokeOnInstance (t: '``Traversable<Functor<'T>>``) = (^``Traversable<Functor<'T>>`` : (static member Sequence : _ -> _) t) : '``Functor<'Traversable<'T>>``
+
+    // (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>``
 
     #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -35,7 +37,10 @@ type Traverse =
     inherit Default1
     static member inline InvokeOnInstance f (t: ^a) = (^a : (static member Traverse : _*_ -> 'R) t, f)
 
-    static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) = Map.Invoke f (Sequence.InvokeOnInstance t) : 'R
+    static member inline Traverse (t: '``Traversable<'T>``  , f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<'Traversable<'U>>``, [<Optional>]_impl: Default4) =
+        let mapped = Map.Invoke f t : '``Traversable<'Functor<'U>>``
+        (^``Traversable<'T>`` : (static member Sequence : _ -> _) mapped) : '``Functor<'Traversable<'U>>``
+
     static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) = Map.Invoke Id.create (f (Id.run t))
     #if !FABLE_COMPILER
     static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
@@ -84,7 +89,7 @@ type Traverse =
        Array.foldBack cons_f t (result [||])
     #endif
 
-    static member inline Invoke f t =
+    static member inline Invoke (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
         let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'R>, f) : 'R
         call (Unchecked.defaultof<Traverse>, t, f)
@@ -116,10 +121,10 @@ type Sequence with
     static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = let cons x y = Array.append [|x|] y in let cons_f x ys = Map.Invoke cons x <*> ys in Array.foldBack cons_f t (result [||]) : 'R
     #endif
  
-    static member inline Sequence (t: Id<_>             , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Traverse.Invoke id t                                                                  : 'R
+    static member inline Sequence (t: Id<'``Functor<'T>``>         , [<Optional>]_output: '``Functor<Id<'T>>``          , [<Optional>]_impl: Sequence) = Traverse.Invoke id t : '``Functor<Id<'T>>``
  
     #if !FABLE_COMPILER
-    static member inline Sequence (t: _ ResizeArray     , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Traverse.Invoke id t                                                                  : 'R
+    static member inline Sequence (t: ResizeArray<'``Functor<'T>``>, [<Optional>]_output: '``Functor<ResizeArray<'T>>`` , [<Optional>]_impl: Sequence) = Traverse.Invoke id t : '``Functor<ResizeArray<'T>>``
     #endif
 
     static member inline Invoke (t: '``Traversable<'Applicative<'T>>``) : '``Applicative<'Traversable<'T>>`` =
