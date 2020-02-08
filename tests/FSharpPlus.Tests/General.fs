@@ -979,9 +979,9 @@ module Traversable =
         let e' = traverse toEithers (Seq.initInfinite id)
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
-        Assert.AreEqual (Choice2Of2 "This is a failure", c)
+        Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
         Assert.AreEqual ([], d)
-        Assert.True ((Left ["This is a failure"] = e))
+        Assert.AreEqual (Either<string list,seq<int>>.Left ["This is a failure"], e)
         let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
         ()
 

@@ -90,12 +90,17 @@ type Traverse =
 type Sequence with
 
     #if !FABLE_COMPILER
-    static member inline Sequence (t:_ seq         , [<Optional>]_output: 'R, [<Optional>]_impl:Default4 ) : 'R =
+    static member inline Sequence (t:_ seq         , [<Optional>]_output: 'R, [<Optional>]_impl:Default5) : 'R =
                         let cons x y = seq {yield x; yield! y}
                         let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) x <*> ys
                         Seq.foldBack cons_f t (result Seq.empty)
 
-    static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences (t, IsLeftZeroForApply.Invoke) : '``Applicative<seq<'T>>``
+    static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZeroForApply.Invoke) : '``Applicative<seq<'T>>``
+    static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone)                              : option<seq<'t>>
+    static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, function Error _      -> true | _ -> false) : Result<seq<'t>, 'e>
+    static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, function Choice2Of2 _ -> true | _ -> false) : Choice<seq<'t>, 'e>
+    static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty)                               : list<seq<'t>>
+    static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty)                              : seq<'t> []
     #endif
 
     static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) = Async.Sequence t                                                               : Async<seq<'t>>
