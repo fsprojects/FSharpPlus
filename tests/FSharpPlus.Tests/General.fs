@@ -912,7 +912,8 @@ module Traversable =
     type Either<'l,'r> = Left of 'l | Right of 'r with
         static member Return x = Right x
         static member inline get_Empty () = Left empty
-        static member (<*>) (f, x) = match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e        
+        static member (<*>) (f, x) = match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e
+        static member IsLeftZeroForApply x = match x with Left _ -> true | _ -> false
 
     let traverseTest =
         let resNone = sequence (seq [Some 3;None ;Some 1])
@@ -978,7 +979,7 @@ module Traversable =
         let e' = traverse toEithers (Seq.initInfinite id)
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
-        Assert.True ((Choice2Of2 "This is a failure" = c))
+        Assert.AreEqual (Choice2Of2 "This is a failure", c)
         Assert.AreEqual ([], d)
         Assert.True ((Left ["This is a failure"] = e))
         let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
