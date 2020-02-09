@@ -13,9 +13,11 @@
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
     <Compile Include="Validations.fs" />
+    <Compile Include="Free.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
+    <Compile Include="BifoldableTests.fs" />
     <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
   </ItemGroup>
   <ItemGroup>

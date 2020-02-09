@@ -115,6 +115,13 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member Delay (f: unit -> WrappedListD<_>) = SideEffects.add "Using WrappedListG's Delay"; f ()
     static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
+type WrappedListH<'s> = WrappedListH of 's list with
+    static member Map (WrappedListH lst, f) = WrappedListH (List.map f lst)
+    static member inline Sequence (x: WrappedListH<'``Functor<'T>``>) =
+        let (WrappedListH lst) = x
+        let s = sequence lst : '``Functor<List<'T>>``
+        map WrappedListH s : '``Functor<WrappedListH<'T>>``
+
 
 type WrappedSeqA<'s> = WrappedSeqA of 's seq with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqA x) = x in x).GetEnumerator ()
@@ -200,7 +207,7 @@ module Monoid =
         static member Map   (ZipList x, f: 'a->'b)                = ZipList (Seq.map f x)
         static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList<'b>
         static member inline get_Zero () = result zero            : ZipList<'a>
-        static member inline (+) (x:ZipList<'a>, y:ZipList<'a>) = liftA2 plus x y :ZipList<'a>
+        static member inline (+) (x:ZipList<'a>, y:ZipList<'a>) = lift2 plus x y :ZipList<'a>
         static member ToSeq    (ZipList lst)     = lst
 
     type ZipList'<'s> = ZipList' of 's seq with
@@ -208,7 +215,7 @@ module Monoid =
         static member Map   (ZipList' x, f: 'a->'b)                 = ZipList' (Seq.map f x)
         static member (<*>) (ZipList' (f: seq<'a->'b>), ZipList' x) = ZipList' (Seq.zip f x |> Seq.map (fun (f,x) -> f x)) : ZipList'<'b>
         static member inline get_Zero () = result zero              : ZipList'<'a>
-        static member inline (+) (x: ZipList'<'a>, y: ZipList'<'a>) = liftA2 plus x y :ZipList'<'a>
+        static member inline (+) (x: ZipList'<'a>, y: ZipList'<'a>) = lift2 plus x y :ZipList'<'a>
         static member inline Sum (x: seq<ZipList'<'a>>) = SideEffects.add "Using optimized Sum"; List.foldBack plus (Seq.toList x) zero : ZipList'<'a>
         static member ToSeq    (ZipList' lst)     = lst
 
@@ -365,6 +372,7 @@ module Functor =
         let i = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let j = zip (async {return 1}) (async {return '2'})
         let h = zip (Task.FromResult 1) (Task.FromResult '2')
+        let i = zip List.singleton<int> Array.singleton<int>
 
         let fa a = zip a (seq [1. .. 3. ])
         let fb a = zip a (WrappedListD [1. .. 3. ])
@@ -376,6 +384,7 @@ module Functor =
         let fi a = zip a (ofSeq [1,'1' ; 2,'2' ; 3,'3'] : Dictionary<_,_>)
         let fj a = zip a (async {return '2'})
         let fh a = zip a (Task.FromResult '2')
+        let fi a = zip a Array.singleton<int>
 
         let ga b = zip (seq [1;2;3]) b
         let gb b = zip (WrappedListD [1;2;3]) b
@@ -387,6 +396,7 @@ module Functor =
         let gi b = zip (ofSeq [1,'1' ; 2,'2' ; 4,'4'] : Dictionary<_,_>) b
         let gj b = zip (async {return 1}) b
         let gh b = zip (Task.FromResult 1) b
+        let gh b = zip List.singleton<int> b
 
         let ha : _ -> _ -> _ seq            = zip
         let hb : _ -> _ -> _ WrappedListD   = zip
@@ -398,6 +408,7 @@ module Functor =
         let hi : _ -> _ -> Dictionary<_,_>  = zip
         let hj : _ -> _ -> Async<_>         = zip
         let hh : _ -> _ -> Task<_>          = zip
+        let hi : _ -> _ -> (int -> _ )      = zip
 
         ()
 
@@ -908,6 +919,17 @@ module Traversable =
         Assert.IsInstanceOf<Option<array<int>>> testVal
 
     [<Test>]
+    let traverseDerivedFromSequence () = 
+        let testVal = traverse (fun x -> [int16 x..int16 (x+2)]) (WrappedListH [1; 4])
+        Assert.AreEqual (
+            [
+                WrappedListH [1s; 4s]; WrappedListH [1s; 5s]; WrappedListH [1s; 6s];
+                WrappedListH [2s; 4s]; WrappedListH [2s; 5s]; WrappedListH [2s; 6s];
+                WrappedListH [3s; 4s]; WrappedListH [3s; 5s]; WrappedListH [3s; 6s]
+            ] , testVal)
+        Assert.IsInstanceOf<list<WrappedListH<int16>>> testVal
+
+    [<Test>]
     let sequence_Specialization () =
         
         let inline seqSeq (x:_ seq ) = sequence x
@@ -1155,6 +1177,27 @@ module MonadTransformers =
             </catch/> (fun s -> throw ("The error was: " + s))
 
         let okFoo10 = okFoo10Comp |> ChoiceT.run |> Async.RunSynchronously
+
+        // test generic put (no unknown(1,1): error FS0073: internal error: Undefined or unsolved type variable:  ^_?51242)
+        let initialState = -1
+        let x = put initialState : ListT<State<int, unit list>>
+        let y = put initialState : ChoiceT<State<int, Choice<unit,string>>>
+
+        ()
+
+    let testStateT () =
+        let lst1 : StateT<string,_> = StateT.lift [1;2]
+        let lst2 : StateT<string,_> = StateT.lift [4;5]
+
+        let m = monad { 
+            let! x =  lst1
+            let! y =  lst2
+            do! modify String.toUpper
+            let! st = gets String.length
+            return (x, y +  st)
+            }
+
+        CollectionAssert.AreEqual (StateT.run m "ok", [((1, 6), "OK"); ((1, 7), "OK"); ((2, 6), "OK"); ((2, 7), "OK")])
 
         ()
 

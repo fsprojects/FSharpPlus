@@ -11,14 +11,61 @@ open FSharpPlus.Lens
 Lens
 ====
 
-TODO Add some basic lens samples here
+Lens is an abstraction over function that allow to read and update parts of immutable data.
+
+The abstraction name comes from the analogy of focusing on a specific part of the data structure.
+
+Another analogy could be with pointers, but in this case data is treated as immutable which means that instead of modifying it returns a new copy.
+
+In this [quick tour](tutorial.html#Lens) you can find some basic examples of operating with Lenses.
+
+To allow lensing over your record types, lens (as functions) have to be written by hand for each field.
+
+As a convention, all lens identifiers will start with an underscore `_`.
+
+Here's an example usage of lenses with business objects:
+
 
 *)
+open System
+// From Mauricio Scheffer: https://gist.github.com/mausch/4260932
+type Person = {
+    Name: string
+    DateOfBirth: DateTime
+}
+module Person=
+    let inline _name f { Name = a; DateOfBirth = b } = f a <&> fun a' -> { Name = a'; DateOfBirth = b }
+ type Book = {
+    Title: string
+    Author: Person
+}
+module Book =
+    let inline _author f { Author = a; Title = b } = f a <&> fun a' -> { Author = a'; Title = b }
+    let inline _authorName b = _author << Person._name <| b
+let rayuela =
+    { Book.Title = "Rayuela"
+      Author = { Person.Name = "Julio Cortázar"
+                 DateOfBirth = DateTime (1914, 8, 26) } }
+// read book author name:
+let authorName1 = view Book._authorName rayuela
+//  you can also write the read operation as:
+let authorName2 = rayuela ^. Book._authorName
 
 
 (**
+
+Note: 
+
+The operator `<&>` is not available in F#+ v1.0 but since it's a flipped map, you can use `</flip map/>` instead.
+
+However it's recommended to upgrade F#+ since you'll get better compile times with `<&>`.
+
 Prism
 =====
+
+Also called a Partial Lens, they focus in parts of the data that could be there or not.
+
+See the following example using the built-in `_Some` prism.
 
 *)
 
@@ -164,32 +211,3 @@ let i2 = view (from' isoTupleOption) (Some 42)
 // Iso composed with a Lens -> Lens
 let i3 = view (_1 << isoTupleOption) (System.Int32.TryParse "42", ())
 // val i3 : int option = Some 42
-
-(**
-Example usage of lenses with business objects
-===
-
-*)
-open System
-// From Mauricio Scheffer: https://gist.github.com/mausch/4260932
-type Person = {
-    Name: string
-    DateOfBirth: DateTime
-}
-module Person=
-    let inline name f { Name = a; DateOfBirth = b } = f a <&> fun a' -> { Name = a'; DateOfBirth = b }
- type Book = {
-    Title: string
-    Author: Person
-}
-module Book =
-    let inline author f { Author = a; Title = b } = f a <&> fun a' -> { Author = a'; Title = b }
-    let inline authorName b = author << Person.name <| b
-let rayuela =
-    { Book.Title = "Rayuela"
-      Author = { Person.Name = "Julio Cortázar"
-                 DateOfBirth = DateTime(1914, 8, 26) } }
-// read book author name:
-let authorName1 = view Book.authorName rayuela
-//  you can also write the read operation as:
-let authorName2 = rayuela ^. Book.authorName

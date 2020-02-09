@@ -16,8 +16,9 @@
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <RepositoryUrl>https://github.com/gusty/FSharpPlus</RepositoryUrl>
-    <Description>A complete and extensible base library for F#.
-      </Description>
+    <Description>
+      A complete and extensible base library for F#.
+    </Description>
     <Authors>Gusty</Authors>
     <Copyright>2012-2018 Gustavo P. Leon (and contributors https://github.com/gusty/FSharpPlus/graphs/contributors)</Copyright>
     <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
@@ -26,8 +27,8 @@
     <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading</PackageTags>
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -40,36 +41,67 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Internals.fs" />
-    <Compile Include="Extensions.fs" />
-    <Compile Include="Converter.fs" />
-    <Compile Include="Numeric.fs" />
-    <Compile Include="Monoid.fs" />
-    <Compile Include="Functor.fs" />
-    <Compile Include="Foldable.fs" />
-    <Compile Include="Traversable.fs" />
-    <Compile Include="Indexable.fs" />
-    <Compile Include="MonadTrans.fs" />
-    <Compile Include="Collection.fs" />
-    <Compile Include="Tuple.fs" />
+    <Compile Include="Extensions/Option.fs" />
+    <Compile Include="Extensions/Result.fs" />
+    <Compile Include="Extensions/Choice.fs" />
+    <Compile Include="Extensions/Seq.fs" />
+    <Compile Include="Extensions/IList.fs" />
+    <Compile Include="Extensions/List.fs" />
+    <Compile Include="Extensions/Array.fs" />
+    <Compile Include="Extensions/String.fs" />
+    <Compile Include="Extensions/IReadOnlyCollection.fs" />
+    <Compile Include="Extensions/IReadOnlyList.fs" />
+    <Compile Include="Extensions/Map.fs" />
+    <Compile Include="Extensions/Dict.fs" />
+    <Compile Include="Extensions/IReadOnlyDictionary.fs" />
+    <Compile Include="Extensions/Enumerator.fs" />
+    <Compile Include="Extensions/Task.fs" />
+    <Compile Include="Extensions/Async.fs" />
+    <Compile Include="Extensions/Extensions.fs" />
+    <Compile Include="Control/Converter.fs" />
+    <Compile Include="Control/Numeric.fs" />
+    <Compile Include="Control/Monoid.fs" />
+    <Compile Include="Control/Monad.fs" />
+    <Compile Include="Control/Applicative.fs" />
+    <Compile Include="Control/Functor.fs" />
+    <Compile Include="Control/Alternative.fs" />
+    <Compile Include="Control/MonadOps.fs" />
+    <Compile Include="Control/Comonad.fs" />
+    <Compile Include="Control/Invokable.fs" />
+    <Compile Include="Control/Category.fs" />
+    <Compile Include="Control/Arrow.fs" />
+    <Compile Include="Control/ArrowChoice.fs" />
+    <Compile Include="Control/ArrowApply.fs" />
+    <Compile Include="Control/Foldable.fs" />
+    <Compile Include="Control/Bifoldable.fs" />
+    <Compile Include="Control/Traversable.fs" />
+    <Compile Include="Control/Indexable.fs" />
+    <Compile Include="Control/MonadTrans.fs" />
+    <Compile Include="Control/Collection.fs" />
+    <Compile Include="Control/Tuple.fs" />
     <Compile Include="Operators.fs" />
+    <Compile Include="Math/Applicative.fs" />
+    <Compile Include="Math/Generic.fs" />
     <Compile Include="Builders.fs" />
-    <Compile Include="Identity.fs" />
-    <Compile Include="List.fs" />
-    <Compile Include="Seq.fs" />
-    <Compile Include="Option.fs" />
-    <Compile Include="Error.fs" />
-    <Compile Include="Cont.fs" />
-    <Compile Include="Reader.fs" />
-    <Compile Include="Writer.fs" />
-    <Compile Include="State.fs" />
-    <Compile Include="Monoids.fs" />
+    <Compile Include="Data/Identity.fs" />
+    <Compile Include="Data/List.fs" />
+    <Compile Include="Data/Seq.fs" />
+    <Compile Include="Data/Option.fs" />
+    <Compile Include="Data/Error.fs" />
+    <Compile Include="Data/Cont.fs" />
+    <Compile Include="Data/Reader.fs" />
+    <Compile Include="Data/Writer.fs" />
+    <Compile Include="Data/State.fs" />
+    <Compile Include="Data/Monoids.fs" />
     <Compile Include="Lens.fs" />
-    <Compile Include="NonEmptyList.fs" />
-    <Compile Include="ZipList.fs" />
-    <Compile Include="ParallelArray.fs" />
-    <Compile Include="DList.fs" />
-    <Compile Include="Validations.fs" />
-    <Compile Include="Kleisli.fs" />
+    <Compile Include="Data/NonEmptyList.fs" />
+    <Compile Include="Data/ZipList.fs" />
+    <Compile Include="Data/ParallelArray.fs" />
+    <Compile Include="Data/DList.fs" />
+    <Compile Include="Data/Validations.fs" />
+    <Compile Include="Data/Kleisli.fs" />
+    <Compile Include="Data/Free.fs" />
+    <Compile Include="Data/Coproduct.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <None Include="Samples\Collections.fsx" />
@@ -79,7 +111,6 @@
     <None Include="Samples\ZipLists.fsx" />
     <None Include="Samples\Learn You a Haskell.fsx" />
     <None Include="Samples\Cont.fsx" />
-    <None Include="Samples\Validations.fsx" />
     <None Include="Samples\MonadTrans.fsx" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
