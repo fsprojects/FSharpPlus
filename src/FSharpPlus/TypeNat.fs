@@ -109,18 +109,6 @@ module TypeNat =
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =
     (^Nat: (static member Match: _*_*_->_) n, caseZ, caseSn)
 
-  type ``0`` = Z
-  type ``1`` = S<``0``>
-  type ``2`` = S<``1``>
-  type ``3`` = S<``2``>
-  type ``4`` = S<``3``>
-  type ``5`` = S<``4``>
-  type ``6`` = S<``5``>
-  type ``7`` = S<``6``>
-  type ``8`` = S<``7``>
-  type ``9`` = S<``8``>
-  type ``10`` = S<``9``>
-
 #if DEBUG
 module private NatTests =
   open TypeBool

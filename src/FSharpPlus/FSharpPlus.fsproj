@@ -40,7 +40,24 @@
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
+    <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
     <Compile Include="Internals.fs" />
+    <Compile Include="Extensions.fs" />
+    <Compile Include="Converter.fs" />
+    <Compile Include="Numeric.fs" />
+    <Compile Include="Monoid.fs" />
+    <Compile Include="Functor.fs" />
+    <Compile Include="Foldable.fs" />
+    <Compile Include="Traversable.fs" />
+    <Compile Include="Indexable.fs" />
+    <Compile Include="MonadTrans.fs" />
+    <Compile Include="Collection.fs" />
+    <Compile Include="TypeLevelOperators.fs" />
+    <Compile Include="TypeBool.fs" />
+    <Compile Include="TypeNat.fs" />
+    <Compile Include="TypeNat.Provider.fs" />
+    <Compile Include="Tuple.fs" />
     <Compile Include="Extensions/Option.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
@@ -104,6 +121,7 @@
     <Compile Include="Data/Coproduct.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
+    <Compile Include="Matrix.fs" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Split-Join.fsx" />
     <None Include="Samples\Conversions.fsx" />

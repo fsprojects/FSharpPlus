@@ -7,10 +7,15 @@
   <ItemGroup>
     <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
     <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
+    <Compile Include="Internals.fs" />
+    <Compile Include="Extensions.fs" />
+    <Compile Include="Converter.fs" />
+    <Compile Include="Numeric.fs" />
     <Compile Include="TypeLevelOperators.fs" />
     <Compile Include="TypeBool.fs" />
     <Compile Include="TypeNat.fs" />
     <Compile Include="TypeNat.Provider.fs" />
+    <Compile Include="Tuple.fs" />
     <Compile Include="Matrix.fs" />
   </ItemGroup>
 </Project>
