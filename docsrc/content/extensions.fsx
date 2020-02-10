@@ -15,7 +15,7 @@ under the FSharpPlus namespace, so can be accessed via:
 open FSharpPlus
 
 (**
-Some functions are common across traversable types such as `intercalate` on
+Some functions are common across foldable types such as `intercalate` on
 List, Array and Seq, and others are common across wrapping containers,
 such as `map`, `bind` and `apply` on List, Array, and Seq, but also Option and Result.
 
@@ -65,9 +65,11 @@ exactly the same as `Result.either`.
 Also, see the generic function [`option`](reference/fsharpplus-operators.html) that
 unwraps an Option in a similar way to `either`.
 
-On Foldables (collections)
-==========================
+On Foldables
+============
+Foldables are the class of data structures that can be folded to a summary value.
 Most collections, or specifically 'foldable' instances implement these:
+
 
  * intersperse - takes an element and `intersperses' that element between the elements
 
@@ -79,12 +81,12 @@ Most collections, or specifically 'foldable' instances implement these:
 
  * intercalate - insert a list of elements between each element and flattens
 
-    [[1;2]; [3;4]] |> List.intercalate [-1;-2];;  
+    [[1;2]; [3;4]] |> List.intercalate [-1;-2];;
     // val it : int list = [1; 2; -1; -2; 3; 4]
 
     ["Woo"; "Hoo"] |> String.intercalate "--o.o--";;
     // val it : string = "Woo--o.o--Hoo"
-    
+
  * zip/unzip - tuple together values inside two containers, or untuble tupled values
 
 On Monad/Functor/Applicatives
