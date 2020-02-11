@@ -163,7 +163,7 @@ Converting between `Choice` and `Result` is often useful:
 The String type:
 ================
 
- * [ String ](reference/fsharppuls-string.html)
+ * [ String ](reference/fsharpplus-string.html)
    * intercalate, intersperse, 
    * split, replace
    * isSubString, startsWith, endsWith, contains
@@ -189,9 +189,9 @@ Collections / Traversable types:
    * split, replace,
    * findSliceIndex, trySliceIndex,
    * partitionMap
- * [IList](reference/fsharpplus-ilist.html)]
+ * [IList](reference/fsharpplus-ilist.html)
    * toIReadOnlyList
- * [List](reference/fsharpplus-list.html)]
+ * [List](reference/fsharpplus-list.html)
    * singleton,
    * cons,
    * apply,
@@ -227,7 +227,7 @@ Collections / Traversable types:
  * [ IReadOnlyCollection ](reference/fsharpplus-ireadonlycollection.html)
      * ofArray, ofList, ofSeq
      * map
- * [ IReadOnlyList ](reference/fsharpplus-readonlylist.html)
+ * [ IReadOnlyList ](reference/fsharpplus-ireadonlylist.html)
    * ofArray, toArray
    * trySetItem, tryItem
  * [ Map ](reference/fsharpplus-map.html)
