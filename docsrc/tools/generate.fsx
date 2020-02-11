@@ -120,7 +120,8 @@ let processFile outdir path  =
     let t =
         { properties with
             Body = format body
-            Title = tips}
+            // Title = tips}
+        }
     t 
     |> template
     |> write outfile
@@ -135,6 +136,7 @@ let buildDocumentation () =
   Directory.copyRecursive Path.files Path.output
   IO.Directory.EnumerateFiles Path.content
   |> Seq.iter (processFile Path.output)
+
 // Generate
 copyFiles()
 buildDocumentation()
