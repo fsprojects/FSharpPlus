@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="Extensions" class="anchor" href="#Extensions">Extensions</a></h1>
+<p>Extensions are what you probably expect: helper functions for existing types.</p>
+<p>They are defined as modules with the same name as the types they operate on
+under the FSharpPlus namespace, so can be accessed via:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)" class="id">FSharpPlus</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Some functions are common across foldable types such as <code>intercalate</code> on
+List, Array and Seq, and others are common across wrapping containers,
+such as <code>map</code>, <code>bind</code> and <code>apply</code> on List, Array, and Seq, but also Option and Result.</p>
+<h1><a name="Construction" class="anchor" href="#Construction">Construction:</a></h1>
+<p>This is added and is already defined for Seq, Array and List:</p>
+<ul>
+<li>Enumerator.singleton - construct a container with the given value inside it</li>
+</ul>
+<p>To construct MonadError instances (Result or Choice) you can use result/throw:</p>
+<ul>
+<li>result - construct with the given value (as Ok or Choice1Of2)</li>
+<li>throw - construct an error from the given value (as Error or Choice2of2)</li>
+</ul>
+<p>It's also possible to construct by wrapping exception producing functions:</p>
+<ul>
+<li>protect - protect a function in try/catch, returning a wrapped value</li>
+</ul>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="c">// throws &quot;ArgumentException: The input sequence was empty.&quot;</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)" class="id">expectedSingleItem</span> <span class="o">=</span> <span onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+
+    <span class="c">// returns a Result.Error holding the exception as its value:</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)" class="id">expectedSingleItem</span> <span class="o">=</span> <span onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)" class="m">Result</span><span class="pn">.</span><span onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)" class="id">protect</span> <span onmouseout="hideTip(event, '3', 8)" onmouseover="showTip(event, '3', 8)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 9)" onmouseover="showTip(event, '4', 9)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+
+    <span class="c">// ...or like typical try prefixed functions, treat exception as None</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '8', 10)" onmouseover="showTip(event, '8', 10)" class="id">expectedSingleItem</span> <span class="o">=</span> <span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '10', 12)" onmouseover="showTip(event, '10', 12)" class="id">protect</span> <span onmouseout="hideTip(event, '3', 13)" onmouseover="showTip(event, '3', 13)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 14)" onmouseover="showTip(event, '4', 14)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+
+    <span class="c">// which might look like this:</span>
+    <span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, '11', 15)" onmouseover="showTip(event, '11', 15)" class="fn">tryExactlyOne</span> <span onmouseout="hideTip(event, '12', 16)" onmouseover="showTip(event, '12', 16)" class="id">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, '9', 17)" onmouseover="showTip(event, '9', 17)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '10', 18)" onmouseover="showTip(event, '10', 18)" class="id">protect</span> <span onmouseout="hideTip(event, '3', 19)" onmouseover="showTip(event, '3', 19)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 20)" onmouseover="showTip(event, '4', 20)" class="id">exactlyOne</span> <span onmouseout="hideTip(event, '12', 21)" onmouseover="showTip(event, '12', 21)" class="id">xs</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Deconstruction-unwrapping" class="anchor" href="#Deconstruction-unwrapping">Deconstruction (unwrapping):</a></h1>
+<p>Some extensions on Result are designed to behave like Option:</p>
+<ul>
+<li>Result.get - unwraps the value when it is an 'ok, otherwise throws an exception</li>
+<li>Result.defaultValue - return the 'ok value if present, otherwise the default value</li>
+<li>
+Result.defaultWith - return the 'ok value uif present, otherwise apply the given function
+to the 'error value
+</li>
+</ul>
+<p>To deconstruct MonadError instances (Result or Choice) use:</p>
+<ul>
+<li>either - unwraps the result/choice by applying the given <code>ok</code> or <code>err</code> function as appropriate</li>
+</ul>
+<p>Note that there is also the generic <code>either</code> operator function that works
+exactly the same as <code>Result.either</code>.</p>
+<p>Also, see the generic function <a href="reference/fsharpplus-operators.html"><code>option</code></a> that
+unwraps an Option in a similar way to <code>either</code>.</p>
+<h1><a name="On-Foldables" class="anchor" href="#On-Foldables">On Foldables</a></h1>
+<p>Foldables are the class of data structures that can be folded to a summary value.
+Most collections, or specifically 'foldable' instances implement these:</p>
+<ul>
+<li>intersperse - takes an element and `intersperses' that element between the elements</li>
+</ul>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="pn">[</span><span class="s">&quot;Bob&quot;</span><span class="pn">;</span> <span class="s">&quot;Jane&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 22)" onmouseover="showTip(event, '3', 22)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '13', 23)" onmouseover="showTip(event, '13', 23)" class="id">intersperse</span> <span class="s">&quot;and&quot;</span>
+    <span class="c">// [&quot;Bob&quot;; &quot;and&quot;; &quot;Jane&quot;]</span>
+
+    <span class="s">&quot;WooHoo&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '14', 24)" onmouseover="showTip(event, '14', 24)" class="id">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '15', 25)" onmouseover="showTip(event, '15', 25)" class="id">intersperse</span> <span class="s">&#39;-&#39;</span>
+    <span class="c">// val it : string = &quot;W-o-o-H-o-o&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<ul>
+<li>intercalate - insert a list of elements between each element and flattens</li>
+</ul>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="pn">[</span><span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">]</span><span class="pn">;</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 26)" onmouseover="showTip(event, '3', 26)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '16', 27)" onmouseover="showTip(event, '16', 27)" class="id">intercalate</span> <span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">;</span><span class="o">-</span><span class="n">2</span><span class="pn">]</span><span class="pn">;;</span>
+    <span class="c">// val it : int list = [1; 2; -1; -2; 3; 4]</span>
+
+    <span class="pn">[</span><span class="s">&quot;Woo&quot;</span><span class="pn">;</span> <span class="s">&quot;Hoo&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '14', 28)" onmouseover="showTip(event, '14', 28)" class="id">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '17', 29)" onmouseover="showTip(event, '17', 29)" class="id">intercalate</span> <span class="s">&quot;--o.o--&quot;</span><span class="pn">;;</span>
+    <span class="c">// val it : string = &quot;Woo--o.o--Hoo&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<ul>
+<li>zip/unzip - tuple together values inside two containers, or untuble tupled values</li>
+</ul>
+<h1><a name="On-Monad-Functor-Applicatives" class="anchor" href="#On-Monad-Functor-Applicatives">On Monad/Functor/Applicatives</a></h1>
+<p>Types that implement these will (typically) have these functions defined:</p>
+<ul>
+<li>map - apply a mapping function to the value inside a container</li>
+<li>bind - take a contained value, and apply a function that produces another contained value</li>
+<li>apply - like map but where the mapping function is also inside a container</li>
+</ul>
+<p>These can also be invoked from the generic functions without module prefix as per
+<a href="reference/fsharpplus-operators.html">generic functions &amp; operators</a>.</p>
+<h1><a name="Flatten" class="anchor" href="#Flatten">Flatten:</a></h1>
+<p>Flatten can be used when a container has another container inside it:</p>
+<ul>
+<li>Choice.flatten</li>
+<li>Result.flatten</li>
+<li>Option.flatten (already defined in FSharp Core)</li>
+</ul>
+<p>Note that on traversable types like List, Array and Seq, FSharp Core uses the
+more common <code>concat</code> for flatten and so this naming is continued for Enumerable:</p>
+<ul>
+<li>Enumerable.concat</li>
+</ul>
+<h1><a name="Partitioning" class="anchor" href="#Partitioning">Partitioning:</a></h1>
+<p>Partitioning can be done by applying a separating function that produces a Choice:</p>
+<ul>
+<li>Array.partitionMap</li>
+<li>List.partitionMap</li>
+</ul>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">let</span> <span class="id">isEven</span> <span class="id">x</span> <span class="o">=</span> <span class="pn">(</span><span class="id">x</span> <span class="o">%</span> <span class="n">2</span><span class="pn">)</span> <span class="o">=</span> <span class="n">0</span>
+    <span class="k">let</span> <span class="id">chooseEven</span> <span class="id">x</span> <span class="o">=</span> <span class="k">if</span> <span class="id">isEven</span> <span class="id">x</span> <span class="k">then</span> <span onmouseout="hideTip(event, '18', 30)" onmouseover="showTip(event, '18', 30)" class="id">Choice1Of2</span> <span class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '19', 31)" onmouseover="showTip(event, '19', 31)" class="id">Choice2Of2</span> <span class="id">x</span>
+
+    <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">4</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 32)" onmouseover="showTip(event, '3', 32)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '20', 33)" onmouseover="showTip(event, '20', 33)" class="id">partitionMap</span> <span class="id">chooseEven</span>
+    <span class="c">// val it : int list * int list = ([2; 4], [1; 3])</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="Conversion-functions" class="anchor" href="#Conversion-functions">Conversion functions:</a></h1>
+<p>F#+ adds functions to convert between Result, Choice and Option types.</p>
+<p>These should be self explanatory, but be aware that sometimes they are 'lossy'
+usually when converting to Option:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="c">// Convert a `Result` to an `Option` - effectively throws away error value</span>
+    <span class="c">// when present, by replacing with `None`</span>
+    <span class="id">request</span> <span class="o">|&gt;</span> <span class="id">validateRequest</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '9', 34)" onmouseover="showTip(event, '9', 34)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '21', 35)" onmouseover="showTip(event, '21', 35)" class="id">ofResult</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Going the other way is similar, but a value needs to be filled in for None:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">let</span> <span class="id">firstElementOption</span> <span class="o">=</span> <span class="id">xs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 36)" onmouseover="showTip(event, '3', 36)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '22', 37)" onmouseover="showTip(event, '22', 37)" class="id">tryHead</span>
+
+    <span class="c">// Convert an `Option` to a `Result` will use unit as the Error:</span>
+    <span class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '9', 38)" onmouseover="showTip(event, '9', 38)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '23', 39)" onmouseover="showTip(event, '23', 39)" class="id">toResult</span>
+
+    <span class="c">// ...but you can specify an error value with Option.toResultWith:</span>
+    <span class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '9', 40)" onmouseover="showTip(event, '9', 40)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '24', 41)" onmouseover="showTip(event, '24', 41)" class="id">toResultWith</span> <span class="s">&quot;No Element&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<p>Converting between <code>Choice</code> and <code>Result</code> is often useful:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">let</span> <span class="id">asyncChoice</span> <span class="o">=</span> <span class="id">anAsyncValue</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '25', 42)" onmouseover="showTip(event, '25', 42)" class="id">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, '26', 43)" onmouseover="showTip(event, '26', 43)" class="id">Catch</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '25', 44)" onmouseover="showTip(event, '25', 44)" class="id">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, '26', 45)" onmouseover="showTip(event, '26', 45)" class="id">map</span> <span onmouseout="hideTip(event, '6', 46)" onmouseover="showTip(event, '6', 46)" class="id">Result</span><span class="pn">.</span><span onmouseout="hideTip(event, '27', 47)" onmouseover="showTip(event, '27', 47)" class="id">ofChoice</span>
+</code></pre></td>
+</tr>
+</table>
+<h1><a name="The-String-type" class="anchor" href="#The-String-type">The String type:</a></h1>
+<ul>
+<li>
+<a href="reference/fsharppuls-string.html"> String </a>
+<ul>
+<li>intercalate, intersperse,</li>
+<li>split, replace</li>
+<li>isSubString, startsWith, endsWith, contains</li>
+<li>toUpper, toLower</li>
+<li>trimWhiteSpaces</li>
+<li>normalize</li>
+<li>removeDiacritics</li>
+<li>padLeft, padLeftWith, padRight, padRightWith</li>
+<li>trim, trimStart, trimEnd</li>
+<li>item, tryItem</li>
+<li>rev</li>
+<li>take, skip takeWhile, skipWhile</li>
+<li>truncate, drop</li>
+<li>findIndex, tryFindIndex</li>
+<li>findSliceIndex, tryFindSliceIndex</li>
+<li>toArray, ofArray, toList, ofList, toSeq, ofSeq, toCodePoints, ofCodePoints</li>
+<li>getBytes</li>
+</ul>
+</li>
+</ul>
+<h1><a name="Collections-Traversable-types" class="anchor" href="#Collections-Traversable-types">Collections / Traversable types:</a></h1>
+<ul>
+<li>
+<a href="reference/fsharpplus-array.html">Array</a>
+<ul>
+<li>intercalate, intersperse,</li>
+<li>split, replace,</li>
+<li>findSliceIndex, trySliceIndex,</li>
+<li>partitionMap</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-ilist.html">IList</a>]
+<ul>
+<li>toIReadOnlyList</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-list.html">List</a>]
+<ul>
+<li>singleton,</li>
+<li>cons,</li>
+<li>apply,</li>
+<li>tails, take, skip, drop,</li>
+<li>intercalate, intersperse,</li>
+<li>split, replace,</li>
+<li>toIReadOnlyList,</li>
+<li>findSliceIndex, tryFindSliceIndex,</li>
+<li>partitionMap</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-enumerator.html">Enumerator</a>
+<ul>
+<li>
+EmptyEnumerator
+<ul>
+<li>Empty - create an empty enumerator</li>
+</ul>
+</li>
+<li>
+ConcatEnumerator
+<ul>
+<li>concat</li>
+</ul>
+</li>
+<li>
+MapEnumerators
+<ul>
+<li>map, mapi, map2, mapi2, map3</li>
+</ul>
+</li>
+<li>singleton</li>
+<li>tryItem, nth</li>
+<li>choose</li>
+<li>filter</li>
+<li>unfold</li>
+<li>upto</li>
+<li>zip, zip3</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-seq.html"> Seq </a>
+<ul>
+<li>bind, apply, foldback</li>
+<li>chunkBy</li>
+<li>intersperse, intercalate,</li>
+<li>split, replace</li>
+<li>drop</li>
+<li>replicate</li>
+<li>toIReadOnlyList</li>
+<li>findSliceIndex, tryFindSliceIndex</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-ireadonlycollection.html"> IReadOnlyCollection </a>
+<ul>
+<li>ofArray, ofList, ofSeq</li>
+<li>map</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-readonlylist.html"> IReadOnlyList </a>
+<ul>
+<li>ofArray, toArray</li>
+<li>trySetItem, tryItem</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-map.html"> Map </a>
+<ul>
+<li>keys, values</li>
+<li>mapValues, mapValues2</li>
+<li>zip, unzip</li>
+<li>unionWith, union, intersectWith, intersect</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-dict.html"> Dict </a>
+<ul>
+<li>toIReadOnlyDictionary</li>
+<li>tryGetValue</li>
+<li>containsKey</li>
+<li>keys, values</li>
+<li>map, map2</li>
+<li>zip, unzip</li>
+<li>unionWith, union, intersectWith, intersect</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-ireadonlydictionary.html"> IReadOnlyDictionary </a>
+<ul>
+<li>add,</li>
+<li>tryGetValue, containsKey,</li>
+<li>keys, values,</li>
+<li>map, map2,</li>
+<li>zip, unzip,</li>
+<li>unionWith, union, intersectWith, intersect</li>
+</ul>
+</li>
+</ul>
+<h1><a name="Async-and-Tasks" class="anchor" href="#Async-and-Tasks">Async and Tasks:</a></h1>
+<ul>
+<li>
+<a href="reference/fsharpplus-task.html"> Task </a>
+<ul>
+<li>map, map2</li>
+<li>apply</li>
+<li>zip</li>
+<li>join</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-async.html"> Async </a>
+<ul>
+<li>map, map2</li>
+<li>zip</li>
+<li>join</li>
+<li>apply</li>
+<li>raise</li>
+</ul>
+</li>
+</ul>
+<h1><a name="Option-Choice-and-Result-types" class="anchor" href="#Option-Choice-and-Result-types">Option, Choice and Result types:</a></h1>
+<ul>
+<li>
+<a href="reference/fsharpplus-option.html">Option</a>
+<ul>
+<li>apply,</li>
+<li>unzip, zip,</li>
+<li>toResult, toResultWith, ofResult,</li>
+<li>protect</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-choice.html">Choice</a>
+<ul>
+<li>result, throw - construct a Choice</li>
+<li>bind, apply, flatten,</li>
+<li>map,</li>
+<li>catch, - deprecated</li>
+<li>bindChoice2Of2,</li>
+<li>either,</li>
+<li>protect</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-result.html"> Result </a>
+<ul>
+<li>result, throw - construct a Result</li>
+<li>apply, (map, bind already defined)</li>
+<li>flatten,</li>
+<li>bindError,</li>
+<li>either,</li>
+<li>protect,</li>
+<li>get,</li>
+<li>defaultValue, defaultWith,</li>
+<li>toChoice, ofChoice,</li>
+<li>partition</li>
+</ul>
+</li>
+</ul>
+<h1><a name="Extensions-Methods-on-existing-types" class="anchor" href="#Extensions-Methods-on-existing-types">Extensions Methods (on existing types):</a></h1>
+<p>These are usable from C#</p>
+<ul>
+<li>
+<a href="extension-methods.html"> Extension Methods </a>
+<ul>
+<li>IEnumerable<'T'>.GetSlice</li>
+<li>List<'T>.GetSlice</li>
+<li>Task<'T>.WhenAll</li>
+<li>Async.Sequence - of seq, list or array</li>
+<li>Option.Sequence - of seq</li>
+</ul>
+</li>
+</ul>
+</div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./types.html">Types</a></li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>
