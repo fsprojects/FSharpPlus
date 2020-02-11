@@ -13,18 +13,20 @@ under the FSharpPlus namespace, so can be accessed via:</p>
 List, Array and Seq, and others are common across wrapping containers,
 such as <code>map</code>, <code>bind</code> and <code>apply</code> on List, Array, and Seq, but also Option and Result.</p>
 <h1><a name="Construction" class="anchor" href="#Construction">Construction:</a></h1>
-<p>This is added and is already defined for Seq, Array and List:</p>
+<p>The <code>singleton</code> function is already defined for Seq, Array and List, but F#+ adds it for Enumerator:</p>
 <ul>
 <li>Enumerator.singleton - construct a container with the given value inside it</li>
 </ul>
 <p>To construct MonadError instances (Result or Choice) you can use result/throw:</p>
 <ul>
-<li>result - construct with the given value (as Ok or Choice1Of2)</li>
-<li>throw - construct an error from the given value (as Error or Choice2of2)</li>
+<li>Result.result / Choice.result - construct with the given value (as Ok or Choice1Of2)</li>
+<li>Result.throw / Choice.throw - construct an error from the given value (as Error or Choice2of2)</li>
 </ul>
 <p>It's also possible to construct by wrapping exception producing functions:</p>
 <ul>
-<li>protect - protect a function in try/catch, returning a wrapped value</li>
+<li>Option.protect - returns None on exception</li>
+<li>Result.protect - returns Error with exception value on exception</li>
+<li>Choice.protect - returns Choice2Of2 with exception value on exception</li>
 </ul>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
 <span class="l"> 2: </span>
@@ -58,13 +60,14 @@ such as <code>map</code>, <code>bind</code> and <code>apply</code> on List, Arra
 <li>Result.get - unwraps the value when it is an 'ok, otherwise throws an exception</li>
 <li>Result.defaultValue - return the 'ok value if present, otherwise the default value</li>
 <li>
-Result.defaultWith - return the 'ok value uif present, otherwise apply the given function
+Result.defaultWith - return the 'ok value if present, otherwise apply the given function
 to the 'error value
 </li>
 </ul>
 <p>To deconstruct MonadError instances (Result or Choice) use:</p>
 <ul>
-<li>either - unwraps the result/choice by applying the given <code>ok</code> or <code>err</code> function as appropriate</li>
+<li>Result.either - unwraps the result by applying the given <code>ok</code> or <code>err</code> function as appropriate</li>
+<li>Choice.either - unwraps the choice by applying the given <code>choice1</code> or <code>choice2</code> function as appropriate</li>
 </ul>
 <p>Note that there is also the generic <code>either</code> operator function that works
 exactly the same as <code>Result.either</code>.</p>
@@ -194,7 +197,7 @@ usually when converting to Option:</p>
 <h1><a name="The-String-type" class="anchor" href="#The-String-type">The String type:</a></h1>
 <ul>
 <li>
-<a href="reference/fsharppuls-string.html"> String </a>
+<a href="reference/fsharpplus-string.html"> String </a>
 <ul>
 <li>intercalate, intersperse,</li>
 <li>split, replace</li>
@@ -228,13 +231,13 @@ usually when converting to Option:</p>
 </ul>
 </li>
 <li>
-<a href="reference/fsharpplus-ilist.html">IList</a>]
+<a href="reference/fsharpplus-ilist.html">IList</a>
 <ul>
 <li>toIReadOnlyList</li>
 </ul>
 </li>
 <li>
-<a href="reference/fsharpplus-list.html">List</a>]
+<a href="reference/fsharpplus-list.html">List</a>
 <ul>
 <li>singleton,</li>
 <li>cons,</li>
@@ -298,7 +301,7 @@ MapEnumerators
 </ul>
 </li>
 <li>
-<a href="reference/fsharpplus-readonlylist.html"> IReadOnlyList </a>
+<a href="reference/fsharpplus-ireadonlylist.html"> IReadOnlyList </a>
 <ul>
 <li>ofArray, toArray</li>
 <li>trySetItem, tryItem</li>
@@ -412,4 +415,4 @@ MapEnumerators
 </ul>
 </li>
 </ul>
-</div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./types.html">Types</a></li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>
+</div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./reference/index.html">API Reference</a></li><li><a href="./types.html">Types</a></li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>
