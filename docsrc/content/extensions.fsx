@@ -21,18 +21,20 @@ such as `map`, `bind` and `apply` on List, Array, and Seq, but also Option and R
 
 Construction:
 =============
-This is added and is already defined for Seq, Array and List:
+The `singleton` function is already defined for Seq, Array and List, but F#+ adds it for Enumerator:
 
  * Enumerator.singleton - construct a container with the given value inside it
 
 To construct MonadError instances (Result or Choice) you can use result/throw:
 
- * result - construct with the given value (as Ok or Choice1Of2)
- * throw - construct an error from the given value (as Error or Choice2of2)
+ * Result.result / Choice.result - construct with the given value (as Ok or Choice1Of2)
+ * Result.throw / Choice.throw - construct an error from the given value (as Error or Choice2of2)
 
 It's also possible to construct by wrapping exception producing functions:
 
- * protect - protect a function in try/catch, returning a wrapped value
+ * Option.protect - returns None on exception
+ * Result.protect - returns Error with exception value on exception
+ * Choice.protect - returns Choice2Of2 with exception value on exception
 *)
     // throws "ArgumentException: The input sequence was empty."
     let expectedSingleItem = List.exactlyOne []
@@ -53,12 +55,13 @@ Some extensions on Result are designed to behave like Option:
 
  * Result.get - unwraps the value when it is an 'ok, otherwise throws an exception
  * Result.defaultValue - return the 'ok value if present, otherwise the default value
- * Result.defaultWith - return the 'ok value uif present, otherwise apply the given function
+ * Result.defaultWith - return the 'ok value if present, otherwise apply the given function
    to the 'error value
 
 To deconstruct MonadError instances (Result or Choice) use:
 
- * either - unwraps the result/choice by applying the given `ok` or `err` function as appropriate
+ * Result.either - unwraps the result by applying the given `ok` or `err` function as appropriate
+ * Choice.either - unwraps the choice by applying the given `choice1` or `choice2` function as appropriate
 
 Note that there is also the generic `either` operator function that works
 exactly the same as `Result.either`.
