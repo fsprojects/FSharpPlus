@@ -87,9 +87,9 @@ let template (m:PropertyMeta) =
                                         [ str "Tutorial" ] ]
                                   li [ Class "nav-header" ]
                                     [ str "Documentation" ]
-                                  (*li [ ]
+                                  li [ ]
                                     [ a [ Href <| m.Root "/reference/index.html" ]
-                                        [ str "API Reference" ] ]*)
+                                        [ str "API Reference" ] ]
                                   li [ ]
                                     [ a [ Href <| m.Root "/types.html" ]
                                         [ str "Types" ] ]
