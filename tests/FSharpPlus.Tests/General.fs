@@ -1031,12 +1031,12 @@ module Traversable =
         let d' = traverse toLists   [1..20]
         let e' = traverse toEithers [1..20]
 
-        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
         SideEffects.reset ()
 
         let f' = traverse toEithers [|1..20|]
 
-        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<list<int>,string>.Choice2Of2 "This is a failure", c)
