@@ -1,4 +1,4 @@
-namespace FSharpPlus.TypeLits
+namespace FSharpPlus.TypeLevel
 
 /// Marker interface for type-level literals.
 ///

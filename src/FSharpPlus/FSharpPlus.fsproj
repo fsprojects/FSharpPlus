@@ -60,10 +60,10 @@
     <Compile Include="Extensions/Task.fs" />
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
-    <Compile Include="TypeLevelOperators.fs" />
-    <Compile Include="TypeBool.fs" />
-    <Compile Include="TypeNat.fs" />
-    <Compile Include="TypeNat.Provider.fs" />
+    <Compile Include="TypeLevel/TypeLevelOperators.fs" />
+    <Compile Include="TypeLevel/TypeBool.fs" />
+    <Compile Include="TypeLevel/TypeNat.fs" />
+    <Compile Include="TypeLevel/TypeNat.Provider.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
@@ -108,9 +108,9 @@
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
+    <Compile Include="Data/Matrix.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
-    <Compile Include="Matrix.fs" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Split-Join.fsx" />
     <None Include="Samples\Conversions.fsx" />

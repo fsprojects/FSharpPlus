@@ -1,4 +1,4 @@
-namespace FSharpPlus.TypeLits
+namespace FSharpPlus.TypeLevel
 
 
 type NatTypeError<'a>() =
@@ -109,7 +109,7 @@ module TypeNat =
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =
     (^Nat: (static member Match: _*_*_->_) n, caseZ, caseSn)
 
-#if TYPELITS_DEBUG
+#if TYPELEVEL_DEBUG
 module private NatTests =
   open TypeBool
 

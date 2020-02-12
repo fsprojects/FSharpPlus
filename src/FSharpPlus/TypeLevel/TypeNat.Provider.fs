@@ -1,4 +1,4 @@
-namespace FSharpPlus.TypeLits
+namespace FSharpPlus.TypeLevel
 
 open System.Reflection
 open FSharp.Core.CompilerServices
@@ -40,7 +40,7 @@ module internal ProviderUtils =
 type NatProvider (cfg) as this =
   inherit TypeProviderForNamespaces(cfg)
   let thisAsm = Assembly.GetExecutingAssembly()
-  let root = "FSharpPlus.TypeLits"
+  let root = "FSharpPlus.TypeLevel"
   let baseTy = typeof<obj>
   let prm = [ProvidedStaticParameter("value", typeof<int>)]
   let ty = ProvidedTypeDefinition(thisAsm, root, "TypeNat", Some baseTy)

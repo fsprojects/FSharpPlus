@@ -184,7 +184,7 @@ type Uncurry =
     static member Uncurry ((t1, t2, t3, t4, t5, t6)    , _: Uncurry) = fun f -> f t1 t2 t3 t4 t5 t6
     static member Uncurry ((t1, t2, t3, t4, t5, t6, t7), _: Uncurry) = fun f -> f t1 t2 t3 t4 t5 t6 t7
 
-open FSharpPlus.TypeLits
+open FSharpPlus.TypeLevel
 
 type CountTuple =
   static member inline Invoke xs : 'n =
