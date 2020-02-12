@@ -912,7 +912,10 @@ module Traversable =
     type Either<'l,'r> = Left of 'l | Right of 'r with
         static member Return x = Right x
         static member inline get_Empty () = Left empty
-        static member (<*>) (f, x) = match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e
+        static member Map (x, f) = match x with Right a -> Right (f a) | Left a -> Left a
+        static member (<*>) (f, x) =
+            SideEffects.add ("f(x) <*> " + string x)
+            match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e
         static member IsLeftZeroForApply x = match x with Left _ -> true | _ -> false
 
     let traverseTest =
@@ -962,21 +965,61 @@ module Traversable =
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
 
     [<Test>]
-    let traverseInfiniteOptions () =
+    let traverseInfiniteApplicatives () =
         let toOptions x = if x <> 4 then Some x       else None
         let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
         let toLists   x = if x <> 4 then [x; x]       else []
         let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
+
+        let expectedEffects =
+            [
+                """f(x) <*> Right 0"""
+                """f(x) <*> Right 1"""
+                """f(x) <*> Right 2"""
+                """f(x) <*> Right 3"""
+                """f(x) <*> Left ["This is a failure"]"""
+            ]
+        SideEffects.reset ()
+
         let a = sequence (Seq.initInfinite toOptions)
         let b = sequence (Seq.initInfinite toOptions)
         let c = sequence (Seq.initInfinite toChoices)
         let d = sequence (Seq.initInfinite toLists)
         let e = sequence (Seq.initInfinite toEithers)
+
+        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        SideEffects.reset ()
+
         let a' = traverse toOptions (Seq.initInfinite id)
         let b' = traverse toOptions (Seq.initInfinite id)
         let c' = traverse toChoices (Seq.initInfinite id)
         let d' = traverse toLists   (Seq.initInfinite id)
         let e' = traverse toEithers (Seq.initInfinite id)
+
+        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        Assert.AreEqual (None, a)
+        Assert.AreEqual (None, b)
+        Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
+        Assert.AreEqual ([], d)
+        Assert.AreEqual (Either<string list,seq<int>>.Left ["This is a failure"], e)
+        
+
+    [<Test>]
+    let traverseFiniteApplicatives () =
+        let toOptions x = if x <> 4 then Some x       else None
+        let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
+        let toLists   x = if x <> 4 then [x; x]       else []
+        let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
+        let a = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
+        let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
+        let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
+        let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
+        let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
+        let a' = traverse toOptions [1..20]
+        let b' = traverse toOptions [1..20]
+        let c' = traverse toChoices [1..20]
+        let d' = traverse toLists   [1..20]
+        let e' = traverse toEithers [1..20]
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
