@@ -17,16 +17,13 @@ type Sequence =
     #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline ForInfiniteSequences (t: seq<_>, isFailure) =
-        let mutable failure = None
-        let buf = Seq.toArray (seq {
-            use e = t.GetEnumerator ()
-            while e.MoveNext () && failure.IsNone do
-                if isFailure e.Current then failure <- Some e.Current
-                else yield e.Current })
-        let buf = match failure with None -> buf | Some e -> [|e|]
-        let cons x y = Array.append [|x|] y
-        let cons_f x ys = Map.Invoke cons x <*> ys
-        let r = Array.foldBack cons_f buf (result [||])
+        let add x y = Array.append x [|y|]
+        let mutable go = true
+        let mutable r = result [||]
+        use e = t.GetEnumerator ()
+        while e.MoveNext () && go do
+            if isFailure e.Current then go <- false
+            r <- Map.Invoke add r <*> e.Current
         Map.Invoke Array.toSeq r
     #endif
     
