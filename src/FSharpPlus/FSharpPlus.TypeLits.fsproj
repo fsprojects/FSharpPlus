@@ -2,20 +2,21 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);TYPELITS_DEBUG</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
     <Compile Include="../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
     <Compile Include="Internals.fs" />
-    <Compile Include="Extensions.fs" />
-    <Compile Include="Converter.fs" />
-    <Compile Include="Numeric.fs" />
+    <Compile Include="Extensions/Enumerator.fs" />
     <Compile Include="TypeLevelOperators.fs" />
     <Compile Include="TypeBool.fs" />
     <Compile Include="TypeNat.fs" />
     <Compile Include="TypeNat.Provider.fs" />
-    <Compile Include="Tuple.fs" />
+    <Compile Include="Control/Converter.fs" />
+    <Compile Include="Control/Numeric.fs" />
+    <Compile Include="Control/Tuple.fs" />
     <Compile Include="Matrix.fs" />
   </ItemGroup>
 </Project>

@@ -50,7 +50,7 @@ module TypeBool =
   let inline IfThenElse (cond: ^Bool) (a: 'a) (b: 'b) = (^Bool: (static member IfThenElse: _*_*_->'Result) cond,a,b)
   let inline Assert (_: True) = ()
 
-#if DEBUG
+#if TYPELITS_DEBUG
 module private BoolTests =
   open TypeBool
   let inline f0 x = Not x

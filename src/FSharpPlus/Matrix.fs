@@ -508,7 +508,7 @@ module MatrixOperators =
     AssertTupleType.Invoke(t, Unchecked.defaultof<'at>, m)
     t
 
-#if DEBUG
+#if TYPELITS_DEBUG
 module MatrixTests =
   let v1 = vector (1,2,3,4,5)
   let v2 = vector (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5)

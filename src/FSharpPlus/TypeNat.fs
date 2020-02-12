@@ -109,7 +109,7 @@ module TypeNat =
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =
     (^Nat: (static member Match: _*_*_->_) n, caseZ, caseSn)
 
-#if DEBUG
+#if TYPELITS_DEBUG
 module private NatTests =
   open TypeBool
 
