@@ -989,7 +989,7 @@ module Traversable =
         let d = sequence (Seq.initInfinite toLists)
         let e = sequence (Seq.initInfinite toEithers)
 
-        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
         SideEffects.reset ()
 
         let a' = traverse toOptions (Seq.initInfinite id)
@@ -998,7 +998,7 @@ module Traversable =
         let d' = traverse toLists   (Seq.initInfinite id)
         let e' = traverse toEithers (Seq.initInfinite id)
 
-        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
@@ -1017,12 +1017,12 @@ module Traversable =
         let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
         let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
 
-        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
         SideEffects.reset ()
 
         let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
 
-        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
         SideEffects.reset ()
 
         let a' = traverse toOptions [1..20]
@@ -1031,12 +1031,12 @@ module Traversable =
         let d' = traverse toLists   [1..20]
         let e' = traverse toEithers [1..20]
 
-        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
         SideEffects.reset ()
 
         let f' = traverse toEithers [|1..20|]
 
-        Assert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<list<int>,string>.Choice2Of2 "This is a failure", c)
