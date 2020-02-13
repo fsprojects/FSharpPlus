@@ -62,9 +62,9 @@
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
     <Compile Include="Control/Monad.fs" />
+    <Compile Include="Control/Alternative.fs" />
     <Compile Include="Control/Applicative.fs" />
     <Compile Include="Control/Functor.fs" />
-    <Compile Include="Control/Alternative.fs" />
     <Compile Include="Control/MonadOps.fs" />
     <Compile Include="Control/Comonad.fs" />
     <Compile Include="Control/Invokable.fs" />
