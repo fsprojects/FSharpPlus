@@ -1007,7 +1007,7 @@ module Traversable =
         
 
     [<Test>]
-    let traverseFiniteApplicatives () =
+    let traverseFiniteApplicatives () = // TODO -> implement short-circuit without breaking anything else
 
         SideEffects.reset ()
 
@@ -1017,12 +1017,12 @@ module Traversable =
         let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
         let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
 
-        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
         SideEffects.reset ()
 
         let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
 
-        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
         SideEffects.reset ()
 
         let a' = traverse toOptions [1..20]
@@ -1056,6 +1056,16 @@ module Traversable =
     let traverseTask () =
         let a = traverse Task.FromResult [1;2]
         CollectionAssert.AreEqual ([1;2], a.Result)
+        Assert.IsInstanceOf<Option<list<int>>> (Some a.Result)
+        let b = map Task.FromResult [1;2] |> sequence
+        CollectionAssert.AreEqual ([1;2], b.Result)
+        Assert.IsInstanceOf<Option<list<int>>> (Some b.Result)
+        let c = traverse Task.FromResult [|1;2|]
+        CollectionAssert.AreEqual ([|1;2|], c.Result)
+        Assert.IsInstanceOf<Option<array<int>>> (Some c.Result)
+        let d = map Task.FromResult [|1;2|] |> sequence
+        CollectionAssert.AreEqual ([|1;2|], d.Result)
+        Assert.IsInstanceOf<Option<array<int>>> (Some d.Result)
 
     [<Test>]
     let traverseMap () =
