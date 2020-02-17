@@ -1,12 +1,17 @@
 <Project ToolsVersion="15.0">
 
   <PropertyGroup>
-    <Authors>gusty</Authors>
-    <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus/</PackageProjectUrl>
-    <PackageTags>tracing;fsharp</PackageTags>
-    <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/fsprojects/FSharpPlus.git</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>
+      A complete and extensible base library for F#.
+    </Description>
+    <Authors>Gusty</Authors>
+    <Copyright>2012-2020 Gustavo P. Leon (and contributors https://github.com/fsprojects/FSharpPlus/graphs/contributors)</Copyright>
+    <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus</PackageProjectUrl>
+    <PackageIconUrl>https://raw.github.com/fsprojects/FSharpPlus/master/docsrc/files/img/logo.png</PackageIconUrl>
+    <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
