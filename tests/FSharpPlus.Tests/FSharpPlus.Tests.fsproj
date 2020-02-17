@@ -5,7 +5,7 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.2;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.2;net452</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -19,7 +19,7 @@
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="BifoldableTests.fs" />
-    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net45'" />
+    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
