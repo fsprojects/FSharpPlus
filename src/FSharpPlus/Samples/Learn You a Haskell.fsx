@@ -334,8 +334,8 @@ let stackManip stack =
 
 let res73 = stackManip [5;8;2;1]                                                      // (5, [8; 2; 1])
 
-let pop1 = State ( fun (x::xs) -> (x,xs) )
-let push1 a = State ( fun xs -> ((),a::xs) )
+let pop1<'a> : State<'a list,'a> = state ( fun (x::xs) -> (x,xs) )
+let push1 a = state ( fun xs -> ((),a::xs) )
 
 let stackManip1 =
     monad {
@@ -402,7 +402,7 @@ let res90 = join [[1;2;3];[4;5;6]]                                              
 let res91 = join (Writer (Writer (1,"aaa"), "bbb")) |> Writer.run                     // (1, "bbbaaa")
 let res92 : Choice<int, string> = join (Choice1Of2 (Choice1Of2 9))                    // Choice1Of2 9
 let res93 : Choice<int, string> = join (Choice1Of2 (Choice2Of2 "error"))              // Choice2Of2 "error"
-let res94 = join ( State (fun s -> (push1 10, 1::2::s)) ) |> State.run <| [0;0;0]     // (null, [10; 1; 2; 0; 0; 0])
+let res94 = join ( state (fun s -> (push1 10, 1::2::s)) ) |> State.run <| [0;0;0]     // (null, [10; 1; 2; 0; 0; 0])
 
 //filterM          :: (Monad m) => (a -> m Bool) -> [a] -> m [a]
 //filterM _ []     =  return []

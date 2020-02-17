@@ -2,6 +2,7 @@
 
 open FSharpPlus.Internals
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Internals.MonadOps
 
 // MonadTrans
@@ -55,8 +56,32 @@ type CallCC = static member inline Invoke (f: (('T -> '``MonadCont<'U>``) ->'``M
 
 // MonadState
 
-type Get = static member inline Invoke ()      : '``MonadState<'S * 'S>``   = (^``MonadState<'S * 'S>``   : (static member Get :      _) ())
-type Put = static member inline Invoke (x: 'S) : '``MonadState<unit * 'S>`` = (^``MonadState<unit * 'S>`` : (static member Put : _ -> _) x)
+type DuState<'s,'t> = DuState of ('s->('t * 's))
+
+type Get =
+    inherit Default1
+    static member inline Get (_: ^``MonadState<'S * 'S>``, _: Default1) = (^``MonadState<'S * 'S>`` : (static member Get : _) ()) : ^``MonadState<'S * 'S>``
+    static member        Get (_: DuState<'S,'S>          , _: Get     ) = DuState (fun (s: 'S) -> (s, s))                         : DuState<'S,'S>
+    static member        Get (_: State<'S,'S>            , _: Get     ) = State.get                                               : State<'S,'S>
+
+    static member inline Invoke () =
+        let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Get : _*_ -> _) b, a)
+        let inline call (a: 'a) = call_2 (a, Unchecked.defaultof<'r>) :'r
+        call Unchecked.defaultof<Get>
+
+
+type Put =
+    static member inline Invoke (x: 'E) : '``'MonadError<'E,'T>`` =
+        let inline call_2 (_: ^a, b: ^R, x) = ((^a or ^R) : (static member Put : _*_->'R) (b, x))
+        let inline call (a: 'a, x: 'x) = call_2 (a, Unchecked.defaultof<'r>, x) : 'r
+        call (Unchecked.defaultof<Put>, x)
+
+    #if !FABLE_COMPILER
+    static member inline Put (_: 'R, x: 'E) = (^R : (static member Put : _ -> ^R) x)
+    static member inline Put (_: ^t when ^t: null and ^t: struct, _) = id
+    #endif
+    static member        Put (_: State<'S,unit>  , x: 'S) = State.put x                : State<'S,unit>
+    static member        Put (_: DuState<'S,unit>, x: 'S) = DuState (fun _ -> ((), x)) : DuState<'S,unit>
 
 
 // MonadReader

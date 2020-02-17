@@ -8,6 +8,7 @@ open Microsoft.FSharp.Quotations
 
 open FSharpPlus.Internals
 open FSharpPlus
+open FSharpPlus.Data
 
 
 type Apply =
@@ -24,6 +25,7 @@ type Apply =
     static member        ``<*>`` (f: list<_>          , x: list<'T>             , [<Optional>]_output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
     static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
     static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
+    static member        ``<*>`` (f: State<'S,_>      , x: State<'S,'T>         , [<Optional>]_output:  State<'S,'U>        , [<Optional>]_mthd: Apply) = State.apply f x                              : State<'S,'U>
     static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , [<Optional>]_output: 'Monoid * 'U         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
     #if !FABLE_COMPILER
     static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>

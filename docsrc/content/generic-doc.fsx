@@ -54,7 +54,7 @@ open FSharpPlus.Data
 map string (NonEmptyList.create 2 [3;4;5])
 // val it : NonEmptyList<string> = {Head = "2"; Tail = ["3"; "4"; "5"];}
 
-let stateFul42 = map string (State (fun x -> (42, x)))
+let stateFul42 = map string (state (fun x -> (42, x)))
 State.run stateFul42 "state"
 // val stateFul42 : State<string,string> = State <fun:map@12-9>
 // val it : string * string = ("42", "state")

@@ -11,6 +11,7 @@ open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
+open FSharpPlus.Data
 
 // Monad class ------------------------------------------------------------
 
@@ -21,9 +22,10 @@ type Bind =
     static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
 #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
-    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
+    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>
     static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []     
-    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
+    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U
+    static member        (>>=) (source             , f: 'T -> _           ) = State.bind f source                                           : State<'S,'U>  
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
     static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                                        : Async<'U>
     static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
@@ -67,6 +69,7 @@ type Join =
     static member        Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x              : list<'T>
     static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
     static member        Join (g                        , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)         : 'R->'T
+    static member        Join (x: State<'S,State<'S,_>> , [<Optional>]_output: State<'S,'T>    , [<Optional>]_mthd: Join    ) = State.bind id x            : State<'S,'T>
     static member inline Join (m1, (m2, x)              , [<Optional>]_output: 'Monoid * 'T    , [<Optional>]_mthd: Join    ) = Plus.Invoke m1 m2, x       : 'Monoid*'T
     static member        Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind (x, id)         : Async<'T>
     static member        Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x           : Result<'T,'E>
@@ -122,6 +125,7 @@ type Return =
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []
     static member        Return (_: 'r -> 'a       , _: Return  ) = const': 'a -> 'r -> _
+    static member        Return (_: State<'S,'T>   , _: Return  ) = fun x -> state (fun s -> (x, s))              : State<'S,'T>
     static member inline Return (_:  'm * 'a       , _: Return  ) = fun (x: 'a) -> (Zero.Invoke (): 'm), x
     static member        Return (_: 'a Async       , _: Return  ) = fun (x: 'a) -> async.Return x
     static member        Return (_: Result<'a,'e>  , _: Return  ) = fun x -> Ok x                                 : Result<'a,'e>
@@ -141,7 +145,7 @@ type Return =
 type Delay =
     inherit Default1
     
-    static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` :     struct, _: Default2) = x ()
+    static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>``                                 , _: Default2) = x ()
     static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` : not struct, _: Default1) = x ()
     static member inline Delay (_mthd: Default1, x: unit-> ^I                                             , _: Delay   ) = (^I : (static member Delay : _->_) x) : ^I
     static member inline Delay (_mthd: Default1, _: unit-> ^t when  ^t : null and ^t  : struct            , _          ) = ()

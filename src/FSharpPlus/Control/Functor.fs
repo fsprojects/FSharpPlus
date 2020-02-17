@@ -11,6 +11,7 @@ open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
+open FSharpPlus.Data
 
 // Functor class ----------------------------------------------------------
 
@@ -58,6 +59,7 @@ type Map =
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
     static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
+    static member Map ((x: State<'S, 'T>       , f: 'T->'U), _mthd: Map) = State.map f x
     static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U> (g.Invoke >> f)
     static member Map (((m: 'Monoid, a)        , f: 'T->'U), _mthd: Map) = (m, f a)
     static member Map ((x: _ []                , f: 'T->'U), _mthd: Map) = Array.map   f x
@@ -129,6 +131,7 @@ type Unzip =
     static member        Unzip ((source: list<'T * 'U>                     , _output: list<'T> * list<'U>                                  ) , _mthd: Unzip   ) = List.unzip   source
     static member        Unzip ((source: 'R -> ('T * 'U)                   , _output: ('R -> 'T) * ('R -> 'U)                              ) , _mthd: Unzip   ) = (fun x -> fst (source x)), (fun x -> snd (source x))
     static member        Unzip ((source: Func<'R, ('T * 'U)>               , _output: Func<'R,'T> * Func<'R,'U>                            ) , _mthd: Unzip   ) = Func<_,_> (fun x -> fst (source.Invoke x)), Func<_,_> (fun x -> snd (source.Invoke x))
+    static member        Unzip ((source: State<'S, ('T * 'U)>              , _output: State<'S,'T> * State<'S,'U>                          ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     static member        Unzip (((m: 'Monoid, t: ('T * 'U))                , _output: ('Monoid * 'T) * ('Monoid * 'U)                      ) , _mthd: Unzip   ) = (m, fst t), (m, snd t)
     static member        Unzip ((source: ('T * 'U) []                      , _output: 'T []    * 'U []                                     ) , _mthd: Unzip   ) = Array.unzip  source
     
@@ -180,6 +183,7 @@ type Zip =
     static member Zip ((x: Dictionary<'K, 'T>         , y: Dictionary<'K,'U>         , _output: Dictionary<'K,'T*'U>         ), _mthd: Zip) = Dict.zip       x y :?> Dictionary<'K,'T*'U>
     static member Zip ((x: Map<'K, 'T>                , y: Map<'K,'U>                , _output: Map<'K,'T*'U>                ), _mthd: Zip) = Map.zip        x y
     static member Zip ((f: 'R -> 'T                   , g: 'R -> 'U                  , _output: 'R -> 'T * 'U                ), _mthd: Zip) = fun x -> (f x, g x)
+    static member Zip ((x: State<'S, 'T>              , y: State<'S, 'U>             , _output: State<'S, 'T * 'U>           ), _mthd: Zip) = State.zip x y
     static member Zip ((f: Func<'R, 'T>               , g: Func<'R, 'U>              , _output: Func<'R, 'T * 'U>            ), _mthd: Zip) = Func<_,_> (fun x -> (f.Invoke x, g.Invoke x))
     static member Zip ((x: list<'T>                   , y: list<'U>                  , _output: list<'T*'U>                  ), _mthd: Zip) = List.zip       x y
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zip      x y
