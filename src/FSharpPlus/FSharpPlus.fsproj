@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Internals.fs" />
+    <Compile Include="State.fs" />
     <Compile Include="Extensions/Option.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
@@ -81,7 +82,7 @@
     <Compile Include="Data/Cont.fs" />
     <Compile Include="Data/Reader.fs" />
     <Compile Include="Data/Writer.fs" />
-    <Compile Include="Data/State.fs" />
+    <Compile Include="Data/StateT.fs" />
     <Compile Include="Data/Monoids.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="Data/NonEmptyList.fs" />
