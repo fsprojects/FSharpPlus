@@ -4,7 +4,8 @@ dotnet: 3.0.101
 sudo: false  # use the new container-based Travis infrastructure 
 
 script: 
-  - dotnet build -c Release  -f netstandard2.0 ./FSharpPlus.sln
-  - dotnet test -c Release  -f netstandard2.0 ./FSharpPlus.sln
+  - dotnet restore ./FSharpPlus.sln
+  - dotnet build -c Release -f netstandard2.0 ./FSharpPlus.sln
+  - dotnet test -c Release -f netstandard2.0 ./FSharpPlus.sln
 env:
   FSHARP_FORMATTING_LOG=NONE
