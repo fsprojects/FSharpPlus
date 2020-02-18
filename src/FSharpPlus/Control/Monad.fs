@@ -145,11 +145,12 @@ type Return =
 type Delay =
     inherit Default1
     
-    static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>``                                 , _: Default2) = x ()
+    static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` :     struct, _: Default2) = x ()
     static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>`` when ^``Monad<'T>`` : not struct, _: Default1) = x ()
     static member inline Delay (_mthd: Default1, x: unit-> ^I                                             , _: Delay   ) = (^I : (static member Delay : _->_) x) : ^I
     static member inline Delay (_mthd: Default1, _: unit-> ^t when  ^t : null and ^t  : struct            , _          ) = ()
 
+    static member        Delay (_mthd: Default2, x: unit-> State<'S,'T>                                   , _          ) = x ()             : State<'S,'T>
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = Seq.delay x      : seq<'T> 
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
