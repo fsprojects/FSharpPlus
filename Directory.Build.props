@@ -1,4 +1,28 @@
-<Project>
+<Project ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <RepositoryUrl>https://github.com/fsprojects/FSharpPlus.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>
+      A complete and extensible base library for F#.
+    </Description>
+    <Authors>Gusty</Authors>
+    <Copyright>2012-2020 Gustavo P. Leon (and contributors https://github.com/fsprojects/FSharpPlus/graphs/contributors)</Copyright>
+    <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus</PackageProjectUrl>
+    <PackageIconUrl>https://raw.github.com/fsprojects/FSharpPlus/master/docsrc/files/img/logo.png</PackageIconUrl>
+    <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RepoRootDir>$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory)"))</RepoRootDir>
+    <NupkgsDir>$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory)/bin/nupkg"))</NupkgsDir>
+    <MonoOrEmpty Condition=" '$(OS)' != 'Windows_NT' ">mono </MonoOrEmpty>
+
+    <!-- disable sourcelink on mono, to workaround https://github.com/dotnet/sourcelink/issues/155 -->
+    <EnableSourceLink Condition=" '$(OS)' != 'Windows_NT' AND '$(MSBuildRuntimeType)' != 'Core' ">false</EnableSourceLink>
+    <EnableSourceControlManagerQueries>$(EnableSourceLink)</EnableSourceControlManagerQueries>
+  </PropertyGroup>
 
   <!-- mono -->
   <PropertyGroup Condition="'$(OS)' == 'Unix'">

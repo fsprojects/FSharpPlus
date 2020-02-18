@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Import Project="Directory.Build.props" />
+
+  <Target Name="Build">
+    <Exec Command='dotnet build src/FSharpPlus -c Release --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
+  <Target Name="Pack">
+    <Exec Command='dotnet pack src/FSharpPlus -c Release -o "$(NupkgsDir)" --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
+  <Target Name="Test">
+    <Exec Command='dotnet test tests/FSharpPlus.Tests -c Release --logger:trx' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
+  <Target Name="VSTest" DependsOnTargets="Test" />
+
+</Project>
