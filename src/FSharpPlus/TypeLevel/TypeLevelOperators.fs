@@ -2,7 +2,7 @@ namespace FSharpPlus.TypeLevel
 
 /// Marker interface for type-level literals.
 ///
-/// # Members
+/// #### Members
 ///
 ///     static member inline Singleton (defaultValue: T) = (* unique value-level representation of T *)
 ///

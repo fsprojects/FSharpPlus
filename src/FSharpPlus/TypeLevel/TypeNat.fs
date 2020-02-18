@@ -110,7 +110,7 @@ module TypeNat =
     (^Nat: (static member Match: _*_*_->_) n, caseZ, caseSn)
 
 #if TYPELEVEL_DEBUG
-module private NatTests =
+module NatTests =
   open TypeBool
 
   let inline hasType<'t> (_: 't) = True
@@ -193,4 +193,22 @@ module private NatTests =
   Assert (fd (S Z) =^ Z)
   Assert (fd two =^ Z)
   Assert (fd (S two) =^ two)
+
+  type CaseZ = CaseZ with
+    static member inline Gcd (x: ^X, Z) = x
+  and  CaseS = CaseS with
+    static member inline Gcd (x: ^X, y: ^Y) =
+      let _ : ^Case = TypeNat.Match (fun _ -> CaseZ) (fun _ -> CaseS) (x %^ y)
+      (^Case: (static member Gcd: _*_->_) y, x %^ y)
+
+  let inline gcd x y =
+    let _ : ^Case = TypeNat.Match (fun _ -> CaseZ) (fun _ -> CaseS) y
+    (^Case: (static member Gcd: _*_->_) x,y)
+  let inline lcm x y = (x *^ y) /^ gcd x y
+
+  let g1 = gcd (S(S(S(S Z)))) two
+  Assert (g1 =^ two)
+  let g2 = lcm (S(S(S Z))) two
+  Assert (g2 =^ S(S(S(S(S(S Z))))))
+
 #endif
