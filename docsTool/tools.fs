@@ -1,7 +1,4 @@
-#if INTERACTIVE
-#else
 module Tools
-#endif
 open System
 let (</>) x y = IO.Path.Combine(x,y)
 

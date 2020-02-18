@@ -1,3 +1,4 @@
+module Generate
 // --------------------------------------------------------------------------------------
 // Builds the documentation from `.fsx` and `.md` files in the 'docsrc/content' directory
 // (the generated documentation is stored in the 'docs' directory)
@@ -12,11 +13,11 @@
 
 let githubLink = "https://github.com/fsprojects/FSharpPlus"
 
-#load "./templates/template.fsx"
+//#load "./templates/template.fsx"
 open Template
-#load "./templates/plantuml.fsx"
+//#load "./templates/plantuml.fsx"
 open Plantuml
-#load "./tools.fsx"
+//#load "./tools.fsx"
 open Tools
 // Specify more information about your project
 
@@ -32,15 +33,15 @@ let properties:PropertyMeta =
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
-#load "../../.paket/load/netstandard2.0/docs/FSharp.Literate.fsx"
-#load "../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
-#load "../../.paket/load/netstandard2.0/docs/MathNet.Numerics.FSharp.fsx"
-#I "../../packages/FSharp.Core/lib/netstandard2.0/"
-#I "../../bin/FSharpPlus/netstandard2.0/"
-#I @"../../src/FSharpPlus/bin/Release/netstandard2.0/"
+//#load "../../.paket/load/netstandard2.0/docs/FSharp.Literate.fsx"
+//#load "../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
+//#load "../../.paket/load/netstandard2.0/docs/MathNet.Numerics.FSharp.fsx"
+//#I "../../packages/FSharp.Core/lib/netstandard2.0/"
+//#I "../../bin/FSharpPlus/netstandard2.0/"
+//#I @"../../src/FSharpPlus/bin/Release/netstandard2.0/"
 
-#r "FSharp.Core.dll"
-#r "FSharpPlus.dll"
+//#r "FSharp.Core.dll"
+//#r "FSharpPlus.dll"
 open System
 open FSharp.Literate
 open FSharp.Markdown
@@ -51,7 +52,7 @@ let write path html =
     Fable.ReactServer.Raw.writeTo  writer (Fable.ReactServer.castHTMLNode html)
 
 let docPackagePath  path =
-    __SOURCE_DIRECTORY__ + @"/../../packages/docs/" + path
+    __SOURCE_DIRECTORY__ + @"/../packages/docs/" + path
 let includeDir path =
     "-I:" + docPackagePath path
 let reference path =
@@ -137,6 +138,3 @@ let buildDocumentation () =
   IO.Directory.EnumerateFiles Path.content
   |> Seq.iter (processFile Path.output)
 
-// Generate
-copyFiles()
-buildDocumentation()

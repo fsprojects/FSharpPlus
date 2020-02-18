@@ -1,3 +1,4 @@
+module DocLib
 // Based on Fake project
 // Copyright 2008 "FAKE - F# Make" Project
 // Copyright 2010 Steffen Forkmann

@@ -1,7 +1,4 @@
-#if INTERACTIVE
-#else
 module Plantuml
-#endif
 // PlantUml processing
 open System
 open System.IO.Compression
