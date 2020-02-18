@@ -2,7 +2,10 @@ image: Visual Studio 2019
 init:
   - git config --global core.autocrlf input
 build_script:
-  - cmd: build.cmd -t BuildDocs
+  - cmd: dotnet restore ./FSharpPlus.sln
+  - cmd: dotnet build -c Release ./FSharpPlus.sln
+  - cmd: dotnet test -c Release tests/FSharpPlus.Tests
+  - cmd: dotnet pack build.proj
 test: off
 artifacts:
   - path: bin
