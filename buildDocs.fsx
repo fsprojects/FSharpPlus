@@ -12,7 +12,7 @@
 
 // Script Based on ProjectScaffold
 
-#load "docsrc/tools/doclib.fsx"
+#load "docsrc/tools/doclib.fs"
 
 #load "docsrc/tools/templates/plantuml.fsx"
 
