@@ -14,7 +14,7 @@
 
 #load "docsrc/tools/doclib.fs"
 
-#load "docsrc/tools/templates/plantuml.fsx"
+#load "docsrc/tools/templates/plantuml.fs"
 
 open Doclib
 
