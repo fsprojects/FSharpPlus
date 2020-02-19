@@ -16,7 +16,7 @@
 
 #load "docsrc/tools/templates/plantuml.fs"
 
-open Doclib
+open DocLib
 
 
 // --------------------------------------------------------------------------------------
