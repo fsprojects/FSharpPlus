@@ -52,7 +52,7 @@ let write path html =
     Fable.ReactServer.Raw.writeTo  writer (Fable.ReactServer.castHTMLNode html)
 
 let docPackagePath  path =
-    __SOURCE_DIRECTORY__ + @"/../packages/docs/" + path
+    __SOURCE_DIRECTORY__ + @"/../../packages/docs/" + path
 let includeDir path =
     "-I:" + docPackagePath path
 let reference path =

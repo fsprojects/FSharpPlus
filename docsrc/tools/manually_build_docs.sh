@@ -11,5 +11,5 @@ dotnet build -c Release
 # Gen docs
 #mkdir -p bin/FSharpPlus/netstandard2.0/
 #cp ./src/FSharpPlus/bin/Release/netstandard2.0/* bin/FSharpPlus/netstandard2.0/
-dotnet run --project ./docsTool
+dotnet run --project ./docsrc/tools
 
