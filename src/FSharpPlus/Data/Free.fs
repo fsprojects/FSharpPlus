@@ -78,3 +78,4 @@ type Free<'``functor<'t>``,'t> with
     static member Return x = Pure x
     static member inline (>>=) (x: Free<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>)   = Free.bind  f x : Free<'``Functor<'U>``,'U>
     static member inline (<*>) (f: Free<'``Functor<'T->'U>``,'T->'U>, x: Free<'``Functor<'T>``,'T>) = Free.apply f x : Free<'``Functor<'U>``,'U>
+    static member        Delay (x: unit -> Free<'``Functor<'T>``,'T>) = x ()
