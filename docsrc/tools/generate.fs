@@ -60,16 +60,24 @@ let reference path =
 let evaluationOptions = 
     [| 
          includeDir "FSharp.Core/lib/netstandard2.0/"
+         reference "FSharp.Core/lib/netstandard2.0/FSharp.Core.dll" 
          includeDir "FSharp.Literate/lib/netstandard2.0/" 
+         includeDir "MathNet.Numerics/lib/netstandard2.0/" 
+         reference "MathNet.Numerics/lib/netstandard2.0/MathNet.Numerics.dll" 
+         includeDir "MathNet.Numerics.FSharp/lib/netstandard2.0/" 
+         reference "MathNet.Numerics.FSharp/lib/netstandard2.0/MathNet.Numerics.FSharp.dll" 
+         includeDir "System.Buffers/lib/netstandard2.0/" 
+         includeDir "System.Collections.Immutable/lib/netstandard2.0/" 
+         includeDir "System.Reflection.Metadata/lib/netstandard2.0/" 
+         includeDir "System.Runtime/lib/net462/" 
+         reference "System.Runtime/lib/net462/System.Runtime.dll" 
+         includeDir "System.ValueTuple/lib/netstandard1.0/" 
+         reference "System.ValueTuple/lib/netstandard1.0/System.ValueTuple.dll" 
          includeDir "FSharp.Compiler.Service/lib/netstandard2.0/" 
          reference "FSharp.Compiler.Service/lib/netstandard2.0/FSharp.Compiler.Service.dll" |] 
 
 let compilerOptions = 
-    String.concat " " ( 
-         "-r:System.Runtime"
-         :: "-r:System.Net.WebClient"
-         :: "-r:System.Runtime.Extensions"
-         :: Array.toList evaluationOptions)
+    String.concat " " ( Array.toList evaluationOptions)
 
 // PlantUml processing
 let abstractions = Path.templates </> "abstractions.plantuml"
