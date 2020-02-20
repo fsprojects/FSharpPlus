@@ -198,11 +198,13 @@ module NatTests =
     static member inline Gcd (x: ^X, Z) = x
   and  CaseS = CaseS with
     static member inline Gcd (x: ^X, y: ^Y) =
-      let _ : ^Case = TypeNat.Match (fun _ -> CaseZ) (fun _ -> CaseS) (x %^ y)
+      let _ : ^Case =
+        TypeBool.IfThenElse (TypeNat.IsZero (x %^ y)) CaseZ CaseS
       (^Case: (static member Gcd: _*_->_) y, x %^ y)
 
   let inline gcd x y =
-    let _ : ^Case = TypeNat.Match (fun _ -> CaseZ) (fun _ -> CaseS) y
+    let _ : ^Case =
+      TypeBool.IfThenElse (TypeNat.IsZero y) CaseZ CaseS
     (^Case: (static member Gcd: _*_->_) x,y)
   let inline lcm x y = (x *^ y) /^ gcd x y
 

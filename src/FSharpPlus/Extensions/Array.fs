@@ -5,6 +5,11 @@ open System
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
 module Array =
+
+    let apply f x =
+        let lenf, lenx = Array.length f, Array.length x
+        Array.init (lenf * lenx) (fun i -> f.[i / lenx] x.[i % lenx])
+
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
 
     /// Inserts a separator between each element in the source array.

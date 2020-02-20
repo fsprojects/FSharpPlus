@@ -22,7 +22,7 @@ type Apply =
     static member        ``<*>`` (f: IEnumerator<_>   , x: IEnumerator<'T>      , [<Optional>]_output: IEnumerator<'U>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
     #endif
     static member        ``<*>`` (f: list<_>          , x: list<'T>             , [<Optional>]_output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
-    static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.collect (fun x1 -> Array.collect (fun x2 -> [|x1 x2|]) x) f : 'U []
+    static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
     static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: Apply) = fun x -> f x (g x)                           : 'U
     static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , [<Optional>]_output: 'Monoid * 'U         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
     #if !FABLE_COMPILER
@@ -61,3 +61,30 @@ type Apply =
 
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) (f, x))
+
+
+type IsLeftZeroForApply =
+    inherit Default1
+
+    static member IsLeftZeroForApply (t: ref<seq<_>>      , _mthd: IsLeftZeroForApply) = Seq.isEmpty t.Value
+    static member IsLeftZeroForApply (t: ref<list<_>>     , _mthd: IsLeftZeroForApply) = List.isEmpty t.Value
+    static member IsLeftZeroForApply (t: ref<array<_>>    , _mthd: IsLeftZeroForApply) = Array.isEmpty t.Value
+    static member IsLeftZeroForApply (t: ref<option<_>>   , _mthd: IsLeftZeroForApply) = Option.isNone t.Value
+    static member IsLeftZeroForApply (t: ref<Result<_,_>> , _mthd: IsLeftZeroForApply) = match t.Value with Error _      -> true | _ -> false
+    static member IsLeftZeroForApply (t: ref<Choice<_,_>> , _mthd: IsLeftZeroForApply) = match t.Value with Choice2Of2 _ -> true | _ -> false
+
+    static member inline Invoke (x: '``Applicative<'T>``) : bool =
+        let inline call (mthd : ^M, input: ^I) =
+            ((^M or ^I) : (static member IsLeftZeroForApply : _*_ -> _) ref input, mthd)
+        call(Unchecked.defaultof<IsLeftZeroForApply>, x)
+
+    static member inline InvokeOnInstance (x: '``Applicative<'T>``) : bool =
+        ((^``Applicative<'T>``) : (static member IsLeftZeroForApply : _ -> _) x)
+
+type IsLeftZeroForApply with
+
+    // empty <*> f = empty  ==> empty is left zero for <*>
+    static member inline IsLeftZeroForApply (t: ref<'``Alternative<'T>``>        , _mthd: Default2) = (t.Value = Empty.InvokeOnInstance ())
+
+    static member inline IsLeftZeroForApply (t: ref<'``Applicative<'T>``>        , _mthd: Default1) = (^``Applicative<'T>`` : (static member IsLeftZeroForApply : _ -> _) t.Value)
+    static member inline IsLeftZeroForApply (_: ref< ^t> when ^t: null and ^t: struct, _: Default1) = ()

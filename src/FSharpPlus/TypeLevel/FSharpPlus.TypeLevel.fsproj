@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
-    <Compile Include="../../../paket-files/fsprojects/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
+    <Compile Include="../../../external/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
+    <Compile Include="../../../external/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
     <Compile Include="../Internals.fs" />
     <Compile Include="../Extensions/Enumerator.fs" />
     <Compile Include="TypeLevelOperators.fs" />

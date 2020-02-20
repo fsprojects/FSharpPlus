@@ -3,13 +3,12 @@ dotnet: 3.0.101
 
 sudo: false  # use the new container-based Travis infrastructure 
 
-before_install:
-  - chmod +x build.sh
- 
 script: 
-  - mono ./.paket/paket.bootstrapper.exe
-  - mono ./.paket/paket.exe restore
-  - dotnet build -c Release
-  - dotnet test -c Release
+  - dotnet restore ./FSharpPlus.sln
+  - dotnet build -c Release ./FSharpPlus.sln
+  - dotnet test -c Release tests/FSharpPlus.Tests
 env:
   FSHARP_FORMATTING_LOG=NONE
+branches:
+  only: 
+    - master
