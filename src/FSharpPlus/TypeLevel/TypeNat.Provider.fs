@@ -64,6 +64,4 @@ type NatProvider (cfg) as this =
         )
       )
   do this.AddNamespace(root, [ty])
-  
-[<assembly:TypeProviderAssembly>]
-do ()
+

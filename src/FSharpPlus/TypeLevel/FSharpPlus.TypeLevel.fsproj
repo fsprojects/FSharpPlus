@@ -18,5 +18,6 @@
     <Compile Include="../Control/Numeric.fs" />
     <Compile Include="../Control/Tuple.fs" />
     <Compile Include="../Data/Matrix.fs" />
+    <Compile Include="../TypeProviderAssembly.fs" />
   </ItemGroup>
 </Project>
