@@ -535,7 +535,7 @@ let res119 = solveRPN "1 8 wharglbllargh"                                       
 
 module Probability =
 
-    type Prob<'a> = Prob of List<'a * float>
+    type Prob<'t> = Prob of List<'t * float>
 
     type Prob<'a> with
         static member probMap f (Prob prob : Prob<'a>) : Prob<'b> = List.map (fun (x, p) -> (f x, p)) prob |> Prob
