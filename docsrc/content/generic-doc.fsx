@@ -24,7 +24,45 @@ Read about the specific operators:
  * Other docs exist for each [abstraction](abstractions.html)
  * API Doc for [Generic functions and operators](operators.html)
 
+They're particularly useful in that the specific function called will
+depend on the input arguments and return type. However, this means you
+sometimes need to explicitly specify the type if this information is
+not available (actually it's a good debug technique to temporarily add
+the types explicitly when the compiler tells you that the types are wrong).
 
+For example:
+*)
+
+// Convert the number 42 to bytes... 
+// ... here the type is known (42 is an int, the return value is byte[])
+> let a = 42 |> toBytes;;  
+val a : byte [] = [|42uy; 0uy; 0uy; 0uy|]
+
+// However, this can't compile since the return type is not inferrable
+> let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;  
+
+// The error will be something like:
+// 
+//  let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
+//  -----------------------------------^^^^^^^
+//
+// error FS0071: Type constraint mismatch when applying the default type 'obj'
+// for a type inference variable. No overloads match for method 'OfBytes'.
+// The available overloads are shown below. Consider adding further type constraints
+
+// [followed by many possible implementations...]
+
+// So, in this case, we have to give the return type:
+>   let b :int = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
+val b : int = 42
+
+// ...or, the more usual case, you use in context where type can be inferred,
+// like this example:
+> 1 + ([|42uy; 0uy; 0uy; 0uy|] |> ofBytes);;
+val it : int = 43
+
+
+(**
 How do generic functions work?
 ==============================
 
