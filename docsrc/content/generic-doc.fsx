@@ -10,24 +10,42 @@ open FSharpPlus
 Generic operators and functions
 ===============================
 
-*)
+After reviewing [extension functions](extensions.html) it's natural to want to
+use generic functions that can work across different types.
 
-(**
+F#+ implements generic functions that efficiently call out to specific
+implementations. This handles existing .Net and F# types, and you can use them
+on your own and third-party types by implementing expected method names
+and signatures.
 
-Generic operators, functions and constants are included in this library.
+Read about the specific operators:
 
-They work with many types, including:
-
- 1) Existing .NET and F# types
-
- 2) Other types included in this library
-
- 3) Further user defined types
-
- 4) Types defined in other libraries
+ * Docs on [Operators - Common Combinators](operators-common.html)
+ * Other docs exist for each [abstraction](abstractions.html)
+ * API Doc for [Generic functions and operators](operators.html)
 
 
-Case 1 works by using overload resolution inside an internal class (referred to as the Invokable) used at the definition of the generic operation, while all the other cases work typically through Duck Typing, where an expected method name and signature must exists in the target Type or by using default implementations based on other operations.
+How do generic functions work?
+==============================
+
+F# does not support overloaded functions, but it does support overloaded
+methods on types (classes) - including static methods. F#+ takes
+advantage of this by definining generic functions that call out to
+an internal class (referred to as an "Invokable") where various overloaded 
+static methods are defined.
+
+An Invokable is written such that the most specific, and hence, optimised
+overload is resolved for existing .Net and F# types, and that a more general
+implementation is used otherwise.
+
+What does this all mean?
+
+It means care is taken to use the most optimised impelemntation, and you can
+implement your own instances of generic functions if you implement the required
+methods.
+
+Examples
+========
 
 Here are some examples of the generic ``map`` operation over existing .NET and F# types:
 
