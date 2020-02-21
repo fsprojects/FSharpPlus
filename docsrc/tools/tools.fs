@@ -15,6 +15,7 @@ module Path =
     let dir p = IO.Path.GetDirectoryName(p: string)
     let filename p = IO.Path.GetFileName(p: string)
     let changeExt ext p = IO.Path.ChangeExtension(p, ext)
+    let docTemplate = "docpage.cshtml"
 
 module Directory =
     let ensure dir =
