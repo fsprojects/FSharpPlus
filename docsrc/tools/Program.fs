@@ -64,6 +64,7 @@ let root = website
 
 let referenceBinaries = []
 open Tools.Path
+let bin  = rootDir @@ "src"
 let layoutRootsAll = new System.Collections.Generic.Dictionary<string, string list>()
 layoutRootsAll.Add("en",[   templates; 
                             formatting @@ "templates"
