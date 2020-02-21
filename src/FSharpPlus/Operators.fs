@@ -49,12 +49,19 @@ module Operators =
     /// Otherwise, it applies the function to the value inside Some and returns the result.
     let inline option f n = function Some x -> f x | None -> n
 
+    /// Tuple two arguments
     let inline tuple2 a b             = a,b
+    /// Tuple three arguments
     let inline tuple3 a b c           = a,b,c
+    /// Tuple four arguments
     let inline tuple4 a b c d         = a,b,c,d
+    /// Tuple five arguments
     let inline tuple5 a b c d e       = a,b,c,d,e
+    /// Tuple six arguments
     let inline tuple6 a b c d e f     = a,b,c,d,e,f
+    /// Tuple seven arguments
     let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
+    /// Tuple eight arguments
     let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
 
@@ -93,7 +100,7 @@ module Operators =
 
     #endif
 
-    /// Apply a lifted argument to a lifted function.
+    /// Apply a lifted argument to a lifted function: f <*> arg
     let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
     /// Apply 2 lifted arguments to a non-lifted function.
@@ -109,6 +116,7 @@ module Operators =
     /// Sequences two applicatives left-to-right, discarding the value of the second argument.
     let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``): '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
+    /// Apply a lifted argument to a lifted function (flipped): arg <**> f
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
     #if !FABLE_COMPILER
@@ -185,6 +193,10 @@ module Operators =
     let inline (<|>) (x: '``Functor<'T>``) (y: '``Functor<'T>``) : '``Functor<'T>`` = Append.Invoke x y
 
     #if !FABLE_COMPILER
+    /// Conditional failure of Alternative computations.
+    /// If true it lifts the unit value, else it returns empty.
+    ///
+    /// Common uses of guard include conditionally signaling an error in an error monad and conditionally rejecting the current choice in an Alternative-based parser.
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
     #endif
 
@@ -387,10 +399,19 @@ module Operators =
     /// <returns>The length of the foldable.</returns>
     let inline length (source: '``Foldable<'T>``) : int = Length.Invoke source
 
+    /// Gets the maximum value in the foldable
     let inline maximum (source: '``Foldable<'T>``) = Max.Invoke source : 'T when 'T : comparison
+
+    /// Gets the minimum value in the foldable
     let inline minimum (source: '``Foldable<'T>``) = Min.Invoke source : 'T when 'T : comparison
+
+    /// Gets the maximum value after projecting in the foldable
     let inline maxBy (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) = MaxBy.Invoke projection source : 'T
+
+    /// Gets the minimum value after projecting in the foldable
     let inline minBy (projection: 'T->'U when 'U : comparison) (source: '``Foldable<'T>``) = MinBy.Invoke projection source : 'T
+
+    /// Gets the nth value in the foldable - i.e. at position 'n'
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
 
     // Traversable
@@ -757,6 +778,13 @@ module Operators =
     /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
     let inline sortByDescending (projection: 'T->'Key when 'Key : comparison) (source: '``Collection<'T>``) : '``Collection<'T>`` = SortByDescending.Invoke projection source
 
+    /// Splits a given ordered collection at each of the given sub-ordered collections
+    ///
+    ///     > "asdf" |> split ["s"];;
+    ///        val it : string list = ["a"; "df"]
+    ///
+    ///     > [1;2;3;4;5;6] |> split [ [2]; [5] ];;
+    ///        val it : int list list = [[1]; [3; 4]; [6]]
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection) = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
 
 
@@ -800,11 +828,19 @@ module Operators =
     /// Converts using the explicit operator.
     let inline explicit (value: 'T) : 'U = Explicit.Invoke value
 
+    /// Convert from a byte array value, given options of little-endian, and startIndex
     let inline ofBytesWithOptions (isLtEndian: bool) (startIndex: int) (value: byte[]) = OfBytes.Invoke isLtEndian startIndex value
+
+    /// Convert from a byte array value, assuming little-endian
     let inline ofBytes (value: byte[]) = OfBytes.Invoke true 0 value
+
+    /// Convert from a byte array value, assuming big-endian
     let inline ofBytesBE (value: byte[]) = OfBytes.Invoke false 0 value
 
+    /// Convert to a byte array value, assuming little endian
     let inline toBytes value : byte[] = ToBytes.Invoke true value
+
+    /// Convert to a byte array value, assuming big endian
     let inline toBytesBE value : byte[] = ToBytes.Invoke false value
      
     /// Converts to a value from its string representation.
