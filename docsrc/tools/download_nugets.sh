@@ -1,7 +1,8 @@
 #!/bin/bash
 pushd $(dirname "${0}") > /dev/null
 cd ../../
-mkdir -p packages/docs/
+mkdir -p ./bin
+mkdir -p ./packages/docs/
 NUGET="./bin/nuget.exe"
 if test ! -f "$NUGET"; then
   curl -o ./bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
