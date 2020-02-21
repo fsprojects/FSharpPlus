@@ -11,6 +11,9 @@ open FSharpPlus.Internals.Prelude
 type Matrix< 'Item, 'Row, 'Column > = private { Items: 'Item[,] } with
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   member this.UnsafeGet (i, j) = this.Items.[i, j]
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  static member UnsafeCreate (_row: 'm, _column: 'n, items: _[,]) : Matrix<_, 'm, 'n> =
+    { Items = items }
   interface System.Collections.Generic.IReadOnlyCollection<'Item> with
     member this.Count = this.Items.Length
     member this.GetEnumerator() = this.Items.GetEnumerator()
@@ -26,6 +29,9 @@ type Matrix< 'Item, 'Row, 'Column > = private { Items: 'Item[,] } with
 type Vector<'Item, 'Length> = private { Items: 'Item[] } with
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   member this.UnsafeGet i = this.Items.[i]
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  static member UnsafeCreate (_length: 'n, items: _[]) : Vector<_, 'n> =
+    { Items = items }
   interface System.Collections.Generic.IReadOnlyList<'Item> with
     member this.Count = this.Items.Length
     member this.Item with get i = this.Items.[i]
@@ -75,21 +81,52 @@ module Vector =
   let unsafeCreate (_length: 'n) (xs: _[]) : Vector<_, 'n> =
     { Items = xs }
 
+  /// Tries to create a vector of length `n`.
+  /// If the length of `xs` does not match, it will return `None`.
+  /// Otherwise, it will return the vector with `Some`.
+  ///
+  /// You can also use `Vector.TryCreate<n>.OfArray xs`.
+  let inline tryOfArray (length: 'n) (xs: _[]) : Vector<_, 'n> option =
+    if RuntimeValue length = xs.Length then
+      Some (unsafeCreate length xs)
+    else
+      None
+
+  /// Tries to create a vector of length `n`.
+  /// If the length of `xs` does not match, it will return `None`.
+  /// Otherwise, it will return the vector with `Some`.
+  ///
+  /// You can also use `Vector.TryCreate<n>.OfList xs`.
+  let inline tryOfList (length: 'n) (xs: _ list) : Vector<_, 'n> option = tryOfArray length (List.toArray xs)
+
+  /// Tries to create a vector of length `n`.
+  /// If the length of `xs` does not match, it will return `None`.
+  /// Otherwise, it will return the vector with `Some`.
+  ///
+  /// You can also use `Vector.TryCreate<n>.OfSeq xs`.
+  let inline tryOfSeq (length: 'n) (xs: _ seq) : Vector<_, 'n> option = tryOfArray length (Seq.toArray xs)
+
   let inline create (definition: '``a * 'a * .. * 'a``) : Vector<'a, 'n> =
     unsafeCreate (CountTuple.Invoke definition) (TupleToList.Invoke definition |> Array.ofList)
+
+  let singleton (x: 'a) : Vector<'a, S<Z>> = { Items = [| x |] }
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let unsafeGet index (vec: Vector<'a, 'n>) = vec.Items.[index]
 
+  /// You can also use `Vector.Get<i>.Invoke vec`.
   let inline get (index: ^``i when ^i < ^n``) (vec: Vector<'a, ^n>) =
     let n = Singleton< ^n >
     TypeBool.Assert (index <^ n)
     vec |> unsafeGet (RuntimeValue index)
 
+  /// You can also use `Vector.ZeroCreate<n>.Invoke()`.
   let inline zeroCreate (n: 'n) : Vector<'a, 'n> =
     Array.zeroCreate (RuntimeValue n) |> unsafeCreate n
+  /// You can also use `Vector.Replicate<n>.Invoke value`.
   let inline replicate (n: 'n) (value: 'a) : Vector<'a, 'n> =
     Array.replicate (RuntimeValue n) value |> unsafeCreate n
+  /// You can also use `Vector.Init<n>.Invoke f`.
   let inline init (n: 'n) (f: int -> 'a) : Vector<'a, 'n > =
     Array.init (RuntimeValue n) f |> unsafeCreate n
 
@@ -100,6 +137,8 @@ module Vector =
                     and (Zero or ^a): (static member Zero: ^a * Zero -> ^a)
                   > : Vector<'a, ^m> =
     replicate Singleton (Zero.Invoke ())
+
+  let empty<'a> : Vector<'a, Z> = { Items = [||] }
 
   let inline append (v1: Vector<'a, ^n1>) (v2: Vector<'a, ^n2>) : Vector<'a, ^``n1 + ^n2``> =
     let len = Singleton< ^n1 > +^ Singleton< ^n2 >
@@ -148,17 +187,20 @@ module Vector =
     let len = Singleton<'m> *^ Singleton<'n>
     vv |> toArray |> Array.map toArray |> Array.concat |> unsafeCreate len
 
+  /// You can also use `Vector.Take<n>.Invoke v`.
   let inline take (n: 'n) (v: Vector<'a, '``m when 'm >= 'n``>) : Vector<'a, 'n> =
     let m = length v
     TypeBool.Assert (m >=^ n)
     v |> toArray |> Array.take (RuntimeValue n) |> unsafeCreate n
 
+  /// You can also use `Vector.Skip<n>.Invoke v`.
   let inline skip (n: '``n when 'n <= 'm``) (v: Vector<'a, 'm>) : Vector<'a, '``m - 'n``> =
     let m = length v
     let len = m -^ n
     TypeBool.Assert (len >^ Z)
     v |> toArray |> Array.skip (RuntimeValue n) |> unsafeCreate len
 
+  /// You can also use `Vector.Slice<i, j>.Invoke v`.
   let inline slice (startIndex: ^``i when ^i < ^n``) (endIndex: ^``j when ^i <= ^j < ^n``) (v: Vector<'a, ^n>) : Vector<'a, S< ^``j - ^i`` >> =
     TypeBool.Assert (startIndex <=^ endIndex)
     TypeBool.Assert (endIndex <^ Singleton< ^n >)
@@ -173,17 +215,20 @@ module Vector =
     let n' = Singleton<'n> -^ S Z
     unsafeCreate n' (toArray v |> Array.pairwise)
 
+  /// You can also use `Vector.Windowed<m>.Invoke v`.
   let inline windowed (m: 'm) (v: Vector<'a, 'n>) : Vector<Vector<'a, 'm>, S<'``n - 'm``>> =
     let n = Singleton<'n>
     let nm1 = S (n -^ m)
     unsafeCreate nm1 (toArray v |> Array.windowed (RuntimeValue m) |> Array.map (unsafeCreate m))
 
+  /// You can also use `Vector.ChunkBySize<n>.Invoke v`.
   let inline chunkBySize (n: 'n) (v: Vector<'a, '``k * 'n``>) : Vector<Vector<'a, 'n>, 'k> =
     let kn = Singleton<'``k * 'n``>
     let k = kn /^ n
     TypeBool.Assert ((k *^ n) =^ kn)
     unsafeCreate k (toArray v |> Array.chunkBySize (RuntimeValue n) |> Array.map (unsafeCreate n))
 
+  /// You can also use `Vector.SplitInto<n>.Invoke v`.
   let inline splitInto (n: 'n) (v: Vector<'a, '``n * 'k``>) : Vector<Vector<'a, 'k>, 'n> =
     let nk = Singleton<'``n * 'k``>
     let k = nk /^ n
@@ -223,6 +268,14 @@ module Vector =
       x.[0] * y.[1] - x.[1] * y.[0]
     )
 
+  let inline directProduct (v1: Vector<'a, ^m>) (v2: Vector<'a, ^n>) : Matrix<'a, ^m, ^n> =
+    let m, n = Singleton< ^m>, Singleton< ^n>
+    let items =
+      Array2D.init (RuntimeValue m) (RuntimeValue n) (fun i j ->
+        unsafeGet i v1 * unsafeGet j v2
+      )
+    Matrix<_, _, _>.UnsafeCreate(m, n, items)
+
   let toRow (v: Vector<'a, 'n>) : Matrix<'a, S<Z>, 'n> = { Items = array2D [ v.Items ] }
   let toCol (v: Vector<'a, 'n>) : Matrix<'a, 'n, S<Z>> = { Items = array2D [ for x in v.Items -> [x] ] }
 
@@ -260,10 +313,10 @@ module Matrix =
       for j = 0 to Array2D.length2 m1.Items - 1 do
         f i j m1.Items.[i, j] m2.Items.[i, j]
 
-  let inline length1 (_: Matrix<'a, 'm, 'n>) : 'm = Singleton<'m>
-  let inline length2 (_: Matrix<'a, 'm, 'n>) : 'n = Singleton<'n>
-  let inline length1' (_: Matrix<'a, ^m, 'n>) : int = RuntimeValue (Singleton< ^m >)
-  let inline length2' (_: Matrix<'a, 'm, ^n>) : int = RuntimeValue (Singleton< ^n >)
+  let inline rowLength (_: Matrix<'a, 'm, 'n>) : 'm = Singleton<'m>
+  let inline colLength (_: Matrix<'a, 'm, 'n>) : 'n = Singleton<'n>
+  let inline rowLength' (_: Matrix<'a, ^m, 'n>) : int = RuntimeValue (Singleton< ^m >)
+  let inline colLength' (_: Matrix<'a, 'm, ^n>) : int = RuntimeValue (Singleton< ^n >)
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let toArray2D (m: Matrix<'a, 'm, 'n>) = m.Items
@@ -283,6 +336,26 @@ module Matrix =
   let unsafeCreate (_row: 'm) (_column: 'n) (items: _[,]) : Matrix<_, 'm, 'n> =
     { Items = items }
 
+  /// Tries to create a matrix of given dimension.
+  /// If the dimension does not match, returns `None`. Otherwise returns the matrix with `Some`.
+  ///
+  /// You can also use `Matrix.TryCreate.OfArray2D`.
+  let inline tryOfArray2D (row: ^m) (column: ^n) (items: _[,]) : Matrix<_, ^m, ^n> option =
+    if RuntimeValue row = Array2D.length1 items && RuntimeValue column = Array2D.length2 items then
+      Some (unsafeCreate row column items)
+    else
+      None
+
+  /// Tries to create a matrix of given dimension.
+  /// If the dimension does not match, returns `None`. Otherwise returns the matrix with `Some`.
+  ///
+  /// You can also use `Matrix.TryCreate.OfJaggedSeq`.
+  let inline tryOfJaggedSeq (row: ^m) (column: ^n) (items: #seq<_> seq) : Matrix<_, ^m, ^n> option =
+    try
+      tryOfArray2D row column (array2D items)
+    with
+      | :? System.ArgumentException -> None
+
   let inline create (definition: '``('a * .. * 'a) * .. * ('a * .. * 'a)``) : Matrix<'a, 'm, 'n> =
     let rowLength = CountTuple.Invoke definition
     let columns : 'row array = TupleToList.Invoke definition |> Array.ofList
@@ -295,16 +368,20 @@ module Matrix =
         ys.[i, j] <- xs.[i].[j]
     unsafeCreate rowLength columnLength ys
 
+  /// You can also use `Matrix.ZeroCreate<m, n>.Invoke()`.
   let inline zeroCreate (m: 'm) (n: 'n) : Matrix<'a, 'm, 'n> =
     Array2D.zeroCreate (RuntimeValue m) (RuntimeValue n) |> unsafeCreate m n
+  /// You can also use `Matrix.Replicate<m, n>.Invoke value`.
   let inline replicate (m: 'm) (n: 'n) (value: 'a) : Matrix<'a, 'm, 'n> =
     Array2D.create (RuntimeValue m) (RuntimeValue n) value |> unsafeCreate m n
+  /// You can also use `Matrix.Init<m, n>.Invoke f`.
   let inline init (m: 'm) (n: 'n) (f: int -> int -> 'a) : Matrix<'a, 'm, 'n> =
     Array2D.init (RuntimeValue m) (RuntimeValue n) f |> unsafeCreate m n
 
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let unsafeGet i j (m: Matrix<'a, 'm, 'n>) = m.Items.[i,j]
 
+  /// You can also use `Matrix.Get<i, j>.Invoke mat`.
   let inline get (row: ^``i when ^i < ^m``) (column: ^``j when ^j < ^n``) (mat: Matrix<'a, ^m, ^n>) : 'a =
     let m = Singleton<'m>
     let n = Singleton<'n>
@@ -312,15 +389,34 @@ module Matrix =
     TypeBool.Assert (column <^ n)
     unsafeGet (RuntimeValue row) (RuntimeValue column) mat
 
+  /// You can also use `Matrix.Slice<a, b, c, d>.Invoke mat`.
   let inline slice
     (rowStart: ^``a when ^a < ^m``) (rowEnd: ^``b when ^a <= ^b < ^m``)
     (colStart: ^``c when ^c < ^n``) (colEnd: ^``d when ^c <= ^d < ^n``)
-    (mat: Matrix<'a, ^m, ^n>) : Matrix<'a, S< ^``b - ^a`` >, S< ^``d - ^c`` >> =
+    (mat: Matrix<'t, ^m, ^n>) : Matrix<'t, S< ^``b - ^a`` >, S< ^``d - ^c`` >> =
     let m, n = Singleton< ^m >, Singleton< ^n >
     TypeBool.Assert (rowStart <=^ rowEnd); TypeBool.Assert (rowEnd <^ m)
     TypeBool.Assert (colStart <=^ colEnd); TypeBool.Assert (colEnd <^ n)
     (toArray2D mat).[RuntimeValue rowStart .. RuntimeValue rowEnd, RuntimeValue colStart .. RuntimeValue colEnd]
     |> unsafeCreate (S (rowEnd -^ rowStart)) (S (colEnd -^ colStart))
+
+  /// You can also use `Matrix.SliceRow<a, b>.Invoke mat`.
+  let inline sliceRow
+    (rowStart: ^``a when ^a < ^m``) (rowEnd: ^``b when ^a <= ^b < ^m``)
+    (mat: Matrix<'t, ^m, ^n>) : Matrix<'t, S< ^``b - ^a`` >, ^n> =
+    let m, n = Singleton< ^m >, Singleton< ^n >
+    TypeBool.Assert (rowStart <=^ rowEnd); TypeBool.Assert (rowEnd <^ m)
+    (toArray2D mat).[RuntimeValue rowStart .. RuntimeValue rowEnd, 0 .. RuntimeValue n - 1]
+    |> unsafeCreate (S (rowEnd -^ rowStart)) n
+
+  /// You can also use `Matrix.SliceCol<a, b>.Invoke mat`.
+  let inline sliceCol
+    (colStart: ^``c when ^c < ^n``) (colEnd: ^``d when ^c <= ^d < ^n``)
+    (mat: Matrix<'t, ^m, ^n>) : Matrix<'t, ^m, S< ^``d - ^c`` >> =
+    let m, n = Singleton< ^m >, Singleton< ^n >
+    TypeBool.Assert (colStart <=^ colEnd); TypeBool.Assert (colEnd <^ n)
+    (toArray2D mat).[0 .. RuntimeValue m - 1, RuntimeValue colStart .. RuntimeValue colEnd]
+    |> unsafeCreate m (S (colEnd -^ colStart))
 
   // constants
   let inline zero<'a, ^m, ^n
@@ -348,15 +444,19 @@ module Matrix =
 
   let inline trace (mtx: Matrix<'a, 'n, 'n>) = diagonal mtx |> Vector.toArray |> Array.sum
 
+  /// You can also use `Matrix.Row<i>.AsVector mtx`.
   let inline rowVec  (i: ^``i when ^i < ^m``) (mtx: Matrix<'a, 'm, 'n>) : Vector<'a, 'n> =
     TypeBool.Assert (i <^ Singleton<'m>)
     Vector.init Singleton<'n> (fun j -> mtx |> unsafeGet (RuntimeValue i) j)
+  /// You can also use `Matrix.Row<i>.AsMatrix mtx`.
   let inline row (i: ^``i when ^i < ^m``) (mtx: Matrix<'a, 'm, 'n>) : Matrix<'a, S<Z>, 'n> =
     TypeBool.Assert (i <^ Singleton<'m>)
     init (S Z) Singleton<'n> (fun _ j -> mtx |> unsafeGet (RuntimeValue i) j)
+  /// You can also use `Matrix.Col<j>.AsVector mtx`.
   let inline colVec  (j: ^``j when ^j < ^n``) (mtx: Matrix<'a, 'm, 'n>) : Vector<'a, 'm> =
     TypeBool.Assert (j <^ Singleton<'n>)
     Vector.init Singleton<'m> (fun i -> mtx |> unsafeGet i (RuntimeValue j))
+  /// You can also use `Matrix.Col<j>.AsMatrix mtx`.
   let inline col (j: ^``j when ^j < ^n``) (mtx: Matrix<'a, 'm, 'n>) : Matrix<'a, 'm, S<Z>> =
     TypeBool.Assert (j <^ Singleton<'n>)
     init Singleton<'m> (S Z) (fun i _ -> mtx |> unsafeGet i (RuntimeValue j))
@@ -381,8 +481,8 @@ module Matrix =
     )
 
   let inline transpose (mtx: Matrix<'t, 'm, 'n>) : Matrix<'t, 'n, 'm> =
-    let m = mtx |> length1
-    let n = mtx |> length2
+    let m = mtx |> rowLength
+    let n = mtx |> colLength
     init n m (fun j i -> unsafeGet i j mtx)
 
   let inline private foldiRange initValue startIndex endIndex f =
@@ -392,16 +492,16 @@ module Matrix =
     result
 
   let inline matrixProduct (m1: Matrix<'t, 'm, 'n>) (m2: Matrix<'t, 'n, 'p>) : Matrix<'t, 'm, 'p> =
-    let n' = length2' m1
-    Array2D.init (length1' m1) (length2' m2) (fun m p ->
+    let n' = colLength' m1
+    Array2D.init (rowLength' m1) (colLength' m2) (fun m p ->
       foldiRange LanguagePrimitives.GenericZero<'t> 0 (n' - 1) (fun n result ->
         result + unsafeGet m n m1 * unsafeGet n p m2
       )
     ) |> unsafeCreate Singleton Singleton
 
   let inline kroneckerProduct (mtx1: Matrix<'t, ^m1, ^n1>) (mtx2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 * ^m2``, ^``n1 * ^n2``> =
-    let m1,  n1,  m2,  n2  = length1  mtx1, length2  mtx1, length1  mtx2, length2  mtx2
-    let m1', n1', m2', n2' = length1' mtx1, length2' mtx1, length1' mtx2, length2' mtx2
+    let m1,  n1,  m2,  n2  = rowLength  mtx1, colLength  mtx1, rowLength  mtx2, colLength  mtx2
+    let m1', n1', m2', n2' = rowLength' mtx1, colLength' mtx1, rowLength' mtx2, colLength' mtx2
     let m1m2, n1n2 = m1 *^ m2, n1 *^ n2
     Array2D.init (m1' * m2') (n1' * n2') (fun i1i2 j1j2 ->
       let i1, i2 = i1i2 / m2', i1i2 % m2'
@@ -413,8 +513,8 @@ module Matrix =
     map2 (+) (kroneckerProduct mtx1 identity<'t, ^n>) (kroneckerProduct identity<'t, ^m> mtx2)
 
   let inline directSum (mtx1: Matrix<'t, ^m1, ^n1>) (mtx2: Matrix<'t, ^m2, ^n2>) : Matrix<'t, ^``m1 + ^m2``, ^``n1 + ^n2``> =
-    let m1,  n1,  m2,  n2  = length1  mtx1, length2  mtx1, length1  mtx2, length2  mtx2
-    let m1', n1', m2', n2' = length1' mtx1, length2' mtx1, length1' mtx2, length2' mtx2
+    let m1,  n1,  m2,  n2  = rowLength  mtx1, colLength  mtx1, rowLength  mtx2, colLength  mtx2
+    let m1', n1', m2', n2' = rowLength' mtx1, colLength' mtx1, rowLength' mtx2, colLength' mtx2
     let xs = Array2D.zeroCreate (m1' + m2') (n1' + n2')
     for i = 0 to m1' - 1 do
       for j = 0 to n1' - 1 do
@@ -426,7 +526,7 @@ module Matrix =
 
   let inline verticalSum (m1: Matrix<'t, ^m1, ^n>) (m2: Matrix<'t, ^m2, ^n>) : Matrix<'t, ^``m1 + ^m2``, ^n> =
     let m1m2 = Singleton< ^m1 > +^ Singleton< ^m2 >
-    let m1' = length1' m1
+    let m1' = rowLength' m1
     let n = Singleton< ^n >
     init m1m2 n (fun i j ->
       if i < m1' then unsafeGet i j m1
@@ -436,7 +536,7 @@ module Matrix =
   let inline horizontalSum (m1: Matrix<'t, ^m, ^n1>) (m2: Matrix<'t, ^m, ^n2>) : Matrix<'t, ^m, ^``n1 + ^n2``> =
     let m = Singleton< ^m >
     let n1n2 = Singleton< ^n1 > +^ Singleton< ^n2 >
-    let n1' = length1' m1
+    let n1' = rowLength' m1
     init m n1n2 (fun i j ->
       if j < n1' then unsafeGet i j m1
       else unsafeGet i (j - n1') m2
@@ -453,11 +553,19 @@ type Matrix<'Item, 'Row, 'Column> with
   static member inline get_Zero () : Matrix<'a, 'm, 'n> = Matrix.zero
   static member inline ( + ) (m1, m2) = Matrix.map2 (+) m1 m2
   static member inline ( - ) (m1, m2) = Matrix.map2 (-) m1 m2
+  /// matrix product
+  static member inline ( .* ) (m1, m2) = Matrix.matrixProduct m1 m2
+  /// kronecker (tensor) product
+  static member inline ( @* ) (m1, m2) = Matrix.kroneckerProduct m1 m2
+  /// hadamard (element-wise) product
   static member inline ( * ) (m1, m2) = Matrix.map2 (*) m1 m2
   static member inline ( / ) (m1, m2) = Matrix.map2 (/) m1 m2
-  static member inline ( *. ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map ((*) s) m
-  static member inline ( .* ) (s: 'a, m: Matrix<'a,_,_>) = Matrix.map ((*) s) m
-  static member inline ( /. ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map (fun x -> x / s) m
+  static member inline ( * ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map ((*) s) m
+  static member inline ( * ) (s: 'a, m: Matrix<'a,_,_>) = Matrix.map ((*) s) m
+  static member inline ( / ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map (fun x -> x / s) m
+  static member inline ( / ) (s: 'a, m: Matrix<'a,_,_>) = Matrix.map (fun x -> s / x) m
+  static member inline ( @| ) (m1: Matrix<_,'m,^n1>, m2: Matrix<_,'m,^n2>) : Matrix<_,'m,^``n1 + ^n2``> = Matrix.horizontalSum m1 m2
+  static member inline ( @- ) (m1: Matrix<_,^m1,'n>, m2: Matrix<_,^m2,'n>) : Matrix<_,^``m1 + ^m2``,'n> = Matrix.verticalSum m1 m2
   static member inline ( ~- ) m = Matrix.map ((~-)) m
 
 type Vector<'Item, 'Length> with
@@ -468,12 +576,21 @@ type Vector<'Item, 'Length> with
   static member inline get_Zero () : Vector<'x, 'n> = Vector.zero
   static member inline ( + ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (+) v1 v2
   static member inline ( - ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (-) v1 v2
+  /// dot (inner) product
+  static member inline ( .* ) (v1, v2) = Vector.innerProduct v1 v2
+  /// direct (tensor) product
+  static member inline ( @* ) (v1, v2) = Vector.directProduct v1 v2
+  /// cross product
+  static member inline ( %* ) (v1, v2) = Vector.vectorProduct3 v1 v2
+  /// hadamard (element-wise) product
   static member inline ( * ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (*) v1 v2
   static member inline ( / ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (/) v1 v2
-  static member inline ( *. ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x * s) v
-  static member inline ( .* ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> x * s) v
-  static member inline ( /. ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x / s) v
+  static member inline ( * ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x * s) v
+  static member inline ( * ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> x * s) v
+  static member inline ( / ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x / s) v
+  static member inline ( / ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> s / x) v
   static member inline ( ~- ) (v: Vector<_, 'n>) = v |> Vector.map ((~-))
+  static member inline ( @@ ) (v1: Vector<_, ^m>, v2: Vector<_, ^n>) : Vector<_, ^``m + ^n``> = Vector.append v1 v2
   static member inline ToSeq (v: Vector<'x, 'n>) = v |> Vector.toSeq
   static member inline FoldBack (v: Vector<'x, 'n>, f, z) = Array.foldBack f (Vector.toArray v) z
   static member op_Explicit (v: Vector<'x, 'n>) : Matrix<'x, S<Z>, 'n> = Vector.toRow v
@@ -536,4 +653,3 @@ module MatrixTests =
   let (Matrix(_y1: int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int,_y2,_y3,_y4,_y5,_y6,_y7,_y8)) = m2
 
 #endif 
-

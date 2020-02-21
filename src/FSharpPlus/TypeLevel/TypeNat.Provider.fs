@@ -1,6 +1,7 @@
 namespace FSharpPlus.TypeLevel
 
 open System.Reflection
+open System.ComponentModel
 open FSharp.Core.CompilerServices
 open Microsoft.FSharp.Collections
 open Microsoft.FSharp.Quotations
@@ -36,7 +37,7 @@ module internal ProviderUtils =
       else
         <@@ zTy @@>
 
-[<TypeProvider>]
+[<EditorBrowsable(EditorBrowsableState.Never); TypeProvider>]
 type NatProvider (cfg) as this =
   inherit TypeProviderForNamespaces(cfg)
   let thisAsm = Assembly.GetExecutingAssembly()

@@ -99,6 +99,7 @@
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
     <Compile Include="Data/Matrix.fs" />
+    <Compile Include="Data/Matrix.Provider.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <Compile Include="TypeProviderAssembly.fs" />
