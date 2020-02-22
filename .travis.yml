@@ -8,7 +8,7 @@ script:
   - dotnet build -c Release ./FSharpPlus.sln
   - dotnet test -c Release tests/FSharpPlus.Tests
   - ./docsrc/tools/download_nugets.sh
-  - dotnet run --project -c Release ./docsrc/tools
+  - dotnet run -c Release --project ./docsrc/tools
 
 env:
   FSHARP_FORMATTING_LOG=NONE

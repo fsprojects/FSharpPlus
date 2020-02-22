@@ -7,7 +7,7 @@ build_script:
   - cmd: dotnet test -c Release tests/FSharpPlus.Tests
   - cmd: dotnet pack build.proj
   - ps: ./docsrc/tools/download_nugets.ps1
-  - cmd: dotnet run --project -c Release ./docsrc/tools
+  - cmd: dotnet run -c Release --project ./docsrc/tools
 test: off
 artifacts:
   - path: bin
