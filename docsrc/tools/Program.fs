@@ -176,10 +176,11 @@ let main argv =
     if Array.contains "ReleaseDocs" argv then
 
         Target.create "ReleaseDocs" (fun _ ->
-            let tempDocsDir = "temp/gh-pages"
+            let tempDocsDir = rootDir @@ "temp/gh-pages"
             Shell.cleanDir tempDocsDir
             Git.Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
-            Shell.copyRecursive "docs" tempDocsDir true |> Trace.tracefn "%A"
+            let docDir = rootDir @@ "docs"
+            Shell.copyRecursive docDir tempDocsDir true |> Trace.tracefn "%A"
             Git.Staging.stageAll tempDocsDir
             Git.Commit.exec tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
             Git.Branches.push tempDocsDir
