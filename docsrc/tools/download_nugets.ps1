@@ -2,6 +2,7 @@ Push-Location
 try {
     $rootDir = [IO.Path]::Combine($PSScriptRoot, ".." , "..")
     Set-Location $rootDir
+    dotnet tool restore
     mkdir -p ./bin
     mkdir -p ./packages/docs/
     $nuget="./bin/nuget.exe"

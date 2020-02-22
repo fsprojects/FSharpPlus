@@ -7,6 +7,9 @@ script:
   - dotnet restore ./FSharpPlus.sln
   - dotnet build -c Release ./FSharpPlus.sln
   - dotnet test -c Release tests/FSharpPlus.Tests
+  - ./docsrc/tools/download_nugets.sh
+  - dotnet run --project -c Release ./docsrc/tools
+
 env:
   FSHARP_FORMATTING_LOG=NONE
 branches:

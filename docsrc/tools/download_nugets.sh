@@ -1,6 +1,7 @@
 #!/bin/bash
 pushd $(dirname "${0}") > /dev/null
 cd ../../
+dotnet tool restore
 mkdir -p ./bin
 mkdir -p ./packages/docs/
 NUGET="./bin/nuget.exe"
