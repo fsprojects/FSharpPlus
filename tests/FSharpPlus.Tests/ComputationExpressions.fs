@@ -347,7 +347,7 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual effects (SideEffects.get ())
+        areEqual [] (SideEffects.get ())
         funcM ()
         areEqual effects (SideEffects.get ())
 
@@ -358,7 +358,7 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual effects (SideEffects.get ())
+        areEqual [] (SideEffects.get ())
         Reader.run readerM ()
         areEqual effects (SideEffects.get ())
 
@@ -369,7 +369,7 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual effects (SideEffects.get ())
+        areEqual [] (SideEffects.get ())
         State.run stateM () |> ignore
         areEqual effects (SideEffects.get ())
 
@@ -380,6 +380,6 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual effects (SideEffects.get ())
+        areEqual [] (SideEffects.get ())
         Cont.run contM id
         areEqual effects (SideEffects.get ())
