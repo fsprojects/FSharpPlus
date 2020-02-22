@@ -12,6 +12,3 @@ script:
 
 env:
   FSHARP_FORMATTING_LOG=NONE
-branches:
-  only: 
-    - master

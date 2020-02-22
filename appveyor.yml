@@ -12,6 +12,3 @@ test: off
 artifacts:
   - path: bin
     name: bin
-branches:
-  only: 
-    - master
