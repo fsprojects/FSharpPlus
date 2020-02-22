@@ -50,6 +50,8 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = State.zip x y
 
+    static member TryFinally (State computation, f) = State (fun s -> try computation s finally f())
+
 open FSharpPlus.Control
 open FSharpPlus.Internals.Prelude
 

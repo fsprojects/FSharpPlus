@@ -148,6 +148,7 @@ type Delay =
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = Seq.delay x      : seq<'T> 
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
+    static member        Delay (_mthd: Delay   , x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
 
     static member inline Invoke source : 'R =
         let inline call (mthd: ^M, input: unit -> ^I) = ((^M or ^I) : (static member Delay : _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
@@ -166,6 +167,7 @@ type TryWith =
     static member        TryWith (computation: seq<_>        , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))
     static member        TryWith (computation: Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith ) = async.TryWith (computation, catchHandler)
     static member        TryWith (computation: Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith ) = lazy (try computation.Force () with e -> (catchHandler e).Force ()) : Lazy<_>
+    static member        TryWith (computation: 'R -> _       , catchHandler: exn -> 'R -> _       , _: TryWith ) = (fun s -> try computation s with e -> catchHandler e s) : 'R ->_
 
     static member inline Invoke (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_ -> _) input, h, mthd)
@@ -179,6 +181,7 @@ type TryFinally =
     static member        TryFinally ((computation: Id<_>   , compensation: unit -> unit), _: TryFinally, _) = try computation finally compensation()
     static member        TryFinally ((computation: Async<_>, compensation: unit -> unit), _: TryFinally, _) = async.TryFinally (computation, compensation) : Async<_>
     static member        TryFinally ((computation: Lazy<_> , compensation: unit -> unit), _: TryFinally, _) = lazy (try computation.Force () finally compensation ()) : Lazy<_>
+    static member        TryFinally ((computation: 'R -> _ , compensation: unit -> unit), _: TryFinally, _) = fun s -> try computation s finally compensation ()
 
     static member inline Invoke (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>)
@@ -199,6 +202,7 @@ type Using =
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>  , _: Using   ) = seq (try Seq.toArray (body resource) finally if not (isNull (box resource)) then resource.Dispose ()) : seq<'U>
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Lazy<'U> , _: Using   ) = lazy (try (body resource).Force () finally if not (isNull (box resource)) then resource.Dispose ()) : Lazy<'U>
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> 'R -> 'U , _: Using   ) = (fun s -> try body resource s finally if not (isNull (box resource)) then resource.Dispose ()) : 'R->'U
 
     static member inline Invoke (source : 'T when 'T :> IDisposable) (f : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (mthd: 'M, input: 'T, _output: 'R, h: 'T -> 'I) = ((^M or ^I) : (static member Using : _*_*_ -> _) input, h, mthd)
@@ -208,11 +212,11 @@ type Using =
         (^``Monad<'U>`` : (static member Using : _*_->_) resource, body) : '``Monad<'U>``
 
 type Using with
-    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``:     struct , _: Default3) = using resource body
-    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``: not struct , _: Default2) = using resource body
-    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _: Default1) = TryFinally.InvokeOnInstance (body resource) (fun () -> if not (isNull (box resource)) then resource.Dispose ()) : '``Monad<'U>``
-    #if !FABLE_COMPILER
-    static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _: Using   ) = Using.InvokeOnInstance resource body : '``Monad<'U>``
-    static member inline Using (_                                  , _   : 'a -> ^t when ^t : null and ^t: struct               , _: Using   ) = ()
-    #endif
+static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``:     struct , _: Default3) = using resource body
+static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>`` when '``Monad<'U>``: not struct , _: Default2) = using resource body
+static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _: Default1) = TryFinally.InvokeOnInstance (body resource) (fun () -> if not (isNull (box resource)) then resource.Dispose ()) : '``Monad<'U>``
+#if !FABLE_COMPILER
+static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _: Using   ) = Using.InvokeOnInstance resource body : '``Monad<'U>``
+static member inline Using (_                                  , _   : 'a -> ^t when ^t : null and ^t: struct               , _: Using   ) = ()
+#endif
 

@@ -48,6 +48,7 @@ type Reader<'r,'t> with
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke ()) : 'T
     static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
 
+    static member TryFinally (Reader computation, f) = Reader (fun s -> try computation s finally f())
 
 /// Monad Transformer for Reader<'R, 'T>
 [<Struct>]
