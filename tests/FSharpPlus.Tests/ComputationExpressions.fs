@@ -302,3 +302,84 @@ module ComputationExpressions =
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Identity.run
         areEqual (SideEffects.get()) ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"]
+
+
+    open System.Collections.Generic
+
+    [<Test>]
+    let usingInWhileLoops () =
+        let effects = 
+            [
+                "using"
+                "moving"
+                "-move-next-"
+                "-get-Current-"
+                "--> 0"
+                "moving"
+                "-move-next-"
+                "-get-Current-"
+                "--> 1"
+                "moving"
+                "-move-next-"
+                "about to finish"
+                "-get-Current-"
+                "--> 2"
+                "moving"
+                "-move-next-"
+                "-dispose-"
+            ]
+
+        let toDebugEnum (x: IEnumerator<'t>) =
+            {
+                new IEnumerator<'t> with 
+                    override __.get_Current() = SideEffects.add "-get-Current-"; x.Current
+                    override __.get_Current() = SideEffects.add "-get-Current-(boxed)-"; box x.Current
+                    override __.MoveNext ()   = SideEffects.add "-move-next-"; x.MoveNext ()
+                    override __.Reset ()      = SideEffects.add "-reset-"; x.Reset ()
+                    override __.Dispose ()    = SideEffects.add "-dispose-"; x.Dispose ()}
+
+        let testSeq = (seq {yield 0; yield 1; SideEffects.add "about to finish"; yield 2})
+        
+        SideEffects.reset ()
+
+        let funcM : unit -> unit = monad {
+          use enum = toDebugEnum    ( SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual effects (SideEffects.get ())
+        funcM ()
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let readerM : Reader<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual effects (SideEffects.get ())
+        Reader.run readerM ()
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let stateM : State<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual effects (SideEffects.get ())
+        State.run stateM () |> ignore
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let contM : Cont<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual effects (SideEffects.get ())
+        Cont.run contM id
+        areEqual effects (SideEffects.get ())
