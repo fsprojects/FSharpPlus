@@ -1,22 +1,9 @@
-// Generate and Release Docs
-// =========================
-//
-// Usage:
-//
-// Generate Docs 
-//    -> fsi buildDocs.fsx
-// Generate & Release Docs
-//    -> fsi buildDocs.fsx ReleaseDocs
-//
+﻿// Learn more about F# at http://fsharp.org
 
+open System
+open Generate
 
-// Script Based on ProjectScaffold
-
-#load "docsrc/tools/doclib.fsx"
-
-#load "docsrc/tools/templates/plantuml.fsx"
-
-open Doclib
+open DocLib
 
 
 // --------------------------------------------------------------------------------------
@@ -60,70 +47,24 @@ Target.create "CleanDocs" (fun _ ->
     Shell.cleanDirs ["docs"]
 )
 
-
+let rootDir = __SOURCE_DIRECTORY__ @@ ".." @@ ".."
 // --------------------------------------------------------------------------------------
 // Build project
 
 Target.create "Build" (fun _ ->
-    DotNet.runSimpleDotnetCommand 
-        __SOURCE_DIRECTORY__ 
-        ("pack build.proj")
-        |> Trace.trace
+    copyFiles()
+    buildDocumentation()
 )
-
-
-// --------------------------------------------------------------------------------------
-// Restore FSharp.Formatting
-
-let fsFormattingVersion = "3.1.0"
-let tempDocsDir = "temp/tools"
-Directory.ensure tempDocsDir
-
-System.IO.File.WriteAllText(tempDocsDir @@ "docs.proj", """
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net47</TargetFramework>
-    <RestorePackagesPath>packages</RestorePackagesPath>
-  </PropertyGroup>
-<ItemGroup>
-    <PackageReference Include="FSharp.Formatting" Version="pinnedVersion">
-        <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="FSharp.Formatting.CommandTool" Version="pinnedVersion">
-        <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-</ItemGroup>
-</Project>
-""".Replace("pinnedVersion", fsFormattingVersion))
-
-DotNet.runSimpleDotnetCommand 
-    tempDocsDir 
-    ("add package FSharp.Formatting -s https://ci.appveyor.com/nuget/fsharp-formatting -v " + fsFormattingVersion)
-    |> Trace.trace
-
-DotNet.runSimpleDotnetCommand
-    tempDocsDir
-    ("add package FSharp.Formatting.CommandTool -s https://ci.appveyor.com/nuget/fsharp-formatting -v " + fsFormattingVersion)
-    |> Trace.trace
 
 
 // --------------------------------------------------------------------------------------
 // Generate the documentation
 
-// Paths with template/source/output locations
-let bin        = __SOURCE_DIRECTORY__ @@ "src"
-let content    = __SOURCE_DIRECTORY__ @@ "docsrc/content"
-let output     = __SOURCE_DIRECTORY__ @@ "docs"
-let files      = __SOURCE_DIRECTORY__ @@ "docsrc/files"
-let templates  = __SOURCE_DIRECTORY__ @@ "docsrc/tools/templates"
-let formatting = __SOURCE_DIRECTORY__ @@ tempDocsDir @@ "packages" @@ "FSharp.Formatting" @@ fsFormattingVersion
-let docTemplate = "docpage.cshtml"
-
-
 let root = website
 
 let referenceBinaries = []
-
+open Tools.Path
+let bin  = rootDir @@ "src"
 let layoutRootsAll = new System.Collections.Generic.Dictionary<string, string list>()
 layoutRootsAll.Add("en",[   templates; 
                             formatting @@ "templates"
@@ -170,13 +111,13 @@ let copyFiles () =
     |> Trace.logItems "Copying styles and scripts: "
         
 Target.create "Docs" (fun _ ->
-    System.IO.File.Delete "docsrc/content/release-notes.md"
-    Shell.copyFile "docsrc/content/" "RELEASE_NOTES.md"
-    Shell.rename "docsrc/content/release-notes.md" "docsrc/content/RELEASE_NOTES.md"
+    System.IO.File.Delete ( rootDir @@ "docsrc/content/release-notes.md" )
+    Shell.copyFile (rootDir @@ "docsrc/content/") "RELEASE_NOTES.md"
+    Shell.rename ( rootDir @@ "docsrc/content/release-notes.md" ) "docsrc/content/RELEASE_NOTES.md"
 
-    System.IO.File.Delete "docsrc/content/license.md"
-    Shell.copyFile "docsrc/content/" "LICENSE.txt"
-    Shell.rename "docsrc/content/license.md" "docsrc/content/LICENSE.txt"
+    System.IO.File.Delete ( rootDir @@ "docsrc/content/license.md" )
+    Shell.copyFile ( rootDir @@ "docsrc/content/" ) "LICENSE.txt"
+    Shell.rename ( rootDir @@ "docsrc/content/license.md" ) "docsrc/content/LICENSE.txt"
 
     
     DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath templates)
@@ -222,19 +163,28 @@ System.IO.File.WriteAllText (abstractions, abstractionsText.Replace ("{plantUMLD
 
 
 
-// --------------------------------------------------------------------------------------
-// Release Scripts
 
-if Array.contains "ReleaseDocs" fsi.CommandLineArgs then
+[<EntryPoint>]
+let main argv =
+    // Generate
+    
 
-    Target.create "ReleaseDocs" (fun _ ->
-        let tempDocsDir = "temp/gh-pages"
-        Shell.cleanDir tempDocsDir
-        Git.Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
-        Shell.copyRecursive "docs" tempDocsDir true |> Trace.tracefn "%A"
-        Git.Staging.stageAll tempDocsDir
-        Git.Commit.exec tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
-        Git.Branches.push tempDocsDir
-    )
 
-    Target.create "GenerateDocs" ignore
+    // --------------------------------------------------------------------------------------
+    // Release Scripts
+
+    if Array.contains "ReleaseDocs" argv then
+
+        Target.create "ReleaseDocs" (fun _ ->
+            let tempDocsDir = rootDir @@ "temp/gh-pages"
+            Shell.cleanDir tempDocsDir
+            Git.Repository.cloneSingleBranch rootDir (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+            let docDir = rootDir @@ "docs"
+            Shell.copyRecursive docDir tempDocsDir true |> Trace.tracefn "%A"
+            Git.Staging.stageAll tempDocsDir
+            Git.Commit.exec tempDocsDir (sprintf "Update generated documentation for version %s" release.NugetVersion)
+            Git.Branches.push tempDocsDir
+        )
+
+        Target.create "GenerateDocs" ignore
+    0 // return an integer exit code
