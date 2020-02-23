@@ -49,7 +49,8 @@ type Reader<'r,'t> with
     static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
 
     static member TryFinally (Reader computation, f) = Reader (fun s -> try computation s finally f ())
-    static member Delay (body: unit -> Reader<'R,'T>) = body () : Reader<'R,'T>
+    static member Delay (body: unit -> Reader<'R,'T>) = Reader (fun s -> Reader.run (body ()) s) : Reader<'R,'T>
+
 
 /// Monad Transformer for Reader<'R, 'T>
 [<Struct>]
