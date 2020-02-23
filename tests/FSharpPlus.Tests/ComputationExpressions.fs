@@ -383,3 +383,28 @@ module ComputationExpressions =
         areEqual [] (SideEffects.get ())
         Cont.run contM id
         areEqual effects (SideEffects.get ())
+
+
+        SideEffects.reset ()
+
+        let readertoptionM : ReaderT<unit,unit option> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        ReaderT.run readertoptionM () |> ignore
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let readertfuncM : ReaderT<unit,unit->unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        let a = ReaderT.run readertfuncM ()
+        areEqual [] (SideEffects.get ())
+        let b = a ()
+        areEqual effects (SideEffects.get ())
