@@ -147,9 +147,30 @@
       <tr>
         <td class="member-name">
           <code onmouseout="hideTip(event, '165', 165)" onmouseover="showTip(event, '165', 165)">
-            ( ++ ) x y
+            ( |&gt;&gt; ) x f
           </code>
           <div class="tip" id="165">
+            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; f:(&#39;T -&gt; &#39;U) -&gt; ^Functor&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<'U>, 'T, 'U                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L75-75" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Lifts a function into a Functor. Same as map but with flipped arguments.
+To be used in pipe-forward style expressions</p>
+
+
+              <p>CompiledName: <code>op_BarGreaterGreater</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '166', 166)" onmouseover="showTip(event, '166', 166)">
+            ( ++ ) x y
+          </code>
+          <div class="tip" id="166">
             <strong>Signature:</strong> x:^Monoid -&gt; y:^Monoid -&gt; ^Monoid<br />
                           <strong>Type parameters:</strong> ^Monoid                      </div>
         </td>
@@ -166,10 +187,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '166', 166)" onmouseover="showTip(event, '166', 166)">
+          <code onmouseout="hideTip(event, '167', 167)" onmouseover="showTip(event, '167', 167)">
             ( +++ ) f g
           </code>
-          <div class="tip" id="166">
+          <div class="tip" id="167">
             <strong>Signature:</strong> f:&#39;ArrowChoice&lt;&#39;T1,&#39;U1&gt; -&gt; g:&#39;ArrowChoice&lt;&#39;T2,&#39;U2&gt; -&gt; ^ArrowChoice&lt;Choice&lt;&#39;T2,&#39;T1&gt;,Choice&lt;&#39;U2,&#39;U1&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'ArrowChoice<'T1,'U1>, 'ArrowChoice<'T2,'U2>, ^ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>                      </div>
         </td>
@@ -186,10 +207,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '167', 167)" onmouseover="showTip(event, '167', 167)">
+          <code onmouseout="hideTip(event, '168', 168)" onmouseover="showTip(event, '168', 168)">
             ( &lt;!&gt; ) f x
           </code>
-          <div class="tip" id="167">
+          <div class="tip" id="168">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, ^Functor<'T>, ^Functor<'U>                      </div>
         </td>
@@ -207,10 +228,10 @@ To be used in Applicative Style expressions, combined with <*></p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '168', 168)" onmouseover="showTip(event, '168', 168)">
+          <code onmouseout="hideTip(event, '169', 169)" onmouseover="showTip(event, '169', 169)">
             ( &lt;* ) x y
           </code>
-          <div class="tip" id="168">
+          <div class="tip" id="169">
             <strong>Signature:</strong> x:^Applicative&lt;&#39;U&gt; -&gt; y:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Applicative<'U>, ^Applicative<'T->'U>, ^Applicative<'T>, 'U, 'T                      </div>
         </td>
@@ -227,10 +248,10 @@ To be used in Applicative Style expressions, combined with <*></p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '169', 169)" onmouseover="showTip(event, '169', 169)">
+          <code onmouseout="hideTip(event, '170', 170)" onmouseover="showTip(event, '170', 170)">
             ( &lt;**&gt; )(x)
           </code>
-          <div class="tip" id="169">
+          <div class="tip" id="170">
             <strong>Signature:</strong> x:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;T -&gt; &#39;U&gt; -&gt; ^Applicative&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Applicative<'T>, ^Applicative<'T -> 'U>, ^Applicative<'U>                      </div>
         </td>
@@ -245,10 +266,10 @@ To be used in Applicative Style expressions, combined with <*></p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '170', 170)" onmouseover="showTip(event, '170', 170)">
+          <code onmouseout="hideTip(event, '171', 171)" onmouseover="showTip(event, '171', 171)">
             ( &lt;*&gt; ) f x
           </code>
-          <div class="tip" id="170">
+          <div class="tip" id="171">
             <strong>Signature:</strong> f:^Applicative&lt;&#39;T -&gt; &#39;U&gt; -&gt; x:^Applicative&lt;&#39;T&gt; -&gt; ^Applicative&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Applicative<'T -> 'U>, ^Applicative<'T>, ^Applicative<'U>                      </div>
         </td>
@@ -265,10 +286,10 @@ To be used in Applicative Style expressions, combined with <*></p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '171', 171)" onmouseover="showTip(event, '171', 171)">
+          <code onmouseout="hideTip(event, '172', 172)" onmouseover="showTip(event, '172', 172)">
             ( &lt;/ )(x)
           </code>
-          <div class="tip" id="171">
+          <div class="tip" id="172">
             <strong>Signature:</strong> x:&#39;c -&gt; (&#39;c -&gt; &#39;d) -&gt; &#39;d<br />
                           <strong>Type parameters:</strong> 'c, 'd                      </div>
         </td>
@@ -285,50 +306,10 @@ To be used in Applicative Style expressions, combined with <*></p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '172', 172)" onmouseover="showTip(event, '172', 172)">
-            ( &lt;&lt;| ) f x
-          </code>
-          <div class="tip" id="172">
-            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U, ^Functor<'T>, ^Functor<'U>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L71-71" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Lifts a function into a Functor. Same as map.</p>
-
-
-              <p>CompiledName: <code>op_LessLessBar</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
           <code onmouseout="hideTip(event, '173', 173)" onmouseover="showTip(event, '173', 173)">
-            ( &lt;=&lt; ) g f x
-          </code>
-          <div class="tip" id="173">
-            <strong>Signature:</strong> g:(&#39;b -&gt; ^Monad&lt;&#39;V&gt;) -&gt; f:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;) -&gt; x:&#39;T -&gt; ^Monad&lt;&#39;V&gt;<br />
-                          <strong>Type parameters:</strong> 'b, ^Monad<'V>, ^Monad<'U>, 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L141-141" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Composes right-to-left two monadic functions (Kleisli composition).</p>
-
-
-              <p>CompiledName: <code>op_LessEqualsLess</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
             ( &lt;|&gt; ) x y
           </code>
-          <div class="tip" id="174">
+          <div class="tip" id="173">
             <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; y:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> ^Functor<'T>                      </div>
         </td>
@@ -345,10 +326,50 @@ To be used in Applicative Style expressions, combined with <*></p>
       </tr>
       <tr>
         <td class="member-name">
+          <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
+            ( &lt;&lt;| ) f x
+          </code>
+          <div class="tip" id="174">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:^Functor&lt;&#39;T&gt; -&gt; ^Functor&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, ^Functor<'T>, ^Functor<'U>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L71-71" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Lifts a function into a Functor. Same as map.</p>
+
+
+              <p>CompiledName: <code>op_LessLessBar</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
           <code onmouseout="hideTip(event, '175', 175)" onmouseover="showTip(event, '175', 175)">
-            ( =&lt;&lt; ) f x
+            ( &lt;=&lt; ) g f x
           </code>
           <div class="tip" id="175">
+            <strong>Signature:</strong> g:(&#39;b -&gt; ^Monad&lt;&#39;V&gt;) -&gt; f:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;) -&gt; x:&#39;T -&gt; ^Monad&lt;&#39;V&gt;<br />
+                          <strong>Type parameters:</strong> 'b, ^Monad<'V>, ^Monad<'U>, 'T                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L141-141" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Composes right-to-left two monadic functions (Kleisli composition).</p>
+
+
+              <p>CompiledName: <code>op_LessEqualsLess</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
+            ( =&lt;&lt; ) f x
+          </code>
+          <div class="tip" id="176">
             <strong>Signature:</strong> f:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;) -&gt; x:^Monad&lt;&#39;T&gt; -&gt; ^Monad&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, ^Monad<'U>, ^Monad<'T>                      </div>
         </td>
@@ -365,10 +386,10 @@ To be used in Applicative Style expressions, combined with <*></p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
+          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
             ( =&gt;&gt; ) s g
           </code>
-          <div class="tip" id="176">
+          <div class="tip" id="177">
             <strong>Signature:</strong> s:^Comonad&lt;&#39;T&gt; -&gt; g:(^Comonad&lt;&#39;T&gt; -&gt; &#39;U) -&gt; ^Comonad&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Comonad<'T>, ^Comonad<'U>, 'U                      </div>
         </td>
@@ -386,10 +407,10 @@ Same as extend but with flipped arguments.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
+          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
             ( &gt;=&gt; ) f g x
           </code>
-          <div class="tip" id="177">
+          <div class="tip" id="178">
             <strong>Signature:</strong> f:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;) -&gt; g:(&#39;U -&gt; ^Monad&lt;&#39;V&gt;) -&gt; x:&#39;T -&gt; ^Monad&lt;&#39;V&gt;<br />
                           <strong>Type parameters:</strong> 'T, ^Monad<'U>, ^Monad<'V>, 'U                      </div>
         </td>
@@ -406,10 +427,10 @@ Same as extend but with flipped arguments.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
+          <code onmouseout="hideTip(event, '179', 179)" onmouseover="showTip(event, '179', 179)">
             ( &gt;&gt;= ) x f
           </code>
-          <div class="tip" id="178">
+          <div class="tip" id="179">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; f:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;) -&gt; ^Monad&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<'U>, 'T                      </div>
         </td>
@@ -422,27 +443,6 @@ Same as extend but with flipped arguments.</p>
 
 
               <p>CompiledName: <code>op_GreaterGreaterEquals</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '179', 179)" onmouseover="showTip(event, '179', 179)">
-            ( |&gt;&gt; ) x f
-          </code>
-          <div class="tip" id="179">
-            <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; f:(&#39;T -&gt; &#39;U) -&gt; ^Functor&lt;&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<'U>, 'T, 'U                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L75-75" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Lifts a function into a Functor. Same as map but with flipped arguments.
-To be used in pipe-forward style expressions</p>
-
-
-              <p>CompiledName: <code>op_BarGreaterGreater</code></p>
         </td>
       </tr>
       <tr>
@@ -1197,8 +1197,8 @@ remaining elements of the collection.</p>
             filter predicate source
           </code>
           <div class="tip" id="219">
-            <strong>Signature:</strong> predicate:(&#39;?14272 -&gt; bool) -&gt; source:^Collection -&gt; ^Collection<br />
-                          <strong>Type parameters:</strong> '?14272, ^Collection                      </div>
+            <strong>Signature:</strong> predicate:(&#39;?14302 -&gt; bool) -&gt; source:^Collection -&gt; ^Collection<br />
+                          <strong>Type parameters:</strong> '?14302, ^Collection                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L569-569" class="github-link">
@@ -1509,8 +1509,8 @@ computes f i0 (...(f iN s)).</p>
             getMaxValue()
           </code>
           <div class="tip" id="235">
-            <strong>Signature:</strong> unit -&gt; ^?14402<br />
-                          <strong>Type parameters:</strong> ^?14402                      </div>
+            <strong>Signature:</strong> unit -&gt; ^?14432<br />
+                          <strong>Type parameters:</strong> ^?14432                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L837-837" class="github-link">
@@ -1528,8 +1528,8 @@ computes f i0 (...(f iN s)).</p>
             getMinValue()
           </code>
           <div class="tip" id="236">
-            <strong>Signature:</strong> unit -&gt; ^?14398<br />
-                          <strong>Type parameters:</strong> ^?14398                      </div>
+            <strong>Signature:</strong> unit -&gt; ^?14428<br />
+                          <strong>Type parameters:</strong> ^?14428                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L831-831" class="github-link">
@@ -1586,7 +1586,7 @@ computes f i0 (...(f iN s)).</p>
           </code>
           <div class="tip" id="239">
             <strong>Signature:</strong> f:(&#39;S -&gt; &#39;T) -&gt; ^MonadState&lt;&#39;T * &#39;S&gt;<br />
-                          <strong>Type parameters:</strong> 'S, 'T, ^MonadState<'T * 'S>, ^?14234                      </div>
+                          <strong>Type parameters:</strong> 'S, 'T, ^MonadState<'T * 'S>, ^?14264                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L523-523" class="github-link">
@@ -2042,7 +2042,7 @@ to this key.</p>
           </code>
           <div class="tip" id="263">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U -&gt; &#39;V) -&gt; x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;U&gt; -&gt; ^Applicative&lt;&#39;V&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U, 'V, ^Applicative<'T>, ^?13904, ^Applicative<'U>, ^Applicative<'V>                        <span>
+                          <strong>Type parameters:</strong> 'T, 'U, 'V, ^Applicative<'T>, ^?13934, ^Applicative<'U>, ^Applicative<'V>                        <span>
             <strong>Attributes:</strong><br />
 [&lt;Obsolete(&quot;Use lift2 instead.&quot;)&gt;]<br />
           </span>
@@ -2437,7 +2437,7 @@ to this key.</p>
           </code>
           <div class="tip" id="284">
             <strong>Signature:</strong> f:(&#39;S -&gt; &#39;S) -&gt; ^MonadState&lt;unit * (&#39;S-&gt;&#39;S)&gt;<br />
-                          <strong>Type parameters:</strong> 'S, ^MonadState<unit * ('S->'S)>, ^?14241                      </div>
+                          <strong>Type parameters:</strong> 'S, ^MonadState<unit * ('S->'S)>, ^?14271                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L529-529" class="github-link">
@@ -2511,8 +2511,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytes(value)
           </code>
           <div class="tip" id="288">
-            <strong>Signature:</strong> value:byte [] -&gt; ^?14380<br />
-                          <strong>Type parameters:</strong> ^?14380                      </div>
+            <strong>Signature:</strong> value:byte [] -&gt; ^?14410<br />
+                          <strong>Type parameters:</strong> ^?14410                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L804-804" class="github-link">
@@ -2528,8 +2528,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytesBE(value)
           </code>
           <div class="tip" id="289">
-            <strong>Signature:</strong> value:byte [] -&gt; ^?14382<br />
-                          <strong>Type parameters:</strong> ^?14382                      </div>
+            <strong>Signature:</strong> value:byte [] -&gt; ^?14412<br />
+                          <strong>Type parameters:</strong> ^?14412                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L805-805" class="github-link">
@@ -2545,8 +2545,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytesWithOptions(...)
           </code>
           <div class="tip" id="290">
-            <strong>Signature:</strong> isLtEndian:bool -&gt; startIndex:int -&gt; value:byte [] -&gt; ^?14378<br />
-                          <strong>Type parameters:</strong> ^?14378                      </div>
+            <strong>Signature:</strong> isLtEndian:bool -&gt; startIndex:int -&gt; value:byte [] -&gt; ^?14408<br />
+                          <strong>Type parameters:</strong> ^?14408                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L803-803" class="github-link">
@@ -2657,8 +2657,8 @@ Otherwise, it applies the function to the value inside Some and returns the resu
             optional(v)
           </code>
           <div class="tip" id="296">
-            <strong>Signature:</strong> v:^?13924 -&gt; ^?13925<br />
-                          <strong>Type parameters:</strong> ^?13924, ^?13925, '?13926, '?13927                        <span>
+            <strong>Signature:</strong> v:^?13954 -&gt; ^?13955<br />
+                          <strong>Type parameters:</strong> ^?13954, ^?13955, '?13956, '?13957                        <span>
             <strong>Attributes:</strong><br />
 [&lt;Obsolete(&quot;Use opt instead.&quot;)&gt;]<br />
           </span>
@@ -3102,8 +3102,8 @@ by keys. The keys are compared using generic comparison as implemented by Operat
             sqrt(x)
           </code>
           <div class="tip" id="319">
-            <strong>Signature:</strong> x:^?14428 -&gt; ^?14428<br />
-                          <strong>Type parameters:</strong> ^?14428                      </div>
+            <strong>Signature:</strong> x:^?14458 -&gt; ^?14458<br />
+                          <strong>Type parameters:</strong> ^?14458                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L882-882" class="github-link">
@@ -3274,8 +3274,8 @@ given predicate returns true, and then returns no further elements.</p>
             toArray(value)
           </code>
           <div class="tip" id="328">
-            <strong>Signature:</strong> value:^?14082 -&gt; &#39;T []<br />
-                          <strong>Type parameters:</strong> ^?14082, 'T                      </div>
+            <strong>Signature:</strong> value:^?14112 -&gt; &#39;T []<br />
+                          <strong>Type parameters:</strong> ^?14112, 'T                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L308-308" class="github-link">
@@ -3312,8 +3312,8 @@ given predicate returns true, and then returns no further elements.</p>
             toBytes(value)
           </code>
           <div class="tip" id="330">
-            <strong>Signature:</strong> value:^?14384 -&gt; byte []<br />
-                          <strong>Type parameters:</strong> ^?14384                      </div>
+            <strong>Signature:</strong> value:^?14414 -&gt; byte []<br />
+                          <strong>Type parameters:</strong> ^?14414                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L807-807" class="github-link">
@@ -3329,8 +3329,8 @@ given predicate returns true, and then returns no further elements.</p>
             toBytesBE(value)
           </code>
           <div class="tip" id="331">
-            <strong>Signature:</strong> value:^?14386 -&gt; byte []<br />
-                          <strong>Type parameters:</strong> ^?14386                      </div>
+            <strong>Signature:</strong> value:^?14416 -&gt; byte []<br />
+                          <strong>Type parameters:</strong> ^?14416                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L808-808" class="github-link">
@@ -3346,8 +3346,8 @@ given predicate returns true, and then returns no further elements.</p>
             toList(value)
           </code>
           <div class="tip" id="332">
-            <strong>Signature:</strong> value:^?14079 -&gt; &#39;T list<br />
-                          <strong>Type parameters:</strong> ^?14079, 'T                      </div>
+            <strong>Signature:</strong> value:^?14109 -&gt; &#39;T list<br />
+                          <strong>Type parameters:</strong> ^?14109, 'T                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L303-303" class="github-link">
@@ -3601,8 +3601,8 @@ exists then return None.</p>
             trySqrt(x)
           </code>
           <div class="tip" id="345">
-            <strong>Signature:</strong> x:^?14430 -&gt; ^?14430 option<br />
-                          <strong>Type parameters:</strong> ^?14430                      </div>
+            <strong>Signature:</strong> x:^?14460 -&gt; ^?14460 option<br />
+                          <strong>Type parameters:</strong> ^?14460                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L885-885" class="github-link">
@@ -3741,8 +3741,8 @@ exists then return None.</p>
             tuple8 a b c d e f g h
           </code>
           <div class="tip" id="353">
-            <strong>Signature:</strong> a:&#39;?13845 -&gt; b:&#39;?13846 -&gt; c:&#39;?13847 -&gt; d:&#39;?13848 -&gt; e:&#39;?13849 -&gt; f:&#39;?13850 -&gt; g:&#39;?13851 -&gt; h:&#39;?13852 -&gt; &#39;?13845 * &#39;?13846 * &#39;?13847 * &#39;?13848 * &#39;?13849 * &#39;?13850 * &#39;?13851 * &#39;?13852<br />
-                          <strong>Type parameters:</strong> '?13845, '?13846, '?13847, '?13848, '?13849, '?13850, '?13851, '?13852                      </div>
+            <strong>Signature:</strong> a:&#39;?13875 -&gt; b:&#39;?13876 -&gt; c:&#39;?13877 -&gt; d:&#39;?13878 -&gt; e:&#39;?13879 -&gt; f:&#39;?13880 -&gt; g:&#39;?13881 -&gt; h:&#39;?13882 -&gt; &#39;?13875 * &#39;?13876 * &#39;?13877 * &#39;?13878 * &#39;?13879 * &#39;?13880 * &#39;?13881 * &#39;?13882<br />
+                          <strong>Type parameters:</strong> '?13875, '?13876, '?13877, '?13878, '?13879, '?13880, '?13881, '?13882                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L58-58" class="github-link">

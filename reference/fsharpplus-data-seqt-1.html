@@ -85,7 +85,7 @@
           </code>
           <div class="tip" id="2398">
             <strong>Signature:</strong> (f:SeqT&lt;^Monad&lt;seq&lt;(&#39;T -&gt; &#39;U)&gt;&gt; * x:SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?10193, '?10194, '?10195, ^Monad<seq<'T>, ^Monad<seq<'U>                      </div>
+                          <strong>Type parameters:</strong> ^?10223, '?10224, '?10225, ^Monad<seq<'T>, ^Monad<seq<'U>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L54-54" class="github-link">
@@ -102,8 +102,8 @@
             SeqT.( &lt;|&gt; )(arg1, arg2)
           </code>
           <div class="tip" id="2399">
-            <strong>Signature:</strong> (SeqT&lt;^?10213&gt; * SeqT&lt;^?10216&gt;) -&gt; SeqT&lt;^MonadPlus&lt;seq&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadPlus<seq<'T>, '?10215, ^?10216                      </div>
+            <strong>Signature:</strong> (SeqT&lt;^?10243&gt; * SeqT&lt;^?10246&gt;) -&gt; SeqT&lt;^MonadPlus&lt;seq&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadPlus<seq<'T>, '?10245, ^?10246                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L58-58" class="github-link">
@@ -120,8 +120,8 @@
             SeqT.( &gt;&gt;= )(x, f)
           </code>
           <div class="tip" id="2400">
-            <strong>Signature:</strong> (x:SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;)) -&gt; SeqT&lt;^?10205&gt;<br />
-                          <strong>Type parameters:</strong> ^?10201, '?10202, ^Monad<seq<'U>, 'T, ^?10205, '?10206                      </div>
+            <strong>Signature:</strong> (x:SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;)) -&gt; SeqT&lt;^?10235&gt;<br />
+                          <strong>Type parameters:</strong> ^?10231, '?10232, ^Monad<seq<'U>, 'T, ^?10235, '?10236                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L55-55" class="github-link">
@@ -190,7 +190,7 @@
           </code>
           <div class="tip" id="2404">
             <strong>Signature:</strong> unit -&gt; SeqT&lt;^MonadReader&lt;&#39;R,seq&lt;&#39;R&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?10277, ^?10278, '?10279                      </div>
+                          <strong>Type parameters:</strong> '?10307, ^?10308, '?10309                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L80-80" class="github-link">
@@ -207,7 +207,7 @@
           </code>
           <div class="tip" id="2405">
             <strong>Signature:</strong> unit -&gt; SeqT&lt;^MonadPlus&lt;seq&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?10210                      </div>
+                          <strong>Type parameters:</strong> '?10240                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L57-57" class="github-link">
@@ -224,7 +224,7 @@
           </code>
           <div class="tip" id="2406">
             <strong>Signature:</strong> unit -&gt; SeqT&lt;^MonadState&lt;&#39;S,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?10264, ^?10265, '?10266                      </div>
+                          <strong>Type parameters:</strong> '?10294, ^?10295, '?10296                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L77-77" class="github-link">
@@ -241,7 +241,7 @@
           </code>
           <div class="tip" id="2407">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<seq<'T>>, '?10235, '?10236                        <span>
+                          <strong>Type parameters:</strong> ^Monad<seq<'T>>, '?10265, '?10266                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
@@ -262,7 +262,7 @@
           </code>
           <div class="tip" id="2408">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; SeqT&lt;^MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadAsync<'T>, '?10241, ^?10242, '?10243                      </div>
+                          <strong>Type parameters:</strong> ^MonadAsync<'T>, '?10271, ^?10272, '?10273                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L70-70" class="github-link">
@@ -278,8 +278,8 @@
             SeqT.Local(arg1, f)
           </code>
           <div class="tip" id="2409">
-            <strong>Signature:</strong> (SeqT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; SeqT&lt;^?10285&gt;<br />
-                          <strong>Type parameters:</strong> 'R1, 'R2, ^?10285                      </div>
+            <strong>Signature:</strong> (SeqT&lt;^MonadReader&lt;&#39;R2,&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; SeqT&lt;^?10315&gt;<br />
+                          <strong>Type parameters:</strong> 'R1, 'R2, ^?10315                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L81-81" class="github-link">
@@ -317,7 +317,7 @@
           </code>
           <div class="tip" id="2411">
             <strong>Signature:</strong> x:&#39;S -&gt; SeqT&lt;^MonadState&lt;unit,&#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadState<unit,'S>, '?10271, ^?10272, '?10273                      </div>
+                          <strong>Type parameters:</strong> ^MonadState<unit,'S>, '?10301, ^?10302, '?10303                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L78-78" class="github-link">
@@ -350,8 +350,8 @@
             SeqT.Throw(x)
           </code>
           <div class="tip" id="2413">
-            <strong>Signature:</strong> x:&#39;E -&gt; SeqT&lt;^?10247&gt;<br />
-                          <strong>Type parameters:</strong> ^?10247, '?10248, ^?10249, '?10250                      </div>
+            <strong>Signature:</strong> x:&#39;E -&gt; SeqT&lt;^?10277&gt;<br />
+                          <strong>Type parameters:</strong> ^?10277, '?10278, ^?10279, '?10280                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L72-72" class="github-link">
@@ -385,7 +385,7 @@
           </code>
           <div class="tip" id="2415">
             <strong>Signature:</strong> (source:SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt; * f:(exn -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;)) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?10220                      </div>
+                          <strong>Type parameters:</strong> '?10250                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L61-61" class="github-link">
@@ -401,7 +401,7 @@
             SeqT.Using(resource, f)
           </code>
           <div class="tip" id="2416">
-            <strong>Signature:</strong> (resource:&#39;?10226 * f:(&#39;?10226 -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;)) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;<br />
+            <strong>Signature:</strong> (resource:&#39;?10256 * f:(&#39;?10256 -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;)) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<seq<'T>>                      </div>
         </td>
         <td class="xmldoc">

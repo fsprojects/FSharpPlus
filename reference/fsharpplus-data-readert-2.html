@@ -138,8 +138,8 @@
             ReaderT.CallCC(f)
           </code>
           <div class="tip" id="2356">
-            <strong>Signature:</strong> (f:((&#39;T -&gt; ReaderT&lt;&#39;R,Cont&lt;&#39;?9584,&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9584, 'U, ^MonadCont<'C,'T>                      </div>
+            <strong>Signature:</strong> (f:((&#39;T -&gt; ReaderT&lt;&#39;R,Cont&lt;&#39;?9614,&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?9614, 'U, ^MonadCont<'C,'T>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L100-100" class="github-link">
@@ -172,8 +172,8 @@
             ReaderT.Delay(body)
           </code>
           <div class="tip" id="2358">
-            <strong>Signature:</strong> (body:(unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,&#39;?9567&gt;<br />
-                          <strong>Type parameters:</strong> '?9567                      </div>
+            <strong>Signature:</strong> (body:(unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,&#39;?9597&gt;<br />
+                          <strong>Type parameters:</strong> '?9597                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L93-93" class="github-link">
@@ -278,7 +278,7 @@
             ReaderT.Listen(arg1)
           </code>
           <div class="tip" id="2364">
-            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9621&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T*&#39;Monoid&gt;&gt;<br />
+            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9651&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T*&#39;Monoid&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T*'Monoid>                      </div>
         </td>
         <td class="xmldoc">
@@ -333,7 +333,7 @@
             ReaderT.Pass(arg1)
           </code>
           <div class="tip" id="2367">
-            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9627&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T&gt;&gt;<br />
+            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9657&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T>                      </div>
         </td>
         <td class="xmldoc">
@@ -350,7 +350,7 @@
             ReaderT.Put(x)
           </code>
           <div class="tip" id="2368">
-            <strong>Signature:</strong> x:&#39;?9637 -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, unit&gt;&gt;<br />
+            <strong>Signature:</strong> x:&#39;?9667 -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, unit&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadState<'S, unit>                      </div>
         </td>
         <td class="xmldoc">
@@ -384,7 +384,7 @@
             ReaderT.Tell(w)
           </code>
           <div class="tip" id="2370">
-            <strong>Signature:</strong> w:&#39;?9614 -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,unit&gt;&gt;<br />
+            <strong>Signature:</strong> w:&#39;?9644 -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,unit&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^MonadWriter<'Monoid,unit>                      </div>
         </td>
         <td class="xmldoc">
@@ -436,7 +436,7 @@
           </code>
           <div class="tip" id="2373">
             <strong>Signature:</strong> (source:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(exn -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9550                      </div>
+                          <strong>Type parameters:</strong> '?9580                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L90-90" class="github-link">
@@ -452,7 +452,7 @@
             ReaderT.Using(resource, f)
           </code>
           <div class="tip" id="2374">
-            <strong>Signature:</strong> (resource:&#39;?9559 * f:(&#39;?9559 -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
+            <strong>Signature:</strong> (resource:&#39;?9589 * f:(&#39;?9589 -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>                      </div>
         </td>
         <td class="xmldoc">
@@ -469,8 +469,8 @@
             ReaderT.Zip(x, y)
           </code>
           <div class="tip" id="2375">
-            <strong>Signature:</strong> (x:ReaderT&lt;&#39;S,^Monad&lt;&#39;T&gt;&gt; * y:ReaderT&lt;&#39;S,^Monad&lt;&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;S,^?9544&gt;<br />
-                          <strong>Type parameters:</strong> ^?9540, '?9541, '?9542, ^Monad<'U>, ^?9544                        <span>
+            <strong>Signature:</strong> (x:ReaderT&lt;&#39;S,^Monad&lt;&#39;T&gt;&gt; * y:ReaderT&lt;&#39;S,^Monad&lt;&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;S,^?9574&gt;<br />
+                          <strong>Type parameters:</strong> ^?9570, '?9571, '?9572, ^Monad<'U>, ^?9574                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>

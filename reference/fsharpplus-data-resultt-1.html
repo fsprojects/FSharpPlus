@@ -85,7 +85,7 @@
           </code>
           <div class="tip" id="2377">
             <strong>Signature:</strong> (f:ResultT&lt;^Monad&lt;&#39;Result&lt;(&#39;T -&gt; &#39;U),&#39;E&gt;&gt;&gt; * x:ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;) -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9761, '?9762, '?9763, '?9764, ^Monad<'Result<'T,'E>>, ^Monad<'Result<'U,'E>>                      </div>
+                          <strong>Type parameters:</strong> ^?9791, '?9792, '?9793, '?9794, ^Monad<'Result<'T,'E>>, ^Monad<'Result<'U,'E>>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L66-66" class="github-link">
@@ -103,7 +103,7 @@
           </code>
           <div class="tip" id="2378">
             <strong>Signature:</strong> (x:ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; * f:(&#39;T -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;)) -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'Result<'U,'E>>, '?9771, '?9772, 'T                      </div>
+                          <strong>Type parameters:</strong> ^Monad<'Result<'U,'E>>, '?9801, '?9802, 'T                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L68-68" class="github-link">
@@ -121,7 +121,7 @@
           </code>
           <div class="tip" id="2379">
             <strong>Signature:</strong> (f:((&#39;T -&gt; ResultT&lt;&#39;MonadCont&lt;&#39;R,Result&lt;&#39;U,&#39;E&gt;&gt;&gt;) -&gt; ResultT&lt;^MonadCont&lt;&#39;R, Result&lt;&#39;T,&#39;E&gt;&gt;&gt;)) -&gt; ResultT&lt;^MonadCont&lt;&#39;R, Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'MonadCont<'R,Result<'U,'E>>, ^MonadCont<'R, Result<'T,'E>>, '?9823                      </div>
+                          <strong>Type parameters:</strong> 'MonadCont<'R,Result<'U,'E>>, ^MonadCont<'R, Result<'T,'E>>, '?9853                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L86-86" class="github-link">
@@ -138,7 +138,7 @@
           </code>
           <div class="tip" id="2380">
             <strong>Signature:</strong> (ResultT&lt;^MonadError&lt;&#39;E1,&#39;T&gt;&gt; * f:(&#39;E1 -&gt; ResultT&lt;^Monad&lt;Result&lt;&#39;T,&#39;E2&gt;&gt;&gt;)) -&gt; ResultT&lt;^Monad&lt;Result&lt;&#39;T,&#39;E2&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<Result<'T,'E2>>, '?9806, 'E1, '?9808                      </div>
+                          <strong>Type parameters:</strong> ^Monad<Result<'T,'E2>>, '?9836, 'E1, '?9838                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L81-81" class="github-link">
@@ -154,8 +154,8 @@
             ResultT.Delay(body)
           </code>
           <div class="tip" id="2381">
-            <strong>Signature:</strong> (body:(unit -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;)) -&gt; ResultT&lt;&#39;?9788&gt;<br />
-                          <strong>Type parameters:</strong> '?9788                      </div>
+            <strong>Signature:</strong> (body:(unit -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;)) -&gt; ResultT&lt;&#39;?9818&gt;<br />
+                          <strong>Type parameters:</strong> '?9818                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L74-74" class="github-link">
@@ -172,7 +172,7 @@
           </code>
           <div class="tip" id="2382">
             <strong>Signature:</strong> unit -&gt; ResultT&lt;^MonadReader&lt;&#39;R,Result&lt;&#39;R,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^?9827, '?9828, '?9829                      </div>
+                          <strong>Type parameters:</strong> ^?9857, '?9858, '?9859                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L88-88" class="github-link">
@@ -189,7 +189,7 @@
           </code>
           <div class="tip" id="2383">
             <strong>Signature:</strong> unit -&gt; ResultT&lt;^MonadState&lt;&#39;S,Result&lt;_,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9867, '?9868, ^?9869, '?9870, '?9871                      </div>
+                          <strong>Type parameters:</strong> '?9897, '?9898, ^?9899, '?9900, '?9901                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L100-100" class="github-link">
@@ -206,7 +206,7 @@
           </code>
           <div class="tip" id="2384">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; ResultT&lt;^Monad&lt;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<Result<'T,'E>>, '?9793, '?9794, '?9795, '?9796                        <span>
+                          <strong>Type parameters:</strong> ^Monad<Result<'T,'E>>, '?9823, '?9824, '?9825, '?9826                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
@@ -227,7 +227,7 @@
           </code>
           <div class="tip" id="2385">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ResultT&lt;^MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadAsync<'T>, '?9813, '?9814, ^?9815, '?9816, '?9817                      </div>
+                          <strong>Type parameters:</strong> ^MonadAsync<'T>, '?9843, '?9844, ^?9845, '?9846, '?9847                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L84-84" class="github-link">
@@ -243,8 +243,8 @@
             ResultT.Listen(m)
           </code>
           <div class="tip" id="2386">
-            <strong>Signature:</strong> m:ResultT&lt;&#39;?9847&gt; -&gt; ResultT&lt;^MonadWriter&lt;&#39;Monoid,Result&lt;&#39;T*&#39;Monoid,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,Result<'T*'Monoid,'E>>, ^?9849, '?9850, '?9851, '?9852                      </div>
+            <strong>Signature:</strong> m:ResultT&lt;&#39;?9877&gt; -&gt; ResultT&lt;^MonadWriter&lt;&#39;Monoid,Result&lt;&#39;T*&#39;Monoid,&#39;E&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,Result<'T*'Monoid,'E>>, ^?9879, '?9880, '?9881, '?9882                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L93-93" class="github-link">
@@ -260,8 +260,8 @@
             ResultT.Local(arg1, f)
           </code>
           <div class="tip" id="2387">
-            <strong>Signature:</strong> (ResultT&lt;^MonadReader&lt;&#39;R2,Result&lt;&#39;R2,&#39;E&gt;&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ResultT&lt;^?9835&gt;<br />
-                          <strong>Type parameters:</strong> 'R1, 'R2, ^?9835                      </div>
+            <strong>Signature:</strong> (ResultT&lt;^MonadReader&lt;&#39;R2,Result&lt;&#39;R2,&#39;E&gt;&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ResultT&lt;^?9865&gt;<br />
+                          <strong>Type parameters:</strong> 'R1, 'R2, ^?9865                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L89-89" class="github-link">
@@ -278,7 +278,7 @@
           </code>
           <div class="tip" id="2388">
             <strong>Signature:</strong> (x:ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'Result<'U,'E>>, 'T, '?9756, 'U                        <span>
+                          <strong>Type parameters:</strong> ^Monad<'Result<'U,'E>>, 'T, '?9786, 'U                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
@@ -298,8 +298,8 @@
             ResultT.Pass(m)
           </code>
           <div class="tip" id="2389">
-            <strong>Signature:</strong> m:ResultT&lt;^?9855&gt; -&gt; ResultT&lt;^MonadWriter&lt;&#39;Monoid,Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,Result<'T,'E>>, '?9857, '?9858, ^?9859, ^?9860, '?9861, '?9862, '?9863                      </div>
+            <strong>Signature:</strong> m:ResultT&lt;^?9885&gt; -&gt; ResultT&lt;^MonadWriter&lt;&#39;Monoid,Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,Result<'T,'E>>, '?9887, '?9888, ^?9889, ^?9890, '?9891, '?9892, '?9893                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L97-97" class="github-link">
@@ -316,7 +316,7 @@
           </code>
           <div class="tip" id="2390">
             <strong>Signature:</strong> x:&#39;S -&gt; ResultT&lt;^MonadState&lt;&#39;S,Result&lt;_,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadState<'S,Result<_,'E>>, '?9876, '?9877, ^?9878, '?9879, '?9880                      </div>
+                          <strong>Type parameters:</strong> ^MonadState<'S,Result<_,'E>>, '?9906, '?9907, ^?9908, '?9909, '?9910                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L101-101" class="github-link">
@@ -333,7 +333,7 @@
           </code>
           <div class="tip" id="2391">
             <strong>Signature:</strong> x:&#39;T -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'Result<'T,'E>>, '?9750                      </div>
+                          <strong>Type parameters:</strong> ^Monad<'Result<'T,'E>>, '?9780                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L60-60" class="github-link">
@@ -350,7 +350,7 @@
           </code>
           <div class="tip" id="2392">
             <strong>Signature:</strong> w:&#39;Monoid -&gt; ResultT&lt;^Writer&lt;&#39;Monoid,Result&lt;unit,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Writer<'Monoid,Result<unit,'E>>, '?9840, '?9841, ^?9842, '?9843, '?9844                      </div>
+                          <strong>Type parameters:</strong> ^Writer<'Monoid,Result<unit,'E>>, '?9870, '?9871, ^?9872, '?9873, '?9874                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L91-91" class="github-link">
@@ -367,7 +367,7 @@
           </code>
           <div class="tip" id="2393">
             <strong>Signature:</strong> x:&#39;E -&gt; ResultT&lt;^Monad&lt;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<Result<'T,'E>>, '?9801                      </div>
+                          <strong>Type parameters:</strong> ^Monad<Result<'T,'E>>, '?9831                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L80-80" class="github-link">
@@ -401,7 +401,7 @@
           </code>
           <div class="tip" id="2395">
             <strong>Signature:</strong> (source:ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; * f:(exn -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;)) -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9777                      </div>
+                          <strong>Type parameters:</strong> '?9807                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L71-71" class="github-link">
@@ -417,7 +417,7 @@
             ResultT.Using(resource, f)
           </code>
           <div class="tip" id="2396">
-            <strong>Signature:</strong> (resource:&#39;?9783 * f:(&#39;?9783 -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;)) -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
+            <strong>Signature:</strong> (resource:&#39;?9813 * f:(&#39;?9813 -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;)) -&gt; ResultT&lt;^Monad&lt;&#39;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'Result<'T,'E>>                      </div>
         </td>
         <td class="xmldoc">

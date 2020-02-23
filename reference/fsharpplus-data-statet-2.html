@@ -85,7 +85,7 @@
           </code>
           <div class="tip" id="2426">
             <strong>Signature:</strong> (f:StateT&lt;&#39;S,^Monad&lt;(&#39;T -&gt; &#39;U) * &#39;S&gt;&gt; * x:StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;) -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;U * &#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'U * 'S>, '?9123, '?9124, ^Monad<'T * 'S>                      </div>
+                          <strong>Type parameters:</strong> ^Monad<'U * 'S>, '?9153, '?9154, ^Monad<'T * 'S>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L94-94" class="github-link">
@@ -207,7 +207,7 @@
           </code>
           <div class="tip" id="2433">
             <strong>Signature:</strong> m:^Monad&lt;&#39;T&gt; -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9183, 'S, '?9185                        <span>
+                          <strong>Type parameters:</strong> '?9213, 'S, '?9215                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
@@ -228,7 +228,7 @@
           </code>
           <div class="tip" id="2434">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; StateT&lt;&#39;S,^MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadAsync<'T>, ^?9192, '?9193, '?9194                      </div>
+                          <strong>Type parameters:</strong> ^MonadAsync<'T>, ^?9222, '?9223, '?9224                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L113-113" class="github-link">
@@ -245,7 +245,7 @@
           </code>
           <div class="tip" id="2435">
             <strong>Signature:</strong> (x:StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;U * &#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'U * 'S>, 'T, '?9115, 'U                        <span>
+                          <strong>Type parameters:</strong> ^Monad<'U * 'S>, 'T, '?9145, 'U                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
@@ -299,8 +299,8 @@
             StateT.Throw(x)
           </code>
           <div class="tip" id="2438">
-            <strong>Signature:</strong> x:&#39;E -&gt; StateT&lt;&#39;?9209,^?9210&gt;<br />
-                          <strong>Type parameters:</strong> ^?9210, ^?9211, '?9212, '?9213                      </div>
+            <strong>Signature:</strong> x:&#39;E -&gt; StateT&lt;&#39;?9239,^?9240&gt;<br />
+                          <strong>Type parameters:</strong> ^?9240, ^?9241, '?9242, '?9243                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L120-120" class="github-link">
@@ -334,7 +334,7 @@
           </code>
           <div class="tip" id="2440">
             <strong>Signature:</strong> (source:StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt; * f:(exn -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;)) -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9161                      </div>
+                          <strong>Type parameters:</strong> '?9191                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L103-103" class="github-link">
@@ -350,7 +350,7 @@
             StateT.Using(resource, f)
           </code>
           <div class="tip" id="2441">
-            <strong>Signature:</strong> (resource:&#39;?9170 * f:(&#39;?9170 -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;)) -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;<br />
+            <strong>Signature:</strong> (resource:&#39;?9200 * f:(&#39;?9200 -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;)) -&gt; StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T * 'S>                      </div>
         </td>
         <td class="xmldoc">
@@ -367,8 +367,8 @@
             StateT.Zip(x, y)
           </code>
           <div class="tip" id="2442">
-            <strong>Signature:</strong> (x:StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt; * y:StateT&lt;&#39;S,^Monad&lt;&#39;U * &#39;S&gt;&gt;) -&gt; StateT&lt;&#39;S,^?9152&gt;<br />
-                          <strong>Type parameters:</strong> ^?9148, '?9149, '?9150, '?9151, ^?9152, '?9153, '?9154, ^Monad<'U * 'S>                        <span>
+            <strong>Signature:</strong> (x:StateT&lt;&#39;S,^Monad&lt;&#39;T * &#39;S&gt;&gt; * y:StateT&lt;&#39;S,^Monad&lt;&#39;U * &#39;S&gt;&gt;) -&gt; StateT&lt;&#39;S,^?9182&gt;<br />
+                          <strong>Type parameters:</strong> ^?9178, '?9179, '?9180, '?9181, ^?9182, '?9183, '?9184, ^Monad<'U * 'S>                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
