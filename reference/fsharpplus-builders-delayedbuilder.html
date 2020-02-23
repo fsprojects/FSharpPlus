@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>DelayedBuilder</h1>
 <p>
 
@@ -51,11 +49,10 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '698', 698)" onmouseover="showTip(event, '698', 698)">
+          <code onmouseout="hideTip(event, '704', 704)" onmouseover="showTip(event, '704', 704)">
             new()
           </code>
-          <div class="tip" id="698">
+          <div class="tip" id="704">
             <strong>Signature:</strong> unit -&gt; DelayedBuilder<br />
                                   </div>
         </td>
@@ -78,11 +75,10 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '699', 699)" onmouseover="showTip(event, '699', 699)">
-            Delay(expr)
+          <code onmouseout="hideTip(event, '705', 705)" onmouseover="showTip(event, '705', 705)">
+            x.Delay(expr)
           </code>
-          <div class="tip" id="699">
+          <div class="tip" id="705">
             <strong>Signature:</strong> (expr:(unit -&gt; ^Monad&lt;&#39;T&gt;)) -&gt; ^Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>                      </div>
         </td>
@@ -96,11 +92,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '700', 700)" onmouseover="showTip(event, '700', 700)">
-            Run(f)
+          <code onmouseout="hideTip(event, '706', 706)" onmouseover="showTip(event, '706', 706)">
+            x.Run(f)
           </code>
-          <div class="tip" id="700">
+          <div class="tip" id="706">
             <strong>Signature:</strong> f:&#39;Monad&lt;&#39;T&gt; -&gt; &#39;Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'Monad<'T>                      </div>
         </td>
@@ -114,11 +109,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '701', 701)" onmouseover="showTip(event, '701', 701)">
-            TryFinally(expr, compensation)
+          <code onmouseout="hideTip(event, '707', 707)" onmouseover="showTip(event, '707', 707)">
+            x.TryFinally(expr, compensation)
           </code>
-          <div class="tip" id="701">
+          <div class="tip" id="707">
             <strong>Signature:</strong> (expr:^Monad&lt;&#39;T&gt; * compensation:(unit -&gt; unit)) -&gt; ^Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>                      </div>
         </td>
@@ -132,13 +126,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '702', 702)" onmouseover="showTip(event, '702', 702)">
-            TryWith(expr, handler)
+          <code onmouseout="hideTip(event, '708', 708)" onmouseover="showTip(event, '708', 708)">
+            x.TryWith(expr, handler)
           </code>
-          <div class="tip" id="702">
+          <div class="tip" id="708">
             <strong>Signature:</strong> (expr:^Monad&lt;&#39;T&gt; * handler:(exn -&gt; ^Monad&lt;&#39;T&gt;)) -&gt; ^Monad&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'T>, '?13366                      </div>
+                          <strong>Type parameters:</strong> ^Monad<'T>, '?13446                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L76-76" class="github-link">
@@ -150,13 +143,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '703', 703)" onmouseover="showTip(event, '703', 703)">
-            Using(disposable, body)
+          <code onmouseout="hideTip(event, '709', 709)" onmouseover="showTip(event, '709', 709)">
+            x.Using(disposable, body)
           </code>
-          <div class="tip" id="703">
-            <strong>Signature:</strong> (disposable:&#39;?13370 * body:(&#39;?13370 -&gt; ^Monad&lt;&#39;T&gt;)) -&gt; ^Monad&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> '?13370, ^Monad<'T>                      </div>
+          <div class="tip" id="709">
+            <strong>Signature:</strong> (disposable:&#39;?13450 * body:(&#39;?13450 -&gt; ^Monad&lt;&#39;T&gt;)) -&gt; ^Monad&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> '?13450, ^Monad<'T>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L78-78" class="github-link">

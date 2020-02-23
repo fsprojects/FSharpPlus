@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Map</h1>
 <p>
   <span>Namespace: FSharpPlus</span><br />
@@ -58,20 +56,23 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '136', 136)" onmouseover="showTip(event, '136', 136)">
-            _item(i f t)
+          <code onmouseout="hideTip(event, '134', 134)" onmouseover="showTip(event, '134', 134)">
+            Map._item i f t
           </code>
-          <div class="tip" id="136">
-            <strong>Signature:</strong> i:&#39;?13233 -&gt; f:(&#39;?13234 option -&gt; ^?13235) -&gt; t:Map&lt;&#39;?13233,&#39;?13234&gt; -&gt; &#39;?13236<br />
-                          <strong>Type parameters:</strong> '?13233, '?13234, ^?13235, '?13236                      </div>
+          <div class="tip" id="134">
+            <strong>Signature:</strong> i:&#39;?13313 -&gt; f:(&#39;?13314 option -&gt; ^?13315) -&gt; t:Map&lt;&#39;?13313,&#39;?13314&gt; -&gt; &#39;?13316<br />
+                          <strong>Type parameters:</strong> '?13313, '?13314, ^?13315, '?13316                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L118-118" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L121-121" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Given a specific key, produces a Lens from a Map<key, value> to an Option<value>.  When setting,
+a Some(value) will insert or replace the value into the map at the given key.  Setting a value of
+None will delete the value at the specified key.  Works well together with non.</p>
+
+
         </td>
       </tr>
     </tbody>

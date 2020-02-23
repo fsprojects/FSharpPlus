@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Array</h1>
 <p>
   <span>Namespace: FSharpPlus</span><br />
@@ -59,16 +57,32 @@
     <tbody>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            findSliceIndex(slice source)
+            Array.apply f x
           </code>
           <div class="tip" id="1">
+            <strong>Signature:</strong> f:(&#39;a -&gt; &#39;b) [] -&gt; x:&#39;a [] -&gt; &#39;b []<br />
+                          <strong>Type parameters:</strong> 'a, 'b                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L9-9" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
+            Array.findSliceIndex slice source
+          </code>
+          <div class="tip" id="2">
             <strong>Signature:</strong> slice:&#39;b [] -&gt; source:&#39;b [] -&gt; int<br />
                           <strong>Type parameters:</strong> 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L492-492" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L35-35" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -79,16 +93,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            intercalate(separator source)
+          <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
+            Array.intercalate separator source
           </code>
-          <div class="tip" id="2">
+          <div class="tip" id="3">
             <strong>Signature:</strong> separator:&#39;a [] -&gt; source:seq&lt;&#39;a []&gt; -&gt; &#39;a []<br />
                           <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L470-470" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L13-13" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -97,16 +110,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
-            intersperse(element source)
+          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
+            Array.intersperse element source
           </code>
-          <div class="tip" id="3">
+          <div class="tip" id="4">
             <strong>Signature:</strong> element:&#39;T -&gt; source:&#39;T [] -&gt; &#39;T []<br />
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L473-473" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L16-16" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -117,16 +129,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
-            partitionMap(mapper source)
+          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+            Array.partitionMap mapper source
           </code>
-          <div class="tip" id="4">
+          <div class="tip" id="5">
             <strong>Signature:</strong> mapper:(&#39;T -&gt; Choice&lt;&#39;T1,&#39;T2&gt;) -&gt; source:&#39;T array -&gt; &#39;T1 [] * &#39;T2 []<br />
                           <strong>Type parameters:</strong> 'T, 'T1, 'T2                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L518-518" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -138,16 +149,15 @@ and classifying the transformed values depending on whether they were wrapped wi
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
-            replace(oldValue newValue source)
+          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
+            Array.replace oldValue newValue source
           </code>
-          <div class="tip" id="5">
+          <div class="tip" id="6">
             <strong>Signature:</strong> oldValue:&#39;T [] -&gt; newValue:&#39;T [] -&gt; source:&#39;T [] -&gt; &#39;T []<br />
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L479-479" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L22-22" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -158,16 +168,15 @@ and classifying the transformed values depending on whether they were wrapped wi
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
-            split(separators source)
+          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+            Array.split separators source
           </code>
-          <div class="tip" id="6">
+          <div class="tip" id="7">
             <strong>Signature:</strong> separators:seq&lt;&#39;a []&gt; -&gt; source:&#39;a [] -&gt; seq&lt;&#39;a []&gt;<br />
                           <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L476-476" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L19-19" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -178,16 +187,15 @@ and classifying the transformed values depending on whether they were wrapped wi
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
-            tryFindSliceIndex(slice source)
+          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
+            Array.tryFindSliceIndex slice source
           </code>
-          <div class="tip" id="7">
+          <div class="tip" id="8">
             <strong>Signature:</strong> slice:&#39;b [] -&gt; source:&#39;b [] -&gt; int option<br />
                           <strong>Type parameters:</strong> 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions.fs#L506-506" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L49-49" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

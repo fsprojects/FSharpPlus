@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Validation<'error, 't></h1>
 <p>
 
@@ -56,11 +54,10 @@ that would violate monad rules.</p>
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2369', 2369)" onmouseover="showTip(event, '2369', 2369)">
+          <code onmouseout="hideTip(event, '2443', 2443)" onmouseover="showTip(event, '2443', 2443)">
             Failure(&#39;error)
           </code>
-          <div class="tip" id="2369">
+          <div class="tip" id="2443">
             <strong>Signature:</strong> &#39;error<br />
                                   </div>
         </td>
@@ -74,11 +71,10 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2370', 2370)" onmouseover="showTip(event, '2370', 2370)">
+          <code onmouseout="hideTip(event, '2444', 2444)" onmouseover="showTip(event, '2444', 2444)">
             Success(&#39;t)
           </code>
-          <div class="tip" id="2370">
+          <div class="tip" id="2444">
             <strong>Signature:</strong> &#39;t<br />
                                   </div>
         </td>
@@ -100,12 +96,11 @@ that would violate monad rules.</p>
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2371', 2371)" onmouseover="showTip(event, '2371', 2371)">
-            ( &lt;*&gt; )(f, x)
+          <code onmouseout="hideTip(event, '2445', 2445)" onmouseover="showTip(event, '2445', 2445)">
+            Validation.( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="2371">
-            <strong>Signature:</strong> (f:Validation&lt;^?8499,(&#39;T -&gt; &#39;U)&gt; * x:Validation&lt;^?8499,&#39;T&gt;) -&gt; Validation&lt;^?8499,&#39;U&gt;<br />
+          <div class="tip" id="2445">
+            <strong>Signature:</strong> (f:Validation&lt;^?8434,(&#39;T -&gt; &#39;U)&gt; * x:Validation&lt;^?8434,&#39;T&gt;) -&gt; Validation&lt;^?8434,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
@@ -119,12 +114,11 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2372', 2372)" onmouseover="showTip(event, '2372', 2372)">
-            ( &lt;|&gt; )(x, y)
+          <code onmouseout="hideTip(event, '2446', 2446)" onmouseover="showTip(event, '2446', 2446)">
+            Validation.( &lt;|&gt; )(x, y)
           </code>
-          <div class="tip" id="2372">
-            <strong>Signature:</strong> (x:Validation&lt;^?8510,&#39;?8511&gt; * y:Validation&lt;^?8510,&#39;?8511&gt;) -&gt; Validation&lt;^?8510,&#39;?8511&gt;<br />
+          <div class="tip" id="2446">
+            <strong>Signature:</strong> (x:Validation&lt;^?8445,&#39;?8446&gt; * y:Validation&lt;^?8445,&#39;?8446&gt;) -&gt; Validation&lt;^?8445,&#39;?8446&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
@@ -138,11 +132,10 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2373', 2373)" onmouseover="showTip(event, '2373', 2373)">
-            Bifold(t, f, g, z)
+          <code onmouseout="hideTip(event, '2447', 2447)" onmouseover="showTip(event, '2447', 2447)">
+            Validation.Bifold(t, f, g, z)
           </code>
-          <div class="tip" id="2373">
+          <div class="tip" id="2447">
             <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;b -&gt; &#39;err -&gt; &#39;b) * g:(&#39;b -&gt; &#39;a -&gt; &#39;b) * z:&#39;b) -&gt; &#39;b<br />
                           <strong>Type parameters:</strong> 'b                        <span>
             <strong>Attributes:</strong><br />
@@ -160,11 +153,10 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2374', 2374)" onmouseover="showTip(event, '2374', 2374)">
-            BifoldBack(t, f, g, z)
+          <code onmouseout="hideTip(event, '2448', 2448)" onmouseover="showTip(event, '2448', 2448)">
+            Validation.BifoldBack(t, f, g, z)
           </code>
-          <div class="tip" id="2374">
+          <div class="tip" id="2448">
             <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;err -&gt; &#39;b -&gt; &#39;b) * g:(&#39;a -&gt; &#39;b -&gt; &#39;b) * z:&#39;b) -&gt; &#39;b<br />
                           <strong>Type parameters:</strong> 'b                        <span>
             <strong>Attributes:</strong><br />
@@ -182,11 +174,10 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2375', 2375)" onmouseover="showTip(event, '2375', 2375)">
-            BifoldMap(t, f, g)
+          <code onmouseout="hideTip(event, '2449', 2449)" onmouseover="showTip(event, '2449', 2449)">
+            Validation.BifoldMap(t, f, g)
           </code>
-          <div class="tip" id="2375">
+          <div class="tip" id="2449">
             <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;err -&gt; &#39;b) * g:(&#39;a -&gt; &#39;b)) -&gt; &#39;b<br />
                           <strong>Type parameters:</strong> 'b                        <span>
             <strong>Attributes:</strong><br />
@@ -204,11 +195,10 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2376', 2376)" onmouseover="showTip(event, '2376', 2376)">
-            Bimap(x, f, g)
+          <code onmouseout="hideTip(event, '2450', 2450)" onmouseover="showTip(event, '2450', 2450)">
+            Validation.Bimap(x, f, g)
           </code>
-          <div class="tip" id="2376">
+          <div class="tip" id="2450">
             <strong>Signature:</strong> (x:Validation&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U) * g:(&#39;V -&gt; &#39;W)) -&gt; Validation&lt;&#39;U,&#39;W&gt;<br />
                           <strong>Type parameters:</strong> 'U, 'W                        <span>
             <strong>Attributes:</strong><br />
@@ -226,12 +216,11 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2377', 2377)" onmouseover="showTip(event, '2377', 2377)">
-            get_Empty()
+          <code onmouseout="hideTip(event, '2451', 2451)" onmouseover="showTip(event, '2451', 2451)">
+            Validation.get_Empty()
           </code>
-          <div class="tip" id="2377">
-            <strong>Signature:</strong> unit -&gt; Validation&lt;^?8505,&#39;?8506&gt;<br />
+          <div class="tip" id="2451">
+            <strong>Signature:</strong> unit -&gt; Validation&lt;^?8440,&#39;?8441&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
@@ -244,13 +233,12 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2378', 2378)" onmouseover="showTip(event, '2378', 2378)">
-            Map(x, f)
+          <code onmouseout="hideTip(event, '2452', 2452)" onmouseover="showTip(event, '2452', 2452)">
+            Validation.Map(x, f)
           </code>
-          <div class="tip" id="2378">
-            <strong>Signature:</strong> (x:Validation&lt;&#39;?8515,&#39;?8516&gt; * f:(&#39;?8516 -&gt; &#39;?8517)) -&gt; Validation&lt;&#39;?8515,&#39;?8517&gt;<br />
-                          <strong>Type parameters:</strong> '?8517                        <span>
+          <div class="tip" id="2452">
+            <strong>Signature:</strong> (x:Validation&lt;&#39;?8450,&#39;?8451&gt; * f:(&#39;?8451 -&gt; &#39;?8452)) -&gt; Validation&lt;&#39;?8450,&#39;?8452&gt;<br />
+                          <strong>Type parameters:</strong> '?8452                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
@@ -266,12 +254,11 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2379', 2379)" onmouseover="showTip(event, '2379', 2379)">
-            Return(x)
+          <code onmouseout="hideTip(event, '2453', 2453)" onmouseover="showTip(event, '2453', 2453)">
+            Validation.Return(x)
           </code>
-          <div class="tip" id="2379">
-            <strong>Signature:</strong> x:&#39;?8494 -&gt; Validation&lt;&#39;?8495,&#39;?8494&gt;<br />
+          <div class="tip" id="2453">
+            <strong>Signature:</strong> x:&#39;?8429 -&gt; Validation&lt;&#39;?8430,&#39;?8429&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
@@ -284,13 +271,12 @@ that would violate monad rules.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2380', 2380)" onmouseover="showTip(event, '2380', 2380)">
-            Traverse(t, f)
+          <code onmouseout="hideTip(event, '2454', 2454)" onmouseover="showTip(event, '2454', 2454)">
+            Validation.Traverse(t, f)
           </code>
-          <div class="tip" id="2380">
+          <div class="tip" id="2454">
             <strong>Signature:</strong> (t:Validation&lt;&#39;err,&#39;a&gt; * f:(&#39;a -&gt; ^b)) -&gt; ^c<br />
-                          <strong>Type parameters:</strong> ^b, ^c, '?8532                        <span>
+                          <strong>Type parameters:</strong> ^b, ^c, '?8467                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>

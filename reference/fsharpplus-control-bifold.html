@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Bifold</h1>
 <p>
 
@@ -50,13 +48,12 @@
     <tbody>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '855', 855)" onmouseover="showTip(event, '855', 855)">
-            Bifold(arg1, arg2, arg3, arg4, arg5)
+            Bifold.Bifold(...)
           </code>
           <div class="tip" id="855">
-            <strong>Signature:</strong> (&#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; * &#39;?15848 * &#39;?15849 * &#39;?15850 * Default1) -&gt; &#39;?15851 -&gt; &#39;?15851<br />
-                          <strong>Type parameters:</strong> 'Bifoldable<'T1,'T2>, '?15848, '?15849, '?15850, '?15851                      </div>
+            <strong>Signature:</strong> (&#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; * &#39;?15963 * &#39;?15964 * &#39;?15965 * Default1) -&gt; &#39;?15966 -&gt; &#39;?15966<br />
+                          <strong>Type parameters:</strong> 'Bifoldable<'T1,'T2>, '?15963, '?15964, '?15965, '?15966                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Bifoldable.fs#L42-42" class="github-link">
@@ -68,13 +65,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '856', 856)" onmouseover="showTip(event, '856', 856)">
-            Bifold(x, f, g, z, _impl)
+            Bifold.Bifold(x, f, g, z, _impl)
           </code>
           <div class="tip" id="856">
-            <strong>Signature:</strong> (x:^Bifoldable&lt;&#39;T1,&#39;T2&gt; * f:(&#39;?15843 -&gt; &#39;?15844 -&gt; &#39;?15843) * g:(&#39;?15843 -&gt; &#39;?15845 -&gt; &#39;?15843) * z:&#39;?15843 * _impl:Default1) -&gt; &#39;?15843<br />
-                          <strong>Type parameters:</strong> ^Bifoldable<'T1,'T2>, '?15843, '?15844, '?15845                      </div>
+            <strong>Signature:</strong> (x:^Bifoldable&lt;&#39;T1,&#39;T2&gt; * f:(&#39;?15958 -&gt; &#39;?15959 -&gt; &#39;?15958) * g:(&#39;?15958 -&gt; &#39;?15960 -&gt; &#39;?15958) * z:&#39;?15958 * _impl:Default1) -&gt; &#39;?15958<br />
+                          <strong>Type parameters:</strong> ^Bifoldable<'T1,'T2>, '?15958, '?15959, '?15960                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Bifoldable.fs#L41-41" class="github-link">
@@ -86,9 +82,8 @@
       </tr>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '857', 857)" onmouseover="showTip(event, '857', 857)">
-            Bifold(arg1, f, g, z, _impl)
+            Bifold.Bifold(arg1, f, g, z, _impl)
           </code>
           <div class="tip" id="857">
             <strong>Signature:</strong> ((&#39;T1 * &#39;T2) * f:(&#39;S -&gt; &#39;T1 -&gt; &#39;S) * g:(&#39;S -&gt; &#39;T2 -&gt; &#39;S) * z:&#39;S * _impl:Bifold) -&gt; &#39;S<br />
@@ -104,9 +99,8 @@
       </tr>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '858', 858)" onmouseover="showTip(event, '858', 858)">
-            Bifold(x, f, g, z, _impl)
+            Bifold.Bifold(x, f, g, z, _impl)
           </code>
           <div class="tip" id="858">
             <strong>Signature:</strong> (x:Choice&lt;&#39;T2,&#39;T1&gt; * f:(&#39;S -&gt; &#39;T1 -&gt; &#39;S) * g:(&#39;S -&gt; &#39;T2 -&gt; &#39;S) * z:&#39;S * _impl:Bifold) -&gt; &#39;S<br />
@@ -122,9 +116,8 @@
       </tr>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '859', 859)" onmouseover="showTip(event, '859', 859)">
-            Bifold(x, f, g, z, _impl)
+            Bifold.Bifold(x, f, g, z, _impl)
           </code>
           <div class="tip" id="859">
             <strong>Signature:</strong> (x:Result&lt;&#39;T2,&#39;T1&gt; * f:(&#39;S -&gt; &#39;T1 -&gt; &#39;S) * g:(&#39;S -&gt; &#39;T2 -&gt; &#39;S) * z:&#39;S * _impl:Bifold) -&gt; &#39;S<br />
@@ -140,9 +133,8 @@
       </tr>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '860', 860)" onmouseover="showTip(event, '860', 860)">
-            Invoke(f g z source)
+            Bifold.Invoke f g z source
           </code>
           <div class="tip" id="860">
             <strong>Signature:</strong> (f:(&#39;S -&gt; &#39;T1 -&gt; &#39;S)) -&gt; (g:(&#39;S -&gt; &#39;T2 -&gt; &#39;S)) -&gt; z:&#39;S -&gt; source:^Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; &#39;S<br />
@@ -158,9 +150,8 @@
       </tr>
       <tr>
         <td class="member-name">
-
           <code onmouseout="hideTip(event, '861', 861)" onmouseover="showTip(event, '861', 861)">
-            InvokeOnInstance(f g z source)
+            Bifold.InvokeOnInstance f g z source
           </code>
           <div class="tip" id="861">
             <strong>Signature:</strong> (f:(&#39;S -&gt; &#39;T1 -&gt; &#39;S)) -&gt; (g:(&#39;S -&gt; &#39;T2 -&gt; &#39;S)) -&gt; z:&#39;S -&gt; source:^Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; &#39;S<br />

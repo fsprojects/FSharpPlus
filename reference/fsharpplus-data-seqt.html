@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>SeqT</h1>
 <p>
   <span>Namespace: FSharpPlus.Data</span><br />
@@ -59,69 +57,12 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '558', 558)" onmouseover="showTip(event, '558', 558)">
-            apply(arg1 arg2)
+          <code onmouseout="hideTip(event, '562', 562)" onmouseover="showTip(event, '562', 562)">
+            SeqT.apply arg1 arg2
           </code>
-          <div class="tip" id="558">
+          <div class="tip" id="562">
             <strong>Signature:</strong> SeqT&lt;^Monad&lt;seq&lt;(&#39;T -&gt; &#39;U)&gt;&gt; -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<seq<('T -> 'U)>, ^?12705, '?12706, '?12707, ^Monad<seq<'T>, ^Monad<seq<'U>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L42-42" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '559', 559)" onmouseover="showTip(event, '559', 559)">
-            bind(f arg2)
-          </code>
-          <div class="tip" id="559">
-            <strong>Signature:</strong> f:(&#39;T -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;^?12701&gt;<br />
-                          <strong>Type parameters:</strong> 'T, ^Monad<seq<'U>, ^?12698, '?12699, ^Monad<seq<'T>, ^?12701, '?12702                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L41-41" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '560', 560)" onmouseover="showTip(event, '560', 560)">
-            lift(x)
-          </code>
-          <div class="tip" id="560">
-            <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<seq<'T>>, '?12684, '?12685                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L31-31" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Embed a Monad<'T> into a SeqT<'Monad<seq<'T>&gt;&gt;</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '561', 561)" onmouseover="showTip(event, '561', 561)">
-            map(f arg2)
-          </code>
-          <div class="tip" id="561">
-            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U, ^Monad<seq<'T>, ^Monad<seq<'U>                      </div>
+                          <strong>Type parameters:</strong> ^Monad<seq<('T -> 'U)>, ^?12770, '?12771, '?12772, ^Monad<seq<'T>, ^Monad<seq<'U>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L43-43" class="github-link">
@@ -133,16 +74,68 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '562', 562)" onmouseover="showTip(event, '562', 562)">
-            run(arg1)
+          <code onmouseout="hideTip(event, '563', 563)" onmouseover="showTip(event, '563', 563)">
+            SeqT.bind f arg2
           </code>
-          <div class="tip" id="562">
-            <strong>Signature:</strong> SeqT&lt;&#39;?12680&gt; -&gt; &#39;?12680<br />
-                          <strong>Type parameters:</strong> '?12680                      </div>
+          <div class="tip" id="563">
+            <strong>Signature:</strong> f:(&#39;T -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;^?12766&gt;<br />
+                          <strong>Type parameters:</strong> 'T, ^Monad<seq<'U>, ^?12763, '?12764, ^Monad<seq<'T>, ^?12766, '?12767                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L27-27" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L42-42" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '564', 564)" onmouseover="showTip(event, '564', 564)">
+            SeqT.lift(x)
+          </code>
+          <div class="tip" id="564">
+            <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<seq<'T>>, '?12749, '?12750                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L32-32" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Embed a Monad<'T> into a SeqT<'Monad<seq<'T>&gt;&gt;</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '565', 565)" onmouseover="showTip(event, '565', 565)">
+            SeqT.map f arg2
+          </code>
+          <div class="tip" id="565">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;^Monad&lt;seq&lt;&#39;U&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, ^Monad<seq<'T>, ^Monad<seq<'U>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L44-44" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '566', 566)" onmouseover="showTip(event, '566', 566)">
+            SeqT.run(arg1)
+          </code>
+          <div class="tip" id="566">
+            <strong>Signature:</strong> SeqT&lt;&#39;?12745&gt; -&gt; &#39;?12745<br />
+                          <strong>Type parameters:</strong> '?12745                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L28-28" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

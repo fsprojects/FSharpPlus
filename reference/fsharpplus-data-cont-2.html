@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Cont<'r, 't></h1>
 <p>
 
@@ -59,11 +57,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2102', 2102)" onmouseover="showTip(event, '2102', 2102)">
+          <code onmouseout="hideTip(event, '2170', 2170)" onmouseover="showTip(event, '2170', 2170)">
             Cont((&#39;t -&gt; &#39;r) -&gt; &#39;r)
           </code>
-          <div class="tip" id="2102">
+          <div class="tip" id="2170">
             <strong>Signature:</strong> (&#39;t -&gt; &#39;r) -&gt; &#39;r<br />
                                   </div>
         </td>
@@ -85,11 +82,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2103', 2103)" onmouseover="showTip(event, '2103', 2103)">
-            ( &lt;*&gt; )(f, x)
+          <code onmouseout="hideTip(event, '2171', 2171)" onmouseover="showTip(event, '2171', 2171)">
+            Cont.( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="2103">
+          <div class="tip" id="2171">
             <strong>Signature:</strong> (f:Cont&lt;&#39;R,(&#39;T -&gt; &#39;U)&gt; * x:Cont&lt;&#39;R,&#39;T&gt;) -&gt; Cont&lt;&#39;R,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U                      </div>
         </td>
@@ -104,11 +100,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2104', 2104)" onmouseover="showTip(event, '2104', 2104)">
-            ( &gt;&gt;= )(x, f)
+          <code onmouseout="hideTip(event, '2172', 2172)" onmouseover="showTip(event, '2172', 2172)">
+            Cont.( &gt;&gt;= )(x, f)
           </code>
-          <div class="tip" id="2104">
+          <div class="tip" id="2172">
             <strong>Signature:</strong> (x:Cont&lt;&#39;R,&#39;T&gt; * f:(&#39;T -&gt; Cont&lt;&#39;R,&#39;U&gt;)) -&gt; Cont&lt;&#39;R,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U                      </div>
         </td>
@@ -123,11 +118,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2105', 2105)" onmouseover="showTip(event, '2105', 2105)">
-            CallCC(f)
+          <code onmouseout="hideTip(event, '2173', 2173)" onmouseover="showTip(event, '2173', 2173)">
+            Cont.CallCC(f)
           </code>
-          <div class="tip" id="2105">
+          <div class="tip" id="2173">
             <strong>Signature:</strong> (f:((&#39;T -&gt; Cont&lt;&#39;R,&#39;U&gt;) -&gt; Cont&lt;&#39;R,&#39;T&gt;)) -&gt; Cont&lt;&#39;R,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'U                        <span>
             <strong>Attributes:</strong><br />
@@ -145,11 +139,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2106', 2106)" onmouseover="showTip(event, '2106', 2106)">
-            Delay(f)
+          <code onmouseout="hideTip(event, '2174', 2174)" onmouseover="showTip(event, '2174', 2174)">
+            Cont.Delay(f)
           </code>
-          <div class="tip" id="2106">
+          <div class="tip" id="2174">
             <strong>Signature:</strong> (f:(unit -&gt; Cont&lt;&#39;R,&#39;T&gt;)) -&gt; Cont&lt;&#39;R,&#39;T&gt;<br />
                                   </div>
         </td>
@@ -163,11 +156,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2107', 2107)" onmouseover="showTip(event, '2107', 2107)">
-            get_Ask()
+          <code onmouseout="hideTip(event, '2175', 2175)" onmouseover="showTip(event, '2175', 2175)">
+            Cont.get_Ask()
           </code>
-          <div class="tip" id="2107">
+          <div class="tip" id="2175">
             <strong>Signature:</strong> unit -&gt; ^ContT&lt;&#39;MonadReader&lt;&#39;R,&#39;T&gt;,&#39;R&gt;<br />
                                   </div>
         </td>
@@ -181,11 +173,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2108', 2108)" onmouseover="showTip(event, '2108', 2108)">
-            get_Get()
+          <code onmouseout="hideTip(event, '2176', 2176)" onmouseover="showTip(event, '2176', 2176)">
+            Cont.get_Get()
           </code>
-          <div class="tip" id="2108">
+          <div class="tip" id="2176">
             <strong>Signature:</strong> unit -&gt; ^ContT&lt;&#39;MonadState&lt;&#39;S, &#39;T&gt;, &#39;S&gt;<br />
                                   </div>
         </td>
@@ -199,11 +190,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2109', 2109)" onmouseover="showTip(event, '2109', 2109)">
-            Lift(m)
+          <code onmouseout="hideTip(event, '2177', 2177)" onmouseover="showTip(event, '2177', 2177)">
+            Cont.Lift(m)
           </code>
-          <div class="tip" id="2109">
+          <div class="tip" id="2177">
             <strong>Signature:</strong> m:^Monad&lt;&#39;T&gt; -&gt; ContT&lt;^Monad&lt;&#39;R&gt;,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
@@ -217,11 +207,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2110', 2110)" onmouseover="showTip(event, '2110', 2110)">
-            LiftAsync(x)
+          <code onmouseout="hideTip(event, '2178', 2178)" onmouseover="showTip(event, '2178', 2178)">
+            Cont.LiftAsync(x)
           </code>
-          <div class="tip" id="2110">
+          <div class="tip" id="2178">
             <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ContT&lt;Async&lt;&#39;R&gt;,&#39;T&gt;<br />
                                   </div>
         </td>
@@ -235,13 +224,12 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2111', 2111)" onmouseover="showTip(event, '2111', 2111)">
-            Local(arg1, f)
+          <code onmouseout="hideTip(event, '2179', 2179)" onmouseover="showTip(event, '2179', 2179)">
+            Cont.Local(arg1, f)
           </code>
-          <div class="tip" id="2111">
-            <strong>Signature:</strong> (Cont&lt;^?9729,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ContT&lt;^?9730,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> ^?9731, '?9732, 'R1, 'R2, '?9735, 'MonadReader<R1,'T>,'U                      </div>
+          <div class="tip" id="2179">
+            <strong>Signature:</strong> (Cont&lt;^?9709,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ContT&lt;^?9710,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^?9711, '?9712, 'R1, 'R2, '?9715, 'MonadReader<R1,'T>,'U                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Cont.fs#L52-52" class="github-link">
@@ -253,11 +241,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2112', 2112)" onmouseover="showTip(event, '2112', 2112)">
-            Map(x, f)
+          <code onmouseout="hideTip(event, '2180', 2180)" onmouseover="showTip(event, '2180', 2180)">
+            Cont.Map(x, f)
           </code>
-          <div class="tip" id="2112">
+          <div class="tip" id="2180">
             <strong>Signature:</strong> (x:Cont&lt;&#39;R,&#39;T&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Cont&lt;&#39;R,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U                        <span>
             <strong>Attributes:</strong><br />
@@ -275,13 +262,12 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2113', 2113)" onmouseover="showTip(event, '2113', 2113)">
-            Put(x)
+          <code onmouseout="hideTip(event, '2181', 2181)" onmouseover="showTip(event, '2181', 2181)">
+            Cont.Put(x)
           </code>
-          <div class="tip" id="2113">
+          <div class="tip" id="2181">
             <strong>Signature:</strong> x:&#39;S -&gt; ^ContT&lt;&#39;MonadState&lt;&#39;S, &#39;T&gt;, unit&gt;<br />
-                          <strong>Type parameters:</strong> ^?9747                      </div>
+                          <strong>Type parameters:</strong> ^?9727                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Cont.fs#L56-56" class="github-link">
@@ -293,11 +279,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2114', 2114)" onmouseover="showTip(event, '2114', 2114)">
-            Return(n)
+          <code onmouseout="hideTip(event, '2182', 2182)" onmouseover="showTip(event, '2182', 2182)">
+            Cont.Return(n)
           </code>
-          <div class="tip" id="2114">
+          <div class="tip" id="2182">
             <strong>Signature:</strong> n:&#39;T -&gt; Cont&lt;&#39;R,&#39;T&gt;<br />
                                   </div>
         </td>
@@ -311,11 +296,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2115', 2115)" onmouseover="showTip(event, '2115', 2115)">
-            TryFinally(arg1, h)
+          <code onmouseout="hideTip(event, '2183', 2183)" onmouseover="showTip(event, '2183', 2183)">
+            Cont.TryFinally(arg1, h)
           </code>
-          <div class="tip" id="2115">
+          <div class="tip" id="2183">
             <strong>Signature:</strong> (Cont&lt;&#39;R,&#39;T&gt; * h:(unit -&gt; unit)) -&gt; Cont&lt;&#39;R,&#39;T&gt;<br />
                                   </div>
         </td>
@@ -329,11 +313,10 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2116', 2116)" onmouseover="showTip(event, '2116', 2116)">
-            TryWith(arg1, h)
+          <code onmouseout="hideTip(event, '2184', 2184)" onmouseover="showTip(event, '2184', 2184)">
+            Cont.TryWith(arg1, h)
           </code>
-          <div class="tip" id="2116">
+          <div class="tip" id="2184">
             <strong>Signature:</strong> (Cont&lt;&#39;R,&#39;T&gt; * h:(exn -&gt; Cont&lt;&#39;R,&#39;T&gt;)) -&gt; Cont&lt;&#39;R,&#39;T&gt;<br />
                                   </div>
         </td>
@@ -347,12 +330,11 @@ Useful for: Complex control structures, error handling, and creating co-routines
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '2117', 2117)" onmouseover="showTip(event, '2117', 2117)">
-            Using(resource, f)
+          <code onmouseout="hideTip(event, '2185', 2185)" onmouseover="showTip(event, '2185', 2185)">
+            Cont.Using(resource, f)
           </code>
-          <div class="tip" id="2117">
-            <strong>Signature:</strong> (resource:&#39;?9701 * f:(&#39;?9701 -&gt; Cont&lt;&#39;R,&#39;T&gt;)) -&gt; Cont&lt;&#39;R,&#39;T&gt;<br />
+          <div class="tip" id="2185">
+            <strong>Signature:</strong> (resource:&#39;?9681 * f:(&#39;?9681 -&gt; Cont&lt;&#39;R,&#39;T&gt;)) -&gt; Cont&lt;&#39;R,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">

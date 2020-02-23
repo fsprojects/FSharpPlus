@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Sequence</h1>
 <p>
 
@@ -50,13 +48,12 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1682', 1682)" onmouseover="showTip(event, '1682', 1682)">
-            ForInfiniteSequences(t, isFailure)
+          <code onmouseout="hideTip(event, '1698', 1698)" onmouseover="showTip(event, '1698', 1698)">
+            Sequence.ForInfiniteSequences(...)
           </code>
-          <div class="tip" id="1682">
-            <strong>Signature:</strong> (t:seq&lt;^?15634&gt; * isFailure:(^?15634 -&gt; bool)) -&gt; ^?15639<br />
-                          <strong>Type parameters:</strong> ^?15634, ^?15635, '?15636, ^?15637, '?15638, ^?15639, '?15640                        <span>
+          <div class="tip" id="1698">
+            <strong>Signature:</strong> (t:seq&lt;^?15723&gt; * isFailure:(^?15723 -&gt; bool) * conversion:(&#39;?15729 -&gt; &#39;?15730)) -&gt; ^?15728<br />
+                          <strong>Type parameters:</strong> ^?15723, ^?15724, ^?15725, '?15726, '?15727, ^?15728, '?15729, '?15730                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
@@ -72,16 +69,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1683', 1683)" onmouseover="showTip(event, '1683', 1683)">
-            Invoke(t)
+          <code onmouseout="hideTip(event, '1699', 1699)" onmouseover="showTip(event, '1699', 1699)">
+            Sequence.Invoke(t)
           </code>
-          <div class="tip" id="1683">
+          <div class="tip" id="1699">
             <strong>Signature:</strong> t:^Traversable&lt;&#39;Applicative&lt;&#39;T&gt;&gt; -&gt; ^Applicative&lt;&#39;Traversable&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Traversable<'Applicative<'T>>, ^Applicative<'Traversable<'T>>                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L125-125" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L120-120" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -90,13 +86,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1684', 1684)" onmouseover="showTip(event, '1684', 1684)">
-            InvokeOnInstance(t)
+          <code onmouseout="hideTip(event, '1700', 1700)" onmouseover="showTip(event, '1700', 1700)">
+            Sequence.InvokeOnInstance(t)
           </code>
-          <div class="tip" id="1684">
-            <strong>Signature:</strong> t:^a -&gt; &#39;R<br />
-                          <strong>Type parameters:</strong> ^a, 'R                      </div>
+          <div class="tip" id="1700">
+            <strong>Signature:</strong> t:^Traversable&lt;Functor&lt;&#39;T&gt;&gt; -&gt; &#39;Functor&lt;&#39;Traversable&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Traversable<Functor<'T>>, 'Functor<'Traversable<'T>>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L15-15" class="github-link">
@@ -108,16 +103,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1685', 1685)" onmouseover="showTip(event, '1685', 1685)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1701', 1701)" onmouseover="showTip(event, '1701', 1701)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1685">
-            <strong>Signature:</strong> (t:ResizeArray&lt;^?15770&gt; * _output:^R * _impl:Sequence) -&gt; ^R<br />
-                          <strong>Type parameters:</strong> ^?15770, ^?15771, '?15772, ^R, '?15781, ^?15782, '?15783                      </div>
+          <div class="tip" id="1701">
+            <strong>Signature:</strong> (t:ResizeArray&lt;^Functor&lt;&#39;T&gt;&gt; * _output:^Functor&lt;ResizeArray&lt;&#39;T&gt;&gt; * _impl:Sequence) -&gt; ^Functor&lt;ResizeArray&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^?15880, ^?15881, '?15882, '?15883, ^Functor<ResizeArray<'T>>, '?15893, ^?15894, ^?15895, '?15896, '?15897, '?15898                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L122-122" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L117-117" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -126,67 +120,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1686', 1686)" onmouseover="showTip(event, '1686', 1686)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1702', 1702)" onmouseover="showTip(event, '1702', 1702)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1686">
-            <strong>Signature:</strong> (t:Id&lt;^?15761&gt; * _output:^R * _impl:Sequence) -&gt; ^R<br />
-                          <strong>Type parameters:</strong> ^?15761, ^R, '?15768                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L119-119" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1687', 1687)" onmouseover="showTip(event, '1687', 1687)">
-            Sequence(t, _output, _impl)
-          </code>
-          <div class="tip" id="1687">
-            <strong>Signature:</strong> (t:^?15755 [] * _output:^R * _impl:Sequence) -&gt; ^R<br />
-                          <strong>Type parameters:</strong> ^?15755, ^?15756, '?15757, ^R, '?15759                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L116-116" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1688', 1688)" onmouseover="showTip(event, '1688', 1688)">
-            Sequence(t, _output, _impl)
-          </code>
-          <div class="tip" id="1688">
-            <strong>Signature:</strong> (t:^?15749 list * _output:^R * _impl:Sequence) -&gt; ^R<br />
-                          <strong>Type parameters:</strong> ^?15749, ^?15750, '?15751, ^R, '?15753                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L115-115" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1689', 1689)" onmouseover="showTip(event, '1689', 1689)">
-            Sequence(t, _output, _impl)
-          </code>
-          <div class="tip" id="1689">
-            <strong>Signature:</strong> (t:^?15744 option * _output:^R * _impl:Sequence) -&gt; ^R<br />
-                          <strong>Type parameters:</strong> ^?15744, ^R, '?15746, '?15747                      </div>
+          <div class="tip" id="1702">
+            <strong>Signature:</strong> (t:Id&lt;^Functor&lt;&#39;T&gt;&gt; * _output:^Functor&lt;Id&lt;&#39;T&gt;&gt; * _impl:Sequence) -&gt; ^Functor&lt;Id&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<Id<'T>>, '?15877                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L114-114" class="github-link">
@@ -198,13 +137,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1690', 1690)" onmouseover="showTip(event, '1690', 1690)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1703', 1703)" onmouseover="showTip(event, '1703', 1703)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1690">
-            <strong>Signature:</strong> (t:^a * _output:&#39;R * _impl:Default1) -&gt; &#39;R<br />
-                          <strong>Type parameters:</strong> ^a, 'R                      </div>
+          <div class="tip" id="1703">
+            <strong>Signature:</strong> (t:^?15862 [] * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15862, ^?15863, ^?15864, '?15865, '?15866, ^R, '?15868                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L111-111" class="github-link">
@@ -216,13 +154,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1691', 1691)" onmouseover="showTip(event, '1691', 1691)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1704', 1704)" onmouseover="showTip(event, '1704', 1704)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1691">
-            <strong>Signature:</strong> (t:^a * _output:&#39;R * _impl:Default2) -&gt; &#39;R<br />
-                          <strong>Type parameters:</strong> ^a, '?15738, 'R                      </div>
+          <div class="tip" id="1704">
+            <strong>Signature:</strong> (t:^?15854 list * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15854, ^?15855, ^?15856, '?15857, '?15858, ^R, '?15860                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L110-110" class="github-link">
@@ -234,16 +171,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1692', 1692)" onmouseover="showTip(event, '1692', 1692)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1705', 1705)" onmouseover="showTip(event, '1705', 1705)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1692">
-            <strong>Signature:</strong> (t:seq&lt;Async&lt;&#39;t&gt;&gt; * _output:Async&lt;seq&lt;&#39;t&gt;&gt; * _impl:Default3) -&gt; Async&lt;seq&lt;&#39;t&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 't                      </div>
+          <div class="tip" id="1705">
+            <strong>Signature:</strong> (t:^?15849 option * _output:^R * _impl:Sequence) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15849, ^R, '?15851, '?15852                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L108-108" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L109-109" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -252,13 +188,29 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1693', 1693)" onmouseover="showTip(event, '1693', 1693)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1706', 1706)" onmouseover="showTip(event, '1706', 1706)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1693">
-            <strong>Signature:</strong> (t:seq&lt;&#39;t []&gt; * _output:seq&lt;&#39;t&gt; [] * _impl:Default3) -&gt; seq&lt;&#39;t&gt; []<br />
-                          <strong>Type parameters:</strong> 't                      </div>
+          <div class="tip" id="1706">
+            <strong>Signature:</strong> (t:^a * _output:&#39;R * _impl:Default1) -&gt; &#39;R<br />
+                          <strong>Type parameters:</strong> ^a, 'R                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L106-106" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1707', 1707)" onmouseover="showTip(event, '1707', 1707)">
+            Sequence.Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1707">
+            <strong>Signature:</strong> (t:^a * _output:&#39;R * _impl:Default2) -&gt; &#39;R<br />
+                          <strong>Type parameters:</strong> ^a, '?15843, 'R                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L105-105" class="github-link">
@@ -270,31 +222,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1694', 1694)" onmouseover="showTip(event, '1694', 1694)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1708', 1708)" onmouseover="showTip(event, '1708', 1708)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1694">
-            <strong>Signature:</strong> (t:seq&lt;&#39;t list&gt; * _output:seq&lt;&#39;t&gt; list * _impl:Default3) -&gt; seq&lt;&#39;t&gt; list<br />
+          <div class="tip" id="1708">
+            <strong>Signature:</strong> (t:seq&lt;Async&lt;&#39;t&gt;&gt; * _output:Async&lt;seq&lt;&#39;t&gt;&gt; * _impl:Default3) -&gt; Async&lt;seq&lt;&#39;t&gt;&gt;<br />
                           <strong>Type parameters:</strong> 't                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L104-104" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1695', 1695)" onmouseover="showTip(event, '1695', 1695)">
-            Sequence(t, _output, _impl)
-          </code>
-          <div class="tip" id="1695">
-            <strong>Signature:</strong> (t:seq&lt;Choice&lt;&#39;t,&#39;e&gt;&gt; * _output:Choice&lt;seq&lt;&#39;t&gt;,&#39;e&gt; * _impl:Default3) -&gt; Choice&lt;seq&lt;&#39;t&gt;,&#39;e&gt;<br />
-                          <strong>Type parameters:</strong> 't, 'e                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L103-103" class="github-link">
@@ -306,16 +239,66 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1696', 1696)" onmouseover="showTip(event, '1696', 1696)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1709', 1709)" onmouseover="showTip(event, '1709', 1709)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1696">
+          <div class="tip" id="1709">
+            <strong>Signature:</strong> (t:seq&lt;&#39;t []&gt; * _output:seq&lt;&#39;t&gt; [] * _impl:Default3) -&gt; seq&lt;&#39;t&gt; []<br />
+                          <strong>Type parameters:</strong> 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L100-100" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1710', 1710)" onmouseover="showTip(event, '1710', 1710)">
+            Sequence.Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1710">
+            <strong>Signature:</strong> (t:seq&lt;&#39;t list&gt; * _output:seq&lt;&#39;t&gt; list * _impl:Default3) -&gt; seq&lt;&#39;t&gt; list<br />
+                          <strong>Type parameters:</strong> 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L99-99" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1711', 1711)" onmouseover="showTip(event, '1711', 1711)">
+            Sequence.Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1711">
+            <strong>Signature:</strong> (t:seq&lt;Choice&lt;&#39;t,&#39;e&gt;&gt; * _output:Choice&lt;seq&lt;&#39;t&gt;,&#39;e&gt; * _impl:Default3) -&gt; Choice&lt;seq&lt;&#39;t&gt;,&#39;e&gt;<br />
+                          <strong>Type parameters:</strong> 't, 'e                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L98-98" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1712', 1712)" onmouseover="showTip(event, '1712', 1712)">
+            Sequence.Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1712">
             <strong>Signature:</strong> (t:seq&lt;Result&lt;&#39;t,&#39;e&gt;&gt; * _output:Result&lt;seq&lt;&#39;t&gt;,&#39;e&gt; * _impl:Default3) -&gt; Result&lt;seq&lt;&#39;t&gt;,&#39;e&gt;<br />
                           <strong>Type parameters:</strong> 't, 'e                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L102-102" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L97-97" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -324,16 +307,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1697', 1697)" onmouseover="showTip(event, '1697', 1697)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1713', 1713)" onmouseover="showTip(event, '1713', 1713)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1697">
+          <div class="tip" id="1713">
             <strong>Signature:</strong> (t:seq&lt;&#39;t option&gt; * _output:seq&lt;&#39;t&gt; option * _impl:Default3) -&gt; seq&lt;&#39;t&gt; option<br />
                           <strong>Type parameters:</strong> 't                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L101-101" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L96-96" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -342,16 +324,32 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '1698', 1698)" onmouseover="showTip(event, '1698', 1698)">
-            Sequence(t, _output, _impl)
+          <code onmouseout="hideTip(event, '1714', 1714)" onmouseover="showTip(event, '1714', 1714)">
+            Sequence.Sequence(t, _output, _impl)
           </code>
-          <div class="tip" id="1698">
-            <strong>Signature:</strong> (t:seq&lt;^?15717&gt; * _output:^R * _impl:Default4) -&gt; ^R<br />
-                          <strong>Type parameters:</strong> ^?15717, ^?15718, 'a, ^R, '?15721                      </div>
+          <div class="tip" id="1714">
+            <strong>Signature:</strong> (t:seq&lt;^Applicative&lt;&#39;T&gt;&gt; * _output:^Applicative&lt;seq&lt;&#39;T&gt;&gt; * _impl:Default4) -&gt; ^Applicative&lt;seq&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Applicative<'T>, ^?15821, ^?15822, '?15823, '?15824, ^Applicative<seq<'T>>, '?15826                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L96-96" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L95-95" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1715', 1715)" onmouseover="showTip(event, '1715', 1715)">
+            Sequence.Sequence(t, _output, _impl)
+          </code>
+          <div class="tip" id="1715">
+            <strong>Signature:</strong> (t:seq&lt;^?15814&gt; * _output:^R * _impl:Default5) -&gt; ^R<br />
+                          <strong>Type parameters:</strong> ^?15814, ^?15815, 'a, ^R, '?15818                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Traversable.fs#L90-90" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Lens</h1>
 <p>
   <span>Namespace: FSharpPlus</span><br />
@@ -89,139 +87,12 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
-            ( %-&gt; ) lens updater
-          </code>
-          <div class="tip" id="93">
-            <strong>Signature:</strong> lens:((&#39;?13173 -&gt; Identity&lt;&#39;?13174&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; updater:(&#39;?13173 -&gt; &#39;?13174) -&gt; &#39;s -&gt; &#39;t<br />
-                          <strong>Type parameters:</strong> '?13173, '?13174, 's, 't                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L201-201" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Update a value in a lens. Same as <code>over</code>.</p>
-
-
-              <p>CompiledName: <code>op_PercentMinusGreater</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
-            ( .-&gt; ) lens value
-          </code>
-          <div class="tip" id="94">
-            <strong>Signature:</strong> lens:((&#39;?13168 -&gt; Identity&lt;&#39;?13169&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; value:&#39;?13169 -&gt; &#39;s -&gt; &#39;t<br />
-                          <strong>Type parameters:</strong> '?13168, '?13169, 's, 't                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L195-195" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Write to a lens. Same as <code>setl</code>.</p>
-
-
-              <p>CompiledName: <code>op_DotMinusGreater</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
-            ( ^. ) source lens
-          </code>
-          <div class="tip" id="95">
-            <strong>Signature:</strong> source:&#39;s -&gt; lens:((&#39;a -&gt; Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;&#39;a,&#39;t&gt;) -&gt; &#39;a<br />
-                          <strong>Type parameters:</strong> 's, 'a, 'b, 't                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L189-189" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Read from a lens. Same as <code>view</code> but with the arguments flipped.</p>
-
-
-              <p>CompiledName: <code>op_HatDot</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
-            ( ^.. ) s l
-          </code>
-          <div class="tip" id="96">
-            <strong>Signature:</strong> s:&#39;?13183 -&gt; l:((&#39;?13184 -&gt; Const&lt;Endo&lt;&#39;?13184 list&gt;,&#39;?13185&gt;) -&gt; &#39;?13183 -&gt; Const&lt;Endo&lt;&#39;?13186 list&gt;,&#39;?13187&gt;) -&gt; &#39;?13186 list<br />
-                          <strong>Type parameters:</strong> '?13183, '?13184, '?13185, '?13186, '?13187                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L210-210" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Extract a list of the targets of a Fold. Same as <code>toListOf</code> but with the arguments flipped.</p>
-
-
-              <p>CompiledName: <code>op_HatDotDot</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
-            ( ^? ) source prism
-          </code>
-          <div class="tip" id="97">
-            <strong>Signature:</strong> source:&#39;s -&gt; prism:((&#39;a -&gt; Const&lt;First&lt;&#39;a&gt;,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;First&lt;&#39;a&gt;,&#39;t&gt;) -&gt; &#39;a option<br />
-                          <strong>Type parameters:</strong> 's, 'a, 'b, 't                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L207-207" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). Same as <code>preview</code> but with the arguments flipped.</p>
-
-
-              <p>CompiledName: <code>op_HatQmark</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
-            ( &lt;&amp;&gt; ) x f
-          </code>
-          <div class="tip" id="98">
-            <strong>Signature:</strong> x:^F&lt;&#39;t&gt; -&gt; f:(&#39;t -&gt; &#39;u) -&gt; &#39;F&lt;&#39;u&gt;<br />
-                          <strong>Type parameters:</strong> ^F<'t>, 't, 'u, 'F<'u>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L216-216" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>An infix flipped map, restricted to non-primitive types.</p>
-
-
-              <p>CompiledName: <code>op_LessAmpGreater</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
+          <code onmouseout="hideTip(event, '90', 90)" onmouseover="showTip(event, '90', 90)">
             _1 f t
           </code>
-          <div class="tip" id="99">
-            <strong>Signature:</strong> f:(&#39;?12980 -&gt; ^?12981) -&gt; t:^?12985 -&gt; &#39;?12984<br />
-                          <strong>Type parameters:</strong> '?12980, ^?12981, '?12982, '?12983, '?12984, ^?12985, '?12986                      </div>
+          <div class="tip" id="90">
+            <strong>Signature:</strong> f:(&#39;?13056 -&gt; ^?13057) -&gt; t:^?13061 -&gt; &#39;?13060<br />
+                          <strong>Type parameters:</strong> '?13056, ^?13057, '?13058, '?13059, '?13060, ^?13061, '?13062                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L98-98" class="github-link">
@@ -235,13 +106,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
+          <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
             _2 f t
           </code>
-          <div class="tip" id="100">
-            <strong>Signature:</strong> f:(&#39;?12988 -&gt; ^?12989) -&gt; t:^?12993 -&gt; &#39;?12992<br />
-                          <strong>Type parameters:</strong> '?12988, ^?12989, '?12990, '?12991, '?12992, ^?12993, '?12994                      </div>
+          <div class="tip" id="91">
+            <strong>Signature:</strong> f:(&#39;?13064 -&gt; ^?13065) -&gt; t:^?13069 -&gt; &#39;?13068<br />
+                          <strong>Type parameters:</strong> '?13064, ^?13065, '?13066, '?13067, '?13068, ^?13069, '?13070                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L101-101" class="github-link">
@@ -255,13 +125,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
+          <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
             _3 f t
           </code>
-          <div class="tip" id="101">
-            <strong>Signature:</strong> f:(&#39;?12996 -&gt; ^?12997) -&gt; t:^?13001 -&gt; &#39;?13000<br />
-                          <strong>Type parameters:</strong> '?12996, ^?12997, '?12998, '?12999, '?13000, ^?13001, '?13002                      </div>
+          <div class="tip" id="92">
+            <strong>Signature:</strong> f:(&#39;?13072 -&gt; ^?13073) -&gt; t:^?13077 -&gt; &#39;?13076<br />
+                          <strong>Type parameters:</strong> '?13072, ^?13073, '?13074, '?13075, '?13076, ^?13077, '?13078                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L104-104" class="github-link">
@@ -275,13 +144,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
+          <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
             _4 f t
           </code>
-          <div class="tip" id="102">
-            <strong>Signature:</strong> f:(&#39;?13004 -&gt; ^?13005) -&gt; t:^?13009 -&gt; &#39;?13008<br />
-                          <strong>Type parameters:</strong> '?13004, ^?13005, '?13006, '?13007, '?13008, ^?13009, '?13010                      </div>
+          <div class="tip" id="93">
+            <strong>Signature:</strong> f:(&#39;?13080 -&gt; ^?13081) -&gt; t:^?13085 -&gt; &#39;?13084<br />
+                          <strong>Type parameters:</strong> '?13080, ^?13081, '?13082, '?13083, '?13084, ^?13085, '?13086                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L107-107" class="github-link">
@@ -295,13 +163,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
+          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
             _5 f t
           </code>
-          <div class="tip" id="103">
-            <strong>Signature:</strong> f:(&#39;?13012 -&gt; ^?13013) -&gt; t:^?13017 -&gt; &#39;?13016<br />
-                          <strong>Type parameters:</strong> '?13012, ^?13013, '?13014, '?13015, '?13016, ^?13017, '?13018                      </div>
+          <div class="tip" id="94">
+            <strong>Signature:</strong> f:(&#39;?13088 -&gt; ^?13089) -&gt; t:^?13093 -&gt; &#39;?13092<br />
+                          <strong>Type parameters:</strong> '?13088, ^?13089, '?13090, '?13091, '?13092, ^?13093, '?13094                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L110-110" class="github-link">
@@ -315,16 +182,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
             _all ref f s
           </code>
-          <div class="tip" id="104">
-            <strong>Signature:</strong> ref:&#39;?13042 -&gt; f:(&#39;?13042 -&gt; ^?13043) -&gt; s:^?13044 -&gt; ^?13045<br />
-                          <strong>Type parameters:</strong> '?13042, ^?13043, ^?13044, ^?13045                      </div>
+          <div class="tip" id="95">
+            <strong>Signature:</strong> ref:&#39;?13122 -&gt; f:(&#39;?13122 -&gt; ^?13123) -&gt; s:^?13124 -&gt; ^?13125<br />
+                          <strong>Type parameters:</strong> '?13122, ^?13123, ^?13124, ^?13125                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L139-139" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L152-152" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -333,16 +199,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
-            _Error x
+          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
+            _Error(x)
           </code>
-          <div class="tip" id="105">
-            <strong>Signature:</strong> x:(&#39;?13026 -&gt; ^?13027) -&gt; Result&lt;&#39;?13029,&#39;?13026&gt; -&gt; ^?13030<br />
-                          <strong>Type parameters:</strong> '?13026, ^?13027, '?13028, '?13029, ^?13030                      </div>
+          <div class="tip" id="96">
+            <strong>Signature:</strong> x:(&#39;?13106 -&gt; ^?13107) -&gt; Result&lt;&#39;?13109,&#39;?13106&gt; -&gt; ^?13110<br />
+                          <strong>Type parameters:</strong> '?13106, ^?13107, '?13108, '?13109, ^?13110                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L129-129" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L142-142" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -353,16 +218,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
-            _None x
+          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
+            _None(x)
           </code>
-          <div class="tip" id="106">
-            <strong>Signature:</strong> x:(unit -&gt; ^?13037) -&gt; &#39;?13039 option -&gt; ^?13040<br />
-                          <strong>Type parameters:</strong> ^?13037, '?13038, '?13039, ^?13040                      </div>
+          <div class="tip" id="97">
+            <strong>Signature:</strong> x:(unit -&gt; ^?13117) -&gt; &#39;?13119 option -&gt; ^?13120<br />
+                          <strong>Type parameters:</strong> ^?13117, '?13118, '?13119, ^?13120                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L135-135" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L148-148" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -373,16 +237,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
-            _Ok x
+          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
+            _Ok(x)
           </code>
-          <div class="tip" id="107">
-            <strong>Signature:</strong> x:(&#39;?13020 -&gt; ^?13021) -&gt; Result&lt;&#39;?13020,&#39;?13023&gt; -&gt; ^?13024<br />
-                          <strong>Type parameters:</strong> '?13020, ^?13021, '?13022, '?13023, ^?13024                      </div>
+          <div class="tip" id="98">
+            <strong>Signature:</strong> x:(&#39;?13100 -&gt; ^?13101) -&gt; Result&lt;&#39;?13100,&#39;?13103&gt; -&gt; ^?13104<br />
+                          <strong>Type parameters:</strong> '?13100, ^?13101, '?13102, '?13103, ^?13104                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L126-126" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L139-139" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -393,16 +256,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
-            _Some x
+          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
+            _Some(x)
           </code>
-          <div class="tip" id="108">
-            <strong>Signature:</strong> x:(&#39;?13032 -&gt; ^?13033) -&gt; &#39;?13032 option -&gt; ^?13035<br />
-                          <strong>Type parameters:</strong> '?13032, ^?13033, '?13034, ^?13035                      </div>
+          <div class="tip" id="99">
+            <strong>Signature:</strong> x:(&#39;?13112 -&gt; ^?13113) -&gt; &#39;?13112 option -&gt; ^?13115<br />
+                          <strong>Type parameters:</strong> '?13112, ^?13113, '?13114, ^?13115                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L132-132" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L145-145" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -413,16 +275,135 @@
       </tr>
       <tr>
         <td class="member-name">
+          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
+            ( .-&gt; ) lens value
+          </code>
+          <div class="tip" id="100">
+            <strong>Signature:</strong> lens:((&#39;?13248 -&gt; Identity&lt;&#39;?13249&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; value:&#39;?13249 -&gt; &#39;s -&gt; &#39;t<br />
+                          <strong>Type parameters:</strong> '?13248, '?13249, 's, 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L208-208" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Write to a lens. Same as <code>setl</code>.</p>
 
-          <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
+
+              <p>CompiledName: <code>op_DotMinusGreater</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
+            ( %-&gt; ) lens updater
+          </code>
+          <div class="tip" id="101">
+            <strong>Signature:</strong> lens:((&#39;?13253 -&gt; Identity&lt;&#39;?13254&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; updater:(&#39;?13253 -&gt; &#39;?13254) -&gt; &#39;s -&gt; &#39;t<br />
+                          <strong>Type parameters:</strong> '?13253, '?13254, 's, 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L214-214" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Update a value in a lens. Same as <code>over</code>.</p>
+
+
+              <p>CompiledName: <code>op_PercentMinusGreater</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
+            ( ^? ) source prism
+          </code>
+          <div class="tip" id="102">
+            <strong>Signature:</strong> source:&#39;s -&gt; prism:((&#39;a -&gt; Const&lt;First&lt;&#39;a&gt;,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;First&lt;&#39;a&gt;,&#39;t&gt;) -&gt; &#39;a option<br />
+                          <strong>Type parameters:</strong> 's, 'a, 'b, 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L220-220" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). Same as <code>preview</code> but with the arguments flipped.</p>
+
+
+              <p>CompiledName: <code>op_HatQmark</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
+            ( ^. ) source lens
+          </code>
+          <div class="tip" id="103">
+            <strong>Signature:</strong> source:&#39;s -&gt; lens:((&#39;a -&gt; Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;&#39;a,&#39;t&gt;) -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> 's, 'a, 'b, 't                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L202-202" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Read from a lens. Same as <code>view</code> but with the arguments flipped.</p>
+
+
+              <p>CompiledName: <code>op_HatDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+            ( ^.. ) s l
+          </code>
+          <div class="tip" id="104">
+            <strong>Signature:</strong> s:&#39;?13263 -&gt; l:((&#39;?13264 -&gt; Const&lt;Endo&lt;&#39;?13264 list&gt;,&#39;?13265&gt;) -&gt; &#39;?13263 -&gt; Const&lt;Endo&lt;&#39;?13266 list&gt;,&#39;?13267&gt;) -&gt; &#39;?13266 list<br />
+                          <strong>Type parameters:</strong> '?13263, '?13264, '?13265, '?13266, '?13267                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L223-223" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Extract a list of the targets of a Fold. Same as <code>toListOf</code> but with the arguments flipped.</p>
+
+
+              <p>CompiledName: <code>op_HatDotDot</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
+            ( &lt;&amp;&gt; ) x f
+          </code>
+          <div class="tip" id="105">
+            <strong>Signature:</strong> x:^F&lt;&#39;t&gt; -&gt; f:(&#39;t -&gt; &#39;u) -&gt; &#39;F&lt;&#39;u&gt;<br />
+                          <strong>Type parameters:</strong> ^F<'t>, 't, 'u, 'F<'u>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L229-229" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>An infix flipped map, restricted to non-primitive types.</p>
+
+
+              <p>CompiledName: <code>op_LessAmpGreater</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
             allOf l f
           </code>
-          <div class="tip" id="109">
-            <strong>Signature:</strong> l:((&#39;?13104 -&gt; Const&lt;All,&#39;?13105&gt;) -&gt; &#39;?13106 -&gt; Const&lt;All,&#39;?13107&gt;) -&gt; f:(&#39;?13104 -&gt; bool) -&gt; &#39;?13106 -&gt; bool<br />
-                          <strong>Type parameters:</strong> '?13104, '?13105, '?13106, '?13107                      </div>
+          <div class="tip" id="106">
+            <strong>Signature:</strong> l:((&#39;?13184 -&gt; Const&lt;All,&#39;?13185&gt;) -&gt; &#39;?13186 -&gt; Const&lt;All,&#39;?13187&gt;) -&gt; f:(&#39;?13184 -&gt; bool) -&gt; &#39;?13186 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?13184, '?13185, '?13186, '?13187                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L172-172" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L185-185" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -431,16 +412,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
+          <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
             anyOf l f
           </code>
-          <div class="tip" id="110">
-            <strong>Signature:</strong> l:((&#39;?13099 -&gt; Const&lt;Any,&#39;?13100&gt;) -&gt; &#39;?13101 -&gt; Const&lt;Any,&#39;?13102&gt;) -&gt; f:(&#39;?13099 -&gt; bool) -&gt; &#39;?13101 -&gt; bool<br />
-                          <strong>Type parameters:</strong> '?13099, '?13100, '?13101, '?13102                      </div>
+          <div class="tip" id="107">
+            <strong>Signature:</strong> l:((&#39;?13179 -&gt; Const&lt;Any,&#39;?13180&gt;) -&gt; &#39;?13181 -&gt; Const&lt;Any,&#39;?13182&gt;) -&gt; f:(&#39;?13179 -&gt; bool) -&gt; &#39;?13181 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?13179, '?13180, '?13181, '?13182                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L171-171" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L184-184" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -449,16 +429,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
+          <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
             both f (a, b)
           </code>
-          <div class="tip" id="111">
-            <strong>Signature:</strong> f:(&#39;?13122 -&gt; ^?13123) -&gt; (a:&#39;?13122 * b:&#39;?13122) -&gt; ^?13127<br />
-                          <strong>Type parameters:</strong> '?13122, ^?13123, '?13124, '?13125, ^?13126, ^?13127                      </div>
+          <div class="tip" id="108">
+            <strong>Signature:</strong> f:(&#39;?13202 -&gt; ^?13203) -&gt; (a:&#39;?13202 * b:&#39;?13202) -&gt; ^?13207<br />
+                          <strong>Type parameters:</strong> '?13202, ^?13203, '?13204, '?13205, ^?13206, ^?13207                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L177-177" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L190-190" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -467,11 +446,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
+          <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
             choosing optic1 optic2 f _arg1
           </code>
-          <div class="tip" id="112">
+          <div class="tip" id="109">
             <strong>Signature:</strong> optic1:((&#39;a -&gt; &#39;F&lt;&#39;b&gt;) -&gt; &#39;s1 -&gt; ^F&lt;&#39;t1&gt;) -&gt; optic2:((&#39;a -&gt; &#39;F&lt;&#39;b&gt;) -&gt; &#39;s2 -&gt; ^F&lt;&#39;t2&gt;) -&gt; f:(&#39;a -&gt; &#39;F&lt;&#39;b&gt;) -&gt; _arg1:Result&lt;&#39;s2,&#39;s1&gt; -&gt; &#39;F&lt;Result&lt;&#39;t2,&#39;t1&gt;&gt;<br />
                           <strong>Type parameters:</strong> 's1, 't1, 's2, 't2, 'a, 'b, ^F<'t1>, ^F<'t2>, 'F<'b>, 'F<Result<'t2,'t1>>                      </div>
         </td>
@@ -485,16 +463,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
-            elemOf l
+          <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
+            elemOf(l)
           </code>
-          <div class="tip" id="113">
-            <strong>Signature:</strong> l:((&#39;?13109 -&gt; Const&lt;Any,&#39;?13110&gt;) -&gt; &#39;?13111 -&gt; Const&lt;Any,&#39;?13112&gt;) -&gt; &#39;?13109 -&gt; &#39;?13111 -&gt; bool<br />
-                          <strong>Type parameters:</strong> '?13109, '?13110, '?13111, '?13112                      </div>
+          <div class="tip" id="110">
+            <strong>Signature:</strong> l:((&#39;?13189 -&gt; Const&lt;Any,&#39;?13190&gt;) -&gt; &#39;?13191 -&gt; Const&lt;Any,&#39;?13192&gt;) -&gt; &#39;?13189 -&gt; &#39;?13191 -&gt; bool<br />
+                          <strong>Type parameters:</strong> '?13189, '?13190, '?13191, '?13192                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L173-173" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L186-186" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -503,16 +480,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
+          <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
             filtered p f s
           </code>
-          <div class="tip" id="114">
-            <strong>Signature:</strong> p:(&#39;?13119 -&gt; bool) -&gt; f:(&#39;?13119 -&gt; ^?13120) -&gt; s:&#39;?13119 -&gt; ^?13120<br />
-                          <strong>Type parameters:</strong> '?13119, ^?13120                      </div>
+          <div class="tip" id="111">
+            <strong>Signature:</strong> p:(&#39;?13199 -&gt; bool) -&gt; f:(&#39;?13199 -&gt; ^?13200) -&gt; s:&#39;?13199 -&gt; ^?13200<br />
+                          <strong>Type parameters:</strong> '?13199, ^?13200                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L176-176" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L189-189" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -521,16 +497,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
+          <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
             foldlOf l f z
           </code>
-          <div class="tip" id="115">
-            <strong>Signature:</strong> l:((&#39;?13074 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13075&gt;&gt;,&#39;?13076&gt;) -&gt; &#39;?13077 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13078&gt;&gt;,&#39;?13079&gt;) -&gt; f:(&#39;?13075 -&gt; &#39;?13074 -&gt; &#39;?13075) -&gt; z:&#39;?13078 -&gt; &#39;?13077 -&gt; &#39;?13078<br />
-                          <strong>Type parameters:</strong> '?13074, '?13075, '?13076, '?13077, '?13078, '?13079                      </div>
+          <div class="tip" id="112">
+            <strong>Signature:</strong> l:((&#39;?13154 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13155&gt;&gt;,&#39;?13156&gt;) -&gt; &#39;?13157 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13158&gt;&gt;,&#39;?13159&gt;) -&gt; f:(&#39;?13155 -&gt; &#39;?13154 -&gt; &#39;?13155) -&gt; z:&#39;?13158 -&gt; &#39;?13157 -&gt; &#39;?13158<br />
+                          <strong>Type parameters:</strong> '?13154, '?13155, '?13156, '?13157, '?13158, '?13159                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L150-150" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L163-163" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -539,16 +514,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
+          <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
             foldMapOf l f
           </code>
-          <div class="tip" id="116">
-            <strong>Signature:</strong> l:((&#39;?13054 -&gt; Const&lt;&#39;?13055,&#39;?13056&gt;) -&gt; &#39;?13057 -&gt; Const&lt;&#39;?13058,&#39;?13059&gt;) -&gt; f:(&#39;?13054 -&gt; &#39;?13055) -&gt; &#39;?13057 -&gt; &#39;?13058<br />
-                          <strong>Type parameters:</strong> '?13054, '?13055, '?13056, '?13057, '?13058, '?13059                      </div>
+          <div class="tip" id="113">
+            <strong>Signature:</strong> l:((&#39;?13134 -&gt; Const&lt;&#39;?13135,&#39;?13136&gt;) -&gt; &#39;?13137 -&gt; Const&lt;&#39;?13138,&#39;?13139&gt;) -&gt; f:(&#39;?13134 -&gt; &#39;?13135) -&gt; &#39;?13137 -&gt; &#39;?13138<br />
+                          <strong>Type parameters:</strong> '?13134, '?13135, '?13136, '?13137, '?13138, '?13139                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L147-147" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L160-160" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -557,16 +531,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
-            foldOf l
+          <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
+            foldOf(l)
           </code>
-          <div class="tip" id="117">
-            <strong>Signature:</strong> l:((&#39;?13061 -&gt; Const&lt;&#39;?13061,&#39;?13062&gt;) -&gt; &#39;?13063 -&gt; Const&lt;&#39;?13064,&#39;?13065&gt;) -&gt; &#39;?13063 -&gt; &#39;?13064<br />
-                          <strong>Type parameters:</strong> '?13061, '?13062, '?13063, '?13064, '?13065                      </div>
+          <div class="tip" id="114">
+            <strong>Signature:</strong> l:((&#39;?13141 -&gt; Const&lt;&#39;?13141,&#39;?13142&gt;) -&gt; &#39;?13143 -&gt; Const&lt;&#39;?13144,&#39;?13145&gt;) -&gt; &#39;?13143 -&gt; &#39;?13144<br />
+                          <strong>Type parameters:</strong> '?13141, '?13142, '?13143, '?13144, '?13145                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L148-148" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L161-161" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -575,16 +548,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
+          <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
             foldrOf l f z
           </code>
-          <div class="tip" id="118">
-            <strong>Signature:</strong> l:((&#39;?13067 -&gt; Const&lt;Endo&lt;&#39;?13068&gt;,&#39;?13069&gt;) -&gt; &#39;?13070 -&gt; Const&lt;Endo&lt;&#39;?13071&gt;,&#39;?13072&gt;) -&gt; f:(&#39;?13067 -&gt; &#39;?13068 -&gt; &#39;?13068) -&gt; z:&#39;?13071 -&gt; &#39;?13070 -&gt; &#39;?13071<br />
-                          <strong>Type parameters:</strong> '?13067, '?13068, '?13069, '?13070, '?13071, '?13072                      </div>
+          <div class="tip" id="115">
+            <strong>Signature:</strong> l:((&#39;?13147 -&gt; Const&lt;Endo&lt;&#39;?13148&gt;,&#39;?13149&gt;) -&gt; &#39;?13150 -&gt; Const&lt;Endo&lt;&#39;?13151&gt;,&#39;?13152&gt;) -&gt; f:(&#39;?13147 -&gt; &#39;?13148 -&gt; &#39;?13148) -&gt; z:&#39;?13151 -&gt; &#39;?13150 -&gt; &#39;?13151<br />
+                          <strong>Type parameters:</strong> '?13147, '?13148, '?13149, '?13150, '?13151, '?13152                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L149-149" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L162-162" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -593,16 +565,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
-            from&#39; l
+          <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
+            from&#39;(l)
           </code>
-          <div class="tip" id="119">
-            <strong>Signature:</strong> l:(Exchange&lt;&#39;?13137,&#39;?13138,&#39;?13137,Identity&lt;&#39;?13138&gt;&gt; -&gt; Exchange&lt;&#39;?13139,&#39;?13140,&#39;?13141,Identity&lt;&#39;?13142&gt;&gt;) -&gt; ^?13143 -&gt; ^?13144<br />
-                          <strong>Type parameters:</strong> '?13137, '?13138, '?13139, '?13140, '?13141, '?13142, ^?13143, ^?13144, ^?13145, '?13146                      </div>
+          <div class="tip" id="116">
+            <strong>Signature:</strong> l:(Exchange&lt;&#39;?13217,&#39;?13218,&#39;?13217,Identity&lt;&#39;?13218&gt;&gt; -&gt; Exchange&lt;&#39;?13219,&#39;?13220,&#39;?13221,Identity&lt;&#39;?13222&gt;&gt;) -&gt; ^?13223 -&gt; ^?13224<br />
+                          <strong>Type parameters:</strong> '?13217, '?13218, '?13219, '?13220, '?13221, '?13222, ^?13223, ^?13224, ^?13225, '?13226                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L180-180" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L193-193" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -611,11 +582,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+          <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
             iso func inv
           </code>
-          <div class="tip" id="120">
+          <div class="tip" id="117">
             <strong>Signature:</strong> func:(&#39;s -&gt; &#39;a) -&gt; inv:(&#39;b -&gt; &#39;t) -&gt; ^i -&gt; ^j<br />
                           <strong>Type parameters:</strong> 's, 'a, 'b, 't, ^i, ^j, ^k, 'l                      </div>
         </td>
@@ -631,16 +601,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
-            items x
+          <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
+            items(x)
           </code>
-          <div class="tip" id="121">
-            <strong>Signature:</strong> x:(&#39;?13114 -&gt; &#39;?13115) -&gt; ^?13116 -&gt; ^?13117<br />
-                          <strong>Type parameters:</strong> '?13114, '?13115, ^?13116, ^?13117                      </div>
+          <div class="tip" id="118">
+            <strong>Signature:</strong> x:(&#39;?13194 -&gt; &#39;?13195) -&gt; ^?13196 -&gt; ^?13197<br />
+                          <strong>Type parameters:</strong> '?13194, '?13195, ^?13196, ^?13197                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L174-174" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L187-187" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -649,11 +618,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
+          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
             lens getter setter f s
           </code>
-          <div class="tip" id="122">
+          <div class="tip" id="119">
             <strong>Signature:</strong> getter:(&#39;s -&gt; &#39;a) -&gt; setter:(&#39;s -&gt; &#39;b -&gt; &#39;t) -&gt; f:(&#39;a -&gt; ^F&lt;&#39;b&gt;) -&gt; s:&#39;s -&gt; &#39;F&lt;&#39;t&gt;<br />
                           <strong>Type parameters:</strong> 's, 'a, 'b, 't, ^F<'b>, 'F<'t>                      </div>
         </td>
@@ -669,16 +637,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '123', 123)" onmouseover="showTip(event, '123', 123)">
-            mapping k
+          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+            mapping(k)
           </code>
-          <div class="tip" id="123">
-            <strong>Signature:</strong> k:(Exchange&lt;&#39;?13148,&#39;?13149,&#39;?13148,Identity&lt;&#39;?13149&gt;&gt; -&gt; Exchange&lt;&#39;?13150,&#39;?13151,&#39;?13152,Identity&lt;&#39;?13153&gt;&gt;) -&gt; ^?13154 -&gt; ^?13155<br />
-                          <strong>Type parameters:</strong> '?13148, '?13149, '?13150, '?13151, '?13152, '?13153, ^?13154, ^?13155, ^?13156, '?13157, ^?13158, ^?13159, '?13160, '?13161                      </div>
+          <div class="tip" id="120">
+            <strong>Signature:</strong> k:(Exchange&lt;&#39;?13228,&#39;?13229,&#39;?13228,Identity&lt;&#39;?13229&gt;&gt; -&gt; Exchange&lt;&#39;?13230,&#39;?13231,&#39;?13232,Identity&lt;&#39;?13233&gt;&gt;) -&gt; ^?13234 -&gt; ^?13235<br />
+                          <strong>Type parameters:</strong> '?13228, '?13229, '?13230, '?13231, '?13232, '?13233, ^?13234, ^?13235, ^?13236, '?13237, ^?13238, ^?13239, '?13240, '?13241                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L181-181" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L194-194" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -687,16 +654,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
-            maximumOf l
+          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
+            maximumOf(l)
           </code>
-          <div class="tip" id="124">
-            <strong>Signature:</strong> l:((&#39;?13087 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13087 option&gt;&gt;,&#39;?13088&gt;) -&gt; &#39;?13089 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13090 option&gt;&gt;,&#39;?13091&gt;) -&gt; &#39;?13089 -&gt; &#39;?13090 option<br />
-                          <strong>Type parameters:</strong> '?13087, '?13088, '?13089, '?13090, '?13091                      </div>
+          <div class="tip" id="121">
+            <strong>Signature:</strong> l:((&#39;?13167 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13167 option&gt;&gt;,&#39;?13168&gt;) -&gt; &#39;?13169 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13170 option&gt;&gt;,&#39;?13171&gt;) -&gt; &#39;?13169 -&gt; &#39;?13170 option<br />
+                          <strong>Type parameters:</strong> '?13167, '?13168, '?13169, '?13170, '?13171                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L156-156" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L169-169" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -707,16 +673,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
-            minimumOf l
+          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
+            minimumOf(l)
           </code>
-          <div class="tip" id="125">
-            <strong>Signature:</strong> l:((&#39;?13093 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13093 option&gt;&gt;,&#39;?13094&gt;) -&gt; &#39;?13095 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13096 option&gt;&gt;,&#39;?13097&gt;) -&gt; &#39;?13095 -&gt; &#39;?13096 option<br />
-                          <strong>Type parameters:</strong> '?13093, '?13094, '?13095, '?13096, '?13097                      </div>
+          <div class="tip" id="122">
+            <strong>Signature:</strong> l:((&#39;?13173 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13173 option&gt;&gt;,&#39;?13174&gt;) -&gt; &#39;?13175 -&gt; Const&lt;Dual&lt;Endo&lt;&#39;?13176 option&gt;&gt;,&#39;?13177&gt;) -&gt; &#39;?13175 -&gt; &#39;?13176 option<br />
+                          <strong>Type parameters:</strong> '?13173, '?13174, '?13175, '?13176, '?13177                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L164-164" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L177-177" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -727,13 +692,31 @@
       </tr>
       <tr>
         <td class="member-name">
+          <code onmouseout="hideTip(event, '123', 123)" onmouseover="showTip(event, '123', 123)">
+            non def f ma
+          </code>
+          <div class="tip" id="123">
+            <strong>Signature:</strong> def:&#39;?13096 -&gt; f:(&#39;?13096 -&gt; ^?13097) -&gt; ma:&#39;?13096 option -&gt; &#39;?13098<br />
+                          <strong>Type parameters:</strong> '?13096, ^?13097, '?13098                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L134-134" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Lens for the value inside an Option or the given default value if the Option is None.  Works well when combined with Map._item</p>
 
-          <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
             over optic updater source
           </code>
-          <div class="tip" id="126">
-            <strong>Signature:</strong> optic:((&#39;?12925 -&gt; Identity&lt;&#39;?12926&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; updater:(&#39;?12925 -&gt; &#39;?12926) -&gt; source:&#39;s -&gt; &#39;t<br />
-                          <strong>Type parameters:</strong> '?12925, '?12926, 's, 't                      </div>
+          <div class="tip" id="124">
+            <strong>Signature:</strong> optic:((&#39;?13001 -&gt; Identity&lt;&#39;?13002&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; updater:(&#39;?13001 -&gt; &#39;?13002) -&gt; source:&#39;s -&gt; &#39;t<br />
+                          <strong>Type parameters:</strong> '?13001, '?13002, 's, 't                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L36-36" class="github-link">
@@ -747,11 +730,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
+          <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
             preview optic source
           </code>
-          <div class="tip" id="127">
+          <div class="tip" id="125">
             <strong>Signature:</strong> optic:((&#39;a -&gt; Const&lt;First&lt;&#39;a&gt;,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;First&lt;&#39;a&gt;,&#39;t&gt;) -&gt; source:&#39;s -&gt; &#39;a option<br />
                           <strong>Type parameters:</strong> 'a, 'b, 's, 't                      </div>
         </td>
@@ -767,11 +749,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
+          <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
             prism constructor getter f
           </code>
-          <div class="tip" id="128">
+          <div class="tip" id="126">
             <strong>Signature:</strong> constructor:(&#39;b -&gt; &#39;t) -&gt; getter:(&#39;s -&gt; Result&lt;&#39;a,&#39;t&gt;) -&gt; f:(&#39;a -&gt; ^F&lt;&#39;b&gt;) -&gt; &#39;s -&gt; ^F&lt;&#39;t&gt;<br />
                           <strong>Type parameters:</strong> 'b, 't, 's, 'a, ^F<'b>, ^F<'t>                      </div>
         </td>
@@ -787,11 +768,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
+          <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
             prism&#39; constructor getter f
           </code>
-          <div class="tip" id="129">
+          <div class="tip" id="127">
             <strong>Signature:</strong> constructor:(&#39;b -&gt; &#39;s) -&gt; getter:(&#39;s -&gt; Option&lt;&#39;a&gt;) -&gt; f:(&#39;a -&gt; ^F&lt;&#39;b&gt;) -&gt; &#39;s -&gt; ^F&lt;&#39;t&gt;<br />
                           <strong>Type parameters:</strong> 'b, 's, 'a, ^F<'b>, ^F<'t>                      </div>
         </td>
@@ -807,13 +787,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
+          <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
             setl optic value source
           </code>
-          <div class="tip" id="130">
-            <strong>Signature:</strong> optic:((&#39;?12920 -&gt; Identity&lt;&#39;?12921&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; value:&#39;?12921 -&gt; source:&#39;s -&gt; &#39;t<br />
-                          <strong>Type parameters:</strong> '?12920, '?12921, 's, 't                      </div>
+          <div class="tip" id="128">
+            <strong>Signature:</strong> optic:((&#39;?12996 -&gt; Identity&lt;&#39;?12997&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; value:&#39;?12997 -&gt; source:&#39;s -&gt; &#39;t<br />
+                          <strong>Type parameters:</strong> '?12996, '?12997, 's, 't                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L29-29" class="github-link">
@@ -827,16 +806,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
-            to&#39; k
+          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
+            to&#39;(k)
           </code>
-          <div class="tip" id="131">
-            <strong>Signature:</strong> k:(&#39;?13047 -&gt; &#39;?13048) -&gt; ^?13049 -&gt; ^?13050<br />
-                          <strong>Type parameters:</strong> '?13047, '?13048, ^?13049, ^?13050, ^?13051, '?13052                      </div>
+          <div class="tip" id="129">
+            <strong>Signature:</strong> k:(&#39;?13127 -&gt; &#39;?13128) -&gt; ^?13129 -&gt; ^?13130<br />
+                          <strong>Type parameters:</strong> '?13127, '?13128, ^?13129, ^?13130, ^?13131, '?13132                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L145-145" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L158-158" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -845,16 +823,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
-            toListOf l
+          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
+            toListOf(l)
           </code>
-          <div class="tip" id="132">
-            <strong>Signature:</strong> l:((&#39;?13081 -&gt; Const&lt;Endo&lt;&#39;?13081 list&gt;,&#39;?13082&gt;) -&gt; &#39;?13083 -&gt; Const&lt;Endo&lt;&#39;?13084 list&gt;,&#39;?13085&gt;) -&gt; &#39;?13083 -&gt; &#39;?13084 list<br />
-                          <strong>Type parameters:</strong> '?13081, '?13082, '?13083, '?13084, '?13085                      </div>
+          <div class="tip" id="130">
+            <strong>Signature:</strong> l:((&#39;?13161 -&gt; Const&lt;Endo&lt;&#39;?13161 list&gt;,&#39;?13162&gt;) -&gt; &#39;?13163 -&gt; Const&lt;Endo&lt;&#39;?13164 list&gt;,&#39;?13165&gt;) -&gt; &#39;?13163 -&gt; &#39;?13164 list<br />
+                          <strong>Type parameters:</strong> '?13161, '?13162, '?13163, '?13164, '?13165                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L153-153" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L166-166" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -865,11 +842,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
+          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
             view optic source
           </code>
-          <div class="tip" id="133">
+          <div class="tip" id="131">
             <strong>Signature:</strong> optic:((&#39;a -&gt; Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;&#39;a,&#39;t&gt;) -&gt; source:&#39;s -&gt; &#39;a<br />
                           <strong>Type parameters:</strong> 'a, 'b, 's, 't                      </div>
         </td>
@@ -885,16 +861,15 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '134', 134)" onmouseover="showTip(event, '134', 134)">
+          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
             withIso ai k
           </code>
-          <div class="tip" id="134">
-            <strong>Signature:</strong> ai:(Exchange&lt;&#39;?13129,&#39;?13130,&#39;?13129,Identity&lt;&#39;?13130&gt;&gt; -&gt; Exchange&lt;&#39;?13131,&#39;?13132,&#39;?13133,Identity&lt;&#39;?13134&gt;&gt;) -&gt; k:((&#39;?13133 -&gt; &#39;?13131) -&gt; (&#39;?13132 -&gt; &#39;?13134) -&gt; &#39;?13135) -&gt; &#39;?13135<br />
-                          <strong>Type parameters:</strong> '?13129, '?13130, '?13131, '?13132, '?13133, '?13134, '?13135                      </div>
+          <div class="tip" id="132">
+            <strong>Signature:</strong> ai:(Exchange&lt;&#39;?13209,&#39;?13210,&#39;?13209,Identity&lt;&#39;?13210&gt;&gt; -&gt; Exchange&lt;&#39;?13211,&#39;?13212,&#39;?13213,Identity&lt;&#39;?13214&gt;&gt;) -&gt; k:((&#39;?13213 -&gt; &#39;?13211) -&gt; (&#39;?13212 -&gt; &#39;?13214) -&gt; &#39;?13215) -&gt; &#39;?13215<br />
+                          <strong>Type parameters:</strong> '?13209, '?13210, '?13211, '?13212, '?13213, '?13214, '?13215                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L179-179" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L192-192" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

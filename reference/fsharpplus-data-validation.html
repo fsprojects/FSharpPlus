@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>Validation</h1>
 <p>
   <span>Namespace: FSharpPlus.Data</span><br />
@@ -52,13 +50,12 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '579', 579)" onmouseover="showTip(event, '579', 579)">
-            _Failure x
+          <code onmouseout="hideTip(event, '585', 585)" onmouseover="showTip(event, '585', 585)">
+            _Failure(x)
           </code>
-          <div class="tip" id="579">
-            <strong>Signature:</strong> x:(&#39;?10867 -&gt; ^?10868) -&gt; Validation&lt;&#39;?10867,&#39;?10869&gt; -&gt; ^?10871<br />
-                          <strong>Type parameters:</strong> '?10867, ^?10868, '?10869, '?10870, ^?10871                      </div>
+          <div class="tip" id="585">
+            <strong>Signature:</strong> x:(&#39;?10851 -&gt; ^?10852) -&gt; Validation&lt;&#39;?10851,&#39;?10853&gt; -&gt; ^?10855<br />
+                          <strong>Type parameters:</strong> '?10851, ^?10852, '?10853, '?10854, ^?10855                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L156-156" class="github-link">
@@ -70,13 +67,12 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '580', 580)" onmouseover="showTip(event, '580', 580)">
-            _Success x
+          <code onmouseout="hideTip(event, '586', 586)" onmouseover="showTip(event, '586', 586)">
+            _Success(x)
           </code>
-          <div class="tip" id="580">
-            <strong>Signature:</strong> x:(&#39;?10861 -&gt; ^?10862) -&gt; Validation&lt;&#39;?10864,&#39;?10861&gt; -&gt; ^?10865<br />
-                          <strong>Type parameters:</strong> '?10861, ^?10862, '?10863, '?10864, ^?10865                      </div>
+          <div class="tip" id="586">
+            <strong>Signature:</strong> x:(&#39;?10845 -&gt; ^?10846) -&gt; Validation&lt;&#39;?10848,&#39;?10845&gt; -&gt; ^?10849<br />
+                          <strong>Type parameters:</strong> '?10845, ^?10846, '?10847, '?10848, ^?10849                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L155-155" class="github-link">
@@ -88,11 +84,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '581', 581)" onmouseover="showTip(event, '581', 581)">
+          <code onmouseout="hideTip(event, '587', 587)" onmouseover="showTip(event, '587', 587)">
             apply f x
           </code>
-          <div class="tip" id="581">
+          <div class="tip" id="587">
             <strong>Signature:</strong> f:Validation&lt;^Error,(&#39;T -&gt; &#39;U)&gt; -&gt; x:Validation&lt;^Error,&#39;T&gt; -&gt; Validation&lt;^Error,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Error, 'T, 'U                      </div>
         </td>
@@ -111,11 +106,10 @@
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '582', 582)" onmouseover="showTip(event, '582', 582)">
+          <code onmouseout="hideTip(event, '588', 588)" onmouseover="showTip(event, '588', 588)">
             appValidation combine e1&#39; e2&#39;
           </code>
-          <div class="tip" id="582">
+          <div class="tip" id="588">
             <strong>Signature:</strong> combine:(&#39;err -&gt; &#39;err -&gt; &#39;err) -&gt; e1&#39;:Validation&lt;&#39;err,&#39;a&gt; -&gt; e2&#39;:Validation&lt;&#39;err,&#39;a&gt; -&gt; Validation&lt;&#39;err,&#39;a&gt;<br />
                           <strong>Type parameters:</strong> 'err, 'a                      </div>
         </td>
@@ -132,11 +126,10 @@ If both are Failures it returns both Failures combined with the supplied functio
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '583', 583)" onmouseover="showTip(event, '583', 583)">
+          <code onmouseout="hideTip(event, '589', 589)" onmouseover="showTip(event, '589', 589)">
             bifoldBack f g source state
           </code>
-          <div class="tip" id="583">
+          <div class="tip" id="589">
             <strong>Signature:</strong> f:(&#39;Error -&gt; &#39;State -&gt; &#39;State) -&gt; g:(&#39;T -&gt; &#39;State -&gt; &#39;State) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; state:&#39;State -&gt; &#39;State<br />
                           <strong>Type parameters:</strong> 'Error, 'State, 'T                      </div>
         </td>
@@ -150,13 +143,12 @@ If both are Failures it returns both Failures combined with the supplied functio
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '584', 584)" onmouseover="showTip(event, '584', 584)">
+          <code onmouseout="hideTip(event, '590', 590)" onmouseover="showTip(event, '590', 590)">
             biFoldBack f g state x
           </code>
-          <div class="tip" id="584">
-            <strong>Signature:</strong> f:(&#39;?10793 -&gt; &#39;?10794 -&gt; &#39;?10795) -&gt; g:(&#39;?10796 -&gt; &#39;?10794 -&gt; &#39;?10795) -&gt; state:Validation&lt;&#39;?10793,&#39;?10796&gt; -&gt; x:&#39;?10794 -&gt; &#39;?10795<br />
-                          <strong>Type parameters:</strong> '?10793, '?10794, '?10795, '?10796                        <span>
+          <div class="tip" id="590">
+            <strong>Signature:</strong> f:(&#39;?10777 -&gt; &#39;?10778 -&gt; &#39;?10779) -&gt; g:(&#39;?10780 -&gt; &#39;?10778 -&gt; &#39;?10779) -&gt; state:Validation&lt;&#39;?10777,&#39;?10780&gt; -&gt; x:&#39;?10778 -&gt; &#39;?10779<br />
+                          <strong>Type parameters:</strong> '?10777, '?10778, '?10779, '?10780                        <span>
             <strong>Attributes:</strong><br />
 [&lt;Obsolete(&quot;Use Validation.bifoldBack instead.&quot;)&gt;]<br />
           </span>
@@ -176,11 +168,10 @@ If both are Failures it returns both Failures combined with the supplied functio
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '585', 585)" onmouseover="showTip(event, '585', 585)">
+          <code onmouseout="hideTip(event, '591', 591)" onmouseover="showTip(event, '591', 591)">
             bimap f g _arg1
           </code>
-          <div class="tip" id="585">
+          <div class="tip" id="591">
             <strong>Signature:</strong> f:(&#39;T1 -&gt; &#39;U1) -&gt; g:(&#39;T2 -&gt; &#39;U2) -&gt; _arg1:Validation&lt;&#39;T1,&#39;T2&gt; -&gt; Validation&lt;&#39;U1,&#39;U2&gt;<br />
                           <strong>Type parameters:</strong> 'T1, 'U1, 'T2, 'U2                      </div>
         </td>
@@ -194,11 +185,10 @@ If both are Failures it returns both Failures combined with the supplied functio
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '586', 586)" onmouseover="showTip(event, '586', 586)">
+          <code onmouseout="hideTip(event, '592', 592)" onmouseover="showTip(event, '592', 592)">
             bind f x
           </code>
-          <div class="tip" id="586">
+          <div class="tip" id="592">
             <strong>Signature:</strong> f:(&#39;T -&gt; Validation&lt;&#39;Error,&#39;U&gt;) -&gt; x:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'Error, 'U                      </div>
         </td>
@@ -220,11 +210,10 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '587', 587)" onmouseover="showTip(event, '587', 587)">
+          <code onmouseout="hideTip(event, '593', 593)" onmouseover="showTip(event, '593', 593)">
             bitraverse f g source
           </code>
-          <div class="tip" id="587">
+          <div class="tip" id="593">
             <strong>Signature:</strong> f:(&#39;T1 -&gt; ^Functor&lt;&#39;U1&gt;) -&gt; g:(&#39;T2 -&gt; ^Functor&lt;&#39;U2&gt;) -&gt; source:Validation&lt;&#39;T1,&#39;T2&gt; -&gt; ^Functor&lt;Validation&lt;&#39;U1,&#39;U2&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T1, ^Functor<'U1>, ^Functor<Validation<'U1,'U2>>, ^Functor<'U2>, 'U2, 'U1, 'T2                      </div>
         </td>
@@ -238,11 +227,10 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '588', 588)" onmouseover="showTip(event, '588', 588)">
+          <code onmouseout="hideTip(event, '594', 594)" onmouseover="showTip(event, '594', 594)">
             defaultValue value source
           </code>
-          <div class="tip" id="588">
+          <div class="tip" id="594">
             <strong>Signature:</strong> value:&#39;T -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; &#39;T<br />
                           <strong>Type parameters:</strong> 'T, 'Error                      </div>
         </td>
@@ -258,11 +246,10 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '589', 589)" onmouseover="showTip(event, '589', 589)">
+          <code onmouseout="hideTip(event, '595', 595)" onmouseover="showTip(event, '595', 595)">
             defaultWith compensation source
           </code>
-          <div class="tip" id="589">
+          <div class="tip" id="595">
             <strong>Signature:</strong> compensation:(&#39;Error -&gt; &#39;T) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; &#39;T<br />
                           <strong>Type parameters:</strong> 'Error, 'T                      </div>
         </td>
@@ -278,11 +265,10 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '590', 590)" onmouseover="showTip(event, '590', 590)">
+          <code onmouseout="hideTip(event, '596', 596)" onmouseover="showTip(event, '596', 596)">
             either fSuccess fFailure source
           </code>
-          <div class="tip" id="590">
+          <div class="tip" id="596">
             <strong>Signature:</strong> fSuccess:(&#39;T -&gt; &#39;U) -&gt; fFailure:(&#39;Error -&gt; &#39;U) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; &#39;U<br />
                           <strong>Type parameters:</strong> 'T, 'U, 'Error                      </div>
         </td>
@@ -298,11 +284,10 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '591', 591)" onmouseover="showTip(event, '591', 591)">
+          <code onmouseout="hideTip(event, '597', 597)" onmouseover="showTip(event, '597', 597)">
             ensure e p _arg1
           </code>
-          <div class="tip" id="591">
+          <div class="tip" id="597">
             <strong>Signature:</strong> e:&#39;e -&gt; p:(&#39;a -&gt; bool) -&gt; _arg1:Validation&lt;&#39;e,&#39;a&gt; -&gt; Validation&lt;&#39;e,&#39;a&gt;<br />
                           <strong>Type parameters:</strong> 'e, 'a                        <span>
             <strong>Attributes:</strong><br />
@@ -324,11 +309,10 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '592', 592)" onmouseover="showTip(event, '592', 592)">
+          <code onmouseout="hideTip(event, '598', 598)" onmouseover="showTip(event, '598', 598)">
             foldBack folder source state
           </code>
-          <div class="tip" id="592">
+          <div class="tip" id="598">
             <strong>Signature:</strong> folder:(&#39;T -&gt; &#39;State -&gt; &#39;State) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; state:&#39;State -&gt; &#39;State<br />
                           <strong>Type parameters:</strong> 'T, 'State, 'Error                      </div>
         </td>
@@ -342,13 +326,12 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '593', 593)" onmouseover="showTip(event, '593', 593)">
-            isoValidationResult x
+          <code onmouseout="hideTip(event, '599', 599)" onmouseover="showTip(event, '599', 599)">
+            isoValidationResult(x)
           </code>
-          <div class="tip" id="593">
-            <strong>Signature:</strong> x:^?10873 -&gt; ^?10874<br />
-                          <strong>Type parameters:</strong> ^?10873, ^?10874, '?10875, '?10876, ^?10877, '?10878, '?10879, '?10880                      </div>
+          <div class="tip" id="599">
+            <strong>Signature:</strong> x:^?10857 -&gt; ^?10858<br />
+                          <strong>Type parameters:</strong> ^?10857, ^?10858, '?10859, '?10860, ^?10861, '?10862, '?10863, '?10864                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validations.fs#L158-158" class="github-link">
@@ -360,11 +343,10 @@ valid Monad instance.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '594', 594)" onmouseover="showTip(event, '594', 594)">
-            liftChoice f
+          <code onmouseout="hideTip(event, '600', 600)" onmouseover="showTip(event, '600', 600)">
+            liftChoice(f)
           </code>
-          <div class="tip" id="594">
+          <div class="tip" id="600">
             <strong>Signature:</strong> f:(&#39;b -&gt; &#39;Semigroup) -&gt; Choice&lt;&#39;b,&#39;T&gt; -&gt; Validation&lt;&#39;Semigroup,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'b, 'Semigroup, 'T                      </div>
         </td>
@@ -381,11 +363,10 @@ when the 'Choice2Of2' of the 'Choice' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '595', 595)" onmouseover="showTip(event, '595', 595)">
+          <code onmouseout="hideTip(event, '601', 601)" onmouseover="showTip(event, '601', 601)">
             liftResult f _arg1
           </code>
-          <div class="tip" id="595">
+          <div class="tip" id="601">
             <strong>Signature:</strong> f:(&#39;Error -&gt; &#39;Semigroup) -&gt; _arg1:Result&lt;&#39;T,&#39;Error&gt; -&gt; Validation&lt;&#39;Semigroup,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'Error, 'Semigroup, 'T                      </div>
         </td>
@@ -402,11 +383,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '596', 596)" onmouseover="showTip(event, '596', 596)">
+          <code onmouseout="hideTip(event, '602', 602)" onmouseover="showTip(event, '602', 602)">
             map f source
           </code>
-          <div class="tip" id="596">
+          <div class="tip" id="602">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, 'Error                      </div>
         </td>
@@ -420,11 +400,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '597', 597)" onmouseover="showTip(event, '597', 597)">
-            ofChoice x
+          <code onmouseout="hideTip(event, '603', 603)" onmouseover="showTip(event, '603', 603)">
+            ofChoice(x)
           </code>
-          <div class="tip" id="597">
+          <div class="tip" id="603">
             <strong>Signature:</strong> x:Choice&lt;&#39;T,&#39;Error&gt; -&gt; Validation&lt;&#39;Error,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'Error                      </div>
         </td>
@@ -440,11 +419,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '598', 598)" onmouseover="showTip(event, '598', 598)">
-            ofResult x
+          <code onmouseout="hideTip(event, '604', 604)" onmouseover="showTip(event, '604', 604)">
+            ofResult(x)
           </code>
-          <div class="tip" id="598">
+          <div class="tip" id="604">
             <strong>Signature:</strong> x:Result&lt;&#39;T,&#39;Error&gt; -&gt; Validation&lt;&#39;Error,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'Error                      </div>
         </td>
@@ -460,13 +438,12 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '599', 599)" onmouseover="showTip(event, '599', 599)">
+          <code onmouseout="hideTip(event, '605', 605)" onmouseover="showTip(event, '605', 605)">
             orElse v a
           </code>
-          <div class="tip" id="599">
-            <strong>Signature:</strong> v:Validation&lt;&#39;?10810,&#39;a&gt; -&gt; a:&#39;a -&gt; &#39;a<br />
-                          <strong>Type parameters:</strong> '?10810, 'a                        <span>
+          <div class="tip" id="605">
+            <strong>Signature:</strong> v:Validation&lt;&#39;?10794,&#39;a&gt; -&gt; a:&#39;a -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> '?10794, 'a                        <span>
             <strong>Attributes:</strong><br />
 [&lt;Obsolete(&quot;Use Validation.defaultValue instead.&quot;)&gt;]<br />
           </span>
@@ -486,11 +463,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '600', 600)" onmouseover="showTip(event, '600', 600)">
+          <code onmouseout="hideTip(event, '606', 606)" onmouseover="showTip(event, '606', 606)">
             protect f x
           </code>
-          <div class="tip" id="600">
+          <div class="tip" id="606">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;T -&gt; Validation&lt;exn,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U                      </div>
         </td>
@@ -506,11 +482,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '601', 601)" onmouseover="showTip(event, '601', 601)">
-            toChoice x
+          <code onmouseout="hideTip(event, '607', 607)" onmouseover="showTip(event, '607', 607)">
+            toChoice(x)
           </code>
-          <div class="tip" id="601">
+          <div class="tip" id="607">
             <strong>Signature:</strong> x:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Choice&lt;&#39;T,&#39;Error&gt;<br />
                           <strong>Type parameters:</strong> 'Error, 'T                      </div>
         </td>
@@ -526,11 +501,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '602', 602)" onmouseover="showTip(event, '602', 602)">
-            toResult x
+          <code onmouseout="hideTip(event, '608', 608)" onmouseover="showTip(event, '608', 608)">
+            toResult(x)
           </code>
-          <div class="tip" id="602">
+          <div class="tip" id="608">
             <strong>Signature:</strong> x:Validation&lt;&#39;Error,&#39;T&gt; -&gt; Result&lt;&#39;T,&#39;Error&gt;<br />
                           <strong>Type parameters:</strong> 'Error, 'T                      </div>
         </td>
@@ -546,11 +520,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '603', 603)" onmouseover="showTip(event, '603', 603)">
+          <code onmouseout="hideTip(event, '609', 609)" onmouseover="showTip(event, '609', 609)">
             traverse f source
           </code>
-          <div class="tip" id="603">
+          <div class="tip" id="609">
             <strong>Signature:</strong> f:(&#39;T -&gt; ^Functor&lt;&#39;U&gt;) -&gt; source:Validation&lt;&#39;Error,&#39;T&gt; -&gt; ^Functor&lt;Validation&lt;&#39;Error,&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T, ^Functor<'U>, ^Functor<Validation<'Error,'U>>, 'U, 'Error                      </div>
         </td>
@@ -564,11 +537,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '604', 604)" onmouseover="showTip(event, '604', 604)">
+          <code onmouseout="hideTip(event, '610', 610)" onmouseover="showTip(event, '610', 610)">
             validate e p a
           </code>
-          <div class="tip" id="604">
+          <div class="tip" id="610">
             <strong>Signature:</strong> e:&#39;e -&gt; p:(&#39;a -&gt; bool) -&gt; a:&#39;a -&gt; Validation&lt;&#39;e,&#39;a&gt;<br />
                           <strong>Type parameters:</strong> 'e, 'a                        <span>
             <strong>Attributes:</strong><br />
@@ -590,11 +562,10 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '605', 605)" onmouseover="showTip(event, '605', 605)">
-            validationNel x
+          <code onmouseout="hideTip(event, '611', 611)" onmouseover="showTip(event, '611', 611)">
+            validationNel(x)
           </code>
-          <div class="tip" id="605">
+          <div class="tip" id="611">
             <strong>Signature:</strong> x:Result&lt;&#39;a,&#39;e&gt; -&gt; Validation&lt;NonEmptyList&lt;&#39;e&gt;,&#39;a&gt;<br />
                           <strong>Type parameters:</strong> 'a, 'e                      </div>
         </td>
@@ -612,11 +583,10 @@ they are a common semigroup to use.</p>
       </tr>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '606', 606)" onmouseover="showTip(event, '606', 606)">
+          <code onmouseout="hideTip(event, '612', 612)" onmouseover="showTip(event, '612', 612)">
             valueOr ea v
           </code>
-          <div class="tip" id="606">
+          <div class="tip" id="612">
             <strong>Signature:</strong> ea:(&#39;e -&gt; &#39;a) -&gt; v:Validation&lt;&#39;e,&#39;a&gt; -&gt; &#39;a<br />
                           <strong>Type parameters:</strong> 'e, 'a                        <span>
             <strong>Attributes:</strong><br />

@@ -33,8 +33,6 @@
         <div class="span9" id="main">
           
 
-
-
 <h1>IReadOnlyDictionary</h1>
 <p>
   <span>Namespace: FSharpPlus</span><br />
@@ -58,20 +56,23 @@
     <tbody>
       <tr>
         <td class="member-name">
-
-          <code onmouseout="hideTip(event, '135', 135)" onmouseover="showTip(event, '135', 135)">
-            _item(i f t)
+          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
+            IReadOnlyDictionary._item i f t
           </code>
-          <div class="tip" id="135">
-            <strong>Signature:</strong> i:&#39;?13239 -&gt; f:(&#39;?13240 option -&gt; ^?13241) -&gt; t:IReadOnlyDictionary&lt;&#39;?13239,&#39;?13240&gt; -&gt; &#39;?13242<br />
-                          <strong>Type parameters:</strong> '?13239, '?13240, ^?13241, '?13242                      </div>
+          <div class="tip" id="133">
+            <strong>Signature:</strong> i:&#39;?13319 -&gt; f:(&#39;?13320 option -&gt; ^?13321) -&gt; t:IReadOnlyDictionary&lt;&#39;?13319,&#39;?13320&gt; -&gt; &#39;?13322<br />
+                          <strong>Type parameters:</strong> '?13319, '?13320, ^?13321, '?13322                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L121-121" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L129-129" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Given a specific key, produces a Lens from a IReadOnlyDictionary<key, value> to an Option<value>.  When setting,
+a Some(value) will insert or replace the value into the dictionary at the given key.  Setting a value of
+None will delete the value at the specified key.  Works well together with non.</p>
+
+
         </td>
       </tr>
     </tbody>
