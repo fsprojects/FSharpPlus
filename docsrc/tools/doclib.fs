@@ -1027,7 +1027,7 @@ type ProcessResult = { ExitCode : int; stdout : string; stderr : string }
 
 let executeProcess (exe, cmdline, workingDir) =
     let psi =
-        new System.Diagnostics.ProcessStartInfo (exe, cmdline,
+        System.Diagnostics.ProcessStartInfo (exe, cmdline,
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -1157,8 +1157,9 @@ module Git =
 
     /// Runs the given git command, waits for its completion and fails when it didn't succeeded.
     let directRunGitCommandAndFail repositoryDir command =
-        directRunGitCommand repositoryDir command
-        |> fun ok -> if not ok then failwith "Command failed."
+        let result = executeProcess (gitPath, command, Some repositoryDir)
+        result.ExitCode = 0
+        |> fun ok -> if not ok then failwithf "Command failed. \n%A\n%A\n" result.stdout result.stderr
 
     /// Runs the git command and returns the first line of the result.
     let runSimpleGitCommand repositoryDir command =
