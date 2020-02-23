@@ -178,7 +178,7 @@ let main argv =
         Target.create "ReleaseDocs" (fun _ ->
             let tempDocsDir = rootDir @@ "temp/gh-pages"
             Shell.cleanDir tempDocsDir
-            Git.Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+            Git.Repository.cloneSingleBranch rootDir (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
             let docDir = rootDir @@ "docs"
             Shell.copyRecursive docDir tempDocsDir true |> Trace.tracefn "%A"
             Git.Staging.stageAll tempDocsDir
