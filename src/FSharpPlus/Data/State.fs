@@ -50,8 +50,11 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = State.zip x y
 
-    static member TryFinally (State computation, f) = State (fun s -> try computation s finally f ())
-    static member Delay (body: unit -> State<'S,'T>) = State (fun s -> State.run (body ()) s) : State<'S,'T>
+    static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> (h e) s) : State<'S,'T>
+    static member TryFinally (State computation, f) = State (fun s -> try computation s finally f ()) : State<'S,'T>
+    static member Using (resource, f: _ -> State<'S,'T>) = State.TryFinally (f resource, fun () -> dispose resource)
+    static member Delay (body: unit->State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S,'T>
+
 
 open FSharpPlus.Control
 open FSharpPlus.Internals.Prelude
