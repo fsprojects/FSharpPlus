@@ -20,8 +20,7 @@ The additions can be summarised as:
 
  * [Extensions](extensions.html) to core types, such as [`String.toLower`](reference/fsharpplus-string.html)
 
- * [Generic Functions and Operators](reference/fsharpplus-operators.html),
-   like `map`, which can be extended to support other types
+ * [Generic Functions and Operators](generic-doc.html) like `map`, which can be extended to support other types
 
  * Generic and customizable [Computation Expressions](computation-expressions.html),
    like `monad`
