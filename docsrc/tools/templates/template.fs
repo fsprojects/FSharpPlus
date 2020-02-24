@@ -1,8 +1,4 @@
-﻿#if INTERACTIVE
-#load "../../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
-#else
-module Template
-#endif
+﻿module Template
 open Fable.React
 open Fable.React.Props
 type PropertyMeta={Author: string ; Github:string; NuGet:string; Name:string ;Description:string; Title:string; Root:string->string; Body:string;}

@@ -1,3 +1,4 @@
+module DocLib
 // Based on Fake project
 // Copyright 2008 "FAKE - F# Make" Project
 // Copyright 2010 Steffen Forkmann
@@ -1026,7 +1027,7 @@ type ProcessResult = { ExitCode : int; stdout : string; stderr : string }
 
 let executeProcess (exe, cmdline, workingDir) =
     let psi =
-        new System.Diagnostics.ProcessStartInfo (exe, cmdline,
+        System.Diagnostics.ProcessStartInfo (exe, cmdline,
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -1049,11 +1050,10 @@ let executeProcess (exe, cmdline, workingDir) =
 module FSFormatting =
 
     /// Specifies the fsformatting executable
-    let mutable toolPath = lazy ( Tools.findToolInSubPath "fsformatting.exe" (Directory.GetCurrentDirectory() @@ "tools" @@ "FSharp.Formatting.CommandTool" @@ "tools") )
 
     /// Runs fsformatting.exe with the given command in the given repository directory.
-    let private run toolPath command =
-        let result = executeProcess (toolPath, command, None)
+    let private run command =
+        let result = executeProcess ("dotnet", sprintf "tool run fsformatting %s" command, None)
         if 0 <> result.ExitCode
         then
             failwithf
@@ -1063,16 +1063,14 @@ module FSFormatting =
                 (if System.String.IsNullOrEmpty result.stderr then result.stdout else result.stderr)
 
     type LiterateArguments =
-        { ToolPath : string Lazy
-          Source : string
+        { Source : string
           OutputDirectory : string 
           Template : string
           ProjectParameters : (string * string) list
           LayoutRoots : string list }
 
     let defaultLiterateArguments =
-        { ToolPath = toolPath
-          Source = ""
+        { Source = ""
           OutputDirectory = ""
           Template = ""
           ProjectParameters = []
@@ -1091,12 +1089,11 @@ module FSFormatting =
                         "--outputDirectory"; outputDir; "--replacements" ])
             |> Seq.map (fun s -> if s.StartsWith "\"" then s else sprintf "\"%s\"" s)
             |> String.separated " "
-            |> run arguments.ToolPath.Value
+            |> run //arguments.ToolPath.Value
         printfn "Successfully generated docs for %s" source
 
     type MetadataFormatArguments =
-        { ToolPath : string Lazy
-          Source : string
+        { Source : string
           SourceRepository : string
           OutputDirectory : string 
           Template : string
@@ -1105,8 +1102,7 @@ module FSFormatting =
           LibDirs : string list }
 
     let defaultMetadataFormatArguments =
-        { ToolPath = toolPath
-          Source = Directory.GetCurrentDirectory()
+        { Source = Directory.GetCurrentDirectory()
           SourceRepository = ""
           OutputDirectory = ""
           Template = ""
@@ -1130,7 +1126,7 @@ module FSFormatting =
             |> Seq.map (fun s -> if s.StartsWith "\"" then s else sprintf "\"%s\"" s)
             |> String.separated " "
             |> fun prefix -> sprintf "%s --dllfiles %s" prefix (String.separated " " (dllFiles |> Seq.map (sprintf "\"%s\"")))
-            |> run arguments.ToolPath.Value
+            |> run // arguments.ToolPath.Value
         printfn "Successfully generated docs for DLLs: %s" (String.separated ", " dllFiles)
 
 
@@ -1161,8 +1157,9 @@ module Git =
 
     /// Runs the given git command, waits for its completion and fails when it didn't succeeded.
     let directRunGitCommandAndFail repositoryDir command =
-        directRunGitCommand repositoryDir command
-        |> fun ok -> if not ok then failwith "Command failed."
+        let result = executeProcess (gitPath, command, Some repositoryDir)
+        result.ExitCode = 0
+        |> fun ok -> if not ok then failwithf "Command failed. \n%A\n%A\n" result.stdout result.stderr
 
     /// Runs the git command and returns the first line of the result.
     let runSimpleGitCommand repositoryDir command =

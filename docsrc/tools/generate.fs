@@ -1,3 +1,4 @@
+module Generate
 // --------------------------------------------------------------------------------------
 // Builds the documentation from `.fsx` and `.md` files in the 'docsrc/content' directory
 // (the generated documentation is stored in the 'docs' directory)
@@ -12,11 +13,11 @@
 
 let githubLink = "https://github.com/fsprojects/FSharpPlus"
 
-#load "./templates/template.fsx"
+//#load "./templates/template.fsx"
 open Template
-#load "./templates/plantuml.fsx"
+//#load "./templates/plantuml.fsx"
 open Plantuml
-#load "./tools.fsx"
+//#load "./tools.fsx"
 open Tools
 // Specify more information about your project
 
@@ -32,15 +33,15 @@ let properties:PropertyMeta =
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below
 // --------------------------------------------------------------------------------------
-#load "../../.paket/load/netstandard2.0/docs/FSharp.Literate.fsx"
-#load "../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
-#load "../../.paket/load/netstandard2.0/docs/MathNet.Numerics.FSharp.fsx"
-#I "../../packages/FSharp.Core/lib/netstandard2.0/"
-#I "../../bin/FSharpPlus/netstandard2.0/"
-#I @"../../src/FSharpPlus/bin/Release/netstandard2.0/"
+//#load "../../.paket/load/netstandard2.0/docs/FSharp.Literate.fsx"
+//#load "../../.paket/load/netstandard2.0/docs/Fable.React.fsx"
+//#load "../../.paket/load/netstandard2.0/docs/MathNet.Numerics.FSharp.fsx"
+//#I "../../packages/FSharp.Core/lib/netstandard2.0/"
+//#I "../../bin/FSharpPlus/netstandard2.0/"
+//#I @"../../src/FSharpPlus/bin/Release/netstandard2.0/"
 
-#r "FSharp.Core.dll"
-#r "FSharpPlus.dll"
+//#r "FSharp.Core.dll"
+//#r "FSharpPlus.dll"
 open System
 open FSharp.Literate
 open FSharp.Markdown
@@ -59,16 +60,22 @@ let reference path =
 let evaluationOptions = 
     [| 
          includeDir "FSharp.Core/lib/netstandard2.0/"
+         reference "FSharp.Core/lib/netstandard2.0/FSharp.Core.dll" 
          includeDir "FSharp.Literate/lib/netstandard2.0/" 
+         includeDir "MathNet.Numerics/lib/netstandard2.0/" 
+         reference "MathNet.Numerics/lib/netstandard2.0/MathNet.Numerics.dll" 
+         includeDir "MathNet.Numerics.FSharp/lib/netstandard2.0/" 
+         reference "MathNet.Numerics.FSharp/lib/netstandard2.0/MathNet.Numerics.FSharp.dll" 
+         includeDir "System.Buffers/lib/netstandard2.0/" 
+         includeDir "System.Collections.Immutable/lib/netstandard2.0/" 
+         includeDir "System.Reflection.Metadata/lib/netstandard2.0/" 
+         includeDir "System.ValueTuple/lib/netstandard1.0/" 
+         reference "System.ValueTuple/lib/netstandard1.0/System.ValueTuple.dll" 
          includeDir "FSharp.Compiler.Service/lib/netstandard2.0/" 
          reference "FSharp.Compiler.Service/lib/netstandard2.0/FSharp.Compiler.Service.dll" |] 
 
 let compilerOptions = 
-    String.concat " " ( 
-         "-r:System.Runtime"
-         :: "-r:System.Net.WebClient"
-         :: "-r:System.Runtime.Extensions"
-         :: Array.toList evaluationOptions)
+    String.concat " " ( Array.toList evaluationOptions)
 
 // PlantUml processing
 let abstractions = Path.templates </> "abstractions.plantuml"
@@ -137,6 +144,3 @@ let buildDocumentation () =
   IO.Directory.EnumerateFiles Path.content
   |> Seq.iter (processFile Path.output)
 
-// Generate
-copyFiles()
-buildDocumentation()
