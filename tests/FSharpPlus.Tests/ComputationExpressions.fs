@@ -328,6 +328,22 @@ module ComputationExpressions =
                 "-move-next-"
                 "-dispose-"
             ]
+        let strictEffects =
+            [
+                "using"
+                "-get-Current-"
+                "--> 0"
+                "moving"
+                "-move-next-"
+                "moving"
+                "-move-next-"
+                "moving"
+                "-move-next-"
+                "about to finish"
+                "moving"
+                "-move-next-"
+                "-dispose-"
+            ]
 
         let toDebugEnum (x: IEnumerator<'t>) =
             {
@@ -340,6 +356,7 @@ module ComputationExpressions =
 
         let testSeq = (seq {yield 0; yield 1; SideEffects.add "about to finish"; yield 2})
         
+        // Check lazy monads
         SideEffects.reset ()
 
         let funcM : unit -> unit = monad {
@@ -384,27 +401,66 @@ module ComputationExpressions =
         Cont.run contM id
         areEqual effects (SideEffects.get ())
 
-
+        // Monad transformers are delayed if at least one of the layers is lazy.
         SideEffects.reset ()
-
-        let readertoptionM : ReaderT<unit,unit option> = monad {
+        
+        let readerToptionM : ReaderT<unit,unit option> = monad {
           use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
         areEqual [] (SideEffects.get ())
-        ReaderT.run readertoptionM () |> ignore
+        ReaderT.run readerToptionM () |> ignore
         areEqual effects (SideEffects.get ())
 
         SideEffects.reset ()
 
-        let readertfuncM : ReaderT<unit,unit->unit> = monad {
+        let readerTfuncM : ReaderT<unit,unit->unit> = monad {
           use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
         areEqual [] (SideEffects.get ())
-        let a = ReaderT.run readertfuncM ()
+        let a = ReaderT.run readerTfuncM ()
         areEqual [] (SideEffects.get ())
         let b = a ()
         areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let optionTreaderM : OptionT<Reader<unit,unit option>> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        let c = OptionT.run optionTreaderM
+        areEqual [] (SideEffects.get ())
+        let d = Reader.run c ()
+        areEqual effects (SideEffects.get ())
+
+        // Writer is strict
+        SideEffects.reset ()
+
+        let writerM : Writer<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual strictEffects (SideEffects.get ())
+        Writer.run writerM |> ignore
+        areEqual strictEffects (SideEffects.get ())
+
+        // Writer combined with a strict monad is also strict
+        SideEffects.reset ()
+
+        let optionTwriterM : OptionT<Writer<unit,unit option>> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual strictEffects (SideEffects.get ())
+        let e = OptionT.run optionTwriterM
+        areEqual strictEffects (SideEffects.get ())
+        let f = Writer.run e
+        areEqual strictEffects (SideEffects.get ())
