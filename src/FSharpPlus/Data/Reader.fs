@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus.Data
 
+#nowarn "1125"
+
 open FSharpPlus
 open FSharpPlus.Control
 open System.ComponentModel

@@ -5,6 +5,8 @@ open FSharpPlus
 open FSharpPlus.Control
 open FSharpPlus.Internals.Prelude
 
+#nowarn "686"
+
 [<NoComparison>]
 type Free<'``functor<'t>``,'t> = Pure of 't | Roll of obj
 

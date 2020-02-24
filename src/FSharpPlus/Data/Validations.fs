@@ -5,6 +5,8 @@ open FSharpPlus.Lens
 open FSharpPlus.Data
 open System.ComponentModel
 
+#nowarn "44"
+
 // Validation is based on https://github.com/qfpl/validation
 
 /// A 'Validation' is either a value of the type 'error or 't, similar to 'Result'. However,
