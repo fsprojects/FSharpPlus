@@ -302,3 +302,165 @@ module ComputationExpressions =
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Identity.run
         areEqual (SideEffects.get()) ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"]
+
+
+    open System.Collections.Generic
+
+    [<Test>]
+    let usingInWhileLoops () =
+        let effects = 
+            [
+                "using"
+                "moving"
+                "-move-next-"
+                "-get-Current-"
+                "--> 0"
+                "moving"
+                "-move-next-"
+                "-get-Current-"
+                "--> 1"
+                "moving"
+                "-move-next-"
+                "about to finish"
+                "-get-Current-"
+                "--> 2"
+                "moving"
+                "-move-next-"
+                "-dispose-"
+            ]
+        let strictEffects =
+            [
+                "using"
+                "-get-Current-"
+                "--> 0"
+                "moving"
+                "-move-next-"
+                "moving"
+                "-move-next-"
+                "moving"
+                "-move-next-"
+                "about to finish"
+                "moving"
+                "-move-next-"
+                "-dispose-"
+            ]
+
+        let toDebugEnum (x: IEnumerator<'t>) =
+            {
+                new IEnumerator<'t> with 
+                    override __.get_Current() = SideEffects.add "-get-Current-"; x.Current
+                    override __.get_Current() = SideEffects.add "-get-Current-(boxed)-"; box x.Current
+                    override __.MoveNext ()   = SideEffects.add "-move-next-"; x.MoveNext ()
+                    override __.Reset ()      = SideEffects.add "-reset-"; x.Reset ()
+                    override __.Dispose ()    = SideEffects.add "-dispose-"; x.Dispose ()}
+
+        let testSeq = (seq {yield 0; yield 1; SideEffects.add "about to finish"; yield 2})
+        
+        // Check lazy monads
+        SideEffects.reset ()
+
+        let funcM : unit -> unit = monad {
+          use enum = toDebugEnum    ( SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        funcM ()
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let readerM : Reader<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        Reader.run readerM ()
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let stateM : State<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        State.run stateM () |> ignore
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let contM : Cont<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        Cont.run contM id
+        areEqual effects (SideEffects.get ())
+
+        // Monad transformers are delayed if at least one of the layers is lazy.
+        SideEffects.reset ()
+        
+        let readerToptionM : ReaderT<unit,unit option> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        ReaderT.run readerToptionM () |> ignore
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let readerTfuncM : ReaderT<unit,unit->unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        let a = ReaderT.run readerTfuncM ()
+        areEqual [] (SideEffects.get ())
+        let b = a ()
+        areEqual effects (SideEffects.get ())
+
+        SideEffects.reset ()
+
+        let optionTreaderM : OptionT<Reader<unit,unit option>> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual [] (SideEffects.get ())
+        let c = OptionT.run optionTreaderM
+        areEqual [] (SideEffects.get ())
+        let d = Reader.run c ()
+        areEqual effects (SideEffects.get ())
+
+        // Writer is strict
+        SideEffects.reset ()
+
+        let writerM : Writer<unit,unit> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual strictEffects (SideEffects.get ())
+        Writer.run writerM |> ignore
+        areEqual strictEffects (SideEffects.get ())
+
+        // Writer combined with a strict monad is also strict
+        SideEffects.reset ()
+
+        let optionTwriterM : OptionT<Writer<unit,unit option>> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+             SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        areEqual strictEffects (SideEffects.get ())
+        let e = OptionT.run optionTwriterM
+        areEqual strictEffects (SideEffects.get ())
+        let f = Writer.run e
+        areEqual strictEffects (SideEffects.get ())

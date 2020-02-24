@@ -119,7 +119,7 @@ module Builders =
             fix ()
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) : '``MonadPlus<'U>`` =
             let mutable isReallyDelayed = true
-            Delay.Invoke (fun () -> isReallyDelayed <- false; Unchecked.defaultof<'``MonadPlus<'U>``>) |> ignore
+            Delay.Invoke (fun () -> isReallyDelayed <- false; Empty.Invoke () : '``MonadPlus<'U>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
                 if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
@@ -153,7 +153,7 @@ module Builders =
             loop guard body
         member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) : '``Monad<unit>``=
             let mutable isReallyDelayed = true
-            Delay.Invoke (fun () -> isReallyDelayed <- false; Unchecked.defaultof<'``Monad<unit>``>) |> ignore
+            Delay.Invoke (fun () -> isReallyDelayed <- false; Return.Invoke () : '``Monad<unit>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
                 if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
