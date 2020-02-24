@@ -10,24 +10,80 @@ open FSharpPlus
 Generic operators and functions
 ===============================
 
+After reviewing [extension functions](extensions.html) it's natural to want to
+use generic functions that can work across different types.
+
+F#+ implements generic functions that efficiently call out to specific
+implementations. This handles existing .Net and F# types, and you can use them
+on your own and third-party types by implementing expected method names
+and signatures.
+
+Read about the specific operators:
+
+ * Docs on [Operators - Common Combinators](operators-common.html)
+ * Other docs exist for each [abstraction](abstractions.html)
+ * API Doc for [Generic functions and operators](reference/operators.html)
+
+They're particularly useful in that the specific function called will
+depend on the input arguments and return type. However, this means you
+sometimes need to explicitly specify the type if this information is
+not available (actually it's a good debug technique to temporarily add
+the types explicitly when the compiler tells you that the types are wrong).
+
+For example:
 *)
 
+// Convert the number 42 to bytes... 
+// ... here the type is known (42 is an int, the return value is byte[])
+> let a = 42 |> toBytes;;  
+val a : byte [] = [|42uy; 0uy; 0uy; 0uy|]
+
+// However, this can't compile since the return type is not inferrable
+> let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;  
+
+// The error will be something like:
+// 
+//  let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
+//  -----------------------------------^^^^^^^
+//
+// error FS0071: Type constraint mismatch when applying the default type 'obj'
+// for a type inference variable. No overloads match for method 'OfBytes'.
+// The available overloads are shown below. Consider adding further type constraints
+
+// [followed by many possible implementations...]
+
+// So, in this case, we have to give the return type:
+>   let b :int = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
+val b : int = 42
+
+// ...or, the more usual case, you use in context where type can be inferred,
+// like this example:
+> 1 + ([|42uy; 0uy; 0uy; 0uy|] |> ofBytes);;
+val it : int = 43
+
+
 (**
+How do generic functions work?
+==============================
 
-Generic operators, functions and constants are included in this library.
+F# does not support overloaded functions, but it does support overloaded
+methods on types (classes) - including static methods. F#+ takes
+advantage of this by definining generic functions that call out to
+an internal class (referred to as an "Invokable") where various overloaded 
+static methods are defined.
 
-They work with many types, including:
+An Invokable is written such that the most specific, and hence, optimised
+overload is resolved for existing .Net and F# types, and that a more general
+implementation is used otherwise.
 
- 1) Existing .NET and F# types
+What does this all mean?
 
- 2) Other types included in this library
+It means care is taken to use the most optimised implementation, and you can
+implement your own instances of generic functions if you implement the required
+methods.
 
- 3) Further user defined types
-
- 4) Types defined in other libraries
-
-
-Case 1 works by using overload resolution inside an internal class (referred to as the Invokable) used at the definition of the generic operation, while all the other cases work typically through Duck Typing, where an expected method name and signature must exists in the target Type or by using default implementations based on other operations.
+Examples
+========
 
 Here are some examples of the generic ``map`` operation over existing .NET and F# types:
 
