@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus.Data
 
+#nowarn "1125"
+
 open FSharpPlus
 open FSharpPlus.Control
 open System.ComponentModel
@@ -47,6 +49,11 @@ type Reader<'r,'t> with
 
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke ()) : 'T
     static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
+
+    static member TryWith (Reader computation, h)    = Reader (fun s -> try computation s with e -> (h e) s) : Reader<'R,'T>
+    static member TryFinally (Reader computation, f) = Reader (fun s -> try computation s finally f ())
+    static member Using (resource, f: _ -> Reader<'R,'T>) = Reader.TryFinally (f resource, fun () -> dispose resource)
+    static member Delay (body: unit->Reader<'R,'T>)  = Reader (fun s -> Reader.run (body ()) s) : Reader<'R,'T>
 
 
 /// Monad Transformer for Reader<'R, 'T>

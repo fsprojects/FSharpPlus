@@ -2,6 +2,8 @@
 open System.ComponentModel
 open FSharpPlus
 
+#nowarn "1125"
+
 /// <summary> Computation type: Computations which maintain state.
 /// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
 /// <para/>   Useful for: Building computations from sequences of operations that require a shared state. </summary>
@@ -49,6 +51,12 @@ type State<'s,'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = State.zip x y
+
+    static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> (h e) s) : State<'S,'T>
+    static member TryFinally (State computation, f) = State (fun s -> try computation s finally f ()) : State<'S,'T>
+    static member Using (resource, f: _ -> State<'S,'T>) = State.TryFinally (f resource, fun () -> dispose resource)
+    static member Delay (body: unit->State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S,'T>
+
 
 open FSharpPlus.Control
 open FSharpPlus.Internals.Prelude
