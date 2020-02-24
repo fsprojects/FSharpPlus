@@ -22,7 +22,7 @@ Read about the specific operators:
 
  * Docs on [Operators - Common Combinators](operators-common.html)
  * Other docs exist for each [abstraction](abstractions.html)
- * API Doc for [Generic functions and operators](operators.html)
+ * API Doc for [Generic functions and operators](reference/operators.html)
 
 They're particularly useful in that the specific function called will
 depend on the input arguments and return type. However, this means you
@@ -78,7 +78,7 @@ implementation is used otherwise.
 
 What does this all mean?
 
-It means care is taken to use the most optimised impelemntation, and you can
+It means care is taken to use the most optimised implementation, and you can
 implement your own instances of generic functions if you implement the required
 methods.
 
