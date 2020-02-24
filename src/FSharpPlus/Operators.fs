@@ -690,6 +690,24 @@ module Operators =
     /// <exception cref="System.ArgumentNullException">Thrown when the input collection is null.</exception>
     let inline skipWhile (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = SkipWhile.Invoke predicate source
 
+    /// <summary>
+    /// Generic 'choose' for any collection.
+    /// 
+    /// A combination of map and filter, `choose` enables you to transform
+    /// and select elements at the same time.
+    /// </summary>
+    ///
+    /// <param name="chooser">
+    /// A function that is applied to each element in the
+    /// collection and returns an option value. When the result is a Some then
+    /// the unwrapped value is included in the result collection, otherwise
+    /// it is discarded.
+    /// </param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The result collection.</returns>
+    ///
+    /// <exception cref="System.InvalidOperationException">Thrown when the input collection is an Id.</exception>
     let inline choose (chooser: 'T->'U option) (source: '``Collection<'T>``) : '``Collection<'U>`` = Choose.Invoke chooser source
 
     /// <summary>Returns a collection that contains no duplicate entries according to generic hash and
@@ -718,6 +736,14 @@ module Operators =
     /// Inserts a separator between each element.
     let inline intersperse (sep: 'T) (source: '``Collection<'T>``) : '``Collection<'T>`` = Intersperse.Invoke sep source
     
+    /// <summary>Replaces part of the collection with a new part</summary>
+    ///
+    /// <param name="oldValue">A collection that if part of the source collection
+    /// should be replaced with newValue.</param>
+    /// <param name="newValue">The collection to replace oldValue with.</param>
+    /// <param name="source">The input collection.</param>
+    ///
+    /// <returns>The resulting collection with oldValue replaced with newValue.</returns>
     let inline replace (oldValue: 'Collection) (newValue: 'Collection) (source: 'Collection) = Replace.Invoke oldValue newValue source : 'Collection
 
     /// <summary>Returns a new collection with the elements in reverse order.</summary>
@@ -780,11 +806,15 @@ module Operators =
 
     /// Splits a given ordered collection at each of the given sub-ordered collections
     ///
-    ///     > "asdf" |> split ["s"];;
-    ///        val it : string list = ["a"; "df"]
+    /// <example>
+    /// <code>
+    /// > "asdf" |> split ["s"];;
+    /// val it : string list = ["a"; "df"]
     ///
-    ///     > [1;2;3;4;5;6] |> split [ [2]; [5] ];;
-    ///        val it : int list list = [[1]; [3; 4]; [6]]
+    /// > [1;2;3;4;5;6;7] |> split [ [2;3]; [5] ];;
+    /// val it : int list list = [[1]; [4]; [6; 7]]
+    /// </code>
+    /// </example>
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection) = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
 
 
