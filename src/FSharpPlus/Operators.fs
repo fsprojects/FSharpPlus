@@ -414,6 +414,20 @@ module Operators =
     /// Gets the nth value in the foldable - i.e. at position 'n'
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
 
+
+    // Reducible
+
+    /// <summary>Applies a function to each element of the reducible, threading an accumulator argument
+    /// through the computation. Apply the function to the first two elements of the reducible.
+    /// Then feed this result into the function along with the third element and so on. 
+    /// Return the final result. If the input function is <c>f</c> and the elements are <c>i0...iN</c> then computes 
+    /// <c>f (... (f i0 i1) i2 ...) iN</c>.</summary>
+    /// <param name="reduction">The function to reduce two reducible elements to a single element.</param>
+    /// <param name="source">The input reducible.</param>
+    /// <returns>The final reduced value.</returns>
+    let inline reduce reduction (source: '``Reducible<'T>``) = Reduce.Invoke reduction source : 'T
+
+
     // Traversable
 
     /// Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
@@ -988,8 +1002,8 @@ module Operators =
 
     // Additional functions
 
-    /// Folds using alternative operator `<|>`.
-    let inline choice (x: '``Foldable<'Alternative<'T>>``) = foldBack (<|>) x (getEmpty ()) : '``Alternative<'T>>``
+    /// Reduces using alternative operator `<|>`.
+    let inline choice (x: '``Foldable<'Alternative<'T>>``) = Choice.Invoke x : '``Alternative<'T>>``
 
     #if !FABLE_COMPILER
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
