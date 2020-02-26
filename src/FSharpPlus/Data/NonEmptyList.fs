@@ -181,6 +181,16 @@ type NonEmptyList<'t> with
         let lst = source |> NonEmptyList.toSeq |> Seq.replace oldValue newValue |> Seq.toList
         {Head = lst.Head; Tail = lst.Tail}
 
+    static member Reduce ({Head = x; Tail = xs}, reduction: 'T -> 'T -> 'T) = List.reduce reduction (x :: xs)
+
+    static member inline Choice (source: NonEmptyList<'``Alt<'T>``>) =
+        use e = (NonEmptyList.toSeq source).GetEnumerator ()
+        e.MoveNext() |> ignore
+        let mutable res = e.Current
+        while e.MoveNext() && not (IsLeftZeroForAppend.Invoke res) do
+            res <- Append.Invoke res e.Current
+        res
+
 
 [<AutoOpen>]
 module NonEmptyListBuilder =
