@@ -173,6 +173,10 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (f <*> x)
     static member ToList (WrappedSeqD x) = Seq.toList x
 
+type WrappedSeqE<'s> = WrappedSeqE of 's seq with
+    static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
+    static member ToSeq  (WrappedSeqE x) = SideEffects.add "Using WrappedSeqE's ToSeq"; x
+
 open System.Collections.Generic
 open System.Collections
 open System.Threading.Tasks
@@ -1218,6 +1222,70 @@ module Alternative =
 
         Assert.AreEqual (SideEffects.get (), ["hello"])
         Assert.AreEqual (z, Some 1)
+
+    [<Test>]
+    let testChoice () =
+        let s = seq { 
+            yield (SideEffects.add "a"; None)
+            yield (SideEffects.add "b"; None)
+            yield (SideEffects.add "c"; Some 'c')
+            yield (SideEffects.add "d"; Some 'd')
+            yield (SideEffects.add "e"; None)
+            yield (SideEffects.add "f"; Some 'f')
+            }
+
+        let t = seq { 
+            yield (SideEffects.add "a"; Error "a")
+            yield (SideEffects.add "b"; Error "b")
+            yield (SideEffects.add "c"; Ok 'c')
+            yield (SideEffects.add "d"; Ok 'd')
+            yield (SideEffects.add "e"; Error "e")
+            yield (SideEffects.add "f"; Ok 'f')
+            }
+
+
+        let v = seq { 
+            yield (SideEffects.add "a"; Failure ["a"])
+            yield (SideEffects.add "b"; Failure ["b"])
+            yield (SideEffects.add "c"; Success 'c')
+            yield (SideEffects.add "d"; Success 'd')
+            yield (SideEffects.add "e"; Failure ["e"])
+            yield (SideEffects.add "f"; Success 'f')
+            }
+
+        let shortList, fullList = ["a"; "b"; "c"; "d"], ["a"; "b"; "c"; "d"; "e"; "f"]
+
+        SideEffects.reset ()
+        let x1 = choice s                               // uses specific overload for seqs
+        Assert.AreEqual (shortList, SideEffects.get ()) // short-circuits
+
+        SideEffects.reset ()
+        let x2 = choice (toList s)                     // uses specific overload for lists
+        Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to list forces all side-effects
+
+        SideEffects.reset ()
+        let x3 = choice (toArray s)                    // uses specific overload for arrays
+        Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to array forces all side-effects
+
+        SideEffects.reset ()
+        let x4 = choice (Unchecked.toNonEmptyList (toList s)) // uses Default1 (Choice defined on NonEmptyList)
+        Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to list forces all side-effects
+
+        SideEffects.reset ()
+        let x5 = choice (ofSeq s: Set<_>)              // use Default3: choice of an alternative
+        Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
+
+        SideEffects.reset ()
+        let t4 = choice (Unchecked.toNonEmptyList (toList t)) // uses Default1 (Choice defined on NonEmptyList)
+        Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
+
+        SideEffects.reset ()
+        let t4' = choice (WrappedSeqE t)                // uses Default2
+        Assert.AreEqual ("Using WrappedSeqE's ToSeq"::shortList, SideEffects.get ()) // short-circuits
+
+        SideEffects.reset ()
+        let v4' = choice (toList v)                    // uses specific overload for lists
+        Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
 
 
 module MonadTransformers =

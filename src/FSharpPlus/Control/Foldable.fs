@@ -387,3 +387,4 @@ type Length =
         call (Unchecked.defaultof<Length>, source) : int
 
 
+type Reduce = static member inline Invoke (f: 'T->'T->'T) (x: '``Reducible<'T>``) : 'T = (^``Reducible<'T>`` : (static member Reduce : _*_ -> _) x, f)
