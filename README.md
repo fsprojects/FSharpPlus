@@ -1,5 +1,3 @@
-FSharpPlus
-
 <h1 align="center">FSharpPlus</h1>
 
 <p align="center">
