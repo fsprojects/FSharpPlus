@@ -61,3 +61,9 @@ let matrix3x4_sum = matrix3x4_1 + matrix3x4_2
 
 let matrix3x4_3 = matrix3x4_1 + result 5
 
+
+// Another way
+
+open FSharpPlus.Math.Generic
+
+let vector3d_4 = matrix3x4_1 + 5G

@@ -51,3 +51,10 @@ let vector3d_sum = vector3d_1 + vector3d_2
 // Add a scalar
 
 let vector3d_3 = vector (1, 2, 3) + result 5
+
+
+// Another way
+
+open FSharpPlus.Math.Generic
+
+let vector3d_4 = vector (1, 2, 3) + 5G

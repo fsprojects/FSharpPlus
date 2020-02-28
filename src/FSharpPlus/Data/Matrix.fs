@@ -572,6 +572,12 @@ type Matrix<'Item, 'Row, 'Column> with
   static member inline ( @- ) (m1: Matrix<_,^m1,'n>, m2: Matrix<_,^m2,'n>) : Matrix<_,^``m1 + ^m2``,'n> = Matrix.verticalSum m1 m2
   static member inline ( ~- ) m = Matrix.map ((~-)) m
 
+  // As generic number literals
+  static member inline FromInt32  (i: int   ) = Matrix.replicate Singleton Singleton (FromInt32.Invoke  i)
+  static member inline FromInt64  (i: int64 ) = Matrix.replicate Singleton Singleton (FromInt64.Invoke  i)
+  static member inline FromBigInt (i: bigint) = Matrix.replicate Singleton Singleton (FromBigInt.Invoke i)
+
+
 type Vector<'Item, 'Length> with
   static member inline Item (v: Vector<'a, 'n>, i) = Vector.get i v
   static member inline Map (v: Vector<'a, 'n>, f: 'a -> 'b) : Vector<'b, 'n> = Vector.map f v
@@ -599,6 +605,11 @@ type Vector<'Item, 'Length> with
   static member inline FoldBack (v: Vector<'x, 'n>, f, z) = Array.foldBack f (Vector.toArray v) z
   static member op_Explicit (v: Vector<'x, 'n>) : Matrix<'x, S<Z>, 'n> = Vector.toRow v
   static member op_Explicit (v: Vector<'x, 'n>) : Matrix<'x, 'n, S<Z>> = Vector.toCol v
+
+  // As generic number literals
+  static member inline FromInt32  (i: int   ) = Vector.replicate Singleton (FromInt32.Invoke  i)
+  static member inline FromInt64  (i: int64 ) = Vector.replicate Singleton (FromInt64.Invoke  i)
+  static member inline FromBigInt (i: bigint) = Vector.replicate Singleton (FromBigInt.Invoke i)
 
 [<AutoOpen>]
 module MatrixOperators =
