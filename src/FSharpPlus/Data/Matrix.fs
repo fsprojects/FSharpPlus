@@ -628,32 +628,3 @@ module MatrixOperators =
     let t = ArrayToTuple.Invoke(xs, m) |> retype
     AssertTupleType.Invoke(t, Unchecked.defaultof<'at>, m)
     t
-
-#if TYPELEVEL_DEBUG
-module MatrixTests =
-  let v1 = vector (1,2,3,4,5)
-  let v2 = vector (1,2,3,4,5,6,7,8,9,0,1,2,3,4,5)
-  let (Vector(_,_,_,_,_)) = v1
-  let (Vector(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)) = v2
-
-  let m1 =
-    matrix (
-      (1,0,0,0),
-      (0,1,0,0),
-      (0,0,1,0)
-    )
-  let m2 =
-    matrix (
-      (1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
-      (0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
-      (0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0),
-      (0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0),
-      (0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0),
-      (0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0),
-      (0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0),
-      (0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0)
-    )
-  let (Matrix(_x1,_x2,_x3)) = m1
-  let (Matrix(_y1: int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int,_y2,_y3,_y4,_y5,_y6,_y7,_y8)) = m2
-
-#endif 
