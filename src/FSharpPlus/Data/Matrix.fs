@@ -564,10 +564,6 @@ type Matrix<'Item, 'Row, 'Column> with
   /// hadamard (element-wise) product
   static member inline ( * ) (m1, m2) = Matrix.map2 (*) m1 m2
   static member inline ( / ) (m1, m2) = Matrix.map2 (/) m1 m2
-  static member inline ( * ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map ((*) s) m
-  static member inline ( * ) (s: 'a, m: Matrix<'a,_,_>) = Matrix.map ((*) s) m
-  static member inline ( / ) (m: Matrix<'a,_,_>, s: 'a) = Matrix.map (fun x -> x / s) m
-  static member inline ( / ) (s: 'a, m: Matrix<'a,_,_>) = Matrix.map (fun x -> s / x) m
   static member inline ( @| ) (m1: Matrix<_,'m,^n1>, m2: Matrix<_,'m,^n2>) : Matrix<_,'m,^``n1 + ^n2``> = Matrix.horizontalSum m1 m2
   static member inline ( @- ) (m1: Matrix<_,^m1,'n>, m2: Matrix<_,^m2,'n>) : Matrix<_,^``m1 + ^m2``,'n> = Matrix.verticalSum m1 m2
   static member inline ( ~- ) m = Matrix.map ((~-)) m
@@ -596,10 +592,6 @@ type Vector<'Item, 'Length> with
   /// hadamard (element-wise) product
   static member inline ( * ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (*) v1 v2
   static member inline ( / ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (/) v1 v2
-  static member inline ( * ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x * s) v
-  static member inline ( * ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> x * s) v
-  static member inline ( / ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x / s) v
-  static member inline ( / ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> s / x) v
   static member inline ( ~- ) (v: Vector<_, 'n>) = v |> Vector.map ((~-))
   static member inline ( @@ ) (v1: Vector<_, ^m>, v2: Vector<_, ^n>) : Vector<_, ^``m + ^n``> = Vector.append v1 v2  
   static member inline ToSeq (v: Vector<'x, 'n>) = v |> Vector.toSeq
