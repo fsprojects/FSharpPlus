@@ -23,8 +23,10 @@ Abstractions
  -  [Semigroup](abstraction-semigroup.html)
  -  [Monoid](abstraction-monoid.html)
  -  [Functor](abstraction-functor.html)
+ -  [ZipFunctor](abstraction-misc.html)
  -  [Applicative](abstraction-applicative.html)
  -  [Foldable](abstraction-foldable.html)
+ -  [Reducible](abstraction-misc.html)
 
 
 

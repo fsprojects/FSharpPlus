@@ -583,6 +583,7 @@ type Vector<'Item, 'Length> with
   static member inline Map (v: Vector<'a, 'n>, f: 'a -> 'b) : Vector<'b, 'n> = Vector.map f v
   static member inline Return (x: 'x) : Vector<'x, 'n> = Vector.replicate Singleton x
   static member inline ( <*> ) (f: Vector<'x -> 'y, 'n>, x: Vector<'x, 'n>) : Vector<'y, 'n> = Vector.apply f x
+  static member inline Zip (x, y) = Vector.zip x y
   static member inline get_Zero () : Vector<'x, 'n> = Vector.zero
   static member inline ( + ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (+) v1 v2
   static member inline ( - ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (-) v1 v2
@@ -600,9 +601,10 @@ type Vector<'Item, 'Length> with
   static member inline ( / ) (v: Vector<'a, 'n>, s: 'a) = Vector.map (fun x -> x / s) v
   static member inline ( / ) (s: 'a, v: Vector<'a, 'n>) = Vector.map (fun x -> s / x) v
   static member inline ( ~- ) (v: Vector<_, 'n>) = v |> Vector.map ((~-))
-  static member inline ( @@ ) (v1: Vector<_, ^m>, v2: Vector<_, ^n>) : Vector<_, ^``m + ^n``> = Vector.append v1 v2
+  static member inline ( @@ ) (v1: Vector<_, ^m>, v2: Vector<_, ^n>) : Vector<_, ^``m + ^n``> = Vector.append v1 v2  
   static member inline ToSeq (v: Vector<'x, 'n>) = v |> Vector.toSeq
   static member inline FoldBack (v: Vector<'x, 'n>, f, z) = Array.foldBack f (Vector.toArray v) z
+  static member inline Reduce   (v: Vector<'x, S<'n>>, f) = Array.reduce   f (Vector.toArray v)
   static member op_Explicit (v: Vector<'x, 'n>) : Matrix<'x, S<Z>, 'n> = Vector.toRow v
   static member op_Explicit (v: Vector<'x, 'n>) : Matrix<'x, 'n, S<Z>> = Vector.toCol v
 
