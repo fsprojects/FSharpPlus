@@ -558,7 +558,7 @@ type Matrix<'Item, 'Row, 'Column> with
   static member inline ( + ) (m1, m2) = Matrix.map2 (+) m1 m2
   static member inline ( - ) (m1, m2) = Matrix.map2 (-) m1 m2
   /// matrix product
-  static member inline ( .* ) (m1, m2) = Matrix.matrixProduct m1 m2
+  static member inline ( |*| ) (m1, m2) = Matrix.matrixProduct m1 m2
   /// kronecker (tensor) product
   static member inline ( @* ) (m1, m2) = Matrix.kroneckerProduct m1 m2
   /// hadamard (element-wise) product
@@ -584,7 +584,7 @@ type Vector<'Item, 'Length> with
   static member inline ( + ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (+) v1 v2
   static member inline ( - ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (-) v1 v2
   /// dot (inner) product
-  static member inline ( .* ) (v1, v2) = Vector.innerProduct v1 v2
+  static member inline ( |*| ) (v1, v2) = Vector.innerProduct v1 v2
   /// direct (tensor) product
   static member inline ( @* ) (v1, v2) = Vector.directProduct v1 v2
   /// cross product
