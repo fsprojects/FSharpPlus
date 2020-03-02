@@ -1,14 +1,13 @@
-<h1 align="center">FSharpPlus</h1>
+# FSharpPlus
 
-<p align="center">
-  <a href="https://travis-ci.org/fsprojects/FSharpPlus"><img alt="Build Status" src="https://api.travis-ci.org/fsprojects/FSharpPlus.svg?branch=master"></a>
-  <a href="https://ci.appveyor.com/project/wallymathieu/fsharpplus/branch/master"><img alt="Build Status" src="https://ci.appveyor.com/api/projects/status/25ukpc0lamyf7pdx/branch/master?svg=true"></a>
-  <a href="https://www.nuget.org/packages/FSharpPlus"><img alt="Downloaded" src="https://img.shields.io/nuget/dt/FSharpPlus.svg"></a>
-  <a href="https://www.nuget.org/packages/FSharpPlus"><img alt="NuGet" src="https://img.shields.io/nuget/v/FSharpPlus.svg"></a>
-  <a href="https://www.nuget.org/packages/FSharpPlus/absoluteLatest"><img alt="NuGet Pre" src="https://img.shields.io/nuget/vpre/FSharpPlus.svg?label=pre"></a>
-  <img alt="Made with F#" src="https://img.shields.io/github/languages/top/fsprojects/FSharpPlus?color=%23b845fc">
-  <img alt="License - Apache 2.0" src="https://img.shields.io/github/license/fsprojects/FSharpPlus?color=%23FF957D">
-</p><br>
+[![Build Status](https://api.travis-ci.org/fsprojects/FSharpPlus.svg?branch=master)](https://travis-ci.org/fsprojects/FSharpPlus)
+[![Build Status](https://ci.appveyor.com/api/projects/status/25ukpc0lamyf7pdx/branch/master?svg=true)](https://ci.appveyor.com/project/wallymathieu/fsharpplus/branch/master)
+[![Download](https://img.shields.io/nuget/dt/FSharpPlus.svg)](https://www.nuget.org/packages/FSharpPlus)
+[![NuGet](https://img.shields.io/nuget/v/FSharpPlus.svg)](https://www.nuget.org/packages/FSharpPlus)
+[![NuGet Preview](https://img.shields.io/nuget/vpre/FSharpPlus.svg?label=pre)](https://www.nuget.org/packages/FSharpPlus/absoluteLatest)
+![Made with F#](https://img.shields.io/github/languages/top/fsprojects/FSharpPlus?color=%23b845fc)
+![License - Apache 2.0](https://img.shields.io/github/license/fsprojects/FSharpPlus?color=%23FF957D)
+
 
 F#+ is a base library that aims to take F# to the next level of functional
 programming.
