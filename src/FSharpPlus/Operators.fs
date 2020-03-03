@@ -134,6 +134,8 @@ module Operators =
 
     // Monad -----------------------------------------------------------
     
+#endif
+
     /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
     let inline bind (f:'T->'``Monad<'U>``) (x:'``Monad<'T>``) :'``Monad<'U>`` = Bind.Invoke x f
     
@@ -150,7 +152,13 @@ module Operators =
     let inline (<=<) (g: 'b->'``Monad<'V>``) (f: 'T->'``Monad<'U>``) : 'T -> '``Monad<'V>`` = fun x -> Bind.Invoke (f x) g
 
     /// Flattens two layers of monadic information into one.
+    #if !FABLE_COMPILER
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
+    #else
+    let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Bind.Invoke x id
+    #endif
+
+#if !FABLE_COMPILER
 
     /// Equivalent to map but only for Monads.
     let inline liftM (f: 'T->'U) (m1: '``Monad<'T>``) : '``Monad<'U>``= m1 >>= (result << f)

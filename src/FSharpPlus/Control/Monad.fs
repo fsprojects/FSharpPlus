@@ -12,19 +12,23 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
-#if !FABLE_COMPILER
-
 // Monad class ------------------------------------------------------------
 
 type Bind =
     static member        (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
-    static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U> 
+    static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U>
+    #if !FABLE_COMPILER
     static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
+    #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
-    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>  
-    static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []     
-    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U    
+    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>
+    static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []
+    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U
+    #if !FABLE_COMPILER
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
+    #else
+    static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)                                  : 'Monoid*'U
+    #endif
     static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                                        : Async<'U>
     static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
     static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
@@ -52,6 +56,7 @@ type Bind =
     static member inline InvokeOnInstance (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member (>>=) : _*_ -> _) source, binder)
 
+#if !FABLE_COMPILER
 
 type Join =
     inherit Default1
