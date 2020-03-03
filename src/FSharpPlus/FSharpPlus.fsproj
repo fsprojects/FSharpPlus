@@ -30,8 +30,6 @@
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../../external/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
-    <Compile Include="../../external/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
     <Compile Include="Internals.fs" />
     <Compile Include="Extensions/Option.fs" />
     <Compile Include="Extensions/Result.fs" />
@@ -53,7 +51,6 @@
     <Compile Include="TypeLevel/TypeLevelOperators.fs" />
     <Compile Include="TypeLevel/TypeBool.fs" />
     <Compile Include="TypeLevel/TypeNat.fs" />
-    <Compile Include="TypeLevel/TypeNat.Provider.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
@@ -99,10 +96,8 @@
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
     <Compile Include="Data/Matrix.fs" />
-    <Compile Include="Data/Matrix.Provider.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
-    <Compile Include="TypeProviderAssembly.fs" />
     <None Include="Samples\Collections.fsx" />
     <None Include="Samples\Split-Join.fsx" />
     <None Include="Samples\Conversions.fsx" />
@@ -113,12 +108,25 @@
     <None Include="Samples\MonadTrans.fsx" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
+
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
+
+  <!-- Add the provider dll to Nuget package -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);AddProviderToPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="AddProviderToPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.dll" />
+      <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.xml" />
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
-    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime"/>
+    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
