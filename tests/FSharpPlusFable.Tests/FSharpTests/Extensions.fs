@@ -4,6 +4,7 @@ open Testing
 open FSharpPlus
 open System.Collections.Generic
 
+open FSharpPlus.Data
 
 
 let ExtensionsTest = 
@@ -36,4 +37,13 @@ let ExtensionsTest =
                    let r1 = m1 |> Map.union m2
                    let r2 = m1 |> Map.unionWith konst m2
                    equalMap r1 r2)
-  ]
+
+
+      testCase "Bind" 
+        (fun () ->  let x = [1;2] >>= fun x -> [string x ; string (x + 1000) ]
+                    let y = { Head = 1; Tail = [2] } >>= fun x -> { Head = string x ; Tail = [string (x + 1000)] }
+                    let z = ("a", 1) >>= fun x -> (string x, x + 10)
+                    equal ["1"; "1001"; "2"; "1002"] x
+                    equal { Head = "1"; Tail = ["1001"; "2"; "1002"] } y
+                    equal ("a1", 11) z)
+]
