@@ -87,7 +87,7 @@ let runSimpleCommand com repositoryDir command =
             if msg.Length = 0 then "" else
             msg |> Seq.iter (logfn "%s")
             msg.[0]
-        with exn -> failwithf "Could not run \"git %s\".\r\nError: %s" command exn.Message
+        with exn -> failwithf "Could not run \"%s %s\" in dir: %s .\r\nError: %s" com command repositoryDir exn.Message
 
 
 
