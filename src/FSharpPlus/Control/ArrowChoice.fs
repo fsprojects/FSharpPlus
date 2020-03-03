@@ -12,6 +12,8 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
+#if !FABLE_COMPILER
+
 // ArrowChoice class ------------------------------------------------------
 
 #nowarn "0077"
@@ -27,11 +29,9 @@ type Fanin =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = (^``ArrowChoice<Choice<'U,'T>,'V>`` : (static member (|||) : _*_ -> _) f, g)
 
-#if !FABLE_COMPILER
 type Fanin with
     static member inline ``|||`` (f: '``ArrowChoice<'T,'V>``, g: '``ArrowChoice<'U,'V>``, _output: '``ArrowChoice<Choice<'U,'T>,'V>``, _mthd: Default1) = Fanin.InvokeOnInstance f g : '``ArrowChoice<Choice<'U,'T>,'V>``
     static member inline ``|||`` (_: '``ArrowChoice<'T,'V>``, _: '``ArrowChoice<'U,'V>``, _output: ^t when ^t : null and ^t : struct , _mthd: Default1) = id
-#endif
 
 
 type AcMerge =
@@ -45,11 +45,9 @@ type AcMerge =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T1,'U1>``) (g: '``ArrowChoice<'T2,'U2>``) : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` = (^``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>`` : (static member (+++) : _*_ -> _) f, g)
 
-#if !FABLE_COMPILER
 type AcMerge with
     static member inline ``+++`` (f: '``ArrowChoice<'T1,'U1>``, g: '``ArrowChoice<'T2,'U2>``, _output: '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``, _mthd: Default1) = AcMerge.InvokeOnInstance f g : '``ArrowChoice<Choice<'T2,'T1>,Choice<'U2,'U1>>``
     static member inline ``+++`` (_: '``ArrowChoice<'T1,'U1>``, _: '``ArrowChoice<'T2,'U2>``, _output: ^t when ^t : null and ^t : struct                , _mthd: Default1) = id
-#endif
 
 
 type AcLeft =
@@ -63,11 +61,10 @@ type AcLeft =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``) : (static member Left : _ -> _) f)
 
-#if !FABLE_COMPILER
 type AcLeft with
     static member inline Left (f: '``ArrowChoice<'T,'U>``, _output: '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``, _mthd: Default1) = AcLeft.InvokeOnInstance f: '``ArrowChoice<Choice<'V,'T>,Choice<'V,'U>>``
     static member inline Left (_: '``ArrowChoice<'T,'U>``, _output: ^t when ^t : null and ^t : struct            , _mthd: Default1) = id
-#endif
+
 
 type AcRight =
     inherit Default1
@@ -80,8 +77,8 @@ type AcRight =
 
     static member inline InvokeOnInstance (f: '``ArrowChoice<'T,'U>``) : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>`` = ((^``ArrowChoice<'T,'U>`` or ^``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``) : (static member Right : _ -> _) f)
 
-#if !FABLE_COMPILER
 type AcRight with
     static member inline Right (f: '``ArrowChoice<'T,'U>``, _output: '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``, _mthd: Default1) = AcRight.InvokeOnInstance f : '``ArrowChoice<Choice<'V,'T>,Choice<'U,'V>>``
     static member inline Right (_: '``ArrowChoice<'T,'U>``, _output: ^t when ^t : null and ^t : struct            , _mthd: Default1) = id
+
 #endif

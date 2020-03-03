@@ -13,7 +13,7 @@ type Cont<'r,'t> = Cont of (('t->'r)->'r)
 [<RequireQualifiedAccess>]
 module Cont =
     let run (Cont x) = x : ('T->'R)->'R
-    
+
     /// (call-with-current-continuation) calls a function with the current continuation as its argument.
     let callCC (f: ('T->Cont<'R,'U>)->_) = Cont (fun k -> run (f (fun a -> Cont(fun _ -> k a))) k)
 
@@ -43,12 +43,10 @@ type Cont<'r,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member CallCC (f: ('T -> Cont<'R,'U>) -> _) = Cont.callCC f : Cont<'R,'T>
 
-    static member inline Lift (m: '``Monad<'T>``) = Cont ((>>=) m) : ContT<'``Monad<'R>``,'T>    
+#if !FABLE_COMPILER
+    static member inline Lift (m: '``Monad<'T>``) = Cont ((>>=) m) : ContT<'``Monad<'R>``,'T>
 
-
-    #if !FABLE_COMPILER
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
-    #endif
     
     static member inline get_Ask () = lift ask             : '``ContT<'MonadReader<'R,'T>,'R>``
     static member inline Local (Cont m, f: 'R1 -> 'R2)     : ContT<_,'``MonadReader<R1,'T>,'U``> =
@@ -56,6 +54,8 @@ type Cont<'r,'t> with
     
     static member inline get_Get () = lift get          : '``ContT<'MonadState<'S, 'T>, 'S>``
     static member inline Put (x: 'S) = x |> put |> lift : '``ContT<'MonadState<'S, 'T>, unit>``
+
+#endif
 
 /// Basic operations on ContT
 module ContT =

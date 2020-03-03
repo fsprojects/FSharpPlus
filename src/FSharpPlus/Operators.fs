@@ -20,14 +20,18 @@ module Operators =
     /// Takes a function expecting a tuple of two elements and returns a function expecting two curried arguments.
     let inline curry f (x: 'T1) (y: 'T2) : 'Result = f (x, y)
     
+    #if !FABLE_COMPILER
     /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
     let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'Result) : 'T1 -> '``T2 -> ... -> 'Tn -> 'Result`` = fun t -> Curry.Invoke f t
+    #endif
 
     /// Takes a function expecting two curried arguments and returns a function expecting a tuple of two elements. Same as (<||).
     let inline uncurry f (x: 'T1, y: 'T2) : 'Result = f x y
     
+    #if !FABLE_COMPILER
     /// Takes a function expecting any N number of curried arguments and returns a function expecting a tuple of N elements.
     let inline uncurryN (f: 'T1 -> '``T2 -> ... -> 'Tn -> 'Result``) (t: (^``T1 * ^T2 * ... * ^Tn``)) = Uncurry.Invoke f t : 'Result
+    #endif
 
     /// Used in conjunction with /> to make an ad-hoc binary operator out of a function (x </f/> y).
     let inline (</) x = (|>) x
@@ -65,6 +69,8 @@ module Operators =
     let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
 
+#if !FABLE_COMPILER
+
     // Functor ----------------------------------------------------------------
 
     /// Lifts a function into a Functor.
@@ -93,12 +99,10 @@ module Operators =
 
     // Applicative ------------------------------------------------------------
 
-    #if !FABLE_COMPILER
+    
 
     /// Lifts a value into a Functor. Same as return in Computation Expressions.
     let inline result (x: 'T) : '``Functor<'T>`` = Return.Invoke x
-
-    #endif
 
     /// Apply a lifted argument to a lifted function: f <*> arg
     let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
@@ -119,8 +123,6 @@ module Operators =
     /// Apply a lifted argument to a lifted function (flipped): arg <**> f
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
-    #if !FABLE_COMPILER
-
     [<System.Obsolete("Use opt instead.")>]
     let inline optional v = Some <!> v </Append.Invoke/> result None
 
@@ -128,7 +130,6 @@ module Operators =
     /// that always succeed, wrapping the original value into an option to signify success/failure of the original alternative.
     let inline opt (v: '``Alternative<'T>``) : '``Alternative<option<'T>>`` = (Some : 'T -> _) <!> v </Append.Invoke/> result (None: option<'T>)
 
-    #endif
 
 
     // Monad -----------------------------------------------------------
@@ -151,10 +152,8 @@ module Operators =
     /// Flattens two layers of monadic information into one.
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
 
-    #if !FABLE_COMPILER
     /// Equivalent to map but only for Monads.
     let inline liftM (f: 'T->'U) (m1: '``Monad<'T>``) : '``Monad<'U>``= m1 >>= (result << f)
-    #endif
 
 
     // Monoid -----------------------------------------------------------------
@@ -181,24 +180,18 @@ module Operators =
     /// Gets a functor representing the empty value.
     let inline getEmpty () : '``Functor<'T>`` = Empty.Invoke ()
 
-    #if !FABLE_COMPILER
-
     /// A functor representing the empty value.
     [<GeneralizableValue>]
     let inline empty< ^``Functor<'T>`` when (Empty or ^``Functor<'T>``) : (static member Empty : ^``Functor<'T>`` * Empty -> ^``Functor<'T>``) > : ^``Functor<'T>`` = Empty.Invoke ()
 
-    #endif
-
     /// Combines two Alternatives
     let inline (<|>) (x: '``Functor<'T>``) (y: '``Functor<'T>``) : '``Functor<'T>`` = Append.Invoke x y
 
-    #if !FABLE_COMPILER
     /// Conditional failure of Alternative computations.
     /// If true it lifts the unit value, else it returns empty.
     ///
     /// Common uses of guard include conditionally signaling an error in an error monad and conditionally rejecting the current choice in an Alternative-based parser.
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
-    #endif
 
    
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
@@ -899,13 +892,11 @@ module Operators =
     /// Gets a value that represents the number 1 (one).
     let inline getOne () = One.Invoke ()
 
-    #if !FABLE_COMPILER
     /// A value that represents the 1 element.
     let inline one< ^Num when (One or ^Num) : (static member One : ^Num * One -> ^Num) > : ^Num = One.Invoke ()
 
     /// Divides one number by another, returns a tuple with the result and the remainder.
     let inline divRem (D: 'T) (d: 'T) : 'T*'T = DivRem.Invoke D d
-    #endif
 
     /// Gets the smallest possible value.
     let inline getMinValue () = MinValue.Invoke ()
@@ -931,7 +922,6 @@ module Operators =
     /// The pi number.
     let inline pi< ^Num when (Pi or ^Num) : (static member Pi : ^Num * Pi -> ^Num) > : ^Num = Pi.Invoke ()
 
-    #if !FABLE_COMPILER
     /// Additive inverse of the number.
     let inline negate (x: 'Num) : 'Num = x |> TryNegate.Invoke |> function Ok x -> x | Error e -> raise e
 
@@ -945,15 +935,12 @@ module Operators =
 
     /// Subtraction between two numbers. Throws an error if the result is negative on unsigned types.
     let inline subtract (x: 'Num) (y: 'Num) : 'Num = Subtract.Invoke x y
-    #endif
 
     /// Subtraction between two numbers. Returns None if the result is negative on unsigned types.
     let inline trySubtract (x: 'Num) (y: 'Num) : 'Num option = y |> TrySubtract.Invoke x |> function Ok x -> Some x | Error _ -> None
 
-    #if !FABLE_COMPILER
     /// Division between two numbers. If the numbers are not divisible throws an error.
     let inline div (dividend: 'Num) (divisor: 'Num) : 'Num = Divide.Invoke dividend divisor
-    #endif
     
     /// Division between two numbers. Returns None if the numbers are not divisible.
     let inline tryDiv (dividend: 'Num) (divisor: 'Num) : 'Num option = divisor |> TryDivide.Invoke dividend |> function Ok x -> Some x | Error _ -> None
@@ -976,14 +963,12 @@ module Operators =
     /// <returns>-1, 0, or 1 depending on the sign of the input.</returns>
     let inline signum (value: 'Num) : 'Num = Signum.Invoke value
 
-    #if !FABLE_COMPILER
     /// <summary>Sign of the given number
     ///           Works also for unsigned types. 
     /// <para/>   Rule: signum x * abs x = x </summary>
     /// <param name="value">The input value.</param>
     /// <returns>-1, 0, or 1 depending on the sign of the input.</returns>
     let inline signum' (value: 'Num) : 'Num = Signum'.Invoke value
-    #endif
 
     /// <summary> Gets the absolute value of the given number.
     /// <para/>   Rule: signum x * abs x = x </summary>
@@ -1005,13 +990,11 @@ module Operators =
     /// Reduces using alternative operator `<|>`.
     let inline choice (x: '``Foldable<'Alternative<'T>>``) = Choice.Invoke x : '``Alternative<'T>>``
 
-    #if !FABLE_COMPILER
     /// Generic filter operation for MonadZero. It returns all values satisfying the predicate, if the predicate returns false will use the empty value.
     let inline mfilter (predicate: 'T->bool) (m: '``MonadZero<'T>``) : '``MonadZero<'T>`` = m >>= fun a -> if predicate a then result a else Empty.Invoke ()
 
     /// Folds the sum of all monoid elements in the Foldable.
     let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
-    #endif
 
     /// Converts using the implicit operator. 
     let inline implicit (x: ^T) = ((^R or ^T) : (static member op_Implicit : ^T -> ^R) x) : ^R
@@ -1019,8 +1002,12 @@ module Operators =
     /// An active recognizer for a generic value parser.
     let inline (|Parse|_|) str : 'T option = tryParse str
 
+#endif
+
     /// Safely dispose a resource (includes null-checking).
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
+
+#if !FABLE_COMPILER
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =
@@ -1037,3 +1024,4 @@ module Operators =
         /// Splits the input between the two argument arrows and merge their outputs. Also known as fanin.
         let inline (|||) (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g
 
+#endif

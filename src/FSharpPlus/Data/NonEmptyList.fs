@@ -59,9 +59,12 @@ module NonEmptyList =
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
 
+    
+#if !FABLE_COMPILER
     let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
         let lst = traverse f (toList s) : '``Functor<'List<'U>>``
         (create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<NonEmptyList<'U>>``
+#endif
 
     /// <summary>Returns the average of the elements in the list.</summary>
     /// <param name="list">The input list.</param>
@@ -116,10 +119,12 @@ module NonEmptyList =
     let minBy (projection: 'T -> 'U) list = List.minBy projection (list.Head :: list.Tail)
 
     /// Equivalent to [start..stop] on regular lists.
-    let inline range (start: 'T) stop = create start (drop 1 [start..stop])
+    let inline range (start: 'T) stop = create start (List.drop 1 [start..stop])
 
+#if !FABLE_COMPILER
     /// Reduces using alternative operator `<|>`.
     let inline choice (list: NonEmptyList<'``Alt<'T>``>) = reduce (<|>) list : '``Alt<'T>``
+#endif
 
     /// Transforms a list to a NonEmptyList, returning an option to signal when the original list was empty.
     let tryOfList s =
@@ -154,11 +159,15 @@ type NonEmptyList<'t> with
 
     static member Return (x: 'a) = {Head = x; Tail = []}
     static member (<*>)  (f: NonEmptyList<'T->'U>, x: NonEmptyList<'T>) =
-        let r = NonEmptyList.toList f <*> NonEmptyList.toList x
+        let r = NonEmptyList.toList f </List.apply/> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
     static member Extract   {Head = h; Tail = _} = h : 't
+
+    #if !FABLE_COMPILER
     static member Duplicate (s: NonEmptyList<'a>, [<Optional>]_impl: Duplicate) = NonEmptyList.tails s
+    #endif
+
     static member (=>>)     (s, g) = NonEmptyList.map g (NonEmptyList.tails s) : NonEmptyList<'b>
     
 
@@ -166,16 +175,15 @@ type NonEmptyList<'t> with
 
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
 
+    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member ToList (s: NonEmptyList<'a>, [<Optional>]_impl: ToList) = NonEmptyList.toList s
+    static member ToList (s: NonEmptyList<'a>, [<Optional>]_impl: ToList) = NonEmptyList.toList s    
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToSeq (s: NonEmptyList<'a>, [<Optional>]_impl: ToSeq ) = NonEmptyList.toList s |> List.toSeq
 
-    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (s: NonEmptyList<'T>, f: 'T->'``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
-    #endif
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
         let lst = source |> NonEmptyList.toSeq |> Seq.replace oldValue newValue |> Seq.toList
@@ -190,13 +198,14 @@ type NonEmptyList<'t> with
         while e.MoveNext() && not (IsLeftZeroForAppend.Invoke res) do
             res <- Append.Invoke res e.Current
         res
+    #endif
 
 
 [<AutoOpen>]
 module NonEmptyListBuilder =
     type NelBuilder () =
         member __.Zero () = invalidOp "A NonEmptyList doesn't support the Zero operation."
-        member __.Combine (a: NonEmptyList<'T>, b) = a ++ b
-        member __.Yield  x = NonEmptyList.singleton x
-        member __.Delay expr = expr () :  NonEmptyList<'T>
+        member __.Combine (a: NonEmptyList<'T>, b) = a + b
+        member __.Yield x = NonEmptyList.singleton x
+        member __.Delay expr = expr () : NonEmptyList<'T>
     let nel = NelBuilder ()

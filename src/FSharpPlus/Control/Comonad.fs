@@ -12,6 +12,8 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
+#if !FABLE_COMPILER
+
 // Comonad class ----------------------------------------------------------
 
 type Extract =
@@ -20,10 +22,7 @@ type Extract =
     static member        Extract ((_: 'W, a: 'T)  ) = a
     static member inline Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
     static member        Extract (f: 'T Id        ) = f
-
-#if !FABLE_COMPILER
     static member        Extract (f: Task<'T>     ) = f.Result
-#endif
 
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
         let inline call_2 (_mthd: ^M, x: ^I) = ((^M or ^I) : (static member Extract : _ -> _) x)
@@ -35,10 +34,7 @@ type Extend =
     static member        (=>>) ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))        
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
     static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
-
-#if !FABLE_COMPILER
     static member        (=>>) (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith (f)
-#endif
 
     // Restricted Comonads
     static member        (=>>) (s: list<'T>     , g) = List.map  g (List.tails s) : list<'U>
@@ -65,3 +61,5 @@ type Duplicate =
     static member inline Invoke (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` =
         let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Duplicate : _*_ -> _) source, mthd)
         call (Unchecked.defaultof<Duplicate>, x, Unchecked.defaultof<'``Comonad<'Comonad<'T>>``>)
+
+#endif

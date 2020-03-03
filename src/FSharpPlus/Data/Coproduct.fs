@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus.Data
 
+#if !FABLE_COMPILER
+
 open FSharpPlus
 open FSharpPlus.Control
 
@@ -35,3 +37,5 @@ type Coproduct<'``functorL<'t>``,'``functorR<'t>``> with
         let (l, r, isL) =  a.getContents ()
         if isL then InL (Map.InvokeOnInstance f l)
         else        InR (Map.InvokeOnInstance f r)
+
+#endif

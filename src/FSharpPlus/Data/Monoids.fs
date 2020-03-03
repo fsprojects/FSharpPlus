@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus.Data
 
+#if !FABLE_COMPILER
+
 open FSharpPlus.Operators
 
 /// The dual of a monoid, obtained by swapping the arguments of append.
@@ -11,6 +13,8 @@ type Dual<'t> = Dual of 't with
 /// Basic operations on Dual
 [<RequireQualifiedAccess>]
 module Dual = let run (Dual x) = x : 'T
+
+#endif
 
 /// The monoid of endomorphisms under composition.
 [<Struct; NoEquality; NoComparison>]
@@ -35,6 +39,8 @@ type Any = Any of bool with
     static member Zero = Any false
     static member (+) (Any x, Any y) = Any (x || y)
 
+
+#if !FABLE_COMPILER
 
 /// <summary> The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
 /// <para/>   Useful for: Lens getters.
@@ -70,6 +76,7 @@ type Const<'t,'u> = Const of 't with
 module Const =
     let run (Const t) = t
 
+#endif
 
 /// Option<'T> monoid returning the leftmost non-None value.
 [<Struct>]
@@ -86,12 +93,12 @@ type Last<'t> = Last of Option<'t> with
     static member run (Last a) = a                                            : 't option
 
 
+#if !FABLE_COMPILER
+
 /// Numeric wrapper for multiplication monoid (*, 1)
 [<Struct>]
-type Mult<'a> = Mult of 'a with
-    #if !FABLE_COMPILER
+type Mult<'a> = Mult of 'a with    
     static member inline get_Zero () = Mult one
-    #endif
     static member inline (+) (Mult (x: 'n), Mult (y: 'n)) = Mult (x * y)
 
 
@@ -102,10 +109,8 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
     // Functor
     static member inline Map (Compose (x: '``FunctorF<'FunctorG<'T>>``), f: 'T->'U) = Compose (map (map f: '``FunctorG<'T>`` -> '``FunctorG<'U>``) x : '``FunctorF<'FunctorG<'U>>``)
 
-    #if !FABLE_COMPILER
     // Applicative
     static member inline Return (x: 'T) = Compose (result (result x: '``ApplicativeG<'T>``)) : Compose<'``ApplicativeF<'ApplicativeG<'T>``>
-    #endif
     static member inline (<*>) (Compose (f: '``ApplicativeF<'ApplicativeG<'T->'U>``), Compose (x: '``ApplicativeF<'ApplicativeG<'T>``)) =
         Compose ((((<*>) : '``ApplicativeG<'T->'U>`` -> '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>``) <!> f: '``ApplicativeF<'ApplicativeG<'T>->'ApplicativeG<'U>`` ) <*> x: '``ApplicativeF<'ApplicativeG<'U>``)
 
@@ -118,3 +123,5 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
 [<RequireQualifiedAccess>]
 module Compose =
     let run (Compose t) = t
+
+#endif

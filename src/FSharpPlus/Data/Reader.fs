@@ -19,8 +19,10 @@ module Reader =
     let bind (f: 'T->_ ) (Reader m) = Reader (fun r -> run (f (m r)) r)    : Reader<'R,'U>
     let apply (Reader f) (Reader x) = Reader (fun a -> f a ((x: _->'T) a)) : Reader<'R,'U>
 
+#if !FABLE_COMPILER
     /// Zips two Readers into one.
     let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = lift2 tuple2 x y      : Reader<'R, 'T * 'U>
+#endif
 
     /// Retrieves the monad environment.
     let ask = Reader id                                                    : Reader<'R,'R>
@@ -44,17 +46,22 @@ type Reader<'r,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Local (m, f: 'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
+    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Zip (x, y) = Reader.zip x y
+    static member Zip (x, y) = Reader.zip x y    
 
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke ()) : 'T
     static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
+
+    #endif
 
     static member TryWith (Reader computation, h)    = Reader (fun s -> try computation s with e -> (h e) s) : Reader<'R,'T>
     static member TryFinally (Reader computation, f) = Reader (fun s -> try computation s finally f ())
     static member Using (resource, f: _ -> Reader<'R,'T>) = Reader.TryFinally (f resource, fun () -> dispose resource)
     static member Delay (body: unit->Reader<'R,'T>)  = Reader (fun s -> Reader.run (body ()) s) : Reader<'R,'T>
 
+
+#if !FABLE_COMPILER
 
 /// Monad Transformer for Reader<'R, 'T>
 [<Struct>]
@@ -64,9 +71,9 @@ type ReaderT<'r,'``monad<'t>``> = ReaderT of ('r -> '``monad<'t>``)
 [<RequireQualifiedAccess>]
 module ReaderT =
     let  run (ReaderT x) = x : 'R -> '``Monad<'T>``
-    #if !FABLE_COMPILER
+
     let inline hoist (x: Reader<'R, 'T>) = (ReaderT << (fun a -> result << a) << Reader.run) x : ReaderT<'R, '``Monad<'T>``>
-    #endif
+
     let inline map   (f: 'T->'U) (ReaderT m: ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m)                                : ReaderT<'R, '``Monad<'U>``>
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x: _->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
 
@@ -79,9 +86,9 @@ module ReaderT =
     let lift m = ReaderT (fun _ -> m)                                                                                           : ReaderT<'R, '``Monad<'T>``>
 
 type ReaderT<'r,'``monad<'t>``> with
-    #if !FABLE_COMPILER
+
     static member inline Return (x: 'T) = ReaderT (fun _ -> result x)                                                 : ReaderT<'R, '``Monad<'T>``>
-    #endif
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: ReaderT<'R, '``Monad<'T>``>, f: 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
 
@@ -107,9 +114,7 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline CallCC (f: ('T -> ReaderT<'R, Cont<_,'U>>) -> _)               : ReaderT<'R,'``MonadCont<'C,'T>``> =
         ReaderT (fun r -> callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
           
-    #if !FABLE_COMPILER  
     static member inline get_Ask () = ReaderT result                                    : ReaderT<'R,'``Monad<'T>``>
-    #endif
     static member        Local (ReaderT m, f: _->'R2) = ReaderT (fun r -> m (f r))      : ReaderT<'R1,'``Monad<'T>``>
 
     static member inline Throw (x: 'E) = x |> throw |> ReaderT.lift                     : ReaderT<'R,'``MonadError<'E,'T>``>
@@ -122,3 +127,5 @@ type ReaderT<'r,'``monad<'t>``> with
 
     static member inline get_Get () = ReaderT.lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
     static member inline Put x      = x |> put |> ReaderT.lift : ReaderT<'R, '``MonadState<'S, unit>``>
+
+#endif

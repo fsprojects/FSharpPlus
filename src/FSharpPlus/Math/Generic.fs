@@ -3,6 +3,8 @@ namespace FSharpPlus.Math
 open FSharpPlus
 open FSharpPlus.Control
 
+#if !FABLE_COMPILER
+
 /// <summary>
 /// Generic numbers, functions and operators.
 /// By opening this module some common operators become restricted, like (+) to 'T->'T->'T
@@ -30,13 +32,11 @@ module Generic =
     /// Integer division. Same as (/) for Integral types.
     let inline div (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; a / b
 
-    #if !FABLE_COMPILER
     /// Euclidean integer division, following the mathematical convention where the mod is always positive.
     let inline divE (a: 'Integral) b : 'Integral =
         whenIntegral a
         let (a, b) = if b < 0G then (-a, -b) else (a, b)
         (if a < 0G then (a - b + 1G) else a) / b
-    #endif
 
     /// Remainder of Integer division. Same as (%).
     let inline rem (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; a % b
@@ -44,7 +44,6 @@ module Generic =
     /// Euclidean remainder of integer division, following the mathematical convention where the mod is always positive.
     let inline remE (a: 'Integral) (b: 'Integral) : 'Integral = whenIntegral a; ((a % b) + b) % b
 
-    #if !FABLE_COMPILER
     /// Euclidean division-remainder, following the mathematical convention where the mod is always positive.
     let inline divRemE D d =
         let q, r = divRem D d
@@ -52,7 +51,6 @@ module Generic =
             if d > 0G then q - 1G, r + d
             else           q + 1G, r - d
         else q, r
-    #endif
 
     /// Greatest Common Divisor.
     let inline gcd x y : 'Integral =
@@ -63,3 +61,5 @@ module Generic =
         match x, y with
         | t when t = (zero, zero) -> failwith "gcd 0 0 is undefined"
         | _                       -> loop (abs x) (abs y)
+
+#endif
