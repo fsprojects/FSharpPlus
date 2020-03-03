@@ -49,8 +49,6 @@ type ParallelArray<'t> with
     static member Return (x: 'a) = Infinite x
     #if !FABLE_COMPILER
     static member (<*>) (f: parray<'a->'b>, x: parray<_>) = ParallelArray.ap f x : parray<'b>
-    #endif
     static member inline get_Zero () = Bounded (getZero ()) : parray<'m>
-    #if !FABLE_COMPILER
     static member inline (+) (x: parray<'m>, y: parray<'m>) = lift2 plus x y : parray<'m>
     #endif

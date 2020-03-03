@@ -12,6 +12,8 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
+#if !FABLE_COMPILER
+
 // Functor class ----------------------------------------------------------
 
 type Iterate =
@@ -21,7 +23,6 @@ type Iterate =
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
-    #if !FABLE_COMPILER
     static member Iterate (x: 'T [,]     , action) = Array2D.iter action x
     static member Iterate (x: 'T [,,]    , action) = Array3D.iter action x
     static member Iterate (x: 'T [,,,]   , action) =
@@ -30,7 +31,7 @@ type Iterate =
                             for k = 0 to Array4D.length3 x - 1 do
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
-    #endif
+
     static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
     static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
@@ -52,29 +53,23 @@ type Map =
     inherit Default1
 
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value) : Lazy<'U>
-    #if !FABLE_COMPILER
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
-    #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
     static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
     static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U> (g.Invoke >> f)
     static member Map (((m: 'Monoid, a)        , f: 'T->'U), _mthd: Map) = (m, f a)
     static member Map ((x: _ []                , f: 'T->'U), _mthd: Map) = Array.map   f x
-    #if !FABLE_COMPILER
     static member Map ((x: _ [,]               , f: 'T->'U), _mthd: Map) = Array2D.map f x
     static member Map ((x: _ [,,]              , f: 'T->'U), _mthd: Map) = Array3D.map f x
     static member Map ((x: _ [,,,]             , f: 'T->'U), _mthd: Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-    #endif
     static member Map ((x: Async<_>            , f: 'T->'U), _mthd: Map) = async.Bind (x, async.Return << f)
     static member Map ((x: Result<_,'E>        , f: 'T->'U), _mthd: Map) = Result.map f x
     static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
     static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
     static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
     static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d : Dictionary<'Key,'U>
-    #if !FABLE_COMPILER
     static member Map ((x: Expr<'T>            , f: 'T->'U), _mthd: Map) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
-    #endif
     static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray (Seq.map f x) : ResizeArray<'U>
 
     // Restricted
@@ -101,16 +96,12 @@ type Map with
                                                           , f: 'T->'U), [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
 
     static member        Map ((x: seq<_>                  , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
-    #if !FABLE_COMPILER
     static member        Map ((x: IEnumerator<_>          , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
-    #endif
     static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d :> IDictionary<'Key,'U>
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.map f x : IReadOnlyDictionary<'Key,_>
     static member        Map ((x: IObservable<'T>         , f: 'T->'U), _mthd: Default2) = Observable.map f x       : IObservable<'U>
-    #if !FABLE_COMPILER
     static member inline Map ((x: '``Functor<'T>``        , f: 'T->'U), _mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
     static member inline Map ((_: ^t when ^t: null and ^t: struct, _ ), _mthd: Default1) = ()
-    #endif    
 
 
 type Unzip =
@@ -121,9 +112,7 @@ type Unzip =
     
     static member        Unzip ((source: Lazy<'T * 'U>                     , _output: Lazy<'T> * Lazy<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
 
-    #if !FABLE_COMPILER
     static member        Unzip ((source: Task<'T * 'U>                     , _output: Task<'T> * Task<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    #endif
     static member        Unzip ((source: option<'T * 'U>                   , _output: option<'T> * option<'U>                              ) , _mthd: Unzip   ) = Option.unzip source
 
     static member        Unzip ((source: list<'T * 'U>                     , _output: list<'T> * list<'U>                                  ) , _mthd: Unzip   ) = List.unzip   source
@@ -132,11 +121,9 @@ type Unzip =
     static member        Unzip (((m: 'Monoid, t: ('T * 'U))                , _output: ('Monoid * 'T) * ('Monoid * 'U)                      ) , _mthd: Unzip   ) = (m, fst t), (m, snd t)
     static member        Unzip ((source: ('T * 'U) []                      , _output: 'T []    * 'U []                                     ) , _mthd: Unzip   ) = Array.unzip  source
     
-    #if !FABLE_COMPILER
     static member        Unzip ((source: ('T * 'U) [,]                     , _output: 'T [,]   * 'U [,]                                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     static member        Unzip ((source: ('T * 'U) [,,]                    , _output: 'T [,,]  * 'U [,,]                                   ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     static member        Unzip ((source: ('T * 'U) [,,,]                   , _output: 'T [,,,] * 'U [,,,]                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    #endif
 
     static member        Unzip ((source: Async<'T * 'U>                    , _output: Async<'T> * Async<'U>                                ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     static member        Unzip ((source: Result<'T * 'U, 'E>               , _output: Result<'T,'E> * Result<'U,'E>                        ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
@@ -145,17 +132,13 @@ type Unzip =
     static member        Unzip ((source: Map<'Key, 'T * 'U>                , _output: Map<_, 'T> * Map<_, 'U>                              ) , _mthd: Unzip   ) = Map.unzip    source
     static member        Unzip ((source: Dictionary<'Key, 'T * 'U>         , _output: Dictionary<_, 'T> * Dictionary<_, 'U>                ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
 
-    #if !FABLE_COMPILER
     static member        Unzip ((source: Expr<'T * 'U>                     , _output: Expr<'T> * Expr<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    #endif
 
     static member        Unzip ((source: ResizeArray<'T * 'U>              , _output: ResizeArray<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     
     static member        Unzip ((source: seq<'T * 'U>                      , _output: seq<'T> * seq<'U>                                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     
-    #if !FABLE_COMPILER
     static member        Unzip ((source: IEnumerator<'T * 'U>              , _output: IEnumerator<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    #endif
     
     static member        Unzip ((source: IDictionary<'Key, 'T * 'U>        , _output: IDictionary<_,'T> * IDictionary<_,'U>                ) , _mthd: Unzip   ) = Dict.unzip source
     static member        Unzip ((source: IReadOnlyDictionary<'Key,'T * 'U> , _output: IReadOnlyDictionary<_,'T> * IReadOnlyDictionary<_,'U>) , _mthd: Unzip   ) = IReadOnlyDictionary.unzip source
@@ -171,9 +154,8 @@ type Unzip =
 
 type Zip =
     inherit Default1
-    #if !FABLE_COMPILER
+
     static member Zip ((x: IEnumerator<'T>            , y: IEnumerator<'U>           , _output: IEnumerator<'T*'U>           ), _mthd: Zip) = Enumerator.zip x y
-    #endif
     static member Zip ((x: seq<'T>                    , y: seq<'U>                   , _output: seq<'T*'U>                   ), _mthd: Zip) = Seq.zip        x y
     static member Zip ((x: IDictionary<'K, 'T>        , y: IDictionary<'K,'U>        , _output: IDictionary<'K,'T*'U>        ), _mthd: Zip) = Dict.zip       x y
     static member Zip ((x: IReadOnlyDictionary<'K, 'T>, y: IReadOnlyDictionary<'K,'U>, _output: IReadOnlyDictionary<'K,'T*'U>), _mthd: Zip) = IReadOnlyDictionary.zip x y
@@ -185,9 +167,7 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zip      x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip     x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip      x y
-    #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip       x y
-    #endif
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =
         let inline call_4 (a: ^a, b: ^b, c: ^c, d: ^d) = ((^a or ^b or ^c or ^d) : (static member Zip : (_*_*_)*_ -> _) (b, c, d), a)
@@ -197,11 +177,10 @@ type Zip =
     static member inline InvokeOnInstance (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` =
         ((^``ZipFunctor<'T1>`` or ^``ZipFunctor<'T2>`` or  ^``ZipFunctor<'T1 * 'T2>``) : (static member Zip : _*_ -> _) source1, source2)
 
-#if !FABLE_COMPILER
 type Zip with    
     static member inline Zip ((_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _output: ^r when ^r : null and ^r: struct), _mthd: Default1) = id
     static member inline Zip ((x: '``ZipFunctor<'T1>``            , y: '``ZipFunctor<'T2>``            , _output: '``ZipFunctor<'T1 * 'T2>``      ), _mthd: Default1) = Zip.InvokeOnInstance x y : '``ZipFunctor<'T1 * 'T2>``
-#endif
+
 
 // Bifunctor class --------------------------------------------------------
 
@@ -238,10 +217,9 @@ type MapFirst =
 
 type MapFirst with
     static member inline First (x: '``Bifunctor<'T,'V>``, f: 'T->'U, [<Optional>]_mthd: Default2) = Bimap.InvokeOnInstance f id x  : '``Bifunctor<'U,'V>``
-    #if !FABLE_COMPILER
+
     static member inline First (x: '``Bifunctor<'T,'V>``, f: 'T->'U, [<Optional>]_mthd: Default1) = MapFirst.InvokeOnInstance f x  : '``Bifunctor<'U,'V>``
     static member inline First (_: ^t when ^t: null and ^t: struct, _ : 'T->'U,  _mthd: Default1) = ()
-    #endif
 
 
 type Map with
@@ -250,10 +228,9 @@ type Map with
 
 type Bimap with
     static member inline Bimap (x: '``Bifunctor<'T,'V>``, f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Default2) = x |> MapFirst.InvokeOnInstance f |> Map.InvokeOnInstance g : '``Bifunctor<'U,'W>``
-    #if !FABLE_COMPILER
+
     static member inline Bimap (x: '``Bifunctor<'T,'V>``, f: 'T->'U, g: 'V->'W, [<Optional>]_mthd: Default1) = Bimap.InvokeOnInstance f g x                               : '``Bifunctor<'U,'W>``
     static member inline Bimap (_: ^t when ^t: null and ^t: struct, _: 'T->'U, _: 'V->'W,   _mthd: Default1) = ()
-    #endif
 
 
 // Profunctor class -------------------------------------------------------
@@ -286,9 +263,7 @@ type Contramap =
 
     static member Contramap (k: 'T -> 'C            , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = f >> k : 'U->'C
     static member Contramap (k: Func<'T, 'C>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Func<'U, 'C> (f >> k.Invoke)
-    #if !FABLE_COMPILER
-    static member Contramap (p: Predicate<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Predicate (fun x -> p.Invoke (f x))
-    #endif
+    static member Contramap (p: Predicate<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Predicate (fun x -> p.Invoke (f x))    
     static member Contramap (c: IComparer<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { new IComparer<'U> with member __.Compare (x, y) = c.Compare (f x, f y) }
     static member Contramap (c: IEqualityComparer<_>, f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { 
                     new IEqualityComparer<'U> with
@@ -297,10 +272,8 @@ type Contramap =
     
 type Contramap with
     static member inline Contramap (x: '``Profunctor<'B,'C>``, f: 'A->'B, [<Optional>]_mthd: Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
-    #if !FABLE_COMPILER
     static member inline Contramap (x: '``Contravariant<'T>``, f: 'U->'T, [<Optional>]_mthd: Default1) = Contramap.InvokeOnInstance f x: '``Contravariant<'U>``
     static member inline Contramap (_: ^t when ^t: null and ^t: struct  , _: 'A->'B,  _mthd: Default1) = ()
-    #endif
 
 
 type Map with
@@ -309,12 +282,12 @@ type Map with
 
 type Dimap with
     static member inline Dimap (x: '``Profunctor<'B,'C>``, ab: 'A->'B, cd: 'C->'D, [<Optional>]_mthd: Default2) = x |> Map.InvokeOnInstance cd |> Contramap.InvokeOnInstance ab : '``Profunctor<'A,'D>``
-    #if !FABLE_COMPILER
     static member inline Dimap (x: '``Profunctor<'B,'C>``, ab: 'A->'B, cd: 'C->'D, [<Optional>]_mthd: Default1) = Dimap.InvokeOnInstance ab cd x                                : '``Profunctor<'A,'D>``
     static member inline Dimap (_: ^t when ^t: null and ^t: struct,     _: 'T->'U, _: 'V->'W,  _mthd: Default1) = ()
-    #endif
 
 
 // Invariant functor
 
 type Invmap = static member inline Invoke (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = (^``InvariantFunctor<'T>`` : (static member Invmap : _*_*_ -> _) source, f, g) : '``InvariantFunctor<'U>``
+
+#endif

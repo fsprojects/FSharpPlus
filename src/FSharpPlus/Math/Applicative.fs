@@ -3,6 +3,8 @@ namespace FSharpPlus.Math
 open FSharpPlus
 open FSharpPlus.Control
 
+#if !FABLE_COMPILER
+
 /// <summary>Math Operators ready to use over Applicative Functors.</summary>
 module Applicative =
 
@@ -47,3 +49,5 @@ module Applicative =
     let inline (.&& ) (x: '``Functor<bool>``)     (y: bool)                   = map ((&&)/> y) x : '``Functor<bool>``
     let inline ( &&.) (x: bool)                   (y: '``Functor<bool>``)     = map ((&&)   x) y : '``Functor<bool>``
     let inline (.&&.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (&&) <!> x <*> y : '``Applicative<bool>``
+
+#endif

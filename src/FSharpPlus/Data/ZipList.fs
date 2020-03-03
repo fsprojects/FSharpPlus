@@ -36,14 +36,15 @@ type ZipList<'s> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = ZipList.zip x y
 
-    #if !FABLE_COMPILER
-    static member inline get_Zero () = result (getZero ()) : ZipList<'a>
-    #endif
-    static member inline (+) (x: ZipList<'a>, y: ZipList<'a>) = lift2 plus x y : ZipList<'a>
     static member ToSeq (ZipList x) = x
 
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
+
+    static member inline get_Zero () = result (getZero ()) : ZipList<'a>
+    static member inline (+) (x: ZipList<'a>, y: ZipList<'a>) = lift2 plus x y : ZipList<'a>
+    
     static member inline Traverse (ZipList (x: seq<'T>), f: 'T->'``Functor<'U>``) =
         let lst = traverse f x : '``Functor<List<'U>>``
         ZipList <!> lst : '``Functor<ZipList<'U>>``
-    #endif
+
+#endif

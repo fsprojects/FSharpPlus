@@ -2,6 +2,7 @@
 
 open FSharpPlus.Internals
 
+#if !FABLE_COMPILER
 
 [<AutoOpen>]
 module Parsing =
@@ -18,7 +19,6 @@ module Parsing =
 
         let formatters = [|"%b"; "%d"; "%i"; "%s"; "%u"; "%x"; "%X"; "%o"; "%e"; "%E"; "%f"; "%F"; "%g"; "%G"; "%M"; "%c"; "%A"|]
 
-        #if !FABLE_COMPILER
         let getGroups (pf: PrintfFormat<_,_,_,_,_>) s =
           let formatStr = replace "%%" "%" pf.Value
           let constants = split formatters formatStr
@@ -30,7 +30,6 @@ module Parsing =
           groups
             |> Seq.map (fun g  -> g.Value)
             |> Seq.toArray
-        #endif
         
         type ParseArray =
             static member inline ParseArray (_: 't  , _: obj) = fun (g: string []) -> (parse (g.[0])) : 't
@@ -90,7 +89,6 @@ module Parsing =
 
             static member inline TryParseArray (_: unit                        , _: TryParseArray) = fun (_: string []) -> ()
 
-            #if !FABLE_COMPILER
             static member inline TryParseArray (_: Tuple<'t1>                  , _: TryParseArray) = fun (g: string []) -> Tuple<_> <!> tryParseElemAt 0 g : Tuple<'t1> option
             static member inline TryParseArray (_: Id<'t1>                     , _: TryParseArray) = fun (g: string []) -> Id<_>    <!> tryParseElemAt 0 g
             static member inline TryParseArray (_: 't1*'t2                     , _: TryParseArray) = fun (g: string []) -> tuple2 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g
@@ -99,7 +97,6 @@ module Parsing =
             static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5        , _: TryParseArray) = fun (g: string []) -> tuple5 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g
             static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6    , _: TryParseArray) = fun (g: string []) -> tuple6 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g
             static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6*'t7, _: TryParseArray) = fun (g: string []) -> tuple7 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g <*> tryParseElemAt 6 g
-            #endif
 
 
     open Internals
@@ -108,21 +105,19 @@ module Parsing =
     /// Gets a tuple with the result of parsing each element of a string array.
     let inline parseArray (source: string[]) : '``(T1 * T2 * ... * Tn)`` = ParseArray.Invoke source
 
-    #if !FABLE_COMPILER
     /// Gets a tuple with the result of parsing each element of a formatted text.
     let inline sscanf (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` = getGroups pf s |> parseArray
 
     /// Gets a tuple with the result of parsing each element of a formatted text from the Console.
     let inline scanfn pf : '``(T1 * T2 * ... * Tn)`` = sscanf pf (Console.ReadLine ())
-    #endif
 
     /// Gets a tuple with the result of parsing each element of a string array. Returns None in case of failure.
     let inline tryParseArray g : '``(T1 * T2 * ... * Tn)`` option = TryParseArray.Invoke g
 
-    #if !FABLE_COMPILER
     /// Gets a tuple with the result of parsing each element of a formatted text. Returns None in case of failure.
     let inline trySscanf (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` option = getGroups pf s |> tryParseArray
 
     /// Gets a tuple with the result of parsing each element of a formatted text from the Console. Returns None in case of failure.
     let inline tryScanfn pf : '``(T1 * T2 * ... * Tn)`` option = trySscanf pf (Console.ReadLine ())
-    #endif
+
+#endif

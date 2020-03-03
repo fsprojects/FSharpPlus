@@ -12,6 +12,8 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
+#if !FABLE_COMPILER
+
 // Category class ---------------------------------------------------------
 
 #nowarn "0077"
@@ -27,11 +29,9 @@ type Id =
 
     static member inline InvokeOnInstance () : '``Category<'T,'T>`` = (^``Category<'T,'T>`` : (static member Id : _) ())
 
-#if !FABLE_COMPILER
 type Id with
     static member inline Id (_output:  '``Category<'T,'T>``        , _mthd: Default1) = Id.InvokeOnInstance () : '``Category<'T,'T>``
     static member inline Id (_output: ^t when ^t:null and ^t:struct, _mthd: Default1) = id                       
-#endif
 
 
 type Comp =
@@ -46,7 +46,6 @@ type Comp =
     static member inline InvokeOnInstance  (f: '``Category<'U,'V>``) (g: '``Category<'T,'U>``) : '``Category<'T,'V>`` = ( ^``Category<'T,'V>`` : (static member (<<<) : _*_ -> _) f, g)
     static member inline InvokeOnInstance' (f: '``Category<'U,'V>``) (g: '``Category<'T,'U>``) : '``Category<'T,'V>`` = ((^``Category<'U,'V>`` or ^``Category<'T,'U>``) : (static member (<<<) : _*_ -> _) f, g) : '``Category<'T,'V>``
 
-#if !FABLE_COMPILER
 type Comp with
     static member inline ``<<<`` (f: '``Category<'U,'V>``, g: '``Category<'T,'U>``, _output (* : '``Category<'T,'V>``   *) , _mthd : Default1) = Comp.InvokeOnInstance' f g : '``Category<'T,'V>``
     static member inline ``<<<`` (f: 'F, g: 'G, _, _mthd: Default1) =         
@@ -56,4 +55,5 @@ type Comp with
             ivk g i
         let _ = h f g
         Unchecked.defaultof<ComposedStaticInvokable<'F, 'G>>
+
 #endif

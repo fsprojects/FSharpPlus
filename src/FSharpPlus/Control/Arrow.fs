@@ -12,6 +12,8 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
+#if !FABLE_COMPILER
+
 // Arrow class ------------------------------------------------------------
 
 #nowarn "0077"
@@ -27,11 +29,9 @@ type Arr =
 
     static member inline InvokeOnInstance (f: 'T -> 'U) : '``Arrow<'T,'U>`` = (^``Arrow<'T,'U>`` : (static member Arr: _ -> _) f)
 
-#if !FABLE_COMPILER
 type Arr with
     static member inline Arr (f: 'T -> 'U, _output: '``Arrow<'T,'U>``                , _mthd: Default1) = Arr.InvokeOnInstance f : '``Arrow<'T,'U>``
     static member inline Arr (_: 'T -> 'U, _output: ^t when ^t : null and ^t : struct, _mthd: Default1) = id
-#endif
 
 
 type ArrFirst =
@@ -45,11 +45,9 @@ type ArrFirst =
 
     static member inline InvokeOnInstance (f: '``Arrow<'T,'U>``) : '``Arrow<('T * 'V),('U * 'V)>`` = ((^``Arrow<'T,'U>`` or ^``Arrow<('T * 'V),('U * 'V)>``) : (static member First : _ -> _) f)
 
-#if !FABLE_COMPILER
 type ArrFirst with
     static member inline First (f: '``Arrow<'T,'U>``, _output: '``Arrow<('T * 'V),('U * 'V)>``, _mthd: Default1) = ArrFirst.InvokeOnInstance f  : '``Arrow<('T * 'V),('U * 'V)>``
     static member inline First (_: ^t when ^t : null and ^t : struct  , _output               , _mthd: Default1) = id
-#endif
 
 
 type ArrSecond =
@@ -68,10 +66,9 @@ type ArrSecond with
         let arrSwap = Arr.InvokeOnInstance (fun (x, y) -> (y, x))
         Comp.InvokeOnInstance arrSwap (Comp.InvokeOnInstance (ArrFirst.InvokeOnInstance f) arrSwap)
 
-    #if !FABLE_COMPILER
     static member inline Second (f: '``Arrow<'T,'U>``, _output: '``Arrow<('V * 'T),('V * 'U)>``, _mthd: Default1) = ArrSecond.InvokeOnInstance f : '``Arrow<('V * 'T),('V * 'U)>``
     static member inline Second (_: ^t when ^t : null and ^t : struct  , _output               , _mthd: Default1) = id
-    #endif
+
 
 type ArrCombine =
     inherit Default1
@@ -86,10 +83,9 @@ type ArrCombine =
 
 type ArrCombine with
     static member inline ``***`` (f: '``Arrow<'T1,'U1>``, g: '``Arrow<'T2,'U2>``, _output: '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, _mthd: Default2) = Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f) : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
-    #if !FABLE_COMPILER
+
     static member inline ``***`` (f: '``Arrow<'T1,'U1>``, g: '``Arrow<'T2,'U2>``, _output: '``Arrow<('T1 * 'T2),('U1 * 'U2)>``, _mthd: Default1) = ArrCombine.InvokeOnInstance f g                                                    : '``Arrow<('T1 * 'T2),('U1 * 'U2)>``
     static member inline ``***`` (_: '``Arrow<'T1,'U1>``, _: '``Arrow<'T2,'U2>``, _output: ^t when ^t : null and ^t : struct  , _mthd: Default1) = id
-    #endif
 
 
 type Fanout =
@@ -106,7 +102,8 @@ type Fanout =
 type Fanout with
     static member inline ``&&&`` (f: '``Arrow<'T,'U1>``, g: '``Arrow<'T,'U2>``, _output: '``Arrow<'T,('U1 * 'U2)>``,    _mthd: Default3) = Comp.InvokeOnInstance (Comp.InvokeOnInstance (ArrSecond.InvokeOnInstance g) (ArrFirst.InvokeOnInstance f)) (Arr.InvokeOnInstance (fun b -> (b, b))) : '``Arrow<'T,('U1 * 'U2)>``
     static member inline ``&&&`` (f: '``Arrow<'T,'U1>``, g: '``Arrow<'T,'U2>``, _output: '``Arrow<'T,('U1 * 'U2)>``,    _mthd: Default2) = Comp.InvokeOnInstance (ArrCombine.InvokeOnInstance f g) (Arr.InvokeOnInstance (fun b -> (b, b)))                                                    : '``Arrow<'T,('U1 * 'U2)>``
-    #if !FABLE_COMPILER
+
     static member inline ``&&&`` (f: '``Arrow<'T,'U1>``, g: '``Arrow<'T,'U2>``, _output: '``Arrow<'T,('U1 * 'U2)>``,    _mthd: Default1) = Fanout.InvokeOnInstance f g                                                                                                                         : '``Arrow<'T,('U1 * 'U2)>``
     static member inline ``&&&`` (_: '``Arrow<'T,'U1>``, _: '``Arrow<'T,'U2>``, _output: ^t when ^t:null and ^t:struct, _mthd: Default1) = id
-    #endif
+
+#endif
