@@ -1,6 +1,6 @@
 namespace FSharpPlus.Data
 
-#if !FABLE_COMPILER
+
 
 open System.ComponentModel
 
@@ -85,4 +85,3 @@ type Free<'``functor<'t>``,'t> with
     static member inline (<*>) (f: Free<'``Functor<'T->'U>``,'T->'U>, x: Free<'``Functor<'T>``,'T>) = Free.apply f x : Free<'``Functor<'U>``,'U>
     static member        Delay (x: unit -> Free<'``Functor<'T>``,'T>) = x ()
 
-#endif
