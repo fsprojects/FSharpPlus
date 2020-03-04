@@ -46,4 +46,14 @@ let ExtensionsTest =
                     equal ["1"; "1001"; "2"; "1002"] x
                     equal { Head = "1"; Tail = ["1001"; "2"; "1002"] } y
                     equal ("a1", 11) z)
+
+      testCase "Comonad" 
+        (fun () ->  let x = [1;2;3;4;5]
+                    let y = { Head = 1 ; Tail = [2;3;4;5] }
+                    equal (List.head x) 1
+                    equal (y.Head) 1
+                    equal (duplicate x) [[1; 2; 3; 4; 5]; [2; 3; 4; 5]; [3; 4; 5]; [4; 5]; [5]]
+                    equal (duplicate y) { Head = { Head = 1; Tail = [2; 3; 4; 5] }; Tail = [{ Head = 2; Tail = [3; 4; 5] }; { Head = 3; Tail = [4; 5] }; { Head = 4; Tail = [5] }; { Head = 5; Tail = [] }] }
+                    equal (extend List.head x) x
+                    equal (extend (fun x -> x.Head) y) y)
 ]
