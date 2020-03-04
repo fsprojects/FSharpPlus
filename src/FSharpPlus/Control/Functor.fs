@@ -285,9 +285,8 @@ type Dimap with
     static member inline Dimap (x: '``Profunctor<'B,'C>``, ab: 'A->'B, cd: 'C->'D, [<Optional>]_mthd: Default1) = Dimap.InvokeOnInstance ab cd x                                : '``Profunctor<'A,'D>``
     static member inline Dimap (_: ^t when ^t: null and ^t: struct,     _: 'T->'U, _: 'V->'W,  _mthd: Default1) = ()
 
+#endif
 
 // Invariant functor
 
 type Invmap = static member inline Invoke (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = (^``InvariantFunctor<'T>`` : (static member Invmap : _*_*_ -> _) source, f, g) : '``InvariantFunctor<'U>``
-
-#endif

@@ -134,7 +134,7 @@ module Operators =
 
     // Monad -----------------------------------------------------------
     
-#endif
+    #endif
 
     /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
     let inline bind (f:'T->'``Monad<'U>``) (x:'``Monad<'T>``) :'``Monad<'U>`` = Bind.Invoke x f
@@ -158,7 +158,7 @@ module Operators =
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Bind.Invoke x id
     #endif
 
-#if !FABLE_COMPILER
+    #if !FABLE_COMPILER
 
     /// Equivalent to map but only for Monads.
     let inline liftM (f: 'T->'U) (m1: '``Monad<'T>``) : '``Monad<'U>``= m1 >>= (result << f)
@@ -225,9 +225,13 @@ module Operators =
     /// Maps over the right part of a Profunctor.
     let inline rmap (f: 'C->'D) (source: '``Profunctor<'B,'C>``) : '``Profunctor<'B,'D>`` = Map.Invoke f source
 
+    #endif
+
     /// Maps a pair of functions over an Invariant Functor
     let inline invmap (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = Invmap.Invoke f g source : '``InvariantFunctor<'U>``
 
+
+    #if !FABLE_COMPILER
 
     // Category ---------------------------------------------------------------
 
