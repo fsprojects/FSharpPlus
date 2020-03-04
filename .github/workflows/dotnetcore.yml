@@ -21,5 +21,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+    - run: npx fable-splitter --allFiles
     - run: npm install -g fable-splitter fable-compiler
     - run: cd tests/FSharpPlusFable.Tests; npm install; npm run buildFSharpPlus; npm run test
