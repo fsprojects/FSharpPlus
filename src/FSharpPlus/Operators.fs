@@ -69,7 +69,7 @@ module Operators =
     let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
 
-#if !FABLE_COMPILER
+    #if !FABLE_COMPILER
 
     // Functor ----------------------------------------------------------------
 
@@ -527,6 +527,8 @@ module Operators =
 
     // Comonads
 
+    #endif
+
     /// Extracts a value from a comonadic context.
     let inline extract (x: '``Comonad<'T>``) : 'T = Extract.Invoke x
 
@@ -538,8 +540,14 @@ module Operators =
     let inline (=>>) (s: '``Comonad<'T>``) (g: '``Comonad<'T>``->'U) : '``Comonad<'U>`` = Extend.Invoke g s
 
     /// Duplicates a comonadic context.
+    #if !FABLE_COMPILER
     let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x
+    #else
+    let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Extend.Invoke id x
+    #endif
 
+
+    #if !FABLE_COMPILER
 
     // Monad Transformers
 
@@ -1010,12 +1018,12 @@ module Operators =
     /// An active recognizer for a generic value parser.
     let inline (|Parse|_|) str : 'T option = tryParse str
 
-#endif
+    #endif
 
     /// Safely dispose a resource (includes null-checking).
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
 
-#if !FABLE_COMPILER
+    #if !FABLE_COMPILER
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =
@@ -1032,4 +1040,4 @@ module Operators =
         /// Splits the input between the two argument arrows and merge their outputs. Also known as fanin.
         let inline (|||) (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g
 
-#endif
+    #endif
