@@ -1,7 +1,11 @@
 namespace FSharpPlus.Data
 
 open FSharpPlus
+
+#if !FABLE_COMPILER
 open FSharpPlus.Lens
+#endif
+
 open FSharpPlus.Data
 open System.ComponentModel
 
@@ -34,7 +38,11 @@ module Validation =
     /// <returns>A Success of the function applied to the value when both are Success, or the Failure(s) if more than one, combined with the Semigroup (++) operation of the Error type.</returns>
     let inline apply f x : Validation<'Error,'U> =
         match f, (x: Validation<'Error,'T>) with
+        #if !FABLE_COMPILER
         | Failure e1, Failure e2 -> Failure (plus e1 e2)
+        #else
+        | Failure e1, Failure e2 -> Failure (e1 + e2)
+        #endif
         | Failure e1, Success _  -> Failure e1
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
@@ -153,11 +161,12 @@ module Validation =
             Success (f x)
         with e -> Failure e
 
-
+    #if !FABLE_COMPILER
     let inline _Success x = (prism Success <| either Ok (Error << Failure)) x
-    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x
+    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x    
     
     let inline isoValidationResult x = x |> iso toResult ofResult
+    #endif
 
 
 type Validation<'err,'a> with
@@ -166,9 +175,11 @@ type Validation<'err,'a> with
     static member Return x = Success x
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
 
+    #if !FABLE_COMPILER
     // as Alternative (inherits from Applicative)
     static member inline get_Empty () = Failure (getEmpty ())
     static member inline (<|>) (x: Validation<_,_>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
+    #endif
 
     // as Functor
     [<EditorBrowsable(EditorBrowsableState.Never)>]

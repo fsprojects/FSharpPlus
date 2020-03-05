@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus.Data
 open System.ComponentModel
+
 /// <summary> Computation type: Computations which produce a stream of data in addition to the computed values.
 /// <para/>   Binding strategy: Combines the outputs of the subcomputations using <c>mappend</c>.
 /// <para/>   Useful for: Logging, or other computations that produce output "on the side". </summary>
@@ -17,8 +18,14 @@ module Writer =
     let run (Writer x) = x : 'T * 'Monoid
 
     let map f (Writer (a: 'T, w)) = Writer (f a, w)                                            : Writer<'Monoid,'U>
+    
+    #if !FABLE_COMPILER
     let inline bind f (Writer (a: 'T, w)) = Writer (let (b, w') = run (f a) in (b, plus w w')) : Writer<'Monoid,'U>
     let inline apply  (Writer (f, a)) (Writer (x: 'T, b))       = Writer (f x, plus a b)       : Writer<'Monoid,'U>
+    #else
+    let inline bind f (Writer (a: 'T, w)) = Writer (let (b, w') = run (f a) in (b, w + w')) : Writer<'Monoid,'U>
+    let inline apply  (Writer (f, a)) (Writer (x: 'T, b))       = Writer (f x, a + b)       : Writer<'Monoid,'U>
+    #endif
 
     /// Extract the output from a writer computation.
     let exec (Writer m:Writer<'Monoid,'T>) = snd m : 'Monoid
@@ -39,7 +46,12 @@ type Writer<'monoid,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Map   (x, f: 'T->_) = Writer.map f x           : Writer<'Monoid,'U>
 
+    #if !FABLE_COMPILER
     static member inline Return x = Writer (x, getZero ())              : Writer<'Monoid,'T>
+    #else
+    static member inline Return x = Writer (x, LanguagePrimitives.GenericZero) : Writer<'Monoid,'T>
+    #endif
+
     static member inline (>>=) (x, f: 'T->_) = Writer.bind f x          : Writer<'Monoid,'U>
     static member inline (<*>) (f, x: Writer<_,'T>) = Writer.apply f x  : Writer<'Monoid,'U>
 
@@ -49,6 +61,8 @@ type Writer<'monoid,'t> with
 
     static member        Extract (Writer (_: 'W, a: 'T)) = a
     static member        (=>>)   (Writer (w: 'W, _: 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
+
+#if !FABLE_COMPILER
 
 open FSharpPlus.Control
 
@@ -62,39 +76,31 @@ module WriterT =
 
     let run (WriterT x) = x : '``Monad<'T * 'Monoid>``
 
-    #if !FABLE_COMPILER
     /// Embed a Monad<'T> into a WriterT<'Monad<'T * 'Monoid>>
     let inline lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> =
         if opaqueId false then m |> liftM (fun a -> (a, getZero ())) |> WriterT
         else m |> map (fun a -> (a, getZero ())) |> WriterT
-    #endif
 
     let inline map (f: 'T->'U) (WriterT m:WriterT<'``Monad<'T * 'Monoid>``>) =
         let mapWriter f (a, m) = (f a, m)
         WriterT (map (mapWriter f) m) : WriterT<'``Monad<'U * 'Monoid>``>
 
-    #if !FABLE_COMPILER
     let inline apply (WriterT f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) (WriterT x : WriterT<'``Monad<'T * 'Monoid>``>) =
         let applyWriter (a, w) (b, w') = (a b, plus w w')
         WriterT (result applyWriter <*> f <*> x) : WriterT<'``Monad<'U * 'Monoid>``>
         
     let inline bind (f: 'T->WriterT<'``Monad<'U * 'Monoid>``>) (WriterT (m: '``Monad<'T * 'Monoid>``)) = 
         WriterT (m >>= (fun (a, w) -> run (f a) >>= (fun (b, w') -> result (b, plus w w'))))  : WriterT<'``Monad<'U * 'Monoid>``>
-    #endif
 
 type WriterT<'``monad<'t * 'monoid>``> with
 
-    #if !FABLE_COMPILER
     static member inline Return (x: 'T) = WriterT (result (x, getZero ())) : WriterT<'``Monad<'T * 'Monoid>``>
-    #endif
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> 'U)                                   = WriterT.map   f x : WriterT<'``Monad<'U * 'Monoid>``>
 
-    #if !FABLE_COMPILER
     static member inline (<*>) (f: WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x: WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline (>>=) (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> _)                                    = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>
-    #endif
 
     static member inline get_Empty () = WriterT (getEmpty ()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
     static member inline (<|>) (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>
@@ -104,14 +110,12 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline Using (resource, f: _ -> WriterT<'``Monad<'T * 'Monoid>``>)    = WriterT (Using.Invoke resource (WriterT.run << f))
     static member inline Delay (body : unit   ->  WriterT<'``Monad<'T * 'Monoid>``>)    = WriterT (Delay.Invoke (fun _ -> WriterT.run (body ()))) : WriterT<'``Monad<'T * 'Monoid>``>
 
-    #if !FABLE_COMPILER
     static member inline Tell   (w: 'Monoid) = WriterT (result ((), w))                                                                                        : WriterT<'``Monad<unit * 'Monoid>``>
     static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w))) : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
     static member inline Pass   (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))                          : WriterT<'``Monad<'T * 'Monoid>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT.lift m
-    #endif
     
     static member inline LiftAsync (x: Async<'T>) = WriterT.lift (liftAsync x) : WriterT<'``MonadAsync<'T>``>
 
@@ -127,3 +131,5 @@ type WriterT<'``monad<'t * 'monoid>``> with
 
     static member inline get_Get () = WriterT.lift get          : WriterT<'``MonadState<'S,'S*'Monoid>``>
     static member inline Put (x: 'S) = x |> put |> WriterT.lift : WriterT<'``MonadState<'S,unit*'Monoid>``>
+
+#endif

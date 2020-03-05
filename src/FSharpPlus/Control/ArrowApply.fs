@@ -12,6 +12,8 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
+#if !FABLE_COMPILER
+
 // ArrowApply class -------------------------------------------------------
 
 type App =
@@ -25,8 +27,8 @@ type App =
 
     static member inline InvokeOnInstance () : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` = (^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` : (static member App : _) ())
 
-#if !FABLE_COMPILER
 type App with
     static member inline App (_output: '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``, _mthd: Default1) = App.InvokeOnInstance () : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
     static member inline App (_output: ^t when ^t : null and ^t : struct              , _mthd: Default1) = id
+
 #endif

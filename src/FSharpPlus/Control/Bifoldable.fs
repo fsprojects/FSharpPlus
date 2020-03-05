@@ -5,6 +5,8 @@ namespace FSharpPlus.Control
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
 
+#if !FABLE_COMPILER
+
 type BifoldMap =
     inherit Default1
 
@@ -77,3 +79,5 @@ type Bisum with
     static member inline Bisum (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default2) = BifoldMap.InvokeOnInstance id id x : 'T
     static member inline Bisum (x: '``Bifoldable<'T,'T>``, [<Optional>]_impl: Default1) = Bisum.InvokeOnInstance x : 'T
     static member inline Bisum (_: '``Bifoldable<'T,'T>`` when '``Bifoldable<'T,'T>`` : null and '``Bifoldable<'T,'T>``: struct, _: Default1) = ()
+
+#endif

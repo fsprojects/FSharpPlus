@@ -1,5 +1,7 @@
 namespace FSharpPlus.Control
 
+#if !FABLE_COMPILER
+
 open System
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
@@ -15,10 +17,10 @@ open FSharpPlus
 type Empty =
     inherit Default1
     static member        Empty ([<Optional>]_output: seq<'T>             , [<Optional>]_mthd: Default2) = Seq.empty    : seq<'T>
-    #if !FABLE_COMPILER
+
     static member inline Empty ([<Optional>]_output: '``Alternative<'T>``, [<Optional>]_mthd: Default1) = (^``Alternative<'T>`` : (static member Empty : ^``Alternative<'T>``) ()) : '``Alternative<'T>``
     static member inline Empty (_output: ^t when ^t: null and ^t: struct ,             _mthd: Default1) = id    
-    #endif
+
     static member        Empty ([<Optional>]_output: option<'T>          , [<Optional>]_mthd: Empty   ) = None         : option<'T>
     static member        Empty ([<Optional>]_output: list<'T>            , [<Optional>]_mthd: Empty   ) = [  ]         : list<'T>
     static member        Empty ([<Optional>]_output: 'T []               , [<Optional>]_mthd: Empty   ) = [||]         : 'T []    
@@ -33,10 +35,10 @@ type Empty =
 type Append =
     inherit Default1
     static member        ``<|>`` (x: 'T seq              , y              , [<Optional>]_mthd: Default2) = Seq.append   x y
-    #if !FABLE_COMPILER
+
     static member inline ``<|>`` (x: '``Alt<'T>``        , y: '``Alt<'T>``, [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member (<|>) : _*_ -> _) x, y) : '``Alt<'T>``
     static member inline ``<|>`` (_: ^t when ^t: null and ^t: struct   , _,             _mthd: Default1) = ()
-    #endif
+
     static member inline ``<|>`` (x: Result<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x, y with Ok _        , _ -> x | Error x     , Error y      -> Error      (Plus.Invoke x y) | _, _ -> y
     static member inline ``<|>`` (x: Choice<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x, y with Choice1Of2 _, _ -> x | Choice2Of2 x, Choice2Of2 y -> Choice2Of2 (Plus.Invoke x y) | _, _ -> y
     static member inline ``<|>`` (x: Either<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x with Left _ -> y | xs -> xs
@@ -121,3 +123,5 @@ type Choice =
     static member inline Invoke (x: '``Foldable<'Alternative<'T>>``) : '``Alternative<'T>>`` =
         let inline call (mthd: ^M, input1: ^I) = ((^M or ^I) : (static member Choice : _*_ -> _) (ref input1, mthd))
         call (Unchecked.defaultof<Choice>, x)
+
+#endif

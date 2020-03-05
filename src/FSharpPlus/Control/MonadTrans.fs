@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus.Control
 
+#if !FABLE_COMPILER
+
 open FSharpPlus.Internals
 open FSharpPlus
 open FSharpPlus.Internals.MonadOps
@@ -18,9 +20,7 @@ type LiftAsync =
         call Unchecked.defaultof<LiftAsync> x
 
     static member inline LiftAsync (_: 'R) = fun (x: Async<'T>) -> (^R : (static member LiftAsync : _ -> ^R) x)
-    #if !FABLE_COMPILER
     static member inline LiftAsync (_: ^t when ^t: null and ^t: struct) = ()
-    #endif
     static member        LiftAsync (_: Async<'T>) = fun (x: Async<'T>) -> x
 
 
@@ -32,10 +32,8 @@ type Throw =
         let inline call (a: 'a, x: 'x) = call_2 (a, Unchecked.defaultof<'r>, x) : 'r
         call (Unchecked.defaultof<Throw>, x)
 
-    #if !FABLE_COMPILER
     static member inline Throw (_: 'R, x: 'E) = (^R : (static member Throw : _ -> ^R) x)
     static member inline Throw (_: ^t when ^t: null and ^t: struct, _) = id
-    #endif
     static member        Throw (_: Result<'T,'E>, x: 'E) = Error x     : Result<'T,'E>
     static member        Throw (_: Choice<'T,'E>, x: 'E) = Choice2Of2 x: Choice<'T,'E>
 
@@ -70,3 +68,5 @@ type Local = static member inline Invoke (f: 'R1->'R2) (m: ^``MonadReader<'R2,'T
 type Tell   = static member inline Invoke (w: 'Monoid)                                               : '``MonadWriter<'Monoid,unit>``           = (^``MonadWriter<'Monoid,unit>``           : (static member Tell   : _ -> _) w)
 type Listen = static member inline Invoke (m: '``MonadWriter<'Monoid,'T>``)                          : '``MonadWriter<'Monoid,('T * 'Monoid)>`` = (^``MonadWriter<'Monoid,('T * 'Monoid)>`` : (static member Listen : _ -> _) m)
 type Pass   = static member inline Invoke (m: '``MonadWriter<'Monoid,('T * ('Monoid -> 'Monoid))>``) : '``MonadWriter<'Monoid,'T>``             = (^``MonadWriter<'Monoid,'T>``             : (static member Pass   : _ -> _) m)
+
+#endif

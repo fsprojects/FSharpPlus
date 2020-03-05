@@ -1,3 +1,18 @@
+#### 1.1.0-RC3  - March 5 2020
+* Retarget Fable compilation to Extensions, some types from Data and abstractions Comonad, Invariant and Bind
+* Lens new functions: choosed and non
+* Fix: _item (from Lens)
+* Generic choice function made extensible and already working with semigroups
+* More operations on NonEmptyList and nel builder
+* Added missing operations for Computation Expressions to some types
+* Fix: signature for curry, uncurry and State.modify
+* Fix: traverse operation when derived from sequence operation
+* Short-circuit mechanism for Traversable and Alternatives
+* More extension functions: Result.bindError, Choice.bindChoice2Of2 and Array.apply
+* Fix and rename optional function to opt
+* Rename liftA2 to lift2
+* More ZipFunctor instances and better Unzip internals
+
 #### 1.1.0-RC2  - January 25 2020
 * Some tweaks to Free (internals)
 * Add functions gets and modify for stateful computations

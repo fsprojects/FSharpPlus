@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus
 
+#if !FABLE_COMPILER
+
 open FSharpPlus.Operators
 open FSharpPlus.Data
 
@@ -147,12 +149,10 @@ module Lens =
     /// Prism providing a Traversal for targeting the 'None' part of an Option<'T>
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
 
-    #if !FABLE_COMPILER
     // Traversal
     let inline _all ref f s =
         let update old = if old = ref then f old else Return.InvokeOnInstance old
         traverse update s
-    #endif
 
     // functions
     let inline to' k = dimap k (Contramap.InvokeOnInstance k)
@@ -187,6 +187,10 @@ module Lens =
     let inline items x = traverse x
 
     let inline filtered p f s = if p s then f s else Return.InvokeOnInstance s
+    let inline choosed p f s =
+        match p s with
+        | Some x -> f x
+        | None -> Return.InvokeOnInstance s
     let inline both f (a, b) = tuple2 </Map.InvokeOnInstance/> f a </Apply.InvokeOnInstance/> f b
 
     let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run << bt)
@@ -227,3 +231,5 @@ module Lens =
     /// <param name="f">The mapper function.</param>
     /// <returns>The mapped Functor.</returns>
     let inline (<&>) (x: '``F<'t>``) (f: 't -> 'u) : '``F<'u>`` = Map.InvokeOnInstance f x
+
+#endif

@@ -6,11 +6,11 @@ open System.ComponentModel
 open FSharpPlus.Internals.Prelude
 
 #if !FABLE_COMPILER
+
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
 module Option =
-    let inline traverse f = function Some x -> Map.Invoke Some (f x) | _ -> result None   
-#endif
+    let inline traverse f = function Some x -> Map.Invoke Some (f x) | _ -> result None
 
 /// Monad Transformer for Option<'T>
 [<Struct>]
@@ -20,8 +20,6 @@ type OptionT<'``monad<option<'t>>``> = OptionT of '``monad<option<'t>>``
 [<RequireQualifiedAccess>]
 module OptionT =
     let run   (OptionT m) = m : '``Monad<option<'T>>``
-
-    #if !FABLE_COMPILER
 
     /// Embed a Monad<'T> into an OptionT<'Monad<option<'T>>>
     let inline lift (x: '``Monad<'T>``) : OptionT<'``Monad<option<'T>>``> =
@@ -34,10 +32,9 @@ module OptionT =
     let inline bind (f: 'T-> OptionT<'``Monad<option<'U>``>) (OptionT m: OptionT<'``Monad<option<'T>``>)             = (OptionT <| (m  >>= (fun maybe_value -> match maybe_value with Some value -> run (f value) | _ -> result None)))
     let inline apply (OptionT f: OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x: OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x) : OptionT<'``Monad<option<'U>``>
     let inline map  (f: 'T->'U) (OptionT m: OptionT<'``Monad<option<'T>``>)                                          = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
-    #endif
 
 type OptionT<'``monad<option<'t>>``> with
-    #if !FABLE_COMPILER
+    
     static member inline Return (x: 'T) = Some x |> result |> OptionT                                                        : OptionT<'``Monad<seq<'T>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -47,18 +44,15 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline (>>=)  (x: OptionT<'``Monad<seq<'T>``>, f: 'T -> OptionT<'``Monad<seq<'U>``>)   = OptionT.bind  f x
 
     static member inline get_Empty () = OptionT <| result None : OptionT<'``MonadPlus<option<'T>``>
-    static member inline (<|>) (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> result (Some value) | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>
-    #endif
+    static member inline (<|>) (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> result (Some value) | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>    
 
     static member inline TryWith (source: OptionT<'``Monad<option<'T>>``>, f: exn -> OptionT<'``Monad<option<'T>>``>) = OptionT (TryWith.Invoke (OptionT.run source) (OptionT.run << f))
     static member inline TryFinally (computation: OptionT<'``Monad<option<'T>>``>, f) = OptionT (TryFinally.Invoke     (OptionT.run computation) f)
     static member inline Using (resource, f: _ -> OptionT<'``Monad<option<'T>>``>)    = OptionT (Using.Invoke resource (OptionT.run << f))
     static member inline Delay (body : unit   ->  OptionT<'``Monad<option<'T>>``>)    = OptionT (Delay.Invoke (fun _ -> OptionT.run (body ()))) : OptionT<'``Monad<option<'T>>``>
 
-    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (x: '``Monad<'T>``) : OptionT<'``Monad<option<'T>>``> = OptionT.lift x
-    #endif
 
     static member inline LiftAsync (x : Async<'T>) = OptionT.lift (liftAsync x) : OptionT<'``MonadAsync<'T>``>
 
@@ -74,10 +68,11 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline Local (OptionT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = OptionT (local f m)
 
     static member inline Tell (w: 'Monoid) = w |> tell |> OptionT.lift : OptionT<'``MonadWriter<'Monoid, unit>``>
-    #if !FABLE_COMPILER
+
     static member inline Listen m                              : OptionT<'``'MonadWriter<'Monoid, option<'T>>``> =
         let liftMaybe (m, w) = Option.map (fun x -> (x, w)) m
         OptionT (listen (OptionT.run m) >>= (result << liftMaybe))
 
     static member inline Pass m : OptionT<'``MonadWriter<'Monoid, option<'T>>``> = OptionT (OptionT.run m >>= option (map Some << pass << result) (result None))
-    #endif
+
+#endif

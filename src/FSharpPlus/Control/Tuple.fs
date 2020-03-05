@@ -6,6 +6,7 @@ open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
 
+#if !FABLE_COMPILER
 
 type Item1 = static member inline Invoke value = (^t : (member Item1 : _) value)
 type Item2 = static member inline Invoke value = (^t : (member Item2 : _) value)
@@ -26,9 +27,7 @@ type MapItem1 =
         let x1 = (^t : (member Item1: 't1) t)
         Tuple<_,_,_,_,_,_,_,_> (fn x1, x2, x3, x4, x5, x6, x7, xr)
 
-    #if !FABLE_COMPILER
     static member MapItem1 ( x: Tuple<_>         , fn) = Tuple<_> (fn x.Item1)
-    #endif
     static member MapItem1 ((a, b)               , fn) = (fn a, b)
     static member MapItem1 ((a, b, c)            , fn) = (fn a, b, c)
     static member MapItem1 ((a, b, c, d)         , fn) = (fn a, b, c, d)
@@ -147,10 +146,8 @@ type Curry =
         Curry.Invoke (fun tr ->
             let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
             f (Tuple<'t1,'t2,'t3,'t4,'t5,'t6,'t7,'tr> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype))
-
-    #if !FABLE_COMPILER
+    
     static member Curry (_: Tuple<'t1>        , _: Curry) = fun f t1                   -> f (Tuple<_> t1)
-    #endif
     static member Curry ((_, _)               , _: Curry) = fun f t1 t2                -> f (t1, t2)
     static member Curry ((_, _, _)            , _: Curry) = fun f t1 t2 t3             -> f (t1, t2, t3)
     static member Curry ((_, _, _, _)         , _: Curry) = fun f t1 t2 t3 t4          -> f (t1, t2, t3, t4)
@@ -174,9 +171,7 @@ type Uncurry =
         let (t1: 't1) = (^t : (member Item1 : 't1) t)
         Uncurry.Invoke (f t1 t2 t3 t4 t5 t6 t7) tr
 
-    #if !FABLE_COMPILER
     static member Uncurry (x: Tuple<'t1>               , _: Uncurry) = fun f -> f x.Item1
-    #endif
     static member Uncurry ((t1, t2)                    , _: Uncurry) = fun f -> f t1 t2
     static member Uncurry ((t1, t2, t3)                , _: Uncurry) = fun f -> f t1 t2 t3
     static member Uncurry ((t1, t2, t3, t4)            , _: Uncurry) = fun f -> f t1 t2 t3 t4
@@ -262,3 +257,4 @@ type ArrayToTuple =
   static member inline ArrayToTuple (xs:_[], S (S (S (S (S (S Z))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5])
   static member inline ArrayToTuple (xs:_[], S (S (S (S (S (S (S Z)))))), i) = (xs.[i], xs.[i+1], xs.[i+2], xs.[i+3], xs.[i+4], xs.[i+5], xs.[i+6])
 
+#endif

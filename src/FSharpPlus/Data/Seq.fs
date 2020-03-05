@@ -1,10 +1,11 @@
 ﻿namespace FSharpPlus.Data
 
+#if !FABLE_COMPILER
+
 open FSharpPlus
 open System.ComponentModel
 open FSharpPlus.Internals.Prelude
 
-#if !FABLE_COMPILER
 /// Additional operations on Seq
 module Seq =
 
@@ -13,7 +14,6 @@ module Seq =
     let inline traverse (f: 'T->'``Applicative<'U>``) (xs: seq<'T>) : '``Applicative<seq<'U>>`` = traverse f xs
 
     let inline replicateM count (initial: '``Applicative<'T>``) = sequence (Seq.replicate count initial)
-#endif
 
 
 open FSharpPlus.Control
@@ -27,7 +27,6 @@ type SeqT<'``monad<seq<'t>>``> = SeqT of '``monad<seq<'t>>``
 module SeqT =
     let run (SeqT m) = m
 
-    #if !FABLE_COMPILER
     /// Embed a Monad<'T> into a SeqT<'Monad<seq<'T>>>
     let inline lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> =
            if opaqueId false then x |> liftM Seq.singleton |> SeqT
@@ -42,11 +41,9 @@ module SeqT =
     let inline bind (f: 'T-> SeqT<'``Monad<seq<'U>``>) (SeqT m: SeqT<'``Monad<seq<'T>``>)          = SeqT (m >>= (mapM : _->seq<_>->_) (run << f) >>= ((Seq.concat: seq<seq<_>>->_) >> result))
     let inline apply (SeqT f: SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x: SeqT<'``Monad<seq<'T>``>) = SeqT (map (Seq.apply : seq<_->_>->seq<_>->seq<_>) f <*> x) : SeqT<'``Monad<seq<'U>``>
     let inline map (f: 'T->'U) (SeqT m: SeqT<'``Monad<seq<'T>``>)                                  = SeqT <| map (Seq.map f : (seq<_>->_)) m                    : SeqT<'``Monad<seq<'U>``>
-    #endif
 
 type SeqT<'``monad<seq<'t>>``> with
 
-    #if !FABLE_COMPILER
     static member inline Return (x: 'T) = x |> Seq.singleton |> result |> SeqT                                     : SeqT<'``Monad<seq<'T>``>
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: SeqT<'``Monad<seq<'T>``>, f: 'T->'U) = SeqT.map f x                             : SeqT<'``Monad<seq<'U>``>
@@ -56,14 +53,12 @@ type SeqT<'``monad<seq<'t>>``> with
 
     static member inline get_Empty () = SeqT <| result Seq.empty : SeqT<'``MonadPlus<seq<'T>``>
     static member inline (<|>) (SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>
-    #endif
 
     static member inline TryWith (source: SeqT<'``Monad<seq<'T>>``>, f: exn -> SeqT<'``Monad<seq<'T>>``>) = SeqT (TryWith.Invoke (SeqT.run source) (SeqT.run << f))
     static member inline TryFinally (computation: SeqT<'``Monad<seq<'T>>``>, f) = SeqT (TryFinally.Invoke     (SeqT.run computation) f)
     static member inline Using (resource, f: _ -> SeqT<'``Monad<seq<'T>>``>)    = SeqT (Using.Invoke resource (SeqT.run << f))
     static member inline Delay (body : unit   ->  SeqT<'``Monad<seq<'T>>``>)    = SeqT (Delay.Invoke (fun _ -> SeqT.run (body ()))) : SeqT<'``Monad<seq<'T>>``>
     
-    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> = SeqT.lift x
     
@@ -79,4 +74,5 @@ type SeqT<'``monad<seq<'t>>``> with
     
     static member inline get_Ask () = SeqT.lift ask          : SeqT<'``MonadReader<'R,seq<'R>>``>
     static member inline Local (SeqT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = SeqT (local f m)
-    #endif
+
+#endif

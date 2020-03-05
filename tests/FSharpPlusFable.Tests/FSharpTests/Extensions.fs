@@ -4,6 +4,14 @@ open Testing
 open FSharpPlus
 open System.Collections.Generic
 
+open FSharpPlus.Data
+
+type StringCodec<'t> = StringCodec of ( (string -> Result<'t,string>) * ('t -> string) ) with
+    static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (d >> Result.map f, e << g) : StringCodec<'U>
+
+module StringCodec =
+    let decode (StringCodec (d,_)) x = d x
+    let encode (StringCodec (_,e)) x = e x
 
 
 let ExtensionsTest = 
@@ -36,4 +44,41 @@ let ExtensionsTest =
                    let r1 = m1 |> Map.union m2
                    let r2 = m1 |> Map.unionWith konst m2
                    equalMap r1 r2)
-  ]
+
+
+      testCase "Bind" 
+        (fun () ->  let x = [1;2] >>= fun x -> [string x ; string (x + 1000) ]
+                    let y = { Head = 1; Tail = [2] } >>= fun x -> { Head = string x ; Tail = [string (x + 1000)] }
+                    let z = ("a", 1) >>= fun x -> (string x, x + 10)
+                    equal ["1"; "1001"; "2"; "1002"] x
+                    equal { Head = "1"; Tail = ["1001"; "2"; "1002"] } y
+                    equal ("a1", 11) z)
+
+      testCase "Comonad" 
+        (fun () ->  let x = [1;2;3;4;5]
+                    let y = { Head = 1 ; Tail = [2;3;4;5] }
+                    equal (List.head x) 1
+                    equal (y.Head) 1
+                    equal (duplicate x) [[1; 2; 3; 4; 5]; [2; 3; 4; 5]; [3; 4; 5]; [4; 5]; [5]]
+                    equal (duplicate y) { Head = { Head = 1; Tail = [2; 3; 4; 5] }; Tail = [{ Head = 2; Tail = [3; 4; 5] }; { Head = 3; Tail = [4; 5] }; { Head = 4; Tail = [5] }; { Head = 5; Tail = [] }] }
+                    equal (extend List.head x) x
+                    equal (extend (fun x -> x.Head) y) y)
+
+      testCase "Invariant"
+        (fun () ->  let tryParse x =
+                        match System.Double.TryParse (x: string) with
+                        | (true, x) -> Some x
+                        | (false, _) -> None
+        
+                    let floatCodec = StringCodec ( (tryParse >> Option.toResultWith "Parse error"), string<float>)
+                    let floatParsed  = StringCodec.decode floatCodec "1.8"
+                    let floatEncoded = StringCodec.encode floatCodec 1.5
+                    equal floatParsed (Result<float, string>.Ok 1.8)
+                    equal floatEncoded "1.5" 
+        
+                    let intCodec = invmap int<float> float<int> floatCodec
+                    let oneParsed  = StringCodec.decode intCodec "1"
+                    let tenEncoded = StringCodec.encode intCodec 10
+                    equal oneParsed (Result<int, string>.Ok 1)
+                    equal tenEncoded "10" )
+]
