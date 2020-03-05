@@ -187,6 +187,10 @@ module Lens =
     let inline items x = traverse x
 
     let inline filtered p f s = if p s then f s else Return.InvokeOnInstance s
+    let inline choosed p f s =
+        match p s with
+        | Some x -> f x
+        | None -> Return.InvokeOnInstance s
     let inline both f (a, b) = tuple2 </Map.InvokeOnInstance/> f a </Apply.InvokeOnInstance/> f b
 
     let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run << bt)
