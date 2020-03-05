@@ -13,12 +13,12 @@
     <Compile Include="TypeLevelOperators.fs" />
     <Compile Include="TypeBool.fs" />
     <Compile Include="TypeNat.fs" />
-    <Compile Include="TypeNat.Provider.fs" />
+    <Compile Include="../Providers/TypeNat.Provider.fs" />
     <Compile Include="../Control/Converter.fs" />
     <Compile Include="../Control/Numeric.fs" />
     <Compile Include="../Control/Tuple.fs" />
     <Compile Include="../Data/Matrix.fs" />
-    <Compile Include="../Data/Matrix.Provider.fs" />
-    <Compile Include="../TypeProviderAssembly.fs" />
+    <Compile Include="../Providers/Matrix.Provider.fs" />
+    <Compile Include="../Providers/TypeProviderAssembly.fs" />
   </ItemGroup>
 </Project>
