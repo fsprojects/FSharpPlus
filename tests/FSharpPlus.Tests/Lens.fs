@@ -2,6 +2,7 @@ module FSharpPlus.Tests.Lens
 
 open System
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Lens
 open NUnit.Framework
 open FsCheck
@@ -52,6 +53,12 @@ let filtered () =
     areEqual [12; 5; 20] (['a',-10; 'b',12; 'c',5; 'd',-3; 'e',20]^..(items << _2 << filtered (fun x -> x > 0)))
     areEqual [12; 5; 20] ([N0,-10; N1,12; N2,5; N3,-3; N4,20]^..(items << _2 << filtered (fun x -> x > 0)))
     areEqual [N2; N2]    ([N0,N2; N1,N1; N2,N2; N3,N3; N4,N4]^..(items << _2 << filtered (fun x -> x = N2)))
+
+[<Test>]
+let choosed () =
+    areEqual [2;4] ([1;2;3;4] ^.. (items << choosed (fun x -> if x % 2 = 0 then Some x else None)))
+    areEqual [1;3;3;5;3;5;5;7] ([[0;1;2;3];[1;2;3;4];[2;3;4;5];[3;4;5;6]] ^.. (traverse << List.traverse << choosed (fun x -> if x % 2 = 0 then Some (x + 1) else None)))
+    areEqual [6] ([[0;1;2;3];[1;2;3;4];[2;3;4;5];[3;4;5;6]] ^.. (traverse << List.traverse << choosed (fun x -> if x = 6 then Some x else None)))
 
 [<Test>]
 let choosing () =
