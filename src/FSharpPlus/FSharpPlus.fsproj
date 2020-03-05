@@ -119,6 +119,7 @@
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);AddProviderToPackage</TargetsForTfmSpecificBuildOutput>
   </PropertyGroup>
   <Target Name="AddProviderToPackage">
+    <Error Condition="!Exists('$(OutputPath)FSharpPlus.Providers.dll')" Text="FSharpPlus.Providers must be built before packaging." />
     <ItemGroup>
       <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.dll" />
       <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.xml" />
