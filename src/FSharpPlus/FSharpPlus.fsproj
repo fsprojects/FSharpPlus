@@ -8,9 +8,8 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
-    <!--<VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>
-    </VersionSuffix>-->
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <VersionSuffix>RC3</VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
