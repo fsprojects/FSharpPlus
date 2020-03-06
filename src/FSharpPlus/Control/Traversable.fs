@@ -63,6 +63,16 @@ type Traverse =
        let insert_f k x ys = Map.Invoke (Map.add k) (f x) <*> ys
        Map.foldBack insert_f t (result Map.empty)
 
+    static member inline Traverse (t: Result<'T,'Error>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<Result<'U,'Error>>``, [<Optional>]_impl: Traverse) : '``Functor<Result<'U,'Error>>`` =
+        match t with
+        | Ok a    -> Map.Invoke Result<'U,'Error>.Ok (f a)
+        | Error e -> Return.Invoke (Result<'U,'Error>.Error e)
+
+    static member inline Traverse (t: Choice<'T,'Error>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<Choice<'U,'Error>>``, [<Optional>]_impl: Traverse) : '``Functor<Choice<'U,'Error>>`` =
+        match t with
+        | Choice1Of2 a -> Map.Invoke Choice<'U,'Error>.Choice1Of2 (f a)
+        | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
+
     static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
        let cons_f x ys = Map.Invoke List.cons (f x) <*> ys
        List.foldBack cons_f t (result [])
@@ -99,6 +109,21 @@ type Sequence with
 
     static member inline Sequence (t: option<_>         , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with Some x -> Map.Invoke Some x | _ -> result None               : 'R
     static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, Array.toList) : 'R
+
+    static member inline Sequence (t: Map<_,_>          , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) : 'R =
+       let insert_f k x ys = Map.Invoke (Map.add k) x <*> ys
+       Map.foldBack insert_f t (result Map.empty)
+    
+    static member inline Sequence (t: Result<'``Functor<'T>``,'Error>, [<Optional>]_output: '``Functor<Result<'T,'Error>>``, [<Optional>]_impl: Sequence) : '``Functor<Result<'T,'Error>>`` =
+        match t with
+        | Ok a    -> Map.Invoke Result<'T,'Error>.Ok a
+        | Error e -> Return.Invoke (Result<'T,'Error>.Error e)
+
+    static member inline Sequence (t: Choice<'``Functor<'T>``,'Error>, [<Optional>]_output: '``Functor<Choice<'T,'Error>>``, [<Optional>]_impl: Sequence) : '``Functor<Choice<'T,'Error>>`` =
+        match t with
+        | Choice1Of2 a -> Map.Invoke Choice<'T,'Error>.Choice1Of2 a
+        | Choice2Of2 e -> Return.Invoke (Choice<'T,'Error>.Choice2Of2 e)
+
     static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, id) : 'R
  
     static member inline Sequence (t: Id<'``Functor<'T>``>         , [<Optional>]_output: '``Functor<Id<'T>>``          , [<Optional>]_impl: Sequence) = Traverse.Invoke id t : '``Functor<Id<'T>>``

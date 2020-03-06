@@ -57,6 +57,8 @@ From .Net/F#
  -  ``option<'T>`` 
  -  ``ResizeArray<'T>``
  -  ``Map<'K, 'T>``
+ -  ``Result<'T, 'Error>``
+ -  ``Choice<'T, 'Error>``
 
  
 From F#+

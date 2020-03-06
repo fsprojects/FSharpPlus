@@ -1085,6 +1085,20 @@ module Traversable =
         Assert.AreEqual(None, r1)
         CollectionAssert.AreEqual (r2.Value, Map.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])])
 
+        let expected = [Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)];
+                        Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)];
+                        Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]]
+        let actual = sequence m1
+        CollectionAssert.AreEqual (expected, actual)
+
+    [<Test>]
+    let traverseResults () =
+        let a = sequence (if true then Ok [1] else Error "no")
+        let b = traverse id (if true then Ok [1] else Error "no")
+        let expected: Result<int, string> list = [Ok 1]
+        CollectionAssert.AreEqual (expected, a)
+        CollectionAssert.AreEqual (expected, b)
+
         
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
