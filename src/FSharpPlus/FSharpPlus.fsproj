@@ -87,7 +87,7 @@
     <Compile Include="Data/ZipList.fs" />
     <Compile Include="Data/ParallelArray.fs" />
     <Compile Include="Data/DList.fs" />
-    <Compile Include="Data/Validations.fs" />
+    <Compile Include="Data/Validation.fs" />
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
@@ -108,7 +108,7 @@
     <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime"/>
+    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
