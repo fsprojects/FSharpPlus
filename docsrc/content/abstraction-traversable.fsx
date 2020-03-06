@@ -41,8 +41,8 @@ Rules
 Related Abstractions
 --------------------
 
- - [Functor](abstraction-functor.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations,
- 
+ - [Functor](abstraction-functor.html): A traversable is generic on the Traversable type parameter and the (Applicative) Functor inner type parameter.
+ - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations. 
  - [Foldable](abstraction-foldable.html) : All traversables are foldables.
 
 
@@ -61,8 +61,9 @@ From .Net/F#
  
 From F#+
 
- -  ``ZipList<'T>``
- -  ``NonEmptyList<'T>``
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``NonEmptyList<'T>``](type-nonempty.html)
+ -  [``Validation<'Error,'T>``](type-validation.html)
 
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
