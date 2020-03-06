@@ -291,3 +291,17 @@ module Tests=
         | Success _ -> failwith "unexpected"
         | Failure (e: exn) -> (e :?> AggregateException).InnerExceptions |> Seq.map (fun x -> x.Message) |> toList
     areEqual (f subject) (f expected)
+
+  [<Test>]
+  let testValidateSequence () =
+    let v: Validation<string, int Async> = Success (async {return 42})
+    let r = Validation.sequence v
+    let subject = Async.RunSynchronously r
+    areEqual subject (Success 42)
+
+  [<Test>]
+  let testValidateBisequence () =
+    let v: Validation<string Async, int Async> = Success (async {return 42})
+    let r = Validation.bisequence v
+    let subject = Async.RunSynchronously r
+    areEqual subject (Success 42)

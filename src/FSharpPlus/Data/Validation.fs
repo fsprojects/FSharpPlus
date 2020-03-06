@@ -53,10 +53,16 @@ module Validation =
         | Failure _ -> state
 
     #if !FABLE_COMPILER
+
+    /// Traverse the Success case with the supplied function.
     let inline traverse (f: 'T->'``Functor<'U>``) (source: Validation<'Error,'T>) : '``Functor<Validation<'Error,'U>>`` =
         match source with
         | Success a -> Validation<'Error,'U>.Success <!> f a
         | Failure e -> result (Validation<'Error,'U>.Failure e)
+
+    /// Traverse the Success case.
+    let inline sequence (source: Validation<'Error,'``Functor<'T>``>) : '``Functor<Validation<'Error,'T>>`` = traverse id source
+
     #endif
 
     let bimap (f: 'T1->'U1) (g: 'T2->'U2) = function
@@ -74,10 +80,14 @@ module Validation =
         | Success a -> g a x
         | Failure e -> f e x
 
-    let inline bitraverse (f: 'T1->'``Functor<'U1>``) (g: 'T2->'``Functor<'U2>``) (source: Validation<'T1,'T2>) : '``Functor<Validation<'U1,'U2>>`` =
+    /// Like traverse but taking an additional function to traverse the Failure part as well.
+    let inline bitraverse (f: 'Error1->'``Functor<'Error2>``) (g: 'T1->'``Functor<'T2>``) (source: Validation<'Error1,'T1>) : '``Functor<Validation<'Error2,'T2>>`` =
         match source with
         | Success a -> Validation<'U1,'U2>.Success <!> g a
         | Failure e -> Validation<'U1,'U2>.Failure <!> f e
+
+    /// Like sequence but traversing the Failure part as well.
+    let inline bisequence (source: Validation<'``Functor<'Error>``,'``Functor<'T>``>) : '``Functor<Validation<'Error,'T>>`` = bitraverse id id source
 
     /// Binds through a Validation, which is useful for
     /// composing Validations sequentially. Note that despite having a bind
@@ -190,9 +200,14 @@ type Validation<'err,'a> with
     static member Bimap (x: Validation<'T,'V>, f: 'T->'U, g: 'V->'W) : Validation<'U,'W> = Validation.bimap f g x
 
     #if !FABLE_COMPILER
+
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (t: Validation<'err,'a>, f: 'a->'b) : 'c = Validation.traverse f t
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Sequence (t: Validation<'err,'a>) : 'c = Validation.sequence t
+
     #endif
 
     // as Bifoldable
