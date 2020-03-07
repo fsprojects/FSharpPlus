@@ -22,7 +22,7 @@ module ComputationExpressions =
             SideEffects.add "2" }
 
         // Check side effects are not yet executed
-        areEqual (SideEffects.get()) []
+        areEqual [] (SideEffects.get())
 
         // This workflow will always run the previous one
         let combinewf = monad { 
@@ -30,12 +30,12 @@ module ComputationExpressions =
             return! zerowf }
 
         // The list should be empty, no workflow was run
-        areEqual (SideEffects.get()) []
+        areEqual [] (SideEffects.get())
 
         Async.RunSynchronously combinewf
 
         // Since it's an FX workflow, the last line should have been executed
-        areEqual (SideEffects.get()) ["1"; "2"]
+        areEqual ["1"; "2"] (SideEffects.get())
 
 
     [<Test>]
@@ -50,10 +50,10 @@ module ComputationExpressions =
             return 6; }
 
         // Check if side effect was already performed
-        areEqual (SideEffects.get()) ["3"]
+        areEqual ["3"] (SideEffects.get())
 
         // Check 'plus' (<|>) operation was properly performed
-        areEqual lst [5;6]
+        areEqual [5;6] lst
 
         SideEffects.reset()
 
@@ -71,15 +71,15 @@ module ComputationExpressions =
                 return 42 }
 
         // Confirm the side effect wasn't performed
-        areEqual (SideEffects.get()) []
+        areEqual [] (SideEffects.get())
 
         let seqValue = toList seq3
 
         // Now they should
-        areEqual (SideEffects.get()) ["Start"; "execute this"; "Exception! Attempted to divide by zero."]
+        areEqual ["Start"; "execute this"; "Exception! Attempted to divide by zero."] (SideEffects.get())
 
         // Check the result
-        areEqual seqValue [42]
+        areEqual [42] seqValue
 
 
     [<Test>]
@@ -93,13 +93,13 @@ module ComputationExpressions =
                 SideEffects.add (sprintf "processing %i" i)
                 yield parse s + i }
 
-        areEqual (SideEffects.get()) []
+        areEqual [] (SideEffects.get())
         
         // Following line would throw an exception (due to the for loop) if ReaderT had no Delay implementation
         let results = ReaderT.run threeElements "100"
 
-        areEqual (SideEffects.get()) ["processing 1"; "processing 2"; "processing 3"]
-        areEqual results [101; 102; 103]
+        areEqual ["processing 1"; "processing 2"; "processing 3"] (SideEffects.get())
+        areEqual [101; 102; 103] results
 
 
     [<Test>]
@@ -145,9 +145,9 @@ module ComputationExpressions =
             let!  _  = d1 "" (Some len)
             return str }
 
-        areEqual (SideEffects.get()) []
+        areEqual [] (SideEffects.get())
         let d3 = d2 |> Seq.toList
-        areEqual (SideEffects.get()) ["Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"]
+        areEqual ["Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"] (SideEffects.get())
         SideEffects.reset()
         
         // external type, custom definition of TryFinally
@@ -158,9 +158,9 @@ module ComputationExpressions =
             let!  _  = e1 "" (Some len)
             return str }
 
-        areEqual (SideEffects.get()) []
+        areEqual [] (SideEffects.get())
         let e3 = e2 |> Seq.toList
-        areEqual (SideEffects.get()) ["Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"]
+        areEqual ["Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"] (SideEffects.get())
         SideEffects.reset()
 
         // plain seqs
@@ -201,7 +201,7 @@ module ComputationExpressions =
             let!  _  = i1 "" (Some len)
             return str }
 
-        areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
+        areEqual ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"] (SideEffects.get())
         SideEffects.reset()
 
         // same example but without explicitely telling that the monad is strict
@@ -212,7 +212,7 @@ module ComputationExpressions =
             let!  _  = j1 "" (Some len)
             return str }
 
-        areEqual (SideEffects.get()) ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
+        areEqual ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"] (SideEffects.get())
 
 
     
@@ -252,7 +252,7 @@ module ComputationExpressions =
         do Async.Sleep 1000 |> Async.RunSynchronously
 
         let effA, effB = List.partition (String.startsWith "A") (SideEffects.get())
-        areEqual (List.last effA, List.last effB) ("A: Disposed properly", "B: Disposed properly")
+        areEqual ("A: Disposed properly", "B: Disposed properly") (List.last effA, List.last effB)
 
     type AsyncOfOptionDisposable () =
         interface IDisposable with
@@ -275,7 +275,7 @@ module ComputationExpressions =
                 return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
-        areEqual (SideEffects.get()) ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
+        areEqual ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"] (SideEffects.get())
    
     [<Test>]
     let testCompileUsingInOptionTStrict () = // wrong results, Async is not strict
@@ -288,7 +288,7 @@ module ComputationExpressions =
                 return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
-        areEqual (SideEffects.get()) ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"]
+        areEqual ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"] (SideEffects.get())
         
     [<Test>]
     let UsingInOptionTStrict () = // this is the way to use it with a strict monad
@@ -301,7 +301,7 @@ module ComputationExpressions =
                 return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Identity.run
-        areEqual (SideEffects.get()) ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"]
+        areEqual ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"] (SideEffects.get())
 
 
     open System.Collections.Generic

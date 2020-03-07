@@ -284,8 +284,8 @@ module Monoid =
     let seqSumDefaultCustom () =
         let (WrappedListB x) = Seq.sum [WrappedListB [10] ;WrappedListB [15]]
         let (WrappedListC y) = Seq.sum [WrappedListC [10] ;WrappedListC [15]]
-        Assert.AreEqual (x, [10;15])
-        Assert.AreEqual (y, [10])
+        Assert.AreEqual ([10;15], x)
+        Assert.AreEqual ([10], y)
 
         let x = [ ("a", 1); ("b", 2); ("a", 3) ]
         let y = x |> map (Seq.singleton >> (ofSeq : seq<_*_> -> Dictionary<_,_>) >> map List.singleton) |> Seq.sum
@@ -297,13 +297,13 @@ module Monoid =
 
         let quotLst123  = plus zero (ZipList [ [1];[2];[3] ])
 
-        Assert.AreEqual (quotLst123 |> toList, [[1]; [2]; [3]])
-        Assert.AreEqual (SideEffects.get (), [])
+        Assert.AreEqual ([[1]; [2]; [3]], quotLst123 |> toList)
+        Assert.AreEqual ([], SideEffects.get ())
 
         let quotLst123' = Seq.sum [zero; zero; ZipList' [ [1];[2];[3] ]]
 
-        Assert.AreEqual (quotLst123' |> toList, [[1]; [2]; [3]])
-        Assert.AreEqual (SideEffects.get (), ["Using optimized Sum"])
+        Assert.AreEqual ([[1]; [2]; [3]], quotLst123' |> toList)
+        Assert.AreEqual (["Using optimized Sum"], SideEffects.get ())
 
         let wl = WrappedListB  [2..10]
 
@@ -337,10 +337,10 @@ module Functor =
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
 
         // WrappedSeqD is Applicative. Applicatives are Functors => map should work
-        Assert.AreEqual (SideEffects.get (), [])
+        Assert.AreEqual ([], SideEffects.get ())
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
-        Assert.AreEqual (SideEffects.get (), ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"])
+        Assert.AreEqual (["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"], SideEffects.get ())
         SideEffects.reset ()
         
         // WrappedListE is a Monad. Monads are Functors => map should work
@@ -348,10 +348,10 @@ module Functor =
         Assert.IsInstanceOf<Option<WrappedListE<int>>> (Some testVal5)
 
         // Same with WrappedListD but WrappedListD is also IEnumerable<_>
-        Assert.AreEqual (SideEffects.get (), [])
+        Assert.AreEqual ([], SideEffects.get ())
         let testVal6 = map ((+) 1) (WrappedListD [1..3])
         Assert.IsInstanceOf<Option<WrappedListD<int>>> (Some testVal6)
-        Assert.AreEqual (SideEffects.get (), ["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"])
+        Assert.AreEqual (["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"], SideEffects.get ())
 
     [<Test>]
     let unzip () = 
@@ -363,10 +363,10 @@ module Functor =
 
         SideEffects.reset ()
         let a = zip (seq [1;2;3]) (seq [1. .. 3. ])
-        Assert.AreEqual (SideEffects.get (), [])
+        Assert.AreEqual ([], SideEffects.get ())
 
         let b = zip (WrappedListD [1;2;3]) (WrappedListD [1. .. 3. ])
-        Assert.AreEqual (SideEffects.get (), ["Using WrappedListD's zip"])
+        Assert.AreEqual (["Using WrappedListD's zip"], SideEffects.get ())
 
         let c = zip (dict [1,'1' ; 2,'2' ; 4,'4']) (dict [1,'1' ; 2,'2' ; 3,'3'])
         let d = zip [ 1;2;3 ] [ 1. .. 3. ]
@@ -620,19 +620,19 @@ module Foldable =
     let foldMapDefaultCustom () =
         SideEffects.reset ()
         let x = foldMap ((+) 10) (WrappedListD [1..4]) //= 50 w side effect
-        Assert.AreEqual (x, 50)
-        Assert.AreEqual (SideEffects.get (), ["Using optimized foldMap"])
+        Assert.AreEqual (50, x)
+        Assert.AreEqual (["Using optimized foldMap"], SideEffects.get ())
 
         SideEffects.reset ()
         let y = foldMap ((+) 10) {1..4}  //= 50 w/o side effect
-        Assert.AreEqual (x, 50)
-        Assert.AreEqual (SideEffects.get (), [])
+        Assert.AreEqual (50, x)
+        Assert.AreEqual ([], SideEffects.get ())
 
     [<Test>]
     let filterDefaultCustom () = 
         let wlA1 = WrappedListA [1..10]
         let testVal = filter ((=)2) wlA1
-        Assert.AreEqual (testVal, WrappedListA [2])
+        Assert.AreEqual (WrappedListA [2], testVal)
         Assert.IsInstanceOf<Option<WrappedListA<int>>> (Some testVal)
 
         let twos   = filter ((=) (box 2)) (([1;2;3;4;3;2;1;2;3] |> ofSeq) : Collections.ArrayList)
@@ -645,8 +645,8 @@ module Foldable =
     let foldAternatives () = 
         let x = choice [None; Some 3; Some 4; None]
         let y = choice [| []; [3]; [4]; [] |]
-        Assert.AreEqual (x, Some 3)
-        Assert.AreEqual (y, [3;4])
+        Assert.AreEqual (Some 3, x)
+        Assert.AreEqual ([3; 4], y)
 
     [<Test>]
     let fromToSeq () =
@@ -677,8 +677,8 @@ module Foldable =
         let l' = sortBy id l
         let s  = WrappedListB [10;4;6;89]
         let s' = sortBy id s
-        Assert.AreEqual (l', [4;6;10;89])
-        Assert.AreEqual (s', WrappedListB [4;6;10;89])
+        Assert.AreEqual ([4;6;10;89], l')
+        Assert.AreEqual (WrappedListB [4;6;10;89], s')
 
         let sortedList = sortBy string     [ 11;2;3;9;5;6;7;8;9;10 ]
         let sortedSeq  = sortBy string (seq [11;2;3;9;5;6;7;8;9;10])
@@ -728,7 +728,7 @@ module Foldable =
         let b = exists ((=) '2') (System.Text.StringBuilder "abc")
         let c = exists ((=) 2) (WrappedListA [1..3])
         let d = exists ((=) 2) (WrappedListD [1..3])
-        areEqual (SideEffects.get ()) ["Using WrappedListA's Exists"; "Using WrappedListD's Exists"]
+        areEqual ["Using WrappedListA's Exists"; "Using WrappedListD's Exists"] (SideEffects.get ())
         ()
 
     [<Test>]
@@ -738,7 +738,7 @@ module Foldable =
         let b = pick Some (System.Text.StringBuilder "abc")
         let c = pick Some (WrappedListA [1..3])
         let d = pick Some (WrappedListD [1..3])
-        areEqual (SideEffects.get ()) ["Using WrappedListA's Pick"; "Using WrappedListD's Pick"]
+        areEqual ["Using WrappedListA's Pick"; "Using WrappedListD's Pick"] (SideEffects.get ())
         ()
 
     [<Test>]
@@ -748,7 +748,7 @@ module Foldable =
         let b = minimum (System.Text.StringBuilder "abc")
         let c = minimum (WrappedListA [1..3])
         let d = minimum (WrappedListD [1..3])
-        areEqual (SideEffects.get ()) ["Using WrappedListA's Min"; "Using WrappedListD's Min"]
+        areEqual ["Using WrappedListA's Min"; "Using WrappedListD's Min"] (SideEffects.get ())
         ()
 
     [<Test>]
@@ -758,7 +758,7 @@ module Foldable =
         let b = maxBy id (System.Text.StringBuilder "abc")
         let c = maxBy id (WrappedListA [1..3])
         let d = maxBy id (WrappedListD [1..3])
-        areEqual (SideEffects.get ()) ["Using WrappedListA's MaxBy"; "Using WrappedListD's MaxBy"]
+        areEqual ["Using WrappedListA's MaxBy"; "Using WrappedListD's MaxBy"] (SideEffects.get ())
         ()
 
     [<Test>]
@@ -768,7 +768,7 @@ module Foldable =
         let b = length (System.Text.StringBuilder "abc")
         let c = length (WrappedListA [1..3])
         let d = length (WrappedListD [1..3])
-        areEqual (SideEffects.get ()) ["Using WrappedListA's Length"; "Using WrappedListD's Length"]
+        areEqual ["Using WrappedListA's Length"; "Using WrappedListD's Length"] (SideEffects.get ())
         ()
 
 
@@ -873,13 +873,13 @@ module Monad =
     [<Test>]
     let joinDefaultCustom () = 
         let x = join [[1];[2]]
-        Assert.AreEqual (x, [1;2])
+        Assert.AreEqual ([1;2], x)
         let y : WrappedListE<_> = join (WrappedListE [WrappedListE [1];WrappedListE [2]])
-        Assert.AreEqual (y, WrappedListE [1;2])
+        Assert.AreEqual (WrappedListE [1;2], y)
         SideEffects.reset ()
         let z = join (WrappedListF [WrappedListF [1];WrappedListF [2]])
-        Assert.AreEqual (z, WrappedListF [1;2])
-        Assert.AreEqual (SideEffects.get (), ["Join"])
+        Assert.AreEqual (WrappedListF [1;2], z)
+        Assert.AreEqual (["Join"], SideEffects.get ())
 
     [<Test>]
     let workFlow () =       
@@ -993,7 +993,7 @@ module Traversable =
         let d = sequence (Seq.initInfinite toLists)
         let e = sequence (Seq.initInfinite toEithers)
 
-        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
         let a' = traverse toOptions (Seq.initInfinite id)
@@ -1002,7 +1002,7 @@ module Traversable =
         let d' = traverse toLists   (Seq.initInfinite id)
         let e' = traverse toEithers (Seq.initInfinite id)
 
-        CollectionAssert.AreEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
@@ -1021,12 +1021,12 @@ module Traversable =
         let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
         let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
 
-        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
         let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
 
-        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
         let a' = traverse toOptions [1..20]
@@ -1035,12 +1035,12 @@ module Traversable =
         let d' = traverse toLists   [1..20]
         let e' = traverse toEithers [1..20]
 
-        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
         let f' = traverse toEithers [|1..20|]
 
-        CollectionAssert.AreNotEqual (SideEffects.get (), expectedEffects)
+        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<list<int>,string>.Choice2Of2 "This is a failure", c)
@@ -1083,7 +1083,7 @@ module Traversable =
         let r1 = m1 |> traversei (fun _ _ -> None)
         let r2 = m1 |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
         Assert.AreEqual(None, r1)
-        CollectionAssert.AreEqual (r2.Value, Map.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])])
+        CollectionAssert.AreEqual (Map.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])], r2.Value)
 
         let expected = [Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)];
                         Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)];
@@ -1234,8 +1234,8 @@ module Alternative =
 
         let z = (x <|> y) |> OptionT.run |> Async.RunSynchronously
 
-        Assert.AreEqual (SideEffects.get (), ["hello"])
-        Assert.AreEqual (z, Some 1)
+        Assert.AreEqual (["hello"], SideEffects.get ())
+        Assert.AreEqual (Some 1, z)
 
     [<Test>]
     let testChoice () =
@@ -1364,7 +1364,7 @@ module MonadTransformers =
             return (x, y +  st)
             }
 
-        CollectionAssert.AreEqual (StateT.run m "ok", [((1, 6), "OK"); ((1, 7), "OK"); ((2, 6), "OK"); ((2, 7), "OK")])
+        CollectionAssert.AreEqual ([((1, 6), "OK"); ((1, 7), "OK"); ((2, 6), "OK"); ((2, 7), "OK")], StateT.run m "ok")
 
         ()
 
@@ -1399,14 +1399,14 @@ module Invariant =
         let floatCodec = StringCodec (ReaderT (tryParse >> Option.toResultWith "Parse error"), string<float> >> Const)
         let floatParsed  = StringCodec.decode floatCodec "1.8"
         let floatEncoded = StringCodec.encode floatCodec 1.5
-        Assert.AreEqual (floatParsed, Result<float, string>.Ok 1.8)
-        Assert.AreEqual (floatEncoded, "1.5")
+        Assert.AreEqual (Result<float, string>.Ok 1.8, floatParsed)
+        Assert.AreEqual ("1.5", floatEncoded)
 
         let intCodec = invmap int<float> float<int> floatCodec
         let oneParsed  = StringCodec.decode intCodec "1"
         let tenEncoded = StringCodec.encode intCodec 10
-        Assert.AreEqual (oneParsed, Result<int, string>.Ok 1)
-        Assert.AreEqual (tenEncoded, "10")
+        Assert.AreEqual (Result<int, string>.Ok 1, oneParsed)
+        Assert.AreEqual ("10", tenEncoded)
 
 module Categories =
 
@@ -1557,7 +1557,7 @@ module Numerics =
 
         let (res20: int * char * int * char * int * char * int * char * int * char) = maxValue
 
-        Assert.AreEqual (res09 * res19, argBigRational)
+        Assert.AreEqual (argBigRational, res09 * res19)
 
 
 
@@ -1947,7 +1947,7 @@ module Memoization =
         let v13 = mh 2010 1 1
         let v14 = mh 2010 1 1
 
-        Assert.AreEqual(effs.ToArray(), [|"sum2"; "sum2"; "sum3"; "sum4"; "sum4"; "f"; "g"; "h"|])
+        Assert.AreEqual ([|"sum2"; "sum2"; "sum3"; "sum4"; "sum4"; "f"; "g"; "h"|], effs.ToArray ())
 
 
     [<Test>]
