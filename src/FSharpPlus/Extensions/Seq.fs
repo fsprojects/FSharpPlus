@@ -1,10 +1,9 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Seq
 [<RequireQualifiedAccess>]
 module Seq =
+    open System
 
     /// <summary>Applies the given function to each element of the sequence and concatenates all the
     /// results.</summary>

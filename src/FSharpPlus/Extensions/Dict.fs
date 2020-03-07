@@ -1,7 +1,5 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Dict =
@@ -10,8 +8,6 @@ module Dict =
 
     #if !FABLE_COMPILER
     open System.Linq
-    
-
     let toIReadOnlyDictionary source = ReadOnlyDictionary source :> IReadOnlyDictionary<_,_>
     #endif
 

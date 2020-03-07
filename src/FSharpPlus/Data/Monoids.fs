@@ -2,7 +2,7 @@
 
 #if !FABLE_COMPILER
 
-open FSharpPlus.Operators
+open FSharpPlus
 
 /// The dual of a monoid, obtained by swapping the arguments of append.
 [<Struct>]

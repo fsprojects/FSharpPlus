@@ -49,8 +49,12 @@ type Iterate =
         let inline call (_: ^M, source: ^I) =  ((^M or ^I) : (static member Iterate : _*_ -> _) source, action)
         call (Unchecked.defaultof<Iterate>, source)
 
+#endif
+
 type Map =
     inherit Default1
+
+#if !FABLE_COMPILER
 
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value) : Lazy<'U>
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
@@ -83,8 +87,13 @@ type Map =
         let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Map : (_*_)*_ -> _) (source, mapping), mthd)
         call (Unchecked.defaultof<Map>, source, Unchecked.defaultof<'``Functor<'U>``>)
 
+#endif
+
     static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map : _ * _ -> _) source, mapping)
+
+#if !FABLE_COMPILER
+
 
 type Map with
     static member inline Map ((x: '``Monad<'T>``       when '``Monad<'T>`` : (static member (>>=)  : '``Monad<'T>`` * ('T -> '``Monad<'U>``) -> '``Monad<'U>``)

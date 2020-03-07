@@ -1,16 +1,16 @@
 namespace FSharpPlus.Control
 
 open System
-open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
 open System.Threading.Tasks
 open Microsoft.FSharp.Quotations
 
+open FSharpPlus
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
-open FSharpPlus
+
 
 // Monad class ------------------------------------------------------------
 
@@ -96,15 +96,19 @@ type Join =
         let inline call (mthd: 'M, input: 'I, output: 'R) = ((^M or ^I or ^R) : (static member Join : _*_*_ -> _) input, output, mthd)
         call (Unchecked.defaultof<Join>, source, Unchecked.defaultof<'``Monad<'T>``>)
 
+#endif
 
 type Return =
     inherit Default1
+    static member inline InvokeOnInstance (x: 'T) = (^``Applicative<'T>`` : (static member Return : ^T -> ^``Applicative<'T>``) x)
+
+#if !FABLE_COMPILER
 
     static member inline Invoke (x: 'T) : '``Applicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Return : _*_ -> _) output, mthd)
         call (Unchecked.defaultof<Return>, Unchecked.defaultof<'``Applicative<'T>``>) x
     
-    static member inline InvokeOnInstance (x: 'T) = (^``Applicative<'T>`` : (static member Return : ^T -> ^``Applicative<'T>``) x)
+    
 
     static member        Return (_: seq<'a>        , _: Default2) = fun  x      -> Seq.singleton x : seq<'a>
     static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>

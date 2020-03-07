@@ -1,5 +1,8 @@
 namespace FSharpPlus.Data
 
+#nowarn "44"
+
+open System.ComponentModel
 open FSharpPlus
 
 #if !FABLE_COMPILER
@@ -7,9 +10,7 @@ open FSharpPlus.Lens
 #endif
 
 open FSharpPlus.Data
-open System.ComponentModel
 
-#nowarn "44"
 
 // Validation is based on https://github.com/qfpl/validation
 

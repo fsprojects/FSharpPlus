@@ -2,9 +2,8 @@
 
 #if !FABLE_COMPILER
 
-open FSharpPlus.Internals
 open FSharpPlus
-open FSharpPlus.Internals.MonadOps
+
 
 // MonadTrans
 

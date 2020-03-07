@@ -1,9 +1,9 @@
 namespace FSharpPlus
 
-open System
-
 /// Module containing F#+ Extension Methods on existing types
 module Extensions =
+
+    open System
 
     type Collections.Generic.IEnumerable<'T> with
         member this.GetSlice = function

@@ -1,8 +1,8 @@
 ﻿namespace FSharpPlus.Data
 
-open FSharpPlus.Control
-open FSharpPlus.Operators
 open System.ComponentModel
+open FSharpPlus.Operators
+
 
 /// Array with an Applicative functor based on zipping and parallel execution.
 type ParallelArray<'t> =

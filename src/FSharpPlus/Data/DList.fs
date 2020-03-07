@@ -1,7 +1,9 @@
 ﻿namespace FSharpPlus.Data
+
 open System.Collections.Generic
-open FSharpPlus
 open System.ComponentModel
+open FSharpPlus
+
 
 // DList from FSharpx.Collections
 //This implementation adds an additional parameter to allow O(1) retrieval of the list length.

@@ -1,11 +1,11 @@
 namespace FSharpPlus.Data
 
-open System.Text
 open System.Runtime.InteropServices
 open System.ComponentModel
 open System.Collections.Generic
-open FSharpPlus.Control
 open FSharpPlus
+open FSharpPlus.Control
+
 
 /// A type-safe list that contains at least one element.
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with

@@ -1,7 +1,5 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
 module Option =

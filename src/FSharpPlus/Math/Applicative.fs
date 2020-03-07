@@ -1,9 +1,9 @@
 namespace FSharpPlus.Math
 
-open FSharpPlus
-open FSharpPlus.Control
-
 #if !FABLE_COMPILER
+
+open FSharpPlus
+
 
 /// <summary>Math Operators ready to use over Applicative Functors.</summary>
 module Applicative =

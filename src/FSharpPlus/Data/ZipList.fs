@@ -1,10 +1,8 @@
 ﻿namespace FSharpPlus.Data
 
-open System.Text
-open System.Runtime.InteropServices
-open FSharpPlus
-open FSharpPlus.Control
 open System.ComponentModel
+open FSharpPlus
+
 
 /// A sequence with an Applicative functor based on zipping.
 [<NoComparison>]

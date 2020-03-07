@@ -1,18 +1,18 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on IReadOnlyDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module IReadOnlyDictionary =
-    #if !FABLE_COMPILER
 
+    #if !FABLE_COMPILER
     open System.Linq
     #endif
-    open System.Collections.Generic
-    /// Replaces or sets the item associated with a specified key with the specified value.
 
+    open System.Collections.Generic
+
+    /// Replaces or sets the item associated with a specified key with the specified value.
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
+
     let remove key (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.filter (fun t -> t.Key <> key) |> Seq.map (|KeyValue|) |> Map :> IReadOnlyDictionary<_,_>
 
     /// Gets the value associated with the specified key. Returns None if a value associated with the key is not found.

@@ -1,10 +1,9 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on String
 [<RequireQualifiedAccess>]
 module String =
+    open System
     open System.Text
     open System.Globalization
 

@@ -1,10 +1,10 @@
 ﻿namespace FSharpPlus.Data
 
 open System
-open FSharpPlus.Control
-open FSharpPlus
 open System.ComponentModel
+open FSharpPlus
 open FSharpPlus.Internals.Prelude
+open FSharpPlus.Control
 
 
 #if !FABLE_COMPILER

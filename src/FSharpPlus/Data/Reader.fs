@@ -2,9 +2,11 @@
 
 #nowarn "1125"
 
+open System.ComponentModel
 open FSharpPlus
 open FSharpPlus.Control
-open System.ComponentModel
+
+
 /// <summary> Computation type: Computations which read values from a shared environment.
 /// <para/>   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
 /// <para/>   Useful for: Maintaining variable bindings, or other shared environment.</summary>

@@ -1,8 +1,5 @@
 ﻿namespace FSharpPlus.Data
 
-open FSharpPlus
-
-
 /// <summary> Computation type: Simple function application.
 /// <para/>   Binding strategy: The bound function is applied to the input value. Identity x >>= f = Identity (f x)
 /// <para/>   Useful for: Lens setters and updaters - Monads can be derived from monad transformers applied to the Identity monad.

@@ -1,10 +1,10 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
 module Array =
+
+    open System
 
     let apply f x =
         let lenf, lenx = Array.length f, Array.length x

@@ -1,8 +1,10 @@
 ﻿namespace FSharpPlus.Data
+
+#nowarn "1125"
+
 open System.ComponentModel
 open FSharpPlus
 
-#nowarn "1125"
 
 /// <summary> Computation type: Computations which maintain state.
 /// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.

@@ -4,9 +4,8 @@
 
 namespace FSharpPlus.Control
 
-open FSharpPlus.Internals
-open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
+open FSharpPlus.Internals
 
 #if !FABLE_COMPILER
 
@@ -308,11 +307,8 @@ module internal Numerics =
 
 namespace FSharpPlus.Control
 
-open Numerics
 open FSharpPlus.Internals
 open FSharpPlus.Control
-
-
 
 
 type Pi =

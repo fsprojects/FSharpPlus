@@ -1,7 +1,5 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Result<'T,'Error>
 [<RequireQualifiedAccess>]
 module Result =

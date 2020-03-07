@@ -2,17 +2,10 @@ namespace FSharpPlus.Control
 
 #if !FABLE_COMPILER
 
-open System
-open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
-open System.Text
-open System.Collections.Generic
-open System.Threading.Tasks
-open Microsoft.FSharp.Quotations
-
-open FSharpPlus.Internals
-open FSharpPlus.Internals.Prelude
 open FSharpPlus
+open FSharpPlus.Internals
+
 
 type Empty =
     inherit Default1

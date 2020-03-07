@@ -1,12 +1,12 @@
 namespace FSharpPlus
 
-open System
-
 #if !FABLE_COMPILER
 
 /// Additional operations on IEnumerator
 [<RequireQualifiedAccess>]
 module Enumerator =
+
+    open System
         
     /// [omit]
     let inline invalidArgFmt (arg: string) (format: string) paramArray = 

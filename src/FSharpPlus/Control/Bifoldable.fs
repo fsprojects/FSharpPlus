@@ -1,11 +1,10 @@
-namespace FSharpPlus.Internals
-
 namespace FSharpPlus.Control
+
+#if !FABLE_COMPILER
 
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
 
-#if !FABLE_COMPILER
 
 type BifoldMap =
     inherit Default1

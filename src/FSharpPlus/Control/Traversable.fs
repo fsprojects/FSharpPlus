@@ -2,14 +2,14 @@
 
 #if !FABLE_COMPILER
 
-open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.ComponentModel
+open FSharpPlus
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus.Internals.MonadOps
-open FSharpPlus
 open FSharpPlus.Extensions
+
 
 type Sequence =
     inherit Default1

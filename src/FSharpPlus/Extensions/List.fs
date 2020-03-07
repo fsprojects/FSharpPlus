@@ -1,10 +1,10 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on List
 [<RequireQualifiedAccess>]
 module List =
+
+    open System
 
     /// Creates a list with a single element.
     let singleton x = [x]
