@@ -10,7 +10,6 @@ open FSharpPlus.Data
 //https://github.com/fabriceleal/Continuations/blob/master/Continuations/Program.fs
 
 // http://www.markhneedham.com/blog/2009/06/22/f-continuation-passing-style/
-// http://nathansuniversity.com/cont_.html
 
 let assertEqual expected actual = 
     if expected <> actual then
