@@ -97,7 +97,7 @@ let resEListOfElist = traverse f []
 // sequence
 let resSome321  = sequence [Some 3;Some 2;Some 1]
 let resNone     = sequence [Some 3;None  ;Some 1]
-let res654      = sequence [ (+)3 ; (+)2 ; (+) 1] 3
+let res654      = (sequence [ (+) 3 ; (+) 2 ; (+) 1]) 3
 let resCombined = sequence [ [1;2;3] ; [4;5;6]  ]
 let resLstOfArr = sequence [|[1;2;3] ; [4;5;6] |]  // <- Uses the default method.
 let resArrOfLst = sequence [[|1;2;3|];[|4;5;6 |]]

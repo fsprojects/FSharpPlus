@@ -36,17 +36,17 @@ It's also possible to construct by wrapping exception producing functions:
  * Result.protect - returns Error with exception value on exception
  * Choice.protect - returns Choice2Of2 with exception value on exception
 *)
-    // throws "ArgumentException: The input sequence was empty."
-    let expectedSingleItem = List.exactlyOne []
+// throws "ArgumentException: The input sequence was empty."
+let expectedSingleItem1 : int = List.exactlyOne []
 
-    // returns a Result.Error holding the exception as its value:
-    let expectedSingleItem = Result.protect List.exactlyOne []
+// returns a Result.Error holding the exception as its value:
+let expectedSingleItem2 : Result<int,exn> = Result.protect List.exactlyOne []
 
-    // ...or like typical try prefixed functions, treat exception as None
-    let expectedSingleItem = Option.protect List.exactlyOne []
+// ...or like typical try prefixed functions, treat exception as None
+let expectedSingleItem3 : Option<int> = Option.protect List.exactlyOne []
 
-    // which might look like this:
-    let inline tryExactlyOne xs = Option.protect List.exactlyOne xs
+// which might look like this:
+let inline tryExactlyOne xs = Option.protect List.exactlyOne xs
 
 (**
 Deconstruction (unwrapping):
@@ -77,20 +77,20 @@ Most collections, or specifically 'foldable' instances implement these:
  * intersperse - takes an element and `intersperses' that element between the elements
 
 *)
-    ["Bob"; "Jane"] |> List.intersperse "and"
-    // ["Bob"; "and"; "Jane"]
+let a = ["Bob"; "Jane"] |> List.intersperse "and"
+// vat a : string list = ["Bob"; "and"; "Jane"]
 
-    "WooHoo" |> String.intersperse '-'
-    // val it : string = "W-o-o-H-o-o"
+let b = "WooHoo" |> String.intersperse '-'
+// val b : string = "W-o-o-H-o-o"
 
 (**
  * intercalate - insert a list of elements between each element and flattens
 *)
-    [[1;2]; [3;4]] |> List.intercalate [-1;-2];;
-    // val it : int list = [1; 2; -1; -2; 3; 4]
+let c = [[1;2]; [3;4]] |> List.intercalate [-1;-2];;
+// val c : int list = [1; 2; -1; -2; 3; 4]
 
-    ["Woo"; "Hoo"] |> String.intercalate "--o.o--";;
-    // val it : string = "Woo--o.o--Hoo"
+let d = ["Woo"; "Hoo"] |> String.intercalate "--o.o--";;
+// val d : string = "Woo--o.o--Hoo"
 
 (**
  * zip/unzip - tuple together values inside two containers, or untuble tupled values
@@ -126,11 +126,11 @@ Partitioning can be done by applying a separating function that produces a Choic
  * Array.partitionMap
  * List.partitionMap
 *)
-    let isEven x = (x % 2) = 0
-    let chooseEven x = if isEven x then Choice1Of2 x else Choice2Of2 x
+let isEven x = (x % 2) = 0
+let chooseEven x = if isEven x then Choice1Of2 x else Choice2Of2 x
 
-    [1; 2; 3; 4] |> List.partitionMap chooseEven
-    // val it : int list * int list = ([2; 4], [1; 3])
+let e = [1; 2; 3; 4] |> List.partitionMap chooseEven
+// val e : int list * int list = ([2; 4], [1; 3])
 
 (**
 Conversion functions:
@@ -140,27 +140,32 @@ F#+ adds functions to convert between Result, Choice and Option types.
 These should be self explanatory, but be aware that sometimes they are 'lossy'
 usually when converting to Option:
 *)
-    // Convert a `Result` to an `Option` - effectively throws away error value
-    // when present, by replacing with `None`
-    request |> validateRequest |> Option.ofResult
+(**
+// Convert a `Result` to an `Option` - effectively throws away error value
+// when present, by replacing with `None`
+```f#
+request |> validateRequest |> Option.ofResult
+```
+*)
 
 (**
 Going the other way is similar, but a value needs to be filled in for None:
 *)
+let xs = ["some value"]
+let firstElementOption = xs |> List.tryHead
 
-    let firstElementOption = xs |> List.tryHead
+// Convert an `Option` to a `Result` will use unit as the Error:
+firstElementOption |> Option.toResult
 
-    // Convert an `Option` to a `Result` will use unit as the Error:
-    firstElementOption |> Option.toResult
-
-    // ...but you can specify an error value with Option.toResultWith:
-    firstElementOption |> Option.toResultWith "No Element"
+// ...but you can specify an error value with Option.toResultWith:
+firstElementOption |> Option.toResultWith "No Element"
 
 (**
 Converting between `Choice` and `Result` is often useful:
+```f#
+let asyncChoice = anAsyncValue |> Async.Catch |> Async.map Result.ofChoice
+```
 *)
-
-    let asyncChoice = anAsyncValue |> Async.Catch |> Async.map Result.ofChoice
 
 (**
 The String type:
