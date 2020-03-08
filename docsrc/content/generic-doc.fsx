@@ -35,12 +35,15 @@ For example:
 
 // Convert the number 42 to bytes... 
 // ... here the type is known (42 is an int, the return value is byte[])
-> let a = 42 |> toBytes;;  
+let a = 42 |> toBytes;;  
+(**
 val a : byte [] = [|42uy; 0uy; 0uy; 0uy|]
+*)
 
 // However, this can't compile since the return type is not inferrable
-> let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;  
-
+(**
+let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;  
+*)
 // The error will be something like:
 // 
 //  let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
@@ -53,14 +56,17 @@ val a : byte [] = [|42uy; 0uy; 0uy; 0uy|]
 // [followed by many possible implementations...]
 
 // So, in this case, we have to give the return type:
->   let b :int = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
+let b :int = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
+(**
 val b : int = 42
+*)
 
 // ...or, the more usual case, you use in context where type can be inferred,
 // like this example:
-> 1 + ([|42uy; 0uy; 0uy; 0uy|] |> ofBytes);;
+1 + ([|42uy; 0uy; 0uy; 0uy|] |> ofBytes);;
+(**
 val it : int = 43
-
+*)
 
 (**
 How do generic functions work?

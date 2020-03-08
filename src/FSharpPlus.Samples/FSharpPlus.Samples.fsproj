@@ -11,11 +11,40 @@
 
   <ItemGroup>
     <Compile Include="*.fsx" />
+    <Compile Include="..\..\docsrc\content\applicative-functors.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\computation-expressions.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\extension-methods.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\extensions.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <!--
+    <Compile Include="..\..\docsrc\content\generic-doc.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>-->
+    <Compile Include="..\..\docsrc\content\lens.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\numerics.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <!--
+    <Compile Include="..\..\docsrc\content\operators-common.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>-->
+    <Compile Include="..\..\docsrc\content\tutorial.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
     <Compile Include="..\..\docsrc\content\type-*.fsx">
-      <Link>Type\%(FileName)%(Extension)</Link>	
+      <Link>Docs\Type\%(FileName)%(Extension)</Link>	
     </Compile>
     <Compile Include="..\..\docsrc\content\abstraction-*.fsx">
-      <Link>Abstraction\%(FileName)%(Extension)</Link>	
+      <Link>Docs\Abstraction\%(FileName)%(Extension)</Link>	
     </Compile>
     <Compile Include="Program.fs" />
   </ItemGroup>
