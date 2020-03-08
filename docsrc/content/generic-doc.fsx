@@ -36,14 +36,11 @@ For example:
 // Convert the number 42 to bytes... 
 // ... here the type is known (42 is an int, the return value is byte[])
 let a = 42 |> toBytes;;  
-(**
-val a : byte [] = [|42uy; 0uy; 0uy; 0uy|]
-*)
+//val a : byte [] = [|42uy; 0uy; 0uy; 0uy|]
 
 // However, this can't compile since the return type is not inferrable
-(**
-let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;  
-*)
+// let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;  
+
 // The error will be something like:
 // 
 //  let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
@@ -57,16 +54,12 @@ let b = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
 
 // So, in this case, we have to give the return type:
 let b :int = [|42uy; 0uy; 0uy; 0uy|] |> ofBytes;;
-(**
-val b : int = 42
-*)
+// val b : int = 42
 
 // ...or, the more usual case, you use in context where type can be inferred,
 // like this example:
 1 + ([|42uy; 0uy; 0uy; 0uy|] |> ofBytes);;
-(**
-val it : int = 43
-*)
+//val it : int = 43
 
 (**
 How do generic functions work?
@@ -143,8 +136,7 @@ For a type defined in an external library it will work when it contains a static
 
 Here's an example of the generic function ``fromBigInt`` targeting a type defined in the MathNet library
 *)
-
-#r "../../packages/MathNet.Numerics/lib/net40/MathNet.Numerics.dll"
-#r "../../packages/MathNet.Numerics.FSharp/lib/net40/MathNet.Numerics.FSharp.dll"
+#r "../../packages/docs/MathNet.Numerics/lib/net40/MathNet.Numerics.dll"
+#r "../../packages/docs/MathNet.Numerics.FSharp/lib/net45/MathNet.Numerics.FSharp.dll"
 
 let x : MathNet.Numerics.BigRational = fromBigInt 10I

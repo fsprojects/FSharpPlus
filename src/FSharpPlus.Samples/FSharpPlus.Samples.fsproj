@@ -23,10 +23,9 @@
     <Compile Include="..\..\docsrc\content\extensions.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <!--
     <Compile Include="..\..\docsrc\content\generic-doc.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
-    </Compile>-->
+    </Compile>
     <Compile Include="..\..\docsrc\content\lens.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
