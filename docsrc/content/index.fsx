@@ -120,7 +120,7 @@ redistribution for both commercial and non-commercial purposes. For more informa
 [License file][license] in the GitHub repository. 
 
   [content]: https://github.com/fsprojects/FSharpPlus/tree/master/docsrc/content
-  [samples]: https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples
+  [samples]: https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus.Docs/Samples
   [gh]: https://github.com/fsprojects/FSharpPlus
   [issues]: https://github.com/fsprojects/FSharpPlus/issues
   [readme]: https://github.com/fsprojects/FSharpPlus/blob/master/README.md

@@ -1,6 +1,5 @@
-﻿// This folder contains only this project to compile the samples and make sure they never break.
- // Actual samples are in https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Samples
-
+﻿// This folder contains this project to compile the documentation files and samples and make sure they never break.
+ 
 open System
 
 [<EntryPoint>]

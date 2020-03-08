@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="*.fsx" />
+    <Compile Include="Samples\*.fsx" />
     <Compile Include="..\..\docsrc\content\applicative-functors.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
