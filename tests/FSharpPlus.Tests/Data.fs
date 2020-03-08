@@ -1,16 +1,13 @@
 namespace FSharpPlus.Tests.Data
 
 open System
-open FSharpPlus
-open FSharpPlus.Data
-open FSharpPlus.Control
-open FSharpPlus.Tests
 open NUnit.Framework
 open FsCheck
+open FSharpPlus
+open FSharpPlus.Data
 
-module DList=
-    open FSharpPlus.Data.DList
-    open Helpers
+module DList =
+
     // tests from FSharpx.Collections DList
     let shouldEqual (x: 't) (y: 't) = Assert.AreEqual (x, y)
     let shouldThrow (exnT: Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate (x)) |> ignore
@@ -90,79 +87,79 @@ module DList=
 
     [<Test>]
     let ``allow to tail to work`` () =
-        emptyDList |> add 1 |> tail |> isEmpty |> shouldEqual true
+        emptyDList |> DList.add 1 |> DList.tail |> DList.isEmpty |> shouldEqual true
 
     [<Test>]
     let ``add to work`` () =
-        emptyDList |> add 1 |> add 2 |> isEmpty |> shouldEqual false
+        emptyDList |> DList.add 1 |> DList.add 2 |> DList.isEmpty |> shouldEqual false
 
     [<Test>]
     let ``cons to work`` () =
-        emptyDList |> cons 1 |> cons 2 |> length |> shouldEqual 2
+        emptyDList |> DList.cons 1 |> DList.cons 2 |> DList.length |> shouldEqual 2
 
     [<Test>]
     let ``allow to cons and add to work`` () =
-        emptyDList |> cons 1 |> cons 2 |> add 3 |> length |> shouldEqual 3
+        emptyDList |> DList.cons 1 |> DList.cons 2 |> DList.add 3 |> DList.length |> shouldEqual 3
 
     [<Test>]
     let ``empty DList should be empty`` () =
-        emptyDList |> isEmpty |> shouldEqual true
+        emptyDList |> DList.isEmpty |> shouldEqual true
 
     [<Test>]
     let ``fail if there is no head in the DList`` () =
-        (fun () -> emptyDList |> head |> ignore) |> shouldThrow typeof<System.Exception>
+        (fun () -> emptyDList |> DList.head |> ignore) |> shouldThrow typeof<System.Exception>
 
     [<Test>]
     let ``fail if there is no tail in the DList`` () =
-        (fun () -> emptyDList |> tail |> ignore) |> shouldThrow typeof<System.Exception>
+        (fun () -> emptyDList |> DList.tail |> ignore) |> shouldThrow typeof<System.Exception>
 
     [<Test>]
     let ``fold matches build list rev`` () =
 
         fsCheck "DList" (Prop.forAll (Arb.fromGen DListIntGen) 
-            (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
+            (fun ((q :DList<int>), (l : int list)) -> q |> DList.fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
                   
         fsCheck "DList OfSeq" (Prop.forAll (Arb.fromGen DListIntOfSeqGen) 
-            (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
+            (fun ((q :DList<int>), (l : int list)) -> q |> DList.fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
 
         fsCheck "DList Add" (Prop.forAll (Arb.fromGen DListIntAddGen) 
-             (fun ((q :DList<int>), (l : int list)) -> q |> fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
+             (fun ((q :DList<int>), (l : int list)) -> q |> DList.fold (fun (l' : int list) (elem : int) -> elem::l') [] = (List.rev l) ))
 
     [<Test>]
     let ``foldBack matches build list`` () =
 
         fsCheck "DList" (Prop.forAll (Arb.fromGen DListIntGen) 
-            (fun ((q :DList<int>), (l : int list)) -> foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
+            (fun ((q :DList<int>), (l : int list)) -> DList.foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
                   
         fsCheck "DList OfSeq" (Prop.forAll (Arb.fromGen DListIntOfSeqGen) 
-            (fun ((q :DList<int>), (l : int list)) -> foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
+            (fun ((q :DList<int>), (l : int list)) -> DList.foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
 
         fsCheck "DList Add" (Prop.forAll (Arb.fromGen DListIntAddGen) 
-             (fun ((q :DList<int>), (l : int list)) -> foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
+             (fun ((q :DList<int>), (l : int list)) -> DList.foldBack (fun (elem : int) (l' : int list) -> elem::l') q [] = l ))
 
     [<Test>]
     let ``foldBack matches build list 2`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"]
-        let lq = foldBack (fun (elem : string) (l' : string list) -> elem::l') q []
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"]
+        let lq = DList.foldBack (fun (elem : string) (l' : string list) -> elem::l') q []
         lq |> shouldEqual (DList.toList q)
 
     [<Test>]
     let ``fold matches build list rev 2`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"]
-        let lq = fold (fun (l' : string list) (elem : string) -> elem::l') [] q
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"]
+        let lq = DList.fold (fun (l' : string list) (elem : string) -> elem::l') [] q
         lq |> shouldEqual (List.rev (DList.toList q))
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
     let ``get head from DList`` (x: obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (head q) = (List.item 0 l) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (DList.head q) = (List.item 0 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
     let ``get head from DList safely`` (x: obj) =
         let genAndName = unbox x 
-        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (tryHead q).Value = (List.item 0 l) ))
+        fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (DList.tryHead q).Value = (List.item 0 l) ))
 
     [<Test>]
     [<TestCaseSource("intGensStart2")>]
@@ -178,11 +175,11 @@ module DList=
 
     [<Test>]
     let ``give None if there is no head in the DList`` () =
-        emptyDList |> tryHead |> shouldEqual None
+        emptyDList |> DList.tryHead |> shouldEqual None
 
     [<Test>]
     let ``give None if there is no tail in the DList`` () =
-        emptyDList |> tryTail |> shouldEqual None
+        emptyDList |> DList.tryTail |> shouldEqual None
 
     [<Test>]
     [<TestCaseSource("intGensStart1")>]
@@ -200,7 +197,7 @@ module DList=
 
     [<Test>]
     let ``TryUncons wind-down to None`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"] 
 
         let rec loop (q' : DList<string>) = 
             match (q'.TryUncons) with
@@ -213,7 +210,7 @@ module DList=
 
     [<Test>]
     let ``Uncons wind-down to None`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"] 
 
         let rec loop (q' : DList<string>) = 
             match (q'.Uncons) with
@@ -226,16 +223,16 @@ module DList=
 
     [<Test>]
     let ``test length should return 6`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
-        length q |> shouldEqual 6
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"] 
+        DList.length q |> shouldEqual 6
 
     [<Test>]
     let ``singleton length 1`` () =
-        singleton 1 |> length |> shouldEqual 1
+        DList.singleton 1 |> DList.length |> shouldEqual 1
 
     [<Test>]
     let ``empty length 0`` () =
-        empty |> length |> shouldEqual 0
+        DList.empty |> DList.length |> shouldEqual 0
 
     [<Test>]
     let ``test ofSeq should create a DList from a list`` () =
@@ -250,24 +247,24 @@ module DList=
 
     [<Test>]
     let ``test singleton should return a Unit containing the solo value`` () =
-        singleton 1 |> head |> shouldEqual 1
+        DList.singleton 1 |> DList.head |> shouldEqual 1
 
     [<Test>]
     let ``test append should join two DLists together`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"]
-        let q2 = ofSeq ["1";"2";"3";"4";"5";"6"]
-        let q3 =  append q q2
-        q3 |> length |> shouldEqual 12
-        q3 |> head |> shouldEqual "f"
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"]
+        let q2 = DList.ofSeq ["1";"2";"3";"4";"5";"6"]
+        let q3 = DList.append q q2
+        q3 |> DList.length |> shouldEqual 12
+        q3 |> DList.head |> shouldEqual "f"
 
     [<Test>]
     let ``test toSeq`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"] 
         List.ofSeq (DList.toSeq q) |> shouldEqual ["f";"e";"d";"c";"b";"a"]
 
     [<Test>]
     let ``test toList`` () =
-        let q = ofSeq ["f";"e";"d";"c";"b";"a"] 
+        let q = DList.ofSeq ["f";"e";"d";"c";"b";"a"] 
         DList.toList q |> shouldEqual ["f";"e";"d";"c";"b";"a"]
 
     type DListGen =
@@ -284,12 +281,12 @@ module DList=
     [<Test>]
     let ``structural equality`` () =
 
-        let l1 = ofSeq [1..100]
-        let l2 = ofSeq [1..100]
+        let l1 = DList.ofSeq [1..100]
+        let l2 = DList.ofSeq [1..100]
 
         l1 = l2 |> shouldEqual true
 
-        let l3 = ofSeq [1..99] |> add 7
+        let l3 = DList.ofSeq [1..99] |> DList.add 7
 
         l1 = l3 |> shouldEqual false
 
