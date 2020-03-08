@@ -1,5 +1,5 @@
 #if INTERACTIVE
-#r @"../FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 #else
 module Samples.Learn_You_a_Haskell
 #endif

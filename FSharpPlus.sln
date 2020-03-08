@@ -85,7 +85,7 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Tests", "tests\F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{81F5F559-FD23-4E90-9EE6-3E2A2C1A7F96}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Samples", "src\FSharpPlus.Samples\FSharpPlus.Samples.fsproj", "{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Docs", "src\FSharpPlus.Docs\FSharpPlus.Docs.fsproj", "{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
