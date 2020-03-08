@@ -10,12 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\FSharpPlus\Samples\*.fsx">
-      <Link>Samples\%(FileName)%(Extension)</Link>
-    </Compile>
-    <Compile Include="..\FSharpPlus\SamplesFromFsControl\*.fsx">
-      <Link>SamplesFromFsControl\%(FileName)%(Extension)</Link>
-    </Compile>
+    <Compile Include="*.fsx" />
 
     <Compile Include="Program.fs" />
   </ItemGroup>
