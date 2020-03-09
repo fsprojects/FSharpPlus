@@ -3,8 +3,6 @@
 open System
 open FSharpPlus.Internals
 
-#if !FABLE_COMPILER
-
 type Item1 = static member inline Invoke value = (^t : (member Item1 : _) value)
 type Item2 = static member inline Invoke value = (^t : (member Item2 : _) value)
 type Item3 = static member inline Invoke value = (^t : (member Item3 : _) value)
@@ -12,7 +10,10 @@ type Item4 = static member inline Invoke value = (^t : (member Item4 : _) value)
 type Item5 = static member inline Invoke value = (^t : (member Item5 : _) value)
 
 
-type MapItem1 =   
+type MapItem1 =
+
+    #if !FABLE_COMPILER
+
     static member inline MapItem1 (t: 't, fn) =
         let xr = (^t : (member Rest : 'tr) t)
         let x7 = (^t : (member Item7: 't7) t)
@@ -25,6 +26,9 @@ type MapItem1 =
         Tuple<_,_,_,_,_,_,_,_> (fn x1, x2, x3, x4, x5, x6, x7, xr)
 
     static member MapItem1 ( x: Tuple<_>         , fn) = Tuple<_> (fn x.Item1)
+
+    #endif
+
     static member MapItem1 ((a, b)               , fn) = (fn a, b)
     static member MapItem1 ((a, b, c)            , fn) = (fn a, b, c)
     static member MapItem1 ((a, b, c, d)         , fn) = (fn a, b, c, d)
@@ -37,7 +41,10 @@ type MapItem1 =
         let inline call   (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem1>, value)
 
-type MapItem2 =   
+type MapItem2 =
+
+    #if !FABLE_COMPILER
+
     static member inline MapItem2 (t: 't, fn) =
         let xr = (^t : (member Rest : 'tr) t)
         let x7 = (^t : (member Item7: 't7) t)
@@ -50,6 +57,9 @@ type MapItem2 =
         Tuple<_,_,_,_,_,_,_,_> (x1, fn x2, x3, x4, x5, x6, x7, xr)
 
     static member MapItem2 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
+
+    #endif
+
     static member MapItem2 ((a, b)               , fn) = (a, fn b)
     static member MapItem2 ((a, b, c)            , fn) = (a, fn b, c)
     static member MapItem2 ((a, b, c, d)         , fn) = (a, fn b, c, d)
@@ -62,7 +72,10 @@ type MapItem2 =
         let inline call   (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem2>, value)
 
-type MapItem3 =   
+type MapItem3 =
+    
+    #if !FABLE_COMPILER
+
     static member inline MapItem3 (t: 't, fn) =
         let xr = (^t : (member Rest : 'tr) t)
         let x7 = (^t : (member Item7: 't7) t)
@@ -75,6 +88,9 @@ type MapItem3 =
         Tuple<_,_,_,_,_,_,_,_> (x1, x2, fn x3, x4, x5, x6, x7, xr)
 
     static member MapItem3 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
+
+    #endif
+
     static member MapItem3 ((a, b, c)            , fn) = (a, b, fn c)
     static member MapItem3 ((a, b, c, d)         , fn) = (a, b, fn c, d)
     static member MapItem3 ((a, b, c, d, e)      , fn) = (a, b, fn c, d, e)
@@ -86,7 +102,10 @@ type MapItem3 =
         let inline call   (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem3>, value)
 
-type MapItem4 =   
+type MapItem4 =
+
+    #if !FABLE_COMPILER
+
     static member inline MapItem4 (t: 't, fn) =
         let xr = (^t : (member Rest  : 'tr) t)
         let x7 = (^t : (member Item7 : 't7) t)
@@ -99,6 +118,9 @@ type MapItem4 =
         Tuple<_,_,_,_,_,_,_,_> (x1, x2, x3, fn x4, x5, x6, x7, xr)
 
     static member MapItem4 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
+
+    #endif
+
     static member MapItem4 ((a, b, c, d)         , fn) = (a, b, c, fn d)
     static member MapItem4 ((a, b, c, d, e)      , fn) = (a, b, c, fn d, e)
     static member MapItem4 ((a, b, c, d, e, f)   , fn) = (a, b, c, fn d, e, f)
@@ -109,7 +131,10 @@ type MapItem4 =
         let inline call   (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem4>, value)
 
-type MapItem5 =   
+type MapItem5 =
+
+    #if !FABLE_COMPILER
+
     static member inline MapItem5 (t: 't, fn) =
         let xr = (^t : (member Rest  : 'tr) t)
         let x7 = (^t : (member Item7 : 't7) t)
@@ -122,6 +147,9 @@ type MapItem5 =
         Tuple<_,_,_,_,_,_,_,_> (x1, x2, x3, x4, fn x5, x6, x7, xr)
 
     static member MapItem5 ( x: Id<_>            , fn) = Id<_> (fn x.getValue)
+
+    #endif
+
     static member MapItem5 ((a, b, c, d, e)      , fn) = (a, b, c, d, fn e)
     static member MapItem5 ((a, b, c, d, e, f)   , fn) = (a, b, c, d, fn e, f)
     static member MapItem5 ((a, b, c, d, e, f, g), fn) = (a, b, c, d, fn e, f, g)
@@ -131,6 +159,8 @@ type MapItem5 =
         let inline call   (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem5>, value)
 
+
+#if !FABLE_COMPILER
 
 open FSharpPlus.Internals.Prelude
 

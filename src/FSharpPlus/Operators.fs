@@ -845,6 +845,7 @@ module Operators =
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection) = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
 
 
+    #endif
 
     // Tuple
     
@@ -879,6 +880,7 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
+    #if !FABLE_COMPILER
     
     // Converter
 

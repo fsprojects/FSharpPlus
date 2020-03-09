@@ -81,4 +81,10 @@ let ExtensionsTest =
                     let tenEncoded = StringCodec.encode intCodec 10
                     equal oneParsed (Result<int, string>.Ok 1)
                     equal tenEncoded "10" )
+
+      testCase "Tuple"
+        (fun () ->
+                   equal (mapItem2 string (1,2,3)) (1,"2",3)
+                   equal (item3 (1,2,3)) 3
+                   )
 ]
