@@ -55,15 +55,15 @@
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2352', 2352)" onmouseover="showTip(event, '2352', 2352)">
+          <code onmouseout="hideTip(event, '2409', 2409)" onmouseover="showTip(event, '2409', 2409)">
             ReaderT(&#39;r -&gt; &#39;monad&lt;&#39;t&gt;)
           </code>
-          <div class="tip" id="2352">
+          <div class="tip" id="2409">
             <strong>Signature:</strong> &#39;r -&gt; &#39;monad&lt;&#39;t&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L54-54" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L70-70" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -80,15 +80,15 @@
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2353', 2353)" onmouseover="showTip(event, '2353', 2353)">
+          <code onmouseout="hideTip(event, '2410', 2410)" onmouseover="showTip(event, '2410', 2410)">
             ReaderT.( &lt;*&gt; )(f, x)
           </code>
-          <div class="tip" id="2353">
+          <div class="tip" id="2410">
             <strong>Signature:</strong> (f:ReaderT&lt;&#39;R,^Monad&lt;&#39;T -&gt; &#39;U&gt;&gt; * x:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<'U>                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L81-81" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L97-97" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -98,15 +98,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2354', 2354)" onmouseover="showTip(event, '2354', 2354)">
+          <code onmouseout="hideTip(event, '2411', 2411)" onmouseover="showTip(event, '2411', 2411)">
             ReaderT.( &lt;|&gt; )(arg1, arg2)
           </code>
-          <div class="tip" id="2354">
+          <div class="tip" id="2411">
             <strong>Signature:</strong> (ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt; * ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L85-85" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L101-101" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -116,15 +116,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2355', 2355)" onmouseover="showTip(event, '2355', 2355)">
+          <code onmouseout="hideTip(event, '2412', 2412)" onmouseover="showTip(event, '2412', 2412)">
             ReaderT.( &gt;&gt;= )(x, f)
           </code>
-          <div class="tip" id="2355">
+          <div class="tip" id="2412">
             <strong>Signature:</strong> (x:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'U>, 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L82-82" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L98-98" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -134,97 +134,12 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2356', 2356)" onmouseover="showTip(event, '2356', 2356)">
+          <code onmouseout="hideTip(event, '2413', 2413)" onmouseover="showTip(event, '2413', 2413)">
             ReaderT.CallCC(f)
           </code>
-          <div class="tip" id="2356">
-            <strong>Signature:</strong> (f:((&#39;T -&gt; ReaderT&lt;&#39;R,Cont&lt;&#39;?9614,&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9614, 'U, ^MonadCont<'C,'T>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L100-100" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2357', 2357)" onmouseover="showTip(event, '2357', 2357)">
-            ReaderT.Catch(m, h)
-          </code>
-          <div class="tip" id="2357">
-            <strong>Signature:</strong> (m:ReaderT&lt;&#39;R,^MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h:(&#39;E1 -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E2,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E2,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadError<'E2,'T>, 'E1                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L109-109" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2358', 2358)" onmouseover="showTip(event, '2358', 2358)">
-            ReaderT.Delay(body)
-          </code>
-          <div class="tip" id="2358">
-            <strong>Signature:</strong> (body:(unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,&#39;?9597&gt;<br />
-                          <strong>Type parameters:</strong> '?9597                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L93-93" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2359', 2359)" onmouseover="showTip(event, '2359', 2359)">
-            ReaderT.get_Ask()
-          </code>
-          <div class="tip" id="2359">
-            <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L104-104" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2360', 2360)" onmouseover="showTip(event, '2360', 2360)">
-            ReaderT.get_Empty()
-          </code>
-          <div class="tip" id="2360">
-            <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L84-84" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2361', 2361)" onmouseover="showTip(event, '2361', 2361)">
-            ReaderT.get_Get()
-          </code>
-          <div class="tip" id="2361">
-            <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, &#39;S&gt;&gt;<br />
-                                  </div>
+          <div class="tip" id="2413">
+            <strong>Signature:</strong> (f:((&#39;T -&gt; ReaderT&lt;&#39;R,Cont&lt;&#39;?9678,&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadCont&lt;&#39;C,&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?9678, 'U, ^MonadCont<'C,'T>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L116-116" class="github-link">
@@ -236,156 +151,101 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2362', 2362)" onmouseover="showTip(event, '2362', 2362)">
+          <code onmouseout="hideTip(event, '2414', 2414)" onmouseover="showTip(event, '2414', 2414)">
+            ReaderT.Catch(m, h)
+          </code>
+          <div class="tip" id="2414">
+            <strong>Signature:</strong> (m:ReaderT&lt;&#39;R,^MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h:(&#39;E1 -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E2,&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E2,&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadError<'E2,'T>, 'E1                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L123-123" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2415', 2415)" onmouseover="showTip(event, '2415', 2415)">
+            ReaderT.Delay(body)
+          </code>
+          <div class="tip" id="2415">
+            <strong>Signature:</strong> (body:(unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,&#39;?9661&gt;<br />
+                          <strong>Type parameters:</strong> '?9661                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L109-109" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2416', 2416)" onmouseover="showTip(event, '2416', 2416)">
+            ReaderT.get_Ask()
+          </code>
+          <div class="tip" id="2416">
+            <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L119-119" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2417', 2417)" onmouseover="showTip(event, '2417', 2417)">
+            ReaderT.get_Empty()
+          </code>
+          <div class="tip" id="2417">
+            <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^MonadPlus&lt;&#39;T&gt;&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L100-100" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2418', 2418)" onmouseover="showTip(event, '2418', 2418)">
+            ReaderT.get_Get()
+          </code>
+          <div class="tip" id="2418">
+            <strong>Signature:</strong> unit -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, &#39;S&gt;&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L130-130" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2419', 2419)" onmouseover="showTip(event, '2419', 2419)">
             ReaderT.Lift(m)
           </code>
-          <div class="tip" id="2362">
+          <div class="tip" id="2419">
             <strong>Signature:</strong> m:&#39;Monad&lt;&#39;T&gt; -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;&gt;<br />
                                     <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
           </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L96-96" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2363', 2363)" onmouseover="showTip(event, '2363', 2363)">
-            ReaderT.LiftAsync(x)
-          </code>
-          <div class="tip" id="2363">
-            <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ReaderT&lt;&#39;R,^MonadAsync&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadAsync<'T>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L98-98" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2364', 2364)" onmouseover="showTip(event, '2364', 2364)">
-            ReaderT.Listen(arg1)
-          </code>
-          <div class="tip" id="2364">
-            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9651&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T*&#39;Monoid&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T*'Monoid>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L113-113" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2365', 2365)" onmouseover="showTip(event, '2365', 2365)">
-            ReaderT.Local(arg1, f)
-          </code>
-          <div class="tip" id="2365">
-            <strong>Signature:</strong> (ReaderT&lt;&#39;R2,&#39;Monad&lt;&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ReaderT&lt;&#39;R1,&#39;Monad&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'R1                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L106-106" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2366', 2366)" onmouseover="showTip(event, '2366', 2366)">
-            ReaderT.Map(x, f)
-          </code>
-          <div class="tip" id="2366">
-            <strong>Signature:</strong> (x:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'U>, 'T, 'U                        <span>
-            <strong>Attributes:</strong><br />
-[&lt;EditorBrowsable(1)&gt;]<br />
-          </span>
-          </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L79-79" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2367', 2367)" onmouseover="showTip(event, '2367', 2367)">
-            ReaderT.Pass(arg1)
-          </code>
-          <div class="tip" id="2367">
-            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9657&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L114-114" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2368', 2368)" onmouseover="showTip(event, '2368', 2368)">
-            ReaderT.Put(x)
-          </code>
-          <div class="tip" id="2368">
-            <strong>Signature:</strong> x:&#39;?9667 -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, unit&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadState<'S, unit>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L117-117" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2369', 2369)" onmouseover="showTip(event, '2369', 2369)">
-            ReaderT.Return(x)
-          </code>
-          <div class="tip" id="2369">
-            <strong>Signature:</strong> x:&#39;T -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'T>                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L76-76" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2370', 2370)" onmouseover="showTip(event, '2370', 2370)">
-            ReaderT.Tell(w)
-          </code>
-          <div class="tip" id="2370">
-            <strong>Signature:</strong> w:&#39;?9644 -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,unit&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,unit>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L112-112" class="github-link">
@@ -397,15 +257,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2371', 2371)" onmouseover="showTip(event, '2371', 2371)">
-            ReaderT.Throw(x)
+          <code onmouseout="hideTip(event, '2420', 2420)" onmouseover="showTip(event, '2420', 2420)">
+            ReaderT.LiftAsync(x)
           </code>
-          <div class="tip" id="2371">
-            <strong>Signature:</strong> x:&#39;E -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^MonadError<'E,'T>                      </div>
+          <div class="tip" id="2420">
+            <strong>Signature:</strong> x:Async&lt;&#39;T&gt; -&gt; ReaderT&lt;&#39;R,^MonadAsync&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadAsync<'T>                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L108-108" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L114-114" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -414,15 +274,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2372', 2372)" onmouseover="showTip(event, '2372', 2372)">
-            ReaderT.TryFinally(computation, f)
+          <code onmouseout="hideTip(event, '2421', 2421)" onmouseover="showTip(event, '2421', 2421)">
+            ReaderT.Listen(arg1)
           </code>
-          <div class="tip" id="2372">
-            <strong>Signature:</strong> (computation:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(unit -&gt; unit)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
-                                  </div>
+          <div class="tip" id="2421">
+            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9715&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T*&#39;Monoid&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T*'Monoid>                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L91-91" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L127-127" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -431,15 +291,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2373', 2373)" onmouseover="showTip(event, '2373', 2373)">
-            ReaderT.TryWith(source, f)
+          <code onmouseout="hideTip(event, '2422', 2422)" onmouseover="showTip(event, '2422', 2422)">
+            ReaderT.Local(arg1, f)
           </code>
-          <div class="tip" id="2373">
-            <strong>Signature:</strong> (source:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(exn -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> '?9580                      </div>
+          <div class="tip" id="2422">
+            <strong>Signature:</strong> (ReaderT&lt;&#39;R2,&#39;Monad&lt;&#39;T&gt;&gt; * f:(&#39;R1 -&gt; &#39;R2)) -&gt; ReaderT&lt;&#39;R1,&#39;Monad&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'R1                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L90-90" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L120-120" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -448,11 +308,66 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2374', 2374)" onmouseover="showTip(event, '2374', 2374)">
-            ReaderT.Using(resource, f)
+          <code onmouseout="hideTip(event, '2423', 2423)" onmouseover="showTip(event, '2423', 2423)">
+            ReaderT.Map(x, f)
           </code>
-          <div class="tip" id="2374">
-            <strong>Signature:</strong> (resource:&#39;?9589 * f:(&#39;?9589 -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
+          <div class="tip" id="2423">
+            <strong>Signature:</strong> (x:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;U&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'U>, 'T, 'U                        <span>
+            <strong>Attributes:</strong><br />
+[&lt;EditorBrowsable(1)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L95-95" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2424', 2424)" onmouseover="showTip(event, '2424', 2424)">
+            ReaderT.Pass(arg1)
+          </code>
+          <div class="tip" id="2424">
+            <strong>Signature:</strong> ReaderT&lt;&#39;R,&#39;?9721&gt; -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L128-128" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2425', 2425)" onmouseover="showTip(event, '2425', 2425)">
+            ReaderT.Put(x)
+          </code>
+          <div class="tip" id="2425">
+            <strong>Signature:</strong> x:&#39;?9731 -&gt; ReaderT&lt;&#39;R,^MonadState&lt;&#39;S, unit&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadState<'S, unit>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L131-131" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2426', 2426)" onmouseover="showTip(event, '2426', 2426)">
+            ReaderT.Return(x)
+          </code>
+          <div class="tip" id="2426">
+            <strong>Signature:</strong> x:&#39;T -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>                      </div>
         </td>
         <td class="xmldoc">
@@ -465,19 +380,104 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2375', 2375)" onmouseover="showTip(event, '2375', 2375)">
+          <code onmouseout="hideTip(event, '2427', 2427)" onmouseover="showTip(event, '2427', 2427)">
+            ReaderT.Tell(w)
+          </code>
+          <div class="tip" id="2427">
+            <strong>Signature:</strong> w:&#39;?9708 -&gt; ReaderT&lt;&#39;R,^MonadWriter&lt;&#39;Monoid,unit&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadWriter<'Monoid,unit>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L126-126" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2428', 2428)" onmouseover="showTip(event, '2428', 2428)">
+            ReaderT.Throw(x)
+          </code>
+          <div class="tip" id="2428">
+            <strong>Signature:</strong> x:&#39;E -&gt; ReaderT&lt;&#39;R,^MonadError&lt;&#39;E,&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^MonadError<'E,'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L122-122" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2429', 2429)" onmouseover="showTip(event, '2429', 2429)">
+            ReaderT.TryFinally(computation, f)
+          </code>
+          <div class="tip" id="2429">
+            <strong>Signature:</strong> (computation:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(unit -&gt; unit)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L107-107" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2430', 2430)" onmouseover="showTip(event, '2430', 2430)">
+            ReaderT.TryWith(source, f)
+          </code>
+          <div class="tip" id="2430">
+            <strong>Signature:</strong> (source:ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt; * f:(exn -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> '?9644                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L106-106" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2431', 2431)" onmouseover="showTip(event, '2431', 2431)">
+            ReaderT.Using(resource, f)
+          </code>
+          <div class="tip" id="2431">
+            <strong>Signature:</strong> (resource:&#39;?9653 * f:(&#39;?9653 -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;)) -&gt; ReaderT&lt;&#39;R,^Monad&lt;&#39;T&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'T>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L108-108" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2432', 2432)" onmouseover="showTip(event, '2432', 2432)">
             ReaderT.Zip(x, y)
           </code>
-          <div class="tip" id="2375">
-            <strong>Signature:</strong> (x:ReaderT&lt;&#39;S,^Monad&lt;&#39;T&gt;&gt; * y:ReaderT&lt;&#39;S,^Monad&lt;&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;S,^?9574&gt;<br />
-                          <strong>Type parameters:</strong> ^?9570, '?9571, '?9572, ^Monad<'U>, ^?9574                        <span>
+          <div class="tip" id="2432">
+            <strong>Signature:</strong> (x:ReaderT&lt;&#39;S,^Monad&lt;&#39;T&gt;&gt; * y:ReaderT&lt;&#39;S,^Monad&lt;&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;S,^?9638&gt;<br />
+                          <strong>Type parameters:</strong> ^?9634, '?9635, '?9636, ^Monad<'U>, ^?9638                        <span>
             <strong>Attributes:</strong><br />
 [&lt;EditorBrowsable(1)&gt;]<br />
           </span>
           </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L88-88" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L104-104" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

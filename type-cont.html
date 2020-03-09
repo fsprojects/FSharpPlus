@@ -1,13 +1,493 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="TO-DO-Add-some-docs-here" class="anchor" href="#TO-DO-Add-some-docs-here">TO-DO Add some docs here !</a></h1>
+<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="Cont-R-U" class="anchor" href="#Cont-R-U">Cont<'R,'U></a></h1>
+<p>The <code>Cont</code> computation type represents computations which can be interrupted and resumed.</p>
+<p>Some of these examples are adapted from <a href="https://github.com/fabriceleal/Continuations/blob/master/Continuations/Program.fs">fabriceleal/Continuations on github</a>.</p>
+<p>You can read up on the style on <a href="http://www.markhneedham.com/blog/2009/06/22/f-continuation-passing-style/">Markh Needhams blog post</a> or
+by reading <a href="https://livebook.manning.com/book/real-world-functional-programming/chapter-10/156">Real World Functional Programming by Tomas Petricek with Jon Skeet</a> on the subject.</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<p>In order to get an idea about this style, let us contrast some of the examples and how they look in when using f#+ or without help.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
 <span class="k">open</span> <span onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, '1', 2)" onmouseover="showTip(event, '1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, '2', 3)" onmouseover="showTip(event, '2', 3)" class="id">Data</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, '3', 4)" onmouseover="showTip(event, '3', 4)" class="fn">assertEqual</span> <span onmouseout="hideTip(event, '4', 5)" onmouseover="showTip(event, '4', 5)" class="id">expected</span> <span onmouseout="hideTip(event, '5', 6)" onmouseover="showTip(event, '5', 6)" class="id">actual</span> <span class="o">=</span> 
+    <span class="k">if</span> <span onmouseout="hideTip(event, '4', 7)" onmouseover="showTip(event, '4', 7)" class="id">expected</span> <span class="o">&lt;&gt;</span> <span onmouseout="hideTip(event, '5', 8)" onmouseover="showTip(event, '5', 8)" class="id">actual</span> <span class="k">then</span>
+        <span onmouseout="hideTip(event, '6', 9)" onmouseover="showTip(event, '6', 9)" class="fn">failwithf</span> <span class="s">&quot;</span><span class="pf">%A</span><span class="s"> != </span><span class="pf">%A</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, '4', 10)" onmouseover="showTip(event, '4', 10)" class="id">expected</span> <span onmouseout="hideTip(event, '5', 11)" onmouseover="showTip(event, '5', 11)" class="id">actual</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Example-g-k" class="anchor" href="#Example-g-k">Example g k</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '7', 12)" onmouseover="showTip(event, '7', 12)" class="fn">g</span> <span onmouseout="hideTip(event, '8', 13)" onmouseover="showTip(event, '8', 13)" class="id">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, '8', 14)" onmouseover="showTip(event, '8', 14)" class="id">n</span> <span class="o">+</span> <span class="n">1</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '9', 15)" onmouseover="showTip(event, '9', 15)" class="fn">f</span> <span onmouseout="hideTip(event, '8', 16)" onmouseover="showTip(event, '8', 16)" class="id">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, '7', 17)" onmouseover="showTip(event, '7', 17)" class="fn">g</span><span class="pn">(</span><span onmouseout="hideTip(event, '8', 18)" onmouseover="showTip(event, '8', 18)" class="id">n</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span> <span class="o">+</span> <span class="n">1</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE g k``</span> <span class="o">=</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '10', 19)" onmouseover="showTip(event, '10', 19)" class="fn">g_k</span> <span onmouseout="hideTip(event, '8', 20)" onmouseover="showTip(event, '8', 20)" class="id">n</span> <span onmouseout="hideTip(event, '11', 21)" onmouseover="showTip(event, '11', 21)" class="fn">k</span> <span class="o">=</span> <span onmouseout="hideTip(event, '11', 22)" onmouseover="showTip(event, '11', 22)" class="fn">k</span><span class="pn">(</span><span onmouseout="hideTip(event, '8', 23)" onmouseover="showTip(event, '8', 23)" class="id">n</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '12', 24)" onmouseover="showTip(event, '12', 24)" class="fn">f_k</span> <span onmouseout="hideTip(event, '8', 25)" onmouseover="showTip(event, '8', 25)" class="id">n</span> <span onmouseout="hideTip(event, '11', 26)" onmouseover="showTip(event, '11', 26)" class="fn">k</span> <span class="o">=</span> <span onmouseout="hideTip(event, '10', 27)" onmouseover="showTip(event, '10', 27)" class="fn">g_k</span><span class="pn">(</span><span onmouseout="hideTip(event, '8', 28)" onmouseover="showTip(event, '8', 28)" class="id">n</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '13', 29)" onmouseover="showTip(event, '13', 29)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '11', 30)" onmouseover="showTip(event, '11', 30)" class="fn">k</span><span class="pn">(</span><span onmouseout="hideTip(event, '13', 31)" onmouseover="showTip(event, '13', 31)" class="id">x</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span><span class="pn">)</span>
+    <span onmouseout="hideTip(event, '12', 32)" onmouseover="showTip(event, '12', 32)" class="fn">f_k</span> <span class="n">1</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '13', 33)" onmouseover="showTip(event, '13', 33)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '3', 34)" onmouseover="showTip(event, '3', 34)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '9', 35)" onmouseover="showTip(event, '9', 35)" class="fn">f</span> <span class="n">1</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 36)" onmouseover="showTip(event, '13', 36)" class="id">x</span><span class="pn">)</span>
+    <span onmouseout="hideTip(event, '12', 37)" onmouseover="showTip(event, '12', 37)" class="fn">f_k</span> <span class="n">2</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '13', 38)" onmouseover="showTip(event, '13', 38)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '3', 39)" onmouseover="showTip(event, '3', 39)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '9', 40)" onmouseover="showTip(event, '9', 40)" class="fn">f</span> <span class="n">2</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 41)" onmouseover="showTip(event, '13', 41)" class="id">x</span><span class="pn">)</span>
+
+
+<span class="k">module</span> <span class="m">``EXAMPLE g k in FSharpPlus``</span> <span class="o">=</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '14', 42)" onmouseover="showTip(event, '14', 42)" class="fn">g_k</span> <span onmouseout="hideTip(event, '8', 43)" onmouseover="showTip(event, '8', 43)" class="id">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, '15', 44)" onmouseover="showTip(event, '15', 44)" class="k">monad</span> <span class="pn">{</span> <span class="k">return</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 45)" onmouseover="showTip(event, '8', 45)" class="id">n</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '16', 46)" onmouseover="showTip(event, '16', 46)" class="fn">f_k</span> <span onmouseout="hideTip(event, '8', 47)" onmouseover="showTip(event, '8', 47)" class="id">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, '15', 48)" onmouseover="showTip(event, '15', 48)" class="k">monad</span> <span class="pn">{</span>
+      <span class="k">let!</span> <span onmouseout="hideTip(event, '13', 49)" onmouseover="showTip(event, '13', 49)" class="id">x</span><span class="o">=</span> <span onmouseout="hideTip(event, '14', 50)" onmouseover="showTip(event, '14', 50)" class="fn">g_k</span><span class="pn">(</span><span onmouseout="hideTip(event, '8', 51)" onmouseover="showTip(event, '8', 51)" class="id">n</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span> 
+      <span class="k">return</span> <span onmouseout="hideTip(event, '13', 52)" onmouseover="showTip(event, '13', 52)" class="id">x</span><span class="o">+</span><span class="n">1</span>
+    <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '8', 53)" onmouseover="showTip(event, '8', 53)" class="id">n</span> <span class="o">=</span> <span class="n">2</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '17', 54)" onmouseover="showTip(event, '17', 54)" class="id">res</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 55)" onmouseover="showTip(event, '18', 55)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 56)" onmouseover="showTip(event, '19', 56)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '16', 57)" onmouseover="showTip(event, '16', 57)" class="fn">f_k</span> <span onmouseout="hideTip(event, '8', 58)" onmouseover="showTip(event, '8', 58)" class="id">n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 59)" onmouseover="showTip(event, '20', 59)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 60)" onmouseover="showTip(event, '3', 60)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '9', 61)" onmouseover="showTip(event, '9', 61)" class="fn">f</span> <span onmouseout="hideTip(event, '8', 62)" onmouseover="showTip(event, '8', 62)" class="id">n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '17', 63)" onmouseover="showTip(event, '17', 63)" class="id">res</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Example-Max" class="anchor" href="#Example-Max">Example Max</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// Max, regular-style</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '21', 64)" onmouseover="showTip(event, '21', 64)" class="fn">max</span> <span onmouseout="hideTip(event, '22', 65)" onmouseover="showTip(event, '22', 65)" class="id">x</span> <span onmouseout="hideTip(event, '23', 66)" onmouseover="showTip(event, '23', 66)" class="id">y</span> <span class="o">=</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, '22', 67)" onmouseover="showTip(event, '22', 67)" class="id">x</span> <span class="o">&gt;</span> <span onmouseout="hideTip(event, '23', 68)" onmouseover="showTip(event, '23', 68)" class="id">y</span> <span class="k">then</span> <span onmouseout="hideTip(event, '22', 69)" onmouseover="showTip(event, '22', 69)" class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '23', 70)" onmouseover="showTip(event, '23', 70)" class="id">y</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE max``</span> <span class="o">=</span>
+
+    <span class="c">// Max, CPS-style</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '24', 71)" onmouseover="showTip(event, '24', 71)" class="fn">max_k</span> <span onmouseout="hideTip(event, '22', 72)" onmouseover="showTip(event, '22', 72)" class="id">x</span> <span onmouseout="hideTip(event, '23', 73)" onmouseover="showTip(event, '23', 73)" class="id">y</span> <span onmouseout="hideTip(event, '25', 74)" onmouseover="showTip(event, '25', 74)" class="fn">k</span> <span class="o">=</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '22', 75)" onmouseover="showTip(event, '22', 75)" class="id">x</span> <span class="o">&gt;</span> <span onmouseout="hideTip(event, '23', 76)" onmouseover="showTip(event, '23', 76)" class="id">y</span> <span class="k">then</span> <span onmouseout="hideTip(event, '25', 77)" onmouseover="showTip(event, '25', 77)" class="fn">k</span> <span onmouseout="hideTip(event, '22', 78)" onmouseover="showTip(event, '22', 78)" class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '25', 79)" onmouseover="showTip(event, '25', 79)" class="fn">k</span> <span onmouseout="hideTip(event, '23', 80)" onmouseover="showTip(event, '23', 80)" class="id">y</span>
+    <span class="c">// More CPS Styl-ish</span>
+    <span onmouseout="hideTip(event, '24', 81)" onmouseover="showTip(event, '24', 81)" class="fn">max_k</span> <span class="n">1</span> <span class="n">2</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '13', 82)" onmouseover="showTip(event, '13', 82)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '3', 83)" onmouseover="showTip(event, '3', 83)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '21', 84)" onmouseover="showTip(event, '21', 84)" class="fn">max</span> <span class="n">1</span> <span class="n">2</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 85)" onmouseover="showTip(event, '13', 85)" class="id">x</span><span class="pn">)</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE max in FSharpPlus``</span> <span class="o">=</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '26', 86)" onmouseover="showTip(event, '26', 86)" class="fn">max_k</span> <span onmouseout="hideTip(event, '13', 87)" onmouseover="showTip(event, '13', 87)" class="id">x</span> <span onmouseout="hideTip(event, '27', 88)" onmouseover="showTip(event, '27', 88)" class="id">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, '15', 89)" onmouseover="showTip(event, '15', 89)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">return</span> <span class="k">if</span> <span onmouseout="hideTip(event, '13', 90)" onmouseover="showTip(event, '13', 90)" class="id">x</span> <span class="o">&gt;</span> <span onmouseout="hideTip(event, '27', 91)" onmouseover="showTip(event, '27', 91)" class="id">y</span> <span class="k">then</span> <span onmouseout="hideTip(event, '13', 92)" onmouseover="showTip(event, '13', 92)" class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '27', 93)" onmouseover="showTip(event, '27', 93)" class="id">y</span> <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '13', 94)" onmouseover="showTip(event, '13', 94)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 95)" onmouseover="showTip(event, '18', 95)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 96)" onmouseover="showTip(event, '19', 96)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '26', 97)" onmouseover="showTip(event, '26', 97)" class="fn">max_k</span> <span class="n">1</span> <span class="n">2</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 98)" onmouseover="showTip(event, '20', 98)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 99)" onmouseover="showTip(event, '3', 99)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '21', 100)" onmouseover="showTip(event, '21', 100)" class="fn">max</span> <span class="n">1</span> <span class="n">2</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 101)" onmouseover="showTip(event, '13', 101)" class="id">x</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Example-factorial" class="anchor" href="#Example-factorial">Example factorial</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// regular factorial</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '28', 102)" onmouseover="showTip(event, '28', 102)" class="fn">factorial</span> <span onmouseout="hideTip(event, '8', 103)" onmouseover="showTip(event, '8', 103)" class="id">n</span> <span class="o">=</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, '8', 104)" onmouseover="showTip(event, '8', 104)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+        <span class="n">1</span>
+    <span class="k">else</span>
+        <span onmouseout="hideTip(event, '8', 105)" onmouseover="showTip(event, '8', 105)" class="id">n</span> <span class="o">*</span> <span onmouseout="hideTip(event, '28', 106)" onmouseover="showTip(event, '28', 106)" class="fn">factorial</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 107)" onmouseover="showTip(event, '8', 107)" class="id">n</span><span class="o">-</span><span class="n">1</span><span class="pn">)</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE factorial``</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '29', 108)" onmouseover="showTip(event, '29', 108)" class="fn">factorial_k</span> <span onmouseout="hideTip(event, '8', 109)" onmouseover="showTip(event, '8', 109)" class="id">n</span> <span onmouseout="hideTip(event, '11', 110)" onmouseover="showTip(event, '11', 110)" class="fn">k</span> <span class="o">=</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '8', 111)" onmouseover="showTip(event, '8', 111)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+            <span onmouseout="hideTip(event, '11', 112)" onmouseover="showTip(event, '11', 112)" class="fn">k</span> <span class="n">1</span>
+        <span class="k">else</span>
+            <span onmouseout="hideTip(event, '29', 113)" onmouseover="showTip(event, '29', 113)" class="fn">factorial_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 114)" onmouseover="showTip(event, '8', 114)" class="id">n</span><span class="o">-</span><span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '13', 115)" onmouseover="showTip(event, '13', 115)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '11', 116)" onmouseover="showTip(event, '11', 116)" class="fn">k</span><span class="pn">(</span><span onmouseout="hideTip(event, '13', 117)" onmouseover="showTip(event, '13', 117)" class="id">x</span> <span class="o">*</span> <span onmouseout="hideTip(event, '8', 118)" onmouseover="showTip(event, '8', 118)" class="id">n</span><span class="pn">)</span><span class="pn">)</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '30', 119)" onmouseover="showTip(event, '30', 119)" class="id">fact_n</span> <span class="o">=</span> <span class="n">5</span>
+    <span onmouseout="hideTip(event, '29', 120)" onmouseover="showTip(event, '29', 120)" class="fn">factorial_k</span> <span onmouseout="hideTip(event, '30', 121)" onmouseover="showTip(event, '30', 121)" class="id">fact_n</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '13', 122)" onmouseover="showTip(event, '13', 122)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '3', 123)" onmouseover="showTip(event, '3', 123)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '28', 124)" onmouseover="showTip(event, '28', 124)" class="fn">factorial</span> <span onmouseout="hideTip(event, '30', 125)" onmouseover="showTip(event, '30', 125)" class="id">fact_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 126)" onmouseover="showTip(event, '13', 126)" class="id">x</span><span class="pn">)</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE factorial in FSharpPlus``</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '31', 127)" onmouseover="showTip(event, '31', 127)" class="fn">factorial_k</span> <span onmouseout="hideTip(event, '8', 128)" onmouseover="showTip(event, '8', 128)" class="id">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, '15', 129)" onmouseover="showTip(event, '15', 129)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '8', 130)" onmouseover="showTip(event, '8', 130)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+            <span class="k">return</span> <span class="n">1</span>
+        <span class="k">else</span>
+            <span class="k">let!</span> <span onmouseout="hideTip(event, '13', 131)" onmouseover="showTip(event, '13', 131)" class="id">x</span><span class="o">=</span><span onmouseout="hideTip(event, '31', 132)" onmouseover="showTip(event, '31', 132)" class="fn">factorial_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 133)" onmouseover="showTip(event, '8', 133)" class="id">n</span><span class="o">-</span><span class="n">1</span><span class="pn">)</span>
+            <span class="k">return</span> <span onmouseout="hideTip(event, '13', 134)" onmouseover="showTip(event, '13', 134)" class="id">x</span> <span class="o">*</span> <span onmouseout="hideTip(event, '8', 135)" onmouseover="showTip(event, '8', 135)" class="id">n</span>
+      <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '30', 136)" onmouseover="showTip(event, '30', 136)" class="id">fact_n</span> <span class="o">=</span> <span class="n">5</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '13', 137)" onmouseover="showTip(event, '13', 137)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 138)" onmouseover="showTip(event, '18', 138)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 139)" onmouseover="showTip(event, '19', 139)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '31', 140)" onmouseover="showTip(event, '31', 140)" class="fn">factorial_k</span> <span onmouseout="hideTip(event, '30', 141)" onmouseover="showTip(event, '30', 141)" class="id">fact_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 142)" onmouseover="showTip(event, '20', 142)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 143)" onmouseover="showTip(event, '3', 143)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '28', 144)" onmouseover="showTip(event, '28', 144)" class="fn">factorial</span> <span onmouseout="hideTip(event, '30', 145)" onmouseover="showTip(event, '30', 145)" class="id">fact_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 146)" onmouseover="showTip(event, '13', 146)" class="id">x</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Example-sum" class="anchor" href="#Example-sum">Example sum</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// sum</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '32', 147)" onmouseover="showTip(event, '32', 147)" class="fn">sum</span> <span onmouseout="hideTip(event, '13', 148)" onmouseover="showTip(event, '13', 148)" class="id">x</span> <span class="o">=</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, '13', 149)" onmouseover="showTip(event, '13', 149)" class="id">x</span> <span class="o">=</span> <span class="n">1</span> <span class="k">then</span>
+        <span class="n">1</span>
+    <span class="k">else</span>
+        <span onmouseout="hideTip(event, '32', 150)" onmouseover="showTip(event, '32', 150)" class="fn">sum</span><span class="pn">(</span><span onmouseout="hideTip(event, '13', 151)" onmouseover="showTip(event, '13', 151)" class="id">x</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span> <span class="o">+</span> <span onmouseout="hideTip(event, '13', 152)" onmouseover="showTip(event, '13', 152)" class="id">x</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE sum``</span> <span class="o">=</span>
+
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '33', 153)" onmouseover="showTip(event, '33', 153)" class="fn">sum_k</span> <span onmouseout="hideTip(event, '13', 154)" onmouseover="showTip(event, '13', 154)" class="id">x</span> <span onmouseout="hideTip(event, '11', 155)" onmouseover="showTip(event, '11', 155)" class="fn">k</span> <span class="o">=</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '13', 156)" onmouseover="showTip(event, '13', 156)" class="id">x</span> <span class="o">=</span> <span class="n">1</span> <span class="k">then</span>
+            <span onmouseout="hideTip(event, '11', 157)" onmouseover="showTip(event, '11', 157)" class="fn">k</span> <span class="n">1</span>
+        <span class="k">else</span>
+            <span onmouseout="hideTip(event, '33', 158)" onmouseover="showTip(event, '33', 158)" class="fn">sum_k</span><span class="pn">(</span><span onmouseout="hideTip(event, '13', 159)" onmouseover="showTip(event, '13', 159)" class="id">x</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '27', 160)" onmouseover="showTip(event, '27', 160)" class="id">y</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '11', 161)" onmouseover="showTip(event, '11', 161)" class="fn">k</span><span class="pn">(</span><span onmouseout="hideTip(event, '13', 162)" onmouseover="showTip(event, '13', 162)" class="id">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, '27', 163)" onmouseover="showTip(event, '27', 163)" class="id">y</span><span class="pn">)</span><span class="pn">)</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '34', 164)" onmouseover="showTip(event, '34', 164)" class="id">sum_n</span> <span class="o">=</span> <span class="n">5</span>
+    <span onmouseout="hideTip(event, '33', 165)" onmouseover="showTip(event, '33', 165)" class="fn">sum_k</span> <span onmouseout="hideTip(event, '34', 166)" onmouseover="showTip(event, '34', 166)" class="id">sum_n</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '35', 167)" onmouseover="showTip(event, '35', 167)" class="id">t</span> <span class="k">-&gt;</span>  <span onmouseout="hideTip(event, '3', 168)" onmouseover="showTip(event, '3', 168)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '32', 169)" onmouseover="showTip(event, '32', 169)" class="fn">sum</span> <span onmouseout="hideTip(event, '34', 170)" onmouseover="showTip(event, '34', 170)" class="id">sum_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '35', 171)" onmouseover="showTip(event, '35', 171)" class="id">t</span><span class="pn">)</span>
+<span class="k">module</span> <span class="m">``EXAMPLE sum in FSharpPlus``</span> <span class="o">=</span>
+
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '36', 172)" onmouseover="showTip(event, '36', 172)" class="fn">sum_k</span> <span onmouseout="hideTip(event, '13', 173)" onmouseover="showTip(event, '13', 173)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '15', 174)" onmouseover="showTip(event, '15', 174)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '13', 175)" onmouseover="showTip(event, '13', 175)" class="id">x</span> <span class="o">=</span> <span class="n">1</span> <span class="k">then</span>
+            <span class="k">return</span> <span class="n">1</span>
+        <span class="k">else</span>
+            <span class="k">let!</span> <span onmouseout="hideTip(event, '27', 176)" onmouseover="showTip(event, '27', 176)" class="id">y</span><span class="o">=</span><span onmouseout="hideTip(event, '36', 177)" onmouseover="showTip(event, '36', 177)" class="fn">sum_k</span><span class="pn">(</span><span onmouseout="hideTip(event, '13', 178)" onmouseover="showTip(event, '13', 178)" class="id">x</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span>
+            <span class="k">return</span> <span onmouseout="hideTip(event, '13', 179)" onmouseover="showTip(event, '13', 179)" class="id">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, '27', 180)" onmouseover="showTip(event, '27', 180)" class="id">y</span>
+      <span class="pn">}</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '34', 181)" onmouseover="showTip(event, '34', 181)" class="id">sum_n</span> <span class="o">=</span> <span class="n">5</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '35', 182)" onmouseover="showTip(event, '35', 182)" class="id">t</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 183)" onmouseover="showTip(event, '18', 183)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 184)" onmouseover="showTip(event, '19', 184)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '36', 185)" onmouseover="showTip(event, '36', 185)" class="fn">sum_k</span> <span onmouseout="hideTip(event, '34', 186)" onmouseover="showTip(event, '34', 186)" class="id">sum_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 187)" onmouseover="showTip(event, '20', 187)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 188)" onmouseover="showTip(event, '3', 188)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '32', 189)" onmouseover="showTip(event, '32', 189)" class="fn">sum</span> <span onmouseout="hideTip(event, '34', 190)" onmouseover="showTip(event, '34', 190)" class="id">sum_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '35', 191)" onmouseover="showTip(event, '35', 191)" class="id">t</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Example-Fibonacci-number" class="anchor" href="#Example-Fibonacci-number">Example Fibonacci number</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// fibo</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '37', 192)" onmouseover="showTip(event, '37', 192)" class="fn">fibo</span> <span onmouseout="hideTip(event, '8', 193)" onmouseover="showTip(event, '8', 193)" class="id">n</span> <span class="o">=</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, '8', 194)" onmouseover="showTip(event, '8', 194)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+        <span class="n">1</span>
+    <span class="k">else</span> <span class="k">if</span> <span onmouseout="hideTip(event, '8', 195)" onmouseover="showTip(event, '8', 195)" class="id">n</span> <span class="o">=</span> <span class="n">1</span> <span class="k">then</span>
+        <span class="n">1</span>
+        <span class="k">else</span>
+            <span onmouseout="hideTip(event, '37', 196)" onmouseover="showTip(event, '37', 196)" class="fn">fibo</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 197)" onmouseover="showTip(event, '8', 197)" class="id">n</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span> <span class="o">+</span> <span onmouseout="hideTip(event, '37', 198)" onmouseover="showTip(event, '37', 198)" class="fn">fibo</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 199)" onmouseover="showTip(event, '8', 199)" class="id">n</span> <span class="o">-</span> <span class="n">2</span><span class="pn">)</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE fibo``</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '38', 200)" onmouseover="showTip(event, '38', 200)" class="fn">fibo_k</span> <span onmouseout="hideTip(event, '8', 201)" onmouseover="showTip(event, '8', 201)" class="id">n</span> <span onmouseout="hideTip(event, '11', 202)" onmouseover="showTip(event, '11', 202)" class="fn">k</span> <span class="o">=</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '8', 203)" onmouseover="showTip(event, '8', 203)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+            <span onmouseout="hideTip(event, '11', 204)" onmouseover="showTip(event, '11', 204)" class="fn">k</span> <span class="n">1</span>
+        <span class="k">else</span> <span class="k">if</span> <span onmouseout="hideTip(event, '8', 205)" onmouseover="showTip(event, '8', 205)" class="id">n</span> <span class="o">=</span> <span class="n">1</span> <span class="k">then</span> 
+            <span onmouseout="hideTip(event, '11', 206)" onmouseover="showTip(event, '11', 206)" class="fn">k</span> <span class="n">1</span>
+            <span class="k">else</span>
+                <span class="k">let</span> <span onmouseout="hideTip(event, '39', 207)" onmouseover="showTip(event, '39', 207)" class="fn">k_new1</span> <span class="o">=</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '40', 208)" onmouseover="showTip(event, '40', 208)" class="id">x1</span> <span class="k">-&gt;</span> 
+                    <span class="k">let</span> <span onmouseout="hideTip(event, '41', 209)" onmouseover="showTip(event, '41', 209)" class="fn">k_new2</span> <span class="o">=</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '42', 210)" onmouseover="showTip(event, '42', 210)" class="id">x2</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '11', 211)" onmouseover="showTip(event, '11', 211)" class="fn">k</span><span class="pn">(</span><span onmouseout="hideTip(event, '40', 212)" onmouseover="showTip(event, '40', 212)" class="id">x1</span> <span class="o">+</span> <span onmouseout="hideTip(event, '42', 213)" onmouseover="showTip(event, '42', 213)" class="id">x2</span><span class="pn">)</span><span class="pn">)</span>
+                    <span onmouseout="hideTip(event, '38', 214)" onmouseover="showTip(event, '38', 214)" class="fn">fibo_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 215)" onmouseover="showTip(event, '8', 215)" class="id">n</span> <span class="o">-</span> <span class="n">2</span><span class="pn">)</span> <span onmouseout="hideTip(event, '41', 216)" onmouseover="showTip(event, '41', 216)" class="fn">k_new2</span>
+                <span class="pn">)</span>
+                <span onmouseout="hideTip(event, '38', 217)" onmouseover="showTip(event, '38', 217)" class="fn">fibo_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 218)" onmouseover="showTip(event, '8', 218)" class="id">n</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span> <span onmouseout="hideTip(event, '39', 219)" onmouseover="showTip(event, '39', 219)" class="fn">k_new1</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '43', 220)" onmouseover="showTip(event, '43', 220)" class="id">fibo_n</span> <span class="o">=</span> <span class="n">9</span>
+    <span onmouseout="hideTip(event, '38', 221)" onmouseover="showTip(event, '38', 221)" class="fn">fibo_k</span> <span onmouseout="hideTip(event, '43', 222)" onmouseover="showTip(event, '43', 222)" class="id">fibo_n</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '13', 223)" onmouseover="showTip(event, '13', 223)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '3', 224)" onmouseover="showTip(event, '3', 224)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '37', 225)" onmouseover="showTip(event, '37', 225)" class="fn">fibo</span> <span onmouseout="hideTip(event, '43', 226)" onmouseover="showTip(event, '43', 226)" class="id">fibo_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 227)" onmouseover="showTip(event, '13', 227)" class="id">x</span><span class="pn">)</span>
+<span class="k">module</span> <span class="m">``EXAMPLE fibo in FSharpPlus``</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '44', 228)" onmouseover="showTip(event, '44', 228)" class="fn">fibo_k</span> <span onmouseout="hideTip(event, '8', 229)" onmouseover="showTip(event, '8', 229)" class="id">n</span> <span class="o">=</span>
+      <span onmouseout="hideTip(event, '15', 230)" onmouseover="showTip(event, '15', 230)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '8', 231)" onmouseover="showTip(event, '8', 231)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+            <span class="k">return</span> <span class="n">1</span>
+        <span class="k">else</span> <span class="k">if</span> <span onmouseout="hideTip(event, '8', 232)" onmouseover="showTip(event, '8', 232)" class="id">n</span> <span class="o">=</span> <span class="n">1</span> <span class="k">then</span> 
+            <span class="k">return</span> <span class="n">1</span>
+            <span class="k">else</span>
+                <span class="k">let!</span> <span onmouseout="hideTip(event, '40', 233)" onmouseover="showTip(event, '40', 233)" class="id">x1</span> <span class="o">=</span> <span onmouseout="hideTip(event, '44', 234)" onmouseover="showTip(event, '44', 234)" class="fn">fibo_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 235)" onmouseover="showTip(event, '8', 235)" class="id">n</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span>
+                <span class="k">let!</span> <span onmouseout="hideTip(event, '42', 236)" onmouseover="showTip(event, '42', 236)" class="id">x2</span> <span class="o">=</span> <span onmouseout="hideTip(event, '44', 237)" onmouseover="showTip(event, '44', 237)" class="fn">fibo_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 238)" onmouseover="showTip(event, '8', 238)" class="id">n</span> <span class="o">-</span> <span class="n">2</span><span class="pn">)</span>
+                <span class="k">return</span> <span onmouseout="hideTip(event, '40', 239)" onmouseover="showTip(event, '40', 239)" class="id">x1</span><span class="o">+</span><span onmouseout="hideTip(event, '42', 240)" onmouseover="showTip(event, '42', 240)" class="id">x2</span>
+      <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '43', 241)" onmouseover="showTip(event, '43', 241)" class="id">fibo_n</span> <span class="o">=</span> <span class="n">9</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '13', 242)" onmouseover="showTip(event, '13', 242)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 243)" onmouseover="showTip(event, '18', 243)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 244)" onmouseover="showTip(event, '19', 244)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '44', 245)" onmouseover="showTip(event, '44', 245)" class="fn">fibo_k</span> <span onmouseout="hideTip(event, '43', 246)" onmouseover="showTip(event, '43', 246)" class="id">fibo_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 247)" onmouseover="showTip(event, '20', 247)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 248)" onmouseover="showTip(event, '3', 248)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '37', 249)" onmouseover="showTip(event, '37', 249)" class="fn">fibo</span> <span onmouseout="hideTip(event, '43', 250)" onmouseover="showTip(event, '43', 250)" class="id">fibo_n</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 251)" onmouseover="showTip(event, '13', 251)" class="id">x</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Example-nth" class="anchor" href="#Example-nth">Example nth</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+<span class="l">37: </span>
+<span class="l">38: </span>
+<span class="l">39: </span>
+<span class="l">40: </span>
+<span class="l">41: </span>
+<span class="l">42: </span>
+<span class="l">43: </span>
+<span class="l">44: </span>
+<span class="l">45: </span>
+<span class="l">46: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// nth</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '45', 252)" onmouseover="showTip(event, '45', 252)" class="fn">nth</span> <span onmouseout="hideTip(event, '8', 253)" onmouseover="showTip(event, '8', 253)" class="id">n</span> <span class="pn">(</span><span onmouseout="hideTip(event, '46', 254)" onmouseover="showTip(event, '46', 254)" class="id">ls</span> <span class="pn">:</span> <span class="ta">&#39;</span><span class="id">a</span> <span onmouseout="hideTip(event, '47', 255)" onmouseover="showTip(event, '47', 255)" class="rt">list</span><span class="pn">)</span> <span class="o">=</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, '46', 256)" onmouseover="showTip(event, '46', 256)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '48', 257)" onmouseover="showTip(event, '48', 257)" class="id">IsEmpty</span> <span class="k">then</span>
+        <span onmouseout="hideTip(event, '49', 258)" onmouseover="showTip(event, '49', 258)" class="uc">None</span>
+    <span class="k">else</span> <span class="k">if</span> <span onmouseout="hideTip(event, '8', 259)" onmouseover="showTip(event, '8', 259)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+        <span onmouseout="hideTip(event, '50', 260)" onmouseover="showTip(event, '50', 260)" class="uc">Some</span><span class="pn">(</span><span onmouseout="hideTip(event, '46', 261)" onmouseover="showTip(event, '46', 261)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '51', 262)" onmouseover="showTip(event, '51', 262)" class="id">Head</span><span class="pn">)</span>
+    <span class="k">else</span>
+        <span onmouseout="hideTip(event, '45', 263)" onmouseover="showTip(event, '45', 263)" class="fn">nth</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 264)" onmouseover="showTip(event, '8', 264)" class="id">n</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span> <span onmouseout="hideTip(event, '46', 265)" onmouseover="showTip(event, '46', 265)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '52', 266)" onmouseover="showTip(event, '52', 266)" class="id">Tail</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE nth``</span> <span class="o">=</span>
+
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '53', 267)" onmouseover="showTip(event, '53', 267)" class="fn">nth_k</span> <span onmouseout="hideTip(event, '8', 268)" onmouseover="showTip(event, '8', 268)" class="id">n</span> <span class="pn">(</span><span onmouseout="hideTip(event, '46', 269)" onmouseover="showTip(event, '46', 269)" class="id">ls</span> <span class="pn">:</span> <span class="ta">&#39;</span><span class="id">a</span> <span onmouseout="hideTip(event, '47', 270)" onmouseover="showTip(event, '47', 270)" class="rt">list</span><span class="pn">)</span> <span onmouseout="hideTip(event, '54', 271)" onmouseover="showTip(event, '54', 271)" class="fn">k</span> <span class="o">=</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '46', 272)" onmouseover="showTip(event, '46', 272)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '48', 273)" onmouseover="showTip(event, '48', 273)" class="id">IsEmpty</span> <span class="k">then</span>
+            <span onmouseout="hideTip(event, '54', 274)" onmouseover="showTip(event, '54', 274)" class="fn">k</span><span class="pn">(</span><span onmouseout="hideTip(event, '49', 275)" onmouseover="showTip(event, '49', 275)" class="uc">None</span><span class="pn">)</span>
+        <span class="k">else</span> <span class="k">if</span> <span onmouseout="hideTip(event, '8', 276)" onmouseover="showTip(event, '8', 276)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+            <span onmouseout="hideTip(event, '54', 277)" onmouseover="showTip(event, '54', 277)" class="fn">k</span><span class="pn">(</span><span onmouseout="hideTip(event, '50', 278)" onmouseover="showTip(event, '50', 278)" class="uc">Some</span><span class="pn">(</span><span onmouseout="hideTip(event, '46', 279)" onmouseover="showTip(event, '46', 279)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '51', 280)" onmouseover="showTip(event, '51', 280)" class="id">Head</span><span class="pn">)</span><span class="pn">)</span>
+        <span class="k">else</span>
+            <span onmouseout="hideTip(event, '53', 281)" onmouseover="showTip(event, '53', 281)" class="fn">nth_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 282)" onmouseover="showTip(event, '8', 282)" class="id">n</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span> <span onmouseout="hideTip(event, '46', 283)" onmouseover="showTip(event, '46', 283)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '52', 284)" onmouseover="showTip(event, '52', 284)" class="id">Tail</span> <span onmouseout="hideTip(event, '54', 285)" onmouseover="showTip(event, '54', 285)" class="fn">k</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '55', 286)" onmouseover="showTip(event, '55', 286)" class="id">ls</span><span class="pn">,</span> <span onmouseout="hideTip(event, '56', 287)" onmouseover="showTip(event, '56', 287)" class="id">i1</span><span class="pn">,</span> <span onmouseout="hideTip(event, '57', 288)" onmouseover="showTip(event, '57', 288)" class="id">i2</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">;</span><span class="n">6</span><span class="pn">]</span><span class="pn">,</span> <span class="n">3</span><span class="pn">,</span> <span class="n">15</span>
+
+    <span class="c">// becomes:</span>
+    <span onmouseout="hideTip(event, '53', 289)" onmouseover="showTip(event, '53', 289)" class="fn">nth_k</span> <span onmouseout="hideTip(event, '56', 290)" onmouseover="showTip(event, '56', 290)" class="id">i1</span> <span onmouseout="hideTip(event, '55', 291)" onmouseover="showTip(event, '55', 291)" class="id">ls</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '58', 292)" onmouseover="showTip(event, '58', 292)" class="id">x</span><span class="k">-&gt;</span><span onmouseout="hideTip(event, '3', 293)" onmouseover="showTip(event, '3', 293)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '45', 294)" onmouseover="showTip(event, '45', 294)" class="fn">nth</span> <span onmouseout="hideTip(event, '56', 295)" onmouseover="showTip(event, '56', 295)" class="id">i1</span> <span onmouseout="hideTip(event, '55', 296)" onmouseover="showTip(event, '55', 296)" class="id">ls</span><span class="pn">)</span> <span onmouseout="hideTip(event, '58', 297)" onmouseover="showTip(event, '58', 297)" class="id">x</span><span class="pn">)</span>
+
+    <span onmouseout="hideTip(event, '53', 298)" onmouseover="showTip(event, '53', 298)" class="fn">nth_k</span> <span onmouseout="hideTip(event, '57', 299)" onmouseover="showTip(event, '57', 299)" class="id">i2</span> <span onmouseout="hideTip(event, '55', 300)" onmouseover="showTip(event, '55', 300)" class="id">ls</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '58', 301)" onmouseover="showTip(event, '58', 301)" class="id">x</span><span class="k">-&gt;</span><span onmouseout="hideTip(event, '3', 302)" onmouseover="showTip(event, '3', 302)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '45', 303)" onmouseover="showTip(event, '45', 303)" class="fn">nth</span> <span onmouseout="hideTip(event, '57', 304)" onmouseover="showTip(event, '57', 304)" class="id">i2</span> <span onmouseout="hideTip(event, '55', 305)" onmouseover="showTip(event, '55', 305)" class="id">ls</span><span class="pn">)</span> <span onmouseout="hideTip(event, '58', 306)" onmouseover="showTip(event, '58', 306)" class="id">x</span><span class="pn">)</span>
+
+
+<span class="pp">#nowarn</span> <span class="s">&quot;0064&quot;</span>
+<span class="k">module</span> <span class="m">``EXAMPLE nth in FSharpPlus``</span> <span class="o">=</span>
+
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '59', 307)" onmouseover="showTip(event, '59', 307)" class="fn">nth_k</span> <span onmouseout="hideTip(event, '8', 308)" onmouseover="showTip(event, '8', 308)" class="id">n</span> <span class="pn">(</span><span onmouseout="hideTip(event, '55', 309)" onmouseover="showTip(event, '55', 309)" class="id">ls</span> <span class="pn">:</span> <span class="ta">&#39;</span><span class="id">a</span> <span onmouseout="hideTip(event, '47', 310)" onmouseover="showTip(event, '47', 310)" class="rt">list</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, '15', 311)" onmouseover="showTip(event, '15', 311)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '55', 312)" onmouseover="showTip(event, '55', 312)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '48', 313)" onmouseover="showTip(event, '48', 313)" class="id">IsEmpty</span> <span class="k">then</span>
+            <span class="k">return</span> <span class="pn">(</span><span onmouseout="hideTip(event, '49', 314)" onmouseover="showTip(event, '49', 314)" class="uc">None</span><span class="pn">)</span>
+        <span class="k">else</span> <span class="k">if</span> <span onmouseout="hideTip(event, '8', 315)" onmouseover="showTip(event, '8', 315)" class="id">n</span> <span class="o">=</span> <span class="n">0</span> <span class="k">then</span>
+            <span class="k">return</span> <span class="pn">(</span><span onmouseout="hideTip(event, '50', 316)" onmouseover="showTip(event, '50', 316)" class="uc">Some</span><span class="pn">(</span><span onmouseout="hideTip(event, '55', 317)" onmouseover="showTip(event, '55', 317)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '60', 318)" onmouseover="showTip(event, '60', 318)" class="id">Head</span><span class="pn">)</span><span class="pn">)</span>
+        <span class="k">else</span>
+            <span class="k">let!</span> <span onmouseout="hideTip(event, '61', 319)" onmouseover="showTip(event, '61', 319)" class="id">r</span><span class="o">=</span><span onmouseout="hideTip(event, '59', 320)" onmouseover="showTip(event, '59', 320)" class="fn">nth_k</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 321)" onmouseover="showTip(event, '8', 321)" class="id">n</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span> <span onmouseout="hideTip(event, '55', 322)" onmouseover="showTip(event, '55', 322)" class="id">ls</span><span class="pn">.</span><span onmouseout="hideTip(event, '62', 323)" onmouseover="showTip(event, '62', 323)" class="id">Tail</span>
+            <span class="k">return</span> <span onmouseout="hideTip(event, '61', 324)" onmouseover="showTip(event, '61', 324)" class="id">r</span>
+      <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '55', 325)" onmouseover="showTip(event, '55', 325)" class="id">ls</span><span class="pn">,</span> <span onmouseout="hideTip(event, '56', 326)" onmouseover="showTip(event, '56', 326)" class="id">i1</span><span class="pn">,</span> <span onmouseout="hideTip(event, '57', 327)" onmouseover="showTip(event, '57', 327)" class="id">i2</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">;</span><span class="n">6</span><span class="pn">]</span><span class="pn">,</span> <span class="n">3</span><span class="pn">,</span> <span class="n">15</span>
+
+    <span class="c">// becomes:</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '58', 328)" onmouseover="showTip(event, '58', 328)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 329)" onmouseover="showTip(event, '18', 329)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 330)" onmouseover="showTip(event, '19', 330)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '59', 331)" onmouseover="showTip(event, '59', 331)" class="fn">nth_k</span> <span onmouseout="hideTip(event, '56', 332)" onmouseover="showTip(event, '56', 332)" class="id">i1</span> <span onmouseout="hideTip(event, '55', 333)" onmouseover="showTip(event, '55', 333)" class="id">ls</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 334)" onmouseover="showTip(event, '20', 334)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 335)" onmouseover="showTip(event, '3', 335)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '45', 336)" onmouseover="showTip(event, '45', 336)" class="fn">nth</span> <span onmouseout="hideTip(event, '56', 337)" onmouseover="showTip(event, '56', 337)" class="id">i1</span> <span onmouseout="hideTip(event, '55', 338)" onmouseover="showTip(event, '55', 338)" class="id">ls</span><span class="pn">)</span> <span onmouseout="hideTip(event, '58', 339)" onmouseover="showTip(event, '58', 339)" class="id">x</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '63', 340)" onmouseover="showTip(event, '63', 340)" class="id">x2</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 341)" onmouseover="showTip(event, '18', 341)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 342)" onmouseover="showTip(event, '19', 342)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '59', 343)" onmouseover="showTip(event, '59', 343)" class="fn">nth_k</span> <span onmouseout="hideTip(event, '57', 344)" onmouseover="showTip(event, '57', 344)" class="id">i2</span> <span onmouseout="hideTip(event, '55', 345)" onmouseover="showTip(event, '55', 345)" class="id">ls</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 346)" onmouseover="showTip(event, '20', 346)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 347)" onmouseover="showTip(event, '3', 347)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '45', 348)" onmouseover="showTip(event, '45', 348)" class="fn">nth</span> <span onmouseout="hideTip(event, '57', 349)" onmouseover="showTip(event, '57', 349)" class="id">i2</span> <span onmouseout="hideTip(event, '55', 350)" onmouseover="showTip(event, '55', 350)" class="id">ls</span><span class="pn">)</span> <span onmouseout="hideTip(event, '63', 351)" onmouseover="showTip(event, '63', 351)" class="id">x2</span>
+</code></pre></td>
+</tr>
+</table>
+<h3><a name="Example-count-nodes-in-a-tree" class="anchor" href="#Example-count-nodes-in-a-tree">Example count nodes in a tree</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+<span class="l">34: </span>
+<span class="l">35: </span>
+<span class="l">36: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, '64', 352)" onmouseover="showTip(event, '64', 352)" class="rt">Tree</span> <span class="o">=</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, '65', 353)" onmouseover="showTip(event, '65', 353)" class="uc">Node</span> <span class="k">of</span> <span onmouseout="hideTip(event, '64', 354)" onmouseover="showTip(event, '64', 354)" class="rt">Tree</span> <span class="pn">*</span> <span onmouseout="hideTip(event, '64', 355)" onmouseover="showTip(event, '64', 355)" class="rt">Tree</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, '66', 356)" onmouseover="showTip(event, '66', 356)" class="uc">Leaf</span>
+<span class="c">// node_count</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '67', 357)" onmouseover="showTip(event, '67', 357)" class="fn">node_count</span> <span class="o">=</span> <span class="k">function</span>
+                    <span class="pn">|</span> <span onmouseout="hideTip(event, '65', 358)" onmouseover="showTip(event, '65', 358)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '68', 359)" onmouseover="showTip(event, '68', 359)" class="id">lt</span><span class="pn">,</span> <span onmouseout="hideTip(event, '69', 360)" onmouseover="showTip(event, '69', 360)" class="id">rt</span><span class="pn">)</span> <span class="k">-&gt;</span> <span class="n">1</span> <span class="o">+</span> <span onmouseout="hideTip(event, '67', 361)" onmouseover="showTip(event, '67', 361)" class="fn">node_count</span><span class="pn">(</span><span onmouseout="hideTip(event, '68', 362)" onmouseover="showTip(event, '68', 362)" class="id">lt</span><span class="pn">)</span>  <span class="o">+</span> <span onmouseout="hideTip(event, '67', 363)" onmouseover="showTip(event, '67', 363)" class="fn">node_count</span><span class="pn">(</span><span onmouseout="hideTip(event, '69', 364)" onmouseover="showTip(event, '69', 364)" class="id">rt</span><span class="pn">)</span>
+                    <span class="pn">|</span> <span onmouseout="hideTip(event, '66', 365)" onmouseover="showTip(event, '66', 365)" class="uc">Leaf</span> <span class="k">-&gt;</span> <span class="n">0</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE count_nodes``</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '70', 366)" onmouseover="showTip(event, '70', 366)" class="fn">node_count_k</span> <span onmouseout="hideTip(event, '71', 367)" onmouseover="showTip(event, '71', 367)" class="id">tree</span> <span onmouseout="hideTip(event, '11', 368)" onmouseover="showTip(event, '11', 368)" class="fn">k</span> <span class="o">=</span> <span class="k">match</span> <span onmouseout="hideTip(event, '71', 369)" onmouseover="showTip(event, '71', 369)" class="id">tree</span> <span class="k">with</span>
+                                    <span class="pn">|</span> <span onmouseout="hideTip(event, '65', 370)" onmouseover="showTip(event, '65', 370)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '72', 371)" onmouseover="showTip(event, '72', 371)" class="id">ltree</span><span class="pn">,</span> <span onmouseout="hideTip(event, '73', 372)" onmouseover="showTip(event, '73', 372)" class="id">rtree</span><span class="pn">)</span> <span class="k">-&gt;</span>
+                                        <span class="k">let</span> <span onmouseout="hideTip(event, '74', 373)" onmouseover="showTip(event, '74', 373)" class="fn">new_k1</span> <span class="o">=</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '75', 374)" onmouseover="showTip(event, '75', 374)" class="id">ltree_count</span> <span class="k">-&gt;</span> 
+                                            <span class="k">let</span> <span onmouseout="hideTip(event, '76', 375)" onmouseover="showTip(event, '76', 375)" class="fn">new_k2</span> <span class="o">=</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '77', 376)" onmouseover="showTip(event, '77', 376)" class="id">rtree_count</span> <span class="k">-&gt;</span> 
+                                                <span onmouseout="hideTip(event, '11', 377)" onmouseover="showTip(event, '11', 377)" class="fn">k</span><span class="pn">(</span><span class="n">1</span> <span class="o">+</span> <span onmouseout="hideTip(event, '75', 378)" onmouseover="showTip(event, '75', 378)" class="id">ltree_count</span> <span class="o">+</span> <span onmouseout="hideTip(event, '77', 379)" onmouseover="showTip(event, '77', 379)" class="id">rtree_count</span><span class="pn">)</span>
+                                            <span class="pn">)</span>
+                                            <span onmouseout="hideTip(event, '70', 380)" onmouseover="showTip(event, '70', 380)" class="fn">node_count_k</span> <span onmouseout="hideTip(event, '73', 381)" onmouseover="showTip(event, '73', 381)" class="id">rtree</span> <span onmouseout="hideTip(event, '76', 382)" onmouseover="showTip(event, '76', 382)" class="fn">new_k2</span>
+                                        <span class="pn">)</span>
+                                        <span onmouseout="hideTip(event, '70', 383)" onmouseover="showTip(event, '70', 383)" class="fn">node_count_k</span> <span onmouseout="hideTip(event, '72', 384)" onmouseover="showTip(event, '72', 384)" class="id">ltree</span> <span onmouseout="hideTip(event, '74', 385)" onmouseover="showTip(event, '74', 385)" class="fn">new_k1</span>
+                                    <span class="pn">|</span> <span onmouseout="hideTip(event, '66', 386)" onmouseover="showTip(event, '66', 386)" class="uc">Leaf</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '11', 387)" onmouseover="showTip(event, '11', 387)" class="fn">k</span> <span class="n">0</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '78', 388)" onmouseover="showTip(event, '78', 388)" class="id">t</span> <span class="o">=</span> <span onmouseout="hideTip(event, '65', 389)" onmouseover="showTip(event, '65', 389)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '65', 390)" onmouseover="showTip(event, '65', 390)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 391)" onmouseover="showTip(event, '66', 391)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '66', 392)" onmouseover="showTip(event, '66', 392)" class="uc">Leaf</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, '65', 393)" onmouseover="showTip(event, '65', 393)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 394)" onmouseover="showTip(event, '66', 394)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '65', 395)" onmouseover="showTip(event, '65', 395)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 396)" onmouseover="showTip(event, '66', 396)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '65', 397)" onmouseover="showTip(event, '65', 397)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 398)" onmouseover="showTip(event, '66', 398)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '66', 399)" onmouseover="showTip(event, '66', 399)" class="uc">Leaf</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span>
+    <span onmouseout="hideTip(event, '70', 400)" onmouseover="showTip(event, '70', 400)" class="fn">node_count_k</span> <span onmouseout="hideTip(event, '78', 401)" onmouseover="showTip(event, '78', 401)" class="id">t</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '79', 402)" onmouseover="showTip(event, '79', 402)" class="id">count</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '3', 403)" onmouseover="showTip(event, '3', 403)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '67', 404)" onmouseover="showTip(event, '67', 404)" class="fn">node_count</span> <span onmouseout="hideTip(event, '78', 405)" onmouseover="showTip(event, '78', 405)" class="id">t</span><span class="pn">)</span>  <span onmouseout="hideTip(event, '79', 406)" onmouseover="showTip(event, '79', 406)" class="id">count</span><span class="pn">)</span>
+
+<span class="k">module</span> <span class="m">``EXAMPLE count_nodes in FSharpPlus``</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '80', 407)" onmouseover="showTip(event, '80', 407)" class="fn">node_count_k</span> <span onmouseout="hideTip(event, '71', 408)" onmouseover="showTip(event, '71', 408)" class="id">tree</span> <span class="o">=</span> 
+                                <span onmouseout="hideTip(event, '15', 409)" onmouseover="showTip(event, '15', 409)" class="k">monad</span> <span class="pn">{</span>
+                                    <span class="k">match</span> <span onmouseout="hideTip(event, '71', 410)" onmouseover="showTip(event, '71', 410)" class="id">tree</span> <span class="k">with</span>
+                                    <span class="pn">|</span> <span onmouseout="hideTip(event, '65', 411)" onmouseover="showTip(event, '65', 411)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '68', 412)" onmouseover="showTip(event, '68', 412)" class="id">lt</span><span class="pn">,</span> <span onmouseout="hideTip(event, '69', 413)" onmouseover="showTip(event, '69', 413)" class="id">rt</span><span class="pn">)</span> <span class="k">-&gt;</span> 
+                                        <span class="k">let!</span> <span onmouseout="hideTip(event, '81', 414)" onmouseover="showTip(event, '81', 414)" class="id">x_lt</span><span class="o">=</span><span onmouseout="hideTip(event, '80', 415)" onmouseover="showTip(event, '80', 415)" class="fn">node_count_k</span><span class="pn">(</span><span onmouseout="hideTip(event, '68', 416)" onmouseover="showTip(event, '68', 416)" class="id">lt</span><span class="pn">)</span>
+                                        <span class="k">let!</span> <span onmouseout="hideTip(event, '82', 417)" onmouseover="showTip(event, '82', 417)" class="id">x_rt</span><span class="o">=</span><span onmouseout="hideTip(event, '80', 418)" onmouseover="showTip(event, '80', 418)" class="fn">node_count_k</span><span class="pn">(</span><span onmouseout="hideTip(event, '69', 419)" onmouseover="showTip(event, '69', 419)" class="id">rt</span><span class="pn">)</span>
+                                        <span class="k">return</span> <span class="n">1</span> <span class="o">+</span> <span onmouseout="hideTip(event, '81', 420)" onmouseover="showTip(event, '81', 420)" class="id">x_lt</span> <span class="o">+</span> <span onmouseout="hideTip(event, '82', 421)" onmouseover="showTip(event, '82', 421)" class="id">x_rt</span>
+                                    <span class="pn">|</span> <span onmouseout="hideTip(event, '66', 422)" onmouseover="showTip(event, '66', 422)" class="uc">Leaf</span> <span class="k">-&gt;</span> <span class="k">return</span> <span class="n">0</span>
+                                <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '78', 423)" onmouseover="showTip(event, '78', 423)" class="id">t</span> <span class="o">=</span> <span onmouseout="hideTip(event, '65', 424)" onmouseover="showTip(event, '65', 424)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '65', 425)" onmouseover="showTip(event, '65', 425)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 426)" onmouseover="showTip(event, '66', 426)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '66', 427)" onmouseover="showTip(event, '66', 427)" class="uc">Leaf</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, '65', 428)" onmouseover="showTip(event, '65', 428)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 429)" onmouseover="showTip(event, '66', 429)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '65', 430)" onmouseover="showTip(event, '65', 430)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 431)" onmouseover="showTip(event, '66', 431)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '65', 432)" onmouseover="showTip(event, '65', 432)" class="uc">Node</span><span class="pn">(</span><span onmouseout="hideTip(event, '66', 433)" onmouseover="showTip(event, '66', 433)" class="uc">Leaf</span><span class="pn">,</span> <span onmouseout="hideTip(event, '66', 434)" onmouseover="showTip(event, '66', 434)" class="uc">Leaf</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '79', 435)" onmouseover="showTip(event, '79', 435)" class="id">count</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 436)" onmouseover="showTip(event, '18', 436)" class="m">Cont</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 437)" onmouseover="showTip(event, '19', 437)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, '80', 438)" onmouseover="showTip(event, '80', 438)" class="fn">node_count_k</span> <span onmouseout="hideTip(event, '78', 439)" onmouseover="showTip(event, '78', 439)" class="id">t</span><span class="pn">)</span> <span onmouseout="hideTip(event, '20', 440)" onmouseover="showTip(event, '20', 440)" class="fn">id</span>
+    <span onmouseout="hideTip(event, '3', 441)" onmouseover="showTip(event, '3', 441)" class="fn">assertEqual</span> <span class="pn">(</span><span onmouseout="hideTip(event, '67', 442)" onmouseover="showTip(event, '67', 442)" class="fn">node_count</span> <span onmouseout="hideTip(event, '78', 443)" onmouseover="showTip(event, '78', 443)" class="id">t</span><span class="pn">)</span>  <span onmouseout="hideTip(event, '79', 444)" onmouseover="showTip(event, '79', 444)" class="id">count</span>
 </code></pre></td>
 </tr>
 </table>

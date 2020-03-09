@@ -77,73 +77,207 @@
 </li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
-<span class="l">19: </span>
-<span class="l">20: </span>
-<span class="l">21: </span>
-<span class="l">22: </span>
-<span class="l">23: </span>
-<span class="l">24: </span>
-<span class="l">25: </span>
-<span class="l">26: </span>
-<span class="l">27: </span>
-<span class="l">28: </span>
-<span class="l">29: </span>
-<span class="l">30: </span>
-<span class="l">31: </span>
-<span class="l">32: </span>
-<span class="l">33: </span>
-<span class="l">34: </span>
-<span class="l">35: </span>
-<span class="l">36: </span>
-<span class="l">37: </span>
-<span class="l">38: </span>
-<span class="l">39: </span>
-<span class="l">40: </span>
-<span class="l">41: </span>
-<span class="l">42: </span>
-<span class="l">43: </span>
-<span class="l">44: </span>
-<span class="l">45: </span>
-<span class="l">46: </span>
-<span class="l">47: </span>
-<span class="l">48: </span>
-<span class="l">49: </span>
-<span class="l">50: </span>
-<span class="l">51: </span>
-<span class="l">52: </span>
-<span class="l">53: </span>
-<span class="l">54: </span>
-<span class="l">55: </span>
-<span class="l">56: </span>
-<span class="l">57: </span>
-<span class="l">58: </span>
-<span class="l">59: </span>
-<span class="l">60: </span>
-<span class="l">61: </span>
-<span class="l">62: </span>
-<span class="l">63: </span>
-<span class="l">64: </span>
-<span class="l">65: </span>
-<span class="l">66: </span>
-<span class="l">67: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">  1: </span>
+<span class="l">  2: </span>
+<span class="l">  3: </span>
+<span class="l">  4: </span>
+<span class="l">  5: </span>
+<span class="l">  6: </span>
+<span class="l">  7: </span>
+<span class="l">  8: </span>
+<span class="l">  9: </span>
+<span class="l"> 10: </span>
+<span class="l"> 11: </span>
+<span class="l"> 12: </span>
+<span class="l"> 13: </span>
+<span class="l"> 14: </span>
+<span class="l"> 15: </span>
+<span class="l"> 16: </span>
+<span class="l"> 17: </span>
+<span class="l"> 18: </span>
+<span class="l"> 19: </span>
+<span class="l"> 20: </span>
+<span class="l"> 21: </span>
+<span class="l"> 22: </span>
+<span class="l"> 23: </span>
+<span class="l"> 24: </span>
+<span class="l"> 25: </span>
+<span class="l"> 26: </span>
+<span class="l"> 27: </span>
+<span class="l"> 28: </span>
+<span class="l"> 29: </span>
+<span class="l"> 30: </span>
+<span class="l"> 31: </span>
+<span class="l"> 32: </span>
+<span class="l"> 33: </span>
+<span class="l"> 34: </span>
+<span class="l"> 35: </span>
+<span class="l"> 36: </span>
+<span class="l"> 37: </span>
+<span class="l"> 38: </span>
+<span class="l"> 39: </span>
+<span class="l"> 40: </span>
+<span class="l"> 41: </span>
+<span class="l"> 42: </span>
+<span class="l"> 43: </span>
+<span class="l"> 44: </span>
+<span class="l"> 45: </span>
+<span class="l"> 46: </span>
+<span class="l"> 47: </span>
+<span class="l"> 48: </span>
+<span class="l"> 49: </span>
+<span class="l"> 50: </span>
+<span class="l"> 51: </span>
+<span class="l"> 52: </span>
+<span class="l"> 53: </span>
+<span class="l"> 54: </span>
+<span class="l"> 55: </span>
+<span class="l"> 56: </span>
+<span class="l"> 57: </span>
+<span class="l"> 58: </span>
+<span class="l"> 59: </span>
+<span class="l"> 60: </span>
+<span class="l"> 61: </span>
+<span class="l"> 62: </span>
+<span class="l"> 63: </span>
+<span class="l"> 64: </span>
+<span class="l"> 65: </span>
+<span class="l"> 66: </span>
+<span class="l"> 67: </span>
+<span class="l"> 68: </span>
+<span class="l"> 69: </span>
+<span class="l"> 70: </span>
+<span class="l"> 71: </span>
+<span class="l"> 72: </span>
+<span class="l"> 73: </span>
+<span class="l"> 74: </span>
+<span class="l"> 75: </span>
+<span class="l"> 76: </span>
+<span class="l"> 77: </span>
+<span class="l"> 78: </span>
+<span class="l"> 79: </span>
+<span class="l"> 80: </span>
+<span class="l"> 81: </span>
+<span class="l"> 82: </span>
+<span class="l"> 83: </span>
+<span class="l"> 84: </span>
+<span class="l"> 85: </span>
+<span class="l"> 86: </span>
+<span class="l"> 87: </span>
+<span class="l"> 88: </span>
+<span class="l"> 89: </span>
+<span class="l"> 90: </span>
+<span class="l"> 91: </span>
+<span class="l"> 92: </span>
+<span class="l"> 93: </span>
+<span class="l"> 94: </span>
+<span class="l"> 95: </span>
+<span class="l"> 96: </span>
+<span class="l"> 97: </span>
+<span class="l"> 98: </span>
+<span class="l"> 99: </span>
+<span class="l">100: </span>
+<span class="l">101: </span>
+<span class="l">102: </span>
+<span class="l">103: </span>
+<span class="l">104: </span>
+<span class="l">105: </span>
+<span class="l">106: </span>
+<span class="l">107: </span>
+<span class="l">108: </span>
+<span class="l">109: </span>
+<span class="l">110: </span>
+<span class="l">111: </span>
+<span class="l">112: </span>
+<span class="l">113: </span>
+<span class="l">114: </span>
+<span class="l">115: </span>
+<span class="l">116: </span>
+<span class="l">117: </span>
+<span class="l">118: </span>
+<span class="l">119: </span>
+<span class="l">120: </span>
+<span class="l">121: </span>
+<span class="l">122: </span>
+<span class="l">123: </span>
+<span class="l">124: </span>
+<span class="l">125: </span>
+<span class="l">126: </span>
+<span class="l">127: </span>
+<span class="l">128: </span>
+<span class="l">129: </span>
+<span class="l">130: </span>
+<span class="l">131: </span>
+<span class="l">132: </span>
+<span class="l">133: </span>
+<span class="l">134: </span>
+<span class="l">135: </span>
+<span class="l">136: </span>
+<span class="l">137: </span>
+<span class="l">138: </span>
+<span class="l">139: </span>
+<span class="l">140: </span>
+<span class="l">141: </span>
+<span class="l">142: </span>
+<span class="l">143: </span>
+<span class="l">144: </span>
+<span class="l">145: </span>
+<span class="l">146: </span>
+<span class="l">147: </span>
+<span class="l">148: </span>
+<span class="l">149: </span>
+<span class="l">150: </span>
+<span class="l">151: </span>
+<span class="l">152: </span>
+<span class="l">153: </span>
+<span class="l">154: </span>
+<span class="l">155: </span>
+<span class="l">156: </span>
+<span class="l">157: </span>
+<span class="l">158: </span>
+<span class="l">159: </span>
+<span class="l">160: </span>
+<span class="l">161: </span>
+<span class="l">162: </span>
+<span class="l">163: </span>
+<span class="l">164: </span>
+<span class="l">165: </span>
+<span class="l">166: </span>
+<span class="l">167: </span>
+<span class="l">168: </span>
+<span class="l">169: </span>
+<span class="l">170: </span>
+<span class="l">171: </span>
+<span class="l">172: </span>
+<span class="l">173: </span>
+<span class="l">174: </span>
+<span class="l">175: </span>
+<span class="l">176: </span>
+<span class="l">177: </span>
+<span class="l">178: </span>
+<span class="l">179: </span>
+<span class="l">180: </span>
+<span class="l">181: </span>
+<span class="l">182: </span>
+<span class="l">183: </span>
+<span class="l">184: </span>
+<span class="l">185: </span>
+<span class="l">186: </span>
+<span class="l">187: </span>
+<span class="l">188: </span>
+<span class="l">189: </span>
+<span class="l">190: </span>
+<span class="l">191: </span>
+<span class="l">192: </span>
+<span class="l">193: </span>
+<span class="l">194: </span>
+<span class="l">195: </span>
+<span class="l">196: </span>
+<span class="l">197: </span>
+<span class="l">198: </span>
+<span class="l">199: </span>
+<span class="l">200: </span>
+<span class="l">201: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
@@ -175,43 +309,177 @@
         <span class="k">return</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span onmouseout="hideTip(event, '5', 24)" onmouseover="showTip(event, '5', 24)" class="id">x1</span> <span onmouseout="hideTip(event, '6', 25)" onmouseover="showTip(event, '6', 25)" class="id">x2</span><span class="pn">)</span> <span class="pn">}</span>
 
 
-<span class="c">// Monads do not compose well, we need to use Monad Transformers</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, '12', 26)" onmouseover="showTip(event, '12', 26)" class="id">System</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, '1', 27)" onmouseover="showTip(event, '1', 27)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, '2', 28)" onmouseover="showTip(event, '2', 28)" class="id">Data</span>
+<span class="c">// MONAD TRANSFORMERS</span>
+<span class="c">// ==================</span>
+<span class="c">//</span>
+<span class="c">// Monads do not compose directly, we need to use Monad Transformers</span>
+
+
+
+<span class="k">let</span> <span onmouseout="hideTip(event, '12', 26)" onmouseover="showTip(event, '12', 26)" class="id">fn</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '13', 27)" onmouseover="showTip(event, '13', 27)" class="vt">ResultT</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '14', 28)" onmouseover="showTip(event, '14', 28)" class="vt">Reader</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '15', 29)" onmouseover="showTip(event, '15', 29)" class="vt">int</span><span class="pn">,</span><span onmouseout="hideTip(event, '16', 30)" onmouseover="showTip(event, '16', 30)" class="vt">Result</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span onmouseout="hideTip(event, '17', 31)" onmouseover="showTip(event, '17', 31)" class="rt">string</span><span class="pn">&gt;</span><span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="o">=</span> 
+    <span onmouseout="hideTip(event, '4', 32)" onmouseover="showTip(event, '4', 32)" class="k">monad</span> <span class="pn">{</span>
+       <span class="k">let!</span> <span onmouseout="hideTip(event, '5', 33)" onmouseover="showTip(event, '5', 33)" class="id">x1</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 34)" onmouseover="showTip(event, '18', 34)" class="fn">lift</span> <span onmouseout="hideTip(event, '19', 35)" onmouseover="showTip(event, '19', 35)" class="id">ask</span>
+       <span class="k">let!</span> <span onmouseout="hideTip(event, '6', 36)" onmouseover="showTip(event, '6', 36)" class="id">x2</span> <span class="o">=</span> 
+           <span class="k">if</span> <span onmouseout="hideTip(event, '5', 37)" onmouseover="showTip(event, '5', 37)" class="id">x1</span> <span class="o">&gt;</span> <span class="n">0</span> <span class="k">then</span> <span onmouseout="hideTip(event, '20', 38)" onmouseover="showTip(event, '20', 38)" class="fn">result</span> <span class="n">1</span>
+           <span class="k">else</span> <span onmouseout="hideTip(event, '13', 39)" onmouseover="showTip(event, '13', 39)" class="uc">ResultT</span> <span class="pn">(</span><span onmouseout="hideTip(event, '20', 40)" onmouseover="showTip(event, '20', 40)" class="fn">result</span> <span class="pn">(</span><span onmouseout="hideTip(event, '21', 41)" onmouseover="showTip(event, '21', 41)" class="uc">Error</span> <span class="s">&quot;Negative value&quot;</span><span class="pn">)</span><span class="pn">)</span> 
+       <span class="k">return</span> <span onmouseout="hideTip(event, '5', 42)" onmouseover="showTip(event, '5', 42)" class="id">x1</span> <span class="o">+</span> <span onmouseout="hideTip(event, '6', 43)" onmouseover="showTip(event, '6', 43)" class="id">x2</span>
+    <span class="pn">}</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, '22', 44)" onmouseover="showTip(event, '22', 44)" class="id">x</span> <span class="o">=</span> <span class="pn">(</span><span onmouseout="hideTip(event, '12', 45)" onmouseover="showTip(event, '12', 45)" class="id">fn</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '13', 46)" onmouseover="showTip(event, '13', 46)" class="m">ResultT</span><span class="pn">.</span><span onmouseout="hideTip(event, '23', 47)" onmouseover="showTip(event, '23', 47)" class="id">run</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '14', 48)" onmouseover="showTip(event, '14', 48)" class="m">Reader</span><span class="pn">.</span><span onmouseout="hideTip(event, '24', 49)" onmouseover="showTip(event, '24', 49)" class="id">run</span><span class="pn">)</span> <span class="n">10</span>
+<span class="c">// Result&lt;int,string&gt; = Ok 11</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '25', 50)" onmouseover="showTip(event, '25', 50)" class="id">y</span> <span class="o">=</span> <span class="pn">(</span><span onmouseout="hideTip(event, '12', 51)" onmouseover="showTip(event, '12', 51)" class="id">fn</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '13', 52)" onmouseover="showTip(event, '13', 52)" class="m">ResultT</span><span class="pn">.</span><span onmouseout="hideTip(event, '23', 53)" onmouseover="showTip(event, '23', 53)" class="id">run</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '14', 54)" onmouseover="showTip(event, '14', 54)" class="m">Reader</span><span class="pn">.</span><span onmouseout="hideTip(event, '24', 55)" onmouseover="showTip(event, '24', 55)" class="id">run</span><span class="pn">)</span> <span class="o">-</span><span class="n">1</span>
+<span class="c">// Result&lt;int,string&gt; = Error &quot;Negative value&quot;         </span>
+
+
+
+<span class="c">// The following example comes from Haskell</span>
+<span class="c">// async is used instead of IO</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, '26', 56)" onmouseover="showTip(event, '26', 56)" class="id">System</span>
 
 <span class="c">// First let&#39;s define some functions we&#39;ll use later</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '27', 57)" onmouseover="showTip(event, '27', 57)" class="id">getLine</span>    <span class="o">=</span> <span onmouseout="hideTip(event, '28', 58)" onmouseover="showTip(event, '28', 58)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, '29', 59)" onmouseover="showTip(event, '29', 59)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, '30', 60)" onmouseover="showTip(event, '30', 60)" class="id">ReadLine</span> <span class="pn">(</span><span class="pn">)</span> <span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '31', 61)" onmouseover="showTip(event, '31', 61)" class="fn">putStrLn</span> <span onmouseout="hideTip(event, '32', 62)" onmouseover="showTip(event, '32', 62)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '28', 63)" onmouseover="showTip(event, '28', 63)" class="k">async</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '33', 64)" onmouseover="showTip(event, '33', 64)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, '32', 65)" onmouseover="showTip(event, '32', 65)" class="id">x</span> <span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '34', 66)" onmouseover="showTip(event, '34', 66)" class="fn">isValid</span> <span onmouseout="hideTip(event, '35', 67)" onmouseover="showTip(event, '35', 67)" class="id">s</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, '36', 68)" onmouseover="showTip(event, '36', 68)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '37', 69)" onmouseover="showTip(event, '37', 69)" class="id">length</span> <span onmouseout="hideTip(event, '35', 70)" onmouseover="showTip(event, '35', 70)" class="id">s</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">8</span>
+        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '36', 71)" onmouseover="showTip(event, '36', 71)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '38', 72)" onmouseover="showTip(event, '38', 72)" class="id">exists</span> <span onmouseout="hideTip(event, '39', 73)" onmouseover="showTip(event, '39', 73)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, '40', 74)" onmouseover="showTip(event, '40', 74)" class="id">IsLetter</span> <span onmouseout="hideTip(event, '35', 75)" onmouseover="showTip(event, '35', 75)" class="id">s</span>
+        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '36', 76)" onmouseover="showTip(event, '36', 76)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '38', 77)" onmouseover="showTip(event, '38', 77)" class="id">exists</span> <span onmouseout="hideTip(event, '39', 78)" onmouseover="showTip(event, '39', 78)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, '41', 79)" onmouseover="showTip(event, '41', 79)" class="id">IsNumber</span> <span onmouseout="hideTip(event, '35', 80)" onmouseover="showTip(event, '35', 80)" class="id">s</span>
+        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '36', 81)" onmouseover="showTip(event, '36', 81)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '38', 82)" onmouseover="showTip(event, '38', 82)" class="id">exists</span> <span onmouseout="hideTip(event, '39', 83)" onmouseover="showTip(event, '39', 83)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, '42', 84)" onmouseover="showTip(event, '42', 84)" class="id">IsPunctuation</span> <span onmouseout="hideTip(event, '35', 85)" onmouseover="showTip(event, '35', 85)" class="id">s</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, '13', 29)" onmouseover="showTip(event, '13', 29)" class="id">getLine</span>    <span class="o">=</span> <span onmouseout="hideTip(event, '14', 30)" onmouseover="showTip(event, '14', 30)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, '12', 31)" onmouseover="showTip(event, '12', 31)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, '15', 32)" onmouseover="showTip(event, '15', 32)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, '16', 33)" onmouseover="showTip(event, '16', 33)" class="id">ReadLine</span><span class="pn">(</span><span class="pn">)</span><span class="pn">}</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '17', 34)" onmouseover="showTip(event, '17', 34)" class="fn">putStrLn</span> <span onmouseout="hideTip(event, '18', 35)" onmouseover="showTip(event, '18', 35)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '14', 36)" onmouseover="showTip(event, '14', 36)" class="k">async</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '19', 37)" onmouseover="showTip(event, '19', 37)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, '18', 38)" onmouseover="showTip(event, '18', 38)" class="id">x</span><span class="pn">}</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '20', 39)" onmouseover="showTip(event, '20', 39)" class="fn">isValid</span> <span onmouseout="hideTip(event, '21', 40)" onmouseover="showTip(event, '21', 40)" class="id">s</span> <span class="o">=</span>
-    <span onmouseout="hideTip(event, '22', 41)" onmouseover="showTip(event, '22', 41)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '23', 42)" onmouseover="showTip(event, '23', 42)" class="id">length</span> <span onmouseout="hideTip(event, '21', 43)" onmouseover="showTip(event, '21', 43)" class="id">s</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">8</span>
-        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '22', 44)" onmouseover="showTip(event, '22', 44)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '24', 45)" onmouseover="showTip(event, '24', 45)" class="id">exists</span> <span onmouseout="hideTip(event, '12', 46)" onmouseover="showTip(event, '12', 46)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, '25', 47)" onmouseover="showTip(event, '25', 47)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, '26', 48)" onmouseover="showTip(event, '26', 48)" class="id">IsLetter</span> <span onmouseout="hideTip(event, '21', 49)" onmouseover="showTip(event, '21', 49)" class="id">s</span>
-        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '22', 50)" onmouseover="showTip(event, '22', 50)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '24', 51)" onmouseover="showTip(event, '24', 51)" class="id">exists</span> <span onmouseout="hideTip(event, '12', 52)" onmouseover="showTip(event, '12', 52)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, '25', 53)" onmouseover="showTip(event, '25', 53)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, '27', 54)" onmouseover="showTip(event, '27', 54)" class="id">IsNumber</span> <span onmouseout="hideTip(event, '21', 55)" onmouseover="showTip(event, '21', 55)" class="id">s</span>
-        <span class="o">&amp;&amp;</span> <span onmouseout="hideTip(event, '22', 56)" onmouseover="showTip(event, '22', 56)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '24', 57)" onmouseover="showTip(event, '24', 57)" class="id">exists</span> <span onmouseout="hideTip(event, '25', 58)" onmouseover="showTip(event, '25', 58)" class="vt">Char</span><span class="pn">.</span><span onmouseout="hideTip(event, '28', 59)" onmouseover="showTip(event, '28', 59)" class="id">IsPunctuation</span> <span onmouseout="hideTip(event, '21', 60)" onmouseover="showTip(event, '21', 60)" class="id">s</span>
-
-<span class="k">let</span> <span onmouseout="hideTip(event, '29', 61)" onmouseover="showTip(event, '29', 61)" class="fn">decodeError</span> <span class="o">=</span> <span class="k">function</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '43', 86)" onmouseover="showTip(event, '43', 86)" class="fn">decodeError</span> <span class="o">=</span> <span class="k">function</span>
     <span class="pn">|</span> <span class="o">-</span><span class="n">1</span> <span class="k">-&gt;</span> <span class="s">&quot;Password not valid&quot;</span>
     <span class="pn">|</span> <span class="id">_</span>  <span class="k">-&gt;</span> <span class="s">&quot;Unknown&quot;</span>
 
 
-<span class="c">// The following functions compose the Error monad with the Async one.</span>
+<span class="c">// Now whe following functions compose the Error monad with the Async one.</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, '30', 62)" onmouseover="showTip(event, '30', 62)" class="id">getValidPassword</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '31', 63)" onmouseover="showTip(event, '31', 63)" class="vt">ResultT</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span> <span class="o">=</span>
-    <span onmouseout="hideTip(event, '4', 64)" onmouseover="showTip(event, '4', 64)" class="k">monad</span> <span class="pn">{</span>
-        <span class="k">let!</span> <span onmouseout="hideTip(event, '21', 65)" onmouseover="showTip(event, '21', 65)" class="id">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, '32', 66)" onmouseover="showTip(event, '32', 66)" class="fn">liftAsync</span> <span onmouseout="hideTip(event, '13', 67)" onmouseover="showTip(event, '13', 67)" class="id">getLine</span>
-        <span class="k">if</span> <span onmouseout="hideTip(event, '20', 68)" onmouseover="showTip(event, '20', 68)" class="fn">isValid</span> <span onmouseout="hideTip(event, '21', 69)" onmouseover="showTip(event, '21', 69)" class="id">s</span> <span class="k">then</span> <span class="k">return</span> <span onmouseout="hideTip(event, '21', 70)" onmouseover="showTip(event, '21', 70)" class="id">s</span>
-        <span class="k">else</span> <span class="k">return!</span> <span onmouseout="hideTip(event, '33', 71)" onmouseover="showTip(event, '33', 71)" class="fn">throw</span> <span class="o">-</span><span class="n">1</span><span class="pn">}</span>
-    <span class="o">&lt;/</span><span onmouseout="hideTip(event, '34', 72)" onmouseover="showTip(event, '34', 72)" class="fn">catch</span><span class="o">/&gt;</span>
-        <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '35', 73)" onmouseover="showTip(event, '35', 73)" class="id">s</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '33', 74)" onmouseover="showTip(event, '33', 74)" class="fn">throw</span> <span class="pn">(</span><span class="s">&quot;The error was: &quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, '29', 75)" onmouseover="showTip(event, '29', 75)" class="fn">decodeError</span> <span onmouseout="hideTip(event, '35', 76)" onmouseover="showTip(event, '35', 76)" class="id">s</span><span class="pn">)</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '44', 87)" onmouseover="showTip(event, '44', 87)" class="id">getValidPassword</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '13', 88)" onmouseover="showTip(event, '13', 88)" class="vt">ResultT</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, '4', 89)" onmouseover="showTip(event, '4', 89)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, '35', 90)" onmouseover="showTip(event, '35', 90)" class="id">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, '45', 91)" onmouseover="showTip(event, '45', 91)" class="fn">liftAsync</span> <span onmouseout="hideTip(event, '27', 92)" onmouseover="showTip(event, '27', 92)" class="id">getLine</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, '34', 93)" onmouseover="showTip(event, '34', 93)" class="fn">isValid</span> <span onmouseout="hideTip(event, '35', 94)" onmouseover="showTip(event, '35', 94)" class="id">s</span> <span class="k">then</span> <span class="k">return</span> <span onmouseout="hideTip(event, '35', 95)" onmouseover="showTip(event, '35', 95)" class="id">s</span>
+        <span class="k">else</span> <span class="k">return!</span> <span onmouseout="hideTip(event, '46', 96)" onmouseover="showTip(event, '46', 96)" class="fn">throw</span> <span class="o">-</span><span class="n">1</span><span class="pn">}</span>
+    <span class="o">&lt;/</span><span onmouseout="hideTip(event, '47', 97)" onmouseover="showTip(event, '47', 97)" class="fn">catch</span><span class="o">/&gt;</span>
+        <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '48', 98)" onmouseover="showTip(event, '48', 98)" class="id">s</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '46', 99)" onmouseover="showTip(event, '46', 99)" class="fn">throw</span> <span class="pn">(</span><span class="s">&quot;The error was: &quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, '43', 100)" onmouseover="showTip(event, '43', 100)" class="fn">decodeError</span> <span onmouseout="hideTip(event, '48', 101)" onmouseover="showTip(event, '48', 101)" class="id">s</span><span class="pn">)</span><span class="pn">)</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, '36', 77)" onmouseover="showTip(event, '36', 77)" class="id">askPassword</span> <span class="o">=</span> <span onmouseout="hideTip(event, '4', 78)" onmouseover="showTip(event, '4', 78)" class="k">monad</span> <span class="pn">{</span>
-    <span class="k">do!</span> <span onmouseout="hideTip(event, '37', 79)" onmouseover="showTip(event, '37', 79)" class="fn">lift</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '17', 80)" onmouseover="showTip(event, '17', 80)" class="fn">putStrLn</span> <span class="s">&quot;Insert your new password:&quot;</span>
-    <span class="k">let!</span> <span onmouseout="hideTip(event, '38', 81)" onmouseover="showTip(event, '38', 81)" class="id">value</span> <span class="o">=</span> <span onmouseout="hideTip(event, '30', 82)" onmouseover="showTip(event, '30', 82)" class="id">getValidPassword</span>
-    <span class="k">do!</span> <span onmouseout="hideTip(event, '37', 83)" onmouseover="showTip(event, '37', 83)" class="fn">lift</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '17', 84)" onmouseover="showTip(event, '17', 84)" class="fn">putStrLn</span> <span class="s">&quot;Storing in database...&quot;</span>
-    <span class="k">return</span> <span onmouseout="hideTip(event, '38', 85)" onmouseover="showTip(event, '38', 85)" class="id">value</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '49', 102)" onmouseover="showTip(event, '49', 102)" class="id">askPassword</span> <span class="o">=</span> <span onmouseout="hideTip(event, '4', 103)" onmouseover="showTip(event, '4', 103)" class="k">monad</span> <span class="pn">{</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, '18', 104)" onmouseover="showTip(event, '18', 104)" class="fn">lift</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '31', 105)" onmouseover="showTip(event, '31', 105)" class="fn">putStrLn</span> <span class="s">&quot;Insert your new password:&quot;</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, '50', 106)" onmouseover="showTip(event, '50', 106)" class="id">value</span> <span class="o">=</span> <span onmouseout="hideTip(event, '44', 107)" onmouseover="showTip(event, '44', 107)" class="id">getValidPassword</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, '18', 108)" onmouseover="showTip(event, '18', 108)" class="fn">lift</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, '31', 109)" onmouseover="showTip(event, '31', 109)" class="fn">putStrLn</span> <span class="s">&quot;Storing in database...&quot;</span>
+    <span class="k">return</span> <span onmouseout="hideTip(event, '50', 110)" onmouseover="showTip(event, '50', 110)" class="id">value</span><span class="pn">}</span>
 
 <span class="c">//try -&gt; Async.RunSynchronously (ResultT.run askPassword)</span>
+
+
+<span class="c">// After getting used to monadic CEs it&#39;s natural</span>
+<span class="c">// to feel the need to combine monads</span>
+<span class="c">// (from https://stackoverflow.com/a/37900264 )</span>
+
+<span class="k">module</span> <span class="m">CombineWriterWithResult</span> <span class="o">=</span>
+    
+    <span class="k">let</span> <span onmouseout="hideTip(event, '51', 111)" onmouseover="showTip(event, '51', 111)" class="fn">divide5By</span> <span class="o">=</span> <span class="k">function</span>
+        <span class="pn">|</span> <span class="n">0.0</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '21', 112)" onmouseover="showTip(event, '21', 112)" class="uc">Error</span> <span class="s">&quot;Divide by zero&quot;</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, '52', 113)" onmouseover="showTip(event, '52', 113)" class="id">x</span>   <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '53', 114)" onmouseover="showTip(event, '53', 114)" class="uc">Ok</span> <span class="pn">(</span><span class="n">5.0</span> <span class="o">/</span> <span onmouseout="hideTip(event, '52', 115)" onmouseover="showTip(event, '52', 115)" class="id">x</span><span class="pn">)</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '54', 116)" onmouseover="showTip(event, '54', 116)" class="fn">eitherConv</span> <span onmouseout="hideTip(event, '55', 117)" onmouseover="showTip(event, '55', 117)" class="fn">logSuccessF</span> <span onmouseout="hideTip(event, '56', 118)" onmouseover="showTip(event, '56', 118)" class="fn">logFailF</span> <span onmouseout="hideTip(event, '57', 119)" onmouseover="showTip(event, '57', 119)" class="fn">f</span> <span onmouseout="hideTip(event, '58', 120)" onmouseover="showTip(event, '58', 120)" class="id">v</span> <span class="o">=</span>
+        <span onmouseout="hideTip(event, '13', 121)" onmouseover="showTip(event, '13', 121)" class="uc">ResultT</span> <span class="o">&lt;|</span>
+            <span class="k">match</span> <span onmouseout="hideTip(event, '57', 122)" onmouseover="showTip(event, '57', 122)" class="fn">f</span> <span onmouseout="hideTip(event, '58', 123)" onmouseover="showTip(event, '58', 123)" class="id">v</span> <span class="k">with</span>
+            <span class="pn">|</span> <span onmouseout="hideTip(event, '53', 124)" onmouseover="showTip(event, '53', 124)" class="uc">Ok</span> <span onmouseout="hideTip(event, '59', 125)" onmouseover="showTip(event, '59', 125)" class="id">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '60', 126)" onmouseover="showTip(event, '60', 126)" class="uc">Writer</span><span class="pn">(</span><span onmouseout="hideTip(event, '53', 127)" onmouseover="showTip(event, '53', 127)" class="uc">Ok</span> <span onmouseout="hideTip(event, '59', 128)" onmouseover="showTip(event, '59', 128)" class="id">a</span><span class="pn">,</span> <span class="pn">[</span><span class="s">&quot;Success: &quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, '55', 129)" onmouseover="showTip(event, '55', 129)" class="fn">logSuccessF</span> <span onmouseout="hideTip(event, '59', 130)" onmouseover="showTip(event, '59', 130)" class="id">a</span><span class="pn">]</span><span class="pn">)</span>
+            <span class="pn">|</span> <span onmouseout="hideTip(event, '21', 131)" onmouseover="showTip(event, '21', 131)" class="uc">Error</span> <span onmouseout="hideTip(event, '61', 132)" onmouseover="showTip(event, '61', 132)" class="id">b</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '60', 133)" onmouseover="showTip(event, '60', 133)" class="uc">Writer</span><span class="pn">(</span><span onmouseout="hideTip(event, '21', 134)" onmouseover="showTip(event, '21', 134)" class="uc">Error</span> <span onmouseout="hideTip(event, '61', 135)" onmouseover="showTip(event, '61', 135)" class="id">b</span><span class="pn">,</span> <span class="pn">[</span><span class="s">&quot;ERROR: &quot;</span>   <span class="o">+</span> <span onmouseout="hideTip(event, '56', 136)" onmouseover="showTip(event, '56', 136)" class="fn">logFailF</span> <span onmouseout="hideTip(event, '61', 137)" onmouseover="showTip(event, '61', 137)" class="id">b</span><span class="pn">]</span><span class="pn">)</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '62', 138)" onmouseover="showTip(event, '62', 138)" class="id">ew</span> <span class="o">=</span> <span onmouseout="hideTip(event, '4', 139)" onmouseover="showTip(event, '4', 139)" class="k">monad</span> <span class="pn">{</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, '52', 140)" onmouseover="showTip(event, '52', 140)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '54', 141)" onmouseover="showTip(event, '54', 141)" class="fn">eitherConv</span> <span class="pn">(</span><span onmouseout="hideTip(event, '63', 142)" onmouseover="showTip(event, '63', 142)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%f</span><span class="s">&quot;</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '63', 143)" onmouseover="showTip(event, '63', 143)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span><span class="pn">)</span> <span onmouseout="hideTip(event, '51', 144)" onmouseover="showTip(event, '51', 144)" class="fn">divide5By</span> <span class="n">6.0</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, '64', 145)" onmouseover="showTip(event, '64', 145)" class="id">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, '54', 146)" onmouseover="showTip(event, '54', 146)" class="fn">eitherConv</span> <span class="pn">(</span><span onmouseout="hideTip(event, '63', 147)" onmouseover="showTip(event, '63', 147)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%f</span><span class="s">&quot;</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '63', 148)" onmouseover="showTip(event, '63', 148)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span><span class="pn">)</span> <span onmouseout="hideTip(event, '51', 149)" onmouseover="showTip(event, '51', 149)" class="fn">divide5By</span> <span class="n">3.0</span>
+        <span class="k">let!</span> <span onmouseout="hideTip(event, '65', 150)" onmouseover="showTip(event, '65', 150)" class="id">z</span> <span class="o">=</span> <span onmouseout="hideTip(event, '54', 151)" onmouseover="showTip(event, '54', 151)" class="fn">eitherConv</span> <span class="pn">(</span><span onmouseout="hideTip(event, '63', 152)" onmouseover="showTip(event, '63', 152)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%f</span><span class="s">&quot;</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '63', 153)" onmouseover="showTip(event, '63', 153)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span><span class="pn">)</span> <span onmouseout="hideTip(event, '51', 154)" onmouseover="showTip(event, '51', 154)" class="fn">divide5By</span> <span class="n">0.0</span>
+        <span class="k">return</span> <span class="pn">(</span><span onmouseout="hideTip(event, '52', 155)" onmouseover="showTip(event, '52', 155)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, '64', 156)" onmouseover="showTip(event, '64', 156)" class="id">y</span><span class="pn">,</span> <span onmouseout="hideTip(event, '65', 157)" onmouseover="showTip(event, '65', 157)" class="id">z</span><span class="pn">)</span> <span class="pn">}</span>
+
+    <span class="k">let</span> <span class="pn">(</span><span class="id">_</span><span class="pn">,</span> <span onmouseout="hideTip(event, '66', 158)" onmouseover="showTip(event, '66', 158)" class="id">log</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, '62', 159)" onmouseover="showTip(event, '62', 159)" class="id">ew</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '13', 160)" onmouseover="showTip(event, '13', 160)" class="m">ResultT</span><span class="pn">.</span><span onmouseout="hideTip(event, '23', 161)" onmouseover="showTip(event, '23', 161)" class="id">run</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '60', 162)" onmouseover="showTip(event, '60', 162)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, '67', 163)" onmouseover="showTip(event, '67', 163)" class="id">run</span>
+
+
+
+<span class="c">// Many popular F# libraries are in fact an instantiation of a specific monad combination.</span>
+<span class="c">// The followong example demonstrate how to code a mini-Suave lib in a few lines</span>
+
+<span class="k">module</span> <span onmouseout="hideTip(event, '68', 164)" onmouseover="showTip(event, '68', 164)" class="m">Suave</span> <span class="o">=</span>
+    <span class="c">// setup something that reminds us of what Suave can work with</span>
+    <span class="c">// this is an overly simplified model of Suave in order to show how OptionT can be used </span>
+    <span class="c">// in conjunction with generic Kleisli composition (fish) operator</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '69', 165)" onmouseover="showTip(event, '69', 165)" class="rt">WebPart</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">&gt;</span> <span class="o">=</span> <span class="ta">&#39;</span><span class="id">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '70', 166)" onmouseover="showTip(event, '70', 166)" class="vt">OptionT</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '71', 167)" onmouseover="showTip(event, '71', 167)" class="rt">Async</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span> <span onmouseout="hideTip(event, '72', 168)" onmouseover="showTip(event, '72', 168)" class="rt">option</span><span class="pn">&gt;</span><span class="pn">&gt;</span>
+    <span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, '73', 169)" onmouseover="showTip(event, '73', 169)" class="fn">succeed</span> <span onmouseout="hideTip(event, '74', 170)" onmouseover="showTip(event, '74', 170)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '28', 171)" onmouseover="showTip(event, '28', 171)" class="fn">async</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 172)" onmouseover="showTip(event, '75', 172)" class="id">Return</span> <span class="pn">(</span><span onmouseout="hideTip(event, '10', 173)" onmouseover="showTip(event, '10', 173)" class="uc">Some</span> <span onmouseout="hideTip(event, '74', 174)" onmouseover="showTip(event, '74', 174)" class="id">x</span><span class="pn">)</span>
+
+    <span class="k">module</span> <span onmouseout="hideTip(event, '69', 175)" onmouseover="showTip(event, '69', 175)" class="m">WebPart</span> <span class="o">=</span>
+        <span class="c">/// Comment from &lt;a href=&quot;https://github.com/SuaveIO/suave/blob/v2.4.3/src/Suave/WebPart.fsi#L39-L42&quot;&gt;WebPart.fsi&lt;/a&gt;</span>
+        <span class="c">/// Entry-point for composing the applicative routes of the http application,</span>
+        <span class="c">/// by iterating the options, applying the context, arg, to the predicate</span>
+        <span class="c">/// from the list of options, until there&#39;s a match/a Some(x) which can be</span>
+        <span class="c">/// run.</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '76', 176)" onmouseover="showTip(event, '76', 176)" class="fn">choose</span> <span class="pn">(</span><span onmouseout="hideTip(event, '77', 177)" onmouseover="showTip(event, '77', 177)" class="id">options</span><span class="pn">:</span> <span onmouseout="hideTip(event, '69', 178)" onmouseover="showTip(event, '69', 178)" class="rt">WebPart</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">&gt;</span> <span onmouseout="hideTip(event, '78', 179)" onmouseover="showTip(event, '78', 179)" class="rt">list</span><span class="pn">)</span> <span class="o">=</span> <span class="k">fun</span> <span onmouseout="hideTip(event, '74', 180)" onmouseover="showTip(event, '74', 180)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '79', 181)" onmouseover="showTip(event, '79', 181)" class="fn">choice</span> <span class="pn">(</span><span onmouseout="hideTip(event, '80', 182)" onmouseover="showTip(event, '80', 182)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '81', 183)" onmouseover="showTip(event, '81', 183)" class="id">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">|&gt;</span><span class="pn">)</span> <span onmouseout="hideTip(event, '74', 184)" onmouseover="showTip(event, '74', 184)" class="id">x</span><span class="pn">)</span> <span onmouseout="hideTip(event, '77', 185)" onmouseover="showTip(event, '77', 185)" class="id">options</span><span class="pn">)</span>
+
+    <span class="k">module</span> <span class="m">Http</span> <span class="o">=</span>
+        <span class="k">type</span> <span onmouseout="hideTip(event, '82', 186)" onmouseover="showTip(event, '82', 186)" class="rt">HttpResponse</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '83', 187)" onmouseover="showTip(event, '83', 187)" class="id">status</span><span class="pn">:</span> <span onmouseout="hideTip(event, '15', 188)" onmouseover="showTip(event, '15', 188)" class="vt">int</span><span class="pn">;</span> <span onmouseout="hideTip(event, '84', 189)" onmouseover="showTip(event, '84', 189)" class="id">content</span><span class="pn">:</span> <span onmouseout="hideTip(event, '85', 190)" onmouseover="showTip(event, '85', 190)" class="rt">string</span> <span class="pn">}</span>
+        <span class="k">type</span> <span onmouseout="hideTip(event, '86', 191)" onmouseover="showTip(event, '86', 191)" class="rt">HttpRequest</span>  <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '87', 192)" onmouseover="showTip(event, '87', 192)" class="id">url</span><span class="pn">:</span> <span onmouseout="hideTip(event, '88', 193)" onmouseover="showTip(event, '88', 193)" class="rt">Uri</span><span class="pn">;</span> <span class="id">``method``</span><span class="pn">:</span> <span onmouseout="hideTip(event, '85', 194)" onmouseover="showTip(event, '85', 194)" class="rt">string</span> <span class="pn">}</span>
+        <span class="k">type</span> <span onmouseout="hideTip(event, '89', 195)" onmouseover="showTip(event, '89', 195)" class="rt">HttpContext</span>  <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '90', 196)" onmouseover="showTip(event, '90', 196)" class="id">request</span><span class="pn">:</span> <span onmouseout="hideTip(event, '86', 197)" onmouseover="showTip(event, '86', 197)" class="rt">HttpRequest</span><span class="pn">;</span> <span onmouseout="hideTip(event, '91', 198)" onmouseover="showTip(event, '91', 198)" class="id">response</span><span class="pn">:</span> <span onmouseout="hideTip(event, '82', 199)" onmouseover="showTip(event, '82', 199)" class="rt">HttpResponse</span> <span class="pn">}</span>
+
+    <span class="k">module</span> <span class="m">Successful</span> <span class="o">=</span>
+        <span class="k">open</span> <span onmouseout="hideTip(event, '92', 200)" onmouseover="showTip(event, '92', 200)" class="id">Http</span>
+        <span class="k">let</span> <span class="k">private</span> <span onmouseout="hideTip(event, '93', 201)" onmouseover="showTip(event, '93', 201)" class="fn">withStatusCode</span> <span onmouseout="hideTip(event, '94', 202)" onmouseover="showTip(event, '94', 202)" class="id">statusCode</span> <span onmouseout="hideTip(event, '35', 203)" onmouseover="showTip(event, '35', 203)" class="id">s</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, '70', 204)" onmouseover="showTip(event, '70', 204)" class="uc">OptionT</span> <span class="o">&lt;&lt;</span> <span class="k">fun</span> <span onmouseout="hideTip(event, '95', 205)" onmouseover="showTip(event, '95', 205)" class="id">ctx</span> <span class="k">-&gt;</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '95', 206)" onmouseover="showTip(event, '95', 206)" class="id">ctx</span> <span class="k">with</span> <span class="id">response</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '95', 207)" onmouseover="showTip(event, '95', 207)" class="id">ctx</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 208)" onmouseover="showTip(event, '75', 208)" class="id">response</span> <span class="k">with</span> <span class="id">status</span> <span class="o">=</span> <span onmouseout="hideTip(event, '94', 209)" onmouseover="showTip(event, '94', 209)" class="id">statusCode</span><span class="pn">;</span> <span class="id">content</span> <span class="o">=</span> <span onmouseout="hideTip(event, '35', 210)" onmouseover="showTip(event, '35', 210)" class="id">s</span> <span class="pn">}</span><span class="pn">}</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '73', 211)" onmouseover="showTip(event, '73', 211)" class="fn">succeed</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '96', 212)" onmouseover="showTip(event, '96', 212)" class="fn">OK</span> <span onmouseout="hideTip(event, '35', 213)" onmouseover="showTip(event, '35', 213)" class="id">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, '93', 214)" onmouseover="showTip(event, '93', 214)" class="fn">withStatusCode</span> <span class="n">200</span> <span onmouseout="hideTip(event, '35', 215)" onmouseover="showTip(event, '35', 215)" class="id">s</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '97', 216)" onmouseover="showTip(event, '97', 216)" class="fn">BAD_REQUEST</span> <span onmouseout="hideTip(event, '35', 217)" onmouseover="showTip(event, '35', 217)" class="id">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, '93', 218)" onmouseover="showTip(event, '93', 218)" class="fn">withStatusCode</span> <span class="n">400</span> <span onmouseout="hideTip(event, '35', 219)" onmouseover="showTip(event, '35', 219)" class="id">s</span>
+
+    <span class="k">module</span> <span class="m">Filters</span> <span class="o">=</span>
+        <span class="k">open</span> <span onmouseout="hideTip(event, '92', 220)" onmouseover="showTip(event, '92', 220)" class="id">Http</span>
+        <span class="k">let</span> <span class="fn">``method``</span> <span class="pn">(</span><span onmouseout="hideTip(event, '98', 221)" onmouseover="showTip(event, '98', 221)" class="id">m</span><span class="pn">:</span> <span onmouseout="hideTip(event, '85', 222)" onmouseover="showTip(event, '85', 222)" class="rt">string</span><span class="pn">)</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, '70', 223)" onmouseover="showTip(event, '70', 223)" class="uc">OptionT</span> <span class="o">&lt;&lt;</span> <span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, '99', 224)" onmouseover="showTip(event, '99', 224)" class="id">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, '89', 225)" onmouseover="showTip(event, '89', 225)" class="rt">HttpContext</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '28', 226)" onmouseover="showTip(event, '28', 226)" class="fn">async</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 227)" onmouseover="showTip(event, '75', 227)" class="id">Return</span> <span class="pn">(</span><span class="k">if</span> <span class="pn">(</span><span onmouseout="hideTip(event, '98', 228)" onmouseover="showTip(event, '98', 228)" class="id">m</span> <span class="o">=</span> <span onmouseout="hideTip(event, '99', 229)" onmouseover="showTip(event, '99', 229)" class="id">x</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 230)" onmouseover="showTip(event, '75', 230)" class="id">request</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 231)" onmouseover="showTip(event, '75', 231)" class="id">``method``</span><span class="pn">)</span> <span class="k">then</span> <span onmouseout="hideTip(event, '10', 232)" onmouseover="showTip(event, '10', 232)" class="uc">Some</span> <span onmouseout="hideTip(event, '99', 233)" onmouseover="showTip(event, '99', 233)" class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '100', 234)" onmouseover="showTip(event, '100', 234)" class="uc">None</span><span class="pn">)</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '101', 235)" onmouseover="showTip(event, '101', 235)" class="fn">GET</span>  <span class="pn">(</span><span onmouseout="hideTip(event, '99', 236)" onmouseover="showTip(event, '99', 236)" class="id">x</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '89', 237)" onmouseover="showTip(event, '89', 237)" class="rt">HttpContext</span><span class="pn">)</span> <span class="o">=</span> <span class="fn">``method``</span> <span class="s">&quot;GET&quot;</span> <span onmouseout="hideTip(event, '99', 238)" onmouseover="showTip(event, '99', 238)" class="id">x</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '102', 239)" onmouseover="showTip(event, '102', 239)" class="fn">POST</span> <span class="pn">(</span><span onmouseout="hideTip(event, '99', 240)" onmouseover="showTip(event, '99', 240)" class="id">x</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '89', 241)" onmouseover="showTip(event, '89', 241)" class="rt">HttpContext</span><span class="pn">)</span> <span class="o">=</span> <span class="fn">``method``</span> <span class="s">&quot;POST&quot;</span> <span onmouseout="hideTip(event, '99', 242)" onmouseover="showTip(event, '99', 242)" class="id">x</span>
+  
+        <span class="k">let</span> <span onmouseout="hideTip(event, '103', 243)" onmouseover="showTip(event, '103', 243)" class="fn">path</span> <span onmouseout="hideTip(event, '35', 244)" onmouseover="showTip(event, '35', 244)" class="id">s</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, '70', 245)" onmouseover="showTip(event, '70', 245)" class="uc">OptionT</span> <span class="o">&lt;&lt;</span> <span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, '99', 246)" onmouseover="showTip(event, '99', 246)" class="id">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, '89', 247)" onmouseover="showTip(event, '89', 247)" class="rt">HttpContext</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '28', 248)" onmouseover="showTip(event, '28', 248)" class="fn">async</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 249)" onmouseover="showTip(event, '75', 249)" class="id">Return</span> <span class="pn">(</span><span class="k">if</span> <span class="pn">(</span><span onmouseout="hideTip(event, '35', 250)" onmouseover="showTip(event, '35', 250)" class="id">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, '99', 251)" onmouseover="showTip(event, '99', 251)" class="id">x</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 252)" onmouseover="showTip(event, '75', 252)" class="id">request</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 253)" onmouseover="showTip(event, '75', 253)" class="id">url</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 254)" onmouseover="showTip(event, '75', 254)" class="id">AbsolutePath</span><span class="pn">)</span> <span class="k">then</span> <span onmouseout="hideTip(event, '10', 255)" onmouseover="showTip(event, '10', 255)" class="uc">Some</span> <span onmouseout="hideTip(event, '99', 256)" onmouseover="showTip(event, '99', 256)" class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '100', 257)" onmouseover="showTip(event, '100', 257)" class="uc">None</span><span class="pn">)</span>
+
+    <span class="c">// Stub implementations: here you can plug Fleece or another similar Json library</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '104', 258)" onmouseover="showTip(event, '104', 258)" class="fn">toJson</span> <span onmouseout="hideTip(event, '105', 259)" onmouseover="showTip(event, '105', 259)" class="id">o</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '85', 260)" onmouseover="showTip(event, '85', 260)" class="rt">string</span>  <span class="o">=</span> <span onmouseout="hideTip(event, '106', 261)" onmouseover="showTip(event, '106', 261)" class="fn">failwith</span> <span class="s">&quot;Not implemented&quot;</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '107', 262)" onmouseover="showTip(event, '107', 262)" class="fn">ofJson</span> <span class="pn">(</span><span onmouseout="hideTip(event, '35', 263)" onmouseover="showTip(event, '35', 263)" class="id">s</span><span class="pn">:</span> <span onmouseout="hideTip(event, '85', 264)" onmouseover="showTip(event, '85', 264)" class="rt">string</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, '106', 265)" onmouseover="showTip(event, '106', 265)" class="fn">failwith</span> <span class="s">&quot;Not implemented&quot;</span>
+
+    <span class="k">module</span> <span class="m">Request</span> <span class="o">=</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '108', 266)" onmouseover="showTip(event, '108', 266)" class="fn">tryGet</span> <span onmouseout="hideTip(event, '109', 267)" onmouseover="showTip(event, '109', 267)" class="id">_s</span> <span class="pn">(</span><span onmouseout="hideTip(event, '110', 268)" onmouseover="showTip(event, '110', 268)" class="id">_r</span><span class="pn">:</span> <span onmouseout="hideTip(event, '92', 269)" onmouseover="showTip(event, '92', 269)" class="m">Http</span><span class="pn">.</span><span onmouseout="hideTip(event, '86', 270)" onmouseover="showTip(event, '86', 270)" class="id">HttpRequest</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, '53', 271)" onmouseover="showTip(event, '53', 271)" class="uc">Ok</span> <span class="s">&quot;FORM VALUE&quot;</span>
+
+    <span class="k">let</span> <span onmouseout="hideTip(event, '111', 272)" onmouseover="showTip(event, '111', 272)" class="fn">authenticated</span> <span class="pn">(</span><span onmouseout="hideTip(event, '112', 273)" onmouseover="showTip(event, '112', 273)" class="fn">f</span><span class="pn">:</span> <span onmouseout="hideTip(event, '92', 274)" onmouseover="showTip(event, '92', 274)" class="m">Http</span><span class="pn">.</span><span onmouseout="hideTip(event, '89', 275)" onmouseover="showTip(event, '89', 275)" class="id">HttpContext</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '15', 276)" onmouseover="showTip(event, '15', 276)" class="vt">int</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '70', 277)" onmouseover="showTip(event, '70', 277)" class="vt">OptionT</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '71', 278)" onmouseover="showTip(event, '71', 278)" class="rt">Async</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span> <span onmouseout="hideTip(event, '72', 279)" onmouseover="showTip(event, '72', 279)" class="rt">option</span><span class="pn">&gt;</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span>
+        <span class="c">// we assume that authenticated executes f only if auth, otherwise returns 401</span>
+        <span class="c">// we fake it as:</span>
+        <span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, '113', 280)" onmouseover="showTip(event, '113', 280)" class="id">ctx</span><span class="pn">:</span> <span onmouseout="hideTip(event, '92', 281)" onmouseover="showTip(event, '92', 281)" class="m">Http</span><span class="pn">.</span><span onmouseout="hideTip(event, '89', 282)" onmouseover="showTip(event, '89', 282)" class="id">HttpContext</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '112', 283)" onmouseover="showTip(event, '112', 283)" class="fn">f</span> <span onmouseout="hideTip(event, '113', 284)" onmouseover="showTip(event, '113', 284)" class="id">ctx</span> <span class="o">-</span><span class="n">1</span>
+
+    <span class="c">// Usage:</span>
+    <span class="k">open</span> <span onmouseout="hideTip(event, '114', 285)" onmouseover="showTip(event, '114', 285)" class="id">Successful</span>
+    <span class="k">open</span> <span onmouseout="hideTip(event, '115', 286)" onmouseover="showTip(event, '115', 286)" class="id">Filters</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '116', 287)" onmouseover="showTip(event, '116', 287)" class="rt">Note</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '117', 288)" onmouseover="showTip(event, '117', 288)" class="id">id</span><span class="pn">:</span> <span onmouseout="hideTip(event, '15', 289)" onmouseover="showTip(event, '15', 289)" class="vt">int</span><span class="pn">;</span> <span onmouseout="hideTip(event, '118', 290)" onmouseover="showTip(event, '118', 290)" class="id">text</span><span class="pn">:</span> <span onmouseout="hideTip(event, '85', 291)" onmouseover="showTip(event, '85', 291)" class="rt">string</span> <span class="pn">}</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '119', 292)" onmouseover="showTip(event, '119', 292)" class="rt">NoteList</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '120', 293)" onmouseover="showTip(event, '120', 293)" class="id">notes</span><span class="pn">:</span> <span onmouseout="hideTip(event, '116', 294)" onmouseover="showTip(event, '116', 294)" class="rt">Note</span> <span onmouseout="hideTip(event, '78', 295)" onmouseover="showTip(event, '78', 295)" class="rt">list</span><span class="pn">;</span> <span onmouseout="hideTip(event, '121', 296)" onmouseover="showTip(event, '121', 296)" class="id">offset</span><span class="pn">:</span> <span onmouseout="hideTip(event, '15', 297)" onmouseover="showTip(event, '15', 297)" class="vt">int</span><span class="pn">;</span> <span onmouseout="hideTip(event, '122', 298)" onmouseover="showTip(event, '122', 298)" class="id">chunk</span><span class="pn">:</span> <span onmouseout="hideTip(event, '15', 299)" onmouseover="showTip(event, '15', 299)" class="vt">int</span><span class="pn">;</span> <span onmouseout="hideTip(event, '123', 300)" onmouseover="showTip(event, '123', 300)" class="id">total</span><span class="pn">:</span> <span onmouseout="hideTip(event, '15', 301)" onmouseover="showTip(event, '15', 301)" class="vt">int</span> <span class="pn">}</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '124', 302)" onmouseover="showTip(event, '124', 302)" class="if">IDb</span> <span class="o">=</span>
+        <span class="k">abstract</span> <span class="k">member</span> <span class="fn">getUserNotes</span><span class="pn">:</span> <span onmouseout="hideTip(event, '15', 303)" onmouseover="showTip(event, '15', 303)" class="vt">int</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '71', 304)" onmouseover="showTip(event, '71', 304)" class="rt">Async</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '119', 305)" onmouseover="showTip(event, '119', 305)" class="rt">NoteList</span><span class="pn">&gt;</span>
+        <span class="k">abstract</span> <span class="k">member</span> <span class="fn">addUserNote</span><span class="pn">:</span> <span onmouseout="hideTip(event, '15', 306)" onmouseover="showTip(event, '15', 306)" class="vt">int</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '85', 307)" onmouseover="showTip(event, '85', 307)" class="rt">string</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '71', 308)" onmouseover="showTip(event, '71', 308)" class="rt">Async</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '116', 309)" onmouseover="showTip(event, '116', 309)" class="rt">Note</span><span class="pn">&gt;</span>
+    <span class="k">type</span> <span onmouseout="hideTip(event, '125', 310)" onmouseover="showTip(event, '125', 310)" class="rt">OverviewViewModel</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, '126', 311)" onmouseover="showTip(event, '126', 311)" class="id">myNotes</span><span class="pn">:</span> <span onmouseout="hideTip(event, '116', 312)" onmouseover="showTip(event, '116', 312)" class="rt">Note</span> <span onmouseout="hideTip(event, '78', 313)" onmouseover="showTip(event, '78', 313)" class="rt">list</span> <span class="pn">}</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, '127', 314)" onmouseover="showTip(event, '127', 314)" class="fn">app</span> <span class="pn">(</span><span onmouseout="hideTip(event, '128', 315)" onmouseover="showTip(event, '128', 315)" class="id">db</span><span class="pn">:</span> <span onmouseout="hideTip(event, '124', 316)" onmouseover="showTip(event, '124', 316)" class="if">IDb</span><span class="pn">)</span> <span class="o">=</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '129', 317)" onmouseover="showTip(event, '129', 317)" class="fn">overview</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, '130', 318)" onmouseover="showTip(event, '130', 318)" class="fn">GET</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="pn">(</span><span onmouseout="hideTip(event, '111', 319)" onmouseover="showTip(event, '111', 319)" class="fn">authenticated</span> <span class="o">&lt;|</span> <span class="k">fun</span> <span onmouseout="hideTip(event, '113', 320)" onmouseover="showTip(event, '113', 320)" class="id">ctx</span> <span onmouseout="hideTip(event, '131', 321)" onmouseover="showTip(event, '131', 321)" class="id">userId</span> <span class="k">-&gt;</span>
+                <span onmouseout="hideTip(event, '4', 322)" onmouseover="showTip(event, '4', 322)" class="k">monad</span> <span class="pn">{</span>
+                  <span class="k">let!</span> <span onmouseout="hideTip(event, '132', 323)" onmouseover="showTip(event, '132', 323)" class="id">res</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 324)" onmouseover="showTip(event, '18', 324)" class="fn">lift</span> <span class="pn">(</span><span onmouseout="hideTip(event, '128', 325)" onmouseover="showTip(event, '128', 325)" class="fn">db</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 326)" onmouseover="showTip(event, '75', 326)" class="id">getUserNotes</span> <span onmouseout="hideTip(event, '131', 327)" onmouseover="showTip(event, '131', 327)" class="id">userId</span><span class="pn">)</span>
+                  <span class="k">let</span> <span onmouseout="hideTip(event, '133', 328)" onmouseover="showTip(event, '133', 328)" class="id">ovm</span> <span class="o">=</span> <span onmouseout="hideTip(event, '104', 329)" onmouseover="showTip(event, '104', 329)" class="fn">toJson</span> <span class="pn">{</span> <span class="id">myNotes</span> <span class="o">=</span> <span onmouseout="hideTip(event, '132', 330)" onmouseover="showTip(event, '132', 330)" class="id">res</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 331)" onmouseover="showTip(event, '75', 331)" class="id">notes</span> <span class="pn">}</span>
+                  <span class="k">return!</span> <span onmouseout="hideTip(event, '134', 332)" onmouseover="showTip(event, '134', 332)" class="fn">OK</span> <span onmouseout="hideTip(event, '133', 333)" onmouseover="showTip(event, '133', 333)" class="id">ovm</span> <span onmouseout="hideTip(event, '113', 334)" onmouseover="showTip(event, '113', 334)" class="id">ctx</span>
+                <span class="pn">}</span><span class="pn">)</span>
+        <span class="k">let</span> <span onmouseout="hideTip(event, '135', 335)" onmouseover="showTip(event, '135', 335)" class="fn">register</span> <span class="o">=</span>
+            <span onmouseout="hideTip(event, '136', 336)" onmouseover="showTip(event, '136', 336)" class="fn">POST</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="pn">(</span><span onmouseout="hideTip(event, '111', 337)" onmouseover="showTip(event, '111', 337)" class="fn">authenticated</span> <span class="o">&lt;|</span> <span class="k">fun</span> <span onmouseout="hideTip(event, '113', 338)" onmouseover="showTip(event, '113', 338)" class="id">ctx</span> <span onmouseout="hideTip(event, '131', 339)" onmouseover="showTip(event, '131', 339)" class="id">userId</span> <span class="k">-&gt;</span>
+                <span onmouseout="hideTip(event, '4', 340)" onmouseover="showTip(event, '4', 340)" class="k">monad</span> <span class="pn">{</span>
+                  <span class="k">match</span> <span onmouseout="hideTip(event, '113', 341)" onmouseover="showTip(event, '113', 341)" class="id">ctx</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 342)" onmouseover="showTip(event, '75', 342)" class="id">request</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '137', 343)" onmouseover="showTip(event, '137', 343)" class="m">Request</span><span class="pn">.</span><span onmouseout="hideTip(event, '108', 344)" onmouseover="showTip(event, '108', 344)" class="id">tryGet</span> <span class="s">&quot;text&quot;</span> <span class="k">with</span> 
+                  <span class="pn">|</span> <span onmouseout="hideTip(event, '53', 345)" onmouseover="showTip(event, '53', 345)" class="uc">Ok</span> <span onmouseout="hideTip(event, '138', 346)" onmouseover="showTip(event, '138', 346)" class="id">text</span> <span class="k">-&gt;</span>
+                      <span class="k">let!</span> <span onmouseout="hideTip(event, '139', 347)" onmouseover="showTip(event, '139', 347)" class="id">newNote</span> <span class="o">=</span> <span onmouseout="hideTip(event, '18', 348)" onmouseover="showTip(event, '18', 348)" class="fn">lift</span> <span class="pn">(</span><span onmouseout="hideTip(event, '128', 349)" onmouseover="showTip(event, '128', 349)" class="fn">db</span><span class="pn">.</span><span onmouseout="hideTip(event, '75', 350)" onmouseover="showTip(event, '75', 350)" class="id">addUserNote</span> <span onmouseout="hideTip(event, '131', 351)" onmouseover="showTip(event, '131', 351)" class="id">userId</span> <span onmouseout="hideTip(event, '138', 352)" onmouseover="showTip(event, '138', 352)" class="id">text</span><span class="pn">)</span>
+                      <span class="k">let</span> <span onmouseout="hideTip(event, '140', 353)" onmouseover="showTip(event, '140', 353)" class="id">rvm</span> <span class="o">=</span> <span onmouseout="hideTip(event, '104', 354)" onmouseover="showTip(event, '104', 354)" class="fn">toJson</span> <span onmouseout="hideTip(event, '139', 355)" onmouseover="showTip(event, '139', 355)" class="id">newNote</span>
+                      <span class="k">return!</span> <span onmouseout="hideTip(event, '134', 356)" onmouseover="showTip(event, '134', 356)" class="fn">OK</span> <span onmouseout="hideTip(event, '140', 357)" onmouseover="showTip(event, '140', 357)" class="id">rvm</span> <span onmouseout="hideTip(event, '113', 358)" onmouseover="showTip(event, '113', 358)" class="id">ctx</span>
+                  <span class="pn">|</span> <span onmouseout="hideTip(event, '21', 359)" onmouseover="showTip(event, '21', 359)" class="uc">Error</span> <span onmouseout="hideTip(event, '141', 360)" onmouseover="showTip(event, '141', 360)" class="id">msg</span> <span class="k">-&gt;</span> 
+                      <span class="k">return!</span> <span onmouseout="hideTip(event, '142', 361)" onmouseover="showTip(event, '142', 361)" class="fn">BAD_REQUEST</span> <span onmouseout="hideTip(event, '141', 362)" onmouseover="showTip(event, '141', 362)" class="id">msg</span> <span onmouseout="hideTip(event, '113', 363)" onmouseover="showTip(event, '113', 363)" class="id">ctx</span>
+                <span class="pn">}</span><span class="pn">)</span>
+        <span onmouseout="hideTip(event, '143', 364)" onmouseover="showTip(event, '143', 364)" class="m">WebPart</span><span class="pn">.</span><span onmouseout="hideTip(event, '76', 365)" onmouseover="showTip(event, '76', 365)" class="id">choose</span> <span class="pn">[</span> <span onmouseout="hideTip(event, '144', 366)" onmouseover="showTip(event, '144', 366)" class="fn">path</span> <span class="s">&quot;/&quot;</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="pn">(</span><span onmouseout="hideTip(event, '134', 367)" onmouseover="showTip(event, '134', 367)" class="fn">OK</span> <span class="s">&quot;/&quot;</span><span class="pn">)</span>
+                         <span onmouseout="hideTip(event, '144', 368)" onmouseover="showTip(event, '144', 368)" class="fn">path</span> <span class="s">&quot;/note&quot;</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span onmouseout="hideTip(event, '135', 369)" onmouseover="showTip(event, '135', 369)" class="fn">register</span>
+                         <span onmouseout="hideTip(event, '144', 370)" onmouseover="showTip(event, '144', 370)" class="fn">path</span> <span class="s">&quot;/notes&quot;</span> <span class="o">&gt;</span><span class="o">=&gt;</span> <span onmouseout="hideTip(event, '129', 371)" onmouseover="showTip(event, '129', 371)" class="fn">overview</span> <span class="pn">]</span>
 </code></pre></td>
 </tr>
 </table>

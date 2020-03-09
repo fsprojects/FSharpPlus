@@ -40,17 +40,17 @@ such as <code>map</code>, <code>bind</code> and <code>apply</code> on List, Arra
 <span class="l">10: </span>
 <span class="l">11: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="c">// throws &quot;ArgumentException: The input sequence was empty.&quot;</span>
-    <span class="k">let</span> <span onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)" class="id">expectedSingleItem</span> <span class="o">=</span> <span onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// throws &quot;ArgumentException: The input sequence was empty.&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)" class="id">expectedSingleItem1</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)" class="vt">int</span> <span class="o">=</span> <span onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
 
-    <span class="c">// returns a Result.Error holding the exception as its value:</span>
-    <span class="k">let</span> <span onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)" class="id">expectedSingleItem</span> <span class="o">=</span> <span onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)" class="m">Result</span><span class="pn">.</span><span onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)" class="id">protect</span> <span onmouseout="hideTip(event, '3', 8)" onmouseover="showTip(event, '3', 8)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 9)" onmouseover="showTip(event, '4', 9)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+<span class="c">// returns a Result.Error holding the exception as its value:</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)" class="id">expectedSingleItem2</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)" class="vt">Result</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '3', 8)" onmouseover="showTip(event, '3', 8)" class="vt">int</span><span class="pn">,</span><span onmouseout="hideTip(event, '8', 9)" onmouseover="showTip(event, '8', 9)" class="rt">exn</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, '7', 10)" onmouseover="showTip(event, '7', 10)" class="m">Result</span><span class="pn">.</span><span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="id">protect</span> <span onmouseout="hideTip(event, '4', 12)" onmouseover="showTip(event, '4', 12)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '5', 13)" onmouseover="showTip(event, '5', 13)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
 
-    <span class="c">// ...or like typical try prefixed functions, treat exception as None</span>
-    <span class="k">let</span> <span onmouseout="hideTip(event, '8', 10)" onmouseover="showTip(event, '8', 10)" class="id">expectedSingleItem</span> <span class="o">=</span> <span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '10', 12)" onmouseover="showTip(event, '10', 12)" class="id">protect</span> <span onmouseout="hideTip(event, '3', 13)" onmouseover="showTip(event, '3', 13)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 14)" onmouseover="showTip(event, '4', 14)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+<span class="c">// ...or like typical try prefixed functions, treat exception as None</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '10', 14)" onmouseover="showTip(event, '10', 14)" class="id">expectedSingleItem3</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '11', 15)" onmouseover="showTip(event, '11', 15)" class="rt">Option</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, '3', 16)" onmouseover="showTip(event, '3', 16)" class="vt">int</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, '11', 17)" onmouseover="showTip(event, '11', 17)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '12', 18)" onmouseover="showTip(event, '12', 18)" class="id">protect</span> <span onmouseout="hideTip(event, '4', 19)" onmouseover="showTip(event, '4', 19)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '5', 20)" onmouseover="showTip(event, '5', 20)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
 
-    <span class="c">// which might look like this:</span>
-    <span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, '11', 15)" onmouseover="showTip(event, '11', 15)" class="fn">tryExactlyOne</span> <span onmouseout="hideTip(event, '12', 16)" onmouseover="showTip(event, '12', 16)" class="id">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, '9', 17)" onmouseover="showTip(event, '9', 17)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '10', 18)" onmouseover="showTip(event, '10', 18)" class="id">protect</span> <span onmouseout="hideTip(event, '3', 19)" onmouseover="showTip(event, '3', 19)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '4', 20)" onmouseover="showTip(event, '4', 20)" class="id">exactlyOne</span> <span onmouseout="hideTip(event, '12', 21)" onmouseover="showTip(event, '12', 21)" class="id">xs</span>
+<span class="c">// which might look like this:</span>
+<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, '13', 21)" onmouseover="showTip(event, '13', 21)" class="fn">tryExactlyOne</span> <span onmouseout="hideTip(event, '14', 22)" onmouseover="showTip(event, '14', 22)" class="id">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, '11', 23)" onmouseover="showTip(event, '11', 23)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '12', 24)" onmouseover="showTip(event, '12', 24)" class="id">protect</span> <span onmouseout="hideTip(event, '4', 25)" onmouseover="showTip(event, '4', 25)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '5', 26)" onmouseover="showTip(event, '5', 26)" class="id">exactlyOne</span> <span onmouseout="hideTip(event, '14', 27)" onmouseover="showTip(event, '14', 27)" class="id">xs</span>
 </code></pre></td>
 </tr>
 </table>
@@ -85,11 +85,11 @@ Most collections, or specifically 'foldable' instances implement these:</p>
 <span class="l">4: </span>
 <span class="l">5: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="pn">[</span><span class="s">&quot;Bob&quot;</span><span class="pn">;</span> <span class="s">&quot;Jane&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 22)" onmouseover="showTip(event, '3', 22)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '13', 23)" onmouseover="showTip(event, '13', 23)" class="id">intersperse</span> <span class="s">&quot;and&quot;</span>
-    <span class="c">// [&quot;Bob&quot;; &quot;and&quot;; &quot;Jane&quot;]</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '15', 28)" onmouseover="showTip(event, '15', 28)" class="id">a</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;Bob&quot;</span><span class="pn">;</span> <span class="s">&quot;Jane&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '4', 29)" onmouseover="showTip(event, '4', 29)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '16', 30)" onmouseover="showTip(event, '16', 30)" class="id">intersperse</span> <span class="s">&quot;and&quot;</span>
+<span class="c">// vat a : string list = [&quot;Bob&quot;; &quot;and&quot;; &quot;Jane&quot;]</span>
 
-    <span class="s">&quot;WooHoo&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '14', 24)" onmouseover="showTip(event, '14', 24)" class="id">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '15', 25)" onmouseover="showTip(event, '15', 25)" class="id">intersperse</span> <span class="s">&#39;-&#39;</span>
-    <span class="c">// val it : string = &quot;W-o-o-H-o-o&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '17', 31)" onmouseover="showTip(event, '17', 31)" class="id">b</span> <span class="o">=</span> <span class="s">&quot;WooHoo&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '18', 32)" onmouseover="showTip(event, '18', 32)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 33)" onmouseover="showTip(event, '19', 33)" class="id">intersperse</span> <span class="s">&#39;-&#39;</span>
+<span class="c">// val b : string = &quot;W-o-o-H-o-o&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -102,11 +102,11 @@ Most collections, or specifically 'foldable' instances implement these:</p>
 <span class="l">4: </span>
 <span class="l">5: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="pn">[</span><span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">]</span><span class="pn">;</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 26)" onmouseover="showTip(event, '3', 26)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '16', 27)" onmouseover="showTip(event, '16', 27)" class="id">intercalate</span> <span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">;</span><span class="o">-</span><span class="n">2</span><span class="pn">]</span><span class="pn">;;</span>
-    <span class="c">// val it : int list = [1; 2; -1; -2; 3; 4]</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '20', 34)" onmouseover="showTip(event, '20', 34)" class="id">c</span> <span class="o">=</span> <span class="pn">[</span><span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">]</span><span class="pn">;</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '4', 35)" onmouseover="showTip(event, '4', 35)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '21', 36)" onmouseover="showTip(event, '21', 36)" class="id">intercalate</span> <span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">;</span><span class="o">-</span><span class="n">2</span><span class="pn">]</span><span class="pn">;;</span>
+<span class="c">// val c : int list = [1; 2; -1; -2; 3; 4]</span>
 
-    <span class="pn">[</span><span class="s">&quot;Woo&quot;</span><span class="pn">;</span> <span class="s">&quot;Hoo&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '14', 28)" onmouseover="showTip(event, '14', 28)" class="id">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '17', 29)" onmouseover="showTip(event, '17', 29)" class="id">intercalate</span> <span class="s">&quot;--o.o--&quot;</span><span class="pn">;;</span>
-    <span class="c">// val it : string = &quot;Woo--o.o--Hoo&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '22', 37)" onmouseover="showTip(event, '22', 37)" class="id">d</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;Woo&quot;</span><span class="pn">;</span> <span class="s">&quot;Hoo&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '18', 38)" onmouseover="showTip(event, '18', 38)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, '23', 39)" onmouseover="showTip(event, '23', 39)" class="id">intercalate</span> <span class="s">&quot;--o.o--&quot;</span><span class="pn">;;</span>
+<span class="c">// val d : string = &quot;Woo--o.o--Hoo&quot;</span>
 </code></pre></td>
 </tr>
 </table>
@@ -146,11 +146,11 @@ more common <code>concat</code> for flatten and so this naming is continued for 
 <span class="l">4: </span>
 <span class="l">5: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">let</span> <span class="id">isEven</span> <span class="id">x</span> <span class="o">=</span> <span class="pn">(</span><span class="id">x</span> <span class="o">%</span> <span class="n">2</span><span class="pn">)</span> <span class="o">=</span> <span class="n">0</span>
-    <span class="k">let</span> <span class="id">chooseEven</span> <span class="id">x</span> <span class="o">=</span> <span class="k">if</span> <span class="id">isEven</span> <span class="id">x</span> <span class="k">then</span> <span onmouseout="hideTip(event, '18', 30)" onmouseover="showTip(event, '18', 30)" class="id">Choice1Of2</span> <span class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '19', 31)" onmouseover="showTip(event, '19', 31)" class="id">Choice2Of2</span> <span class="id">x</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '24', 40)" onmouseover="showTip(event, '24', 40)" class="fn">isEven</span> <span onmouseout="hideTip(event, '25', 41)" onmouseover="showTip(event, '25', 41)" class="id">x</span> <span class="o">=</span> <span class="pn">(</span><span onmouseout="hideTip(event, '25', 42)" onmouseover="showTip(event, '25', 42)" class="id">x</span> <span class="o">%</span> <span class="n">2</span><span class="pn">)</span> <span class="o">=</span> <span class="n">0</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '26', 43)" onmouseover="showTip(event, '26', 43)" class="fn">chooseEven</span> <span onmouseout="hideTip(event, '25', 44)" onmouseover="showTip(event, '25', 44)" class="id">x</span> <span class="o">=</span> <span class="k">if</span> <span onmouseout="hideTip(event, '24', 45)" onmouseover="showTip(event, '24', 45)" class="fn">isEven</span> <span onmouseout="hideTip(event, '25', 46)" onmouseover="showTip(event, '25', 46)" class="id">x</span> <span class="k">then</span> <span onmouseout="hideTip(event, '27', 47)" onmouseover="showTip(event, '27', 47)" class="uc">Choice1Of2</span> <span onmouseout="hideTip(event, '25', 48)" onmouseover="showTip(event, '25', 48)" class="id">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, '28', 49)" onmouseover="showTip(event, '28', 49)" class="uc">Choice2Of2</span> <span onmouseout="hideTip(event, '25', 50)" onmouseover="showTip(event, '25', 50)" class="id">x</span>
 
-    <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">4</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 32)" onmouseover="showTip(event, '3', 32)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '20', 33)" onmouseover="showTip(event, '20', 33)" class="id">partitionMap</span> <span class="id">chooseEven</span>
-    <span class="c">// val it : int list * int list = ([2; 4], [1; 3])</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '29', 51)" onmouseover="showTip(event, '29', 51)" class="id">e</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">4</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '4', 52)" onmouseover="showTip(event, '4', 52)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '30', 53)" onmouseover="showTip(event, '30', 53)" class="id">partitionMap</span> <span onmouseout="hideTip(event, '26', 54)" onmouseover="showTip(event, '26', 54)" class="fn">chooseEven</span>
+<span class="c">// val e : int list * int list = ([2; 4], [1; 3])</span>
 </code></pre></td>
 </tr>
 </table>
@@ -158,16 +158,12 @@ more common <code>concat</code> for flatten and so this naming is continued for 
 <p>F#+ adds functions to convert between Result, Choice and Option types.</p>
 <p>These should be self explanatory, but be aware that sometimes they are 'lossy'
 usually when converting to Option:</p>
+<p>// Convert a <code>Result</code> to an <code>Option</code> - effectively throws away error value
+// when present, by replacing with <code>None</code></p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="c">// Convert a `Result` to an `Option` - effectively throws away error value</span>
-    <span class="c">// when present, by replacing with `None`</span>
-    <span class="id">request</span> <span class="o">|&gt;</span> <span class="id">validateRequest</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '9', 34)" onmouseover="showTip(event, '9', 34)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '21', 35)" onmouseover="showTip(event, '21', 35)" class="id">ofResult</span>
-</code></pre></td>
-</tr>
-</table>
+<td class="snippet"><pre class="fssnip"><code lang="f#">request |&gt; validateRequest |&gt; Option.ofResult
+</code></pre></td></tr></table>
 <p>Going the other way is similar, but a value needs to be filled in for None:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
@@ -176,24 +172,24 @@ usually when converting to Option:</p>
 <span class="l">5: </span>
 <span class="l">6: </span>
 <span class="l">7: </span>
+<span class="l">8: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">let</span> <span class="id">firstElementOption</span> <span class="o">=</span> <span class="id">xs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 36)" onmouseover="showTip(event, '3', 36)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '22', 37)" onmouseover="showTip(event, '22', 37)" class="id">tryHead</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '31', 55)" onmouseover="showTip(event, '31', 55)" class="id">xs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;some value&quot;</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '32', 56)" onmouseover="showTip(event, '32', 56)" class="id">firstElementOption</span> <span class="o">=</span> <span onmouseout="hideTip(event, '31', 57)" onmouseover="showTip(event, '31', 57)" class="id">xs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '4', 58)" onmouseover="showTip(event, '4', 58)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, '33', 59)" onmouseover="showTip(event, '33', 59)" class="id">tryHead</span>
 
-    <span class="c">// Convert an `Option` to a `Result` will use unit as the Error:</span>
-    <span class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '9', 38)" onmouseover="showTip(event, '9', 38)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '23', 39)" onmouseover="showTip(event, '23', 39)" class="id">toResult</span>
+<span class="c">// Convert an `Option` to a `Result` will use unit as the Error:</span>
+<span onmouseout="hideTip(event, '32', 60)" onmouseover="showTip(event, '32', 60)" class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '11', 61)" onmouseover="showTip(event, '11', 61)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '34', 62)" onmouseover="showTip(event, '34', 62)" class="id">toResult</span>
 
-    <span class="c">// ...but you can specify an error value with Option.toResultWith:</span>
-    <span class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '9', 40)" onmouseover="showTip(event, '9', 40)" class="id">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '24', 41)" onmouseover="showTip(event, '24', 41)" class="id">toResultWith</span> <span class="s">&quot;No Element&quot;</span>
+<span class="c">// ...but you can specify an error value with Option.toResultWith:</span>
+<span onmouseout="hideTip(event, '32', 63)" onmouseover="showTip(event, '32', 63)" class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '11', 64)" onmouseover="showTip(event, '11', 64)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, '35', 65)" onmouseover="showTip(event, '35', 65)" class="id">toResultWith</span> <span class="s">&quot;No Element&quot;</span>
 </code></pre></td>
 </tr>
 </table>
 <p>Converting between <code>Choice</code> and <code>Result</code> is often useful:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">    <span class="k">let</span> <span class="id">asyncChoice</span> <span class="o">=</span> <span class="id">anAsyncValue</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '25', 42)" onmouseover="showTip(event, '25', 42)" class="id">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, '26', 43)" onmouseover="showTip(event, '26', 43)" class="id">Catch</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '25', 44)" onmouseover="showTip(event, '25', 44)" class="id">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, '27', 45)" onmouseover="showTip(event, '27', 45)" class="id">map</span> <span onmouseout="hideTip(event, '6', 46)" onmouseover="showTip(event, '6', 46)" class="id">Result</span><span class="pn">.</span><span onmouseout="hideTip(event, '28', 47)" onmouseover="showTip(event, '28', 47)" class="id">ofChoice</span>
-</code></pre></td>
-</tr>
-</table>
+<td class="snippet"><pre class="fssnip"><code lang="f#">let asyncChoice = anAsyncValue |&gt; Async.Catch |&gt; Async.map Result.ofChoice
+</code></pre></td></tr></table>
 <h1><a name="The-String-type" class="anchor" href="#The-String-type">The String type:</a></h1>
 <ul>
 <li>
