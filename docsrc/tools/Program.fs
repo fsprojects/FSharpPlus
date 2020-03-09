@@ -78,7 +78,7 @@ Target.create "ReferenceDocs" (fun _ ->
    
         let conventionBased = 
             DirectoryInfo.getSubDirectories <| System.IO.DirectoryInfo bin
-            |> Array.filter (fun x -> not ( x.FullName.EndsWith("FSharpPlus.Docs")))
+            |> Array.filter (fun x -> not ( x.FullName.EndsWith("FSharpPlus.Docs") || x.FullName.EndsWith("FSharpPlus.Samples")))
             |> Array.collect (fun d ->
                 let (name, d) =
                     let net45Bin = DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath (d.FullName @@ "bin" @@ "Release")) |> Array.filter (fun x -> x.FullName.ToLower().Contains("net45"))
