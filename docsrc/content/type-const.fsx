@@ -4,8 +4,10 @@
 #I "../../bin"
 
 (**
-TO-DO Add some docs here !
+Const
 =========================
+
+The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
 
 Examples
 --------
