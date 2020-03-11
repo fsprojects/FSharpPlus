@@ -21,7 +21,7 @@
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="id">t</span> <span class="o">&lt;&lt;</span> <span class="id">traverse</span> <span class="id">f</span> <span class="o">=</span> <span class="id">traverse</span> <span class="pn">(</span><span class="id">t</span> <span class="o">&lt;&lt;</span> <span class="id">f</span><span class="pn">)</span> 
 <span class="id">traverse</span> <span class="id">Identity</span> <span class="o">=</span> <span class="id">Identity</span>
-<span class="id">traverse</span> <span class="pn">(</span><span class="id">Compose</span> <span class="o">&lt;&lt;</span> <span class="id">fmap</span> <span class="id">g</span> <span class="pn">.</span> <span class="id">f</span><span class="pn">)</span> <span class="o">=</span> <span class="id">Compose</span> <span class="o">&lt;&lt;</span> <span class="id">fmap</span> <span class="pn">(</span><span class="id">traverse</span> <span class="id">g</span><span class="pn">)</span> <span class="o">&lt;&lt;</span> <span class="id">traverse</span> <span class="id">f</span>
+<span class="id">traverse</span> <span class="pn">(</span><span class="id">Compose</span> <span class="o">&lt;&lt;</span> <span class="id">map</span> <span class="id">g</span> <span class="o">&lt;&lt;</span> <span class="id">f</span><span class="pn">)</span> <span class="o">=</span> <span class="id">Compose</span> <span class="o">&lt;&lt;</span> <span class="id">map</span> <span class="pn">(</span><span class="id">traverse</span> <span class="id">g</span><span class="pn">)</span> <span class="o">&lt;&lt;</span> <span class="id">traverse</span> <span class="id">f</span>
 </code></pre></td>
 </tr>
 </table>

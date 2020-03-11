@@ -57,15 +57,15 @@ Its applicative instance plays a fundamental role in Lens.</p>
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2207', 2207)" onmouseover="showTip(event, '2207', 2207)">
+          <code onmouseout="hideTip(event, '2228', 2228)" onmouseover="showTip(event, '2228', 2228)">
             Const(&#39;t)
           </code>
-          <div class="tip" id="2207">
+          <div class="tip" id="2228">
             <strong>Signature:</strong> &#39;t<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L49-49" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L50-50" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -82,15 +82,15 @@ Its applicative instance plays a fundamental role in Lens.</p>
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2208', 2208)" onmouseover="showTip(event, '2208', 2208)">
+          <code onmouseout="hideTip(event, '2229', 2229)" onmouseover="showTip(event, '2229', 2229)">
             Const.( + )(arg1, arg2)
           </code>
-          <div class="tip" id="2208">
+          <div class="tip" id="2229">
             <strong>Signature:</strong> (Const&lt;^T,&#39;U&gt; * Const&lt;^T,&#39;U&gt;) -&gt; Const&lt;^T,&#39;U&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L53-53" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L54-54" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -100,15 +100,15 @@ Its applicative instance plays a fundamental role in Lens.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2209', 2209)" onmouseover="showTip(event, '2209', 2209)">
+          <code onmouseout="hideTip(event, '2230', 2230)" onmouseover="showTip(event, '2230', 2230)">
             Const.( &lt;*&gt; )(arg1, arg2)
           </code>
-          <div class="tip" id="2209">
+          <div class="tip" id="2230">
             <strong>Signature:</strong> (Const&lt;^C,(&#39;T -&gt; &#39;U)&gt; * Const&lt;^C,&#39;T&gt;) -&gt; Const&lt;^C,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L60-60" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -118,11 +118,28 @@ Its applicative instance plays a fundamental role in Lens.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2210', 2210)" onmouseover="showTip(event, '2210', 2210)">
+          <code onmouseout="hideTip(event, '2231', 2231)" onmouseover="showTip(event, '2231', 2231)">
             Const.Bifold(arg1, f, arg3, z)
           </code>
-          <div class="tip" id="2210">
+          <div class="tip" id="2231">
             <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;U -&gt; &#39;T -&gt; &#39;U) * (&#39;W -&gt; &#39;V -&gt; &#39;W) * z:&#39;U) -&gt; &#39;U<br />
+                          <strong>Type parameters:</strong> 'U, 'W                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L73-73" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2232', 2232)" onmouseover="showTip(event, '2232', 2232)">
+            Const.BifoldBack(arg1, f, arg3, z)
+          </code>
+          <div class="tip" id="2232">
+            <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U -&gt; &#39;U) * (&#39;V -&gt; &#39;W -&gt; &#39;W) * z:&#39;U) -&gt; &#39;U<br />
                           <strong>Type parameters:</strong> 'U, 'W                      </div>
         </td>
         <td class="xmldoc">
@@ -135,11 +152,11 @@ Its applicative instance plays a fundamental role in Lens.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2211', 2211)" onmouseover="showTip(event, '2211', 2211)">
-            Const.BifoldBack(arg1, f, arg3, z)
+          <code onmouseout="hideTip(event, '2233', 2233)" onmouseover="showTip(event, '2233', 2233)">
+            Const.BifoldMap(arg1, f, arg3)
           </code>
-          <div class="tip" id="2211">
-            <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U -&gt; &#39;U) * (&#39;V -&gt; &#39;W -&gt; &#39;W) * z:&#39;U) -&gt; &#39;U<br />
+          <div class="tip" id="2233">
+            <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U) * (&#39;V -&gt; &#39;W)) -&gt; &#39;U<br />
                           <strong>Type parameters:</strong> 'U, 'W                      </div>
         </td>
         <td class="xmldoc">
@@ -152,63 +169,12 @@ Its applicative instance plays a fundamental role in Lens.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2212', 2212)" onmouseover="showTip(event, '2212', 2212)">
-            Const.BifoldMap(arg1, f, arg3)
-          </code>
-          <div class="tip" id="2212">
-            <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U) * (&#39;V -&gt; &#39;W)) -&gt; &#39;U<br />
-                          <strong>Type parameters:</strong> 'U, 'W                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L70-70" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2213', 2213)" onmouseover="showTip(event, '2213', 2213)">
+          <code onmouseout="hideTip(event, '2234', 2234)" onmouseover="showTip(event, '2234', 2234)">
             Const.Bimap(arg1, f, arg3)
           </code>
-          <div class="tip" id="2213">
+          <div class="tip" id="2234">
             <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U) * (&#39;V -&gt; &#39;W)) -&gt; Const&lt;&#39;U,&#39;W&gt;<br />
                           <strong>Type parameters:</strong> 'U, 'W                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L66-66" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2214', 2214)" onmouseover="showTip(event, '2214', 2214)">
-            Const.Contramap(arg1, arg2)
-          </code>
-          <div class="tip" id="2214">
-            <strong>Signature:</strong> (Const&lt;&#39;C,&#39;T&gt; * (&#39;U -&gt; &#39;T)) -&gt; Const&lt;&#39;C,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'U                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L63-63" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2215', 2215)" onmouseover="showTip(event, '2215', 2215)">
-            Const.First(arg1, f)
-          </code>
-          <div class="tip" id="2215">
-            <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Const&lt;&#39;U,&#39;V&gt;<br />
-                          <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L67-67" class="github-link">
@@ -220,15 +186,66 @@ Its applicative instance plays a fundamental role in Lens.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2216', 2216)" onmouseover="showTip(event, '2216', 2216)">
+          <code onmouseout="hideTip(event, '2235', 2235)" onmouseover="showTip(event, '2235', 2235)">
+            Const.Bitraverse(arg1, f, g)
+          </code>
+          <div class="tip" id="2235">
+            <strong>Signature:</strong> (Const&lt;&#39;T1,&#39;U1&gt; * f:(&#39;T1 -&gt; ^Functor&lt;&#39;T2&gt;) * g:(&#39;U1 -&gt; ^Functor&lt;&#39;U2&gt;)) -&gt; ^Functor&lt;Const&lt;&#39;T2,&#39;U2&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^Functor<'T2>, ^Functor<Const<'T2,'U2>>, ^Functor<'U2>, 'U2, 'T2, 'T2                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L76-76" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2236', 2236)" onmouseover="showTip(event, '2236', 2236)">
+            Const.Contramap(arg1, arg2)
+          </code>
+          <div class="tip" id="2236">
+            <strong>Signature:</strong> (Const&lt;&#39;C,&#39;T&gt; * (&#39;U -&gt; &#39;T)) -&gt; Const&lt;&#39;C,&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> 'U                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L64-64" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2237', 2237)" onmouseover="showTip(event, '2237', 2237)">
+            Const.First(arg1, f)
+          </code>
+          <div class="tip" id="2237">
+            <strong>Signature:</strong> (Const&lt;&#39;T,&#39;V&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; Const&lt;&#39;U,&#39;V&gt;<br />
+                          <strong>Type parameters:</strong> 'U                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L68-68" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2238', 2238)" onmouseover="showTip(event, '2238', 2238)">
             Const.get_Zero()
           </code>
-          <div class="tip" id="2216">
+          <div class="tip" id="2238">
             <strong>Signature:</strong> unit -&gt; Const&lt;^T,&#39;U&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L52-52" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L53-53" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -237,15 +254,15 @@ Its applicative instance plays a fundamental role in Lens.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2217', 2217)" onmouseover="showTip(event, '2217', 2217)">
+          <code onmouseout="hideTip(event, '2239', 2239)" onmouseover="showTip(event, '2239', 2239)">
             Const.Map(arg1, arg2)
           </code>
-          <div class="tip" id="2217">
+          <div class="tip" id="2239">
             <strong>Signature:</strong> (Const&lt;&#39;C,&#39;T&gt; * (&#39;T -&gt; &#39;U)) -&gt; Const&lt;&#39;C,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L56-56" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L57-57" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -254,15 +271,15 @@ Its applicative instance plays a fundamental role in Lens.</p>
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '2218', 2218)" onmouseover="showTip(event, '2218', 2218)">
+          <code onmouseout="hideTip(event, '2240', 2240)" onmouseover="showTip(event, '2240', 2240)">
             Const.Return(arg1)
           </code>
-          <div class="tip" id="2218">
+          <div class="tip" id="2240">
             <strong>Signature:</strong> &#39;U -&gt; Const&lt;^T,&#39;U&gt;<br />
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L59-59" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L60-60" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
