@@ -84,8 +84,8 @@ module Validation =
     /// Like traverse but taking an additional function to traverse the Failure part as well.
     let inline bitraverse (f: 'Error1->'``Functor<'Error2>``) (g: 'T1->'``Functor<'T2>``) (source: Validation<'Error1,'T1>) : '``Functor<Validation<'Error2,'T2>>`` =
         match source with
-        | Success a -> Validation<'U1,'U2>.Success <!> g a
-        | Failure e -> Validation<'U1,'U2>.Failure <!> f e
+        | Success a -> Validation<'Error2,'T2>.Success <!> g a
+        | Failure e -> Validation<'Error2,'T2>.Failure <!> f e
 
     /// Like sequence but traversing the Failure part as well.
     let inline bisequence (source: Validation<'``Functor<'Error>``,'``Functor<'T>``>) : '``Functor<Validation<'Error,'T>>`` = bitraverse id id source
@@ -226,3 +226,10 @@ type Validation<'err,'a> with
         match t with
         | Failure a -> f z a
         | Success a -> g z a
+
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Bitraverse (t: Validation<'err,'a>, f, g) = Validation.bitraverse f g t
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Bisequence (t: Validation<'err,'a>) = Validation.bisequence t

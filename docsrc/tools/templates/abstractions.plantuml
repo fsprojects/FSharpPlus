@@ -80,6 +80,11 @@ abstract class Traversable [[http://fsprojects.github.io/FSharpPlus/abstraction-
   + sequence x [[[http://fsprojects.github.io/FSharpPlus/abstraction-traversable.html#sequence {Evaluate each action in the structure left to right and collect the result } ]]]
 }
 
+abstract class Bitraversable [[http://fsprojects.github.io/FSharpPlus/abstraction-bitraversable.html]] {
+  {static} + bitraverse f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bitraversable.html#bitraverse {Evaluates the relevant functions at each element in the structure, running the action, and collect results }]]]
+  + bisequence x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bitraversable.html#bisequence {Sequences all the actions in a structure, building a new structure with the same shape using the results of the actions } ]]]
+}
+
 together {
 	abstract class Profunctor [[http://fsprojects.github.io/FSharpPlus/abstraction-profunctor.html]] {
 	  + {static} dimap f g x [[[http://fsprojects.github.io/FSharpPlus/abstraction-profunctor.html#dimap]]]
@@ -117,6 +122,8 @@ Monoid ..|> Bifoldable
 Functor --|> Comonad
 Functor --|> Traversable
 Foldable --|> Traversable
+Bifoldable --|> Bitraversable
+Applicative ..|> Bitraversable
 Applicative ..|> Traversable
 Monoid ..|> Alternative
 Functor - Contravariant

@@ -63,6 +63,7 @@
     <Compile Include="Control/ArrowChoice.fs" />
     <Compile Include="Control/ArrowApply.fs" />
     <Compile Include="Control/Bifoldable.fs" />
+    <Compile Include="Control/Bitraversable.fs" />
     <Compile Include="Control/Traversable.fs" />
     <Compile Include="Control/Indexable.fs" />
     <Compile Include="Control/MonadTrans.fs" />

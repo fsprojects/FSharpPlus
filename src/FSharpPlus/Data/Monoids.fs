@@ -3,6 +3,7 @@
 #if !FABLE_COMPILER
 
 open FSharpPlus
+open FSharpPlus.Internals.Prelude
 
 /// The dual of a monoid, obtained by swapping the arguments of append.
 [<Struct>]
@@ -70,6 +71,15 @@ type Const<'t,'u> = Const of 't with
     static member BifoldMap  (Const x: Const<'T,'V>, f: 'T->'U, _: 'V->'W) = f x
     static member BifoldBack (Const x: Const<'T,'V>, f: 'T->'U->'U, _: 'V->'W->'W, z: 'U) = f x z
     static member Bifold     (Const x: Const<'T,'V>, f: 'U->'T->'U, _: 'W->'V->'W, z: 'U) = f z x
+
+    // Bitraversable
+    static member inline Bitraverse (Const x: Const<'T1,'U1>, f: 'T1->'``Functor<'T2>``, g: 'U1->'``Functor<'U2>``) : '``Functor<Const<'T2,'U2>>`` =
+        let mid x = map (id: 'U2 -> 'U2) x
+        if opaqueId false then
+            let (a: '``Functor<'U2>``) = mid (g Unchecked.defaultof<'U1>)
+            let (_: '``Functor<Const<'T2,'U2>>``) = map (Unchecked.defaultof<'U2 -> Const<'T2,'U2>>) a
+            ()
+        (Const : _ -> Const<'T2,'U2>) <!> f x
 
 /// Basic operations on Const
 [<RequireQualifiedAccess>]

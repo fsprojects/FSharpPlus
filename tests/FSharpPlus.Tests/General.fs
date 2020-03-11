@@ -1093,7 +1093,35 @@ module Traversable =
         CollectionAssert.AreEqual (expected, a)
         CollectionAssert.AreEqual (expected, b)
 
-        
+
+module Bitraversable =
+
+    type Either<'left,'right> = Left of 'left | Right of 'right with
+        static member        Bimap (x, f, g) = match x with Right a -> Right (f a) | Left e -> Left (g e)
+        static member inline Bisequence x = match x with Right a -> map Either<'Left,'Right>.Right a | Left e -> map Either<'Left,'Right>.Left e
+
+    let _ErrorBad: Result<int,string> list = bitraverse id id (Error ["Bad"])
+    let _FailureBad: Validation<string, int> list = bitraverse id id (Failure ["Bad"])
+    let _Some42x = bitraverse (Option.map string) Some (Some 42, 'x')
+    let _LeftBad: Either<string, int> list = bitraverse id id (Left ["Bad"])  // works through Bisequence and Bimap
+
+    type Either2<'left,'right> = Left of 'left | Right of 'right with
+        static member inline Bitraverse (x, f, g) = match x with | Right a -> Either2<'Error2,'T2>.Right <!> g a | Left e -> Either2<'Error2,'T2>.Left <!> f e
+
+    let _Right42: Either2<string, int> list = bisequence (Right [42])  // works through Bitraverse
+
+    let c: Const<int list, string list> = Const [1]
+    let d: Const<_, bool> = Const 2
+    let e: Const<_, bool> = Const 3
+
+    let _Const1 = bisequence c    
+    let _Const2 = bitraverse List.singleton List.singleton d    
+    let _Const3 = bitraverse NonEmptyList.singleton NonEmptyList.singleton e
+
+    ()
+
+
+
 type ZipList<'s> = ZipList of 's seq with
     static member Map    (ZipList x, f:'a->'b)               = ZipList (Seq.map f x)
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
