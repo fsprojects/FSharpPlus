@@ -33,7 +33,7 @@ Rules
 (**
     t << traverse f = traverse (t << f) 
     traverse Identity = Identity
-    traverse (Compose << fmap g . f) = Compose << fmap (traverse g) << traverse f
+    traverse (Compose << map g << f) = Compose << map (traverse g) << traverse f
 *)
 (**
 

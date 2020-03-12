@@ -17,12 +17,12 @@ type BifoldMap =
         let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member BifoldMap : _*_*_*_ -> _) b,f,g,a)
         call (Unchecked.defaultof<BifoldMap>, source)
         
-    static member inline InvokeOnInstance (f: 'T1->'U) (g: 'T2->'U) (source: '``Bifoldable<T1,T2>``) : 'U =
-        (^``Bifoldable<T1,T2>`` : (static member BifoldMap : _*_*_ -> _) source, f, g)
+    static member inline InvokeOnInstance (f: 'T1->'U) (g: 'T2->'U) (source: '``Bifoldable<'T1,'T2>``) : 'U =
+        (^``Bifoldable<'T1,'T2>`` : (static member BifoldMap : _*_*_ -> _) source, f, g)
 
 type BifoldMap with
-    static member inline BifoldMap (x: '``Bifoldable<'T1,'T2>``, f: _ -> 'b, g: _ -> 'b, [<Optional>]_impl: Default1) = BifoldMap.InvokeOnInstance f g x : 'b
-    static member inline BifoldMap (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _, _, _: Default1) = id
+    static member inline BifoldMap (x: '``Bifoldable<'T1,'T2>``, f: _ -> 'b, g: _ -> 'b, _impl: Default1) = BifoldMap.InvokeOnInstance f g x : 'b
+    static member inline BifoldMap (_: 't when 't: null and 't: struct, _  , _         , _impl: Default1) = id
 
 type Bifold =
     inherit Default1
@@ -39,8 +39,8 @@ type Bifold =
       (^``Bifoldable<'T1,'T2>`` : (static member Bifold : _*_*_*_ -> _) source, f, g, z)
       
 type Bifold with
-    static member inline Bifold (x: '``Bifoldable<'T1,'T2>``, f, g, z, [<Optional>]_impl: Default1) = Bifold.InvokeOnInstance f g z x
-    static member inline Bifold (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _, _, _, _: Default1) = id
+    static member inline Bifold (x: '``Bifoldable<'T1,'T2>``       , f, g, z, _impl: Default1) = Bifold.InvokeOnInstance f g z x
+    static member inline Bifold (_: 't when 't: null and 't: struct, _, _, _, _impl: Default1) = id
 
 type BifoldBack =
     inherit Default1
@@ -57,8 +57,8 @@ type BifoldBack =
       (^``Bifoldable<'T1,'T2>`` : (static member BifoldBack : _*_*_*_ -> _) source, f, g, z)
       
 type BifoldBack with
-    static member inline BifoldBack (x: '``Bifoldable<'T1,'T2>``, f, g, z, [<Optional>]_impl: Default1) = BifoldBack.InvokeOnInstance f g z x
-    static member inline BifoldBack (_: '``Bifoldable<'T1,'T2>`` when '``Bifoldable<'T1,'T2>`` : null and '``Bifoldable<'T1,'T2>``: struct, _, _, _, _: Default1) = id
+    static member inline BifoldBack (x: '``Bifoldable<'T1,'T2>``       , f, g, z, _impl: Default1) = BifoldBack.InvokeOnInstance f g z x
+    static member inline BifoldBack (_: 't when 't: null and 't: struct, _, _, _, _impl: Default1) = id
 
 type Bisum =
     inherit Default1

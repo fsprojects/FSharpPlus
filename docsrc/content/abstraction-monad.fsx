@@ -175,7 +175,7 @@ let decodeError = function
     | _  -> "Unknown"
 
 
-// Now whe following functions compose the Error monad with the Async one.
+// Now the following functions compose the Error monad with the Async one.
 
 let getValidPassword : ResultT<_> =
     monad {
