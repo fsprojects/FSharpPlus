@@ -19,8 +19,8 @@ type OfSeq =
     static member        OfSeq (x: seq<'t>                 , _: ICollection<'t>                 , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> ICollection<'t>
     static member        OfSeq (x: seq<'t>                 , _: IList<'t>                       , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> IList<'t>
     static member        OfSeq (x: seq<'t>                 , _: IList                           , _: Default4) = let d = ResizeArray () in Seq.iter d.Add x; d :> IList    
-    static member        OfSeq (x: seq<'k*'v>              , _: IReadOnlyDictionary<'k,'v>      , _: Default4) = Dict.toIReadOnlyDictionary (dict x)
-    static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IReadOnlyDictionary<'k,'v>      , _: Default4) = x |> Seq.map (|KeyValue|) |> dict |> Dict.toIReadOnlyDictionary    
+    static member        OfSeq (x: seq<'k*'v>              , _: IReadOnlyDictionary<'k,'v>      , _: Default4) = readOnlyDict x
+    static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IReadOnlyDictionary<'k,'v>      , _: Default4) = x |> Seq.map (|KeyValue|) |> readOnlyDict
     static member        OfSeq (x: seq<'k*'v>              , _: IDictionary<'k,'v>              , _: Default4) = dict x
     static member        OfSeq (x: seq<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              , _: Default4) = x |> Seq.map (|KeyValue|) |> dict
     static member        OfSeq (x: seq<'k*'v>              , _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> Seq.iter d.Add; d :> IDictionary
@@ -58,8 +58,8 @@ type OfList =
     static member        OfList (x: list<'t>                 , _: ICollection<'t>                 , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> ICollection<'t>
     static member        OfList (x: list<'t>                 , _: IList<'t>                       , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> IList<'t>
     static member        OfList (x: list<'t>                 , _: IList                           , _: Default4) = let d = ResizeArray () in List.iter d.Add x; d :> IList
-    static member        OfList (x: list<'k*'v>              , _: IReadOnlyDictionary<'k,'v>      , _: Default4) = Dict.toIReadOnlyDictionary (dict x)
-    static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IReadOnlyDictionary<'k,'v>      , _: Default4) = x |> List.map (|KeyValue|) |> dict |> Dict.toIReadOnlyDictionary
+    static member        OfList (x: list<'k*'v>              , _: IReadOnlyDictionary<'k,'v>      , _: Default4) = readOnlyDict x
+    static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IReadOnlyDictionary<'k,'v>      , _: Default4) = x |> List.map (|KeyValue|) |> readOnlyDict
     static member        OfList (x: list<'k*'v>              , _: IDictionary<'k,'v>              , _: Default4) = dict x
     static member        OfList (x: list<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              , _: Default4) = x |> List.map (|KeyValue|) |> dict
     static member        OfList (x: list<'k*'v>              , _: IDictionary                     , _: Default4) = let d = Hashtable () in x |> List.iter d.Add; d :> IDictionary
