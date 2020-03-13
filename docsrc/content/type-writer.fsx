@@ -4,7 +4,7 @@
 #I "../../bin"
 
 (**
-TO-DO Add some docs here !
+Writer
 =========================
 
 Examples
@@ -15,3 +15,20 @@ Examples
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 open FSharpPlus
+open FSharpPlus.Data
+type LogEntry={msg:string}
+with
+    static member Create x = {msg = x}
+
+let output x =  Writer.tell [LogEntry.Create x]
+
+let calc = monad {
+  do! output "I'm going to start a heavy computation" // start logging
+  let y = sum [1..100_000]
+  do! output (string y)
+  do! output "The computation finished"
+  return y // return the result of the computation
+}
+
+let logs = Writer.exec calc
+let (y,logs') = Writer.run calc
