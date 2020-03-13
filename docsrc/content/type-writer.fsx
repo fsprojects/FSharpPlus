@@ -18,9 +18,9 @@ open FSharpPlus
 open FSharpPlus.Data
 type LogEntry={msg:string}
 with
-    static member Create x = {msg = x}
+    static member create x = {msg = x}
 
-let output x =  Writer.tell [LogEntry.Create x]
+let output x =  Writer.tell [LogEntry.create x]
 
 let calc = monad {
   do! output "I'm going to start a heavy computation" // start logging
