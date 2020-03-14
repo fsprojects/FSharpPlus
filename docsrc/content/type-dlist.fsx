@@ -35,7 +35,7 @@ let list2 = DList.cons 100 list123
 let list3 = DList.append list2 (DList.singleton 200)
 // this can be written as (since list2 is a DList):
 let list3' = plus list2 (result 200)
-
+// in order to get back to a regular list you can then use toList:
 let list4 = toList list3'
 
 (**
