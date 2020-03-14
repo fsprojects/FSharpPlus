@@ -32,3 +32,20 @@ let calc = monad {
 
 let logs = Writer.exec calc
 let (y,logs') = Writer.run calc
+
+(**
+There are some performance implications around using a regular list, why instead you can use DList
+*)
+
+let output' x =  Writer.tell <| DList.ofSeq [LogEntry.create x]
+
+let calc' = monad {
+  do! output' "I'm going to start a heavy computation" // start logging
+  let y = sum [1..100_000]
+  do! output' (string y)
+  do! output' "The computation finished"
+  return y // return the result of the computation
+}
+
+let logs2 = Writer.exec calc'
+let (y',logs2') = Writer.run calc'

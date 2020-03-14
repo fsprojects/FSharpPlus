@@ -36,6 +36,8 @@ let list3 = DList.append list2 (DList.singleton 200)
 // this can be written as (since list2 is a DList):
 let list3' = plus list2 (result 200)
 
+let list4 = toList list3'
+
 (**
 ### Operations on DList
 *)
