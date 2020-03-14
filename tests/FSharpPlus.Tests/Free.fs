@@ -1,6 +1,6 @@
 namespace FSharpPlus.Tests
 
-#nowarn "40"
+#nowarn "40" "49"
 
 open System
 open FSharpPlus

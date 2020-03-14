@@ -1,5 +1,7 @@
 namespace FSharpPlus.Tests
 
+#nowarn "44"
+
 module Validation =
 
   open System
