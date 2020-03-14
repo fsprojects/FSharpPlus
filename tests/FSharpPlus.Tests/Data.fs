@@ -11,8 +11,7 @@ module DList =
     module Monoid =        
         let _Empty: DList<int> = empty
         let _Zero: DList<int> = zero
-        // still failing
-        // let _42: DList<int> = ofList [4] + ofList [2]
+        let _42: DList<int> = ofList [4] + ofList [2]
 
 
     // tests from FSharpx.Collections DList
