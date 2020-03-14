@@ -91,6 +91,8 @@ type FromInt32 =
         let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r
         call Unchecked.defaultof<FromInt32> x
 
+    static member inline InvokeOnInstance (x: int32) : 'Num = (^Num : (static member FromInt32 : _ -> ^Num) x)
+
 
 
 
@@ -118,7 +120,7 @@ type Zero =
 
     static member inline Zero (_: 't                             , _: Default3) = (^t : (static member Empty : ^t) ()) : 't
     
-    static member inline Zero (_: 't                             , _: Default2) = FromInt32.Invoke 0             : 't
+    static member inline Zero (_: 't                             , _: Default2) = FromInt32.InvokeOnInstance 0         : 't
     static member inline Zero (_: ^t when ^t: null and ^t: struct, _: Default2) = id
 
     static member inline Zero (_: 't                             , _: Default1) = LanguagePrimitives.GenericZero : 't
@@ -178,12 +180,12 @@ type Zero with
     static member inline Zero (_: Lazy<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in lazy v
     static member        Zero (_: Dictionary<'a,'b>         , _: Zero) = Dictionary<'a,'b> ()
     static member        Zero (_: ResizeArray<'a>           , _: Zero) = ResizeArray () : ResizeArray<'a>
-    static member        Zero (_: seq<'a>                   , _: Zero) = Seq.empty      : seq<'a>
-    
-    static member        Zero (_: IEnumerator<'a>           , _: Zero) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
-    
-    static member        Zero (_: IDictionary<'a,'b>        , _: Zero) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
-    static member        Zero (_: IReadOnlyDictionary<'a,'b>, _: Zero) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
+    static member inline Zero (_: ^R                        , _: Default6) = FromInt64.Invoke 0L : ^R
+    static member inline Zero (_: ^R                        , _: Default5) = Implicit.Invoke 0   : ^R
+    static member        Zero (_: seq<'a>                   , _: Default4) = Seq.empty      : seq<'a>
+    static member        Zero (_: IEnumerator<'a>           , _: Default4) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
+    static member        Zero (_: IDictionary<'a,'b>        , _: Default4) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
+    static member        Zero (_: IReadOnlyDictionary<'a,'b>, _: Default4) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
 
 
 
