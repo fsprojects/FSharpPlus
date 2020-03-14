@@ -118,6 +118,12 @@ type WrappedListH<'s> = WrappedListH of 's list with
         let s = sequence lst : '``Functor<List<'T>>``
         map WrappedListH s : '``Functor<WrappedListH<'T>>``
 
+type WrappedListI<'s> = WrappedListI of 's list with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedListI x) = x in x :> _ seq).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedListI x) = x in x :> _ seq).GetEnumerator () :> Collections.IEnumerator
+    static member Return  (x) = SideEffects.add "Using WrappedListI's Return"; WrappedListI [x]
+    static member Sum (lst: seq<WrappedListI<_>>) = Seq.head lst
+
 
 type WrappedSeqA<'s> = WrappedSeqA of 's seq with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqA x) = x in x).GetEnumerator ()
@@ -502,6 +508,11 @@ module Collections =
             d.Columns
         let _col1 = columns |> find (fun x -> x.ColumnName = "column1")
         let _cols = columns |> toList |> map  (fun x -> x.ColumnName)
+
+        // Defaults
+
+        let _12: WrappedListI<_> = seq [1;2] |> ofSeq
+
 
         ()
 
