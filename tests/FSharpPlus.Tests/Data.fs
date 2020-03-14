@@ -8,6 +8,13 @@ open FSharpPlus.Data
 
 module DList =
 
+    module Monoid =        
+        let _Empty: DList<int> = empty
+        // still failing
+        // let _Zero: DList<int> = zero
+        // let _42: DList<int> = ofList [4] + ofList [2]
+
+
     // tests from FSharpx.Collections DList
     let shouldEqual (x: 't) (y: 't) = Assert.AreEqual (x, y)
     let shouldThrow (exnT: Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate (x)) |> ignore

@@ -269,9 +269,9 @@ module DList =
     let inline bind m k = DList.foldBack (append << k) empty m
 
 type DList<'T> with
-    static member get_Zero = DList (0, Nil)
+    static member get_Zero () = DList (0, Nil)
     static member (+) (x: DList<_>, y: DList<_>) = DList.append x y
-    static member get_Empty = DList (0, Nil)
+    static member get_Empty () = DList (0, Nil)
     static member (<|>) (x: DList<_>, y: DList<_>) = DList.append x y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
