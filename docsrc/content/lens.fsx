@@ -6,6 +6,7 @@
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 open FSharpPlus
 open FSharpPlus.Lens
+open FSharpPlus.Data
 
 (**
 Lens
@@ -211,3 +212,40 @@ let i2 = view (from' isoTupleOption) (Some 42)
 // Iso composed with a Lens -> Lens
 let i3 = view (_1 << isoTupleOption) (System.Int32.TryParse "42", ())
 // val i3 : int option = Some 42
+
+
+(**
+Fold
+====
+
+*)
+
+let fv1 = foldMapOf (traverse << both << _Some) Mult [(Some 21, Some 21)]
+// val fv1 : Mult<int> = Mult 441
+
+let fv2 = foldOf (traverse << both << _Some) [(Some 21, Some 21)]
+// val fv2 : int = 42
+
+(**
+Maximum and minimum
+===================
+
+*)
+
+let fv3 = maximumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4)]
+// val fv3 : int option = Some 4
+
+let fv4 = minimumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4)]
+// val fv4 : int option = Some 1
+
+(**
+Existance
+=========
+
+*)
+
+let fv5 = anyOf both ((=) 'x') ('x','y')
+// val fv5 : bool = true
+
+let fv6 = allOf both (fun x-> x >= 3) (4,5)
+// val fv6 : bool = true
