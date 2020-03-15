@@ -4,7 +4,7 @@
 #I "../../bin"
 
 (**
-TO-DO Add some docs here !
+Reader
 =========================
 
 Examples
