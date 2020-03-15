@@ -190,6 +190,14 @@ let f7 = anyOf items ((=)'x') ['x';'y']
 let f8 = [1;2]^..items
 // val f8 : int list = [1; 2]
 
+let f9 = foldMapOf (traverse << both << _Some) Mult [(Some 21, Some 21)]
+// val f9 : Mult<int> = Mult 441
+
+let f10 = foldOf (traverse << both << _Some) [(Some 21, Some 21)]
+// val f10 : int = 42
+
+let f11 = allOf both (fun x-> x >= 3) (4,5)
+// val f11 : bool = true
 
 (**
 Iso
@@ -215,18 +223,6 @@ let i3 = view (_1 << isoTupleOption) (System.Int32.TryParse "42", ())
 
 
 (**
-Fold
-====
-
-*)
-
-let fv1 = foldMapOf (traverse << both << _Some) Mult [(Some 21, Some 21)]
-// val fv1 : Mult<int> = Mult 441
-
-let fv2 = foldOf (traverse << both << _Some) [(Some 21, Some 21)]
-// val fv2 : int = 42
-
-(**
 Maximum and minimum
 ===================
 
@@ -237,15 +233,3 @@ let fv3 = maximumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4
 
 let fv4 = minimumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4)]
 // val fv4 : int option = Some 1
-
-(**
-Existance
-=========
-
-*)
-
-let fv5 = anyOf both ((=) 'x') ('x','y')
-// val fv5 : bool = true
-
-let fv6 = allOf both (fun x-> x >= 3) (4,5)
-// val fv6 : bool = true

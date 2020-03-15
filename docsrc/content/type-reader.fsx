@@ -9,7 +9,7 @@ Reader<'R,'T>
 
 The Reader monad is good for computations which read values from a shared environment.
 
-Related Tyes
+Related Types
 ------------
 
  - [State](type-state.html): Similar, but it allows you to modify the environment.

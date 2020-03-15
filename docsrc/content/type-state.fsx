@@ -9,7 +9,7 @@ State<'S,'T>
 
 The intention when using the State monad is to keep state in a purely functional manner without violating referential transparency of functions.
 
-Related Tyes
+Related Types
 ------------
 
  - [Reader](type-reader.html): Similar but read-only.
