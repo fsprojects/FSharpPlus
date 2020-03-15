@@ -5,7 +5,10 @@
 
 (**
 Writer
-=========================
+======
+
+The Writer monad is good way to introduce a log of a computation. 
+It gives you a different way of logging that can be useful when you want to be able to inspect the logged results.
 
 Examples
 --------

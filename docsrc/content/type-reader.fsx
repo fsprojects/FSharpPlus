@@ -7,6 +7,13 @@
 Reader
 =========================
 
+The Reader monad is good for computations which read values from a shared environment.
+
+Related Tyes
+------------
+
+ - [State](type-state.html): Similar, but more general than the Reader monad.
+
 Examples
 --------
 *)

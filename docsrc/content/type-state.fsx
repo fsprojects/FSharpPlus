@@ -5,7 +5,14 @@
 
 (**
 State
-=========================
+=====
+
+The intention when using the State monad is to keep state in a purely functional manner without violating referential transparency of functions.
+
+Related Tyes
+------------
+
+ - [Reader](type-reader.html): Similar, but less general than the State monad.
 
 Examples
 --------
