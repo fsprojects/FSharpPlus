@@ -204,7 +204,8 @@ type NonEmptyList<'t> with
 [<AutoOpen>]
 module NonEmptyListBuilder =
     type NelBuilder () =
-        member __.Zero () = invalidOp "A NonEmptyList doesn't support the Zero operation."
+        [<CompilerMessage("A NonEmptyList doesn't support the Zero operation.", 708, IsError = true)>]
+        member __.Zero () = raise Internals.Errors.exnUnreachable
         member __.Combine (a: NonEmptyList<'T>, b) = a + b
         member __.Yield x = NonEmptyList.singleton x
         member __.Delay expr = expr () : NonEmptyList<'T>
