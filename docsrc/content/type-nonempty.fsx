@@ -23,7 +23,9 @@ open FSharpPlus.Data
 ### Constructing NonEmptyList
 *)
 // you can construct a NonEmptyList by using ofSeq
-let list123 = NonEmptyList.create 1 [ 2; 3 ]
+let list123' = NonEmptyList.create 1 [ 2; 3 ]
+// or more idiomatically
+let list123 = nel { 1 ; 2; 3 } // will work in F# version 4.7
 
 let listOne = NonEmptyList.singleton 1
 // cons

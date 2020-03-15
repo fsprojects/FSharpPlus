@@ -37,7 +37,7 @@ let logs = Writer.exec calc
 let (y,logs') = Writer.run calc
 
 (**
-There are some performance implications around using a regular list, why instead you can use DList
+There are some performance implications around using a regular list, that's why you should use DList in these scenarios
 *)
 
 let output' x =  Writer.tell <| DList.ofSeq [LogEntry.create x]
