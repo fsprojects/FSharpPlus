@@ -4,8 +4,8 @@
 #I "../../bin"
 
 (**
-NonEmptyList
-=========================
+NonEmptyList<'T>
+================
 
 A type-safe list that contains at least one element.
 

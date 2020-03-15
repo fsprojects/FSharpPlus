@@ -4,8 +4,8 @@
 #I "../../bin"
 
 (**
-State
-=====
+State<'S,'T>
+============
 
 The intention when using the State monad is to keep state in a purely functional manner without violating referential transparency of functions.
 

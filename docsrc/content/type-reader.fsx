@@ -4,8 +4,8 @@
 #I "../../bin"
 
 (**
-Reader
-=========================
+Reader<'R,'T>
+=============
 
 The Reader monad is good for computations which read values from a shared environment.
 

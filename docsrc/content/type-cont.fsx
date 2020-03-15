@@ -5,7 +5,7 @@
 
 (**
 Cont<'R,'U>
-=========================
+===========
 
 The `Cont` computation type represents computations which can be interrupted and resumed.
 
