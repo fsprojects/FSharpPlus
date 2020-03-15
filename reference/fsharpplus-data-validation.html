@@ -54,8 +54,8 @@
             _Failure(x)
           </code>
           <div class="tip" id="607">
-            <strong>Signature:</strong> x:(&#39;?11011 -&gt; ^?11012) -&gt; Validation&lt;&#39;?11011,&#39;?11013&gt; -&gt; ^?11015<br />
-                          <strong>Type parameters:</strong> '?11011, ^?11012, '?11013, '?11014, ^?11015                      </div>
+            <strong>Signature:</strong> x:(&#39;?11013 -&gt; ^?11014) -&gt; Validation&lt;&#39;?11013,&#39;?11015&gt; -&gt; ^?11017<br />
+                          <strong>Type parameters:</strong> '?11013, ^?11014, '?11015, '?11016, ^?11017                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validation.fs#L177-177" class="github-link">
@@ -71,8 +71,8 @@
             _Success(x)
           </code>
           <div class="tip" id="608">
-            <strong>Signature:</strong> x:(&#39;?11005 -&gt; ^?11006) -&gt; Validation&lt;&#39;?11008,&#39;?11005&gt; -&gt; ^?11009<br />
-                          <strong>Type parameters:</strong> '?11005, ^?11006, '?11007, '?11008, ^?11009                      </div>
+            <strong>Signature:</strong> x:(&#39;?11007 -&gt; ^?11008) -&gt; Validation&lt;&#39;?11010,&#39;?11007&gt; -&gt; ^?11011<br />
+                          <strong>Type parameters:</strong> '?11007, ^?11008, '?11009, '?11010, ^?11011                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validation.fs#L176-176" class="github-link">
@@ -147,8 +147,8 @@ If both are Failures it returns both Failures combined with the supplied functio
             biFoldBack f g state x
           </code>
           <div class="tip" id="612">
-            <strong>Signature:</strong> f:(&#39;?10931 -&gt; &#39;?10932 -&gt; &#39;?10933) -&gt; g:(&#39;?10934 -&gt; &#39;?10932 -&gt; &#39;?10933) -&gt; state:Validation&lt;&#39;?10931,&#39;?10934&gt; -&gt; x:&#39;?10932 -&gt; &#39;?10933<br />
-                          <strong>Type parameters:</strong> '?10931, '?10932, '?10933, '?10934                        <span>
+            <strong>Signature:</strong> f:(&#39;?10933 -&gt; &#39;?10934 -&gt; &#39;?10935) -&gt; g:(&#39;?10936 -&gt; &#39;?10934 -&gt; &#39;?10935) -&gt; state:Validation&lt;&#39;?10933,&#39;?10936&gt; -&gt; x:&#39;?10934 -&gt; &#39;?10935<br />
+                          <strong>Type parameters:</strong> '?10933, '?10934, '?10935, '?10936                        <span>
             <strong>Attributes:</strong><br />
 [&lt;Obsolete(&quot;Use Validation.bifoldBack instead.&quot;)&gt;]<br />
           </span>
@@ -215,7 +215,7 @@ valid Monad instance.</p>
           </code>
           <div class="tip" id="615">
             <strong>Signature:</strong> source:Validation&lt;^Functor&lt;&#39;Error&gt;,^Functor&lt;&#39;T&gt;&gt; -&gt; ^Functor&lt;Validation&lt;&#39;Error,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Functor<'Error>, ^Functor<Validation<'Error,'T>>, ^Functor<'T>, '?10947, '?10948                      </div>
+                          <strong>Type parameters:</strong> ^Functor<'Error>, ^Functor<Validation<'Error,'T>>, ^Functor<'T>, '?10949, '?10950                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validation.fs#L91-91" class="github-link">
@@ -351,8 +351,8 @@ valid Monad instance.</p>
             isoValidationResult(x)
           </code>
           <div class="tip" id="622">
-            <strong>Signature:</strong> x:^?11017 -&gt; ^?11018<br />
-                          <strong>Type parameters:</strong> ^?11017, ^?11018, '?11019, '?11020, ^?11021, '?11022, '?11023, '?11024                      </div>
+            <strong>Signature:</strong> x:^?11019 -&gt; ^?11020<br />
+                          <strong>Type parameters:</strong> ^?11019, ^?11020, '?11021, '?11022, ^?11023, '?11024, '?11025, '?11026                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validation.fs#L179-179" class="github-link">
@@ -463,8 +463,8 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
             orElse v a
           </code>
           <div class="tip" id="628">
-            <strong>Signature:</strong> v:Validation&lt;&#39;?10954,&#39;a&gt; -&gt; a:&#39;a -&gt; &#39;a<br />
-                          <strong>Type parameters:</strong> '?10954, 'a                        <span>
+            <strong>Signature:</strong> v:Validation&lt;&#39;?10956,&#39;a&gt; -&gt; a:&#39;a -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> '?10956, 'a                        <span>
             <strong>Attributes:</strong><br />
 [&lt;Obsolete(&quot;Use Validation.defaultValue instead.&quot;)&gt;]<br />
           </span>
@@ -508,7 +508,7 @@ when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.</p>
           </code>
           <div class="tip" id="630">
             <strong>Signature:</strong> source:Validation&lt;&#39;Error,^Functor&lt;&#39;T&gt;&gt; -&gt; ^Functor&lt;Validation&lt;&#39;Error,&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'Error, ^Functor<'T>, ^Functor<Validation<'Error,'T>>, '?10920                      </div>
+                          <strong>Type parameters:</strong> 'Error, ^Functor<'T>, ^Functor<Validation<'Error,'T>>, '?10922                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validation.fs#L65-65" class="github-link">

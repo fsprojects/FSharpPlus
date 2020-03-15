@@ -1,13 +1,58 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="TO-DO-Add-some-docs-here" class="anchor" href="#TO-DO-Add-some-docs-here">TO-DO Add some docs here !</a></h1>
+<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="State" class="anchor" href="#State">State</a></h1>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
+<span class="l">4: </span>
 </pre></td>
 <td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
 <span class="k">open</span> <span onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, '1', 2)" onmouseover="showTip(event, '1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, '2', 3)" onmouseover="showTip(event, '2', 3)" class="id">Data</span>
+</code></pre></td>
+</tr>
+</table>
+<p>From <a href="https://wiki.haskell.org/State_Monad">Haskell Wiki on State monad</a></p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '3', 4)" onmouseover="showTip(event, '3', 4)" class="fn">playGame</span> <span class="o">=</span>
+    <span class="k">function</span>
+    <span class="pn">|</span> <span class="pn">[</span><span class="pn">]</span><span class="k">-&gt;</span><span onmouseout="hideTip(event, '4', 5)" onmouseover="showTip(event, '4', 5)" class="k">monad</span><span class="pn">{</span>
+            <span class="k">let!</span> <span class="pn">(</span><span class="id">_</span><span class="pn">,</span> <span onmouseout="hideTip(event, '5', 6)" onmouseover="showTip(event, '5', 6)" class="id">score</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, '6', 7)" onmouseover="showTip(event, '6', 7)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '7', 8)" onmouseover="showTip(event, '7', 8)" class="id">get</span>
+            <span class="k">return</span> <span onmouseout="hideTip(event, '5', 9)" onmouseover="showTip(event, '5', 9)" class="id">score</span>
+        <span class="pn">}</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, '8', 10)" onmouseover="showTip(event, '8', 10)" class="id">x</span><span class="uc">::</span><span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="id">xs</span><span class="k">-&gt;</span><span onmouseout="hideTip(event, '4', 12)" onmouseover="showTip(event, '4', 12)" class="k">monad</span><span class="pn">{</span>
+            <span class="k">let!</span> <span class="pn">(</span><span onmouseout="hideTip(event, '10', 13)" onmouseover="showTip(event, '10', 13)" class="id">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, '5', 14)" onmouseover="showTip(event, '5', 14)" class="id">score</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, '6', 15)" onmouseover="showTip(event, '6', 15)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '7', 16)" onmouseover="showTip(event, '7', 16)" class="id">get</span>
+            <span class="k">match</span> <span onmouseout="hideTip(event, '8', 17)" onmouseover="showTip(event, '8', 17)" class="id">x</span> <span class="k">with</span>
+            <span class="pn">|</span> <span class="s">&#39;a&#39;</span> <span class="k">when</span> <span onmouseout="hideTip(event, '10', 18)" onmouseover="showTip(event, '10', 18)" class="id">on</span> <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, '6', 19)" onmouseover="showTip(event, '6', 19)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '11', 20)" onmouseover="showTip(event, '11', 20)" class="id">put</span> <span class="pn">(</span><span onmouseout="hideTip(event, '10', 21)" onmouseover="showTip(event, '10', 21)" class="id">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, '5', 22)" onmouseover="showTip(event, '5', 22)" class="id">score</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span>
+            <span class="pn">|</span> <span class="s">&#39;b&#39;</span> <span class="k">when</span> <span onmouseout="hideTip(event, '10', 23)" onmouseover="showTip(event, '10', 23)" class="id">on</span> <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, '6', 24)" onmouseover="showTip(event, '6', 24)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '11', 25)" onmouseover="showTip(event, '11', 25)" class="id">put</span> <span class="pn">(</span><span onmouseout="hideTip(event, '10', 26)" onmouseover="showTip(event, '10', 26)" class="id">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, '5', 27)" onmouseover="showTip(event, '5', 27)" class="id">score</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span>
+            <span class="pn">|</span> <span class="s">&#39;c&#39;</span>         <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, '6', 28)" onmouseover="showTip(event, '6', 28)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '11', 29)" onmouseover="showTip(event, '11', 29)" class="id">put</span> <span class="pn">(</span><span onmouseout="hideTip(event, '12', 30)" onmouseover="showTip(event, '12', 30)" class="fn">not</span> <span onmouseout="hideTip(event, '10', 31)" onmouseover="showTip(event, '10', 31)" class="id">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, '5', 32)" onmouseover="showTip(event, '5', 32)" class="id">score</span><span class="pn">)</span>
+            <span class="pn">|</span> <span class="id">_</span>           <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, '6', 33)" onmouseover="showTip(event, '6', 33)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '11', 34)" onmouseover="showTip(event, '11', 34)" class="id">put</span> <span class="pn">(</span><span onmouseout="hideTip(event, '10', 35)" onmouseover="showTip(event, '10', 35)" class="id">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, '5', 36)" onmouseover="showTip(event, '5', 36)" class="id">score</span><span class="pn">)</span>
+            <span class="k">return!</span> <span onmouseout="hideTip(event, '3', 37)" onmouseover="showTip(event, '3', 37)" class="fn">playGame</span> <span onmouseout="hideTip(event, '9', 38)" onmouseover="showTip(event, '9', 38)" class="id">xs</span>
+        <span class="pn">}</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, '13', 39)" onmouseover="showTip(event, '13', 39)" class="id">startState</span> <span class="o">=</span> <span class="pn">(</span><span class="k">false</span><span class="pn">,</span> <span class="n">0</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '14', 40)" onmouseover="showTip(event, '14', 40)" class="id">moves</span> <span class="o">=</span><span onmouseout="hideTip(event, '15', 41)" onmouseover="showTip(event, '15', 41)" class="fn">toList</span> <span class="s">&quot;abcaaacbbcabbab&quot;</span>
+<span onmouseout="hideTip(event, '6', 42)" onmouseover="showTip(event, '6', 42)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '16', 43)" onmouseover="showTip(event, '16', 43)" class="id">eval</span> <span class="pn">(</span><span onmouseout="hideTip(event, '3', 44)" onmouseover="showTip(event, '3', 44)" class="fn">playGame</span> <span onmouseout="hideTip(event, '14', 45)" onmouseover="showTip(event, '14', 45)" class="id">moves</span><span class="pn">)</span> <span onmouseout="hideTip(event, '13', 46)" onmouseover="showTip(event, '13', 46)" class="id">startState</span>
 </code></pre></td>
 </tr>
 </table>
