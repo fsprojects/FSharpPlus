@@ -98,7 +98,11 @@
   </ItemGroup>
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
   <ItemGroup>
-    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
+    <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
+    <Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
+    <Content Include="Control/*.fs" PackagePath="fable/Control" />
+    <Content Include="Math/*.fs" PackagePath="fable/Math" />
+    <Content Include="Data/*.fs" PackagePath="fable/Data" />
   </ItemGroup>
   <ItemGroup>
     <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
