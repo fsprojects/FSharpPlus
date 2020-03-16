@@ -245,8 +245,8 @@ module ComputationExpressions =
              do SideEffects.add "B: Never getting here" }
            Async.Start (example, token)
 
-
-        do Async.Sleep 1000 |> Async.RunSynchronously
+        while (not <| List.contains "B: Disposed properly" ( SideEffects.get ()))
+            do Async.Sleep 1 |> Async.RunSynchronously
 
         let effA, effB = List.partition (String.startsWith "A") (SideEffects.get ())
         areEqual ("A: Disposed properly", "B: Disposed properly") (List.last effA, List.last effB)
