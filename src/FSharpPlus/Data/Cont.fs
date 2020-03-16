@@ -8,7 +8,8 @@ open FSharpPlus
 
 /// <summary> Computation type: Computations which can be interrupted and resumed.
 /// <para/>   Binding strategy: Binding a function to a monadic value creates a new continuation which uses the function as the continuation of the monadic computation.
-/// <para/>   Useful for: Complex control structures, error handling, and creating co-routines.</summary>
+/// <para/>   Useful for: Complex control structures, error handling, and creating co-routines.
+/// See also the [type](/FSharpPlus/type-cont.html) documentation.</summary>
 [<Struct>]
 type Cont<'r,'t> = Cont of (('t->'r)->'r)
 

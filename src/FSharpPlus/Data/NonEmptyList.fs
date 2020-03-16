@@ -7,7 +7,8 @@ open FSharpPlus
 open FSharpPlus.Control
 
 
-/// A type-safe list that contains at least one element.
+/// <summary>A type-safe list that contains at least one element.
+/// See also the [type](/FSharpPlus/type-nonempty.html) documentation.</summary>
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     interface IEnumerable<'t> with member x.GetEnumerator () = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator ()
     interface System.Collections.IEnumerable with member x.GetEnumerator () = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator () :> System.Collections.IEnumerator

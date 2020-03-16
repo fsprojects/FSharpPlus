@@ -8,10 +8,10 @@ open FSharpPlus
 // DList from FSharpx.Collections
 //This implementation adds an additional parameter to allow O(1) retrieval of the list length.
 
-
-/// DList is an ordered linear structure implementing the List signature (head, tail, cons), 
+/// <summary> DList is an ordered linear structure implementing the List signature (head, tail, cons), 
 /// end-insertion (add), and O(1) append. Ordering is by insertion history.
 /// DList is an implementation of [John Hughes' append list](http://dl.acm.org/citation.cfm?id=8475).
+/// See also the [type](/FSharpPlus/type-dlist.html) documentation.</summary>
 [<Sealed>]
 type DList<'T> (length: int, data: DListData<'T>) =
 

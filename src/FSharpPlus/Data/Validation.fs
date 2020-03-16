@@ -14,14 +14,13 @@ open FSharpPlus.Data
 
 // Validation is based on https://github.com/qfpl/validation
 
-/// A 'Validation' is either a value of the type 'error or 't, similar to 'Result'. However,
+/// <summary> A 'Validation' is either a value of the type 'error or 't, similar to 'Result'. However,
 /// the 'Applicative' instance for 'Validation' accumulates errors using a 'Semigroup' on 'error.
 /// In contrast, the Applicative for 'Result' returns only the first error.
 ///
 /// A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
 /// that would violate monad rules.
-
-
+/// See also the [type](/FSharpPlus/type-validation.html) documentation.</summary>
 type Validation<'error, 't> =
   | Failure of 'error
   | Success of 't
