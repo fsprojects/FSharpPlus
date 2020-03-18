@@ -219,37 +219,21 @@ module ComputationExpressions =
     let usingInAsyncs() =
 
         // from https://github.com/Microsoft/visualfsharp/issues/1436        
-        SideEffects.reset ()
-        do let source = new CancellationTokenSource ()
-           let token = source.Token
-           let example = monad.fx {
-             SideEffects.add "A: Here we go"
-             use! h = Async.OnCancel <| fun () -> SideEffects.add "A: We got cancelled"
-             use x =
-                source.Cancel ()
-                SideEffects.add "A: Creating disposable"
-                {new IDisposable with override __.Dispose () = SideEffects.add "A: Disposed properly"}
-             do SideEffects.add "A: Never getting here" }
-           Async.Start (example, token)
-
-        do let source = new CancellationTokenSource ()
-           let token = source.Token
-           let example = monad.fx {
-             SideEffects.add "B: Here we go"
-             use! h = Async.OnCancel <| fun () -> SideEffects.add "B: We got cancelled"
-             use x = 
-                SideEffects.add "B: Creating disposable"
-                {new IDisposable with override __.Dispose () = SideEffects.add "B: Disposed properly"}
-             do source.Cancel ()
-             do! async { return () }
-             do SideEffects.add "B: Never getting here" }
-           Async.Start (example, token)
-
-
-        do Async.Sleep 1000 |> Async.RunSynchronously
-
-        let effA, effB = List.partition (String.startsWith "A") (SideEffects.get ())
-        areEqual ("A: Disposed properly", "B: Disposed properly") (List.last effA, List.last effB)
+        let flag = ref 0
+        let cts = new System.Threading.CancellationTokenSource()
+        let go = monad.fx {
+            use disp =
+                cts.Cancel()
+                { new IDisposable with
+                    override __.Dispose() = incr flag }
+            while true do
+                do! Async.Sleep 50
+            }
+        try
+            Async.RunSynchronously (go, cancellationToken = cts.Token)
+        with
+            :? System.OperationCanceledException -> ()
+        Assert.AreEqual(1, !flag)
 
     type AsyncOfOptionDisposable () =
         interface IDisposable with
