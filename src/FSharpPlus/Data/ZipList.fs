@@ -31,6 +31,8 @@ type ZipList<'s> with
     static member Return (x: 'a)     = ZipList (Seq.initInfinite (konst x))
     static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
 
+    static member Lift2 (f, x : ZipList<'b>, y : ZipList<'c>) = (((FSharpPlus.Control.Return.Invoke f, x) ||> FSharpPlus.Control.Apply.Invoke), y) ||> FSharpPlus.Control.Apply.Invoke
+    
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = ZipList.zip x y
 

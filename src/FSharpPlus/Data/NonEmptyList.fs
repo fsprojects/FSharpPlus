@@ -162,6 +162,8 @@ type NonEmptyList<'t> with
         let r = NonEmptyList.toList f </List.apply/> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
+    static member Lift2 (f: 'T -> 'U -> 'V, x, y) = Unchecked.toNonEmptyList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
+
     static member Extract   {Head = h; Tail = _} = h : 't
 
     #if !FABLE_COMPILER

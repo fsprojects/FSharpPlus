@@ -53,7 +53,14 @@ module Free =
             | Pure f -> map<'T,'U,'``Functor<'T>``,'``Functor<Free<'Functor<'T>,'T>>``,'``Functor<Free<'Functor<'U>,'U>>``,'``Functor<'U>``> f x : Free<'``Functor<'U>``,'U>
             | Roll (f: ^``Functor<Free<'Functor<'T->'U>,'T->'U>>``) -> Roll (Map.Invoke (loop x: Free<'``Functor<'T->'U>``,'T->'U> -> _) f: '``Functor<Free<'Functor<'U>,'U>>``)
         loop x f
-        
+
+    let inline map2 (f: 'T->'U->'V) (x: Free<'``Functor<'T>``,'T>) (y: Free<'``Functor<'U>``,'U>) : Free<'``Functor<'V>``,'V> =
+        let rec loop (y: Free<_,_>) (x: Free<_,_>) =
+            match run x with
+            | Pure x -> map<'U,'V,'``Functor<'U>``,'``Functor<Free<'Functor<'U>,'U>>``,'``Functor<Free<'Functor<'V>,'V>>``,'``Functor<'V>``> (f x) y : Free<'``Functor<'V>``,'V>
+            | Roll (x: ^``Functor<Free<'Functor<'T>,'T>>``) -> Roll (Map.Invoke (loop y: Free<'``Functor<'T>``,'T> -> _) x: '``Functor<Free<'Functor<'V>,'V>>``)
+        loop y x
+
     /// Folds the Free structure into a Monad
     let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
         let rec loop f x =
@@ -82,6 +89,7 @@ type Free<'``functor<'t>``,'t> with
     static member Return x = Pure x
     static member inline (>>=) (x: Free<'``Functor<'T>``,'T>, f: 'T -> Free<'``Functor<'U>``,'U>)   = Free.bind  f x : Free<'``Functor<'U>``,'U>
     static member inline (<*>) (f: Free<'``Functor<'T->'U>``,'T->'U>, x: Free<'``Functor<'T>``,'T>) = Free.apply f x : Free<'``Functor<'U>``,'U>
+    static member inline Lift2 (f, x: Free<'``Functor<'T>``,'T>, y: Free<'``Functor<'U>``,'U>) = Free.map2 f x y: Free<'``Functor<'V>``,'V>
     static member        Delay (x: unit -> Free<'``Functor<'T>``,'T>) = x ()
 
 #endif
