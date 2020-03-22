@@ -56,7 +56,7 @@ type Map =
 
 #if !FABLE_COMPILER
 
-    static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value) : Lazy<'U>
+    static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy.map f x
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
@@ -72,9 +72,9 @@ type Map =
     static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
     static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
     static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
-    static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d : Dictionary<'Key,'U>
+    static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = Dictionary.map f x : Dictionary<'Key,'U>
     static member Map ((x: Expr<'T>            , f: 'T->'U), _mthd: Map) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
-    static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray (Seq.map f x) : ResizeArray<'U>
+    static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray.map f x
 
     // Restricted
     static member Map ((x: string              , f        ), _mthd: Map) = String.map f x

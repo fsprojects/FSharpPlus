@@ -29,7 +29,7 @@
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Internals.fs" />
+    <Compile Include="Internals.fs" />    
     <Compile Include="Extensions/Option.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
@@ -37,10 +37,13 @@
     <Compile Include="Extensions/IList.fs" />
     <Compile Include="Extensions/List.fs" />
     <Compile Include="Extensions/Array.fs" />
+    <Compile Include="Extensions/ResizeArray.fs" />
     <Compile Include="Extensions/String.fs" />
     <Compile Include="Extensions/IReadOnlyCollection.fs" />
     <Compile Include="Extensions/IReadOnlyList.fs" />
+    <Compile Include="Extensions/Lazy.fs" />
     <Compile Include="Extensions/Map.fs" />
+    <Compile Include="Extensions/Dictionary.fs" />
     <Compile Include="Extensions/Dict.fs" />
     <Compile Include="Extensions/IReadOnlyDictionary.fs" />
     <Compile Include="Extensions/Enumerator.fs" />

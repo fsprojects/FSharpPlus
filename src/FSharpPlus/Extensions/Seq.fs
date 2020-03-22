@@ -21,6 +21,9 @@ module Seq =
     let bind (mapping: 'T->seq<'U>) source = Seq.collect mapping source
 
     let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
+
+    let lift2 f x1 x2 = Seq.allPairs x1 x2 |> Seq.map (fun (x, y) -> f x y)
+
     let foldBack f x z = Array.foldBack f (Seq.toArray x) z
 
     /// <summary>Applies a key-generating function to each element of a sequence and yields a sequence of 
