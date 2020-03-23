@@ -14,6 +14,7 @@ type ZipList<'s> = ZipList of 's seq with
 module ZipList =
     let run   (ZipList x) = x
     let map f (ZipList x) = ZipList (Seq.map f x)
+    let map2 (f:'T1->'T2->'U) (ZipList x) (ZipList y) = ZipList (Seq.map2 f x y)
     let singleton x = ZipList (Seq.singleton x)
 
     /// <summary>Combines the two lists into a list of pairs. The two lists need not have equal lengths:
@@ -31,7 +32,7 @@ type ZipList<'s> with
     static member Return (x: 'a)     = ZipList (Seq.initInfinite (konst x))
     static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
 
-    static member Lift2 (f, x : ZipList<'b>, y : ZipList<'c>) = (((FSharpPlus.Control.Return.Invoke f, x) ||> FSharpPlus.Control.Apply.Invoke), y) ||> FSharpPlus.Control.Apply.Invoke
+    static member Lift2 (f, x : ZipList<'T1>, y : ZipList<'T2>) = ZipList.map2 f x y
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = ZipList.zip x y
