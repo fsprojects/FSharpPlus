@@ -55,33 +55,6 @@ type Map =
     inherit Default1
 
 #if !FABLE_COMPILER
-
-    [<Obsolete>]static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value)   : Lazy<'U>
-    [<Obsolete>]static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = x.ContinueWith (fun (x: Task<_>) -> f x.Result)   : Task<'U>
-    [<Obsolete>]static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
-    [<Obsolete>]static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x      : list<'U>
-    [<Obsolete>]static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
-    [<Obsolete>]static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U>(g.Invoke >> f)
-    [<Obsolete>]static member Map (((m: 'Monoid, a)        , f: 'T->'U), _mthd: Map) = (m, f a)
-    [<Obsolete>]static member Map ((x: _ []                , f: 'T->'U), _mthd: Map) = Array.map   f x
-    [<Obsolete>]static member Map ((x: _ [,]               , f: 'T->'U), _mthd: Map) = Array2D.map f x
-    [<Obsolete>]static member Map ((x: _ [,,]              , f: 'T->'U), _mthd: Map) = Array3D.map f x
-    [<Obsolete>]static member Map ((x: _ [,,,]             , f: 'T->'U), _mthd: Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-    [<Obsolete>]static member Map ((x: Async<_>            , f: 'T->'U), _mthd: Map) = async.Bind (x, async.Return << f)
-    [<Obsolete>]static member Map ((x: Result<_,'E>        , f: 'T->'U), _mthd: Map) = Result.map f x
-    [<Obsolete>]static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
-    [<Obsolete>]static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
-    [<Obsolete>]static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
-    [<Obsolete>]static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = let d = Dictionary() in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d: Dictionary<'Key,'U>
-    [<Obsolete>]static member Map ((x: Expr<'T>            , f: 'T->'U), _mthd: Map) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
-    [<Obsolete>]static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray(Seq.map f x) : ResizeArray<'U>
-
-    // Restricted
-    [<Obsolete>]static member Map ((x: string              , f)        , _mthd: Map) = String.map f x
-    [<Obsolete>]static member Map ((x: StringBuilder       , f)        , _mthd: Map) = new StringBuilder (String.map f (string x))
-    [<Obsolete>]static member Map ((x: Set<_>              , f)        , _mthd: Map) = Set.map f x
-
-
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy.map f x
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
