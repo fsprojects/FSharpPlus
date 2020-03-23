@@ -19,6 +19,7 @@
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="BifoldableTests.fs" />
+    <Compile Include="Compatibility.fs" />
     <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
   </ItemGroup>
   <ItemGroup>
@@ -28,6 +29,7 @@
     <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\FSharpPlus.1\FSharpPlus.1.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
