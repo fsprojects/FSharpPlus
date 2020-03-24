@@ -179,6 +179,13 @@ type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
     static member ToSeq  (WrappedSeqE x) = SideEffects.add "Using WrappedSeqE's ToSeq"; x
 
+type WrappedSeqF<'s> = WrappedSeqF of 's seq with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqF x) = x in x).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedSeqF x) = x in x).GetEnumerator () :> Collections.IEnumerator
+    static member Return x = SideEffects.add "Using WrappedSeqF's Return"; WrappedSeqF (Seq.singleton x)
+    static member (<*>)  (WrappedSeqF f, WrappedSeqF x) = SideEffects.add "Using WrappedSeqF's Apply"; WrappedSeqF (f <*> x)
+    static member ToList (WrappedSeqF x) = Seq.toList x
+
 open System.Collections.Generic
 open System.Collections
 open System.Threading.Tasks
@@ -1177,6 +1184,18 @@ module Applicative =
         Assert.AreEqual (508, res508)
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
 
+        // WrappedSeqC is Monad. Monads are Applicatives => (<*>) should work
+        let (res3: WrappedSeqC<_>) = WrappedSeqC [(+) 1] <*> WrappedSeqC [2]
+        CollectionAssert.AreEqual (WrappedSeqC [3], res3)
+
+        // Check user defined types implementing IEnumerable don't default to seq<_>
+        let res4 = WrappedSeqF [(+) 1] <*> WrappedSeqF [3]
+        Assert.IsInstanceOf<Option<WrappedSeqF<int>>> (Some res4)
+        CollectionAssert.AreEqual (WrappedSeqF [4], res4)
+        let res5 = WrappedSeqF [(+)] <*> WrappedSeqF [3] <*> WrappedSeqF [2]
+        Assert.IsInstanceOf<Option<WrappedSeqF<int>>> (Some res5)
+        CollectionAssert.AreEqual (WrappedSeqF [5], res5)
+
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
 type Ii = Ii
@@ -1193,9 +1212,9 @@ module IdiomBrackets =
         let inline iI x = (idiomatic << result) x
 
         let res3n4''  = iI ((+) 2) [1;2] Ii
-        let res3n4''' = iI (+) (result 2) [1;2] Ii   // fails to compile when constraints are not properly defined
+        // let res3n4''' = iI (+) (result 2) [1;2] Ii   // fails to compile when constraints are not properly defined / Fails with strict applicatives
         Assert.AreEqual ([3;4], res3n4'' )
-        Assert.AreEqual ([3;4], res3n4''')
+        // Assert.AreEqual ([3;4], res3n4''') // Fails with strict applicatives
 
 
         let output = System.Text.StringBuilder ()
@@ -1870,25 +1889,26 @@ module ApplicativeInference =
     open FSharpPlus.Builders // for applicative brackets
 
     let res3n4''  = iI ((+) 2) [1;2] Ii
-    let res3n4''' = iI (+) (result 2) [1;2] Ii                              // *1
-    let res18n24' = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
-    // let res6n7n8' = iI (+) (result 5G      ) (ZipList [1;2;3]     ) Ii   // *1, *2
+    // let res3n4''' = iI (+) (result 2) [1;2] Ii                              // *1
+    // let res18n24' = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
+    // let res6n7n8' = iI (+) (result 5G      ) (ZipList [1;2;3]     ) Ii   // *1, *2, *3
     let res18n14' = iI (+) (ZipList(seq [8;4])) (result 10           ) Ii
 
     let safeDiv x y = if y = 0 then None else Some (x </div/> y)
-    let resSome3    = join (iI safeDiv (Some 6) (Some 2) Ii)
-    let resSome3'   =       iI safeDiv (Some 6) (Some 2) Ji
+    // let resSome3    = join (iI safeDiv (Some 6) (Some 2) Ii) // *3
+    // let resSome3'   =       iI safeDiv (Some 6) (Some 2) Ji // *3
 
     let safeDivBy y = if y = 0 then None else Some (fun x -> x </div/> y)
     let resSome2  = join (result safeDivBy  <*> Some 4G) <*> Some 8G
-    let resSome2' = join (   iI safeDivBy (Some 4G) Ii) <*> Some 8G
+    // let resSome2' = join (   iI safeDivBy (Some 4G) Ii) <*> Some 8G // *3
 
-    let resSome2'' = iI safeDivBy (Some 4G) J (Some 8G) Ii
-    let resNone = iI safeDivBy (Some 0G) J (Some 8G) Ii
-    let res16n17   = iI (+) (iI (+) (result 4) [2;3] Ii ) (result 10: _ list) Ii   // *1
+    // let resSome2'' = iI safeDivBy (Some 4G) J (Some 8G) Ii // *3
+    // let resNone = iI safeDivBy (Some 0G) J (Some 8G) Ii // *3
+    // let res16n17   = iI (+) (iI (+) (result 4) [2;3] Ii ) (result 10: _ list) Ii   // *1 *3
 
     // *1 These lines fails when Apply.Invoke has no 'or ^'``Applicative<'U>`` ' (output) constraint.
     // *2 F# 4.1 regression
+    // *3 Fails to compile when constraints are not properly defined // fails with strict applicatives
 
 
 
