@@ -123,8 +123,8 @@ let person3 = Person.create <!> tryHead ["gus"] <*> (tryHead ["42"] >>= tryParse
 // Another way to write applicative expressions
 open FSharpPlus.Builders
 
-let opt121  = iI (+) (Some 21) (tryParse "100") Ii
-let opt122  = iI tryDiv (tryParse "488") (trySqrt 16) Ji
+// let opt121 = iI (+) (Some 21) (tryParse "100") Ii
+// let opt122 = iI tryDiv (tryParse "488") (trySqrt 16) Ji
 
 
 // Using applicative math operators
@@ -147,20 +147,20 @@ let person4 = Person.create <!> Compose (getName ["gus"]) <*> Compose (getAge "4
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
 let res3n4   = iI ((+) 2) [1;2] Ii
-let res3n4'  = iI (+) (result 2) [1;2] Ii
-let res18n24 = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
+// let res3n4'  = iI (+) (result 2) [1;2] Ii
+// let res18n24 = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
 
 let tryDiv x y = if y = 0 then None else Some (x </div/> y)
-let resSome3    = join (iI tryDiv (Some 6) (Some 2) Ii)
-let resSome3'   =       iI tryDiv (Some 6) (Some 2) Ji
+// let resSome3    = join (iI tryDiv (Some 6) (Some 2) Ii)
+// let resSome3'   =       iI tryDiv (Some 6) (Some 2) Ji
 
 let tryDivBy y = if y = 0 then None else Some (fun x -> x </div/> y)
 let resSome2  = join (result tryDivBy  <*> Some 4) <*> Some 8
-let resSome2' = join (   iI tryDivBy (Some 4) Ii) <*> Some 8
+// let resSome2' = join (   iI tryDivBy (Some 4) Ii) <*> Some 8
 
-let resSome2'' = iI tryDivBy (Some 4) J (Some 8) Ii
-let resNone = iI tryDivBy (Some 0) J (Some 8) Ii
-let res16n17   = iI (+) (iI (+) (result 4) [2; 3] Ii) [10] Ii
+// let resSome2'' = iI tryDivBy (Some 4) J (Some 8) Ii
+// let resNone = iI tryDivBy (Some 0) J (Some 8) Ii
+// let res16n17   = iI (+) (iI (+) (result 4) [2; 3] Ii) [10] Ii
 
 
 
