@@ -15,7 +15,7 @@ module Lens =
         let getAll (All p) = p
 
         [<Struct>]
-        type Exchange<'A,'B,'S,'T> = Exchange of ('S -> 'A) * ('B -> 'T) with
+        type Exchange<'T,'U> = Exchange of 'T * 'U with
             static member Dimap (Exchange (sa, bt), f, g) = Exchange (sa << f, g << bt)
 
     open Internals
