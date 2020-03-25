@@ -1,11 +1,18 @@
 namespace FSharpPlus.Internals
 
-type Default6 = class end
-type Default5 = class inherit Default6 end
-type Default4 = class inherit Default5 end
-type Default3 = class inherit Default4 end
-type Default2 = class inherit Default3 end
-type Default1 = class inherit Default2 end
+type Default6  = interface end
+type Default5  = interface inherit Default6 end
+type Default4  = interface inherit Default5 end
+type Default3  = interface inherit Default4 end
+type Default2  = interface inherit Default3 end
+type Default2a = interface inherit Default3 end
+type Default2b = interface inherit Default3 end
+type Default1 = 
+    class 
+        interface Default2
+        interface Default2a
+        interface Default2b 
+    end
 
 #nowarn "0042" // retype
 

@@ -57,7 +57,9 @@ type Apply with
     static member inline ``<*>`` ((_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _output: ^r when ^r : null and ^r: struct), _mthd: Default1) = id
     static member inline ``<*>`` ((f: '``Applicative<'T->'U>``, x: '``Applicative<'T>``, _output: '``Applicative<'U>``), [<Optional>]_mthd:Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) f, x)
 
-
+type FMap =
+    static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
+        (^``Functor<'T>`` : (static member Map : _ * _ -> _) source, mapping)
 
 type Lift2 =
     inherit Default1
@@ -88,11 +90,11 @@ type Lift2 =
         ((^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member Lift2 : _*_*_ -> _) f, x, y)
 
 type Lift2 with
-    static member inline Lift2 (f, (x, y), _mthd: Default2) = (((Return.InvokeOnInstance f, x) ||> Apply.InvokeOnInstance), y) ||> Apply.InvokeOnInstance
-
-    static member inline Lift2 (_, (_:'t when 't: null and 't: struct, _: ^u when ^u : null and ^u: struct), _mthd: Default1) = id
-    static member inline Lift2 (f: 'T -> 'U -> 'V, (x: '``Applicative<'T>``, y: '``Applicative<'U>``)      , _mthd: Default1) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` ) : (static member Lift2 : _*_*_ -> _) f, x, y)
+    static member inline Lift2 (f, (x, y), _mthd: Default3) = Apply.InvokeOnInstance (FMap.InvokeOnInstance f x) y
     
+    static member inline Lift2 (f: 'T -> 'U -> 'V, (x: '``Applicative<'T>``, y: '``Applicative<'U>``), _mthd: Default2a) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` ) : (static member Lift2 : _*_*_ -> _) f, x, y)
+    static member inline Lift2 (f: 'T -> 'U -> 'V, (x: '``Applicative<'T>``, y: '``Applicative<'U>``), _mthd: Default2b) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` ) : (static member XxXxX : _*_*_ -> _) f, x, y)
+
 
 
 type IsLeftZeroForApply =
