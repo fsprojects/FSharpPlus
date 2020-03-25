@@ -22,6 +22,8 @@ type Sequence =
         let mutable r = result [||]
         use e = t.GetEnumerator ()
         while e.MoveNext () && go do
+            if opaqueId false then
+                r <- e.Current |> (<*>) ((r |> Map.Invoke add))
             if isFailure e.Current then go <- false
             r <- Lift2.Invoke add r e.Current
         Map.Invoke conversion r
