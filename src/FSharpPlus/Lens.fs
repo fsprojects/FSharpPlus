@@ -2,6 +2,7 @@
 
 #if !FABLE_COMPILER
 
+open System
 open FSharpPlus.Operators
 open FSharpPlus.Data
 
@@ -10,6 +11,10 @@ module Lens =
 
     /// [omit]
     module Internals =
+        [<Obsolete>]
+        let lmap' ab p = ab >> p
+        [<Obsolete>]
+        let rmap' cd p = p >> cd
         let dimap' ab cd  p = ab >> p >> cd
         let getAny (Any p) = p
         let getAll (All p) = p
