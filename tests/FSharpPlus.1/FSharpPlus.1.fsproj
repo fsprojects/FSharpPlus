@@ -1,14 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <RootNamespace>FSharpPlus.One</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="Library.fs" />
+    <Compile Include="ComputationExpressions.fs" />
+    <Compile Include="Validations.fs" />
+    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
     <PackageReference Include="FSharpPlus" Version="1.0.0" />
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="FsCheck" Version="2.14" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
 </Project>

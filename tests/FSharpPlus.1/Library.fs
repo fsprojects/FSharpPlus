@@ -5,6 +5,12 @@ open System.Collections.Generic
 open FSharpPlus
 open FSharpPlus.Data
 
+type SideEffects() =
+    let effects = ResizeArray<string> []
+    member __.Reset () = effects.Clear ()
+    member __.Add x = effects.Add (x)
+    member __.Get () = effects |> Seq.toList
+
 module Choice=
     let seqS = seq { 
         yield (None)

@@ -18,3 +18,41 @@ let applicatives() =
 [<Test>]
 let applicativeInference() =
     ApplicativeInference.run() |> ignore
+
+open FSharpPlus.One.ComputationExpressions
+[<Test>]
+let testMonadFx() =
+    monadFx() |> ignore
+
+[<Test>]
+let testMonadPlus() =
+    monadPlus() |> ignore
+
+[<Test>]
+let testUsingInForLoops() =
+    usingInForLoops() |> ignore
+
+[<Test>]
+let testUsingInAsyncs() =
+    usingInAsyncs() |> ignore
+
+[<Test>]
+let testUsingInOptionT() =
+    usingInOptionT() |> ignore
+
+[<Test>]
+let testUsingInWhileLoops() =
+    usingInWhileLoops() |> ignore
+
+module Validations=
+    open FSharpPlus.One.Validations
+    type FunctorPT()= inherit FunctorP()
+    type BifunctorPT()= inherit BifunctorP()
+    type ApplicativePT()= inherit ApplicativeP()
+    type AlternativePT()= inherit AlternativeP()
+    type TraversablePT()= inherit TraversableP()
+    type BaseT()= inherit Base()
+    type TestsT()= inherit Tests()
+
+
+
