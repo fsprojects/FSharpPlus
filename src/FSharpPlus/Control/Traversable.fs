@@ -23,7 +23,7 @@ type Sequence =
         use e = t.GetEnumerator ()
         while e.MoveNext () && go do
             if opaqueId false then
-                r <- e.Current |> (<*>) ((r |> Map.Invoke add))
+                r <- e.Current |> Apply.Invoke ((r |> Map.Invoke add))
             if isFailure e.Current then go <- false
             r <- Lift2.Invoke add r e.Current
         Map.Invoke conversion r
@@ -75,14 +75,14 @@ type Traverse =
         | Choice1Of2 a -> Map.Invoke Choice<'U,'Error>.Choice1Of2 (f a)
         | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
 
-    static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let cons_f x ys = Lift2.Invoke List.cons (f x) ys
-       List.foldBack cons_f t (result [])
+    static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : '``Functor<list<'U>>`` =
+       let mapped = Seq.map f t
+       Sequence.ForInfiniteSequences (mapped, IsLeftZeroForApply.Invoke, Array.toList)
+
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let cons x y = Array.append [|x|] y
-       let cons_f x ys = Lift2.Invoke cons (f x) ys
-       Array.foldBack cons_f t (result [||])
+       let mapped = Seq.map f t
+       Sequence.ForInfiniteSequences (mapped, IsLeftZeroForApply.Invoke, id)
 
     static member inline Invoke (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
