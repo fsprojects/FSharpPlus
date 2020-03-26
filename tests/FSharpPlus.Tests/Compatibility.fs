@@ -54,5 +54,7 @@ module Validations=
     type BaseT()= inherit Base()
     type TestsT()= inherit Tests()
 
-
+module Lens=
+    open FSharpPlus.One.Lenses
+    type LensT()=inherit Lens()
 
