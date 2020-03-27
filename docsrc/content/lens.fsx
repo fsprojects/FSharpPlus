@@ -137,23 +137,23 @@ Traversal
 
 
 
-let t1 = [|"Something"; ""; "Something Else"; ""|] |> setl (_all "") ("Nothing")
+let t1 : string [] = [|"Something"; ""; "Something Else"; ""|] |> setl (_all "") ("Nothing")
 // val t1 : string [] = [|"Something"; "Nothing"; "Something Else"; "Nothing"|]
 
 // we can preview it
-let t2 = [|"Something"; "Nothing"; "Something Else"; "Nothing"|] |> preview (_all "Something")
+let t2: string option = [|"Something"; "Nothing"; "Something Else"; "Nothing"|] |> preview (_all "Something")
 // val t2 : string option = Some "Something"
 
 // view all elements in a list
-let t3 = [|"Something"; "Nothing"; "Something Else"; "Nothing"|] |> toListOf (_all "Something")
+let t3: string list = [|"Something"; "Nothing"; "Something Else"; "Nothing"|] |> toListOf (_all "Something")
 // val t3 : string list = ["Something"]
 
 // also view it, since string is a monoid
-let t4 = [|"Something"; "Nothing"; "Something Else"; "Nothing"|] |> view  (_all "Something")
+let t4: string = [|"Something"; "Nothing"; "Something Else"; "Nothing"|] |> view  (_all "Something")
 // val t4 : string = "Something"
 
 // Lens composed with a Traversal -> Traversal
-let t5 = [((), "Something"); ((),""); ((), "Something Else"); ((),"")] |> preview  (_all ((),"Something") << _2)
+let t5: Option<string> = [((), "Something"); ((),""); ((), "Something Else"); ((),"")] |> preview  (_all ((),"Something") << _2)
 // val t5 : Option<string> = Some "Something"
 
 
@@ -178,13 +178,13 @@ let f3 = anyOf both ((=)'x') ('x','y')
 let f4 = (1,2)^..both
 // val f4 : int list = [1; 2]
 
-let f5 = over items length ["hello";"world"]
+// let f5 = over items length ["hello";"world"]
 // val f5 : int list = [5; 5]
 
 let f6 = ["hello";"world"]^.items
 // val f6 : string = "helloworld"
 
-let f7 = anyOf items ((=)'x') ['x';'y']
+// let f7 = anyOf items ((=)'x') ['x';'y']
 // val f7 : bool = true
 
 let f8 = [1;2]^..items
