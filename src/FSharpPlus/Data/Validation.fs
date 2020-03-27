@@ -48,6 +48,17 @@ module Validation =
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
 
+    let inline map2 f x y : Validation<'Error,'V> =
+        match (x: Validation<'Error,'T>), (y: Validation<'Error,'U>) with
+        #if !FABLE_COMPILER
+        | Failure e1, Failure e2 -> Failure (plus e1 e2)
+        #else
+        | Failure e1, Failure e2 -> Failure (e1 + e2)
+        #endif
+        | Failure e1, Success _  -> Failure e1
+        | Success _ , Failure e2 -> Failure e2
+        | Success x , Success y  -> Success (f x y)
+
     let inline foldBack (folder: 'T->'State->'State) (source: Validation<'Error,'T>) (state: 'State) =
         match source with
         | Success a -> folder a state
@@ -185,6 +196,7 @@ type Validation<'err,'a> with
     // as Applicative
     static member Return x = Success x
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
+    static member inline Lift2  (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
 
     #if !FABLE_COMPILER
     // as Alternative (inherits from Applicative)

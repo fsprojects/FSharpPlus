@@ -264,3 +264,7 @@ module Extensions =
 
     for s in testStrings do
       areStEqual s (s |> String.toCodePoints |> String.ofCodePoints)
+
+  [<Test>]
+  let ``Array.lift2 should combine all arrays `` () =
+    areStEqual [|11; 21; 31; 12; 22; 32|] (Array.lift2 (+) [|1;2|] [|10;20;30|])

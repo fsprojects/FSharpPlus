@@ -26,6 +26,12 @@ module Dict =
             dct.Add (k, f v)
         dct :> IDictionary<'Key, 'U>
 
+    /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
+    /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
+    /// <param name="x">The first input dictionary.</param>
+    /// <param name="y">The second input dictionary.</param>
+    ///
+    /// <returns>The combined dictionary.</returns>
     let map2 f (x: IDictionary<'Key, 'T1>) (y: IDictionary<'Key, 'T2>) =
         let dct = Dictionary<'Key, 'U> ()
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f

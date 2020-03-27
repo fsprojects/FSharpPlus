@@ -29,6 +29,16 @@ module ParallelArray =
         | Bounded  f, Bounded  x ->
             if f.LongLength < x.LongLength then Bounded (Array.Parallel.mapi (fun i f -> f x.[i]) f)
             else                                Bounded (Array.Parallel.mapi (fun i x -> f.[i] x) x)
+
+    let map2 f x y =
+        match x, y with
+        | Infinite x, Infinite y -> Infinite (f x y)
+        | Infinite x, Bounded  y -> Bounded (Array.Parallel.map (f x) y)
+        | Bounded  x, Infinite y -> Bounded (Array.Parallel.map (fun x -> f x y) x)
+        | Bounded  x, Bounded  y ->
+            if x.LongLength < y.LongLength then Bounded (Array.Parallel.mapi (fun i x -> f x y.[i]) x)
+            else                                Bounded (Array.Parallel.mapi (fun i y -> f x.[i] y) y)
+
     #endif
 
 /// A type alias for ParallelArray<'T>
@@ -49,6 +59,7 @@ type ParallelArray<'t> with
     static member Return (x: 'a) = Infinite x
     #if !FABLE_COMPILER
     static member (<*>) (f: parray<'a->'b>, x: parray<_>) = ParallelArray.ap f x : parray<'b>
+    static member Lift2 (f, x: parray<'T>, y: parray<'U>) = ParallelArray.map2 f x y : parray<'V>
     static member inline get_Zero () = Bounded (getZero ()) : parray<'m>
     static member inline (+) (x: parray<'m>, y: parray<'m>) = lift2 plus x y : parray<'m>
     #endif
