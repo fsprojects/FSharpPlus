@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Helpers.fs" />
     <Compile Include="Library.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Validations.fs" />
