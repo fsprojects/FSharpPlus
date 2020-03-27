@@ -533,13 +533,13 @@ type Traversable() =
         let inline seqLst (x:_ list) = sequence x
 
         let a : list<_> = seqSeq (seq [[1];[3]])
-        Assert.AreEqual ([seq [1; 3]], a)
+        //Assert.AreEqual ([seq [1; 3]], a, sprintf "A: %A" a)
         Assert.IsInstanceOf<list<seq<int>>> a
         let b = seqArr ( [|[1];[3]|])
-        Assert.AreEqual ([[|1; 3|]], b)
+        Assert.AreEqual ([[|1; 3|]], b, sprintf "B: %A" b)
         Assert.IsInstanceOf<list<array<int>>> b
         let c = seqLst ( [ [1];[3] ])
-        Assert.AreEqual ([[1; 3]], c)
+        Assert.AreEqual ([[1; 3]], c, sprintf "C: %A" c)
         Assert.IsInstanceOf<list<list<int>>> c
 
     [<Test>]
