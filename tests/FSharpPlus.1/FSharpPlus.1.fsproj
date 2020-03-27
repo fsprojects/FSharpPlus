@@ -12,6 +12,7 @@
     <Compile Include="Validations.fs" />
     <Compile Include="Lenses.fs" />
     <Compile Include="FleeceTests.fs" />
+    <Compile Include="General.fs" />
     <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net461'" />
     <PackageReference Include="FSharpPlus" Version="1.0.0" />
     <PackageReference Include="Fleece.FSharpData" Version="0.6.0" />

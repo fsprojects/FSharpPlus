@@ -63,3 +63,22 @@ open Fuchu
 [<Test>]
 let testFleece() =
     runParallel tests |> ignore
+
+module General=
+    open FSharpPlus.One.General
+
+    type MonoidT( )= inherit Monoid()
+    type FunctorT() = inherit Functor()
+    type FoldableT() = inherit Foldable()
+    type IndexableT() = inherit Indexable()
+    type MonadT() = inherit Monad()
+    type TraversableT() = inherit Traversable()
+    type ApplicativeT() = inherit Applicative()
+    type IdiomBracketsT() = inherit IdiomBrackets()
+    type AlternativeT() = inherit Alternative()
+    type SplitsT() = inherit Splits()
+    type ParsingT() = inherit Parsing()
+    type ConversionsT() = inherit Conversions()
+    type BitConverterT() = inherit BitConverter()
+    type SequencesT() = inherit Sequences()
+
