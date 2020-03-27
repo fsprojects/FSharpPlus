@@ -172,7 +172,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
 
 type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
-    static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (f <*> x)
+    static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Apply"; WrappedSeqD (f <*> x)
     static member ToList (WrappedSeqD x) = Seq.toList x
 
 type WrappedSeqE<'s> = WrappedSeqE of 's seq with
@@ -342,7 +342,7 @@ module Functor =
         Assert.AreEqual ([], SideEffects.get ())
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
-        Assert.AreEqual (["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"], SideEffects.get ())
+        Assert.AreEqual (["Using WrappedSeqD's Return"; "Using WrappedSeqD's Apply"], SideEffects.get ())
         SideEffects.reset ()
         
         // WrappedListE is a Monad. Monads are Functors => map should work
@@ -1176,6 +1176,12 @@ module Applicative =
         Assert.AreEqual (606, res606)
         Assert.AreEqual (508, res508)
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
+
+    let testLift2 () =
+        let expectedEffects = ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Apply"; "Using WrappedSeqD's Apply"]
+        SideEffects.reset ()
+        let _ = (WrappedSeqD [1] , WrappedSeqD [2]) ||> lift2 (+)
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
 
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
