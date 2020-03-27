@@ -38,7 +38,7 @@ module State =
 
     #if !FABLE_COMPILER
     /// Zips two States into one.
-    // let zip (x: State<'S,'T>) (y: State<'S,'U>) = lift2 tuple2 x y : State<'S, ('T * 'U)>
+    let zip (x: State<'S,'T>) (y: State<'S,'U>) = lift2 tuple2 x y : State<'S, ('T * 'U)>
     #endif
 
 type State<'s,'t> with
@@ -56,7 +56,7 @@ type State<'s,'t> with
 
     #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    // static member Zip (x, y) = State.zip x y
+    static member Zip (x, y) = State.zip x y
     #endif
 
     static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> (h e) s) : State<'S,'T>

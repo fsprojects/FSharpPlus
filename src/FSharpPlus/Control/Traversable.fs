@@ -22,10 +22,8 @@ type Sequence =
         let mutable r = result [||]
         use e = t.GetEnumerator ()
         while e.MoveNext () && go do
-            if opaqueId false then
-                r <- e.Current |> Apply.Invoke ((r |> Map.Invoke add))
             if isFailure e.Current then go <- false
-            r <- Lift2.Invoke add r e.Current
+            r <- Map.Invoke add r <*> e.Current
         Map.Invoke conversion r
     
 
@@ -41,7 +39,7 @@ type Traverse =
 
     static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
        let cons x y = seq {yield x; yield! y}
-       let cons_f x ys = Lift2.Invoke (cons: 'a->seq<_>->seq<_>) (f x) ys
+       let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Traverse (t: seq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
@@ -62,7 +60,7 @@ type Traverse =
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
 
     static member inline Traverse (t:Map<_,_>  , f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let insert_f k x ys = Lift2.Invoke (Map.add k) (f x) ys
+       let insert_f k x ys = Map.Invoke (Map.add k) (f x) <*> ys
        Map.foldBack insert_f t (result Map.empty)
 
     static member inline Traverse (t: Result<'T,'Error>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<Result<'U,'Error>>``, [<Optional>]_impl: Traverse) : '``Functor<Result<'U,'Error>>`` =
@@ -75,14 +73,14 @@ type Traverse =
         | Choice1Of2 a -> Map.Invoke Choice<'U,'Error>.Choice1Of2 (f a)
         | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
 
-    static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : '``Functor<list<'U>>`` =
-       let mapped = Seq.map f t
-       Sequence.ForInfiniteSequences (mapped, IsLeftZeroForApply.Invoke, Array.toList)
-
+    static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
+       let cons_f x ys = Map.Invoke List.cons (f x) <*> ys
+       List.foldBack cons_f t (result [])
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let mapped = Seq.map f t
-       Sequence.ForInfiniteSequences (mapped, IsLeftZeroForApply.Invoke, id)
+       let cons x y = Array.append [|x|] y
+       let cons_f x ys = Map.Invoke cons (f x) <*> ys
+       Array.foldBack cons_f t (result [||])
 
     static member inline Invoke (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
@@ -94,7 +92,7 @@ type Sequence with
 
     static member inline Sequence (t:_ seq         , [<Optional>]_output: 'R, [<Optional>]_impl:Default5) : 'R =
                         let cons x y = seq {yield x; yield! y}
-                        let cons_f x ys = Lift2.Invoke (cons: 'a->seq<_>->seq<_>) x ys
+                        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) x <*> ys
                         Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZeroForApply.Invoke, Array.toSeq)   : '``Applicative<seq<'T>>``
@@ -113,7 +111,7 @@ type Sequence with
     static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, Array.toList) : 'R
 
     static member inline Sequence (t: Map<_,_>          , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) : 'R =
-       let insert_f k x ys = Lift2.Invoke (Map.add k) x ys
+       let insert_f k x ys = Map.Invoke (Map.add k) x <*> ys
        Map.foldBack insert_f t (result Map.empty)
     
     static member inline Sequence (t: Result<'``Functor<'T>``,'Error>, [<Optional>]_output: '``Functor<Result<'T,'Error>>``, [<Optional>]_impl: Sequence) : '``Functor<Result<'T,'Error>>`` =
