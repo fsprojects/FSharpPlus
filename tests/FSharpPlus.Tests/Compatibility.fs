@@ -62,4 +62,4 @@ open FSharpPlus.One.FleeceTests
 open Fuchu
 [<Test>]
 let testFleece() =
-    runParallel tests
+    runParallel tests |> ignore
