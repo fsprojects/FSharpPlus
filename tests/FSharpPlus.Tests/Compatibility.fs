@@ -58,3 +58,8 @@ module Lens=
     open FSharpPlus.One.Lenses
     type LensT()=inherit Lens()
 
+open FSharpPlus.One.FleeceTests
+open Fuchu
+[<Test>]
+let testFleece() =
+    runParallel tests

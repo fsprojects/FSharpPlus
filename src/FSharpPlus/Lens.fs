@@ -29,30 +29,31 @@ module Lens =
     // Basic operations
 
     /// <summary>Write to a lens.</summary>
-    /// <param name="optic">The lens.</param>
-    /// <param name="value">The value we want to write in the part targeted by the lens.</param>
+    /// <param name="lens">The lens.</param>
+    /// <param name="v">The value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let setl optic value (source: 's) : 't = Identity.run (optic (fun _ -> Identity value) source)
+    let setl lens v = Identity.run << lens (fun _ -> Identity v)
 
     /// <summary>Update a value in a lens.</summary>
-    /// <param name="optic">The lens.</param>
-    /// <param name="updater">A function that converts the value we want to write in the part targeted by the lens.</param>
+    /// <param name="lens">The lens.</param>
+    /// <param name="f">A function that converts the value we want to write in the part targeted by the lens.</param>
     /// <param name="source">The original object.</param>
     /// <returns>The new object with the value modified.</returns>
-    let over optic updater (source: 's) : 't = Identity.run (optic (Identity << updater) source)
+    let over lens f = Identity.run << lens (Identity << f)
 
     /// <summary>Read from a lens.</summary>
-    /// <param name="optic">The lens.</param>
+    /// <param name="lens">The lens.</param>
     /// <param name="source">The object.</param>
     /// <returns>The part the lens is targeting.</returns>
-    let view (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a = Const.run (optic Const source)
+    let view lens   = Const.run << lens Const
 
     /// <summary>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). See also (^?).</summary>
-    /// <param name="optic">The prism.</param>
+    /// <param name="prism">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (FSharpPlus.Data.First (Some x))) |> Const.run |> First.run
+    let preview prism = First.run << Const.run << prism (fun x -> Const (FSharpPlus.Data.First (Some x)))
+
 
     /// <summary>Build a 'Lens' from a getter and a setter.</summary>
     /// <remarks>The lens should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>

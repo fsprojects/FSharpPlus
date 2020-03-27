@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <RootNamespace>FSharpPlus.One</RootNamespace>
   </PropertyGroup>
 
@@ -11,8 +11,12 @@
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="Lenses.fs" />
-    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
+    <Compile Include="FleeceTests.fs" />
+    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net461'" />
     <PackageReference Include="FSharpPlus" Version="1.0.0" />
+    <PackageReference Include="Fleece.FSharpData" Version="0.6.0" />
+    <PackageReference Include="Fuchu" Version="1.1.0" />
+    <PackageReference Include="Fuchu.FsCheck" Version="1.1.0" />
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="FsCheck" Version="2.14" />
