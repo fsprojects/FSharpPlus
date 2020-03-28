@@ -1,5 +1,5 @@
 ﻿namespace FSharpPlus.Control
-
+open System
 #if !FABLE_COMPILER
 
 open System.Runtime.InteropServices
@@ -87,6 +87,10 @@ type Traverse =
         let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'R>, f) : 'R
         call (Unchecked.defaultof<Traverse>, t, f)
 
+    [<Obsolete;CompiledName("Traverse")>]
+    static member TraverseLegacy (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'u>>, [<Optional>]_impl:Default2): seq<'u> option =
+        let mapped = Seq.map f t
+        Sequence.ForInfiniteSequences (mapped, IsLeftZeroForApply.Invoke, Array.toSeq)
 
 type Sequence with
 

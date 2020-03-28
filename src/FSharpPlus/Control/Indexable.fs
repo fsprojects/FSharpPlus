@@ -55,7 +55,7 @@ type TryItem =
     static member        TryItem (x: IReadOnlyList<'a> , n        , [<Optional>]_impl: Default3) = if n >= 0 && n < x.Count then Some x.[n] else None
     static member        TryItem (x: Map<'K,'T>        , k        , [<Optional>]_impl: TryItem ) = x.TryFind k : 'T option
     [<Obsolete;CompiledName("TryItem")>]
-    static member        TryItemX (x: IDictionary<'K,'T>, k       , [<Optional>]_impl: Default2) = let mutable r = Unchecked.defaultof< 'T>
+    static member        TryItemLegacy (x: IDictionary<'K,'T>, k  , [<Optional>]_impl: Default2) = let mutable r = Unchecked.defaultof< 'T>
                                                                                                    if (x.TryGetValue( k, &r)) then Some r else None : 'T option
 
     static member inline Invoke (n: 'K) (source: '``Indexed<'T>``) : 'T option =
