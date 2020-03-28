@@ -107,8 +107,8 @@ module Operators =
     /// Apply a lifted argument to a lifted function: f <*> arg
     let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
-    /// Apply 2 lifted arguments to a non-lifted function.
-    let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = (f <!> x : '``Applicative<'U->'V>``) <*> y
+    /// Applies 2 lifted arguments to a non-lifted function. Equivalent to map2 in non list-like types.
+    let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
     [<System.Obsolete("Use lift2 instead.")>]
     /// Apply 2 lifted arguments to a non-lifted function.

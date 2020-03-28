@@ -59,6 +59,7 @@ type Const<'t,'u> = Const of 't with
     // Applicative
     static member inline Return (_: 'U) = Const (getZero ()) : Const<'T,'U>
     static member inline (<*>) (Const f: Const<'C,'T->'U>, Const x: Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
+    static member inline Lift2 (_: 'T->'U->'V, Const x: Const<'C,'T>, Const y: Const<'C,'U>) = Const (plus x y) : Const<'C,'V>
 
     // Contravariant
     static member Contramap (Const x: Const<'C,'T>, _: 'U->'T) = Const x     : Const<'C,'U>

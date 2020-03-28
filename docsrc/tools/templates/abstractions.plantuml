@@ -38,6 +38,7 @@ abstract class Applicative [[http://fsprojects.github.io/FSharpPlus/abstraction-
   + (<*>) f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-applicative.html {Apply a lifted argument to a lifted function} ]]]
   ==
   + map f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]]
+  + lift2 f x y [[[http://fsprojects.github.io/FSharpPlus/abstraction-applicative.html#lift2 {Applies 2 lifted values to a non-lifted function} ]]]
 }
 
 abstract class Alternative [[http://fsprojects.github.io/FSharpPlus/abstraction-alternative.html]] {

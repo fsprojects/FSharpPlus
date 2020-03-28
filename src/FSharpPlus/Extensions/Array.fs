@@ -10,6 +10,11 @@ module Array =
         let lenf, lenx = Array.length f, Array.length x
         Array.init (lenf * lenx) (fun i -> f.[i / lenx] x.[i % lenx])
 
+    /// Combines all values from the first array with the second, using the supplied mapping function.
+    let lift2 f x y =
+        let lenx, leny = Array.length x, Array.length y
+        Array.init (lenx * leny) (fun i -> f x.[i / leny] y.[i % leny])
+
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
 
     /// Inserts a separator between each element in the source array.
