@@ -3,11 +3,34 @@
 open System
 open FSharpPlus.Internals
 
-type Item1 = static member inline Invoke value = (^t : (member Item1 : _) value)
-type Item2 = static member inline Invoke value = (^t : (member Item2 : _) value)
-type Item3 = static member inline Invoke value = (^t : (member Item3 : _) value)
-type Item4 = static member inline Invoke value = (^t : (member Item4 : _) value)
-type Item5 = static member inline Invoke value = (^t : (member Item5 : _) value)
+type Item1 = 
+    static member inline Invoke value = (^t : (member Item1 : _) value)
+    [<Obsolete>]static member Item1 ((a, _, _, _, _)) = a
+    [<Obsolete>]static member Item1 ((a, _, _, _)   ) = a
+    [<Obsolete>]static member Item1 ((a, _, _)      ) = a
+    [<Obsolete>]static member Item1 ((a, _)         ) = a
+
+type Item2 =
+    static member inline Invoke value = (^t : (member Item2 : _) value)
+    [<Obsolete>]static member Item2 ((_, b, _, _, _)) = b
+    [<Obsolete>]static member Item2 ((_, b, _, _)   ) = b
+    [<Obsolete>]static member Item2 ((_, b, _)      ) = b
+    [<Obsolete>]static member Item2 ((_, b)         ) = b
+
+type Item3 =
+    static member inline Invoke value = (^t : (member Item3 : _) value)
+    [<Obsolete>]static member Item3 ((_, _, c, _, _)) = c
+    [<Obsolete>]static member Item3 ((_, _, c, _)   ) = c
+    [<Obsolete>]static member Item3 ((_, _, c)      ) = c
+
+type Item4 =
+    static member inline Invoke value = (^t : (member Item4 : _) value)
+    [<Obsolete>]static member Item4 ((_, _, _, d, _)) = d
+    [<Obsolete>]static member Item4 ((_, _, _, d)   ) = d
+
+type Item5 = 
+    static member inline Invoke value = (^t : (member Item5 : _) value)
+    [<Obsolete>]static member Item5 ((_, _, _, _, e)) = e
 
 
 type MapItem1 =

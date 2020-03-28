@@ -55,7 +55,6 @@ type Map =
     inherit Default1
 
 #if !FABLE_COMPILER
-
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy.map f x
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
@@ -153,6 +152,8 @@ type Unzip =
     static member        Unzip ((source: IReadOnlyDictionary<'Key,'T * 'U> , _output: IReadOnlyDictionary<_,'T> * IReadOnlyDictionary<_,'U>) , _mthd: Unzip   ) = IReadOnlyDictionary.unzip source
     static member        Unzip ((source: IObservable<'T * 'U>              , _output: IObservable<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
 
+    [<Obsolete>]static member        Unzip (source: list<'T * 'U>         , [<Optional>]_output: list<'T> * list<'U>                 , [<Optional>]_mthd:Unzip   ) = List.unzip  source
+    [<Obsolete>]static member        Unzip (source: ('T * 'U) []          , [<Optional>]_output: 'T [] * 'U []                       , [<Optional>]_mthd:Unzip   ) = Array.unzip source
 
 
     static member inline Invoke (source: '``Functor<'T1 * 'T2>``) =

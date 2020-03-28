@@ -373,6 +373,10 @@ type Length =
     static member        Length (x: ResizeArray<'T>  , [<Optional>]_impl: Length  ) = x.Count
     static member        Length (x: option<'T>       , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
     static member        Length (x: 'T []            , [<Optional>]_impl: Length  ) = Array.length x
+    [<Obsolete;CompiledName("Length")>]
+    static member        LengthLegacy (x:seq<'T>     , [<Optional>]_impl:Length) = Seq.length   x
+    [<Obsolete;CompiledName("Length")>]
+    static member        LengthLegacy (x:list<'T>    , [<Optional>]_impl:Length) = List.length  x
 
     static member inline Invoke (source: '``Foldable<'T>``) =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Length : _*_ -> _) b, a)

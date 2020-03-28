@@ -12,7 +12,25 @@ open FSharpPlus.Internals
 
 type OfSeq =
     inherit Default1
-    
+    [<Obsolete>] static member        OfSeq (x:seq<'t>                 , _:seq<'t>                         , _:Default4) = x
+    [<Obsolete>] static member        OfSeq (x:seq<'t>                 , _:ICollection<'t>                 , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> ICollection<'t>
+    [<Obsolete>] static member        OfSeq (x:seq<'t>                 , _:IList<'t>                       , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> IList<'t>
+    [<Obsolete>] static member        OfSeq (x:seq<'t>                 , _:IList                           , _:Default4) = let d = ResizeArray() in Seq.iter d.Add x; d:> IList
+    [<Obsolete>] static member        OfSeq (x:seq<'k*'v>              , _:IDictionary<'k,'v>              , _:Default4) = dict x
+    [<Obsolete>] static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:IDictionary<'k,'v>              , _:Default4) = x |> Seq.map (function (KeyValue x) -> x) |> dict
+    [<Obsolete>] static member        OfSeq (x:seq<'k*'v>              , _:IDictionary                     , _:Default4) = let d = Hashtable() in x |> Seq.iter d.Add; d :> IDictionary
+    [<Obsolete>] static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:IDictionary                     , _:Default4) = let d = Hashtable() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    [<Obsolete>] static member        OfSeq (x:seq<'t>                 , _:'T when 'T :> ICollection<'t>   , _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    [<Obsolete>] static member        OfSeq (x:seq<'k*'v>              , _:'T when 'T :> IDictionary       , _:Default1) = let d = new 'T() in x |> Seq.iter d.Add; d
+    [<Obsolete>] static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:'T when 'T :> IDictionary       , _:Default1) = let d = new 'T() in x |> Seq.iter (function (KeyValue x) -> d.Add x); d
+    [<Obsolete>] static member        OfSeq (x:seq<'k*'v>              , _:'T when 'T :> IDictionary<'k,'v>, _:OfSeq   ) = let d = new 'T() in x |> Seq.iter d.Add; d
+    [<Obsolete>] static member        OfSeq (x:seq<KeyValuePair<'k,'v>>, _:'T when 'T :> IDictionary<'k,'v>, _:OfSeq   ) = let d = new 'T() in x |> Seq.iter d.Add; d
+    [<Obsolete>] static member        OfSeq (x                         , _:'t []                           , _:OfSeq   ) = Array.ofSeq<'t> x
+    [<Obsolete>] static member        OfSeq (x                         , _:'t list                         , _:OfSeq   ) = List.ofSeq<'t> x
+    [<Obsolete>] static member        OfSeq (x:seq<char>               , _:string                          , _:OfSeq   ) = String.Join ("", Array.ofSeq x)
+    [<Obsolete>] static member        OfSeq (x:seq<char>               , _:Text.StringBuilder              , _:OfSeq   ) = (StringBuilder(), x) ||> Seq.fold (fun x -> x.Append)
+    [<Obsolete>] static member        OfSeq (x:seq<'t>                 , _:Stack<'t>                       , _:OfSeq   ) = Generic.Stack x
+
     static member inline OfSeq ((x: seq<'t>                 , _: 'R                              ), _: Default5) = (^R : (new : seq<'t> -> ^R) x) : 'R
     static member inline OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: 'R                              ), _: Default5) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
 
@@ -53,6 +71,13 @@ type OfSeq =
 
 type OfList =
     inherit Default1
+    [<Obsolete>] static member OfList (_:string        , _:OfList) = fun (x:list<char>) -> String.Join("",  x |> Array.ofList)
+    [<Obsolete>] static member OfList (_:StringBuilder , _:OfList) = fun (x:list<char>) -> new StringBuilder(String.Join("", x |> Array.ofList))
+    [<Obsolete>] static member OfList (_:'a []         , _:OfList) = Array.ofList<'a>
+    [<Obsolete>] static member OfList (_:'a ResizeArray, _:OfList) = fun (x:list<'a>)   -> ResizeArray x
+    [<Obsolete>] static member OfList (_:list<'a>      , _:OfList) = id<list<'a>>
+    [<Obsolete>] static member OfList (_:Set<'a>       , _:OfList) = Set.ofList<'a>
+    [<Obsolete>] static member OfList (_:seq<'a>       , _:OfList) = Seq.ofList<'a>
 
     static member inline OfList ((x: list<'t>                 , _: 'R                              ), _: Default6) = (^R : (new : seq<'t> -> ^R) (List.toSeq x)) : 'R
     static member inline OfList ((x: list<KeyValuePair<'k,'v>>, _: 'R                              ), _: Default6) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
