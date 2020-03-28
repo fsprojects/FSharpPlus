@@ -118,6 +118,9 @@ type IsLeftZeroForApply =
 
 type IsLeftZeroForApply with
 
+    static member inline IsLeftZeroForApply (_: ref<'T>   when 'T : struct    , _mthd: Default4) = false
+    static member inline IsLeftZeroForApply (_: ref<'T>   when 'T : not struct, _mthd: Default3) = false
+
     // empty <*> f = empty  ==> empty is left zero for <*>
     static member inline IsLeftZeroForApply (t: ref<'``Alternative<'T>``>        , _mthd: Default2) = (t.Value = Empty.InvokeOnInstance ())
 

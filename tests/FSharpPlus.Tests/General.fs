@@ -966,6 +966,11 @@ module Traversable =
         Assert.IsInstanceOf<list<list<int>>> c
 
     [<Test>]
+    let traverse_Specialization () =
+        let _ = Seq.traverse id [ZipList [1]; ZipList [2]]
+        ()
+
+    [<Test>]
     let traversableForNonPrimitive () =
         let nel = NonEmptyList.create (Some 1) [Some 2]
         let rs1  = traverse id nel
