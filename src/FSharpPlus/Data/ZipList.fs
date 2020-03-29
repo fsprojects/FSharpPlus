@@ -30,9 +30,9 @@ type ZipList<'s> with
     static member Map (ZipList x, f: 'a->'b) = ZipList (Seq.map f x)
 
     static member Return (x: 'a)     = ZipList (Seq.initInfinite (konst x))
-    static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
-
+    static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>    
     static member Lift2 (f, x : ZipList<'T1>, y : ZipList<'T2>) = ZipList.map2 f x y
+    static member IsLeftZero (ZipList x) = Seq.isEmpty x
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = ZipList.zip x y

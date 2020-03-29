@@ -967,7 +967,10 @@ module Traversable =
 
     [<Test>]
     let traverse_Specialization () =
-        let _ = Seq.traverse id [ZipList [1]; ZipList [2]]
+        let _ = Seq.traverse id [WrappedSeqD [1]; WrappedSeqD [2]]
+        let _ = Seq.sequence    [WrappedSeqD [1]; WrappedSeqD [2]]
+        let _ = Seq.traverse id [ZipList [1]; ZipList []; ZipList (seq {failwith "sholdn't get here"})] |> toList
+        let _ = Seq.sequence    [ZipList [1]; ZipList []; ZipList (seq {failwith "sholdn't get here"})] |> toList
         ()
 
     [<Test>]
