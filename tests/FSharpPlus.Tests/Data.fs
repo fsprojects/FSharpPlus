@@ -6,6 +6,14 @@ open FsCheck
 open FSharpPlus
 open FSharpPlus.Data
 
+module ZipList =
+
+    module Alternative =
+        let _123andZeroesToTheInfinite = ZipList [1;2;3] <|> result 0
+        let _ZeroesToTheInfiniteAnd123 = result 0 <|> ZipList [1;2;3]
+        ()
+
+
 module DList =
 
     module Monoid =        

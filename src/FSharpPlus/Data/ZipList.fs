@@ -34,6 +34,12 @@ type ZipList<'s> with
     static member Lift2 (f, x : ZipList<'T1>, y : ZipList<'T2>) = ZipList.map2 f x y
     static member IsLeftZero (ZipList x) = Seq.isEmpty x
     
+    static member get_Empty () = ZipList Seq.empty
+    static member (<|>) (ZipList x, ZipList y) = ZipList <| seq {
+        let mutable i = 0
+        for e in x do i <- i + 1; yield e
+        yield! Seq.drop i y }
+    
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = ZipList.zip x y
 
