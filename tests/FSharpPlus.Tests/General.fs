@@ -925,7 +925,7 @@ module Traversable =
         static member (<*>) (f, x) =
             SideEffects.add ("f(x) <*> " + string x)
             match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e
-        static member IsLeftZeroForApply x = match x with Left _ -> true | _ -> false
+        static member IsLeftZero x = match x with Left _ -> true | _ -> false
 
     let traverseTest =
         let _None = sequence (seq [Some 3;None ;Some 1])

@@ -197,7 +197,7 @@ type NonEmptyList<'t> with
         use e = (NonEmptyList.toSeq source).GetEnumerator ()
         e.MoveNext() |> ignore
         let mutable res = e.Current
-        while e.MoveNext() && not (IsLeftZeroForAppend.Invoke res) do
+        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res
     #endif

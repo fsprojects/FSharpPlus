@@ -45,25 +45,25 @@ type Append =
 
 
 
-type IsLeftZeroForAppend =
+type IsAltLeftZero =
     inherit Default1
 
-    static member inline IsLeftZeroForAppend (_: ref<'T>   when 'T : struct    , _mthd: Default3) = false
-    static member inline IsLeftZeroForAppend (_: ref<'T>   when 'T : not struct, _mthd: Default2) = false
+    static member inline IsAltLeftZero (_: ref<'T>   when 'T : struct    , _mthd: Default3) = false
+    static member inline IsAltLeftZero (_: ref<'T>   when 'T : not struct, _mthd: Default2) = false
 
-    static member inline IsLeftZeroForAppend (t: ref<'``Applicative<'T>``>             , _mthd: Default1) = (^``Applicative<'T>`` : (static member IsLeftZeroForAppend : _ -> _) t.Value)
-    static member inline IsLeftZeroForAppend (_: ref< ^t> when ^t: null and ^t: struct , _mthd: Default1) = ()
+    static member inline IsAltLeftZero (t: ref<'``Applicative<'T>``>             , _mthd: Default1) = (^``Applicative<'T>`` : (static member IsAltLeftZero : _ -> _) t.Value)
+    static member inline IsAltLeftZero (_: ref< ^t> when ^t: null and ^t: struct , _mthd: Default1) = ()
 
-    static member        IsLeftZeroForAppend (t: ref<option<_>  > , _mthd: IsLeftZeroForAppend) = Option.isSome t.Value
-    static member        IsLeftZeroForAppend (t: ref<Result<_,_>> , _mthd: IsLeftZeroForAppend) = match t.Value with (Ok _        ) -> true | _ -> false
-    static member        IsLeftZeroForAppend (t: ref<Choice<_,_>> , _mthd: IsLeftZeroForAppend) = match t.Value with (Choice1Of2 _) -> true | _ -> false
+    static member        IsAltLeftZero (t: ref<option<_>  > , _mthd: IsAltLeftZero) = Option.isSome t.Value
+    static member        IsAltLeftZero (t: ref<Result<_,_>> , _mthd: IsAltLeftZero) = match t.Value with (Ok _        ) -> true | _ -> false
+    static member        IsAltLeftZero (t: ref<Choice<_,_>> , _mthd: IsAltLeftZero) = match t.Value with (Choice1Of2 _) -> true | _ -> false
 
     static member inline Invoke (x: '``Applicative<'T>``) : bool =
         let inline call (mthd : ^M, input: ^I) =
-            ((^M or ^I) : (static member IsLeftZeroForAppend : _*_ -> _) (ref input), mthd)
-        call(Unchecked.defaultof<IsLeftZeroForAppend>, x)
+            ((^M or ^I) : (static member IsAltLeftZero : _*_ -> _) (ref input), mthd)
+        call(Unchecked.defaultof<IsAltLeftZero>, x)
 
-    static member inline InvokeOnInstance (x: '``Applicative<'T>``) : bool = (^``Applicative<'T>`` : (static member IsLeftZeroForAppend : _ -> _) x)
+    static member inline InvokeOnInstance (x: '``Applicative<'T>``) : bool = (^``Applicative<'T>`` : (static member IsAltLeftZero : _ -> _) x)
 
 
 type Choice =
@@ -72,7 +72,7 @@ type Choice =
     static member inline Choice (x: ref<'``Foldable<'Alternative<'T>>``>, _mthd: Default4) =
         use e = (ToSeq.Invoke x.Value).GetEnumerator ()
         let mutable res = Empty.Invoke ()
-        while e.MoveNext() && not (IsLeftZeroForAppend.Invoke res) do
+        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res
 
@@ -82,7 +82,7 @@ type Choice =
         use e = t.GetEnumerator ()
         e.MoveNext() |> ignore
         let mutable res = e.Current
-        while e.MoveNext() && not (IsLeftZeroForAppend.Invoke res) do
+        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res
 
@@ -92,14 +92,14 @@ type Choice =
     static member inline Choice (x: ref<seq<'``Alternative<'T>``>>, _mthd: Choice) =
         use e = x.Value.GetEnumerator ()
         let mutable res = Empty.Invoke ()
-        while e.MoveNext() && not (IsLeftZeroForAppend.Invoke res) do
+        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res
 
     static member inline Choice (x: ref<list<'``Alternative<'T>``>>, _mthd: Choice) =
         use e = (List.toSeq x.Value ).GetEnumerator ()
         let mutable res = Empty.Invoke ()
-        while e.MoveNext() && not (IsLeftZeroForAppend.Invoke res) do
+        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res
 
@@ -108,7 +108,7 @@ type Choice =
         let mutable i = 0
         let mutable res = Empty.Invoke ()
         let last = Array.length arr - 1
-        while i < last && not (IsLeftZeroForAppend.Invoke res) do
+        while i < last && not (IsAltLeftZero.Invoke res) do
             i <- i + 1
             res <- Append.Invoke res arr.[i]
         res

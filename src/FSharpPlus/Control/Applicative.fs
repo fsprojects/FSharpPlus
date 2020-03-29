@@ -98,33 +98,33 @@ type Lift2 with
     
 
 
-type IsLeftZeroForApply =
+type IsLeftZero =
     inherit Default1
 
-    static member IsLeftZeroForApply (t: ref<seq<_>>      , _mthd: IsLeftZeroForApply) = Seq.isEmpty t.Value
-    static member IsLeftZeroForApply (t: ref<list<_>>     , _mthd: IsLeftZeroForApply) = List.isEmpty t.Value
-    static member IsLeftZeroForApply (t: ref<array<_>>    , _mthd: IsLeftZeroForApply) = Array.isEmpty t.Value
-    static member IsLeftZeroForApply (t: ref<option<_>>   , _mthd: IsLeftZeroForApply) = Option.isNone t.Value
-    static member IsLeftZeroForApply (t: ref<Result<_,_>> , _mthd: IsLeftZeroForApply) = match t.Value with Error _      -> true | _ -> false
-    static member IsLeftZeroForApply (t: ref<Choice<_,_>> , _mthd: IsLeftZeroForApply) = match t.Value with Choice2Of2 _ -> true | _ -> false
+    static member IsLeftZero (t: ref<seq<_>>      , _mthd: IsLeftZero) = Seq.isEmpty t.Value
+    static member IsLeftZero (t: ref<list<_>>     , _mthd: IsLeftZero) = List.isEmpty t.Value
+    static member IsLeftZero (t: ref<array<_>>    , _mthd: IsLeftZero) = Array.isEmpty t.Value
+    static member IsLeftZero (t: ref<option<_>>   , _mthd: IsLeftZero) = Option.isNone t.Value
+    static member IsLeftZero (t: ref<Result<_,_>> , _mthd: IsLeftZero) = match t.Value with Error _      -> true | _ -> false
+    static member IsLeftZero (t: ref<Choice<_,_>> , _mthd: IsLeftZero) = match t.Value with Choice2Of2 _ -> true | _ -> false
 
     static member inline Invoke (x: '``Applicative<'T>``) : bool =
         let inline call (mthd : ^M, input: ^I) =
-            ((^M or ^I) : (static member IsLeftZeroForApply : _*_ -> _) ref input, mthd)
-        call(Unchecked.defaultof<IsLeftZeroForApply>, x)
+            ((^M or ^I) : (static member IsLeftZero : _*_ -> _) ref input, mthd)
+        call(Unchecked.defaultof<IsLeftZero>, x)
 
     static member inline InvokeOnInstance (x: '``Applicative<'T>``) : bool =
-        ((^``Applicative<'T>``) : (static member IsLeftZeroForApply : _ -> _) x)
+        ((^``Applicative<'T>``) : (static member IsLeftZero : _ -> _) x)
 
-type IsLeftZeroForApply with
+type IsLeftZero with
 
-    static member inline IsLeftZeroForApply (_: ref<'T>   when 'T : struct    , _mthd: Default4) = false
-    static member inline IsLeftZeroForApply (_: ref<'T>   when 'T : not struct, _mthd: Default3) = false
+    static member inline IsLeftZero (_: ref<'T>   when 'T : struct    , _mthd: Default4) = false
+    static member inline IsLeftZero (_: ref<'T>   when 'T : not struct, _mthd: Default3) = false
 
     // empty <*> f = empty  ==> empty is left zero for <*>
-    static member inline IsLeftZeroForApply (t: ref<'``Alternative<'T>``>        , _mthd: Default2) = (t.Value = Empty.InvokeOnInstance ())
+    static member inline IsLeftZero (t: ref<'``Alternative<'T>``>        , _mthd: Default2) = (t.Value = Empty.InvokeOnInstance ())
 
-    static member inline IsLeftZeroForApply (t: ref<'``Applicative<'T>``>        , _mthd: Default1) = (^``Applicative<'T>`` : (static member IsLeftZeroForApply : _ -> _) t.Value)
-    static member inline IsLeftZeroForApply (_: ref< ^t> when ^t: null and ^t: struct, _: Default1) = ()
+    static member inline IsLeftZero (t: ref<'``Applicative<'T>``>        , _mthd: Default1) = (^``Applicative<'T>`` : (static member IsLeftZero : _ -> _) t.Value)
+    static member inline IsLeftZero (_: ref< ^t> when ^t: null and ^t: struct, _: Default1) = ()
 
 #endif
