@@ -39,6 +39,11 @@ module NonEmptyList =
     let singleton x = {Head = x; Tail = []}
     let toList {Head = x; Tail = xs} = x::xs
     let toSeq  {Head = x; Tail = xs} = seq { yield x; yield! xs; }
+    let toArray nel = toList nel |> List.toArray
+    let ofArray (array : _ array) = match Array.tryHead array with | Some head -> create head (Array.tail array |> Array.toList) | _ -> failwith "cannot construct empty non empty list"
+    let ofList (list : _ list) = match List.tryHead list with | Some head -> create head (List.tail list) | _ -> failwith "cannot construct empty non empty list"
+    let ofSeq (list : _ seq) = match Seq.tryHead list with | Some head -> create head (Seq.tail list |> Seq.toList) | _ -> failwith "cannot construct empty non empty list"
+    let length (nel:_ NonEmptyList) = nel.Length
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
 
     /// <summary>Splits a list of pairs into two lists.</summary>
@@ -53,13 +58,14 @@ module NonEmptyList =
     let zip (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) = {Head = (list1.Head, list2.Head); Tail = List.zip list1.Tail list2.Tail}
 
     let cons e {Head = x; Tail = xs} = {Head = e  ; Tail = x::xs}
+    let head {Head = x; Tail = _ } = x
+    let tail {Head = _; Tail = xs } = xs
     let rec tails s =
         let {Tail = xs} = s
         match xs with
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
 
-    
 #if !FABLE_COMPILER
     let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
         let lst = traverse f (toList s) : '``Functor<'List<'U>>``
