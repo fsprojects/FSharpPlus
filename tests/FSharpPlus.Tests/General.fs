@@ -1329,7 +1329,7 @@ module Alternative =
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to array forces all side-effects
 
         SideEffects.reset ()
-        let _ = choice (Unchecked.toNonEmptyList (toList s)) // uses Default1 (Choice defined on NonEmptyList)
+        let _ = choice (NonEmptyList.ofList (toList s)) // uses Default1 (Choice defined on NonEmptyList)
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to list forces all side-effects
 
         SideEffects.reset ()
@@ -1337,7 +1337,7 @@ module Alternative =
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
 
         SideEffects.reset ()
-        let _ = choice (Unchecked.toNonEmptyList (toList t)) // uses Default1 (Choice defined on NonEmptyList)
+        let _ = choice (NonEmptyList.ofList (toList t)) // uses Default1 (Choice defined on NonEmptyList)
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
 
         SideEffects.reset ()

@@ -50,13 +50,28 @@ module NonEmptyList =
     /// <returns>Non empty list containing the elements of the array.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
     /// <remarks>Throws exception for empty array</remarks>
-    let ofArray (array : _ array) = match Array.tryHead array with | Some head -> create head (Array.tail array |> Array.toList) | _ -> invalidArg "array" "The input array was empty."
+    let ofArray (array : _ array) =
+        match array |> Array.toList with
+        | []    -> invalidArg "array" "The input array was empty."
+        | x::xs -> create x xs
     /// <summary>Builds a non empty list from the given list.</summary>
     /// <param name="list">The input list.</param>
     /// <returns>Non empty list containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
     /// <remarks>Throws exception for empty list</remarks>
-    let ofList (list : _ list) = match List.tryHead list with | Some head -> create head (List.tail list) | _ -> invalidArg "list" "The input list was empty."
+    let ofList (list : _ list) =
+        match list with
+        | []    -> invalidArg "list" "The input list was empty."
+        | x::xs -> create x xs
+    /// <summary>Builds a non empty list from the given sequence.</summary>
+    /// <param name="seq">The input list.</param>
+    /// <returns>Non empty list containing the elements of the list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
+    /// <remarks>Throws exception for empty list</remarks>
+    let ofSeq (seq : _ seq) =
+        match seq |> Seq.toList with
+        | []    -> invalidArg "seq" "The input sequence was empty."
+        | x::xs -> create x xs
     /// Returns the length of a non empty list. You can also use property nel.Length.
     let length (nel:_ NonEmptyList) = nel.Length
     /// <summary>Build a new non empty list whose elements are the results of applying the given function
@@ -75,9 +90,11 @@ module NonEmptyList =
     let zip (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) = {Head = (list1.Head, list2.Head); Tail = List.zip list1.Tail list2.Tail}
     /// Returns a new NonEmptyList with the element added to the beginning.
     let cons e {Head = x; Tail = xs} = {Head = e ; Tail = x::xs}
-    /// Returns the first element.
+    /// Returns the first element of a new non empty list. You can also use property nel.Head.
     let head {Head = x; Tail = _ } = x
-    /// Returns a new NonEmptyList of the elements trailing the first element.
+    /// <summary>Returns a new NonEmptyList of the elements trailing the first element.</summary>
+    /// <exception cref="System.ArgumentException">Thrown when the tail is empty.</exception>
+    /// <remarks>Throws exception for empty tail</remarks>
     let tail {Head = _; Tail = xs } = ofList xs
     let rec tails s =
         let {Tail = xs} = s
@@ -157,16 +174,6 @@ module NonEmptyList =
         | []    -> None
         | x::xs -> Some (create x xs)
 
-
-[<RequireQualifiedAccess>]
-module Unchecked =
-    /// Transforms a sequence to a NonEmptyList. This functions throws if the sequence is empty.
-    let toNonEmptyList (source: seq<'T>) =
-        match Seq.toList source with
-        | []    -> invalidArg "s" "Sequence is empty"
-        | x::xs -> NonEmptyList.create x xs
-      
-
 type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: NonEmptyList<'a>, f: 'a->'b) = NonEmptyList.map f x
@@ -187,7 +194,7 @@ type NonEmptyList<'t> with
         let r = NonEmptyList.toList f </List.apply/> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
-    static member Lift2 (f: 'T -> 'U -> 'V, x, y) = Unchecked.toNonEmptyList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
+    static member Lift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.ofList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
 
     static member Extract   {Head = h; Tail = _} = h : 't
 
