@@ -35,15 +35,32 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
 /// Basic operations on NonEmptyList
 [<RequireQualifiedAccess>]
 module NonEmptyList =
+    /// <summary>Builds a non empty list.</summary>
     let create x xs = {Head = x; Tail = xs}
+    /// <summary>Builds a non empty list with a single element.</summary>
     let singleton x = {Head = x; Tail = []}
+    /// <summary>Builds a list from the given non empty list.</summary>
     let toList {Head = x; Tail = xs} = x::xs
+    /// <summary>Builds a sequence from the given non empty list.</summary>
     let toSeq  {Head = x; Tail = xs} = seq { yield x; yield! xs; }
+    /// <summary>Builds an array from the given non empty list.</summary>
     let toArray nel = toList nel |> List.toArray
-    let ofArray (array : _ array) = match Array.tryHead array with | Some head -> create head (Array.tail array |> Array.toList) | _ -> failwith "cannot construct empty non empty list"
-    let ofList (list : _ list) = match List.tryHead list with | Some head -> create head (List.tail list) | _ -> failwith "cannot construct empty non empty list"
-    let ofSeq (list : _ seq) = match Seq.tryHead list with | Some head -> create head (Seq.tail list |> Seq.toList) | _ -> failwith "cannot construct empty non empty list"
+    /// <summary>Builds a non empty list from the given array.</summary>
+    /// <param name="array">The input array.</param>
+    /// <returns>Non empty list containing the elements of the array.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
+    /// <remarks>Throws exception for empty array</remarks>
+    let ofArray (array : _ array) = match Array.tryHead array with | Some head -> create head (Array.tail array |> Array.toList) | _ -> invalidArg "array" "The input array was empty."
+    /// <summary>Builds a non empty list from the given list.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>Non empty list containing the elements of the list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
+    /// <remarks>Throws exception for empty list</remarks>
+    let ofList (list : _ list) = match List.tryHead list with | Some head -> create head (List.tail list) | _ -> invalidArg "list" "The input list was empty."
+    /// Returns the length of a non empty list. You can also use property nel.Length.
     let length (nel:_ NonEmptyList) = nel.Length
+    /// <summary>Build a new non empty list whose elements are the results of applying the given function
+    /// to each of the elements of the non empty list.</summary>
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
 
     /// <summary>Splits a list of pairs into two lists.</summary>
@@ -56,10 +73,12 @@ module NonEmptyList =
     /// <param name="list2">The second input list.</param>
     /// <returns>A single list containing pairs of matching elements from the input lists.</returns>
     let zip (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) = {Head = (list1.Head, list2.Head); Tail = List.zip list1.Tail list2.Tail}
-
-    let cons e {Head = x; Tail = xs} = {Head = e  ; Tail = x::xs}
+    /// Returns a new NonEmptyList with the element added to the beginning.
+    let cons e {Head = x; Tail = xs} = {Head = e ; Tail = x::xs}
+    /// Returns the first element.
     let head {Head = x; Tail = _ } = x
-    let tail {Head = _; Tail = xs } = xs
+    /// Returns a new NonEmptyList of the elements trailing the first element.
+    let tail {Head = _; Tail = xs } = ofList xs
     let rec tails s =
         let {Tail = xs} = s
         match xs with

@@ -336,14 +336,14 @@ module NonEmptyList =
     let NonEmptyListIntOfSeqGen =
         gen {   let! n = Gen.length1thru12
                 let! x = Gen.listInt n
-                return ( (NonEmptyList.ofSeq x), x) }
+                return ( (NonEmptyList.ofList x), x) }
 
     let NonEmptyListStringGen =
         gen {   let! n = Gen.length1thru12
                 let! n2 = Gen.length2thru12
                 let! x =  Gen.listString n
                 let! y =  Gen.listString n2
-                return ( (NonEmptyList.ofSeq x |> enNonEmptyListThruList y), (x @ y) ) }
+                return ( (NonEmptyList.ofList x |> enNonEmptyListThruList y), (x @ y) ) }
 
     [<Test>]
     let ``cons works`` () =
