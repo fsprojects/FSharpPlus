@@ -219,6 +219,31 @@ module CombineWriterWithResult =
     let (_, log) = ew |> ResultT.run |> Writer.run
 
 
+// And you can build stack monad transformers
+// (Because a monad transformer and a monad is itself a monad,
+// you can pass that into another monad transformer. For example, below we are stacking them like:
+// type Example = ReaderT<DateTime, ResultT<Writer<string list, Result<string * string * string, string>>>>)
+
+module CombineReaderWithWriterWithResult =
+
+    let divide5By = function
+        | 0.0 -> Error "Divide by zero"
+        | x   -> Ok (5.0 / x)
+
+    let eitherConv f v =
+        ReaderT <| fun (now : System.DateTime) ->
+        ResultT <|
+            match f v with
+            | Ok a    -> Writer(Ok a,    [sprintf "Success at %s: %A" (now.ToString "o") a])
+            | Error b -> Writer(Error b, [sprintf "ERROR at %s: %A"   (now.ToString "o") b])
+
+    let ew = monad {
+        let! x = eitherConv divide5By 6.0
+        let! y = eitherConv divide5By 3.0
+        let! z = eitherConv divide5By 0.0
+        return (x, y, z) }
+
+    let (_, log) = ew |> ReaderT.run >> ResultT.run >> Writer.run <| DateTime.UtcNow
 
 // Many popular F# libraries are in fact an instantiation of a specific monad combination.
 // The followong example demonstrate how to code a mini-Suave lib in a few lines
