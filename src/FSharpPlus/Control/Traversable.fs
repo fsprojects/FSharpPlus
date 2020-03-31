@@ -44,7 +44,7 @@ type Traverse =
 
     static member inline Traverse (t: seq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
         let mapped = Seq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZeroForApply.Invoke, Array.toSeq) : '``Functor<seq<'U>>``
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, Array.toSeq) : '``Functor<seq<'U>>``
 
     static member Traverse (t: 't seq, f: 't->Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Default2) : Async<seq<_>> = async {
         let! ct = Async.CancellationToken
@@ -99,7 +99,7 @@ type Sequence with
                         let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) x <*> ys
                         Seq.foldBack cons_f t (result Seq.empty)
 
-    static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZeroForApply.Invoke, Array.toSeq)   : '``Applicative<seq<'T>>``
+    static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, Array.toSeq)   : '``Applicative<seq<'T>>``
     static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone, Array.toSeq)                                : option<seq<'t>>
     static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Error _      -> true | _ -> false), Array.toSeq) : Result<seq<'t>, 'e>
     static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Choice2Of2 _ -> true | _ -> false), Array.toSeq) : Choice<seq<'t>, 'e>

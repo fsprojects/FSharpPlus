@@ -67,6 +67,7 @@ From F#+
  -  ``StateT<'S,'MonadPlus<'T * 'S>>``
  -  ``Compose<'F<'G<'T>>>``
  -  ``DList<'T>``
+ -  ``ZipList<'T>``
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

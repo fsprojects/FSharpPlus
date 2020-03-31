@@ -1,10 +1,30 @@
-namespace FSharpPlus.Tests.Data
+module FSharpPlus.Tests.Data
 
 open System
 open NUnit.Framework
 open FsCheck
 open FSharpPlus
 open FSharpPlus.Data
+module Gen = // FSharpx.Collections extension of Gen
+    let listInt n  = Gen.listOfLength n Arb.generate<int>
+    let listObj n  = Gen.listOfLength n Arb.generate<obj>
+    let listString n  = Gen.listOfLength n Arb.generate<string>
+    let length1thru12 = Gen.choose (1, 12)
+    let length2thru12 = Gen.choose (2, 12)
+let fsCheck s x = Check.Quick (s, x)
+
+
+// tests from FSharpx.Collections DList
+let shouldEqual (x: 't) (y: 't) = Assert.AreEqual (x, y)
+let shoulSeqEqual (x: 't) (y: 't) = CollectionAssert.AreEqual (x, y)
+let shouldThrow (exnT: Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate (x)) |> ignore
+
+module ZipList =
+
+    module Alternative =
+        let _123andZeroesToTheInfinite = ZipList [1;2;3] <|> result 0
+        let _ZeroesToTheInfiniteAnd123 = result 0 <|> ZipList [1;2;3]
+        ()
 
 module DList =
 
@@ -13,18 +33,6 @@ module DList =
         let _Zero: DList<int> = zero
         let _42: DList<int> = ofList [4] + ofList [2]
 
-
-    // tests from FSharpx.Collections DList
-    let shouldEqual (x: 't) (y: 't) = Assert.AreEqual (x, y)
-    let shouldThrow (exnT: Type) (x: unit -> unit) = Assert.Throws(exnT, TestDelegate (x)) |> ignore
-    let fsCheck s x = Check.Quick (s, x)
-
-    module Gen = // FSharpx.Collections extension of Gen
-        let listInt n  = Gen.listOfLength n Arb.generate<int>
-        let listObj n  = Gen.listOfLength n Arb.generate<obj>
-        let listString n  = Gen.listOfLength n Arb.generate<string>
-        let length1thru12 = Gen.choose (1, 12)
-        let length2thru12 = Gen.choose (2, 12)
     let emptyDList = DList.empty
 
     let enDListThruList l q =
@@ -43,7 +51,7 @@ module DList =
     let DListOfListGen =
         gen {   let! n = Gen.length2thru12
                 let! x = Gen.listInt n
-                return ( (DList.ofSeq x), x) }                
+                return ( (DList.ofSeq x), x) }
     (*
     IDList generators from random ofSeq and/or add elements from random list 
     *)
@@ -313,3 +321,62 @@ module DList =
                  |>  DList.ofSeq
         assertThrowsIndexOutOfRange (fun _ -> l1.[100])
         assertThrowsIndexOutOfRange (fun _ -> l1.[-1])
+
+module NonEmptyList =
+    let nonEmptyList = NonEmptyList.create 1 []
+
+    let enNonEmptyListThruList l q =
+        let rec loop (q': 'a NonEmptyList) (l': 'a list) =
+            match l' with
+            | hd :: [] -> NonEmptyList.cons hd q'
+            | hd :: tl -> loop (NonEmptyList.cons hd q') tl
+            | [] -> q'
+        loop q l
+
+    let NonEmptyListIntOfSeqGen =
+        gen {   let! n = Gen.length1thru12
+                let! x = Gen.listInt n
+                return ( (NonEmptyList.ofList x), x) }
+
+    let NonEmptyListStringGen =
+        gen {   let! n = Gen.length1thru12
+                let! n2 = Gen.length2thru12
+                let! x =  Gen.listString n
+                let! y =  Gen.listString n2
+                return ( (NonEmptyList.ofList x |> enNonEmptyListThruList y), (x @ y) ) }
+
+    [<Test>]
+    let ``cons works`` () =
+        nonEmptyList |> NonEmptyList.cons 2 |> NonEmptyList.toList |> shoulSeqEqual [2;1]
+
+    [<Test>]
+    let ``zip `` () =
+        nonEmptyList |> NonEmptyList.zip nonEmptyList |> NonEmptyList.toList |> shoulSeqEqual [(1,1)]
+
+    [<Test>]
+    let ``get head from NonEmptyList`` () =
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (NonEmptyList.head q) = (List.item 0 l) ))
+
+    [<Test>]
+    let ``get tail from NonEmptyList`` () =
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun ((q : NonEmptyList<int>), l) -> q.Tail.Head = (List.item 1 l) ))
+
+    [<Test>]
+    let ``get length of NonEmptyList`` () =
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun ((q : NonEmptyList<int>), l) -> q.Length = (List.length l) ))
+
+    [<Test>]
+    let ``int NonEmptyList builds and serializes`` () =
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> q |> Seq.toList = l ))
+
+    [<Test>]
+    let ``string NonEmptyList builds and serializes`` () =
+        fsCheck "string NonEmptyList" (Prop.forAll (Arb.fromGen NonEmptyListStringGen) (fun (q : NonEmptyList<string>, l) -> q |> Seq.toList = l ))
+
+    [<Test>]
+    let ``toArray`` () =
+        fsCheck "string NonEmptyList" (Prop.forAll (Arb.fromGen NonEmptyListStringGen) (fun (q : NonEmptyList<string>, l) -> q |> NonEmptyList.toArray = List.toArray l ))
+
+    [<Test>]
+    let ``map on non empty list should equal map on list`` () =
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (q |> NonEmptyList.map string |> NonEmptyList.toList) = (l |> List.map string)))

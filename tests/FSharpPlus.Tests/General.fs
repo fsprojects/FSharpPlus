@@ -925,7 +925,7 @@ module Traversable =
         static member (<*>) (f, x) =
             SideEffects.add ("f(x) <*> " + string x)
             match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e
-        static member IsLeftZeroForApply x = match x with Left _ -> true | _ -> false
+        static member IsLeftZero x = match x with Left _ -> true | _ -> false
 
     let traverseTest =
         let _None = sequence (seq [Some 3;None ;Some 1])
@@ -967,7 +967,10 @@ module Traversable =
 
     [<Test>]
     let traverse_Specialization () =
-        let _ = Seq.traverse id [ZipList [1]; ZipList [2]]
+        let _ = Seq.traverse id [WrappedSeqD [1]; WrappedSeqD [2]]
+        let _ = Seq.sequence    [WrappedSeqD [1]; WrappedSeqD [2]]
+        let _ = Seq.traverse id [ZipList [1]; ZipList []; ZipList (seq {failwith "sholdn't get here"})] |> toList
+        let _ = Seq.sequence    [ZipList [1]; ZipList []; ZipList (seq {failwith "sholdn't get here"})] |> toList
         ()
 
     [<Test>]
@@ -1326,7 +1329,7 @@ module Alternative =
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to array forces all side-effects
 
         SideEffects.reset ()
-        let _ = choice (Unchecked.toNonEmptyList (toList s)) // uses Default1 (Choice defined on NonEmptyList)
+        let _ = choice (NonEmptyList.ofList (toList s)) // uses Default1 (Choice defined on NonEmptyList)
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to list forces all side-effects
 
         SideEffects.reset ()
@@ -1334,7 +1337,7 @@ module Alternative =
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
 
         SideEffects.reset ()
-        let _ = choice (Unchecked.toNonEmptyList (toList t)) // uses Default1 (Choice defined on NonEmptyList)
+        let _ = choice (NonEmptyList.ofList (toList t)) // uses Default1 (Choice defined on NonEmptyList)
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
 
         SideEffects.reset ()

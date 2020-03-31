@@ -5,7 +5,7 @@ open FSharpPlus
 
 
 /// A sequence with an Applicative functor based on zipping.
-[<NoComparison>]
+[<NoEquality;NoComparison>]
 type ZipList<'s> = ZipList of 's seq with
     member this.Item n = let (ZipList s) = this in Seq.item n s
 
@@ -30,9 +30,15 @@ type ZipList<'s> with
     static member Map (ZipList x, f: 'a->'b) = ZipList (Seq.map f x)
 
     static member Return (x: 'a)     = ZipList (Seq.initInfinite (konst x))
-    static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>
-
+    static member (<*>) (ZipList (f: seq<'a->'b>), ZipList x) = ZipList (Seq.zip f x |> Seq.map (fun (f, x) -> f x)) : ZipList<'b>    
     static member Lift2 (f, x : ZipList<'T1>, y : ZipList<'T2>) = ZipList.map2 f x y
+    static member IsLeftZero (ZipList x) = Seq.isEmpty x
+    
+    static member get_Empty () = ZipList Seq.empty
+    static member (<|>) (ZipList x, ZipList y) = ZipList <| seq {
+        let mutable i = 0
+        for e in x do i <- i + 1; yield e
+        yield! Seq.drop i y }
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = ZipList.zip x y
