@@ -225,7 +225,7 @@ module CombineWriterWithResult =
 // For example, below we are stacking them like:
 // type Example = ReaderT<DateTime, ResultT<Writer<string list, Result<string * string * string, string>>>>)
 
-// Catch and throw is generic over all monad transformers in F#+ so you can use catch works in this example
+// Catch and throw is generic over all monad transformers in F#+ so catch works in this example
 // because there is a Result in the stack. We use it here to consolidate Result's 'TError.
 
 module CombineReaderWithWriterWithResult =
@@ -253,7 +253,9 @@ module CombineReaderWithWriterWithResult =
 
         return (x, y, z) }
 
-    let (_, log) = ew |> ReaderT.run >> ResultT.run >> Writer.run <| DateTime.UtcNow
+    let run expr = ReaderT.run expr >> ResultT.run >> Writer.run
+
+    let (_, log) = run ew DateTime.UtcNow
 
 
 // Many popular F# libraries are in fact an instantiation of a specific monad combination.
