@@ -251,7 +251,7 @@ module CombineReaderWithWriterWithResult =
         let! y = eitherConv divide5By       0.0
         let! z = eitherConv otherDivide5By  0.0 </catch/> (throw << (fun _ -> "Unknown error"))
 
-        return (x, y, z) }
+        return (w, x, y, z) }
 
     let run expr = ReaderT.run expr >> ResultT.run >> Writer.run
 
