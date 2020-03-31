@@ -90,7 +90,7 @@ type Traverse =
     [<Obsolete;CompiledName("Traverse")>]
     static member TraverseLegacy (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'u>>, [<Optional>]_impl:Default2): seq<'u> option =
         let mapped = Seq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZeroForApply.Invoke, Array.toSeq)
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, Array.toSeq)
 
 type Sequence with
 
