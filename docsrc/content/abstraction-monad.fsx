@@ -245,7 +245,7 @@ module CombineReaderWithWriterWithResult =
             | Ok a    -> Writer(Ok a,    [sprintf "Success at %s: %A" (now.ToString "o") a])
             | Error b -> Writer(Error b, [sprintf "ERROR at %s: %A"   (now.ToString "o") b])
 
-    let ew = monad {
+    let divide = monad {
         let! w = eitherConv divide5By       6.0
         let! x = eitherConv divide5By       3.0
         let! y = eitherConv divide5By       0.0
@@ -255,7 +255,7 @@ module CombineReaderWithWriterWithResult =
 
     let run expr = ReaderT.run expr >> ResultT.run >> Writer.run
 
-    let (_, log) = run ew DateTime.UtcNow
+    let (_, log) = run divide DateTime.UtcNow
 
 
 // Many popular F# libraries are in fact an instantiation of a specific monad combination.
