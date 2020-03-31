@@ -9,7 +9,7 @@
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
     <VersionPrefix>1.1.0</VersionPrefix>
-    <VersionSuffix>RC3</VersionSuffix>
+    <VersionSuffix>RC4</VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
