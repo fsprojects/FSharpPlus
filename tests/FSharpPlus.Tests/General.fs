@@ -9,6 +9,7 @@ open FSharpPlus.Data
 open FSharpPlus.Control
 open NUnit.Framework
 open Helpers
+open FSharpPlus.Math.Applicative
 
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
