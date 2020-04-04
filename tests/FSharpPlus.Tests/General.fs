@@ -9,6 +9,7 @@ open FSharpPlus.Data
 open FSharpPlus.Control
 open NUnit.Framework
 open Helpers
+open FSharpPlus.Math.Applicative
 
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
@@ -1162,6 +1163,37 @@ module Applicative =
         Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
         Assert.IsInstanceOf<Option<list<int>>> (Some testVal)
 
+        let testLTE1 = Some 1 .<=. Some 2
+        Assert.AreEqual (Some true, testLTE1)
+        Assert.IsInstanceOf<Option<bool>> testLTE1
+
+        let testLTE2 = Some 1 .<= 2
+        Assert.AreEqual (Some true, testLTE2)
+        Assert.IsInstanceOf<Option<bool>> testLTE2
+        
+        let testLTE3 = 3 <=. Some 1
+        Assert.AreEqual (Some false, testLTE3)
+        Assert.IsInstanceOf<Option<bool>> testLTE3
+
+        let testLTE4 = Some 3 .<=. Some 3
+        Assert.AreEqual (Some true, testLTE4)
+        Assert.IsInstanceOf<Option<bool>> testLTE4
+
+        let testGTE1 = Some 1 .>=. Some 2
+        Assert.AreEqual (Some false, testGTE1)
+        Assert.IsInstanceOf<Option<bool>> testGTE1
+
+        let testGTE2 = Some 1 .>= 2
+        Assert.AreEqual (Some false, testGTE2)
+        Assert.IsInstanceOf<Option<bool>> testGTE2
+        
+        let testGTE3 = 3 >=. Some 1
+        Assert.AreEqual (Some true, testGTE3)
+        Assert.IsInstanceOf<Option<bool>> testGTE3
+
+        let testGTE4 = Some 3 .>=. Some 3
+        Assert.AreEqual (Some true, testGTE4)
+        Assert.IsInstanceOf<Option<bool>> testGTE4
 
     [<Test>]
     let applicatives () = 
