@@ -10,6 +10,7 @@ open FSharpPlus.Control
 open NUnit.Framework
 open Helpers
 open FSharpPlus.Math.Applicative
+open CSharpLib
 
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
@@ -1701,7 +1702,15 @@ module Splits =
         Assert.IsTrue((d = Sum 13))
 
 
-module Parsing = 
+module Parsing =
+    let (|Int32|_|) : _-> Int32 option = tryParse
+    type ProductId = { Value:int }
+    with
+        static member TryParse(value:string) : ProductId option=
+            match value.Split('_') |> List.ofArray with
+            | "P" :: Int32 v :: [] -> Some { Value = v }
+            | _ -> None
+
     [<Test>]
     let parseDateTime () =
 #if MONO
@@ -1735,7 +1744,18 @@ module Parsing =
 
         let r123: WrappedListA<int> option = tryParse "[1;2;3]"
         areStEqual r123 (Some (WrappedListA [1; 2; 3]))
-        
+
+    [<Test>]
+    let parseCustomType () = 
+        let v1 : CustomerId option = tryParse "C_1"
+        Assert.IsTrue((v1.Value.Value = 1L))
+        let v2 : CustomerId option = tryParse "C_X"
+        Assert.IsTrue(Option.isNone v2)
+        let v3 : ProductId option = tryParse "P_1"
+        Assert.IsTrue((v3.Value.Value = 1))
+        let v4 : ProductId option = tryParse "P_X"
+        Assert.IsTrue(Option.isNone v4)
+
     [<Test>]
     let scanfParsing () =
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]

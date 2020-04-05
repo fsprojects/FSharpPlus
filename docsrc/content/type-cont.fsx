@@ -17,7 +17,7 @@ by reading [Real World Functional Programming by Tomas Petricek with Jon Skeet](
 Examples
 --------
 
-In order to get an idea about this style, let us contrast some of the examples and how they look in when using f#+ or without help.  
+In order to get an idea about this style, let us contrast some of the examples and how they look in when using F#+ or without help.  
 
 *)
 
