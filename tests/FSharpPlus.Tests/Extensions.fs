@@ -2,6 +2,7 @@ namespace FSharpPlus.Tests
 
 module Extensions =
 
+  open System
   open System.Collections.Generic
   open NUnit.Framework
   open FSharpPlus
@@ -268,3 +269,30 @@ module Extensions =
   [<Test>]
   let ``Array.lift2 should combine all arrays `` () =
     areStEqual [|11; 21; 31; 12; 22; 32|] (Array.lift2 (+) [|1;2|] [|10;20;30|])
+
+  [<Test>]
+  let ``Nullable.bind should return the expected result`` () =
+    let add1 x = x + 1 |> Nullable
+    let firstOfYear x = DateTime(x, 1, 1) |> Nullable
+    Nullable.bind add1 (Nullable 2) |> areEqual (Nullable 3)
+    Nullable.bind firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+    // generic bind should work the same way
+    bind add1 (Nullable 2) |> areEqual (Nullable 3)
+    bind firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+
+  [<Test>]
+  let ``Nullable.map should return the expected result`` () =
+    let firstOfYear x = DateTime(x, 1, 1)
+    Nullable.map ((+) 1) (Nullable 1) |> areEqual (Nullable 2)
+    Nullable.map firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+    // generic map should work the same way
+    map ((+) 1) (Nullable 1) |> areEqual (Nullable 2)
+    map firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+
+  [<Test>]
+  let ``Nullable.iter should only invoke the function when a value is present`` () =
+    let mutable v = 0
+    Nullable.iter (fun x -> v <- x) (Nullable 1)
+    v |> areEqual 1
+
+    Nullable.iter (fun x -> failwith "this should not be called") (Nullable ())
