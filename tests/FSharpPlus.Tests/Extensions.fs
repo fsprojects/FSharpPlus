@@ -296,3 +296,48 @@ module Extensions =
     v |> areEqual 1
 
     Nullable.iter (fun x -> failwith "this should not be called") (Nullable ())
+
+  [<Test>]
+  let ``Nullable.defaultWith should only invoke thunk if needed`` () =
+    Nullable.defaultWith (fun () -> failwith "this should not be called") (Nullable 2) |> areEqual 2
+    Nullable.defaultWith (fun () -> 1) (Nullable()) |> areEqual 1
+
+  [<Test>]
+  let ``Nullable.defaultValue uses default when Nullable has no value`` () =
+    Nullable.defaultValue 1 (Nullable 2) |> areEqual 2
+    Nullable.defaultValue 1 (Nullable()) |> areEqual 1
+
+  [<Test>]
+  let ``Nullable.exists returns whether there is a matching value`` () =
+    let pred x = x > 1
+    Nullable.exists pred (Nullable 2) |> areEqual true
+    Nullable.exists pred (Nullable 1) |> areEqual false
+    Nullable.exists pred (Nullable()) |> areEqual false
+
+  [<Test>]
+  let ``Nullable.filter returns empty Nullable when there is no matching value`` () =
+    let pred x = x > 1
+    Nullable.filter pred (Nullable 2) |> areEqual (Nullable 2)
+    Nullable.filter pred (Nullable 1) |> areEqual (Nullable())
+    Nullable.filter pred (Nullable()) |> areEqual (Nullable())
+
+  [<Test>]
+  let ``Nullable.fold and foldBack return the expected value`` () =
+    let d = DateTime(2020, 1, 1)
+    let update (s: DateTime) (x: int) = s.AddDays(float x)
+    Nullable.fold update d (Nullable 2) |> areEqual (DateTime(2020, 1, 3))
+    Nullable.fold update d (Nullable()) |> areEqual d
+    Nullable.foldBack (flip update) d (Nullable 2) |> areEqual (DateTime(2020, 1, 3))
+    Nullable.foldBack (flip update) d (Nullable()) |> areEqual d
+
+  [<Test>]
+  let ``Nullable.forall returns whether there is a matching value or no value`` () =
+    let pred x = x > 1
+    Nullable.forall pred (Nullable 2) |> areEqual true
+    Nullable.forall pred (Nullable 1) |> areEqual false
+    Nullable.forall pred (Nullable()) |> areEqual true
+
+  [<Test>]
+  let ``Nullable.toList returns a list with the value if there is one`` () =
+    Nullable.toList (Nullable 1) |> areEqual [1]
+    Nullable.toList (Nullable()) |> areEqual []
