@@ -87,4 +87,14 @@ let ExtensionsTest =
                    equal (mapItem2 string (1,2,3)) (1,"2",3)
                    equal (item3 (1,2,3)) 3
                    )
+
+      testCase "eq on DList"
+          (fun () ->
+                     let a = DList.ofSeq [1;2;3]
+                     let b = DList.ofSeq [1;2;3]
+                     let c = DList.ofSeq [1;2]
+                     equal true (a = b)
+                     equal false (a = c)
+                     )
+
 ]
