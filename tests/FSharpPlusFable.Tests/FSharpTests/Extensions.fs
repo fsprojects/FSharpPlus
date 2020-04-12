@@ -15,6 +15,10 @@ module StringCodec =
 
 
 let ExtensionsTest = 
+    let a = DList.ofSeq [1;2;3]
+    let b = DList.ofSeq [1;2;3]
+    let c = DList.ofSeq [1;2]
+    let d = DList.ofSeq [1 :> obj;2:> obj;3:> obj]
     testList "Extension Tests" [
 
       testCase "Applying Option.Zip and Option.Unzip returns the original value" 
@@ -88,13 +92,11 @@ let ExtensionsTest =
                    equal (item3 (1,2,3)) 3
                    )
 
-      testCase "eq on DList"
-          (fun () ->
-                     let a = DList.ofSeq [1;2;3]
-                     let b = DList.ofSeq [1;2;3]
-                     let c = DList.ofSeq [1;2]
-                     equal true (a = b)
-                     equal false (a = c)
-                     )
+      testCase "eq on DList 1" (fun () -> equal true  (a = b))
+      testCase "eq on DList 2" (fun () -> equal false (a = c))
+      testCase "eq on DList 3" (fun () -> equal true  ((a :> obj)  = (b :> obj)))
+      testCase "eq on DList 4" (fun () -> equal false ((a :> obj)  = (c :> obj)))
+      testCase "eq on DList 5" (fun () -> equal false ((a :> obj)  = (d :> obj)))
+                     
 
 ]
