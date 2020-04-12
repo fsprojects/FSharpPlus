@@ -4,9 +4,14 @@ open System.Collections.Generic
 open System.ComponentModel
 open FSharpPlus
 
-
 // DList from FSharpx.Collections
 //This implementation adds an additional parameter to allow O(1) retrieval of the list length.
+
+
+type DListData<'T> =
+    | Nil
+    | Unit of 'T
+    | Join of DListData<'T> * DListData<'T>
 
 
 /// DList is an ordered linear structure implementing the List signature (head, tail, cons), 
@@ -202,13 +207,8 @@ type DList<'T> (length: int, data: DListData<'T>) =
         member s.Item with get index = s.Item index
 
     interface System.Collections.IEnumerable with
-        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)
-            
-and 
-    DListData<'T> =
-    | Nil
-    | Unit of 'T
-    | Join of DListData<'T> * DListData<'T>  
+        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)            
+
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module DList =
