@@ -37,6 +37,9 @@ type DList<'T> (length: int, data: DListData<'T>) =
         | Some hash -> hash
 
     override this.Equals other =
+        #if FABLE_COMPILER
+        (this :> System.IComparable).CompareTo(other) = 0
+        #else
         match other with
         | :? DList<'T> as y -> 
             if this.Length <> y.Length then false 
@@ -44,6 +47,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
                 if this.GetHashCode () <> y.GetHashCode () then false
                 else Seq.forall2 Unchecked.equals this y
         | _ -> false
+        #endif
 
     /// O(1). Returns the count of elememts.
     member __.Length = length
