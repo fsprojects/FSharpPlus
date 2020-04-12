@@ -38,7 +38,11 @@ type DList<'T> (length: int, data: DListData<'T>) =
 
     override this.Equals other =
         #if FABLE_COMPILER
-        (this :> System.IComparable).CompareTo(other) = 0
+        let y = other :?> DList<'T>
+            if this.Length <> y.Length then false 
+            else
+                if this.GetHashCode () <> y.GetHashCode () then false
+                else Seq.forall2 Unchecked.equals this y
         #else
         match other with
         | :? DList<'T> as y -> 
