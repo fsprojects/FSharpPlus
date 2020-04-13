@@ -15,10 +15,12 @@ module StringCodec =
 
 
 let ExtensionsTest = 
-    let a = DList.ofSeq [1;2;3]
-    let b = DList.ofSeq [1;2;3]
-    let c = DList.ofSeq [1;2]
-    let d = DList.ofSeq [1 :> obj;2:> obj;3:> obj]
+
+    let dlistA = DList.ofSeq [1;2;3]
+    let dlistB = DList.ofSeq [1;2;3]
+    let dlistC = DList.ofSeq [1;2]
+    let dlistD = DList.ofSeq [1 :> obj;2:> obj;3:> obj]
+
     testList "Extension Tests" [
 
       testCase "Applying Option.Zip and Option.Unzip returns the original value" 
@@ -92,10 +94,10 @@ let ExtensionsTest =
                    equal (item3 (1,2,3)) 3
                    )
 
-      testCase "eq on DList 1" (fun () -> equal true  (a = b))
-      testCase "eq on DList 2" (fun () -> equal false (a = c))
-      testCase "eq on DList 3" (fun () -> equal true  ((a :> obj)  = (b :> obj)))
-      testCase "eq on DList 4" (fun () -> equal false ((a :> obj)  = (c :> obj)))
-      testCase "eq on DList 5" (fun () -> equal true ((a :> obj)  = (d :> obj)))   // this differs from F# but same way it would be with normal lists.
+      testCase "eq on DList 1" (fun () -> equal true  (dlistA = dlistB))
+      testCase "eq on DList 2" (fun () -> equal false (dlistA = dlistC))
+      testCase "eq on DList 3" (fun () -> equal true  ((dlistA :> obj) = (dlistB :> obj)))
+      testCase "eq on DList 4" (fun () -> equal false ((dlistA :> obj) = (dlistC :> obj)))
+      testCase "eq on DList 5" (fun () -> equal true  ((dlistA :> obj) = (dlistD :> obj))) // this behavior differs from (non-fable) F# but same way it would be with normal lists.
 
 ]
