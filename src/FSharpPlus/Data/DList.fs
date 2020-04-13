@@ -4,9 +4,14 @@ open System.Collections.Generic
 open System.ComponentModel
 open FSharpPlus
 
-
 // DList from FSharpx.Collections
 //This implementation adds an additional parameter to allow O(1) retrieval of the list length.
+
+
+type DListData<'T> =
+    | Nil
+    | Unit of 'T
+    | Join of DListData<'T> * DListData<'T>
 
 
 /// DList is an ordered linear structure implementing the List signature (head, tail, cons), 
@@ -37,6 +42,13 @@ type DList<'T> (length: int, data: DListData<'T>) =
         | Some hash -> hash
 
     override this.Equals other =
+        #if FABLE_COMPILER
+        let y = other :?> DList<'T>
+        if this.Length <> y.Length then false 
+        else
+            if hash this <> hash y then false
+            else Seq.forall2 Unchecked.equals this y
+        #else
         match other with
         | :? DList<'T> as y -> 
             if this.Length <> y.Length then false 
@@ -44,6 +56,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
                 if this.GetHashCode () <> y.GetHashCode () then false
                 else Seq.forall2 Unchecked.equals this y
         | _ -> false
+        #endif
 
     /// O(1). Returns the count of elememts.
     member __.Length = length
@@ -194,13 +207,8 @@ type DList<'T> (length: int, data: DListData<'T>) =
         member s.Item with get index = s.Item index
 
     interface System.Collections.IEnumerable with
-        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)
-            
-and 
-    DListData<'T> =
-    | Nil
-    | Unit of 'T
-    | Join of DListData<'T> * DListData<'T>  
+        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)            
+
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module DList =
