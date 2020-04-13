@@ -96,7 +96,6 @@ let ExtensionsTest =
       testCase "eq on DList 2" (fun () -> equal false (a = c))
       testCase "eq on DList 3" (fun () -> equal true  ((a :> obj)  = (b :> obj)))
       testCase "eq on DList 4" (fun () -> equal false ((a :> obj)  = (c :> obj)))
-      testCase "eq on DList 5" (fun () -> equal false ((a :> obj)  = (d :> obj)))
-                     
+      testCase "eq on DList 5" (fun () -> equal true ((a :> obj)  = (d :> obj)))   // this differs from F# but same way it would be with normal lists.
 
 ]
