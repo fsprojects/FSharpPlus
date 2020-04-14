@@ -219,6 +219,44 @@ module CombineWriterWithResult =
     let (_, log) = ew |> ResultT.run |> Writer.run
 
 
+// You can also stack monad transformers.
+
+// A monad transformer and a monad is itself a monad, so you can pass that into another monad transformer.
+// For example, below we are stacking them like:
+// type Example = ReaderT<DateTime, ResultT<Writer<string list, Result<string * string * string, string>>>>)
+
+// Catch and throw is generic over all monad transformers in F#+ so catch works in this example
+// because there is a Result in the stack. We use it here to consolidate Result's 'TError.
+
+module CombineReaderWithWriterWithResult =
+
+    let divide5By : float -> Result<float, string> = function
+        | 0.0 -> Error "Divide by zero"
+        | x   -> Ok (5.0 / x)
+
+    let otherDivide5By : float -> Result<float, unit>  = function
+        | 0.0 -> Error ()
+        | x   -> Ok (5.0 / x)
+
+    let eitherConv f v =
+        ReaderT <| fun (now : System.DateTime) ->
+        ResultT <|
+            match f v with
+            | Ok a    -> Writer(Ok a,    [sprintf "Success at %s: %A" (now.ToString "o") a])
+            | Error b -> Writer(Error b, [sprintf "ERROR at %s: %A"   (now.ToString "o") b])
+
+    let divide = monad {
+        let! w = eitherConv divide5By       6.0
+        let! x = eitherConv divide5By       3.0
+        let! y = eitherConv divide5By       0.0
+        let! z = eitherConv otherDivide5By  0.0 </catch/> (throw << (fun _ -> "Unknown error"))
+
+        return (w, x, y, z) }
+
+    let run expr = ReaderT.run expr >> ResultT.run >> Writer.run
+
+    let (_, log) = run divide DateTime.UtcNow
+
 
 // Many popular F# libraries are in fact an instantiation of a specific monad combination.
 // The followong example demonstrate how to code a mini-Suave lib in a few lines

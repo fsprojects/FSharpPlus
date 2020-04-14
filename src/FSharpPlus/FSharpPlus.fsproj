@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup Condition="'$(CompilerTest)' == 'true'">
     <FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
@@ -31,6 +31,7 @@
   <ItemGroup>
     <Compile Include="Internals.fs" />    
     <Compile Include="Extensions/Option.fs" />
+    <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
     <Compile Include="Extensions/Seq.fs" />

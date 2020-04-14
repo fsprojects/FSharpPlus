@@ -50,4 +50,12 @@ module Applicative =
     let inline ( &&.) (x: bool)                   (y: '``Functor<bool>``)     = map ((&&)   x) y : '``Functor<bool>``
     let inline (.&&.) (x: '``Applicative<bool>``) (y: '``Applicative<bool>``) = (&&) <!> x <*> y : '``Applicative<bool>``
 
+    let inline ( .<=  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((<=)/> y) x : '``Functor<bool>``
+    let inline (  <=. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((<=)   x) y : '``Functor<bool>``
+    let inline ( .<=. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (<=) <!> x <*> y : '``Applicative<bool>``
+
+    let inline ( .>=  ) (x: '``Functor<'T>``)     (y: 'T)                   = map ((>=)/> y) x : '``Functor<bool>``
+    let inline (  >=. ) (x: 'T)                   (y: '``Functor<'T>``)     = map ((>=)   x) y : '``Functor<bool>``
+    let inline ( .>=. ) (x: '``Applicative<'T>``) (y: '``Applicative<'T>``) = (>=) <!> x <*> y : '``Applicative<bool>``
+
 #endif
