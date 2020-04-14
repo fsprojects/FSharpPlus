@@ -1,3 +1,8 @@
+#### 1.1.0  - April 14 2020
+* Fix: issue with equality for DLists in Fable
+* Add Nullable module and map and bind overloads for Nullable
+* Add <= and >= Applicative Math operators
+
 #### 1.1.0-RC4  - March 31 2020
 * Fix: issue with Fable consumption of the library
 * Bitraversable abstraction
