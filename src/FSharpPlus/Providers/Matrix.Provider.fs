@@ -99,6 +99,7 @@ type VectorProvider (cfg) as this =
   do vty.AddMember (createMethod "Windowed" ["windowSize"] typeof<Windowed<obj>>)
   do vty.AddMember (createMethod "ChunkBySize" ["chunkSize"] typeof<ChunkBySize<obj>>)
   do vty.AddMember (createMethod "SplitInto" ["count"] typeof<SplitInto<obj>>)
+  do vty.AddMember (createMethod "TryCreate" ["count"] typeof<TryCreate<obj>>)
   do this.AddNamespace(root, [vty])
 
 [<EditorBrowsable(EditorBrowsableState.Never)>]
