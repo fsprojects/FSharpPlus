@@ -29,7 +29,7 @@ module String =
     let contains char      (source: string) = Seq.contains char source
     let toUpper (source: string) = if isNull source then source else source.ToUpperInvariant ()
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
-    let trimWhiteSpaces (source: string) = source.Trim ()
+    let trim (source: string) = source.Trim ()
 
     #if !FABLE_COMPILER
     
@@ -53,7 +53,7 @@ module String =
     let padRightWith totalLength paddingChar (source: string) = source.PadRight (totalLength, paddingChar)
 
     /// Removes all leading and trailing occurrences of specified characters from the given string.
-    let trim      (trimChars: char seq) (source: string) = source.Trim (Seq.toArray trimChars)
+    let trimBoth  (trimChars: char seq) (source: string) = source.Trim (Seq.toArray trimChars)
     /// Removes all leading occurrences of specified characters from the given string.
     let trimStart (trimChars: char seq) (source: string) = source.TrimStart (Seq.toArray trimChars)
     /// Removes all trailing occurrences of specified characters from the given string.
