@@ -142,5 +142,6 @@ let copyFiles () =
 let buildDocumentation () =
   Directory.copyRecursive Path.files Path.output
   IO.Directory.EnumerateFiles Path.content
+  |> Seq.filter (fun file-> not <| file.EndsWith(".DS_Store"))
   |> Seq.iter (processFile Path.output)
 
