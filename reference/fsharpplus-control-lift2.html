@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Lift2 - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+<h1>Lift2</h1>
+<p>
+
+    <span>Namespace: FSharpPlus.Control</span><br />
+    </p>
+<div class="xmldoc">
+</div>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1439', 1439)" onmouseover="showTip(event, '1439', 1439)">
+            Lift2.Invoke f x y
+          </code>
+          <div class="tip" id="1439">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;V)) -&gt; x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;U&gt; -&gt; ^Applicative&lt;&#39;V&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'V, ^Applicative<'T>, ^Applicative<'U>, ^Applicative<'V>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L85-85" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1440', 1440)" onmouseover="showTip(event, '1440', 1440)">
+            Lift2.InvokeOnInstance f x y
+          </code>
+          <div class="tip" id="1440">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;V)) -&gt; x:^Applicative&lt;&#39;T&gt; -&gt; y:^Applicative&lt;&#39;U&gt; -&gt; &#39;?17672<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'V, ^Applicative<'T>, ^Applicative<'U>, '?17672                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L90-90" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1441', 1441)" onmouseover="showTip(event, '1441', 1441)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1441">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;V) * (^Applicative&lt;&#39;T&gt; * ^Applicative&lt;&#39;U&gt;) * _mthd:Default1) -&gt; &#39;?17691<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'V, ^Applicative<'T>, ^Applicative<'U>, '?17691                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L97-97" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1442', 1442)" onmouseover="showTip(event, '1442', 1442)">
+            Lift2.Lift2(arg1, arg2, _mthd)
+          </code>
+          <div class="tip" id="1442">
+            <strong>Signature:</strong> (&#39;?17681 * (&#39;t * ^u) * _mthd:Default1) -&gt; &#39;?17684 -&gt; &#39;?17684<br />
+                          <strong>Type parameters:</strong> '?17681, 't, ^u, '?17684                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L96-96" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1443', 1443)" onmouseover="showTip(event, '1443', 1443)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1443">
+            <strong>Signature:</strong> (f:&#39;?17674 * (^?17675 * ^?17678) * _mthd:Default2) -&gt; ^?17679<br />
+                          <strong>Type parameters:</strong> '?17674, ^?17675, ^?17676, ^?17677, ^?17678, ^?17679                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L94-94" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1444', 1444)" onmouseover="showTip(event, '1444', 1444)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1444">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17658) * (ResizeArray&lt;&#39;T&gt; * ResizeArray&lt;&#39;U&gt;) * _mthd:Lift2) -&gt; ResizeArray&lt;&#39;?17658&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17658                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L83-83" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1445', 1445)" onmouseover="showTip(event, '1445', 1445)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1445">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17654) * (Expr&lt;&#39;T&gt; * Expr&lt;&#39;U&gt;) * _mthd:Lift2) -&gt; Expr&lt;&#39;?17654&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17654                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L82-82" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1446', 1446)" onmouseover="showTip(event, '1446', 1446)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1446">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17649) * (Dictionary&lt;&#39;Key,&#39;T&gt; * Dictionary&lt;&#39;Key,&#39;U&gt;) * _mthd:Lift2) -&gt; Dictionary&lt;&#39;Key,&#39;?17649&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17649, 'Key                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L81-81" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1447', 1447)" onmouseover="showTip(event, '1447', 1447)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1447">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17644) * (Map&lt;&#39;Key,&#39;T&gt; * Map&lt;&#39;Key,&#39;U&gt;) * _mthd:Lift2) -&gt; Map&lt;&#39;Key,&#39;?17644&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17644, 'Key                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L80-80" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1448', 1448)" onmouseover="showTip(event, '1448', 1448)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1448">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17639) * (Choice&lt;&#39;T,&#39;Error&gt; * Choice&lt;&#39;U,&#39;Error&gt;) * _mthd:Lift2) -&gt; Choice&lt;&#39;?17639,&#39;Error&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17639, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L79-79" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1449', 1449)" onmouseover="showTip(event, '1449', 1449)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1449">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17634) * (Result&lt;&#39;T,&#39;Error&gt; * Result&lt;&#39;U,&#39;Error&gt;) * _mthd:Lift2) -&gt; Result&lt;&#39;?17634,&#39;Error&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17634, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L78-78" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1450', 1450)" onmouseover="showTip(event, '1450', 1450)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1450">
+            <strong>Signature:</strong> (f:(&#39;?17628 -&gt; &#39;?17629 -&gt; &#39;?17630) * (&#39;?17628 option * &#39;?17629 option) * _mthd:Lift2) -&gt; &#39;?17630 option<br />
+                          <strong>Type parameters:</strong> '?17628, '?17629, '?17630                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L77-77" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1451', 1451)" onmouseover="showTip(event, '1451', 1451)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1451">
+            <strong>Signature:</strong> (f:(&#39;?17624 -&gt; &#39;?17625 -&gt; &#39;?17626) * (Async&lt;&#39;?17624&gt; * Async&lt;&#39;?17625&gt;) * _mthd:Lift2) -&gt; Async&lt;&#39;?17626&gt;<br />
+                          <strong>Type parameters:</strong> '?17624, '?17625, '?17626                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L76-76" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1452', 1452)" onmouseover="showTip(event, '1452', 1452)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1452">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17622) * (Task&lt;&#39;T&gt; * Task&lt;&#39;U&gt;) * _mthd:Lift2) -&gt; Task&lt;&#39;?17622&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17622                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L75-75" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1453', 1453)" onmouseover="showTip(event, '1453', 1453)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1453">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17617) * ((^Monoid * &#39;T) * (^Monoid * &#39;U)) * _mthd:Lift2) -&gt; ^Monoid * &#39;?17617<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17617, ^Monoid                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L74-74" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1454', 1454)" onmouseover="showTip(event, '1454', 1454)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1454">
+            <strong>Signature:</strong> (f:(&#39;T -&gt; &#39;U -&gt; &#39;?17612) * ((&#39;R -&gt; &#39;T) * (&#39;R -&gt; &#39;U)) * _mthd:Lift2) -&gt; &#39;R -&gt; &#39;?17612<br />
+                          <strong>Type parameters:</strong> 'T, 'U, '?17612, 'R                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L73-73" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1455', 1455)" onmouseover="showTip(event, '1455', 1455)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1455">
+            <strong>Signature:</strong> (f:(&#39;?17606 -&gt; &#39;?17607 -&gt; &#39;?17608) * (&#39;?17606 [] * &#39;?17607 []) * _mthd:Lift2) -&gt; &#39;?17608 []<br />
+                          <strong>Type parameters:</strong> '?17606, '?17607, '?17608                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L72-72" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1456', 1456)" onmouseover="showTip(event, '1456', 1456)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1456">
+            <strong>Signature:</strong> (f:(&#39;?17602 -&gt; &#39;?17603 -&gt; &#39;?17604) * (&#39;?17602 list * &#39;?17603 list) * _mthd:Lift2) -&gt; &#39;?17604 list<br />
+                          <strong>Type parameters:</strong> '?17602, '?17603, '?17604                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L71-71" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1457', 1457)" onmouseover="showTip(event, '1457', 1457)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1457">
+            <strong>Signature:</strong> (f:(&#39;?17598 -&gt; &#39;?17599 -&gt; &#39;?17600) * (IEnumerator&lt;&#39;?17598&gt; * IEnumerator&lt;&#39;?17599&gt;) * _mthd:Lift2) -&gt; IEnumerator&lt;&#39;?17600&gt;<br />
+                          <strong>Type parameters:</strong> '?17598, '?17599, '?17600                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L70-70" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1458', 1458)" onmouseover="showTip(event, '1458', 1458)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1458">
+            <strong>Signature:</strong> (f:(&#39;?17594 -&gt; &#39;?17595 -&gt; &#39;?17596) * (seq&lt;&#39;?17594&gt; * seq&lt;&#39;?17595&gt;) * _mthd:Lift2) -&gt; seq&lt;&#39;?17596&gt;<br />
+                          <strong>Type parameters:</strong> '?17594, '?17595, '?17596                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L69-69" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '1459', 1459)" onmouseover="showTip(event, '1459', 1459)">
+            Lift2.Lift2(f, arg2, _mthd)
+          </code>
+          <div class="tip" id="1459">
+            <strong>Signature:</strong> (f:(&#39;?17590 -&gt; &#39;?17591 -&gt; &#39;?17592) * (Lazy&lt;&#39;?17590&gt; * Lazy&lt;&#39;?17591&gt;) * _mthd:Lift2) -&gt; Lazy&lt;&#39;?17592&gt;<br />
+                          <strong>Type parameters:</strong> '?17590, '?17591, '?17592                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Applicative.fs#L68-68" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

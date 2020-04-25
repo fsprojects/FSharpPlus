@@ -49,10 +49,10 @@
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '717', 717)" onmouseover="showTip(event, '717', 717)">
+          <code onmouseout="hideTip(event, '766', 766)" onmouseover="showTip(event, '766', 766)">
             new()
           </code>
-          <div class="tip" id="717">
+          <div class="tip" id="766">
             <strong>Signature:</strong> unit -&gt; Builder<br />
                                   </div>
         </td>
@@ -75,10 +75,10 @@
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '718', 718)" onmouseover="showTip(event, '718', 718)">
+          <code onmouseout="hideTip(event, '767', 767)" onmouseover="showTip(event, '767', 767)">
             x.Bind(p, rest)
           </code>
-          <div class="tip" id="718">
+          <div class="tip" id="767">
             <strong>Signature:</strong> (p:^Monad&lt;&#39;T&gt; * rest:(&#39;T -&gt; ^Monad&lt;&#39;U&gt;)) -&gt; ^Monad&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<'U>, 'T                      </div>
         </td>
@@ -92,19 +92,36 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '719', 719)" onmouseover="showTip(event, '719', 719)">
+          <code onmouseout="hideTip(event, '768', 768)" onmouseover="showTip(event, '768', 768)">
+            x.BindReturn(x, f)
+          </code>
+          <div class="tip" id="768">
+            <strong>Signature:</strong> (x:^Monad&lt;&#39;T&gt; * f:(&#39;T -&gt; &#39;U)) -&gt; ^Monad&lt;&#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<'U>, 'T, 'U                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L39-39" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '769', 769)" onmouseover="showTip(event, '769', 769)">
             x.ChunkBy(x, f)
           </code>
-          <div class="tip" id="719">
-            <strong>Signature:</strong> (x:^?13685 * f:(&#39;T -&gt; &#39;key)) -&gt; ^?13686<br />
-                          <strong>Type parameters:</strong> ^?13685, ^?13686, 'T, 'key                        <span>
+          <div class="tip" id="769">
+            <strong>Signature:</strong> (x:^?13789 * f:(&#39;T -&gt; &#39;key)) -&gt; ^?13790<br />
+                          <strong>Type parameters:</strong> ^?13789, ^?13790, 'T, 'key                        <span>
             <strong>Attributes:</strong><br />
 [&lt;CustomOperation(&quot;chunkBy&quot;, AllowIntoPattern = true, MaintainsVariableSpaceUsingBind = true)&gt;]<br />
           </span>
           </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L52-52" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L54-54" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -113,19 +130,19 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '720', 720)" onmouseover="showTip(event, '720', 720)">
+          <code onmouseout="hideTip(event, '770', 770)" onmouseover="showTip(event, '770', 770)">
             x.GroupBy(x, f)
           </code>
-          <div class="tip" id="720">
-            <strong>Signature:</strong> (x:^?13680 * f:(&#39;T -&gt; &#39;key)) -&gt; ^?13681<br />
-                          <strong>Type parameters:</strong> ^?13680, ^?13681, 'T, 'key                        <span>
+          <div class="tip" id="770">
+            <strong>Signature:</strong> (x:^?13784 * f:(&#39;T -&gt; &#39;key)) -&gt; ^?13785<br />
+                          <strong>Type parameters:</strong> ^?13784, ^?13785, 'T, 'key                        <span>
             <strong>Attributes:</strong><br />
 [&lt;CustomOperation(&quot;groupBy&quot;, AllowIntoPattern = true, MaintainsVariableSpaceUsingBind = true)&gt;]<br />
           </span>
           </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L49-49" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L51-51" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -134,19 +151,36 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '721', 721)" onmouseover="showTip(event, '721', 721)">
+          <code onmouseout="hideTip(event, '771', 771)" onmouseover="showTip(event, '771', 771)">
+            x.MergeSources(t1, t2)
+          </code>
+          <div class="tip" id="771">
+            <strong>Signature:</strong> (t1:^Monad&lt;&#39;T&gt; * t2:^Monad&lt;&#39;U&gt;) -&gt; ^Monad&lt;&#39;T * &#39;U&gt;<br />
+                          <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<'U>, ^Monad<'T * 'U>, '?13766, '?13767                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L38-38" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '772', 772)" onmouseover="showTip(event, '772', 772)">
             x.OrderBy(x, f)
           </code>
-          <div class="tip" id="721">
-            <strong>Signature:</strong> (x:^?13690 * f:(&#39;T -&gt; &#39;key)) -&gt; ^?13690<br />
-                          <strong>Type parameters:</strong> ^?13690, 'T, 'key                        <span>
+          <div class="tip" id="772">
+            <strong>Signature:</strong> (x:^?13794 * f:(&#39;T -&gt; &#39;key)) -&gt; ^?13794<br />
+                          <strong>Type parameters:</strong> ^?13794, 'T, 'key                        <span>
             <strong>Attributes:</strong><br />
 [&lt;CustomOperation(&quot;orderBy&quot;, MaintainsVariableSpaceUsingBind = true, AllowIntoPattern = true)&gt;]<br />
           </span>
           </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L55-55" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L57-57" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -155,10 +189,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '722', 722)" onmouseover="showTip(event, '722', 722)">
+          <code onmouseout="hideTip(event, '773', 773)" onmouseover="showTip(event, '773', 773)">
             x.Return(x)
           </code>
-          <div class="tip" id="722">
+          <div class="tip" id="773">
             <strong>Signature:</strong> x:&#39;T -&gt; ^Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T, ^Monad<'T>                      </div>
         </td>
@@ -172,10 +206,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '723', 723)" onmouseover="showTip(event, '723', 723)">
+          <code onmouseout="hideTip(event, '774', 774)" onmouseover="showTip(event, '774', 774)">
             x.ReturnFrom(expr)
           </code>
-          <div class="tip" id="723">
+          <div class="tip" id="774">
             <strong>Signature:</strong> expr:&#39;Monad&lt;&#39;T&gt; -&gt; &#39;Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'Monad<'T>                      </div>
         </td>
@@ -189,19 +223,19 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '724', 724)" onmouseover="showTip(event, '724', 724)">
+          <code onmouseout="hideTip(event, '775', 775)" onmouseover="showTip(event, '775', 775)">
             x.Select(x, f)
           </code>
-          <div class="tip" id="724">
-            <strong>Signature:</strong> (x:^?13670 * f:(&#39;?13672 -&gt; &#39;?13673)) -&gt; ^?13671<br />
-                          <strong>Type parameters:</strong> ^?13670, ^?13671, '?13672, '?13673                        <span>
+          <div class="tip" id="775">
+            <strong>Signature:</strong> (x:^?13774 * f:(&#39;?13776 -&gt; &#39;?13777)) -&gt; ^?13775<br />
+                          <strong>Type parameters:</strong> ^?13774, ^?13775, '?13776, '?13777                        <span>
             <strong>Attributes:</strong><br />
 [&lt;CustomOperation(&quot;select&quot;, MaintainsVariableSpaceUsingBind = true, AllowIntoPattern = true)&gt;]<br />
           </span>
           </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L40-40" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L42-42" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -210,19 +244,19 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '725', 725)" onmouseover="showTip(event, '725', 725)">
+          <code onmouseout="hideTip(event, '776', 776)" onmouseover="showTip(event, '776', 776)">
             x.Top(source, n)
           </code>
-          <div class="tip" id="725">
-            <strong>Signature:</strong> (source:^?13678 * n:int) -&gt; ^?13678<br />
-                          <strong>Type parameters:</strong> ^?13678                        <span>
+          <div class="tip" id="776">
+            <strong>Signature:</strong> (source:^?13782 * n:int) -&gt; ^?13782<br />
+                          <strong>Type parameters:</strong> ^?13782                        <span>
             <strong>Attributes:</strong><br />
 [&lt;CustomOperation(&quot;top&quot;, MaintainsVariableSpaceUsingBind = true)&gt;]<br />
           </span>
           </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L46-46" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L48-48" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -231,19 +265,19 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '726', 726)" onmouseover="showTip(event, '726', 726)">
+          <code onmouseout="hideTip(event, '777', 777)" onmouseover="showTip(event, '777', 777)">
             x.Where(x, p)
           </code>
-          <div class="tip" id="726">
-            <strong>Signature:</strong> (x:^?13675 * p:(&#39;?13676 -&gt; bool)) -&gt; ^?13675<br />
-                          <strong>Type parameters:</strong> ^?13675, '?13676                        <span>
+          <div class="tip" id="777">
+            <strong>Signature:</strong> (x:^?13779 * p:(&#39;?13780 -&gt; bool)) -&gt; ^?13779<br />
+                          <strong>Type parameters:</strong> ^?13779, '?13780                        <span>
             <strong>Attributes:</strong><br />
 [&lt;CustomOperation(&quot;where&quot;, MaintainsVariableSpaceUsingBind = true)&gt;]<br />
           </span>
           </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L43-43" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L45-45" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -252,10 +286,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '727', 727)" onmouseover="showTip(event, '727', 727)">
+          <code onmouseout="hideTip(event, '778', 778)" onmouseover="showTip(event, '778', 778)">
             x.Yield(x)
           </code>
-          <div class="tip" id="727">
+          <div class="tip" id="778">
             <strong>Signature:</strong> x:&#39;T -&gt; ^Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T, ^Monad<'T>                      </div>
         </td>

@@ -57,10 +57,10 @@
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '501', 501)" onmouseover="showTip(event, '501', 501)">
+          <code onmouseout="hideTip(event, '532', 532)" onmouseover="showTip(event, '532', 532)">
             Free.apply f x
           </code>
-          <div class="tip" id="501">
+          <div class="tip" id="532">
             <strong>Signature:</strong> f:Free&lt;^Functor&lt;&#39;T-&gt;&#39;U&gt;,(&#39;T -&gt; &#39;U)&gt; -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> ^Functor<'T->'U>, ^Functor<Free<'Functor<'T->'U>,'T->'U>>, 'T, 'U, ^Functor<Free<'Functor<'U>,'U>>, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<'T>, ^Functor<'U>                      </div>
         </td>
@@ -74,10 +74,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '502', 502)" onmouseover="showTip(event, '502', 502)">
+          <code onmouseout="hideTip(event, '533', 533)" onmouseover="showTip(event, '533', 533)">
             Free.bind f x
           </code>
-          <div class="tip" id="502">
+          <div class="tip" id="533">
             <strong>Signature:</strong> f:(&#39;T -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, ^Functor<'U>, ^Functor<Free<'Functor<'U>,'U>>, 'U, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<'T>                      </div>
         </td>
@@ -91,15 +91,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '503', 503)" onmouseover="showTip(event, '503', 503)">
+          <code onmouseout="hideTip(event, '534', 534)" onmouseover="showTip(event, '534', 534)">
             Free.fold f x
           </code>
-          <div class="tip" id="503">
+          <div class="tip" id="534">
             <strong>Signature:</strong> f:(^Functor&lt;&#39;T&gt; -&gt; ^Monad&lt;&#39;T&gt;) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; ^Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> ^Functor<'T>, 'T, ^Monad<'T>                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L58-58" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L65-65" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -110,15 +110,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '504', 504)" onmouseover="showTip(event, '504', 504)">
+          <code onmouseout="hideTip(event, '535', 535)" onmouseover="showTip(event, '535', 535)">
             Free.iterM f x
           </code>
-          <div class="tip" id="504">
+          <div class="tip" id="535">
             <strong>Signature:</strong> f:(^Functor&lt;&#39;Monad&lt;&#39;T&gt;&gt; -&gt; ^Monad&lt;&#39;T&gt;) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; ^Monad&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> ^Functor<'Monad<'T>>, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<'T>, 'T, ^Monad<'T>                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L66-66" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L73-73" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -129,15 +129,15 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '505', 505)" onmouseover="showTip(event, '505', 505)">
+          <code onmouseout="hideTip(event, '536', 536)" onmouseover="showTip(event, '536', 536)">
             Free.liftF(x)
           </code>
-          <div class="tip" id="505">
+          <div class="tip" id="536">
             <strong>Signature:</strong> x:^Functor&lt;&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<Free<'Functor<'T>,'T>>, 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L74-74" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L81-81" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -148,10 +148,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '506', 506)" onmouseover="showTip(event, '506', 506)">
+          <code onmouseout="hideTip(event, '537', 537)" onmouseover="showTip(event, '537', 537)">
             Free.map f x
           </code>
-          <div class="tip" id="506">
+          <div class="tip" id="537">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, ^Functor<'T>, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<Free<'Functor<'U>,'U>>, ^Functor<'U>                      </div>
         </td>
@@ -165,10 +165,27 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '507', 507)" onmouseover="showTip(event, '507', 507)">
+          <code onmouseout="hideTip(event, '538', 538)" onmouseover="showTip(event, '538', 538)">
+            Free.map2 f x y
+          </code>
+          <div class="tip" id="538">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U -&gt; &#39;V) -&gt; x:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; y:Free&lt;^Functor&lt;&#39;U&gt;,&#39;U&gt; -&gt; Free&lt;^Functor&lt;&#39;V&gt;,&#39;V&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'V, ^Functor<'T>, ^Functor<Free<'Functor<'T>,'T>>, ^Functor<Free<'Functor<'V>,'V>>, ^Functor<Free<'Functor<'U>,'U>>, ^Functor<'U>, ^Functor<'V>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L57-57" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '539', 539)" onmouseover="showTip(event, '539', 539)">
             Free.run(f)
           </code>
-          <div class="tip" id="507">
+          <div class="tip" id="539">
             <strong>Signature:</strong> f:Free&lt;^Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Choice&lt;&#39;T,^Functor&lt;Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> ^Functor<'T>, ^Functor<Free<'Functor<'T>,'T>>, 'T                      </div>
         </td>

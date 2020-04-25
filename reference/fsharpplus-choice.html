@@ -57,10 +57,10 @@
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '19', 19)" onmouseover="showTip(event, '19', 19)">
+          <code onmouseout="hideTip(event, '20', 20)" onmouseover="showTip(event, '20', 20)">
             Choice.apply f x
           </code>
-          <div class="tip" id="19">
+          <div class="tip" id="20">
             <strong>Signature:</strong> f:Choice&lt;(&#39;T -&gt; &#39;U),&#39;Error&gt; -&gt; x:Choice&lt;&#39;T,&#39;Error&gt; -&gt; Choice&lt;&#39;U,&#39;Error&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, 'Error                      </div>
         </td>
@@ -80,15 +80,15 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '20', 20)" onmouseover="showTip(event, '20', 20)">
+          <code onmouseout="hideTip(event, '21', 21)" onmouseover="showTip(event, '21', 21)">
             Choice.bind binder source
           </code>
-          <div class="tip" id="20">
+          <div class="tip" id="21">
             <strong>Signature:</strong> binder:(&#39;T -&gt; Choice&lt;&#39;U,&#39;T2&gt;) -&gt; source:Choice&lt;&#39;T,&#39;T2&gt; -&gt; Choice&lt;&#39;U,&#39;T2&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, 'T2                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L36-36" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L43-43" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -99,15 +99,15 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '21', 21)" onmouseover="showTip(event, '21', 21)">
+          <code onmouseout="hideTip(event, '22', 22)" onmouseover="showTip(event, '22', 22)">
             Choice.bindChoice2Of2 binder source
           </code>
-          <div class="tip" id="21">
+          <div class="tip" id="22">
             <strong>Signature:</strong> binder:(&#39;T2 -&gt; Choice&lt;&#39;T,&#39;U2&gt;) -&gt; source:Choice&lt;&#39;T,&#39;T2&gt; -&gt; Choice&lt;&#39;T,&#39;U2&gt;<br />
                           <strong>Type parameters:</strong> 'T2, 'T, 'U2                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L45-45" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L52-52" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -118,10 +118,10 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '22', 22)" onmouseover="showTip(event, '22', 22)">
+          <code onmouseout="hideTip(event, '23', 23)" onmouseover="showTip(event, '23', 23)">
             Choice.catch f _arg1
           </code>
-          <div class="tip" id="22">
+          <div class="tip" id="23">
             <strong>Signature:</strong> f:(&#39;t -&gt; Choice&lt;&#39;v,&#39;e&gt;) -&gt; _arg1:Choice&lt;&#39;v,&#39;t&gt; -&gt; Choice&lt;&#39;v,&#39;e&gt;<br />
                           <strong>Type parameters:</strong> 't, 'v, 'e                        <span>
             <strong>Attributes:</strong><br />
@@ -134,7 +134,7 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
               <strong>WARNING: </strong> This API is obsolete
               <p>Use Choice.bindChoice2Of2</p>
               </div> 
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L39-39" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L46-46" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -143,15 +143,15 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '23', 23)" onmouseover="showTip(event, '23', 23)">
+          <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
             Choice.either(...)
           </code>
-          <div class="tip" id="23">
+          <div class="tip" id="24">
             <strong>Signature:</strong> fChoice1Of2:(&#39;a -&gt; &#39;b) -&gt; fChoice2Of2:(&#39;c -&gt; &#39;b) -&gt; source:Choice&lt;&#39;a,&#39;c&gt; -&gt; &#39;b<br />
                           <strong>Type parameters:</strong> 'a, 'b, 'c                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L52-52" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L59-59" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -162,15 +162,15 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
+          <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
             Choice.flatten(source)
           </code>
-          <div class="tip" id="24">
+          <div class="tip" id="25">
             <strong>Signature:</strong> source:Choice&lt;Choice&lt;&#39;T1,&#39;T2&gt;,&#39;T2&gt; -&gt; Choice&lt;&#39;T1,&#39;T2&gt;<br />
                           <strong>Type parameters:</strong> 'T1, 'T2                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L30-30" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L37-37" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -181,10 +181,10 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
+          <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
             Choice.map mapping source
           </code>
-          <div class="tip" id="25">
+          <div class="tip" id="26">
             <strong>Signature:</strong> mapping:(&#39;T -&gt; &#39;U) -&gt; source:Choice&lt;&#39;T,&#39;T2&gt; -&gt; Choice&lt;&#39;U,&#39;T2&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, 'T2                      </div>
         </td>
@@ -200,15 +200,34 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
+          <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
+            Choice.map2 f x y
+          </code>
+          <div class="tip" id="27">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U -&gt; &#39;V) -&gt; x:Choice&lt;&#39;T,&#39;Error&gt; -&gt; y:Choice&lt;&#39;U,&#39;Error&gt; -&gt; Choice&lt;&#39;V,&#39;Error&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'V, 'Error                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L31-31" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a Choice value from a pair of Choice values, using a function to combine the Choice1Of2 values.</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
             Choice.protect f x
           </code>
-          <div class="tip" id="26">
+          <div class="tip" id="28">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;T -&gt; Choice&lt;&#39;U,exn&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L55-55" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L62-62" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -219,12 +238,12 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
+          <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
             Choice.result(x)
           </code>
-          <div class="tip" id="27">
-            <strong>Signature:</strong> x:&#39;?22861 -&gt; Choice&lt;&#39;?22861,&#39;?22862&gt;<br />
-                          <strong>Type parameters:</strong> '?22861, '?22862                      </div>
+          <div class="tip" id="29">
+            <strong>Signature:</strong> x:&#39;?23300 -&gt; Choice&lt;&#39;?23300,&#39;?23301&gt;<br />
+                          <strong>Type parameters:</strong> '?23300, '?23301                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L8-8" class="github-link">
@@ -238,12 +257,12 @@ This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
+          <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
             Choice.throw(x)
           </code>
-          <div class="tip" id="28">
-            <strong>Signature:</strong> x:&#39;?22864 -&gt; Choice&lt;&#39;?22865,&#39;?22864&gt;<br />
-                          <strong>Type parameters:</strong> '?22864, '?22865                      </div>
+          <div class="tip" id="30">
+            <strong>Signature:</strong> x:&#39;?23303 -&gt; Choice&lt;&#39;?23304,&#39;?23303&gt;<br />
+                          <strong>Type parameters:</strong> '?23303, '?23304                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L11-11" class="github-link">
