@@ -78,12 +78,12 @@ Target.create "ReferenceDocs" (fun _ ->
    
         let conventionBased = 
             DirectoryInfo.getSubDirectories <| System.IO.DirectoryInfo bin
-            |> Array.filter (fun x -> not ( x.FullName.EndsWith("FSharpPlus.Samples")))
+            |> Array.filter (fun x -> not ( x.FullName.EndsWith("FSharpPlus.Docs") || x.FullName.EndsWith("FSharpPlus.Samples")))
             |> Array.collect (fun d ->
                 let (name, d) =
                     let net45Bin = DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath (d.FullName @@ "bin" @@ "Release")) |> Array.filter (fun x -> x.FullName.ToLower().Contains("net45"))
                     let net47Bin = DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath (d.FullName @@ "bin" @@ "Release")) |> Array.filter (fun x -> x.FullName.ToLower().Contains("net47"))
-                    if net45Bin.Length = 0 && net47Bin.Length = 0 then failwith "Failure: No binaries found."
+                    if net45Bin.Length = 0 && net47Bin.Length = 0 then failwithf "Failure: No binaries found for %s." d.FullName
                     if net45Bin.Length > 0 then d.Name, net45Bin.[0]
                     else d.Name, net47Bin.[0]
                 d.GetFiles ()

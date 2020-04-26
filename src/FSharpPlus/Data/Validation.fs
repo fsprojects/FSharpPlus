@@ -1,5 +1,8 @@
 namespace FSharpPlus.Data
 
+#nowarn "44"
+
+open System.ComponentModel
 open FSharpPlus
 
 #if !FABLE_COMPILER
@@ -7,9 +10,7 @@ open FSharpPlus.Lens
 #endif
 
 open FSharpPlus.Data
-open System.ComponentModel
 
-#nowarn "44"
 
 // Validation is based on https://github.com/qfpl/validation
 
@@ -47,16 +48,33 @@ module Validation =
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
 
+    let inline map2 f x y : Validation<'Error,'V> =
+        match (x: Validation<'Error,'T>), (y: Validation<'Error,'U>) with
+        #if !FABLE_COMPILER
+        | Failure e1, Failure e2 -> Failure (plus e1 e2)
+        #else
+        | Failure e1, Failure e2 -> Failure (e1 + e2)
+        #endif
+        | Failure e1, Success _  -> Failure e1
+        | Success _ , Failure e2 -> Failure e2
+        | Success x , Success y  -> Success (f x y)
+
     let inline foldBack (folder: 'T->'State->'State) (source: Validation<'Error,'T>) (state: 'State) =
         match source with
         | Success a -> folder a state
         | Failure _ -> state
 
     #if !FABLE_COMPILER
+
+    /// Traverse the Success case with the supplied function.
     let inline traverse (f: 'T->'``Functor<'U>``) (source: Validation<'Error,'T>) : '``Functor<Validation<'Error,'U>>`` =
         match source with
         | Success a -> Validation<'Error,'U>.Success <!> f a
         | Failure e -> result (Validation<'Error,'U>.Failure e)
+
+    /// Traverse the Success case.
+    let inline sequence (source: Validation<'Error,'``Functor<'T>``>) : '``Functor<Validation<'Error,'T>>`` = traverse id source
+
     #endif
 
     let bimap (f: 'T1->'U1) (g: 'T2->'U2) = function
@@ -74,10 +92,14 @@ module Validation =
         | Success a -> g a x
         | Failure e -> f e x
 
-    let inline bitraverse (f: 'T1->'``Functor<'U1>``) (g: 'T2->'``Functor<'U2>``) (source: Validation<'T1,'T2>) : '``Functor<Validation<'U1,'U2>>`` =
+    /// Like traverse but taking an additional function to traverse the Failure part as well.
+    let inline bitraverse (f: 'Error1->'``Functor<'Error2>``) (g: 'T1->'``Functor<'T2>``) (source: Validation<'Error1,'T1>) : '``Functor<Validation<'Error2,'T2>>`` =
         match source with
-        | Success a -> Validation<'U1,'U2>.Success <!> g a
-        | Failure e -> Validation<'U1,'U2>.Failure <!> f e
+        | Success a -> Validation<'Error2,'T2>.Success <!> g a
+        | Failure e -> Validation<'Error2,'T2>.Failure <!> f e
+
+    /// Like sequence but traversing the Failure part as well.
+    let inline bisequence (source: Validation<'``Functor<'Error>``,'``Functor<'T>``>) : '``Functor<Validation<'Error,'T>>`` = bitraverse id id source
 
     /// Binds through a Validation, which is useful for
     /// composing Validations sequentially. Note that despite having a bind
@@ -174,6 +196,7 @@ type Validation<'err,'a> with
     // as Applicative
     static member Return x = Success x
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
+    static member inline Lift2  (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
 
     #if !FABLE_COMPILER
     // as Alternative (inherits from Applicative)
@@ -190,9 +213,14 @@ type Validation<'err,'a> with
     static member Bimap (x: Validation<'T,'V>, f: 'T->'U, g: 'V->'W) : Validation<'U,'W> = Validation.bimap f g x
 
     #if !FABLE_COMPILER
+
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (t: Validation<'err,'a>, f: 'a->'b) : 'c = Validation.traverse f t
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Sequence (t: Validation<'err,'a>) : 'c = Validation.sequence t
+
     #endif
 
     // as Bifoldable
@@ -210,3 +238,10 @@ type Validation<'err,'a> with
         match t with
         | Failure a -> f z a
         | Success a -> g z a
+
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Bitraverse (t: Validation<'err,'a>, f, g) = Validation.bitraverse f g t
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Bisequence (t: Validation<'err,'a>) = Validation.bisequence t

@@ -1,7 +1,5 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Map<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Map =

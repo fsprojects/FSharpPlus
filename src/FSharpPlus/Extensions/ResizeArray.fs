@@ -1,19 +1,26 @@
-namespace FSharpPlus
+﻿namespace FSharpPlus
 
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
-module Array =
+module ResizeArray =
 
     open System
 
-    let apply f x =
-        let lenf, lenx = Array.length f, Array.length x
-        Array.init (lenf * lenx) (fun i -> f.[i / lenx] x.[i % lenx])
+    /// <summary>Builds a new ResizeArray whose elements are the results of applying the given function
+    /// to each of the elements of the ResizeArray.</summary>
+    ///
+    /// <param name="mapping">A function to transform items from the input ResizeArray.</param>
+    /// <param name="source">The input ResizeArray.</param>
+    ///
+    /// <returns>The result ResizeArray.</returns>
+    ///
+    /// <exception cref="System.ArgumentNullException">Thrown when the input ResizeArray is null.</exception>
+    let map (f: 'T->'U) (x: ResizeArray<'T>) = ResizeArray (Seq.map f x)
 
-    /// Combines all values from the first array with the second, using the supplied mapping function.
-    let lift2 f x y =
-        let lenx, leny = Array.length x, Array.length y
-        Array.init (lenx * leny) (fun i -> f x.[i / leny] y.[i % leny])
+    let apply (f: ResizeArray<'T->'U>) (x: ResizeArray<'T>) = ResizeArray (Seq.apply f x)
+
+    /// Combine all values from the first ResizeArray with the second, using the supplied mapping function.
+    let lift2 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) = ResizeArray (Seq.lift2 mapping x1 x2)
 
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
 

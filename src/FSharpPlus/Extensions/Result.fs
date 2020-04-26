@@ -1,7 +1,5 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Result<'T,'Error>
 [<RequireQualifiedAccess>]
 module Result =
@@ -17,6 +15,14 @@ module Result =
     /// <param name="x">The value wrapped in an Ok or an Error.</param>
     /// <returns>An Ok of the function applied to the value, or the first <c>Error</c> if either the function or the value is <c>Error</c>.</returns>
     let apply f (x: Result<'T,'Error>) : Result<'U,'Error> = match f, x with Ok a, Ok b -> Ok (a b) | Error e, _ | _, Error e -> Error e
+
+    
+    /// <summary>Creates a Result value from a pair of Result values, using a function to combine them.</summary>
+    /// <param name="x">The first Result value.</param>
+    /// <param name="y">The second Result value.</param>
+    ///
+    /// <returns>The combined value, or the first Error.</returns>
+    let map2 f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> = match x, y with Ok a, Ok b -> Ok (f a b) | Error e, _ | _, Error e -> Error e
 
     /// <summary>Flattens two nested Results.</summary>
     /// <param name="source">The nested Results.</param>

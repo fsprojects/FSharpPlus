@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Condition="'$(CompilerTest)' == 'true'">
+    <FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
+    <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Samples\*.fsx" />
+    <Compile Include="..\..\docsrc\content\applicative-functors.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\computation-expressions.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\extension-methods.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\extensions.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\generic-doc.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\lens.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\numerics.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\operators-common.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\tutorial.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\type-*.fsx">
+      <Link>Docs\Type\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="..\..\docsrc\content\abstraction-*.fsx">
+      <Link>Docs\Abstraction\%(FileName)%(Extension)</Link>	
+    </Compile>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
+      <Name>FSharpPlus</Name>
+      <Project>{4364a3ea-06d8-4493-be44-e22d5370cca1}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
+  </ItemGroup>
+</Project>

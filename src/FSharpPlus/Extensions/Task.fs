@@ -1,13 +1,12 @@
 namespace FSharpPlus
 
-open System
-
 #if !FABLE_COMPILER
 
 /// Additional operations on Task<'T>
 [<RequireQualifiedAccess>]
 module Task =
 
+    open System
     open System.Threading.Tasks
 
     /// <summary>Creates a task workflow from another workflow 'x', mapping its result with 'f'.</summary>

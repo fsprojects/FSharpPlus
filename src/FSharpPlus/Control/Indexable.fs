@@ -1,20 +1,19 @@
 ﻿namespace FSharpPlus.Control
 
+#nowarn "77"
+// Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
+// Those .NET types are string and array but they are explicitely handled here.
+
 #if !FABLE_COMPILER
 
 open System
-open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
 open FSharpPlus
 open FSharpPlus.Internals
 open FSharpPlus.Internals.MonadOps
-open FSharpPlus.Internals.Prelude
 
-#nowarn "77"
-// Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
-// Those .NET types are string and array but they are explicitely handled here.
 
 type Item =
     inherit Default1

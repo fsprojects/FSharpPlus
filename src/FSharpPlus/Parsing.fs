@@ -1,8 +1,9 @@
 ﻿namespace FSharpPlus
 
+#if !FABLE_COMPILER
+
 open FSharpPlus.Internals
 
-#if !FABLE_COMPILER
 
 [<AutoOpen>]
 module Parsing =

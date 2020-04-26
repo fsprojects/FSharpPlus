@@ -1,7 +1,5 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Choice
 [<RequireQualifiedAccess>]
 module Choice =
@@ -24,6 +22,13 @@ module Choice =
     /// <param name="value">The source input value.</param>
     /// <returns>A Choice1Of2 of the input value after applying the mapping function, or the original Choice2Of2 value if the input is Choice2Of2.</returns>
     let map (mapping: 'T->'U) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 (mapping v) | Choice2Of2 e -> Choice2Of2 e
+
+    /// <summary>Creates a Choice value from a pair of Choice values, using a function to combine the Choice1Of2 values.</summary>
+    /// <param name="x">The first Choice value.</param>
+    /// <param name="y">The second Choice value.</param>
+    ///
+    /// <returns>The combined value, or the first Choice2Of2.</returns>
+    let map2 f (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) : Choice<'V,'Error> = match x, y with Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (f a b) | Choice2Of2 e, _ | _, Choice2Of2 e -> Choice2Of2 e
 
     /// <summary>Flattens two nested Choice.</summary>
     /// <param name="source">The nested Choice.</param>

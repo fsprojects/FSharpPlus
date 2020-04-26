@@ -1,14 +1,16 @@
 ﻿namespace FSharpPlus.Data
+
 open System.ComponentModel
+open FSharpPlus
+open FSharpPlus.Internals.Prelude
+open FSharpPlus.Control
+
 
 /// <summary> Computation type: Computations which produce a stream of data in addition to the computed values.
 /// <para/>   Binding strategy: Combines the outputs of the subcomputations using <c>mappend</c>.
 /// <para/>   Useful for: Logging, or other computations that produce output "on the side". </summary>
 [<Struct>]
 type Writer<'monoid,'t> = Writer of ('t * 'monoid)
-
-open FSharpPlus
-open FSharpPlus.Internals.Prelude
 
 /// Basic operations on Writer
 [<RequireQualifiedAccess>]
@@ -64,7 +66,6 @@ type Writer<'monoid,'t> with
 
 #if !FABLE_COMPILER
 
-open FSharpPlus.Control
 
 /// Monad Transformer for Writer<'Monoid, 'T>
 [<Struct>]

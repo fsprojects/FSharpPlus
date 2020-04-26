@@ -1,13 +1,11 @@
 namespace FSharpPlus.Tests
 
+#nowarn "40" "49"
+
 open System
 open FSharpPlus
-open FSharpPlus.Builders
 open FSharpPlus.Data
-open NUnit.Framework
-
-open Helpers
-open SideEffects
+open FSharpPlus.Tests.Helpers
 
 module Free =
     
@@ -22,7 +20,7 @@ module Free =
     let aFreeOfIdentityFloat = aFreeOfIdentityInt >>= (fun x -> Roll (Identity (Pure (float x))))
 
     // Structural Equality
-    Assert.IsTrue ((aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]))
+    areStEqual aFreeOfListInt (Roll [Roll [Roll [Pure 2]]])
 
 
 module Sample1 =

@@ -1,10 +1,12 @@
 ﻿namespace FSharpPlus.Data
 
+#if !FABLE_COMPILER
+
 open FSharpPlus
 open System.ComponentModel
 open FSharpPlus.Internals.Prelude
 
-#if !FABLE_COMPILER
+
 /// Additional operations on List
 module List =
     let inline sequence (ms: list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequence ms

@@ -280,11 +280,10 @@ It looks the same as applying outside but in fact some effects occurs behind the
 To have a better idea let's move out of Option:
 *)
 
+[<AutoOpen>]
 module Async =
     let pure' x = async.Return x
     let (<*>) f x = async.Bind(f, fun x1 -> async.Bind(x, fun x2 -> pure'(x1 x2)))
-
-open Async
 
     
 let r23   = async {return (+)} <*> async {return 2} <*> async {return 3}

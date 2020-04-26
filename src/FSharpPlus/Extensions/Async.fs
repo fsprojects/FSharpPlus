@@ -1,10 +1,10 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on Async
 [<RequireQualifiedAccess>]
 module Async =
+
+    open System
 
     /// <summary>Creates an async workflow from another workflow 'x', mapping its result with 'f'.</summary>
     let map f x = async.Bind (x, async.Return << f)

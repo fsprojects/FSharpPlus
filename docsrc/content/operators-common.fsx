@@ -32,8 +32,8 @@ for flexibility, but isn't required in a specific instance.
 
 example:
 *)
-    > [1;2;3] |> filter (konst true);; 
-    val it : int list = [1; 2; 3]
+let a = [1;2;3] |> filter (konst true);; 
+// val a : int list = [1; 2; 3]
 
 (**
 curry, uncurry, curryN, uncurryN
@@ -49,11 +49,11 @@ and `uncurryN` work on any number.
 
 example:
 *)
-    > let addThreeNums (x, y, z) = x + y + z;;
-    val addThreeNums : x:int * y:int * z:int -> int
+let addThreeNums (x, y, z) = x + y + z;;
+// val addThreeNums : x:int * y:int * z:int -> int
 
-    > curryN addThreeNums 1 2 3;;
-    val it : int = 6
+let b = curryN addThreeNums 1 2 3;;
+// val it : int = 6
 
 (**
 Functions as operators - </ />
@@ -65,11 +65,11 @@ the first argument is coming from the left-hand-side.
 
 example:
 *)
-> let biggerThan a b = a > b;;
-val biggerThan : a:'a -> b:'a -> bool when 'a : comparison
+let biggerThan a b = a > b;;
+// val biggerThan : a:'a -> b:'a -> bool when 'a : comparison
 
-> 10 </biggerThan/> 3;;
-val it : bool = true
+let c = 10 </biggerThan/> 3;;
+// val c : bool = true
 
 (**
 tap
@@ -80,15 +80,15 @@ Consider this as 'tapping into' a chain of functions.
 
 example:
 *)
-    // a pipeline of functions, with a tap in the middle
-    let names = ["John"; "Smith"]
-    names |> map String.toUpper |> tap (printfn "%A") |> map String.toLower;;
+// a pipeline of functions, with a tap in the middle
+let names = ["John"; "Smith"]
+names |> map String.toUpper |> tap (printfn "%A") |> map String.toLower;;
 
-    // prints this:
-    ["JOHN"; "SMITH"]
+// prints this:
+// ["JOHN"; "SMITH"]
 
-    // but returns this:
-    val it : string list = ["john"; "smith"]
+// but returns this:
+// val it : string list = ["john"; "smith"]
 
 (**
 either
@@ -106,17 +106,17 @@ It takes a pair of functions:
  * source - the source value containing an Ok or Error
 
 *)
-    > let myResult = Ok "I am ok!";;
-    val myResult : Result<string,'a>
+let myResult = Ok "I am ok!";;
+// val myResult : Result<string,'a>
 
-    > let myOther = Error -1;;
-    val myOther : Result<'a,int>
+let myOther = Error -1;;
+// val myOther : Result<'a,int>
 
-    > either id id myResult;;
-    val it : string = "I am ok!"
+let d = either id id myResult;;
+// val d : string = "I am ok!"
 
-    > either id id myOther;;
-    val it : int = -1
+let e = either id id myOther;;
+// val e : int = -1
 
 (**
 Don't confuse the `either` function with `result` which lifts a value into a
@@ -129,7 +129,7 @@ option
 Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
 Otherwise, it applies the function to the value inside Some and returns the result.
 *)
-    let inline option f n = function Some x -> f x | None -> n
+let inline option f n = function Some x -> f x | None -> n
 
 (**
 
@@ -140,10 +140,10 @@ Functions that generate a tuple. The number indicates the number of arguments
 that are defined, and the corresponding size of tuple.
 
 *)
-    let inline tuple2 a b             = a,b
-    let inline tuple3 a b c           = a,b,c
-    let inline tuple4 a b c d         = a,b,c,d
-    let inline tuple5 a b c d e       = a,b,c,d,e
-    let inline tuple6 a b c d e f     = a,b,c,d,e,f
-    let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
-    let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
+let inline tuple2 a b             = a,b
+let inline tuple3 a b c           = a,b,c
+let inline tuple4 a b c d         = a,b,c,d
+let inline tuple5 a b c d e       = a,b,c,d,e
+let inline tuple6 a b c d e f     = a,b,c,d,e,f
+let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
+let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h

@@ -1,5 +1,5 @@
 #if INTERACTIVE
-#r @"../bin/Release/net45/FSharpPlus.dll"
+#r @"../../FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 #else
 module Samples.Conversions
 #endif

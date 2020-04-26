@@ -107,8 +107,8 @@ module Operators =
     /// Apply a lifted argument to a lifted function: f <*> arg
     let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
-    /// Apply 2 lifted arguments to a non-lifted function.
-    let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = (f <!> x : '``Applicative<'U->'V>``) <*> y
+    /// Applies 2 lifted arguments to a non-lifted function. Equivalent to map2 in non list-like types.
+    let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
     [<System.Obsolete("Use lift2 instead.")>]
     /// Apply 2 lifted arguments to a non-lifted function.
@@ -441,6 +441,7 @@ module Operators =
     /// Evaluate each action in the structure from left to right, and and collect the results.
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
+
     // Bifoldable
 
     /// Combines the elements of a structure, given ways of mapping them to a common monoid.
@@ -454,6 +455,16 @@ module Operators =
 
     /// Combines the elements of a structure using a monoid.
     let inline bisum (source: '``Bifoldable<'Monoid,'Monoid>``) : 'Monoid = Bisum.Invoke source
+
+    
+    // Bitraversable
+
+    // Evaluates the relevant functions at each element in the structure, running the action, and builds a new structure with the same shape, using the results produced from sequencing the actions.
+    let inline bitraverse (f: 'T1->'``Functor<'T2>``) (g: 'U1->'``Functor<'U2>``) (source: '``Bitraversable<'T1,'U1>``) : '``Functor<'Bitraversable<'T2,'U2>>`` = Bitraverse.Invoke f g source
+
+    // Sequences all the actions in a structure, building a new structure with the same shape using the results of the actions.
+    let inline bisequence (source: '``Bitraversable<'Functor<'T>,'Functor<'U>>``) : '``Functor<'Bitraversable<'T,'U>>`` = Bisequence.Invoke source
+
 
     // Indexable
 
@@ -845,6 +856,7 @@ module Operators =
     let inline split (sep: '``'Collection<'OrderedCollection>``) (source: 'OrderedCollection) = Split.Invoke sep source : '``'Collection<'OrderedCollection>``
 
 
+    #endif
 
     // Tuple
     
@@ -879,6 +891,7 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
+    #if !FABLE_COMPILER
     
     // Converter
 

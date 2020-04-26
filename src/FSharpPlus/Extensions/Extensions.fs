@@ -1,9 +1,9 @@
 namespace FSharpPlus
 
-open System
-
 /// Module containing F#+ Extension Methods on existing types
 module Extensions =
+
+    open System
 
     type Collections.Generic.IEnumerable<'T> with
         member this.GetSlice = function
@@ -87,6 +87,29 @@ module Extensions =
                 arr.[i] <- v
             return arr }
 
+        /// Creates an async Result from a Result where the Ok case is async.
+        static member Sequence (t: Result<Async<'T>, 'Error>) : Async<Result<'T,'Error>> =
+            match t with
+            | Ok a    -> Async.map Ok a
+            | Error e -> async.Return (Error e)
+
+        /// Creates an async Choice from a Choice where the Choice1Of2 case is async.
+        static member Sequence (t: Choice<Async<'T>, 'Choice2Of2>) : Async<Choice<'T,'Choice2Of2>> =
+            match t with
+            | Choice1Of2 a -> Async.map Choice1Of2 a
+            | Choice2Of2 e -> async.Return (Choice2Of2 e)
+
+        /// Creates an async Result from a Result where both cases are async.
+        static member Bisequence (t: Result<Async<'T>, Async<'Error>>) : Async<Result<'T,'Error>> =
+            match t with
+            | Ok a    -> Async.map Ok a
+            | Error e -> Async.map Error e
+
+        /// Creates an async Choice from a Choice where both cases are async.
+        static member Bisequence (t: Choice<Async<'T>, Async<'Choice2Of2>>) : Async<Choice<'T,'Choice2Of2>> =
+            match t with
+            | Choice1Of2 a -> Async.map Choice1Of2 a
+            | Choice2Of2 e -> Async.map Choice2Of2 e
 
     type Option<'t> with
 

@@ -1,3 +1,25 @@
+#### 1.1.0  - April 14 2020
+* Fix: issue with equality for DLists in Fable
+* Add Nullable module and map and bind overloads for Nullable
+* Add <= and >= Applicative Math operators
+
+#### 1.1.0-RC4  - March 31 2020
+* Fix: issue with Fable consumption of the library
+* Bitraversable abstraction
+* Fix: compatibility issue with 1.0 in a separate branch (from which it will be released)
+* Generic lift2 function made extensible and usable from F#5 preview's applicative CEs
+* Polymorphic itemX and mapItemX function working in Fable
+* More Traverse/Sequence overloads for extensions
+* Add Dictionary/Lazy extensions and some additionals for ResizeArray
+* Convert NonEmptyList builder empty list error in a compile-time error
+* ZipList as Alternative
+* ZipList without Equality
+* Conversion functions for NonEmptyList, replacing Unchecked module from previous RC
+* Fix: zero and empty for DList
+* Fix: defaults for zero function
+* Fix: ofSeq/ofList for IEnumerables
+* Rename LeftZero for Traversable/Alternative, fixed some issues and add some instances
+
 #### 1.1.0-RC3  - March 5 2020
 * Retarget Fable compilation to Extensions, some types from Data and abstractions Comonad, Invariant and Bind
 * Lens new functions: choosed and non

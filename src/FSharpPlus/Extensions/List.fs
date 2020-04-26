@@ -1,16 +1,19 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on List
 [<RequireQualifiedAccess>]
 module List =
+
+    open System
 
     /// Creates a list with a single element.
     let singleton x = [x]
 
     let cons x y = x :: y
     let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
+
+    /// Combines all values from the first list with the second, using the supplied mapping function.
+    let lift2 f x1 x2 = List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
 
     /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x

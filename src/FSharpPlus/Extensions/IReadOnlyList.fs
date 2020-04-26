@@ -1,7 +1,5 @@
 namespace FSharpPlus
 
-open System
-
 /// Additional operations on ReadOnlyList<'T>
 [<RequireQualifiedAccess>]
 module IReadOnlyList =

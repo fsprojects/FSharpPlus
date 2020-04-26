@@ -49,10 +49,14 @@ type Iterate =
         let inline call (_: ^M, source: ^I) =  ((^M or ^I) : (static member Iterate : _*_ -> _) source, action)
         call (Unchecked.defaultof<Iterate>, source)
 
+#endif
+
 type Map =
     inherit Default1
 
-    static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy<_>.Create (fun () -> f x.Value) : Lazy<'U>
+#if !FABLE_COMPILER
+
+    static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy.map f x
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
@@ -68,9 +72,9 @@ type Map =
     static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
     static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
     static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
-    static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d : Dictionary<'Key,'U>
+    static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = Dictionary.map f x : Dictionary<'Key,'U>
     static member Map ((x: Expr<'T>            , f: 'T->'U), _mthd: Map) = Expr.Cast<'U> (Expr.Application (Expr.Value (f), x))
-    static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray (Seq.map f x) : ResizeArray<'U>
+    static member Map ((x: ResizeArray<'T>     , f: 'T->'U), _mthd: Map) = ResizeArray.map f x
 
     // Restricted
     static member Map ((x: string              , f        ), _mthd: Map) = String.map f x
@@ -83,8 +87,13 @@ type Map =
         let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Map : (_*_)*_ -> _) (source, mapping), mthd)
         call (Unchecked.defaultof<Map>, source, Unchecked.defaultof<'``Functor<'U>``>)
 
+#endif
+
     static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map : _ * _ -> _) source, mapping)
+
+#if !FABLE_COMPILER
+
 
 type Map with
     static member inline Map ((x: '``Monad<'T>``       when '``Monad<'T>`` : (static member (>>=)  : '``Monad<'T>`` * ('T -> '``Monad<'U>``) -> '``Monad<'U>``)
@@ -100,6 +109,7 @@ type Map with
     static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d :> IDictionary<'Key,'U>
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.map f x : IReadOnlyDictionary<'Key,_>
     static member        Map ((x: IObservable<'T>         , f: 'T->'U), _mthd: Default2) = Observable.map f x       : IObservable<'U>
+    static member        Map ((x: Nullable<_>             , f: 'T->'U), _mthd: Default2) = Nullable.map f x         : Nullable<'U>
     static member inline Map ((x: '``Functor<'T>``        , f: 'T->'U), _mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
     static member inline Map ((_: ^t when ^t: null and ^t: struct, _ ), _mthd: Default1) = ()
 

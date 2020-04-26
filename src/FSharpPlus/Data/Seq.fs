@@ -2,9 +2,10 @@
 
 #if !FABLE_COMPILER
 
-open FSharpPlus
 open System.ComponentModel
+open FSharpPlus
 open FSharpPlus.Internals.Prelude
+
 
 /// Additional operations on Seq
 module Seq =

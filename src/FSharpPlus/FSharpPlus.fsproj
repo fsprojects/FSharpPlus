@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup Condition="'$(CompilerTest)' == 'true'">
     <FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
@@ -8,9 +8,8 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
-    <!--<VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>
-    </VersionSuffix>-->
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
@@ -30,18 +29,22 @@
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Internals.fs" />
+    <Compile Include="Internals.fs" />    
     <Compile Include="Extensions/Option.fs" />
+    <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
     <Compile Include="Extensions/Seq.fs" />
     <Compile Include="Extensions/IList.fs" />
     <Compile Include="Extensions/List.fs" />
     <Compile Include="Extensions/Array.fs" />
+    <Compile Include="Extensions/ResizeArray.fs" />
     <Compile Include="Extensions/String.fs" />
     <Compile Include="Extensions/IReadOnlyCollection.fs" />
     <Compile Include="Extensions/IReadOnlyList.fs" />
+    <Compile Include="Extensions/Lazy.fs" />
     <Compile Include="Extensions/Map.fs" />
+    <Compile Include="Extensions/Dictionary.fs" />
     <Compile Include="Extensions/Dict.fs" />
     <Compile Include="Extensions/IReadOnlyDictionary.fs" />
     <Compile Include="Extensions/Enumerator.fs" />
@@ -67,6 +70,7 @@
     <Compile Include="Control/ArrowChoice.fs" />
     <Compile Include="Control/ArrowApply.fs" />
     <Compile Include="Control/Bifoldable.fs" />
+    <Compile Include="Control/Bitraversable.fs" />
     <Compile Include="Control/Traversable.fs" />
     <Compile Include="Control/Indexable.fs" />
     <Compile Include="Control/MonadTrans.fs" />
@@ -91,27 +95,23 @@
     <Compile Include="Data/ZipList.fs" />
     <Compile Include="Data/ParallelArray.fs" />
     <Compile Include="Data/DList.fs" />
-    <Compile Include="Data/Validations.fs" />
+    <Compile Include="Data/Validation.fs" />
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
     <Compile Include="Data/Matrix.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
-    <None Include="Samples\Collections.fsx" />
-    <None Include="Samples\Split-Join.fsx" />
-    <None Include="Samples\Conversions.fsx" />
-    <None Include="Samples\ParallelArrays.fsx" />
-    <None Include="Samples\ZipLists.fsx" />
-    <None Include="Samples\Learn You a Haskell.fsx" />
-    <None Include="Samples\Cont.fsx" />
-    <None Include="Samples\MonadTrans.fsx" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
 
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
   <ItemGroup>
-    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
+    <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
+    <Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
+    <Content Include="Control/*.fs" PackagePath="fable/Control" />
+    <Content Include="Math/*.fs" PackagePath="fable/Math" />
+    <Content Include="Data/*.fs" PackagePath="fable/Data" />
   </ItemGroup>
 
   <!-- Add the provider dll to Nuget package -->

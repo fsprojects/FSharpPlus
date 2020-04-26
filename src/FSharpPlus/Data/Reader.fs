@@ -2,9 +2,11 @@
 
 #nowarn "1125"
 
+open System.ComponentModel
 open FSharpPlus
 open FSharpPlus.Control
-open System.ComponentModel
+
+
 /// <summary> Computation type: Computations which read values from a shared environment.
 /// <para/>   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
 /// <para/>   Useful for: Maintaining variable bindings, or other shared environment.</summary>
@@ -19,10 +21,11 @@ module Reader =
     let bind (f: 'T->_ ) (Reader m) = Reader (fun r -> run (f (m r)) r)    : Reader<'R,'U>
     let apply (Reader f) (Reader x) = Reader (fun a -> f a ((x: _->'T) a)) : Reader<'R,'U>
 
-#if !FABLE_COMPILER
+    /// Combines two Readers into one by applying a mapping function.
+    let map2 (mapping: 'T->'U->'V) (Reader x) (Reader y) = Reader (fun r -> mapping (x r) (y r)) : Reader<'R,'V>
+    
     /// Zips two Readers into one.
-    let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = lift2 tuple2 x y      : Reader<'R, 'T * 'U>
-#endif
+    let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = map2 tuple2 x y        : Reader<'R, 'T * 'U>
 
     /// Retrieves the monad environment.
     let ask = Reader id                                                    : Reader<'R,'R>
