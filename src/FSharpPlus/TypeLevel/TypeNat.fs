@@ -1,5 +1,6 @@
 namespace FSharpPlus.TypeLevel
 
+#if !FABLE_COMPILER
 
 type NatTypeError<'a>() =
   inherit TypeError<'a>()
@@ -108,3 +109,5 @@ module TypeNat =
 
   let inline Match (caseZ: Z -> _) (caseSn: S<'a> -> _) (n: ^Nat) =
     (^Nat: (static member Match: _*_*_->_) n, caseZ, caseSn)
+
+#endif

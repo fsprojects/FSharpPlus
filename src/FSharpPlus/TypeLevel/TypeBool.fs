@@ -1,5 +1,7 @@
 namespace FSharpPlus.TypeLevel
 
+#if !FABLE_COMPILER
+
 
 type BoolTypeError<'a>() =
   inherit TypeError<'a>()
@@ -49,3 +51,5 @@ module TypeBool =
   let inline Not (b: ^Bool) = (^Bool: (static member Not: _->_) b)
   let inline IfThenElse (cond: ^Bool) (a: 'a) (b: 'b) = (^Bool: (static member IfThenElse: _*_*_->'Result) cond,a,b)
   let inline Assert (_: True) = ()
+
+#endif

@@ -1,5 +1,7 @@
 namespace FSharpPlus.TypeLevel
 
+#if !FABLE_COMPILER
+
 /// Marker interface for type-level literals.
 ///
 /// #### Members
@@ -72,3 +74,5 @@ module TypeLevelOperators =
   
   /// If `x` is a type-level error, returns `onError`. Otherwise, returns `f x`.
   let inline TryWithCont (x: ^X) (f: _ -> _) onError = TryWithImpl.Invoke (x, onError, f)
+
+#endif

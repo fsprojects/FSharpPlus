@@ -1,5 +1,7 @@
 namespace FSharpPlus.Data
 
+#if !FABLE_COMPILER
+
 open System.Runtime.CompilerServices
 open FSharpPlus.Control
 open FSharpPlus.TypeLevel
@@ -633,3 +635,5 @@ module MatrixOperators =
     let t = ArrayToTuple.Invoke(xs, m) |> retype
     AssertTupleType.Invoke(t, Unchecked.defaultof<'at>, m)
     t
+
+#endif
