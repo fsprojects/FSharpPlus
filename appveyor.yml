@@ -1,6 +1,8 @@
 image: Visual Studio 2019
 init:
   - git config --global core.autocrlf input
+install:
+  - git submodule update --init --recursive
 build_script:
   - cmd: dotnet restore ./FSharpPlus.sln
   - cmd: dotnet build -c Release ./FSharpPlus.sln
