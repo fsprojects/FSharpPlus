@@ -19,6 +19,7 @@
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="BifoldableTests.fs" />
+    <Compile Include="TypeLevel.fs" />
     <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
   </ItemGroup>
   <ItemGroup>

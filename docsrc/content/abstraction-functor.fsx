@@ -86,6 +86,8 @@ From F#+
  -  ``Compose<'F<'G<'T>>>``
  -  ``Coproduct<'FunctorL<'T>,'FunctorR<'T>>``
  -  ``DList<'T>``
+ -  [``Vector<'T,'Dimension>``](type-vector.html)
+ -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
 
 Restricted:
  -  ``string``

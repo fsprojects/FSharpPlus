@@ -82,6 +82,9 @@ From F#+
  -  [``First<'T>``](type-first.html)
  -  [``Last<'T>``](type-last.html)
  -  [``DList<'T>``](type-dlist.html)
+ -  [``Vector<'T,'Dimension>``](type-vector.html)
+ -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
+
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

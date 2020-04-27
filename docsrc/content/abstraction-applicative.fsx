@@ -87,12 +87,15 @@ From F#+
  -  ``Const<'C,'T>``
  -  ``Compose<'F<'G<'T>>>``
  -  ``DList<'T>``
+ -  [``Vector<'T,'Dimension>``](type-vector.html)
+ -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
  
 Restricted:
  -  ``string``
  -  ``StringBuilder``
  -  ``Set<'T>``
  -  ``IEnumerator<'T>``
+
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
 Examples
