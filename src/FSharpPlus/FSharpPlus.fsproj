@@ -53,6 +53,9 @@
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
     <Compile Include="Extensions/Tuple.fs" />
+    <Compile Include="TypeLevel/TypeLevelOperators.fs" />
+    <Compile Include="TypeLevel/TypeBool.fs" />
+    <Compile Include="TypeLevel/TypeNat.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
@@ -98,10 +101,12 @@
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
+    <Compile Include="Data/Matrix.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
+
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
@@ -110,6 +115,19 @@
     <Content Include="Math/*.fs" PackagePath="fable/Math" />
     <Content Include="Data/*.fs" PackagePath="fable/Data" />
   </ItemGroup>
+
+  <!-- Add the provider dll to Nuget package -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);AddProviderToPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="AddProviderToPackage">
+    <Error Condition="!Exists('$(OutputPath)FSharpPlus.Providers.dll')" Text="FSharpPlus.Providers must be built before packaging." />
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.dll" />
+      <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.xml" />
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
   </ItemGroup>

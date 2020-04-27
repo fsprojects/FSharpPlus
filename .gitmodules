@@ -1,0 +1,3 @@
+[submodule "external/FSharp.TypeProvider.SDK"]
+	path = external/FSharp.TypeProviders.SDK
+	url = https://github.com/fsprojects/FSharp.TypeProviders.SDK.git
