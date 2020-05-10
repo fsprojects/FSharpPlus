@@ -421,8 +421,7 @@ type Intersperse =
 type Intercalate =
     inherit Default1
 
-    static member inline Intercalate (x: '``Foldable<'Monoid>``, e: 'Monoid          , [<Optional>]_impl: Default2   ) = let f t x = match t, x with (true, _), x -> false, x | (_, acc ), x -> (false, Plus.Invoke (Plus.Invoke acc e) x) in Fold.Invoke f (true, Zero.Invoke ()) x |> snd
-    static member inline Intercalate (x: seq<'``Foldable<'T>``>, e: '``Foldable<'T>``, [<Optional>]_impl: Default1   ) = x |> Seq.map ToSeq.Invoke |> Seq.intercalate (ToSeq.Invoke e) |> OfSeq.Invoke : '``Foldable<'T>``
+    static member inline Intercalate (x: '``Foldable<'Monoid>``, e: 'Monoid          , [<Optional>]_impl: Default1   ) = let f t x = match t, x with (true, _), x -> false, x | (_, acc ), x -> (false, Plus.Invoke (Plus.Invoke acc e) x) in Fold.Invoke f (true, Zero.Invoke ()) x |> snd
     static member inline Intercalate (_: seq<'``Foldable<'T>``>, _: ^t when ^t: null and ^t: struct  , _: Default1   ) = id
 
     static member        Intercalate (x: seq<list<'T>>         , e: list<'T>         , [<Optional>]_impl: Intercalate) = List.intercalate  e x

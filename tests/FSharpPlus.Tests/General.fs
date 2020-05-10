@@ -1676,11 +1676,9 @@ module Splits =
 
         let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
 
-        // Fails to compile but works in F#4.1
-        // let c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
-        // 
-
-        let d = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
+        let _c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
+        let d  = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
+        let _e = intercalate 10 (seq [1; 2; 3])
 
         Assert.IsTrue((a1 = a2))
         Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
