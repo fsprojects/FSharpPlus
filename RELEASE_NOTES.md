@@ -1,3 +1,7 @@
+#### 1.1.1  - May 10 2020
+* Fix: issue with generic intercalate function
+* Fix: traverse for seq of asyncs
+
 #### 1.1.0  - April 14 2020
 * Fix: issue with equality for DLists in Fable
 * Add Nullable module and map and bind overloads for Nullable
