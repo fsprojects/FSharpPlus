@@ -77,11 +77,6 @@ let evaluationOptions =
 let compilerOptions = 
     String.concat " " ( Array.toList evaluationOptions)
 
-// PlantUml processing
-let abstractions = Path.templates </> "abstractions.plantuml"
-let plantUMLDiag = toUrl (IO.File.ReadAllText abstractions)
-let customize (doc:LiterateDocument) = doc.With (paragraphs = (doc.Paragraphs |>> function InlineBlock (x,y) -> InlineBlock ((replace "{plantUMLDiag}" plantUMLDiag x),y) | x -> x))
-
 let parseFsx path =
 
     let doc = 
@@ -90,7 +85,7 @@ let parseFsx path =
                   compilerOptions = compilerOptions,
                   fsiEvaluator = FSharp.Literate.FsiEvaluator(evaluationOptions))
     
-    let body = FSharp.Literate.Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true) |> customize
+    let body = FSharp.Literate.Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true)
     for err in doc.Errors do
         Printf.printfn "%A" err
     body, body.FormattedTips
@@ -102,7 +97,7 @@ let parseMd path =
                   path,
                   compilerOptions = compilerOptions,
                   fsiEvaluator = FSharp.Literate.FsiEvaluator(evaluationOptions))
-    let body = FSharp.Literate.Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true) |> customize
+    let body = FSharp.Literate.Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true)
     for err in doc.Errors do
         Printf.printfn "%A" err
     body, body.FormattedTips

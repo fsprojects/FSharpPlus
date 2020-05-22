@@ -3,111 +3,111 @@ skinparam svgDimensionStyle false
 
 together {
 	abstract class Semigroup [[http://fsprojects.github.io/FSharpPlus/abstraction-semigroup.html]] {
-	  + (+) x y [[[http://fsprojects.github.io/FSharpPlus/abstraction-semigroup.html#plus {Appends two semigroups} ]]]
+	  + (+) x y
 	}
 
 	abstract class Comonad [[http://fsprojects.github.io/FSharpPlus/abstraction-comonad.html]] {
-	  + extract x [[[http://fsprojects.github.io/FSharpPlus/abstraction-comonad.html#extract]]]
-	  + (=>>) s g | extend s g [[[http://fsprojects.github.io/FSharpPlus/abstraction-comonad.html#extend]]]
+	  + extract x
+	  + (=>>) s g | extend s g
 	  ==
 	  + duplicate x
 	}
 }
 
 abstract class Monoid [[http://fsprojects.github.io/FSharpPlus/abstraction-monoid.html]] {
-  + zero [[[http://fsprojects.github.io/FSharpPlus/abstraction-monoid.html#zero {Identity for (+)} ]]]
-  + (+) x y [[[http://fsprojects.github.io/FSharpPlus/abstraction-monoid.html#plus {Appends both monoids} ]]]
+  + zero
+  + (+) x y {Appends both monoids}
   ==
-  + Seq.sum x [[[http://fsprojects.github.io/FSharpPlus/abstraction-monoid.html#sum {Flatten a sequence of monoids} ]]]
+  + Seq.sum x
 }
 
 
 abstract class Functor [[http://fsprojects.github.io/FSharpPlus/abstraction-functor.html]] {
-  + map f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]]
+  + map f x
   ==
   + unzip x
 }
 
 abstract class Contravariant [[http://fsprojects.github.io/FSharpPlus/abstraction-contravariant.html]] {
-  + contramap f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-contravariant.html#contramap]]]
+  + contramap f x
 }
 
 
 abstract class Applicative [[http://fsprojects.github.io/FSharpPlus/abstraction-applicative.html]] {
-  + return x [[[http://fsprojects.github.io/FSharpPlus/abstraction-monad.html#return {Lift a value into a Functor} ]]]
-  + (<*>) f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-applicative.html {Apply a lifted argument to a lifted function} ]]]
+  + return x
+  + (<*>) f x
   ==
-  + map f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]]
-  + lift2 f x y [[[http://fsprojects.github.io/FSharpPlus/abstraction-applicative.html#lift2 {Applies 2 lifted values to a non-lifted function} ]]]
+  + map f x
+  + lift2 f x y
 }
 
 abstract class Alternative [[http://fsprojects.github.io/FSharpPlus/abstraction-alternative.html]] {
-  + empty [[[http://fsprojects.github.io/FSharpPlus/abstraction-alternative.html]]]
-  + (<|>) f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-alternative.html]]]
+  + empty
+  + (<|>) f x
   ==
-  + mfilter p x [[[http://fsprojects.github.io/FSharpPlus/abstraction-alternative.html#mfilter {Returns all values satisfying the predicate, if the predicate returns false will use the empty value} ]]]
+  + mfilter p x
 }
 
 abstract class Monad [[http://fsprojects.github.io/FSharpPlus/abstraction-monad.html]] {
-  + return x [[[http://fsprojects.github.io/FSharpPlus/abstraction-monad.html#return {Lift a value into a Functor} ]]]
-  + (>>=) x f [[[http://fsprojects.github.io/FSharpPlus/abstraction-monad.html#bind {Takes a monadic value and a function from a plain type to a monadic value, and returns a new monadic value} ]]]
+  + return x
+  + (>>=) x f
   ==
-  + map f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-functor.html#map {Lift a function into a Functor} ]]]
-  + join x [[[http://fsprojects.github.io/FSharpPlus/abstraction-functor.html#join {Flattens two layers of monadic information into one} ]]]
+  + map f x
+  + join x
 }
 
 
 abstract class Bifunctor [[http://fsprojects.github.io/FSharpPlus/abstraction-bifunctor.html]] {
-  + {static} bimap f g x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifunctor.html#bimap]]]
-  + first f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifunctor.html#first]]]
-  + second f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifunctor.html#second]]]
+  + {static} bimap f g x
+  + first f x
+  + second f x
 }
 
 
 
 abstract class Foldable [[http://fsprojects.github.io/FSharpPlus/abstraction-foldable.html]] {
-  {static} + toSeq x [[[http://fsprojects.github.io/FSharpPlus/abstraction-foldable.html#toSeq {Converts to a seq} ]]]
+  {static} + toSeq x
 }
 
 abstract class Bifoldable [[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html]] {
-  {static} + bifoldMap f g x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifoldMap]]]
-  {static} + bifold f g z x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifold]]]
-  {static} + bifoldBack f g x z [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bifoldBack]]]
-  + bisum x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bifoldable.html#bisum]]]
+  {static} + bifoldMap f g x
+  {static} + bifold f g z x
+  {static} + bifoldBack f g x z
+  + bisum x
 }
 
 abstract class Traversable [[http://fsprojects.github.io/FSharpPlus/abstraction-traversable.html]] {
-  {static} + traverse f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-traversable.html#traverse {Map each element of a structure to an action, evaluate them left to right and collect result }]]]
-  + sequence x [[[http://fsprojects.github.io/FSharpPlus/abstraction-traversable.html#sequence {Evaluate each action in the structure left to right and collect the result } ]]]
+  {static} + traverse f x
+  + sequence x
 }
 
 abstract class Bitraversable [[http://fsprojects.github.io/FSharpPlus/abstraction-bitraversable.html]] {
-  {static} + bitraverse f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bitraversable.html#bitraverse {Evaluates the relevant functions at each element in the structure, running the action, and collect results }]]]
-  + bisequence x [[[http://fsprojects.github.io/FSharpPlus/abstraction-bitraversable.html#bisequence {Sequences all the actions in a structure, building a new structure with the same shape using the results of the actions } ]]]
+  {static} + bitraverse f x
+  + bisequence x
 }
 
 together {
 	abstract class Profunctor [[http://fsprojects.github.io/FSharpPlus/abstraction-profunctor.html]] {
-	  + {static} dimap f g x [[[http://fsprojects.github.io/FSharpPlus/abstraction-profunctor.html#dimap]]]
-	  + lmap f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-profunctor.html#lmap]]]
-	  + rmap f x [[[http://fsprojects.github.io/FSharpPlus/abstraction-profunctor.html#rmap]]]
+	  + {static} dimap f g x
+	  + lmap f x
+	  + rmap f x
 	}
 
 	abstract class Category [[http://fsprojects.github.io/FSharpPlus/abstraction-category.html]] {
-	  + catId [[[http://fsprojects.github.io/FSharpPlus/abstraction-category.html#catId {The identity morphism. }]]]
-	  + (<<<) f g [[[http://fsprojects.github.io/FSharpPlus/abstraction-category.html#catComp {Right-to-left morphism composition. } ]]]
+	  + catId
+	  + (<<<) f g
 	  ==
-	  + (>>>) f g [[[http://fsprojects.github.io/FSharpPlus/abstraction-category.html#catComp {Left-to-right morphism composition. } ]]]
+	  + (>>>) f g
 	}
 }
 
 abstract class Arrow [[http://fsprojects.github.io/FSharpPlus/abstraction-arrow.html]] {
-  + arr f [[[http://fsprojects.github.io/FSharpPlus/abstraction-arrow.html#arr {Lift a function to an arrow. }]]]
-  + arrFirst f g [[[http://fsprojects.github.io/FSharpPlus/abstraction-arrow.html#arrFirst {Send the 1st component of the input through the argument arrow and copy the rest unchanged to the output. } ]]]
+  + arr f
+  + arrFirst f g
   ==
-  + arrSecond f g [[[http://fsprojects.github.io/FSharpPlus/abstraction-arrow.html#arrSecond {Send the 2nd component of the input through the argument arrow and copy the rest unchanged to the output. } ]]]
-  + (***) f g [[[http://fsprojects.github.io/FSharpPlus/abstraction-arrow.html#arrCombine {Split the input between the two argument arrows and combine their output. } ]]]
-  + (&&&) f g [[[http://fsprojects.github.io/FSharpPlus/abstraction-arrow.html#fanout {Send the input to both argument arrows and combine their output. } ]]]
+  + arrSecond f g
+  + (***) f g
+  + (&&&) f g
 }
 
 
