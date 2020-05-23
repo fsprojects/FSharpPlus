@@ -1,6 +1,0 @@
-FSharp.Core
-group Test
-MathNet.Numerics
-MathNet.Numerics.FSharp
-NUnit
-NUnit.Runners
