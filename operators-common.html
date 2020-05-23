@@ -3,9 +3,9 @@
 <p>These generic functions and operators are used commonly and are not part
 of any other abstraction.</p>
 <p>You can find these in the API docs: <a href="reference/operators.html">Operators.fs</a></p>
-<h1><a name="flip" class="anchor" href="#flip">flip</a></h1>
+<h2><a name="flip" class="anchor" href="#flip">flip</a></h2>
 <p>Creates a new function with first two arguments flipped.</p>
-<h1><a name="konst" class="anchor" href="#konst">konst</a></h1>
+<h2><a name="konst" class="anchor" href="#konst">konst</a></h2>
 <p>Create a function that always returns the given argument.
 This is known as a 'constant' function.</p>
 <p>This is commonly useful where a function is required as a parameter
@@ -19,7 +19,7 @@ for flexibility, but isn't required in a specific instance.</p>
 </code></pre></td>
 </tr>
 </table>
-<h1><a name="curry-uncurry-curryN-uncurryN" class="anchor" href="#curry-uncurry-curryN-uncurryN">curry, uncurry, curryN, uncurryN</a></h1>
+<h2><a name="curry-uncurry-curryN-uncurryN" class="anchor" href="#curry-uncurry-curryN-uncurryN">curry, uncurry, curryN, uncurryN</a></h2>
 <p>Currying is the process of taking a function expecting a tuple, and returning a
 function with the same number of arguments as the tuple size.</p>
 <p>Uncurrying is the reverse process.</p>
@@ -40,7 +40,7 @@ and <code>uncurryN</code> work on any number.</p>
 </code></pre></td>
 </tr>
 </table>
-<h1><a name="Functions-as-operators" class="anchor" href="#Functions-as-operators">Functions as operators - </ /></a></h1>
+<h2><a name="Functions-as-operators" class="anchor" href="#Functions-as-operators">Functions as operators - </ /></a></h2>
 <p>A pair of operators <code>&lt;/</code> and <code>/&gt;</code> are defined to allow any function to be used as
 an operator. It will flip the args of your function so that it makes sense when
 the first argument is coming from the left-hand-side.</p>
@@ -59,7 +59,7 @@ the first argument is coming from the left-hand-side.</p>
 </code></pre></td>
 </tr>
 </table>
-<h1><a name="tap" class="anchor" href="#tap">tap</a></h1>
+<h2><a name="tap" class="anchor" href="#tap">tap</a></h2>
 <p>Tap executes a side-effect function, then returns the original input value.
 Consider this as 'tapping into' a chain of functions.</p>
 <p>example:</p>
@@ -85,7 +85,7 @@ Consider this as 'tapping into' a chain of functions.</p>
 </code></pre></td>
 </tr>
 </table>
-<h1><a name="either" class="anchor" href="#either">either</a></h1>
+<h2><a name="either" class="anchor" href="#either">either</a></h2>
 <p>Extracts the value inside a Result from either side - whether Ok or Error.</p>
 <p>It takes a pair of functions:</p>
 <ul>
@@ -124,7 +124,7 @@ Consider this as 'tapping into' a chain of functions.</p>
 </table>
 <p>Don't confuse the <code>either</code> function with <code>result</code> which lifts a value into a
 Functor, just like <code>return</code> when in a computation expression.</p>
-<h1><a name="option" class="anchor" href="#option">option</a></h1>
+<h2><a name="option" class="anchor" href="#option">option</a></h2>
 <p>Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
 Otherwise, it applies the function to the value inside Some and returns the result.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -133,7 +133,7 @@ Otherwise, it applies the function to the value inside Some and returns the resu
 </code></pre></td>
 </tr>
 </table>
-<h1><a name="tuple2-tuple3-tuple8" class="anchor" href="#tuple2-tuple3-tuple8">tuple2, tuple3, ...tuple8</a></h1>
+<h2><a name="tuple2-tuple3-tuple8" class="anchor" href="#tuple2-tuple3-tuple8">tuple2, tuple3, ...tuple8</a></h2>
 <p>Functions that generate a tuple. The number indicates the number of arguments
 that are defined, and the corresponding size of tuple.</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
@@ -154,4 +154,32 @@ that are defined, and the corresponding size of tuple.</p>
 </code></pre></td>
 </tr>
 </table>
+<h2><a name="Explicit" class="anchor" href="#Explicit">Explicit</a></h2>
+<p>Explicit allows you to use <code>explicit</code> generic method for standard types and types that implement the static explicit type cast signature.</p>
+<h3><a name="Minimal-definition" class="anchor" href="#Minimal-definition">Minimal definition</a></h3>
+<p>In order to use the <code>explicit</code> generic method together with a type it needs to implement the following:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="f#">static member op_Explicit (x:'r) :'T
+</code></pre></td></tr></table>
+<p>or in c#</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="c#">public static explicit operator T(R s)
+</code></pre></td></tr></table>
+<p>This is useful when dealing with c# libraries that make heavy use of explicit conversions.</p>
+<h2><a name="Implicit" class="anchor" href="#Implicit">Implicit</a></h2>
+<p>Implicit allows you to use <code>implicit</code> generic method for standard types and types that implement the static implicit type cast signature.</p>
+<h3><a name="Minimal-definition-1" class="anchor" href="#Minimal-definition-1">Minimal definition</a></h3>
+<p>In order to use the <code>implicit</code> generic method together with a type it needs to implement the following:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="f#">static member op_Implicit (x:'r) :'T
+</code></pre></td></tr></table>
+<p>or in c#</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="c#">public static implicit operator T(R s)
+</code></pre></td></tr></table>
+<p>This is useful when dealing with c# libraries that make heavy use of implicit conversions.</p>
 </div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./reference/index.html">API Reference</a></li><li><a href="./types.html">Types</a></li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>

@@ -1,13 +1,55 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="Parsing" class="anchor" href="#Parsing">Parsing</a></h1>
+<p>F#+ provides several helper methods in order to simplify building parsers and parsing like tasks.</p>
+<h2><a name="sscanf-trySscanf-and-friends" class="anchor" href="#sscanf-trySscanf-and-friends">sscanf, trySscanf and friends</a></h2>
 <p>In f# you have some nice utility functions for creating printf style string writer function. In f#+ we find the inverse: sscanf and trySscanf.</p>
 <p>For instance if you want to parse based on known format of a url:</p>
 <table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
 <span class="l">2: </span>
 </pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)" class="fn">route1</span> <span onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)" class="fn">trySscanf</span> <span class="s">&quot;/api/resource/</span><span class="pf">%d</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, '3', 5)" onmouseover="showTip(event, '3', 5)" class="id">x</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '5', 6)" onmouseover="showTip(event, '5', 6)" class="id">parsed</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '6', 7)" onmouseover="showTip(event, '6', 7)" class="vt">int</span> <span onmouseout="hideTip(event, '7', 8)" onmouseover="showTip(event, '7', 8)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, '2', 9)" onmouseover="showTip(event, '2', 9)" class="fn">route1</span> <span class="s">&quot;/api/resource/1&quot;</span>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)" class="fn">route1</span> <span onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)" class="fn">trySscanf</span> <span class="s">&quot;/api/resource/</span><span class="pf">%d</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, '4', 6)" onmouseover="showTip(event, '4', 6)" class="id">x</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, '6', 7)" onmouseover="showTip(event, '6', 7)" class="id">parsed</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '7', 8)" onmouseover="showTip(event, '7', 8)" class="vt">int</span> <span onmouseout="hideTip(event, '8', 9)" onmouseover="showTip(event, '8', 9)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, '3', 10)" onmouseover="showTip(event, '3', 10)" class="fn">route1</span> <span class="s">&quot;/api/resource/1&quot;</span>
 </code></pre></td>
 </tr>
 </table>
+<h2><a name="TryParse" class="anchor" href="#TryParse">TryParse</a></h2>
+<p>TryParse allows you to use <code>tryParse</code> generic method for standard types and types that implement a static TryParse method with the correct signature.</p>
+<h3><a name="Minimal-definition" class="anchor" href="#Minimal-definition">Minimal definition</a></h3>
+<p>In order to use <code>tryParse</code> together with a type the type needs to implement a TryParse like static method.</p>
+<p>You can use f# style TryParse:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="f#">static member TryParse(value:'r) : 'T option
+</code></pre></td></tr></table>
+<p>or c# style TryParse:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="f#">static member TryParse (x:'r, [&lt;Out&gt;] result: 'T byref) :bool
+</code></pre></td></tr></table>
+<p>expressed in c# that would be:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="c#">public static bool TryParse (string x, out T result) 
+</code></pre></td></tr></table>
+<p>A neat thing when you have types that implement the above definition is that it's simple to define active patterns:</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="pn">(</span><span class="fn">|</span><span class="uc">Port</span><span class="pn">|</span><span class="id">_</span><span class="pn">|</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">_</span><span class="k">-&gt;</span> <span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="vt">UInt16</span> <span onmouseout="hideTip(event, '8', 12)" onmouseover="showTip(event, '8', 12)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, '10', 13)" onmouseover="showTip(event, '10', 13)" class="fn">tryParse</span>
+<span class="k">let</span> <span class="pn">(</span><span class="fn">|</span><span class="uc">IPAddress</span><span class="pn">|</span><span class="id">_</span><span class="pn">|</span><span class="pn">)</span> <span class="pn">:</span><span class="id">_</span><span class="k">-&gt;</span><span onmouseout="hideTip(event, '1', 14)" onmouseover="showTip(event, '1', 14)" class="rt">System</span><span class="pn">.</span><span onmouseout="hideTip(event, '11', 15)" onmouseover="showTip(event, '11', 15)" class="id">Net</span><span class="pn">.</span><span onmouseout="hideTip(event, '12', 16)" onmouseover="showTip(event, '12', 16)" class="id">IPAddress</span> <span onmouseout="hideTip(event, '8', 17)" onmouseover="showTip(event, '8', 17)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, '10', 18)" onmouseover="showTip(event, '10', 18)" class="fn">tryParse</span>
+</code></pre></td>
+</tr>
+</table>
+<h2><a name="Parse" class="anchor" href="#Parse">Parse</a></h2>
+<p>Parse allows you to use <code>parse</code> generic method for standard types and types that implement a static Parse method with the correct signature.</p>
+<h3><a name="Minimal-definition-1" class="anchor" href="#Minimal-definition-1">Minimal definition</a></h3>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="f#">static member Parse (x:'r) :'T
+</code></pre></td></tr></table>
+<p>or</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip"><code lang="f#">static member Parse (x:'r, c:CultureInfo) :'T
+</code></pre></td></tr></table>
 </div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./reference/index.html">API Reference</a></li><li><a href="./types.html">Types</a></li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>

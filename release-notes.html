@@ -1,5 +1,34 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h4><a name="1-1-0-RC3-March-5-2020" class="anchor" href="#1-1-0-RC3-March-5-2020">1.1.0-RC3  - March 5 2020</a></h4>
+<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h4><a name="1-1-1-May-10-2020" class="anchor" href="#1-1-1-May-10-2020">1.1.1  - May 10 2020</a></h4>
+<ul>
+<li>Fix: issue with generic intercalate function</li>
+<li>Fix: traverse for seq of asyncs</li>
+</ul>
+<h4><a name="1-1-0-April-14-2020" class="anchor" href="#1-1-0-April-14-2020">1.1.0  - April 14 2020</a></h4>
+<ul>
+<li>Fix: issue with equality for DLists in Fable</li>
+<li>Add Nullable module and map and bind overloads for Nullable</li>
+<li>Add <= and >= Applicative Math operators</li>
+</ul>
+<h4><a name="1-1-0-RC4-March-31-2020" class="anchor" href="#1-1-0-RC4-March-31-2020">1.1.0-RC4  - March 31 2020</a></h4>
+<ul>
+<li>Fix: issue with Fable consumption of the library</li>
+<li>Bitraversable abstraction</li>
+<li>Fix: compatibility issue with 1.0 in a separate branch (from which it will be released)</li>
+<li>Generic lift2 function made extensible and usable from F#5 preview's applicative CEs</li>
+<li>Polymorphic itemX and mapItemX function working in Fable</li>
+<li>More Traverse/Sequence overloads for extensions</li>
+<li>Add Dictionary/Lazy extensions and some additionals for ResizeArray</li>
+<li>Convert NonEmptyList builder empty list error in a compile-time error</li>
+<li>ZipList as Alternative</li>
+<li>ZipList without Equality</li>
+<li>Conversion functions for NonEmptyList, replacing Unchecked module from previous RC</li>
+<li>Fix: zero and empty for DList</li>
+<li>Fix: defaults for zero function</li>
+<li>Fix: ofSeq/ofList for IEnumerables</li>
+<li>Rename LeftZero for Traversable/Alternative, fixed some issues and add some instances</li>
+</ul>
+<h4><a name="1-1-0-RC3-March-5-2020" class="anchor" href="#1-1-0-RC3-March-5-2020">1.1.0-RC3  - March 5 2020</a></h4>
 <ul>
 <li>Retarget Fable compilation to Extensions, some types from Data and abstractions Comonad, Invariant and Bind</li>
 <li>Lens new functions: choosed and non</li>

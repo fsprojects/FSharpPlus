@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Vector<'Item, 'Length> - FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="Gusty"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+<h1>Vector<'Item, 'Length></h1>
+<p>
+
+    <span>Namespace: FSharpPlus.Data</span><br />
+            <span>
+            Attributes: <br />
+[&lt;Struct&gt;]<br />
+[&lt;StructuredFormatDisplay(&quot;{Items}&quot;)&gt;]<br />
+            
+        </span>
+</p>
+<div class="xmldoc">
+</div>
+  <h3>Record Fields</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Record Field</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2841', 2841)" onmouseover="showTip(event, '2841', 2841)">
+            Items
+          </code>
+          <div class="tip" id="2841">
+            <strong>Signature:</strong> &#39;Item []<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L33-33" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2842', 2842)" onmouseover="showTip(event, '2842', 2842)">
+            x.UnsafeGet(i)
+          </code>
+          <div class="tip" id="2842">
+            <strong>Signature:</strong> i:int -&gt; &#39;Item<br />
+                                    <span>
+            <strong>Attributes:</strong><br />
+[&lt;MethodImpl(256)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L35-35" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2843', 2843)" onmouseover="showTip(event, '2843', 2843)">
+            Vector.( - )(v1, v2)
+          </code>
+          <div class="tip" id="2843">
+            <strong>Signature:</strong> (v1:Vector&lt;^?8475,&#39;n&gt; * v2:Vector&lt;^?8476,&#39;n&gt;) -&gt; Vector&lt;^?8477,&#39;n&gt;<br />
+                          <strong>Type parameters:</strong> ^?8477, 'n                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L587-587" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_Subtraction</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2844', 2844)" onmouseover="showTip(event, '2844', 2844)">
+            Vector.( @@ )(v1, v2)
+          </code>
+          <div class="tip" id="2844">
+            <strong>Signature:</strong> (v1:Vector&lt;&#39;?8521,^m&gt; * v2:Vector&lt;&#39;?8521,^n&gt;) -&gt; Vector&lt;&#39;?8521,^m + ^n&gt;<br />
+                          <strong>Type parameters:</strong> ^n, ^m + ^n                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L598-598" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_AtAt</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2845', 2845)" onmouseover="showTip(event, '2845', 2845)">
+            Vector.( @* )(v1, v2)
+          </code>
+          <div class="tip" id="2845">
+            <strong>Signature:</strong> (v1:Vector&lt;^?8489,^?8490&gt; * v2:Vector&lt;^?8489,^?8491&gt;) -&gt; Matrix&lt;^?8489,^?8490,^?8491&gt;<br />
+                          <strong>Type parameters:</strong> ^?8491                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L591-591" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>direct (tensor) product</p>
+
+
+              <p>CompiledName: <code>op_AtMultiply</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2846', 2846)" onmouseover="showTip(event, '2846', 2846)">
+            Vector.( * )(v1, v2)
+          </code>
+          <div class="tip" id="2846">
+            <strong>Signature:</strong> (v1:Vector&lt;^?8502,&#39;n&gt; * v2:Vector&lt;^?8503,&#39;n&gt;) -&gt; Vector&lt;^?8504,&#39;n&gt;<br />
+                          <strong>Type parameters:</strong> ^?8504, 'n                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L595-595" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>hadamard (element-wise) product</p>
+
+
+              <p>CompiledName: <code>op_Multiply</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2847', 2847)" onmouseover="showTip(event, '2847', 2847)">
+            Vector.( / )(v1, v2)
+          </code>
+          <div class="tip" id="2847">
+            <strong>Signature:</strong> (v1:Vector&lt;^?8509,&#39;n&gt; * v2:Vector&lt;^?8510,&#39;n&gt;) -&gt; Vector&lt;^?8511,&#39;n&gt;<br />
+                          <strong>Type parameters:</strong> ^?8511, 'n                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L596-596" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_Division</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2848', 2848)" onmouseover="showTip(event, '2848', 2848)">
+            Vector.( %* )(v1, v2)
+          </code>
+          <div class="tip" id="2848">
+            <strong>Signature:</strong> (v1:Vector&lt;^?8495,S&lt;S&lt;S&lt;Z&gt;&gt;&gt;&gt; * v2:Vector&lt;^?8496,S&lt;S&lt;S&lt;Z&gt;&gt;&gt;&gt;) -&gt; Vector&lt;^?8498,S&lt;S&lt;S&lt;Z&gt;&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> ^?8497, ^?8498                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L593-593" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>cross product</p>
+
+
+              <p>CompiledName: <code>op_PercentMultiply</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2849', 2849)" onmouseover="showTip(event, '2849', 2849)">
+            Vector.( + )(v1, v2)
+          </code>
+          <div class="tip" id="2849">
+            <strong>Signature:</strong> (v1:Vector&lt;^?8468,&#39;n&gt; * v2:Vector&lt;^?8469,&#39;n&gt;) -&gt; Vector&lt;^?8470,&#39;n&gt;<br />
+                          <strong>Type parameters:</strong> ^?8470, 'n                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L586-586" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_Addition</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2850', 2850)" onmouseover="showTip(event, '2850', 2850)">
+            Vector.( &lt;*&gt; )(f, x)
+          </code>
+          <div class="tip" id="2850">
+            <strong>Signature:</strong> (f:Vector&lt;(&#39;x -&gt; &#39;y),&#39;n&gt; * x:Vector&lt;&#39;x,&#39;n&gt;) -&gt; Vector&lt;&#39;y,&#39;n&gt;<br />
+                          <strong>Type parameters:</strong> 'n                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L583-583" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_LessMultiplyGreater</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2851', 2851)" onmouseover="showTip(event, '2851', 2851)">
+            Vector.( |*| )(v1, v2)
+          </code>
+          <div class="tip" id="2851">
+            <strong>Signature:</strong> (v1:Vector&lt;^?8482,S&lt;&#39;?8485&gt;&gt; * v2:Vector&lt;^?8483,S&lt;&#39;?8485&gt;&gt;) -&gt; ^?8484<br />
+                          <strong>Type parameters:</strong> ^?8484, '?8485                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L589-589" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>dot (inner) product</p>
+
+
+              <p>CompiledName: <code>op_BarMultiplyBar</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2852', 2852)" onmouseover="showTip(event, '2852', 2852)">
+            Vector.( ~- )(v)
+          </code>
+          <div class="tip" id="2852">
+            <strong>Signature:</strong> v:Vector&lt;^?8516,&#39;n&gt; -&gt; Vector&lt;^?8516,&#39;n&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L597-597" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>op_UnaryNegation</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2853', 2853)" onmouseover="showTip(event, '2853', 2853)">
+            Vector.FoldBack(v, f, z)
+          </code>
+          <div class="tip" id="2853">
+            <strong>Signature:</strong> (v:Vector&lt;&#39;x,&#39;n&gt; * f:(&#39;x -&gt; &#39;?8535 -&gt; &#39;?8535) * z:&#39;?8535) -&gt; &#39;?8535<br />
+                          <strong>Type parameters:</strong> '?8535                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L600-600" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2854', 2854)" onmouseover="showTip(event, '2854', 2854)">
+            Vector.FromBigInt(i)
+          </code>
+          <div class="tip" id="2854">
+            <strong>Signature:</strong> i:bigint -&gt; Vector&lt;^?8564,^?8565&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L608-608" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2855', 2855)" onmouseover="showTip(event, '2855', 2855)">
+            Vector.FromInt32(i)
+          </code>
+          <div class="tip" id="2855">
+            <strong>Signature:</strong> i:int -&gt; Vector&lt;^?8554,^?8555&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L606-606" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2856', 2856)" onmouseover="showTip(event, '2856', 2856)">
+            Vector.FromInt64(i)
+          </code>
+          <div class="tip" id="2856">
+            <strong>Signature:</strong> i:int64 -&gt; Vector&lt;^?8559,^?8560&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L607-607" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2857', 2857)" onmouseover="showTip(event, '2857', 2857)">
+            Vector.get_Zero()
+          </code>
+          <div class="tip" id="2857">
+            <strong>Signature:</strong> unit -&gt; Vector&lt;^x,^n&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L585-585" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2858', 2858)" onmouseover="showTip(event, '2858', 2858)">
+            Vector.Item(v, i)
+          </code>
+          <div class="tip" id="2858">
+            <strong>Signature:</strong> (v:Vector&lt;&#39;a,^n&gt; * i:^?8436) -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> ^?8436                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L580-580" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2859', 2859)" onmouseover="showTip(event, '2859', 2859)">
+            Vector.Map(v, f)
+          </code>
+          <div class="tip" id="2859">
+            <strong>Signature:</strong> (v:Vector&lt;&#39;a,&#39;n&gt; * f:(&#39;a -&gt; &#39;b)) -&gt; Vector&lt;&#39;b,&#39;n&gt;<br />
+                          <strong>Type parameters:</strong> 'b                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L581-581" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2860', 2860)" onmouseover="showTip(event, '2860', 2860)">
+            Vector.op_Explicit(v)
+          </code>
+          <div class="tip" id="2860">
+            <strong>Signature:</strong> v:Vector&lt;&#39;x,&#39;n&gt; -&gt; Matrix&lt;&#39;x,&#39;n,S&lt;Z&gt;&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L603-603" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2861', 2861)" onmouseover="showTip(event, '2861', 2861)">
+            Vector.op_Explicit(v)
+          </code>
+          <div class="tip" id="2861">
+            <strong>Signature:</strong> v:Vector&lt;&#39;x,&#39;n&gt; -&gt; Matrix&lt;&#39;x,S&lt;Z&gt;,&#39;n&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L602-602" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2862', 2862)" onmouseover="showTip(event, '2862', 2862)">
+            Vector.Reduce(v, f)
+          </code>
+          <div class="tip" id="2862">
+            <strong>Signature:</strong> (v:Vector&lt;&#39;x,S&lt;&#39;n&gt;&gt; * f:(&#39;x -&gt; &#39;x -&gt; &#39;x)) -&gt; &#39;x<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L601-601" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2863', 2863)" onmouseover="showTip(event, '2863', 2863)">
+            Vector.Return(x)
+          </code>
+          <div class="tip" id="2863">
+            <strong>Signature:</strong> x:&#39;x -&gt; Vector&lt;&#39;x,^n&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L582-582" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2864', 2864)" onmouseover="showTip(event, '2864', 2864)">
+            Vector.ToSeq(v)
+          </code>
+          <div class="tip" id="2864">
+            <strong>Signature:</strong> v:Vector&lt;&#39;x,&#39;n&gt; -&gt; seq&lt;&#39;x&gt;<br />
+                                  </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L599-599" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2865', 2865)" onmouseover="showTip(event, '2865', 2865)">
+            Vector.UnsafeCreate(_length, items)
+          </code>
+          <div class="tip" id="2865">
+            <strong>Signature:</strong> (_length:&#39;n * items:&#39;?8282 []) -&gt; Vector&lt;&#39;?8282,&#39;n&gt;<br />
+                                    <span>
+            <strong>Attributes:</strong><br />
+[&lt;MethodImpl(256)&gt;]<br />
+          </span>
+          </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L37-37" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '2866', 2866)" onmouseover="showTip(event, '2866', 2866)">
+            Vector.Zip(x, y)
+          </code>
+          <div class="tip" id="2866">
+            <strong>Signature:</strong> (x:Vector&lt;&#39;?8457,&#39;?8458&gt; * y:Vector&lt;&#39;?8459,&#39;?8458&gt;) -&gt; Vector&lt;(&#39;?8457 * &#39;?8459),&#39;?8458&gt;<br />
+                          <strong>Type parameters:</strong> '?8459                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L584-584" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
+		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+		  	<li class="nav-header">FSharpPlus</li>
+		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
+		  <li class="divider"></li>
+		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
+		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
+		  <li><a href="/FSharpPlus/license.html">License</a></li>
+		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
+
+		  <li class="nav-header">Getting started</li>
+		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+
+		  <li class="nav-header">Documentation</li>
+		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
+      <li><a href="/FSharpPlus/types.html">Types</a></li>
+		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
+		  </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>
