@@ -18,6 +18,10 @@ module State =
     let run (State x) = x                                                                                         : 'S->('T * 'S)
 
     let map   f (State m) = State (fun s -> let (a: 'T, s') = m s in (f a, s'))                                   : State<'S,'U>
+
+    /// Combines two States into one by applying a mapping function.
+    let map2 (f: 'T->'U->_) (State x) (State y) = State (fun s -> let (g, s1) = mapItem1 f (x s) in mapItem1 g (y s1))  : State<'S,'V>
+
     let bind  f (State m) = State (fun s -> let (a: 'T, s') = m s in run (f a) s')                                : State<'S,'U>
     let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x': 'T, s2) = x s1 in (f' x', s2)) : State<'S,'U>
 
@@ -36,10 +40,8 @@ module State =
     /// Modify the state inside the monad by applying a function.
     let modify f = State (fun s -> ((), f s))                                                                     : State<'S,unit>
 
-    #if !FABLE_COMPILER
     /// Zips two States into one.
-    let zip (x: State<'S,'T>) (y: State<'S,'U>) = lift2 tuple2 x y : State<'S, ('T * 'U)>
-    #endif
+    let zip (x: State<'S,'T>) (y: State<'S,'U>) = map2 tuple2 x y : State<'S, ('T * 'U)>
 
 type State<'s,'t> with
 
@@ -88,6 +90,10 @@ module StateT =
     let inline hoist (x: State<'S, 'T>) = (StateT << (fun a -> result << a) << State.run) x : StateT<'S, '``Monad<'T * 'S>``>
 
     let inline map (f: 'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s'))) : StateT<'S,'``Monad<'U * 'S>``>
+    
+    /// Combines two StateTs into one by applying a mapping function.
+    let inline map2 (f: 'T->'U->'V) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2) -> result (f g h, s2)) : StateT<'S,'``Monad<'V * 'S>``>
+
     let inline apply (StateT f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a: StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z: 'T, u: 'S) -> ((g z: 'U), u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
 
     /// Zips two StateTs into one.
@@ -101,6 +107,9 @@ type StateT<'s,'``monad<'t * 's>``> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x: StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f: 'T->'U->'V, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT.map2 f x y
 
     static member inline (<*>)  (f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x: StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
     static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>)     = StateT.bind  f x
