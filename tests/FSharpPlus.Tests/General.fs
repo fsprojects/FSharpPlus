@@ -1238,6 +1238,20 @@ module Applicative =
         let _ = (WrappedSeqD [1] , WrappedSeqD [2]) ||> lift2 (+)
         CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
 
+        let a1 = StateT <| fun x -> (async { return 1, "Here's the state " +  x})
+        let b1 = StateT <| fun x -> (async { return 5, "Here's the other state " +  x})
+        let r1 = lift2 (+) a1 b1
+        Assert.AreEqual ((6, "Here's the other state Here's the state S"), (StateT.run r1 "S" |> Async.RunSynchronously))
+
+        let a2 = WriterT <| (async { return 1, "Here's the state "})
+        let b2 = WriterT <| (async { return 5, "Here's the other state "})
+        let r2 = lift2 (+) a2 b2
+        Assert.AreEqual ((6, "Here's the state Here's the other state "), (WriterT.run r2 |> Async.RunSynchronously))
+
+        let a3 = ReaderT <| fun x -> (async { return "Here's the state " +  x})
+        let b3 = ReaderT <| fun x -> (async { return "Here's the other state " +  x})
+        let r3 = lift2 (+) a3 b3
+        Assert.AreEqual ("Here's the state SHere's the other state S", (ReaderT.run r3 "S" |> Async.RunSynchronously))
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
 type Ii = Ii
