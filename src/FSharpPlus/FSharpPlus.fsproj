@@ -29,7 +29,7 @@
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Internals.fs" />    
+    <Compile Include="Internals.fs" />
     <Compile Include="Extensions/Option.fs" />
     <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
@@ -51,6 +51,10 @@
     <Compile Include="Extensions/Task.fs" />
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
+    <Compile Include="Extensions/Tuple.fs" />
+    <Compile Include="TypeLevel/TypeLevelOperators.fs" />
+    <Compile Include="TypeLevel/TypeBool.fs" />
+    <Compile Include="TypeLevel/TypeNat.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
