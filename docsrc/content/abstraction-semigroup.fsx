@@ -58,16 +58,16 @@ From .Net/F#
  
 From F#+
  
- -  ``NonEmptyList<'S>``
- -  ``ZipList<'S>``
- -  ``Dual<'T>``
- -  ``Endo<'T>``
- -  ``All``
- -  ``Any``
- -  ``Const<'T,'U>``
- -  ``First<'T>``
- -  ``Last<'T>``
- -  ``DList<'T>``
+ -  [``NonEmptyList<'S>``](type-nonempty.html)
+ -  [``ZipList<'S>``](type-ziplist.html)
+ -  [``Dual<'T>``](type-dual.html)
+ -  [``Endo<'T>``](type-endo.html)
+ -  [``All``](type-all.html)
+ -  [``Any``](type-any.html)
+ -  [``Const<'C,'T>``](type-const.html)
+ -  [``First<'T>``](type-first.html)
+ -  [``Last<'T>``](type-last.html)
+ -  [``DList<'T>``](type-dlist.html)
  -  [``Vector<'T,'Dimension>``](type-vector.html)
  -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
  

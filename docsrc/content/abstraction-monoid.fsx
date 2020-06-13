@@ -73,8 +73,8 @@ From .Net/F#
  
 From F#+
  
- -  ``ZipList<'S>``
- -  [``Dual<'T>](type-dual.html)
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``Dual<'T>``](type-dual.html)
  -  [``Endo<'T>``](type-endo.html)
  -  [``All``](type-all.html)
  -  [``Any``](type-any.html)
