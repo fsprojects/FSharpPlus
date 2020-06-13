@@ -20,7 +20,7 @@ module State =
     let map   f (State m) = State (fun s -> let (a: 'T, s') = m s in (f a, s'))                                   : State<'S,'U>
 
     /// Combines two States into one by applying a mapping function.
-    let map2 (f: 'T->'U->_) (State x) (State y) = State (fun s -> let (g, s1) = mapItem1 f (x s) in mapItem1 g (y s1))  : State<'S,'V>
+    let map2 (f: 'T->'U->_) (State x) (State y) = State (fun s -> let (g, s1) = Tuple2.mapItem1 f (x s) in Tuple2.mapItem1 g (y s1)) : State<'S,'V>
 
     let bind  f (State m) = State (fun s -> let (a: 'T, s') = m s in run (f a) s')                                : State<'S,'U>
     let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x': 'T, s2) = x s1 in (f' x', s2)) : State<'S,'U>
