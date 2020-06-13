@@ -62,7 +62,7 @@ From .Net/F#
  
 From F#+
 
- -  ``Kleisli<'T, 'Monad<'U>>``
+ -  [``Kleisli<'T, 'Monad<'U>>``](type-kleisli.html)
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 *)
