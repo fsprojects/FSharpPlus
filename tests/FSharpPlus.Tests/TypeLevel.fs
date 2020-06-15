@@ -117,19 +117,19 @@ module NatTests =
         let inline f94 x = Z <=^ x
         Assert (f94 Z); Assert (f94 (S Z)); Assert (f94 two)
         
-        let inline fa x = x /^ two
-        Assert (fa Z =^ Z)
-        Assert (fa (S Z) =^ Z)
-        Assert (fa two =^ S Z)
+        // let inline fa x = x /^ two
+        // Assert (fa Z =^ Z)
+        // Assert (fa (S Z) =^ Z)
+        // Assert (fa two =^ S Z)
         let inline fb x = S (S Z) /^ x
         Assert (hasType<DividedByZeroError> (fb Z))
         Assert (fb (S Z) =^ two)
         Assert (fb two =^ (S Z))
         
-        let inline fc x = x %^ S (S Z)
-        Assert (fc Z =^ Z)
-        Assert (fc (S Z) =^ (S Z))
-        Assert (fc two =^ Z)
+        // let inline fc x = x %^ S (S Z)
+        // Assert (fc Z =^ Z)
+        // Assert (fc (S Z) =^ (S Z))
+        // Assert (fc two =^ Z)
         let inline fd x = S (S Z) %^ x
         Assert (hasType<DividedByZeroError> (fd Z))
         Assert (fd (S Z) =^ Z)

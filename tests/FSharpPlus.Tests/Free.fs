@@ -11,18 +11,18 @@ module Free =
     
     // primitive functor types
     let aFreeOfListInt = Roll [Roll [Roll [Pure 2]]]
-    let mFreeOfListString = map string aFreeOfListInt
-    let aFreeOfListFloat = aFreeOfListInt >>= (fun x -> let a = Roll [ Pure (string x) ] in a) >>= (fun x -> Roll [ Pure (float (x+".5")) ])
+    // let mFreeOfListString = map string aFreeOfListInt
+    // let aFreeOfListFloat = aFreeOfListInt >>= (fun x -> let a = Roll [ Pure (string x) ] in a) >>= (fun x -> Roll [ Pure (float (x+".5")) ])
     
     // user defined functor types
     let aFreeOfIdentityInt = Roll (Identity (Pure 1))
-    let aFreeOfIdentityString = map string aFreeOfIdentityInt
-    let aFreeOfIdentityFloat = aFreeOfIdentityInt >>= (fun x -> Roll (Identity (Pure (float x))))
+    // let aFreeOfIdentityString = map string aFreeOfIdentityInt
+    // let aFreeOfIdentityFloat = aFreeOfIdentityInt >>= (fun x -> Roll (Identity (Pure (float x))))
 
     // Structural Equality
     areStEqual aFreeOfListInt (Roll [Roll [Roll [Pure 2]]])
 
-
+(*
 module Sample1 =
 
     // Free monad-interpreter in F# from http://www.fssnip.net/7SX/title/Freemonad-interpreter
@@ -45,13 +45,13 @@ module Sample1 =
     let get key       = Free.liftF (Get (key, id))
     let set key value = Free.liftF (Set (key, value, ()))
 
-    let exF2 = set "foo" "bar" >>= fun _ -> get "foo"
+    // let exF2 = set "foo" "bar" >>= fun _ -> get "foo"
 
-    let exF3 = monad {
-        let! value  = get "foo"
-        do! set "bar" value
-        get "bar" |> ignore
-    }
+    // let exF3 = monad {
+    //     let! value  = get "foo"
+    //     do! set "bar" value
+    //     get "bar" |> ignore
+    // }
 
 
     let rec interpreter: ('a -> unit) -> FreeDSL<'a> -> unit =
@@ -67,8 +67,8 @@ module Sample1 =
 
 
     interpreter (printfn "Received: %A") exF1
-    interpreter (printfn "Received: %A") exF2
-    interpreter (printfn "Received: %A") exF3
+    // interpreter (printfn "Received: %A") exF2
+    // interpreter (printfn "Received: %A") exF3
 
 
 module Sample2 =
@@ -242,7 +242,7 @@ module Sample3 =
 
     let interpretedProgram = interpret tryReserve
 
-
+*)
 module TestCoproduct =
 
     let a11 = if true  then InL (Some 1) else InR ([20])
@@ -266,11 +266,11 @@ module TestCoproduct =
     let a41 = InL [3] : Coproduct<_,_ list>
     let a42 = map ((+)10 >> string) a41
 
-    open Sample3
-
-    let readReservationRequest =
-        Reservation.Create
-        <!> readQuantity
-        <*> readDate
-        <*> readName
-        <*> readEmail
+    // open Sample3
+    // 
+    // let readReservationRequest =
+    //     Reservation.Create
+    //     <!> readQuantity
+    //     <*> readDate
+    //     <*> readName
+    //     <*> readEmail

@@ -41,16 +41,16 @@ module ComputationExpressions =
 
         // This is a plus workflow
         // Although we're not explicitely using a strict workflow list hasn't a proper delay mechanism
-        let lst: _ list = monad.plus {
-            SideEffects.add "3"
-            return 5;
-            return 6; }
-
-        // Check if side effect was already performed
-        areEqual ["3"] (SideEffects.get ())
-
-        // Check 'plus' (<|>) operation was properly performed
-        areEqual [5; 6] lst
+        // let lst: _ list = monad.plus {
+        //     SideEffects.add "3"
+        //     return 5;
+        //     return 6; }
+        // 
+        // // Check if side effect was already performed
+        // areEqual ["3"] (SideEffects.get ())
+        // 
+        // // Check 'plus' (<|>) operation was properly performed
+        // areEqual [5; 6] lst
 
         SideEffects.reset ()
 
@@ -79,24 +79,24 @@ module ComputationExpressions =
         areEqual [42] seqValue
 
 
-    [<Test>]
-    let delayedMonadTransformers() =
-
-        SideEffects.reset ()
-
-        let threeElements: ReaderT<string, list<_>> = monad.plus {
-            let! s = ask
-            for i in 1 .. 3 do
-                SideEffects.add (sprintf "processing %i" i)
-                yield parse s + i }
-
-        areEqual [] (SideEffects.get ())
-        
-        // Following line would throw an exception (due to the for loop) if ReaderT had no Delay implementation
-        let results = ReaderT.run threeElements "100"
-
-        areEqual ["processing 1"; "processing 2"; "processing 3"] (SideEffects.get ())
-        areEqual [101; 102; 103] results
+    // [<Test>]
+    // let delayedMonadTransformers() =
+    // 
+    //     SideEffects.reset ()
+    // 
+    //     let threeElements: ReaderT<string, list<_>> = monad.plus {
+    //         let! s = ask
+    //         for i in 1 .. 3 do
+    //             SideEffects.add (sprintf "processing %i" i)
+    //             yield parse s + i }
+    // 
+    //     areEqual [] (SideEffects.get ())
+    //     
+    //     // Following line would throw an exception (due to the for loop) if ReaderT had no Delay implementation
+    //     let results = ReaderT.run threeElements "100"
+    // 
+    //     areEqual ["processing 1"; "processing 2"; "processing 3"] (SideEffects.get ())
+    //     areEqual [101; 102; 103] results
 
 
     [<Test>]
@@ -201,15 +201,15 @@ module ComputationExpressions =
         areEqual ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"] (SideEffects.get ())
         SideEffects.reset ()
 
-        // same example but without explicitely telling that the monad is strict
-        let j1 s _ = WrappedListG (List.singleton (s, 0))
-        let j2 = monad.plus {
-            for str in [("first1", "second1"); ("first2", "second2")] do
-            for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
-            let!  _  = j1 "" (Some len)
-            return str }
-
-        areEqual ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"] (SideEffects.get ())
+        // // same example but without explicitely telling that the monad is strict
+        // let j1 s _ = WrappedListG (List.singleton (s, 0))
+        // let j2 = monad.plus {
+        //     for str in [("first1", "second1"); ("first2", "second2")] do
+        //     for len in [1 + (fst str).Length ; 2 + (snd str).Length] do
+        //     let!  _  = j1 "" (Some len)
+        //     return str }
+        // 
+        // areEqual ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"] (SideEffects.get ())
 
 
     
@@ -235,6 +235,7 @@ module ComputationExpressions =
             :? System.OperationCanceledException -> ()
         Assert.AreEqual(1, !flag)
 
+    (*
     type AsyncOfOptionDisposable () =
         interface IDisposable with
             member __.Dispose() = SideEffects.add "I'm disposed"
@@ -284,7 +285,7 @@ module ComputationExpressions =
         let _ = reproducePrematureDisposal |> Identity.run
         areEqual ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"] (SideEffects.get ())
 
-
+*)
     open System.Collections.Generic
 
     [<Test>]
@@ -385,14 +386,14 @@ module ComputationExpressions =
         // Monad transformers are delayed if at least one of the layers is lazy.
         SideEffects.reset ()
         
-        let readerToptionM : ReaderT<unit,unit option> = monad {
-          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
-          while (SideEffects.add "moving"; enum.MoveNext ()) do
-             SideEffects.add (sprintf "--> %i" enum.Current) }
-
-        areEqual [] (SideEffects.get ())
-        ReaderT.run readerToptionM () |> ignore
-        areEqual effects (SideEffects.get ())
+        // let readerToptionM : ReaderT<unit,unit option> = monad {
+        //   use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+        //   while (SideEffects.add "moving"; enum.MoveNext ()) do
+        //      SideEffects.add (sprintf "--> %i" enum.Current) }
+        // 
+        // areEqual [] (SideEffects.get ())
+        // ReaderT.run readerToptionM () |> ignore
+        // areEqual effects (SideEffects.get ())
 
         SideEffects.reset ()
 
@@ -423,25 +424,25 @@ module ComputationExpressions =
         // Writer is strict
         SideEffects.reset ()
 
-        let writerM: Writer<unit,unit> = monad {
-          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
-          while (SideEffects.add "moving"; enum.MoveNext ()) do
-             SideEffects.add (sprintf "--> %i" enum.Current) }
-
-        areEqual strictEffects (SideEffects.get ())
-        Writer.run writerM |> ignore
-        areEqual strictEffects (SideEffects.get ())
+        // let writerM: Writer<unit,unit> = monad {
+        //   use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+        //   while (SideEffects.add "moving"; enum.MoveNext ()) do
+        //      SideEffects.add (sprintf "--> %i" enum.Current) }
+        // 
+        // areEqual strictEffects (SideEffects.get ())
+        // Writer.run writerM |> ignore
+        // areEqual strictEffects (SideEffects.get ())
 
         // Writer combined with a strict monad is also strict
         SideEffects.reset ()
 
-        let optionTwriterM: OptionT<Writer<unit,unit option>> = monad {
-          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
-          while (SideEffects.add "moving"; enum.MoveNext ()) do
-             SideEffects.add (sprintf "--> %i" enum.Current) }
-
-        areEqual strictEffects (SideEffects.get ())
-        let e = OptionT.run optionTwriterM
-        areEqual strictEffects (SideEffects.get ())
-        let f = Writer.run e
-        areEqual strictEffects (SideEffects.get ())
+        // let optionTwriterM: OptionT<Writer<unit,unit option>> = monad {
+        //   use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+        //   while (SideEffects.add "moving"; enum.MoveNext ()) do
+        //      SideEffects.add (sprintf "--> %i" enum.Current) }
+        // 
+        // areEqual strictEffects (SideEffects.get ())
+        // let e = OptionT.run optionTwriterM
+        // areEqual strictEffects (SideEffects.get ())
+        // let f = Writer.run e
+        // areEqual strictEffects (SideEffects.get ())
