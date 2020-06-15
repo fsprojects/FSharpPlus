@@ -153,7 +153,7 @@ type Delay =
     static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
     
 
-    static member inline Invoke source : 'R =
+    static member inline Invoke (source: unit -> 'R) : 'R =
         let inline call (mthd: ^M, input: unit -> ^I) = ((^M or ^I) : (static member Delay : _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
         call (Unchecked.defaultof<Delay>, source)
 
