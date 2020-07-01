@@ -4,9 +4,6 @@
 #I "../../bin"
 
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
-open FSharpPlus
-open FSharpPlus.Lens
-open FSharpPlus.Data
 
 (**
 Lens
@@ -29,6 +26,10 @@ Here's an example usage of lenses with business objects:
 
 *)
 open System
+open FSharpPlus
+open FSharpPlus.Lens
+open FSharpPlus.Data
+
 // From Mauricio Scheffer: https://gist.github.com/mausch/4260932
 type Person = {
     Name: string
