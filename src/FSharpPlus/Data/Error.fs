@@ -53,7 +53,7 @@ module ResultT =
 
     let inline apply (ResultT f:ResultT<'``Monad<'Result<('T -> 'U),'E>>``>) (ResultT x: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (map Result.apply f <*> x) : ResultT<'``Monad<'Result<'U,'E>>``>
     let inline map (f: 'T->'U) (ResultT m: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (map (Result.map f) m) : ResultT<'``Monad<'Result<('T -> 'U),'E>>``>
-    let inline map2 (f: 'T->'U->'V) (ResultT x: ResultT<'``Monad<Result<'T,'E>>``>) (ResultT y: ResultT<'``Monad<Result<'U,'E>>``>) : ResultT<'``Monad<Result<'V,'E>>``> = ResultT (lift2 (Option.map2 f) x y)
+    let inline map2 (f: 'T->'U->'V) (ResultT x: ResultT<'``Monad<Result<'T,'E>>``>) (ResultT y: ResultT<'``Monad<Result<'U,'E>>``>) : ResultT<'``Monad<Result<'V,'E>>``> = ResultT (lift2 (Result.map2 f) x y)
 
 type ResultT<'``monad<'result<'t,'e>>``> with
     
@@ -118,7 +118,7 @@ module ChoiceT =
 
     let inline apply (ChoiceT f: ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>) (ChoiceT x: ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT (map Choice.apply f <*> x) : ChoiceT<'``Monad<'Choice<'U,'E>>``>
     let inline map  (f: 'T->'U) (ChoiceT m: ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT (map (Choice.map f) m) : ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>
-    let inline map2 (f: 'T->'U->'V) (ChoiceT x: ChoiceT<'``Monad<Choice<'T,'E>>``>) (ChoiceT y: ChoiceT<'``Monad<Choice<'U,'E>>``>) : ChoiceT<'``Monad<Choice<'V,'E>>``> = ChoiceT (lift2 (Option.map2 f) x y)
+    let inline map2 (f: 'T->'U->'V) (ChoiceT x: ChoiceT<'``Monad<Choice<'T,'E>>``>) (ChoiceT y: ChoiceT<'``Monad<Choice<'U,'E>>``>) : ChoiceT<'``Monad<Choice<'V,'E>>``> = ChoiceT (lift2 (Choice.map2 f) x y)
 
 type ChoiceT<'``monad<'choice<'t,'e>>``> with
     
