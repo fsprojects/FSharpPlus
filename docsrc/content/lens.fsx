@@ -26,6 +26,7 @@ Here's an example usage of lenses with business objects:
 
 *)
 open System
+// In order to use the Lens module of F#+ we import the following:
 open FSharpPlus
 open FSharpPlus.Lens
 open FSharpPlus.Data
