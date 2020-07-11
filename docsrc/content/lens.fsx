@@ -28,9 +28,6 @@ Here's an example usage of lenses with business objects:
 open System
 // In order to use the Lens module of F#+ we import the following:
 open FSharpPlus.Lens
-// These modules contain other functions relevant for the examples:
-open FSharpPlus
-open FSharpPlus.Data
 
 // From Mauricio Scheffer: https://gist.github.com/mausch/4260932
 type Person = {
@@ -167,7 +164,9 @@ Fold
 ====
 
 *)
-
+open FSharpPlus.Lens
+open FSharpPlus // This module contain other functions relevant for the examples (length, traverse)
+open FSharpPlus.Data // Mult
 
 let f1 = over both length ("hello","world")
 // val f1 : int * int = (5, 5)
