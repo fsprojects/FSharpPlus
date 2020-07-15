@@ -14,8 +14,6 @@ Related Types
 ------------
 
  - [Any](type-any.html): Similar wrapper, but using the 'any' criteria.
- 
-
 
 
 Abstractions
@@ -23,8 +21,6 @@ Abstractions
 
  -  [Semigroup](abstraction-semigroup.html)
  -  [Monoid](abstraction-monoid.html)
-
-
 
 Examples
 --------
@@ -34,3 +30,7 @@ Examples
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 open FSharpPlus
+
+let res1 = (All true) ++ ( zero ) ++ (All false)
+let even x = x % 2 = 0
+let res2 = sum <| map ( fun x -> All (even x) ) [2;4;6;7;8]
