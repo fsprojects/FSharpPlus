@@ -30,6 +30,7 @@ Examples
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 open FSharpPlus
+open FSharpPlus.Data
 
 let res1 = All true ++ zero ++ All false
 // val res1 : All = All false
