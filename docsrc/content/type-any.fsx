@@ -32,8 +32,10 @@ Examples
 open FSharpPlus
 open FSharpPlus.Data
 
-let res1 = (Any true) ++ ( zero ) ++ (Any false)
+let res1 = Any true ++ zero ++ Any false
 // val res1 : Any = Any true
+
 let even x = x % 2 = 0
-let res2 = sum <| map ( fun x -> Any (even x) ) [2;4;6;7;8]
+
+let res2 = [2;4;6;7;8] |> map (even >> Any) |> sum
 // val res2 : Any = Any true
