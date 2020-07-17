@@ -929,7 +929,7 @@ module Operators =
     let inline one< ^Num when (One or ^Num) : (static member One : ^Num * One -> ^Num) > : ^Num = One.Invoke ()
 
     /// Divides one number by another, returns a tuple with the result and the remainder.
-    let inline divRem (D: 'T) (d: 'T) : 'T*'T = DivRem.Invoke D d
+    let inline divRem (dividend: 'Num) (divisor: 'Num) : 'Num * 'Num = DivRem.Invoke dividend divisor
 
     /// Gets the smallest possible value.
     let inline getMinValue () = MinValue.Invoke ()
