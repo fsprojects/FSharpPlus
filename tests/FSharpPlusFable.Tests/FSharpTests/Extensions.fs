@@ -9,6 +9,151 @@ open FSharpPlus.Data
 type StringCodec<'t> = StringCodec of ( (string -> Result<'t,string>) * ('t -> string) ) with
     static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (d >> Result.map f, e << g) : StringCodec<'U>
 
+
+// Begin Validation test
+
+type ValidationErrorType =
+    | InvalidLatitude
+    | InvalidLongitude
+    | EmptyString
+    | InvalidStringLength of expected: int * actual: int
+    | NegativeNumber
+    | InvalidGuidString
+
+type ValidationError = string * ValidationErrorType list
+
+type NonEmptyString =
+    | NonEmptyString of string
+
+    static member Read (NonEmptyString v) = v
+
+    static member Parse (v: string) =
+        if String.IsNullOrWhiteSpace(v) then
+            Failure [ EmptyString ]
+        else
+            Success(NonEmptyString v)
+
+type Identifier =
+    private
+    | Identifier of Guid
+
+    static member Read (Identifier (identifier)) = identifier
+
+    static member Parse (v: string) =
+        match Guid.TryParse(v) with
+        | true, v -> Identifier v |> Success
+        | false, _ -> Failure [ InvalidGuidString ]
+
+type Latitude =
+    | Latitude of float
+
+    static member Read (Latitude v) = v
+
+    static member Parse (v: float) =
+        if (v >= -90.0) && (v <= 90.0) then
+            Latitude v |> Success
+        else
+            Failure [ InvalidLatitude ]
+
+type Longitude =
+    private
+    | Longitude of float
+
+    static member Read (Longitude v) = v
+
+    static member Parse (v: float) =
+        if (v >= -180.0) && (v <= 180.) then
+            Longitude v |> Success
+        else
+            Failure [ InvalidLongitude ]
+
+type Location =
+    private
+    | Location of Latitude * Longitude
+
+    static member Read (Location (Latitude (lat), Longitude (lng))) = lat, lng
+
+    static member Parse lat lng =
+        FSharpPlus.Operators.curry Location
+        <!> Latitude.Parse lat
+        <*> Longitude.Parse lng
+
+type ThreeLetterString =
+    private
+    | ThreeLetterString of string
+
+    static member Read (ThreeLetterString (s)) = s
+
+    static member Parse s =
+        if String.IsNullOrWhiteSpace s then
+            Failure [ EmptyString ]
+        elif s.Length <> 3 then
+            Failure [ InvalidStringLength(3, s.Length) ]
+        else
+            Success(ThreeLetterString(s))
+
+type Currency =
+    private
+    | Currency of decimal * ThreeLetterString
+
+    static member Read (Currency (v, t)) = v, t
+
+    static member Parse (value: decimal) (currencyType: string) =
+        if value <= 0m then
+            Failure [ NegativeNumber ]
+        else
+            ThreeLetterString.Parse currencyType
+            |> Validation.map (fun currencyType -> Currency(value, currencyType))
+
+let private mapValidationError propertyName v =
+    match v with
+    | Success s -> Success s
+    | Failure errors -> ValidationError(propertyName, errors) |> Failure
+
+type LocationAdded =
+    { Id: Identifier
+      Name: NonEmptyString
+      Location: Location
+      Price: Currency
+      IsDraft: bool
+      Remark: string option
+      Created: DateTimeOffset
+      Creator: NonEmptyString }
+
+    static member Parse id name lat lng price currency isDraft remark created creator =
+        let createFn =
+            fun id name location price isDraft remark created creator ->
+                { Id = id
+                  Name = name
+                  Location = location
+                  Price = price
+                  IsDraft = isDraft
+                  Remark = remark
+                  Created = created
+                  Creator = creator }
+
+        createFn
+        <!> (Identifier.Parse >> mapValidationError "id") id
+        <*> (NonEmptyString.Parse >> mapValidationError "name") name
+        <*> (fun lat lng ->
+                Location.Parse lat lng
+                |> mapValidationError "location")
+                lat
+                lng
+        <*> (fun p c ->
+                Currency.Parse p c
+                |> mapValidationError "currency")
+                price
+                currency
+        <*> (Validation.Success >> mapValidationError "draft") isDraft
+        <*> (Validation.Success >> mapValidationError "remark") remark
+        <*> (Validation.Success >> mapValidationError "created") created
+        <*> (NonEmptyString.Parse
+             >> mapValidationError "creator") creator
+             
+// End Validation test
+
+
 module StringCodec =
     let decode (StringCodec (d,_)) x = d x
     let encode (StringCodec (_,e)) x = e x
