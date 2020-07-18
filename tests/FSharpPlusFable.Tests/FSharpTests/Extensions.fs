@@ -9,6 +9,7 @@ open FSharpPlus.Data
 type StringCodec<'t> = StringCodec of ( (string -> Result<'t,string>) * ('t -> string) ) with
     static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (d >> Result.map f, e << g) : StringCodec<'U>
 
+open System
 
 // Begin Validation test
 
