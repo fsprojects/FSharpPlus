@@ -207,6 +207,8 @@ type Validation<'err,'a> with
     // as Functor
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: Validation<_,_>, f) = Validation.map f x
+    
+    static member (<!>) (f, x: Validation<_,_>) = Validation.map f x
 
     // as Bifunctor
     [<EditorBrowsable(EditorBrowsableState.Never)>]
