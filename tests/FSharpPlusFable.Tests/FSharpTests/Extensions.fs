@@ -20,7 +20,8 @@ type ValidationErrorType =
     | NegativeNumber
     | InvalidGuidString
 
-type ValidationError = string * ValidationErrorType list
+type ValidationError = ValidationError of (string * ValidationErrorType NonEmptyList) with
+    static member (+) (ValidationError (s1,v1), ValidationError (s2,v2)) = ValidationError (s1+s2, v1+v2)
 
 type NonEmptyString =
     | NonEmptyString of string
@@ -29,7 +30,7 @@ type NonEmptyString =
 
     static member Parse (v: string) =
         if String.IsNullOrWhiteSpace(v) then
-            Failure [ EmptyString ]
+            Failure ( nel { EmptyString })
         else
             Success(NonEmptyString v)
 
@@ -42,7 +43,7 @@ type Identifier =
     static member Parse (v: string) =
         match Guid.TryParse(v) with
         | true, v -> Identifier v |> Success
-        | false, _ -> Failure [ InvalidGuidString ]
+        | false, _ -> Failure ( nel { InvalidGuidString } )
 
 type Latitude =
     | Latitude of float
@@ -53,7 +54,7 @@ type Latitude =
         if (v >= -90.0) && (v <= 90.0) then
             Latitude v |> Success
         else
-            Failure [ InvalidLatitude ]
+            Failure ( nel { InvalidLatitude } )
 
 type Longitude =
     private
@@ -65,7 +66,14 @@ type Longitude =
         if (v >= -180.0) && (v <= 180.) then
             Longitude v |> Success
         else
-            Failure [ InvalidLongitude ]
+            Failure ( nel { InvalidLongitude } )
+
+
+type Id<'t> = Id of 't with
+    static member (<!>) (f, Id x) = Id ( f x)
+    static member (<*>) (Id f, Id x) = Id (f x)
+
+let a = curry (fun (x: float, y: float) -> x + y) <!> Id 1. <*> Id 8.   // <*> Id 10
 
 type Location =
     private
@@ -74,9 +82,7 @@ type Location =
     static member Read (Location (Latitude (lat), Longitude (lng))) = lat, lng
 
     static member Parse lat lng =
-        FSharpPlus.Operators.curry Location
-        <!> Latitude.Parse lat
-        <*> Longitude.Parse lng
+        (curry Location <!> Latitude.Parse lat) </Validation.apply/> Longitude.Parse lng
 
 type ThreeLetterString =
     private
@@ -86,9 +92,9 @@ type ThreeLetterString =
 
     static member Parse s =
         if String.IsNullOrWhiteSpace s then
-            Failure [ EmptyString ]
+            Failure ( nel { EmptyString  } )
         elif s.Length <> 3 then
-            Failure [ InvalidStringLength(3, s.Length) ]
+            Failure ( nel { InvalidStringLength(3, s.Length)  } )
         else
             Success(ThreeLetterString(s))
 
@@ -100,7 +106,7 @@ type Currency =
 
     static member Parse (value: decimal) (currencyType: string) =
         if value <= 0m then
-            Failure [ NegativeNumber ]
+            Failure ( nel { NegativeNumber } )
         else
             ThreeLetterString.Parse currencyType
             |> Validation.map (fun currencyType -> Currency(value, currencyType))
