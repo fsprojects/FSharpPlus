@@ -1,4 +1,4 @@
-#### 1.1.2  - July 19 2020
+#### 1.1.3  - July 19 2020
 * Add map2/lift2 for all monad transformers
 * Add Tuple2 and Tuple3 extensions
 * Add non-generic <!> operator for Validation, mainly intended to be used for applicative validation in Fable
