@@ -8,7 +8,7 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
-    <VersionPrefix>1.1.2</VersionPrefix>
+    <VersionPrefix>1.1.2.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
@@ -52,9 +52,6 @@
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
     <Compile Include="Extensions/Tuple.fs" />
-    <Compile Include="TypeLevel/TypeLevelOperators.fs" />
-    <Compile Include="TypeLevel/TypeBool.fs" />
-    <Compile Include="TypeLevel/TypeNat.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
