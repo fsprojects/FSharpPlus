@@ -93,12 +93,17 @@ let ExtensionsTest =
                    equal (mapItem2 string (1,2,3)) (1,"2",3)
                    // equal (item3 (1,2,3)) 3
                    )
-                   
+
       testCase "Const"
         (fun () ->
                    equal (Const.Map (Const 1, fun (x:bool) -> string x)) (Const 1: Const<int,string>)
                    )
 
+      testCase "Lens"
+        (fun () ->
+                   equal (view _1 (1, '2')) 1
+                   equal (view _2 ('1', 2)) 2
+                   )
       testCase "eq on DList 1" (fun () -> equal true  (dlistA = dlistB))
       testCase "eq on DList 2" (fun () -> equal false (dlistA = dlistC))
       testCase "eq on DList 3" (fun () -> equal true  ((dlistA :> obj) = (dlistB :> obj)))
