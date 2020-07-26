@@ -41,7 +41,6 @@ type Any = Any of bool with
     static member (+) (Any x, Any y) = Any (x || y)
 
 
-#if !FABLE_COMPILER
 
 /// <summary> The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
 /// <para/>   Useful for: Lens getters.
@@ -49,18 +48,22 @@ type Any = Any of bool with
 [<Struct>]
 type Const<'t,'u> = Const of 't with
 
+    // Functor
+    static member Map (Const x: Const<_,'T>, _: 'T->'U) = Const x : Const<'C,'U>
+    
+    #if !FABLE_COMPILER
+
     // Monoid
     static member inline get_Zero () = Const (getZero ()) : Const<'T,'U>
     static member inline (+) (Const x: Const<'T,'U>, Const y: Const<'T,'U>) = Const (plus x y) : Const<'T,'U>
-
-    // Functor
-    static member Map (Const x: Const<_,'T>, _: 'T->'U) = Const x : Const<'C,'U>
 
     // Applicative
     static member inline Return (_: 'U) = Const (getZero ()) : Const<'T,'U>
     static member inline (<*>) (Const f: Const<'C,'T->'U>, Const x: Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
     static member inline Lift2 (_: 'T->'U->'V, Const x: Const<'C,'T>, Const y: Const<'C,'U>) = Const (plus x y) : Const<'C,'V>
-
+    
+    #endif
+    
     // Contravariant
     static member Contramap (Const x: Const<'C,'T>, _: 'U->'T) = Const x     : Const<'C,'U>
 
@@ -73,6 +76,8 @@ type Const<'t,'u> = Const of 't with
     static member BifoldBack (Const x: Const<'T,'V>, f: 'T->'U->'U, _: 'V->'W->'W, z: 'U) = f x z
     static member Bifold     (Const x: Const<'T,'V>, f: 'U->'T->'U, _: 'W->'V->'W, z: 'U) = f z x
 
+    #if !FABLE_COMPILER
+
     // Bitraversable
     static member inline Bitraverse (Const x: Const<'T1,'U1>, f: 'T1->'``Functor<'T2>``, g: 'U1->'``Functor<'U2>``) : '``Functor<Const<'T2,'U2>>`` =
         let mid x = map (id: 'U2 -> 'U2) x
@@ -82,12 +87,13 @@ type Const<'t,'u> = Const of 't with
             ()
         (Const : _ -> Const<'T2,'U2>) <!> f x
 
+    #endif
+
 /// Basic operations on Const
 [<RequireQualifiedAccess>]
 module Const =
     let run (Const t) = t
 
-#endif
 
 /// Option<'T> monoid returning the leftmost non-None value.
 [<Struct>]
