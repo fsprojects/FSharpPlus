@@ -62,6 +62,8 @@ type Const<'t,'u> = Const of 't with
     static member inline (<*>) (Const f: Const<'C,'T->'U>, Const x: Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
     static member inline Lift2 (_: 'T->'U->'V, Const x: Const<'C,'T>, Const y: Const<'C,'U>) = Const (plus x y) : Const<'C,'V>
     
+    #else
+    static member inline Return (_: 'U) = Const LanguagePrimitives.GenericZero : Const<'T,'U>
     #endif
     
     // Contravariant
