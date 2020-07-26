@@ -5,6 +5,7 @@ open FSharpPlus
 open System.Collections.Generic
 
 open FSharpPlus.Data
+open FSharpPlus.Lens
 
 type StringCodec<'t> = StringCodec of ( (string -> Result<'t,string>) * ('t -> string) ) with
     static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (d >> Result.map f, e << g) : StringCodec<'U>
