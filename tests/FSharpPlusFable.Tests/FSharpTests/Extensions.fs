@@ -5,7 +5,6 @@ open FSharpPlus
 open System.Collections.Generic
 
 open FSharpPlus.Data
-open FSharpPlus.Lens
 
 type StringCodec<'t> = StringCodec of ( (string -> Result<'t,string>) * ('t -> string) ) with
     static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (d >> Result.map f, e << g) : StringCodec<'U>
@@ -13,6 +12,20 @@ type StringCodec<'t> = StringCodec of ( (string -> Result<'t,string>) * ('t -> s
 module StringCodec =
     let decode (StringCodec (d,_)) x = d x
     let encode (StringCodec (_,e)) x = e x
+
+type Person = {
+    Name: string
+    DateOfBirth: DateTime
+}
+module Person=
+    let inline _name f { Name = a; DateOfBirth = b } = f a <&> fun a' -> { Name = a'; DateOfBirth = b }
+ type Book = {
+    Title: string
+    Author: Person
+}
+module Book =
+    let inline _author f { Author = a; Title = b } = f a <&> fun a' -> { Author = a'; Title = b }
+    let inline _authorName b = _author << Person._name <| b
 
 
 let ExtensionsTest = 
@@ -102,8 +115,14 @@ let ExtensionsTest =
 
       testCase "Lens"
         (fun () ->
-                   equal (view _1 (1, '2')) 1
-                   equal (view _2 ('1', 2)) 2
+                   //equal (view _1 (1, '2')) 1
+                   // equal (view _2 ('1', 2)) 2
+                   let rayuela =
+                        { Book.Title = "Rayuela"
+                          Author = { Person.Name = "Julio Cortázar"
+                                     DateOfBirth = DateTime (1914, 8, 26) } }
+                   equal (view Book._authorName rayuela) "Julio Cortázar"
+
                    )
       testCase "eq on DList 1" (fun () -> equal true  (dlistA = dlistB))
       testCase "eq on DList 2" (fun () -> equal false (dlistA = dlistC))
