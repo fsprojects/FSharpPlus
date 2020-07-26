@@ -96,6 +96,8 @@ module Lens =
             | Error x -> Error </Map.InvokeOnInstance/> optic1 f x
             | Ok    x -> Ok    </Map.InvokeOnInstance/> optic2 f x
 
+    #if !FABLE_COMPILER
+    
     // Some common Lens
 
     /// Lens for the first element of a tuple
@@ -103,8 +105,6 @@ module Lens =
 
     /// Lens for the second element of a tuple
     let inline _2 f t = Map.InvokeOnInstance (fun x -> mapItem2 (fun _ -> x) t) (f (item2 t))
-    
-    #if !FABLE_COMPILER
 
     /// Lens for the third element of a tuple
     let inline _3 f t = Map.InvokeOnInstance (fun x -> mapItem3 (fun _ -> x) t) (f (item3 t))
