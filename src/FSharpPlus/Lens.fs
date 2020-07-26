@@ -103,6 +103,8 @@ module Lens =
 
     /// Lens for the second element of a tuple
     let inline _2 f t = Map.InvokeOnInstance (fun x -> mapItem2 (fun _ -> x) t) (f (item2 t))
+    
+    #if !FABLE_COMPILER
 
     /// Lens for the third element of a tuple
     let inline _3 f t = Map.InvokeOnInstance (fun x -> mapItem3 (fun _ -> x) t) (f (item3 t))
@@ -112,6 +114,8 @@ module Lens =
 
     /// Lens for the fifth element of a tuple
     let inline _5 f t = Map.InvokeOnInstance (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
+    
+    #endif
 
     [<RequireQualifiedAccess>]
     module Set=
