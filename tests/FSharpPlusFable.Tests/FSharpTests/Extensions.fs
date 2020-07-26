@@ -91,7 +91,7 @@ let ExtensionsTest =
       testCase "Tuple"
         (fun () ->
                    equal (mapItem2 string (1,2,3)) (1,"2",3)
-                   equal (item3 (1,2,3)) 3
+                   // equal (item3 (1,2,3)) 3
                    )
                    
       testCase "Const"
