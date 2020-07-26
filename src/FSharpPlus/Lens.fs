@@ -1,7 +1,5 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER
-
 open FSharpPlus.Operators
 open FSharpPlus.Data
 
@@ -76,11 +74,15 @@ module Lens =
     /// <returns>The prism.</returns>
     let inline prism' (constructor: 'b -> 's) (getter: 's -> Option<'a>) (f: 'a -> '``F<'b>``) = prism constructor (fun s -> option Ok (Error s) (getter s)) f : 's -> '``F<'t>``
 
+    #if !FABLE_COMPILER
+
     /// <summary>Build an 'Iso' from a pair of inverse functions.</summary>
     /// <param name="func">The transform function.</param>
     /// <param name="inv">The inverse of the transform function.</param>
     /// <returns>The iso.</returns>
     let inline iso (func: 's -> 'a) (inv: 'b -> 't) = dimap func (Map.InvokeOnInstance inv)
+
+    #endif
 
     /// Merge two lenses, getters, setters, folds or traversals.
     /// <param name="optic1">The first optic.</param>
@@ -149,6 +151,8 @@ module Lens =
     /// Prism providing a Traversal for targeting the 'None' part of an Option<'T>
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
 
+    #if !FABLE_COMPILER
+
     // Traversal
     let inline _all ref f s =
         let update old = if old = ref then f old else Return.InvokeOnInstance old
@@ -157,13 +161,22 @@ module Lens =
     // functions
     let inline to' k = dimap k (Contramap.InvokeOnInstance k)
 
+    #endif
+
     let foldMapOf l f = Const.run << l (Const << f)
     let foldOf    l   = Const.run << l Const
     let foldrOf l f z = flip Endo.run z << foldMapOf l (Endo << f)
+
+    #if !FABLE_COMPILER
+
     let foldlOf l f z = (flip Endo.run z << Dual.run) << foldMapOf l (Dual << Endo << flip f)
+
+    #endif
 
     /// Extract a list of the targets of a Fold. See also (^..).
     let toListOf  l   = let cons x y = x :: y in foldrOf l cons []
+
+    #if !FABLE_COMPILER
 
     /// Get the largest target of a Fold.
     let maximumOf l =
@@ -181,10 +194,17 @@ module Lens =
             | None -> Some y
         foldlOf l mf None
 
+    #endif
+
     let anyOf  l f = getAny << foldMapOf l (Any << f)
     let allOf  l f = getAll << foldMapOf l (All << f)
     let elemOf l = anyOf l << (=)
+
+    #if !FABLE_COMPILER
+
     let inline items x = traverse x
+
+    #endif
 
     let inline filtered p f s = if p s then f s else Return.InvokeOnInstance s
     let inline choosed p f s =
@@ -194,8 +214,11 @@ module Lens =
     let inline both f (a, b) = tuple2 </Map.InvokeOnInstance/> f a </Apply.InvokeOnInstance/> f b
 
     let inline withIso ai k = let (Exchange (sa, bt)) = ai (Exchange (id, Identity)) in k sa (Identity.run << bt)
+
+    #if !FABLE_COMPILER
     let inline from' l   = withIso l <| fun sa bt -> iso bt sa
     let inline mapping k = withIso k <| fun sa bt -> iso (Map.InvokeOnInstance sa) (Map.InvokeOnInstance bt)
+    #endif
 
     // Operators
 
@@ -231,5 +254,3 @@ module Lens =
     /// <param name="f">The mapper function.</param>
     /// <returns>The mapped Functor.</returns>
     let inline (<&>) (x: '``F<'t>``) (f: 't -> 'u) : '``F<'u>`` = Map.InvokeOnInstance f x
-
-#endif
