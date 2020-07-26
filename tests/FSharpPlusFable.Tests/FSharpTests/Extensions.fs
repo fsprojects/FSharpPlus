@@ -1,5 +1,6 @@
 module ExtensionsTests
 
+open System
 open Testing
 open FSharpPlus
 open System.Collections.Generic
@@ -13,16 +14,10 @@ module StringCodec =
     let decode (StringCodec (d,_)) x = d x
     let encode (StringCodec (_,e)) x = e x
 
-type Person = {
-    Name: string
-    DateOfBirth: DateTime
-}
-module Person=
+type Person = { Name: string; DateOfBirth: DateTime }
+module Person =
     let inline _name f { Name = a; DateOfBirth = b } = f a <&> fun a' -> { Name = a'; DateOfBirth = b }
- type Book = {
-    Title: string
-    Author: Person
-}
+type Book = { Title: string; Author: Person }
 module Book =
     let inline _author f { Author = a; Title = b } = f a <&> fun a' -> { Author = a'; Title = b }
     let inline _authorName b = _author << Person._name <| b
