@@ -13,7 +13,7 @@ module String =
     /// Inserts a separator between each char in the source string.
     let intersperse (element: char) (source: string) = String.Join ("", Array.ofSeq (source |> Seq.intersperse element))
 
-    /// Creates a sequence of strings by splitting the srouce string on any of the given separators.
+    /// Creates a sequence of strings by splitting the source string on any of the given separators.
     let split (separators: seq<string>) (source: string) = source.Split (Seq.toArray separators, StringSplitOptions.None) :> seq<_>
 
     /// Replace a substring with the given replacement string.
@@ -93,7 +93,7 @@ module String =
                 i <- i + 1
             if i = 0 then ""
             else source |> skip i
-    /// Returns a string that have at most N characters from the beginning of the original string.
+    /// Returns a string that has at most N characters from the beginning of the original string.
     /// It returns the original string if it is shorter than count.
     let truncate count (source: string) =
         if count < 1 then String.Empty
