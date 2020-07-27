@@ -124,10 +124,10 @@ let ExtensionsTest =
                    // equal (Some 1) (preview _Error (Error 1))
                    // equal None (preview _Error (Ok 1))
                    )
-      testCase "prism1" (fun () -> equal None (preview _Some None))
+      testCase "prism1" (fun () -> equal true (Option.isNone (preview _Some None)))
       testCase "prism2" (fun () -> equal (Some 1) (preview _Some (Some 1)))
       testCase "prism3" (fun () -> equal (Some ()) (preview _None None))
-      testCase "prism4" (fun () -> equal None (preview _None (Some 1)))
+      testCase "prism4" (fun () -> equal true (Option.isNone (preview _None (Some 1))))
       
       testCase "eq on DList 1" (fun () -> equal true  (dlistA = dlistB))
       testCase "eq on DList 2" (fun () -> equal false (dlistA = dlistC))
