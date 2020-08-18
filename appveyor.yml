@@ -1,11 +1,20 @@
 image: Visual Studio 2019
+
+before_build:
+  - ps: >-
+      $buildId = $env:APPVEYOR_BUILD_NUMBER.PadLeft(5, '0');
+      $versionSuffixPR = "PR$($env:APPVEYOR_PULL_REQUEST_NUMBER)-$buildId";
+      $branchName = "$env:APPVEYOR_REPO_BRANCH".Replace("_","");
+      $versionSuffixBRANCH = if ("$env:APPVEYOR_REPO_BRANCH" -eq "v1.1.0") { "CI$buildId" } else { "$branchName-CI$buildId" };
+      $env:VersionSuffix = if ("$env:APPVEYOR_REPO_TAG" -eq "true") { "" } else { if ("$env:APPVEYOR_PULL_REQUEST_NUMBER") { $versionSuffixPR } else { $versionSuffixBRANCH } };
+
 init:
   - git config --global core.autocrlf input
 build_script:
   - cmd: dotnet restore ./FSharpPlus.sln
   - cmd: dotnet build -c Release ./FSharpPlus.sln
   - cmd: dotnet test -c Release tests/FSharpPlus.Tests
-  - cmd: dotnet pack build.proj
+  - cmd: dotnet pack build.proj --version-suffix %VersionSuffix%
   - ps: ./docsrc/tools/download_nugets.ps1
   - cmd: dotnet run -c Release --project ./docsrc/tools
 test: off
