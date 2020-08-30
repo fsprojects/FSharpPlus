@@ -161,7 +161,8 @@ type Delay =
 type TryWith =
     inherit Default1
 
-    static member        TryWith (computation: '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3) = try computation with e -> catchHandler e
+    [<CompilerMessage("Method TryWith not implemented. To solve this issue implement a static member TryWith or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
+    static member        TryWith (_: '``Monad<'T>``          , _: exn            -> '``Monad<'T>``, _: Default3) = raise Internals.Errors.exnUnreachable
     static member inline TryWith (computation: '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation, catchHandler) : '``Monad<'T>``
     static member inline TryWith (_: ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1) = ()
 
