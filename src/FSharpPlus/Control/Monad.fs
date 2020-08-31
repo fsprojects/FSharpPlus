@@ -180,7 +180,10 @@ type TryFinally =
     inherit Default1
 
     static member        TryFinally ((computation: seq<_>  , compensation: unit -> unit), _: Default2  , _) = seq (try (Seq.toArray computation) finally compensation ())
-    static member        TryFinally ((computation: 'R -> _ , compensation: unit -> unit), _: Default2, _) = fun s -> try computation s finally compensation ()
+    
+    [<CompilerMessage("Method TryFinally not implemented. To solve this issue implement a static member TryFinally or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
+    static member        TryFinally ((_: 'R -> _           , _: unit -> unit           ), _: Default2  , _) = raise Internals.Errors.exnUnreachable
+    
     static member        TryFinally ((computation: Id<_>   , compensation: unit -> unit), _: TryFinally, _) = try computation finally compensation()
     static member        TryFinally ((computation: Async<_>, compensation: unit -> unit), _: TryFinally, _) = async.TryFinally (computation, compensation) : Async<_>
     static member        TryFinally ((computation: Lazy<_> , compensation: unit -> unit), _: TryFinally, _) = lazy (try computation.Force () finally compensation ()) : Lazy<_>
