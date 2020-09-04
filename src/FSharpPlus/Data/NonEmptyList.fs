@@ -185,7 +185,7 @@ type NonEmptyList<'t> with
     static member Map (x: NonEmptyList<'a>, f: 'a->'b) = NonEmptyList.map f x
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member MapI(x: NonEmptyList<_>, f) = NonEmptyList.mapi f x
+    static member MapIndexed (x: NonEmptyList<_>, f) = NonEmptyList.mapi f x
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Unzip s = NonEmptyList.unzip s
