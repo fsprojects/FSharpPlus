@@ -77,6 +77,12 @@ module NonEmptyList =
     /// <summary>Build a new non empty list whose elements are the results of applying the given function
     /// to each of the elements of the non empty list.</summary>
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
+    /// <summary>Build a new non empty list whose elements are the results of applying the given function with index
+    /// to each of the elements of the non empty list.</summary>
+    let mapi f { Head = x; Tail = xs } =
+        let mapperI = (fun i item -> f (i + 1) item)
+        { Head = f 0 x
+          Tail = List.mapi mapperI xs }
 
     /// <summary>Splits a list of pairs into two lists.</summary>
     /// <param name="list">The input list.</param>
@@ -177,6 +183,9 @@ module NonEmptyList =
 type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: NonEmptyList<'a>, f: 'a->'b) = NonEmptyList.map f x
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member MapI(x: NonEmptyList<_>, f) = NonEmptyList.mapi f x
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Unzip s = NonEmptyList.unzip s
