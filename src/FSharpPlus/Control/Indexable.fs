@@ -63,8 +63,7 @@ type TryItem =
 
 
 type MapIndexed =
-    static member MapIndexed (x: Id<'T>     , f: _->'T->'U , [<Optional>]_impl: MapIndexed) = f () x.getValue
-    static member MapIndexed (x: seq<'T>    , f            , [<Optional>]_impl: MapIndexed) = Seq.mapi   f x
+    inherit Default1
     static member MapIndexed (x: list<'T>   , f            , [<Optional>]_impl: MapIndexed) = List.mapi  f x
     static member MapIndexed (x: 'T []      , f            , [<Optional>]_impl: MapIndexed) = Array.mapi f x
     static member MapIndexed ((k: 'K, a: 'T), f            , [<Optional>]_impl: MapIndexed) = (k, ((f k a) : 'U))
@@ -72,9 +71,14 @@ type MapIndexed =
     static member MapIndexed (x: Map<'K,'T> , f            , [<Optional>]_impl: MapIndexed) = Map.map f x : Map<'K,'U>
 
     static member inline Invoke (mapping: 'K->'T->'U) (source: '``Indexable<'T>``) =
-        let inline call_3 (a: ^a, b: ^b, _: ^c, f) = ((^a or ^b or ^c) : (static member MapIndexed : _*_*_ -> _) b, f, a)
-        let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) : 'r
-        call (Unchecked.defaultof<MapIndexed>,   source, mapping) : '``Indexable<'U>``
+        let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member MapIndexed : _*_*_ -> _) b, f, a)
+        let inline call (a: 'a, b: 'b, f) = call_2 (a, b, f)
+        call (Unchecked.defaultof<MapIndexed>, source, mapping)
+    static member inline InvokeOnInstance (mapping: 'K->'T->'Key) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member MapIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
+
+    static member inline MapIndexed (x: seq<'T>   , f: int->'T->'U, _impl: Default2) = x |> Seq.mapi f : seq<'U>
+    static member inline MapIndexed (x: ^``I<'T>``, f: 'K->'T->'U , _impl: Default1) = (^``I<'T>`` : (static member MapIndexed : _*_->_) x, f) : '``I<'U>``
+    static member inline MapIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default1) = ()
 
 
 type IterateIndexed =
