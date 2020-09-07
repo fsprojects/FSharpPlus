@@ -93,8 +93,9 @@ type IterateIndexed =
         call (Unchecked.defaultof<IterateIndexed>,  source, action) : unit
     static member inline InvokeOnInstance (action: 'K->'T->unit) (source: '``Indexable<'T>``) = (^``Indexable<'T>`` : (static member IterateIndexed : _*_->unit) source, action)
 
-    static member IterateIndexed (x: seq<'T>   , f: int->'T->unit , _impl: Default2) = Seq.iteri   f x
-    static member inline IterateIndexed (x: ^``I<'T>``, f: 'K->'T->unit  , _impl: Default1) = (^``I<'T>`` : (static member IterateIndexed : _*_->unit) x, f)
+    static member inline IterateIndexed (x: seq<'T>   , f: int->'T->unit , _impl: Default2) = Seq.iteri   f x
+    static member inline IterateIndexed (x: ^``I<'T>``, f: 'K->'T->unit  , _impl: Default1) = IterateIndexed.InvokeOnInstance f x
+    static member inline IterateIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default1) = ()
 
 
 

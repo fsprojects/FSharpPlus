@@ -904,6 +904,11 @@ module Indexable =
 
     [<Test>]
     let iteriUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        SideEffects.reset ()
+        iteri (fun i v -> SideEffects.add <| sprintf "Got %d-%s" i v) m
+        areEquivalent ["Got 1-one";"Got 2-two"] (SideEffects.get ())
+
         SideEffects.reset ()
         let onIteration i v= ()
         iteri onIteration (WrappedListD [1..2])
