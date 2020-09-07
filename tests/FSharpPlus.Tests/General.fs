@@ -84,11 +84,13 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using WrappedListD's MaxBy"
         let (WrappedListD lst) = x
         List.maxBy f lst
+    static member MapIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's MapIndexed"
+        WrappedListD (List.mapi f x)
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
         List.length lst
-
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return x = WrappedListE [x]
     static member (>>=)  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
@@ -875,6 +877,25 @@ module Indexable =
         Assert.AreEqual (Some 2, tryItem 1 l)
         Assert.AreEqual (Some 2, tryItem 1 iReadOnlyList)
         Assert.AreEqual (Some 2, tryItem 1 rarr)
+
+    [<Test>]
+    let mapiUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        let l = ReadOnlyCollection [|1..2|]
+        let iReadOnlyList = l :> IReadOnlyList<_>
+        let rarr = ResizeArray [|1..2|]
+        let mapDS = sprintf "%d-%s"
+        areEquivalent [KeyValuePair(1,"1-one"); KeyValuePair(2,"2-two")] (mapi mapDS m)
+        let mapDD = sprintf "%d-%d"
+        areEquivalent ["0-1";"1-2"] (mapi mapDD l)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD iReadOnlyList)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD rarr)
+
+        // correct overload:
+        let wl = WrappedListD [1..2]
+        SideEffects.reset ()
+        areEquivalent ["0-1";"1-2"] (mapi (sprintf "%d-%d") wl)
+        areEqual ["Using WrappedListD's MapIndexed"] (SideEffects.get ())
 
 module Monad = 
     [<Test>]
