@@ -87,6 +87,9 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member MapIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's MapIndexed"
         WrappedListD (List.mapi f x)
+    static member IterateIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's IterateIndexed"
+        List.iteri f x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -895,6 +898,20 @@ module Indexable =
         SideEffects.reset ()
         areEquivalent ["0-1";"1-2"] (mapi mapDD (WrappedListD [1..2]))
         areEqual ["Using WrappedListD's MapIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        areEquivalent ["0-1";"1-2"] (MapIndexed.InvokeOnInstance mapDD (WrappedListD [1..2]))
+        areEqual ["Using WrappedListD's MapIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    let iteriUsage () =
+        SideEffects.reset ()
+        let onIteration i v= ()
+        iteri onIteration (WrappedListD [1..2])
+        areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        IterateIndexed.InvokeOnInstance onIteration (WrappedListD [1..2])
+        areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
+
 
 module Monad = 
     [<Test>]

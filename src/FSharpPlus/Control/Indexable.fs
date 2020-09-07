@@ -82,8 +82,7 @@ type MapIndexed =
 
 
 type IterateIndexed =
-    static member IterateIndexed (x: Id<'T>    , f: _->'T->unit, [<Optional>]_impl: IterateIndexed) = f () x.getValue
-    static member IterateIndexed (x: seq<'T>   , f             , [<Optional>]_impl: IterateIndexed) = Seq.iteri   f x
+    inherit Default1
     static member IterateIndexed (x: list<'T>  , f             , [<Optional>]_impl: IterateIndexed) = List.iteri  f x
     static member IterateIndexed (x: 'T []     , f             , [<Optional>]_impl: IterateIndexed) = Array.iteri f x
     static member IterateIndexed (x: Map<'K,'T>, f             , [<Optional>]_impl: IterateIndexed) = Map.iter f x
@@ -92,6 +91,10 @@ type IterateIndexed =
         let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member IterateIndexed : _*_*_ -> _) b, f, a)
         let inline call (a: 'a, b: 'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<IterateIndexed>,  source, action) : unit
+    static member inline InvokeOnInstance (action: 'K->'T->unit) (source: '``Indexable<'T>``) = (^``Indexable<'T>`` : (static member IterateIndexed : _*_->unit) source, action)
+
+    static member IterateIndexed (x: seq<'T>   , f: int->'T->unit , _impl: Default2) = Seq.iteri   f x
+    static member inline IterateIndexed (x: ^``I<'T>``, f: 'K->'T->unit  , _impl: Default1) = (^``I<'T>`` : (static member IterateIndexed : _*_->unit) x, f)
 
 
 
