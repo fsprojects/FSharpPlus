@@ -890,7 +890,7 @@ module Indexable =
         areEquivalent ["0-1";"1-2"] (mapi mapDD l)
         areEquivalent ["0-1";"1-2"] (mapi mapDD iReadOnlyList)
         areEquivalent ["0-1";"1-2"] (mapi mapDD rarr)
-        areEquivalent ["0-1";"1-2"] (mapi (sprintf "%d-%d") WrappedListD [1..2])
+        areEquivalent ["0-1";"1-2"] (mapi (sprintf "%d-%d") (WrappedListD [1..2]))
 
         // correct overload:
         let wl = WrappedListD [1..2]
