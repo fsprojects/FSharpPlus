@@ -380,3 +380,8 @@ module NonEmptyList =
     [<Test>]
     let ``map on non empty list should equal map on list`` () =
         fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (q |> NonEmptyList.map string |> NonEmptyList.toList) = (l |> List.map string)))
+
+    [<Test>]
+    let ``mapi on non empty list should equal mapi on list`` () =
+        let mapOp a b = sprintf "%d-%d" a b
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (q |> NonEmptyList.mapi mapOp |> NonEmptyList.toList) = (l |> List.mapi mapOp)))
