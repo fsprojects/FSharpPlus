@@ -81,6 +81,8 @@ From F#+
  -  [``ChoiceT<'Monad<Choice<'T,'TError>>``](type-choicet.html)
  -  [``Free<'Functor<'T>,'T>``](type-free.html)
  -  [``NonEmptyList<'T>``](type-nonempty.html)
+ -  [``NonEmptySet<'T>``](type-nonempty-set.html)
+ -  [``NonEmptyMap<'Key, 'T>``](type-nonempty-map.html)
  -  [``Validation<'Error,'T>``](type-validation.html)
  -  [``ZipList<'T>``](type-ziplist.html)
  -  [``ParallelArray<'T>``](type-parallelarray.html)

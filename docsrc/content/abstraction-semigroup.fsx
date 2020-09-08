@@ -59,6 +59,8 @@ From .Net/F#
 From F#+
  
  -  [``NonEmptyList<'S>``](type-nonempty.html)
+ -  [``NonEmptySet<'T>``](type-nonempty-set.html)
+ -  [``NonEmptyMap<'Key, 'T>``](type-nonempty-map.html)
  -  [``ZipList<'S>``](type-ziplist.html)
  -  [``Dual<'T>``](type-dual.html)
  -  [``Endo<'T>``](type-endo.html)
