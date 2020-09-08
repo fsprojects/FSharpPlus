@@ -13,8 +13,8 @@ type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> = private { Va
     interface IEnumerable<'a> with member x.GetEnumerator() = (x.Value :> _ seq).GetEnumerator()
     interface IReadOnlyCollection<'a> with member x.Count = x.Value.Count
 
-    static member Create (first: 'a, [<ParamArray>] rest: 'a[]) =
-        Set.ofArray rest |> Set.add first
+    static member Create (first: 'a, [<ParamArray>] rest: 'a[]) : NonEmptySet<'a> =
+        { Value = Set.ofArray rest |> Set.add first }
 
     member x.Add(value) = { Value = Set.add value x.Value }
     member x.Count = x.Value.Count

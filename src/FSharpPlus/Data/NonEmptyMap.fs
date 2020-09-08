@@ -14,8 +14,8 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
     interface IEnumerable<KeyValuePair<'Key, 'Value>> with member x.GetEnumerator() = (x.Value :> _ seq).GetEnumerator()
     interface IReadOnlyCollection<KeyValuePair<'Key, 'Value>> with member x.Count = x.Value.Count
 
-    static member Create ((k, v), [<ParamArray>] rest: ('Key * 'Value)[]) =
-        Map.ofArray rest |> Map.add k v
+    static member Create ((k, v), [<ParamArray>] rest: ('Key * 'Value)[]) : NonEmptyMap<_, _> =
+        { Value = Map.ofArray rest |> Map.add k v }
 
     member x.Add(key, value) = { Value = Map.add key value x.Value }
     member x.Item with get(key) = x.Value.[key]
