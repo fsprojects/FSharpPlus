@@ -261,6 +261,6 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
     static member FoldIndexed (x: NonEmptyMap<'k,'t>, f, z, _impl: FoldIndexed) = NonEmptyMap.fold f z x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline TraverseIndexed (x: NonEmptyMap<'K, 'T>, f: 'K->'T->'``Functor<'U>``) : '``Functor<NonEmptyMap<'K, 'U>>`` = NonEmptyMap.traversei f x
+    static member inline TraverseIndexed (x: NonEmptyMap<'K, 'T>, f: 'K->'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptyMap<'K, 'U>>``, [<Optional>]_impl: TraverseIndexed) : '``Functor<NonEmptyMap<'K, 'U>>`` = NonEmptyMap.traversei f x
 
     #endif
