@@ -7,6 +7,7 @@ open System.Collections.Generic
 open FSharpPlus
 open FSharpPlus.Control
 
+/// A type-safe map that contains at least one element.
 type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;ComparisonConditionalOn>]'Value when 'Key : comparison> =
     private { Value: Map<'Key, 'Value> } with
     interface Collections.IEnumerable with member x.GetEnumerator () = (x.Value :> _ seq).GetEnumerator() :> _
@@ -30,6 +31,8 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
       member x.Values = (x.Value :> IReadOnlyDictionary<_, _>).Values
       member x.ContainsKey key = x.ContainsKey key
 
+/// Basic operations on NonEmptyMap
+[<RequireQualifiedAccess>]
 module NonEmptyMap =
     /// <summary>Builds a non empty map.</summary>
     let create (k, v) (rest: ('k * 'v) seq) : NonEmptyMap<_, _> =

@@ -26,6 +26,8 @@ type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> = private { Va
     member x.MinimumElement = x.Value.MinimumElement
     member x.MaximumElement = x.Value.MaximumElement
 
+/// Basic operations on NonEmptySet
+[<RequireQualifiedAccess>]
 module NonEmptySet =
     /// <summary>Builds a non empty set.</summary>
     let create x xs = { Value = Set.ofSeq xs |> Set.add x }
