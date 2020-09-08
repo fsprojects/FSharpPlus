@@ -218,6 +218,16 @@ module NonEmptyMap =
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: NonEmptyMap<'Key, 'T>) (altSource: NonEmptyMap<'Key, 'T>) = unionWith (fun x _ -> x) source altSource
 
+#if !FABLE_COMPILER
+    let inline traverse (f: 'T->'``Functor<'U>``) (m: NonEmptyMap<'K, 'T>) : '``Functor<NonEmptyMap<'K, 'U>>`` =
+        let m' = traverse f (toMap m) : '``Functor<Map<'K, 'U>>``
+        ofMap <!> m' : '``Functor<NonEmptyMap<'K, 'U>>``
+
+    let inline traversei (f: 'K -> 'T -> '``Functor<'U>``) (m: NonEmptyMap<'K, 'T>) : '``Functor<NonEmptyMap<'K, 'U>>`` =
+        let m' = traversei f (toMap m) : '``Functor<Map<'K, 'U>>``
+        ofMap <!> m' : '``Functor<NonEmptyMap<'K, 'U>>``
+#endif
+
 type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;ComparisonConditionalOn>]'Value when 'Key : comparison> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Iterate (x: NonEmptyMap<_, _>, action) = NonEmptyMap.iterValues action x
@@ -229,6 +239,9 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
     static member Unzip (x: NonEmptyMap<'K, ('T * 'U)>) = NonEmptyMap.unzip x : NonEmptyMap<'K, 'T> * NonEmptyMap<'K, 'U>
 
     #if !FABLE_COMPILER
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Traverse (x: NonEmptyMap<'K, 'T>, f: 'T->'``Functor<'U>``) : '``Functor<NonEmptyMap<'K, 'U>>`` = NonEmptyMap.traverse f x
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline ``+`` (x: NonEmptyMap<'a,'b>, y, [<Optional>]_mthd: Plus) = NonEmptyMap.unionWith Plus.Invoke x y
 
@@ -246,4 +259,8 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member FoldIndexed (x: NonEmptyMap<'k,'t>, f, z, _impl: FoldIndexed) = NonEmptyMap.fold f z x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline TraverseIndexed (x: NonEmptyMap<'K, 'T>, f: 'K->'T->'``Functor<'U>``) : '``Functor<NonEmptyMap<'K, 'U>>`` = NonEmptyMap.traversei f x
+
     #endif
