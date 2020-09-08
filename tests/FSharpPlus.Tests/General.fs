@@ -90,6 +90,9 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member IterateIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's IterateIndexed"
         List.iteri f x
+    static member inline FoldIndexed (WrappedListD x, f, z) =
+        SideEffects.add "Using WrappedListD's FoldIndexed"
+        foldi f z x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -917,6 +920,18 @@ module Indexable =
         IterateIndexed.InvokeOnInstance onIteration (WrappedListD [1..2])
         areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
 
+    [<Test>]
+    let foldiUsage () =
+        SideEffects.reset ()
+        let folder (s:int) (i:int) (t:int) = t * s - i
+        let wlist = WrappedListD [1..2]
+        let res = foldi folder 10 wlist
+        areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
+        areEqual 19 res
+        SideEffects.reset ()
+        let res1 = FoldIndexed.InvokeOnInstance folder 10 wlist
+        areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
+        areEqual 19 res1
 
 module Monad = 
     [<Test>]

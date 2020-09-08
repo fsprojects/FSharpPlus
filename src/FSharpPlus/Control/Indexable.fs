@@ -77,7 +77,7 @@ type MapIndexed =
     static member inline InvokeOnInstance (mapping: 'K->'T->'Key) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member MapIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
 
     static member inline MapIndexed (x: seq<'T>   , f: int->'T->'U, _impl: Default2) = x |> Seq.mapi f : seq<'U>
-    static member inline MapIndexed (x: ^``I<'T>``, f: 'K->'T->'U , _impl: Default1) = (^``I<'T>`` : (static member MapIndexed : _*_->_) x, f) : '``I<'U>``
+    static member inline MapIndexed (x: ^``I<'T>``, f: 'K->'T->'U , _impl: Default1) = MapIndexed.InvokeOnInstance f x
     static member inline MapIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default1) = ()
 
 
@@ -100,7 +100,7 @@ type IterateIndexed =
 
 
 type FoldIndexed =
-    static member FoldIndexed (x: seq<_>    , f, z, _impl: FoldIndexed) = x |> Seq.fold   (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
+    inherit Default1
     static member FoldIndexed (x: list<_>   , f, z, _impl: FoldIndexed) = x |> List.fold  (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
     static member FoldIndexed (x: _ []      , f, z, _impl: FoldIndexed) = x |> Array.fold (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
     static member FoldIndexed (_: Map<'k,'t>, f, z, _impl: FoldIndexed) = Map.fold f z
@@ -109,6 +109,11 @@ type FoldIndexed =
         let inline call_2 (a: ^a, b: ^b, f, z) = ((^a or ^b) : (static member FoldIndexed : _*_*_*_ -> _) b, f, z, a)
         let inline call (a: 'a, b: 'b, f, z) = call_2 (a, b, f, z)
         call (Unchecked.defaultof<FoldIndexed>, foldable, folder, state)
+    static member inline InvokeOnInstance (folder: 'State->'Key->'T->'State) (state: 'State) (source: '``Indexable<'T>``) : 'State = (^``Indexable<'T>`` : (static member FoldIndexed : _*_*_->_) source, folder, state) : 'State
+
+    static member inline FoldIndexed (x: seq<_>    , f: 'State->int->'T->'State  , z:'State, _impl: Default2) = x |> Seq.fold   (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
+    static member inline FoldIndexed (x: ^``I<'T>``, f: 'State->'Key->'T->'State , z:'State, _impl: Default1) : 'State = FoldIndexed.InvokeOnInstance f z x
+    static member inline FoldIndexed (_: ^t when ^t: null and ^t: struct, _: 'State->'Key->'T->'State, _:'S, _mthd: Default1) = ()
 
 
 type TraverseIndexed =
