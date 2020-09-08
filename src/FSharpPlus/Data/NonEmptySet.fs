@@ -52,7 +52,7 @@ module NonEmptySet =
     /// <param name="list">The input list.</param>
     /// <returns>Non empty set containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
-    /// <remarks>Throws exception for empty set</remarks>
+    /// <remarks>Throws exception for empty list</remarks>
     let ofList (list : _ list) =
         match list with
         | []    -> invalidArg "list" "The input list was empty."
@@ -61,7 +61,7 @@ module NonEmptySet =
     /// <param name="seq">The input list.</param>
     /// <returns>Non empty set containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
-    /// <remarks>Throws exception for empty set</remarks>
+    /// <remarks>Throws exception for empty sequence</remarks>
     let ofSeq (seq : _ seq) =
         match seq |> Seq.toList with
         | []    -> invalidArg "seq" "The input sequence was empty."
@@ -96,7 +96,7 @@ module NonEmptySet =
     /// <param name="set2">The set to test against.</param>
     /// <returns>True if <c>set1</c> is a subset of <c>set2</c>.</returns>
     let isSubset (set1: _ NonEmptySet) (set2: _ NonEmptySet) = Set.isSubset set1.Value set2.Value
-    /// <summary>Evaluates to "true" if all elements of the first set are in the second, and at least 
+    /// <summary>Evaluates to "true" if all elements of the first set are in the second, and at least
     /// one element of the second is not in the first.</summary>
     /// <param name="set1">The potential subset.</param>
     /// <param name="set2">The set to test against.</param>
@@ -107,14 +107,14 @@ module NonEmptySet =
     /// <param name="set2">The set to test against.</param>
     /// <returns>True if <c>set1</c> is a superset of <c>set2</c>.</returns>
     let isSuperset (set1: _ NonEmptySet) (set2: _ NonEmptySet) = Set.isSuperset set1.Value set2.Value
-    /// <summary>Evaluates to "true" if all elements of the second set are in the first, and at least 
+    /// <summary>Evaluates to "true" if all elements of the second set are in the first, and at least
     /// one element of the first is not in the second.</summary>
     /// <param name="set1">The potential superset.</param>
     /// <param name="set2">The set to test against.</param>
     /// <returns>True if <c>set1</c> is a proper superset of <c>set2</c>.</returns>
     let isProperSuperset (set1: _ NonEmptySet) (set2: _ NonEmptySet) = Set.isProperSuperset set1.Value set2.Value
     /// <summary>Tests if any element of the collection satisfies the given predicate.
-    /// If the input function is <c>predicate</c> and the elements are <c>i0...iN</c> 
+    /// If the input function is <c>predicate</c> and the elements are <c>i0...iN</c>
     /// then computes <c>p i0 or ... or p iN</c>.</summary>
     /// <param name="predicate">The function to test set elements.</param>
     /// <param name="set">The input set.</param>
@@ -173,16 +173,19 @@ module NonEmptySet =
 type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: NonEmptySet<'a>, f: 'a->'b) = NonEmptySet.map f x
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Return (x: 'a) = NonEmptySet.singleton x
     static member (+) (set1: NonEmptySet<'a>, set2: NonEmptySet<'a>) = NonEmptySet.union set1 set2
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member FoldBack (set: NonEmptySet<'a>, f, z) = Set.foldBack f set.Value z
 
     #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member ToList (s: NonEmptySet<'a>, [<Optional>]_impl: ToList) = NonEmptySet.toList s    
+    static member ToList (s: NonEmptySet<'a>, [<Optional>]_impl: ToList) = NonEmptySet.toList s
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member ToSeq (s: NonEmptySet<'a>, [<Optional>]_impl: ToSeq) = NonEmptySet.toList s |> List.toSeq
+    static member ToSeq (s: NonEmptySet<'a>, [<Optional>]_impl: ToSeq) = NonEmptySet.toSeq s
 
-    static member Reduce (s: NonEmptySet<'a>, reduction: 'a -> 'a -> 'a) = Seq.reduce reduction (NonEmptySet.toSeq s)
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Reduce (s: NonEmptySet<'a>, reduction: 'a -> 'a -> 'a) = NonEmptySet.reduce reduction s
     #endif
