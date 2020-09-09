@@ -77,7 +77,7 @@ type MapIndexed =
     static member inline InvokeOnInstance (mapping: 'K->'T->'Key) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member MapIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
 
     static member inline MapIndexed (x: seq<'T>   , f: int->'T->'U, _impl: Default2) = x |> Seq.mapi f : seq<'U>
-    static member inline MapIndexed (x: ^``I<'T>``, f: 'K->'T->'U , _impl: Default1) = MapIndexed.InvokeOnInstance f x
+    static member inline MapIndexed (x: ^``I<'T>``, f: 'K->'T->'U , _impl: Default1) : '``I<'U>`` = MapIndexed.InvokeOnInstance f x
     static member inline MapIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default1) = ()
 
 
