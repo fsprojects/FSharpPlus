@@ -12,6 +12,16 @@ open Helpers
 open FSharpPlus.Math.Applicative
 open CSharpLib
 
+type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
+    static member ToMap (WrappedMapA m) = m
+    static member inline TraverseIndexed (WrappedMapA m, f:'K->'b->'c) =
+        SideEffects.add "Using WrappedMapA's TraverseIndexed"
+        let insert_f k x ys = Map.Invoke (Map.add k) (f k x) <*> ys
+        WrappedMapA <!> (Map.foldBack insert_f m (result Map.empty))
+
+module WrappedMapA=
+    let inline ofList l = Map.ofList l |> WrappedMapA
+
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
     static member OfSeq lst = WrappedListA (Seq.toList lst)
@@ -932,6 +942,29 @@ module Indexable =
         let res1 = FoldIndexed.InvokeOnInstance folder 10 wlist
         areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
         areEqual 19 res1
+
+    [<Test>]
+    let traverseiUsage () =
+        let m1 = WrappedMapA.ofList [(1, [1;1;1]); (2, [2;2;2])]
+
+        SideEffects.reset ()
+        let r1 = m1 |> TraverseIndexed.InvokeOnInstance (fun _ _ -> None)
+        Assert.AreEqual(None, r1)
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+        (*
+        SideEffects.reset ()
+        let r2 = m1 |> TraverseIndexed.InvokeOnInstance (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r2.Value
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+        *)
+
+        (*
+        SideEffects.reset ()
+        let r3 = m1 |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r3.Value
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+        *)
 
 module Monad = 
     [<Test>]
