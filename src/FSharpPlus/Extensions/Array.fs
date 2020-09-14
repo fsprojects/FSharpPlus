@@ -26,9 +26,10 @@ module Array =
         let lenx, leny = Array.length x, Array.length y
         Array.init (lenx * leny) (fun i -> f x.[i / leny] y.[i % leny])
 
+    /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
 
-    /// Inserts a separator between each element in the source array.
+    /// Inserts a separator element between each element in the source array.
     let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.

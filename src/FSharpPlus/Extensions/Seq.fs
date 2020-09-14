@@ -64,6 +64,7 @@ module Seq =
                     members.Add e.Current
             yield g, members }
 
+    /// Inserts a separator element between each element in the source seq.
     // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
     let intersperse sep list = seq {
         let mutable notFirst = false

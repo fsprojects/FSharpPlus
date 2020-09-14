@@ -54,9 +54,10 @@ module List =
             | x, n -> loop (n-1) (List.tail x)
         if i > 0 then loop i list else list
 
+    /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
 
-    /// Inserts a separator between each element in the source list.
+    /// Inserts a separator element between each element in the source list.
     let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList : list<'T>
 
     /// Creates a sequence of lists by splitting the source list on any of the given separators.

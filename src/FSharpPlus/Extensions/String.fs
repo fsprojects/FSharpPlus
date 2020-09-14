@@ -10,7 +10,7 @@ module String =
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: string) (source: seq<string>) = String.Join (separator, source)
 
-    /// Inserts a separator between each char in the source string.
+    /// Inserts a separator char between each char in the source string.
     let intersperse (element: char) (source: string) = String.Join ("", Array.ofSeq (source |> Seq.intersperse element))
 
     /// Creates a sequence of strings by splitting the source string on any of the given separators.

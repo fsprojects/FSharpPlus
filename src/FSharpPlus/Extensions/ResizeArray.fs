@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus
+namespace FSharpPlus
 
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
@@ -22,9 +22,10 @@ module ResizeArray =
     /// Combine all values from the first ResizeArray with the second, using the supplied mapping function.
     let lift2 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) = ResizeArray (Seq.lift2 mapping x1 x2)
 
+    /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
 
-    /// Inserts a separator between each element in the source array.
+    /// Inserts a separator element between each element in the source ResizeArray.
     let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
