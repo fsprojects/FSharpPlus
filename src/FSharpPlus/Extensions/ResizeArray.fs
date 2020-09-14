@@ -1,4 +1,4 @@
-namespace FSharpPlus
+﻿namespace FSharpPlus
 
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
@@ -17,6 +17,17 @@ module ResizeArray =
     /// <exception cref="System.ArgumentNullException">Thrown when the input ResizeArray is null.</exception>
     let map (f: 'T->'U) (x: ResizeArray<'T>) = ResizeArray (Seq.map f x)
 
+    /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them</summary>
+    /// <param name="f">The functions.</param>
+    /// <param name="x">The values.</param>
+    /// <returns>A concatenated list of the resulting ResizeArray after applying each function to each value</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > List.apply [double; triple] [1; 2; 3];;  
+    /// val it : int list = [2; 4; 6; 3; 6; 9]
+    /// </code>
+    /// </example>
     let apply (f: ResizeArray<'T->'U>) (x: ResizeArray<'T>) = ResizeArray (Seq.apply f x)
 
     /// Combine all values from the first ResizeArray with the second, using the supplied mapping function.
