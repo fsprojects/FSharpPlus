@@ -9,7 +9,11 @@ module List =
     /// Creates a list with a single element.
     let singleton x = [x]
 
-    let cons x y = x :: y
+    /// <summary>Add an element to the beginning of the given list</summary>
+    /// <param name="x">The element to add</param>
+    /// <param name="list">The list to add to</param>
+    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    let cons x list = x :: list 
 
     /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
     /// <param name="f">The list of functions.</param>
