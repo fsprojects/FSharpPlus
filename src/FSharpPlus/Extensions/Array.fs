@@ -6,6 +6,17 @@ module Array =
 
     open System
 
+    /// <summary>Applies an array of functions to an array of values and concatenates them</summary>
+    /// <param name="f">The array of functions.</param>
+    /// <param name="x">The array of values.</param>
+    /// <returns>A concatenated array of the resulting arrays from applying each function to each value</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > Array.apply [|double; triple|] [|1; 2; 3|];;  
+    /// val it : int [] = [|2; 4; 6; 3; 6; 9|]
+    /// </code>
+    /// </example>
     let apply f x =
         let lenf, lenx = Array.length f, Array.length x
         Array.init (lenf * lenx) (fun i -> f.[i / lenx] x.[i % lenx])

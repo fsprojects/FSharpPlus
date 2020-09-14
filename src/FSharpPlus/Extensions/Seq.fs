@@ -20,6 +20,17 @@ module Seq =
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
     let bind (mapping: 'T->seq<'U>) source = Seq.collect mapping source
 
+    /// <summary>Applies a sequence of functions to a sequence of values and concatenates them</summary>
+    /// <param name="f">The seq of functions.</param>
+    /// <param name="x">The seq of values.</param>
+    /// <returns>A seq concatenating the results from applying each function to each value</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > Seq.apply [double; triple] [1; 2; 3];;  
+    /// val it : seq&lt;int&gt; = seq [2; 4; 6; 3; ...]
+    /// </code>
+    /// </example>
     let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
 
     let lift2 f x1 x2 = Seq.allPairs x1 x2 |> Seq.map (fun (x, y) -> f x y)

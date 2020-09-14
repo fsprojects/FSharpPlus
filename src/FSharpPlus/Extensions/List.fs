@@ -10,6 +10,18 @@ module List =
     let singleton x = [x]
 
     let cons x y = x :: y
+
+    /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
+    /// <param name="f">The list of functions.</param>
+    /// <param name="x">The list of values.</param>
+    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > List.apply [double; triple] [1; 2; 3];;  
+    /// val it : int list = [2; 4; 6; 3; 6; 9]
+    /// </code>
+    /// </example>
     let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
