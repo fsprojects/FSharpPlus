@@ -117,6 +117,7 @@ type FoldIndexed =
 
 
 type TraverseIndexed =
+    inherit Default1
     static member inline TraverseIndexed ((k: 'K, a: 'T), f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke ((fun x y -> (x, y)) k) (f k a)
     static member inline TraverseIndexed (a: Tuple<_>   , f , [<Optional>]_output: 'R, [<Optional>]_impl: TraverseIndexed) : 'R = Map.Invoke Tuple (f () a.Item1)
     
@@ -126,8 +127,8 @@ type TraverseIndexed =
 
     static member inline InvokeOnInstance (f: 'Key -> 'T -> '``Functor<'U>``) (t: '``Indexable<'T>``) : '``Functor<'Indexable<'U>>`` = (^``Indexable<'T>`` : (static member TraverseIndexed: _*_->_) t,f) : '``Functor<'Indexable<'U>>`` 
 
-    static member inline TraverseIndexed (t: seq<'T>, f: int -> 'T -> '``Functor<'U>``, _output: '``Functor<seq<'U>>``, _impl: Default2) : '``Functor<seq<'U>>`` = Traverse.Traverse(Seq.indexed t, (fun (i, x) -> f i x), _output, _impl)
-    static member inline TraverseIndexed (t: ^``I<'T>``, f: 'Index -> 'T -> '``Functor<'U>``, _output: '``Functor<'I<'U>>``, _impl: Default1) : '``Functor<'I<'U>>`` = TraverseIndexed.InvokeOnInstance f t : '``Functor<'I<'U>>``
+    static member inline TraverseIndexed (t: seq<'T>, f: int -> 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) : '``Functor<seq<'U>>`` = Traverse.Traverse(Seq.indexed t, (fun (i, x) -> f i x), _output, _impl)
+    static member inline TraverseIndexed (t: ^``I<'T>``, f: 'Index -> 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<'I<'U>>``, [<Optional>]_impl: Default1) : '``Functor<'I<'U>>`` = TraverseIndexed.InvokeOnInstance f t : '``Functor<'I<'U>>``
     static member inline TraverseIndexed (_: ^t when ^t: null and ^t: struct, _: 'Index -> 'T -> '``Functor<'U>``, _: 'R, _mthd: Default1) = id
 
     static member inline Invoke (f: 'Key -> 'T -> '``Functor<'U>``) (t: '``Indexable<'T>``) : '``Functor<'Indexable<'U>>`` =

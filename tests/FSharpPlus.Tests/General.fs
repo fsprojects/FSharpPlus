@@ -105,7 +105,8 @@ type WrappedListD<'s> = WrappedListD of 's list with
         foldi f z x
     static member inline TraverseIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's TraverseIndexed"
-        traversei f x
+        // traversei f x
+        Control.TraverseIndexed.TraverseIndexed(x, f)
     static member FindIndex (WrappedListD x, y) =
         SideEffects.add "Using WrappedListD's FindIndex"
         printfn "WrappedListD.FindIndex"
@@ -963,23 +964,20 @@ module Indexable =
         Assert.AreEqual(None, r1)
         areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
 
-(*
         SideEffects.reset ()
         let r1 = m1 |> traversei (fun _ _ -> None)
         Assert.AreEqual(None, r1)
         areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
-*)
+
         SideEffects.reset ()
         let r2 = m1 |> TraverseIndexed.InvokeOnInstance (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
         areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r2.Value
         areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
 
-(*
         SideEffects.reset ()
         let r3 = m1 |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
         areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r3.Value
         areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
-        *)
 
     [<Test>]
     let findIndexUsage () =
