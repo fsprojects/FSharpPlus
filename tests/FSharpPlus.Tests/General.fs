@@ -358,7 +358,7 @@ module Functor =
         SideEffects.reset ()
 
         // NonEmptyList<_> has Map but at the same time is a seq<_>
-        let testVal1 = map ((+) 1) {Head = 10; Tail = [20;30]}
+        let testVal1 = map ((+) 1) (nel {10; 20; 30})
         Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal1)
 
         let testVal2 = map ((+) 1) ((ofSeq :seq<_*_> -> Dictionary<_,_>) (seq ["a", 1; "b", 2]))
@@ -1094,7 +1094,7 @@ module Traversable =
 
     [<Test>]
     let traversableForNonPrimitive () =
-        let nel = NonEmptyList.create (Some 1) [Some 2]
+        let nel = nel {Some 1}
         let rs1  = traverse id nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
         let rs2  = sequence nel
