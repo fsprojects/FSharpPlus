@@ -14,11 +14,9 @@ open CSharpLib
 
 type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
     static member ToMap (WrappedMapA m) = m
-    static member inline TraverseIndexed (WrappedMapA m, f:'K->'T->_) =
+    static member inline TraverseIndexed (WrappedMapA m, f) =
         SideEffects.add "Using WrappedMapA's TraverseIndexed"
-        let insert_f k x ys = Map.Invoke (Map.add k) (f k x) <*> ys
-        WrappedMapA <!> (Map.foldBack insert_f m (result Map.empty))
-        //WrappedMapA <!> traversei f m
+        WrappedMapA <!> (traversei f m : ^__)
 module WrappedMapA=
     let inline ofList l = Map.ofList l |> WrappedMapA
 
@@ -105,8 +103,7 @@ type WrappedListD<'s> = WrappedListD of 's list with
         foldi f z x
     static member inline TraverseIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's TraverseIndexed"
-        // traversei f x
-        Control.TraverseIndexed.TraverseIndexed(x, f)
+        WrappedListD <!> (traversei f x : ^r)
     static member FindIndex (WrappedListD x, y) =
         SideEffects.add "Using WrappedListD's FindIndex"
         printfn "WrappedListD.FindIndex"
