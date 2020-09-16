@@ -103,6 +103,17 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member inline FoldIndexed (WrappedListD x, f, z) =
         SideEffects.add "Using WrappedListD's FoldIndexed"
         foldi f z x
+    static member inline TraverseIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's TraverseIndexed"
+        traversei f x
+    static member FindIndex (WrappedListD x, y) =
+        SideEffects.add "Using WrappedListD's FindIndex"
+        printfn "WrappedListD.FindIndex"
+        findIndex y x
+    static member FindSliceIndex (WrappedListD x, WrappedListD y) =
+        SideEffects.add "Using WrappedListD's FindSliceIndex"
+        printfn "WrappedListD.FindSliceIndex"
+        findSliceIndex y x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -969,6 +980,23 @@ module Indexable =
         areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r3.Value
         areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
         *)
+
+    [<Test>]
+    let findIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        SideEffects.reset ()
+        let i1 = findIndex ((=) 2) m1
+        areEquivalent ["Using WrappedListD's FindIndex"] (SideEffects.get ())
+        areEqual i1 2
+
+    [<Test>]
+    let findSliceIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        let m2 = WrappedListD [1..3]
+        SideEffects.reset ()
+        let i1 = findSliceIndex m2 m1
+        areEquivalent ["Using WrappedListD's FindSliceIndex"] (SideEffects.get ())
+        areEqual i1 1
 
 module Monad = 
     [<Test>]
