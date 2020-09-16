@@ -12,6 +12,14 @@ open Helpers
 open FSharpPlus.Math.Applicative
 open CSharpLib
 
+type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
+    static member ToMap (WrappedMapA m) = m
+    static member inline TraverseIndexed (WrappedMapA m, f) =
+        SideEffects.add "Using WrappedMapA's TraverseIndexed"
+        WrappedMapA <!> (traversei f m : ^__)
+module WrappedMapA=
+    let inline ofList l = Map.ofList l |> WrappedMapA
+
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
     static member OfSeq lst = WrappedListA (Seq.toList lst)
@@ -84,11 +92,30 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using WrappedListD's MaxBy"
         let (WrappedListD lst) = x
         List.maxBy f lst
+    static member MapIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's MapIndexed"
+        WrappedListD (List.mapi f x)
+    static member IterateIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's IterateIndexed"
+        List.iteri f x
+    static member inline FoldIndexed (WrappedListD x, f, z) =
+        SideEffects.add "Using WrappedListD's FoldIndexed"
+        foldi f z x
+    static member inline TraverseIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's TraverseIndexed"
+        WrappedListD <!> (traversei f x : ^r)
+    static member FindIndex (WrappedListD x, y) =
+        SideEffects.add "Using WrappedListD's FindIndex"
+        printfn "WrappedListD.FindIndex"
+        findIndex y x
+    static member FindSliceIndex (WrappedListD x, WrappedListD y) =
+        SideEffects.add "Using WrappedListD's FindSliceIndex"
+        printfn "WrappedListD.FindSliceIndex"
+        findSliceIndex y x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
         List.length lst
-
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return x = WrappedListE [x]
     static member (>>=)  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
@@ -875,6 +902,96 @@ module Indexable =
         Assert.AreEqual (Some 2, tryItem 1 l)
         Assert.AreEqual (Some 2, tryItem 1 iReadOnlyList)
         Assert.AreEqual (Some 2, tryItem 1 rarr)
+
+    [<Test>]
+    let mapiUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        let l = ReadOnlyCollection [|1..2|]
+        let iReadOnlyList = l :> IReadOnlyList<_>
+        let rarr = ResizeArray [|1..2|]
+        let mapDS = sprintf "%d-%s"
+        areEquivalent [KeyValuePair(1,"1-one"); KeyValuePair(2,"2-two")] (mapi mapDS m)
+        let mapDD = sprintf "%d-%d"
+        areEquivalent ["0-1";"1-2"] (mapi mapDD l)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD iReadOnlyList)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD rarr)
+
+        // correct overload:
+        SideEffects.reset ()
+        areEquivalent ["0-1";"1-2"] (mapi mapDD (WrappedListD [1..2]))
+        areEqual ["Using WrappedListD's MapIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        areEquivalent ["0-1";"1-2"] (MapIndexed.InvokeOnInstance mapDD (WrappedListD [1..2]))
+        areEqual ["Using WrappedListD's MapIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    let iteriUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        SideEffects.reset ()
+        iteri (fun i v -> SideEffects.add <| sprintf "Got %d-%s" i v) m
+        areEquivalent ["Got 1-one";"Got 2-two"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let onIteration i v= ()
+        iteri onIteration (WrappedListD [1..2])
+        areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        IterateIndexed.InvokeOnInstance onIteration (WrappedListD [1..2])
+        areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    let foldiUsage () =
+        SideEffects.reset ()
+        let folder (s:int) (i:int) (t:int) = t * s - i
+        let wlist = WrappedListD [1..2]
+        let res = foldi folder 10 wlist
+        areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
+        areEqual 19 res
+        SideEffects.reset ()
+        let res1 = FoldIndexed.InvokeOnInstance folder 10 wlist
+        areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
+        areEqual 19 res1
+
+    [<Test>]
+    let traverseiUsage () =
+        let m1 = WrappedMapA.ofList [(1, [1;1;1]); (2, [2;2;2])]
+
+        SideEffects.reset ()
+        let r1 = m1 |> TraverseIndexed.InvokeOnInstance (fun _ _ -> None)
+        Assert.AreEqual(None, r1)
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let r1 = m1 |> traversei (fun _ _ -> None)
+        Assert.AreEqual(None, r1)
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let r2 = m1 |> TraverseIndexed.InvokeOnInstance (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r2.Value
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let r3 = m1 |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r3.Value
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    let findIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        SideEffects.reset ()
+        let i1 = findIndex ((=) 2) m1
+        areEquivalent ["Using WrappedListD's FindIndex"] (SideEffects.get ())
+        areEqual i1 2
+
+    [<Test>]
+    let findSliceIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        let m2 = WrappedListD [1..3]
+        SideEffects.reset ()
+        let i1 = findSliceIndex m2 m1
+        areEquivalent ["Using WrappedListD's FindSliceIndex"] (SideEffects.get ())
+        areEqual i1 1
 
 module Monad = 
     [<Test>]
