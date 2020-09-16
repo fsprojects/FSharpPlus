@@ -9,12 +9,27 @@ module Map =
     open System.Linq
     #endif
 
+    /// NOTE: Missing from other dictionary like modules:
+    /// tryGetValue, containsKey
+    
+    /// <summary>Return the keys of the given map.</summary>
+    /// <param name="source">The input map.</param>
+    ///
+    /// <returns>A seq of the keys in the map.</returns>
     let keys   (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(k, _)) -> k) source
+
+    /// <summary>Return the values of the given map.</summary>
+    /// <param name="source">The input map.</param>
+    ///
+    /// <returns>A seq of the values in the map.</returns>
     let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
-    /// <summary>Map values of the original Map.</summary>
-    /// <remarks>Keys remain unchanged.</remarks>
-    /// <param name="f">The mapping function.</param>
+    /// <summary>Map the values of the original Map.</summary>
+    /// <remarks>
+    /// The core `Map.map` function maps over values too, but it passes both
+    /// key and value to the mapping function.
+    /// </remarks>
+    /// <param name="f">The mapping function - takes only the value, and returns the mapped value.</param>
     /// <param name="x">The input Map.</param>
     ///
     /// <returns>The mapped Map.</returns>
@@ -46,6 +61,10 @@ module Map =
             | Some vy -> yield (k, (vx, vy))
             | None    -> () }
 
+    /// <summary>Split a Map with tuple pair values to two separate Maps.</summary>
+    /// <param name="source">The source Map.</param>
+    ///
+    /// <returns>A tuple of each untupled Map.</returns>
     let unzip (source: Map<'Key, 'T1 * 'T2>) = mapValues fst source, mapValues snd source
 
     /// Returns the union of two maps, using the combiner function for duplicate keys.
