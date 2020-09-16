@@ -50,10 +50,16 @@ module NonEmptyMap =
 
     /// <summary>Builds a list from the given non empty map.</summary>
     let toList  ({ Value = v }: NonEmptyMap<_, _>) = Map.toList v
+
+    /// <summary>Builds a non-empty list from the given non empty map.</summary>
+    let toNonEmptyList  ({ Value = v }: NonEmptyMap<_, _>) = Map.toList v |> NonEmptyList.ofList
+
     /// <summary>Builds a sequence from the given non empty map.</summary>
     let toSeq   ({ Value = v }: NonEmptyMap<_, _>) = Map.toSeq v
+
     /// <summary>Builds an array from the given non empty map.</summary>
     let toArray ({ Value = v }: NonEmptyMap<_, _>) = Map.toArray v
+
     /// <summary>Builds a map from the given non empty map.</summary>
     let toMap ({ Value = v }: NonEmptyMap<_, _>) = v
 
@@ -66,6 +72,7 @@ module NonEmptyMap =
         match array |> Array.toList with
         | []    -> invalidArg "array" "The input array was empty."
         | x::xs -> create x xs
+
     /// <summary>Builds a non empty map from the given list.</summary>
     /// <param name="list">The input list.</param>
     /// <returns>Non empty map containing the elements of the list.</returns>
@@ -75,6 +82,12 @@ module NonEmptyMap =
         match list with
         | []    -> invalidArg "list" "The input list was empty."
         | x::xs -> create x xs
+
+    /// <summary>Builds a non empty map from the given non-empty list.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>Non empty map containing the elements of the non-empty list.</returns>
+    let ofNonEmptyList (list: _ NonEmptyList) = create list.Head list.Tail
+
     /// <summary>Builds a non empty map from the given sequence.</summary>
     /// <param name="seq">The input list.</param>
     /// <returns>Non empty map containing the elements of the list.</returns>
@@ -84,6 +97,7 @@ module NonEmptyMap =
         match seq |> Seq.toList with
         | []    -> invalidArg "seq" "The input sequence was empty."
         | x::xs -> create x xs
+
     /// <summary>Builds a non empty map from the given map.</summary>
     /// <param name="map">The input map.</param>
     /// <returns>Non empty map containing the elements of the map.</returns>
@@ -92,6 +106,7 @@ module NonEmptyMap =
     let ofMap (map: Map<_, _>) =
       if Map.isEmpty map then invalidArg "seq" "The input sequence was empty."
       else { Value = map }
+
     /// Transforms a map to a NonEmptyMap, returning an option to signal when the original map was empty.
     let tryOfMap (map: Map<_, _>) =
       if Map.isEmpty map then None

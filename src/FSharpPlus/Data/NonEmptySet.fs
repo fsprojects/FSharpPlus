@@ -47,6 +47,9 @@ module NonEmptySet =
     /// <summary>Builds a set from the given non empty set.</summary>
     let toSet { Value = v } = v
 
+    /// <summary>Builds a non-empty list from the given non empty set.</summary>
+    let toNonEmptyList { Value = v } = NonEmptyList.ofSeq v
+
     /// <summary>Builds a non empty set from the given array.</summary>
     /// <param name="array">The input array.</param>
     /// <returns>Non empty set containing the elements of the array.</returns>
@@ -66,6 +69,12 @@ module NonEmptySet =
         match list with
         | []    -> invalidArg "list" "The input list was empty."
         | x::xs -> create x xs
+
+    /// <summary>Builds a non empty set from the given non-empty list.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>Non empty set containing the elements of the non-empty list.</returns>
+    let ofNonEmptyList (list: _ NonEmptyList) =
+        create list.Head list.Tail
 
     /// <summary>Builds a non empty set from the given sequence.</summary>
     /// <param name="seq">The input list.</param>
