@@ -8,6 +8,7 @@ open FSharpPlus
 open FSharpPlus.Control
 
 /// A type-safe map that contains at least one element.
+[<StructuredFormatDisplay("{Value}")>]
 type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;ComparisonConditionalOn>]'Value when 'Key : comparison> =
     private { Value: Map<'Key, 'Value> } with
     interface Collections.IEnumerable with member x.GetEnumerator () = (x.Value :> _ seq).GetEnumerator() :> _
@@ -267,15 +268,15 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
     static member ToSeq (s: NonEmptyMap<_, _>, [<Optional>]_impl: ToSeq) = NonEmptyMap.toSeq s
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member MapIndexed (x: NonEmptyMap<'K,'T>, f, [<Optional>]_impl: MapIndexed) = NonEmptyMap.map f x : NonEmptyMap<'K,'U>
+    static member MapIndexed (x: NonEmptyMap<'K,'T>, f) = NonEmptyMap.map f x : NonEmptyMap<'K,'U>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member IterateIndexed (x: NonEmptyMap<'K,'T>, f, [<Optional>]_impl: IterateIndexed) = NonEmptyMap.iter f x
+    static member IterateIndexed (x: NonEmptyMap<'K,'T>, f) = NonEmptyMap.iter f x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member FoldIndexed (x: NonEmptyMap<'k,'t>, f, z, [<Optional>]_impl: FoldIndexed) = NonEmptyMap.fold f z x
+    static member FoldIndexed (x: NonEmptyMap<'k,'t>, f, z) = NonEmptyMap.fold f z x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline TraverseIndexed (x: NonEmptyMap<'K, 'T>, f: 'K->'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptyMap<'K, 'U>>``, [<Optional>]_impl: TraverseIndexed) : '``Functor<NonEmptyMap<'K, 'U>>`` = NonEmptyMap.traversei f x
+    static member inline TraverseIndexed (x: NonEmptyMap<'K, 'T>, f: 'K->'T->'``Functor<'U>``) : '``Functor<NonEmptyMap<'K, 'U>>`` = NonEmptyMap.traversei f x
 
     #endif

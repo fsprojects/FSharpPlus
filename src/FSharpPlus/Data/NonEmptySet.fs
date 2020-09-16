@@ -8,6 +8,7 @@ open FSharpPlus
 open FSharpPlus.Control
 
 /// A type-safe set that contains at least one element.
+[<StructuredFormatDisplay("{Value}")>]
 type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> = private { Value: Set<'a> } with
     interface Collections.IEnumerable with member x.GetEnumerator () = (x.Value :> _ seq).GetEnumerator() :> _
     interface IEnumerable<'a> with member x.GetEnumerator() = (x.Value :> _ seq).GetEnumerator()
