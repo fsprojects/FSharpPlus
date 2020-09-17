@@ -367,6 +367,12 @@ module Functor =
         let testVal3 = map ((+) 1) (dict (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
 
+        let testVal4 = map ((+) 1) (NonEmptySet.Create(10, 20, 30))
+        Assert.IsInstanceOf<Option<NonEmptySet<int>>> (Some testVal4)
+
+        let testVal5 = map ((+) 1) (NonEmptyMap.Create(("a", 1), ("b", 2)))
+        Assert.IsInstanceOf<Option<NonEmptyMap<string,int>>> (Some testVal5)
+
         // WrappedSeqD is Applicative. Applicatives are Functors => map should work
         Assert.AreEqual ([], SideEffects.get ())
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
@@ -388,6 +394,9 @@ module Functor =
     let unzip () = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
+
+        let testVal2 = unzip (NonEmptyMap.Create((1,(true, 'a')), (2, (false, 'b'))))
+        Assert.IsInstanceOf<Option<NonEmptyMap<int, bool> * NonEmptyMap<int, char>>> (Some testVal2)
 
     [<Test>]
     let zipTest () =
@@ -761,6 +770,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = exists ((=) 2) [1..3]
         let _ = exists ((=) '2') (System.Text.StringBuilder "abc")
+        let _ = exists ((=) 2) (NonEmptySet.Create(1,2,3))
         let _ = exists ((=) 2) (WrappedListA [1..3])
         let _ = exists ((=) 2) (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Exists"; "Using WrappedListD's Exists"] (SideEffects.get ())
@@ -771,6 +781,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = pick Some [1..3]
         let _ = pick Some (System.Text.StringBuilder "abc")
+        let _ = pick Some (NonEmptySet.Create(1,2,3))
         let _ = pick Some (WrappedListA [1..3])
         let _ = pick Some (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Pick"; "Using WrappedListD's Pick"] (SideEffects.get ())
@@ -781,6 +792,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = minimum [1..3]
         let _ = minimum (System.Text.StringBuilder "abc")
+        let _ = minimum (NonEmptySet.Create(1,2,3))
         let _ = minimum (WrappedListA [1..3])
         let _ = minimum (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Min"; "Using WrappedListD's Min"] (SideEffects.get ())
@@ -791,6 +803,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = maxBy id [1..3]
         let _ = maxBy id (System.Text.StringBuilder "abc")
+        let _ = maxBy id (NonEmptySet.Create(1,2,3))
         let _ = maxBy id (WrappedListA [1..3])
         let _ = maxBy id (WrappedListD [1..3])
         areEqual ["Using WrappedListA's MaxBy"; "Using WrappedListD's MaxBy"] (SideEffects.get ())
@@ -801,6 +814,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = length [1..3]
         let _ = length (System.Text.StringBuilder "abc")
+        let _ = length (NonEmptySet.Create(1,2,3))
         let _ = length (WrappedListA [1..3])
         let _ = length (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Length"; "Using WrappedListD's Length"] (SideEffects.get ())
@@ -841,6 +855,9 @@ module Indexable =
         let j = Array4D.create 3 2 2 3 0
         let _ = item (1, 1, 1, 1) j
 
+        let k = NonEmptyMap.Create (("a", 1), ("b", 2))
+        let _ = item "b" k
+
         // This doesn't intentionally compile: seq is not Indexable. Not all foldables are Indexable, for example a Set is foldable but not Indexable. For seq use nth instead.
         // let f = seq [1, "one"; 2, "two"]
         // let _ = item 1 f
@@ -880,10 +897,19 @@ module Indexable =
         let j = Array4D.create 3 2 2 3 0
         let _ = tryItem (1, 1, 1, 1) j
 
+        let k = NonEmptyMap.Create (("a", 1), ("b", 2))
+        let _ = tryItem "b" k
+
         let w = WrappedListA [1, "one"; 2, "two"]
         let _ = tryItem 1 w
 
         ()
+
+    [<Test>]
+    let testCompileAndExecuteTraverseIndexed () =
+        let nem = NonEmptyMap.Create (("a", Some 1), ("b", Some 2), ("c", Some 3))
+        let rs1 = traversei (fun _ v -> v) nem
+        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs1
 
     [<Test>]
     let tryItemReadonly () =
@@ -1099,6 +1125,11 @@ module Traversable =
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
         let rs2  = sequence nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
+        let nem = NonEmptyMap.Create (("a", Some 1), ("b", Some 2), ("c", Some 3))
+        let rs3 = traverse id nem
+        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs3
+        let rs4 = sequence nem
+        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs4
 
     let toOptions x = if x <> 4 then Some x       else None
     let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"

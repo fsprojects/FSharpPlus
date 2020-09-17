@@ -65,6 +65,7 @@ From F#+
 
  -  [``ZipList<'T>``](type-ziplist.html)
  -  [``NonEmptyList<'T>``](type-nonempty.html)
+ -  [``NonEmptyMap<'Key, 'T>``](type-nonempty-map.html)
  -  [``Validation<'Error,'T>``](type-validation.html)
 
 
