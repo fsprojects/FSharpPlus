@@ -294,6 +294,8 @@ module Monoid =
         let _bigNestedTuple1 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (2, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (3, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20))
         let _bigNestedTuple2 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (zero, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ zero
 
+        let _nes : NonEmptySeq<_> = plus (NonEmptySeq.singleton 1) (NonEmptySeq.singleton 2)
+
         let mapA = Map.empty 
                     |> Map.add 1 (async.Return "Hey")
                     |> Map.add 2 (async.Return "Hello")
@@ -1390,6 +1392,10 @@ module Applicative =
         Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
         Assert.IsInstanceOf<Option<list<int>>> (Some testVal)
 
+        let testVal2 = NonEmptySeq.create 1 [2] .+. NonEmptySeq.create 10 [20] .+. NonEmptySeq.create 100 [200] .+ 2
+        Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], Seq.toList testVal2)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int>>> (Some testVal2)
+
         let testLTE1 = Some 1 .<=. Some 2
         Assert.AreEqual (Some true, testLTE1)
         Assert.IsInstanceOf<Option<bool>> testLTE1
@@ -1527,6 +1533,7 @@ module Alternative =
         let _ = [1;2] <|> [3;4]
         let _ = WrappedListG [1;2] <|> WrappedListG [3;4]
         let _ = seq [1;2] <|> seq [3;4]
+        let _ = NonEmptySeq.create 1 [2] <|> NonEmptySeq.create 3 [4]
 
         // shoud not compile. 
         // Although WrappedListD implements IEnumerable, it should explicitely implement (<|>). Not all IEnumerables have (<|>).
