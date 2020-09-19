@@ -8,6 +8,7 @@ open System.Threading.Tasks
 open Microsoft.FSharp.Quotations
 
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -49,6 +50,8 @@ type Bind =
                    dct
 
     static member (>>=) (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray (Seq.bind (f >> seq<_>) source) : ResizeArray<'U>
+
+    static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq.collect f source : NonEmptySeq<'U>
 
     static member inline Invoke (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (_mthd: 'M, input: 'I, _output: 'R, f) = ((^M or ^I or ^R) : (static member (>>=) : _*_ -> _) input, f)
@@ -92,6 +95,8 @@ type Join =
                     dct
 
     static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray (Seq.bind seq<_> x) : ResizeArray<'T> 
+    
+    static member        Join (x: NonEmptySeq<NonEmptySeq<'T>> , [<Optional>]_output: NonEmptySeq<'T>        , [<Optional>]_mthd: Join) = NonEmptySeq.concat x : NonEmptySeq<'T> 
 
     static member inline Invoke (source: '``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, output: 'R) = ((^M or ^I or ^R) : (static member Join : _*_*_ -> _) input, output, mthd)
@@ -112,6 +117,7 @@ type Return =
     
 
     static member        Return (_: seq<'a>        , _: Default2) = fun  x      -> Seq.singleton x : seq<'a>
+    static member        Return (_: NonEmptySeq<'a>, _: Default2) = fun  x      -> NonEmptySeq.singleton x : NonEmptySeq<'a>
     static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
 
@@ -148,6 +154,7 @@ type Delay =
     static member inline Delay (_mthd: Default1, _: unit-> ^t when  ^t : null and ^t  : struct            , _          ) = ()
 
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = Seq.delay x      : seq<'T>
+    static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = NonEmptySeq.delay x : NonEmptySeq<'T>
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
@@ -166,6 +173,7 @@ type TryWith =
     static member inline TryWith (_: ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1) = ()
 
     static member        TryWith (computation: seq<_>        , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))
+    static member        TryWith (computation: NonEmptySeq<_>, catchHandler: exn -> NonEmptySeq<_>, _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e)) |> NonEmptySeq.unsafeOfSeq
     static member        TryWith (computation: 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2) = (fun s -> try computation s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith ) = async.TryWith (computation, catchHandler)
     static member        TryWith (computation: Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith ) = lazy (try computation.Force () with e -> (catchHandler e).Force ()) : Lazy<_>
@@ -183,6 +191,8 @@ type TryFinally =
     static member        TryFinally ((computation: Id<_>   , compensation: unit -> unit), _: TryFinally, _) = try computation finally compensation()
     static member        TryFinally ((computation: Async<_>, compensation: unit -> unit), _: TryFinally, _) = async.TryFinally (computation, compensation) : Async<_>
     static member        TryFinally ((computation: Lazy<_> , compensation: unit -> unit), _: TryFinally, _) = lazy (try computation.Force () finally compensation ()) : Lazy<_>
+
+    static member        TryFinally ((computation: NonEmptySeq<_>, compensation: unit -> unit), _: Default2, _) = seq (try (Seq.toArray computation) finally compensation ()) |> NonEmptySeq.unsafeOfSeq
 
     static member inline Invoke (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>)
@@ -204,6 +214,8 @@ type Using =
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> 'R -> 'U , _: Using   ) = (fun s -> try body resource s finally if not (isNull (box resource)) then resource.Dispose ()) : 'R->'U
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Lazy<'U> , _: Using   ) = lazy (try (body resource).Force () finally if not (isNull (box resource)) then resource.Dispose ()) : Lazy<'U>
+
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>  , _: Using) = seq (try Seq.toArray (body resource) finally if not (isNull (box resource)) then resource.Dispose ()) |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
 
     static member inline Invoke (source : 'T when 'T :> IDisposable) (f : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (mthd: 'M, input: 'T, _output: 'R, h: 'T -> 'I) = ((^M or ^I) : (static member Using : _*_*_ -> _) input, h, mthd)

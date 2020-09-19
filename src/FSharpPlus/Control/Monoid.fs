@@ -8,6 +8,7 @@ open System.Runtime.InteropServices
 open Microsoft.FSharp.Quotations
 open System.Threading.Tasks
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -116,6 +117,8 @@ type Plus with
     static member        ``+`` (x: _ IEnumerator             , y                            , [<Optional>]_mthd: Default3) = Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator ()
     static member inline ``+`` (x: IDictionary<'K,'V>        , y: IDictionary<'K,'V>        , [<Optional>]_mthd: Default3) = Dict.unionWith Plus.Invoke x y
     static member inline ``+`` (x: IReadOnlyDictionary<'K,'V>, y: IReadOnlyDictionary<'K,'V>, [<Optional>]_mthd: Default3) = IReadOnlyDictionary.unionWith Plus.Invoke x y
+    static member inline ``+`` (x: _ NonEmptySeq             , y: _ NonEmptySeq             , [<Optional>]_mthd: Default3) = NonEmptySeq.append x y
+    
 
 
 [<Extension; Sealed>]
