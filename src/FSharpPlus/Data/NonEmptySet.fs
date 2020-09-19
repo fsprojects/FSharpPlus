@@ -13,7 +13,7 @@ type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> = private { Va
     interface Collections.IEnumerable with member x.GetEnumerator () = (x.Value :> _ seq).GetEnumerator() :> _
     interface IEnumerable<'a> with member x.GetEnumerator() = (x.Value :> _ seq).GetEnumerator()
     interface IReadOnlyCollection<'a> with member x.Count = x.Value.Count
-    interface NonEmptySeq<'a> with member x.Head = x.Value |> Seq.head
+    interface NonEmptySeq<'a> with member x.First = x.Value |> Seq.head
 
     static member Create (first: 'a, [<ParamArray>] rest: 'a[]) : NonEmptySet<'a> =
         { Value = Set.ofArray rest |> Set.add first }
@@ -95,7 +95,7 @@ module NonEmptySet =
     /// <param name="list">The input sequence.</param>
     /// <returns>Non empty set containing the elements of the non-empty sequence.</returns>
     let ofNonEmptySeq (seq: _ NonEmptySeq) =
-        create seq.Head (Seq.tail seq)
+        create seq.First (Seq.tail seq)
 
     /// <summary>Builds a non empty set from the given set.</summary>
     /// <param name="set">The input set.</param>

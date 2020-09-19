@@ -210,7 +210,7 @@ type WrappedSeqE<'s> = WrappedSeqE of 's seq with
 
 type TestNonEmptyCollection<'a> = private { Singleton: 'a } with
     interface NonEmptySeq<'a> with
-        member this.Head =
+        member this.First =
           SideEffects.add "Using TestNonEmptyCollection's Head"
           this.Singleton
         member this.GetEnumerator() =

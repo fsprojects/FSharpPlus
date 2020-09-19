@@ -232,7 +232,7 @@ type Head =
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Head : 'T) x)
     static member        Head (x: 'T option        , [<Optional>]_impl: Head    ) = x.Value
     static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]
-    static member        Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.Head
+    static member        Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.First
     static member        Head (x: Id<'T>           , [<Optional>]_impl: Head    ) = x.getValue
     static member        Head (x: ResizeArray<'T>  , [<Optional>]_impl: Head    ) = x.[0]
     static member        Head (x: string           , [<Optional>]_impl: Head    ) = x.[0]
@@ -249,7 +249,7 @@ type TryHead =
     static member inline TryHead (x               , [<Optional>]_impl: Default1) = let x = ToSeq.Invoke x in if Seq.isEmpty x then None else Some (Seq.head x) : 'T option  
     static member        TryHead (x: 't list      , [<Optional>]_impl: TryHead ) = match x with [] -> None | _ -> Some (List.head x)
     static member        TryHead (x: 't []        , [<Optional>]_impl: TryHead ) = if Array.length x = 0 then None else Some x.[0]
-    static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.Head
+    static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
     static member        TryHead (x: Id<'T>       , [<Optional>]_impl: TryHead ) = Some x.getValue
     static member        TryHead (x: string       , [<Optional>]_impl: TryHead ) = if String.length x = 0 then None else Some x.[0]   
     static member        TryHead (x: StringBuilder, [<Optional>]_impl: TryHead ) = if x.Length = 0 then None else Some (x.ToString().[0])
