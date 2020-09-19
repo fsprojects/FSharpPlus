@@ -64,7 +64,8 @@ module ComputationExpressions =
                     SideEffects.add "execute this"
             with
             | e -> 
-                SideEffects.add (sprintf "Exception! %s" e.Message)
+                // SideEffects.add (sprintf "Exception! %s" e.Message) // this can be different if run on non-English environment
+                SideEffects.add "Exception! Attempted to divide by zero."
                 return 42 }
 
         // Confirm the side effect wasn't performed

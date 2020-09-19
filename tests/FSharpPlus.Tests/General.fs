@@ -208,6 +208,21 @@ type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
     static member ToSeq  (WrappedSeqE x) = SideEffects.add "Using WrappedSeqE's ToSeq"; x
 
+type TestNonEmptyCollection<'a> = private { Singleton: 'a } with
+    interface NonEmptySeq<'a> with
+        member this.Head =
+          SideEffects.add "Using TestNonEmptyCollection's Head"
+          this.Singleton
+        member this.GetEnumerator() =
+          SideEffects.add "Using TestNonEmptyCollection's GetEnumerator<>"
+          (Seq.singleton this.Singleton).GetEnumerator()
+        member this.GetEnumerator() =
+          SideEffects.add "Using TestNonEmptyCollection's GetEnumerator"
+          (Seq.singleton this.Singleton).GetEnumerator() :> System.Collections.IEnumerator
+
+module TestNonEmptyCollection =
+    let Create x = { Singleton = x } :> NonEmptySeq<_>
+
 open System.Collections.Generic
 open System.Collections
 open System.Threading.Tasks
@@ -373,6 +388,9 @@ module Functor =
         let testVal5 = map ((+) 1) (NonEmptyMap.Create(("a", 1), ("b", 2)))
         Assert.IsInstanceOf<Option<NonEmptyMap<string,int>>> (Some testVal5)
 
+        let testVal6 = map ((+) 1) (TestNonEmptyCollection.Create 1)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int>>> (Some testVal6)
+
         // WrappedSeqD is Applicative. Applicatives are Functors => map should work
         Assert.AreEqual ([], SideEffects.get ())
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
@@ -389,6 +407,13 @@ module Functor =
         let testVal6 = map ((+) 1) (WrappedListD [1..3])
         Assert.IsInstanceOf<Option<WrappedListD<int>>> (Some testVal6)
         Assert.AreEqual (["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"], SideEffects.get ())
+        SideEffects.reset ()
+
+        let testVal7 = TestNonEmptyCollection.Create 42
+        head testVal7 |> ignore
+        Assert.AreEqual (["Using TestNonEmptyCollection's Head"], SideEffects.get ())
+        let testVal8 = testVal7 >>= fun i -> result (string i)
+        Assert.IsInstanceOf<Option<NonEmptySeq<string>>> (Some testVal8)
 
     [<Test>]
     let unzip () = 
@@ -417,6 +442,7 @@ module Functor =
         let _j = zip (async {return 1}) (async {return '2'})
         let _h = zip (Task.FromResult 1) (Task.FromResult '2')
         let _i = zip List.singleton<int> Array.singleton<int>
+        let _k = zip (TestNonEmptyCollection.Create 1) (result 2)
 
         let _fa a = zip a (seq [1. .. 3. ])
         let _fb a = zip a (WrappedListD [1. .. 3. ])
@@ -429,6 +455,7 @@ module Functor =
         let _fj a = zip a (async {return '2'})
         let _fh a = zip a (Task.FromResult '2')
         let _fi a = zip a Array.singleton<int>
+        let _fj a = zip a (TestNonEmptyCollection.Create 2)
 
         let _ga b = zip (seq [1;2;3]) b
         let _gb b = zip (WrappedListD [1;2;3]) b
@@ -441,6 +468,7 @@ module Functor =
         let _gj b = zip (async {return 1}) b
         let _gh b = zip (Task.FromResult 1) b
         let _gh b = zip List.singleton<int> b
+        let _gj b = zip (TestNonEmptyCollection.Create 1) b
 
         let _ha : _ -> _ -> _ seq            = zip
         let _hb : _ -> _ -> _ WrappedListD   = zip
@@ -453,6 +481,7 @@ module Functor =
         let _hj : _ -> _ -> Async<_>         = zip
         let _hh : _ -> _ -> Task<_>          = zip
         let _hi : _ -> _ -> (int -> _ )      = zip
+        let _hj : _ -> _ -> NonEmptySeq<_>   = zip
 
         ()
 
@@ -1074,6 +1103,7 @@ module Traversable =
 
     let traverseTest =
         let _None = sequence (seq [Some 3;None ;Some 1])
+        let _None2 = sequence (TestNonEmptyCollection.Create (Some 42))
         ()
 
     [<Test>]
@@ -1130,6 +1160,8 @@ module Traversable =
         Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs3
         let rs4 = sequence nem
         Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs4
+        let rs5 = traverse id (TestNonEmptyCollection.Create (Some 42))
+        Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs5
 
     let toOptions x = if x <> 4 then Some x       else None
     let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
@@ -1171,6 +1203,30 @@ module Traversable =
         Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
         Assert.AreEqual ([], d)
         Assert.AreEqual (Either<string list,seq<int>>.Left ["This is a failure"], e)
+
+        SideEffects.reset ()
+
+        let a = sequence (NonEmptySeq.initInfinite toOptions)
+        let b = sequence (NonEmptySeq.initInfinite toOptions)
+        let c = sequence (NonEmptySeq.initInfinite toChoices)
+        let d = sequence (NonEmptySeq.initInfinite toLists)
+        let e = sequence (NonEmptySeq.initInfinite toEithers)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let _a = traverse toOptions (NonEmptySeq.initInfinite id)
+        let _b = traverse toOptions (NonEmptySeq.initInfinite id)
+        let _c = traverse toChoices (NonEmptySeq.initInfinite id)
+        let _d = traverse toLists   (NonEmptySeq.initInfinite id)
+        let _e = traverse toEithers (NonEmptySeq.initInfinite id)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        Assert.AreEqual (None, a)
+        Assert.AreEqual (None, b)
+        Assert.AreEqual (Choice<NonEmptySeq<int>,string>.Choice2Of2 "This is a failure", c)
+        Assert.AreEqual ([], d)
+        Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e)
         
 
     [<Test>]
@@ -1226,6 +1282,15 @@ module Traversable =
         |> map  (head >> printfn "%A")
         |> Async.RunSynchronously
         CollectionAssert.AreEqual (["doSomething: 1"], SideEffects.get ())
+
+        (*
+        SideEffects.reset ()
+        NonEmptySeq.create 1 [2..10]
+        |> traverse doSomething
+        |> map  (head >> printfn "%A")
+        |> Async.RunSynchronously
+        CollectionAssert.AreEqual (["doSomething: 1"], SideEffects.get ())
+        *)
 
     [<Test>]
     let traverseInfiniteAsyncSequences =
