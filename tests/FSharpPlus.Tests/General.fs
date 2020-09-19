@@ -1283,14 +1283,12 @@ module Traversable =
         |> Async.RunSynchronously
         CollectionAssert.AreEqual (["doSomething: 1"], SideEffects.get ())
 
-        (*
         SideEffects.reset ()
         NonEmptySeq.create 1 [2..10]
         |> traverse doSomething
         |> map  (head >> printfn "%A")
         |> Async.RunSynchronously
         CollectionAssert.AreEqual (["doSomething: 1"], SideEffects.get ())
-        *)
 
     [<Test>]
     let traverseInfiniteAsyncSequences =

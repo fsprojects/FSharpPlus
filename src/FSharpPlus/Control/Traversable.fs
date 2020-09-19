@@ -43,6 +43,11 @@ type Traverse =
        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result Seq.empty)
 
+    static member inline Traverse (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+       let cons x y = seq {yield x; yield! y}
+       let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
+       Map.Invoke NonEmptySeq.ofSeq (Seq.foldBack cons_f t (result Seq.empty))
+
     static member inline Traverse (t: seq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
         let mapped = Seq.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, Array.toSeq) : '``Functor<seq<'U>>``
@@ -60,6 +65,13 @@ type Traverse =
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
+
+    static member Traverse (t: 't NonEmptySeq, f: 't->Async<'u>, [<Optional>]_output: Async<NonEmptySeq<'u>>, [<Optional>]_impl: Traverse) : Async<NonEmptySeq<_>> = async {
+        let! ct = Async.CancellationToken
+        return seq {
+            use enum = t.GetEnumerator ()
+            while enum.MoveNext() do
+                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
     
     static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
