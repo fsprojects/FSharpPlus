@@ -445,3 +445,23 @@ module ComputationExpressions =
         areEqual strictEffects (SideEffects.get ())
         let f = Writer.run e
         areEqual strictEffects (SideEffects.get ())
+
+    [<Test>]
+    let tryWithBlocks () =
+        let monadTransformer3layersTest1 () =
+            let x: StateT<string, ReaderT<int, seq<(unit * string)>>> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = ((monadTransformer3layersTest1 () |> StateT.run) "" |> ReaderT.run) 0 |> Seq.toList
+        
+        let monadTransformer3layersTest2 () =
+            let x: StateT<string, ReaderT<int, list<(unit * string)>>> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = ((monadTransformer3layersTest2 () |> StateT.run) "" |> ReaderT.run) 0
