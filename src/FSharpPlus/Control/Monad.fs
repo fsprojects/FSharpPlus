@@ -175,6 +175,23 @@ type TryWith =
         let inline call (mthd: 'M, input: 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_ -> _) input, h, mthd)
         call (Unchecked.defaultof<TryWith>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
 
+type TryWithStrict =
+    inherit Default1
+
+    static member        TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3) = try computation () with e -> catchHandler e
+    static member inline TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation (), catchHandler) : '``Monad<'T>``
+    static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1) = ()
+    
+    static member        TryWith (computation: unit -> seq<_>        , catchHandler: exn -> seq<_>       , _: Default2     ) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e))
+    static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _      , _: Default2     ) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
+    static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>     , _: TryWithStrict) = async.TryWith ((computation ()), catchHandler)
+    static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>      , _: TryWithStrict) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
+
+    static member inline Invoke (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_ -> _) input, h, mthd)
+        call (Unchecked.defaultof<TryWithStrict>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
+
+
 
 type TryFinally =
     inherit Default1
