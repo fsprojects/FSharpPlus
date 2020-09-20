@@ -466,4 +466,24 @@ module ComputationExpressions =
             x
         let _ = ((monadTransformer3layersTest2 () |> StateT.run) "" |> ReaderT.run) 0
         
+        let monadTransformer3layersTest3 () =
+            let x: WriterT<OptionT<seq<(unit * string) option>>> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = monadTransformer3layersTest3 () |> WriterT.run |> OptionT.run |> Seq.toList
+        
+        // Same test but with list instead of seq, which makes the whole monad strict
+        // If .strict is not used it fails compilation with a nice error asking us to add it
+        let monadTransformer3layersTest4 () =
+            let x: WriterT<OptionT<list<(unit * string) option>>> = monad.strict {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = monadTransformer3layersTest4 () |> WriterT.run |> OptionT.run
+
         ()
