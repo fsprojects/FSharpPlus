@@ -49,6 +49,13 @@ module Array =
     /// </returns>
     #if !FABLE_COMPILER
 
+    /// <summary>
+    /// Returns the index of the first occurrence of the specified slice in the source.
+    /// Note: this is unsafe and will throw ArgumentException when the specified slice is not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
     let findSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then
