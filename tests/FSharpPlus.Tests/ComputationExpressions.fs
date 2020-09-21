@@ -460,7 +460,7 @@ module ComputationExpressions =
         let _ = lazyMonadTest () |> Seq.toList
         
         let strictMonadTest () =
-            let x : list<unit> = monad {
+            let x : list<unit> = monad.strict {
                 try
                     failwith "Exception in try-with not handled"
                     ()
