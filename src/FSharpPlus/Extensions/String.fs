@@ -16,31 +16,31 @@ module String =
     /// Creates a sequence of strings by splitting the source string on any of the given separators.
     let split (separators: seq<string>) (source: string) = source.Split (Seq.toArray separators, StringSplitOptions.None) :> seq<_>
 
-    /// Replace a substring with the given replacement string.
+    /// Replaces a substring with the given replacement string.
     let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace (oldValue, newValue)
 
-    /// Does the source string contain the given subString? -- function wrapper for String.Contains method
+    /// Does the source string contain the given subString? -- function wrapper for String.Contains method.
     let isSubString (subString: string) (source: string) = source.Contains subString
 
     #if !FABLE_COMPILER
     
-    /// Does the source string start with the given subString? -- function wrapper for String.StartsWith method using InvariantCulture
+    /// Does the source string start with the given subString? -- function wrapper for String.StartsWith method using InvariantCulture.
     let startsWith (subString: string) (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
     #endif
 
-    /// Does the source string end with the given subString? -- function wrapper for String.EndsWith method using InvariantCulture
+    /// Does the source string end with the given subString? -- function wrapper for String.EndsWith method using InvariantCulture.
     let endsWith subString (source: string) = source.EndsWith (subString, false, CultureInfo.InvariantCulture)
 
     /// Does the source string contain the given character?
     let contains char      (source: string) = Seq.contains char source
 
-    /// Convert to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method
+    /// Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.
     let toUpper (source: string) = if isNull source then source else source.ToUpperInvariant ()
 
-    /// Convert to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method
+    /// Converts to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method.
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
 
-    /// Trims white space -- function wrapper for String.Trim method
+    /// Trims white space -- function wrapper for String.Trim method.
     /// 
     /// Note this is distinct from trim which trims the given characters,
     /// not whitespace.
@@ -50,10 +50,10 @@ module String =
        
     /// Returns a new string whose textual value is the same as this string, but whose binary representation is in the specified Unicode normalization form.
     /// 
-    /// This is a null safe function wrapper of the String.Normalize method
+    /// This is a null safe function wrapper of the String.Normalize method.
     let normalize normalizationForm (source: string) = if isNull source then source else source.Normalize normalizationForm
 
-    /// Remove diacritics (accents) from the given source string.
+    /// Removes diacritics (accents) from the given source string.
     /// 
     /// The approach uses `normalize` to split the input string into constituent glyphs
     /// (basically separating the "base" characters from the diacritics) and then scans
@@ -88,54 +88,54 @@ module String =
     /// Removes all trailing occurrences of specified characters from the given string.
     let trimEnd   (trimChars: char seq) (source: string) = source.TrimEnd (Seq.toArray trimChars)
 
-    /// Convert to an array of chars
+    /// Converts the given string to an array of chars.
     let toArray (source: string)    = source.ToCharArray ()
 
-    /// Convert an array of chars to a String
+    /// Converts an array of chars to a String.
     let ofArray (source: char [])   = String (source)
 
-    /// Convert to a list of chars
+    /// Converts the given string to a list of chars.
     let toList  (source: string)    = toArray source |> List.ofArray
 
-    /// Convert a list of chars to a String
+    /// Converts a list of chars to a String.
     let ofList  (source: char list) = String (source |> Array.ofList)
 
-    /// Convert to a seq of chars
+    /// Converts the given string to a seq of chars.
     let toSeq   (source: string)    = source :> seq<char>
 
-    /// Convert a seq of chars to a String
+    /// Converts a seq of chars to a String.
     let ofSeq   (source: seq<char>) = String.Join (String.Empty, source)
 
-    /// (Unsafely) Return the char at the given index in the source string
+    /// (Unsafely) Returns the char at the given index in the source string.
     /// 
-    /// This is a function wrapper for `source.[index]` method
+    /// This is a function wrapper for `source.[index]` method.
     /// 
     /// Note: this is not exception safe, and will throw System.IndexOutOfRangeException when
     /// the given index is out of bounds.
     let item    (index: int) (source: string) = source.[index]
 
-    /// Return an the char (as an Option) at the given index in the source string,
-    /// returning `None` if out of bounds
+    /// Returns the char (as an Option) at the given index in the source string,
+    /// returning `None` if out of bounds.
     let tryItem (index: int) (source: string) = if index >= 0 && index < source.Length then Some source.[index] else None
 
-    /// Reverse the given string
+    /// Reverses the given string.
     let rev (source: string) = String (source.ToCharArray () |> Array.rev)
 
-    /// (Unsafely) Take the first count chars in the string
+    /// (Unsafely) Takes the first count chars in the string.
     /// Use `String.truncate` for a safe version.
     /// 
     /// Note: will throw System.ArgumentOutOfRangeException if you try to take more than the
-    /// number of chars in the string
+    /// number of chars in the string.
     let take count (source: string) = source.[..count-1]
 
-    /// (Unsafely) Skip over the first count chars in the string
+    /// (Unsafely) Skips over the first count chars in the string.
     /// Use `String.drop` for a safe version.
     /// 
     /// Note: will throw System.ArgumentOutOfRangeException if you try to skip more than the
-    /// number of chars in the string
+    /// number of chars in the string.
     let skip count (source: string) = source.[count..]
 
-    /// Take chars from the source string while the given predicate is true
+    /// Takes chars from the source string while the given predicate is true.
     let takeWhile (predicate: char -> bool) (source: string) =
         if String.IsNullOrEmpty source then
             String.Empty
@@ -147,7 +147,7 @@ module String =
             if i = 0 then ""
             else source |> take i
 
-    /// Skip over chars from the source string while the given predicate is true
+    /// Skips over chars from the source string while the given predicate is true.
     let skipWhile (predicate: char -> bool) (source: string) =
         if String.IsNullOrEmpty source then
             String.Empty
@@ -173,7 +173,7 @@ module String =
         else if String.length source >= count then String.Empty
         else skip count source
 
-    /// Find the first index of the char in the substring which satisfies the given predicate
+    /// Finds the first index of the char in the substring which satisfies the given predicate.
     /// 
     /// Note: throws an ArgumentException when not found.
     let findIndex (predicate: char -> bool) (source: string) =
@@ -184,7 +184,7 @@ module String =
             else go (index + 1)
         go 0
 
-    /// Try and find the first index of the char in the substring which satisfies the given predicate
+    /// Tries to find the first index of the char in the substring which satisfies the given predicate.
     let tryFindIndex (predicate: char -> bool) (source: string) =
         let rec go index =
             if index >= source.Length then None
@@ -207,6 +207,7 @@ module String =
             ArgumentException("The specified substring was not found in the string.") |> raise
         else
             index
+            
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
     /// Returns <c>None</c> if not found.
@@ -220,7 +221,7 @@ module String =
 
     #if !FABLE_COMPILER
 
-    /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
+    /// Converts the given string to an array of Int32 code-points (the actual Unicode Code Point number).
     let toCodePoints (source : string) : seq<int> =
         let mapper i c =
             // Ignore the low-surrogate because it's already been converted

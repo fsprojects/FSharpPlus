@@ -17,10 +17,10 @@ module ResizeArray =
     /// <exception cref="System.ArgumentNullException">Thrown when the input ResizeArray is null.</exception>
     let map (f: 'T->'U) (x: ResizeArray<'T>) = ResizeArray (Seq.map f x)
 
-    /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them</summary>
+    /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.</summary>
     /// <param name="f">The functions.</param>
     /// <param name="x">The values.</param>
-    /// <returns>A concatenated list of the resulting ResizeArray after applying each function to each value</returns>
+    /// <returns>A concatenated list of the resulting ResizeArray after applying each function to each value.</returns>
     /// 
     /// <example>
     /// <code>
@@ -30,7 +30,7 @@ module ResizeArray =
     /// </example>
     let apply (f: ResizeArray<'T->'U>) (x: ResizeArray<'T>) = ResizeArray (Seq.apply f x)
 
-    /// Combine all values from the first ResizeArray with the second, using the supplied mapping function.
+    /// Combines all values from the first ResizeArray with the second, using the supplied mapping function.
     let lift2 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) = ResizeArray (Seq.lift2 mapping x1 x2)
 
     /// Concatenates all elements, using the specified separator between each element.
@@ -42,8 +42,10 @@ module ResizeArray =
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
     let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
-    /// Replace a subsequence of the source array with the given replacement array.
+    /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
+
+    #if !FABLE_COMPILER
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
@@ -54,8 +56,6 @@ module ResizeArray =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    #if !FABLE_COMPILER
-
     let findSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then

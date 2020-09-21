@@ -13,44 +13,43 @@ module IReadOnlyDictionary =
     /// Replaces or sets the item associated with a specified key with the specified value.
     let add key value (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
 
+    /// Removes the given key from the read-only dictionary.
     let remove key (table: IReadOnlyDictionary<'Key, 'Value>) = table |> Seq.filter (fun t -> t.Key <> key) |> Seq.map (|KeyValue|) |> Map :> IReadOnlyDictionary<_,_>
 
-    /// Gets the value associated with the specified key. Returns None if a value associated with the key is not found.
-    /// 
-    /// <summary>Try and get the value of the given key</summary>
+    /// <summary>Tries to get the value of the given key.</summary>
     /// <remarks>This is a function wrapper for the IReadOnlyDictionary.TryGetValue method,
     /// representing the result as an Option&lt;value&gt; instead of a bool plus an out-value.
     /// </remarks>
     /// <param name="k">The key whose value you wish to find.</param>
     /// <param name="dct">The input IReadOnlyDictionary.</param>
     ///
-    /// <returns>An option wrapped value</returns>
+    /// <returns>An option wrapped value.</returns>
     let tryGetValue k (dct: IReadOnlyDictionary<'Key, 'Value>) =
         match dct.TryGetValue k with
         | true, v -> Some v
         | _       -> None
 
     /// <summary>Does the read-only dictionary contain the given key?</summary>
-    /// <remarks>Note: this is a function wrapper for the IReadOnlyDictionary.ContainsKey method</remarks>
+    /// <remarks>Note: this is a function wrapper for the IReadOnlyDictionary.ContainsKey method.</remarks>
     /// <param name="k">The key to find.</param>
     /// <param name="dct">The input IReadOnlyDictionary.</param>
     ///
-    /// <returns>A bool indicating if the key was found</returns>
+    /// <returns>A bool indicating if the key was found.</returns>
     let containsKey k (dct: IReadOnlyDictionary<'Key, 'Value>) = dct.ContainsKey k
 
-    /// <summary>Return the keys of the given read-only dictionary.</summary>
+    /// <summary>Returns the keys of the given read-only dictionary.</summary>
     /// <param name="source">The input IReadOnlyDictionary.</param>
     ///
     /// <returns>A seq of the keys in the IReadOnlyDictionary.</returns>
     let keys   (source: IReadOnlyDictionary<'Key, 'Value>) = Seq.map (fun (KeyValue(k, _)) -> k) source
 
-    /// <summary>Return the values of the given read-only dictionary.</summary>
+    /// <summary>Returns the values of the given read-only dictionary.</summary>
     /// <param name="source">The input IReadOnlyDictionary.</param>
     ///
     /// <returns>A seq of the values in the read-only dictionary.</returns>
     let values (source: IReadOnlyDictionary<'Key, 'Value>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
-    /// <summary>Map the given function over each value in the read-only dictionary</summary>
+    /// <summary>Maps the given function over each value in the read-only dictionary.</summary>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The input IReadOnlyDictionary.</param>
     ///
@@ -78,7 +77,7 @@ module IReadOnlyDictionary =
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'U>
 
-    /// <summary>Tuple values of two read-only dictionaries.</summary>
+    /// <summary>Tuples values of two read-only dictionaries.</summary>
     /// <remarks>Keys that are not present on both read-only dictionaries are dropped.</remarks>
     /// <param name="x">The first input IReadOnlyDictionary.</param>
     /// <param name="y">The second input IReadOnlyDictionary.</param>
@@ -92,7 +91,7 @@ module IReadOnlyDictionary =
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'T1 * 'T2>
 
-    /// <summary>Split a read-only dictionary with tuple pair values to two separate read-only dictionaries.</summary>
+    /// <summary>Splits a read-only dictionary with tuple pair values to two separate read-only dictionaries.</summary>
     /// <param name="source">The source IReadOnlyDictionary.</param>
     ///
     /// <returns>A tuple of each untupled IReadOnlyDictionary.</returns>

@@ -6,7 +6,7 @@ module Array =
 
     open System
 
-    /// <summary>Applies an array of functions to an array of values and concatenates them</summary>
+    /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>
     /// <param name="x">The array of values.</param>
     /// <returns>A concatenated array of the resulting arrays from applying each function to each value</returns>
@@ -35,7 +35,7 @@ module Array =
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
     let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
-    /// Replace a subsequence of the source array with the given replacement array.
+    /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
 
     /// <summary>
@@ -77,7 +77,7 @@ module Array =
 
     /// <summary>
     /// Creates two arrays by applying the mapper function to each element in the array
-    /// and classifying the transformed values depending on whether they were wrapped with Choice1Of2 or Choice2Of2.
+    /// and classifies the transformed values depending on whether they were wrapped with Choice1Of2 or Choice2Of2.
     /// </summary>
     /// <returns>
     /// A tuple with both resulting arrays.

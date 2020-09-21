@@ -39,7 +39,7 @@ module Result =
     /// <returns>A result of the output type of the binder.</returns>
     let inline bindError (binder: 'Error->Result<'T,'Error2>) (source: Result<'T,'Error>) = match source with Ok v -> Ok v | Error e -> binder e
 
-    /// <summary> Extracts a value from either side of a Result.</summary>
+    /// <summary>Extracts a value from either side of a Result.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
     /// <param name="source">The source value, containing an Ok or an Error.</param>

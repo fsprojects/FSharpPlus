@@ -51,7 +51,7 @@ module Choice =
     /// <returns>A result of the output type of the binder.</returns>
     let bindChoice2Of2 (binder: 'T2->Choice<'T,'U2>) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> binder e
 
-    /// <summary> Extracts a value from either side of a Choice.</summary>
+    /// <summary>Extracts a value from either side of a Choice.</summary>
     /// <param name="fChoice1Of2">Function to be applied to source, if it contains a Choice1Of2 value.</param>
     /// <param name="fChoice2Of2">Function to be applied to source, if it contains a Choice2Of2 value.</param>
     /// <param name="source">The source value, containing a Choice1Of2 or a Choice2Of2.</param>

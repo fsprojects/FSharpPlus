@@ -9,22 +9,19 @@ module Map =
     open System.Linq
     #endif
 
-    /// NOTE: Missing from other dictionary like modules:
-    /// tryGetValue, containsKey
-    
-    /// <summary>Return the keys of the given map.</summary>
+    /// <summary>Returns the keys of the given map.</summary>
     /// <param name="source">The input map.</param>
     ///
     /// <returns>A seq of the keys in the map.</returns>
     let keys   (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(k, _)) -> k) source
 
-    /// <summary>Return the values of the given map.</summary>
+    /// <summary>Returns the values of the given map.</summary>
     /// <param name="source">The input map.</param>
     ///
     /// <returns>A seq of the values in the map.</returns>
     let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
-    /// <summary>Map the values of the original Map.</summary>
+    /// <summary>Maps the values of the original Map.</summary>
     /// <remarks>
     /// The core `Map.map` function maps over values too, but it passes both
     /// key and value to the mapping function.
@@ -35,7 +32,7 @@ module Map =
     /// <returns>The mapped Map.</returns>
     let mapValues f (x: Map<'Key, 'T>) = Map.map (fun _ -> f) x
 
-    /// <summary>Map values of two Maps.</summary>
+    /// <summary>Maps values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The first input Map.</param>
@@ -49,7 +46,7 @@ module Map =
             | Some vy -> yield (k, f.Invoke (vx, vy))
             | None    -> () }
 
-    /// <summary>Tuple values of two Maps.</summary>
+    /// <summary>Tuples values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
     /// <param name="x">The first input Map.</param>
     /// <param name="y">The second input Map.</param>
@@ -61,7 +58,7 @@ module Map =
             | Some vy -> yield (k, (vx, vy))
             | None    -> () }
 
-    /// <summary>Split a Map with tuple pair values to two separate Maps.</summary>
+    /// <summary>Splits a Map with tuple pair values to two separate Maps.</summary>
     /// <param name="source">The source Map.</param>
     ///
     /// <returns>A tuple of each untupled Map.</returns>

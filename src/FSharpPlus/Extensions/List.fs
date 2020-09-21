@@ -9,7 +9,7 @@ module List =
     /// Creates a list with a single element.
     let singleton x = [x]
 
-    /// <summary>Add an element to the beginning of the given list</summary>
+    /// <summary>Adds an element to the beginning of the given list</summary>
     /// <param name="x">The element to add</param>
     /// <param name="list">The list to add to</param>
     /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
@@ -67,7 +67,7 @@ module List =
     /// Creates a sequence of lists by splitting the source list on any of the given separators.
     let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
 
-    /// Replace a subsequence of the source list with the given replacement list.
+    /// Replaces a subsequence of the source list with the given replacement list.
     let replace oldValue (newValue: _ list) (source: _ list) = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList : list<'T>
 
     let toIReadOnlyList (source: _ list) =

@@ -9,11 +9,11 @@ module Dict =
     #if !FABLE_COMPILER
     open System.Linq
 
-    /// Convert an IDictionary to an IReadOnlyDictionary
+    /// Converts an IDictionary to an IReadOnlyDictionary.
     let toIReadOnlyDictionary source = ReadOnlyDictionary source :> IReadOnlyDictionary<_,_>
     #endif
 
-    /// <summary>Try and get the value of the given key</summary>
+    /// <summary>Tries to get the value of the given key.</summary>
     /// <remarks>This is a function wrapper for the IDictionary.TryGetValue method,
     /// representing the result as an Option&lt;value&gt; instead of a bool plus an out-value.
     /// </remarks>
@@ -34,19 +34,19 @@ module Dict =
     /// <returns>A bool indicating if the key was found</returns>
     let containsKey k (dct: IDictionary<'Key, 'Value>) = dct.ContainsKey k
 
-    /// <summary>Return the keys of the given dictionary.</summary>
+    /// <summary>Returns the keys of the given dictionary.</summary>
     /// <param name="source">The input dictionary.</param>
     ///
     /// <returns>A seq of the keys in the dictionary.</returns>
     let keys   (source: IDictionary<_,_>) = Seq.map (fun (KeyValue(k, _)) -> k) source
 
-    /// <summary>Return the values of the given dictionary.</summary>
+    /// <summary>Returns the values of the given dictionary.</summary>
     /// <param name="source">The input dictionary.</param>
     ///
     /// <returns>A seq of the values in the dictionary.</returns>
     let values (source: IDictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
-    /// <summary>Map the given function over each value in the dictionary</summary>
+    /// <summary>Maps the given function over each value in the dictionary.</summary>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The input dictionary.</param>
     ///
@@ -73,7 +73,7 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'U>
 
-    /// <summary>Tuple values of two dictionaries.</summary>
+    /// <summary>Tuples values of two dictionaries.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
     /// <param name="x">The first input dictionary.</param>
     /// <param name="y">The second input dictionary.</param>
@@ -87,7 +87,7 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'T1 * 'T2>
 
-    /// <summary>Split a dictionary with tuple pair values to two separate dictionaries.</summary>
+    /// <summary>Splits a dictionary with tuple pair values to two separate dictionaries.</summary>
     /// <param name="source">The source dictionary.</param>
     ///
     /// <returns>A tuple of each untupled dictionary.</returns>

@@ -5,8 +5,7 @@ namespace FSharpPlus
 module Seq =
     open System
 
-    /// <summary>Applies the given function to each element of the sequence and concatenates all the
-    /// results.</summary>
+    /// <summary>Applies the given function to each element of the sequence and concatenates the results.</summary>
     ///
     /// <remarks>Remember sequence is lazy, effects are delayed until it is enumerated.</remarks>
     /// <remarks>This is the same as Seq.collect but the type of the mapping function is not flexible.</remarks>
@@ -20,10 +19,10 @@ module Seq =
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
     let bind (mapping: 'T->seq<'U>) source = Seq.collect mapping source
 
-    /// <summary>Applies a sequence of functions to a sequence of values and concatenates them</summary>
+    /// <summary>Applies a sequence of functions to a sequence of values and concatenates them.</summary>
     /// <param name="f">The seq of functions.</param>
     /// <param name="x">The seq of values.</param>
-    /// <returns>A seq concatenating the results from applying each function to each value</returns>
+    /// <returns>A seq concatenating the results from applying each function to each value.</returns>
     /// 
     /// <example>
     /// <code>
@@ -37,17 +36,24 @@ module Seq =
 
     let foldBack f x z = Array.foldBack f (Seq.toArray x) z
 
-    /// <summary>Applies a key-generating function to each element of a sequence and yields a sequence of 
-    /// keys tupled with values. Each key contains an array of all adjacent elements that match 
-    /// to this key, therefore keys are not unique but they can't be adjacent
-    /// as each time the key changes, a new group is yield.</summary>
+    /// <summary>
+    /// Chunks the seq up into groups with the same projected key by applying
+    /// the key-generating projection function to each element and yielding a sequence of 
+    /// keys tupled with values.
+    /// </summary>
+    ///
+    /// <remarsk>
+    /// Each key is tupled with an array of all adjacent elements that match 
+    /// to the key, therefore keys are not unique but can't be adjacent
+    /// as each time the key changes a new group is yield.
     /// 
-    /// <remarks>The ordering of the original sequence is respected.</remarks>
+    /// The ordering of the original sequence is respected.
+    /// </remarks>
     ///
     /// <param name="projection">A function that transforms an element of the sequence into a comparable key.</param>
-    /// <param name="source">The input collection.</param>
+    /// <param name="source">The input seq.</param>
     ///
-    /// <returns>The result sequence.</returns>
+    /// <returns>The resulting sequence of keys tupled with an array of matching values</returns>
     let chunkBy (projection: 'T -> 'Key) (source: _ seq) = seq {
         use e = source.GetEnumerator ()
         if e.MoveNext () then
