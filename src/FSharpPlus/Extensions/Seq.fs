@@ -42,7 +42,7 @@ module Seq =
     /// keys tupled with values.
     /// </summary>
     ///
-    /// <remarsk>
+    /// <remarks>
     /// Each key is tupled with an array of all adjacent elements that match 
     /// to the key, therefore keys are not unique but can't be adjacent
     /// as each time the key changes a new group is yield.
