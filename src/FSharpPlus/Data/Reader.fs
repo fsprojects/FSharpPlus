@@ -112,7 +112,7 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Zip (x: ReaderT<'S,'``Monad<'T>``>, y: ReaderT<'S,'``Monad<'U>``>) = ReaderT.zip x y
 
     static member inline TryWith (source: ReaderT<'R,'``Monad<'T>``>, f: exn -> ReaderT<'R,'``Monad<'T>``>) = ReaderT (fun s -> TryWithStrict.Invoke (fun () -> ReaderT.run source s) (fun x -> ReaderT.run (f x) s))
-    static member inline TryFinally (computation: ReaderT<'R,'``Monad<'T>``>, f) = ReaderT (fun s -> TryFinally.Invoke     (ReaderT.run computation s) f)
+    static member inline TryFinally (computation: ReaderT<'R,'``Monad<'T>``>, f) = ReaderT (fun s -> TryFinallyStrict.Invoke (fun () -> ReaderT.run computation s) f)
     static member inline Using (resource, f: _ -> ReaderT<'R,'``Monad<'T>``>)    = ReaderT (fun s -> Using.Invoke resource (fun x -> ReaderT.run (f x) s))
     static member inline Delay (body : unit   ->  ReaderT<'R,'``Monad<'T>``>)    = ReaderT (fun s -> Delay.Invoke (fun _ -> ReaderT.run (body ()) s))
 

@@ -223,6 +223,30 @@ type TryFinally with
     static member inline TryFinally (( _         : ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            ) = ()
 
 
+type TryFinallyStrict =
+    inherit Default1
+
+    static member        TryFinally ((computation: unit -> seq<_>  , compensation: unit -> unit), _: Default2  , _) = seq (try (Seq.toArray (computation ())) finally compensation ())
+    static member        TryFinally ((computation: unit -> 'R -> _ , compensation: unit -> unit), _: Default2  , _) = fun s -> try computation () s finally compensation ()
+    
+    static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinallyStrict, _) = try computation () finally compensation ()
+    static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinallyStrict, _) = async.TryFinally (computation (), compensation) : Async<_>
+    static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinallyStrict, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
+
+    static member inline Invoke (source: unit ->'``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinallyStrict>)
+        call (Unchecked.defaultof<TryFinallyStrict>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
+
+type TryFinallyStrict with
+
+    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2  ) = try computation () finally compensation ()
+    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1  ) = try computation () finally compensation ()
+    
+    static member inline TryFinally ((computation: unit -> '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinallyStrict) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
+    static member inline TryFinally (( _         : unit -> ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            ) = ()
+
+
+
 type Using =
     inherit Default1
     
