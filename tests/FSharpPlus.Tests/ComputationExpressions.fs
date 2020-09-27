@@ -529,7 +529,8 @@ module ComputationExpressions =
                 try
                     failwith "Exception in try-finally"
                     ()
-                finally _ -> SideEffects.add "Finally goes here" }
+                finally
+                    SideEffects.add "Finally goes here" }
             x
         let _ = lazyMonadTest () |> Seq.toList
         areEqual ["Finally goes here"] (SideEffects.get ())
@@ -540,7 +541,10 @@ module ComputationExpressions =
                 try
                     failwith "Exception in try-finally"
                     ()
-                finally _ -> SideEffects.add "Finally goes here" }
+                finally
+                    SideEffects.add "Finally goes here" }
             x
         let _ = strictMonadTest ()
         areEqual ["Finally goes here"] (SideEffects.get ())
+
+        ()
