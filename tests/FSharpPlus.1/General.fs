@@ -6,15 +6,7 @@ open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
 open NUnit.Framework
-
-module Helpers =
-    let areEqual (x:'t) (y:'t) = Assert.AreEqual (x, y)
-
-module SideEffects =
-    let private effects = ResizeArray<string> []
-    let reset() = effects.Clear()
-    let add x = effects.Add(x)
-    let get() = effects |> Seq.toList
+open FSharpPlus.One.Helpers
 
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq    (WrappedListA lst) = List.toSeq lst
@@ -256,7 +248,7 @@ type Functor() =
         Assert.AreEqual (SideEffects.get(), [])
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
-        Assert.AreEqual (SideEffects.get(), ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"])
+        areEquivalent ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"] (SideEffects.get())
         SideEffects.reset()
         
         // WrappedListE is a Monad. Monads are Functors => map should work
@@ -279,10 +271,10 @@ type Functor() =
 
         SideEffects.reset()
         let a = zip (seq [1;2;3]) (seq [1. .. 3. ])
-        Assert.AreEqual (SideEffects.get(), [])
+        areEquivalent [] (SideEffects.get())
 
         let b = zip (WrappedListD [1;2;3]) (WrappedListD [1. .. 3. ])
-        Assert.AreEqual (SideEffects.get(), ["Using WrappedListD's zip"])
+        areEquivalent ["Using WrappedListD's zip"] (SideEffects.get())
 
         let c = zip (dict [1,'1' ; 2,'2' ; 4,'4']) (dict [1,'1' ; 2,'2' ; 3,'3'])
         let d = zip [ 1;2;3 ] [ 1. .. 3. ]
@@ -326,12 +318,12 @@ type Foldable() =
         SideEffects.reset()
         let x = foldMap ((+) 10) (WrappedListD [1..4]) //= 50 w side effect
         Assert.AreEqual (x, 50)
-        Assert.AreEqual (SideEffects.get(), ["Using optimized foldMap"])
+        areEquivalent ["Using optimized foldMap"] (SideEffects.get())
 
         SideEffects.reset()
         let y = foldMap ((+) 10) {1..4}  //= 50 w/o side effect
         Assert.AreEqual (x, 50)
-        Assert.AreEqual (SideEffects.get(), [])
+        areEquivalent [] (SideEffects.get())
 
     [<Test>]
     member __.filterDefaultCustom() = 
@@ -468,6 +460,58 @@ type Indexable() =
         let w = WrappedListA [1, "one"; 2, "two"]
         let w1 = tryItem 1 w
 
+        ()
+
+    [<Test>]
+    member __.tryItemReadonly () =
+        let d = Collections.ObjectModel.ReadOnlyDictionary (dict [1, "one"; 2, "two"])
+        let iReadOnlyDict = d :> IReadOnlyDictionary<_,_>
+        let l = Collections.ObjectModel.ReadOnlyCollection [|1..10|]
+        let rarr = ResizeArray [|1..10|]
+        Assert.AreEqual (Some "one", tryItem 1 d)
+        //Assert.AreEqual (Some "one", tryItem 1 iReadOnlyDict)
+        Assert.AreEqual ("one", item 1 d)
+        Assert.AreEqual ("one", item 1 iReadOnlyDict)
+        Assert.AreEqual (2, item 1 l)
+        Assert.AreEqual (2, item 1 rarr)
+        Assert.AreEqual (Some 2, tryItem 1 rarr)
+
+    [<Test>]
+    member __.mapiUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        let l = System.Collections.ObjectModel.ReadOnlyCollection [|1..2|]
+        let iReadOnlyList = l :> IReadOnlyList<_>
+        let rarr = ResizeArray [|1..2|]
+        let mapDS = sprintf "%d-%s"
+        areEquivalent [KeyValuePair(1,"1-one"); KeyValuePair(2,"2-two")] (mapi mapDS m)
+        let mapDD = sprintf "%d-%d"
+        areEquivalent ["0-1";"1-2"] (mapi mapDD l)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD iReadOnlyList)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD rarr)
+
+
+    [<Test>]
+    member __.iteriUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        SideEffects.reset ()
+        iteri (fun i v -> SideEffects.add <| sprintf "Got %d-%s" i v) m
+        areEquivalent ["Got 1-one";"Got 2-two"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let onIteration i v= ()
+        iteri onIteration (WrappedListD [1..2])
+        ()
+    [<Test>]
+    member __.foldiUsage () =
+        SideEffects.reset ()
+        let folder (s:int) (i:int) (t:int) = t * s - i
+        let wlist = WrappedListD [1..2]
+        let res = foldi folder 10 wlist
+        areEqual 19 res
+
+    [<Test>]
+    member __.traverseiUsage () =
+        let resSomeId20 = traversei (fun k t -> Some (10 + t)) (Tuple 10)
         ()
 
 [<AbstractClass>]
