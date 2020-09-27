@@ -547,4 +547,68 @@ module ComputationExpressions =
         let _ = try (strictMonadTest ()) with _ -> Unchecked.defaultof<_>
         areEqual ["Finally goes here"] (SideEffects.get ())
 
+        let monadTransformer3layersTest1 () =
+            SideEffects.reset ()
+            let x: StateT<string, ReaderT<int, seq<(unit * string)>>> = monad {
+                try
+                    failwith "Exception in try-finally"
+                    ()
+                finally
+                    SideEffects.add "Finally goes here" }
+            x
+        let _ = try (((monadTransformer3layersTest1 () |> StateT.run) "" |> ReaderT.run) 0 |> Seq.toList) with _ -> Unchecked.defaultof<_>
+        areEqual ["Finally goes here"] (SideEffects.get ())
+
+        let monadTransformer3layersTest2 () =
+            SideEffects.reset ()
+            let x: StateT<string, ReaderT<int, list<(unit * string)>>> = monad {
+                try
+                    failwith "Exception in try-finally"
+                    ()
+                finally
+                    SideEffects.add "Finally goes here" }
+            x
+        let _ = try (((monadTransformer3layersTest2 () |> StateT.run) "" |> ReaderT.run) 0) with _ -> Unchecked.defaultof<_>
+        areEqual ["Finally goes here"] (SideEffects.get ())
+
+        let monadTransformer3layersTest3 () =
+            SideEffects.reset ()
+            let x: WriterT<OptionT<seq<(unit * string) option>>> = monad {
+                try
+                    failwith "Exception in try-finally"
+                    ()
+                finally
+                    SideEffects.add "Finally goes here" }
+            x
+        let _ = try (monadTransformer3layersTest3 () |> WriterT.run |> OptionT.run |> Seq.toList) with _ -> Unchecked.defaultof<_>
+        areEqual ["Finally goes here"] (SideEffects.get ())
+
+        // Same test but with list instead of seq, which makes the whole monad strict
+        // If .strict is not used it fails compilation with a nice error asking us to add it
+        let monadTransformer3layersTest4 () =
+            SideEffects.reset ()
+            let x: WriterT<OptionT<list<(unit * string) option>>> = monad.strict {
+                try
+                    failwith "Exception in try-finally"
+                    ()
+                finally
+                    SideEffects.add "Finally goes here" }
+            x
+        let _ = try (monadTransformer3layersTest4 () |> WriterT.run |> OptionT.run) with _ -> Unchecked.defaultof<_>
+        areEqual ["Finally goes here"] (SideEffects.get ())
+
+        // ContT doesn't deal with the inner monad, so we don't need to do anything.
+        let contTTest () =
+            SideEffects.reset ()
+            let x: ContT<list<unit>,unit> = monad {
+                try
+                    failwith "Exception in try-finally"
+                    ()
+                finally
+                    SideEffects.add "Finally goes here" }
+            x
+        let _ = try ((contTTest () |> ContT.run) result) with _ -> Unchecked.defaultof<_>
+        areEqual ["Finally goes here"] (SideEffects.get ())
+
+
         ()
