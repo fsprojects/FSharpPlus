@@ -537,7 +537,7 @@ module ComputationExpressions =
         
         let strictMonadTest () =
             SideEffects.reset ()
-            let x : list<unit> = monad {
+            let x : list<unit> = monad.strict {
                 try
                     failwith "Exception in try-finally"
                     ()
