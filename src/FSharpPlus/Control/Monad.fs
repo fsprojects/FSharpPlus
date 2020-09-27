@@ -197,7 +197,7 @@ type TryFinally =
     inherit Default1
 
     static member        TryFinally ((computation: seq<_>  , compensation: unit -> unit), _: Default2  , _) = seq (try (Seq.toArray computation) finally compensation ())
-    
+
     [<CompilerMessage("Method TryFinally not implemented. To solve this issue implement a static member TryFinally or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
     static member        TryFinally ((_: 'R -> _           , _: unit -> unit           ), _: Default2  , _) = raise Internals.Errors.exnUnreachable
     
@@ -212,8 +212,13 @@ type TryFinally =
     static member inline InvokeOnInstance (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = (^``Monad<'T>`` : (static member TryFinally : _*_->_) source, f) : '``Monad<'T>``
 
 type TryFinally with
-    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2  ) = try computation finally compensation ()
-    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1  ) = try computation finally compensation ()
+
+    [<CompilerMessage("Method TryFinally not implemented. To solve this issue implement a static member TryFinally or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
+    static member        TryFinally ((_: '``Monad<'T>`` when '``Monad<'T>`` :     struct, _: unit -> unit), _: Default3, _: Default2  ) = raise Internals.Errors.exnUnreachable
+    
+    [<CompilerMessage("Method TryFinally not implemented. To solve this issue implement a static member TryFinally or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
+    static member        TryFinally ((_: '``Monad<'T>`` when '``Monad<'T>`` : not struct, _: unit -> unit), _: Default3, _: Default1  ) = raise Internals.Errors.exnUnreachable
+    
     static member inline TryFinally ((computation: '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinally) = TryFinally.InvokeOnInstance computation compensation: '``Monad<'T>``
     static member inline TryFinally (( _         : ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            ) = ()
 
