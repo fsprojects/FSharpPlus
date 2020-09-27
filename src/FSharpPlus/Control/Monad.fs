@@ -158,55 +158,52 @@ type Delay =
         call (Unchecked.defaultof<Delay>, source)
 
 
+type True  = True
+type False = False
+
 type TryWith =
     inherit Default1
 
     [<CompilerMessage("Method TryWith not implemented. To solve this issue implement a static member TryWith or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
-    static member        TryWith (_: '``Monad<'T>``          , _: exn            -> '``Monad<'T>``, _: Default3) = raise Internals.Errors.exnUnreachable
-    static member inline TryWith (computation: '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation, catchHandler) : '``Monad<'T>``
-    static member inline TryWith (_: ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1) = ()
+    static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _useDefaults: False) = raise Internals.Errors.exnUnreachable
+    static member        TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3, _useDefaults: True ) = try computation () with e -> catchHandler e
 
-    static member        TryWith (computation: seq<_>        , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))
-    static member        TryWith (computation: 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2) = (fun s -> try computation s with e -> catchHandler e s) : 'R ->_
-    static member        TryWith (computation: Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith ) = async.TryWith (computation, catchHandler)
-    static member        TryWith (computation: Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith ) = lazy (try computation.Force () with e -> (catchHandler e).Force ()) : Lazy<_>
+    static member inline TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1, _) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation (), catchHandler) : '``Monad<'T>``
+    static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1, _) = ()
+    
+    static member        TryWith (computation: unit -> seq<_>        , catchHandler: exn -> seq<_>        , _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e))
+    static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2, _) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
+    static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith , _) = async.TryWith ((computation ()), catchHandler)
+    static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith , _) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
 
     static member inline Invoke (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_ -> _) input, h, mthd)
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, False)
+        call (Unchecked.defaultof<TryWith>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
+
+    static member inline InvokeForStrict (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, True)
         call (Unchecked.defaultof<TryWith>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
-
-type TryWithStrict =
-    inherit Default1
-
-    static member        TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3) = try computation () with e -> catchHandler e
-    static member inline TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation (), catchHandler) : '``Monad<'T>``
-    static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1) = ()
-    
-    static member        TryWith (computation: unit -> seq<_>        , catchHandler: exn -> seq<_>       , _: Default2     ) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e))
-    static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _      , _: Default2     ) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
-    static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>     , _: TryWithStrict) = async.TryWith ((computation ()), catchHandler)
-    static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>      , _: TryWithStrict) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
-
-    static member inline Invoke (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_ -> _) input, h, mthd)
-        call (Unchecked.defaultof<TryWithStrict>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
-
 
 
 type TryFinally =
     inherit Default1
 
-    static member        TryFinally ((computation: seq<_>  , compensation: unit -> unit), _: Default2  , _) = seq (try (Seq.toArray computation) finally compensation ())
+    static member        TryFinally ((computation: unit -> seq<_>  , compensation: unit -> unit), _: Default2  , _, _) = seq (try (Seq.toArray (computation ())) finally compensation ())
 
     [<CompilerMessage("Method TryFinally not implemented. To solve this issue implement a static member TryFinally or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
-    static member        TryFinally ((_: 'R -> _           , _: unit -> unit           ), _: Default2  , _) = raise Internals.Errors.exnUnreachable
+    static member        TryFinally ((_:           unit -> 'R -> _            , _: unit -> unit), _: Default2  , _, _useDefaults: False) = raise Internals.Errors.exnUnreachable
+    static member        TryFinally ((computation: unit -> 'R -> _ , compensation: unit -> unit), _: Default2  , _, _useDefaults: True ) = fun s -> try computation () s finally compensation ()
     
-    static member        TryFinally ((computation: Id<_>   , compensation: unit -> unit), _: TryFinally, _) = try computation finally compensation()
-    static member        TryFinally ((computation: Async<_>, compensation: unit -> unit), _: TryFinally, _) = async.TryFinally (computation, compensation) : Async<_>
-    static member        TryFinally ((computation: Lazy<_> , compensation: unit -> unit), _: TryFinally, _) = lazy (try computation.Force () finally compensation ()) : Lazy<_>
+    static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinally, _, _) = try computation () finally compensation ()
+    static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinally, _, _) = async.TryFinally (computation (), compensation) : Async<_>
+    static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinally, _, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
 
     static member inline Invoke (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: 'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>)
+        let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>, False)
+        call (Unchecked.defaultof<TryFinally>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
+
+    static member inline InvokeForStrict (source: unit ->'``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>, True)
         call (Unchecked.defaultof<TryFinally>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
 
     static member inline InvokeOnInstance (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = (^``Monad<'T>`` : (static member TryFinally : _*_->_) source, f) : '``Monad<'T>``
@@ -214,36 +211,16 @@ type TryFinally =
 type TryFinally with
 
     [<CompilerMessage("Method TryFinally not implemented. To solve this issue implement a static member TryFinally or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
-    static member        TryFinally ((_: '``Monad<'T>`` when '``Monad<'T>`` :     struct, _: unit -> unit), _: Default3, _: Default2  ) = raise Internals.Errors.exnUnreachable
-    
+    static member        TryFinally ((_: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, _: unit -> unit), _: Default3, _: Default2  , _useDefaults: False) = raise Internals.Errors.exnUnreachable
+
     [<CompilerMessage("Method TryFinally not implemented. To solve this issue implement a static member TryFinally or use a strict computation expression if the type is not lazy (monad.strict or monad').", 708, IsError = true)>]
-    static member        TryFinally ((_: '``Monad<'T>`` when '``Monad<'T>`` : not struct, _: unit -> unit), _: Default3, _: Default1  ) = raise Internals.Errors.exnUnreachable
+    static member        TryFinally ((_: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, _: unit -> unit), _: Default3, _: Default1  , _useDefaults: False) = raise Internals.Errors.exnUnreachable
+
+    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2  , _useDefaults: True) = try computation () finally compensation ()
+    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1  , _useDefaults: True) = try computation () finally compensation ()
     
-    static member inline TryFinally ((computation: '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinally) = TryFinally.InvokeOnInstance computation compensation: '``Monad<'T>``
-    static member inline TryFinally (( _         : ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            ) = ()
-
-
-type TryFinallyStrict =
-    inherit Default1
-
-    static member        TryFinally ((computation: unit -> seq<_>  , compensation: unit -> unit), _: Default2  , _) = seq (try (Seq.toArray (computation ())) finally compensation ())
-    static member        TryFinally ((computation: unit -> 'R -> _ , compensation: unit -> unit), _: Default2  , _) = fun s -> try computation () s finally compensation ()
-    
-    static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinallyStrict, _) = try computation () finally compensation ()
-    static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinallyStrict, _) = async.TryFinally (computation (), compensation) : Async<_>
-    static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinallyStrict, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
-
-    static member inline Invoke (source: unit ->'``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinallyStrict>)
-        call (Unchecked.defaultof<TryFinallyStrict>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
-
-type TryFinallyStrict with
-
-    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2  ) = try computation () finally compensation ()
-    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1  ) = try computation () finally compensation ()
-    
-    static member inline TryFinally ((computation: unit -> '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinallyStrict) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
-    static member inline TryFinally (( _         : unit -> ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            ) = ()
+    static member inline TryFinally ((computation: unit -> '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinally, _) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
+    static member inline TryFinally (( _         : unit -> ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            , _) = ()
 
 
 

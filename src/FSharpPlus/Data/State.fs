@@ -120,8 +120,8 @@ type StateT<'s,'``monad<'t * 's>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Zip (x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) = StateT.zip x y
 
-    static member inline TryWith (source: StateT<'S,'``Monad<'T * 'S>``>, f: exn -> StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> TryWithStrict.Invoke (fun () -> StateT.run source s) (fun x -> StateT.run (f x) s))
-    static member inline TryFinally (computation: StateT<'S,'``Monad<'T * 'S>``>, f) = StateT (fun s -> TryFinallyStrict.Invoke (fun () -> StateT.run computation s) f)
+    static member inline TryWith (source: StateT<'S,'``Monad<'T * 'S>``>, f: exn -> StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> TryWith.InvokeForStrict (fun () -> StateT.run source s) (fun x -> StateT.run (f x) s))
+    static member inline TryFinally (computation: StateT<'S,'``Monad<'T * 'S>``>, f) = StateT (fun s -> TryFinally.InvokeForStrict (fun () -> StateT.run computation s) f)
     static member inline Using (resource, f: _ -> StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Using.Invoke resource (fun x -> StateT.run (f x) s))
     static member inline Delay (body : unit   ->  StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Delay.Invoke (fun _ -> StateT.run (body ()) s)) : StateT<'S,'``Monad<'T * 'S>``>
 
