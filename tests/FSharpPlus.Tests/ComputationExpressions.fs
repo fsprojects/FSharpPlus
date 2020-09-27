@@ -518,3 +518,29 @@ module ComputationExpressions =
         let _ = (contTTest () |> ContT.run) result        
 
         ()
+
+
+    [<Test>]
+    let tryFinallyBlocks () =
+
+        let lazyMonadTest () =
+            SideEffects.reset ()
+            let x : seq<unit> = monad {
+                try
+                    failwith "Exception in try-finally"
+                    ()
+                finally _ -> SideEffects.add "Finally goes here" }
+            x
+        let _ = lazyMonadTest () |> Seq.toList
+        areEqual ["Finally goes here"] (SideEffects.get ())
+        
+        let strictMonadTest () =
+            SideEffects.reset ()
+            let x : list<unit> = monad {
+                try
+                    failwith "Exception in try-finally"
+                    ()
+                finally _ -> SideEffects.add "Finally goes here" }
+            x
+        let _ = strictMonadTest ()
+        areEqual ["Finally goes here"] (SideEffects.get ())
