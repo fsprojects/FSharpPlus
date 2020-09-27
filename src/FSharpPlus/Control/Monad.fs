@@ -12,8 +12,6 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
 
-
-
 // Monad class ------------------------------------------------------------
 
 type Bind =
