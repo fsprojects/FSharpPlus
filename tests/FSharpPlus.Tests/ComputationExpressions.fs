@@ -532,7 +532,7 @@ module ComputationExpressions =
                 finally
                     SideEffects.add "Finally goes here" }
             x
-        let _ = lazyMonadTest () |> Seq.toList
+        let _ = try (lazyMonadTest () |> Seq.toList) with _ -> Unchecked.defaultof<_>
         areEqual ["Finally goes here"] (SideEffects.get ())
         
         let strictMonadTest () =
@@ -544,7 +544,7 @@ module ComputationExpressions =
                 finally
                     SideEffects.add "Finally goes here" }
             x
-        let _ = strictMonadTest ()
+        let _ = try (strictMonadTest ()) with _ -> Unchecked.defaultof<_>
         areEqual ["Finally goes here"] (SideEffects.get ())
 
         ()
