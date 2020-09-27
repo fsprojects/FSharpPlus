@@ -2,6 +2,7 @@ module FSharpPlus.One.General
 
 
 open System
+open System.Collections.ObjectModel
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
@@ -127,6 +128,7 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
 
 open System.Collections.Generic
 open System.Threading.Tasks
+open FSharpPlus.One.Helpers
 type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                              = ZipList (Seq.initInfinite (konst x))
     static member Map   (ZipList x, f:'a->'b)                = ZipList (Seq.map f x)
@@ -468,6 +470,60 @@ type Indexable() =
         let w = WrappedListA [1, "one"; 2, "two"]
         let w1 = tryItem 1 w
 
+        ()
+
+    [<Test>]
+    member __.tryItemReadonly () =
+        let d = ReadOnlyDictionary (dict [1, "one"; 2, "two"])
+        let iReadOnlyDict = d :> IReadOnlyDictionary<_,_>
+        let l = ReadOnlyCollection [|1..10|]
+        let rarr = ResizeArray [|1..10|]
+        Assert.AreEqual (Some "one", tryItem 1 d)
+        //Assert.AreEqual (Some "one", tryItem 1 iReadOnlyDict)
+        Assert.AreEqual ("one", item 1 d)
+        Assert.AreEqual ("one", item 1 iReadOnlyDict)
+        Assert.AreEqual (2, item 1 l)
+        Assert.AreEqual (2, item 1 rarr)
+        Assert.AreEqual (Some 2, tryItem 1 rarr)
+
+    [<Test>]
+    member __.mapiUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        let l = ReadOnlyCollection [|1..2|]
+        let iReadOnlyList = l :> IReadOnlyList<_>
+        let rarr = ResizeArray [|1..2|]
+        let mapDS = sprintf "%d-%s"
+        areEquivalent [KeyValuePair(1,"1-one"); KeyValuePair(2,"2-two")] (mapi mapDS m)
+        let mapDD = sprintf "%d-%d"
+        areEquivalent ["0-1";"1-2"] (mapi mapDD l)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD iReadOnlyList)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD rarr)
+
+
+    [<Test>]
+    member __.iteriUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        SideEffects.reset ()
+        iteri (fun i v -> SideEffects.add <| sprintf "Got %d-%s" i v) m
+        areEquivalent ["Got 1-one";"Got 2-two"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let onIteration i v= ()
+        iteri onIteration (WrappedListD [1..2])
+        areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    member __.foldiUsage () =
+        SideEffects.reset ()
+        let folder (s:int) (i:int) (t:int) = t * s - i
+        let wlist = WrappedListD [1..2]
+        let res = foldi folder 10 wlist
+        areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
+        areEqual 19 res
+
+    [<Test>]
+    member __.traverseiUsage () =
+        let resSomeId20 = traversei (fun k t -> Some (10 + t)) (Tuple 10)
         ()
 
 [<AbstractClass>]
