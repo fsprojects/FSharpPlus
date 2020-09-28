@@ -173,6 +173,14 @@ open TryBlock
 
 type TryWith =
     inherit Default1
+    // Begin compat members
+    static member        TryWith (computation: '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3) = try computation with e -> catchHandler e
+
+    static member        TryWith (computation: seq<_>        , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))
+    static member        TryWith (computation: 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2) = (fun s -> try computation s with e -> catchHandler e s) : 'R ->_
+    static member        TryWith (computation: Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith ) = async.TryWith (computation, catchHandler)
+    static member        TryWith (computation: Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith ) = lazy (try computation.Force () with e -> (catchHandler e).Force ()) : Lazy<_>
+    // End compat members
 
     [<CompilerMessage(MessageTryWith, CodeTryWith, IsError = true)>]
     static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: False) = raise Internals.Errors.exnUnreachable
@@ -197,6 +205,15 @@ type TryWith =
 
 type TryFinally =
     inherit Default1
+    // Begin compat members
+    static member        TryFinally ((computation: seq<_>  , compensation: unit -> unit), _: Default2  , _) = seq (try (Seq.toArray computation) finally compensation ())
+    static member        TryFinally ((computation: 'R -> _ , compensation: unit -> unit), _: Default2, _) = fun s -> try computation s finally compensation ()
+    static member        TryFinally ((computation: Id<_>   , compensation: unit -> unit), _: TryFinally, _) = try computation finally compensation()
+    static member        TryFinally ((computation: Async<_>, compensation: unit -> unit), _: TryFinally, _) = async.TryFinally (computation, compensation) : Async<_>
+    static member        TryFinally ((computation: Lazy<_> , compensation: unit -> unit), _: TryFinally, _) = lazy (try computation.Force () finally compensation ()) : Lazy<_>
+    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2  ) = try computation finally compensation ()
+    static member        TryFinally ((computation: '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1  ) = try computation finally compensation ()
+    // End compat members
 
     static member        TryFinally ((computation: unit -> seq<_>  , compensation: unit -> unit), _: Default2  , _, _) = seq (try (Seq.toArray (computation ())) finally compensation ())
 
