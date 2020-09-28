@@ -249,7 +249,14 @@ module NonEmptyListBuilder =
     type NelBuilder () =
         [<CompilerMessage("A NonEmptyList doesn't support the Zero operation.", 708, IsError = true)>]
         member __.Zero () = raise Internals.Errors.exnUnreachable
-        member __.Combine (a: NonEmptyList<'T>, b) = a + b
-        member __.Yield x = NonEmptyList.singleton x
-        member __.Delay expr = expr () : NonEmptyList<'T>
+        member __.Combine (a: 'T, { Head = b; Tail = c }) = { Head = a; Tail = b::c }
+        member __.Yield x = x
+        member __.Delay expr = expr ()
+        member __.Run (x: NonEmptyList<_>) = x
     let nel = NelBuilder ()
+
+[<AutoOpen>]
+module NonEmptyListBuilderExtensions =
+    type NelBuilder with
+        member __.Combine (a: 'T, b: 'T) = { Head = a; Tail = [b] }
+        member __.Run x = { Head = x; Tail = [] }
