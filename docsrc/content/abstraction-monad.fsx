@@ -264,7 +264,7 @@ module CombineReaderWithWriterWithResult =
 
 
 // Many popular F# libraries are in fact an instantiation of a specific monad combination.
-// The followong example demonstrate how to code a mini-Suave lib in a few lines
+// The following example demonstrate how to code a mini-Suave lib in a few lines
 
 module Suave =
     // setup something that reminds us of what Suave can work with
