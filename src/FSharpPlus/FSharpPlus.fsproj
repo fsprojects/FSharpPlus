@@ -48,6 +48,10 @@
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
     <Compile Include="Extensions/Tuple.fs" />
+    <Compile Include="TypeLevel/TypeLevelOperators.fs" />
+    <Compile Include="TypeLevel/TypeBool.fs" />
+    <Compile Include="TypeLevel/TypeNat.fs" />
+    <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />

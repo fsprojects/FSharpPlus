@@ -14,6 +14,7 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
     interface Collections.IEnumerable with member x.GetEnumerator () = (x.Value :> _ seq).GetEnumerator() :> _
     interface IEnumerable<KeyValuePair<'Key, 'Value>> with member x.GetEnumerator() = (x.Value :> _ seq).GetEnumerator()
     interface IReadOnlyCollection<KeyValuePair<'Key, 'Value>> with member x.Count = x.Value.Count
+    interface NonEmptySeq<KeyValuePair<'Key, 'Value>> with member x.First = x.Value |> Seq.head
 
     static member Create ((k, v), [<ParamArray>] rest: ('Key * 'Value)[]) : NonEmptyMap<_, _> =
         { Value = Map.ofArray rest |> Map.add k v }
@@ -57,6 +58,9 @@ module NonEmptyMap =
 
     /// <summary>Builds a sequence from the given non empty map.</summary>
     let toSeq   ({ Value = v }: NonEmptyMap<_, _>) = Map.toSeq v
+    
+    /// <summary>Builds a non-empty sequence from the given non empty map.</summary>
+    let toNonEmptySeq ({ Value = v }: NonEmptyMap<_, _>) = Map.toSeq v |> NonEmptySeq.unsafeOfSeq
 
     /// <summary>Builds an array from the given non empty map.</summary>
     let toArray ({ Value = v }: NonEmptyMap<_, _>) = Map.toArray v
@@ -98,6 +102,11 @@ module NonEmptyMap =
         match seq |> Seq.toList with
         | []    -> invalidArg "seq" "The input sequence was empty."
         | x::xs -> create x xs
+
+    /// <summary>Builds a non empty map from the given non-empty sequence.</summary>
+    /// <param name="sequence">The input sequence.</param>
+    /// <returns>Non empty map containing the elements of the non-empty sequence.</returns>
+    let ofNonEmptySeq (seq: _ NonEmptySeq) = create seq.First (Seq.tail seq)
 
     /// <summary>Builds a non empty map from the given map.</summary>
     /// <param name="map">The input map.</param>

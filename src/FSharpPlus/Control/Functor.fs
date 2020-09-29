@@ -11,6 +11,7 @@ open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
+open FSharpPlus.Data
 
 #if !FABLE_COMPILER
 
@@ -104,6 +105,7 @@ type Map with
                                                           , f: 'T->'U), [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
 
     static member        Map ((x: seq<_>                  , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
+    static member        Map ((x: NonEmptySeq<_>          , f: 'T->'U), _mthd: Default2) = NonEmptySeq.map f x      : NonEmptySeq<'U>
     static member        Map ((x: IEnumerator<_>          , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
     static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d :> IDictionary<'Key,'U>
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.map f x : IReadOnlyDictionary<'Key,_>
@@ -146,6 +148,7 @@ type Unzip =
     static member        Unzip ((source: ResizeArray<'T * 'U>              , _output: ResizeArray<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     
     static member        Unzip ((source: seq<'T * 'U>                      , _output: seq<'T> * seq<'U>                                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: NonEmptySeq<'T * 'U>                      , _output: NonEmptySeq<'T> * NonEmptySeq<'U>            ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     
     static member        Unzip ((source: IEnumerator<'T * 'U>              , _output: IEnumerator<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     
@@ -168,6 +171,7 @@ type Zip =
 
     static member Zip ((x: IEnumerator<'T>            , y: IEnumerator<'U>           , _output: IEnumerator<'T*'U>           ), _mthd: Zip) = Enumerator.zip x y
     static member Zip ((x: seq<'T>                    , y: seq<'U>                   , _output: seq<'T*'U>                   ), _mthd: Zip) = Seq.zip        x y
+    static member Zip ((x: NonEmptySeq<'T>            , y: NonEmptySeq<'U>           , _output: NonEmptySeq<'T*'U>           ), _mthd: Zip) = NonEmptySeq.zip        x y
     static member Zip ((x: IDictionary<'K, 'T>        , y: IDictionary<'K,'U>        , _output: IDictionary<'K,'T*'U>        ), _mthd: Zip) = Dict.zip       x y
     static member Zip ((x: IReadOnlyDictionary<'K, 'T>, y: IReadOnlyDictionary<'K,'U>, _output: IReadOnlyDictionary<'K,'T*'U>), _mthd: Zip) = IReadOnlyDictionary.zip x y
     static member Zip ((x: Dictionary<'K, 'T>         , y: Dictionary<'K,'U>         , _output: Dictionary<'K,'T*'U>         ), _mthd: Zip) = Dict.zip       x y :?> Dictionary<'K,'T*'U>
