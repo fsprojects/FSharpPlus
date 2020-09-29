@@ -5,6 +5,7 @@ open System
 open System.Runtime.InteropServices
 open System.ComponentModel
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus.Internals.MonadOps
@@ -42,9 +43,18 @@ type Traverse =
        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result Seq.empty)
 
+    static member inline Traverse (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+       let cons x y = seq {yield x; yield! y}
+       let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
+       Map.Invoke NonEmptySeq.ofSeq (Seq.foldBack cons_f t (result Seq.empty))
+
     static member inline Traverse (t: seq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
         let mapped = Seq.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, Array.toSeq) : '``Functor<seq<'U>>``
+
+    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default2) =
+        let mapped = NonEmptySeq.map f t
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq.ofArray) : '``Functor<NonEmptySeq<'U>>``
 
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
@@ -55,6 +65,13 @@ type Traverse =
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
+
+    static member Traverse (t: 't NonEmptySeq, f: 't->Async<'u>, [<Optional>]_output: Async<NonEmptySeq<'u>>, [<Optional>]_impl: Traverse) : Async<NonEmptySeq<_>> = async {
+        let! ct = Async.CancellationToken
+        return seq {
+            use enum = t.GetEnumerator ()
+            while enum.MoveNext() do
+                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
     
     static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
@@ -107,6 +124,16 @@ type Sequence with
     static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty, Array.toSeq)                                : seq<'t> []
 
     static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) = Async.Sequence t                                                          : Async<seq<'t>>
+
+    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq.ofArray)   : '``Applicative<NonEmptySeq<'T>>``
+    static member        Sequence (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone, NonEmptySeq.ofArray)                                : option<NonEmptySeq<'t>>
+    static member        Sequence (t: NonEmptySeq<Result<'t,'e>>, [<Optional>]_output: Result<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Error _      -> true | _ -> false), NonEmptySeq.ofArray) : Result<NonEmptySeq<'t>, 'e>
+    static member        Sequence (t: NonEmptySeq<Choice<'t,'e>>, [<Optional>]_output: Choice<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Choice2Of2 _ -> true | _ -> false), NonEmptySeq.ofArray) : Choice<NonEmptySeq<'t>, 'e>
+    static member        Sequence (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty, NonEmptySeq.ofArray)                                 : list<NonEmptySeq<'t>>
+    static member        Sequence (t: NonEmptySeq<'t []>        , [<Optional>]_output: NonEmptySeq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty, NonEmptySeq.ofArray)                                : NonEmptySeq<'t> []
+
+    static member        Sequence (t: NonEmptySeq<Async<'t>>    , [<Optional>]_output: Async<NonEmptySeq<'t>>     , [<Optional>]_impl: Default3) = Async.Sequence t |> Async.map NonEmptySeq.unsafeOfSeq                                                         : Async<NonEmptySeq<'t>>
+
 
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default2) = Traverse.InvokeOnInstance id t                                            : 'R
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                               : 'R

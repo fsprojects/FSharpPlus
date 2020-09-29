@@ -13,6 +13,7 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     interface System.Collections.IEnumerable with member x.GetEnumerator () = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator () :> System.Collections.IEnumerator
     interface IReadOnlyCollection<'t>        with member s.Count = 1 + List.length s.Tail
     interface IReadOnlyList<'t>              with member s.Item with get index = s.Item index
+    interface NonEmptySeq<'t>                with member s.First = s.Head
 
     [<System.Obsolete("Use Head instead.")>]
     member this.head = let {Head = a; Tail = _} = this in a
@@ -179,6 +180,11 @@ module NonEmptyList =
         match s with
         | []    -> None
         | x::xs -> Some (create x xs)
+
+    let ofNonEmptySeq (s: NonEmptySeq<_>) =
+      create s.First (Seq.tail s |> List.ofSeq)
+
+    let toNonEmptySeq (list: NonEmptyList<_>) = list :> NonEmptySeq<_>
 
 type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
