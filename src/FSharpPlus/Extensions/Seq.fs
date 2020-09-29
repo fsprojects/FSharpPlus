@@ -32,8 +32,17 @@ module Seq =
     /// </example>
     let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
 
+    /// Combines all values from the first seq with the second, using the supplied mapping function.
     let lift2 f x1 x2 = Seq.allPairs x1 x2 |> Seq.map (fun (x, y) -> f x y)
 
+    /// <summary>
+    /// Applies a function to each element of the collection, starting from the end,
+    /// threading an accumulator argument through the computation.
+    /// </summary>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let foldBack f x z = Array.foldBack f (Seq.toArray x) z
 
     /// <summary>
@@ -114,6 +123,7 @@ module Seq =
                 if options = StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
         split StringSplitOptions.None
 
+    /// Replaces a subsequence of the source seq with the given replacement seq.
     let replace (oldValue: seq<'T>) (newValue: seq<'T>) (source: seq<'T>) : seq<'T> = seq {
         let old = oldValue |> Seq.toList
         if old.Length = 0 then
@@ -151,6 +161,13 @@ module Seq =
 
     #if !FABLE_COMPILER
     
+    /// <summary>
+    /// Creates a sequence by replicating the given initial value count times.
+    /// </summary>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
     #endif
 
@@ -159,6 +176,9 @@ module Seq =
 
     #if !FABLE_COMPILER
     
+    /// <summary>Converts a seq to an IReadOnlyList (from System.Collections.Generic).</summary>
+    /// <param name="source">The seq source</param>
+    /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
 
     /// <summary>

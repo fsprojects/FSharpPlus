@@ -70,6 +70,9 @@ module List =
     /// Replaces a subsequence of the source list with the given replacement list.
     let replace oldValue (newValue: _ list) (source: _ list) = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList : list<'T>
 
+    /// <summary>Converts a list to an IReadOnlyList (from System.Collections.Generic).</summary>
+    /// <param name="source">The list source</param>
+    /// <returns>The list converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (source: _ list) =
         { new System.Collections.Generic.IReadOnlyList<_> with
             member __.Count = source.Length
