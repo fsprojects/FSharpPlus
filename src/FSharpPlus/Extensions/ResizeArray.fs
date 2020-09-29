@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-/// Additional operations on Array
+/// Additional operations on ResizeArray
 [<RequireQualifiedAccess>]
 module ResizeArray =
 
@@ -17,21 +17,35 @@ module ResizeArray =
     /// <exception cref="System.ArgumentNullException">Thrown when the input ResizeArray is null.</exception>
     let map (f: 'T->'U) (x: ResizeArray<'T>) = ResizeArray (Seq.map f x)
 
+    /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.</summary>
+    /// <param name="f">The functions.</param>
+    /// <param name="x">The values.</param>
+    /// <returns>A concatenated list of the resulting ResizeArray after applying each function to each value.</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > List.apply [double; triple] [1; 2; 3];;  
+    /// val it : int list = [2; 4; 6; 3; 6; 9]
+    /// </code>
+    /// </example>
     let apply (f: ResizeArray<'T->'U>) (x: ResizeArray<'T>) = ResizeArray (Seq.apply f x)
 
-    /// Combine all values from the first ResizeArray with the second, using the supplied mapping function.
+    /// Combines all values from the first ResizeArray with the second, using the supplied mapping function.
     let lift2 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) = ResizeArray (Seq.lift2 mapping x1 x2)
 
+    /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
 
-    /// Inserts a separator between each element in the source array.
+    /// Inserts a separator element between each element in the source ResizeArray.
     let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
     let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
-    /// Replace a subsequence of the source array with the given replacement array.
+    /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
+
+    #if !FABLE_COMPILER
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
@@ -42,8 +56,6 @@ module ResizeArray =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    #if !FABLE_COMPILER
-
     let findSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then

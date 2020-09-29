@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-/// Additional operations on Option
+/// Additional operations on Lazy - delayed computations
 [<RequireQualifiedAccess>]
 module Lazy =
 

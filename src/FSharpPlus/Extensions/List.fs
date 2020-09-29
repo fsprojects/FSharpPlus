@@ -9,7 +9,23 @@ module List =
     /// Creates a list with a single element.
     let singleton x = [x]
 
-    let cons x y = x :: y
+    /// <summary>Adds an element to the beginning of the given list</summary>
+    /// <param name="x">The element to add</param>
+    /// <param name="list">The list to add to</param>
+    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    let cons x list = x :: list 
+
+    /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
+    /// <param name="f">The list of functions.</param>
+    /// <param name="x">The list of values.</param>
+    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > List.apply [double; triple] [1; 2; 3];;  
+    /// val it : int list = [2; 4; 6; 3; 6; 9]
+    /// </code>
+    /// </example>
     let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
@@ -42,17 +58,21 @@ module List =
             | x, n -> loop (n-1) (List.tail x)
         if i > 0 then loop i list else list
 
+    /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
 
-    /// Inserts a separator between each element in the source list.
+    /// Inserts a separator element between each element in the source list.
     let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList : list<'T>
 
     /// Creates a sequence of lists by splitting the source list on any of the given separators.
     let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
 
-    /// Replace a subsequence of the source list with the given replacement list.
+    /// Replaces a subsequence of the source list with the given replacement list.
     let replace oldValue (newValue: _ list) (source: _ list) = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList : list<'T>
 
+    /// <summary>Converts a list to an IReadOnlyList (from System.Collections.Generic).</summary>
+    /// <param name="source">The list source</param>
+    /// <returns>The list converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (source: _ list) =
         { new System.Collections.Generic.IReadOnlyList<_> with
             member __.Count = source.Length

@@ -10,30 +10,54 @@ module String =
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: string) (source: seq<string>) = String.Join (separator, source)
 
-    /// Inserts a separator between each char in the source string.
+    /// Inserts a separator char between each char in the source string.
     let intersperse (element: char) (source: string) = String.Join ("", Array.ofSeq (source |> Seq.intersperse element))
 
     /// Creates a sequence of strings by splitting the srouce string on any of the given separators.
     let split (separators: seq<string>) (source: string) = source.Split (Seq.toArray separators, StringSplitOptions.None) :> seq<_>
 
-    /// Replace a substring with the given replacement string.
+    /// Replaces a substring with the given replacement string.
     let replace (oldValue: string) newValue (source: string) = if oldValue.Length = 0 then source else source.Replace (oldValue, newValue)
 
+    /// Does the source string contain the given subString? -- function wrapper for String.Contains method.
     let isSubString (subString: string) (source: string) = source.Contains subString
 
     #if !FABLE_COMPILER
     
+    /// Does the source string start with the given subString? -- function wrapper for String.StartsWith method using InvariantCulture.
     let startsWith (subString: string) (source: string) = source.StartsWith (subString, false, CultureInfo.InvariantCulture)
     #endif
+
+    /// Does the source string end with the given subString? -- function wrapper for String.EndsWith method using InvariantCulture.
     let endsWith subString (source: string) = source.EndsWith (subString, false, CultureInfo.InvariantCulture)
+
+    /// Does the source string contain the given character?
     let contains char      (source: string) = Seq.contains char source
+
+    /// Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.
     let toUpper (source: string) = if isNull source then source else source.ToUpperInvariant ()
+
+    /// Converts to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method.
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
+
+    /// Trims white space -- function wrapper for String.Trim method.
+    /// 
+    /// Note this is distinct from trim which trims the given characters,
+    /// not whitespace.
     let trimWhiteSpaces (source: string) = source.Trim ()
 
     #if !FABLE_COMPILER
-    
+       
+    /// Returns a new string whose textual value is the same as this string, but whose binary representation is in the specified Unicode normalization form.
+    /// 
+    /// This is a null safe function wrapper of the String.Normalize method.
     let normalize normalizationForm (source: string) = if isNull source then source else source.Normalize normalizationForm
+
+    /// Removes diacritics (accents) from the given source string.
+    /// 
+    /// The approach uses `normalize` to split the input string into constituent glyphs
+    /// (basically separating the "base" characters from the diacritics) and then scans
+    /// the result and retains only the base characters. 
     let removeDiacritics (source: string) =
         if isNull source then source
         else
@@ -45,34 +69,73 @@ module String =
 
     /// Pads the beginning of the given string with spaces so that it has a specified total length.
     let padLeft totalLength (source: string) = source.PadLeft totalLength
+
     /// Pads the beginning of the given string with a specified character so that it has a specified total length.
     let padLeftWith totalLength paddingChar (source: string) = source.PadLeft (totalLength, paddingChar)
+
     /// Pads the end of the given string with spaces so that it has a specified total length.
     let padRight totalLength (source: string) = source.PadRight totalLength
+    
     /// Pads the end of the given string with a specified character so that it has a specified total length.
     let padRightWith totalLength paddingChar (source: string) = source.PadRight (totalLength, paddingChar)
 
     /// Removes all leading and trailing occurrences of specified characters from the given string.
     let trim      (trimChars: char seq) (source: string) = source.Trim (Seq.toArray trimChars)
+    
     /// Removes all leading occurrences of specified characters from the given string.
     let trimStart (trimChars: char seq) (source: string) = source.TrimStart (Seq.toArray trimChars)
+
     /// Removes all trailing occurrences of specified characters from the given string.
     let trimEnd   (trimChars: char seq) (source: string) = source.TrimEnd (Seq.toArray trimChars)
 
+    /// Converts the given string to an array of chars.
     let toArray (source: string)    = source.ToCharArray ()
-    let ofArray (source: char [])   = new String (source)
+
+    /// Converts an array of chars to a String.
+    let ofArray (source: char [])   = String (source)
+
+    /// Converts the given string to a list of chars.
     let toList  (source: string)    = toArray source |> List.ofArray
-    let ofList  (source: char list) = new String (source |> Array.ofList)
+
+    /// Converts a list of chars to a String.
+    let ofList  (source: char list) = String (source |> Array.ofList)
+
+    /// Converts the given string to a seq of chars.
     let toSeq   (source: string)    = source :> seq<char>
+
+    /// Converts a seq of chars to a String.
     let ofSeq   (source: seq<char>) = String.Join (String.Empty, source)
 
+    /// (Unsafely) Returns the char at the given index in the source string.
+    /// 
+    /// This is a function wrapper for `source.[index]` method.
+    /// 
+    /// Note: this is not exception safe, and will throw System.IndexOutOfRangeException when
+    /// the given index is out of bounds.
     let item    (index: int) (source: string) = source.[index]
+
+    /// Returns the char (as an Option) at the given index in the source string,
+    /// returning `None` if out of bounds.
     let tryItem (index: int) (source: string) = if index >= 0 && index < source.Length then Some source.[index] else None
 
-    let rev (source: string) = new String (source.ToCharArray () |> Array.rev)
+    /// Reverses the given string.
+    let rev (source: string) = String (source.ToCharArray () |> Array.rev)
 
+    /// (Unsafely) Takes the first count chars in the string.
+    /// Use `String.truncate` for a safe version.
+    /// 
+    /// Note: will throw System.ArgumentOutOfRangeException if you try to take more than the
+    /// number of chars in the string.
     let take count (source: string) = source.[..count-1]
+
+    /// (Unsafely) Skips over the first count chars in the string.
+    /// Use `String.drop` for a safe version.
+    /// 
+    /// Note: will throw System.ArgumentOutOfRangeException if you try to skip more than the
+    /// number of chars in the string.
     let skip count (source: string) = source.[count..]
+
+    /// Takes chars from the source string while the given predicate is true.
     let takeWhile (predicate: char -> bool) (source: string) =
         if String.IsNullOrEmpty source then
             String.Empty
@@ -83,6 +146,8 @@ module String =
                 i <- i + 1
             if i = 0 then ""
             else source |> take i
+
+    /// Skips over chars from the source string while the given predicate is true.
     let skipWhile (predicate: char -> bool) (source: string) =
         if String.IsNullOrEmpty source then
             String.Empty
@@ -93,12 +158,14 @@ module String =
                 i <- i + 1
             if i = 0 then ""
             else source |> skip i
-    /// Returns a string that have at most N characters from the beginning of the original string.
+
+    /// Returns a string that has at most N characters from the beginning of the original string.
     /// It returns the original string if it is shorter than count.
     let truncate count (source: string) =
         if count < 1 then String.Empty
         else if String.length source <= count then source
         else take count source
+
     /// Returns a string that drops first N characters of the original string.
     /// When count exceeds the length of the string it returns an empty string.
     let drop count (source: string) =
@@ -106,6 +173,9 @@ module String =
         else if String.length source >= count then String.Empty
         else skip count source
 
+    /// Finds the first index of the char in the substring which satisfies the given predicate.
+    /// 
+    /// Note: throws an ArgumentException when not found.
     let findIndex (predicate: char -> bool) (source: string) =
         let rec go index =
             if index >= source.Length then
@@ -113,6 +183,8 @@ module String =
             else if predicate source.[index] then index
             else go (index + 1)
         go 0
+
+    /// Tries to find the first index of the char in the substring which satisfies the given predicate.
     let tryFindIndex (predicate: char -> bool) (source: string) =
         let rec go index =
             if index >= source.Length then None
@@ -135,6 +207,7 @@ module String =
             ArgumentException("The specified substring was not found in the string.") |> raise
         else
             index
+            
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
     /// Returns <c>None</c> if not found.
@@ -148,13 +221,14 @@ module String =
 
     #if !FABLE_COMPILER
 
-    /// Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).
+    /// Converts the given string to an array of Int32 code-points (the actual Unicode Code Point number).
     let toCodePoints (source : string) : seq<int> =
         let mapper i c =
             // Ignore the low-surrogate because it's already been converted
             if c |> Char.IsLowSurrogate then None
             else Char.ConvertToUtf32 (source, i) |> Some
         source |> Seq.mapi mapper |> Seq.choose id
+
     /// Converts the array of Int32 code-points (the actual Unicode Code Point number) to a string.
     let ofCodePoints (source: seq<int>) : string =
         source |> Seq.map Char.ConvertFromUtf32 |> String.concat String.Empty
