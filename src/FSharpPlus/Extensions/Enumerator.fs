@@ -445,9 +445,9 @@ module Enumerator =
     /// <remarks>
     /// The Current value for a valid index is "f i".
     ///
-    /// Lazy<_> values are used as caches, to store either the result or an exception if thrown.
+    /// Lazy&lt;_&gt; values are used as caches, to store either the result or an exception if thrown.
     /// 
-    /// These "Lazy<_>" caches are created only on the first call to current and forced immediately.
+    /// These "Lazy&lt;_&gt;" caches are created only on the first call to current and forced immediately.
     /// The lazy creation of the cache nodes means enumerations that skip many Current values are not delayed by GC.
     /// For example, the full enumeration of Seq.initInfinite in the tests.
     /// </remarks>
