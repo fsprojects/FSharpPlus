@@ -8,13 +8,15 @@ module Enumerator =
 
     open System
         
+    // Helper functions used in Enumerators
+
     /// [omit]
     let inline invalidArgFmt (arg: string) (format: string) paramArray = 
         let msg = String.Format (format,paramArray)
-        raise (new ArgumentException (msg, arg))
+        raise (ArgumentException (msg, arg))
     
     /// [omit]
-    let noReset ()         = raise (new System.NotSupportedException ("Reset is not supported on this enumerator."))
+    let noReset ()         = raise (System.NotSupportedException ("Reset is not supported on this enumerator."))
     
     /// [omit]
     let notStarted ()      = invalidOp "Enumeration has not started. Call MoveNext."
@@ -31,7 +33,7 @@ module Enumerator =
     open System.Collections
     open System.Collections.Generic
     
-    /// A concrete implementation of an enumerator that returns no values
+    /// An enumerator that is empty -- useful in combination with other enumerators
     /// [omit]
     [<Sealed>]
     type EmptyEnumerator<'T> () =
@@ -52,13 +54,16 @@ module Enumerator =
         interface System.IDisposable with
             member __.Dispose () = ()
               
+    /// Constructs an EmptyEnumerator of type 'T.
     let Empty<'T> () = new EmptyEnumerator<'T>() :> IEnumerator<'T>
 
+    /// Constructs an Enumerator that yields the single value given.
     let singleton x = (Seq.singleton x).GetEnumerator()
 
     /// [omit]
     type IFinallyEnumerator = abstract AppendFinallyAction : (unit -> unit) -> unit
 
+    /// Enumerate all sources in sequence
     /// [omit]
     [<Sealed>]
     type ConcatEnumerator<'T> (sources: IEnumerator<IEnumerator<'T>>) =
@@ -151,13 +156,41 @@ module Enumerator =
         interface System.IDisposable with
             member x.Dispose () = if not finished then x.Finish ()
 
+    
+    /// <summary>
+    /// Enumerates the elements of each of the Enumerators in order.
+    /// </summary>
+    /// <param name="sources">The source Enumerator of Enumerators.</param>
+    /// <returns>A concatenated enumeration of the given Enumerator sources.</returns>
     let concat sources = new ConcatEnumerator<_> (sources) :> IEnumerator<_>
     
+    /// <summary>
+    /// Tries to find the nth element in the Enumerator.
+    /// Returns None if index is negative or the Enumerator does not contain enough elements. 
+    /// </summary>
+    /// <param name="index">The index to retrieve.</param>
+    /// <param name="e">The input Enumerator.</param>
+    /// <returns>The value at the given index or <c>None</c> if not found.</returns>
+    /// <exception cref="System.InvalidOperationException">
+    /// Thrown when the Enumeratoris modified after the enumerator is created,
+    /// </exception>
     let rec tryItem index (e: IEnumerator<'T>) =
         if not (e.MoveNext ()) then None
         elif index = 0 then Some e.Current
         else tryItem (index-1) e
     
+    /// <summary>
+    /// Retuns the nth element in the Enumerator.
+    /// </summary>
+    /// <remarks>
+    /// This is called <c>item</c> in some other parts of core.
+    /// </remarks>
+    /// <param name="index">The index to retrieve.</param>
+    /// <param name="e">The input Enumerator.</param>
+    /// <returns>The value at the given index or an exception is thrown if not found.</returns>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown if the index is negative or the Enumerator does not contain enough elements.
+    /// </exception>
     let rec nth index (e: IEnumerator<'T>) =
         if not (e.MoveNext ()) then
             let shortBy = index + 1
@@ -167,12 +200,21 @@ module Enumerator =
         if index = 0 then e.Current
         else nth (index-1) e
     
+    /// Defines the possible states of a MapEnumerator.
+    /// [omit]
     [<NoEquality; NoComparison>]
     type MapEnumeratorState =
         | NotStarted
         | InProcess
         | Finished
     
+    /// An abstract enumerator, useful when mapping over enumerators.
+    /// 
+    /// It maintains a mutable `curr` item, and a process MapEnumeratorState `state`.
+    /// 
+    /// Implement DoMoveNext such that `curr` is set after calling, and return
+    /// whether the enumerator actually moved next.
+    /// [omit]
     [<AbstractClass>]
     type MapEnumerator<'T> () =
         let mutable state = NotStarted
@@ -202,9 +244,16 @@ module Enumerator =
                     state <- Finished
                     false
             member __.Reset () = noReset ()
+
         interface System.IDisposable with
             member this.Dispose () = this.Dispose ()
     
+    /// <summary>
+    /// Maps over an enumerator.
+    /// </summary>
+    /// <param name="f">The function to apply.</param>
+    /// <param name="e">The input Enumerator.</param>
+    /// <returns>A new Enumerator of mapped elements.</returns>
     let map f (e: IEnumerator<_>) : IEnumerator<_> =
         upcast
             { new MapEnumerator<_>() with
@@ -217,6 +266,12 @@ module Enumerator =
                   member __.Dispose () = e.Dispose ()
             }
     
+    /// <summary>
+    /// Maps over an Enumerator, with the mapping function also given the index.
+    /// </summary>
+    /// <param name="f">The function to apply, which is given both the index and the element.</param>
+    /// <param name="e">The input Enumerator.</param>
+    /// <returns>A new Enumerator of mapped elements.</returns>
     let mapi f (e: IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         let i = ref -1
@@ -229,7 +284,18 @@ module Enumerator =
                         true
                     else false
                 member __.Dispose () = e.Dispose () }
-    
+
+    /// <summary>
+    /// Maps over two Enumerators, with the mapping function is given the corresponding elements
+    /// of the two Enumerators pairwise.
+    /// </summary>
+    /// <remarks>
+    /// Stops enumerating when either of the input Enumerators are finished enumerating.
+    /// </remarks>
+    /// <param name="f">The function to apply to each pair of elements from the input Enumerators</param>
+    /// <param name="e1">The first input Enumerator.</param>
+    /// <param name="e2">The second input Enumerator.</param>
+    /// <returns>A new Enumerator of mapped elements.</returns>
     let map2 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
         upcast {
@@ -245,6 +311,17 @@ module Enumerator =
                     try e1.Dispose ()
                     finally e2.Dispose () }
     
+    /// <summary>
+    /// Maps over two Enumerators, where the mapping function is given the index and corresponding elements
+    /// of the two input Enumerators pairwise.
+    /// </summary>
+    /// <remarks>
+    /// Stops enumerating when either of the input Enumerators are finished enumerating.
+    /// </remarks>
+    /// <param name="f">The function to apply to the index and each pair of elements from the input Enumerators</param>
+    /// <param name="e1">The first input Enumerator.</param>
+    /// <param name="e2">The second input Enumerator.</param>
+    /// <returns>A new Enumerator of mapped elements.</returns>
     let mapi2 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
         let i = ref -1
@@ -260,6 +337,18 @@ module Enumerator =
                     try e1.Dispose ()
                     finally e2.Dispose () }
     
+    /// <summary>
+    /// Maps over three Enumerators, where the mapping function is given the corresponding elements
+    /// of the three Enumerators.
+    /// </summary>
+    /// <remarks>
+    /// Stops enumerating when any of the input Enumerators are finished enumerating.
+    /// </remarks>
+    /// <param name="f">The function to apply to each triple of elements from the input Enumerators</param>
+    /// <param name="e1">The first input Enumerator.</param>
+    /// <param name="e2">The second input Enumerator.</param>
+    /// <param name="e3">The third input Enumerator.</param>
+    /// <returns>A new Enumerator of mapped elements.</returns>
     let map3 f (e1: IEnumerator<_>) (e2: IEnumerator<_>) (e3: IEnumerator<_>) : IEnumerator<_> =
         let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
         upcast {
@@ -279,7 +368,15 @@ module Enumerator =
                         try e2.Dispose ()
                         finally e3.Dispose () }
     
-    let choose f (e: IEnumerator<'T>) =
+    /// <summary>
+    /// Applies the given function to each element in the input Enumerator.
+    /// Returns an Enumerator comprised of the resuls <c>x</c> for each element
+    /// where the function returns <c>Some(x)</c>.
+    /// </summary>
+    /// <param name="chooser">The function to apply to each triple of elements from the input Enumerators.</param>
+    /// <param name="e">The input Enumerator.</param>
+    /// <returns>A new Enumerator of values selected from the chooser function.</returns>
+    let choose chooser (e: IEnumerator<'T>) =
         let started = ref false
         let curr = ref None
         let get () =  check !started; (match !curr with None -> alreadyFinished () | Some x -> x)
@@ -291,13 +388,20 @@ module Enumerator =
                   if not !started then started := true
                   curr := None
                   while (!curr).IsNone && e.MoveNext () do
-                      curr := f e.Current
+                      curr := chooser e.Current
                   Option.isSome !curr
               member __.Reset() = noReset ()
           interface System.IDisposable with
               member __.Dispose () = e.Dispose () }
     
-    let filter f (e: IEnumerator<'T>) =
+    /// <summary>
+    /// Returns a new Enumerator yielding only the elements of the input Enumerator for which the
+    /// given predicate returns "true".
+    /// </summary>
+    /// <param name="predicate">The function to test the input elements.</param>
+    /// <param name="e">The input Enumerator.</param>
+    /// <returns>A new Enumerator yielding only elements that satsify the predicate.</returns>
+    let filter predicate (e: IEnumerator<'T>) =
         let started = ref false
         { new IEnumerator<'T> with
                 member __.Current = check !started; e.Current
@@ -306,18 +410,27 @@ module Enumerator =
                 member __.MoveNext () =
                     let rec next () =
                         if not !started then started := true
-                        e.MoveNext () && (f e.Current || next ())
+                        e.MoveNext () && (predicate e.Current || next ())
                     next ()
                 member __.Reset () = noReset ()
             interface System.IDisposable with
                 member __.Dispose () = e.Dispose () }
     
-    let unfold f x : IEnumerator<_> =
-        let state = ref x
+    /// <summary>
+    /// Returns a new Enumerator yielding elements <c>x</c> generated by the given computation
+    /// so long as it generates a <c>Some(x)</c> - and stops when it generates a <c>None</c>.
+    /// The given initial <c>state</c> argument is passed to the element generator.
+    /// </summary>
+    /// <param name="generator">The function that takes the current state and returns an
+    /// option tuple of the next element of the list and the next state value.</param>
+    /// <param name="inititalState">The intitial state value.</param>
+    /// <returns>A new Enumerator yielding only elements that satsify the predicate.</returns>
+    let unfold generator initialState : IEnumerator<_> =
+        let state = ref initialState
         upcast {
             new MapEnumerator<_> () with
                 member __.DoMoveNext curr =
-                    match f !state with
+                    match generator !state with
                     |   None -> false
                     |   Some (r, s) ->
                             curr <- r
@@ -325,6 +438,22 @@ module Enumerator =
                             true
                 member __.Dispose () = () }
     
+    /// <summary>
+    /// Enumerates from zero up to the given <c>lastOption</c>, yielding elements
+    /// generated by the given function applied to the index.
+    /// </summary>
+    /// <remarks>
+    /// The Current value for a valid index is "f i".
+    ///
+    /// Lazy<_> values are used as caches, to store either the result or an exception if thrown.
+    /// 
+    /// These "Lazy<_>" caches are created only on the first call to current and forced immediately.
+    /// The lazy creation of the cache nodes means enumerations that skip many Current values are not delayed by GC.
+    /// For example, the full enumeration of Seq.initInfinite in the tests.
+    /// </remarks>
+    /// <param name="lastOption">The last index to stop at -- or <c>None</c> to run forever, well as far as Int32.MaxValue.</param>
+    /// <param name="f">The function to apply to each index.</param>
+    /// <returns>An enumerator that yields upto the lastOption.</returns>
     let upto lastOption f =
         match lastOption with
         | Some b when b < 0 -> Empty ()    // a request for -ve length returns empty sequence
@@ -336,12 +465,6 @@ module Enumerator =
                 match lastOption with
                 | Some b -> b             // here b>=0, a valid end value.
                 | None   -> unreachable   // run "forever", well as far as Int32.MaxValue since indexing with a bounded type.
-            // The Current value for a valid index is "f i".
-            // Lazy<_> values are used as caches, to store either the result or an exception if thrown.
-            // These "Lazy<_>" caches are created only on the first call to current and forced immediately.
-            // The lazy creation of the cache nodes means enumerations that skip many Current values are not delayed by GC.
-            // For example, the full enumeration of Seq.initInfinite in the tests.
-            // state
             let index = ref unstarted
             // a Lazy node to cache the result/exception
             let current = ref Unchecked.defaultof<_>
@@ -373,6 +496,12 @@ module Enumerator =
               interface System.IDisposable with
                   member __.Dispose () = () }
 
+    /// <summary>
+    /// Zip two input Enumerators into a new Enumerator yielding pairs.
+    /// </summary>
+    /// <param name="e1">The first input Enumerator.</param>
+    /// <param name="e2">The second input Enumerator.</param>
+    /// <returns>An Enumerator that enumerates pairs of two input Enumerators.</returns>
     let zip (e1: IEnumerator<_>) (e2: IEnumerator<_>) : IEnumerator<_> =
         upcast {
             new MapEnumerator<_> () with
@@ -385,6 +514,13 @@ module Enumerator =
                     try e1.Dispose ()
                     finally e2.Dispose () }
 
+    /// <summary>
+    /// Zip three input Enumerators into a new Enumerator yielding triples.
+    /// </summary>
+    /// <param name="e1">The first input Enumerator.</param>
+    /// <param name="e2">The second input Enumerator.</param>
+    /// <param name="e3">The third input Enumerator.</param>
+    /// <returns>An Enumerator that enumerates triples of three input Enumerators.</returns>
     let zip3 (e1: IEnumerator<_>) (e2: IEnumerator<_>) (e3: IEnumerator<_>) : IEnumerator<_> =
         upcast {
             new MapEnumerator<_> () with
