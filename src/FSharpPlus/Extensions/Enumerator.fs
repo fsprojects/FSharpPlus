@@ -171,9 +171,6 @@ module Enumerator =
     /// <param name="index">The index to retrieve.</param>
     /// <param name="e">The input Enumerator.</param>
     /// <returns>The value at the given index or <c>None</c> if not found.</returns>
-    /// <exception cref="System.InvalidOperationException">
-    /// Thrown when the Enumeratoris modified after the enumerator is created,
-    /// </exception>
     let rec tryItem index (e: IEnumerator<'T>) =
         if not (e.MoveNext ()) then None
         elif index = 0 then Some e.Current
@@ -292,7 +289,7 @@ module Enumerator =
     /// <remarks>
     /// Stops enumerating when either of the input Enumerators are finished enumerating.
     /// </remarks>
-    /// <param name="f">The function to apply to each pair of elements from the input Enumerators</param>
+    /// <param name="f">The function to apply to each pair of elements from the input Enumerators.</param>
     /// <param name="e1">The first input Enumerator.</param>
     /// <param name="e2">The second input Enumerator.</param>
     /// <returns>A new Enumerator of mapped elements.</returns>
@@ -318,7 +315,7 @@ module Enumerator =
     /// <remarks>
     /// Stops enumerating when either of the input Enumerators are finished enumerating.
     /// </remarks>
-    /// <param name="f">The function to apply to the index and each pair of elements from the input Enumerators</param>
+    /// <param name="f">The function to apply to the index and each pair of elements from the input Enumerators.</param>
     /// <param name="e1">The first input Enumerator.</param>
     /// <param name="e2">The second input Enumerator.</param>
     /// <returns>A new Enumerator of mapped elements.</returns>
@@ -344,7 +341,7 @@ module Enumerator =
     /// <remarks>
     /// Stops enumerating when any of the input Enumerators are finished enumerating.
     /// </remarks>
-    /// <param name="f">The function to apply to each triple of elements from the input Enumerators</param>
+    /// <param name="f">The function to apply to each triple of elements from the input Enumerators.</param>
     /// <param name="e1">The first input Enumerator.</param>
     /// <param name="e2">The second input Enumerator.</param>
     /// <param name="e3">The third input Enumerator.</param>
