@@ -63,8 +63,7 @@ module ComputationExpressions =
                 finally
                     SideEffects.add "execute this"
             with
-            | e -> 
-                // SideEffects.add (sprintf "Exception! %s" e.Message) // this can be different if run on non-English environment
+            | :? DivideByZeroException ->
                 SideEffects.add "Exception! Attempted to divide by zero."
                 return 42 }
 
