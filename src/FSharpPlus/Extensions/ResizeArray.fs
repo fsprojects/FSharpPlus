@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-/// Additional operations on Array
+/// Additional operations on ResizeArray
 [<RequireQualifiedAccess>]
 module ResizeArray =
 
