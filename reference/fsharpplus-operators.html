@@ -1022,11 +1022,11 @@ If an element occurs multiple times in the collection then the later occurrences
       <tr>
         <td class="member-name">
           <code onmouseout="hideTip(event, '249', 249)" onmouseover="showTip(event, '249', 249)">
-            divRem D d
+            divRem dividend divisor
           </code>
           <div class="tip" id="249">
-            <strong>Signature:</strong> D:^T -&gt; d:^T -&gt; ^T * ^T<br />
-                          <strong>Type parameters:</strong> ^T                      </div>
+            <strong>Signature:</strong> dividend:^Num -&gt; divisor:^Num -&gt; ^Num * ^Num<br />
+                          <strong>Type parameters:</strong> ^Num                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L932-932" class="github-link">
@@ -1237,8 +1237,8 @@ remaining elements of the collection.</p>
             filter predicate source
           </code>
           <div class="tip" id="260">
-            <strong>Signature:</strong> predicate:(&#39;?15874 -&gt; bool) -&gt; source:^Collection -&gt; ^Collection<br />
-                          <strong>Type parameters:</strong> '?15874, ^Collection                      </div>
+            <strong>Signature:</strong> predicate:(&#39;?16116 -&gt; bool) -&gt; source:^Collection -&gt; ^Collection<br />
+                          <strong>Type parameters:</strong> '?16116, ^Collection                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L628-628" class="github-link">
@@ -1549,8 +1549,8 @@ computes f i0 (...(f iN s)).</p>
             getMaxValue()
           </code>
           <div class="tip" id="276">
-            <strong>Signature:</strong> unit -&gt; ^?16004<br />
-                          <strong>Type parameters:</strong> ^?16004                      </div>
+            <strong>Signature:</strong> unit -&gt; ^?16246<br />
+                          <strong>Type parameters:</strong> ^?16246                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L941-941" class="github-link">
@@ -1568,8 +1568,8 @@ computes f i0 (...(f iN s)).</p>
             getMinValue()
           </code>
           <div class="tip" id="277">
-            <strong>Signature:</strong> unit -&gt; ^?16000<br />
-                          <strong>Type parameters:</strong> ^?16000                      </div>
+            <strong>Signature:</strong> unit -&gt; ^?16242<br />
+                          <strong>Type parameters:</strong> ^?16242                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L935-935" class="github-link">
@@ -1626,7 +1626,7 @@ computes f i0 (...(f iN s)).</p>
           </code>
           <div class="tip" id="280">
             <strong>Signature:</strong> f:(&#39;S -&gt; &#39;T) -&gt; ^MonadState&lt;&#39;T * &#39;S&gt;<br />
-                          <strong>Type parameters:</strong> 'S, 'T, ^MonadState<'T * 'S>, ^?15836                      </div>
+                          <strong>Type parameters:</strong> 'S, 'T, ^MonadState<'T * 'S>, ^?16078                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L582-582" class="github-link">
@@ -2489,7 +2489,7 @@ If true it lifts the unit value, else it returns empty.</p>
           </code>
           <div class="tip" id="325">
             <strong>Signature:</strong> f:(&#39;S -&gt; &#39;S) -&gt; ^MonadState&lt;unit * (&#39;S-&gt;&#39;S)&gt;<br />
-                          <strong>Type parameters:</strong> 'S, ^MonadState<unit * ('S->'S)>, ^?15843                      </div>
+                          <strong>Type parameters:</strong> 'S, ^MonadState<unit * ('S->'S)>, ^?16085                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L588-588" class="github-link">
@@ -2565,8 +2565,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytes(value)
           </code>
           <div class="tip" id="329">
-            <strong>Signature:</strong> value:byte [] -&gt; ^?15982<br />
-                          <strong>Type parameters:</strong> ^?15982                      </div>
+            <strong>Signature:</strong> value:byte [] -&gt; ^?16224<br />
+                          <strong>Type parameters:</strong> ^?16224                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L905-905" class="github-link">
@@ -2584,8 +2584,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytesBE(value)
           </code>
           <div class="tip" id="330">
-            <strong>Signature:</strong> value:byte [] -&gt; ^?15984<br />
-                          <strong>Type parameters:</strong> ^?15984                      </div>
+            <strong>Signature:</strong> value:byte [] -&gt; ^?16226<br />
+                          <strong>Type parameters:</strong> ^?16226                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L908-908" class="github-link">
@@ -2603,8 +2603,8 @@ Works also for unsigned types (Throws an exception if there is no inverse).</p>
             ofBytesWithOptions(...)
           </code>
           <div class="tip" id="331">
-            <strong>Signature:</strong> isLtEndian:bool -&gt; startIndex:int -&gt; value:byte [] -&gt; ^?15980<br />
-                          <strong>Type parameters:</strong> ^?15980                      </div>
+            <strong>Signature:</strong> isLtEndian:bool -&gt; startIndex:int -&gt; value:byte [] -&gt; ^?16222<br />
+                          <strong>Type parameters:</strong> ^?16222                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L902-902" class="github-link">
@@ -2717,8 +2717,8 @@ Otherwise, it applies the function to the value inside Some and returns the resu
             optional(v)
           </code>
           <div class="tip" id="337">
-            <strong>Signature:</strong> v:^?15513 -&gt; ^?15514<br />
-                          <strong>Type parameters:</strong> ^?15513, ^?15514, '?15515, '?15516                        <span>
+            <strong>Signature:</strong> v:^?15755 -&gt; ^?15756<br />
+                          <strong>Type parameters:</strong> ^?15755, ^?15756, '?15757, '?15758                        <span>
             <strong>Attributes:</strong><br />
 [&lt;Obsolete(&quot;Use opt instead.&quot;)&gt;]<br />
           </span>
@@ -3199,8 +3199,8 @@ val it : int list list = [[1]; [4]; [6; 7]]
             sqrt(x)
           </code>
           <div class="tip" id="361">
-            <strong>Signature:</strong> x:^?16030 -&gt; ^?16030<br />
-                          <strong>Type parameters:</strong> ^?16030                      </div>
+            <strong>Signature:</strong> x:^?16272 -&gt; ^?16272<br />
+                          <strong>Type parameters:</strong> ^?16272                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L982-982" class="github-link">
@@ -3371,8 +3371,8 @@ given predicate returns true, and then returns no further elements.</p>
             toArray(value)
           </code>
           <div class="tip" id="370">
-            <strong>Signature:</strong> value:^?15671 -&gt; &#39;T []<br />
-                          <strong>Type parameters:</strong> ^?15671, 'T                      </div>
+            <strong>Signature:</strong> value:^?15913 -&gt; &#39;T []<br />
+                          <strong>Type parameters:</strong> ^?15913, 'T                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L325-325" class="github-link">
@@ -3409,8 +3409,8 @@ given predicate returns true, and then returns no further elements.</p>
             toBytes(value)
           </code>
           <div class="tip" id="372">
-            <strong>Signature:</strong> value:^?15986 -&gt; byte []<br />
-                          <strong>Type parameters:</strong> ^?15986                      </div>
+            <strong>Signature:</strong> value:^?16228 -&gt; byte []<br />
+                          <strong>Type parameters:</strong> ^?16228                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L911-911" class="github-link">
@@ -3428,8 +3428,8 @@ given predicate returns true, and then returns no further elements.</p>
             toBytesBE(value)
           </code>
           <div class="tip" id="373">
-            <strong>Signature:</strong> value:^?15988 -&gt; byte []<br />
-                          <strong>Type parameters:</strong> ^?15988                      </div>
+            <strong>Signature:</strong> value:^?16230 -&gt; byte []<br />
+                          <strong>Type parameters:</strong> ^?16230                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L914-914" class="github-link">
@@ -3447,8 +3447,8 @@ given predicate returns true, and then returns no further elements.</p>
             toList(value)
           </code>
           <div class="tip" id="374">
-            <strong>Signature:</strong> value:^?15668 -&gt; &#39;T list<br />
-                          <strong>Type parameters:</strong> ^?15668, 'T                      </div>
+            <strong>Signature:</strong> value:^?15910 -&gt; &#39;T list<br />
+                          <strong>Type parameters:</strong> ^?15910, 'T                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L320-320" class="github-link">
@@ -3702,8 +3702,8 @@ exists then return None.</p>
             trySqrt(x)
           </code>
           <div class="tip" id="387">
-            <strong>Signature:</strong> x:^?16032 -&gt; ^?16032 option<br />
-                          <strong>Type parameters:</strong> ^?16032                      </div>
+            <strong>Signature:</strong> x:^?16274 -&gt; ^?16274 option<br />
+                          <strong>Type parameters:</strong> ^?16274                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L985-985" class="github-link">
@@ -3854,8 +3854,8 @@ exists then return None.</p>
             tuple8 a b c d e f g h
           </code>
           <div class="tip" id="395">
-            <strong>Signature:</strong> a:&#39;?15436 -&gt; b:&#39;?15437 -&gt; c:&#39;?15438 -&gt; d:&#39;?15439 -&gt; e:&#39;?15440 -&gt; f:&#39;?15441 -&gt; g:&#39;?15442 -&gt; h:&#39;?15443 -&gt; &#39;?15436 * &#39;?15437 * &#39;?15438 * &#39;?15439 * &#39;?15440 * &#39;?15441 * &#39;?15442 * &#39;?15443<br />
-                          <strong>Type parameters:</strong> '?15436, '?15437, '?15438, '?15439, '?15440, '?15441, '?15442, '?15443                      </div>
+            <strong>Signature:</strong> a:&#39;?15678 -&gt; b:&#39;?15679 -&gt; c:&#39;?15680 -&gt; d:&#39;?15681 -&gt; e:&#39;?15682 -&gt; f:&#39;?15683 -&gt; g:&#39;?15684 -&gt; h:&#39;?15685 -&gt; &#39;?15678 * &#39;?15679 * &#39;?15680 * &#39;?15681 * &#39;?15682 * &#39;?15683 * &#39;?15684 * &#39;?15685<br />
+                          <strong>Type parameters:</strong> '?15678, '?15679, '?15680, '?15681, '?15682, '?15683, '?15684, '?15685                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L69-69" class="github-link">

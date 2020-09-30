@@ -65,11 +65,13 @@
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L29-29" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L35-35" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Does the source string contain the given character?</p>
+
+
         </td>
       </tr>
       <tr>
@@ -82,7 +84,7 @@
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L104-104" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L171-171" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -102,11 +104,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L28-28" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L32-32" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Does the source string end with the given subString? -- function wrapper for String.EndsWith method using InvariantCulture.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -119,11 +123,14 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L109-109" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L179-179" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Finds the first index of the char in the substring which satisfies the given predicate.</p>
+<p>Note: throws an ArgumentException when not found.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -136,7 +143,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L132-132" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L204-204" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -155,7 +162,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L164-164" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L238-238" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -197,7 +204,7 @@ When count exceeds the length of the string it returns an empty string.</p>
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Inserts a separator between each char in the source string.</p>
+          <p>Inserts a separator char between each char in the source string.</p>
 
 
         </td>
@@ -212,11 +219,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L22-22" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L23-23" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Does the source string contain the given subString? -- function wrapper for String.Contains method.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -229,11 +238,16 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L69-69" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L115-115" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>(Unsafely) Returns the char at the given index in the source string.</p>
+<p>This is a function wrapper for <code>source.[index]</code> method.</p>
+<p>Note: this is not exception safe, and will throw System.IndexOutOfRangeException when
+the given index is out of bounds.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -246,11 +260,14 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L36-36" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L54-54" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Returns a new string whose textual value is the same as this string, but whose binary representation is in the specified Unicode normalization form.</p>
+<p>This is a null safe function wrapper of the String.Normalize method.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -263,11 +280,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L63-63" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L95-95" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts an array of chars to a String.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -280,7 +299,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L159-159" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L233-233" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -299,11 +318,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L65-65" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L101-101" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts a list of chars to a String.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -316,11 +337,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L67-67" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L107-107" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts a seq of chars to a String.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -333,7 +356,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L47-47" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L71-71" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -352,7 +375,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L49-49" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L74-74" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -371,7 +394,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L51-51" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L77-77" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -390,7 +413,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L53-53" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L80-80" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -409,11 +432,16 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L37-37" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Removes diacritics (accents) from the given source string.</p>
+<p>The approach uses <code>normalize</code> to split the input string into constituent glyphs
+(basically separating the "base" characters from the diacritics) and then scans
+the result and retains only the base characters.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -430,7 +458,7 @@ When count exceeds the length of the string it returns an empty string.</p>
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Replace a substring with the given replacement string.</p>
+          <p>Replaces a substring with the given replacement string.</p>
 
 
         </td>
@@ -445,11 +473,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L72-72" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L122-122" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Reverses the given string.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -462,11 +492,16 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L75-75" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L136-136" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>(Unsafely) Skips over the first count chars in the string.
+Use <code>String.drop</code> for a safe version.</p>
+<p>Note: will throw System.ArgumentOutOfRangeException if you try to skip more than the
+number of chars in the string.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -479,11 +514,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L86-86" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L151-151" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Skips over chars from the source string while the given predicate is true.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -500,7 +537,7 @@ When count exceeds the length of the string it returns an empty string.</p>
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Creates a sequence of strings by splitting the srouce string on any of the given separators.</p>
+          <p>Creates a sequence of strings by splitting the source string on any of the given separators.</p>
 
 
         </td>
@@ -515,11 +552,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L26-26" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L28-28" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Does the source string start with the given subString? -- function wrapper for String.StartsWith method using InvariantCulture.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -532,11 +571,16 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L74-74" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L129-129" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>(Unsafely) Takes the first count chars in the string.
+Use <code>String.truncate</code> for a safe version.</p>
+<p>Note: will throw System.ArgumentOutOfRangeException if you try to take more than the
+number of chars in the string.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -549,11 +593,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L76-76" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L139-139" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Takes chars from the source string while the given predicate is true.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -566,11 +612,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L62-62" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L92-92" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts the given string to an array of chars.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -583,11 +631,11 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L152-152" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L225-225" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Converts the string to an array of Int32 code-points (the actual Unicode Code Point number).</p>
+          <p>Converts the given string to an array of Int32 code-points (the actual Unicode Code Point number).</p>
 
 
         </td>
@@ -602,11 +650,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L64-64" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L98-98" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts the given string to a list of chars.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -619,11 +669,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L31-31" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L41-41" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -636,11 +688,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L66-66" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L104-104" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts the given string to a seq of chars.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -653,11 +707,13 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L30-30" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L38-38" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -670,7 +726,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L56-56" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L83-83" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -689,7 +745,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L60-60" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L89-89" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -708,7 +764,7 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L58-58" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L86-86" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -727,11 +783,15 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L32-32" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L47-47" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Trims white space -- function wrapper for String.Trim method.</p>
+<p>Note this is distinct from trim which trims the given characters,
+not whitespace.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -744,11 +804,11 @@ When count exceeds the length of the string it returns an empty string.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L98-98" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L164-164" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Returns a string that have at most N characters from the beginning of the original string.
+          <p>Returns a string that has at most N characters from the beginning of the original string.
 It returns the original string if it is shorter than count.</p>
 
 
@@ -764,11 +824,13 @@ It returns the original string if it is shorter than count.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L116-116" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L188-188" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Tries to find the first index of the char in the substring which satisfies the given predicate.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -781,7 +843,7 @@ It returns the original string if it is shorter than count.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L145-145" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L218-218" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -801,11 +863,14 @@ Returns None if not found.</p>
                                   </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L70-70" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L119-119" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Returns the char (as an Option) at the given index in the source string,
+returning <code>None</code> if out of bounds.</p>
+
+
         </td>
       </tr>
     </tbody>

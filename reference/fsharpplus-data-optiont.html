@@ -57,12 +57,12 @@
     <tbody>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '650', 650)" onmouseover="showTip(event, '650', 650)">
+          <code onmouseout="hideTip(event, '658', 658)" onmouseover="showTip(event, '658', 658)">
             OptionT.apply arg1 arg2
           </code>
-          <div class="tip" id="650">
+          <div class="tip" id="658">
             <strong>Signature:</strong> OptionT&lt;^Monad&lt;option&lt;(&#39;T -&gt; &#39;U)&gt;&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<option<('T -> 'U)>, ^?14125, '?14126, '?14127, ^Monad<option<'T>, ^Monad<option<'U>                      </div>
+                          <strong>Type parameters:</strong> ^Monad<option<('T -> 'U)>, ^?14328, '?14329, '?14330, ^Monad<option<'T>, ^Monad<option<'U>                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L34-34" class="github-link">
@@ -74,12 +74,12 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '651', 651)" onmouseover="showTip(event, '651', 651)">
+          <code onmouseout="hideTip(event, '659', 659)" onmouseover="showTip(event, '659', 659)">
             OptionT.bind f arg2
           </code>
-          <div class="tip" id="651">
+          <div class="tip" id="659">
             <strong>Signature:</strong> f:(&#39;T -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;U&gt;&gt;) -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;U&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'T, ^Monad<option<'U>, ^Monad<option<'T>, '?14122                      </div>
+                          <strong>Type parameters:</strong> 'T, ^Monad<option<'U>, ^Monad<option<'T>, '?14325                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L33-33" class="github-link">
@@ -91,10 +91,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '652', 652)" onmouseover="showTip(event, '652', 652)">
+          <code onmouseout="hideTip(event, '660', 660)" onmouseover="showTip(event, '660', 660)">
             OptionT.hoist(x)
           </code>
-          <div class="tip" id="652">
+          <div class="tip" id="660">
             <strong>Signature:</strong> x:&#39;T option -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;T&gt;&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T, ^Monad<option<'T>>                      </div>
         </td>
@@ -110,12 +110,12 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '653', 653)" onmouseover="showTip(event, '653', 653)">
+          <code onmouseout="hideTip(event, '661', 661)" onmouseover="showTip(event, '661', 661)">
             OptionT.lift(x)
           </code>
-          <div class="tip" id="653">
+          <div class="tip" id="661">
             <strong>Signature:</strong> x:^Monad&lt;&#39;T&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;T&gt;&gt;&gt;<br />
-                          <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<option<'T>>, '?14113, '?14114                      </div>
+                          <strong>Type parameters:</strong> ^Monad<'T>, ^Monad<option<'T>>, '?14316, '?14317                      </div>
         </td>
         <td class="xmldoc">
                       <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L26-26" class="github-link">
@@ -129,10 +129,10 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '654', 654)" onmouseover="showTip(event, '654', 654)">
+          <code onmouseout="hideTip(event, '662', 662)" onmouseover="showTip(event, '662', 662)">
             OptionT.map f arg2
           </code>
-          <div class="tip" id="654">
+          <div class="tip" id="662">
             <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;U&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U, ^Monad<option<'T>, ^Monad<option<'U>                      </div>
         </td>
@@ -146,10 +146,27 @@
       </tr>
       <tr>
         <td class="member-name">
-          <code onmouseout="hideTip(event, '655', 655)" onmouseover="showTip(event, '655', 655)">
+          <code onmouseout="hideTip(event, '663', 663)" onmouseover="showTip(event, '663', 663)">
+            OptionT.map2 f arg2 arg3
+          </code>
+          <div class="tip" id="663">
+            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U -&gt; &#39;V) -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;T&gt;&gt;&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;U&gt;&gt;&gt; -&gt; OptionT&lt;^Monad&lt;option&lt;&#39;V&gt;&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'U, 'V, ^Monad<option<'T>>, ^Monad<option<'U>>, ^Monad<option<'V>>                      </div>
+        </td>
+        <td class="xmldoc">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L36-36" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+          <code onmouseout="hideTip(event, '664', 664)" onmouseover="showTip(event, '664', 664)">
             OptionT.run(arg1)
           </code>
-          <div class="tip" id="655">
+          <div class="tip" id="664">
             <strong>Signature:</strong> OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt;&gt; -&gt; &#39;Monad&lt;option&lt;&#39;T&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'Monad<option<'T>>                      </div>
         </td>

@@ -48,33 +48,6 @@
 </div>
 
 <!-- Render nested types and modules, if there are any -->
-  <h2>Nested types and modules</h2>
-  <div>
-      <table class="table table-bordered type-list">
-    <thead>
-      <tr><td>Type</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td class="type-name">
-            <a href="fsharpplus-enumerator-mapenumerator-1.html">MapEnumerator<'T></a>
-          </td>
-          <td class="xmldoc">
-          
-          </td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="fsharpplus-enumerator-mapenumeratorstate.html">MapEnumeratorState</a>
-          </td>
-          <td class="xmldoc">
-          
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -85,18 +58,22 @@
       <tr>
         <td class="member-name">
           <code onmouseout="hideTip(event, '57', 57)" onmouseover="showTip(event, '57', 57)">
-            Enumerator.choose f e
+            Enumerator.choose chooser e
           </code>
           <div class="tip" id="57">
-            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U option) -&gt; e:IEnumerator&lt;&#39;T&gt; -&gt; IEnumerator&lt;&#39;U&gt;<br />
+            <strong>Signature:</strong> chooser:(&#39;T -&gt; &#39;U option) -&gt; e:IEnumerator&lt;&#39;T&gt; -&gt; IEnumerator&lt;&#39;U&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'U                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L282-282" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L376-376" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Applies the given function to each element in the input Enumerator.
+Returns an Enumerator comprised of the resuls x for each element
+where the function returns Some(x).</p>
+
+
         </td>
       </tr>
       <tr>
@@ -109,11 +86,13 @@
                           <strong>Type parameters:</strong> 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L154-154" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L165-165" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Enumerates the elements of each of the Enumerators in order.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -126,28 +105,33 @@
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L55-55" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L58-58" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Constructs an EmptyEnumerator of type 'T.</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
           <code onmouseout="hideTip(event, '60', 60)" onmouseover="showTip(event, '60', 60)">
-            Enumerator.filter f e
+            Enumerator.filter predicate e
           </code>
           <div class="tip" id="60">
-            <strong>Signature:</strong> f:(&#39;T -&gt; bool) -&gt; e:IEnumerator&lt;&#39;T&gt; -&gt; IEnumerator&lt;&#39;T&gt;<br />
+            <strong>Signature:</strong> predicate:(&#39;T -&gt; bool) -&gt; e:IEnumerator&lt;&#39;T&gt; -&gt; IEnumerator&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L300-300" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L401-401" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Returns a new Enumerator yielding only the elements of the input Enumerator for which the
+given predicate returns "true".</p>
+
+
         </td>
       </tr>
       <tr>
@@ -160,11 +144,13 @@
                           <strong>Type parameters:</strong> 'a, 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L208-208" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L254-254" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Maps over an enumerator.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -177,11 +163,14 @@
                           <strong>Type parameters:</strong> 'a, 'b, 'c                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L233-233" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L296-296" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Maps over two Enumerators, with the mapping function is given the corresponding elements
+of the two Enumerators pairwise.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -190,15 +179,18 @@
             Enumerator.map3 f e1 e2 e3
           </code>
           <div class="tip" id="63">
-            <strong>Signature:</strong> f:(&#39;?24871 -&gt; &#39;?24872 -&gt; &#39;?24873 -&gt; &#39;?24874) -&gt; e1:IEnumerator&lt;&#39;?24871&gt; -&gt; e2:IEnumerator&lt;&#39;?24872&gt; -&gt; e3:IEnumerator&lt;&#39;?24873&gt; -&gt; IEnumerator&lt;&#39;?24874&gt;<br />
-                          <strong>Type parameters:</strong> '?24871, '?24872, '?24873, '?24874                      </div>
+            <strong>Signature:</strong> f:(&#39;?25138 -&gt; &#39;?25139 -&gt; &#39;?25140 -&gt; &#39;?25141) -&gt; e1:IEnumerator&lt;&#39;?25138&gt; -&gt; e2:IEnumerator&lt;&#39;?25139&gt; -&gt; e3:IEnumerator&lt;&#39;?25140&gt; -&gt; IEnumerator&lt;&#39;?25141&gt;<br />
+                          <strong>Type parameters:</strong> '?25138, '?25139, '?25140, '?25141                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L263-263" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L349-349" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Maps over three Enumerators, where the mapping function is given the corresponding elements
+of the three Enumerators.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -207,15 +199,17 @@
             Enumerator.mapi f e
           </code>
           <div class="tip" id="64">
-            <strong>Signature:</strong> f:(int -&gt; &#39;?24860 -&gt; &#39;?24861) -&gt; e:IEnumerator&lt;&#39;?24860&gt; -&gt; IEnumerator&lt;&#39;?24861&gt;<br />
-                          <strong>Type parameters:</strong> '?24860, '?24861                      </div>
+            <strong>Signature:</strong> f:(int -&gt; &#39;?25127 -&gt; &#39;?25128) -&gt; e:IEnumerator&lt;&#39;?25127&gt; -&gt; IEnumerator&lt;&#39;?25128&gt;<br />
+                          <strong>Type parameters:</strong> '?25127, '?25128                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L220-220" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L272-272" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Maps over an Enumerator, with the mapping function also given the index.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -224,15 +218,18 @@
             Enumerator.mapi2 f e1 e2
           </code>
           <div class="tip" id="65">
-            <strong>Signature:</strong> f:(int -&gt; &#39;?24867 -&gt; &#39;?24868 -&gt; &#39;?24869) -&gt; e1:IEnumerator&lt;&#39;?24867&gt; -&gt; e2:IEnumerator&lt;&#39;?24868&gt; -&gt; IEnumerator&lt;&#39;?24869&gt;<br />
-                          <strong>Type parameters:</strong> '?24867, '?24868, '?24869                      </div>
+            <strong>Signature:</strong> f:(int -&gt; &#39;?25134 -&gt; &#39;?25135 -&gt; &#39;?25136) -&gt; e1:IEnumerator&lt;&#39;?25134&gt; -&gt; e2:IEnumerator&lt;&#39;?25135&gt; -&gt; IEnumerator&lt;&#39;?25136&gt;<br />
+                          <strong>Type parameters:</strong> '?25134, '?25135, '?25136                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L248-248" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L322-322" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Maps over two Enumerators, where the mapping function is given the index and corresponding elements
+of the two input Enumerators pairwise.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -245,11 +242,13 @@
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L161-161" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L191-191" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Retuns the nth element in the Enumerator.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -258,15 +257,17 @@
             Enumerator.singleton(x)
           </code>
           <div class="tip" id="67">
-            <strong>Signature:</strong> x:&#39;?24810 -&gt; IEnumerator&lt;&#39;?24810&gt;<br />
-                          <strong>Type parameters:</strong> '?24810                      </div>
+            <strong>Signature:</strong> x:&#39;?25077 -&gt; IEnumerator&lt;&#39;?25077&gt;<br />
+                          <strong>Type parameters:</strong> '?25077                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L57-57" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Constructs an Enumerator that yields the single value given.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -279,28 +280,35 @@
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L156-156" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L174-174" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Tries to find the nth element in the Enumerator.
+Returns None if index is negative or the Enumerator does not contain enough elements.</p>
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
           <code onmouseout="hideTip(event, '69', 69)" onmouseover="showTip(event, '69', 69)">
-            Enumerator.unfold f x
+            Enumerator.unfold generator initialState
           </code>
           <div class="tip" id="69">
-            <strong>Signature:</strong> f:(&#39;?24881 -&gt; (&#39;?24882 * &#39;?24881) option) -&gt; x:&#39;?24881 -&gt; IEnumerator&lt;&#39;?24882&gt;<br />
-                          <strong>Type parameters:</strong> '?24881, '?24882                      </div>
+            <strong>Signature:</strong> generator:(&#39;?25148 -&gt; (&#39;?25149 * &#39;?25148) option) -&gt; initialState:&#39;?25148 -&gt; IEnumerator&lt;&#39;?25149&gt;<br />
+                          <strong>Type parameters:</strong> '?25148, '?25149                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L315-315" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L425-425" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Returns a new Enumerator yielding elements x generated by the given computation
+so long as it generates a Some(x) - and stops when it generates a None.
+The given initial state argument is passed to the element generator.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -313,11 +321,14 @@
                           <strong>Type parameters:</strong> 'U                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L328-328" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L454-454" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Enumerates from zero up to the given lastOption, yielding elements
+generated by the given function applied to the index.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -330,11 +341,13 @@
                           <strong>Type parameters:</strong> 'a, 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L376-376" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L502-502" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Zip two input Enumerators into a new Enumerator yielding pairs.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -343,15 +356,17 @@
             Enumerator.zip3 e1 e2 e3
           </code>
           <div class="tip" id="72">
-            <strong>Signature:</strong> e1:IEnumerator&lt;&#39;?24889&gt; -&gt; e2:IEnumerator&lt;&#39;?24890&gt; -&gt; e3:IEnumerator&lt;&#39;?24891&gt; -&gt; IEnumerator&lt;&#39;?24889 * &#39;?24890 * &#39;?24891&gt;<br />
-                          <strong>Type parameters:</strong> '?24889, '?24890, '?24891                      </div>
+            <strong>Signature:</strong> e1:IEnumerator&lt;&#39;?25156&gt; -&gt; e2:IEnumerator&lt;&#39;?25157&gt; -&gt; e3:IEnumerator&lt;&#39;?25158&gt; -&gt; IEnumerator&lt;&#39;?25156 * &#39;?25157 * &#39;?25158&gt;<br />
+                          <strong>Type parameters:</strong> '?25156, '?25157, '?25158                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L388-388" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L521-521" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Zip three input Enumerators into a new Enumerator yielding triples.</p>
+
+
         </td>
       </tr>
     </tbody>

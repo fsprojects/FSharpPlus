@@ -65,11 +65,13 @@
                           <strong>Type parameters:</strong> 'a, 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L23-23" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L33-33" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Applies a sequence of functions to a sequence of values and concatenates them.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -82,12 +84,11 @@
                           <strong>Type parameters:</strong> 'T, 'U                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L21-21" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L20-20" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Applies the given function to each element of the sequence and concatenates all the
-results.</p>
+          <p>Applies the given function to each element of the sequence and concatenates the results.</p>
 
 
         </td>
@@ -102,14 +103,13 @@ results.</p>
                           <strong>Type parameters:</strong> 'T, 'Key                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L40-40" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L66-66" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Applies a key-generating function to each element of a sequence and yields a sequence of
-keys tupled with values. Each key contains an array of all adjacent elements that match
-to this key, therefore keys are not unique but they can't be adjacent
-as each time the key changes, a new group is yield.</p>
+          <p>Chunks the seq up into groups with the same projected key by applying
+the key-generating projection function to each element and yielding a sequence of
+keys tupled with values.</p>
 
 
         </td>
@@ -124,7 +124,7 @@ as each time the key changes, a new group is yield.</p>
                           <strong>Type parameters:</strong> 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L128-128" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L156-156" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -144,7 +144,7 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L160-160" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L198-198" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -163,11 +163,14 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'f, 'g                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L27-27" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L46-46" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Applies a function to each element of the collection, starting from the end,
+threading an accumulator argument through the computation.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -180,7 +183,7 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'b, 'c                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L65-65" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L92-92" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -199,11 +202,13 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'a                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L57-57" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L84-84" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Inserts a separator element between each element in the source seq.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -216,11 +221,13 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'b, 'c, 'd                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L25-25" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L36-36" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Combines all values from the first seq with the second, using the supplied mapping function.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -233,11 +240,13 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'T                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L99-99" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L127-127" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Replaces a subsequence of the source seq with the given replacement seq.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -250,11 +259,13 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'g                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L136-136" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L171-171" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Creates a sequence by replicating the given initial value count times.</p>
+
+
         </td>
       </tr>
       <tr>
@@ -267,7 +278,7 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'b, 'c                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L73-73" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L100-100" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -282,15 +293,17 @@ remaining elements of the sequence.</p>
             Seq.toIReadOnlyList(x)
           </code>
           <div class="tip" id="457">
-            <strong>Signature:</strong> x:seq&lt;&#39;?25281&gt; -&gt; IReadOnlyList&lt;&#39;?25281&gt;<br />
-                          <strong>Type parameters:</strong> '?25281                      </div>
+            <strong>Signature:</strong> x:seq&lt;&#39;?25548&gt; -&gt; IReadOnlyList&lt;&#39;?25548&gt;<br />
+                          <strong>Type parameters:</strong> '?25548                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L144-144" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L182-182" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          
+          <p>Converts a seq to an IReadOnlyList (from System.Collections.Generic).</p>
+
+
         </td>
       </tr>
       <tr>
@@ -303,7 +316,7 @@ remaining elements of the sequence.</p>
                           <strong>Type parameters:</strong> 'b                      </div>
         </td>
         <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L179-179" class="github-link">
+                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L217-217" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
