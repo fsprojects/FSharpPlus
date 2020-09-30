@@ -108,7 +108,7 @@ module Dict =
         d :> IDictionary<'Key,'Value>
 
     #if !FABLE_COMPILER
-    // Returns the union of two maps, preferring values from the first in case of duplicate keys.
+   ///Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: IDictionary<'Key, 'T>) (altSource: IDictionary<'Key, 'T>) = 
         Enumerable
           .Union(
@@ -131,7 +131,7 @@ module Dict =
               KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
           .ToDictionary((fun x -> x.Key), (fun y -> y.Value)) :> IDictionary<'Key, 'T>
 
-    // Returns the intersection of two Dicts, preferring values from the first in case of duplicate keys.
+   ///Returns the intersection of two Dicts, preferring values from the first in case of duplicate keys.
     let intersect (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
     #endif
