@@ -86,7 +86,7 @@ module Map =
         |> Seq.map (fun kv -> (kv.Key, kv.Value))
         |> Map.ofSeq
 
-    // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
+   ///Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
     #endif

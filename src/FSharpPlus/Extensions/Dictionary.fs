@@ -109,7 +109,7 @@ module Dictionary =
         d
 
     #if !FABLE_COMPILER
-    // Returns the union of two maps, preferring values from the first in case of duplicate keys.
+   ///Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: Dictionary<'Key, 'T>) (altSource: Dictionary<'Key, 'T>) =
         Enumerable
           .Union(
@@ -132,7 +132,7 @@ module Dictionary =
               KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
           .ToDictionary((fun x -> x.Key), (fun y -> y.Value))
 
-    // Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
+   ///Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1: Dictionary<'Key, 'T>) (source2: Dictionary<'Key, 'T>) =
         intersectWith (fun a _ -> a) source1 source2
     #endif
