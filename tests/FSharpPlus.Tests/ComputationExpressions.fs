@@ -515,7 +515,7 @@ module ComputationExpressions =
                     ()
                 with _ -> () }
             x
-        let _ = (contTTest () |> ContT.run) result        
+        let _ = contTTest () |> ContT.eval
 
         ()
 
@@ -614,8 +614,7 @@ module ComputationExpressions =
                 finally
                     SideEffects.add "Finally goes here" }
             x
-        let _ = try ((contTTest () |> ContT.run) result) with _ -> Unchecked.defaultof<_>
+        let _ = try (contTTest () |> ContT.eval) with _ -> Unchecked.defaultof<_>
         areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
-
 
         ()
