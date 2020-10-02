@@ -15,7 +15,12 @@ type Cont<'r,'t> = Cont of (('t->'r)->'r)
 /// Basic operations on Cont
 [<RequireQualifiedAccess>]
 module Cont =
-    let run (Cont x) = x : ('T->'R)->'R
+
+    /// The result of running a CPS computation with a given final continuation.
+    let run (Cont x) (continuation: 'T->'R) = x continuation : 'R
+    
+    /// The result of running a CPS computation with the identity function as the final continuation.
+    let eval (Cont x) = x id : 'R
 
     /// (call-with-current-continuation) calls a function with the current continuation as its argument.
     let callCC (f: ('T->Cont<'R,'U>)->_) = Cont (fun k -> run (f (fun a -> Cont(fun _ -> k a))) k)
@@ -46,6 +51,7 @@ type Cont<'r,'t> with
     static member CallCC (f: ('T -> Cont<'R,'U>) -> _) = Cont.callCC f : Cont<'R,'T>
 
 #if !FABLE_COMPILER
+
     static member inline Lift (m: '``Monad<'T>``) = Cont ((>>=) m) : ContT<'``Monad<'R>``,'T>
 
     static member inline LiftAsync (x: Async<'T>) = lift (liftAsync x) : ContT<Async<'R>,'T>
@@ -59,6 +65,16 @@ type Cont<'r,'t> with
 
 #endif
 
+
 /// Basic operations on ContT
 module ContT =
-    let run (Cont x) = x : ('T->'R)->'R
+
+    /// The result of running a CPS computation with the identity function as the final continuation.
+    let run (Cont x: ContT<'MR, 'T>) (continuation: 'T->'MR) = x continuation : 'MR
+
+#if !FABLE_COMPILER
+
+    /// The result of running a CPS computation with its inner monad's 'Return' function as the final continuation.
+    let inline eval (Cont x: ContT<'MR, 'T>) = x result :' MR
+
+#endif
