@@ -450,14 +450,23 @@ module ComputationExpressions =
     [<Test>]
     let tryWithBlocks () =
 
-        let lazyMonadTest () =
+        let lazyMonadTest1 () =
             let x : seq<unit> = monad {
                 try
                     failwith "Exception in try-with not handled"
                     ()
                 with _ -> () }
             x
-        let _ = lazyMonadTest () |> Seq.toList
+        let _ = lazyMonadTest1 () |> Seq.toList
+
+        let lazyMonadTest2 () =
+            let x : State<unit,unit> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = (lazyMonadTest2 () |> State.run) ()
         
         let strictMonadTest () =
             let x : list<unit> = monad.strict {
