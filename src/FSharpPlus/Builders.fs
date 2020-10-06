@@ -111,20 +111,22 @@ module Builders =
         member inline __.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
 
-        member inline __.While (guard, body: '``MonadPlus<'T>``)      : '``MonadPlus<'T>`` =
-
+        member inline __.WhileImpl (guard, body: '``MonadPlus<'T>``)  : '``MonadPlus<'T>`` =
+            let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
+            fix ()
+        
+        member inline this.While (guard, body: '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
             // Check the type is lazy, otherwise display a warning.
             let __ ()  = TryWith.InvokeForWhile (Unchecked.defaultof<'``MonadPlus<'T>``>) (fun (_: exn) -> Unchecked.defaultof<'``MonadPlus<'T>``>) : '``MonadPlus<'T>``
 
-            let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
-            fix ()
+            this.WhileImpl (guard, body)
 
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) : '``MonadPlus<'U>`` =
             let mutable isReallyDelayed = true
             Delay.Invoke (fun () -> isReallyDelayed <- false; Empty.Invoke () : '``MonadPlus<'U>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
-                if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
+                if isReallyDelayed then this.WhileImpl (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
     type MonadFxBuilder () =
@@ -147,22 +149,23 @@ module Builders =
 
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
         
-        member inline __.While (guard, body: '``Monad<unit>``)                  : '``Monad<unit>`` =
-
-            // Check the type is lazy, otherwise display a warning.
-            let __ ()  = TryWith.InvokeForWhile (Unchecked.defaultof<'``Monad<unit>``>) (fun (_: exn) -> Unchecked.defaultof<'``Monad<unit>``>) : '``Monad<unit>``
-
+        member inline __.WhileImpl (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body >>= (fun () -> loop guard body)
                 else result ()
             loop guard body
+
+        member inline this.While (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
+            // Check the type is lazy, otherwise display a warning.
+            let __ ()  = TryWith.InvokeForWhile (Unchecked.defaultof<'``Monad<unit>``>) (fun (_: exn) -> Unchecked.defaultof<'``Monad<unit>``>) : '``Monad<unit>``
+            this.WhileImpl (guard, body)
 
         member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) : '``Monad<unit>``=
             let mutable isReallyDelayed = true
             Delay.Invoke (fun () -> isReallyDelayed <- false; Return.Invoke () : '``Monad<unit>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
-                if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
+                if isReallyDelayed then this.WhileImpl (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
 
