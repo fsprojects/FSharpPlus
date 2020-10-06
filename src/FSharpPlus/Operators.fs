@@ -9,63 +9,113 @@ module Operators =
 
     // Common combinators
 
-    /// Creates a new function with first two arguments flipped.
+    /// <summary>Creates a new function with first two arguments flipped.</summary>
+    /// <category>common</category>
     let inline flip f (x: 'T) (y: 'V) : 'Result = f y x
     
     /// <summary> Creates a constant function.</summary>
     /// <param name="k">The constant value.</param>
     /// <returns>The constant value function.</returns>
+    /// <category>common</category>
     let inline konst (k: 'T) = fun (_: 'Ignored) -> k
 
-    /// Takes a function expecting a tuple of two elements and returns a function expecting two curried arguments.
+    /// <summary>Takes a function expecting a tuple of two elements and returns a function expecting two curried arguments.</summary>
+    /// <category>common</category>
     let inline curry f (x: 'T1) (y: 'T2) : 'Result = f (x, y)
     
     #if !FABLE_COMPILER
+    /// <summary>
     /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
+    /// </summary>
+    /// <category>common</category>
     let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'Result) : 'T1 -> '``T2 -> ... -> 'Tn -> 'Result`` = fun t -> Curry.Invoke f t
     #endif
 
-    /// Takes a function expecting two curried arguments and returns a function expecting a tuple of two elements. Same as (<||).
+    /// <summary>
+    /// Takes a function expecting two curried arguments and returns a function expecting a tuple of two elements. Same as (&lt;||).
+    /// </summary>
+    /// <category>common</category>
     let inline uncurry f (x: 'T1, y: 'T2) : 'Result = f x y
     
     #if !FABLE_COMPILER
+    /// <summary>
     /// Takes a function expecting any N number of curried arguments and returns a function expecting a tuple of N elements.
+    /// </summary>
+    /// <category>common</category>
     let inline uncurryN (f: 'T1 -> '``T2 -> ... -> 'Tn -> 'Result``) (t: (^``T1 * ^T2 * ... * ^Tn``)) = Uncurry.Invoke f t : 'Result
     #endif
 
-    /// Used in conjunction with /> to make an ad-hoc binary operator out of a function (x </f/> y).
+    /// <summary>
+    /// Used in conjunction with /&gt; to make an ad-hoc binary operator out of a function (x &lt;/f/&gt; y).
+    /// </summary>
+    /// <category>common</category>
     let inline (</) x = (|>) x
 
-    /// Used in conjunction with </ to make an ad-hoc binary operator out of a function (x </f/> y).
+    /// <summary>
+    /// Used in conjunction with &lt;/ to make an ad-hoc binary operator out of a function (x &lt;/f/&gt; y).
+    /// </summary>
+    /// <category>common</category>
     let inline (/>) x = flip x
     
+    /// <summary>
     /// Executes a side-effect function and returns the original input value.
+    /// </summary>
+    /// <category>common</category>
     let tap (f: 'T -> unit) x = f x; x
 
     /// <summary> Extracts a value from either side of a Result.</summary>
+    /// <category>common</category>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
     /// <param name="source">The source value, containing an Ok or an Error.</param>
     /// <returns>The result of applying either functions.</returns>
     let inline either fOk fError (source: Result<'T,'Error>) : 'U = match source with Ok x -> fOk x | Error x -> fError x
 
+    /// <summary>
     /// Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
     /// Otherwise, it applies the function to the value inside Some and returns the result.
+    /// </summary>
+    /// <category>common</category>
     let inline option f n = function Some x -> f x | None -> n
 
+    /// <summary>
     /// Tuple two arguments
+    /// </summary>
+    /// <category>common</category>
     let inline tuple2 a b             = a,b
+
+    /// <summary>
     /// Tuple three arguments
+    /// </summary>
+    /// <category>common</category>
     let inline tuple3 a b c           = a,b,c
+
+    /// <summary>
     /// Tuple four arguments
+    /// </summary>
+    /// <category>common</category>
     let inline tuple4 a b c d         = a,b,c,d
+
+    /// <summary>
     /// Tuple five arguments
+    /// </summary>
+    /// <category>common</category>
     let inline tuple5 a b c d e       = a,b,c,d,e
+
     /// Tuple six arguments
+    /// <category>common</category>
     let inline tuple6 a b c d e f     = a,b,c,d,e,f
+
+    /// <summary>
     /// Tuple seven arguments
+    /// </summary>
+    /// <category>common</category>
     let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
+
+    /// <summary>
     /// Tuple eight arguments
+    /// </summary>
+    /// <category>common</category>
     let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
 
@@ -73,27 +123,45 @@ module Operators =
 
     // Functor ----------------------------------------------------------------
 
-    /// Lifts a function into a Functor.
+    /// <summary>Lifts a function into a Functor.</summary>
+    /// <category>Functor</category>
     let inline map (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
-    /// Lifts a function into a Functor. Same as map.
-    /// To be used in Applicative Style expressions, combined with <*>
+    /// <summary>Lifts a function into a Functor. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category>Functor</category>
     let inline (<!>) (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
+    /// <summary>
     /// Lifts a function into a Functor. Same as map.
+    /// </summary>
+    /// <category>Functor</category>
     let inline (<<|) (f: 'T->'U) (x: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke f x
 
+    /// <summary>
     /// Lifts a function into a Functor. Same as map but with flipped arguments.
     /// To be used in pipe-forward style expressions
+    /// </summary>
+    /// <category>Functor</category>
     let inline (|>>) (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.Invoke f x
 
+    /// <summary>
     /// Like map but ignoring the results.
+    /// </summary>
+    /// <category>Functor</category>
     let inline iter (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
 
-    // Un-zips (un-tuple) two functors.
+    /// <summary>
+    /// Un-zips (un-tuple) two functors.
+    /// </summary>
+    /// <category>Functor</category>
     let inline unzip (source: '``Functor<'T1 * 'T2>``) = Unzip.Invoke source : '``Functor<'T1>`` * '``Functor<'T2>``
 
-    // Zips (tuple) two functors.
+    /// <summary>
+    /// Zips (tuple) two functors.
+    /// </summary>
+    /// <category>Functor</category>
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
    
 
@@ -101,10 +169,16 @@ module Operators =
 
     
 
+    /// <summary>
     /// Lifts a value into a Functor. Same as return in Computation Expressions.
+    /// </summary>
+    /// <category>Applicative</category>
     let inline result (x: 'T) : '``Functor<'T>`` = Return.Invoke x
 
-    /// Apply a lifted argument to a lifted function: f <*> arg
+    /// <summary>
+    /// Apply a lifted argument to a lifted function: f &lt;*&gt; arg
+    /// </summary>
+    /// <category>Applicative</category>
     let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
     /// Applies 2 lifted arguments to a non-lifted function. Equivalent to map2 in non list-like types.
