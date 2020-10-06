@@ -11,40 +11,40 @@
 
   <ItemGroup>
     <Compile Include="Samples\*.fsx" />
-    <Compile Include="..\..\docsrc\content\applicative-functors.fsx">
+    <Compile Include="..\..\docsrc\applicative-functors.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\computation-expressions.fsx">
+    <Compile Include="..\..\docsrc\computation-expressions.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\extension-methods.fsx">
+    <Compile Include="..\..\docsrc\extension-methods.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\extensions.fsx">
+    <Compile Include="..\..\docsrc\extensions.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\generic-doc.fsx">
+    <Compile Include="..\..\docsrc\generic-doc.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\lens.fsx">
+    <Compile Include="..\..\docsrc\lens.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\numerics.fsx">
+    <Compile Include="..\..\docsrc\numerics.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\operators-common.fsx">
+    <Compile Include="..\..\docsrc\operators-common.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\tutorial.fsx">
+    <Compile Include="..\..\docsrc\tutorial.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\parsing.fsx">
+    <Compile Include="..\..\docsrc\parsing.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>
     </Compile>
-    <Compile Include="..\..\docsrc\content\type-*.fsx">
+    <Compile Include="..\..\docsrc\type-*.fsx">
       <Link>Docs\Type\%(FileName)%(Extension)</Link>	
     </Compile>
-    <Compile Include="..\..\docsrc\content\abstraction-*.fsx">
+    <Compile Include="..\..\docsrc\abstraction-*.fsx">
       <Link>Docs\Abstraction\%(FileName)%(Extension)</Link>	
     </Compile>
     <Compile Include="Program.fs" />

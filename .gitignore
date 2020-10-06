@@ -183,6 +183,10 @@ docs/
 # Temp folder used for publishing docs
 temp/
 
+# FSDocs cache and watch
+.fsdocs/
+tmp/watch
+
 # Test results produced by build
 TestResults.xml
 TestResult.xml
