@@ -169,6 +169,7 @@ type Delay =
 module TryBlock =
     type True  = True
     type False = False
+    type While = While
 
     let [<Literal>]MessageTryWith = "Method TryWith not implemented. If the computation's type is not lazy use a strict monad by adding .strict, otherwise it should have a static member TryWith."
     let [<Literal>]CodeTryWith = 10708
@@ -176,11 +177,17 @@ module TryBlock =
     let [<Literal>]MessageTryFinally = "Method TryFinally not implemented. If the computation's type is not lazy use a strict monad by adding .strict, otherwise it should have a static member TryFinally."
     let [<Literal>]CodeTryFinally = 10709
 
+    let [<Literal>]MessageWhile = "This monad doesn't seem to be lazy or at least it doesn't have the try-with method implemented. Using a while loop can lead to runtime errors. Make sure this type is lazy, otherwise use a strict monad by adding .strict"
+    let [<Literal>]CodeWhile = 10710
+
 open TryBlock
 
 type TryWith =
     inherit Default1
 
+    [<CompilerMessage(MessageWhile  , CodeWhile  , IsError = false)>]
+    static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: While) = raise Internals.Errors.exnUnreachable
+    
     [<CompilerMessage(MessageTryWith, CodeTryWith, IsError = true)>]
     static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: False) = raise Internals.Errors.exnUnreachable
     static member        TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3, _defaults: True ) = try computation () with e -> catchHandler e
@@ -201,6 +208,10 @@ type TryWith =
     static member inline InvokeForStrict (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, True)
         call (Unchecked.defaultof<TryWith>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
+
+    static member inline InvokeForWhile (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, While)
+        call (Unchecked.defaultof<TryWith>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
 
 
 type TryFinally =
