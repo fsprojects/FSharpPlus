@@ -5,7 +5,7 @@ before_build:
       $buildId = $env:APPVEYOR_BUILD_NUMBER.PadLeft(5, '0');
       $versionSuffixPR = "PR$($env:APPVEYOR_PULL_REQUEST_NUMBER)-$buildId";
       $branchName = "$env:APPVEYOR_REPO_BRANCH".Replace("_","").Replace("/","-");
-      $versionSuffixBRANCH = if ("$env:APPVEYOR_REPO_BRANCH".StartsWith("v1.")) { "CI$buildId" } else { "$branchName-CI$buildId" };
+      $versionSuffixBRANCH = if ("$env:APPVEYOR_REPO_BRANCH" -eq "v1.1") { "CI$buildId" } else { "$branchName-CI$buildId" };
       $env:VersionSuffix = if ("$env:APPVEYOR_REPO_TAG" -eq "true") { "" } else { if ("$env:APPVEYOR_PULL_REQUEST_NUMBER") { $versionSuffixPR } else { $versionSuffixBRANCH } };
 
 init:
