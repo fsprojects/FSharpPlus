@@ -10,7 +10,7 @@
     "fable-compiler": "^2.4.21",
     "fable-loader": "^2.1.9",
     "fable-splitter": "^2.1.12",
-    "isomorphic-fetch": "^2.2.1",
+    "isomorphic-fetch": "^3.0.0",
     "minimist": "^1.2.5",
     "mocha": "^7.1.0"
   }
