@@ -33,12 +33,15 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
       member x.Values = (x.Value :> IReadOnlyDictionary<_, _>).Values
       member x.ContainsKey key = x.ContainsKey key
 
+/// A type alias for NonEmptyMap<'Key,'Value>
+type nemap<'Key,'Value when 'Key : comparison> = NonEmptyMap<'Key,'Value>
+
 /// Basic operations on NonEmptyMap
 [<RequireQualifiedAccess>]
 module NonEmptyMap =
     /// <summary>Builds a non empty map.</summary>
-    let create (k, v) (rest: ('k * 'v) seq) : NonEmptyMap<_, _> =
-      { Value = Map.ofSeq rest |> Map.add k v }
+    let create (k, v) (rest: ('k * 'v) seq) : NonEmptyMap<_, _> = { Value = Map.ofSeq rest |> Map.add k v }
+
     /// <summary>Builds a non empty map with a single element.</summary>
     let singleton key value : NonEmptyMap<_, _> = { Value = Map.ofList [key, value] }
 

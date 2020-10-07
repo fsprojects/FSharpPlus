@@ -11,6 +11,9 @@ type NonEmptySeq<'T> =
     inherit IEnumerable<'T>
     abstract member First: 'T
 
+/// A type alias for NonEmptySeq<'t>
+type neseq<'t> = NonEmptySeq<'t>
+
 module NonEmptySeq =
     let internal unsafeOfSeq (x: _ seq) =
         { new NonEmptySeq<_> with

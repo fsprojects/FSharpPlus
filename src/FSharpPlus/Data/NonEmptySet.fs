@@ -28,6 +28,9 @@ type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> = private { Va
     member x.MinimumElement = x.Value.MinimumElement
     member x.MaximumElement = x.Value.MaximumElement
 
+/// A type alias for NonEmptySet<'t>
+type neset<'t when 't: comparison> = NonEmptySet<'t>
+
 /// Basic operations on NonEmptySet
 [<RequireQualifiedAccess>]
 module NonEmptySet =

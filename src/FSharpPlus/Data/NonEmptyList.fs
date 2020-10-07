@@ -33,6 +33,9 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     member this.Length = 1 + List.length this.Tail
 
 
+/// A type alias for NonEmptyList<'t>
+type nelist<'t> = NonEmptyList<'t>
+
 /// Basic operations on NonEmptyList
 [<RequireQualifiedAccess>]
 module NonEmptyList =
@@ -262,6 +265,7 @@ module NonEmptyListBuilder =
         member __.Delay expr = expr ()
         member __.Run (x: NonEmptyList<_>) = x
     let nel = NelBuilder ()
+    let nelist = NelBuilder ()
 
 [<AutoOpen>]
 module NonEmptyListBuilderExtensions =
