@@ -12,3 +12,4 @@ module SideEffects =
     let reset () = effects.Clear ()
     let add x = effects.Add (x)
     let get () = effects |> Seq.toList
+    let are lst = areEquivalent lst (get ())
