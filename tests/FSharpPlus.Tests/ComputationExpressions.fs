@@ -209,7 +209,7 @@ module ComputationExpressions =
             let!  _  = j1 "" (Some len)
             return str }
 
-        SideEffects.are ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
+        SideEffects.are ["Using WrappedListG's Delay"; "Using WrappedListG's Delay"; "Using WrappedListG's Using"; "Using WrappedListG's Delay"; "Using WrappedListG's Using"; "Using WrappedListG's Delay"; "Using WrappedListG's Using"]
 
 
     
