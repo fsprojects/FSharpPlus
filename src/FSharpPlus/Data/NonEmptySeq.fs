@@ -486,3 +486,14 @@ module NonEmptySeq =
     let replace (oldValue: NonEmptySeq<'T>) (newValue: NonEmptySeq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> =
         Seq.replace oldValue newValue source |> unsafeOfSeq
 
+
+[<AutoOpen>]
+module NonEmptySeqBuilder =
+    type NESeqBuilder () =
+        [<CompilerMessage("A NonEmptySeq doesn't support the Zero operation.", 708, IsError = true)>]
+        member __.Zero () = raise Internals.Errors.exnUnreachable
+        member __.Combine (a: NonEmptySeq<'T>, b) = NonEmptySeq.append a b
+        member __.Yield x = NonEmptySeq.singleton x
+        member __.Delay expr = expr () : NonEmptySeq<'T>
+
+    let neseq = NESeqBuilder ()
