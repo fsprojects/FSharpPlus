@@ -33,13 +33,14 @@ type Iterate =
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
 
-    static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
-    static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
-    static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
-    static member Iterate (KeyValue(_: 'Key, x: 'T), action) = action x : unit
-    static member Iterate (x: Map<'Key,'T>         , action) = Map.iter (const' action) x 
-    static member Iterate (x: Dictionary<'Key, 'T> , action) = Seq.iter action x.Values
-    static member Iterate (x: _ ResizeArray        , action) = Seq.iter action x
+    static member Iterate (x: Async<'T>              , action) = action (Async.RunSynchronously x) : unit
+    static member Iterate (x: Result<'T, 'E>         , action) = match x with Ok x         -> action x | _ -> ()
+    static member Iterate (x: Choice<'T, 'E>         , action) = match x with Choice1Of2 x -> action x | _ -> ()
+    static member Iterate (KeyValue(_: 'Key, x: 'T)  , action) = action x : unit
+    static member Iterate (x: Map<'Key,'T>           , action) = Map.iter (const' action) x 
+    static member Iterate (x: Dictionary<'Key, 'T>   , action) = Seq.iter action x.Values
+    static member Iterate (x: IReadOnlyCollection<'T>, action) = IReadOnlyCollection.iter action x
+    static member Iterate (x: _ ResizeArray          , action) = Seq.iter action x
 
     // Restricted
     static member Iterate (x:string         , action) = String.iter action x
@@ -112,6 +113,7 @@ type Map with
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.map f x : IReadOnlyDictionary<'Key,_>
     static member        Map ((x: IObservable<'T>         , f: 'T->'U), _mthd: Default2) = Observable.map f x       : IObservable<'U>
     static member        Map ((x: Nullable<_>             , f: 'T->'U), _mthd: Default2) = Nullable.map f x         : Nullable<'U>
+    static member        Map ((x: IReadOnlyCollection<'T> , f: 'T->'U), _mthd: Default1) = IReadOnlyCollection.map f x : IReadOnlyCollection<'U>
     static member inline Map ((x: '``Functor<'T>``        , f: 'T->'U), _mthd: Default1) = Map.InvokeOnInstance f x : '``Functor<'U>``
     static member inline Map ((_: ^t when ^t: null and ^t: struct, _ ), _mthd: Default1) = ()
 

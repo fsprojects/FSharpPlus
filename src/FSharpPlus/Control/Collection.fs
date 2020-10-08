@@ -28,6 +28,7 @@ type OfSeq =
     static member        OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              ), _: Default3) = x |> Seq.map (|KeyValue|) |> dict
     static member        OfSeq ((x: seq<'k*'v>              , _: IDictionary                     ), _: Default3) = let d = Hashtable () in x |> Seq.iter d.Add; d :> IDictionary
     static member        OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: IDictionary                     ), _: Default3) = let d = Hashtable () in x |> Seq.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    static member        OfSeq ((x: seq<'t>                 , _: IReadOnlyCollection<'t>         ), _: Default3) = IReadOnlyCollection.ofSeq x
 
     static member inline OfSeq ((x: seq<'t>                 , _: 'F                              ), _: Default2) = let c = new 'F () in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
 
@@ -69,6 +70,7 @@ type OfList =
     static member        OfList ((x: list<KeyValuePair<'k,'v>>, _: IDictionary<'k,'v>              ), _: Default4) = x |> List.map (|KeyValue|) |> dict
     static member        OfList ((x: list<'k*'v>              , _: IDictionary                     ), _: Default4) = let d = Hashtable () in x |> List.iter d.Add; d :> IDictionary
     static member        OfList ((x: list<KeyValuePair<'k,'v>>, _: IDictionary                     ), _: Default4) = let d = Hashtable () in x |> List.iter (function (KeyValue x) -> d.Add x); d :> IDictionary
+    static member        OfList ((x: list<'t>                 , _: IReadOnlyCollection<'t>         ), _: Default4) = IReadOnlyCollection.ofSeq x
 
     static member inline OfList ((x: list<'t>                 , _: 'F                              ), _: Default2) = let c = new 'F () in (List.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
 
