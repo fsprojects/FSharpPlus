@@ -415,6 +415,9 @@ module Functor =
         Assert.AreEqual (["Using TestNonEmptyCollection's Head"], SideEffects.get ())
         let testVal8 = testVal7 >>= fun i -> result (string i)
         Assert.IsInstanceOf<Option<NonEmptySeq<string>>> (Some testVal8)
+        
+        let testVal9 = map ((+) 1) (IReadOnlyCollection.ofList [1..3])
+        Assert.IsInstanceOf<Option<IReadOnlyCollection<int>>> (Some testVal9)
 
     [<Test>]
     let unzip () = 
@@ -534,6 +537,7 @@ module Collections =
         let _d: Generic.IDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let r : IReadOnlyDictionary<_,_>  = ofSeq (seq [("One", 1)])             // but it will come back as ...
         let _r: IReadOnlyDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let rc: IReadOnlyCollection<_>    = ofSeq (seq [2..7])
         let ut: Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
         let al: ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
         let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
@@ -561,6 +565,7 @@ module Collections =
         let _mp'  = toSeq mp 
         let _d'   = toSeq d  
         let _r'   = toSeq r
+        let _rc'  = toSeq rc
         let _ut'  = toSeq ut 
         let _al'  = toSeq al 
         let _us'  = toSeq us 
@@ -610,6 +615,7 @@ module Collections =
         let _d: Generic.IDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let r : IReadOnlyDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
         let _r: IReadOnlyDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let rc: IReadOnlyCollection<_>    = ofList ([2..5])
         let ut: Hashtable                 = ofList ([1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
         let al: ArrayList                 = ofList (["1";"2";"3"])            // but it will come back as seq<obj>
         let us: SortedList                = ofList ([4,'2';3,'4'])            // but it will come back as seq<obj>
@@ -637,6 +643,7 @@ module Collections =
         let _mp'  = toList mp
         let _d'   = toList d
         let _r'   = toList r
+        let _rc'  = toList rc
         let _ut'  = toList ut
         let _al'  = toList al
         let _us'  = toList us
