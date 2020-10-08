@@ -33,14 +33,13 @@ type Iterate =
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
 
-    static member Iterate (x: Async<'T>              , action) = action (Async.RunSynchronously x) : unit
-    static member Iterate (x: Result<'T, 'E>         , action) = match x with Ok x         -> action x | _ -> ()
-    static member Iterate (x: Choice<'T, 'E>         , action) = match x with Choice1Of2 x -> action x | _ -> ()
-    static member Iterate (KeyValue(_: 'Key, x: 'T)  , action) = action x : unit
-    static member Iterate (x: Map<'Key,'T>           , action) = Map.iter (const' action) x 
-    static member Iterate (x: Dictionary<'Key, 'T>   , action) = Seq.iter action x.Values
-    static member Iterate (x: IReadOnlyCollection<'T>, action) = IReadOnlyCollection.iter action x
-    static member Iterate (x: _ ResizeArray          , action) = Seq.iter action x
+    static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
+    static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
+    static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
+    static member Iterate (KeyValue(_: 'Key, x: 'T), action) = action x : unit
+    static member Iterate (x: Map<'Key,'T>         , action) = Map.iter (const' action) x 
+    static member Iterate (x: Dictionary<'Key, 'T> , action) = Seq.iter action x.Values
+    static member Iterate (x: _ ResizeArray        , action) = Seq.iter action x
 
     // Restricted
     static member Iterate (x:string         , action) = String.iter action x
