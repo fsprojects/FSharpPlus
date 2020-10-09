@@ -8,4 +8,5 @@ module IReadOnlyCollection =
     let ofArray (source: 'T[]   ) = source                :> IReadOnlyCollection<'T>
     let ofList  (source: 'T list) = source                :> IReadOnlyCollection<'T>
     let ofSeq   (source: seq<'T>) = source |> Array.ofSeq :> IReadOnlyCollection<'T>
-    let map mapping (source: IReadOnlyCollection<'T>) = Seq.map mapping source |> Seq.toArray :> IReadOnlyCollection<'U>
+    let map  mapping (source: IReadOnlyCollection<'T>) = Seq.map  mapping source |> Seq.toArray :> IReadOnlyCollection<'U>
+    let iter mapping (source: IReadOnlyCollection<'T>) = Seq.iter mapping source

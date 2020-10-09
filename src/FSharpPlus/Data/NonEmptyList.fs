@@ -222,7 +222,9 @@ type NonEmptyList<'t> with
 
     static member (+) ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
+    static member Fold     ({Head = x; Tail = xs}, f, z) = List.fold     f z (x::xs)
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
+    static member Sum (source: seq<NonEmptyList<'T>>) = source |> Seq.map NonEmptyList.toList |> List.concat |> NonEmptyList.ofList
 
     #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]

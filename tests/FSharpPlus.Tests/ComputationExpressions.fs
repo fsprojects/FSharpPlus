@@ -19,7 +19,7 @@ module ComputationExpressions =
             SideEffects.add "2" }
 
         // Check side effects are not yet executed
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
 
         // This workflow will always run the previous one
         let combinewf = monad { 
@@ -27,12 +27,12 @@ module ComputationExpressions =
             return! zerowf }
 
         // The list should be empty, no workflow was run
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
 
         Async.RunSynchronously combinewf
 
         // Since it's an FX workflow, the last line should have been executed
-        areEqual ["1"; "2"] (SideEffects.get ())
+        SideEffects.are ["1"; "2"]
 
 
     [<Test>]
@@ -47,10 +47,10 @@ module ComputationExpressions =
             return 6; }
 
         // Check if side effect was already performed
-        areEqual ["3"] (SideEffects.get ())
+        SideEffects.are ["3"]
 
         // Check 'plus' (<|>) operation was properly performed
-        areEqual [5; 6] lst
+        areEquivalent [5; 6] lst
 
         SideEffects.reset ()
 
@@ -68,15 +68,15 @@ module ComputationExpressions =
                 return 42 }
 
         // Confirm the side effect wasn't performed
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
 
         let seqValue = toList seq3
 
         // Now they should
-        areEqual ["Start"; "execute this"; "Exception! Attempted to divide by zero."] (SideEffects.get ())
+        SideEffects.are ["Start"; "execute this"; "Exception! Attempted to divide by zero."]
 
         // Check the result
-        areEqual [42] seqValue
+        areEquivalent [42] seqValue
 
 
     [<Test>]
@@ -90,13 +90,13 @@ module ComputationExpressions =
                 SideEffects.add (sprintf "processing %i" i)
                 yield parse s + i }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         
         // Following line would throw an exception (due to the for loop) if ReaderT had no Delay implementation
         let results = ReaderT.run threeElements "100"
 
-        areEqual ["processing 1"; "processing 2"; "processing 3"] (SideEffects.get ())
-        areEqual [101; 102; 103] results
+        SideEffects.are ["processing 1"; "processing 2"; "processing 3"]
+        areEquivalent [101; 102; 103] results
 
 
     [<Test>]
@@ -142,9 +142,9 @@ module ComputationExpressions =
             let!  _  = d1 "" (Some len)
             return str }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         let _d3 = d2 |> Seq.toList
-        areEqual ["Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"] (SideEffects.get ())
+        SideEffects.are ["Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"; "Using WrappedSeqB's Using"]
         SideEffects.reset ()
         
         // external type, custom definition of TryFinally
@@ -155,9 +155,9 @@ module ComputationExpressions =
             let!  _  = e1 "" (Some len)
             return str }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         let _e3 = e2 |> Seq.toList
-        areEqual ["Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"] (SideEffects.get ())
+        SideEffects.are ["Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"; "Using WrappedSeqC's TryFinally"]
         SideEffects.reset ()
 
         // plain seqs
@@ -198,7 +198,7 @@ module ComputationExpressions =
             let!  _  = i1 "" (Some len)
             return str }
 
-        areEqual ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"] (SideEffects.get ())
+        SideEffects.are ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"]
         SideEffects.reset ()
 
         // same example but without explicitely telling that the monad is strict
@@ -209,7 +209,7 @@ module ComputationExpressions =
             let!  _  = j1 "" (Some len)
             return str }
 
-        areEqual ["Using WrappedListG's Using"; "Using WrappedListG's Using"; "Using WrappedListG's Using"] (SideEffects.get ())
+        SideEffects.are ["Using WrappedListG's Delay"; "Using WrappedListG's Delay"; "Using WrappedListG's Using"; "Using WrappedListG's Delay"; "Using WrappedListG's Using"; "Using WrappedListG's Delay"; "Using WrappedListG's Using"]
 
 
     
@@ -256,7 +256,7 @@ module ComputationExpressions =
                 return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
-        areEqual ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"] (SideEffects.get ())
+        SideEffects.are ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
    
     [<Test>]
     let testCompileUsingInOptionTStrict () = // wrong results, Async is not strict
@@ -269,7 +269,7 @@ module ComputationExpressions =
                 return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
-        areEqual ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"] (SideEffects.get ())
+        SideEffects.are ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"]
         
     [<Test>]
     let UsingInOptionTStrict () = // this is the way to use it with a strict monad
@@ -282,7 +282,7 @@ module ComputationExpressions =
                 return res
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Identity.run
-        areEqual ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"] (SideEffects.get ())
+        SideEffects.are ["I'm doing something id"; "Unpacked id option: 1"; "I'm disposed"]
 
 
     open System.Collections.Generic
@@ -345,9 +345,9 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         funcM ()
-        areEqual effects (SideEffects.get ())
+        SideEffects.are effects
 
         SideEffects.reset ()
 
@@ -356,9 +356,9 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         Reader.run readerM ()
-        areEqual effects (SideEffects.get ())
+        SideEffects.are effects
 
         SideEffects.reset ()
 
@@ -367,9 +367,9 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         State.run stateM () |> ignore
-        areEqual effects (SideEffects.get ())
+        SideEffects.are effects
 
         SideEffects.reset ()
 
@@ -378,9 +378,9 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         Cont.run contM id
-        areEqual effects (SideEffects.get ())
+        SideEffects.are effects
 
         // Monad transformers are delayed if at least one of the layers is lazy.
         SideEffects.reset ()
@@ -390,9 +390,9 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         ReaderT.run readerToptionM () |> ignore
-        areEqual effects (SideEffects.get ())
+        SideEffects.are effects
 
         SideEffects.reset ()
 
@@ -401,11 +401,11 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         let a = ReaderT.run readerTfuncM ()
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         let b = a ()
-        areEqual effects (SideEffects.get ())
+        SideEffects.are effects
 
         SideEffects.reset ()
 
@@ -414,11 +414,11 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         let c = OptionT.run optionTreaderM
-        areEqual [] (SideEffects.get ())
+        SideEffects.are []
         let d = Reader.run c ()
-        areEqual effects (SideEffects.get ())
+        SideEffects.are effects
 
         // Writer is strict
         SideEffects.reset ()
@@ -428,9 +428,9 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual strictEffects (SideEffects.get ())
+        SideEffects.are strictEffects
         Writer.run writerM |> ignore
-        areEqual strictEffects (SideEffects.get ())
+        SideEffects.are strictEffects
 
         // Writer combined with a strict monad is also strict
         SideEffects.reset ()
@@ -440,24 +440,33 @@ module ComputationExpressions =
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
 
-        areEqual strictEffects (SideEffects.get ())
+        SideEffects.are strictEffects
         let e = OptionT.run optionTwriterM
-        areEqual strictEffects (SideEffects.get ())
+        SideEffects.are strictEffects
         let f = Writer.run e
-        areEqual strictEffects (SideEffects.get ())
+        SideEffects.are strictEffects
 
 
     [<Test>]
     let tryWithBlocks () =
 
-        let lazyMonadTest () =
+        let lazyMonadTest1 () =
             let x : seq<unit> = monad {
                 try
                     failwith "Exception in try-with not handled"
                     ()
                 with _ -> () }
             x
-        let _ = lazyMonadTest () |> Seq.toList
+        let _ = lazyMonadTest1 () |> Seq.toList
+
+        let lazyMonadTest2 () =
+            let x : State<unit,unit> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = (lazyMonadTest2 () |> State.run) ()
         
         let strictMonadTest () =
             let x : list<unit> = monad.strict {
@@ -534,7 +543,7 @@ module ComputationExpressions =
                     SideEffects.add "Finally goes here" }
             x
         let _ = try (lazyMonadTest () |> Seq.toList) with _ -> Unchecked.defaultof<_>
-        areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
+        SideEffects.are ["Finally goes here"; "Disposing"]
         
         let strictMonadTest () =
             SideEffects.reset ()
@@ -547,7 +556,7 @@ module ComputationExpressions =
                     SideEffects.add "Finally goes here" }
             x
         let _ = try (strictMonadTest ()) with _ -> Unchecked.defaultof<_>
-        areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
+        SideEffects.are ["Finally goes here"; "Disposing"]
 
         let monadTransformer3layersTest1 () =
             SideEffects.reset ()
@@ -560,7 +569,7 @@ module ComputationExpressions =
                     SideEffects.add "Finally goes here" }
             x
         let _ = try (((monadTransformer3layersTest1 () |> StateT.run) "" |> ReaderT.run) 0 |> Seq.toList) with _ -> Unchecked.defaultof<_>
-        areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
+        SideEffects.are ["Finally goes here"; "Disposing"]
 
         let monadTransformer3layersTest2 () =
             SideEffects.reset ()
@@ -573,7 +582,7 @@ module ComputationExpressions =
                     SideEffects.add "Finally goes here" }
             x
         let _ = try (((monadTransformer3layersTest2 () |> StateT.run) "" |> ReaderT.run) 0) with _ -> Unchecked.defaultof<_>
-        areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
+        SideEffects.are ["Finally goes here"; "Disposing"]
 
         let monadTransformer3layersTest3 () =
             SideEffects.reset ()
@@ -586,7 +595,7 @@ module ComputationExpressions =
                     SideEffects.add "Finally goes here" }
             x
         let _ = try (monadTransformer3layersTest3 () |> WriterT.run |> OptionT.run |> Seq.toList) with _ -> Unchecked.defaultof<_>
-        areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
+        SideEffects.are ["Finally goes here"; "Disposing"]
 
         // Same test but with list instead of seq, which makes the whole monad strict
         // If .strict is not used it fails compilation with a nice error asking us to add it
@@ -601,7 +610,7 @@ module ComputationExpressions =
                     SideEffects.add "Finally goes here" }
             x
         let _ = try (monadTransformer3layersTest4 () |> WriterT.run |> OptionT.run) with _ -> Unchecked.defaultof<_>
-        areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
+        SideEffects.are ["Finally goes here"; "Disposing"]
 
         // ContT doesn't deal with the inner monad, so we don't need to do anything.
         let contTTest () =
@@ -615,6 +624,6 @@ module ComputationExpressions =
                     SideEffects.add "Finally goes here" }
             x
         let _ = try (contTTest () |> ContT.eval) with _ -> Unchecked.defaultof<_>
-        areEqual ["Finally goes here"; "Disposing"] (SideEffects.get ())
+        SideEffects.are ["Finally goes here"; "Disposing"]
 
         ()

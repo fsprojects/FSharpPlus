@@ -61,7 +61,7 @@ type State<'s,'t> with
     static member Zip (x, y) = State.zip x y
     #endif
 
-    static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> (h e) s) : State<'S,'T>
+    static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> State.run (h e) s) : State<'S,'T>
     static member TryFinally (State computation, f) = State (fun s -> try computation s finally f ()) : State<'S,'T>
     static member Using (resource, f: _ -> State<'S,'T>) = State.TryFinally (f resource, fun () -> dispose resource)
     static member Delay (body: unit->State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S,'T>
