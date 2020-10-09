@@ -78,7 +78,7 @@ module Dictionary =
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The input dictionary.</param>
     ///
-    /// <returns>Returns Map with values x for each dictionary value where the function returns Some(x).</returns>
+    /// <returns>Returns dictionary with values x for each dictionary value where the function returns Some(x).</returns>
     let choose f (x: IDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
         for KeyValue(k, v) in x do
