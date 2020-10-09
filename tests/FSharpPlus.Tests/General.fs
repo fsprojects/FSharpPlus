@@ -690,6 +690,20 @@ module Collections =
         let rl = ReadOnlyListOnlyIndex [1..10]
         Assert.AreEqual (2, nth 1 rl)
 
+    [<Test>]
+    let choose () = 
+        let d = choose Some ((ofSeq :seq<_*_> -> Dictionary<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<Dictionary<string,int>>> (Some d)
+
+        let d' = choose Some ((ofSeq :seq<_*_> -> IDictionary<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some d')
+        
+        let rd = choose Some ((ofSeq :seq<_*_> -> IReadOnlyDictionary<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<IReadOnlyDictionary<string,int>>> (Some rd)
+        
+        let m = choose Some ((ofSeq :seq<_*_> -> Map<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<Map<string,int>>> (Some m)
+        
 module Foldable =
 
     let foldables =
