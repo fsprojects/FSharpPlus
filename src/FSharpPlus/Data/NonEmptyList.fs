@@ -264,7 +264,10 @@ module NonEmptyListBuilder =
         member __.Yield x = x
         member __.Delay expr = expr ()
         member __.Run (x: NonEmptyList<_>) = x
+        
+    [<System.Obsolete("Use nelist instead.")>]
     let nel = NelBuilder ()
+    
     let nelist = NelBuilder ()
 
 [<AutoOpen>]
