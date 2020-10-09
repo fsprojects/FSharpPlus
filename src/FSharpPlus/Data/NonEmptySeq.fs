@@ -11,6 +11,9 @@ type NonEmptySeq<'T> =
     inherit IEnumerable<'T>
     abstract member First: 'T
 
+/// A type alias for NonEmptySeq<'t>
+type neseq<'t> = NonEmptySeq<'t>
+
 module NonEmptySeq =
     let internal unsafeOfSeq (x: _ seq) =
         { new NonEmptySeq<_> with
@@ -26,6 +29,13 @@ module NonEmptySeq =
     
     /// <summary>Builds a non empty sequence.</summary>
     let create x xs = seq { yield x; yield! xs } |> unsafeOfSeq
+    
+    /// Creates a NonEmptySeq range, containing at least the first element of the range
+    let (|..) starting ending = (if starting < ending then { starting .. ending } else Seq.singleton starting) |> unsafeOfSeq
+
+    /// Creates a NonEmptySeq range, containing at least the last element of the range
+    let (..|) starting ending = (if starting < ending then { starting .. ending } else Seq.singleton ending)   |> unsafeOfSeq
+    
     
     /// <summary>Returns a new sequence that contains all pairings of elements from the first and second sequences.</summary>
     /// <param name="source1">The first sequence.</param>
@@ -476,3 +486,14 @@ module NonEmptySeq =
     let replace (oldValue: NonEmptySeq<'T>) (newValue: NonEmptySeq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> =
         Seq.replace oldValue newValue source |> unsafeOfSeq
 
+
+[<AutoOpen>]
+module NonEmptySeqBuilder =
+    type NESeqBuilder () =
+        [<CompilerMessage("A NonEmptySeq doesn't support the Zero operation.", 708, IsError = true)>]
+        member __.Zero () = raise Internals.Errors.exnUnreachable
+        member __.Combine (a: NonEmptySeq<'T>, b) = NonEmptySeq.append a b
+        member __.Yield x = NonEmptySeq.singleton x
+        member __.Delay expr = expr () : NonEmptySeq<'T>
+
+    let neseq = NESeqBuilder ()
