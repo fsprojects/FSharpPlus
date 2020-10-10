@@ -169,20 +169,21 @@ type Unzip =
 type Zip =
     inherit Default1
 
-    static member Zip ((x: IEnumerator<'T>            , y: IEnumerator<'U>           , _output: IEnumerator<'T*'U>           ), _mthd: Zip) = Enumerator.zip x y
-    static member Zip ((x: seq<'T>                    , y: seq<'U>                   , _output: seq<'T*'U>                   ), _mthd: Zip) = Seq.zip        x y
-    static member Zip ((x: NonEmptySeq<'T>            , y: NonEmptySeq<'U>           , _output: NonEmptySeq<'T*'U>           ), _mthd: Zip) = NonEmptySeq.zip        x y
-    static member Zip ((x: IDictionary<'K, 'T>        , y: IDictionary<'K,'U>        , _output: IDictionary<'K,'T*'U>        ), _mthd: Zip) = Dict.zip       x y
+    static member Zip ((x: IEnumerator<'T>            , y: IEnumerator<'U>           , _output: IEnumerator<'T*'U>           ), _mthd: Zip) = Enumerator.zip          x y
+    static member Zip ((x: seq<'T>                    , y: seq<'U>                   , _output: seq<'T*'U>                   ), _mthd: Zip) = Seq.zipShortest         x y
+    static member Zip ((x: NonEmptySeq<'T>            , y: NonEmptySeq<'U>           , _output: NonEmptySeq<'T*'U>           ), _mthd: Zip) = NonEmptySeq.zipShortest x y
+    static member Zip ((x: IDictionary<'K, 'T>        , y: IDictionary<'K,'U>        , _output: IDictionary<'K,'T*'U>        ), _mthd: Zip) = Dict.zip                x y
     static member Zip ((x: IReadOnlyDictionary<'K, 'T>, y: IReadOnlyDictionary<'K,'U>, _output: IReadOnlyDictionary<'K,'T*'U>), _mthd: Zip) = IReadOnlyDictionary.zip x y
     static member Zip ((x: Dictionary<'K, 'T>         , y: Dictionary<'K,'U>         , _output: Dictionary<'K,'T*'U>         ), _mthd: Zip) = Dict.zip       x y :?> Dictionary<'K,'T*'U>
     static member Zip ((x: Map<'K, 'T>                , y: Map<'K,'U>                , _output: Map<'K,'T*'U>                ), _mthd: Zip) = Map.zip        x y
     static member Zip ((f: 'R -> 'T                   , g: 'R -> 'U                  , _output: 'R -> 'T * 'U                ), _mthd: Zip) = fun x -> (f x, g x)
     static member Zip ((f: Func<'R, 'T>               , g: Func<'R, 'U>              , _output: Func<'R, 'T * 'U>            ), _mthd: Zip) = Func<_,_> (fun x -> (f.Invoke x, g.Invoke x))
-    static member Zip ((x: list<'T>                   , y: list<'U>                  , _output: list<'T*'U>                  ), _mthd: Zip) = List.zip       x y
-    static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zip      x y
-    static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip     x y
-    static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip      x y
-    static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip       x y
+    static member Zip ((x: list<'T>                   , y: list<'U>                  , _output: list<'T*'U>                  ), _mthd: Zip) = List.zipShortest        x y
+    static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zipShortest       x y
+    static member Zip ((x: ResizeArray<'T>            , y: ResizeArray<'U>           , _output: ResizeArray<'T*'U>           ), _mthd: Zip) = ResizeArray.zipShortest x y
+    static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip              x y
+    static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
+    static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =
         let inline call_4 (a: ^a, b: ^b, c: ^c, d: ^d) = ((^a or ^b or ^c or ^d) : (static member Zip : (_*_*_)*_ -> _) (b, c, d), a)

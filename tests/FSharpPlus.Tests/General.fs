@@ -490,6 +490,25 @@ module Functor =
 
         ()
 
+    [<Test>]
+    let genericZipShortest () =
+        let s = zip (seq [1; 2]) (seq ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (seq [1,"a"; 2,"b"], s)
+        
+        let a = zip [|1; 2; 3|]  [|"a"; "b"|]
+        CollectionAssert.AreEqual ([|1,"a"; 2,"b"|], a)
+        
+        let l = zip [1; 2]  ["a"; "b"; "c"]
+        CollectionAssert.AreEqual ([1,"a"; 2,"b"], l)
+        
+        let e = zip (ResizeArray [1; 2]) (ResizeArray ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (ResizeArray [1,"a"; 2,"b"], e)
+        
+        let nes = zip (NonEmptySeq.ofList [1; 2]) (NonEmptySeq.ofList ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (NonEmptySeq.ofList [1,"a"; 2,"b"], nes)
+        
+        let nel = zip (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
 
 module Collections =
 
@@ -690,32 +709,6 @@ module Collections =
         let rl = ReadOnlyListOnlyIndex [1..10]
         Assert.AreEqual (2, nth 1 rl)
 
-    [<Test>]
-    let zipShortest () =
-        let s = zipShortest (seq [1; 2]) (seq ["a"; "b"; "c"])
-        CollectionAssert.AreEqual (seq [1,"a"; 2,"b"], s)
-        Assert.IsInstanceOf<seq<int*string>> s
-        
-        let a = zipShortest [|1; 2; 3|]  [|"a"; "b"|]
-        CollectionAssert.AreEqual ([|1,"a"; 2,"b"|], a)
-        Assert.IsInstanceOf<array<int*string>> a
-        
-        let l = zipShortest [1; 2]  ["a"; "b"; "c"]
-        CollectionAssert.AreEqual ([1,"a"; 2,"b"], l)
-        Assert.IsInstanceOf<list<int*string>> l
-        
-        let e = zipShortest (ResizeArray [1; 2]) (ResizeArray ["a"; "b"; "c"])
-        CollectionAssert.AreEqual (ResizeArray [1,"a"; 2,"b"], e)
-        Assert.IsInstanceOf<ResizeArray<int*string>> e
-        
-        let nes = zipShortest (NonEmptySeq.ofList [1; 2]) (NonEmptySeq.ofList ["a"; "b"; "c"])
-        CollectionAssert.AreEqual (NonEmptySeq.ofList [1,"a"; 2,"b"], nes)
-        Assert.IsInstanceOf<neseq<int*string>> nes 
-        
-        let nel = zipShortest (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
-        CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
-        Assert.IsInstanceOf<nelist<int*string>> nel 
-        
 module Foldable =
 
     let foldables =

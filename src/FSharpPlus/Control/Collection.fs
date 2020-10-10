@@ -6,7 +6,6 @@ open System.Collections
 open System.Collections.Generic
 open System.Runtime.InteropServices
 open FSharpPlus
-open FSharpPlus.Data
 open FSharpPlus.Internals
 
 #if !FABLE_COMPILER
@@ -437,25 +436,4 @@ type Intercalate =
         let inline call (a: 'a, b: 'b, s) = call_2 (a, b, s)
         call (Unchecked.defaultof<Intercalate>, source, sep) : 'Monoid
 
-type ZipShortest =
-    inherit Default1
-    
-    static member ZipShortest ((x1: seq<'T1>        , x2: seq<'T2>         , _output: seq<'T1*'T2>),         _mthd: ZipShortest) = Seq.zipShortest x1 x2
-    static member ZipShortest ((x1: 'T1 []          , x2: 'T2 []           , _output: ('T1*'T2) []),         _mthd: ZipShortest) = Array.zipShortest x1 x2
-    static member ZipShortest ((x1: ResizeArray<'T1>, x2: ResizeArray<'T2> , _output: ResizeArray<'T1*'T2>), _mthd: ZipShortest) = ResizeArray.zipShortest x1 x2
-    static member ZipShortest ((x1: list<'T1>       , x2: list<'T2>        , _output: list<'T1*'T2>),        _mthd: ZipShortest) = List.zipShortest x1 x2
-    static member ZipShortest ((x1: NonEmptySeq<'T1> , x2: NonEmptySeq<'T2>, _output: NonEmptySeq<'T1*'T2>), _mthd: ZipShortest) = NonEmptySeq.zipShortest x1 x2
-    
-    static member inline Invoke (source1: '``ZipShortestCollection<'T1>``) (source2: '``ZipShortestCollection<'T2>``) =
-        let inline call_4 (a: ^a, b: ^b, c: ^c, d: ^d) = ((^a or ^b or ^c or ^d) : (static member ZipShortest : (_*_*_)*_ -> _) (b, c, d), a)
-        let inline call (a: 'a, b: 'b, c: 'c) = call_4 (a, b, c, Unchecked.defaultof<'r>) : 'r
-        call (Unchecked.defaultof<ZipShortest>, source1, source2) : '``ZipShortestCollection<'T1 * 'T2>``
-
-    static member inline InvokeOnInstance (source1: '``ZipShortestCollection<'T1>``) (source2: '``ZipShortestCollection<'T2>``) : '``ZipShortestCollection<'T1 * 'T2>`` =
-        ((^``ZipShortestCollection<'T1>`` or ^``ZipShortestCollection<'T2>`` or  ^``ZipShortestCollection<'T1 * 'T2>``) : (static member ZipShortest : _*_ -> _) source1, source2)
-        
-type ZipShortest with    
-    static member inline ZipShortest ((_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _output: ^r when ^r : null and ^r: struct), _mthd: Default1) = id
-    static member inline ZipShortest ((x: '``ZipShortestCollection<'T1>``            , y: '``ZipShortestCollection<'T2>``            , _output: '``ZipShortestCollection<'T1 * 'T2>``      ), _mthd: Default1) = ZipShortest.InvokeOnInstance x y : '``ZipShortestCollection<'T1 * 'T2>``
-    
 #endif

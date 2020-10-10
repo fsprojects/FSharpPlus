@@ -211,10 +211,7 @@ type NonEmptyList<'t> with
     static member Unzip s = NonEmptyList.unzip s
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Zip (x, y) = NonEmptyList.zip x y
-
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member ZipShortest (x, y) = NonEmptyList.zipShortest x y
+    static member Zip (x, y) = NonEmptyList.zipShortest x y
     
     static member (>>=) ({Head = x; Tail = xs}, f: _->NonEmptyList<'b>) =
         let {Head = y; Tail = ys} = f x
