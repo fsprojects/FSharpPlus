@@ -213,10 +213,10 @@ type Choose =
     static member Choose (x: seq<'T>                   , f:  _->'U option, [<Optional>]_impl: Choose) = Seq.choose   f x
     static member Choose (x: list<'T>                  , f:  _->'U option, [<Optional>]_impl: Choose) = List.choose  f x
     static member Choose (x: 'T []                     , f:  _->'U option, [<Optional>]_impl: Choose) = Array.choose f x
-    static member Choose (x: Dictionary<'K,'V>         , f: 'V->'U option, [<Optional>]_impl: Choose) = Dictionary.choose f x
-    static member Choose (x: IReadOnlyDictionary<'K,'V>, f: 'V->'U option, [<Optional>]_impl: Choose) = IReadOnlyDictionary.choose f x
-    static member Choose (x: IDictionary<'K,'V>        , f: 'V->'U option, [<Optional>]_impl: Choose) = Dict.choose f x
-    static member Choose (x: Map<'K,'V>                , f: 'V->'U option, [<Optional>]_impl: Choose) = Map.choose f x
+    static member Choose (x: Dictionary<'K,'V>         , f: 'V->'U option, [<Optional>]_impl: Choose) = Dictionary.chooseValues f x
+    static member Choose (x: IReadOnlyDictionary<'K,'V>, f: 'V->'U option, [<Optional>]_impl: Choose) = IReadOnlyDictionary.chooseValues f x
+    static member Choose (x: IDictionary<'K,'V>        , f: 'V->'U option, [<Optional>]_impl: Choose) = Dict.chooseValues f x
+    static member Choose (x: Map<'K,'V>                , f: 'V->'U option, [<Optional>]_impl: Choose) = Map.chooseValues  f x
 
     static member inline Invoke (chooser: 'T->'U option) (source: '``Collection<'T>``) =
         let inline call_3 (a: ^a, b: ^b, _: ^c, f) = ((^a or ^b or ^c) : (static member Choose : _*_*_ -> _) b, f, a)

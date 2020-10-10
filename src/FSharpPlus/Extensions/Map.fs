@@ -51,7 +51,7 @@ module Map =
     /// <param name="x">The input Map.</param>
     ///
     /// <returns>Returns Map with values x for each Map value where the function returns Some(x).</returns>
-    let choose f (x: Map<'Key, 'T>) = Map <| seq {
+    let chooseValues f (x: Map<'Key, 'T>) = Map <| seq {
         for KeyValue(k, v) in x do
             match f v with
             | Some v -> yield (k, v)

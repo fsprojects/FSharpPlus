@@ -78,7 +78,7 @@ module Dict =
     /// <param name="x">The input dictionary.</param>
     ///
     /// <returns>Returns dictionary with values x for each dictionary value where the function returns Some(x).</returns>
-    let choose f (x: IDictionary<'Key, 'T>) =
+    let chooseValues f (x: IDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
         for KeyValue(k, v) in x do
             match f v with

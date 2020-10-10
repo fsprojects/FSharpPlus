@@ -82,7 +82,7 @@ module IReadOnlyDictionary =
     /// <param name="x">The input IReadOnlyDictionary.</param>
     ///
     /// <returns>Returns IReadOnlyDictionary with values x for each dictionary value where the function returns Some(x).</returns>
-    let choose f (x: IReadOnlyDictionary<'Key, 'T>) =
+    let chooseValues f (x: IReadOnlyDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
         for KeyValue(k, v) in x do
             match f v with
