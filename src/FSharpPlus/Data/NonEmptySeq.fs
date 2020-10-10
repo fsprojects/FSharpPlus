@@ -463,14 +463,6 @@ module NonEmptySeq =
     ///
     /// <returns>The result sequence.</returns>
     let zip3 (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) (source3: NonEmptySeq<_>) = Seq.zip3 source1 source2 source3 |> unsafeOfSeq
-
-    /// <summary>
-    /// Zip safely two sequences. If one sequence is shorter, excess elements are discarded from the right end of the longer sequence. 
-    /// </summary>
-    /// <param name="a1">First input sequence.</param>
-    /// <param name="a2">Second input sequence.</param>
-    /// <returns>Sequence with corresponding pairs of input sequences.</returns>
-    let zipShortest (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = Seq.zipShortest source1 source2 |> unsafeOfSeq
     
     /// <summary>Applies the given function to each element of the NonEmptySequence and concatenates all the
     /// results.</summary>
