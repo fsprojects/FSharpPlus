@@ -93,7 +93,8 @@ module Operators =
     // Un-zips (un-tuple) two functors.
     let inline unzip (source: '``Functor<'T1 * 'T2>``) = Unzip.Invoke source : '``Functor<'T1>`` * '``Functor<'T2>``
 
-    // Zips safely two collections. If one collection is shorter, excess elements are discarded from the right end of the longer collection. 
+    // Zips (tuple) two functors.
+    // For collections, if one collection is shorter, excess elements are discarded from the right end of the longer collection. 
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
 
     
