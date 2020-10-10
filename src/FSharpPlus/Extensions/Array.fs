@@ -94,5 +94,4 @@ module Array =
     /// <param name="a2">Second input array.</param>
     /// <returns>Array with corresponding pairs of input arrays.</returns>
     let zipShortest (a1: array<'T1>) (a2: array<'T2>) =
-        let len = min a1.Length a2.Length
-        [| for i in 0..(len-1) -> a1.[i], a2.[i] |] 
+        Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])

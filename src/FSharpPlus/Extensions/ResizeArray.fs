@@ -96,5 +96,7 @@ module ResizeArray =
     /// <returns>ResizeArray with corresponding pairs of input ResizeArrays.</returns>
     let zipShortest (a1: ResizeArray<'T1>) (a2: ResizeArray<'T2>) =
         let len = min a1.Count a2.Count
-        [| for i in 0..(len-1) -> a1.[i], a2.[i] |]
-        |> ResizeArray
+        let ra = ResizeArray(len)
+        for i in 0..(len-1) do
+            ra.Add (a1.[i], a2.[i])
+        ra
