@@ -73,6 +73,19 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'U>
 
+    /// <summary>Applies given function to each value of the given dictionary.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input dictionary.</param>
+    ///
+    /// <returns>Returns dictionary with values x for each dictionary value where the function returns Some(x).</returns>
+    let chooseValues f (x: IDictionary<'Key, 'T>) =
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in x do
+            match f v with
+            | Some v -> dct.Add (k, v)
+            | None    -> ()
+        dct :> IDictionary<'Key, 'U>
+        
     /// <summary>Tuples values of two dictionaries.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
     /// <param name="x">The first input dictionary.</param>
