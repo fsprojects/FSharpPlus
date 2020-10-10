@@ -45,6 +45,17 @@ module Map =
             match Map.tryFind k y with
             | Some vy -> yield (k, f.Invoke (vx, vy))
             | None    -> () }
+    
+    /// <summary>Applies given function to each value of the given Map.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input Map.</param>
+    ///
+    /// <returns>Returns Map with values x for each Map value where the function returns Some(x).</returns>
+    let chooseValues f (x: Map<'Key, 'T>) = Map <| seq {
+        for KeyValue(k, v) in x do
+            match f v with
+            | Some v -> yield (k, v)
+            | None    -> () }
 
     /// <summary>Tuples values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>

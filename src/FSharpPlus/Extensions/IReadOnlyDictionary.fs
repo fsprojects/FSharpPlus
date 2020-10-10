@@ -77,6 +77,19 @@ module IReadOnlyDictionary =
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'U>
 
+    /// <summary>Applies given function to each value of the given read-only dictionary.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input IReadOnlyDictionary.</param>
+    ///
+    /// <returns>Returns IReadOnlyDictionary with values x for each dictionary value where the function returns Some(x).</returns>
+    let chooseValues f (x: IReadOnlyDictionary<'Key, 'T>) =
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in x do
+            match f v with
+            | Some v -> dct.Add (k, v)
+            | None    -> ()
+        dct :> IReadOnlyDictionary<'Key, 'U>
+        
     /// <summary>Tuples values of two read-only dictionaries.</summary>
     /// <remarks>Keys that are not present on both read-only dictionaries are dropped.</remarks>
     /// <param name="x">The first input IReadOnlyDictionary.</param>
