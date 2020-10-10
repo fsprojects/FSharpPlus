@@ -127,7 +127,7 @@ module List =
         loop ([], []) (List.rev source)
     
     /// <summary>
-    // Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
+    /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
     /// </summary>
     /// <param name="a1">First input list.</param>
     /// <param name="a2">Second input list.</param>

@@ -88,7 +88,7 @@ module Array =
         x.ToArray (), y.ToArray ()
     
     /// <summary>
-    // Zip safely two arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
+    /// Zip safely two arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
     /// </summary>
     /// <param name="a1">First input array.</param>
     /// <param name="a2">Second input array.</param>

@@ -80,7 +80,7 @@ module Seq =
             yield g, members }
     
     /// <summary>
-    // Zip safely two sequences. If one seq is shorter, excess elements are discarded from the right end of the longer seq. 
+    /// Zip safely two sequences. If one seq is shorter, excess elements are discarded from the right end of the longer seq. 
     /// </summary>
     /// <param name="s1">First input seq.</param>
     /// <param name="s2">Second input seq.</param>

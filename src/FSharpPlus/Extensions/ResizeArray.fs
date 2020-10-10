@@ -89,7 +89,7 @@ module ResizeArray =
     
     
     /// <summary>
-    // Zip safely two ResizeArrays. If one ResizeArray is shorter, excess elements are discarded from the right end of the longer ResizeArray. 
+    /// Zip safely two ResizeArrays. If one ResizeArray is shorter, excess elements are discarded from the right end of the longer ResizeArray. 
     /// </summary>
     /// <param name="a1">First input ResizeArray.</param>
     /// <param name="a2">Second input ResizeArray.</param>
