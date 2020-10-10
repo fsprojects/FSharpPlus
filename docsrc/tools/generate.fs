@@ -1,4 +1,7 @@
 module Generate
+
+open FSharp.Formatting.Literate.Evaluation
+
 // --------------------------------------------------------------------------------------
 // Builds the documentation from `.fsx` and `.md` files in the 'docsrc/content' directory
 // (the generated documentation is stored in the 'docs' directory)
@@ -43,8 +46,8 @@ let properties:PropertyMeta =
 //#r "FSharp.Core.dll"
 //#r "FSharpPlus.dll"
 open System
-open FSharp.Literate
-open FSharp.Markdown
+open FSharp.Formatting.Literate
+open FSharp.Formatting.Markdown
 open FSharpPlus
 
 let write path html =
@@ -80,14 +83,12 @@ let compilerOptions =
 let parseFsx path =
 
     let doc = 
-      Literate.ParseScriptFile(
+      Literate.ParseAndCheckScriptFile(
                   path = path,
-                  compilerOptions = compilerOptions,
-                  fsiEvaluator = FSharp.Literate.FsiEvaluator(evaluationOptions))
+                  fscoptions = compilerOptions,
+                  fsiEvaluator = FsiEvaluator(evaluationOptions))
     
-    let body = FSharp.Literate.Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true)
-    for err in doc.Errors do
-        Printf.printfn "%A" err
+    let body = Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true)
     body, body.FormattedTips
     
 
@@ -95,15 +96,13 @@ let parseMd path =
     let doc = 
       Literate.ParseMarkdownFile(
                   path,
-                  compilerOptions = compilerOptions,
-                  fsiEvaluator = FSharp.Literate.FsiEvaluator(evaluationOptions))
-    let body = FSharp.Literate.Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true)
-    for err in doc.Errors do
-        Printf.printfn "%A" err
+                  fscoptions = compilerOptions,
+                  fsiEvaluator = FsiEvaluator(evaluationOptions))
+    let body = Literate.FormatLiterateNodes(doc, OutputKind.Html, "", true, true)
     body, body.FormattedTips
 
 let format (doc: LiterateDocument) =
-    Formatting.format doc.MarkdownDocument true OutputKind.Html
+    Markdown.ToHtml(doc.MarkdownDocument)
 
 let processFile outdir path  =
     printfn "Processing help: %s" path

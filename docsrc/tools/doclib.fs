@@ -1053,11 +1053,11 @@ module FSFormatting =
 
     /// Runs fsformatting.exe with the given command in the given repository directory.
     let private run command =
-        let result = executeProcess ("dotnet", sprintf "tool run fsformatting %s" command, None)
+        let result = executeProcess ("dotnet", sprintf "tool run fsdocs %s" command, None)
         if 0 <> result.ExitCode
         then
             failwithf
-                "FSharp.Formatting command %s failed with: %s" 
+                "fsdocs command %s failed with: %s" 
                 command
                 // workaround (fsformatting doesn't output errors to stderr)
                 (if System.String.IsNullOrEmpty result.stderr then result.stdout else result.stderr)
