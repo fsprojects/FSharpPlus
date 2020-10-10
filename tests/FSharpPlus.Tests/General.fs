@@ -708,6 +708,14 @@ module Collections =
         CollectionAssert.AreEqual (ResizeArray [1,"a"; 2,"b"], e)
         Assert.IsInstanceOf<ResizeArray<int*string>> e
         
+        let nes = zipShortest (NonEmptySeq.ofList [1; 2]) (NonEmptySeq.ofList ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (NonEmptySeq.ofList [1,"a"; 2,"b"], nes)
+        Assert.IsInstanceOf<neseq<int*string>> nes 
+        
+        let nel = zipShortest (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
+        Assert.IsInstanceOf<nelist<int*string>> nel 
+        
 module Foldable =
 
     let foldables =
