@@ -463,7 +463,7 @@ module NonEmptySeq =
     ///
     /// <returns>The result sequence.</returns>
     let zip3 (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) (source3: NonEmptySeq<_>) = Seq.zip3 source1 source2 source3 |> unsafeOfSeq
-    
+
     /// <summary>Applies the given function to each element of the NonEmptySequence and concatenates all the
     /// results.</summary>
     ///
