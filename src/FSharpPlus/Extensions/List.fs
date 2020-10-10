@@ -125,3 +125,14 @@ module List =
                 | Choice1Of2 x -> loop (x::acc1, acc2) xs
                 | Choice2Of2 x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
+
+
+    /// <summary>Safely build a new list whose elements are the results of applying the given function
+    /// to each of the elements of the two lists pairwise.</summary>
+    /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
+    let map2Shortest f (l1: list<_>) (l2: list<_>) =
+        let rec loop acc = function
+            | (l::ls,r::rs) -> loop ((f l r)::acc) (ls,rs)
+            | (_,_) -> acc
+        loop [] (l1,l2) |> List.rev
+        

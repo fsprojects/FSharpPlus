@@ -86,3 +86,13 @@ module ResizeArray =
         let (x, y) = ResizeArray (), ResizeArray ()
         Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
         x.ToArray (), y.ToArray ()
+        
+    /// <summary>Safely build a new ResizeArray whose elements are the results of applying the given function
+    /// to each of the elements of the two ResizeArrays pairwise.</summary>
+    /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
+    let map2Shortest f (a1: ResizeArray<_>) (a2: ResizeArray<_>) =
+        let len = min a1.Count a2.Count
+        let ra = ResizeArray(len)
+        for i in 0..(len-1) do
+            ra.Add (f a1.[i] a2.[i])
+        ra

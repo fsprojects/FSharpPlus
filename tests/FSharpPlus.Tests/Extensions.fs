@@ -341,3 +341,9 @@ module Extensions =
   let ``Nullable.toList returns a list with the value if there is one`` () =
     Nullable.toList (Nullable 1) |> areEqual [1]
     Nullable.toList (Nullable()) |> areEqual []
+ 
+  [<Test>]
+  let map2Shortest () =
+    List.map2Shortest (+) [1;2;3] [2;3] |> areEqual [3;5]
+    Array.map2Shortest (+) [|1;2|] [|2;3;4|] |> areEqual [|3;5|]
+    ResizeArray.map2Shortest (+) (ResizeArray [1;2;3]) (ResizeArray [2;3]) |> areEqual (ResizeArray [3;5])
