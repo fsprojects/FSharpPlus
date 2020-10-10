@@ -78,6 +78,18 @@ module Seq =
                     members <- ResizeArray ()
                     members.Add e.Current
             yield g, members }
+    
+    /// <summary>
+    // Zip safely two sequences. If one seq is shorter, excess elements are discarded from the right end of the longer seq. 
+    /// </summary>
+    /// <param name="s1">First input seq.</param>
+    /// <param name="s2">Second input seq.</param>
+    /// <returns>Sequence with corresponding pairs of input sequences.</returns>
+    let zipShortest (s1: 'T1 seq) (s2: 'T2 seq) = seq {
+        use e1 = s1.GetEnumerator () 
+        use e2 = s2.GetEnumerator ()
+        while e1.MoveNext () && e2.MoveNext() do
+            yield e1.Current, e2.Current }
 
     /// Inserts a separator element between each element in the source seq.
    ///http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/

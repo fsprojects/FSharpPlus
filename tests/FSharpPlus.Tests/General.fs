@@ -690,6 +690,24 @@ module Collections =
         let rl = ReadOnlyListOnlyIndex [1..10]
         Assert.AreEqual (2, nth 1 rl)
 
+    [<Test>]
+    let zipShortest () =
+        let s = zipShortest (seq [1; 2]) (seq ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (seq [1,"a"; 2,"b"], s)
+        Assert.IsInstanceOf<seq<int*string>> s
+        
+        let a = zipShortest [|1; 2; 3|]  [|"a"; "b"|]
+        CollectionAssert.AreEqual ([|1,"a"; 2,"b"|], a)
+        Assert.IsInstanceOf<array<int*string>> a
+        
+        let l = zipShortest [1; 2]  ["a"; "b"; "c"]
+        CollectionAssert.AreEqual ([1,"a"; 2,"b"], l)
+        Assert.IsInstanceOf<list<int*string>> l
+        
+        let e = zipShortest (ResizeArray [1; 2]) (ResizeArray ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (ResizeArray [1,"a"; 2,"b"], e)
+        Assert.IsInstanceOf<ResizeArray<int*string>> e
+        
 module Foldable =
 
     let foldables =

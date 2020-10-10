@@ -86,3 +86,13 @@ module Array =
         let (x, y) = ResizeArray (), ResizeArray ()
         Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
         x.ToArray (), y.ToArray ()
+    
+    /// <summary>
+    // Zip safely two arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
+    /// </summary>
+    /// <param name="a1">First input array.</param>
+    /// <param name="a2">Second input array.</param>
+    /// <returns>Array with corresponding pairs of input arrays.</returns>
+    let zipShortest (a1: array<'T1>) (a2: array<'T2>) =
+        let len = min a1.Length a2.Length
+        [| for i in 0..(len-1) -> a1.[i], a2.[i] |] 
