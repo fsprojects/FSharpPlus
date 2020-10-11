@@ -159,6 +159,17 @@ module String =
             if i = 0 then ""
             else source |> skip i
 
+    /// <summary>Gets the first char of the string, or
+    /// <c>None</c> if the string is empty.</summary>
+    let tryHead (source: string) =
+        if String.length source = 0 then None else Some source.[0]
+
+    /// <summary>Gets the last char of the string, or
+    /// <c>None</c> if the string is empty.</summary>
+    let tryLast (source: string) =
+        let length = String.length source
+        if length = 0 then None else Some source.[length-1]
+
     /// Returns a string that has at most N characters from the beginning of the original string.
     /// It returns the original string if it is shorter than count.
     let truncate count (source: string) =
