@@ -15,12 +15,16 @@ module Expr =
 
     let [<Literal>] private opSliceName = "SpliceExpression"
     let [<Literal>] private opSliceType = "ExtraTopLevelOperators"
+    let [<Literal>] private ubSliceName = "Unbox"
+    let [<Literal>] private ubSliceType = "Operators"
 
     let private fsCoreAs = AppDomain.CurrentDomain.GetAssemblies () |> Seq.find (fun a -> a.GetName().Name = "FSharp.Core")
     let private miSplice = fsCoreAs.GetType(fsNamespace + "." + opSliceType).GetMethod opSliceName
+    let private ubSplice = fsCoreAs.GetType(fsNamespace + "." + ubSliceType).GetMethod ubSliceName
         
     let bind (f: 'T -> Expr<'U>) (x: Expr<'T>) : Expr<'U> =
-        Expr.Coerce (Expr.Call (miSplice.MakeGenericMethod typeof<'U>, [Expr.Application (Expr.Value f, x)]), typeof<'U>)
+        Expr.Call (ubSplice.MakeGenericMethod typeof<'U>,
+            [Expr.Call (miSplice.MakeGenericMethod typeof<'U>, [Expr.Application (Expr.Value f, x)])])
         |> Expr.Cast
 
     let rec runWithUntyped (eval: Expr -> obj) (exp: Expr) s =
