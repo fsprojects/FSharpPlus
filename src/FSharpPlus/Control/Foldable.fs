@@ -260,6 +260,21 @@ type TryHead =
         let inline call (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<TryHead>, source) : 'T option
 
+type TryLast =
+    inherit Default1
+    static member inline TryLast (x                 , [<Optional>]_impl: Default1) = Seq.tryLast <| ToSeq.Invoke x
+    static member        TryLast (x: 't list        , [<Optional>]_impl: TryLast)  = List.tryLast x
+    static member        TryLast (x: 't []          , [<Optional>]_impl: TryLast)  = Array.tryLast x
+    static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
+    static member        TryLast (x: Id<'T>         , [<Optional>]_impl: TryLast ) = Some x.getValue
+    static member        TryLast (x: string         , [<Optional>]_impl: TryLast ) = if String.length x = 0 then None else Some x.[String.length x - 1]
+    static member        TryLast (x: StringBuilder  , [<Optional>]_impl: TryLast ) = if x.Length = 0 then None else Some (x.ToString().[x.Length - 1])
+    static member        TryLast (x: 't seq         , [<Optional>]_impl: TryLast ) = Seq.tryLast x
+
+    static member inline Invoke (source: '``Foldable'<T>``) =
+        let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member TryLast : _*_ -> _) b, a)
+        let inline call (a: 'a, b: 'b) = call_2 (a, b)
+        call (Unchecked.defaultof<TryLast>, source) : 'T option
 
 type Pick =
     inherit Default1

@@ -400,6 +400,13 @@ module Operators =
     /// <returns>The first element of the foldable or None.</returns>
     let inline tryHead (source: '``Foldable<'T>``) = TryHead.Invoke source : 'T option
 
+    /// <summary>Gets the last element of the foldable, or
+    /// <c>None</c> if the foldable is empty.</summary>
+    /// <remarks>Unsafe for infinite sequence input.</remarks>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The last element of the foldable or None.</returns>
+    let inline tryLast (source: '``Foldable<'T>``) = TryLast.Invoke source : 'T option
+
     /// <summary>Gets the number of elements in the foldable.</summary>
     /// <param name="list">The input foldable.</param>
     /// <returns>The length of the foldable.</returns>
