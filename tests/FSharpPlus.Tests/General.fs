@@ -7,7 +7,6 @@ open System.Collections.ObjectModel
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
-open FSharpPlus.Internals
 open NUnit.Framework
 open Helpers
 open FSharpPlus.Math.Applicative
@@ -892,9 +891,6 @@ module Foldable =
 
         let nes              = tryLast <| NonEmptySeq.ofList [1;2]
         areEqual nes (Some 2)
-
-        let i                = tryLast <| Id.create 4
-        areEqual i (Some 4)
 
         let str                = tryLast "string"
         let str': char option  = tryLast ""
