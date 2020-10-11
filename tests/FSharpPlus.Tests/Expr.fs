@@ -18,9 +18,9 @@ module Expr =
 
         areEqual "11" res
 
-    [<Test>]
-    let ``Simple quotation combination (QuotationEvaluator)`` () =
-        ``Simple quotation combination`` FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped
+    // [<Test>]
+    // let ``Simple quotation combination (QuotationEvaluator)`` () =
+    //     ``Simple quotation combination`` FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped
 
     [<Test>]
     let ``Simple quotation combination (Unquote)`` () =
