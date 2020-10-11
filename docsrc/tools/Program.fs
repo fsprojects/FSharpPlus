@@ -1,7 +1,6 @@
 ﻿// Learn more about F# at http://fsharp.org
 
 open System
-open Generate
 
 open DocLib
 
@@ -48,13 +47,6 @@ Target.create "CleanDocs" (fun _ ->
 )
 
 let rootDir = __SOURCE_DIRECTORY__ @@ ".." @@ ".."
-// --------------------------------------------------------------------------------------
-// Build project
-
-Target.create "Build" (fun _ ->
-    copyFiles()
-    buildDocumentation()
-)
 
 
 // --------------------------------------------------------------------------------------
@@ -62,43 +54,15 @@ Target.create "Build" (fun _ ->
 
 let root = website
 
-let referenceBinaries = []
 open Tools.Path
-let bin  = rootDir @@ "src"
-let layoutRootsAll = new System.Collections.Generic.Dictionary<string, string list>()
-layoutRootsAll.Add("en",[   templates; 
-                            formatting @@ "templates"
-                            formatting @@ "templates/reference" ])
 
-Target.create "ReferenceDocs" (fun _ ->
-    Directory.ensure (output @@ "reference")
-
-    let binaries () =
-        let manuallyAdded = referenceBinaries |> List.map (fun b -> bin @@ b)
-   
-        let conventionBased = 
-            DirectoryInfo.getSubDirectories <| System.IO.DirectoryInfo bin
-            |> Array.filter (fun x -> not ( x.FullName.EndsWith("FSharpPlus.Docs") || x.FullName.EndsWith("FSharpPlus.Samples")))
-            |> Array.collect (fun d ->
-                let (name, d) =
-                    let net45Bin = DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath (d.FullName @@ "bin" @@ "Release")) |> Array.filter (fun x -> x.FullName.ToLower().Contains("net45"))
-                    let net47Bin = DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath (d.FullName @@ "bin" @@ "Release")) |> Array.filter (fun x -> x.FullName.ToLower().Contains("net47"))
-                    if net45Bin.Length = 0 && net47Bin.Length = 0 then failwithf "Failure: No binaries found for %s." d.FullName
-                    if net45Bin.Length > 0 then d.Name, net45Bin.[0]
-                    else d.Name, net47Bin.[0]
-                d.GetFiles ()
-                |> Array.filter (fun x -> x.Name.ToLower() = (sprintf "%s.dll" name).ToLower())
-                |> Array.map (fun x -> x.FullName))
-            |> List.ofArray
-
-        conventionBased @ manuallyAdded
-
-    binaries()
-    |> FSFormatting.createDocsForDlls (fun args ->
+Target.create "Build" (fun _ ->
+    FSFormatting.buildDocs (fun args ->
         { args with
-            OutputDirectory = output @@ "reference"
-            LayoutRoots =  layoutRootsAll.["en"]
+            OutputDirectory = output
             ProjectParameters =  ("root", root)::info
+            Projects = rootDir @@ "src/FSharpPlus/FSharpPlus.fsproj"
+            TargetPath = rootDir @@ "src/FSharpPlus/bin/Debug/netstandard2.0/FSharpPlus.dll"
             SourceRepository = githubLink @@ "tree/master" }
            )
 )
@@ -107,8 +71,6 @@ let copyFiles () =
     Shell.copyRecursive files output true 
     |> Trace.logItems "Copying file: "
     Directory.ensure (output @@ "content")
-    Shell.copyRecursive (formatting @@ "styles") (output @@ "content") true 
-    |> Trace.logItems "Copying styles and scripts: "
         
 Target.create "Docs" (fun _ ->
     System.IO.File.Delete ( rootDir @@ "docsrc/content/release-notes.md" )
@@ -119,34 +81,7 @@ Target.create "Docs" (fun _ ->
     Shell.copyFile ( rootDir @@ "docsrc/content/" ) "LICENSE.txt"
     Shell.rename ( rootDir @@ "docsrc/content/license.md" ) "docsrc/content/LICENSE.txt"
 
-    
-    DirectoryInfo.getSubDirectories (DirectoryInfo.ofPath templates)
-    |> Seq.iter (fun d ->
-                    let name = d.Name
-                    if name.Length = 2 || name.Length = 3 then
-                        layoutRootsAll.Add(
-                                name, [templates @@ name
-                                       formatting @@ "templates"
-                                       formatting @@ "templates/reference" ]))
     copyFiles ()
-    
-    for dir in  [ content; ] do
-        let langSpecificPath(lang, path:string) =
-            path.Split([|'/'; '\\'|], System.StringSplitOptions.RemoveEmptyEntries)
-            |> Array.exists(fun i -> i = lang)
-        let layoutRoots =
-            let key = layoutRootsAll.Keys |> Seq.tryFind (fun i -> langSpecificPath(i, dir))
-            match key with
-            | Some lang -> layoutRootsAll.[lang]
-            | None -> layoutRootsAll.["en"] // "en" is the default language
-
-        FSFormatting.createDocs (fun args ->
-            { args with
-                Source = content
-                OutputDirectory = output 
-                LayoutRoots = layoutRoots
-                ProjectParameters  = ("root", root)::info
-                Template = docTemplate } )
 )
 
 // --------------------------------------------------------------------------------------

@@ -6,11 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="templates/template.fs" />
     <Compile Include="templates/plantuml.fs" />
     <Compile Include="doclib.fs" />
     <Compile Include="tools.fs" />
-    <Compile Include="generate.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

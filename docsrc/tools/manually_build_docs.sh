@@ -13,3 +13,4 @@ dotnet build -c Release FSharpPlus.sln
 #cp ./src/FSharpPlus/bin/Release/netstandard2.0/* bin/FSharpPlus/netstandard2.0/
 dotnet run --project ./docsrc/tools
 
+# (export TargetPath=src/FSharpPlus/bin/Debug/netstandard2.0/FSharpPlus.dll ;dotnet fsdocs build --projects src/FSharpPlus/FSharpPlus.fsproj --input docsrc/content/ --output docs/)
