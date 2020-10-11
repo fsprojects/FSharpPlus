@@ -7,6 +7,7 @@ open System.Collections.ObjectModel
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
+open FSharpPlus.Internals
 open NUnit.Framework
 open Helpers
 open FSharpPlus.Math.Applicative
@@ -874,8 +875,8 @@ module Foldable =
 
     [<Test>]
     let tryLast () =
-        let s                = tryLast seq [1;2]
-        let s': int option   = tryLast seq []
+        let s                = tryLast <| seq [1;2]
+        let s': int option   = tryLast <| seq []
         areEqual s (Some 2)
         areEqual s' None
 
@@ -890,17 +891,15 @@ module Foldable =
         areEqual a' None
 
         let nes              = tryLast <| NonEmptySeq.ofList [1;2]
-        let nes': int option = tryLast <| NonEmptySeq.ofList []
-        areEqual a (Some 2)
-        areEqual a' None
+        areEqual nes (Some 2)
 
-        let i                = tryLast <| Id 4
+        let i                = tryLast <| Id.create 4
         areEqual i (Some 4)
 
-        let s                = tryLast "string"
-        let s': char option  = tryLast ""
-        areEqual s (Some 'g')
-        areEqual s' None
+        let str                = tryLast "string"
+        let str': char option  = tryLast ""
+        areEqual str (Some 'g')
+        areEqual str' None
 
         let sb               = tryLast (System.Text.StringBuilder("string"))
         let sb'              = tryLast (System.Text.StringBuilder())
