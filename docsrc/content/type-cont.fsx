@@ -46,7 +46,7 @@ module ``EXAMPLE g k`` =
 
 
 module ``EXAMPLE g k in FSharpPlus`` =
-    let g_k n = monad { return (n + 1) }
+    let g_k n : Cont<int,int> = monad { return (n + 1) }
     let f_k n = monad {
       let! x= g_k(n + 1) 
       return x+1
