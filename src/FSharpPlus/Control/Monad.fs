@@ -20,6 +20,7 @@ type Bind =
     static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U>
     #if !FABLE_COMPILER
     static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
+    static member        (>>=) (source: Expr<'T>   , f: 'T -> Expr<'U>    ) = Expr.bind f source                                            : Expr<'U>
     static member        (>>=) (source             , f: 'T -> _           ) = Nullable.bind f source                                        : Nullable<'U>
     #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
@@ -34,8 +35,6 @@ type Bind =
     static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                                        : Async<'U>
     static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
     static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
-
-    static member        (>>=) (source: Expr<'T>   , f: 'T -> Expr<'U>    ) = Expr.bind f source                                            : Expr<'U>
 
     static member (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
                    for KeyValue(k, v) in source do
