@@ -35,6 +35,8 @@ type Bind =
     static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
     static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
 
+    static member        (>>=) (source: Expr<'T>   , f: 'T -> Expr<'U>    ) = Expr.bind f source                                            : Expr<'U>
+
     static member (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
                    for KeyValue(k, v) in source do
                        match Map.tryFind k (f v) with
@@ -158,7 +160,7 @@ type Delay =
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
-    
+    static member        Delay (_mthd: Delay   , x: unit-> Expr<_>                                        , _          ) = Expr.bind x (Return.Invoke ()) : Expr<'T>
 
     static member inline Invoke source : 'R =
         let inline call (mthd: ^M, input: unit -> ^I) = ((^M or ^I) : (static member Delay : _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
