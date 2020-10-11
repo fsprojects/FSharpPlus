@@ -35,11 +35,11 @@ module Expr =
     let ``2-layers quotation combination`` evaluator =
         let expr = 
             <@ 4 + 5 @>
-            >>= fun x ->
-                let a = x + 10
-                <@  (a, a*a) @>
-            >>= fun (x, y) ->
-                <@  ([x + y], x, y, [|x; y|]) @>
+            >>= (fun x ->
+                    let a = x + 10
+                    <@  (a, a*a) @>
+                    >>= fun (x, y) ->
+                        <@  ([x + y], x, y, [|x; y|]) @>)
         let res = Expr.run evaluator expr
 
         areEqual ([380], 19, 361, [|19; 361|]) res
@@ -49,3 +49,22 @@ module Expr =
     
     [<Test>]
     let ``2-layers quotation combination [PowerPack]`` () = ``2-layers quotation combination`` powerpack
+
+
+    let ``2-layers quot comb associative`` evaluator =
+        let expr = 
+            (<@ 4 + 5 @>
+            >>= fun x ->
+                let a = x + 10
+                <@  (a, a*a) @>)
+            >>= fun (x, y) ->
+                <@  ([x + y], x, y, [|x; y|]) @>
+        let res = Expr.run evaluator expr
+
+        areEqual ([380], 19, 361, [|19; 361|]) res
+
+    [<Test>]
+    let ``2-layers quot comb associative [Unquote]`` () = ``2-layers quot comb associative`` unquote
+    
+    [<Test>]
+    let ``2-layers quot comb associative [PowerPack]`` () = ``2-layers quot comb associative`` powerpack
