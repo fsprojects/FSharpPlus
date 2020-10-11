@@ -52,11 +52,11 @@ let rootDir = __SOURCE_DIRECTORY__ @@ ".." @@ ".."
 // --------------------------------------------------------------------------------------
 // Generate the documentation
 
-let root = website
-
 open Tools.Path
 
 Target.create "Build" (fun _ ->
+    let root = website+"/"
+
     FSFormatting.buildDocs (fun args ->
         { args with
             OutputDirectory = output
