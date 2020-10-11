@@ -18,7 +18,12 @@ module Expr =
 
         areEqual "11" res
 
-    let quotseval x = FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped x
+    let quotseval x =
+#if NETSTANDARD
+        FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped x
+#else
+        Swensen.Unquote.Operators.evalRaw x
+#endif
     let unquote   x = Swensen.Unquote.Operators.evalRaw x
     let powerpack x = Microsoft.FSharp.Linq.QuotationEvaluator.EvaluateUntyped x
     
