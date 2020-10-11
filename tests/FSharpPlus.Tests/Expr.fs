@@ -68,3 +68,20 @@ module Expr =
     
     [<Test>]
     let ``2-layers quot comb associative [PowerPack]`` () = ``2-layers quot comb associative`` powerpack
+
+
+    let ``simple computation expression`` evaluator =
+        let expr = monad {
+            let! x = <@ 1 @>
+            let! y = <@ "2" @>
+            return! <@ string x + y @>
+        }
+        let res = Expr.run evaluator expr
+        
+        areEqual "12" res
+
+    [<Test>]
+    let ``simple computation expression [Unquote]`` () = ``simple computation expression`` unquote
+    
+    [<Test>]
+    let ``simple computation expression [PowerPack]`` () = ``simple computation expression`` powerpack
