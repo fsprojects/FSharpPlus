@@ -18,12 +18,13 @@ module Expr =
 
         areEqual "11" res
 
+    let quotseval x = FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped x
     let unquote   x = Swensen.Unquote.Operators.evalRaw x
     let powerpack x = Microsoft.FSharp.Linq.QuotationEvaluator.EvaluateUntyped x
     
-    // [<Test>]
-    // let ``Simple quotation combination (QuotationEvaluator)`` () =
-    //     ``Simple quotation combination`` FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped
+    
+    [<Test>]
+    let ``Simple quotation combination [QuotationEvaluator]`` () = ``Simple quotation combination`` quotseval
 
     [<Test>]
     let ``Simple quotation combination [Unquote]`` () = ``Simple quotation combination`` unquote

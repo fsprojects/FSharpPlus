@@ -33,6 +33,7 @@
     <ProjectReference Include="..\CSharpLib\CSharpLib.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FSharp.Quotations.Evaluator" Version ="2.1.0"/>
     <PackageReference Include="FSPowerPack.Linq.Community" Version="3.0.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="Unquote" Version="5.0.0" />
@@ -42,10 +43,5 @@
     <PackageReference Include="FsCheck" Version="2.14" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <PackageReference Include="FSharp.Quotations.Evaluator">
-      <Version>2.1.0</Version>
-    </PackageReference>
   </ItemGroup>
 </Project>
