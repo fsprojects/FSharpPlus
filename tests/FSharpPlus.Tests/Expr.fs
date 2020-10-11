@@ -7,6 +7,17 @@ open FSharpPlus.Tests.Helpers
 
 module Expr =
 
+    let quotseval x =
+#if NETSTANDARD
+        FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped x
+#else
+        Swensen.Unquote.Operators.evalRaw x
+#endif
+    let unquote   x = Swensen.Unquote.Operators.evalRaw x
+    let powerpack x = Microsoft.FSharp.Linq.QuotationEvaluator.EvaluateUntyped x
+
+
+    
     let ``Simple quotation combination`` evaluator =
         let one = <@ 1 @>
         let add10AndToString x =
@@ -17,25 +28,10 @@ module Expr =
         let res = Expr.run evaluator expr
 
         areEqual "11" res
-
-    let quotseval x =
-#if NETSTANDARD
-        FSharp.Quotations.Evaluator.QuotationEvaluator.EvaluateUntyped x
-#else
-        Swensen.Unquote.Operators.evalRaw x
-#endif
-    let unquote   x = Swensen.Unquote.Operators.evalRaw x
-    let powerpack x = Microsoft.FSharp.Linq.QuotationEvaluator.EvaluateUntyped x
     
-    
-    [<Test>]
-    let ``Simple quotation combination [QuotationEvaluator]`` () = ``Simple quotation combination`` quotseval
-
-    [<Test>]
-    let ``Simple quotation combination [Unquote]`` () = ``Simple quotation combination`` unquote
-    
-    [<Test>]
-    let ``Simple quotation combination [PowerPack]`` () = ``Simple quotation combination`` powerpack
+    let [<Test>] ``Simple quotation combination [QuotationEvaluator]`` () = ``Simple quotation combination`` quotseval
+    let [<Test>] ``Simple quotation combination [Unquote]``            () = ``Simple quotation combination`` unquote
+    let [<Test>] ``Simple quotation combination [PowerPack]``          () = ``Simple quotation combination`` powerpack
 
 
     let ``2-layers quotation combination`` evaluator =
@@ -50,11 +46,9 @@ module Expr =
 
         areEqual ([380], 19, 361, [|19; 361|]) res
 
-    [<Test>]
-    let ``2-layers quotation combination [Unquote]`` () = ``2-layers quotation combination`` unquote
-    
-    [<Test>]
-    let ``2-layers quotation combination [PowerPack]`` () = ``2-layers quotation combination`` powerpack
+    let [<Test>] ``2-layers quotation combination [QuotationEvaluator]`` () = ``2-layers quotation combination`` quotseval
+    let [<Test>] ``2-layers quotation combination [Unquote]``            () = ``2-layers quotation combination`` unquote
+    let [<Test>] ``2-layers quotation combination [PowerPack]``          () = ``2-layers quotation combination`` powerpack
 
 
     let ``2-layers quot comb associative`` evaluator =
@@ -69,11 +63,9 @@ module Expr =
 
         areEqual ([380], 19, 361, [|19; 361|]) res
 
-    [<Test>]
-    let ``2-layers quot comb associative [Unquote]`` () = ``2-layers quot comb associative`` unquote
-    
-    [<Test>]
-    let ``2-layers quot comb associative [PowerPack]`` () = ``2-layers quot comb associative`` powerpack
+    let [<Test>] ``2-layers quot comb associative [QuotationEvaluator]`` () = ``2-layers quot comb associative`` quotseval
+    let [<Test>] ``2-layers quot comb associative [Unquote]``            () = ``2-layers quot comb associative`` unquote
+    let [<Test>] ``2-layers quot comb associative [PowerPack]``          () = ``2-layers quot comb associative`` powerpack
 
 
     let ``simple CE same type`` evaluator =
@@ -86,11 +78,9 @@ module Expr =
         
         areEqual 3 res
 
-    [<Test>]
-    let ``simple CE same type [Unquote]`` () = ``simple CE same type`` unquote
-    
-    [<Test>]
-    let ``simple CE same type [PowerPack]`` () = ``simple CE same type`` powerpack
+    let [<Test>] ``simple CE same type [QuotationEvaluator]`` () = ``simple CE same type`` quotseval
+    let [<Test>] ``simple CE same type [Unquote]``            () = ``simple CE same type`` unquote
+    let [<Test>] ``simple CE same type [PowerPack]``          () = ``simple CE same type`` powerpack
 
 
     let ``simple CE different types`` evaluator =
@@ -103,8 +93,6 @@ module Expr =
         
         areEqual "12" res
 
-    [<Test>]
-    let ``simple CE different types [Unquote]`` () = ``simple CE different types`` unquote
-    
-    [<Test>]
-    let ``simple CE different types [PowerPack]`` () = ``simple CE different types`` powerpack
+    let [<Test>] ``simple CE different types [QuotationEvaluator]`` () = ``simple CE different types`` quotseval
+    let [<Test>] ``simple CE different types [Unquote]``            () = ``simple CE different types`` unquote
+    let [<Test>] ``simple CE different types [PowerPack]``          () = ``simple CE different types`` powerpack
