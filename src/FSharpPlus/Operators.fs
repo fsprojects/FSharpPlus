@@ -90,13 +90,14 @@ module Operators =
     /// Like map but ignoring the results.
     let inline iter (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
 
-    // Un-zips (un-tuple) two functors.
+    /// Un-zips (un-tuple) two functors.
     let inline unzip (source: '``Functor<'T1 * 'T2>``) = Unzip.Invoke source : '``Functor<'T1>`` * '``Functor<'T2>``
 
-    // Zips (tuple) two functors.
+    /// Zips (tuple) two functors.
+    /// For collections, if one collection is shorter, excess elements are discarded from the right end of the longer collection. 
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
-   
 
+    
     // Applicative ------------------------------------------------------------
 
     
@@ -398,6 +399,13 @@ module Operators =
     /// <param name="source">The input foldable.</param>
     /// <returns>The first element of the foldable or None.</returns>
     let inline tryHead (source: '``Foldable<'T>``) = TryHead.Invoke source : 'T option
+
+    /// <summary>Gets the last element of the foldable, or
+    /// <c>None</c> if the foldable is empty.</summary>
+    /// <remarks>Unsafe for infinite sequence input.</remarks>
+    /// <param name="source">The input foldable.</param>
+    /// <returns>The last element of the foldable or None.</returns>
+    let inline tryLast (source: '``Foldable<'T>``) = TryLast.Invoke source : 'T option
 
     /// <summary>Gets the number of elements in the foldable.</summary>
     /// <param name="list">The input foldable.</param>

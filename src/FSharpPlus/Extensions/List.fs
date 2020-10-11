@@ -126,7 +126,6 @@ module List =
                 | Choice2Of2 x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
 
-
     /// <summary>Safely build a new list whose elements are the results of applying the given function
     /// to each of the elements of the two lists pairwise.</summary>
     /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
@@ -136,3 +135,14 @@ module List =
             | (_,_) -> acc
         loop [] (l1,l2) |> List.rev
         
+    /// <summary>
+    /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
+    /// </summary>
+    /// <param name="a1">First input list.</param>
+    /// <param name="a2">Second input list.</param>
+    /// <returns>List with corresponding pairs of input lists.</returns>
+    let zipShortest (l1: list<'T1>) (l2: list<'T2>) =
+        let rec loop acc = function
+            | (l::ls,r::rs) -> loop ((l,r)::acc) (ls,rs)
+            | (_,_) -> acc
+        loop [] (l1,l2) |> List.rev

@@ -359,6 +359,11 @@ module NonEmptyList =
     [<Test>]
     let ``zip `` () =
         nonEmptyList |> NonEmptyList.zip nonEmptyList |> NonEmptyList.toList |> shoulSeqEqual [(1,1)]
+    
+    [<Test>]
+    let zipShortest () =
+        let nonEmptyList' = nonEmptyList |> NonEmptyList.cons 2
+        nonEmptyList |> NonEmptyList.zipShortest nonEmptyList' |> NonEmptyList.toList |> shoulSeqEqual [(2,1)]
 
     [<Test>]
     let ``get head from NonEmptyList`` () =

@@ -490,6 +490,19 @@ module Functor =
 
         ()
 
+    [<Test>]
+    let genericZipShortest () =
+        let a = zip [|1; 2; 3|]  [|"a"; "b"|]
+        CollectionAssert.AreEqual ([|1,"a"; 2,"b"|], a)
+        
+        let l = zip [1; 2]  ["a"; "b"; "c"]
+        CollectionAssert.AreEqual ([1,"a"; 2,"b"], l)
+        
+        let e = zip (ResizeArray [1; 2]) (ResizeArray ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (ResizeArray [1,"a"; 2,"b"], e)
+        
+        let nel = zip (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
 
 module Collections =
 
@@ -872,6 +885,36 @@ module Foldable =
         areEqual ["Using WrappedListA's Length"; "Using WrappedListD's Length"] (SideEffects.get ())
         ()
 
+    [<Test>]
+    let tryLast () =
+        let s                = tryLast <| seq [1;2]
+        let s': int option   = tryLast <| seq []
+        areEqual s (Some 2)
+        areEqual s' None
+
+        let l                = tryLast [1;2;3]
+        let l': int option   = tryLast []
+        areEqual l (Some 3)
+        areEqual l' None
+
+        let a                = tryLast [|1|]
+        let a': int option   = tryLast [||]
+        areEqual a (Some 1)
+        areEqual a' None
+
+        let nes              = tryLast <| NonEmptySeq.ofList [1;2]
+        areEqual nes (Some 2)
+
+        let str                = tryLast "string"
+        let str': char option  = tryLast ""
+        areEqual str (Some 'g')
+        areEqual str' None
+
+        let sb               = tryLast (System.Text.StringBuilder("string"))
+        let sb'              = tryLast (System.Text.StringBuilder())
+        areEqual sb (Some 'g')
+        areEqual sb' None
+        ()
 
 module Indexable = 
     [<Test>]
