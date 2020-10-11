@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus
 
+#if !FABLE_COMPILER
+
 /// Additional operations on Quotations.Expr
 [<RequireQualifiedAccess>]
 module Expr =
@@ -34,3 +36,5 @@ module Expr =
     
     /// Executes quoted expression, given a quotation evaluator function.
     let run (eval: Expr -> obj) (exp: Expr<'T>) : 'T = runWithUntyped eval exp.Raw null :?> 'T
+
+#endif
