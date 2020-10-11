@@ -90,13 +90,14 @@ module Operators =
     /// Like map but ignoring the results.
     let inline iter (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
 
-    // Un-zips (un-tuple) two functors.
+    /// Un-zips (un-tuple) two functors.
     let inline unzip (source: '``Functor<'T1 * 'T2>``) = Unzip.Invoke source : '``Functor<'T1>`` * '``Functor<'T2>``
 
-    // Zips (tuple) two functors.
+    /// Zips (tuple) two functors.
+    /// For collections, if one collection is shorter, excess elements are discarded from the right end of the longer collection. 
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
-   
 
+    
     // Applicative ------------------------------------------------------------
 
     

@@ -98,6 +98,17 @@ module NonEmptyList =
     /// <param name="list2">The second input list.</param>
     /// <returns>A single list containing pairs of matching elements from the input lists.</returns>
     let zip (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) = {Head = (list1.Head, list2.Head); Tail = List.zip list1.Tail list2.Tail}
+    
+    /// <summary>
+    /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
+    /// </summary>
+    /// <param name="a1">First input list.</param>
+    /// <param name="a2">Second input list.</param>
+    /// <returns>List with corresponding pairs of input lists.</returns>
+    let zipShortest (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) =
+        { Head = (list1.Head, list2.Head); Tail = List.zipShortest list1.Tail list2.Tail }
+    
+    
     /// Returns a new NonEmptyList with the element added to the beginning.
     let cons e {Head = x; Tail = xs} = {Head = e ; Tail = x::xs}
     /// Returns the first element of a new non empty list. You can also use property nel.Head.
@@ -200,8 +211,8 @@ type NonEmptyList<'t> with
     static member Unzip s = NonEmptyList.unzip s
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Zip (x, y) = NonEmptyList.zip x y
-
+    static member Zip (x, y) = NonEmptyList.zipShortest x y
+    
     static member (>>=) ({Head = x; Tail = xs}, f: _->NonEmptyList<'b>) =
         let {Head = y; Tail = ys} = f x
         let ys' = List.collect (NonEmptyList.toList << f) xs
