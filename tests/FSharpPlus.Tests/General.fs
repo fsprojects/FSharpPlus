@@ -489,6 +489,19 @@ module Functor =
 
         ()
 
+    [<Test>]
+    let genericZipShortest () =
+        let a = zip [|1; 2; 3|]  [|"a"; "b"|]
+        CollectionAssert.AreEqual ([|1,"a"; 2,"b"|], a)
+        
+        let l = zip [1; 2]  ["a"; "b"; "c"]
+        CollectionAssert.AreEqual ([1,"a"; 2,"b"], l)
+        
+        let e = zip (ResizeArray [1; 2]) (ResizeArray ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (ResizeArray [1,"a"; 2,"b"], e)
+        
+        let nel = zip (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
 
 module Collections =
 
