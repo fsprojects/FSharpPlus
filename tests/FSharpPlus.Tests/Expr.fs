@@ -70,7 +70,24 @@ module Expr =
     let ``2-layers quot comb associative [PowerPack]`` () = ``2-layers quot comb associative`` powerpack
 
 
-    let ``simple computation expression`` evaluator =
+    let ``simple CE same type`` evaluator =
+        let expr = monad {
+            let! x = <@ 1 @>
+            let! y = <@ 2 @>
+            return! <@ x + y @>
+        }
+        let res = Expr.run evaluator expr
+        
+        areEqual 3 res
+
+    [<Test>]
+    let ``simple CE same type [Unquote]`` () = ``simple CE same type`` unquote
+    
+    [<Test>]
+    let ``simple CE same type [PowerPack]`` () = ``simple CE same type`` powerpack
+
+
+    let ``simple CE different types`` evaluator =
         let expr = monad {
             let! x = <@ 1 @>
             let! y = <@ "2" @>
@@ -81,7 +98,7 @@ module Expr =
         areEqual "12" res
 
     [<Test>]
-    let ``simple computation expression [Unquote]`` () = ``simple computation expression`` unquote
+    let ``simple CE different types [Unquote]`` () = ``simple CE different types`` unquote
     
     [<Test>]
-    let ``simple computation expression [PowerPack]`` () = ``simple computation expression`` powerpack
+    let ``simple CE different types [PowerPack]`` () = ``simple CE different types`` powerpack
