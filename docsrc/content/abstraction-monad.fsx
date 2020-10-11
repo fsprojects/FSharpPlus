@@ -144,13 +144,13 @@ let some14 =
 // Monads do not compose directly, we need to use Monad Transformers
 
 
-
+let negativeValueError:ResultT<Reader<int,Result<_,string>>>=ResultT (result (Error "Negative value"))
 let fn : ResultT<Reader<int,Result<_,string>>> = 
     monad {
        let! x1 = lift ask
        let! x2 = 
            if x1 > 0 then result 1
-           else ResultT (result (Error "Negative value")) 
+           else negativeValueError
        return x1 + x2
     }
 
