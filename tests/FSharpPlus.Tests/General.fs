@@ -872,6 +872,41 @@ module Foldable =
         areEqual ["Using WrappedListA's Length"; "Using WrappedListD's Length"] (SideEffects.get ())
         ()
 
+    [<Test>]
+    let tryLast () =
+        let s                = tryLast seq [1;2]
+        let s': int option   = tryLast seq []
+        areEqual s (Some 2)
+        areEqual s' None
+
+        let l                = tryLast [1;2;3]
+        let l': int option   = tryLast []
+        areEqual l (Some 3)
+        areEqual l' None
+
+        let a                = tryLast [|1|]
+        let a': int option   = tryLast [||]
+        areEqual a (Some 1)
+        areEqual a' None
+
+        let nes              = tryLast <| NonEmptySeq.ofList [1;2]
+        let nes': int option = tryLast <| NonEmptySeq.ofList []
+        areEqual a (Some 2)
+        areEqual a' None
+
+        let i                = tryLast <| Id 4
+        areEqual i (Some 4)
+
+        let s                = tryLast "string"
+        let s': char option  = tryLast ""
+        areEqual s (Some 'g')
+        areEqual s' None
+
+        let sb               = tryLast (System.Text.StringBuilder("string"))
+        let sb'              = tryLast (System.Text.StringBuilder())
+        areEqual sb (Some 'g')
+        areEqual sb' None
+        ()
 
 module Indexable = 
     [<Test>]
