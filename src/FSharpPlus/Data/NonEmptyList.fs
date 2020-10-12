@@ -81,6 +81,12 @@ module NonEmptyList =
     /// <summary>Build a new non empty list whose elements are the results of applying the given function
     /// to each of the elements of the non empty list.</summary>
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
+    
+    /// <summary>Safely build a new non empty list whose elements are the results of applying the given function
+    /// to each of the elements of the two non empty list pairwise.</summary>
+    /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
+    let map2Shortest f l1 l2 = { Head = f l1.Head l2.Head; Tail = List.map2 f l1.Tail l2.Tail }
+    
     /// <summary>Build a new non empty list whose elements are the results of applying the given function with index
     /// to each of the elements of the non empty list.</summary>
     let mapi f { Head = x; Tail = xs } =

@@ -338,6 +338,13 @@ module NonEmptyList =
                 let! x = Gen.listInt n
                 return ( (NonEmptyList.ofList x), x) }
 
+    let TwoNonEmptyListIntOfSeqGen =
+        gen {   let! n1 = Gen.length1thru12
+                let! x1 = Gen.listInt n1
+                let! n2 = Gen.length1thru12
+                let! x2 = Gen.listInt n2
+                return ((NonEmptyList.ofList x1, NonEmptyList.ofList x2), (x1, x2)) }
+        
     let NonEmptyListStringGen =
         gen {   let! n = Gen.length1thru12
                 let! n2 = Gen.length2thru12
@@ -386,6 +393,11 @@ module NonEmptyList =
     let ``map on non empty list should equal map on list`` () =
         fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (q |> NonEmptyList.map string |> NonEmptyList.toList) = (l |> List.map string)))
 
+    [<Test>]
+    let ``map2Shortest on non empty list should equal map2Shortest on list`` () =
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen TwoNonEmptyListIntOfSeqGen) (fun ((nel1, nel2), (l1, l2)) ->
+            (NonEmptyList.map2Shortest (+) nel1 nel2 |> NonEmptyList.toList) = (List.map2Shortest (+) l1 l2)))
+        
     [<Test>]
     let ``mapi on non empty list should equal mapi on list`` () =
         let mapOp a b = sprintf "%d-%d" a b
