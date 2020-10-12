@@ -885,6 +885,37 @@ module Foldable =
         ()
 
     [<Test>]
+    let tryHead () =
+        let s                = tryHead <| seq [1;2]
+        let s': int option   = tryHead <| seq []
+        areEqual s (Some 1)
+        areEqual s' None
+
+        let l                = tryHead [1;2;3]
+        let l': int option   = tryHead []
+        areEqual l (Some 1)
+        areEqual l' None
+
+        let a                = tryHead [|1|]
+        let a': int option   = tryHead [||]
+        areEqual a (Some 1)
+        areEqual a' None
+
+        let nes              = tryHead <| NonEmptySeq.ofList [1;2]
+        areEqual nes (Some 1)
+
+        let str                = tryHead "string"
+        let str': char option  = tryHead ""
+        areEqual str (Some 's')
+        areEqual str' None
+
+        let sb               = tryHead (System.Text.StringBuilder("string"))
+        let sb'              = tryHead (System.Text.StringBuilder())
+        areEqual sb (Some 's')
+        areEqual sb' None
+        ()
+
+    [<Test>]
     let tryLast () =
         let s                = tryLast <| seq [1;2]
         let s': int option   = tryLast <| seq []

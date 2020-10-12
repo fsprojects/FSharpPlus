@@ -243,17 +243,16 @@ type Head =
         let inline call (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<Head>, source) : 'T
 
-
 type TryHead =
     inherit Default1
-    static member inline TryHead (x               , [<Optional>]_impl: Default1) = let x = ToSeq.Invoke x in if Seq.isEmpty x then None else Some (Seq.head x) : 'T option  
-    static member        TryHead (x: 't list      , [<Optional>]_impl: TryHead ) = match x with [] -> None | _ -> Some (List.head x)
-    static member        TryHead (x: 't []        , [<Optional>]_impl: TryHead ) = if Array.length x = 0 then None else Some x.[0]
+    static member inline TryHead (x               , [<Optional>]_impl: Default1) = Seq.tryHead <| ToSeq.Invoke x
+    static member        TryHead (x: 't list      , [<Optional>]_impl: TryHead ) = List.tryHead x
+    static member        TryHead (x: 't []        , [<Optional>]_impl: TryHead ) = Array.tryHead x
     static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
     static member        TryHead (x: Id<'T>       , [<Optional>]_impl: TryHead ) = Some x.getValue
-    static member        TryHead (x: string       , [<Optional>]_impl: TryHead ) = if String.length x = 0 then None else Some x.[0]   
+    static member        TryHead (x: string       , [<Optional>]_impl: TryHead ) = String.tryHead x 
     static member        TryHead (x: StringBuilder, [<Optional>]_impl: TryHead ) = if x.Length = 0 then None else Some (x.ToString().[0])
-    static member        TryHead (x: 't seq       , [<Optional>]_impl: TryHead ) = if Seq.isEmpty x then None else Some (Seq.head x)
+    static member        TryHead (x: 't seq       , [<Optional>]_impl: TryHead ) = Seq.tryHead x
 
     static member inline Invoke (source: '``Foldable'<T>``)        =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member TryHead : _*_ -> _) b, a)
@@ -267,7 +266,7 @@ type TryLast =
     static member        TryLast (x: 't []          , [<Optional>]_impl: TryLast)  = Array.tryLast x
     static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
     static member        TryLast (x: Id<'T>         , [<Optional>]_impl: TryLast ) = Some x.getValue
-    static member        TryLast (x: string         , [<Optional>]_impl: TryLast ) = if String.length x = 0 then None else Some x.[String.length x - 1]
+    static member        TryLast (x: string         , [<Optional>]_impl: TryLast ) = String.tryLast x 
     static member        TryLast (x: StringBuilder  , [<Optional>]_impl: TryLast ) = if x.Length = 0 then None else Some (x.ToString().[x.Length - 1])
     static member        TryLast (x: 't seq         , [<Optional>]_impl: TryLast ) = Seq.tryLast x
 
