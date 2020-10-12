@@ -86,6 +86,12 @@ module Array =
         let (x, y) = ResizeArray (), ResizeArray ()
         Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
         x.ToArray (), y.ToArray ()
+        
+    /// <summary>Safely build a new array whose elements are the results of applying the given function
+    /// to each of the elements of the two arrays pairwise.</summary>
+    /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
+    let map2Shortest f (a1: 'T []) (a2: 'U []) =
+        Array.init (min a1.Length a2.Length) (fun i -> f a1.[i] a2.[i])
     
     /// <summary>
     /// Zip safely two arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
