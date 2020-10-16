@@ -67,7 +67,7 @@ type Map =
     static member Map ((x: _ [,]               , f: 'T->'U), _mthd: Map) = Array2D.map f x
     static member Map ((x: _ [,,]              , f: 'T->'U), _mthd: Map) = Array3D.map f x
     static member Map ((x: _ [,,,]             , f: 'T->'U), _mthd: Map) = Array4D.init (x.GetLength 0) (x.GetLength 1) (x.GetLength 2) (x.GetLength 3) (fun a b c d -> f x.[a,b,c,d])
-    static member Map ((x: Async<_>            , f: 'T->'U), _mthd: Map) = async.Bind (x, async.Return << f)
+    static member Map ((x: Async<_>            , f: 'T->'U), _mthd: Map) = Async.map f x
     static member Map ((x: Result<_,'E>        , f: 'T->'U), _mthd: Map) = Result.map f x
     static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
     static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
@@ -78,7 +78,7 @@ type Map =
 
     // Restricted
     static member Map ((x: string              , f        ), _mthd: Map) = String.map f x
-    static member Map ((x: StringBuilder       , f        ), _mthd: Map) = new StringBuilder (String.map f (string x))
+    static member Map ((x: StringBuilder       , f        ), _mthd: Map) = StringBuilder (String.map f (string x))
     static member Map ((x: Set<_>              , f        ), _mthd: Map) = Set.map f x
     static member Map ((_: Set2<'T>            , _: 'T->'U), _mthd: Map) = Set2<'U>()
 
@@ -107,7 +107,7 @@ type Map with
     static member        Map ((x: seq<_>                  , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
     static member        Map ((x: NonEmptySeq<_>          , f: 'T->'U), _mthd: Default2) = NonEmptySeq.map f x      : NonEmptySeq<'U>
     static member        Map ((x: IEnumerator<_>          , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
-    static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = let d = Dictionary () in Seq.iter (fun (KeyValue(k, v)) -> d.Add (k, f v)) x; d :> IDictionary<'Key,'U>
+    static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = Dict.map f x             : IDictionary<'Key,'U>
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.map f x : IReadOnlyDictionary<'Key,_>
     static member        Map ((x: IObservable<'T>         , f: 'T->'U), _mthd: Default2) = Observable.map f x       : IObservable<'U>
     static member        Map ((x: Nullable<_>             , f: 'T->'U), _mthd: Default2) = Nullable.map f x         : Nullable<'U>
