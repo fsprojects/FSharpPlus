@@ -420,6 +420,10 @@ module Functor =
         let testVal9 = map ((+) 1) (IReadOnlyCollection.ofList [1..3])
         Assert.IsInstanceOf<Option<IReadOnlyCollection<int>>> (Some testVal9)
 
+        let testVal10 = map ((+) 1) (async { return 1})
+        Assert.IsInstanceOf<Option<Async<int>>> (Some testVal10)
+        areEqual 2 (testVal10 |> Async.RunSynchronously)
+
     [<Test>]
     let unzip () = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
