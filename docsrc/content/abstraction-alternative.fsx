@@ -127,7 +127,7 @@ let pythags' = monad.plus {
   let! z = [1..50]
   let! x = [1..z]
   let! y = [x..z]
-  if (x*x + y*y = z*z) then return (x, y, z)}
+  if (x*x + y*y = z*z) then return (x, y, z) else ()}
 
 let allCombinations = sequence [['a'; 'b'; 'c']; ['1'; '2']]
 

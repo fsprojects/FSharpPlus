@@ -9,7 +9,10 @@ dotnet tool restore
 dotnet build -c Release
 
 # Gen docs
-#mkdir -p bin/FSharpPlus/netstandard2.0/
-#cp ./src/FSharpPlus/bin/Release/netstandard2.0/* bin/FSharpPlus/netstandard2.0/
-dotnet run --project ./docsrc/tools
+dotnet run --project ./docsrc/tools 
 
+# To release docs run:
+# dotnet run --project ./docsrc/tools ReleaseDocs
+
+# To run the documentation without going through docsrc/tools:
+# (export TargetPath=src/FSharpPlus/bin/Release/net45/FSharpPlus.dll ;dotnet fsdocs build --projects src/FSharpPlus/FSharpPlus.fsproj --input docsrc/content/ --output docs/)

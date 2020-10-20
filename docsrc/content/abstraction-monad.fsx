@@ -138,22 +138,23 @@ let some14 =
 //
 // Monads do not compose directly, we need to use Monad Transformers
 
-
-
+(**
+```f#
 let fn : ResultT<Reader<int,Result<_,string>>> = 
     monad {
        let! x1 = lift ask
        let! x2 = 
            if x1 > 0 then result 1
-           else ResultT (result (Error "Negative value")) 
+           else ResultT (result (Error "Negative value"))
        return x1 + x2
     }
 
 let x = (fn |> ResultT.run |> Reader.run) 10
 // Result<int,string> = Ok 11
 let y = (fn |> ResultT.run |> Reader.run) -1
-// Result<int,string> = Error "Negative value"         
-
+// Result<int,string> = Error "Negative value"
+```
+*)
 
 
 // The following example comes from Haskell
@@ -188,7 +189,7 @@ let getValidPassword : ResultT<_> =
 let askPassword = monad {
     do! lift <| putStrLn "Insert your new password:"
     let! value = getValidPassword
-    do! lift <| putStrLn "Storing in database..."
+    //do! lift <| putStrLn "Storing in database..."
     return value}
 
 //try -> Async.RunSynchronously (ResultT.run askPassword)

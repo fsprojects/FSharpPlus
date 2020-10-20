@@ -79,7 +79,7 @@ let rec resolve : Template -> Reader<Environment,string>  = function
                                     }
                         | C ts   -> monad {
                                       let! resolved = List.traverse resolve ts
-                                      return String.Concat resolved
+                                      return String.Concat<string> resolved
                                     }
 and
    /// resolve a Definition and produce a (name,value) pair
