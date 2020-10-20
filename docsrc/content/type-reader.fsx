@@ -89,3 +89,40 @@ and
                                         let! name = resolve t
                                         let! value = resolve d
                                         return (name,value) }
+
+
+(**
+Another usage of the Reader monad is an alternative to dependency injection or currying
+in order to pass around dependencies. The below code comes from [F# Online - Josef Starýchfojtů - FSharpPlus - Advanced FP concepts in F#](https://www.youtube.com/watch?v=pxJCHJgG8ws). You can find the presenter on github as [@starychfojtu](https://github.com/starychfojtu).
+
+Why would you want to do this style?
+
+- When you want to pass around a single environment instead of using dependency injection.
+
+Why wouldn't you want to use this style?
+
+- The downside of this style is that it supposes that your environment is relatively immutable. If you have different lifetimes for different implementation classes dependency injection frameworks can be easier to use.
+*)
+open System
+open FSharpPlus
+open FSharpPlus.Data
+
+type IUserRepository =
+    abstract GetUser : email : string -> string
+
+type IShoppingListRepository =
+    abstract Add : shoppingList : string list -> string list
+
+let getUser email =
+    Reader(fun (env : #IUserRepository) -> env.GetUser email)
+
+let addShoppingList shoppingList =
+    Reader(fun (env : #IShoppingListRepository) -> env.Add shoppingList)
+
+type Env() =
+    interface IUserRepository with
+        member this.GetUser email =
+                "Sandeep"
+    interface IShoppingListRepository with
+            member this.Add shoppingList =
+                shoppingList
