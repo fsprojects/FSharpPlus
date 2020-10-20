@@ -56,7 +56,6 @@ open Tools.Path
 
 Target.create "Build" (fun _ ->
     let root = website+"/"
-
     FSFormatting.buildDocs (fun args ->
         { args with
             OutputDirectory = output
