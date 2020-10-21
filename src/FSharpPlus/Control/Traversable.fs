@@ -17,14 +17,14 @@ type Sequence =
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline ForInfiniteSequences (t: seq<_>, isFailure, conversion) =
-        let add x y = Array.append x [|y|]
+        let add x y = y :: x
         let mutable go = true
-        let mutable r = result [||]
+        let mutable r = result []
         use e = t.GetEnumerator ()
         while e.MoveNext () && go do
             if isFailure e.Current then go <- false
             r <- Map.Invoke add r <*> e.Current
-        Map.Invoke conversion r
+        Map.Invoke (List.rev >> conversion) r
     
 
 type Traverse =
@@ -44,7 +44,7 @@ type Traverse =
 
     static member inline Traverse (t: seq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
         let mapped = Seq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, Array.toSeq) : '``Functor<seq<'U>>``
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq) : '``Functor<seq<'U>>``
 
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
@@ -90,7 +90,7 @@ type Traverse =
     [<Obsolete;CompiledName("Traverse")>]
     static member TraverseLegacy (t:'t seq ,f:'t->'u option , [<Optional>]_output:option<seq<'u>>, [<Optional>]_impl:Default2): seq<'u> option =
         let mapped = Seq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, Array.toSeq)
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq)
 
 type Sequence with
 
@@ -99,12 +99,12 @@ type Sequence with
                         let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) x <*> ys
                         Seq.foldBack cons_f t (result Seq.empty)
 
-    static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, Array.toSeq)   : '``Applicative<seq<'T>>``
-    static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone, Array.toSeq)                                : option<seq<'t>>
-    static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Error _      -> true | _ -> false), Array.toSeq) : Result<seq<'t>, 'e>
-    static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Choice2Of2 _ -> true | _ -> false), Array.toSeq) : Choice<seq<'t>, 'e>
-    static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty, Array.toSeq)                                 : list<seq<'t>>
-    static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty, Array.toSeq)                                : seq<'t> []
+    static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, List.toSeq)   : '``Applicative<seq<'T>>``
+    static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone, List.toSeq)                                : option<seq<'t>>
+    static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Error _      -> true | _ -> false), List.toSeq) : Result<seq<'t>, 'e>
+    static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Choice2Of2 _ -> true | _ -> false), List.toSeq) : Choice<seq<'t>, 'e>
+    static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty, List.toSeq)                                 : list<seq<'t>>
+    static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Array.isEmpty, List.toSeq)                                : seq<'t> []
 
     static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) = Async.Sequence t                                                          : Async<seq<'t>>
 
@@ -112,7 +112,7 @@ type Sequence with
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                               : 'R
 
     static member inline Sequence (t: option<_>         , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with Some x -> Map.Invoke Some x | _ -> result None               : 'R
-    static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, Array.toList) : 'R
+    static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, id) : 'R
 
     static member inline Sequence (t: Map<_,_>          , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) : 'R =
        let insert_f k x ys = Map.Invoke (Map.add k) x <*> ys
@@ -128,7 +128,7 @@ type Sequence with
         | Choice1Of2 a -> Map.Invoke Choice<'T,'Error>.Choice1Of2 a
         | Choice2Of2 e -> Return.Invoke (Choice<'T,'Error>.Choice2Of2 e)
 
-    static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, id) : 'R
+    static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, Array.ofList) : 'R
  
     static member inline Sequence (t: Id<'``Functor<'T>``>         , [<Optional>]_output: '``Functor<Id<'T>>``          , [<Optional>]_impl: Sequence) = Traverse.Invoke id t : '``Functor<Id<'T>>``
  
