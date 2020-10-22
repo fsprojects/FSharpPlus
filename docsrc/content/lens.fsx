@@ -26,32 +26,43 @@ Here's an example usage of lenses with business objects:
 
 *)
 open System
+open FSharpPlus
 // In order to use the Lens module of F#+ we import the following:
 open FSharpPlus.Lens
 
 // From Mauricio Scheffer: https://gist.github.com/mausch/4260932
-type Person = {
-    Name: string
-    DateOfBirth: DateTime
-}
-module Person=
-    let inline _name f { Name = a; DateOfBirth = b } = f a <&> fun a' -> { Name = a'; DateOfBirth = b }
- type Book = {
-    Title: string
-    Author: Person
-}
+type Person = 
+    { Name: string
+      DateOfBirth: DateTime }
+
+module Person =
+    let inline _name f p =
+        f p.Name <&> fun x -> { p with Name = x }
+
+type Book = 
+    { Title: string
+      Author: Person }
+
 module Book =
-    let inline _author f { Author = a; Title = b } = f a <&> fun a' -> { Author = a'; Title = b }
+    let inline _author f b =
+        f b.Author <&> fun a -> { b with Author = a }
+
     let inline _authorName b = _author << Person._name <| b
+
 let rayuela =
     { Book.Title = "Rayuela"
       Author = { Person.Name = "Julio Cortázar"
-                 DateOfBirth = DateTime (1914, 8, 26) } }
+                 DateOfBirth = DateTime(1914, 8, 26) } }
+    
 // read book author name:
 let authorName1 = view Book._authorName rayuela
 //  you can also write the read operation as:
 let authorName2 = rayuela ^. Book._authorName
 
+// write value through a lens
+let book1 = setl Book._authorName "William Shakespear" rayuela
+// update value
+let book2 = over Book._authorName String.toUpper rayuela
 
 (**
 
