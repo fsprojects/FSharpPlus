@@ -46,10 +46,10 @@ let b = chunkBy fst [1, "a"; 1, "b"; 2, "c"; 1, "d"]
 
 // Reducibles
 
-let c = nel {1; 2; 3}
+let c = nelist {1; 2; 3}
 let d = reduce (+) c
 
-let resultList = nel {Error "1"; Error "2"; Ok 3; Ok 4; Error "5"}
+let resultList = nelist {Error "1"; Error "2"; Ok 3; Ok 4; Error "5"}
 let firstOk = choice resultList
 
 
