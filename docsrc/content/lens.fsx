@@ -45,7 +45,7 @@ type Book =
 
 module Book =
     let inline _author f b =
-        f b.Author <&> fun a' -> { b with Author = a' }
+        f b.Author <&> fun a -> { b with Author = a }
 
     let inline _authorName b = _author << Person._name <| b
 
