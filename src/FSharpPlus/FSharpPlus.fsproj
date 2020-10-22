@@ -109,6 +109,7 @@
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
     <Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
+    <Content Include="TypeLevel/*.fs" PackagePath="fable/TypeLevel" />
     <Content Include="Control/*.fs" PackagePath="fable/Control" />
     <Content Include="Math/*.fs" PackagePath="fable/Math" />
     <Content Include="Data/*.fs" PackagePath="fable/Data" />
