@@ -46,13 +46,13 @@ module Operators =
     #endif
 
     /// <summary>
-    /// Used in conjunction with &#47;&gt; to make an ad-hoc binary operator out of a function (x &lt;&#47;f&#47;&gt; y).
+    /// Turn a function into something that looks like an operator. See <a href="../operators-common.html#Functions-as-operators">Functions as operators</a>.
     /// </summary>
     /// <category index="0">Common Combinators</category>
     let inline (</) x = (|>) x
 
     /// <summary>
-    /// Used in conjunction with &lt;&#47; to make an ad-hoc binary operator out of a function (x &lt;&#47;f&#47;&gt; y).
+    /// Turn a function into something that looks like an operator. See <a href="../operators-common.html#Functions-as-operators">Functions as operators</a>.
     /// </summary>
     /// <category index="0">Common Combinators</category>
     let inline (/>) x = flip x
