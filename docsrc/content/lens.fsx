@@ -26,6 +26,7 @@ Here's an example usage of lenses with business objects:
 
 *)
 open System
+open FSharpPlus
 // In order to use the Lens module of F#+ we import the following:
 open FSharpPlus.Lens
 
@@ -61,7 +62,7 @@ let authorName2 = rayuela ^. Book._authorName
 // write value through a lens
 let book1 = setl Book._authorName "William Shakespear" rayuela
 // update value
-let book2 = over Book._authorName (fun x -> x.ToUpper()) rayuela
+let book2 = over Book._authorName String.toUpper rayuela
 
 (**
 
