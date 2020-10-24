@@ -1,6 +1,13 @@
 # DEVELOPER GUIDE
 
+### Extensions
 
+This library defines many extensions for different types.
+Some of these functions are conceptually connected, in that they represent an abstraction and sometimes they have indeed a generic version of the function which doesn't require typing the type as module prefix.
+Note that in these cases, normally the names are the same but this is not a rule, there are cases where the name differs to avoid collisions or confusion with other functions, for example:
+
+ - `map` is a generic function, and we have many types implementing it, but for dictionaries this correspond to `mapValues`
+ - `min` is a non-generic function operating in collections, but its generic counterpart is `minimum` to avoid collision with the built-in `min` function (minimum between two values).
 
 ### Definition of abstraction
 
@@ -22,7 +29,7 @@ Those Invokers contains static methods of several kinds:
 * an _invokable_ method, that should always be defined as `inline`, which embeds the SRTP dispatcher machinery that is used to pick the right overload (whether defined in F#+ or outside of it)
 * a default or set of default implementations, those may need to be defined in an instrinsic type extension due to F# compiler implementation details to enable being picked up correctly for types that end up supporting the abstraction when such abstraction comes with a default implementation expressed in terms of composing several functions, those are always defined as `inline`.
 
-### Implementation idioms
+
 
 #### Concrete implementations
 
