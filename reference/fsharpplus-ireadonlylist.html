@@ -1,158 +1,647 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>IReadOnlyList - FSharpPlus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content=""/>
-    <meta name="author" content="Gusty"/>
 
-    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
-    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+<head>
+    <meta charset="utf-8">
+    <title>IReadOnlyList (FSharpPlus)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
 
-    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
-    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  Namespaces
+</li>             
+<li class="nav-item active">
+  <span>
+    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </span>
+</li>             
+<ul list-style-type="none">
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-array.html">
+      Array
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-async.html">
+      Async
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
+      Builders
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
+      Choice
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-dict.html">
+      Dict
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-dictionary.html">
+      Dictionary
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-enumerator.html">
+      Enumerator
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
+      Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ilist.html">
+      IList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlycollection.html">
+      IReadOnlyCollection
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlydictionary.html">
+      IReadOnlyDictionary
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlylist.html">
+      IReadOnlyList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-lazy.html">
+      Lazy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-lens.html">
+      Lens
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-list.html">
+      List
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-map.html">
+      Map
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-memoization.html">
+      Memoization
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-nullable.html">
+      Nullable
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-operators.html">
+      Operators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-option.html">
+      Option
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-parsing.html">
+      Parsing
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-resizearray.html">
+      ResizeArray
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-result.html">
+      Result
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-seq.html">
+      Seq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-string.html">
+      String
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-task.html">
+      Task
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-tuple2.html">
+      Tuple2
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-tuple3.html">
+      Tuple3
+    </a>
+  </li>
+</ul>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
+      FSharpPlus.Internals
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
+      FSharpPlus.Math
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
+      FSharpPlus.TypeLevel
+    </a>
+  </span>
+</li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
-      <div class="masthead">
-        <ul class="nav nav-pills pull-right">
-          <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
-        </ul>
-        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="span9" id="main">
-          
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h1>
+    IReadOnlyList Module
+  </h1>
+  <p>
+    Namespace: 
+    <a href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </p>
+  <p>
+    Assembly: FSharpPlus.dll
+  </p>
+  <div class="fsdocs-xmldoc">
+    
+ Additional operations on ReadOnlyList<'T>
 
-<h1>IReadOnlyList</h1>
-<p>
-  <span>Namespace: FSharpPlus</span><br />
-        <span>
-          Attributes:<br />
-[&lt;RequireQualifiedAccess&gt;]<br />
-          
-      </span>
-</p>
-<div class="xmldoc">
-<p>Additional operations on ReadOnlyList<'T></p>
+  </div>
+  <div>
+    <h3>
+      Functions and values
+    </h3>
+    <table class="table outer-list fsdocs-member-list">
+      <thead>
+        <tr>
+          <td class="fsdocs-member-list-header">
+            Function or value
+          </td>
+          <td class="fsdocs-member-list-header">
+            Description
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '110', 110)" onmouseover="showTip(event, '110', 110)">
+                <p>
+                  <a id="ofArray">
+                    <a href="#ofArray">
+                      <code><span>IReadOnlyList.ofArray&#32;<span>source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="110">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyList.ofArray&#32;<span>source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span>'T&#32;array</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L10-10" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span>'T&#32;array</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '111', 111)" onmouseover="showTip(event, '111', 111)">
+                <p>
+                  <a id="toArray">
+                    <a href="#toArray">
+                      <code><span>IReadOnlyList.toArray&#32;<span>source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="111">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyList.toArray&#32;<span>source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'T[]</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L12-12" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'T[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
+                <p>
+                  <a id="tryItem">
+                    <a href="#tryItem">
+                      <code><span>IReadOnlyList.tryItem&#32;<span>i&#32;source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="112">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyList.tryItem&#32;<span>i&#32;source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        i
+                      </b>
+                      :
+                      <code>int</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'a&#32;option</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L24-24" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  i
+                </span>
+                :
+                <code>int</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'a&#32;option</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
+                <p>
+                  <a id="trySetItem">
+                    <a href="#trySetItem">
+                      <code><span>IReadOnlyList.trySetItem&#32;<span>i&#32;value&#32;source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="113">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyList.trySetItem&#32;<span>i&#32;value&#32;source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        i
+                      </b>
+                      :
+                      <code>int</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        value
+                      </b>
+                      :
+                      <code>'T</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span>&#32;option</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L17-17" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.
 
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  i
+                </span>
+                :
+                <code>int</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  value
+                </span>
+                :
+                <code>'T</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'T&gt;</span>&#32;option</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
-
-<!-- Render nested types and modules, if there are any -->
-
-  <h3>Functions and values</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Function or value</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
-            IReadOnlyList.ofArray(source)
-          </code>
-          <div class="tip" id="105">
-            <strong>Signature:</strong> source:&#39;T array -&gt; IReadOnlyList&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L10-10" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
-            IReadOnlyList.toArray(source)
-          </code>
-          <div class="tip" id="106">
-            <strong>Signature:</strong> source:IReadOnlyList&lt;&#39;T&gt; -&gt; &#39;T []<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L12-12" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
-            IReadOnlyList.tryItem i source
-          </code>
-          <div class="tip" id="107">
-            <strong>Signature:</strong> i:int -&gt; source:IReadOnlyList&lt;&#39;?25370&gt; -&gt; &#39;?25370 option<br />
-                          <strong>Type parameters:</strong> '?25370                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L24-24" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
-            IReadOnlyList.trySetItem i value source
-          </code>
-          <div class="tip" id="108">
-            <strong>Signature:</strong> i:int -&gt; value:&#39;T -&gt; source:IReadOnlyList&lt;&#39;T&gt; -&gt; IReadOnlyList&lt;&#39;T&gt; option<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L17-17" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns a new IReadOnlyList from a given IReadOnlyList, with replaced binding for index.</p>
-
-
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
+            
         </div>
-        <div class="span3">
-          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-		  	<li class="nav-header">FSharpPlus</li>
-		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
-		  <li class="divider"></li>
-		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-		  <li><a href="/FSharpPlus/license.html">License</a></li>
-		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-		  <li class="nav-header">Getting started</li>
-		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
-
-		  <li class="nav-header">Documentation</li>
-		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-      <li><a href="/FSharpPlus/types.html">Types</a></li>
-		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
-		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
-		  </ul>
-        </div>
-      </div>
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
     </div>
-    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
-  </body>
-  </html>
+</body>
+
+</html>

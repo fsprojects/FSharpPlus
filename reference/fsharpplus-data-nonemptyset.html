@@ -1,0 +1,3494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>NonEmptySet (FSharpPlus)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  Namespaces
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </span>
+</li>             
+<li class="nav-item active">
+  <span>
+    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </span>
+</li>             
+<ul list-style-type="none">
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-all.html">
+      All
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-any.html">
+      Any
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-choicet.html">
+      ChoiceT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-choicet-1.html">
+      ChoiceT<'monad<'choice<'t,'e>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-compose.html">
+      Compose
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-compose-1.html">
+      Compose<'functorF<'functorG<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-const.html">
+      Const
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-const-2.html">
+      Const<'t, 'u>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-cont.html">
+      Cont
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-cont-2.html">
+      Cont<'r, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-contt.html">
+      ContT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-contt-2.html">
+      ContT<'r, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-coproduct-2.html">
+      Coproduct<'functorL<'t>, 'functorR<'t>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-coproductbase-2.html">
+      CoproductBase<'functorL<'t>, 'functorR<'t>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-coproductprimitives.html">
+      CoproductPrimitives
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dlistmodule.html">
+      DList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dlist-1.html">
+      DList<'T>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dlistdata-1.html">
+      DListData<'T>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dual.html">
+      Dual
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dual-1.html">
+      Dual<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-endo.html">
+      Endo
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-endo-1.html">
+      Endo<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-first-1.html">
+      First<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-free.html">
+      Free
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-free-2.html">
+      Free<'functor<'t>, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-freeprimitives.html">
+      FreePrimitives
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-identity.html">
+      Identity
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-identity-1.html">
+      Identity<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-kleisli.html">
+      Kleisli
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-kleisli-2.html">
+      Kleisli<'t, 'monad<'u>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-last-1.html">
+      Last<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-list.html">
+      List
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-listt.html">
+      ListT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-listt-1.html">
+      ListT<'monad<list<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrix.html">
+      Matrix
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrix-3.html">
+      Matrix<'Item, 'Row, 'Column>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrixoperators.html">
+      MatrixOperators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-mult-1.html">
+      Mult<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nelist-1.html">
+      nelist<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nemap-2.html">
+      nemap<'Key, 'Value>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-neseq-1.html">
+      neseq<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-neset-1.html">
+      neset<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylist.html">
+      NonEmptyList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">
+      NonEmptyList<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylistbuilder.html">
+      NonEmptyListBuilder
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylistbuilderextensions.html">
+      NonEmptyListBuilderExtensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptymap.html">
+      NonEmptyMap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptymap-2.html">
+      NonEmptyMap<'Key, 'Value>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq.html">
+      NonEmptySeq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">
+      NonEmptySeq<'T>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyseqbuilder.html">
+      NonEmptySeqBuilder
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyset.html">
+      NonEmptySet
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">
+      NonEmptySet<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-option.html">
+      Option
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-optiont.html">
+      OptionT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">
+      OptionT<'monad<option<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parallelarray.html">
+      ParallelArray
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parallelarray-1.html">
+      ParallelArray<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parallelarrayoperators.html">
+      ParallelArrayOperators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parray-1.html">
+      parray<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-reader.html">
+      Reader
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-reader-2.html">
+      Reader<'r, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-readert.html">
+      ReaderT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-readert-2.html">
+      ReaderT<'r, 'monad<'t>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-result.html">
+      Result
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-resultorexception.html">
+      ResultOrException
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-resultt.html">
+      ResultT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-resultt-1.html">
+      ResultT<'monad<'result<'t,'e>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-seq.html">
+      Seq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-seqt.html">
+      SeqT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-seqt-1.html">
+      SeqT<'monad<seq<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-state.html">
+      State
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-state-2.html">
+      State<'s, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-statet.html">
+      StateT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-statet-2.html">
+      StateT<'s, 'monad<'t * 's>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-validation.html">
+      Validation
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-validation-2.html">
+      Validation<'error, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-vector.html">
+      Vector
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-vector-2.html">
+      Vector<'Item, 'Length>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writer.html">
+      Writer
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writer-2.html">
+      Writer<'monoid, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writert.html">
+      WriterT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writert-1.html">
+      WriterT<'monad<'t * 'monoid>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-ziplist.html">
+      ZipList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-ziplist-1.html">
+      ZipList<'s>
+    </a>
+  </li>
+</ul>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
+      FSharpPlus.Internals
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
+      FSharpPlus.Math
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
+      FSharpPlus.TypeLevel
+    </a>
+  </span>
+</li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h1>
+    NonEmptySet Module
+  </h1>
+  <p>
+    Namespace: 
+    <a href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </p>
+  <p>
+    Assembly: FSharpPlus.dll
+  </p>
+  <div class="fsdocs-xmldoc">
+    
+ Basic operations on NonEmptySet
+
+  </div>
+  <div>
+    <h3>
+      Functions and values
+    </h3>
+    <table class="table outer-list fsdocs-member-list">
+      <thead>
+        <tr>
+          <td class="fsdocs-member-list-header">
+            Function or value
+          </td>
+          <td class="fsdocs-member-list-header">
+            Description
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '776', 776)" onmouseover="showTip(event, '776', 776)">
+                <p>
+                  <a id="add">
+                    <a href="#add">
+                      <code><span>NonEmptySet.add&#32;<span>value&#32;nes</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="776">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.add&#32;<span>value&#32;nes</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        value
+                      </b>
+                      :
+                      <code>'a</code>
+                       - 
+                      The value to add.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        nes
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  A new set containing <code>value</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L125-125" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Returns a new set with an element added to the set. No exception is raised if
+ the set already contains the given element.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  value
+                </span>
+                :
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The value to add.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  nes
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  A new set containing <code>value</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '777', 777)" onmouseover="showTip(event, '777', 777)">
+                <p>
+                  <a id="contains">
+                    <a href="#contains">
+                      <code><span>NonEmptySet.contains&#32;<span>element&#32;nes</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="777">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.contains&#32;<span>element&#32;nes</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        element
+                      </b>
+                      :
+                      <code>'a</code>
+                       - 
+                      The element to test.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        nes
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  True if <code>element</code> is in <code>set</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L131-131" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Evaluates to "true" if the given element is in the given set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  element
+                </span>
+                :
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The element to test.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  nes
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  True if <code>element</code> is in <code>set</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '778', 778)" onmouseover="showTip(event, '778', 778)">
+                <p>
+                  <a id="count">
+                    <a href="#count">
+                      <code><span>NonEmptySet.count&#32;<span>nes</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="778">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.count&#32;<span>nes</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        nes
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>int</code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L118-118" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Returns the count of a non empty set. You can also use property nes.Count
+
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  nes
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>int</code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '779', 779)" onmouseover="showTip(event, '779', 779)">
+                <p>
+                  <a id="create">
+                    <a href="#create">
+                      <code><span>NonEmptySet.create&#32;<span>x&#32;xs</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="779">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.create&#32;<span>x&#32;xs</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>'a</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        xs
+                      </b>
+                      :
+                      <code><span>seq&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L38-38" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  xs
+                </span>
+                :
+                <code><span>seq&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '780', 780)" onmouseover="showTip(event, '780', 780)">
+                <p>
+                  <a id="exists">
+                    <a href="#exists">
+                      <code><span>NonEmptySet.exists&#32;<span>predicate&#32;set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="780">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.exists&#32;<span>predicate&#32;set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        predicate
+                      </b>
+                      :
+                      <code><span>'a&#32;->&#32;bool</span></code>
+                       - 
+                      The function to test set elements.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  True if any element of <code>set</code> satisfies <code>predicate</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L165-165" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Tests if any element of the collection satisfies the given predicate.
+ If the input function is <code>predicate</code> and the elements are <code>i0...iN</code>
+ then computes <code>p i0 or ... or p iN</code>.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  predicate
+                </span>
+                :
+                <code><span>'a&#32;->&#32;bool</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The function to test set elements.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  True if any element of <code>set</code> satisfies <code>predicate</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '781', 781)" onmouseover="showTip(event, '781', 781)">
+                <p>
+                  <a id="fold">
+                    <a href="#fold">
+                      <code><span>NonEmptySet.fold&#32;<span>folder&#32;state&#32;set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="781">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.fold&#32;<span>folder&#32;state&#32;set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        folder
+                      </b>
+                      :
+                      <code><span>'a&#32;->&#32;'b&#32;->&#32;'a</span></code>
+                       - 
+                      The accumulating function.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        state
+                      </b>
+                      :
+                      <code>'a</code>
+                       - 
+                      The initial state.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'b&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>'a</code>
+                  </span>
+                  The final state.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L215-215" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Applies the given accumulating function to all the elements of the set
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  folder
+                </span>
+                :
+                <code><span>'a&#32;->&#32;'b&#32;->&#32;'a</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The accumulating function.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  state
+                </span>
+                :
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The initial state.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'b&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The final state.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '782', 782)" onmouseover="showTip(event, '782', 782)">
+                <p>
+                  <a id="foldBack">
+                    <a href="#foldBack">
+                      <code><span>NonEmptySet.foldBack&#32;<span>folder&#32;set&#32;state</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="782">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.foldBack&#32;<span>folder&#32;set&#32;state</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        folder
+                      </b>
+                      :
+                      <code><span>'a&#32;->&#32;'b&#32;->&#32;'b</span></code>
+                       - 
+                      The accumulating function.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        state
+                      </b>
+                      :
+                      <code>'b</code>
+                       - 
+                      The initial state.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>'b</code>
+                  </span>
+                  The final state.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L222-222" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Applies the given accumulating function to all the elements of the set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  folder
+                </span>
+                :
+                <code><span>'a&#32;->&#32;'b&#32;->&#32;'b</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The accumulating function.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  state
+                </span>
+                :
+                <code>'b</code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The initial state.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>'b</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The final state.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '783', 783)" onmouseover="showTip(event, '783', 783)">
+                <p>
+                  <a id="forall">
+                    <a href="#forall">
+                      <code><span>NonEmptySet.forall&#32;<span>predicate&#32;set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="783">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.forall&#32;<span>predicate&#32;set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        predicate
+                      </b>
+                      :
+                      <code><span>'a&#32;->&#32;bool</span></code>
+                       - 
+                      The function to test set elements.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  True if all elements of <code>set</code> satisfy <code>predicate</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L180-180" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Tests if all elements of the collection satisfy the given predicate.
+ If the input function is <code>f</code> and the elements are <code>i0...iN</code> and "j0...jN"
+ then computes <code>p i0 && ... && p iN</code>.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  predicate
+                </span>
+                :
+                <code><span>'a&#32;->&#32;bool</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The function to test set elements.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  True if all elements of <code>set</code> satisfy <code>predicate</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '784', 784)" onmouseover="showTip(event, '784', 784)">
+                <p>
+                  <a id="isProperSubset">
+                    <a href="#isProperSubset">
+                      <code><span>NonEmptySet.isProperSubset&#32;<span>set1&#32;set2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="784">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.isProperSubset&#32;<span>set1&#32;set2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set1
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The potential subset.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set2
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The set to test against.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  True if <code>set1</code> is a proper subset of <code>set2</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L144-144" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Evaluates to "true" if all elements of the first set are in the second, and at least
+ one element of the second is not in the first.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set1
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The potential subset.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set2
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The set to test against.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  True if <code>set1</code> is a proper subset of <code>set2</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '785', 785)" onmouseover="showTip(event, '785', 785)">
+                <p>
+                  <a id="isProperSuperset">
+                    <a href="#isProperSuperset">
+                      <code><span>NonEmptySet.isProperSuperset&#32;<span>set1&#32;set2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="785">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.isProperSuperset&#32;<span>set1&#32;set2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set1
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The potential superset.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set2
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The set to test against.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  True if <code>set1</code> is a proper superset of <code>set2</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L157-157" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Evaluates to "true" if all elements of the second set are in the first, and at least
+ one element of the first is not in the second.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set1
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The potential superset.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set2
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The set to test against.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  True if <code>set1</code> is a proper superset of <code>set2</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '786', 786)" onmouseover="showTip(event, '786', 786)">
+                <p>
+                  <a id="isSubset">
+                    <a href="#isSubset">
+                      <code><span>NonEmptySet.isSubset&#32;<span>set1&#32;set2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="786">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.isSubset&#32;<span>set1&#32;set2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set1
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The potential subset.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set2
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The set to test against.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  True if <code>set1</code> is a subset of <code>set2</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L137-137" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Evaluates to "true" if all elements of the first set are in the second
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set1
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The potential subset.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set2
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The set to test against.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  True if <code>set1</code> is a subset of <code>set2</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '787', 787)" onmouseover="showTip(event, '787', 787)">
+                <p>
+                  <a id="isSuperset">
+                    <a href="#isSuperset">
+                      <code><span>NonEmptySet.isSuperset&#32;<span>set1&#32;set2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="787">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.isSuperset&#32;<span>set1&#32;set2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set1
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The potential superset.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set2
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The set to test against.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  True if <code>set1</code> is a superset of <code>set2</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L150-150" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Evaluates to "true" if all elements of the second set are in the first.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set1
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The potential superset.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set2
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The set to test against.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  True if <code>set1</code> is a superset of <code>set2</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '788', 788)" onmouseover="showTip(event, '788', 788)">
+                <p>
+                  <a id="iter">
+                    <a href="#iter">
+                      <code><span>NonEmptySet.iter&#32;<span>action&#32;set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="788">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.iter&#32;<span>action&#32;set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        action
+                      </b>
+                      :
+                      <code><span>'a&#32;->&#32;unit</span></code>
+                       - 
+                      The function to apply to each element.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L198-198" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Applies the given function to each element of the set, in order according
+ to the comparison function.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  action
+                </span>
+                :
+                <code><span>'a&#32;->&#32;unit</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The function to apply to each element.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '789', 789)" onmouseover="showTip(event, '789', 789)">
+                <p>
+                  <a id="map">
+                    <a href="#map">
+                      <code><span>NonEmptySet.map&#32;<span>mapping&#32;set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="789">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.map&#32;<span>mapping&#32;set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        mapping
+                      </b>
+                      :
+                      <code><span>'a&#32;->&#32;'b</span></code>
+                       - 
+                      The function to transform elements of the input set.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'b&gt;</span></code>
+                  </span>
+                  A set containing the transformed elements.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L172-172" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Returns a new collection containing the results of applying the
+ given function to each element of the input set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  mapping
+                </span>
+                :
+                <code><span>'a&#32;->&#32;'b</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The function to transform elements of the input set.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'b&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  A set containing the transformed elements.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '790', 790)" onmouseover="showTip(event, '790', 790)">
+                <p>
+                  <a id="maxElement">
+                    <a href="#maxElement">
+                      <code><span>NonEmptySet.maxElement&#32;<span>set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="790">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.maxElement&#32;<span>set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>'a</code>
+                  </span>
+                  The max value from the set.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L208-208" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Returns the highest element in the set according to the ordering being used for the set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The max value from the set.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '791', 791)" onmouseover="showTip(event, '791', 791)">
+                <p>
+                  <a id="minElement">
+                    <a href="#minElement">
+                      <code><span>NonEmptySet.minElement&#32;<span>set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="791">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.minElement&#32;<span>set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>'a</code>
+                  </span>
+                  The min value from the set.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L203-203" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Returns the lowest element in the set according to the ordering being used for the set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The min value from the set.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '792', 792)" onmouseover="showTip(event, '792', 792)">
+                <p>
+                  <a id="ofArray">
+                    <a href="#ofArray">
+                      <code><span>NonEmptySet.ofArray&#32;<span>array</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="792">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.ofArray&#32;<span>array</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        array
+                      </b>
+                      :
+                      <code><span>'a&#32;array</span></code>
+                       - 
+                      The input array.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  Non empty set containing the elements of the array.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L66-66" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set from the given array.
+            </p>
+            <p class="fsdocs-remarks">
+              Throws exception for empty array
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  array
+                </span>
+                :
+                <code><span>'a&#32;array</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input array.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Non empty set containing the elements of the array.
+                </p>
+              </dd>
+            </dl>
+            <table class="fsdocs-exception-list">
+              <tr>
+                <td>
+                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                    ArgumentException
+                  </a>
+                </td>
+                <td>
+                  Thrown when the input array is empty.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '793', 793)" onmouseover="showTip(event, '793', 793)">
+                <p>
+                  <a id="ofList">
+                    <a href="#ofList">
+                      <code><span>NonEmptySet.ofList&#32;<span>list</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="793">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.ofList&#32;<span>list</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        list
+                      </b>
+                      :
+                      <code><span>'a&#32;list</span></code>
+                       - 
+                      The input list.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  Non empty set containing the elements of the list.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L76-76" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set from the given list.
+            </p>
+            <p class="fsdocs-remarks">
+              Throws exception for empty list
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  list
+                </span>
+                :
+                <code><span>'a&#32;list</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input list.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Non empty set containing the elements of the list.
+                </p>
+              </dd>
+            </dl>
+            <table class="fsdocs-exception-list">
+              <tr>
+                <td>
+                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                    ArgumentException
+                  </a>
+                </td>
+                <td>
+                  Thrown when the input list is empty.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '794', 794)" onmouseover="showTip(event, '794', 794)">
+                <p>
+                  <a id="ofNonEmptyList">
+                    <a href="#ofNonEmptyList">
+                      <code><span>NonEmptySet.ofNonEmptyList&#32;<span>list</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="794">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.ofNonEmptyList&#32;<span>list</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        list
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">NonEmptyList</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input list.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  Non empty set containing the elements of the non-empty list.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L84-84" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set from the given non-empty list.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  list
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">NonEmptyList</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input list.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Non empty set containing the elements of the non-empty list.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '795', 795)" onmouseover="showTip(event, '795', 795)">
+                <p>
+                  <a id="ofNonEmptySeq">
+                    <a href="#ofNonEmptySeq">
+                      <code><span>NonEmptySet.ofNonEmptySeq&#32;<span>seq</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="795">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.ofNonEmptySeq&#32;<span>seq</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        seq
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">NonEmptySeq</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  Non empty set containing the elements of the non-empty sequence.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L100-100" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set from the given non-empty sequence.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  seq
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">NonEmptySeq</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Non empty set containing the elements of the non-empty sequence.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '796', 796)" onmouseover="showTip(event, '796', 796)">
+                <p>
+                  <a id="ofSeq">
+                    <a href="#ofSeq">
+                      <code><span>NonEmptySet.ofSeq&#32;<span>seq</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="796">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.ofSeq&#32;<span>seq</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        seq
+                      </b>
+                      :
+                      <code><span>seq&lt;'a&gt;</span></code>
+                       - 
+                      The input list.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  Non empty set containing the elements of the list.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L92-92" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set from the given sequence.
+            </p>
+            <p class="fsdocs-remarks">
+              Throws exception for empty sequence
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  seq
+                </span>
+                :
+                <code><span>seq&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input list.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Non empty set containing the elements of the list.
+                </p>
+              </dd>
+            </dl>
+            <table class="fsdocs-exception-list">
+              <tr>
+                <td>
+                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                    ArgumentException
+                  </a>
+                </td>
+                <td>
+                  Thrown when the input list is empty.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '797', 797)" onmouseover="showTip(event, '797', 797)">
+                <p>
+                  <a id="ofSet">
+                    <a href="#ofSet">
+                      <code><span>NonEmptySet.ofSet&#32;<span>set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="797">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.ofSet&#32;<span>set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpset-1">Set</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  Non empty set containing the elements of the set.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L108-108" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set from the given set.
+            </p>
+            <p class="fsdocs-remarks">
+              Throws exception for empty set
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpset-1">Set</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Non empty set containing the elements of the set.
+                </p>
+              </dd>
+            </dl>
+            <table class="fsdocs-exception-list">
+              <tr>
+                <td>
+                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                    ArgumentException
+                  </a>
+                </td>
+                <td>
+                  Thrown when the input set is empty.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '798', 798)" onmouseover="showTip(event, '798', 798)">
+                <p>
+                  <a id="reduce">
+                    <a href="#reduce">
+                      <code><span>NonEmptySet.reduce&#32;<span>reduction&#32;set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="798">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.reduce&#32;<span>reduction&#32;set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        reduction
+                      </b>
+                      :
+                      <code><span>'a&#32;->&#32;'a&#32;->&#32;'a</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>'a</code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L224-224" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  reduction
+                </span>
+                :
+                <code><span>'a&#32;->&#32;'a&#32;->&#32;'a</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '799', 799)" onmouseover="showTip(event, '799', 799)">
+                <p>
+                  <a id="singleton">
+                    <a href="#singleton">
+                      <code><span>NonEmptySet.singleton&#32;<span>x</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="799">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.singleton&#32;<span>x</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>'a</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L41-41" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non empty set with a single element.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>'a</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '800', 800)" onmouseover="showTip(event, '800', 800)">
+                <p>
+                  <a id="toArray">
+                    <a href="#toArray">
+                      <code><span>NonEmptySet.toArray&#32;<span>arg1</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="800">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.toArray&#32;<span>arg1</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'a[]</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L50-50" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds an array from the given non empty set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'a[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '801', 801)" onmouseover="showTip(event, '801', 801)">
+                <p>
+                  <a id="toList">
+                    <a href="#toList">
+                      <code><span>NonEmptySet.toList&#32;<span>arg1</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="801">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.toList&#32;<span>arg1</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'a&#32;list</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L44-44" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a list from the given non empty set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'a&#32;list</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '802', 802)" onmouseover="showTip(event, '802', 802)">
+                <p>
+                  <a id="toNonEmptyList">
+                    <a href="#toNonEmptyList">
+                      <code><span>NonEmptySet.toNonEmptyList&#32;<span>arg1</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="802">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.toNonEmptyList&#32;<span>arg1</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">NonEmptyList</a>&lt;'a&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L56-56" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non-empty list from the given non empty set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">NonEmptyList</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '803', 803)" onmouseover="showTip(event, '803', 803)">
+                <p>
+                  <a id="toNonEmptySeq">
+                    <a href="#toNonEmptySeq">
+                      <code><span>NonEmptySet.toNonEmptySeq&#32;<span>set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="803">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.toNonEmptySeq&#32;<span>set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">NonEmptySeq</a>&lt;'a&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L59-59" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a non-empty sequence from the given non empty set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">NonEmptySeq</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '804', 804)" onmouseover="showTip(event, '804', 804)">
+                <p>
+                  <a id="toSeq">
+                    <a href="#toSeq">
+                      <code><span>NonEmptySet.toSeq&#32;<span>arg1</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="804">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.toSeq&#32;<span>arg1</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;'a&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L47-47" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a sequence from the given non empty set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '805', 805)" onmouseover="showTip(event, '805', 805)">
+                <p>
+                  <a id="toSet">
+                    <a href="#toSet">
+                      <code><span>NonEmptySet.toSet&#32;<span>arg1</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="805">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.toSet&#32;<span>arg1</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpset-1">Set</a>&lt;'a&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L53-53" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Builds a set from the given non empty set.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpset-1">Set</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '806', 806)" onmouseover="showTip(event, '806', 806)">
+                <p>
+                  <a id="tryOfSet">
+                    <a href="#tryOfSet">
+                      <code><span>NonEmptySet.tryOfSet&#32;<span>set</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="806">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.tryOfSet&#32;<span>set</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpset-1">Set</a>&lt;'a&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span>&#32;option</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L113-113" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Transforms a set to a NonEmptySet, returning an option to signal when the original set was empty.
+
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpset-1">Set</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span>&#32;option</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '807', 807)" onmouseover="showTip(event, '807', 807)">
+                <p>
+                  <a id="union">
+                    <a href="#union">
+                      <code><span>NonEmptySet.union&#32;<span>set1&#32;set2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="807">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.union&#32;<span>set1&#32;set2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        set1
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The first input set.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        set2
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The second input set.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  The union of <code>set1</code> and <code>set2</code>.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L186-186" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Computes the union of the two sets.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set1
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The first input set.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  set2
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The second input set.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The union of <code>set1</code> and <code>set2</code>.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '808', 808)" onmouseover="showTip(event, '808', 808)">
+                <p>
+                  <a id="unionMany">
+                    <a href="#unionMany">
+                      <code><span>NonEmptySet.unionMany&#32;<span>sets</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="808">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>NonEmptySet.unionMany&#32;<span>sets</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        sets
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">NonEmptyList</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span>&gt;</span></code>
+                       - 
+                      The sequence of sets to union.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                  </span>
+                  The union of the input sets.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L191-191" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Computes the union of a non empty list of sets.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  sets
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">NonEmptyList</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The sequence of sets to union.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The union of the input sets.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+            
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>

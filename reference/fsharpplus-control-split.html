@@ -1,402 +1,2593 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>Split - FSharpPlus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content=""/>
-    <meta name="author" content="Gusty"/>
 
-    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
-    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+<head>
+    <meta charset="utf-8">
+    <title>Split (FSharpPlus)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
 
-    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
-    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  Namespaces
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </span>
+</li>             
+<li class="nav-item active">
+  <span>
+    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </span>
+</li>             
+<ul list-style-type="none">
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-abs.html">
+      Abs
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-abs'.html">
+      Abs'
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-acleft.html">
+      AcLeft
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-acmerge.html">
+      AcMerge
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-acright.html">
+      AcRight
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-app.html">
+      App
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-append.html">
+      Append
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-apply.html">
+      Apply
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-arr.html">
+      Arr
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-arraytotuple.html">
+      ArrayToTuple
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-arrcombine.html">
+      ArrCombine
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-arrfirst.html">
+      ArrFirst
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-arrsecond.html">
+      ArrSecond
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-ask.html">
+      Ask
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-asserttupletype.html">
+      AssertTupleType
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bifold.html">
+      Bifold
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bifoldback.html">
+      BifoldBack
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bifoldmap.html">
+      BifoldMap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bimap.html">
+      Bimap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bind.html">
+      Bind
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bisequence.html">
+      Bisequence
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bisum.html">
+      Bisum
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-bitraverse.html">
+      Bitraverse
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-callcc.html">
+      CallCC
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-catch.html">
+      Catch
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-choice.html">
+      Choice
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-choose.html">
+      Choose
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-chunkby.html">
+      ChunkBy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-comp.html">
+      Comp
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-composedstaticinvokable-2.html">
+      ComposedStaticInvokable<'F, 'G>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-contramap.html">
+      Contramap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-counttuple.html">
+      CountTuple
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-curry.html">
+      Curry
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-delay.html">
+      Delay
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-dimap.html">
+      Dimap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-distinct.html">
+      Distinct
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-distinctby.html">
+      DistinctBy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-divide.html">
+      Divide
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-divrem.html">
+      DivRem
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-drop.html">
+      Drop
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-duplicate.html">
+      Duplicate
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-empty.html">
+      Empty
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-exists.html">
+      Exists
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-explicit.html">
+      Explicit
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-extend.html">
+      Extend
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-extract.html">
+      Extract
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-fanin.html">
+      Fanin
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-fanout.html">
+      Fanout
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-filter.html">
+      Filter
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-find.html">
+      Find
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-findindex.html">
+      FindIndex
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-findsliceindex.html">
+      FindSliceIndex
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-fold.html">
+      Fold
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-foldback.html">
+      FoldBack
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-foldindexed.html">
+      FoldIndexed
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-foldmap.html">
+      FoldMap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-forall.html">
+      ForAll
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-frombigint.html">
+      FromBigInt
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-fromint32.html">
+      FromInt32
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-fromint64.html">
+      FromInt64
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-get.html">
+      Get
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-groupby.html">
+      GroupBy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-head.html">
+      Head
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-id.html">
+      Id
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-intercalate.html">
+      Intercalate
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-intersperse.html">
+      Intersperse
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-invmap.html">
+      Invmap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-invoke.html">
+      Invoke
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-isaltleftzero.html">
+      IsAltLeftZero
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-isleftzero.html">
+      IsLeftZero
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-item.html">
+      Item
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-item1.html">
+      Item1
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-item2.html">
+      Item2
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-item3.html">
+      Item3
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-item4.html">
+      Item4
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-item5.html">
+      Item5
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-iterate.html">
+      Iterate
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-iterateindexed.html">
+      IterateIndexed
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-join.html">
+      Join
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-length.html">
+      Length
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-lift.html">
+      Lift
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-lift2.html">
+      Lift2
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-liftasync.html">
+      LiftAsync
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-limit.html">
+      Limit
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-listen.html">
+      Listen
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-local.html">
+      Local
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-map.html">
+      Map
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-mapfirst.html">
+      MapFirst
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-mapindexed.html">
+      MapIndexed
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-mapitem1.html">
+      MapItem1
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-mapitem2.html">
+      MapItem2
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-mapitem3.html">
+      MapItem3
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-mapitem4.html">
+      MapItem4
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-mapitem5.html">
+      MapItem5
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-max.html">
+      Max
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-maxby.html">
+      MaxBy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-maxvalue.html">
+      MaxValue
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-min.html">
+      Min
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-minby.html">
+      MinBy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-minvalue.html">
+      MinValue
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-nth.html">
+      Nth
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-ofbytes.html">
+      OfBytes
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-oflist.html">
+      OfList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-ofseq.html">
+      OfSeq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-one.html">
+      One
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-parse.html">
+      Parse
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-pass.html">
+      Pass
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-pi.html">
+      Pi
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-pick.html">
+      Pick
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-plus.html">
+      Plus
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-put.html">
+      Put
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-reduce.html">
+      Reduce
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-replace.html">
+      Replace
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-return.html">
+      Return
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-rev.html">
+      Rev
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-scan.html">
+      Scan
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-sequence.html">
+      Sequence
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-signum.html">
+      Signum
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-signum'.html">
+      Signum'
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-skip.html">
+      Skip
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-skipwhile.html">
+      SkipWhile
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-sort.html">
+      Sort
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-sortby.html">
+      SortBy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-sortbydescending.html">
+      SortByDescending
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-split.html">
+      Split
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-sqrt.html">
+      Sqrt
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-subtract.html">
+      Subtract
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-sum.html">
+      Sum
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-take.html">
+      Take
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-takewhile.html">
+      TakeWhile
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tell.html">
+      Tell
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-throw.html">
+      Throw
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-toarray.html">
+      ToArray
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tobigint.html">
+      ToBigInt
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tobytes.html">
+      ToBytes
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tolist.html">
+      ToList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-toseq.html">
+      ToSeq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-traverse.html">
+      Traverse
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-traverseindexed.html">
+      TraverseIndexed
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryblock.html">
+      TryBlock
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trydivide.html">
+      TryDivide
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryfinally.html">
+      TryFinally
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryfind.html">
+      TryFind
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryfindindex.html">
+      TryFindIndex
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryfindsliceindex.html">
+      TryFindSliceIndex
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryhead.html">
+      TryHead
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryitem.html">
+      TryItem
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trylast.html">
+      TryLast
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trynegate.html">
+      TryNegate
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trynegate'.html">
+      TryNegate'
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tryparse.html">
+      TryParse
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trypick.html">
+      TryPick
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trysqrt.html">
+      TrySqrt
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trysqrtrem.html">
+      TrySqrtRem
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trysubtract.html">
+      TrySubtract
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-trywith.html">
+      TryWith
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-tupletolist.html">
+      TupleToList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-uncurry.html">
+      Uncurry
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-unzip.html">
+      Unzip
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-using.html">
+      Using
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-zero.html">
+      Zero
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control-zip.html">
+      Zip
+    </a>
+  </li>
+</ul>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
+      FSharpPlus.Internals
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
+      FSharpPlus.Math
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
+      FSharpPlus.TypeLevel
+    </a>
+  </span>
+</li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
-      <div class="masthead">
-        <ul class="nav nav-pills pull-right">
-          <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
-        </ul>
-        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="span9" id="main">
-          
-
-<h1>Split</h1>
-<p>
-
-    <span>Namespace: FSharpPlus.Control</span><br />
-    </p>
-<div class="xmldoc">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h1>
+    Split Type
+  </h1>
+  <p>
+    Namespace: 
+    <a href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </p>
+  <p>
+    Assembly: FSharpPlus.dll
+  </p>
+  <p>
+    Base Type: 
+    <code><a href="/FSharpPlus/reference/fsharpplus-internals-default1.html">Default1</a></code>
+  </p>
+  <div class="fsdocs-xmldoc">
+    
+  </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div>
+    <h3>
+      Static members
+    </h3>
+    <table class="table outer-list fsdocs-member-list">
+      <thead>
+        <tr>
+          <td class="fsdocs-member-list-header">
+            Static member
+          </td>
+          <td class="fsdocs-member-list-header">
+            Description
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2323', 2323)" onmouseover="showTip(event, '2323', 2323)">
+                <p>
+                  <a id="Invoke">
+                    <a href="#Invoke">
+                      <code><span>Split.Invoke<span><span>(<span>sep</span>)</span>&#32;<span>(<span>source</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2323">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Invoke<span><span>(<span>sep</span>)</span>&#32;<span>(<span>source</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        sep
+                      </b>
+                      :
+                      <code>''Collection<'OrderedCollection></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code>^OrderedCollection</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>''Collection<'OrderedCollection></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L401-401" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  sep
+                </span>
+                :
+                <code>''Collection<'OrderedCollection></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code>^OrderedCollection</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>''Collection<'OrderedCollection></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2324', 2324)" onmouseover="showTip(event, '2324', 2324)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;_mthd</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2324">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;_mthd</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span>^t&#32;*&#32;'a</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        _mthd
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-internals-default1.html">Default1</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'b&#32;->&#32;'b</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L410-410" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span>^t&#32;*&#32;'a</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  _mthd
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-internals-default1.html">Default1</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'b&#32;->&#32;'b</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2325', 2325)" onmouseover="showTip(event, '2325', 2325)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2325">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span>''Collection<'OrderedCollection>&#32;*&#32;^'OrderedCollection</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-internals-default1.html">Default1</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>''Collection<'OrderedCollection></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L409-409" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span>''Collection<'OrderedCollection>&#32;*&#32;^'OrderedCollection</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-internals-default1.html">Default1</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>''Collection<'OrderedCollection></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2326', 2326)" onmouseover="showTip(event, '2326', 2326)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2326">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span>^'Collection<'OrderedCollection>&#32;*&#32;^'OrderedCollection</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-internals-default2.html">Default2</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^'Collection<'OrderedCollection></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L407-407" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span>^'Collection<'OrderedCollection>&#32;*&#32;^'OrderedCollection</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-internals-default2.html">Default2</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>^'Collection<'OrderedCollection></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2327', 2327)" onmouseover="showTip(event, '2327', 2327)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2327">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&#32;list</span>&#32;*&#32;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&#32;list</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L398-398" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&#32;list</span>&#32;*&#32;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&#32;list</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2328', 2328)" onmouseover="showTip(event, '2328', 2328)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2328">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>[]</span>&#32;*&#32;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>[]</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L397-397" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>[]</span>&#32;*&#32;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2329', 2329)" onmouseover="showTip(event, '2329', 2329)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2329">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span>seq&lt;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&gt;</span>&#32;*&#32;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L396-396" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span>seq&lt;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&gt;</span>&#32;*&#32;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;<a href="https://docs.microsoft.com/dotnet/api/system.text.stringbuilder">StringBuilder</a>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2330', 2330)" onmouseover="showTip(event, '2330', 2330)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2330">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span>string&#32;list</span>&#32;*&#32;string</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>string&#32;list</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L395-395" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span>string&#32;list</span>&#32;*&#32;string</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>string&#32;list</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2331', 2331)" onmouseover="showTip(event, '2331', 2331)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2331">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span>string&#32;array</span>&#32;*&#32;string</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>string[]</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L394-394" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span>string&#32;array</span>&#32;*&#32;string</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>string[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2332', 2332)" onmouseover="showTip(event, '2332', 2332)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2332">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span>seq&lt;string&gt;</span>&#32;*&#32;string</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;string&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L393-393" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span>seq&lt;string&gt;</span>&#32;*&#32;string</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;string&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2333', 2333)" onmouseover="showTip(event, '2333', 2333)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2333">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><span>'T[]</span>&#32;list</span>&#32;*&#32;<span>'T[]</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span>'T[]</span>&#32;list</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L392-392" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><span>'T[]</span>&#32;list</span>&#32;*&#32;<span>'T[]</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span>'T[]</span>&#32;list</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2334', 2334)" onmouseover="showTip(event, '2334', 2334)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2334">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><span>'T[]</span>&#32;array</span>&#32;*&#32;<span>'T[]</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span>'T[]</span>[]</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L391-391" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><span>'T[]</span>&#32;array</span>&#32;*&#32;<span>'T[]</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span>'T[]</span>[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2335', 2335)" onmouseover="showTip(event, '2335', 2335)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2335">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span>seq&lt;<span>'T[]</span>&gt;</span>&#32;*&#32;<span>'T[]</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;<span>'T[]</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L390-390" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span>seq&lt;<span>'T[]</span>&gt;</span>&#32;*&#32;<span>'T[]</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;<span>'T[]</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2336', 2336)" onmouseover="showTip(event, '2336', 2336)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2336">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><span>'T&#32;list</span>&#32;list</span>&#32;*&#32;<span>'T&#32;list</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span>'T&#32;list</span>&#32;list</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L389-389" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><span>'T&#32;list</span>&#32;list</span>&#32;*&#32;<span>'T&#32;list</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span>'T&#32;list</span>&#32;list</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2337', 2337)" onmouseover="showTip(event, '2337', 2337)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2337">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><span>'T&#32;list</span>&#32;array</span>&#32;*&#32;<span>'T&#32;list</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span>'T&#32;list</span>[]</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L388-388" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><span>'T&#32;list</span>&#32;array</span>&#32;*&#32;<span>'T&#32;list</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span>'T&#32;list</span>[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2338', 2338)" onmouseover="showTip(event, '2338', 2338)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2338">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span>seq&lt;<span>'T&#32;list</span>&gt;</span>&#32;*&#32;<span>'T&#32;list</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;<span>'T&#32;list</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L387-387" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span>seq&lt;<span>'T&#32;list</span>&gt;</span>&#32;*&#32;<span>'T&#32;list</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;<span>'T&#32;list</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2339', 2339)" onmouseover="showTip(event, '2339', 2339)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2339">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><span>seq&lt;'T&gt;</span>&#32;list</span>&#32;*&#32;<span>seq&lt;'T&gt;</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span>seq&lt;'T&gt;</span>&#32;list</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L386-386" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><span>seq&lt;'T&gt;</span>&#32;list</span>&#32;*&#32;<span>seq&lt;'T&gt;</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span>seq&lt;'T&gt;</span>&#32;list</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2340', 2340)" onmouseover="showTip(event, '2340', 2340)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2340">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span><span>seq&lt;'T&gt;</span>&#32;array</span>&#32;*&#32;<span>seq&lt;'T&gt;</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span>seq&lt;'T&gt;</span>[]</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L385-385" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span><span>seq&lt;'T&gt;</span>&#32;array</span>&#32;*&#32;<span>seq&lt;'T&gt;</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span>seq&lt;'T&gt;</span>[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '2341', 2341)" onmouseover="showTip(event, '2341', 2341)">
+                <p>
+                  <a id="Split">
+                    <a href="#Split">
+                      <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2341">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Split.Split<span><span>(<span>arg1,&#32;?_impl</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><span>seq&lt;<span>seq&lt;'T&gt;</span>&gt;</span>&#32;*&#32;<span>seq&lt;'T&gt;</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        ?_impl
+                      </b>
+                      :
+                      <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;<span>seq&lt;'T&gt;</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L384-384" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><span>seq&lt;<span>seq&lt;'T&gt;</span>&gt;</span>&#32;*&#32;<span>seq&lt;'T&gt;</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  ?_impl
+                </span>
+                :
+                <code><a href="/FSharpPlus/reference/fsharpplus-control-split.html">Split</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;<span>seq&lt;'T&gt;</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-  <h3>Static members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2093', 2093)" onmouseover="showTip(event, '2093', 2093)">
-            Split.Invoke sep source
-          </code>
-          <div class="tip" id="2093">
-            <strong>Signature:</strong> sep:&#39;&#39;Collection&lt;&#39;OrderedCollection&gt; -&gt; source:^OrderedCollection -&gt; &#39;&#39;Collection&lt;&#39;OrderedCollection&gt;<br />
-                          <strong>Type parameters:</strong> ''Collection<'OrderedCollection>, ^OrderedCollection                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L395-395" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2094', 2094)" onmouseover="showTip(event, '2094', 2094)">
-            Split.Split(arg1, _mthd)
-          </code>
-          <div class="tip" id="2094">
-            <strong>Signature:</strong> ((^t * &#39;?17387) * _mthd:Default1) -&gt; &#39;?17388 -&gt; &#39;?17388<br />
-                          <strong>Type parameters:</strong> ^t, '?17387, '?17388                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L404-404" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2095', 2095)" onmouseover="showTip(event, '2095', 2095)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2095">
-            <strong>Signature:</strong> ((&#39;&#39;Collection&lt;&#39;OrderedCollection&gt; * ^&#39;OrderedCollection) * _impl:Default1) -&gt; &#39;&#39;Collection&lt;&#39;OrderedCollection&gt;<br />
-                          <strong>Type parameters:</strong> ''Collection<'OrderedCollection>, ^'OrderedCollection                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L403-403" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2096', 2096)" onmouseover="showTip(event, '2096', 2096)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2096">
-            <strong>Signature:</strong> ((^&#39;Collection&lt;&#39;OrderedCollection&gt; * ^&#39;OrderedCollection) * _impl:Default2) -&gt; ^&#39;Collection&lt;&#39;OrderedCollection&gt;<br />
-                          <strong>Type parameters:</strong> ^'Collection<'OrderedCollection>, '?17378, '?17379, ^?17380, ^'OrderedCollection                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L401-401" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2097', 2097)" onmouseover="showTip(event, '2097', 2097)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2097">
-            <strong>Signature:</strong> ((StringBuilder list * StringBuilder) * _impl:Split) -&gt; StringBuilder list<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L392-392" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2098', 2098)" onmouseover="showTip(event, '2098', 2098)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2098">
-            <strong>Signature:</strong> ((StringBuilder [] * StringBuilder) * _impl:Split) -&gt; StringBuilder []<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L391-391" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2099', 2099)" onmouseover="showTip(event, '2099', 2099)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2099">
-            <strong>Signature:</strong> ((seq&lt;StringBuilder&gt; * StringBuilder) * _impl:Split) -&gt; seq&lt;StringBuilder&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L390-390" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2100', 2100)" onmouseover="showTip(event, '2100', 2100)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2100">
-            <strong>Signature:</strong> ((string list * string) * _impl:Split) -&gt; string list<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L389-389" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2101', 2101)" onmouseover="showTip(event, '2101', 2101)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2101">
-            <strong>Signature:</strong> ((string array * string) * _impl:Split) -&gt; string []<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L388-388" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2102', 2102)" onmouseover="showTip(event, '2102', 2102)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2102">
-            <strong>Signature:</strong> ((seq&lt;string&gt; * string) * _impl:Split) -&gt; seq&lt;string&gt;<br />
-                                  </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L387-387" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2103', 2103)" onmouseover="showTip(event, '2103', 2103)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2103">
-            <strong>Signature:</strong> ((&#39;T [] list * &#39;T []) * _impl:Split) -&gt; &#39;T [] list<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L386-386" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2104', 2104)" onmouseover="showTip(event, '2104', 2104)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2104">
-            <strong>Signature:</strong> ((&#39;T [] array * &#39;T []) * _impl:Split) -&gt; &#39;T [] []<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L385-385" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2105', 2105)" onmouseover="showTip(event, '2105', 2105)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2105">
-            <strong>Signature:</strong> ((seq&lt;&#39;T []&gt; * &#39;T []) * _impl:Split) -&gt; seq&lt;&#39;T []&gt;<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L384-384" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2106', 2106)" onmouseover="showTip(event, '2106', 2106)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2106">
-            <strong>Signature:</strong> ((&#39;T list list * &#39;T list) * _impl:Split) -&gt; &#39;T list list<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L383-383" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2107', 2107)" onmouseover="showTip(event, '2107', 2107)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2107">
-            <strong>Signature:</strong> ((&#39;T list array * &#39;T list) * _impl:Split) -&gt; &#39;T list []<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L382-382" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2108', 2108)" onmouseover="showTip(event, '2108', 2108)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2108">
-            <strong>Signature:</strong> ((seq&lt;&#39;T list&gt; * &#39;T list) * _impl:Split) -&gt; seq&lt;&#39;T list&gt;<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L381-381" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2109', 2109)" onmouseover="showTip(event, '2109', 2109)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2109">
-            <strong>Signature:</strong> ((seq&lt;&#39;T&gt; list * seq&lt;&#39;T&gt;) * _impl:Split) -&gt; seq&lt;&#39;T&gt; list<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L380-380" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2110', 2110)" onmouseover="showTip(event, '2110', 2110)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2110">
-            <strong>Signature:</strong> ((seq&lt;&#39;T&gt; array * seq&lt;&#39;T&gt;) * _impl:Split) -&gt; seq&lt;&#39;T&gt; []<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L379-379" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '2111', 2111)" onmouseover="showTip(event, '2111', 2111)">
-            Split.Split(arg1, _impl)
-          </code>
-          <div class="tip" id="2111">
-            <strong>Signature:</strong> ((seq&lt;seq&lt;&#39;T&gt;&gt; * seq&lt;&#39;T&gt;) * _impl:Split) -&gt; seq&lt;seq&lt;&#39;T&gt;&gt;<br />
-                          <strong>Type parameters:</strong> 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Control/Collection.fs#L378-378" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
+            
         </div>
-        <div class="span3">
-          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-		  	<li class="nav-header">FSharpPlus</li>
-		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
-		  <li class="divider"></li>
-		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-		  <li><a href="/FSharpPlus/license.html">License</a></li>
-		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-		  <li class="nav-header">Getting started</li>
-		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
-
-		  <li class="nav-header">Documentation</li>
-		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-      <li><a href="/FSharpPlus/types.html">Types</a></li>
-		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
-		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
-		  </ul>
-        </div>
-      </div>
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
     </div>
-    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
-  </body>
-  </html>
+</body>
+
+</html>

@@ -1,355 +1,1769 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <title>IReadOnlyDictionary - FSharpPlus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content=""/>
-    <meta name="author" content="Gusty"/>
 
-    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
-    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+<head>
+    <meta charset="utf-8">
+    <title>IReadOnlyDictionary (FSharpPlus)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
 
-    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/style.css" />
-    <script type="text/javascript" src="/FSharpPlus/content/tips.js"></script>
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  Namespaces
+</li>             
+<li class="nav-item active">
+  <span>
+    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </span>
+</li>             
+<ul list-style-type="none">
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-array.html">
+      Array
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-async.html">
+      Async
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
+      Builders
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
+      Choice
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-dict.html">
+      Dict
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-dictionary.html">
+      Dictionary
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-enumerator.html">
+      Enumerator
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
+      Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ilist.html">
+      IList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlycollection.html">
+      IReadOnlyCollection
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlydictionary.html">
+      IReadOnlyDictionary
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlylist.html">
+      IReadOnlyList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-lazy.html">
+      Lazy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-lens.html">
+      Lens
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-list.html">
+      List
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-map.html">
+      Map
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-memoization.html">
+      Memoization
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-nullable.html">
+      Nullable
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-operators.html">
+      Operators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-option.html">
+      Option
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-parsing.html">
+      Parsing
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-resizearray.html">
+      ResizeArray
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-result.html">
+      Result
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-seq.html">
+      Seq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-string.html">
+      String
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-task.html">
+      Task
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-tuple2.html">
+      Tuple2
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-tuple3.html">
+      Tuple3
+    </a>
+  </li>
+</ul>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
+      FSharpPlus.Internals
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
+      FSharpPlus.Math
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
+      FSharpPlus.TypeLevel
+    </a>
+  </span>
+</li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
-      <div class="masthead">
-        <ul class="nav nav-pills pull-right">
-          <li><a href="http://fsharp.org">fsharp.org</a></li>
-          <li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li>
-        </ul>
-        <h3 class="muted"><a href="/FSharpPlus/index.html">FSharpPlus</a></h3>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="span9" id="main">
-          
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h1>
+    IReadOnlyDictionary Module
+  </h1>
+  <p>
+    Namespace: 
+    <a href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </p>
+  <p>
+    Assembly: FSharpPlus.dll
+  </p>
+  <div class="fsdocs-xmldoc">
+    
+ Additional operations on IReadOnlyDictionary<'Key, 'Value>
 
-<h1>IReadOnlyDictionary</h1>
-<p>
-  <span>Namespace: FSharpPlus</span><br />
-        <span>
-          Attributes:<br />
-[&lt;RequireQualifiedAccess&gt;]<br />
-          
-      </span>
-</p>
-<div class="xmldoc">
-<p>Additional operations on IReadOnlyDictionary<'Key, 'Value></p>
+  </div>
+  <div>
+    <h3>
+      Functions and values
+    </h3>
+    <table class="table outer-list fsdocs-member-list">
+      <thead>
+        <tr>
+          <td class="fsdocs-member-list-header">
+            Function or value
+          </td>
+          <td class="fsdocs-member-list-header">
+            Description
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
+                <p>
+                  <a id="add">
+                    <a href="#add">
+                      <code><span>IReadOnlyDictionary.add&#32;<span>key&#32;value&#32;table</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="95">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.add&#32;<span>key&#32;value&#32;table</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        key
+                      </b>
+                      :
+                      <code>'Key</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        value
+                      </b>
+                      :
+                      <code>'Value</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        table
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L14-14" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Replaces or sets the item associated with a specified key with the specified value.
 
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  key
+                </span>
+                :
+                <code>'Key</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  value
+                </span>
+                :
+                <code>'Value</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  table
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
+                <p>
+                  <a id="chooseValues">
+                    <a href="#chooseValues">
+                      <code><span>IReadOnlyDictionary.chooseValues&#32;<span>f&#32;x</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="96">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.chooseValues&#32;<span>f&#32;x</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+                       - 
+                      The mapping function.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                       - 
+                      The input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                  </span>
+                  Returns IReadOnlyDictionary with values x for each dictionary value where the function returns Some(x).
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L85-85" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Applies given function to each value of the given read-only dictionary.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Returns IReadOnlyDictionary with values x for each dictionary value where the function returns Some(x).
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
+                <p>
+                  <a id="containsKey">
+                    <a href="#containsKey">
+                      <code><span>IReadOnlyDictionary.containsKey&#32;<span>k&#32;dct</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="97">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.containsKey&#32;<span>k&#32;dct</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        k
+                      </b>
+                      :
+                      <code>'Key</code>
+                       - 
+                      The key to find.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        dct
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                       - 
+                      The input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>bool</code>
+                  </span>
+                  A bool indicating if the key was found.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L38-38" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Does the read-only dictionary contain the given key?
+            </p>
+            <p class="fsdocs-remarks">
+              Note: this is a function wrapper for the IReadOnlyDictionary.ContainsKey method.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  k
+                </span>
+                :
+                <code>'Key</code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The key to find.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  dct
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  A bool indicating if the key was found.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
+                <p>
+                  <a id="intersect">
+                    <a href="#intersect">
+                      <code><span>IReadOnlyDictionary.intersect&#32;<span>source1&#32;source2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="98">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.intersect&#32;<span>source1&#32;source2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        source1
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source2
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L153-153" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Returns the intersection of two read-only dictionaries, preferring values from the first in case of duplicate keys.
+
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source1
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source2
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
+                <p>
+                  <a id="intersectWith">
+                    <a href="#intersectWith">
+                      <code><span>IReadOnlyDictionary.intersectWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="99">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.intersectWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        combiner
+                      </b>
+                      :
+                      <code><span>'T&#32;->&#32;'T&#32;->&#32;'T</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source1
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source2
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L141-141" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Returns the intersection of two read-only dictionaries, using the combiner function for duplicate keys.
+
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  combiner
+                </span>
+                :
+                <code><span>'T&#32;->&#32;'T&#32;->&#32;'T</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source1
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source2
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
+                <p>
+                  <a id="keys">
+                    <a href="#keys">
+                      <code><span>IReadOnlyDictionary.keys&#32;<span>source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="100">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.keys&#32;<span>source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                       - 
+                      The input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;'Key&gt;</span></code>
+                  </span>
+                  A seq of the keys in the IReadOnlyDictionary.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L44-44" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Returns the keys of the given read-only dictionary.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;'Key&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  A seq of the keys in the IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
+                <p>
+                  <a id="map">
+                    <a href="#map">
+                      <code><span>IReadOnlyDictionary.map&#32;<span>f&#32;x</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="101">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.map&#32;<span>f&#32;x</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T&#32;->&#32;'U</span></code>
+                       - 
+                      The mapping function.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                       - 
+                      The input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                  </span>
+                  The mapped IReadOnlyDictionary.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L57-57" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Maps the given function over each value in the read-only dictionary.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'T&#32;->&#32;'U</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The mapped IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
+                <p>
+                  <a id="map2">
+                    <a href="#map2">
+                      <code><span>IReadOnlyDictionary.map2&#32;<span>f&#32;x&#32;y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="102">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.map2&#32;<span>f&#32;x&#32;y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'U</span></code>
+                       - 
+                      The mapping function.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                       - 
+                      The first input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                       - 
+                      The second input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                  </span>
+                  The combined IReadOnlyDictionary.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L71-71" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Creates a read-only dictionary value from a pair of read-only dictionaries,
+ using a function to combine them.
+            </p>
+            <p class="fsdocs-remarks">
+              Keys that are not present on both read-only dictionaries are dropped.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'U</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The first input IReadOnlyDictionary.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The second input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The combined IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
+                <p>
+                  <a id="remove">
+                    <a href="#remove">
+                      <code><span>IReadOnlyDictionary.remove&#32;<span>key&#32;table</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="103">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.remove&#32;<span>key&#32;table</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        key
+                      </b>
+                      :
+                      <code>'Key</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        table
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L17-17" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Removes the given key from the read-only dictionary.
+
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  key
+                </span>
+                :
+                <code>'Key</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  table
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+                <p>
+                  <a id="tryGetValue">
+                    <a href="#tryGetValue">
+                      <code><span>IReadOnlyDictionary.tryGetValue&#32;<span>k&#32;dct</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="104">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.tryGetValue&#32;<span>k&#32;dct</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        k
+                      </b>
+                      :
+                      <code>'Key</code>
+                       - 
+                      The key whose value you wish to find.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        dct
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                       - 
+                      The input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'Value&#32;option</span></code>
+                  </span>
+                  An option wrapped value.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L27-27" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Tries to get the value of the given key.
+            </p>
+            <p class="fsdocs-remarks">
+              This is a function wrapper for the IReadOnlyDictionary.TryGetValue method,
+ representing the result as an Option<value> instead of a bool plus an out-value.
+ 
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  k
+                </span>
+                :
+                <code>'Key</code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The key whose value you wish to find.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  dct
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'Value&#32;option</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  An option wrapped value.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
+                <p>
+                  <a id="union">
+                    <a href="#union">
+                      <code><span>IReadOnlyDictionary.union&#32;<span>source&#32;altSource</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="105">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.union&#32;<span>source&#32;altSource</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        altSource
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L130-130" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Returns the union of two read-only dictionaries, preferring values from the first in case of duplicate keys.
+
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  altSource
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
+                <p>
+                  <a id="unionWith">
+                    <a href="#unionWith">
+                      <code><span>IReadOnlyDictionary.unionWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="106">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.unionWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        combiner
+                      </b>
+                      :
+                      <code><span>'Value&#32;->&#32;'Value&#32;->&#32;'Value</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source1
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source2
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L120-120" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              
+ Returns the union of two read-only dictionaries, using the combiner function for duplicate keys.
+
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  combiner
+                </span>
+                :
+                <code><span>'Value&#32;->&#32;'Value&#32;->&#32;'Value</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source1
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source2
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
+                <p>
+                  <a id="unzip">
+                    <a href="#unzip">
+                      <code><span>IReadOnlyDictionary.unzip&#32;<span>source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="107">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.unzip&#32;<span>source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+                       - 
+                      The source IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span>&#32;*&#32;<span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></span></code>
+                  </span>
+                  A tuple of each untupled IReadOnlyDictionary.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L111-111" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Splits a read-only dictionary with tuple pair values to two separate read-only dictionaries.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The source IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span>&#32;*&#32;<span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  A tuple of each untupled IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '108', 108)" onmouseover="showTip(event, '108', 108)">
+                <p>
+                  <a id="values">
+                    <a href="#values">
+                      <code><span>IReadOnlyDictionary.values&#32;<span>source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="108">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.values&#32;<span>source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                       - 
+                      The input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;'Value&gt;</span></code>
+                  </span>
+                  A seq of the values in the read-only dictionary.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L50-50" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Returns the values of the given read-only dictionary.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;'Value&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  A seq of the values in the read-only dictionary.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '109', 109)" onmouseover="showTip(event, '109', 109)">
+                <p>
+                  <a id="zip">
+                    <a href="#zip">
+                      <code><span>IReadOnlyDictionary.zip&#32;<span>x&#32;y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="109">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>IReadOnlyDictionary.zip&#32;<span>x&#32;y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                       - 
+                      The first input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                       - 
+                      The second input IReadOnlyDictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+                  </span>
+                  The tupled IReadOnlyDictionary.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L99-99" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Tuples values of two read-only dictionaries.
+            </p>
+            <p class="fsdocs-remarks">
+              Keys that are not present on both read-only dictionaries are dropped.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The first input IReadOnlyDictionary.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The second input IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The tupled IReadOnlyDictionary.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
-
-<!-- Render nested types and modules, if there are any -->
-
-  <h3>Functions and values</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Function or value</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
-            IReadOnlyDictionary.add key value table
-          </code>
-          <div class="tip" id="91">
-            <strong>Signature:</strong> key:&#39;Key -&gt; value:&#39;Value -&gt; table:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L14-14" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Replaces or sets the item associated with a specified key with the specified value.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
-            IReadOnlyDictionary.containsKey k dct
-          </code>
-          <div class="tip" id="92">
-            <strong>Signature:</strong> k:&#39;Key -&gt; dct:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; bool<br />
-                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L38-38" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Does the read-only dictionary contain the given key?</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
-            IReadOnlyDictionary.intersect(...)
-          </code>
-          <div class="tip" id="93">
-            <strong>Signature:</strong> source1:IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt; -&gt; source2:IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L140-140" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns the intersection of two read-only dictionaries, preferring values from the first in case of duplicate keys.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
-            IReadOnlyDictionary.intersectWith(...)
-          </code>
-          <div class="tip" id="94">
-            <strong>Signature:</strong> combiner:(&#39;T -&gt; &#39;T -&gt; &#39;T) -&gt; source1:IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt; -&gt; source2:IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'Key                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L128-128" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns the intersection of two read-only dictionaries, using the combiner function for duplicate keys.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
-            IReadOnlyDictionary.keys(source)
-          </code>
-          <div class="tip" id="95">
-            <strong>Signature:</strong> source:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; seq&lt;&#39;Key&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L44-44" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns the keys of the given read-only dictionary.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
-            IReadOnlyDictionary.map f x
-          </code>
-          <div class="tip" id="96">
-            <strong>Signature:</strong> f:(&#39;T -&gt; &#39;U) -&gt; x:IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'T, 'U, 'Key                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L57-57" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Maps the given function over each value in the read-only dictionary.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
-            IReadOnlyDictionary.map2 f x y
-          </code>
-          <div class="tip" id="97">
-            <strong>Signature:</strong> f:(&#39;T1 -&gt; &#39;T2 -&gt; &#39;U) -&gt; x:IReadOnlyDictionary&lt;&#39;Key,&#39;T1&gt; -&gt; y:IReadOnlyDictionary&lt;&#39;Key,&#39;T2&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;U&gt;<br />
-                          <strong>Type parameters:</strong> 'T1, 'T2, 'U, 'Key                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L71-71" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Creates a read-only dictionary value from a pair of read-only dictionaries,
-using a function to combine them.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
-            IReadOnlyDictionary.remove key table
-          </code>
-          <div class="tip" id="98">
-            <strong>Signature:</strong> key:&#39;Key -&gt; table:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L17-17" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Removes the given key from the read-only dictionary.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
-            IReadOnlyDictionary.tryGetValue k dct
-          </code>
-          <div class="tip" id="99">
-            <strong>Signature:</strong> k:&#39;Key -&gt; dct:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; &#39;Value option<br />
-                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L27-27" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Tries to get the value of the given key.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
-            IReadOnlyDictionary.union(...)
-          </code>
-          <div class="tip" id="100">
-            <strong>Signature:</strong> source:IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt; -&gt; altSource:IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'T                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L117-117" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns the union of two read-only dictionaries, preferring values from the first in case of duplicate keys.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
-            IReadOnlyDictionary.unionWith(...)
-          </code>
-          <div class="tip" id="101">
-            <strong>Signature:</strong> combiner:(&#39;Value -&gt; &#39;Value -&gt; &#39;Value) -&gt; source1:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; source2:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;<br />
-                          <strong>Type parameters:</strong> 'Value, 'Key                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L107-107" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns the union of two read-only dictionaries, using the combiner function for duplicate keys.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
-            IReadOnlyDictionary.unzip(source)
-          </code>
-          <div class="tip" id="102">
-            <strong>Signature:</strong> source:IReadOnlyDictionary&lt;&#39;Key,(&#39;T1 * &#39;T2)&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,&#39;T1&gt; * IReadOnlyDictionary&lt;&#39;Key,&#39;T2&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'T1, 'T2                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L98-98" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Splits a read-only dictionary with tuple pair values to two separate read-only dictionaries.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
-            IReadOnlyDictionary.values(source)
-          </code>
-          <div class="tip" id="103">
-            <strong>Signature:</strong> source:IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt; -&gt; seq&lt;&#39;Value&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'Value                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L50-50" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Returns the values of the given read-only dictionary.</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-          <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
-            IReadOnlyDictionary.zip x y
-          </code>
-          <div class="tip" id="104">
-            <strong>Signature:</strong> x:IReadOnlyDictionary&lt;&#39;Key,&#39;T1&gt; -&gt; y:IReadOnlyDictionary&lt;&#39;Key,&#39;T2&gt; -&gt; IReadOnlyDictionary&lt;&#39;Key,(&#39;T1 * &#39;T2)&gt;<br />
-                          <strong>Type parameters:</strong> 'Key, 'T1, 'T2                      </div>
-        </td>
-        <td class="xmldoc">
-                      <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L86-86" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Tuples values of two read-only dictionaries.</p>
-
-
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
+            
         </div>
-        <div class="span3">
-          <img src="/FSharpPlus/img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" />  
-		  <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-		  	<li class="nav-header">FSharpPlus</li>
-		  <li><a href="/FSharpPlus/index.html">Home page</a></li>
-		  <li class="divider"></li>
-		  <li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li>
-		  <li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li>
-		  <li><a href="/FSharpPlus/license.html">License</a></li>
-		  <li><a href="/FSharpPlus/release-notes.html">Release Notes</a></li>
 
-		  <li class="nav-header">Getting started</li>
-		  <li><a href="/FSharpPlus/tutorial.html">Tutorial</a></li>
-
-		  <li class="nav-header">Documentation</li>
-		  <li><a href="/FSharpPlus/reference/index.html">API Reference</a></li>
-      <li><a href="/FSharpPlus/types.html">Types</a></li>
-		  <li><a href="/FSharpPlus/abstractions.html">Abstractions</a></li>
-		  <li><a href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
-		  <li><a href="/FSharpPlus/numerics.html">Numerics</a></li>
-		  </ul>
-        </div>
-      </div>
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
     </div>
-    <a href="https://github.com/fsprojects/FSharpPlus"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
-  </body>
-  </html>
+</body>
+
+</html>

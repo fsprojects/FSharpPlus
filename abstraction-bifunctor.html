@@ -1,5 +1,91 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="Bifunctor" class="anchor" href="#Bifunctor">Bifunctor</a></h1>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Bifunctor
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <h1><a name="Bifunctor" class="anchor" href="#Bifunctor">Bifunctor</a></h1>
 <p>Intuitively a bifunctor is a functor with 2 arguments which are covariant.</p>
 <hr />
 <p>A bifunctor (short for binary functor) or functor of two variables is simply a functor whose domain is the product of two types.</p>
@@ -7,38 +93,22 @@
 <ul>
 <li><code>bimap f g x</code></li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Bimap</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">T</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span> <span class="id">g</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">V</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
-</code></pre></td>
-</tr>
-</table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Bimap</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">T</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span> <span class="id">g</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">V</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
+</code></pre>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
 <li><code>first f x</code></li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">First</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">T</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span>
-</code></pre></td>
-</tr>
-</table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">First</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">T</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span>
+</code></pre>
 <ul>
 <li><code>second g x</code></li>
 </ul>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)" class="id">Map</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">V</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
-</code></pre></td>
-</tr>
-</table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">Map</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">V</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Bifunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
+</code></pre>
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="id">bimap</span> <span class="id">f</span> <span class="id">g</span> <span class="o">=</span> <span class="id">first</span> <span class="id">f</span> <span class="o">&lt;&lt;</span> <span class="id">second</span> <span class="id">g</span>
-</code></pre></td>
-</tr>
-</table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="id">bimap</span> <span class="id">f</span> <span class="id">g</span> <span class="o">=</span> <span class="id">first</span> <span class="id">f</span> <span class="o">&lt;&lt;</span> <span class="id">second</span> <span class="id">g</span>
+</code></pre>
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
 <li><a href="abstraction-functor.html">Functor</a>: All bifunctors are also functors over the second parameter.</li>
@@ -61,30 +131,42 @@
 </li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">FSharpPlus</span>
 
 <span class="c">// convert (map) first element to an int and the second to a string</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)" class="id">rInt10Str10</span> <span class="o">=</span> <span onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)" class="fn">bimap</span>  <span onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)" class="fn">int</span> <span onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)" class="fn">string</span> <span class="pn">(</span><span class="n">10.0</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">rInt10Str10</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="fn">bimap</span>  <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="fn">int</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="fn">string</span> <span class="pn">(</span><span class="n">10.0</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
 
 
-<span class="k">let</span> <span onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)" class="id">resOk11</span>  <span class="o">=</span> <span onmouseout="hideTip(event, '4', 8)" onmouseover="showTip(event, '4', 8)" class="fn">bimap</span>  <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">1</span><span class="pn">)</span> <span onmouseout="hideTip(event, '6', 9)" onmouseover="showTip(event, '6', 9)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, '8', 10)" onmouseover="showTip(event, '8', 10)" class="uc">Ok</span> <span class="n">10</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="id">rStrTrue</span> <span class="o">=</span> <span onmouseout="hideTip(event, '10', 12)" onmouseover="showTip(event, '10', 12)" class="fn">first</span>  <span onmouseout="hideTip(event, '6', 13)" onmouseover="showTip(event, '6', 13)" class="fn">string</span> <span class="pn">(</span><span class="k">true</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '11', 14)" onmouseover="showTip(event, '11', 14)" class="id">rStr10</span>   <span class="o">=</span> <span onmouseout="hideTip(event, '12', 15)" onmouseover="showTip(event, '12', 15)" class="fn">second</span> <span onmouseout="hideTip(event, '6', 16)" onmouseover="showTip(event, '6', 16)" class="fn">string</span> <span class="pn">(</span><span class="k">true</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
-</code></pre></td>
-</tr>
-</table>
-</div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./reference/index.html">API Reference</a></li><li><a href="./types.html">Types</a></li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="id">resOk11</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 8)" onmouseover="showTip(event, 'fs4', 8)" class="fn">bimap</span>  <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">1</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="uc">Ok</span> <span class="n">10</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="id">rStrTrue</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="fn">first</span>  <span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="fn">string</span> <span class="pn">(</span><span class="k">true</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="id">rStr10</span>   <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="fn">second</span> <span onmouseout="hideTip(event, 'fs6', 16)" onmouseover="showTip(event, 'fs6', 16)" class="fn">string</span> <span class="pn">(</span><span class="k">true</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
+</code></pre>
+
+            <div class="fsdocs-tip" id="fs1">Multiple items<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs3">val rInt10Str10 : int * string</div>
+<div class="fsdocs-tip" id="fs4">val bimap : f:(&#39;T -&gt; &#39;U) -&gt; g:(&#39;V -&gt; &#39;W) -&gt; source:&#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;U,&#39;W&gt; (requires member Bimap)</div>
+<div class="fsdocs-tip" id="fs5">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
+<div class="fsdocs-tip" id="fs7">val resOk11 : Result&lt;string,int&gt;</div>
+<div class="fsdocs-tip" id="fs8">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div class="fsdocs-tip" id="fs9">val rStrTrue : string * int</div>
+<div class="fsdocs-tip" id="fs10">val first : f:(&#39;T -&gt; &#39;V) -&gt; source:&#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;U,&#39;V&gt; (requires member First)</div>
+<div class="fsdocs-tip" id="fs11">val rStr10 : bool * string</div>
+<div class="fsdocs-tip" id="fs12">val second : f:(&#39;V -&gt; &#39;W) -&gt; source:&#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;T,&#39;W&gt; (requires member Map)</div>
+
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>

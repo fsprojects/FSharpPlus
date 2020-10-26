@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>FSharpPlus.TypeLevel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  Namespaces
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
+      FSharpPlus.Internals
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
+      FSharpPlus.Math
+    </a>
+  </span>
+</li>             
+<li class="nav-item active">
+  <span>
+    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
+      FSharpPlus.TypeLevel
+    </a>
+  </span>
+</li>             
+<ul list-style-type="none">
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-aggregatedbooltypeerror-1.html">
+      AggregatedBoolTypeError<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-aggregatednattypeerror-1.html">
+      AggregatedNatTypeError<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-booltypeerror-1.html">
+      BoolTypeError<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-booltypeerrorlifter.html">
+      BoolTypeErrorLifter
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-dividedbyzeroerror.html">
+      DividedByZeroError
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-false.html">
+      False
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-ierrorliftable-1.html">
+      IErrorLiftable<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-itypebool.html">
+      ITypeBool
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-itypeliteral.html">
+      ITypeLiteral
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-itypenat.html">
+      ITypeNat
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-natop.html">
+      NatOp
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-nattypeerror-1.html">
+      NatTypeError<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-nattypeerrorlifter.html">
+      NatTypeErrorLifter
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-overflowerror.html">
+      OverflowError
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-s-1.html">
+      S<'n>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-true.html">
+      True
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-trywithimpl.html">
+      TryWithImpl
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-typebool.html">
+      TypeBool
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-typeerror-1.html">
+      TypeError<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-typeleveloperators.html">
+      TypeLevelOperators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-typenat.html">
+      TypeNat
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-typeop.html">
+      TypeOp
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel-z.html">
+      Z
+    </a>
+  </li>
+</ul>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h2 id="fsharpplus-typelevel">
+    FSharpPlus.TypeLevel Namespace
+  </h2>
+  <table class="table outer-list fsdocs-entity-list">
+    <thead>
+      <tr>
+        <td>
+          Type/Module
+        </td>
+        <td>
+          Description
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="AggregatedBoolTypeError<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-aggregatedbooltypeerror-1.html">
+                AggregatedBoolTypeError<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeBool.fs#L16-16" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="AggregatedNatTypeError<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-aggregatednattypeerror-1.html">
+                AggregatedNatTypeError<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L22-22" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="BoolTypeError<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-booltypeerror-1.html">
+                BoolTypeError<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeBool.fs#L6-6" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="BoolTypeErrorLifter">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-booltypeerrorlifter.html">
+                BoolTypeErrorLifter
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeBool.fs#L19-19" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="DividedByZeroError">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-dividedbyzeroerror.html">
+                DividedByZeroError
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L30-30" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="False">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-false.html">
+                False
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeBool.fs#L38-38" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="IErrorLiftable<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-ierrorliftable-1.html">
+                IErrorLiftable<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeLevelOperators.fs#L20-20" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Marker interface for getting the corresponding type-level error class of a type-level literal.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ITypeBool">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-itypebool.html">
+                ITypeBool
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeBool.fs#L22-22" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ITypeLiteral">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-itypeliteral.html">
+                ITypeLiteral
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeLevelOperators.fs#L17-17" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Marker interface for type-level literals.
+
+ #### Members
+
+     static member inline Singleton (defaultValue: T) = (* unique value-level representation of T *)
+
+ `Singleton` will be called with `Unchecked.defaultof<T>` so it should not use/deconstruct its value.
+
+     static member inline RuntimeValue (t: T) = (* value-level counterpart of T *)
+
+ `RuntimeValue` should return value-level representation of `T`. i.e. If `T` is type-level boolean `True`, then
+ the method should return value-level boolean `true`.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ITypeNat">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-itypenat.html">
+                ITypeNat
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L33-33" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NatOp">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-natop.html">
+                NatOp
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L94-94" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NatTypeError<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-nattypeerror-1.html">
+                NatTypeError<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NatTypeErrorLifter">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-nattypeerrorlifter.html">
+                NatTypeErrorLifter
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L25-25" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="OverflowError">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-overflowerror.html">
+                OverflowError
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L28-28" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="S<'n>">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-s-1.html">
+                S<'n>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L37-37" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="True">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-true.html">
+                True
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeBool.fs#L26-26" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="TryWithImpl">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-trywithimpl.html">
+                TryWithImpl
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeLevelOperators.fs#L52-52" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="TypeBool">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-typebool.html">
+                TypeBool
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeBool.fs#L50-50" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="TypeError<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-typeerror-1.html">
+                TypeError<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeLevelOperators.fs#L48-48" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Base class for type-level errors.
+
+ For every type (kind) of type-level literals, the corresponding type-error class should be created
+ and it should provide all the methods the literals have to offer.
+
+ TypeError should not implement `ITypeLiteral` but should provide `Singleton` and `RuntimeValue`.
+ This is important for making type-level error-handling work correctly.
+
+ TypeError should implement the same `IErrorLiftable<TypeErrorLifter>` as the corresponding kind do.
+ For example, if `TypeFoo` implements `IErrorLiftable<FooTypeErrorLifter>`, `FooTypeError` should also implement it.
+ So, the implementation will look like below:
+
+     type FooTypeError<'a> =
+       inherit TypeError<'a>
+       interface IErrorLiftable<FooTypeErrorLifter>
+       (* members related to Foo *)
+
+     and AggregatedFooTypeError<'a>() =
+       inherit FooTypeError<AggregatedFooTypeError<'a>>()
+    
+     and FooTypeErrorLifter =
+       static member inline Lift (_: 'Error) = Unchecked.defaultof<AggregatedFooTypeError<'Error>>
+
+     type ITypeFoo =
+       inherit ITypeLiteral
+       inherit IErrorLiftable<FooTypeErrorLifter>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="TypeLevelOperators">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-typeleveloperators.html">
+                TypeLevelOperators
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeLevelOperators.fs#L64-64" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="TypeNat">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-typenat.html">
+                TypeNat
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L105-105" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="TypeOp">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-typeop.html">
+                TypeOp
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeLevelOperators.fs#L61-61" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Z">
+              <a href="/FSharpPlus/reference/fsharpplus-typelevel-z.html">
+                Z
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/TypeLevel/TypeNat.fs#L74-74" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+            
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>FSharpPlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  Namespaces
+</li>             
+<li class="nav-item active">
+  <span>
+    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </span>
+</li>             
+<ul list-style-type="none">
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-array.html">
+      Array
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-async.html">
+      Async
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
+      Builders
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
+      Choice
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-dict.html">
+      Dict
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-dictionary.html">
+      Dictionary
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-enumerator.html">
+      Enumerator
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
+      Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ilist.html">
+      IList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlycollection.html">
+      IReadOnlyCollection
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlydictionary.html">
+      IReadOnlyDictionary
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-ireadonlylist.html">
+      IReadOnlyList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-lazy.html">
+      Lazy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-lens.html">
+      Lens
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-list.html">
+      List
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-map.html">
+      Map
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-memoization.html">
+      Memoization
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-nullable.html">
+      Nullable
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-operators.html">
+      Operators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-option.html">
+      Option
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-parsing.html">
+      Parsing
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-resizearray.html">
+      ResizeArray
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-result.html">
+      Result
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-seq.html">
+      Seq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-string.html">
+      String
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-task.html">
+      Task
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-tuple2.html">
+      Tuple2
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-tuple3.html">
+      Tuple3
+    </a>
+  </li>
+</ul>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
+      FSharpPlus.Internals
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
+      FSharpPlus.Math
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
+      FSharpPlus.TypeLevel
+    </a>
+  </span>
+</li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h2 id="fsharpplus">
+    FSharpPlus Namespace
+  </h2>
+  <p>
+    
+ Extension modules, along with, Builders, Lens, Memoization, Operators, and Parsing.
+ 
+  </p>
+  <p>
+    
+ See Operators for generic functions.
+ 
+  </p>
+  <table class="table outer-list fsdocs-entity-list">
+    <thead>
+      <tr>
+        <td>
+          Modules
+        </td>
+        <td>
+          Description
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Array">
+              <a href="/FSharpPlus/reference/fsharpplus-array.html">
+                Array
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Array
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Async">
+              <a href="/FSharpPlus/reference/fsharpplus-async.html">
+                Async
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Async.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Async
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Builders">
+              <a href="/FSharpPlus/reference/fsharpplus-builders.html">
+                Builders
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Builders.fs#L18-18" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Constructs to express generic computations
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Choice">
+              <a href="/FSharpPlus/reference/fsharpplus-choice.html">
+                Choice
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Choice
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Dict">
+              <a href="/FSharpPlus/reference/fsharpplus-dict.html">
+                Dict
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dict.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on IDictionary<'Key, 'Value>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Dictionary">
+              <a href="/FSharpPlus/reference/fsharpplus-dictionary.html">
+                Dictionary
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Dictionary<'Key, 'Value>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Enumerator">
+              <a href="/FSharpPlus/reference/fsharpplus-enumerator.html">
+                Enumerator
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Enumerator.fs#L7-7" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on IEnumerator
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Extensions">
+              <a href="/FSharpPlus/reference/fsharpplus-extensions.html">
+                Extensions
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Extensions.fs#L4-4" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Module containing F#+ Extension Methods on existing types
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="IList">
+              <a href="/FSharpPlus/reference/fsharpplus-ilist.html">
+                IList
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IList.fs#L7-7" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations IList<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="IReadOnlyCollection">
+              <a href="/FSharpPlus/reference/fsharpplus-ireadonlycollection.html">
+                IReadOnlyCollection
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyCollection.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on IReadOnlyCollection<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="IReadOnlyDictionary">
+              <a href="/FSharpPlus/reference/fsharpplus-ireadonlydictionary.html">
+                IReadOnlyDictionary
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyDictionary.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on IReadOnlyDictionary<'Key, 'Value>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="IReadOnlyList">
+              <a href="/FSharpPlus/reference/fsharpplus-ireadonlylist.html">
+                IReadOnlyList
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/IReadOnlyList.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on ReadOnlyList<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Lazy">
+              <a href="/FSharpPlus/reference/fsharpplus-lazy.html">
+                Lazy
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Lazy.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Lazy - delayed computations
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Lens">
+              <a href="/FSharpPlus/reference/fsharpplus-lens.html">
+                Lens
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Lens.fs#L9-9" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Lens functions and operators
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="List">
+              <a href="/FSharpPlus/reference/fsharpplus-list.html">
+                List
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/List.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on List
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Map">
+              <a href="/FSharpPlus/reference/fsharpplus-map.html">
+                Map
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Map<'Key, 'Value>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Memoization">
+              <a href="/FSharpPlus/reference/fsharpplus-memoization.html">
+                Memoization
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Memoization.fs#L9-9" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Nullable">
+              <a href="/FSharpPlus/reference/fsharpplus-nullable.html">
+                Nullable
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Nullable.fs#L9-9" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Nullable
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Operators">
+              <a href="/FSharpPlus/reference/fsharpplus-operators.html">
+                Operators
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Operators.fs#L7-7" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Generic functions and operators
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Option">
+              <a href="/FSharpPlus/reference/fsharpplus-option.html">
+                Option
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Option.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Option
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Parsing">
+              <a href="/FSharpPlus/reference/fsharpplus-parsing.html">
+                Parsing
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Parsing.fs#L9-9" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ResizeArray">
+              <a href="/FSharpPlus/reference/fsharpplus-resizearray.html">
+                ResizeArray
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on ResizeArray
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Result">
+              <a href="/FSharpPlus/reference/fsharpplus-result.html">
+                Result
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Result.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Result<'T,'Error>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Seq">
+              <a href="/FSharpPlus/reference/fsharpplus-seq.html">
+                Seq
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Seq
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="String">
+              <a href="/FSharpPlus/reference/fsharpplus-string.html">
+                String
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/String.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on String
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Task">
+              <a href="/FSharpPlus/reference/fsharpplus-task.html">
+                Task
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Task.fs#L7-7" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Task<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Tuple2">
+              <a href="/FSharpPlus/reference/fsharpplus-tuple2.html">
+                Tuple2
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Tuple.fs#L5-5" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Tuple (,)
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Tuple3">
+              <a href="/FSharpPlus/reference/fsharpplus-tuple3.html">
+                Tuple3
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Tuple.fs#L11-11" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Tuple (,,)
+
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+            
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>

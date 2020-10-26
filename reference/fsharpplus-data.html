@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>FSharpPlus.Data</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  Namespaces
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus.html">
+      FSharpPlus
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control.html">
+      FSharpPlus.Control
+    </a>
+  </span>
+</li>             
+<li class="nav-item active">
+  <span>
+    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus-data.html">
+      FSharpPlus.Data
+    </a>
+  </span>
+</li>             
+<ul list-style-type="none">
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-all.html">
+      All
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-any.html">
+      Any
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-choicet.html">
+      ChoiceT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-choicet-1.html">
+      ChoiceT<'monad<'choice<'t,'e>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-compose.html">
+      Compose
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-compose-1.html">
+      Compose<'functorF<'functorG<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-const.html">
+      Const
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-const-2.html">
+      Const<'t, 'u>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-cont.html">
+      Cont
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-cont-2.html">
+      Cont<'r, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-contt.html">
+      ContT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-contt-2.html">
+      ContT<'r, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-coproduct-2.html">
+      Coproduct<'functorL<'t>, 'functorR<'t>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-coproductbase-2.html">
+      CoproductBase<'functorL<'t>, 'functorR<'t>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-coproductprimitives.html">
+      CoproductPrimitives
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dlistmodule.html">
+      DList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dlist-1.html">
+      DList<'T>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dlistdata-1.html">
+      DListData<'T>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dual.html">
+      Dual
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-dual-1.html">
+      Dual<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-endo.html">
+      Endo
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-endo-1.html">
+      Endo<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-first-1.html">
+      First<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-free.html">
+      Free
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-free-2.html">
+      Free<'functor<'t>, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-freeprimitives.html">
+      FreePrimitives
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-identity.html">
+      Identity
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-identity-1.html">
+      Identity<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-kleisli.html">
+      Kleisli
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-kleisli-2.html">
+      Kleisli<'t, 'monad<'u>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-last-1.html">
+      Last<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-list.html">
+      List
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-listt.html">
+      ListT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-listt-1.html">
+      ListT<'monad<list<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrix.html">
+      Matrix
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrix-3.html">
+      Matrix<'Item, 'Row, 'Column>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrixoperators.html">
+      MatrixOperators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-mult-1.html">
+      Mult<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nelist-1.html">
+      nelist<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nemap-2.html">
+      nemap<'Key, 'Value>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-neseq-1.html">
+      neseq<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-neset-1.html">
+      neset<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylist.html">
+      NonEmptyList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">
+      NonEmptyList<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylistbuilder.html">
+      NonEmptyListBuilder
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptylistbuilderextensions.html">
+      NonEmptyListBuilderExtensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptymap.html">
+      NonEmptyMap
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptymap-2.html">
+      NonEmptyMap<'Key, 'Value>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq.html">
+      NonEmptySeq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">
+      NonEmptySeq<'T>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyseqbuilder.html">
+      NonEmptySeqBuilder
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyset.html">
+      NonEmptySet
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">
+      NonEmptySet<'a>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-option.html">
+      Option
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-optiont.html">
+      OptionT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">
+      OptionT<'monad<option<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parallelarray.html">
+      ParallelArray
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parallelarray-1.html">
+      ParallelArray<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parallelarrayoperators.html">
+      ParallelArrayOperators
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-parray-1.html">
+      parray<'t>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-reader.html">
+      Reader
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-reader-2.html">
+      Reader<'r, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-readert.html">
+      ReaderT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-readert-2.html">
+      ReaderT<'r, 'monad<'t>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-result.html">
+      Result
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-resultorexception.html">
+      ResultOrException
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-resultt.html">
+      ResultT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-resultt-1.html">
+      ResultT<'monad<'result<'t,'e>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-seq.html">
+      Seq
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-seqt.html">
+      SeqT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-seqt-1.html">
+      SeqT<'monad<seq<'t>>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-state.html">
+      State
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-state-2.html">
+      State<'s, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-statet.html">
+      StateT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-statet-2.html">
+      StateT<'s, 'monad<'t * 's>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-validation.html">
+      Validation
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-validation-2.html">
+      Validation<'error, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-vector.html">
+      Vector
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-vector-2.html">
+      Vector<'Item, 'Length>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writer.html">
+      Writer
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writer-2.html">
+      Writer<'monoid, 't>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writert.html">
+      WriterT
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writert-1.html">
+      WriterT<'monad<'t * 'monoid>>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-ziplist.html">
+      ZipList
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-ziplist-1.html">
+      ZipList<'s>
+    </a>
+  </li>
+</ul>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
+      FSharpPlus.Internals
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
+      FSharpPlus.Math
+    </a>
+  </span>
+</li>             
+<li class="nav-item">
+  <span>
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
+      FSharpPlus.TypeLevel
+    </a>
+  </span>
+</li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h2 id="fsharpplus-data">
+    FSharpPlus.Data Namespace
+  </h2>
+  <p>
+    
+ Data contains types and modules that represent data structures designed to be used with F#+ abstractions.
+ 
+  </p>
+  <table class="table outer-list fsdocs-entity-list">
+    <thead>
+      <tr>
+        <td>
+          Type/Module
+        </td>
+        <td>
+          Description
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="All">
+              <a href="/FSharpPlus/reference/fsharpplus-data-all.html">
+                All
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L33-33" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Boolean monoid under conjunction.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Any">
+              <a href="/FSharpPlus/reference/fsharpplus-data-any.html">
+                Any
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L39-39" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Boolean monoid under disjunction.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ChoiceT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-choicet.html">
+                ChoiceT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L106-106" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ChoiceT<'monad<'choice<'t,'e>>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-choicet-1.html">
+                ChoiceT<'monad<'choice<'t,'e>>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L102-102" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Compose">
+              <a href="/FSharpPlus/reference/fsharpplus-data-compose.html">
+                Compose
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L135-135" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Compose
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Compose<'functorF<'functorG<'t>>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-compose-1.html">
+                Compose<'functorF<'functorG<'t>>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L118-118" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Const">
+              <a href="/FSharpPlus/reference/fsharpplus-data-const.html">
+                Const
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L87-87" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Const
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Const<'t, 'u>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-const-2.html">
+                Const<'t, 'u>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L50-50" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+             The Const functor, defined as Const<'T, 'U> where 'U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
+ <p class='fsdocs-para'></p>   Useful for: Lens getters.
+ <p class='fsdocs-para'></p>   Its applicative instance plays a fundamental role in Lens. 
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Cont">
+              <a href="/FSharpPlus/reference/fsharpplus-data-cont.html">
+                Cont
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Cont.fs#L23-23" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Cont
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Cont<'r, 't>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-cont-2.html">
+                Cont<'r, 't>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Cont.fs#L19-19" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+             Computation type: Computations which can be interrupted and resumed.
+ <p class='fsdocs-para'></p>   Binding strategy: Binding a function to a monadic value creates a new continuation which uses the function as the continuation of the monadic computation.
+ <p class='fsdocs-para'></p>   Useful for: Complex control structures, error handling, and creating co-routines.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ContT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-contt.html">
+                ContT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Cont.fs#L76-76" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on ContT
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ContT<'r, 't>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-contt-2.html">
+                ContT<'r, 't>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Cont.fs#L40-40" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for Cont<'R,'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Coproduct<'functorL<'t>, 'functorR<'t>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-coproduct-2.html">
+                Coproduct<'functorL<'t>, 'functorR<'t>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Coproduct.fs#L20-20" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="CoproductBase<'functorL<'t>, 'functorR<'t>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-coproductbase-2.html">
+                CoproductBase<'functorL<'t>, 'functorR<'t>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Coproduct.fs#L10-10" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="CoproductPrimitives">
+              <a href="/FSharpPlus/reference/fsharpplus-data-coproductprimitives.html">
+                CoproductPrimitives
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Coproduct.fs#L24-24" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="DList">
+              <a href="/FSharpPlus/reference/fsharpplus-data-dlistmodule.html">
+                DList
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/DList.fs#L214-214" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="DList<'T>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-dlist-1.html">
+                DList<'T>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/DList.fs#L21-21" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ DList is an ordered linear structure implementing the List signature (head, tail, cons), 
+ end-insertion (add), and O(1) append. Ordering is by insertion history.
+ DList is an implementation of [John Hughes' append list](http://dl.acm.org/citation.cfm?id=8475).
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="DListData<'T>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-dlistdata-1.html">
+                DListData<'T>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/DList.fs#L11-11" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Dual">
+              <a href="/FSharpPlus/reference/fsharpplus-data-dual.html">
+                Dual
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L16-16" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Dual
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Dual<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-dual-1.html">
+                Dual<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L10-10" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ The dual of a monoid, obtained by swapping the arguments of append.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Endo">
+              <a href="/FSharpPlus/reference/fsharpplus-data-endo.html">
+                Endo
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L28-28" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Endo
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Endo<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-endo-1.html">
+                Endo<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L22-22" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ The monoid of endomorphisms under composition.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="First<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-first-1.html">
+                First<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L94-94" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Option<'T> monoid returning the leftmost non-None value.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Free">
+              <a href="/FSharpPlus/reference/fsharpplus-data-free.html">
+                Free
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L26-26" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Free Monads
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Free<'functor<'t>, 't>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-free-2.html">
+                Free<'functor<'t>, 't>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L13-13" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="FreePrimitives">
+              <a href="/FSharpPlus/reference/fsharpplus-data-freeprimitives.html">
+                FreePrimitives
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L16-16" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Identity">
+              <a href="/FSharpPlus/reference/fsharpplus-data-identity.html">
+                Identity
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Identity.fs#L23-23" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Identity
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Identity<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-identity-1.html">
+                Identity<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Identity.fs#L13-13" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+             Computation type: Simple function application.
+ <p class='fsdocs-para'></p>   Binding strategy: The bound function is applied to the input value. Identity x >>= f = Identity (f x)
+ <p class='fsdocs-para'></p>   Useful for: Lens setters and updaters - Monads can be derived from monad transformers applied to the Identity monad.
+ <p class='fsdocs-para'></p>   The Identity monad is a monad that does not embody any computational strategy. 
+           It simply applies the bound function to its input without any modification. 
+           Computationally, there is no reason to use the Identity monad instead of the much simpler act of simply applying functions to their arguments.
+           The purpose of the Identity monad is its fundamental role in the theory of monad transformers.
+           Any monad transformer applied to the Identity monad yields a non-transformer version of that monad.
+           Its applicative instance plays a fundamental role in Lens. 
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Kleisli">
+              <a href="/FSharpPlus/reference/fsharpplus-data-kleisli.html">
+                Kleisli
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Kleisli.fs#L43-43" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Kleisli
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Kleisli<'t, 'monad<'u>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-kleisli-2.html">
+                Kleisli<'t, 'monad<'u>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Kleisli.fs#L11-11" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Kleisli arrows of a monad. Represents a function 'T -> 'Monad<'U>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Last<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-last-1.html">
+                Last<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L101-101" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Option<'T> monoid returning the rightmost non-None value.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="List">
+              <a href="/FSharpPlus/reference/fsharpplus-data-list.html">
+                List
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/List.fs#L11-11" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on List
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ListT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-listt.html">
+                ListT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/List.fs#L43-43" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on ListT
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ListT<'monad<list<'t>>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-listt-1.html">
+                ListT<'monad<list<'t>>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/List.fs#L39-39" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for list<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Matrix">
+              <a href="/FSharpPlus/reference/fsharpplus-data-matrix.html">
+                Matrix
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L288-288" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Matrix<'Item, 'Row, 'Column>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-matrix-3.html">
+                Matrix<'Item, 'Row, 'Column>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L13-13" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="MatrixOperators">
+              <a href="/FSharpPlus/reference/fsharpplus-data-matrixoperators.html">
+                MatrixOperators
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L611-611" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Mult<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-mult-1.html">
+                Mult<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Monoids.fs#L111-111" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Numeric wrapper for multiplication monoid (*, 1)
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="nelist<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nelist-1.html">
+                nelist<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyList.fs#L37-37" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type alias for NonEmptyList<'t>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="nemap<'Key, 'Value>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nemap-2.html">
+                nemap<'Key, 'Value>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyMap.fs#L37-37" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type alias for NonEmptyMap<'Key,'Value>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="neseq<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-neseq-1.html">
+                neseq<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySeq.fs#L15-15" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type alias for NonEmptySeq<'t>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="neset<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-neset-1.html">
+                neset<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L32-32" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type alias for NonEmptySet<'t>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptyList">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist.html">
+                NonEmptyList
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyList.fs#L41-41" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on NonEmptyList
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptyList<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptylist-1.html">
+                NonEmptyList<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyList.fs#L11-11" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type-safe list that contains at least one element.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptyListBuilder">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptylistbuilder.html">
+                NonEmptyListBuilder
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyList.fs#L276-276" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptyListBuilderExtensions">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptylistbuilderextensions.html">
+                NonEmptyListBuilderExtensions
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyList.fs#L291-291" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptyMap">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptymap.html">
+                NonEmptyMap
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyMap.fs#L41-41" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on NonEmptyMap
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptyMap<'Key, 'Value>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptymap-2.html">
+                NonEmptyMap<'Key, 'Value>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptyMap.fs#L12-12" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type-safe map that contains at least one element.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptySeq">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq.html">
+                NonEmptySeq
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySeq.fs#L17-17" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptySeq<'T>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">
+                NonEmptySeq<'T>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySeq.fs#L10-10" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type-safe sequence that contains at least one element.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptySeqBuilder">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseqbuilder.html">
+                NonEmptySeqBuilder
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySeq.fs#L491-491" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptySet">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset.html">
+                NonEmptySet
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L36-36" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on NonEmptySet
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="NonEmptySet<'a>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">
+                NonEmptySet<'a>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/NonEmptySet.fs#L12-12" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type-safe set that contains at least one element.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Option">
+              <a href="/FSharpPlus/reference/fsharpplus-data-option.html">
+                Option
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L13-13" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Option
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="OptionT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-optiont.html">
+                OptionT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L22-22" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on OptionT
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="OptionT<'monad<option<'t>>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">
+                OptionT<'monad<option<'t>>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L18-18" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for Option<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ParallelArray">
+              <a href="/FSharpPlus/reference/fsharpplus-data-parallelarray.html">
+                ParallelArray
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/ParallelArray.fs#L14-14" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on ParallelArray
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ParallelArray<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-parallelarray-1.html">
+                ParallelArray<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/ParallelArray.fs#L8-8" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Array with an Applicative functor based on zipping and parallel execution.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ParallelArrayOperators">
+              <a href="/FSharpPlus/reference/fsharpplus-data-parallelarrayoperators.html">
+                ParallelArrayOperators
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/ParallelArray.fs#L48-48" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="parray<'t>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-parray-1.html">
+                parray<'t>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/ParallelArray.fs#L45-45" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A type alias for ParallelArray<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Reader">
+              <a href="/FSharpPlus/reference/fsharpplus-data-reader.html">
+                Reader
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L18-18" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Reader
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Reader<'r, 't>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-reader-2.html">
+                Reader<'r, 't>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L14-14" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+             Computation type: Computations which read values from a shared environment.
+ <p class='fsdocs-para'></p>   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
+ <p class='fsdocs-para'></p>   Useful for: Maintaining variable bindings, or other shared environment.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ReaderT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-readert.html">
+                ReaderT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L75-75" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Reader
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ReaderT<'r, 'monad<'t>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-readert-2.html">
+                ReaderT<'r, 'monad<'t>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Reader.fs#L71-71" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for Reader<'R, 'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Result">
+              <a href="/FSharpPlus/reference/fsharpplus-data-result.html">
+                Result
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L13-13" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Result
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ResultOrException">
+              <a href="/FSharpPlus/reference/fsharpplus-data-resultorexception.html">
+                ResultOrException
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L19-19" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Result<'TSuccess,'TFailure> specialized in 'TFailure = Exception 
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ResultT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-resultt.html">
+                ResultT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L41-41" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on ResultT
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ResultT<'monad<'result<'t,'e>>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-resultt-1.html">
+                ResultT<'monad<'result<'t,'e>>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Error.fs#L37-37" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for Result<'T, 'E>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Seq">
+              <a href="/FSharpPlus/reference/fsharpplus-data-seq.html">
+                Seq
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L11-11" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Additional operations on Seq
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="SeqT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-seqt.html">
+                SeqT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L28-28" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on SeqT
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="SeqT<'monad<seq<'t>>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-seqt-1.html">
+                SeqT<'monad<seq<'t>>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Seq.fs#L24-24" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for seq<'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="State">
+              <a href="/FSharpPlus/reference/fsharpplus-data-state.html">
+                State
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L17-17" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on State
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="State<'s, 't>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-state-2.html">
+                State<'s, 't>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L13-13" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+             Computation type: Computations which maintain state.
+ <p class='fsdocs-para'></p>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
+ <p class='fsdocs-para'></p>   Useful for: Building computations from sequences of operations that require a shared state. 
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="StateT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-statet.html">
+                StateT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L81-81" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on StateT
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="StateT<'s, 'monad<'t * 's>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-statet-2.html">
+                StateT<'s, 'monad<'t * 's>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/State.fs#L77-77" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for State<'S, 'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Validation">
+              <a href="/FSharpPlus/reference/fsharpplus-data-validation.html">
+                Validation
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validation.fs#L29-29" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Validation<'error, 't>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-validation-2.html">
+                Validation<'error, 't>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Validation.fs#L25-25" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A 'Validation' is either a value of the type 'error or 't, similar to 'Result'. However,
+ the 'Applicative' instance for 'Validation' accumulates errors using a 'Semigroup' on 'error.
+ In contrast, the Applicative for 'Result' returns only the first error.
+
+ A consequence of this is that 'Validation' is not a monad. There is no F#+ 'Bind' method since
+ that would violate monad rules.
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Vector">
+              <a href="/FSharpPlus/reference/fsharpplus-data-vector.html">
+                Vector
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L47-47" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Vector<'Item, 'Length>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-vector-2.html">
+                Vector<'Item, 'Length>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Matrix.fs#L33-33" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Writer">
+              <a href="/FSharpPlus/reference/fsharpplus-data-writer.html">
+                Writer
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Writer.fs#L17-17" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on Writer
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="Writer<'monoid, 't>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-writer-2.html">
+                Writer<'monoid, 't>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Writer.fs#L13-13" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+             Computation type: Computations which produce a stream of data in addition to the computed values.
+ <p class='fsdocs-para'></p>   Binding strategy: Combines the outputs of the subcomputations using <code>mappend</code>.
+ <p class='fsdocs-para'></p>   Useful for: Logging, or other computations that produce output "on the side". 
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="WriterT">
+              <a href="/FSharpPlus/reference/fsharpplus-data-writert.html">
+                WriterT
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Writer.fs#L87-87" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on WriterT
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="WriterT<'monad<'t * 'monoid>>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-writert-1.html">
+                WriterT<'monad<'t * 'monoid>>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Writer.fs#L83-83" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Monad Transformer for Writer<'Monoid, 'T>
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ZipList">
+              <a href="/FSharpPlus/reference/fsharpplus-data-ziplist.html">
+                ZipList
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/ZipList.fs#L14-14" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ Basic operations on ZipList
+
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="fsdocs-entity-name">
+          <p>
+            <a name="ZipList<'s>">
+              <a href="/FSharpPlus/reference/fsharpplus-data-ziplist-1.html">
+                ZipList<'s>
+              </a>
+            </a>
+          </p>
+        </td>
+        <td class="fsdocs-xmldoc">
+          <p>
+            <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/ZipList.fs#L9-9" class="fsdocs-source-link">
+              <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+              <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+            </a>
+            
+ A sequence with an Applicative functor based on zipping.
+
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+            
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>

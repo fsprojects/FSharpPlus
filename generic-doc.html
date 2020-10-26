@@ -1,5 +1,91 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8" /><title></title><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="F#+ is a base library for F#." /><meta name="author" content="Gusty" /><script src="https://code.jquery.com/jquery-1.8.0.js"></script><script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script><script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script><link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet" /><link type="text/css" rel="stylesheet" href="./content/style.css" /><script type="text/javascript" src="./content/tips.js"></script></head><body><div class="container"><div class="masthead"><ul class="nav nav-pills pull-right"><li><a href="http://fsharp.org">fsharp.org</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">github page</a></li></ul><h3 class="muted"><a href="./index.html">FSharpPlus</a></h3></div><hr /><div class="row"><div class="span9" id="main"><h1><a name="Generic-operators-and-functions" class="anchor" href="#Generic-operators-and-functions">Generic operators and functions</a></h1>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Generic operators and functions
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Gusty">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <h1><a name="Generic-operators-and-functions" class="anchor" href="#Generic-operators-and-functions">Generic operators and functions</a></h1>
 <p>After reviewing <a href="extensions.html">extension functions</a> it's natural to want to
 use generic functions that can work across different types.</p>
 <p>F#+ implements generic functions that efficiently call out to specific
@@ -10,7 +96,7 @@ and signatures.</p>
 <ul>
 <li>Docs on <a href="operators-common.html">Operators - Common Combinators</a></li>
 <li>Other docs exist for each <a href="abstractions.html">abstraction</a></li>
-<li>API Doc for <a href="reference/operators.html">Generic functions and operators</a></li>
+<li>API Doc for <a href="reference/fsharpplus-operators.html">Generic functions and operators</a></li>
 </ul>
 <p>They're particularly useful in that the specific function called will
 depend on the input arguments and return type. However, this means you
@@ -18,37 +104,9 @@ sometimes need to explicitly specify the type if this information is
 not available (actually it's a good debug technique to temporarily add
 the types explicitly when the compiler tells you that the types are wrong).</p>
 <p>For example:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
-<span class="l">19: </span>
-<span class="l">20: </span>
-<span class="l">21: </span>
-<span class="l">22: </span>
-<span class="l">23: </span>
-<span class="l">24: </span>
-<span class="l">25: </span>
-<span class="l">26: </span>
-<span class="l">27: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// Convert the number 42 to bytes... </span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// Convert the number 42 to bytes... </span>
 <span class="c">// ... here the type is known (42 is an int, the return value is byte[])</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)" class="id">a</span> <span class="o">=</span> <span class="n">42</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)" class="fn">toBytes</span><span class="pn">;;</span>  
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">a</span> <span class="o">=</span> <span class="n">42</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="fn">toBytes</span><span class="pn">;;</span>  
 <span class="c">//val a : byte [] = [|42uy; 0uy; 0uy; 0uy|]</span>
 
 <span class="c">// However, this can&#39;t compile since the return type is not inferrable</span>
@@ -66,16 +124,14 @@ the types explicitly when the compiler tells you that the types are wrong).</p>
 <span class="c">// [followed by many possible implementations...]</span>
 
 <span class="c">// So, in this case, we have to give the return type:</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)" class="id">b</span> <span class="pn">:</span><span onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)" class="vt">int</span> <span class="o">=</span> <span class="pn">[|</span><span class="n">42uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">|]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)" class="fn">ofBytes</span><span class="pn">;;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">b</span> <span class="pn">:</span><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="vt">int</span> <span class="o">=</span> <span class="pn">[|</span><span class="n">42uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">|]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="fn">ofBytes</span><span class="pn">;;</span>
 <span class="c">// val b : int = 42</span>
 
 <span class="c">// ...or, the more usual case, you use in context where type can be inferred,</span>
 <span class="c">// like this example:</span>
-<span class="n">1</span> <span class="o">+</span> <span class="pn">(</span><span class="pn">[|</span><span class="n">42uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">|]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, '6', 7)" onmouseover="showTip(event, '6', 7)" class="fn">ofBytes</span><span class="pn">)</span><span class="pn">;;</span>
+<span class="n">1</span> <span class="o">+</span> <span class="pn">(</span><span class="pn">[|</span><span class="n">42uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">;</span> <span class="n">0uy</span><span class="pn">|]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="fn">ofBytes</span><span class="pn">)</span><span class="pn">;;</span>
 <span class="c">//val it : int = 43</span>
-</code></pre></td>
-</tr>
-</table>
+</code></pre>
 <h1><a name="How-do-generic-functions-work" class="anchor" href="#How-do-generic-functions-work">How do generic functions work?</a></h1>
 <p>F# does not support overloaded functions, but it does support overloaded
 methods on types (classes) - including static methods. F#+ takes
@@ -91,92 +147,94 @@ implement your own instances of generic functions if you implement the required
 methods.</p>
 <h1><a name="Examples" class="anchor" href="#Examples">Examples</a></h1>
 <p>Here are some examples of the generic <code>map</code> operation over existing .NET and F# types:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, '7', 8)" onmouseover="showTip(event, '7', 8)" class="fn">map</span> <span onmouseout="hideTip(event, '8', 9)" onmouseover="showTip(event, '8', 9)" class="fn">string</span> <span class="pn">[|</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">|]</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="fn">string</span> <span class="pn">[|</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">|]</span>
 <span class="c">// val it : string [] = [|&quot;2&quot;; &quot;3&quot;; &quot;4&quot;; &quot;5&quot;|]</span>
 
-<span onmouseout="hideTip(event, '7', 10)" onmouseover="showTip(event, '7', 10)" class="fn">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">9</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '9', 11)" onmouseover="showTip(event, '9', 11)" class="uc">Some</span> <span class="n">3</span><span class="pn">)</span>
+<span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="fn">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">9</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="uc">Some</span> <span class="n">3</span><span class="pn">)</span>
 <span class="c">// val it : int option = Some 12</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, '10', 12)" onmouseover="showTip(event, '10', 12)" class="id">res12</span> <span class="o">=</span> <span onmouseout="hideTip(event, '7', 13)" onmouseover="showTip(event, '7', 13)" class="fn">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">9</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '11', 14)" onmouseover="showTip(event, '11', 14)" class="k">async</span> <span class="pn">{</span><span class="k">return</span> <span class="n">3</span><span class="pn">}</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="id">res12</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 13)" onmouseover="showTip(event, 'fs7', 13)" class="fn">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">9</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="k">async</span> <span class="pn">{</span><span class="k">return</span> <span class="n">3</span><span class="pn">}</span><span class="pn">)</span>
 <span class="c">// val it : Async&lt;int&gt; = Microsoft.FSharp.Control.FSharpAsync`1[System.Int32]</span>
-<span onmouseout="hideTip(event, '12', 15)" onmouseover="showTip(event, '12', 15)" class="fn">extract</span> <span onmouseout="hideTip(event, '10', 16)" onmouseover="showTip(event, '10', 16)" class="id">res12</span>
+<span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="fn">extract</span> <span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="id">res12</span>
 <span class="c">// val it : int = 12</span>
-</code></pre></td>
-</tr>
-</table>
+</code></pre>
 <p>Here are some examples with types defined in this library:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-<span class="l">5: </span>
-<span class="l">6: </span>
-<span class="l">7: </span>
-<span class="l">8: </span>
-<span class="l">9: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, '1', 17)" onmouseover="showTip(event, '1', 17)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, '13', 18)" onmouseover="showTip(event, '13', 18)" class="id">Data</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 17)" onmouseover="showTip(event, 'fs1', 17)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="id">Data</span>
 
-<span onmouseout="hideTip(event, '7', 19)" onmouseover="showTip(event, '7', 19)" class="fn">map</span> <span onmouseout="hideTip(event, '8', 20)" onmouseover="showTip(event, '8', 20)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, '14', 21)" onmouseover="showTip(event, '14', 21)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, '15', 22)" onmouseover="showTip(event, '15', 22)" class="id">create</span> <span class="n">2</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">)</span>
+<span onmouseout="hideTip(event, 'fs7', 19)" onmouseover="showTip(event, 'fs7', 19)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs8', 20)" onmouseover="showTip(event, 'fs8', 20)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs15', 22)" onmouseover="showTip(event, 'fs15', 22)" class="id">create</span> <span class="n">2</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">)</span>
 <span class="c">// val it : NonEmptyList&lt;string&gt; = {Head = &quot;2&quot;; Tail = [&quot;3&quot;; &quot;4&quot;; &quot;5&quot;];}</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, '16', 23)" onmouseover="showTip(event, '16', 23)" class="id">stateFul42</span> <span class="o">=</span> <span onmouseout="hideTip(event, '7', 24)" onmouseover="showTip(event, '7', 24)" class="fn">map</span> <span onmouseout="hideTip(event, '8', 25)" onmouseover="showTip(event, '8', 25)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, '17', 26)" onmouseover="showTip(event, '17', 26)" class="uc">State</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, '18', 27)" onmouseover="showTip(event, '18', 27)" class="id">x</span> <span class="k">-&gt;</span> <span class="pn">(</span><span class="n">42</span><span class="pn">,</span> <span onmouseout="hideTip(event, '18', 28)" onmouseover="showTip(event, '18', 28)" class="id">x</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span>
-<span onmouseout="hideTip(event, '17', 29)" onmouseover="showTip(event, '17', 29)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, '19', 30)" onmouseover="showTip(event, '19', 30)" class="id">run</span> <span onmouseout="hideTip(event, '16', 31)" onmouseover="showTip(event, '16', 31)" class="id">stateFul42</span> <span class="s">&quot;state&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="id">stateFul42</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 24)" onmouseover="showTip(event, 'fs7', 24)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs8', 25)" onmouseover="showTip(event, 'fs8', 25)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs17', 26)" onmouseover="showTip(event, 'fs17', 26)" class="uc">State</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, 'fs18', 27)" onmouseover="showTip(event, 'fs18', 27)" class="id">x</span> <span class="k">-&gt;</span> <span class="pn">(</span><span class="n">42</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="id">x</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span>
+<span onmouseout="hideTip(event, 'fs17', 29)" onmouseover="showTip(event, 'fs17', 29)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs19', 30)" onmouseover="showTip(event, 'fs19', 30)" class="id">run</span> <span onmouseout="hideTip(event, 'fs16', 31)" onmouseover="showTip(event, 'fs16', 31)" class="id">stateFul42</span> <span class="s">&quot;state&quot;</span>
 <span class="c">// val stateFul42 : State&lt;string,string&gt; = State &lt;fun:map@12-9&gt;</span>
 <span class="c">// val it : string * string = (&quot;42&quot;, &quot;state&quot;)</span>
-</code></pre></td>
-</tr>
-</table>
+</code></pre>
 <p>Now let's define our own type with its own map definition</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="o">=</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, '20', 32)" onmouseover="showTip(event, '20', 32)" class="uc">Tree</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">t</span> <span class="pn">*</span> <span onmouseout="hideTip(event, '20', 33)" onmouseover="showTip(event, '20', 33)" class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="pn">*</span> <span onmouseout="hideTip(event, '20', 34)" onmouseover="showTip(event, '20', 34)" class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, '21', 35)" onmouseover="showTip(event, '21', 35)" class="uc">Leaf</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">t</span>
-    <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, '22', 36)" onmouseover="showTip(event, '22', 36)" class="fn">Map</span> <span class="pn">(</span><span onmouseout="hideTip(event, '23', 37)" onmouseover="showTip(event, '23', 37)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, '20', 38)" onmouseover="showTip(event, '20', 38)" class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, '24', 39)" onmouseover="showTip(event, '24', 39)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span> 
-        <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, '25', 40)" onmouseover="showTip(event, '25', 40)" class="fn">loop</span> <span onmouseout="hideTip(event, '26', 41)" onmouseover="showTip(event, '26', 41)" class="fn">f</span> <span class="o">=</span> <span class="k">function</span>
-            <span class="pn">|</span> <span onmouseout="hideTip(event, '21', 42)" onmouseover="showTip(event, '21', 42)" class="uc">Leaf</span> <span onmouseout="hideTip(event, '27', 43)" onmouseover="showTip(event, '27', 43)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '21', 44)" onmouseover="showTip(event, '21', 44)" class="uc">Leaf</span> <span class="pn">(</span><span onmouseout="hideTip(event, '26', 45)" onmouseover="showTip(event, '26', 45)" class="fn">f</span> <span onmouseout="hideTip(event, '27', 46)" onmouseover="showTip(event, '27', 46)" class="id">x</span><span class="pn">)</span>
-            <span class="pn">|</span> <span onmouseout="hideTip(event, '20', 47)" onmouseover="showTip(event, '20', 47)" class="uc">Tree</span> <span class="pn">(</span><span onmouseout="hideTip(event, '27', 48)" onmouseover="showTip(event, '27', 48)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, '28', 49)" onmouseover="showTip(event, '28', 49)" class="id">t1</span><span class="pn">,</span> <span onmouseout="hideTip(event, '29', 50)" onmouseover="showTip(event, '29', 50)" class="id">t2</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, '20', 51)" onmouseover="showTip(event, '20', 51)" class="uc">Tree</span> <span class="pn">(</span><span onmouseout="hideTip(event, '26', 52)" onmouseover="showTip(event, '26', 52)" class="fn">f</span> <span onmouseout="hideTip(event, '27', 53)" onmouseover="showTip(event, '27', 53)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, '25', 54)" onmouseover="showTip(event, '25', 54)" class="fn">loop</span> <span onmouseout="hideTip(event, '26', 55)" onmouseover="showTip(event, '26', 55)" class="fn">f</span> <span onmouseout="hideTip(event, '28', 56)" onmouseover="showTip(event, '28', 56)" class="id">t1</span><span class="pn">,</span> <span onmouseout="hideTip(event, '25', 57)" onmouseover="showTip(event, '25', 57)" class="fn">loop</span> <span onmouseout="hideTip(event, '26', 58)" onmouseover="showTip(event, '26', 58)" class="fn">f</span> <span onmouseout="hideTip(event, '29', 59)" onmouseover="showTip(event, '29', 59)" class="id">t2</span><span class="pn">)</span>
-        <span onmouseout="hideTip(event, '25', 60)" onmouseover="showTip(event, '25', 60)" class="fn">loop</span> <span onmouseout="hideTip(event, '24', 61)" onmouseover="showTip(event, '24', 61)" class="fn">f</span> <span onmouseout="hideTip(event, '23', 62)" onmouseover="showTip(event, '23', 62)" class="id">x</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="o">=</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs20', 32)" onmouseover="showTip(event, 'fs20', 32)" class="uc">Tree</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">t</span> <span class="pn">*</span> <span onmouseout="hideTip(event, 'fs20', 33)" onmouseover="showTip(event, 'fs20', 33)" class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="pn">*</span> <span onmouseout="hideTip(event, 'fs20', 34)" onmouseover="showTip(event, 'fs20', 34)" class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs21', 35)" onmouseover="showTip(event, 'fs21', 35)" class="uc">Leaf</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">t</span>
+    <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs22', 36)" onmouseover="showTip(event, 'fs22', 36)" class="fn">Map</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs23', 37)" onmouseover="showTip(event, 'fs23', 37)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs20', 38)" onmouseover="showTip(event, 'fs20', 38)" class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs24', 39)" onmouseover="showTip(event, 'fs24', 39)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span> 
+        <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs25', 40)" onmouseover="showTip(event, 'fs25', 40)" class="fn">loop</span> <span onmouseout="hideTip(event, 'fs26', 41)" onmouseover="showTip(event, 'fs26', 41)" class="fn">f</span> <span class="o">=</span> <span class="k">function</span>
+            <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs21', 42)" onmouseover="showTip(event, 'fs21', 42)" class="uc">Leaf</span> <span onmouseout="hideTip(event, 'fs27', 43)" onmouseover="showTip(event, 'fs27', 43)" class="id">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs21', 44)" onmouseover="showTip(event, 'fs21', 44)" class="uc">Leaf</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs26', 45)" onmouseover="showTip(event, 'fs26', 45)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs27', 46)" onmouseover="showTip(event, 'fs27', 46)" class="id">x</span><span class="pn">)</span>
+            <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs20', 47)" onmouseover="showTip(event, 'fs20', 47)" class="uc">Tree</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs27', 48)" onmouseover="showTip(event, 'fs27', 48)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs28', 49)" onmouseover="showTip(event, 'fs28', 49)" class="id">t1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs29', 50)" onmouseover="showTip(event, 'fs29', 50)" class="id">t2</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs20', 51)" onmouseover="showTip(event, 'fs20', 51)" class="uc">Tree</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs26', 52)" onmouseover="showTip(event, 'fs26', 52)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs27', 53)" onmouseover="showTip(event, 'fs27', 53)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs25', 54)" onmouseover="showTip(event, 'fs25', 54)" class="fn">loop</span> <span onmouseout="hideTip(event, 'fs26', 55)" onmouseover="showTip(event, 'fs26', 55)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs28', 56)" onmouseover="showTip(event, 'fs28', 56)" class="id">t1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs25', 57)" onmouseover="showTip(event, 'fs25', 57)" class="fn">loop</span> <span onmouseout="hideTip(event, 'fs26', 58)" onmouseover="showTip(event, 'fs26', 58)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs29', 59)" onmouseover="showTip(event, 'fs29', 59)" class="id">t2</span><span class="pn">)</span>
+        <span onmouseout="hideTip(event, 'fs25', 60)" onmouseover="showTip(event, 'fs25', 60)" class="fn">loop</span> <span onmouseout="hideTip(event, 'fs24', 61)" onmouseover="showTip(event, 'fs24', 61)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs23', 62)" onmouseover="showTip(event, 'fs23', 62)" class="id">x</span>
 
-<span onmouseout="hideTip(event, '7', 63)" onmouseover="showTip(event, '7', 63)" class="fn">map</span> <span class="pn">(</span><span class="o">(*)</span> <span class="n">10</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, '20', 64)" onmouseover="showTip(event, '20', 64)" class="uc">Tree</span><span class="pn">(</span><span class="n">6</span><span class="pn">,</span> <span onmouseout="hideTip(event, '20', 65)" onmouseover="showTip(event, '20', 65)" class="uc">Tree</span><span class="pn">(</span><span class="n">2</span><span class="pn">,</span> <span onmouseout="hideTip(event, '21', 66)" onmouseover="showTip(event, '21', 66)" class="uc">Leaf</span> <span class="n">1</span><span class="pn">,</span> <span onmouseout="hideTip(event, '21', 67)" onmouseover="showTip(event, '21', 67)" class="uc">Leaf</span> <span class="n">3</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, '21', 68)" onmouseover="showTip(event, '21', 68)" class="uc">Leaf</span> <span class="n">9</span><span class="pn">)</span><span class="pn">)</span>
+<span onmouseout="hideTip(event, 'fs7', 63)" onmouseover="showTip(event, 'fs7', 63)" class="fn">map</span> <span class="pn">(</span><span class="o">(*)</span> <span class="n">10</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs20', 64)" onmouseover="showTip(event, 'fs20', 64)" class="uc">Tree</span><span class="pn">(</span><span class="n">6</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs20', 65)" onmouseover="showTip(event, 'fs20', 65)" class="uc">Tree</span><span class="pn">(</span><span class="n">2</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs21', 66)" onmouseover="showTip(event, 'fs21', 66)" class="uc">Leaf</span> <span class="n">1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs21', 67)" onmouseover="showTip(event, 'fs21', 67)" class="uc">Leaf</span> <span class="n">3</span><span class="pn">)</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs21', 68)" onmouseover="showTip(event, 'fs21', 68)" class="uc">Leaf</span> <span class="n">9</span><span class="pn">)</span><span class="pn">)</span>
 <span class="c">// val it : Tree&lt;int&gt; = Tree (60,Tree (20,Leaf 10,Leaf 30),Leaf 90)</span>
-</code></pre></td>
-</tr>
-</table>
+</code></pre>
 <p>For a type defined in an external library it will work when it contains a static member matching the expected name and signature.</p>
 <p>Here's an example of the generic function <code>fromBigInt</code> targeting a type defined in the MathNet library</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;../../packages/docs/MathNet.Numerics/lib/net40/MathNet.Numerics.dll&quot;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;../../packages/docs/MathNet.Numerics/lib/net40/MathNet.Numerics.dll&quot;</span>
 <span class="pp">#r</span> <span class="s">&quot;../../packages/docs/MathNet.Numerics.FSharp/lib/net45/MathNet.Numerics.FSharp.dll&quot;</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, '30', 69)" onmouseover="showTip(event, '30', 69)" class="id">x</span> <span class="pn">:</span> <span onmouseout="hideTip(event, '31', 70)" onmouseover="showTip(event, '31', 70)" class="rt">MathNet</span><span class="pn">.</span><span onmouseout="hideTip(event, '32', 71)" onmouseover="showTip(event, '32', 71)" class="id">Numerics</span><span class="pn">.</span><span onmouseout="hideTip(event, '33', 72)" onmouseover="showTip(event, '33', 72)" class="id">BigRational</span> <span class="o">=</span> <span onmouseout="hideTip(event, '34', 73)" onmouseover="showTip(event, '34', 73)" class="fn">fromBigInt</span> <span class="m">10I</span>
-</code></pre></td>
-</tr>
-</table>
-</div><div class="span3"><img src="./img/logo-color.svg" alt="F# Project" style="width:150px;margin:10px" /><ul class="nav nav-list" id="menu" style="margin-top:20px"><li class="nav-header">FSharpPlus</li><li><a href="./index.html">Home page</a></li><li class="divider"></li><li><a href="http://nuget.org/packages/FSharpPlus">Get Library via NuGet</a></li><li><a href="https://github.com/fsprojects/FSharpPlus">Source Code on GitHub</a></li><li><a href="./license.html">License</a></li><li><a href="./release-notes.html">Release Notes</a></li><li class="nav-header">Getting started</li><li><a href="./tutorial.html">Tutorial</a></li><li class="nav-header">Documentation</li><li><a href="./reference/index.html">API Reference</a></li><li><a href="./types.html">Types</a></li><li><a href="./abstractions.html">Abstractions</a></li><li><a href="./computation-expressions.html">Computation Expressions</a></li><li><a href="./numerics.html">Numerics</a></li></ul></div></div></div><a href="https://github.com/fsprojects/FSharpPlus"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub" /></a></body></html>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 69)" onmouseover="showTip(event, 'fs30', 69)" class="id">x</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs31', 70)" onmouseover="showTip(event, 'fs31', 70)" class="rt">MathNet</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs32', 71)" onmouseover="showTip(event, 'fs32', 71)" class="id">Numerics</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs33', 72)" onmouseover="showTip(event, 'fs33', 72)" class="id">BigRational</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs34', 73)" onmouseover="showTip(event, 'fs34', 73)" class="fn">fromBigInt</span> <span class="m">10I</span>
+</code></pre>
+
+            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs2">val a : byte []</div>
+<div class="fsdocs-tip" id="fs3">val toBytes : value:&#39;a -&gt; byte [] (requires member ToBytes)</div>
+<div class="fsdocs-tip" id="fs4">val b : int</div>
+<div class="fsdocs-tip" id="fs5">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
+<div class="fsdocs-tip" id="fs6">val ofBytes : value:byte [] -&gt; &#39;a (requires member OfBytes)</div>
+<div class="fsdocs-tip" id="fs7">val map : f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)</div>
+<div class="fsdocs-tip" id="fs8">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
+<div class="fsdocs-tip" id="fs9">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs10">val res12 : Async&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs11">val async : AsyncBuilder</div>
+<div class="fsdocs-tip" id="fs12">val extract : x:&#39;Comonad&lt;&#39;T&gt; -&gt; &#39;T (requires member Extract)</div>
+<div class="fsdocs-tip" id="fs13">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs14">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{ Head: &#39;t<br />&#160;&#160;&#160;&#160;Tail: &#39;t list }<br />&#160;&#160;&#160;&#160;interface NonEmptySeq&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member Length : int<br />&#160;&#160;&#160;&#160;static member Choice : source:NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ( &lt;|&gt; ))<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;...</div>
+<div class="fsdocs-tip" id="fs15">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;</div>
+<div class="fsdocs-tip" id="fs16">val stateFul42 : State&lt;string,string&gt;</div>
+<div class="fsdocs-tip" id="fs17">Multiple items<br />union case State.State: (&#39;s -&gt; &#39;t * &#39;s) -&gt; State&lt;&#39;s,&#39;t&gt;<br /><br />--------------------<br />module State<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type State&lt;&#39;s,&#39;t&gt; =<br />&#160;&#160;| State of (&#39;s -&gt; &#39;t * &#39;s)<br />&#160;&#160;&#160;&#160;static member Delay : body:(unit -&gt; State&lt;&#39;S,&#39;T&gt;) -&gt; State&lt;&#39;S,&#39;T&gt;<br />&#160;&#160;&#160;&#160;static member Return : a:&#39;T -&gt; State&lt;&#39;S,&#39;T&gt;<br />&#160;&#160;&#160;&#160;static member TryFinally : State&lt;&#39;S,&#39;T&gt; * f:(unit -&gt; unit) -&gt; State&lt;&#39;S,&#39;T&gt;<br />&#160;&#160;&#160;&#160;static member TryWith : State&lt;&#39;S,&#39;T&gt; * h:(exn -&gt; State&lt;&#39;S,&#39;T&gt;) -&gt; State&lt;&#39;S,&#39;T&gt;<br />&#160;&#160;&#160;&#160;static member Using : resource:&#39;a2 * f:(&#39;a2 -&gt; State&lt;&#39;S,&#39;T&gt;) -&gt; State&lt;&#39;S,&#39;T&gt; (requires &#39;a2 :&gt; IDisposable)<br />&#160;&#160;&#160;&#160;static member get_Get : unit -&gt; State&lt;&#39;S,&#39;S&gt;<br />&#160;&#160;&#160;&#160;static member ( &gt;&gt;= ) : x:State&lt;&#39;S,&#39;T&gt; * f:(&#39;T -&gt; State&lt;&#39;S,&#39;U&gt;) -&gt; State&lt;&#39;S,&#39;U&gt;<br />&#160;&#160;&#160;&#160;static member ( &lt;*&gt; ) : f:State&lt;&#39;S,(&#39;T -&gt; &#39;U)&gt; * x:State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;</div>
+<div class="fsdocs-tip" id="fs18">val x : string</div>
+<div class="fsdocs-tip" id="fs19">val run : State&lt;&#39;S,&#39;T&gt; -&gt; (&#39;S -&gt; &#39;T * &#39;S)</div>
+<div class="fsdocs-tip" id="fs20">Multiple items<br />union case Tree.Tree: &#39;t * Tree&lt;&#39;t&gt; * Tree&lt;&#39;t&gt; -&gt; Tree&lt;&#39;t&gt;<br /><br />--------------------<br />type Tree&lt;&#39;t&gt; =<br />&#160;&#160;| Tree of &#39;t * Tree&lt;&#39;t&gt; * Tree&lt;&#39;t&gt;<br />&#160;&#160;| Leaf of &#39;t<br />&#160;&#160;&#160;&#160;static member Map : x:Tree&lt;&#39;a&gt; * f:(&#39;a -&gt; &#39;a0) -&gt; Tree&lt;&#39;a0&gt;</div>
+<div class="fsdocs-tip" id="fs21">union case Tree.Leaf: &#39;t -&gt; Tree&lt;&#39;t&gt;</div>
+<div class="fsdocs-tip" id="fs22">Multiple items<br />module Map<br /><br />from FSharpPlus<br /><br />--------------------<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="fsdocs-tip" id="fs23">val x : Tree&lt;&#39;a&gt;</div>
+<div class="fsdocs-tip" id="fs24">val f : (&#39;a -&gt; &#39;a0)</div>
+<div class="fsdocs-tip" id="fs25">val loop : ((&#39;b -&gt; &#39;c) -&gt; Tree&lt;&#39;b&gt; -&gt; Tree&lt;&#39;c&gt;)</div>
+<div class="fsdocs-tip" id="fs26">val f : (&#39;b -&gt; &#39;c)</div>
+<div class="fsdocs-tip" id="fs27">val x : &#39;b</div>
+<div class="fsdocs-tip" id="fs28">val t1 : Tree&lt;&#39;b&gt;</div>
+<div class="fsdocs-tip" id="fs29">val t2 : Tree&lt;&#39;b&gt;</div>
+<div class="fsdocs-tip" id="fs30">val x : MathNet.Numerics.BigRational</div>
+<div class="fsdocs-tip" id="fs31">namespace MathNet</div>
+<div class="fsdocs-tip" id="fs32">namespace MathNet.Numerics</div>
+<div class="fsdocs-tip" id="fs33">type BigRational =<br />&#160;&#160;interface IComparable<br />&#160;&#160;override GetHashCode : unit -&gt; int<br />&#160;&#160;override ToString : unit -&gt; string<br />&#160;&#160;member Denominator : BigInteger<br />&#160;&#160;member IsInteger : bool<br />&#160;&#160;member IsNegative : bool<br />&#160;&#160;member IsOne : bool<br />&#160;&#160;member IsPositive : bool<br />&#160;&#160;member IsZero : bool<br />&#160;&#160;member Numerator : BigInteger<br />&#160;&#160;...</div>
+<div class="fsdocs-tip" id="fs34">val fromBigInt : x:bigint -&gt; &#39;Num (requires member FromBigInt)</div>
+
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>
