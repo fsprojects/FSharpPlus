@@ -16,6 +16,8 @@
     <VersionSuffix></VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
+
+    <FsDocsNavBarPosition>fixed-left</FsDocsNavBarPosition>
   </PropertyGroup>
 
   <PropertyGroup>

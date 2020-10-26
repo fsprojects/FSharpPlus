@@ -66,11 +66,6 @@ Target.create "Build" (fun _ ->
            )
 )
 
-let copyFiles () =
-    Shell.copyRecursive files output true 
-    |> Trace.logItems "Copying file: "
-    Directory.ensure (output @@ "content")
-        
 Target.create "Docs" (fun _ ->
     System.IO.File.Delete ( rootDir @@ "docsrc/content/release-notes.md" )
     Shell.copyFile (rootDir @@ "docsrc/content/") "RELEASE_NOTES.md"
@@ -79,8 +74,6 @@ Target.create "Docs" (fun _ ->
     System.IO.File.Delete ( rootDir @@ "docsrc/content/license.md" )
     Shell.copyFile ( rootDir @@ "docsrc/content/" ) "LICENSE.txt"
     Shell.rename ( rootDir @@ "docsrc/content/license.md" ) "docsrc/content/LICENSE.txt"
-
-    copyFiles ()
 )
 
 // --------------------------------------------------------------------------------------
