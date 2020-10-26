@@ -1,5 +1,14 @@
 ﻿namespace FSharpPlus
 
+/// <namespacedoc>
+/// <summary>
+/// Extension modules, along with, Builders, Lens, Memoization, Operators, and Parsing.
+/// </summary>
+/// <remarks>
+/// See Operators for generic functions.
+/// </remarks>
+/// </namespacedoc>
+
 #nowarn "40"
 
 #if !FABLE_COMPILER
