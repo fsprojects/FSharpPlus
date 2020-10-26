@@ -66,16 +66,6 @@ Target.create "Build" (fun _ ->
            )
 )
 
-Target.create "Docs" (fun _ ->
-    System.IO.File.Delete ( rootDir @@ "docsrc/content/release-notes.md" )
-    Shell.copyFile (rootDir @@ "docsrc/content/") "RELEASE_NOTES.md"
-    Shell.rename ( rootDir @@ "docsrc/content/release-notes.md" ) "docsrc/content/RELEASE_NOTES.md"
-
-    System.IO.File.Delete ( rootDir @@ "docsrc/content/license.md" )
-    Shell.copyFile ( rootDir @@ "docsrc/content/" ) "LICENSE.txt"
-    Shell.rename ( rootDir @@ "docsrc/content/license.md" ) "docsrc/content/LICENSE.txt"
-)
-
 // --------------------------------------------------------------------------------------
 // Post process here:
 
