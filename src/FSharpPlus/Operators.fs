@@ -6,7 +6,6 @@ open FSharpPlus.Control
 [<AutoOpenAttribute>]
 module Operators =
 
-
     // Common combinators
 
     /// <summary>Creates a new function with first two arguments flipped.</summary>

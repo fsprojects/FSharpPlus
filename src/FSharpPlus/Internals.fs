@@ -1,5 +1,11 @@
 namespace FSharpPlus.Internals
 
+/// <namespacedoc>
+/// <summary>
+/// Internal to the library - please ignore
+/// </summary>
+/// </namespacedoc>
+ 
 type Default6 = class end
 type Default5 = class inherit Default6 end
 type Default4 = class inherit Default5 end
