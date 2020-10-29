@@ -8,6 +8,22 @@ Note that in these cases, normally the names are the same but this is not a rule
 
  - `map` is a generic function, and we have many types implementing it, but for dictionaries this correspond to `mapValues`
  - `min` is a non-generic function operating in collections, but its generic counterpart is `minimum` to avoid collision with the built-in `min` function (minimum between two values).
+ 
+So, what this means is, we're not providing generic functions based on names, although in many cases names are the same, we need to take into account:
+ 
+ - F# core has some inconsistencies as it's not a type classes based library. A typeclasses based library is not necessarily something that implments a trick for typeclasses, but something that is designed as if we had support for them, I mean capturing some generic concepts and making them clear in the names choosen for every functions.
+
+ - But here we're not attempting to fix F# core, we want to build on top in a non intrusive way, and try to re-use all the consistent concepts, idioms and de-facto naming conventions from F# core as much as possible without increasing the inconsistency level already there.
+
+So the solution sometimes require some creativity like thinking new names that make it clear what the function does without departing too far from existing naming conventions. 
+ 
+Another interesting case is the `zip` related functions:
+
+ - For collections like types, in F# core it's normal to find `zip` / `map2` functions, which acts pairwise. But another possible implementation is the applicative zip which works cross product.
+ - Here we define 2 generic functions, `lift2` which corresponds always to the applicative instance, so normally in non-collections it will correspond to the non-generic `map2` but since collections already have (or at least it's expetcted to) a `map2` acting pairwise, in those cases only we provide a `lift2` extension and that's what's used for its generic counterpart.
+ 
+ - The other generic function we provide is `zip` which is available mainly for collection like types and although they match the non-generic name, note that the behavior is not exactly the same, because F# core throws errors for list and arrays when the number of elements are different. So we could say that in fact it matches `.zipShortest` when defined, otherwise it matchs `.zip`.
+
 
 ### Definition of abstraction
 
