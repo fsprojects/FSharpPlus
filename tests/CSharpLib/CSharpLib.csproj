@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
-    <LangVersion>8.0</LangVersion>
+    <TargetFrameworks>netstandard2.1;net452</TargetFrameworks>
+    <LangVersion Condition=" '$(TargetFramework)' == 'netstandard2.1'">8.0</LangVersion>
   </PropertyGroup>
 
 </Project>

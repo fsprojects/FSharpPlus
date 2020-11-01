@@ -1784,7 +1784,8 @@ module MonadTransformers =
         let _ = put initialState : ChoiceT<State<int, Choice<unit,string>>>
 
         ()
-(*    [<Test>]
+#if !NETSTANDARD3_0
+    [<Test>]
     let testStateT () =
         let lst1: StateT<string,_> = StateT.lift [1;2]
         let lst2: StateT<string,_> = StateT.lift [4;5]
@@ -1800,8 +1801,8 @@ module MonadTransformers =
         CollectionAssert.AreEqual ([((1, 6), "OK"); ((1, 7), "OK"); ((2, 6), "OK"); ((2, 7), "OK")], StateT.run m "ok")
 
         ()
-*)
-(*    type RErrors = | NegativeValue
+
+    type RErrors = | NegativeValue
     [<Test>]
     let testCompilationMT1 () =
 
@@ -1818,7 +1819,7 @@ module MonadTransformers =
         areEqual (Ok 11) x
         let y = (fn |> ResultT.run |> Reader.run) -1
         areEqual (Error NegativeValue) y
-*)
+#endif
 
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
@@ -2112,11 +2113,12 @@ module Parsing =
         Assert.IsTrue((v3.Value.Value = 1))
         let v4 : ProductId option = tryParse "P_X"
         Assert.IsTrue(Option.isNone v4)
-
+#if NETSTANDARD3_0
         let v5 : ICustomerId option = tryParse "C_1"
         Assert.IsTrue((v5.Value.Value = 1L))
         let v6 : ICustomerId option = tryParse "C_X"
         Assert.IsTrue(Option.isNone v6)
+#endif
 
     [<Test>]
     let scanfParsing () =

@@ -2,7 +2,10 @@
 
 namespace CSharpLib
 {
-    public struct CustomerId : IEquatable<CustomerId>,ICustomerId
+    public struct CustomerId : IEquatable<CustomerId>
+#if NETSTANDARD2_1
+    ,ICustomerId
+#endif
     {
         public long Value { get; }
         public CustomerId(long value) => this.Value = value;
@@ -23,6 +26,7 @@ namespace CSharpLib
             return false;
         }
     }
+#if NETSTANDARD2_1 
     public interface ICustomerId{
         long Value{get;}
         public static bool TryParse(string value, out ICustomerId id){
@@ -34,4 +38,5 @@ namespace CSharpLib
             return false;
         }
     }
+#endif
 }
