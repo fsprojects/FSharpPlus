@@ -51,13 +51,3 @@ module Option =
         try
             Some (f x)
         with _ -> None
-    
-    /// <summary>If both are Some, returns option with applied function on both values. Otherwise it returns None.</summary>
-    /// <param name="f">The option function.</param>
-    /// <param name="x">The first option value.</param>
-    /// <param name="y">The second option value.</param>
-    /// <returns>An option of the function applied to both values, or <c>None</c> if either the first or the second value is <c>None</c>.</returns>
-    let map2 f (x: option<'T>) (y: option<'T2>) : option<'U> =
-        match x, y with
-        | Some x, Some y -> Some (f x y)
-        | _              -> None
