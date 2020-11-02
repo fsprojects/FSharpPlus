@@ -347,3 +347,11 @@ module Extensions =
     List.map2Shortest (+) [1;2;3] [2;3] |> areEqual [3;5]
     Array.map2Shortest (+) [|1;2|] [|2;3;4|] |> areEqual [|3;5|]
     ResizeArray.map2Shortest (+) (ResizeArray [1;2;3]) (ResizeArray [2;3]) |> areEqual (ResizeArray [3;5])
+  
+  [<Test>]
+  let ``Option.map2 returns some if both some or none`` () =
+    Option.map2 (+) (Some 2) (Some 3) |> areEqual (Some 5)
+    Option.map2 (+) (Some 2) None |> areEqual None
+    Option.map2 (+) None (Some 3) |> areEqual None
+    Option.map2 (+) None None |> areEqual None
+    
