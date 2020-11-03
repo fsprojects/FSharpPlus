@@ -768,6 +768,12 @@ module Operators =
     /// </summary>
     /// <category index="16">Indexable</category>
     let inline mapi (mapping: 'K->'T->'U) (source: '``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = MapIndexed.Invoke mapping source
+   
+    /// <summary>
+    /// Choose with access to the index.
+    /// </summary>
+    /// <category index="16">Indexable</category>
+    let inline choosei (mapping: 'K->'T->'U) (source: '``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = ChooseIndexed.Invoke mapping source
 
     /// <summary>
     /// Maps an action with access to an index.

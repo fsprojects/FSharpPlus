@@ -62,7 +62,7 @@ module Map =
     /// <param name="x">The input dictionary.</param>
     ///
     /// <returns>Returns Map with values x for each Map value where the function returns Some(x).</returns>
-    let choosei (x: Map<'K,'V>) f = 
+    let choosei f (x: Map<'K,'V>) = 
         let addIndex index (kvp: KeyValuePair<'K, 'V>) =
             (kvp.Key, (kvp.Value, index))
         x |> Seq.mapi addIndex
