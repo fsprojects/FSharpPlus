@@ -86,6 +86,24 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'U>
         
+    /// <summary>Applies given function to each value of the given dictionary.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input dictionary.</param>
+    ///
+    /// <returns>Returns dictionary with values x for each dictionary value where the function returns Some(x).</returns>
+    let choosei (x: Map<'K,'V>) f = 
+        let addIndex index (kvp: KeyValuePair<'K, 'V>) =
+            (kvp.Key, (kvp.Value, index))
+        x |> Seq.mapi addIndex
+            |> Seq.map (fun x -> (fst x, f (snd x)))
+            |> Seq.choose (fun x -> match snd x with
+                                         | Some _ -> Some x
+                                         | None -> None)
+            |> Seq.map (fun x -> (fst x, match snd x with
+                                         | Some x -> x
+                                         | None -> failwith ""))
+            |> Map
+        
     /// <summary>Tuples values of two dictionaries.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
     /// <param name="x">The first input dictionary.</param>
