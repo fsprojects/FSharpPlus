@@ -59,7 +59,7 @@ module Map =
     
     /// <summary>Applies given function to each value of the given Map.</summary>
     /// <param name="f">The mapping function.</param>
-    /// <param name="x">The input dictionary.</param>
+    /// <param name="x">The input map.</param>
     ///
     /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(k * v).</returns>
     let chooseIndex (f: 'Key -> 'T -> ('Key * 'U) option) (x: Map<'Key, 'T>) = Map <| seq {

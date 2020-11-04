@@ -147,6 +147,11 @@ module List =
             | (_,_) -> acc
         loop [] (l1,l2) |> List.rev
         
+    /// <summary>Applies given function to each value of the given List.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input list.</param>
+    ///
+    /// <returns>List with values x for each List value where the function returns Some(x).</returns>
     let chooseIndex f l =
         List.indexed l
         |> List.choose f

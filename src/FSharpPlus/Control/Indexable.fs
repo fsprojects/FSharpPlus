@@ -83,9 +83,7 @@ type MapIndexed =
 type ChooseIndexed =
     inherit Default1
     static member ChooseIndexed (x: list<'T>   , f            , [<Optional>]_impl: ChooseIndexed) = List.chooseIndex f x
-//    static member ChooseIndexed (x: 'T []      , f            , [<Optional>]_impl: ChooseIndexed) = Array.indexed x |> Array.choose f
-//    static member ChooseIndexed ((k: 'K, a: 'T), f            , [<Optional>]_impl: ChooseIndexed) = (k, ((f k a) : 'U))
-//    static member ChooseIndexed (g             , f: 'K->'T->'U, [<Optional>]_impl: ChooseIndexed) = fun x -> f x (g x)
+    static member ChooseIndexed (x: 'T []      , f            , [<Optional>]_impl: ChooseIndexed) = Array.chooseIndex f x
     static member ChooseIndexed (x: Map<'K,'T> , f            , [<Optional>]_impl: ChooseIndexed) = Map.chooseIndex f x : Map<'K,'U>
 
     static member inline Invoke (mapping: 'K->'T->'U) (source: '``Indexable<'T>``) =
