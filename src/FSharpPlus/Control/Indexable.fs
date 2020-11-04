@@ -84,6 +84,7 @@ type ChooseIndexed =
     inherit Default1
     static member ChooseIndexed (x: list<'T>   , f            , [<Optional>]_impl: ChooseIndexed) = List.chooseIndex f x
     static member ChooseIndexed (x: 'T []      , f            , [<Optional>]_impl: ChooseIndexed) = Array.chooseIndex f x
+    static member ChooseIndexed (g             , f: 'K->'T->'U, [<Optional>]_impl: ChooseIndexed) = fun x -> f x (g x)
     static member ChooseIndexed (x: Map<'K,'T> , f            , [<Optional>]_impl: ChooseIndexed) = Map.chooseIndex f x : Map<'K,'U>
 
     static member inline Invoke (mapping: 'K->'T->'U) (source: '``Indexable<'T>``) =
@@ -92,7 +93,7 @@ type ChooseIndexed =
         call (Unchecked.defaultof<ChooseIndexed>, source, mapping)
     static member inline InvokeOnInstance (mapping: 'K->'T->'Key) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member ChooseIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
 
-//    static member inline ChooseIndexed (x: seq<'T>   , f: int->'T->'U, _impl: Default2) = x |> Seq.mapi f : seq<'U>
+    static member inline ChooseIndexed (x: seq<'T>   , f: int*'T->'U option, _impl: Default2) = x |> Seq.chooseIndex f : seq<'U>
     static member inline ChooseIndexed (x: ^``I<'T>``, f: 'K->'T->'U , _impl: Default1) : '``I<'U>`` = ChooseIndexed.InvokeOnInstance f x
     static member inline ChooseIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default1) = ()
 

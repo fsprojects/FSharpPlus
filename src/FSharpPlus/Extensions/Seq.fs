@@ -218,3 +218,12 @@ module Seq =
         let index = Internals.FindSliceIndex.seqImpl slice source
         if index = -1 then None else Some index
     #endif
+    
+    /// <summary>Applies given function to each value of the given Seq.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input seq.</param>
+    ///
+    /// <returns>Seq with values x for each List value where the function returns Some(x).</returns>
+    let chooseIndex f l =
+        Seq.indexed l
+        |> Seq.choose f
