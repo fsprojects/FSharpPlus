@@ -226,4 +226,4 @@ module Seq =
     /// <returns>Seq with values x for each List value where the function returns Some(x).</returns>
     let chooseIndex f l =
         Seq.indexed l
-        |> Seq.choose f
+        |> Seq.choose (fun (a, b) -> f a b)
