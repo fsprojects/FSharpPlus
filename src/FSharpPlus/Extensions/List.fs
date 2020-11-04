@@ -146,3 +146,7 @@ module List =
             | (l::ls,r::rs) -> loop ((l,r)::acc) (ls,rs)
             | (_,_) -> acc
         loop [] (l1,l2) |> List.rev
+        
+    let chooseIndex f l =
+        List.indexed l
+        |> List.choose f

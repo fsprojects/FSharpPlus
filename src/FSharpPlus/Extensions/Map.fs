@@ -62,7 +62,7 @@ module Map =
     /// <param name="x">The input dictionary.</param>
     ///
     /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(k * v).</returns>
-    let chooseIndex (f: 'Key -> 'T -> ('Key * 'T) option) (x: Map<'Key, 'T>) = Map <| seq {
+    let chooseIndex (f: 'Key -> 'T -> ('Key * 'U) option) (x: Map<'Key, 'T>) = Map <| seq {
         for KeyValue(k, v) in x do
             match f k v with
             | Some kvp -> yield(fst kvp, snd kvp)
