@@ -61,19 +61,12 @@ module Map =
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The input dictionary.</param>
     ///
-    /// <returns>Returns Map with values x for each Map value where the function returns Some(x).</returns>
-    let choosei f (x: Map<'K,'V>) = 
-        let addIndex index (kvp: KeyValuePair<'K, 'V>) =
-            (kvp.Key, (kvp.Value, index))
-        x |> Seq.mapi addIndex
-            |> Seq.map (fun x -> (fst x, f (snd x)))
-            |> Seq.choose (fun x -> match snd x with
-                                         | Some _ -> Some x
-                                         | None -> None)
-            |> Seq.map (fun x -> (fst x, match snd x with
-                                         | Some x -> x
-                                         | None -> failwith ""))
-            |> Map
+    /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(k * v).</returns>
+    let chooseIndex (f: 'Key -> 'T -> ('Key * 'T) option) (x: Map<'Key, 'T>) = Map <| seq {
+        for KeyValue(k, v) in x do
+            match f k v with
+            | Some kvp -> yield(fst kvp, snd kvp)
+            | None     -> () }
 
     /// <summary>Tuples values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
