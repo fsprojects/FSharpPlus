@@ -347,3 +347,21 @@ module Extensions =
     List.map2Shortest (+) [1;2;3] [2;3] |> areEqual [3;5]
     Array.map2Shortest (+) [|1;2|] [|2;3;4|] |> areEqual [|3;5|]
     ResizeArray.map2Shortest (+) (ResizeArray [1;2;3]) (ResizeArray [2;3]) |> areEqual (ResizeArray [3;5])
+    
+  [<Test>]
+  let chooseIndex () =
+    let someIfIndexEven (i, x) =
+      if i % 2 = 0 then
+        Some x
+      else
+        None
+    List.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual [1;3;5]
+    Array.chooseIndex someIfIndexEven [|1;2;3;4;5|] |> areEqual [|1;3;5|]
+    Seq.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual (seq <| [1;3;5])
+    
+//    let someIfKeyEven k v =
+//      if k % 2 = 0 then
+//        Some (k, v)
+//      else
+//        None
+//    Map.chooseIndex (someIfKeyEven (Map <| [1,2;2,3;3,4])) |> areEqual (Map <| [2,3])
