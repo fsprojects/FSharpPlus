@@ -85,7 +85,7 @@ type ChooseIndexed =
     static member ChooseIndexed (x: list<'T>   , f            , [<Optional>]_impl: ChooseIndexed) = List.chooseIndex f x
     static member ChooseIndexed (x: 'T []      , f            , [<Optional>]_impl: ChooseIndexed) = Array.chooseIndex f x
     static member ChooseIndexed (g             , f: 'K->'T->'U, [<Optional>]_impl: ChooseIndexed) = fun x -> f x (g x)
-    static member ChooseIndexed (x: Map<'K,'T> , f            , [<Optional>]_impl: ChooseIndexed) = Map.chooseIndex f x : Map<'K2,'U>
+    static member ChooseIndexed (x: Map<'K,'T> , f            , [<Optional>]_impl: ChooseIndexed) = Map.chooseIndex f x : Map<'K,'U>
 
     static member inline Invoke (mapping: 'K->'T->'U) (source: '``Indexable<'T>``) =
         let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member ChooseIndexed : _*_*_ -> _) b, f, a)
