@@ -2533,5 +2533,5 @@ module choosei =
         (choosei someIfIndexEven [|1;2;3;4;5|]) |> areEqual [|1;3;5|]
         (choosei someIfIndexEven (seq [1;2;3;4;5])) |> areEqual (seq [1;3;5])
         (choosei someIfIndexEven (Map [1,2;2,3;3,4])) |> areEqual (Map [2,3])
-        (choosei someIfIndexEven (Dictionary<int, string> (dict [1,"2"; 2,"4"; 4,"8"])) |> areEqual ((dict [2,"4"; 4,"8"]) :> IDictionary<_,_> |> Dictionary<int, string>))
+        (choosei someIfIndexEven (Dictionary<int, string> (dict [1,"2"; 2,"4"; 4,"8"])) |> areEqual (Dictionary<int, string>(dict [2,"4"; 4,"8"])))
         (choosei someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]) |> areEqual (dict [2,"4"; 4,"8"]))
