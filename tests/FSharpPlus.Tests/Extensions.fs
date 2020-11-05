@@ -353,11 +353,13 @@ module Extensions =
     let someIfIndexEven i x =
       if i % 2 = 0 then Some x
       else None
-    List.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual [1;3;5]
-    Array.chooseIndex someIfIndexEven [|1;2;3;4;5|] |> areEqual [|1;3;5|]
-    Seq.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual (seq [1;3;5])
+    List.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual [1; 3; 5]
+    Array.chooseIndex someIfIndexEven [|1;2;3;4;5|] |> areEqual [|1; 3; 5|]
+    Seq.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual (seq [1; 3; 5])
     Map.chooseIndex someIfIndexEven (Map [1,2;2,3;3,4]) |> areEqual (Map [2,3])
-    
+    Dictionary.chooseIndex someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]) |> areEqual ((dict [2,"4"; 4,"8"]) :> IDictionary<_,_> |> Dictionary<int, string>)
+    Dict.chooseIndex someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]) |> areEqual (dict [2,"4"; 4,"8"])
+
   [<Test>]
   let choosei () =
     let someIfIndexEven i x =
@@ -367,3 +369,5 @@ module Extensions =
     (choosei someIfIndexEven [|1;2;3;4;5|]) |> areEqual [|1;3;5|]
     (choosei someIfIndexEven (seq [1;2;3;4;5])) |> areEqual (seq [1;3;5])
     (choosei someIfIndexEven (Map [1,2;2,3;3,4])) |> areEqual (Map [2,3])
+    (choosei someIfIndexEven (Dictionary<int, string> (dict [1,"2"; 2,"4"; 4,"8"])) |> areEqual ((dict [2,"4"; 4,"8"]) :> IDictionary<_,_> |> Dictionary<int, string>))
+    (choosei someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]) |> areEqual (dict [2,"4"; 4,"8"]))

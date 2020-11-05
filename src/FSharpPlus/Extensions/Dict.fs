@@ -148,3 +148,16 @@ module Dict =
     let intersect (source1:IDictionary<'Key, 'T>) (source2:IDictionary<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
     #endif
+    
+    /// <summary>Applies given function to each value of the given dictionary.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input dictionary.</param>
+    ///
+    /// <returns>Dictionary with values x for each dictionary value where the function returns Some(x).</returns>
+    let chooseIndex f (x: IDictionary<'Key, 'T>) =
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in x do
+            match f k v with
+            | Some v -> dct.Add (k, v)
+            | None   -> ()
+        dct :> IDictionary<'Key, 'U>

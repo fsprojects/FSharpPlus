@@ -2522,3 +2522,16 @@ module testCompileOldCode =
         let rec f a b n = if n == 0G then a else f (b * a) b (n - 1G)
         if (n < 0G) then failwith "Negative exponent" else f 1G x n
     let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
+
+module choosei =
+    [<Test>]
+    let choosei () =
+        let someIfIndexEven i x =
+            if i % 2 = 0 then Some x
+            else None
+        (choosei someIfIndexEven [1;2;3;4;5]) |> areEqual [1;3;5]
+        (choosei someIfIndexEven [|1;2;3;4;5|]) |> areEqual [|1;3;5|]
+        (choosei someIfIndexEven (seq [1;2;3;4;5])) |> areEqual (seq [1;3;5])
+        (choosei someIfIndexEven (Map [1,2;2,3;3,4])) |> areEqual (Map [2,3])
+        (choosei someIfIndexEven (Dictionary<int, string> (dict [1,"2"; 2,"4"; 4,"8"])) |> areEqual ((dict [2,"4"; 4,"8"]) :> IDictionary<_,_> |> Dictionary<int, string>))
+        (choosei someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]) |> areEqual (dict [2,"4"; 4,"8"]))
