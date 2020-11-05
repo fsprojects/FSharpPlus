@@ -350,24 +350,12 @@ module Extensions =
     
   [<Test>]
   let chooseIndex () =
-    let someIfIndexEvenTuple (i, x) =
-      if i % 2 = 0 then
-        Some x
-      else
-        None
-    List.chooseIndex someIfIndexEvenTuple [1;2;3;4;5] |> areEqual [1;3;5]
-    Array.chooseIndex someIfIndexEvenTuple [|1;2;3;4;5|] |> areEqual [|1;3;5|]
-    
     let someIfIndexEven i x =
           if i % 2 = 0 then
             Some x
           else
             None
+    List.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual [1;3;5]
+    Array.chooseIndex someIfIndexEven [|1;2;3;4;5|] |> areEqual [|1;3;5|]
     Seq.chooseIndex someIfIndexEven [1;2;3;4;5] |> areEqual (seq <| [1;3;5])
-    
-//    let someIfKeyEven k v =
-//      if k % 2 = 0 then
-//        Some (k, v)
-//      else
-//        None
-//    Map.chooseIndex (someIfKeyEven (Map <| [1,2;2,3;3,4])) |> areEqual (Map <| [2,3])
+    Map.chooseIndex someIfIndexEven (Map <| [1,2;2,3;3,4]) |> areEqual (Map <| [2,3])

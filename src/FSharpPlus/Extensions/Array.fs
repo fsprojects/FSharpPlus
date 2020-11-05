@@ -109,4 +109,4 @@ module Array =
     /// <returns>Array with values x for each Array value where the function returns Some(x).</returns>
     let chooseIndex f l =
         Array.indexed l
-        |> Array.choose f
+        |> Array.choose (fun (a, b) -> f a b)

@@ -154,4 +154,4 @@ module List =
     /// <returns>List with values x for each List value where the function returns Some(x).</returns>
     let chooseIndex f l =
         List.indexed l
-        |> List.choose f
+        |> List.choose (fun (a, b) -> f a b)

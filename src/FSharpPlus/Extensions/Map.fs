@@ -57,17 +57,6 @@ module Map =
             | Some v -> yield (k, v)
             | None    -> () }
     
-    /// <summary>Applies given function to each value of the given Map.</summary>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">The input map.</param>
-    ///
-    /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(k * v).</returns>
-    let chooseIndex (f: 'Key -> 'T -> ('Key * 'U) option) (x: Map<'Key, 'T>) = Map <| seq {
-        for KeyValue(k, v) in x do
-            match f k v with
-            | Some kvp -> yield(fst kvp, snd kvp)
-            | None     -> () }
-
     /// <summary>Tuples values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
     /// <param name="x">The first input Map.</param>
@@ -112,3 +101,14 @@ module Map =
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
     #endif
+    
+    /// <summary>Applies given function to each value of the given Map.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The input map.</param>
+    ///
+    /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(k * v).</returns>
+    let chooseIndex (f: 'Key -> 'T -> 'U option) (x: Map<'Key, 'T>) = Map <| seq {
+        for KeyValue(k, v) in x do
+            match f k v with
+            | Some v -> yield(k, v)
+            | None   -> () }
