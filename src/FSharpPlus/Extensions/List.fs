@@ -153,5 +153,11 @@ module List =
     ///
     /// <returns>List with values x for each List value where the function returns Some(x).</returns>
     let chooseIndex f l =
-        List.indexed l
-        |> List.choose (fun (a, b) -> f a b)
+        let rec chooseIndexInner f l i =
+            match l with
+            | [] -> []
+            | h::t ->
+                match f i h with
+                | None -> chooseIndexInner f t (i + 1)
+                | Some h -> [h] @ (chooseIndexInner f t (i+1))
+        chooseIndexInner f l 0
