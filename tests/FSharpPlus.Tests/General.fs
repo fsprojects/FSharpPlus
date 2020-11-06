@@ -2529,9 +2529,26 @@ module choosei =
         let someIfIndexEven i x =
             if i % 2 = 0 then Some x
             else None
-        (choosei someIfIndexEven [1;2;3;4;5]) |> areEqual [1;3;5]
-        (choosei someIfIndexEven [|1;2;3;4;5|]) |> areEqual [|1;3;5|]
-        (choosei someIfIndexEven (seq [1;2;3;4;5])) |> areEqual (seq [1;3;5])
-        (choosei someIfIndexEven (Map [1,2;2,3;3,4])) |> areEqual (Map [2,3])
-        (choosei someIfIndexEven (Dictionary<int, string> (dict [1,"2"; 2,"4"; 4,"8"])) |> areEqual (Dictionary<int, string>(dict [2,"4"; 4,"8"])))
-        (choosei someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]) |> areEqual (dict [2,"4"; 4,"8"]))
+        let l = (choosei someIfIndexEven [1;2;3;4;5]) 
+        areEqual [1;3;5] l
+        Assert.IsInstanceOf<Microsoft.FSharp.Collections.List<int>> l
+        
+        let a = (choosei someIfIndexEven [|1;2;3;4;5|]) 
+        areEqual [|1;3;5|] a
+        Assert.IsInstanceOf<int[]> a
+        
+        let s =(choosei someIfIndexEven (seq [1;2;3;4;5])) 
+        areEqual (seq [1;3;5]) s
+        Assert.IsInstanceOf<Microsoft.FSharp.Collections.seq<int>> s
+        
+        let m = (choosei someIfIndexEven (Map [1,2;2,3;3,4])) 
+        areEqual (Map [2,3]) m
+        Assert.IsInstanceOf<Microsoft.FSharp.Collections.Map<int, int>> m
+
+        let d = (choosei someIfIndexEven (Dictionary<int, string> (dict [1,"2"; 2,"4"; 4,"8"])))
+        areEqual (Dictionary<int, string>(dict [2,"4"; 4,"8"])) d
+        Assert.IsInstanceOf<Dictionary<int, string>> d
+        
+        let di = (choosei someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]))
+        areEqual (dict [2,"4"; 4,"8"]) di
+        Assert.IsInstanceOf<Dictionary<int, string>> di
