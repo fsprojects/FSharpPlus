@@ -7,9 +7,9 @@
   },
   "dependencies": {
     "@babel/core": "^7.8.7",
-    "fable-compiler": "^2.4.21",
+    "fable-compiler": "^2.13.0",
     "fable-loader": "^2.1.9",
-    "fable-splitter": "^2.1.12",
+    "fable-splitter": "^2.2.1",
     "isomorphic-fetch": "^3.0.0",
     "minimist": "^1.2.5",
     "mocha": "^7.1.0"

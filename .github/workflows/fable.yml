@@ -6,8 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+
 jobs:
   build:
+    env:
+      ftests: tests/FSharpPlusFable.Tests
 
     runs-on: windows-latest
 
@@ -25,9 +28,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: Install fable splitter and compiler
-      run: npm install -g fable-splitter fable-compiler
-    - name: Run fable splitter
-      run: cd src/FSharpPlus; npx fable-splitter --allFiles
-    - name: Test using fable
-      run: cd tests/FSharpPlusFable.Tests; npm install; npm run buildFSharpPlus; npm run test
+    - name: Install npm dependencies
+      working-directory: ${{ftests}}
+      run: npm install
+    - name: Build F#+ using Fable
+      working-directory: ${{ftests}}
+      run: npm run buildFSharpPlus
+    - name: Run Fable tests
+      working-directory: ${{ftests}}
+      run: npm run test
