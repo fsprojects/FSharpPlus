@@ -347,3 +347,12 @@ module Extensions =
     List.map2Shortest (+) [1;2;3] [2;3] |> areEqual [3;5]
     Array.map2Shortest (+) [|1;2|] [|2;3;4|] |> areEqual [|3;5|]
     ResizeArray.map2Shortest (+) (ResizeArray [1;2;3]) (ResizeArray [2;3]) |> areEqual (ResizeArray [3;5])
+  
+  [<Test>]
+  let ``choosei does not throw stack overflow exception`` () =
+    List.chooseIndex (fun _ x -> Some x) [1..30000] |> ignore
+    Array.chooseIndex (fun _ x -> Some x) [|1..30000|] |> ignore
+    Seq.chooseIndex (fun _ x -> Some x) (seq [1..30000]) |> ignore
+//    Map.chooseIndex (fun _ x -> Some x) (Map [1..30000])
+//    Dictionary.chooseIndex (fun _ x -> Some x) [1..30000]
+//    Dict.chooseIndex (fun _ x -> Some x) [1..30000]
