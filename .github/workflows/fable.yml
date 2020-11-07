@@ -20,7 +20,7 @@ jobs:
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build with dotnet
-      run: dotnet build build.proj --configuration Release
+      run: dotnet tool restore
     - name: Build with Fable
       working-directory: tests/FSharpPlusFable.Tests
       run: dotnet fable
