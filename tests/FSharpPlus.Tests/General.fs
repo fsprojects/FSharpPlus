@@ -95,6 +95,9 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member MapIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's MapIndexed"
         WrappedListD (List.mapi f x)
+    static member ChooseIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's ChooseIndexed"
+        WrappedListD (List.choosei f x)
     static member IterateIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's IterateIndexed"
         List.iteri f x
@@ -2525,13 +2528,13 @@ module testCompileOldCode =
 
 module choosei =
     [<Test>]
-    let choosei () =
+    let chooseiTests () =
         let someIfIndexEven i x =
             if i % 2 = 0 then Some x
             else None
         let l = (choosei someIfIndexEven [1;2;3;4;5]) 
         areEqual [1;3;5] l
-        //Assert.IsInstanceOf<Microsoft.FSharp.Collections.List<int>> l
+        Assert.IsInstanceOf<Microsoft.FSharp.Collections.List<int>> l
         
         let a = (choosei someIfIndexEven [|1;2;3;4;5|]) 
         areEqual [|1;3;5|] a
@@ -2552,3 +2555,26 @@ module choosei =
         let di = (choosei someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]))
         areEqual (dict [2,"4"; 4,"8"]) di
         Assert.IsInstanceOf<Dictionary<int, string>> di
+
+//    [<Test>]
+//    let chooseiUsage () =
+//        let someIfIndexEven i x =
+//            if i % 2 = 0 then Some x
+//            else None
+//        
+//        let m = Map [1,2; 2,3; 3,4]
+//        let l = ReadOnlyCollection [|1..5|]
+//        let iReadOnlyList = l :> IReadOnlyList<_>
+//        let rarr = ResizeArray [|1..5|]
+//        areEquivalent (Map [2,3]) (choosei someIfIndexEven m)
+//        //areEquivalent [1;3;5] (choosei someIfIndexEven l)
+//        //areEquivalent [1:3:5] (choosei someIfIndexEven iReadOnlyList)
+//        //areEquivalent [1:3:5] (choosei someIfIndexEven rarr)
+//
+//        // correct overload:
+//        SideEffects.reset ()
+//        areEquivalent [1;3;5] (choosei someIfIndexEven (WrappedListD [1..5]))
+//        areEqual ["Using WrappedListD's ChooseIndexed"] (SideEffects.get ())
+//        SideEffects.reset ()
+//        areEquivalent [1;3;5] (ChooseIndexed.InvokeOnInstance someIfIndexEven (WrappedListD [1..5]))
+//        areEqual ["Using WrappedListD's ChooseIndexed"] (SideEffects.get ())

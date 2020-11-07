@@ -152,7 +152,7 @@ module List =
     /// <param name="x">The input list.</param>
     ///
     /// <returns>List with values x for each List value where the function returns Some(x).</returns>
-    let chooseIndex f l =
+    let choosei f l =
         let rec chooseIndexInner f l i acc =
             match l with
             | [] -> acc

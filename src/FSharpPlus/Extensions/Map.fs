@@ -107,7 +107,7 @@ module Map =
     /// <param name="x">The input map.</param>
     ///
     /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(v).</returns>
-    let chooseIndex (f: 'Key -> 'T -> 'U option) (x: Map<'Key, 'T>) = Map <| seq {
+    let choosei (f: 'Key -> 'T -> 'U option) (x: Map<'Key, 'T>) = Map <| seq {
         for KeyValue(k, v) in x do
             match f k v with
             | Some v -> yield(k, v)

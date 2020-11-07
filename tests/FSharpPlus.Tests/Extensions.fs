@@ -350,9 +350,9 @@ module Extensions =
   
   [<Test>]
   let ``choosei does not throw stack overflow exception`` () =
-    List.chooseIndex (fun _ x -> Some x) [1..30000] |> ignore
-    Array.chooseIndex (fun _ x -> Some x) [|1..30000|] |> ignore
-    Seq.chooseIndex (fun _ x -> Some x) (seq [1..30000]) |> ignore
-//    Map.chooseIndex (fun _ x -> Some x) (Map [1..30000])
-//    Dictionary.chooseIndex (fun _ x -> Some x) [1..30000]
-//    Dict.chooseIndex (fun _ x -> Some x) [1..30000]
+    List.choosei (fun _ x -> Some x) [1..30000] |> ignore
+    Array.choosei (fun _ x -> Some x) [|1..30000|] |> ignore
+    Seq.choosei (fun _ x -> Some x) (seq [1..30000]) |> ignore
+//    Map.choosei (fun _ x -> Some x) (Map [1..30000])
+//    Dictionary.choosei (fun _ x -> Some x) [1..30000]
+//    Dict.choosei (fun _ x -> Some x) [1..30000]
