@@ -51,7 +51,7 @@ let ExtensionsTest =
                    let r2 = m1 |> Map.unionWith konst m2
                    equalMap r1 r2)
 
-
+#if !FABLE_COMPILER
       testCase "Bind" 
         (fun () ->  let x = [1;2] >>= fun x -> [string x ; string (x + 1000) ]
                     let y = { Head = 1; Tail = [2] } >>= fun x -> { Head = string x ; Tail = [string (x + 1000)] }
@@ -69,6 +69,7 @@ let ExtensionsTest =
                     equal (duplicate y) { Head = { Head = 1; Tail = [2; 3; 4; 5] }; Tail = [{ Head = 2; Tail = [3; 4; 5] }; { Head = 3; Tail = [4; 5] }; { Head = 4; Tail = [5] }; { Head = 5; Tail = [] }] }
                     equal (extend List.head x) x
                     equal (extend (fun x -> x.Head) y) y)
+#endif
 
       testCase "Invariant"
         (fun () ->  let tryParse x =
@@ -88,11 +89,13 @@ let ExtensionsTest =
                     equal oneParsed (Result<int, string>.Ok 1)
                     equal tenEncoded "10" )
 
+#if !FABLE_COMPILER
       testCase "Tuple"
         (fun () ->
                    equal (mapItem2 string (1,2,3)) (1,"2",3)
                    equal (item3 (1,2,3)) 3
                    )
+#endif
 
       testCase "eq on DList 1" (fun () -> equal true  (dlistA = dlistB))
       testCase "eq on DList 2" (fun () -> equal false (dlistA = dlistC))
