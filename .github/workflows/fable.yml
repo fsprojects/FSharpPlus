@@ -9,9 +9,6 @@ on:
 
 jobs:
   build:
-    env:
-      ftests: tests/FSharpPlusFable.Tests
-
     runs-on: windows-latest
 
     steps:
@@ -29,11 +26,11 @@ jobs:
       with:
         node-version: '12.x'
     - name: Install npm dependencies
-      working-directory: ${{ftests}}
+      working-directory: tests/FSharpPlusFable.Tests
       run: npm install
     - name: Build F#+ using Fable
-      working-directory: ${{ftests}}
+      working-directory: tests/FSharpPlusFable.Tests
       run: npm run buildFSharpPlus
     - name: Run Fable tests
-      working-directory: ${{ftests}}
+      working-directory: tests/FSharpPlusFable.Tests
       run: npm run test
