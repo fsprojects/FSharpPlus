@@ -13,6 +13,12 @@
       "commands": [
         "fsdocs"
       ]
+    },
+    "fable": {
+      "version": "3.0.0-nagareyama-rc-001",
+      "commands": [
+        "fable"
+      ]
     }
   }
 }
