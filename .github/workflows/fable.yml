@@ -19,9 +19,9 @@ jobs:
         dotnet-version: 3.1.101
     - name: Restore
       run: git submodule update --init --recursive
-    - name: Build with dotnet
+    - name: Restore tools
       run: dotnet tool restore
-    - name: Build with Fable
+    - name: Build with Fable3
       working-directory: tests/FSharpPlusFable.Tests
       run: dotnet fable
     - name: Use Node.js
@@ -31,7 +31,7 @@ jobs:
     - name: Install npm dependencies
       working-directory: tests/FSharpPlusFable.Tests
       run: npm install
-    - name: Build F#+ using Fable
+    - name: Build F#+ using Fable2
       working-directory: tests/FSharpPlusFable.Tests
       run: npm run buildFSharpPlus
     - name: Run Fable tests
