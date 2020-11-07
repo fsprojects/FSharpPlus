@@ -67,10 +67,12 @@ type MapItem2 =
     static member MapItem2 ((a, b, c, d, e, f)   , fn) = (a, fn b, c, d, e, f)
     static member MapItem2 ((a, b, c, d, e, f, g), fn) = (a, fn b, c, d, e, f, g)
 
+#if !FABLE_COMPILER
     static member inline Invoke f value = 
         let inline call_2 (_: ^a, b: ^b) = ((^a or ^b) : (static member MapItem2 : _ * _ -> _) b, f)
         let inline call   (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<MapItem2>, value)
+#endif
 
 type MapItem3 =
     

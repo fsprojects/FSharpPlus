@@ -42,10 +42,11 @@ type Extend =
     static member        (=>>) (s: 'T []        , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray) : 'U []
     static member        (=>>) (s: seq<'T>      , g) = Seq.map   g (s |> Seq.toList   |> List.tails |> List.toSeq   |> Seq.map   List.toSeq)   : 'U seq
 
+#if !FABLE_COMPILER
     static member inline Invoke (g: '``Comonad<'T>``->'U) (s: '``Comonad<'T>``) : '``Comonad<'U>`` =
         let inline call (_mthd: 'M, source: 'I, _output: 'R) = ((^M or ^I or ^R) : (static member (=>>) : _*_ -> _) source, g)
         call (Unchecked.defaultof<Extend>, s, Unchecked.defaultof<'``Comonad<'U>``>)
-
+#endif
 
 #if !FABLE_COMPILER
 
