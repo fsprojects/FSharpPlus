@@ -1,4 +1,4 @@
-name: .NET Core
+name: Fable
 
 on:
   push:
@@ -21,5 +21,13 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build with dotnet
       run: dotnet build build.proj --configuration Release
-    - name: Test with dotnet
-      run: dotnet test build.proj -v n
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install fable splitter and compiler
+      run: npm install -g fable-splitter fable-compiler
+    - name: Run fable splitter
+      run: cd src/FSharpPlus; npx fable-splitter --allFiles
+    - name: Test using fable
+      run: cd tests/FSharpPlusFable.Tests; npm install; npm run buildFSharpPlus; npm run test
