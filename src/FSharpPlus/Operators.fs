@@ -225,6 +225,7 @@ module Operators =
     // Monad -----------------------------------------------------------
     
     #endif
+    #if !FABLE_COMPILER
 
     /// <summary>
     /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
@@ -255,6 +256,7 @@ module Operators =
     /// </summary>
     /// <category index="3">Monad</category>
     let inline (<=<) (g: 'b->'``Monad<'V>``) (f: 'T->'``Monad<'U>``) : 'T -> '``Monad<'V>`` = fun x -> Bind.Invoke (f x) g
+    #endif
 
     /// <summary>
     /// Flattens two layers of monadic information into one.
@@ -262,8 +264,6 @@ module Operators =
     /// <category index="3">Monad</category>
     #if !FABLE_COMPILER
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
-    #else
-    let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Bind.Invoke x id
     #endif
 
     #if !FABLE_COMPILER
@@ -854,6 +854,7 @@ module Operators =
 
     #endif
 
+    #if !FABLE_COMPILER
     /// <summary>
     /// Extracts a value from a comonadic context.
     /// </summary>
@@ -873,10 +874,7 @@ module Operators =
     /// Duplicates a comonadic context.
     /// </summary>
     /// <category index="17">Comonads</category>
-    #if !FABLE_COMPILER
     let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x
-    #else
-    let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Extend.Invoke id x
     #endif
 
 
@@ -1277,11 +1275,13 @@ module Operators =
     /// <category index="20">Tuple</category>
     let inline mapItem1 (mapping: 'T -> 'U) (tuple: '``('T * ..)``) = MapItem1.Invoke mapping tuple : '``('U * ..)``
 
+    #if !FABLE_COMPILER
     /// <summary>
     /// Maps the second value of a tuple.
     /// </summary>
     /// <category index="20">Tuple</category>
     let inline mapItem2 (mapping: 'T -> 'U) (tuple: '``('A * 'T * ..)``) = MapItem2.Invoke mapping tuple : '``('A * 'U * ..)``
+    #endif
 
     /// <summary>
     /// Maps the third value of a tuple.
