@@ -57,7 +57,11 @@ module BigInteger =
             let rec loop previous =
                 let current = (previous + x / previous) >>> 1
                 if abs (previous - current) < 2I then current else loop current
+            #if !FABLE_COMPILER
             let guess = 10I ** (((int (BigInteger.Log10 (x + 1I))) + 1) >>> 1)
+            #else
+            let guess = 10I ** (((int ((x + 1I))) + 1) >>> 1)
+            #endif
             let r = loop guess
             let r2 = r * r
             match compare r2 x with
