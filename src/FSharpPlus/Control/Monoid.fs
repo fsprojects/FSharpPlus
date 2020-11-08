@@ -29,9 +29,7 @@ type Plus =
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(x).Append(y)    
     #if !FABLE_COMPILER
     static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = new AggregateException (seq {yield! x.InnerExceptions; yield! y.InnerExceptions})
-    #endif
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""    
-    #if !FABLE_COMPILER
     static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
         let f (e: exn) = match e with :? AggregateException as a -> a.InnerExceptions :> seq<_> | _ -> Seq.singleton e
         new AggregateException (seq {yield! f x; yield! f y}) :> exn
@@ -63,7 +61,7 @@ type Plus with
                     | Choice1Of2 a, Choice2Of2 _ -> Choice1Of2 a
                     | Choice2Of2 _, Choice1Of2 b -> Choice1Of2 b
                     | Choice2Of2 a, Choice2Of2 b -> Choice2Of2 (Plus.Invoke a b)
-
+#if !FABLE_COMPILER
 type Plus with 
     static member inline ``+`` (x, y, _mthd: Plus) : 't =
         let xr, yr = (^t : (member Rest : 'tr) x), (^t : (member Rest : 'tr) y)
@@ -83,15 +81,16 @@ type Plus with
     static member inline ``+`` ((x1,x2,x3,x4,x5      ), (y1,y2,y3,y4,y5      ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5                                      ) :'a*'b*'c*'d*'e
     static member inline ``+`` ((x1,x2,x3,x4,x5,x6   ), (y1,y2,y3,y4,y5,y6   ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6                   ) :'a*'b*'c*'d*'e*'f
     static member inline ``+`` ((x1,x2,x3,x4,x5,x6,x7), (y1,y2,y3,y4,y5,y6,y7), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7) :'a*'b*'c*'d*'e*'f*'g
+#endif
 
-
-type Plus with    
-    
+type Plus with
+#if !FABLE_COMPILER    
     static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) =
                     x.ContinueWith(fun (t: Task<_>) -> 
                         (fun a -> 
                             y.ContinueWith(fun (u: Task<_>) -> 
                                 Plus.Invoke a u.Result)) t.Result).Unwrap ()
+#endif
 
     static member inline ``+`` (x: Map<'a,'b>             , y                         , [<Optional>]_mthd: Plus) = Map.unionWith Plus.Invoke x y
 
