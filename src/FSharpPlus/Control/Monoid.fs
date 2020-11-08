@@ -12,7 +12,6 @@ open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
-#if !FABLE_COMPILER
 
 [<Extension; Sealed>]
 type Plus =     
@@ -28,13 +27,15 @@ type Plus =
     static member        ``+`` (x: bool              , y: bool              , [<Optional>]_mthd: Plus    ) = x <> y
     static member        ``+`` (x: Set<_>            , y                    , [<Optional>]_mthd: Plus    ) = Set.union x y
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(x).Append(y)    
+    #if !FABLE_COMPILER
     static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = new AggregateException (seq {yield! x.InnerExceptions; yield! y.InnerExceptions})
+    #endif
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""    
-
+    #if !FABLE_COMPILER
     static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
         let f (e: exn) = match e with :? AggregateException as a -> a.InnerExceptions :> seq<_> | _ -> Seq.singleton e
         new AggregateException (seq {yield! f x; yield! f y}) :> exn
-
+    #endif
     static member inline Invoke (x: 'Plus) (y: 'Plus) : 'Plus =
         let inline call (mthd : ^M, input1 : ^I, input2 : ^I) = ((^M or ^I) : (static member ``+`` : _*_*_ -> _) input1, input2, mthd)
         call (Unchecked.defaultof<Plus>, x, y)
@@ -114,7 +115,9 @@ type Plus with
     static member        ``+`` (x: _ ResizeArray             , y: _ ResizeArray             , [<Optional>]_mthd: Plus    ) = ResizeArray (Seq.append x y)
     static member        ``+`` (x: _ IObservable             , y                            , [<Optional>]_mthd: Default3) = Observable.merge x y
     static member        ``+`` (x: _ seq                     , y                            , [<Optional>]_mthd: Default3) = Seq.append x y
+    #if !FABLE_COMPILER
     static member        ``+`` (x: _ IEnumerator             , y                            , [<Optional>]_mthd: Default3) = Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator ()
+    #endif
     static member inline ``+`` (x: IDictionary<'K,'V>        , y: IDictionary<'K,'V>        , [<Optional>]_mthd: Default3) = Dict.unionWith Plus.Invoke x y
     static member inline ``+`` (x: IReadOnlyDictionary<'K,'V>, y: IReadOnlyDictionary<'K,'V>, [<Optional>]_mthd: Default3) = IReadOnlyDictionary.unionWith Plus.Invoke x y
     static member inline ``+`` (x: _ NonEmptySeq             , y: _ NonEmptySeq             , [<Optional>]_mthd: Default3) = NonEmptySeq.append x y
@@ -171,12 +174,11 @@ type Sum with
                     Sum.Invoke (Seq.map (fun (_,x,_,_) -> x) x), 
                     Sum.Invoke (Seq.map (fun (_,_,x,_) -> x) x),
                     Sum.Invoke (Seq.map (fun (_,_,_,x) -> x) x)
-
+#if !FABLE_COMPILER
 type Sum with
     static member inline Sum (x: seq< 'a>, [<Optional>]_output: 'a           , _: Default2) = Seq.fold Plus.Invoke (Zero.Invoke ()) x : 'a
-    
+#endif
 type Sum with
     static member inline Sum (x: seq< ^R>, [<Optional>]_output: ^R           , _: Default1) = Sum.InvokeOnInstance x
     static member inline Sum (_: seq< ^R>, _: ^t when ^t: null and ^t: struct, _: Default1) = fun () -> id
 
-#endif

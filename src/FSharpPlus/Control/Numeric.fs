@@ -169,12 +169,13 @@ type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f   , _: Zero) = (Z
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f*'g, _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : 'a*'b*'c*'d*'e*'f*'g
 
 type Zero with
+    #if !FABLE_COMPILER
     static member inline Zero (_: Task<'a>, _: Zero) =
         let (v: 'a) = Zero.Invoke ()
         let s = TaskCompletionSource ()
         s.SetResult v
         s.Task
-
+    #endif
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
     static member inline Zero (_: Expr<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in Expr.Cast<'a>(Expr.Value (v))
