@@ -287,6 +287,8 @@ module Operators =
     /// </summary>
     /// <category index="4">Monoid</category>
     let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke ()
+    
+    #endif
 
     /// <summary>
     /// Combines two monoids in one.
@@ -300,6 +302,9 @@ module Operators =
     /// <category index="4">Monoid</category>
     let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
 
+    
+    #if !FABLE_COMPILER
+    
     /// S
     module Seq =
         /// <summary>
