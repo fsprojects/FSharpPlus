@@ -107,8 +107,22 @@ let ExtensionsTest =
         (fun () ->
             let lzy1 = plus (lazy [1]) (lazy [2;3])
             let asy1 = plus (async.Return [1]) (async.Return [2;3])
-            equal [1;2;3] (lzy1.Value)
+            
+            let mapA =
+                Map.empty
+                |> Map.add 1 (lazy "Hey")
+                |> Map.add 2 (lazy "Hello")
+
+            let mapB =
+                Map.empty
+                |> Map.add 3 (lazy " You")
+                |> Map.add 2 (lazy " World")
+
+            let mapAB = plus mapA mapB
+            
+            equal [1;2;3] lzy1.Value
             // equal [1;2;3] (Async.RunSynchronously asy1)
+            equal [(1, "Hey"); (2, "Hello World"); (3, " You")] (Map.toList mapAB |> List.map (fun (x, y) -> (x, y.Value)))
             )
 
 ]
