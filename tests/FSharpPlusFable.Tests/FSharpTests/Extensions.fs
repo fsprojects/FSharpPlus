@@ -102,5 +102,12 @@ let ExtensionsTest =
       testCase "eq on DList 3" (fun () -> equal true  ((dlistA :> obj) = (dlistB :> obj)))
       testCase "eq on DList 4" (fun () -> equal false ((dlistA :> obj) = (dlistC :> obj)))
       testCase "eq on DList 5" (fun () -> equal true  ((dlistA :> obj) = (dlistD :> obj))) // this behavior differs from (non-fable) F# but same way it would be with normal lists.
+      
+      testCase "semigroups 1"
+        (fun () ->
+            let lzy1 = plus (lazy [1]) (lazy [2;3])
+            let asy1 = plus (async.Return [1]) (async.Return [2;3])
+            equal [1;2;3] (lzy1.Value)
+            equal [1;2;3] (Async.RunSynchronously asy1)
 
 ]
