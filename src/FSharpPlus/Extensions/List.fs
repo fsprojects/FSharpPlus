@@ -147,8 +147,8 @@ module List =
             | (_,_) -> acc
         loop [] (l1,l2) |> List.rev
         
-    /// <summary>Applies given function to each value of the given List.</summary>
-    /// <param name="f">The mapping function.</param>
+    /// <summary>Choose with access to the index.</summary>
+    /// <param name="f">The mapping function, taking index and element as parameters.</param>
     /// <param name="x">The input list.</param>
     ///
     /// <returns>List with values x for each List value where the function returns Some(x).</returns>

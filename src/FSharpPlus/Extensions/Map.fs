@@ -102,8 +102,8 @@ module Map =
         intersectWith (fun a _ -> a) source1 source2
     #endif
     
-    /// <summary>Applies given function to each value of the given Map.</summary>
-    /// <param name="f">The mapping function.</param>
+    /// <summary>Choose with access to the key.</summary>
+    /// <param name="f">The mapping function, taking key and element as parameters.</param>
     /// <param name="x">The input map.</param>
     ///
     /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(v).</returns>

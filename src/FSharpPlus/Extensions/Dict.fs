@@ -149,11 +149,11 @@ module Dict =
         intersectWith (fun a _ -> a) source1 source2
     #endif
     
-    /// <summary>Applies given function to each value of the given dictionary.</summary>
-    /// <param name="f">The mapping function.</param>
+    /// <summary>Choose with access to the key.</summary>
+    /// <param name="f">The mapping function, taking key and element as parameters.</param>
     /// <param name="x">The input dictionary.</param>
     ///
-    /// <returns>Dictionary with values x for each dictionary value where the function returns Some(x).</returns>
+    /// <returns>Dictionary with values (k, x) for each dictionary value where the function returns Some(x).</returns>
     let choosei f (x: IDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
         for KeyValue(k, v) in x do
