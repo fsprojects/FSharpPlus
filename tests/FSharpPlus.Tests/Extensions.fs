@@ -353,6 +353,4 @@ module Extensions =
     List.choosei (fun _ x -> Some x) [1..30000] |> ignore
     Array.choosei (fun _ x -> Some x) [|1..30000|] |> ignore
     Seq.choosei (fun _ x -> Some x) (seq [1..30000]) |> ignore
-//    Map.choosei (fun _ x -> Some x) (Map [1..30000])
-//    Dictionary.choosei (fun _ x -> Some x) [1..30000]
-//    Dict.choosei (fun _ x -> Some x) [1..30000]
+    Map.choosei (fun _ x -> Some x) ([1..30000] |> List.map (fun x -> (x, "x")) |> Map) |> ignore
