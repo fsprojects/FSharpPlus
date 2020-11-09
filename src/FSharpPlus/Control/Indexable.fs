@@ -94,7 +94,7 @@ type ChooseIndexed =
         let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member ChooseIndexed : _*_*_ -> _) b, f, a)
         let inline call (a: 'a, b: 'b, f) = call_2 (a, b, f)
         call (Unchecked.defaultof<ChooseIndexed>, source, mapping)
-    static member inline InvokeOnInstance (mapping: 'K->'T->'Key option) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member ChooseIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
+    static member inline InvokeOnInstance (mapping: 'K->'T->'U option) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member ChooseIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
 
     static member inline ChooseIndexed (x: seq<'T>   , f: int->'T->'U option, _impl: Default2) = x |> Seq.choosei f : seq<'U>
     static member inline ChooseIndexed (x: ^``I<'T>``, f: 'K->'T->'U option, _impl: Default1) : '``I<'U>`` = ChooseIndexed.InvokeOnInstance f x
