@@ -87,8 +87,6 @@ type ChooseIndexed =
     static member ChooseIndexed ((k: 'K, a: 'T)       ,  f, [<Optional>]_impl: ChooseIndexed) = (k, ((f k a) : 'U))
     static member ChooseIndexed (g                    ,  f: 'K->'T->'U option, [<Optional>]_impl: ChooseIndexed) = fun x -> f x (g x)
     static member ChooseIndexed (x: Map<'K,'T>        ,  f, [<Optional>]_impl: ChooseIndexed) = Map.choosei f x : Map<'K,'U>
-    //static member ChooseIndexed (x: Dictionary<'K, 'T>,  f, [<Optional>]_impl: ChooseIndexed) = Dictionary.choosei f x
-   // static member ChooseIndexed (x: IDictionary<'K, 'T>, f, [<Optional>]_impl: ChooseIndexed) = Dict.choosei f x
 
     static member inline Invoke (mapping: 'K->'T->'U option) (source: '``Indexable<'T>``) =
         let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member ChooseIndexed : _*_*_ -> _) b, f, a)

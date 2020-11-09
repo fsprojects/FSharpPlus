@@ -2526,9 +2526,9 @@ module testCompileOldCode =
         if (n < 0G) then failwith "Negative exponent" else f 1G x n
     let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
 
-module choosei =
+module Choosei =
     [<Test>]
-    let chooseiTests () =
+    let choosei () =
         let someIfIndexEven i x =
             if i % 2 = 0 then Some x
             else None
@@ -2547,30 +2547,7 @@ module choosei =
         let m = (choosei someIfIndexEven (Map [1,2;2,3;3,4])) 
         areEqual (Map [2,3]) m
         Assert.IsInstanceOf<Microsoft.FSharp.Collections.Map<int, int>> m
-
-//        let d = (choosei someIfIndexEven (Dictionary<int, string> (dict [1,"2"; 2,"4"; 4,"8"])))
-//        areEqual (Dictionary<int, string>(dict [2,"4"; 4,"8"])) d
-//        Assert.IsInstanceOf<Dictionary<int, string>> d
-//        
-//        let di = (choosei someIfIndexEven (dict [1,"2"; 2,"4"; 4,"8"]))
-//        areEqual (dict [2,"4"; 4,"8"]) di
-//        Assert.IsInstanceOf<Dictionary<int, string>> di
-
-    [<Test>]
-    let chooseiUsage () =
-        let someIfIndexEven i x =
-            if i % 2 = 0 then Some x
-            else None
         
-//        let m = Map [1,2; 2,3; 3,4]
-//        let l = ReadOnlyCollection [|1..5|]
-//        let iReadOnlyList = l :> IReadOnlyList<_>
-//        let rarr = ResizeArray [|1..5|]
-//        areEquivalent (Map [2,3]) (choosei someIfIndexEven m)
-        //areEquivalent [1;3;5] (choosei someIfIndexEven l)
-        //areEquivalent [1:3:5] (choosei someIfIndexEven iReadOnlyList)
-        //areEquivalent [1:3:5] (choosei someIfIndexEven rarr)
-
         // correct overload:
         SideEffects.reset ()
         areEquivalent [1;3;5] (ChooseIndexed.InvokeOnInstance someIfIndexEven (WrappedListD [1..5]))
