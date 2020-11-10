@@ -206,6 +206,9 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Apply"; WrappedSeqD (f <*> x)
     static member ToList (WrappedSeqD x) = Seq.toList x
+    static member ChooseIndexed (WrappedSeqD x, f) =
+            SideEffects.add "Using WrappedSeqD's ChooseIndexed"
+            WrappedSeqD (Seq.choosei f x)
 
 type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
@@ -2555,3 +2558,10 @@ module Choosei =
         SideEffects.reset ()
         areEquivalent [1;3;5] (choosei someIfIndexEven (WrappedListD [1..5]))
         areEqual ["Using WrappedListD's ChooseIndexed"] (SideEffects.get ())
+        
+        SideEffects.reset ()
+        (ChooseIndexed.InvokeOnInstance someIfIndexEven (WrappedSeqD [1..5])) |> ignore
+        areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        (choosei someIfIndexEven (WrappedSeqD [1..5])) |> ignore
+        areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
