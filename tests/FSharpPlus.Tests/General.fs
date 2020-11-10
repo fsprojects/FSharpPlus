@@ -2534,19 +2534,19 @@ module Choosei =
             else None
         let l = (choosei someIfIndexEven [1;2;3;4;5]) 
         areEqual [1;3;5] l
-        Assert.IsInstanceOf<Microsoft.FSharp.Collections.List<int>> l
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.List<int>>> (Some l)
         
         let a = (choosei someIfIndexEven [|1;2;3;4;5|]) 
         areEqual [|1;3;5|] a
-        Assert.IsInstanceOf<int[]> a
+        Assert.IsInstanceOf<Option<int[]>> (Some a)
         
         let s =(choosei someIfIndexEven (seq [1;2;3;4;5])) 
         areEqual (seq [1;3;5]) s
-        Assert.IsInstanceOf<Microsoft.FSharp.Collections.seq<int>> s
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.seq<int>>> (Some s)
         
         let m = (choosei someIfIndexEven (Map [1,2;2,3;3,4])) 
         areEqual (Map [2,3]) m
-        Assert.IsInstanceOf<Microsoft.FSharp.Collections.Map<int, int>> m
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.Map<int, int>>> (Some m)
         
         // correct overload:
         SideEffects.reset ()
