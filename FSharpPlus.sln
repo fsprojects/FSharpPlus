@@ -142,8 +142,8 @@ Global
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable|Any CPU.Build.0 = Debug|Any CPU
+		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
+		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable|Any CPU.Build.0 = Fable|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
