@@ -29,13 +29,17 @@ type Plus =
     
     #if !FABLE_COMPILER
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(x).Append(y)
-    static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = new AggregateException (seq {yield! x.InnerExceptions; yield! y.InnerExceptions})
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""    
+    static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = new AggregateException (seq {yield! x.InnerExceptions; yield! y.InnerExceptions})
     static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
         let f (e: exn) = match e with :? AggregateException as a -> a.InnerExceptions :> seq<_> | _ -> Seq.singleton e
         new AggregateException (seq {yield! f x; yield! f y}) :> exn
-    #else    
+    #else
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(string x).Append(string y)
+    static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""
+    static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
+        let f (e: exn) = match e with :? AggregateException as a -> a.Data0 :> seq<_> | _ -> Seq.singleton e
+        AggregateException (seq {yield! f x; yield! f y}) :> exn
     #endif
     
     static member inline Invoke (x: 'Plus) (y: 'Plus) : 'Plus =
@@ -65,8 +69,8 @@ type Plus with
                     | Choice1Of2 a, Choice2Of2 _ -> Choice1Of2 a
                     | Choice2Of2 _, Choice1Of2 b -> Choice1Of2 b
                     | Choice2Of2 a, Choice2Of2 b -> Choice2Of2 (Plus.Invoke a b)
-#if !FABLE_COMPILER
 type Plus with 
+#if !FABLE_COMPILER
     static member inline ``+`` (x, y, _mthd: Plus) : 't =
         let xr, yr = (^t : (member Rest : 'tr) x), (^t : (member Rest : 'tr) y)
         let x7, y7 = (^t : (member Item7: 't7) x), (^t : (member Item7: 't7) y)
@@ -79,13 +83,13 @@ type Plus with
         Tuple<_,_,_,_,_,_,_,_> (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7, Plus.Invoke xr yr) |> retype : 't
 
     static member inline ``+`` ( x: Tuple<'a>         ,  y: Tuple<'a>         , [<Optional>]_mthd: Plus) = Tuple<'a> (Plus.Invoke x.Item1 y.Item1) : Tuple<'a>
+#endif
     static member inline ``+`` ((x1,x2               ), (y1,y2               ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                                                               ) :'a*'b
     static member inline ``+`` ((x1,x2,x3            ), (y1,y2,y3            ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3                                                                            ) :'a*'b*'c
     static member inline ``+`` ((x1,x2,x3,x4         ), (y1,y2,y3,y4         ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4                                                         ) :'a*'b*'c*'d
     static member inline ``+`` ((x1,x2,x3,x4,x5      ), (y1,y2,y3,y4,y5      ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5                                      ) :'a*'b*'c*'d*'e
     static member inline ``+`` ((x1,x2,x3,x4,x5,x6   ), (y1,y2,y3,y4,y5,y6   ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6                   ) :'a*'b*'c*'d*'e*'f
     static member inline ``+`` ((x1,x2,x3,x4,x5,x6,x7), (y1,y2,y3,y4,y5,y6,y7), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7) :'a*'b*'c*'d*'e*'f*'g
-#endif
 
 type Plus with
 #if !FABLE_COMPILER    
@@ -122,7 +126,9 @@ type Plus with
     static member        ``+`` (x: _ IEnumerator             , y                            , [<Optional>]_mthd: Default3) = Enumerator.concat <| (seq {yield x; yield y}).GetEnumerator ()
     #endif
     static member inline ``+`` (x: IDictionary<'K,'V>        , y: IDictionary<'K,'V>        , [<Optional>]_mthd: Default3) = Dict.unionWith Plus.Invoke x y
+    #if !FABLE_COMPILER
     static member inline ``+`` (x: IReadOnlyDictionary<'K,'V>, y: IReadOnlyDictionary<'K,'V>, [<Optional>]_mthd: Default3) = IReadOnlyDictionary.unionWith Plus.Invoke x y
+    #endif
     static member inline ``+`` (x: _ NonEmptySeq             , y: _ NonEmptySeq             , [<Optional>]_mthd: Default3) = NonEmptySeq.append x y
     
 

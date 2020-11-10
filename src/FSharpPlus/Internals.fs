@@ -333,3 +333,8 @@ module FindSliceIndex =
             else -1
         go 0
 #endif
+
+#if FABLE_COMPILER
+exception AggregateException of Exception seq
+
+#endif
