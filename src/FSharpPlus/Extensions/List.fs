@@ -152,14 +152,10 @@ module List =
     /// <param name="x">The input list.</param>
     ///
     /// <returns>List with values x for each List value where the function returns Some(x).</returns>
-    let choosei f l =
-        let rec chooseIndexInner f l i acc =
-            match l with
-            | [] -> acc
-            | h::t ->
-                match f i h with
-                | None   -> chooseIndexInner f t (i + 1) acc
-                | Some h -> chooseIndexInner f t (i + 1) (h::acc)
-        chooseIndexInner f l 0 []
-        |> List.rev
+    let choosei f a =
+        let mutable i = ref -1
+        let fi x =
+            incr i
+            f !i x
+        List.choose fi a
         
