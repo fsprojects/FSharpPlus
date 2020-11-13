@@ -6,6 +6,11 @@ namespace FSharpPlus.Control
 
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
+#if FABLE_COMPILER
+/// NOTE
+type OptionalAttribute ()=
+    inherit System.Attribute()
+#endif
 
 #if !FABLE_COMPILER
 
