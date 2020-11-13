@@ -354,3 +354,8 @@ module Extensions =
     Array.choosei (fun _ x -> Some x) [|1..30000|] |> ignore
     Seq.choosei (fun _ x -> Some x) (seq [1..30000]) |> ignore
     Map.choosei (fun _ x -> Some x) ([1..30000] |> List.map (fun x -> (x, "x")) |> Map) |> ignore
+
+  [<Test>]
+  let ``choosei returns elements in correct order`` () =
+    Array.choosei (fun _ x -> Some x) [|1..10|] |> areEqual [|1..10|]
+    List.choosei (fun _ x -> Some x) [1..10] |> areEqual [1..10]

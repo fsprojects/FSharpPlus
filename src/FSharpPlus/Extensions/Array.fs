@@ -107,6 +107,9 @@ module Array =
     /// <param name="x">The input array.</param>
     ///
     /// <returns>Array with values x for each Array value where the function returns Some(x).</returns>
-    let choosei f l =
-        Array.indexed l
-        |> Array.choose (fun (a, b) -> f a b)
+    let choosei f a =
+        let mutable i = ref -1
+        let fi x =
+            incr i
+            f !i x
+        Array.choose fi a
