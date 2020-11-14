@@ -27,11 +27,14 @@ namespace CSharpLib
         }
     }
 #if NETSTANDARD2_1 
-    public interface ICustomerId{
-        long Value{get;}
-        public static bool TryParse(string value, out ICustomerId id){
-            if (CustomerId.TryParse(value, out var id1)){
-                id= id1;
+    public interface ICustomerId
+    {
+        long Value { get; }
+        public static bool TryParse(string value, out ICustomerId id)
+        {
+            if (CustomerId.TryParse(value, out var id1))
+            {
+                id = id1;
                 return true;
             }
             id = null;
