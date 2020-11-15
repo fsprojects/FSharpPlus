@@ -36,6 +36,21 @@ In other words:
  - ``monad.plus`` Lazy additive monadic builder. Use when you expect one or more results.
  - ``monad.plus'`` is the strict version of ``monad.plus``
 
+Note that a type is either lazy or strict, but it could act as fx or plus at the same time (see below some examples). This means that we need to pay attention when using a CE over a type, if the type is lazy but with use a strict monad, we'll get strict semantics which probably would make no sense, but if we do the opposite we might run into runtime errors, fortunatelly a compile-time warning (or error) will prevent us.
+
+A simple way to find out if a type is strict or lazy is to execute this in fsi: `let _ : MyType<'t> = monad { printfn "I'm strict" }`
+
+For layered monads (monad transformers) the general rule is: the monad is strict unless at least one of its constituent types is lazy, in that case the whole monad becomes lazy.
+
+*)
+
+let _ : OptionT<list<unit option>> = monad { printfn "I'm strict" }
+// will print I'm strict, because OptionT and list are strict
+
+let _ : OptionT<seq<unit option>> = monad { printfn "I'm strict" }
+// won't print anything, because seq is lazy
+
+(**
 Examples
 ========
 
