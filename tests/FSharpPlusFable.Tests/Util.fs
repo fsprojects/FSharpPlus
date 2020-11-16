@@ -9,6 +9,6 @@ module Testing
     let equal expected actual: unit = Assert.Equal ("",expected, actual) 
     let notEqual expected actual: unit = Assert.NotEqual ("",expected,actual)
 
-    let equalSeq expected actual: unit = Assert.Equal ("",expected,actual)
+    let equalSeq expected actual: unit = Assert.Equal ("", Seq.toList expected, Seq.toList actual)
     let equalMap expected actual: unit = equalSeq (Map.toSeq expected) (Map.toSeq actual)
 
