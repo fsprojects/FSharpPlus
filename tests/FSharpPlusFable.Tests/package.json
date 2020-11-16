@@ -1,14 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "pretest": "dotnet fable --outDir bin/Fable",
-    "test": "mocha bin/Fable/ -r esm -t 10000"
+    "test": "dotnet fable . --outDir bin --runScript ./bin /d"
   },
   "dependencies": {
-    "esm": "^3.2.25",
-    "isomorphic-fetch": "^3.0.0",
-    "minimist": "^1.2.5",
-    "mocha": "^7.1.0"
+    "esm": "^3.2.25"
   },
   "name": "tests"
 }
