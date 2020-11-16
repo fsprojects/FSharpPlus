@@ -1280,13 +1280,11 @@ module Operators =
     /// <category index="20">Tuple</category>
     let inline mapItem1 (mapping: 'T -> 'U) (tuple: '``('T * ..)``) = MapItem1.Invoke mapping tuple : '``('U * ..)``
 
-    #if !FABLE_COMPILER
     /// <summary>
     /// Maps the second value of a tuple.
     /// </summary>
     /// <category index="20">Tuple</category>
     let inline mapItem2 (mapping: 'T -> 'U) (tuple: '``('A * 'T * ..)``) = MapItem2.Invoke mapping tuple : '``('A * 'U * ..)``
-    #endif
 
     /// <summary>
     /// Maps the third value of a tuple.

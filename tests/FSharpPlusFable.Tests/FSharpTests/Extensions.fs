@@ -89,13 +89,11 @@ let ExtensionsTest =
                     equal oneParsed (Result<int, string>.Ok 1)
                     equal tenEncoded "10" )
 
-#if !FABLE_COMPILER
       testCase "Tuple"
         (fun () ->
                    equal (mapItem2 string (1,2,3)) (1,"2",3)
                    equal (item3 (1,2,3)) 3
                    )
-#endif
 
       testCase "eq on DList 1" (fun () -> equal true  (dlistA = dlistB))
       testCase "eq on DList 2" (fun () -> equal false (dlistA = dlistC))
