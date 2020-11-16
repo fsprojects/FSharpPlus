@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -30,4 +30,4 @@ jobs:
       run: npm install
     - name: Run Fable tests
       working-directory: tests/FSharpPlusFable.Tests
-      run: npm run test
+      run: dotnet fable . --outDir bin --runScript ./bin 
