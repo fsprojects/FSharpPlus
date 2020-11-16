@@ -1784,6 +1784,7 @@ module MonadTransformers =
         let _ = put initialState : ChoiceT<State<int, Choice<unit,string>>>
 
         ()
+#if !NETSTANDARD3_0
     [<Test>]
     let testStateT () =
         let lst1: StateT<string,_> = StateT.lift [1;2]
@@ -1818,7 +1819,7 @@ module MonadTransformers =
         areEqual (Ok 11) x
         let y = (fn |> ResultT.run |> Reader.run) -1
         areEqual (Error NegativeValue) y
-
+#endif
 
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
@@ -2112,6 +2113,12 @@ module Parsing =
         Assert.IsTrue((v3.Value.Value = 1))
         let v4 : ProductId option = tryParse "P_X"
         Assert.IsTrue(Option.isNone v4)
+#if NETSTANDARD3_0
+        let v5 : ICustomerId option = tryParse "C_1"
+        Assert.IsTrue((v5.Value.Value = 1L))
+        let v6 : ICustomerId option = tryParse "C_X"
+        Assert.IsTrue(Option.isNone v6)
+#endif
 
     [<Test>]
     let scanfParsing () =
@@ -2237,7 +2244,7 @@ module Sequences =
           let! z = seq [1..50]
           let! x = seq [1..z]
           let! y = seq [x..z]
-          if (x*x + y*y = z*z) then return (x, y, z)}
+          if (x*x + y*y = z*z) then return (x, y, z) else () }
 
         let _ = monad.plus {
           let! z = seq [1..50]
