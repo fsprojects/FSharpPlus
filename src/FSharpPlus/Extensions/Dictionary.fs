@@ -150,7 +150,7 @@ module Dictionary =
         intersectWith (fun a _ -> a) source1 source2
     #endif
     
-    /// <summary>Choose with access to the key.</summary>
+    /// <summary>Same as chooseValues but with access to the key.</summary>
     /// <param name="f">The mapping function, taking key and element as parameters.</param>
     /// <param name="x">The input dictionary.</param>
     ///

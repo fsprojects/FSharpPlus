@@ -147,7 +147,7 @@ module List =
             | (_,_) -> acc
         loop [] (l1,l2) |> List.rev
         
-    /// <summary>Choose with access to the index.</summary>
+    /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="f">The mapping function, taking index and element as parameters.</param>
     /// <param name="x">The input list.</param>
     ///

@@ -102,7 +102,7 @@ module Array =
     let zipShortest (a1: array<'T1>) (a2: array<'T2>) =
         Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])
 
-    /// <summary>Choose with access to the index.</summary>
+    /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="f">The mapping function, taking index and element as parameters.</param>
     /// <param name="x">The input array.</param>
     ///

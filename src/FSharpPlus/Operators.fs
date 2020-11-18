@@ -772,8 +772,10 @@ module Operators =
     /// <summary>
     /// Choose with access to the index.
     /// </summary>
+    /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
+    /// <param name="source">The input collection.</param>
     /// <category index="16">Indexable</category>
-    let inline choosei (mapping: 'K->'T->'U) (source: '``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = ChooseIndexed.Invoke mapping source
+    let inline choosei (mapping: 'K->'T->'U option) (source: '``FunctorWithIndex<'T>``) : '``FunctorWithIndex<'U>`` = ChooseIndexed.Invoke mapping source
 
     /// <summary>
     /// Maps an action with access to an index.
