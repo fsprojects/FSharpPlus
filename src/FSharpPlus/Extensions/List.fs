@@ -146,3 +146,16 @@ module List =
             | (l::ls,r::rs) -> loop ((l,r)::acc) (ls,rs)
             | (_,_) -> acc
         loop [] (l1,l2) |> List.rev
+        
+    /// <summary>Same as choose but with access to the index.</summary>
+    /// <param name="f">The mapping function, taking index and element as parameters.</param>
+    /// <param name="x">The input list.</param>
+    ///
+    /// <returns>List with values x for each List value where the function returns Some(x).</returns>
+    let choosei f a =
+        let mutable i = ref -1
+        let fi x =
+            incr i
+            f !i x
+        List.choose fi a
+        
