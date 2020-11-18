@@ -94,6 +94,9 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member MapIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's MapIndexed"
         WrappedListD (List.mapi f x)
+    static member ChooseIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's ChooseIndexed"
+        WrappedListD (List.choosei f x)
     static member IterateIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's IterateIndexed"
         List.iteri f x
@@ -202,6 +205,9 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Apply"; WrappedSeqD (f <*> x)
     static member ToList (WrappedSeqD x) = Seq.toList x
+    static member ChooseIndexed (WrappedSeqD x, f) =
+            SideEffects.add "Using WrappedSeqD's ChooseIndexed"
+            WrappedSeqD (Seq.choosei f x)
 
 type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
@@ -2513,3 +2519,40 @@ module testCompileOldCode =
         let rec f a b n = if n == 0G then a else f (b * a) b (n - 1G)
         if (n < 0G) then failwith "Negative exponent" else f 1G x n
     let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
+
+module Choosei =
+    [<Test>]
+    let choosei () =
+        let someIfIndexEven i x =
+            if i % 2 = 0 then Some x
+            else None
+        let l = (choosei someIfIndexEven [1;2;3;4;5]) 
+        areEqual [1;3;5] l
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.List<int>>> (Some l)
+        
+        let a = (choosei someIfIndexEven [|1;2;3;4;5|]) 
+        areEqual [|1;3;5|] a
+        Assert.IsInstanceOf<Option<int[]>> (Some a)
+        
+        let s =(choosei someIfIndexEven (seq [1;2;3;4;5])) 
+        areEqual (seq [1;3;5]) s
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.seq<int>>> (Some s)
+        
+        let m = (choosei someIfIndexEven (Map [1,2;2,3;3,4])) 
+        areEqual (Map [2,3]) m
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.Map<int, int>>> (Some m)
+        
+        // correct overload:
+        SideEffects.reset ()
+        areEquivalent [1;3;5] (ChooseIndexed.InvokeOnInstance someIfIndexEven (WrappedListD [1..5]))
+        areEqual ["Using WrappedListD's ChooseIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        areEquivalent [1;3;5] (choosei someIfIndexEven (WrappedListD [1..5]))
+        areEqual ["Using WrappedListD's ChooseIndexed"] (SideEffects.get ())
+        
+        SideEffects.reset ()
+        (ChooseIndexed.InvokeOnInstance someIfIndexEven (WrappedSeqD [1..5])) |> ignore
+        areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        (choosei someIfIndexEven (WrappedSeqD [1..5])) |> ignore
+        areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
