@@ -28,9 +28,9 @@ module State =
 
     let bind  f (State m) = State (fun s -> let (a: 'T, s') = m s in run (f a) s')                                : State<'S,'U>
     let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x': 'T, s2) = x s1 in (f' x', s2)) : State<'S,'U>
-    /// Evaluate a state with the initial value s and return only the result value of the computation. Ignores the final state.
+    /// Evaluate a <paramref name="sa">state computation</paramref> with the <paramref name="s">initial value</paramref> and return only the result value of the computation. Ignores the final state.
     let eval (State sa) (s: 's)         = fst (sa s) : 'T
-    /// Evaluate a state with the initial value s and return only the final state of the computation. Ignores the result value.
+    /// Evaluate a <paramref name="sa">state computation</paramref> with the <paramref name="s">initial value</paramref> and return only the final state of the computation. Ignores the result value.
     let exec (State sa: State<'S,'A>) s = snd (sa s) : 'S
 
     /// Return the state from the internals of the monad.
