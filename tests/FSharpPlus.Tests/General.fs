@@ -1800,7 +1800,9 @@ module MonadTransformers =
         let _ = put initialState : ChoiceT<State<int, Choice<unit,string>>>
 
         ()
-#if !NETSTANDARD3_0
+
+#if !FSHARP5 // For some reason these does not work with F#5 compiler
+
     [<Test>]
     let testStateT () =
         let lst1: StateT<string,_> = StateT.lift [1;2]
