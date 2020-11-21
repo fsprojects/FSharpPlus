@@ -1587,6 +1587,7 @@ module MonadTransformers =
 
         ()
 
+    [<Test>]
     let testStateT () =
         let lst1: StateT<string,_> = StateT.lift [1;2]
         let lst2: StateT<string,_> = StateT.lift [4;5]
@@ -1602,6 +1603,24 @@ module MonadTransformers =
         CollectionAssert.AreEqual ([((1, 6), "OK"); ((1, 7), "OK"); ((2, 6), "OK"); ((2, 7), "OK")], StateT.run m "ok")
 
         ()
+
+    type RErrors = | NegativeValue
+    [<Test>]
+    let testCompilationMT1 () =
+
+        let fn : ResultT<Reader<int,Result<_,RErrors>>> = 
+            monad {
+               let! x1 = lift ask
+               let! x2 = 
+                   if x1 > 0 then result 1
+                   else ResultT (result (Error NegativeValue)) 
+               return x1 + x2
+            }
+
+        let x = (fn |> ResultT.run |> Reader.run) 10
+        areEqual (Ok 11) x
+        let y = (fn |> ResultT.run |> Reader.run) -1
+        areEqual (Error NegativeValue) y
 
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
