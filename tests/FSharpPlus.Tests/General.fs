@@ -1800,7 +1800,7 @@ module MonadTransformers =
         let _ = put initialState : ChoiceT<State<int, Choice<unit,string>>>
 
         ()
-#if !NETSTANDARD3_0
+
     [<Test>]
     let testStateT () =
         let lst1: StateT<string,_> = StateT.lift [1;2]
@@ -1835,7 +1835,6 @@ module MonadTransformers =
         areEqual (Ok 11) x
         let y = (fn |> ResultT.run |> Reader.run) -1
         areEqual (Error NegativeValue) y
-#endif
 
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
