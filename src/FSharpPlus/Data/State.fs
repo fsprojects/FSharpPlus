@@ -84,6 +84,9 @@ type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 /// Basic operations on StateT
 [<RequireQualifiedAccess>]
 module StateT =
+    /// <summary><para>Run the state with an inital state to get back the result and the new state wrapped in an inner monad.</para>
+    /// <para>An example of using run would be:
+    /// <c>let (score, finalState) = Monad.run ( StateT.run game initialState )</c></para></summary>
     let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``
 
     /// Embed a Monad<'T> into a StateT<'S,'``Monad<'T * 'S>``>
