@@ -1,8 +1,8 @@
 #### 1.1.5  - November 22 2020
 
-- Use list instead of array for the generic implementation of sequence
-- Make `<*>` for functions evaluate left-to-right
-- Remove BindReturn from monad computation expression in order to avoid type inference issues
+- Use list internally instead of array for the generic implementation of sequence
+- Make `<*>` for functions evaluate side-effects left-to-right
+- Remove BindReturn from monad computation expression in order to avoid type inference issues in F#5
 
 #### 1.1.4  - October 7 2020
 
