@@ -15,11 +15,24 @@ type NonEmptySeq<'T> =
 type neseq<'t> = NonEmptySeq<'t>
 
 module NonEmptySeq =
-    let internal unsafeOfSeq (x: _ seq) =
+    /// <summary>Builds a non empty sequence from the given sequence.</summary>
+    /// <param name="seq">The input sequence.</param>
+    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <remarks>
+    ///   **This function does not check whether the sequence is actually non empty or not.**
+    /// 
+    ///   Use this function only if you are sure that the sequence is not empty and
+    ///   you don't want to evaluate the first element of the sequence which would cause a
+    ///   side effect.
+    ///  
+    ///   Otherwise, always use `ofSeq`. 
+    /// </remarks>
+    /// <seealso cref="ofSeq" />
+    let unsafeOfSeq (seq: _ seq) =
         { new NonEmptySeq<_> with
-            member _.First = Seq.head x
-            member _.GetEnumerator() = x.GetEnumerator()
-            member _.GetEnumerator() = x.GetEnumerator() :> Collections.IEnumerator }
+            member _.First = Seq.head seq
+            member _.GetEnumerator() = seq.GetEnumerator()
+            member _.GetEnumerator() = seq.GetEnumerator() :> Collections.IEnumerator }
     
     let internal unsafeOfArray (x: _[]) =
         { new NonEmptySeq<_> with
@@ -243,7 +256,13 @@ module NonEmptySeq =
     /// <param name="seq">The input sequence.</param>
     /// <returns>Non empty sequence containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input sequence is empty.</exception>
-    /// <remarks>Throws exception for empty sequence</remarks>
+    /// <remarks>
+    ///   Throws exception for empty sequence.
+    /// 
+    ///   Evaluates the first element of the sequence and may trigger side effects.
+    ///   If you are sure that the sequence is not empty and want to avoid that, you can use `unsafeOfSeq` instead.
+    /// </remarks>
+    /// <seealso cref="unsafeOfSeq" />
     let ofSeq (seq: _ seq) =
         if isNull seq || Seq.isEmpty seq then invalidArg "seq" "The input sequence was empty."
         else unsafeOfSeq seq
