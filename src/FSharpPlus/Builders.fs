@@ -36,7 +36,6 @@ module Builders =
         member inline __.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
         member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
         member inline __.MergeSources (t1: '``Monad<'T>``, t2: '``Monad<'U>``)           : '``Monad<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
-        member inline __.BindReturn   (x : '``Monad<'T>``, f: 'T -> 'U)                  : '``Monad<'U>``      = Map.Invoke f x
 
         [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.Select (x, [<ProjectionParameter>] f) = map f x
