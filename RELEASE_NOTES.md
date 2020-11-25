@@ -1,3 +1,17 @@
+#### 1.1.5  - November 22 2020
+
+- Use list internally instead of array for the generic implementation of sequence
+- Make `<*>` for functions evaluate side-effects left-to-right
+- Remove BindReturn from monad computation expression in order to avoid type inference issues in F#5
+
+#### 1.1.4  - October 7 2020
+
+- Fix: `TryWith` for State and Reader, `Filter`, `DistinctBy`, `SortBy` and `SortByAscending` for user defined types.
+- Compile-time safety for try-blocks and while-loops in generic computation expressions.
+- Reduce allocations in NonEmptyList builder implementation.
+- Add support for clean signatures to all Indexables.
+- Improved, fixed and additional documentation in the extensions namespace.
+
 #### 1.1.3  - July 19 2020
 * Add map2/lift2 for all monad transformers
 * Add Tuple2 and Tuple3 extensions
