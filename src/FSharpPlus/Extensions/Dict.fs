@@ -161,3 +161,29 @@ module Dict =
             | Some v -> dct.Add (k, v)
             | None   -> ()
         dct :> IDictionary<'Key, 'U>
+
+    /// <summary>Creates a conceptually infinite dictionay containing the same value for all possible keys.</summary>
+    /// <param name="source">The value for all possible keys.</param>
+    let initInfinite<'TKey,'TValue> (source: 'TValue) : IDictionary<'TKey,'TValue> =
+        { 
+            new IDictionary<'TKey,'TValue> with
+                member __.TryGetValue (_key: 'TKey, value: byref<'TValue>) = value <- source; true
+                member __.Count = System.Int32.MaxValue
+                member __.ContainsKey (_key: 'TKey) = true
+                member __.GetEnumerator () = Seq.empty.GetEnumerator () :> System.Collections.IEnumerator
+                member __.GetEnumerator () = Seq.empty.GetEnumerator () : IEnumerator<KeyValuePair<'TKey,'TValue>>
+                member __.IsReadOnly = true
+                member __.Item
+                    with get (_key: 'TKey)   : 'TValue = source
+                    and set  (_key: 'TKey) (_: 'TValue) : unit = raise (System.NotImplementedException())
+
+                member __.Add (_key: 'TKey, _value: 'TValue) : unit                              = raise (System.NotImplementedException())
+                member __.Add (_item: KeyValuePair<'TKey,'TValue>) : unit                        = raise (System.NotImplementedException())
+                member __.Clear () : unit                                                        = raise (System.NotImplementedException())
+                member __.Contains (_item: KeyValuePair<'TKey,'TValue>) : bool                   = raise (System.NotImplementedException())                
+                member __.CopyTo (_arr: KeyValuePair<'TKey,'TValue> [], _arrayIndex: int) : unit = raise (System.NotImplementedException())
+                member __.Keys : ICollection<'TKey>                                              = raise (System.NotImplementedException())
+                member __.Remove (_key: 'TKey) : bool                                            = raise (System.NotImplementedException())
+                member __.Remove (_item: KeyValuePair<'TKey,'TValue>) : bool                     = raise (System.NotImplementedException())
+                member __.Values : ICollection<'TValue>                                          = raise (System.NotImplementedException())
+            }
