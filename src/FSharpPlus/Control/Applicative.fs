@@ -47,6 +47,14 @@ type Apply =
            | true, vx -> dct.Add (k, vf vx)
            | _        -> ()
        dct
+
+    static member        ``<*>`` (f: IDictionary<'Key,_>, x: IDictionary<'Key,'T> , [<Optional>]_output: IDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IDictionary<'Key,'U> =
+       let dct = Dictionary ()
+       for KeyValue(k, vx) in x do
+           match f.TryGetValue k with
+           | true, vf -> dct.Add (k, vf vx)
+           | _        -> ()
+       dct :> IDictionary<'Key,'U>
     
     static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, [<Optional>]_output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     static member        ``<*>`` (f: ('T->'U) ResizeArray, x: 'T ResizeArray, [<Optional>]_output: 'U ResizeArray, [<Optional>]_mthd: Apply) = ResizeArray.apply f x : 'U ResizeArray
