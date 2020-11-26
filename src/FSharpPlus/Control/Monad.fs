@@ -136,6 +136,7 @@ type Return =
     static member        Return (_: 'a Async       , _: Return  ) = fun (x: 'a) -> async.Return x
     static member        Return (_: Result<'a,'e>  , _: Return  ) = fun x -> Ok x                                 : Result<'a,'e>
     static member        Return (_: Choice<'a,'e>  , _: Return  ) = fun x -> Choice1Of2 x                         : Choice<'a,'e>
+    static member        Return (_: IDictionary<'k,'t>, _: Return) = fun x -> Dict.initInfinite x                 : IDictionary<'k,'t>
     static member        Return (_: Expr<'a>       , _: Return  ) = fun x -> Expr.Cast<'a> (Expr.Value (x: 'a))
     static member        Return (_: ResizeArray<'a>, _: Return  ) = fun x -> ResizeArray<'a> (Seq.singleton x)
 
