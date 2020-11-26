@@ -369,3 +369,8 @@ module Extensions =
   let ``choosei returns elements in correct order`` () =
     Array.choosei (fun _ x -> Some x) [|1..10|] |> areEqual [|1..10|]
     List.choosei (fun _ x -> Some x) [1..10] |> areEqual [1..10]
+    
+  [<Test>]
+  let ``map3 should work`` () =
+    Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Ok 1) (Ok 1) |> areEqual (Ok 3: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Error 2) (Ok 1) |> areEqual (Error 2: Result<int, int>)
