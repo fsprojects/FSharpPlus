@@ -170,7 +170,7 @@ module String =
     /// When count exceeds the length of the string it returns an empty string.
     let drop count (source: string) =
         if count < 1 then source
-        else if String.length source >= count then String.Empty
+        else if String.length source <= count then String.Empty
         else skip count source
 
     /// Finds the first index of the char in the substring which satisfies the given predicate.
