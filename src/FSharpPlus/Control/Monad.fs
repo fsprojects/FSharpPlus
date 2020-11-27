@@ -20,6 +20,7 @@ type Bind =
     static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U>
     #if !FABLE_COMPILER
     static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
+    static member        (>>=) (source: Expr<'T>   , f: 'T -> Expr<'U>    ) = Expr.bind f source                                            : Expr<'U>
     static member        (>>=) (source             , f: 'T -> _           ) = Nullable.bind f source                                        : Nullable<'U>
     #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
@@ -158,7 +159,7 @@ type Delay =
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
-    
+    static member        Delay (_mthd: Delay   , x: unit-> Expr<_>                                        , _          ) = Expr.bind x (Return.Invoke ()) : Expr<'T>
 
     static member inline Invoke source : 'R =
         let inline call (mthd: ^M, input: unit -> ^I) = ((^M or ^I) : (static member Delay : _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)

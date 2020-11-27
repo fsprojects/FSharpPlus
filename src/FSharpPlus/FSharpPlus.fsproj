@@ -47,6 +47,7 @@
     <Compile Include="Extensions/Task.fs" />
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
+    <Compile Include="Extensions/Expr.fs" />
     <Compile Include="Extensions/Tuple.fs" />
     <Compile Include="TypeLevel/TypeLevelOperators.fs" />
     <Compile Include="TypeLevel/TypeBool.fs" />
