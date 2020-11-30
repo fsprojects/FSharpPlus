@@ -90,6 +90,18 @@ module Task =
                                     with e -> tcs.SetException e
                         ) |> ignore) |> ignore
             tcs.Task
+            
+     /// <summary>Creates a task workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
+     /// <remarks>Workflows are run in sequence.</remarks>
+     /// <param name="f">The mapping function.</param>
+     /// <param name="x">First task workflow.</param>
+     /// <param name="y">Second task workflow.</param>
+     /// <param name="z">Third task workflow.</param>
+     let map3 (f : 'T -> 'U -> 'V -> 'W) (x : Task<'T>) (y : Task<'U>) (z: Task<'V>) : Task<'W> =
+         x.ContinueWith(fun (x' : Task<'T>) ->
+             y.ContinueWith(fun (y' : Task<'U>) ->
+                 z.ContinueWith(fun (z' : Task<'V>) ->
+                 (f x'.Result y'.Result z'.Result)))).Unwrap().Unwrap()
 
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
     /// to the resulting value of another task workflow</summary>
