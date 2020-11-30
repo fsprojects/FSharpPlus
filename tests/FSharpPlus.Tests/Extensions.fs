@@ -377,5 +377,9 @@ module Extensions =
     Result.map3 (fun x y z -> x + y + z) (Error 1:Result<int, int>) (Error 3) (Ok 5) |> areEqual (Error 1: Result<int, int>)
     Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Error 3) (Error 5) |> areEqual (Error 3: Result<int, int>)
     Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Ok 3) (Error 5) |> areEqual (Error 5: Result<int, int>)
-    
+    // Choice
+    Choice.map3(fun x y z -> x + y + z) (result 1:Choice<int, int>) (result 3) (result 5) |> areEqual (result 9:Choice<int, int>)
+    Choice.map3(fun x y z -> x + y + z) (throw 1:Choice<int, int>) (throw 3) (result 5) |> areEqual (throw 1:Choice<int, int>)
+    Choice.map3(fun x y z -> x + y + z) (result 1:Choice<int, int>) (throw 3) (throw 5) |> areEqual (throw 3:Choice<int, int>)
+    Choice.map3(fun x y z -> x + y + z) (result 1:Choice<int, int>) (result 3) (throw 5) |> areEqual (throw 5:Choice<int, int>)
     
