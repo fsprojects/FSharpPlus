@@ -372,7 +372,10 @@ module Extensions =
     
   [<Test>]
   let ``map3 should work`` () =
+    // Result
     Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Ok 3) (Ok 5) |> areEqual (Ok 9: Result<int, int>)
     Result.map3 (fun x y z -> x + y + z) (Error 1:Result<int, int>) (Error 3) (Ok 5) |> areEqual (Error 1: Result<int, int>)
     Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Error 3) (Error 5) |> areEqual (Error 3: Result<int, int>)
     Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Ok 3) (Error 5) |> areEqual (Error 5: Result<int, int>)
+    
+    

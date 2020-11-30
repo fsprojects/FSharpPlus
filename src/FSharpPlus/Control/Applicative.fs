@@ -109,7 +109,43 @@ type Lift2 with
 
     static member inline Lift2 (_, (_:'t when 't: null and 't: struct, _: ^u when ^u : null and ^u: struct), _mthd: Default1) = id
     static member inline Lift2 (f: 'T -> 'U -> 'V, (x: '``Applicative<'T>``, y: '``Applicative<'U>``)      , _mthd: Default1) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` ) : (static member Lift2 : _*_*_ -> _) f, x, y)
-    
+
+
+
+type Lift3 =
+    inherit Default1
+
+//    static member        Lift3 (f, (x: Lazy<_>            , y: Lazy<_>            ), _mthd: Lift3) = Lazy.map2 f x y
+//    static member        Lift3 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Lift3) = Seq.lift2 f x y
+//    static member        Lift3 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     ), _mthd: Lift3) = NonEmptySeq.lift2 f x y
+    static member        Lift3 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     , z: IEnumerator<_>), _mthd: Lift3) = Enumerator.map3 f x y z
+//    static member        Lift3 (f, (x                     , y                     ), _mthd: Lift3) = List.lift2 f x y
+//    static member        Lift3 (f, (x                     , y                     ), _mthd: Lift3) = Array.lift2 f x y
+    static member        Lift3 (f, (x: 'R -> 'T           , y: 'R -> 'U           , z: 'R -> 'V), _mthd: Lift3) = fun a -> f (x a) (y a) (z a)
+//    static member inline Lift3 (f, ((a: 'Monoid, x: 'T)   , (b: 'Monoid, y: 'U)   ), _mthd: Lift3) = Plus.Invoke a b, f x y    
+//    static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift3) = Task.map2  f x y
+//    static member        Lift3 (f, (x                     , y                     ), _mthd: Lift3) = Async.map2  f x y
+    static member        Lift3 (f, (x                     , y                     , z), _mthd: Lift3) = Option.map3 f x y z
+    static member        Lift3 (f, (x: Result<'T,'Error>  , y: Result<'U,'Error>  , z: Result<'V, 'Error>), _mthd: Lift3) = Result.map3 f x y z
+//    static member        Lift3 (f, (x: Choice<'T,'Error>  , y: Choice<'U,'Error>  ), _mthd: Lift3) = Choice.map2 f x y
+//    static member        Lift3 (f, (x: Map<'Key,'T>       , y : Map<'Key,'U>      ), _mthd: Lift3) = Map.mapValues2 f x y
+//    static member        Lift3 (f, (x: Dictionary<'Key,'T>, y: Dictionary<'Key,'U>), _mthd: Lift3) = Dictionary.map2 f x y
+    static member        Lift3 (f, (x: Expr<'T>           , y: Expr<'U>           , z: Expr<'V>), _mthd: Lift3) = <@ f %x %y %z @>
+//    static member        Lift3 (f, (x: ResizeArray<'T>    , y: ResizeArray<'U>    ), _mthd: Lift3) = ResizeArray.lift2 f x y
+
+//    static member inline Invoke (f: 'T -> 'U -> 'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` =
+//        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, _output: ^R) =
+//            ((^M or ^I1 or ^I2 or ^R) : (static member Lift2 : _*(_*_)*_ -> _) f, (input1, input2), mthd)
+//        call (Unchecked.defaultof<Lift2>, x, y, Unchecked.defaultof<'``Applicative<'V>``>)
+//
+//    static member inline InvokeOnInstance (f: 'T -> 'U -> 'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) =
+//        ((^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member Lift2 : _*_*_ -> _) f, x, y)
+
+type Lift3 with
+    static member inline Lift2 (f, (x, y), _mthd: Default2) = (((Return.InvokeOnInstance f, x) ||> Apply.InvokeOnInstance), y) ||> Apply.InvokeOnInstance
+
+    static member inline Lift2 (_, (_:'t when 't: null and 't: struct, _: ^u when ^u : null and ^u: struct), _mthd: Default1) = id
+    static member inline Lift2 (f: 'T -> 'U -> 'V, (x: '``Applicative<'T>``, y: '``Applicative<'U>``)      , _mthd: Default1) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` ) : (static member Lift2 : _*_*_ -> _) f, x, y)
 
 
 type IsLeftZero =
