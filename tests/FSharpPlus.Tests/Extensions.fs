@@ -397,5 +397,27 @@ module Extensions =
     // Array
     Array.lift3 (fun x y z -> x + y + z) [|1;2|] [|7;11|] [|22;33|] |> areEqual [|30; 41; 34; 45; 31; 42; 35; 46|]
     
-    // Array
+    // Map
     Map.mapValues3 (fun x y z -> x + y + z) (Map [(1,1); (2,1); (3,3)]) (Map [(1,3); (2,5); (4,7)]) (Map [(1,3); (2,3); (5,11)]) |> areEqual (Map [(1, 7); (2, 9)])
+
+    // Dictionary
+    let d1 = new Dictionary<int, int>()
+    d1.Add(1,1)
+    d1.Add(2,1)
+    d1.Add(3,3)
+
+    let d2 = new Dictionary<int, int>()
+    d2.Add(1,3)
+    d2.Add(2,5)
+    d2.Add(4,7)
+    
+    let d3 = new Dictionary<int, int>()
+    d3.Add(1,3)
+    d3.Add(2,3)
+    d3.Add(5,11)
+    
+    let d4 = new Dictionary<int, int>()
+    d4.Add(1, 7)
+    d4.Add(2, 9)
+    
+    Dictionary.map3 (fun x y z -> x + y + z) d1 d2 d3 |> areEqual d4
