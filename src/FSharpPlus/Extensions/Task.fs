@@ -8,9 +8,37 @@ module Task =
 
     open System
     open System.Threading.Tasks
+    
+    let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
+        if t.IsCanceled then Canceled
+        else if t.IsFaulted then Faulted t.Exception
+        else Completed t.Result
 
     /// <summary>Creates a task workflow from another workflow 'x', mapping its result with 'f'.</summary>
-    let map (f : 'T -> 'U) (t : Task<'T>) : Task<'U> = t.ContinueWith(fun (t' : Task<'T>) -> f (t'.Result))
+    let map (f : 'T -> 'U) (t : Task<'T>) : Task<'U> =
+        if task.Status = TaskStatus.RanToCompletion then
+            try Task.FromResult (f task.Result)
+            with e ->
+                let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+                tcs.SetException e
+                tcs.Task
+        else
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+            if task.Status = TaskStatus.Faulted then
+                tcs.SetException task.Exception.InnerExceptions
+                tcs.Task
+            elif task.Status = TaskStatus.Canceled then
+                tcs.SetCanceled ()
+                tcs.Task
+            else
+                let k = function
+                    | Canceled    -> tcs.SetCanceled ()
+                    | Faulted e   -> tcs.SetException e.InnerExceptions
+                    | Completed r ->
+                        try tcs.SetResult (f r)
+                        with e -> tcs.SetException e
+                task.ContinueWith k |> ignore
+                tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
