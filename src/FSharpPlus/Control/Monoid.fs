@@ -86,11 +86,13 @@ type Plus with
     static member inline ``+`` ( x: Tuple<'a>         ,  y: Tuple<'a>         , [<Optional>]_mthd: Plus) = Tuple<'a> (Plus.Invoke x.Item1 y.Item1) : Tuple<'a>
 #endif
     static member inline ``+`` ((x1,x2               ), (y1,y2               ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2                                                                                               ) :'a*'b
+#if !FABLE_COMPILER // compiles, but doesn't work
     static member inline ``+`` ((x1,x2,x3            ), (y1,y2,y3            ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3                                                                            ) :'a*'b*'c
     static member inline ``+`` ((x1,x2,x3,x4         ), (y1,y2,y3,y4         ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4                                                         ) :'a*'b*'c*'d
     static member inline ``+`` ((x1,x2,x3,x4,x5      ), (y1,y2,y3,y4,y5      ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5                                      ) :'a*'b*'c*'d*'e
     static member inline ``+`` ((x1,x2,x3,x4,x5,x6   ), (y1,y2,y3,y4,y5,y6   ), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6                   ) :'a*'b*'c*'d*'e*'f
     static member inline ``+`` ((x1,x2,x3,x4,x5,x6,x7), (y1,y2,y3,y4,y5,y6,y7), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7) :'a*'b*'c*'d*'e*'f*'g
+#endif
 
 type Plus with
 #if !FABLE_COMPILER
