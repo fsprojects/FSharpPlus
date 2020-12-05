@@ -397,3 +397,5 @@ module Extensions =
     // Array
     Array.lift3 (fun x y z -> x + y + z) [|1;2|] [|7;11|] [|22;33|] |> areEqual [|30; 41; 34; 45; 31; 42; 35; 46|]
     
+    // Array
+    Map.mapValues3 (fun x y z -> x + y + z) (Map [(1,1); (2,1); (3,3)]) (Map [(1,3); (2,5); (4,7)]) (Map [(1,3); (2,3); (5,11)]) |> areEqual (Map [(1, 7); (2, 9)])

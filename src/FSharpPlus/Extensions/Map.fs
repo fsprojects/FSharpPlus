@@ -46,6 +46,23 @@ module Map =
             | Some vy -> yield (k, f.Invoke (vx, vy))
             | None    -> () }
     
+    /// <summary>Combines values from three maps using mapping function.</summary>
+    /// <remarks>Keys that are not present on every Map are dropped.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First input Map.</param>
+    /// <param name="y">Second input Map.</param>
+    /// <param name="y">Third input Map.</param>
+    ///
+    /// <returns>The mapped Map.</returns>
+    let mapValues3 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) (z: Map<'Key, 'T3>) = Map <| seq {
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
+        for KeyValue(k, vx) in x do
+            match Map.tryFind k y with
+            |Some vy -> match Map.tryFind k z with
+                        | Some vz -> yield (k, f.Invoke (vx, vy, vz))
+                        | None -> ()
+            | None -> ()}
+    
     /// <summary>Applies given function to each value of the given Map.</summary>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The input Map.</param>
