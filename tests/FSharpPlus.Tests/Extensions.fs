@@ -390,3 +390,7 @@ module Extensions =
     // Task
     Task.map3 (fun x y z -> x + y + z) (async{return 1} |> Async.StartAsTask) (async{return 3} |> Async.StartAsTask) (async{return 5} |> Async.StartAsTask) 
      |> Async.AwaitTask |> Async.RunSynchronously |> areEqual 9
+
+    // List
+    List.lift3 (fun x y z -> x + y + z) [1;2] [7;11] [22;33] |> areEqual [30; 41; 34; 45; 31; 42; 35; 46]
+    

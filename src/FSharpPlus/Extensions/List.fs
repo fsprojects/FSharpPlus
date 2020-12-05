@@ -30,6 +30,19 @@ module List =
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
     let lift2 f x1 x2 = List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
+    
+    /// <summary>Combines all values from three list and calls a mapping function on this combination.</summary>
+    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First list.</param>
+    /// <param name="x2">Second list.</param>
+    /// <param name="x3">Third list.</param>
+    ///
+    /// <returns>List with values returned from mapping function.</returns>
+    let lift3 f x1 x2 x3 =
+        List.allPairs x2 x3
+        |> List.allPairs x1
+        |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> List.map (fun (x, y, z) -> f x y z)
 
     /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
