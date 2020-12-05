@@ -15,7 +15,7 @@ module Task =
         else Completed t.Result
 
     /// <summary>Creates a task workflow from another workflow 'x', mapping its result with 'f'.</summary>
-    let map (f : 'T -> 'U) (t : Task<'T>) : Task<'U> =
+    let map (f: 'T -> 'U) (task: Task<'T>) : Task<'U> =
         if task.Status = TaskStatus.RanToCompletion then
             try Task.FromResult (f task.Result)
             with e ->
