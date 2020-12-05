@@ -12,6 +12,7 @@ open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 [<Extension; Sealed>]
 type Plus =     
@@ -92,7 +93,7 @@ type Plus with
     static member inline ``+`` ((x1,x2,x3,x4,x5,x6,x7), (y1,y2,y3,y4,y5,y6,y7), [<Optional>]_mthd: Plus) = (Plus.Invoke x1 y1, Plus.Invoke x2 y2, Plus.Invoke x3 y3, Plus.Invoke x4 y4, Plus.Invoke x5 y5, Plus.Invoke x6 y6, Plus.Invoke x7 y7) :'a*'b*'c*'d*'e*'f*'g
 
 type Plus with
-#if !FABLE_COMPILER    
+#if !FABLE_COMPILER
     static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) =
                     x.ContinueWith(fun (t: Task<_>) -> 
                         (fun a -> 
@@ -196,3 +197,4 @@ type Sum with
     static member inline Sum (x: seq< ^R>, [<Optional>]_output: ^R           , _: Default1) = Sum.InvokeOnInstance x
     static member inline Sum (_: seq< ^R>, _: ^t when ^t: null and ^t: struct, _: Default1) = fun () -> id
 
+#endif

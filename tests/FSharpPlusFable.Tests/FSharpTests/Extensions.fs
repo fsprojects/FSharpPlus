@@ -100,7 +100,7 @@ let ExtensionsTest =
       testCase "eq on DList 3" (fun () -> equal true  ((dlistA :> obj) = (dlistB :> obj)))
       testCase "eq on DList 4" (fun () -> equal false ((dlistA :> obj) = (dlistC :> obj)))
       testCase "eq on DList 5" (fun () -> equal true  ((dlistA :> obj) = (dlistD :> obj))) // this behavior differs from (non-fable) F# but same way it would be with normal lists.
-      
+      #if !FABLE_COMPILER || FABLE_COMPILER_3
       testCase "semigroups 1"
         (fun () ->
             let lzy1 = plus (lazy [1]) (lazy [2;3])
@@ -126,5 +126,5 @@ let ExtensionsTest =
             equal ([1; 2; 3; 4], [|1; 2; 3; 4|], Some 3) tup3
             
             )
-
+      #endif
 ]

@@ -42,6 +42,8 @@ type FromBigInt =
         call Unchecked.defaultof<FromBigInt> x
 #endif
 
+#if !FABLE_COMPILER || FABLE_COMPILER_3
+
 type FromInt64 =
     inherit Default1
     static member inline FromInt64 (_: ^R        , _: Default4 ) = fun (x: int64) -> Explicit.Invoke x            : ^R
@@ -616,3 +618,4 @@ type MaxValue =
     static member inline MaxValue (_: 'a*'b*'c*'d*'e*'f   , _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke ())
     static member inline MaxValue (_: 'a*'b*'c*'d*'e*'f*'g, _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke ())
 
+#endif

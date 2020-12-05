@@ -3,10 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Configurations>Debug;Release;Fable</Configurations>
+    <Configurations>Debug;Release;Fable;Fable3</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <LangVersion Condition=" '$(Configuration)' == 'Fable'">5.0</LangVersion>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">5.0</LangVersion>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
