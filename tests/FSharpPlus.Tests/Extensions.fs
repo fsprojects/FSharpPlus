@@ -394,3 +394,6 @@ module Extensions =
     // List
     List.lift3 (fun x y z -> x + y + z) [1;2] [7;11] [22;33] |> areEqual [30; 41; 34; 45; 31; 42; 35; 46]
     
+    // Array
+    Array.lift3 (fun x y z -> x + y + z) [|1;2|] [|7;11|] [|22;33|] |> areEqual [|30; 41; 34; 45; 31; 42; 35; 46|]
+    
