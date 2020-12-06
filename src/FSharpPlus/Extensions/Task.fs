@@ -14,20 +14,20 @@ module Task =
         else if t.IsFaulted then Faulted t.Exception
         else Completed t.Result
 
-    /// <summary>Creates a task workflow from another workflow 'x', mapping its result with 'f'.</summary>
-    let map (f: 'T -> 'U) (task: Task<'T>) : Task<'U> =
-        if task.Status = TaskStatus.RanToCompletion then
-            try Task.FromResult (f task.Result)
+    /// <summary>Creates a task workflow from 'source' another, mapping its result with 'f'.</summary>
+    let map (f: 'T -> 'U) (source: Task<'T>) : Task<'U> =
+        if source.Status = TaskStatus.RanToCompletion then
+            try Task.FromResult (f source.Result)
             with e ->
                 let tcs = TaskCompletionSource<'U> ()
                 tcs.SetException e
                 tcs.Task
         else
             let tcs = TaskCompletionSource<'U> ()
-            if task.Status = TaskStatus.Faulted then
-                tcs.SetException task.Exception.InnerExceptions
+            if source.Status = TaskStatus.Faulted then
+                tcs.SetException source.Exception.InnerExceptions
                 tcs.Task
-            elif task.Status = TaskStatus.Canceled then
+            elif source.Status = TaskStatus.Canceled then
                 tcs.SetCanceled ()
                 tcs.Task
             else
@@ -37,7 +37,7 @@ module Task =
                     | Completed r ->
                         try tcs.SetResult (f r)
                         with e -> tcs.SetException e
-                task.ContinueWith k |> ignore
+                source.ContinueWith k |> ignore
                 tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
@@ -179,8 +179,8 @@ module Task =
     /// Flattens two nested tasks into one.
     let join (source: Task<Task<'T>>) : Task<'T> = source.Unwrap()
     
-    /// <summary>Creates a task workflow from another workflow 'x', mapping and flattening its result with 'f'.</summary>
-    let bind (f: 'T -> Task<'U>) (task: Task<'T>) : Task<'U> = x |> map f |> join
+    /// <summary>Creates a task workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
+    let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> = source |> map f |> join
     
     /// <summary>Creates a task that ignores the result of the source task.</summary>
     /// <remarks>It can be used to convert non-generic Task to unit Task.</remarks>
