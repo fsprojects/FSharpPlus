@@ -177,7 +177,10 @@ module Task =
             tcs.Task
 
     /// Flattens two nested tasks into one.
-    let join (t : Task<Task<'T>>) : Task<'T> = t.Unwrap()
+    let join (source: Task<Task<'T>>) : Task<'T> = source.Unwrap()
+    
+    /// <summary>Creates a task workflow from another workflow 'x', mapping and flattening its result with 'f'.</summary>
+    let bind (f: 'T -> Task<'U>) (task: Task<'T>) : Task<'U> = x |> map f |> join
     
     /// <summary>Creates a task that ignores the result of the source task.</summary>
     /// <remarks>It can be used to convert non-generic Task to unit Task.</remarks>
