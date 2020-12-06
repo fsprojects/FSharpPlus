@@ -39,16 +39,12 @@ type Extend =
                 if g.Status   = TaskStatus.Canceled then tcs.SetCanceled ()
                 elif g.Status = TaskStatus.Faulted  then tcs.SetException g.Exception.InnerExceptions
                 else
-                    g.ContinueWith (fun (x:Task<'T>) ->
-                        if x.Status = TaskStatus.RanToCompletion then
-                            x.ContinueWith (fun (k:Task<'T>) ->
-                                if k.Status   = TaskStatus.Canceled then tcs.SetCanceled ()
-                                elif k.Status = TaskStatus.Faulted  then tcs.SetException k.Exception.InnerExceptions
-                                else
-                                    try tcs.SetResult (f k)
-                                    with e -> tcs.SetException e) |> ignore
-                        elif x.Status = TaskStatus.Canceled then tcs.SetCanceled ()
-                        elif x.Status = TaskStatus.Faulted  then tcs.SetException x.Exception.InnerExceptions) |> ignore
+                    g.ContinueWith (fun (k: Task<'T>) ->
+                        if k.Status = TaskStatus.RanToCompletion then
+                            try tcs.SetResult (f k)
+                            with e -> tcs.SetException e
+                        elif k.Status = TaskStatus.Canceled then tcs.SetCanceled ()
+                        elif k.Status = TaskStatus.Faulted  then tcs.SetException k.Exception.InnerExceptions) |> ignore
                 tcs.Task
     #else
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (a + b))
