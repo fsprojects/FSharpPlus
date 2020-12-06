@@ -14,7 +14,7 @@ open FSharpPlus.Internals.Prelude
 #if !FABLE_COMPILER
 
 [<Extension; Sealed>]
-type Plus =     
+type Plus =
     inherit Default1
     static member inline ``+`` (x: 'Plus             , y: 'Plus             ,             _mthd: Default2) = (^Plus :  (static member (<|>) : _*_ -> _) x, y) : ^Plus
 
@@ -85,11 +85,7 @@ type Plus with
 
 type Plus with    
     
-    static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) =
-                    x.ContinueWith(fun (t: Task<_>) -> 
-                        (fun a -> 
-                            y.ContinueWith(fun (u: Task<_>) -> 
-                                Plus.Invoke a u.Result)) t.Result).Unwrap ()
+    static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.map2 Plus.Invoke x y
 
     static member inline ``+`` (x: Map<'a,'b>             , y                         , [<Optional>]_mthd: Plus) = Map.unionWith Plus.Invoke x y
 
