@@ -47,11 +47,23 @@ module Task =
             let x1 = createTask false 0 1
             let x2 = createTask false 0 2
 
-            let mapping isFailure x = if isFailure then raise (TestException "I was told to fail") else x
-
+            let mapping  isFailure x   = if isFailure then raise (TestException "I was told to fail") else x
+            let mapping2 isFailure x y = if isFailure then raise (TestException "I was told to fail") else x + y
 
             let a = Task.map (mapping false) e1
             a.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
             let b = Task.map (mapping true) x1
             b.Exception.InnerExceptions |> areEquivalent [TestException "I was told to fail"]
+
+            let c = Task.zip e1 x2
+            c.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
+
+            let d = Task.zip e1 e2
+            d.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
+
+            let e = Task.map2 (mapping2 false) e1 x2
+            c.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
+
+            let f = Task.map2 (mapping2 false) e1 e2
+            d.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
