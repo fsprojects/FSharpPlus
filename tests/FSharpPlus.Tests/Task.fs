@@ -18,7 +18,8 @@ module Task =
             else
                 let tcs = TaskCompletionSource<_> ()
                 if delay = 0 then tcs.SetException (TestException (sprintf "Ouch, can't create: %A" value ))
-                else (Task.Delay delay).ContinueWith (fun _ -> tcs.SetResult value) |> ignore
+                else (Task.Delay delay).ContinueWith (fun _ ->
+                    if isFailed then tcs.SetException (TestException (sprintf "Ouch, can't create: %A" value )) else tcs.SetResult value) |> ignore
                 tcs.Task
 
         let (|AggregateException|_|) (x: exn) =
@@ -42,69 +43,91 @@ module Task =
 
         [<Test>]
         let erroredTasks () =
-            let e1 = createTask true  0 1
-            let e2 = createTask true  0 2
-            let x1 = createTask false 0 1
-            let x2 = createTask false 0 2
+            let e1 () = createTask true  0 1
+            let e2 () = createTask true  0 2
+            let x1 () = createTask false 0 1
+            let x2 () = createTask false 0 2
+
+            let e1d () = createTask true  10 1
+            let e2d () = createTask true  10 2
+            let x1d () = createTask false 10 1
+            let x2d () = createTask false 10 2
 
             let mapping  isFailure x   = if isFailure then raise (TestException "I was told to fail") else x
             let mapping2 isFailure x y = if isFailure then raise (TestException "I was told to fail") else x + y
             let binding  isFailure x   = if isFailure then raise (TestException "I was told to fail") else Task.FromResult (x + 10)
             let binding' isFailure x   = if isFailure then createTask true 0 (x + 20) else Task.FromResult (x + 10)
 
-            let r01 = Task.map (mapping false) e1
+            let r01 = Task.map (mapping false) (e1 ())
             r01.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r02 = Task.map (mapping true) x1
+            let r02 = Task.map (mapping true) (x1 ())
             r02.Exception.InnerExceptions |> areEquivalent [TestException "I was told to fail"]
 
-            let r03 = Task.zip e1 x2
+            let r03 = Task.zip (e1 ()) (x2 ())
             r03.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r04 = Task.zip e1 e2
+            let r04 = Task.zip (e1 ()) (e2 ())
             r04.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r05 = Task.map2 (mapping2 false) e1 x2
+            let r05 = Task.map2 (mapping2 false) (e1 ()) (x2 ())
             r05.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r06 = Task.map2 (mapping2 false) e1 e2
+            let r06 = Task.map2 (mapping2 false) (e1 ()) (e2 ())
             r06.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r07 = Task.bind (binding true) e1
+            let r07 = Task.bind (binding true) (e1 ())
             r07.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r08 = Task.bind (binding true) x1
+            let r08 = Task.bind (binding true) (x1 ())
             r08.Exception.InnerExceptions |> areEquivalent [TestException "I was told to fail"]
 
-            let r09 = Task.bind (binding true) (createTask true 10 1)
+            let r09 = Task.bind (binding true) (e1d ())
             try r09.Wait ()
             with
-               | AggregateException [TestException "I was told to fail"] -> ()
-               | AggregateException [TestException e] -> failwithf "Another TestException else came in: %A" e
+               | AggregateException [TestException "Ouch, can't create: 1"] -> ()
+               | AggregateException [TestException e] -> failwithf "Another TestException came in: %A" e
                | AggregateException [e]               -> failwithf "Something else came in: %A" e
                | AggregateException e                 -> failwithf "Many errors came in: %A" e
 
-            let r10 = Task.bind (binding true) (createTask false 10 1)
+            let r10 = Task.bind (binding true) (x1 ())
             try r10.Wait ()
             with
                | AggregateException [TestException "I was told to fail"] -> ()
-               | AggregateException [TestException e] -> failwithf "Another TestException else came in: %A" e
+               | AggregateException [TestException e] -> failwithf "Another TestException came in: %A" e
                | AggregateException [e]               -> failwithf "Something else came in: %A" e
                | AggregateException e                 -> failwithf "Many errors came in: %A" e
 
 
-            let r11 = Task.bind (binding' true) (createTask true 10 1)
+            let r11 = Task.bind (binding' true) (e1d ())
             try r11.Wait ()
             with
-               | AggregateException [TestException "Ouch, can't create: 11"] -> ()
-               | AggregateException [TestException e] -> failwithf "Another TestException else came in: %A" e
+               | AggregateException [TestException "Ouch, can't create: 1"] -> ()
+               | AggregateException [TestException e] -> failwithf "Another TestException came in: %A" e
                | AggregateException [e]               -> failwithf "Something else came in: %A" e
                | AggregateException e                 -> failwithf "Many errors came in: %A" e
 
-            let r12 = Task.bind (binding' true) (createTask false 10 1)
+            let r12 = Task.bind (binding' true) (x1 ())
             try r12.Wait ()
             with
                | AggregateException [TestException "Ouch, can't create: 21"] -> ()
-               | AggregateException [TestException e] -> failwithf "Another TestException else came in: %A" e
+               | AggregateException [TestException e] -> failwithf "Another TestException came in: %A" e
+               | AggregateException [e]               -> failwithf "Something else came in: %A" e
+               | AggregateException e                 -> failwithf "Many errors came in: %A" e
+
+
+            let r13 = (e1d ()) =>> (fun x -> if true then raise (TestException "I was told to fail") else extract x)
+            try r13.Wait ()
+            with
+               | AggregateException [TestException "Ouch, can't create: 1"] -> ()
+               | AggregateException [TestException e] -> failwithf "Another TestException came in: %A" e
+               | AggregateException [e]               -> failwithf "Something else came in: %A" e
+               | AggregateException e                 -> failwithf "Many errors came in: %A" e
+
+            let r14 = (x1d ()) =>> (fun x -> if true then raise (TestException "I was told to fail") else extract x)
+            try r14.Wait ()
+            with
+               | AggregateException [TestException "I was told to fail"] -> ()
+               | AggregateException [TestException e] -> failwithf "Another TestException came in: %A" e
                | AggregateException [e]               -> failwithf "Something else came in: %A" e
                | AggregateException e                 -> failwithf "Many errors came in: %A" e

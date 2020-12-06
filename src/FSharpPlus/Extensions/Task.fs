@@ -189,16 +189,14 @@ module Task =
         else
             let tcs = TaskCompletionSource<unit> ()
             if task.Status = TaskStatus.Faulted then
-                tcs.SetException task.Exception.InnerExceptions
-                tcs.Task
+                tcs.SetException task.Exception.InnerExceptions |> ignore
             elif task.Status = TaskStatus.Canceled then
                 tcs.SetCanceled ()
-                tcs.Task
             else
                 let k (t: Task) : unit =
-                    if t.IsCanceled then tcs.TrySetCanceled () |> ignore
-                    elif t.IsFaulted then tcs.TrySetException t.Exception |> ignore
+                    if t.IsCanceled  then tcs.SetCanceled () |> ignore
+                    elif t.IsFaulted then tcs.SetException t.Exception |> ignore
                     else tcs.SetResult ()
                 task.ContinueWith k |> ignore
-                tcs.Task
+            tcs.Task
 #endif
