@@ -12,6 +12,18 @@
 
   <ItemGroup>
     <Compile Include="Util.fs" />
+    <Compile Include="FSharpTests/General/Util.fs" />
+    <Compile Include="FSharpTests/General/Monoid.fs" />
+    <Compile Include="FSharpTests/General/Functor.fs" />
+    <Compile Include="FSharpTests/General/Collections.fs" />
+    <Compile Include="FSharpTests/General/Monad.fs" />
+    <Compile Include="FSharpTests/General/Applicative.fs" />
+    <Compile Include="FSharpTests/General/Alternative.fs" />
+    <Compile Include="FSharpTests/General/Foldable.fs" />
+    <Compile Include="FSharpTests/General/Indexable.fs" />
+    <Compile Include="FSharpTests/General/Parsing.fs" />
+    <Compile Include="FSharpTests/General/Traversable.fs" />
+    <Compile Include="FSharpTests/General.fs" />
     <Compile Include="FSharpTests/Extensions.fs" />
     <Compile Include="Tests.fs" />
   </ItemGroup>

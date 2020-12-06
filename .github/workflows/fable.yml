@@ -8,7 +8,7 @@ on:
 
 
 jobs:
-  build:
+  testfable3:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,3 +31,23 @@ jobs:
     - name: Run Fable tests
       working-directory: tests/FSharpPlusFable.Tests
       run: dotnet fable . --outDir bin --runScript ./bin 
+  
+  testOnCore:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Restore tools
+      run: dotnet tool restore
+    - name: Compile Fable configurations
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet build -c Fable && dotnet build -c Fable3
+    - name: Run tests
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet run

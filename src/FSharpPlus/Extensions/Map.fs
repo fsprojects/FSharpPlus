@@ -96,8 +96,21 @@ module Map =
                 KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
         |> Seq.map (fun kv -> (kv.Key, kv.Value))
         |> Map.ofSeq
+    #else
 
-   ///Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
+    /// Returns the intersection of two maps, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) =
+        let keysSetOf = Map.toList>> (List.map fst) >> set
+        let keyIntersection = Set.intersect (keysSetOf source1) (keysSetOf source2)
+        let intersection = [
+            for key in keyIntersection do
+            let xValue=Map.find key source1
+            let yValue=Map.find key source2
+            yield (key, combiner xValue yValue)
+        ]
+        intersection |> Map.ofList
+    #endif
+
+    ///Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
-    #endif
