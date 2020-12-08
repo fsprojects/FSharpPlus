@@ -16,24 +16,24 @@ open FSharpPlus.Internals.Prelude
 // Monad class ------------------------------------------------------------
 
 type Bind =
-    static member        (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value                                   : Lazy<'U>
-    static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                                             : seq<'U>
+    static member        (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value             : Lazy<'U>
+    static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                       : seq<'U>
     #if !FABLE_COMPILER
-    static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = source.ContinueWith(fun (x: Task<_>) -> f x.Result).Unwrap () : Task<'U>
-    static member        (>>=) (source             , f: 'T -> _           ) = Nullable.bind f source                                        : Nullable<'U>
+    static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = Task.bind f source                      : Task<'U>
+    static member        (>>=) (source             , f: 'T -> _           ) = Nullable.bind f source                  : Nullable<'U>
     #endif
-    static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                                        : option<'U>
-    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                                        : list<'U>
-    static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                                        : 'U []
-    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)                                     : 'R->'U
+    static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                  : option<'U>
+    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                  : list<'U>
+    static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                  : 'U []
+    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)               : 'R->'U
     #if !FABLE_COMPILER
-    static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b)                        : 'Monoid*'U
+    static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b) : 'Monoid*'U
     #else
-    static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)                                  : 'Monoid*'U
+    static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)           : 'Monoid*'U
     #endif
-    static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                                        : Async<'U>
-    static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                                          : Result<'U,'E>
-    static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                                          : Choice<'U,'E>
+    static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                 : Async<'U>
+    static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                   : Result<'U,'E>
+    static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                   : Choice<'U,'E>
 
     static member (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
                    for KeyValue(k, v) in source do
@@ -120,14 +120,8 @@ type Return =
     static member        Return (_: NonEmptySeq<'a>, _: Default2) = fun  x      -> NonEmptySeq.singleton x : NonEmptySeq<'a>
     static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
-
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
-
-    static member        Return (_: 'a Task        , _: Return  ) = fun x -> 
-        let s = TaskCompletionSource ()
-        s.SetResult x
-        s.Task : 'a Task
-
+    static member        Return (_: 'T Task        , _: Return  ) = fun x -> Task.FromResult x                    : 'T Task
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []

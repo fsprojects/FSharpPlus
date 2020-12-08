@@ -32,7 +32,20 @@ type Extend =
     static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
     #if !FABLE_COMPILER
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
-    static member        (=>>) (g: Task<'T>     , f: Task<'T> -> 'U) = g.ContinueWith (f)
+    static member        (=>>) (g: Task<'T>     , f: Task<'T> -> 'U ) =
+            if g.Status = TaskStatus.RanToCompletion then g.ContinueWith f
+            else
+                let tcs = TaskCompletionSource<'U> ()
+                if g.Status   = TaskStatus.Canceled then tcs.SetCanceled ()
+                elif g.Status = TaskStatus.Faulted  then tcs.SetException g.Exception.InnerExceptions
+                else
+                    g.ContinueWith (fun (k: Task<'T>) ->
+                        if k.Status = TaskStatus.RanToCompletion then
+                            try tcs.SetResult (f k)
+                            with e -> tcs.SetException e
+                        elif k.Status = TaskStatus.Canceled then tcs.SetCanceled ()
+                        elif k.Status = TaskStatus.Faulted  then tcs.SetException k.Exception.InnerExceptions) |> ignore
+                tcs.Task
     #else
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (a + b))
     #endif
