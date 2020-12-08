@@ -116,7 +116,7 @@ type Lift3 =
     inherit Default1
 
 //    static member        Lift3 (f, (x: Lazy<_>            , y: Lazy<_>            ), _mthd: Lift3) = Lazy.map2 f x y
-//    static member        Lift3 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Lift3) = Seq.lift2 f x y
+    static member        Lift3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Lift3) = Seq.lift3 f x y z
 //    static member        Lift3 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     ), _mthd: Lift3) = NonEmptySeq.lift2 f x y
     static member        Lift3 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     , z: IEnumerator<_>      ), _mthd: Lift3) = Enumerator.map3 f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = List.lift3 f x y z

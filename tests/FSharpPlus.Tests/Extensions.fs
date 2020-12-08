@@ -421,3 +421,6 @@ module Extensions =
     d4.Add(2, 9)
     
     Dictionary.map3 (fun x y z -> x + y + z) d1 d2 d3 |> areEqual d4
+    
+    // seq
+    Seq.lift3 (fun x y z -> x + y + z) (seq{1;2}) (seq{7;11}) (seq{22;33}) |> areEqual (seq{30; 41; 34; 45; 31; 42; 35; 46})
