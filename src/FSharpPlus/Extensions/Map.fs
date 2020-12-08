@@ -114,3 +114,14 @@ module Map =
     ///Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
+    
+    /// <summary>Same as chooseValues but with access to the key.</summary>
+    /// <param name="f">The mapping function, taking key and element as parameters.</param>
+    /// <param name="x">The input map.</param>
+    ///
+    /// <returns>Returns Map with values (k, v) for each Map value where the function returns Some(v).</returns>
+    let choosei (f: 'Key -> 'T -> 'U option) (x: Map<'Key, 'T>) = Map <| seq {
+        for KeyValue(k, v) in x do
+            match f k v with
+            | Some v -> yield(k, v)
+            | None   -> () }

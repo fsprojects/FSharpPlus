@@ -149,3 +149,16 @@ module Dictionary =
     let intersect (source1: Dictionary<'Key, 'T>) (source2: Dictionary<'Key, 'T>) =
         intersectWith (fun a _ -> a) source1 source2
     #endif
+    
+    /// <summary>Same as chooseValues but with access to the key.</summary>
+    /// <param name="f">The mapping function, taking key and element as parameters.</param>
+    /// <param name="x">The input dictionary.</param>
+    ///
+    /// <returns>Dictionary with values (k, x) for each dictionary value where the function returns Some(x).</returns>
+    let choosei f (x: IDictionary<'Key, 'T>) =
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in x do
+            match f k v with
+            | Some v -> dct.Add (k, v)
+            | None   -> ()
+        dct
