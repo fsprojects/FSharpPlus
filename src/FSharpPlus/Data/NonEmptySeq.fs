@@ -501,6 +501,19 @@ module NonEmptySeq =
     let apply f x = bind (fun f -> map ((<|) f) x) f
 
     let lift2 f x1 x2 = allPairs x1 x2 |> map (fun (x, y) -> f x y)
+    
+    /// <summary>Combines values from three NonEmptySeq and calls a mapping function on this combination.</summary>
+    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First NonEmptySeq.</param>
+    /// <param name="x2">Second NonEmptySeq.</param>
+    /// <param name="x3">Third NonEmptySeq.</param>
+    ///
+    /// <returns>NonEmptySeq with values returned from mapping function.</returns>
+    let lift3 f x1 x2 x3 =
+        allPairs x2 x3
+        |> allPairs x1
+        |> map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> map (fun (x, y, z) -> f x y z)
 
     let replace (oldValue: NonEmptySeq<'T>) (newValue: NonEmptySeq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> =
         Seq.replace oldValue newValue source |> unsafeOfSeq

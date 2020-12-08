@@ -2586,3 +2586,10 @@ module Choosei =
         SideEffects.reset ()
         (choosei someIfIndexEven (WrappedSeqD [1..5])) |> ignore
         areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
+
+module lift3 = 
+    [<Test>]
+    let NonEmptySeqLift3 () =
+        // NonEmptySeq
+        NonEmptySeq.lift3 (fun x y z -> x + y + z) (NonEmptySeq.ofList[1;2]) (NonEmptySeq.ofList[7;11]) (NonEmptySeq.ofList[22;33]) 
+        |> areEqual (NonEmptySeq.ofList[30; 41; 34; 45; 31; 42; 35; 46])

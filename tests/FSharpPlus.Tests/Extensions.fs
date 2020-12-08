@@ -371,7 +371,7 @@ module Extensions =
     List.choosei (fun _ x -> Some x) [1..10] |> areEqual [1..10]
     
   [<Test>]
-  let ``map3 should work`` () =
+  let ``map3 or lift3 should work`` () =
     // Result
     Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Ok 3) (Ok 5) |> areEqual (Ok 9: Result<int, int>)
     Result.map3 (fun x y z -> x + y + z) (Error 1:Result<int, int>) (Error 3) (Ok 5) |> areEqual (Error 1: Result<int, int>)
@@ -422,5 +422,5 @@ module Extensions =
     
     Dictionary.map3 (fun x y z -> x + y + z) d1 d2 d3 |> areEqual d4
     
-    // seq
+    // Seq
     Seq.lift3 (fun x y z -> x + y + z) (seq{1;2}) (seq{7;11}) (seq{22;33}) |> areEqual (seq{30; 41; 34; 45; 31; 42; 35; 46})
