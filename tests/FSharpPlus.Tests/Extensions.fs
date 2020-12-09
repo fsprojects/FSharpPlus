@@ -343,6 +343,16 @@ module Extensions =
     Nullable.toList (Nullable()) |> areEqual []
  
   [<Test>]
+  let ``Option.fromPair returns Some when operation succeeds`` () =
+    Int32.TryParse("123") |> Option.ofPair |> areEqual (Some 123)
+    (dict [("abc",234)]).TryGetValue("abc") |> Option.ofPair |> areEqual (Some 234)
+
+  [<Test>]
+  let ``Option.fromPair returns None when operation fails`` () =
+    Int32.TryParse("abc") |> Option.ofPair |> areEqual None
+    (dict []).TryGetValue("abc") |> Option.ofPair |> areEqual None
+
+  [<Test>]
   let map2Shortest () =
     List.map2Shortest (+) [1;2;3] [2;3] |> areEqual [3;5]
     Array.map2Shortest (+) [|1;2|] [|2;3;4|] |> areEqual [|3;5|]
