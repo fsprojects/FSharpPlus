@@ -100,7 +100,7 @@ let ExtensionsTest =
       testCase "eq on DList 2" (fun () -> equal false (dlistA = dlistC))
       testCase "eq on DList 3" (fun () -> equal true  ((dlistA :> obj) = (dlistB :> obj)))
       testCase "eq on DList 4" (fun () -> equal false ((dlistA :> obj) = (dlistC :> obj)))
-      #if FABLE_COMPILER
+      #if FABLE_COMPILER && !FABLE_COMPILER_FAKE
       testCase "eq on DList 5" (fun () -> equal true  ((dlistA :> obj) = (dlistD :> obj))) // this behavior differs from (non-fable) F# but same way it would be with normal lists.
       #endif
       #if !FABLE_COMPILER || FABLE_COMPILER_3

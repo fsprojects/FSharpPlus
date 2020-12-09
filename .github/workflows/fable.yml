@@ -45,9 +45,9 @@ jobs:
       run: git submodule update --init --recursive
     - name: Restore tools
       run: dotnet tool restore
-    - name: Compile Fable configurations
+    - name: Run tests (Fable2 subset but on .net)
       working-directory: tests/FSharpPlusFable.Tests
-      run: dotnet build -c Fable && dotnet build -c Fable3
-    - name: Run tests
+      run: dotnet build -c Fable
+    - name: Run tests (Fable3 subset but on .net)
       working-directory: tests/FSharpPlusFable.Tests
-      run: dotnet run
+      run: dotnet run -c Fable3

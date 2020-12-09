@@ -60,7 +60,9 @@ let testCompile =
     let _bigNestedTuple2 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (zero, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ zero
     #endif
 
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let _nes : NonEmptySeq<_> = plus (NonEmptySeq.singleton 1) (NonEmptySeq.singleton 2)
+    #endif
 
     let mapA = Map.empty 
                 |> Map.add 1 (async.Return "Hey")
