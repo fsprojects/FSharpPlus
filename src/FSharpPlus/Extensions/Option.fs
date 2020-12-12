@@ -51,3 +51,12 @@ module Option =
         try
             Some (f x)
         with _ -> None
+
+    /// <summary>Converts pair of bool and value to Option.</summary>
+    /// <remarks>Useful for handling C# try pattern with `out` parameter. E.g. `Int.TryParse` or `Dictionary.TryGetValue`.</remarks>
+    /// <param name="pair">Pair of bool and value.</param>
+    /// <returns><c>Some</c> if bool is `true`, <c>None</c> otherwise.</returns>
+    let ofPair (pair: (bool * 'T)) =
+        match pair with
+        | (true,  x) -> Some x
+        | (false, _) -> None

@@ -343,7 +343,29 @@ module Extensions =
     Nullable.toList (Nullable()) |> areEqual []
  
   [<Test>]
+  let ``Option.ofPair returns Some when operation succeeds`` () =
+    Int32.TryParse("123") |> Option.ofPair |> areEqual (Some 123)
+    (dict [("abc",234)]).TryGetValue("abc") |> Option.ofPair |> areEqual (Some 234)
+
+  [<Test>]
+  let ``Option.ofPair returns None when operation fails`` () =
+    Int32.TryParse("abc") |> Option.ofPair |> areEqual None
+    (dict []).TryGetValue("abc") |> Option.ofPair |> areEqual None
+
+  [<Test>]
   let map2Shortest () =
     List.map2Shortest (+) [1;2;3] [2;3] |> areEqual [3;5]
     Array.map2Shortest (+) [|1;2|] [|2;3;4|] |> areEqual [|3;5|]
     ResizeArray.map2Shortest (+) (ResizeArray [1;2;3]) (ResizeArray [2;3]) |> areEqual (ResizeArray [3;5])
+  
+  [<Test>]
+  let ``choosei does not throw stack overflow exception`` () =
+    List.choosei (fun _ x -> Some x) [1..30000] |> ignore
+    Array.choosei (fun _ x -> Some x) [|1..30000|] |> ignore
+    Seq.choosei (fun _ x -> Some x) (seq [1..30000]) |> ignore
+    Map.choosei (fun _ x -> Some x) ([1..30000] |> List.map (fun x -> (x, "x")) |> Map) |> ignore
+
+  [<Test>]
+  let ``choosei returns elements in correct order`` () =
+    Array.choosei (fun _ x -> Some x) [|1..10|] |> areEqual [|1..10|]
+    List.choosei (fun _ x -> Some x) [1..10] |> areEqual [1..10]

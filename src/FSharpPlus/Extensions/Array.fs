@@ -101,3 +101,15 @@ module Array =
     /// <returns>Array with corresponding pairs of input arrays.</returns>
     let zipShortest (a1: array<'T1>) (a2: array<'T2>) =
         Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])
+
+    /// <summary>Same as choose but with access to the index.</summary>
+    /// <param name="f">The mapping function, taking index and element as parameters.</param>
+    /// <param name="x">The input array.</param>
+    ///
+    /// <returns>Array with values x for each Array value where the function returns Some(x).</returns>
+    let choosei f a =
+        let mutable i = ref -1
+        let fi x =
+            incr i
+            f !i x
+        Array.choose fi a
