@@ -78,6 +78,23 @@ module ComputationExpressions =
         // Check the result
         areEquivalent [42] seqValue
 
+    open FsCheck
+
+    [<Test>]
+    let monadPlusReturnAndYieldEquality () =
+        let yieldFromEqualsReturnFrom (l1: int list, l2: int list) =
+            let r1 = monad.plus { yield!  l1; yield!  l2 }
+            let r2 = monad.plus { return! l1; return! l2 }
+            r1 = r2
+
+        Check.QuickThrowOnFailure yieldFromEqualsReturnFrom
+
+        let yieldsEqualsReturns (l1: int list, i1: int, i2: int) =
+            let r1 = monad.plus { yield  i1; yield!  l1; yield  i2 }
+            let r2 = monad.plus { return i1; return! l1; return i2 }
+            r1 = r2
+
+        Check.QuickThrowOnFailure yieldsEqualsReturns
 
     [<Test>]
     let delayedMonadTransformers() =
