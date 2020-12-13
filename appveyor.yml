@@ -11,7 +11,8 @@ before_build:
 init:
   - git config --global core.autocrlf input
 install:
-  - git submodule update --init --recursive
+  - cmd: choco install dotnetcore-sdk -y
+  - cmd: git submodule update --init --recursive
 build_script:
   - cmd: dotnet restore ./FSharpPlus.sln
   - cmd: dotnet build -c Release ./FSharpPlus.sln
