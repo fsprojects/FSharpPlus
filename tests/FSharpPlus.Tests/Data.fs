@@ -11,7 +11,7 @@ module Gen = // FSharpx.Collections extension of Gen
     let listString n  = Gen.listOfLength n Arb.generate<string>
     let length1thru12 = Gen.choose (1, 12)
     let length2thru12 = Gen.choose (2, 12)
-let fsCheck s x = Check.Quick (s, x)
+let fsCheck s x = Check.One({Config.QuickThrowOnFailure with Name = s}, x)
 
 
 // tests from FSharpx.Collections DList
