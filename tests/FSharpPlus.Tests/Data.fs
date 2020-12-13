@@ -325,14 +325,6 @@ module DList =
 module NonEmptyList =
     let nonEmptyList = NonEmptyList.create 1 []
 
-    let enNonEmptyListThruList l q =
-        let rec loop (q': 'a NonEmptyList) (l': 'a list) =
-            match l' with
-            | hd :: [] -> NonEmptyList.cons hd q'
-            | hd :: tl -> loop (NonEmptyList.cons hd q') tl
-            | [] -> q'
-        loop q l
-
     let NonEmptyListIntOfSeqGen =
         gen {   let! n = Gen.length1thru12
                 let! x = Gen.listInt n
@@ -350,7 +342,7 @@ module NonEmptyList =
                 let! n2 = Gen.length2thru12
                 let! x =  Gen.listString n
                 let! y =  Gen.listString n2
-                return ( (NonEmptyList.ofList x |> enNonEmptyListThruList y), (x @ y) ) }
+                return ( (NonEmptyList.ofList x ++ NonEmptyList.ofList y), (x @ y) ) }
 
     [<Test>]
     let ``cons works`` () =
@@ -371,7 +363,8 @@ module NonEmptyList =
 
     [<Test>]
     let ``get tail from NonEmptyList`` () =
-        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun ((q : NonEmptyList<int>), l) -> q.Tail.Head = (List.item 1 l) ))
+        let atLeastOfLengthTwo (_,l) = List.length l >= 2
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen |> Arb.filter atLeastOfLengthTwo) (fun ((q : NonEmptyList<int>), l) -> (NonEmptyList.tail q |> NonEmptyList.toList) = (List.tail l) ))
 
     [<Test>]
     let ``get length of NonEmptyList`` () =
