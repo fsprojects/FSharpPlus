@@ -424,3 +424,6 @@ module Extensions =
     
     // Seq
     Seq.lift3 (fun x y z -> x + y + z) (seq{1;2}) (seq{7;11}) (seq{22;33}) |> areEqual (seq{30; 41; 34; 45; 31; 42; 35; 46})
+
+    // Lazy
+    (Lazy.map3 (fun x y z -> x + y + z) (Lazy<int>.CreateFromValue 1) (Lazy<int>.CreateFromValue 2) (Lazy<int>.CreateFromValue 4)).Value |> areEqual 7
