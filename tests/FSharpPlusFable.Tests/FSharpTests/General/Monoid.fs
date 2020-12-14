@@ -49,11 +49,15 @@ let testCompile =
     let _quot23      = plus       (zero)         <@ ResizeArray ([2;3])   @>
     let _quot13      = plus       (zero)         <@ ("1","3") @>
     #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let lzy1 = plus (lazy [1]) (lazy [2;3])
+    #endif
     #if !FABLE_COMPILER
     let _lzy = plus (zero) lzy1
     #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let asy1 = plus (async.Return [1]) (async.Return [2;3])
+    #endif
     #if !FABLE_COMPILER
     let _asy = plus (zero) asy1
     let _bigNestedTuple1 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (2, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (3, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20))
@@ -72,7 +76,9 @@ let testCompile =
                 |> Map.add 3 (async.Return " You")
                 |> Map.add 2 (async.Return " World")
 
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let mapAB = plus mapA mapB
+    #endif
     #if !FABLE_COMPILER
     let _greeting1 = Async.RunSynchronously mapAB.[2]
     let _greeting2 = Async.RunSynchronously (Seq.sum [mapA; zero; mapB]).[2]

@@ -47,7 +47,7 @@ jobs:
       run: dotnet tool restore
     - name: Run tests (Fable2 subset but on .net)
       working-directory: tests/FSharpPlusFable.Tests
-      run: dotnet build -c Fable
+      run: dotnet run -c Fable
     - name: Run tests (Fable3 subset but on .net)
       working-directory: tests/FSharpPlusFable.Tests
       run: dotnet run -c Fable3
