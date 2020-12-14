@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
     <Configurations>Debug;Release;Fable;Fable3</Configurations>
     <Platforms>AnyCPU</Platforms>
     <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">5.0</LangVersion>
