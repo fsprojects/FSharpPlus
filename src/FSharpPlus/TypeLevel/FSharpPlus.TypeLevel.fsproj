@@ -25,4 +25,7 @@
     <Compile Include="../Providers/Matrix.Provider.fs" />
     <Compile Include="../Providers/TypeProviderAssembly.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+  </ItemGroup>
 </Project>
