@@ -225,7 +225,7 @@ module Operators =
     // Monad -----------------------------------------------------------
     
     #endif
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>
     /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
@@ -262,7 +262,7 @@ module Operators =
     /// Flattens two layers of monadic information into one.
     /// </summary>
     /// <category index="3">Monad</category>
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
     #endif
 

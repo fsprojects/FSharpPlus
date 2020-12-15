@@ -6,7 +6,7 @@ open FSharpPlus.Data
 #nowarn "686"
 
 let monad = testList "Monad" [
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "joinDefaultCustom" (fun () -> 
         let x = join [[1];[2]]
         equal [1;2] x
