@@ -118,7 +118,7 @@ module Operators =
     let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Functor ----------------------------------------------------------------
 
@@ -151,6 +151,8 @@ module Operators =
     /// <category index="1">Functor</category>
     let inline iter (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
 
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Un-zips (un-tuple) two functors.
     /// </summary>
@@ -166,7 +168,9 @@ module Operators =
     /// <category index="1">Functor</category>
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
 
-    
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+
     // Applicative ------------------------------------------------------------
     
     /// <summary>
@@ -266,7 +270,7 @@ module Operators =
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Equivalent to map but only for Monads.
     /// </summary>

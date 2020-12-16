@@ -42,7 +42,7 @@ type WrappedListA<'s> = WrappedListA of 's list with
         List.length lst
 #endif
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return x = WrappedListB [x]
     static member (+) (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
@@ -63,7 +63,7 @@ type WrappedListC<'s> = WrappedListC of 's list with
     static member Zero = WrappedListC List.empty
     static member Sum (lst: seq<WrappedListC<_>>) = Seq.head lst
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type WrappedListD<'s> = WrappedListD of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator ()
     interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator () :> Collections.IEnumerator
@@ -95,6 +95,7 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member IterateIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's IterateIndexed"
         List.iteri f x
+    #if !FABLE_COMPILER
     static member inline FoldIndexed (WrappedListD x, f, z) =
         SideEffects.add "Using WrappedListD's FoldIndexed"
         foldi f z x
@@ -109,6 +110,7 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using WrappedListD's FindSliceIndex"
         printfn "WrappedListD.FindSliceIndex"
         findSliceIndex y x
+    #endif
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -200,7 +202,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
                     SideEffects.add "Using WrappedSeqC's TryFinally"
                     try computation finally compensation ()
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Apply"; WrappedSeqD (f <*> x)
