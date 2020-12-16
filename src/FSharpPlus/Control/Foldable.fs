@@ -4,7 +4,7 @@
 // Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // Those .NET types are string and array. String is explicitely handled here and array through the seq overload.
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open FSharpPlus.Control
 

@@ -14,7 +14,7 @@ module Collections =
 
     open System.Collections.Concurrent
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let testCollections =
         let bigSeq = seq {1..10000000}
         let bigLst = [ 1..10000000 ]
@@ -22,10 +22,14 @@ module Collections =
         let bigMut = ResizeArray(seq {1..10000000})
 
         let _ = head bigSeq
+        #if !FABLE_COMPILER
         let _ = head bigLst
+        #endif
         let _ = head bigArr
 
+        #if !FABLE_COMPILER
         let _ = skip 1000 bigSeq
+        #endif
         let _ = skip 1000 bigLst
         let _ = skip 1000 bigArr
         let _ = skip 1000 bigMut
@@ -35,10 +39,11 @@ module Collections =
         ()
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let testSeqConversions =
-
+        #if !FABLE_COMPILER
         let sk: Generic.Stack<_>          = ofSeq { 1 .. 3 }
+        #endif
         let sg: string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
         let sb: Text.StringBuilder        = ofSeq {'1'..'3'}  // but it will come back as seq<char>
         let sq1:_ seq                     = ofSeq { 1 .. 3 }
@@ -47,10 +52,13 @@ module Collections =
         let sq4:_ seq                     = ofSeq (seq [(1, "One", '1', 1M); (2, "Two", '2', 2M)])
         let ls1:_ list                    = ofSeq {'1'..'3'}
         let ls2:_ list                    = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+        #if !FABLE_COMPILER
         let st1:_ Set                     = ofSeq {'1'..'3'}
         let st2:_ Set                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+        #endif
         let ss: Generic.SortedSet<_>      = ofSeq (seq [3..6])
         let ra: Generic.List<_>           = ofSeq (seq [1..3])
+        #if !FABLE_COMPILER
         let sl: Generic.SortedList<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
         let _sl:Generic.SortedList<_,_>   = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let dc :Generic.Dictionary<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as KeyValuePair
@@ -61,16 +69,20 @@ module Collections =
         let r : IReadOnlyDictionary<_,_>  = ofSeq (seq [("One", 1)])             // but it will come back as ...
         let _r: IReadOnlyDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let rc: IReadOnlyCollection<_>    = ofSeq (seq [2..7])
+        #endif
         let ut: Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
         let al: ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
         let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
         let cc: BlockingCollection<_>     = ofSeq {'1'..'3'}                     // but it will come back as seq<obj>
+        #if !FABLE_COMPILER
         let cd: ConcurrentDictionary<_,_> = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
         let _cd:ConcurrentDictionary<_,_> = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let cb: ConcurrentBag<_>          = ofSeq {'1'..'3'}
-
+        #endif
         // now go back
+        #if !FABLE_COMPILER
         let _sk'  = toSeq sk
+        #endif
         let _sg'  = toSeq sg
         let _sb'  = toSeq sb
         let _sq1' = toSeq sq1
@@ -79,22 +91,28 @@ module Collections =
         let _sq4' = toSeq sq4
         let _ls1' = toSeq ls1
         let _ls2' = toSeq ls2
+        #if !FABLE_COMPILER
         let _st1' = toSeq st1
         let _st2' = toSeq st2
+        #endif
         let _ss'  = toSeq ss 
         let _ra'  = toSeq ra 
+        #if !FABLE_COMPILER
         let _sl'  = toSeq sl 
         let _dc'  = toSeq dc 
         let _mp'  = toSeq mp 
         let _d'   = toSeq d  
         let _r'   = toSeq r
         let _rc'  = toSeq rc
+        #endif
         let _ut'  = toSeq ut 
         let _al'  = toSeq al 
         let _us'  = toSeq us 
         let _cc'  = toSeq cc 
+        #if !FABLE_COMPILER
         let _cd'  = toSeq cd 
-        let _cb'  = toSeq cb 
+        let _cb'  = toSeq cb
+        #endif
 
         // there are some 'one-way' collections that can only be converted toSeq
 
@@ -113,12 +131,13 @@ module Collections =
         ()
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let testListConversions =
 
         // From sequence
-
+        #if !FABLE_COMPILER
         let sk: Generic.Stack<_>          = ofList [ 1 .. 3 ]
+        #endif
         let sg: string                    = ofList ['1'..'3']  // but it will come back as seq<char>
         let sb: Text.StringBuilder        = ofList ['1'..'3']  // but it will come back as seq<char>
         let sq1:_ seq                     = ofList [ 1 .. 3 ]
@@ -127,30 +146,40 @@ module Collections =
         let sq4:_ seq                     = ofList ([(1, "One", '1', 1M); (2, "Two", '2', 2M)])
         let ls1:_ list                    = ofList ['1'..'3']
         let ls2:_ list                    = ofList ([(1, "One", '1'); (2, "Two", '2')])
+        #if !FABLE_COMPILER
         let st1:_ Set                     = ofList ['1'..'3']
         let st2:_ Set                     = ofList ([(1, "One", '1'); (2, "Two", '2')])
+        #endif
         let ss: Generic.SortedSet<_>      = ofList ([3..6])
         let ra: Generic.List<_>           = ofList ([1..3])
+        #if !FABLE_COMPILER
         let sl: Generic.SortedList<_,_>   = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
         let _sl:Generic.SortedList<_,_>   = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let dc :Generic.Dictionary<_,_>   = ofList ([(1, "One"); (2, "Two")]) // but it will come back as KeyValuePair
         let mp :Map<_,_>                  = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
         let _mp:Map<_,_>                  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        #endif
         let d : Generic.IDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
         let _d: Generic.IDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        #if !FABLE_COMPILER
         let r : IReadOnlyDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
         let _r: IReadOnlyDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        #endif
         let rc: IReadOnlyCollection<_>    = ofList ([2..5])
         let ut: Hashtable                 = ofList ([1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
         let al: ArrayList                 = ofList (["1";"2";"3"])            // but it will come back as seq<obj>
         let us: SortedList                = ofList ([4,'2';3,'4'])            // but it will come back as seq<obj>
         let cc: BlockingCollection<_>     = ofList ['1'..'3']                     // but it will come back as seq<obj>
+        #if !FABLE_COMPILER
         let cd: ConcurrentDictionary<_,_> = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
         let _cd:ConcurrentDictionary<_,_> = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let cb: ConcurrentBag<_>          = ofList ['1'..'3']
+        #endif
 
         // now go back
+        #if !FABLE_COMPILER
         let _sk'  = toList sk
+        #endif
         let _sg'  = toList sg
         let _sb'  = toList sb
         let _sq1' = toList sq1
@@ -159,27 +188,35 @@ module Collections =
         let _sq4' = toList sq4
         let _ls1' = toList ls1
         let _ls2' = toList ls2
+        #if !FABLE_COMPILER
         let _st1' = toList st1
         let _st2' = toList st2
+        #endif
         let _ss'  = toList ss
         let _ra'  = toList ra
+        #if !FABLE_COMPILER
         let _sl'  = toList sl
         let _dc'  = toList dc
         let _mp'  = toList mp
+        #endif
         let _d'   = toList d
+        #if !FABLE_COMPILER
         let _r'   = toList r
+        #endif
         let _rc'  = toList rc
         let _ut'  = toList ut
         let _al'  = toList al
         let _us'  = toList us
         let _cc'  = toList cc
+        #if !FABLE_COMPILER
         let _cd'  = toList cd
         let _cb'  = toList cb
+        #endif
 
         ()
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let testSorts =
         let _r1 = [4..1] |> sort
         let _r2 = [4..1] |> sortBy string

@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus.Control
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open System.Runtime.InteropServices
 open System.ComponentModel

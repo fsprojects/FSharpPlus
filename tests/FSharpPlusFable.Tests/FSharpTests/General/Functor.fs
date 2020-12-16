@@ -29,6 +29,7 @@ let functor = testList "Functor" [
             #if !FABLE_COMPILER
             let testVal2 = map ((+) 1) ((ofSeq :seq<_*_> -> Dictionary<_,_>) (seq ["a", 1; "b", 2]))
             Assert.IsInstanceOf<Option<Dictionary<string,int>>> (Some testVal2)
+            Assert.AreEqual(dict ["a",2;"b",3] |> Seq.toList, testVal2 |> Seq.toList)
             #endif
 
             let testVal3 = map ((+) 1) (dict (seq ["a", 1; "b", 2]))

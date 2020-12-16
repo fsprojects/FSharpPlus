@@ -70,7 +70,7 @@ let applicative = testList "Applicative" [
         Assert.IsInstanceOf<Option<bool>> testGTE4)
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "applicatives" (fun () -> 
 
         let run (ZipList x) = x

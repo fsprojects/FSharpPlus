@@ -500,6 +500,8 @@ module Operators =
     let inline app< ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` when (App or ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) : (static member App : ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` * App -> ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) > =
         App.Invoke () : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
 
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// Foldable
 
@@ -685,6 +687,8 @@ module Operators =
     /// <category index="11">Foldable</category>
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
 
+    #endif
+    #if !FABLE_COMPILER
 
     // Reducible
 
@@ -757,6 +761,8 @@ module Operators =
     /// <category index="15">Bitraversable</category>
     let inline bisequence (source: '``Bitraversable<'Functor<'T>,'Functor<'U>>``) : '``Functor<'Bitraversable<'T,'U>>`` = Bisequence.Invoke source
 
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Indexable
 
@@ -867,11 +873,10 @@ module Operators =
     let inline tryFindSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindSliceIndex.Invoke slice source
 
 
+    #endif
+    #if !FABLE_COMPILER
     // Comonads
 
-    #endif
-
-    #if !FABLE_COMPILER
     /// <summary>
     /// Extracts a value from a comonadic context.
     /// </summary>
@@ -892,9 +897,8 @@ module Operators =
     /// </summary>
     /// <category index="17">Comonads</category>
     let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x
+
     #endif
-
-
     #if !FABLE_COMPILER
 
     // Monad Transformers
@@ -980,6 +984,8 @@ module Operators =
     /// <category index="18">Monad Transformers</category>
     let inline catch (value: '``'MonadError<'E1,'T>``) (handler: 'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = Catch.Invoke value handler
 
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Collection
 
