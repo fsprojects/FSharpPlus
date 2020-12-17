@@ -4,7 +4,7 @@ open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
 open Testing
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
     static member ToMap (WrappedMapA m) = m
     static member inline TraverseIndexed (WrappedMapA m, f) =
@@ -95,7 +95,6 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member IterateIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's IterateIndexed"
         List.iteri f x
-    #if !FABLE_COMPILER
     static member inline FoldIndexed (WrappedListD x, f, z) =
         SideEffects.add "Using WrappedListD's FoldIndexed"
         foldi f z x
@@ -106,6 +105,7 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using WrappedListD's FindIndex"
         printfn "WrappedListD.FindIndex"
         findIndex y x
+    #if !FABLE_COMPILER
     static member FindSliceIndex (WrappedListD x, WrappedListD y) =
         SideEffects.add "Using WrappedListD's FindSliceIndex"
         printfn "WrappedListD.FindSliceIndex"

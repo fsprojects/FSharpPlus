@@ -8,7 +8,7 @@ open FSharpPlus.Data
 
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 let testEmpty () =
     let _: WrappedListE<int> = empty
     let _: list<int>         = empty
@@ -21,7 +21,7 @@ let testEmpty () =
     ()
 #endif
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 let testAppend () =
     let _ = WrappedListE [1;2] <|> WrappedListE [3;4]
     let _ = [1;2] <|> [3;4]
@@ -35,7 +35,7 @@ let testAppend () =
     ()
 #endif
 let alternative = testList "Alternative" [
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "testEmptyAndAppendForCustomType" (fun () ->
         let u = WrappedListE [1;2]
         let v = WrappedListG [1;2]
@@ -61,7 +61,7 @@ let alternative = testList "Alternative" [
         Assert.AreEqual (Some 1, z))
 #endif
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "testChoice" (fun () ->
         let s = seq { 
             yield (SideEffects.add "a"; None)
@@ -105,6 +105,7 @@ let alternative = testList "Alternative" [
         let _ = choice (toArray s)                    // uses specific overload for arrays
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to array forces all side-effects
 
+        #if !FABLE_COMPILER
         SideEffects.reset ()
         let _ = choice (NonEmptyList.ofList (toList s)) // uses Default1 (Choice defined on NonEmptyList)
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to list forces all side-effects
@@ -124,6 +125,7 @@ let alternative = testList "Alternative" [
         SideEffects.reset ()
         let _ = choice (toList v)                    // uses specific overload for lists
         Assert.AreEqual (fullList, SideEffects.get ()) // short-circuits but the conversion to set forces all side-effects
+        #endif
     )
 #endif
 ]

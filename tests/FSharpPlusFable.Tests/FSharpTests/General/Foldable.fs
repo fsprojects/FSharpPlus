@@ -9,11 +9,13 @@ open FSharpPlus.Data
 open System
 open System.Collections.ObjectModel
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 let foldables =
     let _10  = foldBack (+) (seq [1;2;3;4]) 0
     let _323 = toList (seq [3;2;3])
+    #if !FABLE_COMPILER
     let _03  = filter ((=) 3) (seq [1;2;3])
+    #endif
     ()
 #endif
 

@@ -307,7 +307,7 @@ module Operators =
     let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
     #endif
     
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     
     /// S
     module Seq =
@@ -348,7 +348,8 @@ module Operators =
     /// <category index="5">Alternative/Monadplus/Arrowplus</category>
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
-   
+    #endif
+    #if !FABLE_COMPILER
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
 
     /// <summary>
@@ -704,6 +705,8 @@ module Operators =
     /// <returns>The final reduced value.</returns>
     let inline reduce reduction (source: '``Reducible<'T>``) = Reduce.Invoke reduction source : 'T
 
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Traversable
 
@@ -719,6 +722,8 @@ module Operators =
     /// <category index="13">Traversable</category>
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
+    #endif
+    #if !FABLE_COMPILER
 
     // Bifoldable
 
@@ -1323,7 +1328,7 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     
     // Converter
 
@@ -1332,7 +1337,8 @@ module Operators =
     /// </summary>
     /// <category index="21">Converter</category>
     let inline explicit (value: 'T) : 'U = Explicit.Invoke value
-
+    #endif
+    #if !FABLE_COMPILER
     /// <summary>
     /// Convert from a byte array value, given options of little-endian, and startIndex
     /// </summary>
@@ -1362,7 +1368,8 @@ module Operators =
     /// </summary>
     /// <category index="21">Converter</category>
     let inline toBytesBE value : byte[] = ToBytes.Invoke false value
-     
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Converts to a value from its string representation.
     /// </summary>
@@ -1405,6 +1412,9 @@ module Operators =
     /// <summary>The largest possible value.</summary>
     /// <category index="22">Numerics</category>
     let inline maxValue< ^Num when (MaxValue or ^Num) : (static member MaxValue : ^Num * MaxValue -> ^Num) > : ^Num = MaxValue.Invoke ()
+
+    #endif
+    #if !FABLE_COMPILER
 
     /// <summary>Converts from BigInteger to the inferred destination type.</summary>
     /// <category index="22">Numerics</category>
@@ -1504,7 +1514,8 @@ module Operators =
     /// <returns>The absolute value of the input.</returns>
     let inline abs' (value: 'Num) : 'Num = Abs'.Invoke value
 
-
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Additional functions
 
@@ -1532,6 +1543,8 @@ module Operators =
     /// <category index="23">Additional Functions</category>
     let inline implicit (x: ^T) = ((^R or ^T) : (static member op_Implicit : ^T -> ^R) x) : ^R
 
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// An active recognizer for a generic value parser.
     /// </summary>

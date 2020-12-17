@@ -10,7 +10,7 @@ open FSharpPlus.Data
 open System.Threading.Tasks
 #endif
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                               = ZipList (Seq.initInfinite (konst x))
     static member Map   (ZipList x, f: 'a->'b)                = ZipList (Seq.map f x)
