@@ -6,7 +6,7 @@ open FSharpPlus.Data
 #nowarn "686"
 open System
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 let (|Int32|_|) : _-> Int32 option = tryParse
 type ProductId = { Value:int }
 with
@@ -18,22 +18,32 @@ with
 
 
 let parsing = testList "Parsing" [
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "parse" (fun () -> 
+        #if !FABLE_COMPILER
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
 
         Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))
-
+        #endif
+        #if !FABLE_COMPILER
         let _101 = tryParse "10.1.0.1" : Net.IPAddress option
+        #endif
         let _102 = tryParse "102" : string option
+        #if !FABLE_COMPILER
         let _MTS = [tryParse "Monday" ; Some DayOfWeek.Thursday; Some DayOfWeek.Saturday]
+        #endif
         let _103 = tryParse "103" : Text.StringBuilder option
-
+        #if !FABLE_COMPILER
         let _109 = parse "10.0.9.1" : Net.IPAddress
+        #endif
         let _111 = parse "true" && true
+        #if !FABLE_COMPILER
         let _MTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
+        #endif
+        #if !FABLE_COMPILER
         let _110 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
         let _120 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;|]                + 100
+        #endif
         let _121 = parse "121" : string
         let _122 = parse "122" : Text.StringBuilder
         

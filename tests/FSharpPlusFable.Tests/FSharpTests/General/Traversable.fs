@@ -7,7 +7,7 @@ open FSharpPlus.Data
 open System.Threading.Tasks
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type Either<'l,'r> = Left of 'l | Right of 'r with
     static member Return x = Right x
     static member inline get_Empty () = Left empty
@@ -27,7 +27,7 @@ let traverseTest =
 let toOptions x = if x <> 4 then Some x       else None
 let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
 let toLists   x = if x <> 4 then [x; x]       else []
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
 #endif
 
@@ -39,7 +39,13 @@ let expectedEffects =
         """f(x) <*> Right 3"""
         """f(x) <*> Left ["This is a failure"]"""
     ]
-
+let expectedEffects20 =
+    ["f(x) <*> Right 0"; "f(x) <*> Right 1"; "f(x) <*> Right 2"; "f(x) <*> Right 3";
+     "f(x) <*> Left [\"This is a failure\"]"; "f(x) <*> Right 5"; "f(x) <*> Right 6";
+     "f(x) <*> Right 7"; "f(x) <*> Right 8"; "f(x) <*> Right 9"; "f(x) <*> Right 10";
+     "f(x) <*> Right 11"; "f(x) <*> Right 12"; "f(x) <*> Right 13";
+     "f(x) <*> Right 14"; "f(x) <*> Right 15"; "f(x) <*> Right 16";
+     "f(x) <*> Right 17"; "f(x) <*> Right 18"; "f(x) <*> Right 19"]
 let traversable = testList "Traversable" [
     #if !FABLE_COMPILER
     testCase "sequence_Default_Primitive" (fun () -> 
@@ -62,20 +68,24 @@ let traversable = testList "Traversable" [
 
     #if !FABLE_COMPILER
     testCase "sequence_Specialization" (fun () ->
-        
         let inline seqSeq (x:_ seq ) = sequence x
+        #if !DEBUG
         let inline seqArr (x:_ []  ) = sequence x
         let inline seqLst (x:_ list) = sequence x
+        #endif
 
         let a : list<_> = seqSeq (seq [[1];[3]])
         equalSeq [seq [1; 3]] a
         Assert.IsInstanceOf<list<seq<int>>> a
+        #if !DEBUG
         let b = seqArr ( [|[1];[3]|])
         equalSeq [[|1; 3|]] b
         Assert.IsInstanceOf<list<array<int>>> b
         let c = seqLst ( [ [1];[3] ])
         equalSeq [[1; 3]] c
-        Assert.IsInstanceOf<list<list<int>>> c)
+        Assert.IsInstanceOf<list<list<int>>> c
+        #endif
+        ())
     #endif
 
     #if !FABLE_COMPILER
@@ -87,25 +97,45 @@ let traversable = testList "Traversable" [
         ())
     #endif
 
-    #if !FABLE_COMPILER
-    testCase "traversableForNonPrimitive" (fun () ->
-        let nel = nelist { Some 1 }
-        let rs1 = traverse id nel
-        Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
-        let rs2 = sequence nel
-        Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
-        let nem = NonEmptyMap.Create (("a", Some 1), ("b", Some 2), ("c", Some 3))
-        let rs3 = traverse id nem
-        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs3
-        let rs4 = sequence nem
-        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs4
-        let rs5 = traverse id (TestNonEmptyCollection.Create (Some 42))
-        Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs5
-        let nes = neseq { Some 1 }
-        let rs6 = traverse id nes
-        Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs6
-        let rs7 = sequence nes
-        Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs7)
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    testList "traversableForNonPrimitive" [
+        testCase "nelist" (fun () ->
+            let nel = nelist { Some 1 }
+            let rs1 = traverse id nel
+            #if !FABLE_COMPILER
+            Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
+            #endif
+            let rs2 = sequence nel
+            #if !FABLE_COMPILER
+            Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
+            #endif
+            ())
+        #if !FABLE_COMPILER
+        testCase "nemap" (fun () ->
+            let nem = NonEmptyMap.Create (("a", Some 1), ("b", Some 2), ("c", Some 3))
+            let rs3 = traverse id nem
+            Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs3
+            let rs4 = sequence nem
+            Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs4)
+        #endif
+        testCase "necol" (fun () ->
+            let rs5 = traverse id (TestNonEmptyCollection.Create (Some 42))
+            #if !FABLE_COMPILER
+            Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs5
+            #endif
+            ())
+        testCase "neseq" (fun () ->
+            let nes = neseq { Some 1 }
+            let rs6 = traverse id nes
+            #if !FABLE_COMPILER
+            Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs6
+            #endif
+            let rs7 = sequence nes
+            #if !FABLE_COMPILER
+            Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs7
+            #endif
+            ())
+    ]
     #endif
 
     #if !FABLE_COMPILER
@@ -119,7 +149,7 @@ let traversable = testList "Traversable" [
         let d = sequence (Seq.initInfinite toLists)
         let e = sequence (Seq.initInfinite toEithers)
 
-        equalSeq expectedEffects (SideEffects.get ())
+        SideEffects.are expectedEffects
         SideEffects.reset ()
 
         let _a = traverse toOptions (Seq.initInfinite id)
@@ -128,7 +158,7 @@ let traversable = testList "Traversable" [
         let _d = traverse toLists   (Seq.initInfinite id)
         let _e = traverse toEithers (Seq.initInfinite id)
 
-        equalSeq expectedEffects (SideEffects.get ())
+        SideEffects.are expectedEffects
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
@@ -143,7 +173,7 @@ let traversable = testList "Traversable" [
         let d = sequence (NonEmptySeq.initInfinite toLists)
         let e = sequence (NonEmptySeq.initInfinite toEithers)
 
-        equalSeq expectedEffects (SideEffects.get ())
+        SideEffects.are expectedEffects
         SideEffects.reset ()
 
         let _a = traverse toOptions (NonEmptySeq.initInfinite id)
@@ -152,7 +182,7 @@ let traversable = testList "Traversable" [
         let _d = traverse toLists   (NonEmptySeq.initInfinite id)
         let _e = traverse toEithers (NonEmptySeq.initInfinite id)
 
-        equalSeq expectedEffects (SideEffects.get ())
+        SideEffects.are expectedEffects
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<NonEmptySeq<int>,string>.Choice2Of2 "This is a failure", c)
@@ -160,44 +190,77 @@ let traversable = testList "Traversable" [
         Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e))
     #endif
 
-    #if !FABLE_COMPILER
-    testCase "traverseFiniteApplicatives" (fun () -> // TODO -> implement short-circuit without breaking anything else
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    testList "traverseFiniteApplicatives" [ // TODO -> implement short-circuit without breaking anything else
+        #if !FABLE_COMPILER
+        testCase "a" (fun () ->
+            SideEffects.reset ()
 
-        SideEffects.reset ()
+            let a = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
+            SideEffects.are []
+            SideEffects.reset ()
+            let _a = traverse toOptions [1..20]
+            SideEffects.are []
+            SideEffects.reset ()
+            Assert.AreEqual (None, a)
+            ())
 
-        let a = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
-        let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
-        let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
+        testCase "b" (fun () ->
+            SideEffects.reset ()
+            let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
+            SideEffects.are []
+            SideEffects.reset ()
+            let _b = traverse toOptions [1..20]
+            SideEffects.are []
+            SideEffects.reset ()
+            Assert.AreEqual (None, b)
+            ())
 
-        //CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
+        testCase "c" (fun () ->
+            SideEffects.reset ()
+            let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
+            SideEffects.are []
+            SideEffects.reset ()
+            let _c = traverse toChoices [1..20]
+            SideEffects.are []
+            SideEffects.reset ()
+            Assert.AreEqual (Choice<list<int>,string>.Choice2Of2 "This is a failure", c)
+            ())
 
-        let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
+        testCase "d" (fun () ->
+            SideEffects.reset ()
+            let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
+            SideEffects.are []
+            SideEffects.reset ()
+            let _d = traverse toLists   [1..20]
+            SideEffects.are []
+            SideEffects.reset ()
+            Assert.IsEmpty d
+            ())
 
-        //CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
+        testCase "e" (fun () ->
+            SideEffects.reset ()
+            let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
+            SideEffects.are expectedEffects20
+            SideEffects.reset ()
+            let _e = traverse toEithers [1..20]
+            //SideEffects.are expectedEffects20
+            SideEffects.reset ()
+            Assert.AreEqual (Either<string list,list<int>>.Left ["This is a failure"], e)
+            ())
 
-        let _a = traverse toOptions [1..20]
-        let _b = traverse toOptions [1..20]
-        let _c = traverse toChoices [1..20]
-        let _d = traverse toLists   [1..20]
-        let _e = traverse toEithers [1..20]
-
-        //CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
-
-        let _f = traverse toEithers [|1..20|]
-
-        //CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        Assert.AreEqual (None, a)
-        Assert.AreEqual (None, b)
-        Assert.AreEqual (Choice<list<int>,string>.Choice2Of2 "This is a failure", c)
-        Assert.IsEmpty d
-        Assert.AreEqual (Either<string list,list<int>>.Left ["This is a failure"], e)
-        Assert.AreEqual (Either<string list,array<int>>.Left ["This is a failure"], f)
-        ())
+        testCase "f" (fun () ->
+            SideEffects.reset ()
+            let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
+            SideEffects.are expectedEffects20
+            SideEffects.reset ()
+            let _f = traverse toEithers [|1..20|]
+            //SideEffects.are expectedEffects20
+            SideEffects.reset ()
+            Assert.AreEqual (Either<string list,array<int>>.Left ["This is a failure"], f)
+            ())
+        #endif
+    ]
     #endif
 
     #if !FABLE_COMPILER
@@ -231,7 +294,7 @@ let traversable = testList "Traversable" [
         equalSeq [0;1;2;3;4;5;6;7;8;9] l)
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER && !DEBUG
     testCase "traverseTask" (fun () ->
         let a = traverse Task.FromResult [1;2]
         equalSeq [1;2] a.Result

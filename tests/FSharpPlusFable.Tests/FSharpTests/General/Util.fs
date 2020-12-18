@@ -141,7 +141,7 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member Delay (f: unit -> WrappedListG<_>) = SideEffects.add "Using WrappedListG's Delay"; f ()
     static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type WrappedListH<'s> = WrappedListH of 's list with
     static member Map (WrappedListH lst, f) = WrappedListH (List.map f lst)
     static member inline Sequence (x: WrappedListH<'``Functor<'T>``>) =

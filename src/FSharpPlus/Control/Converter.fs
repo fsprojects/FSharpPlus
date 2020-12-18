@@ -108,8 +108,10 @@ type TryParse =
 
     static member TryParse (_: string        , _: TryParse) = fun x -> Some x                               : option<string>
     static member TryParse (_: StringBuilder , _: TryParse) = fun x -> Some (new StringBuilder (x: string)) : option<StringBuilder>
+    #if !FABLE_COMPILER
     static member TryParse (_: DateTime      , _: TryParse) = fun (x:string) -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
     static member TryParse (_: DateTimeOffset, _: TryParse) = fun (x:string) -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
+    #endif
 
     static member inline Invoke (value: string) =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member TryParse : _*_ -> _) b, a)
@@ -128,7 +130,7 @@ type Parse =
     inherit Default1
     static member inline Parse (_: ^R                  , _: Default1) = fun (x:string) -> (^R: (static member Parse : _ -> ^R) x)
     static member inline Parse (_: ^R                  , _: Parse   ) = fun (x:string) -> (^R: (static member Parse : _ * _ -> ^R) (x, CultureInfo.InvariantCulture))
-#if !FABLE_COMPILER_3
+#if !FABLE_COMPILER
     static member        Parse (_: 'T when 'T : enum<_>, _: Parse   ) = fun x ->
         (match Enum.TryParse (x) with
             | (true, v) -> v
