@@ -131,7 +131,7 @@ type Lift3 =
     static member        Lift3 (f, (x: Map<'Key,'T>       , y: Map<'Key,'U>       , z: Map<'Key, 'V>       ), _mthd: Lift3) = Map.mapValues3 f x y z
     static member        Lift3 (f, (x: Dictionary<'Key,'T>, y: Dictionary<'Key,'U>, z: Dictionary<'Key, 'V>), _mthd: Lift3) = Dictionary.map3 f x y z
     static member        Lift3 (f, (x: Expr<'T>           , y: Expr<'U>           , z: Expr<'V>            ), _mthd: Lift3) = <@ f %x %y %z @>
-//    static member        Lift3 (f, (x: ResizeArray<'T>    , y: ResizeArray<'U>    ), _mthd: Lift3) = ResizeArray.lift2 f x y
+    static member        Lift3 (f, (x: ResizeArray<'T>    , y: ResizeArray<'U>    , z: ResizeArray<'V>     ), _mthd: Lift3) = ResizeArray.lift3 f x y z
 
 //    static member inline Invoke (f: 'T -> 'U -> 'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` =
 //        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, _output: ^R) =

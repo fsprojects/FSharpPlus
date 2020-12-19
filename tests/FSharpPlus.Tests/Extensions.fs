@@ -427,3 +427,7 @@ module Extensions =
 
     // Lazy
     (Lazy.map3 (fun x y z -> x + y + z) (Lazy<int>.CreateFromValue 1) (Lazy<int>.CreateFromValue 2) (Lazy<int>.CreateFromValue 4)).Value |> areEqual 7
+    
+    // ResizeArray
+    ResizeArray.lift3 (fun x y z -> x + y + z) (ResizeArray([1; 2])) (ResizeArray([7; 11])) (ResizeArray([22; 33]))
+    |> areEqual (ResizeArray([30; 41; 34; 45; 31; 42; 35; 46]))
