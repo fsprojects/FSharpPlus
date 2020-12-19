@@ -28,6 +28,7 @@ type Item =
     static member        Item (x: 'T [,,]            , (i,j,k)  , [<Optional>]_impl: Item    ) = x.[i,j,k]   : 'T
     static member        Item (x: 'T [,,,]           , (i,j,k,l), [<Optional>]_impl: Item    ) = x.[i,j,k,l] : 'T
     #endif
+    static member        Item (x: 'T list            , n        , [<Optional>]_impl: Item    ) = x.[n]       : 'T    
     static member inline Invoke (n: 'K) (source: '``Indexed<'T>``) : 'T =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)
         let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)

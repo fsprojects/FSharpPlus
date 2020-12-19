@@ -11,89 +11,116 @@ open System.Collections.ObjectModel
 open FSharpPlus.Control
 
 let indexable = testList "Indexable" [
-    #if !FABLE_COMPILER
-    testCase "testCompileAndExecuteItem" (fun () ->
-
-        let a = Map.ofSeq [1, "one"; 2, "two"]
-        let _ = item 1 a
-
-        let b = dict [1, "one"; 2, "two"]
-        let _ = item 1 b
-
-        let c = "two"
-        let _ = item 1 c
-
-        let d = System.Text.StringBuilder "one"
-        let _ = item 1 d
-
-        let e = array2D [[1;2];[3;4];[5;6]]
-        let _ = item (1, 1) e
-
-        let f = [1, "one"; 2, "two"]
-        let _ = item 1 f
-
-        let g = [|1, "one"; 2, "two"|]
-        let _ = item 1 g
-
-        let h = ResizeArray [1, "one"; 2, "two"]
-        let _ = item 1 h
-
-        let i = Array3D.create 3 2 2 0
-        let _ = item (1, 1, 1) i
-
-        let j = Array4D.create 3 2 2 3 0
-        let _ = item (1, 1, 1, 1) j
-
-        let k = NonEmptyMap.Create (("a", 1), ("b", 2))
-        let _ = item "b" k
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    testList "testCompileAndExecuteItem" [
+        testCase "map" (fun () ->
+            let a = Map.ofSeq [1, "one"; 2, "two"]
+            let _ = item 1 a
+            ())
+        testCase "dict" (fun () ->
+            let b = dict [1, "one"; 2, "two"]
+            let _ = item 1 b
+            ())
+        testCase "string" (fun () ->
+            let c = "two"
+            let _ = item 1 c
+            ())
+        testCase "StringBuilder" (fun () ->
+            let d = System.Text.StringBuilder "one"
+            let _ = item 1 d
+            ())
+        #if !FABLE_COMPILER
+        testCase "array2D" (fun () ->
+            let e = array2D [[1;2];[3;4];[5;6]]
+            let _ = item (1, 1) e
+            ())
+        #endif
+        testCase "list" (fun () ->
+            let f = [1, "one"; 2, "two"]
+            let _ = item 1 f
+            ())
+        testCase "array" (fun () ->
+            let g = [|1, "one"; 2, "two"|]
+            let _ = item 1 g
+            ())
+        #if !FABLE_COMPILER
+        testCase "ResizeArray" (fun () ->
+            let h = ResizeArray [1, "one"; 2, "two"]
+            let _ = item 1 h
+            ())
+        testCase "Array3D" (fun () ->
+            let i = Array3D.create 3 2 2 0
+            let _ = item (1, 1, 1) i
+            ())
+        testCase "Array4D" (fun () ->
+            let j = Array4D.create 3 2 2 3 0
+            let _ = item (1, 1, 1, 1) j
+            ())
+        #endif
+        testCase "nemap" (fun () ->
+            let k = NonEmptyMap.Create (("a", 1), ("b", 2))
+            let _ = item "b" k
+            ())
 
         // This doesn't intentionally compile: seq is not Indexable. Not all foldables are Indexable, for example a Set is foldable but not Indexable. For seq use nth instead.
         // let f = seq [1, "one"; 2, "two"]
         // let _ = item 1 f
-
-        ())
+    ]
     #endif
 
-    #if !FABLE_COMPILER
-    testCase "testCompileAndExecuteTryItem" (fun () ->
-
-        let a = Map.ofSeq [1, "one"; 2, "two"]
-        let _ = tryItem 1 a
-
-        let b = dict [1, "one"; 2, "two"]
-        let _ = tryItem 1 b
-
-        let c = "two"
-        let _ = tryItem 1 c
-
-        let d = System.Text.StringBuilder "one"
-        let _ = tryItem 1 d
-
-        let e = array2D [[1;2];[3;4];[5;6]]
-        let _ = tryItem (1, 1) e
-
-        let f = [1, "one"; 2, "two"]
-        let _ = tryItem 1 f
-
-        let g = [|1, "one"; 2, "two"|]
-        let _ = tryItem 1 g
-
-        let h = ResizeArray [1, "one"; 2, "two"]
-        let _ = tryItem 1 h
-
-        let i = Array3D.create 3 2 2 0
-        let _ = tryItem (1, 1, 1) i
-
-        let j = Array4D.create 3 2 2 3 0
-        let _ = tryItem (1, 1, 1, 1) j
-
-        let k = NonEmptyMap.Create (("a", 1), ("b", 2))
-        let _ = tryItem "b" k
-
-        let w = WrappedListA [1, "one"; 2, "two"]
-        let _ = tryItem 1 w
-
-        ())
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    testList "testCompileAndExecuteTryItem" [
+        testCase "map" (fun () ->
+            let a = Map.ofSeq [1, "one"; 2, "two"]
+            let _ = tryItem 1 a
+            ())
+        testCase "dict" (fun () ->
+            let b = dict [1, "one"; 2, "two"]
+            let _ = tryItem 1 b
+            ())
+        testCase "string" (fun () ->
+            let c = "two"
+            let _ = tryItem 1 c
+            ())
+        testCase "StringBuilder" (fun () ->
+            let d = System.Text.StringBuilder "one"
+            let _ = tryItem 1 d
+            ())
+        #if !FABLE_COMPILER
+        testCase "array2D" (fun () ->
+            let e = array2D [[1;2];[3;4];[5;6]]
+            let _ = tryItem (1, 1) e
+            ())
+        testCase "Array3D" (fun () ->
+            let i = Array3D.create 3 2 2 0
+            let _ = tryItem (1, 1, 1) i
+            ())
+        testCase "Array4D" (fun () ->
+            let j = Array4D.create 3 2 2 3 0
+            let _ = tryItem (1, 1, 1, 1) j
+            ())
+        #endif
+        testCase "list" (fun () ->
+            let f = [1, "one"; 2, "two"]
+            let _ = tryItem 1 f
+            ())
+        testCase "array" (fun () ->
+            let g = [|1, "one"; 2, "two"|]
+            let _ = tryItem 1 g
+            ())
+        testCase "ResizeArray" (fun () ->
+            let h = ResizeArray [1, "one"; 2, "two"]
+            let _ = tryItem 1 h
+            ())
+        testCase "nemap" (fun () ->
+            let k = NonEmptyMap.Create (("a", 1), ("b", 2))
+            let _ = tryItem "b" k
+            ())
+        testCase "WrappedListA" (fun () ->
+            let w = WrappedListA [1, "one"; 2, "two"]
+            let _ = tryItem 1 w
+            ())
+        ]
     #endif
 
     #if !FABLE_COMPILER
