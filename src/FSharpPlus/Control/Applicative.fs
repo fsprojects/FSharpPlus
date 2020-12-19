@@ -133,19 +133,19 @@ type Lift3 =
     static member        Lift3 (f, (x: Expr<'T>           , y: Expr<'U>           , z: Expr<'V>            ), _mthd: Lift3) = <@ f %x %y %z @>
     static member        Lift3 (f, (x: ResizeArray<'T>    , y: ResizeArray<'U>    , z: ResizeArray<'V>     ), _mthd: Lift3) = ResizeArray.lift3 f x y z
 
-//    static member inline Invoke (f: 'T -> 'U -> 'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` =
-//        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, _output: ^R) =
-//            ((^M or ^I1 or ^I2 or ^R) : (static member Lift2 : _*(_*_)*_ -> _) f, (input1, input2), mthd)
-//        call (Unchecked.defaultof<Lift2>, x, y, Unchecked.defaultof<'``Applicative<'V>``>)
-//
-//    static member inline InvokeOnInstance (f: 'T -> 'U -> 'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) =
-//        ((^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member Lift2 : _*_*_ -> _) f, x, y)
+    static member inline Invoke (f: 'T -> 'U -> 'V -> 'W) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) (z: '``Applicative<'V>``): '``Applicative<'W>`` =
+        let inline call (mthd : ^M, input1: ^I1, input2: ^I2, input3: ^I3, _output: ^R) =
+            ((^M or ^I1 or ^I2 or ^I3 or ^R) : (static member Lift3 : _*(_*_*_)*_ -> _) f, (input1, input2, input3), mthd)
+        call (Unchecked.defaultof<Lift3>, x, y, z, Unchecked.defaultof<'``Applicative<'W>``>)
+
+    static member inline InvokeOnInstance (f: 'T -> 'U -> 'V -> 'W) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) (z: '``Applicative<'V>``)=
+        ((^``Applicative<'T>`` or ^``Applicative<'U>`` or ^``Applicative<'V>``) : (static member Lift3 : _*_*_*_ -> _) f, x, y, z)
 
 type Lift3 with
-    static member inline Lift2 (f, (x, y), _mthd: Default2) = (((Return.InvokeOnInstance f, x) ||> Apply.InvokeOnInstance), y) ||> Apply.InvokeOnInstance
+    static member inline Lift3 (f, (x, y, z), _mthd: Default3) = ((((Return.InvokeOnInstance f, x) ||> Apply.InvokeOnInstance), y) ||> Apply.InvokeOnInstance, z) ||> Apply.InvokeOnInstance
 
-    static member inline Lift2 (_, (_:'t when 't: null and 't: struct, _: ^u when ^u : null and ^u: struct), _mthd: Default1) = id
-    static member inline Lift2 (f: 'T -> 'U -> 'V, (x: '``Applicative<'T>``, y: '``Applicative<'U>``)      , _mthd: Default1) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` ) : (static member Lift2 : _*_*_ -> _) f, x, y)
+    static member inline Lift3 (_, (_:'t when 't: null and 't: struct, _: ^u when ^u : null and ^u: struct, _: ^v when ^v : null and ^v: struct), _mthd: Default1) = id
+    static member inline Lift3 (f: 'T -> 'U -> 'V -> 'W, (x: '``Applicative<'T>``, y: '``Applicative<'U>``, z: '``Applicative<'V>``)            , _mthd: Default1) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` or ^``Applicative<'V>`` ) : (static member Lift3 : _*_*_*_ -> _) f, x, y, z)
 
 
 type IsLeftZero =
