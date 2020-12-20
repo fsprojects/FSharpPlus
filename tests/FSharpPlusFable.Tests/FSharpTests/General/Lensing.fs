@@ -16,8 +16,7 @@ module Book =
     let inline _authorName b = _author << Person._name <| b
 #endif
 let lensing = testList "Lensing" [
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "Lens" (fun () ->
                // equal (view _1 (1, '2')) 1
                // equal (view _2 ('1', 2)) 2
@@ -32,9 +31,13 @@ let lensing = testList "Lensing" [
                // equal (Some 1) (preview _Error (Error 1))
                // equal None (preview _Error (Ok 1))
                )
+    #if !FABLE_COMPILER
     testCase "prism1" (fun () -> equal true (Option.isNone (preview _Some None)))
+    #endif
     testCase "prism2" (fun () -> equal (Some 1) (preview _Some (Some 1)))
     testCase "prism3" (fun () -> equal (Some ()) (preview _None None))
+    #if !FABLE_COMPILER
     testCase "prism4" (fun () -> equal true (Option.isNone (preview _None (Some 1))))
     #endif
+#endif
 ]
