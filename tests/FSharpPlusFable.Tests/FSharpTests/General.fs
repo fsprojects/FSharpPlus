@@ -391,6 +391,7 @@ open General.Monad
 open General.Monoid
 open General.Parsing
 open General.Traversable
+open General.Lensing
 
 let generalTests = testList "General" [
     idiomBrackets
@@ -409,4 +410,5 @@ let generalTests = testList "General" [
     monoid
     parsing
     traversable
+    lensing
 ]

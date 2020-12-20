@@ -32,7 +32,7 @@ jobs:
       working-directory: tests/FSharpPlusFable.Tests
       run: dotnet fable . --outDir bin --runScript ./bin 
   
-  testOnCore:
+  testFable3SubsetOnCore:
     runs-on: ubuntu-latest
 
     steps:
@@ -51,3 +51,6 @@ jobs:
     - name: Run tests (Fable3 subset but on .net)
       working-directory: tests/FSharpPlusFable.Tests
       run: dotnet run -c Fable3
+    - name: Run tests (Full subset for of tests .net)
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet run -c Release

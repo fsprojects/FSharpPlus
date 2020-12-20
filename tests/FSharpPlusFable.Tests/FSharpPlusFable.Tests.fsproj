@@ -23,6 +23,7 @@
     <Compile Include="FSharpTests/General/Indexable.fs" />
     <Compile Include="FSharpTests/General/Parsing.fs" />
     <Compile Include="FSharpTests/General/Traversable.fs" />
+    <Compile Include="FSharpTests\General\Lensing.fs" />
     <Compile Include="FSharpTests/General.fs" />
     <Compile Include="FSharpTests/Extensions.fs" />
     <Compile Include="Tests.fs" />

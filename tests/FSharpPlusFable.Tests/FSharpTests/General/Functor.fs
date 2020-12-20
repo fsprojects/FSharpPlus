@@ -8,9 +8,32 @@ open FSharpPlus.Data
 #nowarn "686"
 
 open System.Threading.Tasks
+type StringCodec<'t> = StringCodec of ( (string -> Result<'t,string>) * ('t -> string) ) with
+    static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (d >> Result.map f, e << g) : StringCodec<'U>
+
+module StringCodec =
+    let decode (StringCodec (d,_)) x = d x
+    let encode (StringCodec (_,e)) x = e x
 
 
 let functor = testList "Functor" [
+    testCase "Invariant" (fun () ->
+        let tryParse x =
+            match System.Double.TryParse (x: string) with
+            | (true, x) -> Some x
+            | (false, _) -> None
+
+        let floatCodec = StringCodec ( (tryParse >> Option.toResultWith "Parse error"), string<float>)
+        let floatParsed  = StringCodec.decode floatCodec "1.8"
+        let floatEncoded = StringCodec.encode floatCodec 1.5
+        equal floatParsed (Result<float, string>.Ok 1.8)
+        equal floatEncoded "1.5"
+
+        let intCodec = invmap int<float> float<int> floatCodec
+        let oneParsed  = StringCodec.decode intCodec "1"
+        let tenEncoded = StringCodec.encode intCodec 10
+        equal oneParsed (Result<int, string>.Ok 1)
+        equal tenEncoded "10" )
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     testList "mapDefaultCustom" [
         testCase "nelist" (fun () -> 
