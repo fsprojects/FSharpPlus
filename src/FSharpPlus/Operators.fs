@@ -904,7 +904,7 @@ module Operators =
     let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x
 
     #endif
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Monad Transformers
 

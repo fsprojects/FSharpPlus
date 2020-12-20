@@ -158,7 +158,7 @@ let monadTransformers = testList "MonadTransformers" [
     #endif
 ]
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
         static member Dimap ((Fun f): Fun<'B,'C>, g: 'A->'B, h:'C->'D) = Fun (g >> f >> h)
@@ -169,7 +169,7 @@ module ProfunctorDefaults =
     ()
 #endif
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 module BifunctorDefaults =
     type Tup<'a,'b> = Tup of ('a * 'b) with
         static member Bimap (Tup (a, b), f, g) = Tup (f a, g b)
@@ -180,7 +180,7 @@ module BifunctorDefaults =
     ()
 #endif
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 type StringCodec<'t> = StringCodec of ReaderT<string, Result<'t,string>> * ('t -> Const<string, unit>) with
     static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (map f d, contramap g e)
 module StringCodec =
@@ -189,7 +189,7 @@ module StringCodec =
 #endif
 
 let invariant = testList "Invariant" [
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "testStringToIntDerivedFromFloat" (fun () ->
         let floatCodec = StringCodec (ReaderT (tryParse >> Option.toResultWith "Parse error"), string<float> >> Const)
         let floatParsed  = StringCodec.decode floatCodec "1.8"
@@ -202,7 +202,7 @@ let invariant = testList "Invariant" [
         let tenEncoded = StringCodec.encode intCodec 10
         Assert.AreEqual (Result<int, string>.Ok 1, oneParsed)
         Assert.AreEqual ("10", tenEncoded))
-    #endif
+#endif
 ]
 
 type Sum<'a> = Sum of 'a with
@@ -211,7 +211,7 @@ type Sum<'a> = Sum of 'a with
 
 
 let splits = testList "Splits" [
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
     testCase "splitArraysAndStrings" (fun () -> 
         let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
         let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|] |> Seq.map System.Text.Encoding.ASCII.GetString
@@ -222,9 +222,9 @@ let splits = testList "Splits" [
         Assert.IsTrue((toList a1 = toList a2))
         Assert.IsTrue((toList b1 = toList b2))
         Assert.IsInstanceOf<Option<string []>> (Some a1))
-    #endif
+#endif
 
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
     testCase "replaceArraysAndStrings" (fun () -> 
         let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
         let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B |> System.Text.Encoding.ASCII.GetString
@@ -234,9 +234,9 @@ let splits = testList "Splits" [
 
         Assert.IsTrue ((a1 = a2))
         Assert.IsTrue ((b1 = b2)))
-    #endif
+#endif
 
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
     testCase "intercalateArraysAndStrings" (fun () -> 
         let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
         let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B |> System.Text.Encoding.ASCII.GetString
@@ -251,11 +251,11 @@ let splits = testList "Splits" [
         //Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
         // Assert.IsTrue((c = Sum 13))
         Assert.IsTrue((d = Sum 13)))
-    #endif
+#endif
 ]
 
 let bitConverter = testList "BitConverter" [
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
     testCase "roundtrips" (fun () ->
         let a0 = -79800210978L
         let b0 = -798021978
@@ -276,13 +276,13 @@ let bitConverter = testList "BitConverter" [
         Assert.IsTrue (("74-68-69-73-20-69-73-20-6A-75-73-74-20-61-20-53-74-72-69-6E-67" = (g0 |> toBytes |> ofBytes)))
         Assert.IsTrue ((h0 = (h0 |> toBytes |> ofBytes)))
         Assert.IsTrue ((i0 = (i0 |> toBytes |> ofBytes))))
-    #endif
+#endif
 ]
 
 
 let curry = testList "Curry" [
 
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
     testCase "curryTest" (fun () ->
         let f1  (x: Tuple<_>) = [x.Item1]
         let f2  (x, y)    = [x + y]
@@ -305,9 +305,9 @@ let curry = testList "Curry" [
         let _x17 = curryN f17 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15 16 17
 
         ())
-    #endif
+#endif
 
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
     testCase "uncurryTest" (fun () ->
         let g2  x y   = [x + y]
         let g3  x y z = [x + y + z]
@@ -329,13 +329,13 @@ let curry = testList "Curry" [
         let _y16 = uncurryN g16 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12, 13, 14, 15, 16)
 
         ())
-    #endif
+#endif
 ]
 
 
 let memoization = testList "Memoization" [
 
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
     testCase "memoization" (fun () ->
         let effs = ResizeArray ()
 
@@ -378,7 +378,7 @@ let memoization = testList "Memoization" [
         let mf = memoizeN f
         let _ = mf null null  // should not throw
         ())
-    #endif
+#endif
 ]
 
 open General.Alternative
