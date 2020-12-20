@@ -52,7 +52,7 @@ let ExtensionsTest =
                    let r2 = m1 |> Map.unionWith konst m2
                    equalMap r1 r2)
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
       testCase "Bind" 
         (fun () ->  let x = [1;2] >>= fun x -> [string x ; string (x + 1000) ]
                     let y = { Head = 1; Tail = [2] } >>= fun x -> { Head = string x ; Tail = [string (x + 1000)] }
@@ -60,7 +60,8 @@ let ExtensionsTest =
                     equal ["1"; "1001"; "2"; "1002"] x
                     equal { Head = "1"; Tail = ["1001"; "2"; "1002"] } y
                     equal ("a1", 11) z)
-
+#endif
+#if !FABLE_COMPILER
       testCase "Comonad" 
         (fun () ->  let x = [1;2;3;4;5]
                     let y = { Head = 1 ; Tail = [2;3;4;5] }

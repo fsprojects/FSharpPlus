@@ -202,18 +202,16 @@ type TryFindIndex =
 type FindSliceIndex =
     inherit Default1
     static member        FindSliceIndex (x: string           , e                   , [<Optional>]_impl: FindSliceIndex) = String.findSliceIndex e x
-    #if !FABLE_COMPILER
-    static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member        FindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
     static member        FindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex e x
     static member        FindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex [e.getValue] [x.getValue]
     #endif
     
     static member inline InvokeOnInstance (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
         (^``Collection<'T>``: (static member FindSliceIndex: _*_->_) source, slice)
-    #if !FABLE_COMPILER
     static member        FindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.findSliceIndex e x
-    #endif
     static member inline FindSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index = FindSliceIndex.InvokeOnInstance e x
     static member inline FindSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
 
@@ -224,19 +222,15 @@ type FindSliceIndex =
 
 type TryFindSliceIndex =
     inherit Default1
-    #if !FABLE_COMPILER
+    static member        TryFindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: string           , e                   , [<Optional>]_impl: TryFindSliceIndex) = String.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: TryFindSliceIndex) = Array.tryFindSliceIndex e x
-    static member        TryFindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex [e.getValue] [x.getValue]
-    #endif
 
     static member inline InvokeOnInstance (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
         (^``Collection<'T>``: (static member TryFindSliceIndex: _*_->_) source, slice)
-    #if !FABLE_COMPILER
     static member        TryFindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.tryFindSliceIndex e x
-    #endif
     static member inline TryFindSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index option = TryFindSliceIndex.InvokeOnInstance e x
     static member inline TryFindSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
 

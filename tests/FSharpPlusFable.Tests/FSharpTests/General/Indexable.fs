@@ -226,22 +226,22 @@ let indexable = testList "Indexable" [
         equalSeq ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ()))
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "findIndexUsage" (fun () ->
         let m1 = WrappedListD [0..4]
         SideEffects.reset ()
         let i1 = findIndex ((=) 2) m1
-        equalSeq ["Using WrappedListD's FindIndex"] (SideEffects.get ())
+        SideEffects.are ["Using WrappedListD's FindIndex"]
         equal i1 2)
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "findSliceIndexUsage" (fun () ->
         let m1 = WrappedListD [0..4]
         let m2 = WrappedListD [1..3]
         SideEffects.reset ()
         let i1 = findSliceIndex m2 m1
-        equalSeq ["Using WrappedListD's FindSliceIndex"] (SideEffects.get ())
+        SideEffects.are ["Using WrappedListD's FindSliceIndex"]
         equal i1 1)
     #endif
 ]

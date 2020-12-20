@@ -108,6 +108,8 @@ let monoid = testList "Monoid" [
     testCase "seqSumDefaultCustom" (fun () ->
         #if !FABLE_COMPILER
         let (WrappedListB x) = Seq.sum [WrappedListB [10]; WrappedListB [15]]
+        #endif
+        #if !FABLE_COMPILER || FABLE_COMPILER_3
         //equalSeq [10;15] x // fails to infer type?
         let (WrappedListC y) = Seq.sum [WrappedListC [10]; WrappedListC [15]]
         equalSeq [10] y
@@ -134,7 +136,7 @@ let monoid = testList "Monoid" [
         equal ["Using optimized Sum"] (SideEffects.get ())
         #endif
 
-        #if !FABLE_COMPILER
+        #if !FABLE_COMPILER || FABLE_COMPILER_3
         let _wl = WrappedListB  [2..10]
 
         let _arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]

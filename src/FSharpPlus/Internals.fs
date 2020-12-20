@@ -277,12 +277,12 @@ type BitConverter =
         if isNull value then nullArg "value"
         BitConverter.ToString (value, startIndex, value.Length - startIndex)
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 // findSliceIndex
 module FindSliceIndex =
-    open System.Linq
     open System.Collections.Generic
-
+    #if !FABLE_COMPILER
+    open System.Linq
     let seqImpl (slice: seq<_>) (source: seq<_>) =
         let cache = Queue<_>()
         // we assume the slice is finite (otherwise it cannot be searched)
@@ -300,6 +300,43 @@ module FindSliceIndex =
                 else go (index + 1)
             else -1
         go 0
+    let sequenceEqual (a: _ seq) (b: _ seq) = a.SequenceEqual b
+    #else
+    let internal sequenceEqual (a: _ seq) (b: _ seq) :bool = Seq.compareWith Operators.compare a b = 0
+    module internal Q=
+        type queue<'a> = | Queue of 'a list * 'a list
+
+        let empty = Queue([], [])
+
+        let enqueue q e = match q with | Queue(fs, bs) -> Queue(e :: fs, bs)
+
+        let dequeue =
+            function
+            | Queue([], []) as q -> None, q
+            | Queue(fs, b :: bs) -> Some b, Queue(fs, bs)
+            | Queue(fs, []) ->
+                let bs = List.rev fs
+                Some bs.Head, Queue([], bs.Tail)
+        let toSeq =
+            function
+            | Queue([], []) -> Seq.empty
+            | Queue(fs, bs) -> bs @ List.rev fs |> List.toSeq
+        let length =
+            function
+            | Queue([], []) -> 0
+            | Queue(fs, bs) -> List.length bs + List.length fs
+    open System.Collections
+    type Queue<'T> ()=
+        let mutable q : Q.queue<'T> = Q.empty
+        interface IEnumerable<'T> with
+            member __.GetEnumerator()= let s = Q.toSeq q in s.GetEnumerator()
+        interface IEnumerable with
+            member __.GetEnumerator()= let s = Q.toSeq q in s.GetEnumerator() :> IEnumerator
+        member __.Enqueue (v)= q <- Q.enqueue q v
+        member __.Dequeue ()= let (dequeued, next) = Q.dequeue q in q <- next
+                              match dequeued with | Some v -> v | None -> failwith "Empty queue!"
+        member __.Count = Q.length q
+    #endif
 
     let listImpl (slice: _ list) (source: _ list) =
         let cache = Queue<_>()
@@ -310,7 +347,7 @@ module FindSliceIndex =
             | h :: t ->
                 cache.Enqueue h
                 if cache.Count = sliceLength then
-                    if cache.SequenceEqual slice then index - sliceLength + 1
+                    if sequenceEqual cache slice then index - sliceLength + 1
                     else
                         cache.Dequeue() |> ignore
                         go (index + 1) t
@@ -325,7 +362,7 @@ module FindSliceIndex =
                 let h = source.[index]
                 cache.Enqueue h
                 if cache.Count = slice.Length then
-                    if cache.SequenceEqual slice then index - slice.Length + 1
+                    if sequenceEqual cache slice then index - slice.Length + 1
                     else
                         cache.Dequeue() |> ignore
                         go (index + 1)

@@ -47,7 +47,7 @@ module Array =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.

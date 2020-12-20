@@ -105,12 +105,10 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using WrappedListD's FindIndex"
         printfn "WrappedListD.FindIndex"
         findIndex y x
-    #if !FABLE_COMPILER
     static member FindSliceIndex (WrappedListD x, WrappedListD y) =
         SideEffects.add "Using WrappedListD's FindSliceIndex"
         printfn "WrappedListD.FindSliceIndex"
         findSliceIndex y x
-    #endif
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this

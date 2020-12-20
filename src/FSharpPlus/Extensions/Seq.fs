@@ -180,7 +180,8 @@ module Seq =
     /// <param name="source">The seq source</param>
     /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
-
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
     /// </summary>
@@ -196,7 +197,11 @@ module Seq =
     /// The index of the slice.
     /// </returns>
     let findSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
         if index = -1 then
             ArgumentException("The specified slice was not found in the sequence.") |> raise
         else
@@ -215,7 +220,11 @@ module Seq =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
         if index = -1 then None else Some index
     #endif
     
