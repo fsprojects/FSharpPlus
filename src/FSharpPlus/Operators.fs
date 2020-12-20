@@ -879,7 +879,7 @@ module Operators =
 
 
     #endif
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     // Comonads
 
     /// <summary>
@@ -1559,7 +1559,7 @@ module Operators =
     /// <category index="23">Additional Functions</category>
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =
