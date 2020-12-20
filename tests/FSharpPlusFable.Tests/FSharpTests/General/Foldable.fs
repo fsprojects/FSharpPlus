@@ -185,11 +185,9 @@ let foldable = testList "Foldable" [
         testCase "list" (fun () ->
             let _ = pick Some [1..3]
             ())
-        #if !FABLE_COMPILER
         testCase "neset" (fun () ->
             let _ = pick Some (NonEmptySet.Create(1,2,3))
             ())
-        #endif
         testCase "WrappedListA" (fun () ->
             SideEffects.reset ()
             let _ = pick Some (WrappedListA [1..3])
@@ -211,11 +209,9 @@ let foldable = testList "Foldable" [
         testCase "StringBuilder" (fun () ->
             let _ = minimum (System.Text.StringBuilder "abc")
             ())
-        #if !FABLE_COMPILER
         testCase "neset" (fun () ->
             let _ = minimum (NonEmptySet.Create(1,2,3))
             ())
-        #endif
         testCase "WrappedListA" (fun () ->
             SideEffects.reset ()
             let _ = minimum (WrappedListA [1..3])
@@ -237,11 +233,9 @@ let foldable = testList "Foldable" [
         testCase "StringBuilder" (fun () ->
             let _ = maxBy id (System.Text.StringBuilder "abc")
             ())
-        #if !FABLE_COMPILER
         testCase "neset" (fun () ->
             let _ = maxBy id (NonEmptySet.Create(1,2,3))
             ())
-        #endif
         testCase "WrappedListA" (fun () ->
             SideEffects.reset ()
             let _ = maxBy id (WrappedListA [1..3])
@@ -263,11 +257,9 @@ let foldable = testList "Foldable" [
         testCase "StringBuilder" (fun () ->
             let _ = length (System.Text.StringBuilder "abc")
             ())
-        #if !FABLE_COMPILER
         testCase "neset" (fun () ->
             let _ = length (NonEmptySet.Create(1,2,3))
             ())
-        #endif
         testCase "WrappedListA" (fun () ->
             SideEffects.reset ()
             let _ = length (WrappedListA [1..3])

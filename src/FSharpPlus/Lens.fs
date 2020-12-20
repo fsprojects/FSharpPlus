@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open FSharpPlus.Operators
 open FSharpPlus.Data

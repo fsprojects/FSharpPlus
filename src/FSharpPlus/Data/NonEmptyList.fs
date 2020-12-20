@@ -129,7 +129,7 @@ module NonEmptyList =
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
         let lst = traverse f (toList s) : '``Functor<'List<'U>>``
         (create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<NonEmptyList<'U>>``
@@ -190,7 +190,7 @@ module NonEmptyList =
     /// Equivalent to [start..stop] on regular lists.
     let inline range (start: 'T) stop = create start (List.drop 1 [start..stop])
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     /// Reduces using alternative operator `<|>`.
     let inline choice (list: NonEmptyList<'``Alt<'T>``>) = reduce (<|>) list : '``Alt<'T>``
 #endif
@@ -233,7 +233,7 @@ type NonEmptyList<'t> with
 
     static member Extract   {Head = h; Tail = _} = h : 't
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member Duplicate (s: NonEmptyList<'a>, [<Optional>]_impl: Duplicate) = NonEmptyList.tails s
     #endif
 
@@ -246,7 +246,7 @@ type NonEmptyList<'t> with
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
     static member Sum (source: seq<NonEmptyList<'T>>) = source |> Seq.map NonEmptyList.toList |> List.concat |> NonEmptyList.ofList
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList (s: NonEmptyList<'a>, [<Optional>]_impl: ToList) = NonEmptyList.toList s    
 
