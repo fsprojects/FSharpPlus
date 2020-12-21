@@ -90,18 +90,49 @@ module Task =
                                     with e -> tcs.SetException e
                         ) |> ignore) |> ignore
             tcs.Task
-            
-     /// <summary>Creates a task workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
-     /// <remarks>Workflows are run in sequence.</remarks>
-     /// <param name="f">The mapping function.</param>
-     /// <param name="x">First task workflow.</param>
-     /// <param name="y">Second task workflow.</param>
-     /// <param name="z">Third task workflow.</param>
-     let map3 (f : 'T -> 'U -> 'V -> 'W) (x : Task<'T>) (y : Task<'U>) (z: Task<'V>) : Task<'W> =
-         x.ContinueWith(fun (x' : Task<'T>) ->
-             y.ContinueWith(fun (y' : Task<'U>) ->
-                 z.ContinueWith(fun (z' : Task<'V>) ->
-                 (f x'.Result y'.Result z'.Result)))).Unwrap().Unwrap()
+
+    /// <summary>Creates a task workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
+    /// <remarks>Workflows are run in sequence.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First task workflow.</param>
+    /// <param name="y">Second task workflow.</param>
+    /// <param name="z">Third task workflow.</param>
+    let map3 (f : 'T -> 'U -> 'V -> 'W) (x : Task<'T>) (y : Task<'U>) (z: Task<'V>) : Task<'W> =
+        if x.Status = TaskStatus.RanToCompletion && y.Status = TaskStatus.RanToCompletion && z.Status = TaskStatus.RanToCompletion then
+            try Task.FromResult (f x.Result y.Result z.Result)
+            with e ->
+                let tcs = TaskCompletionSource<'W> ()
+                tcs.SetException e
+                tcs.Task
+        else
+            let tcs = TaskCompletionSource<'W> ()
+            match x.Status, y.Status, z.Status with
+            | TaskStatus.Canceled, _                  , _                   -> tcs.SetCanceled ()
+            | TaskStatus.Faulted , _                  , _                   -> tcs.SetException x.Exception.InnerExceptions
+            | _                  , TaskStatus.Canceled, _                   -> tcs.SetCanceled ()
+            | _                  , TaskStatus.Faulted , _                   -> tcs.SetException y.Exception.InnerExceptions
+            | _                  , _                  , TaskStatus.Canceled -> tcs.SetCanceled ()
+            | _                  , _                  , TaskStatus.Faulted  -> tcs.SetException z.Exception.InnerExceptions
+            | _                  , _                  , _                   ->
+                x.ContinueWith (
+                    function
+                    | Canceled    -> tcs.SetCanceled ()
+                    | Faulted e   -> tcs.SetException e.InnerExceptions
+                    | Completed r ->
+                        y.ContinueWith (
+                                function
+                                | Canceled     -> tcs.SetCanceled ()
+                                | Faulted e    -> tcs.SetException e.InnerExceptions
+                                | Completed r' ->
+                                    z.ContinueWith (
+                                            function
+                                            | Canceled      -> tcs.SetCanceled ()
+                                            | Faulted e     -> tcs.SetException e.InnerExceptions
+                                            | Completed r'' ->
+                                                   try tcs.SetResult (f r r' r'')
+                                                   with e -> tcs.SetException e
+                                                    ) |> ignore) |> ignore) |> ignore
+            tcs.Task
 
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
     /// to the resulting value of another task workflow</summary>
