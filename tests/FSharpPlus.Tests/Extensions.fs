@@ -373,61 +373,62 @@ module Extensions =
   [<Test>]
   let ``map3 or lift3 should work`` () =
     // Result
-    Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Ok 3) (Ok 5) |> areEqual (Ok 9: Result<int, int>)
-    Result.map3 (fun x y z -> x + y + z) (Error 1:Result<int, int>) (Error 3) (Ok 5) |> areEqual (Error 1: Result<int, int>)
-    Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Error 3) (Error 5) |> areEqual (Error 3: Result<int, int>)
-    Result.map3 (fun x y z -> x + y + z) (Ok 1:Result<int, int>) (Ok 3) (Error 5) |> areEqual (Error 5: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Ok 1: Result<int, int>) (Ok 3) (Ok 5) |> areEqual (Ok 9: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Error 1: Result<int, int>) (Error 3) (Ok 5) |> areEqual (Error 1: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Ok 1: Result<int, int>) (Error 3) (Error 5) |> areEqual (Error 3: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Ok 1: Result<int, int>) (Ok 3) (Error 5) |> areEqual (Error 5: Result<int, int>)
     
     // Choice
-    Choice.map3 (fun x y z -> x + y + z) (result 1:Choice<int, int>) (result 3) (result 5) |> areEqual (result 9:Choice<int, int>)
-    Choice.map3 (fun x y z -> x + y + z) (throw 1:Choice<int, int>) (throw 3) (result 5) |> areEqual (throw 1:Choice<int, int>)
-    Choice.map3 (fun x y z -> x + y + z) (result 1:Choice<int, int>) (throw 3) (throw 5) |> areEqual (throw 3:Choice<int, int>)
-    Choice.map3 (fun x y z -> x + y + z) (result 1:Choice<int, int>) (result 3) (throw 5) |> areEqual (throw 5:Choice<int, int>)
+    Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (result 3) (result 5) |> areEqual (result 9: Choice<int, int>)
+    Choice.map3 (fun x y z -> x + y + z) (throw 1: Choice<int, int>) (throw 3) (result 5) |> areEqual (throw 1: Choice<int, int>)
+    Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (throw 3) (throw 5) |> areEqual (throw 3: Choice<int, int>)
+    Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (result 3) (throw 5) |> areEqual (throw 5: Choice<int, int>)
     
     // Async
-    Async.map3 (fun x y z -> x + y + z) (async{return 1}) (async{return 3}) (async{return 5}) |> Async.RunSynchronously |> areEqual 9
+    Async.map3 (fun x y z -> x + y + z) (async {return 1}) (async {return 3}) (async {return 5}) |> Async.RunSynchronously |> areEqual 9
     
     // Task
-    Task.map3 (fun x y z -> x + y + z) (async{return 1} |> Async.StartAsTask) (async{return 3} |> Async.StartAsTask) (async{return 5} |> Async.StartAsTask) 
+    Task.map3 (fun x y z -> x + y + z) (async {return 1} |> Async.StartAsTask) (async {return 3} |> Async.StartAsTask) (async {return 5} |> Async.StartAsTask) 
      |> Async.AwaitTask |> Async.RunSynchronously |> areEqual 9
 
     // List
-    List.lift3 (fun x y z -> x + y + z) [1;2] [7;11] [22;33] |> areEqual [30; 41; 34; 45; 31; 42; 35; 46]
+    List.lift3 (fun x y z -> x + y + z) [1; 2] [7; 11] [22; 33] |> areEqual [30; 41; 34; 45; 31; 42; 35; 46]
     
     // Array
-    Array.lift3 (fun x y z -> x + y + z) [|1;2|] [|7;11|] [|22;33|] |> areEqual [|30; 41; 34; 45; 31; 42; 35; 46|]
+    Array.lift3 (fun x y z -> x + y + z) [|1; 2|] [|7; 11|] [|22; 33|] |> areEqual [|30; 41; 34; 45; 31; 42; 35; 46|]
     
     // Map
-    Map.mapValues3 (fun x y z -> x + y + z) (Map [(1,1); (2,1); (3,3)]) (Map [(1,3); (2,5); (4,7)]) (Map [(1,3); (2,3); (5,11)]) |> areEqual (Map [(1, 7); (2, 9)])
+    Map.mapValues3 (fun x y z -> x + y + z) (Map [(1, 1); (2, 1); (3, 3)]) (Map [(1, 3); (2, 5); (4, 7)]) (Map [(1, 3); (2, 3); (5, 11)])
+    |> areEqual (Map [(1, 7); (2, 9)])
 
     // Dictionary
     let d1 = new Dictionary<int, int>()
-    d1.Add(1,1)
-    d1.Add(2,1)
-    d1.Add(3,3)
+    d1.Add (1, 1)
+    d1.Add (2, 1)
+    d1.Add (3, 3)
 
     let d2 = new Dictionary<int, int>()
-    d2.Add(1,3)
-    d2.Add(2,5)
-    d2.Add(4,7)
+    d2.Add (1, 3)
+    d2.Add (2, 5)
+    d2.Add (4, 7)
     
     let d3 = new Dictionary<int, int>()
-    d3.Add(1,3)
-    d3.Add(2,3)
-    d3.Add(5,11)
+    d3.Add (1, 3)
+    d3.Add (2, 3)
+    d3.Add (5, 11)
     
     let d4 = new Dictionary<int, int>()
-    d4.Add(1, 7)
-    d4.Add(2, 9)
+    d4.Add (1, 7)
+    d4.Add (2, 9)
     
     Dictionary.map3 (fun x y z -> x + y + z) d1 d2 d3 |> areEqual d4
     
     // Seq
-    Seq.lift3 (fun x y z -> x + y + z) (seq{1;2}) (seq{7;11}) (seq{22;33}) |> areEqual (seq{30; 41; 34; 45; 31; 42; 35; 46})
+    Seq.lift3 (fun x y z -> x + y + z) (seq {1; 2}) (seq {7; 11}) (seq {22; 33}) |> areEqual (seq {30; 41; 34; 45; 31; 42; 35; 46})
 
     // Lazy
     (Lazy.map3 (fun x y z -> x + y + z) (Lazy<int>.CreateFromValue 1) (Lazy<int>.CreateFromValue 2) (Lazy<int>.CreateFromValue 4)).Value |> areEqual 7
     
     // ResizeArray
-    ResizeArray.lift3 (fun x y z -> x + y + z) (ResizeArray([1; 2])) (ResizeArray([7; 11])) (ResizeArray([22; 33]))
-    |> areEqual (ResizeArray([30; 41; 34; 45; 31; 42; 35; 46]))
+    ResizeArray.lift3 (fun x y z -> x + y + z) (ResizeArray ([1; 2])) (ResizeArray ([7; 11])) (ResizeArray ([22; 33]))
+    |> areEqual (ResizeArray ([30; 41; 34; 45; 31; 42; 35; 46]))

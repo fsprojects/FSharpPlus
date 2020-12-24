@@ -38,8 +38,8 @@ module Array =
         let lenx, leny, lenz = Array.length x, Array.length y, Array.length z
         let combinedFirstTwo = Array.init (lenx * leny) (fun i -> (x.[i / leny], y.[i % leny]))
 
-        Array.init(lenx * leny * lenz)(fun i -> combinedFirstTwo.[i/leny], z.[i%leny])
-        |> Array.map(fun x -> f (fst (fst x)) (snd (fst x)) (snd x))
+        Array.init (lenx * leny * lenz) (fun i -> combinedFirstTwo.[i/leny], z.[i%leny])
+        |> Array.map (fun x -> f (fst (fst x)) (snd (fst x)) (snd x))
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
