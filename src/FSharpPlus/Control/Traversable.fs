@@ -24,7 +24,7 @@ type Sequence =
         use e = t.GetEnumerator ()
         while go && e.MoveNext () do
             if isFailure e.Current then go <- false
-            r <- Map.Invoke add r <*> e.Current
+            else r <- Map.Invoke add r <*> e.Current
         Map.Invoke (List.rev >> conversion) r
     
 
