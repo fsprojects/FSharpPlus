@@ -1352,26 +1352,26 @@ module Traversable =
         let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
         let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
         let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
-        let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
+        let e = sequence (Seq.initInfinite toEithers |> Seq.take 5 |> Seq.toList)
 
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
+        let f = sequence (Seq.initInfinite toEithers |> Seq.take 5 |> Seq.toArray)
 
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
         let _a = traverse toOptions [1..20]
         let _b = traverse toOptions [1..20]
         let _c = traverse toChoices [1..20]
         let _d = traverse toLists   [1..20]
-        let _e = traverse toEithers [1..20]
+        let _e = traverse toEithers [1..4]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let _f = traverse toEithers [|1..20|]
+        let _f = traverse toEithers [|1..4|]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         Assert.AreEqual (None, a)

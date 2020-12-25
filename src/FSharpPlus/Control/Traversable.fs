@@ -24,7 +24,7 @@ type Sequence =
         use e = t.GetEnumerator ()
         while go && e.MoveNext () do
             if isFailure e.Current then go <- false
-            else r <- Map.Invoke add r <*> e.Current
+            r <- Map.Invoke add r <*> e.Current
         Map.Invoke (List.rev >> conversion) r
     
 
@@ -135,7 +135,7 @@ type Sequence with
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                               : 'R
 
     static member inline Sequence (t: option<_>         , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with Some x -> Map.Invoke Some x | _ -> result None               : 'R
-    static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, id) : 'R
+    static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, IsLeftZero.Invoke, id) : 'R
 
     static member inline Sequence (t: Map<_,_>          , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) : 'R =
        let insert_f k x ys = Map.Invoke (Map.add k) x <*> ys
@@ -151,7 +151,7 @@ type Sequence with
         | Choice1Of2 a -> Map.Invoke Choice<'T,'Error>.Choice1Of2 a
         | Choice2Of2 e -> Return.Invoke (Choice<'T,'Error>.Choice2Of2 e)
 
-    static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, const' false, Array.ofList) : 'R
+    static member inline Sequence (t: _ []              , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, IsLeftZero.Invoke, Array.ofList) : 'R
  
     static member inline Sequence (t: Id<'``Functor<'T>``>         , [<Optional>]_output: '``Functor<Id<'T>>``          , [<Optional>]_impl: Sequence) = Traverse.Invoke id t : '``Functor<Id<'T>>``
  
