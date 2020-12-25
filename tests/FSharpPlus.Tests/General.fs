@@ -1279,7 +1279,7 @@ module Traversable =
     let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
     let toLists   x = if x <> 4 then [x; x]       else []
     let toEithers x =
-        if x > 4 then failwith "Shouldn't be mapping for %i" x
+        if x > 4 then failwithf "Shouldn't be mapping for %i" x
         if x = 4 then Left ["This is a failure"] else Right x
 
     let expectedEffects =
