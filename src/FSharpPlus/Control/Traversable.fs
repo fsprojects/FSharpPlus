@@ -22,7 +22,7 @@ type Sequence =
         let mutable go = true
         let mutable r = result []
         use e = t.GetEnumerator ()
-        while e.MoveNext () && go do
+        while go && e.MoveNext () && do
             if isFailure e.Current then go <- false
             r <- Map.Invoke add r <*> e.Current
         Map.Invoke (List.rev >> conversion) r
