@@ -1343,35 +1343,38 @@ module Traversable =
         Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e)
         
 
+    let toEithersStrict x =
+        if x = 4 then Left ["This is a failure"] else Right x
+
     [<Test>]
     let traverseFiniteApplicatives () = // TODO -> implement short-circuit without breaking anything else
 
         SideEffects.reset ()
 
-        let a = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
-        let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
-        let e = sequence (Seq.initInfinite toEithers |> Seq.take 5 |> Seq.toList)
+        let a = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let b = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let c = sequence (Seq.initInfinite toChoices       |> Seq.take 20 |> Seq.toList)
+        let d = sequence (Seq.initInfinite toLists         |> Seq.take 20 |> Seq.toList)
+        let e = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toList)
 
         CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let f = sequence (Seq.initInfinite toEithers |> Seq.take 5 |> Seq.toArray)
+        let f = sequence (Seq.initInfinite toEithersStrict |> Seq.take 5 |> Seq.toArray)
 
         CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let _a = traverse toOptions [1..20]
-        let _b = traverse toOptions [1..20]
-        let _c = traverse toChoices [1..20]
-        let _d = traverse toLists   [1..20]
-        let _e = traverse toEithers [1..4]
+        let _a = traverse toOptions       [1..20]
+        let _b = traverse toOptions       [1..20]
+        let _c = traverse toChoices       [1..20]
+        let _d = traverse toLists         [1..20]
+        let _e = traverse toEithersStrict [1..20]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let _f = traverse toEithers [|1..4|]
+        let _f = traverse toEithersStrict [|1..20|]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         Assert.AreEqual (None, a)
