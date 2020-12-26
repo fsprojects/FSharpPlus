@@ -1347,7 +1347,7 @@ module Traversable =
         if x = 4 then Left ["This is a failure"] else Right x
 
     [<Test>]
-    let traverseFiniteApplicatives () = // TODO -> implement short-circuit without breaking anything else
+    let traverseFiniteApplicatives () =
 
         SideEffects.reset ()
 
@@ -1360,7 +1360,7 @@ module Traversable =
         CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let f = sequence (Seq.initInfinite toEithersStrict |> Seq.take 5 |> Seq.toArray)
+        let f = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toArray)
 
         CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
