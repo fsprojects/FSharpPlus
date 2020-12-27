@@ -183,10 +183,11 @@ module Validation =
             Success (f x)
         with e -> Failure e
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER
     let inline _Success x = (prism Success <| either Ok (Error << Failure)) x
-    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x    
-    
+    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline isoValidationResult x = x |> iso toResult ofResult
     #endif
 

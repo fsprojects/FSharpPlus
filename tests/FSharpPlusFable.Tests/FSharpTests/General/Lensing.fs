@@ -33,10 +33,8 @@ let lensing = testList "Lensing" [
                )
     #if !FABLE_COMPILER
     testCase "prism1" (fun () -> equal true (Option.isNone (preview _Some None)))
-    #endif
     testCase "prism2" (fun () -> equal (Some 1) (preview _Some (Some 1)))
     testCase "prism3" (fun () -> equal (Some ()) (preview _None None))
-    #if !FABLE_COMPILER
     testCase "prism4" (fun () -> equal true (Option.isNone (preview _None (Some 1))))
     #endif
 #endif
