@@ -39,13 +39,7 @@ let expectedEffects =
         """f(x) <*> Right 3"""
         """f(x) <*> Left ["This is a failure"]"""
     ]
-let expectedEffects20 =
-    ["f(x) <*> Right 0"; "f(x) <*> Right 1"; "f(x) <*> Right 2"; "f(x) <*> Right 3";
-     "f(x) <*> Left [\"This is a failure\"]"; "f(x) <*> Right 5"; "f(x) <*> Right 6";
-     "f(x) <*> Right 7"; "f(x) <*> Right 8"; "f(x) <*> Right 9"; "f(x) <*> Right 10";
-     "f(x) <*> Right 11"; "f(x) <*> Right 12"; "f(x) <*> Right 13";
-     "f(x) <*> Right 14"; "f(x) <*> Right 15"; "f(x) <*> Right 16";
-     "f(x) <*> Right 17"; "f(x) <*> Right 18"; "f(x) <*> Right 19"]
+
 let traversable = testList "Traversable" [
     #if !FABLE_COMPILER
     testCase "sequence_Default_Primitive" (fun () -> 
@@ -241,10 +235,10 @@ let traversable = testList "Traversable" [
         testCase "e" (fun () ->
             SideEffects.reset ()
             let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
-            SideEffects.are expectedEffects20
+            SideEffects.are expectedEffects
             SideEffects.reset ()
             let _e = traverse toEithers [1..20]
-            //SideEffects.are expectedEffects20
+            //SideEffects.are expectedEffects
             SideEffects.reset ()
             Assert.AreEqual (Either<string list,list<int>>.Left ["This is a failure"], e)
             ())
@@ -252,10 +246,10 @@ let traversable = testList "Traversable" [
         testCase "f" (fun () ->
             SideEffects.reset ()
             let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
-            SideEffects.are expectedEffects20
+            SideEffects.are expectedEffects
             SideEffects.reset ()
             let _f = traverse toEithers [|1..20|]
-            //SideEffects.are expectedEffects20
+            //SideEffects.are expectedEffects
             SideEffects.reset ()
             Assert.AreEqual (Either<string list,array<int>>.Left ["This is a failure"], f)
             ())
