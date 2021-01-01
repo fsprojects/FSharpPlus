@@ -1,27 +1,23 @@
 module Tests
 
 open ExtensionsTests
+open GeneralTests
 open Testing
 
 
-let AllTests =  testList "AllTests" [ExtensionsTest]
+let AllTests =  testList "AllTests" [ExtensionsTest; generalTests]
 
+open Fuchu
 #if FABLE_COMPILER
-
-open Fable.Core
-open Fable.Core.JsInterop
-
-flattenTest AllTests
-
-#else
-
-open Expecto
-open Expecto.TestResults
+let exitIfNonZero v =
+    if v <> 0 then
+        failwithf "expected a nonzero exitcode, but got %i" v
+    v
+#endif
 
 [<EntryPoint>]
-    let main args =
-        printfn "Result: %i" (runTestsWithArgs defaultConfig args AllTests)
-        0
-
-
-#endif
+let main args =
+    defaultMain AllTests args
+    #if FABLE_COMPILER
+    |> exitIfNonZero
+    #endif

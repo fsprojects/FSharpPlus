@@ -1,17 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "buildFSharpPlus": "fable-splitter ../../src/FSharpPlus -o FSharpPlusFable --commonjs --allFiles",
-    "pretest": "fable-splitter -o build --commonjs",
-    "test": "mocha build -t 10000"
+    "test": "dotnet fable . --outDir bin --runScript ./bin /d"
   },
   "dependencies": {
-    "@babel/core": "^7.8.7",
-    "fable-compiler": "^2.4.21",
-    "fable-loader": "^2.1.9",
-    "fable-splitter": "^2.1.12",
-    "isomorphic-fetch": "^2.2.1",
-    "minimist": "^1.2.5",
-    "mocha": "^7.1.0"
-  }
+    "esm": "^3.2.25"
+  },
+  "name": "tests"
 }

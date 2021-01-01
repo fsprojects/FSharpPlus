@@ -1,54 +1,26 @@
 module Testing
 
 
-#if FABLE_COMPILER
-
-    type TestKind =
-    | TestList of string * TestKind seq
-    | TestCase of (string * obj)
-
-    open Fable.Core
-    open Fable.Core.Testing
-    open Fable.Core.JsInterop
-    open Fable.Import
-    open Fetch
-
-    let testList (name: string) (tests: TestKind seq) = TestList( name, tests )
-    let testCase (msg: string) (test: unit->unit) = TestCase( msg, box test )
-
-    let equal expected actual: unit = Assert.AreEqual(actual, expected)
-    let notEqual expected actual: unit = Assert.NotEqual(actual, expected)
-    let deepEqual expected actual: unit = import "deepEqual" "./deepEqual.js"
-
-    let equalSeq expected actual: unit = equal (Seq.toList expected) (Seq.toList actual)
-    let equalMap expected actual: unit = equal (Map.toList expected) (Map.toList actual)
-
-
-    //Code required to run the tests
-    let [<Global>] describe (name: string) (f: unit->unit) = jsNative
-    let [<Global>] it (msg: string) (f: unit->unit) = jsNative
-
-
-    let rec flattenTest (test:TestKind) : unit =
-        match test with
-        | TestList(name, tests) ->
-            describe name (fun () ->
-              for t in tests do
-                flattenTest t)
-        | TestCase (name, test) ->
-            it name (unbox test)
-
-#else 
-
-    open Expecto
+    open Fuchu
 
     let testCase (msg: string) test : Test = testCase msg test
-    let testList (name: string) test : Test = testList name test
+    let testList (name: string) (test:Test seq) : Test = testList name test
 
-    let equal expected actual: unit = Expect.equal actual expected ""
-    let notEqual expected actual: unit = Expect.notEqual actual expected ""
+    let equal expected actual: unit = Assert.Equal ("",expected, actual)
+    let notEqual expected actual: unit = Assert.NotEqual ("",expected,actual)
 
-    let equalSeq expected actual: unit = Expect.sequenceEqual actual expected ""
+    let equalSeq (expected: _ seq) (actual: _ seq): unit = Assert.Equal ("", Seq.toList expected, Seq.toList actual)
     let equalMap expected actual: unit = equalSeq (Map.toSeq expected) (Map.toSeq actual)
 
-#endif
+    module SideEffects =
+        let private effects = ResizeArray<string> []
+        let reset () = effects.Clear ()
+        let add x = effects.Add (x)
+        let get () = effects |> Seq.toList
+        let are lst = equalSeq lst (get ())
+
+    type Assert=
+        static member inline IsInstanceOf<'t> ( o:obj ) = if o :? 't then () else failwithf "Expected %O to be of type %O" o typeof<'t>
+        static member AreEqual (expected:obj, actual:obj) = Assert.Equal ("",expected, actual)
+        static member IsTrue (actual) = Assert.Equal ("", actual, true)
+        static member IsEmpty (actual: _ seq) = if not <| Seq.isEmpty actual then failwithf "Expected sequence %A to be empty" actual
