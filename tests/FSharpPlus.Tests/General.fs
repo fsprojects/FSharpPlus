@@ -1102,7 +1102,9 @@ module Traversable =
     let toOptions x = if x <> 4 then Some x       else None
     let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
     let toLists   x = if x <> 4 then [x; x]       else []
-    let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
+    let toEithers x =
+        if x > 4 then failwithf "Shouldn't be mapping for %i" x
+        if x = 4 then Left ["This is a failure"] else Right x
 
     let expectedEffects =
         [
@@ -1141,35 +1143,38 @@ module Traversable =
         Assert.AreEqual (Either<string list,seq<int>>.Left ["This is a failure"], e)
         
 
+    let toEithersStrict x =
+        if x = 4 then Left ["This is a failure"] else Right x
+
     [<Test>]
-    let traverseFiniteApplicatives () = // TODO -> implement short-circuit without breaking anything else
+    let traverseFiniteApplicatives () =
 
         SideEffects.reset ()
 
-        let a = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
-        let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
-        let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
+        let a = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let b = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let c = sequence (Seq.initInfinite toChoices       |> Seq.take 20 |> Seq.toList)
+        let d = sequence (Seq.initInfinite toLists         |> Seq.take 20 |> Seq.toList)
+        let e = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toList)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let f = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toArray)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let _a = traverse toOptions       [1..20]
+        let _b = traverse toOptions       [1..20]
+        let _c = traverse toChoices       [1..20]
+        let _d = traverse toLists         [1..20]
+        let _e = traverse toEithersStrict [1..20]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
-
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
-
-        let _a = traverse toOptions [1..20]
-        let _b = traverse toOptions [1..20]
-        let _c = traverse toChoices [1..20]
-        let _d = traverse toLists   [1..20]
-        let _e = traverse toEithers [1..20]
-
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
-
-        let _f = traverse toEithers [|1..20|]
+        let _f = traverse toEithersStrict [|1..20|]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         Assert.AreEqual (None, a)
