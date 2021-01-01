@@ -1,7 +1,7 @@
 namespace FSharpPlus.Control
 
 #nowarn "0077"
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open System
 open System.Runtime.InteropServices

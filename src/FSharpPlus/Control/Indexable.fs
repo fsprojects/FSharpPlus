@@ -4,7 +4,7 @@
 // Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // Those .NET types are string and array but they are explicitely handled here.
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open System
 open System.Runtime.InteropServices
@@ -13,7 +13,6 @@ open System.Collections.Generic
 open FSharpPlus
 open FSharpPlus.Internals
 open FSharpPlus.Internals.MonadOps
-
 
 type Item =
     inherit Default1
@@ -24,10 +23,12 @@ type Item =
     static member        Item (x: string             , n        , [<Optional>]_impl: Item    ) = String.item n x
     static member        Item (x: StringBuilder      , n        , [<Optional>]_impl: Item    ) = x.ToString().[n]
     static member        Item (x: 'T []              , n        , [<Optional>]_impl: Item    ) = x.[n]       : 'T    
+    #if !FABLE_COMPILER
     static member        Item (x: 'T [,]             , (i,j)    , [<Optional>]_impl: Item    ) = x.[i,j]     : 'T
     static member        Item (x: 'T [,,]            , (i,j,k)  , [<Optional>]_impl: Item    ) = x.[i,j,k]   : 'T
     static member        Item (x: 'T [,,,]           , (i,j,k,l), [<Optional>]_impl: Item    ) = x.[i,j,k,l] : 'T
-
+    #endif
+    static member        Item (x: 'T list            , n        , [<Optional>]_impl: Item    ) = x.[n]       : 'T    
     static member inline Invoke (n: 'K) (source: '``Indexed<'T>``) : 'T =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Item: _*_*_ -> _) b, n, a)
         let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
@@ -45,10 +46,12 @@ type TryItem =
 
     static member        TryItem (x: string            , n        , [<Optional>]_impl: TryItem ) = String.tryItem n x
     static member        TryItem (x: StringBuilder     , n        , [<Optional>]_impl: TryItem ) = if n >= 0 && n < x.Length then Some ((string x).[n]) else None
+    #if !FABLE_COMPILER
     static member        TryItem (x: 'a []             , n        , [<Optional>]_impl: TryItem ) = if n >= x.GetLowerBound 0 && n <= x.GetUpperBound 0 then Some x.[n] else None : 'a option
     static member        TryItem (x: 'a [,]            , (i,j)    , [<Optional>]_impl: TryItem ) = if (i, j)       >= (x.GetLowerBound 0, x.GetLowerBound 1                                      ) && (i, j)       <= (x.GetUpperBound 0, x.GetUpperBound 1                                      ) then Some x.[i,j]     else None : 'a option
     static member        TryItem (x: 'a [,,]           , (i,j,k)  , [<Optional>]_impl: TryItem ) = if (i, j, k)    >= (x.GetLowerBound 0, x.GetLowerBound 1, x.GetLowerBound 2)                    && (i, j, k)    <= (x.GetUpperBound 0, x.GetUpperBound 1, x.GetUpperBound 2                   ) then Some x.[i,j,k]   else None : 'a option
     static member        TryItem (x: 'a [,,,]          , (i,j,k,l), [<Optional>]_impl: TryItem ) = if (i, j, k, l) >= (x.GetLowerBound 0, x.GetLowerBound 1, x.GetLowerBound 2, x.GetLowerBound 3) && (i, j, k, l) <= (x.GetUpperBound 0, x.GetUpperBound 1, x.GetUpperBound 2, x.GetUpperBound 3) then Some x.[i,j,k,l] else None : 'a option
+    #endif
     static member        TryItem (x: 'a ResizeArray    , n        , [<Optional>]_impl: TryItem ) = if n >= 0 && n < x.Count then Some x.[n] else None
     static member        TryItem (x: list<'a>          , n        , [<Optional>]_impl: TryItem ) = List.tryItem n x
     static member        TryItem (x: IList<'a>         , n        , [<Optional>]_impl: Default2) = if n >= 0 && n < x.Count then Some x.[n] else None
@@ -246,8 +249,9 @@ type FindSliceIndex =
     inherit Default1
     // Begin compat members
     static member        FindSliceIndex (x: string           , e                   , [<Optional>]_impl: FindSliceIndex) = String.findSliceIndex e x
-    static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member        FindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
+    static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
     static member        FindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex e x
     static member        FindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
     static member        FindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex [e.getValue] [x.getValue]
@@ -266,6 +270,7 @@ type FindSliceIndex =
     static member        FindSliceIndex ((x: #seq<'a>          , e                   ), [<Optional>]_impl: Default2) = Seq.findSliceIndex e x
     static member inline FindSliceIndex ((x: '``C<'T>``, e: '``C<'T>``), _impl: Default1) : 'Index = FindSliceIndex.InvokeOnInstance e x
     static member inline FindSliceIndex ((_: ^t when ^t: null and ^t: struct, _), _impl: Default1) = ()
+    #endif
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindSliceIndex : (_*_)*_ -> _) (b, n), a)
@@ -275,9 +280,9 @@ type FindSliceIndex =
 type TryFindSliceIndex =
     inherit Default1
     // Begin compat members
+    static member        TryFindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: string           , e                   , [<Optional>]_impl: TryFindSliceIndex) = String.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: TryFindSliceIndex) = Array.tryFindSliceIndex e x
-    static member        TryFindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex [e.getValue] [x.getValue]

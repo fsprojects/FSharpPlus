@@ -80,7 +80,7 @@ module List =
             member __.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member __.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
