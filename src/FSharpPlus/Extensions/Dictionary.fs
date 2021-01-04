@@ -86,11 +86,9 @@ module Dictionary =
         let dct = Dictionary<'Key, 'U> ()
         let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
         for KeyValue(k, vx) in x do
-            match tryGetValue k y with
-            | Some vy -> match tryGetValue k z with
-                         | Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
-                         | None -> ()
-            | None    -> ()
+            match tryGetValue k y, tryGetValue k z with
+            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+            | _      , _       -> ()
         dct
 
     /// <summary>Applies given function to each value of the given dictionary.</summary>
