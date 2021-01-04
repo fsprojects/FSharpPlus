@@ -114,24 +114,21 @@ module Task =
             | _                  , _                  , TaskStatus.Canceled -> tcs.SetCanceled ()
             | _                  , _                  , TaskStatus.Faulted  -> tcs.SetException z.Exception.InnerExceptions
             | _                  , _                  , _                   ->
-                x.ContinueWith (
-                    function
+                x.ContinueWith ( function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
                     | Completed r ->
-                        y.ContinueWith (
-                            function
+                        y.ContinueWith ( function
                             | Canceled     -> tcs.SetCanceled ()
                             | Faulted e    -> tcs.SetException e.InnerExceptions
                             | Completed r' ->
-                                z.ContinueWith (
-                                    function
+                                z.ContinueWith ( function
                                     | Canceled      -> tcs.SetCanceled ()
                                     | Faulted e     -> tcs.SetException e.InnerExceptions
                                     | Completed r'' ->
                                         try tcs.SetResult (f r r' r'')
                                         with e -> tcs.SetException e
-                                        ) |> ignore) |> ignore) |> ignore
+                                    ) |> ignore) |> ignore) |> ignore
             tcs.Task
 
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
