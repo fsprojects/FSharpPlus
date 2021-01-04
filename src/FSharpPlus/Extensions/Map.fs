@@ -57,7 +57,7 @@ module Map =
     let mapValues3 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) (z: Map<'Key, 'T3>) = Map <| seq {
         let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
         for KeyValue(k, vx) in x do
-            match Map.tryFind k y, lazy (Map.tryFind k z) with
+            match Map.tryFind k y, lazy Map.tryFind k z with
             | Some vy, Lazy (Some vz) -> yield (k, f.Invoke (vx, vy, vz))
             | _      , _         -> () }
     

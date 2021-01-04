@@ -131,7 +131,7 @@ module Task =
                                     | Completed r'' ->
                                         try tcs.SetResult (f r r' r'')
                                         with e -> tcs.SetException e
-                                    ) |> ignore) |> ignore) |> ignore
+                                ) |> ignore) |> ignore) |> ignore
             tcs.Task
 
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
@@ -175,12 +175,12 @@ module Task =
                     | Faulted e   -> tcs.SetException e.InnerExceptions
                     | Completed r ->
                         x.ContinueWith (
-                                function
-                                | Canceled     -> tcs.SetCanceled ()
-                                | Faulted e    -> tcs.SetException e.InnerExceptions
-                                | Completed r' ->
-                                    try tcs.SetResult (r r')
-                                    with e -> tcs.SetException e
+                            function
+                            | Canceled     -> tcs.SetCanceled ()
+                            | Faulted e    -> tcs.SetException e.InnerExceptions
+                            | Completed r' ->
+                                try tcs.SetResult (r r')
+                                with e -> tcs.SetException e
                         ) |> ignore) |> ignore
             tcs.Task
 
