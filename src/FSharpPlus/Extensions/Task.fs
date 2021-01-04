@@ -131,7 +131,7 @@ module Task =
                                     | Completed r'' ->
                                         try tcs.SetResult (f r r' r'')
                                         with e -> tcs.SetException e
-                                    ) |> ignore) |> ignore) |> ignore
+                                        ) |> ignore) |> ignore) |> ignore
             tcs.Task
 
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
