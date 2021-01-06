@@ -18,6 +18,18 @@ module Async =
         let! a = x
         let! b = y
         return f a b}
+    
+    /// <summary>Creates an async workflow from three workflows 'x', 'y' and 'z', mapping its results with 'f'.</summary>
+    /// <remarks>Workflows are run in sequence.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First async workflow.</param>
+    /// <param name="y">Second async workflow.</param>
+    /// <param name="z">third async workflow.</param>
+    let map3 f x y z = async {
+        let! a = x
+        let! b = y
+        let! c = z
+        return f a b c}
 
     /// <summary>Creates an async workflow from two workflows 'x' and 'y', tupling its results.</summary>
     let zip x y = async {

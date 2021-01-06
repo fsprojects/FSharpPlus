@@ -31,6 +31,7 @@ module Task =
         let shortCircuits () =
             let x1 = createTask false 0 1
             let x2 = createTask false 0 2
+            let x3 = createTask false 0 3
 
             let a = Task.map string x1
             require a.IsCompleted "Task.map didn't short-circuit"
@@ -40,23 +41,29 @@ module Task =
 
             let c = Task.map2 (+) x1 x2
             require c.IsCompleted "Task.map2 didn't short-circuit"
+            
+            let d = Task.map3 (fun x y z -> x + y + z) x1 x2 x3
+            require d.IsCompleted "Task.map3 didn't short-circiut"
 
         [<Test>]
         let erroredTasks () =
             let e1 () = createTask true  0 1
             let e2 () = createTask true  0 2
+            let e3 () = createTask true  0 3
             let x1 () = createTask false 0 1
             let x2 () = createTask false 0 2
+            let x3 () = createTask false 0 3
 
             let e1d () = createTask true  10 1
             let e2d () = createTask true  10 2
             let x1d () = createTask false 10 1
             let x2d () = createTask false 10 2
 
-            let mapping  isFailure x   = if isFailure then raise (TestException "I was told to fail") else x
-            let mapping2 isFailure x y = if isFailure then raise (TestException "I was told to fail") else x + y
-            let binding  isFailure x   = if isFailure then raise (TestException "I was told to fail") else Task.FromResult (x + 10)
-            let binding' isFailure x   = if isFailure then createTask true 0 (x + 20) else Task.FromResult (x + 10)
+            let mapping  isFailure x     = if isFailure then raise (TestException "I was told to fail") else x
+            let mapping2 isFailure x y   = if isFailure then raise (TestException "I was told to fail") else x + y
+            let mapping3 isFailure x y z = if isFailure then raise (TestException "I was told to fail") else x + y + z
+            let binding  isFailure x     = if isFailure then raise (TestException "I was told to fail") else Task.FromResult (x + 10)
+            let binding' isFailure x     = if isFailure then createTask true 0 (x + 20) else Task.FromResult (x + 10)
 
             let r01 = Task.map (mapping false) (e1 ())
             r01.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
@@ -131,3 +138,17 @@ module Task =
                | AggregateException [TestException e] -> failwithf "Another TestException came in: %A" e
                | AggregateException [e]               -> failwithf "Something else came in: %A" e
                | AggregateException e                 -> failwithf "Many errors came in: %A" e
+            
+            let r15 = Task.map3 (mapping3 false) (e1 ()) (e2 ()) (e3 ())
+            r15.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
+            let r16 = Task.map3 (mapping3 false) (e1 ()) (x2 ()) (e3 ())
+            r16.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
+            let r17 = Task.map3 (mapping3 false) (e1 ()) (e2 ()) (x3 ())
+            r17.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
+            let r18 = Task.map3 (mapping3 false) (e1 ()) (x2 ()) (x3 ())
+            r18.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
+            let r19 = Task.map3 (mapping3 false) (x1 ()) (e2 ()) (e3 ())
+            r19.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 2"]
+            let r20 = Task.map3 (mapping3 false) (x1 ()) (x2 ()) (e3 ())
+            r20.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 3"]
+            

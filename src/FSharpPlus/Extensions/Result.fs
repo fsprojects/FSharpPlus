@@ -24,6 +24,19 @@ module Result =
     /// <returns>The combined value, or the first Error.</returns>
     let map2 f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> = match x, y with Ok a, Ok b -> Ok (f a b) | Error e, _ | _, Error e -> Error e
 
+    /// <summary>Creates a Result value from three Result values, using a function to combine them.</summary>
+    /// <param name="x">The first Result value.</param>
+    /// <param name="y">The second Result value.</param>
+    /// <param name="z">The third Result value.</param>
+    ///
+    /// <returns>The combined value, or the first Error.</returns>
+    let map3 f (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) (z: Result<'V, 'Error>): Result<'V, 'Error> =
+        match x, y, z with
+        | Ok a, Ok b, Ok c -> Ok(f a b c)
+        | Error e, _, _
+        | _, Error e, _
+        | _, _, Error e -> Error e
+    
     /// <summary>Flattens two nested Results.</summary>
     /// <param name="source">The nested Results.</param>
     /// <returns>A single Ok of the value when it was nested with OKs, or the Error.</returns>

@@ -30,6 +30,19 @@ module Choice =
     /// <returns>The combined value, or the first Choice2Of2.</returns>
     let map2 f (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) : Choice<'V,'Error> = match x, y with Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (f a b) | Choice2Of2 e, _ | _, Choice2Of2 e -> Choice2Of2 e
 
+    /// <summary>Creates a Choice value from three of Choice values, using a function to combine the Choice1Of2 values.</summary>
+    /// <param name="x">The first Choice value.</param>
+    /// <param name="y">The second Choice value.</param>
+    /// <param name="z">The third Choice value.</param>
+    ///
+    /// <returns>The combined value, or the first Choice2Of2.</returns>
+    let map3 f (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) (z: Choice<'V, 'Error>) : Choice<'W,'Error> =
+        match x, y, z with
+        | Choice1Of2 a, Choice1Of2 b, Choice1Of2 c -> Choice1Of2 (f a b c)
+        | Choice2Of2 e, _           , _
+        | _           , Choice2Of2 e, _
+        | _           , _           , Choice2Of2 e -> Choice2Of2 e
+
     /// <summary>Flattens two nested Choice.</summary>
     /// <param name="source">The nested Choice.</param>
     /// <returns>A single Choice1Of2 of the value when it was nested with Choice1Of2s, or the Choice2Of2.</returns>
