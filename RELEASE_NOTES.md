@@ -1,3 +1,6 @@
+#### 1.1.7  - January 7 2021
+- Fix short-circuiting Traverse
+
 #### 1.1.6  - December 7 2020
 - Fix signature of Free.fold
 - Update Task extensions so they can handle short-circuit, exceptions and cancellations
