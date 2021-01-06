@@ -97,6 +97,9 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member ChooseIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's ChooseIndexed"
         WrappedListD (List.choosei f x)
+    static member Lift3 (f, WrappedListD x, WrappedListD y, WrappedListD z) =
+        SideEffects.add "Using WrappedListD's Lift3"
+        WrappedListD (List.lift3 f x y z)
     static member IterateIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's IterateIndexed"
         List.iteri f x
@@ -208,6 +211,9 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member ChooseIndexed (WrappedSeqD x, f) =
             SideEffects.add "Using WrappedSeqD's ChooseIndexed"
             WrappedSeqD (Seq.choosei f x)
+    static member Lift3 (f, WrappedSeqD x, WrappedSeqD y, WrappedSeqD z) =
+            SideEffects.add "Using WrappedSeqD's Lift3"
+            WrappedSeqD (Seq.lift3 f x y z)
 
 type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
@@ -2561,3 +2567,24 @@ module Choosei =
         SideEffects.reset ()
         (choosei someIfIndexEven (WrappedSeqD [1..5])) |> ignore
         areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
+
+module lift3 = 
+    [<Test>]
+    let NonEmptySeqLift3 () =
+        // NonEmptySeq
+        NonEmptySeq.lift3 (fun x y z -> x + y + z) (NonEmptySeq.ofList[1;2]) (NonEmptySeq.ofList[7;11]) (NonEmptySeq.ofList[22;33]) 
+        |> areEqual (NonEmptySeq.ofList[30; 41; 34; 45; 31; 42; 35; 46])
+    
+    [<Test>]
+    let CorrectOverload () =
+        let sumOfThree x y z = x + y + z
+        
+        // correct overload:
+        SideEffects.reset ()
+        areEquivalent [3] (Lift3.InvokeOnInstance sumOfThree (WrappedListD [1]) (WrappedListD [1]) (WrappedListD [1]))
+        areEqual ["Using WrappedListD's Lift3"] (SideEffects.get ())
+        
+        SideEffects.reset ()
+        (Lift3.InvokeOnInstance sumOfThree (WrappedSeqD [1]) (WrappedSeqD [1]) (WrappedSeqD [1])) |> ignore
+        areEqual ["Using WrappedSeqD's Lift3"] (SideEffects.get ())
+        
