@@ -95,8 +95,15 @@ type Traverse =
         | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
 
     static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let cons_f x ys = Map.Invoke List.cons (f x) <*> ys
-       List.foldBack cons_f t (result [])
+        let rec loop acc = function
+            | [] -> acc
+            | x::xs -> let v = f x
+                       if v |> IsLeftZero.Invoke |> not 
+                       then loop (v::acc) xs
+                       else v::acc 
+        let cons_f x xs = Map.Invoke List.cons xs <*> x
+        loop [] t 
+        |> fun x -> List.fold cons_f (result []) x
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
        let cons x y = Array.append [|x|] y
