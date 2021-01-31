@@ -123,8 +123,8 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline get_Empty () = WriterT (getEmpty ()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
     static member inline (<|>) (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>
 
-    static member inline TryWith (source: WriterT<'``Monad<'T * 'Monoid>``>, f: exn -> WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (TryWith.Invoke (WriterT.run source) (WriterT.run << f))
-    static member inline TryFinally (computation: WriterT<'``Monad<'T * 'Monoid>``>, f) = WriterT (TryFinally.Invoke     (WriterT.run computation) f)
+    static member inline TryWith (source: WriterT<'``Monad<'T * 'Monoid>``>, f: exn -> WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (TryWith.InvokeForStrict (fun () -> WriterT.run source) (WriterT.run << f))
+    static member inline TryFinally (computation: WriterT<'``Monad<'T * 'Monoid>``>, f) = WriterT (TryFinally.InvokeForStrict (fun () -> WriterT.run computation) f)
     static member inline Using (resource, f: _ -> WriterT<'``Monad<'T * 'Monoid>``>)    = WriterT (Using.Invoke resource (WriterT.run << f))
     static member inline Delay (body : unit   ->  WriterT<'``Monad<'T * 'Monoid>``>)    = WriterT (Delay.Invoke (fun _ -> WriterT.run (body ()))) : WriterT<'``Monad<'T * 'Monoid>``>
 

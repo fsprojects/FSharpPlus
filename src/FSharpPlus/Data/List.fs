@@ -75,8 +75,8 @@ type ListT<'``monad<list<'t>>``> with
     static member inline get_Empty () = ListT <| result [] : ListT<'``MonadPlus<list<'T>``>
     static member inline (<|>) (ListT x, ListT y) = ListT (x >>= (fun a -> y >>= (fun b -> result (a @ b)))) : ListT<'``MonadPlus<list<'T>``>
 
-    static member inline TryWith (source: ListT<'``Monad<list<'T>>``>, f: exn -> ListT<'``Monad<list<'T>>``>) = ListT (TryWith.Invoke (ListT.run source) (ListT.run << f))
-    static member inline TryFinally (computation: ListT<'``Monad<list<'T>>``>, f) = ListT (TryFinally.Invoke     (ListT.run computation) f)
+    static member inline TryWith (source: ListT<'``Monad<list<'T>>``>, f: exn -> ListT<'``Monad<list<'T>>``>) = ListT (TryWith.InvokeForStrict (fun () -> ListT.run source) (ListT.run << f))
+    static member inline TryFinally (computation: ListT<'``Monad<list<'T>>``>, f) = ListT (TryFinally.InvokeForStrict (fun () -> ListT.run computation) f)
     static member inline Using (resource, f: _ -> ListT<'``Monad<list<'T>>``>)    = ListT (Using.Invoke resource (ListT.run << f))
     static member inline Delay (body : unit   ->  ListT<'``Monad<list<'T>>``>)    = ListT (Delay.Invoke (fun _ -> ListT.run (body ()))) : ListT<'``Monad<list<'T>>``>
 
