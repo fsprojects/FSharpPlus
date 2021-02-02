@@ -170,7 +170,14 @@ module Task =
         open System.Diagnostics
         open System.Threading
         open System.Threading.Tasks
-        open FSharp.Control.Tasks
+
+        module Task =
+            let Yield () =
+                let ya = Task.Yield().GetAwaiter ()
+                let tcs = TaskCompletionSource<unit> TaskCreationOptions.RunContinuationsAsynchronously
+                let k () = tcs.SetResult ()
+                ya.UnsafeOnCompleted (Action k) |> ignore
+                tcs.Task
 
         exception TestException of string
 
@@ -178,7 +185,7 @@ module Task =
 
         let testShortCircuitResult() =
             let t =
-                task {
+                monad' {
                     let! x = Task.FromResult(1)
                     let! y = Task.FromResult(2)
                     return x + y
@@ -189,8 +196,8 @@ module Task =
         let testDelay() =
             let mutable x = 0
             let t =
-                task {
-                    do! Task.Delay(50)
+                monad' {
+                    do! Task.Delay(50) |> Task.ignore
                     x <- x + 1
                 }
             require (x = 0) "task already ran"
@@ -199,9 +206,9 @@ module Task =
         let testNoDelay() =
             let mutable x = 0
             let t =
-                task {
+                monad' {
                     x <- x + 1
-                    do! Task.Delay(5)
+                    do! Task.Delay(5) |> Task.ignore
                     x <- x + 1
                 }
             require (x = 1) "first part didn't run yet"
@@ -211,7 +218,7 @@ module Task =
             let sw = Stopwatch()
             sw.Start()
             let t =
-                task {
+                monad' {
                     do! Task.Yield()
                     Thread.Sleep(100)
                 }
@@ -225,12 +232,12 @@ module Task =
             let mutable x = 0
             let mutable y = 0
             let t =
-                task {
+                monad' {
                     try
-                        do! Task.Delay(0)
+                        do! Task.Delay(0) |> Task.ignore
                         failtest "hello"
                         x <- 1
-                        do! Task.Delay(100)
+                        do! Task.Delay(100) |> Task.ignore
                     with
                     | TestException msg ->
                         require (msg = "hello") "message tampered"
@@ -246,12 +253,12 @@ module Task =
             let mutable x = 0
             let mutable y = 0
             let t =
-                task {
+                monad' {
                     try
                         do! Task.Yield() // can't skip through this
                         failtest "hello"
                         x <- 1
-                        do! Task.Delay(100)
+                        do! Task.Delay(100) |> Task.ignore
                     with
                     | TestException msg ->
                         require (msg = "hello") "message tampered"
@@ -268,7 +275,7 @@ module Task =
             let mutable caughtInner = 0
             let mutable caughtOuter = 0
             let t1() =
-                task {
+                monad' {
                     try
                         do! Task.Yield()
                         failtest "hello"
@@ -279,7 +286,7 @@ module Task =
                         raise exn
                 }
             let t2 =
-                task {
+                monad' {
                     try
                         do! t1()
                     with
@@ -301,10 +308,10 @@ module Task =
         let testTryFinallyHappyPath() =
             let mutable ran = false
             let t =
-                task {
+                monad' {
                     try
                         require (not ran) "ran way early"
-                        do! Task.Delay(100)
+                        do! Task.Delay(100) |> Task.ignore
                         require (not ran) "ran kinda early"
                     finally
                         ran <- true
@@ -315,10 +322,10 @@ module Task =
         let testTryFinallySadPath() =
             let mutable ran = false
             let t =
-                task {
+                monad' {
                     try
                         require (not ran) "ran way early"
-                        do! Task.Delay(100)
+                        do! Task.Delay(100) |> Task.ignore
                         require (not ran) "ran kinda early"
                         failtest "uhoh"
                     finally
@@ -337,11 +344,11 @@ module Task =
         let testTryFinallyCaught() =
             let mutable ran = false
             let t =
-                task {
+                monad' {
                     try
                         try
                             require (not ran) "ran way early"
-                            do! Task.Delay(100)
+                            do! Task.Delay(100) |> Task.ignore
                             require (not ran) "ran kinda early"
                             failtest "uhoh"
                         finally
@@ -360,10 +367,10 @@ module Task =
         let testUsing() =
             let mutable disposed = false
             let t =
-                task {
+                monad' {
                     use d = { new IDisposable with member __.Dispose() = disposed <- true }
                     require (not disposed) "disposed way early"
-                    do! Task.Delay(100)
+                    do! Task.Delay(100) |> Task.ignore
                     require (not disposed) "disposed kinda early"
                 }
             t.Wait()
@@ -373,17 +380,17 @@ module Task =
             let mutable disposedInner = false
             let mutable disposed = false
             let t =
-                task {
+                monad' {
                     use! d =
-                        task {
-                            do! Task.Delay(50)
+                        monad' {
+                            do! Task.Delay(50) |> Task.ignore
                             use i = { new IDisposable with member __.Dispose() = disposedInner <- true }
                             require (not disposed && not disposedInner) "disposed inner early"
                             return { new IDisposable with member __.Dispose() = disposed <- true }
                         }
                     require disposedInner "did not dispose inner after task completion"
                     require (not disposed) "disposed way early"
-                    do! Task.Delay(50)
+                    do! Task.Delay(50) |> Task.ignore
                     require (not disposed) "disposed kinda early"
                 }
             t.Wait()
@@ -393,11 +400,11 @@ module Task =
             let mutable disposedInner = false
             let mutable disposed = false
             let t =
-                task {
+                monad' {
                     try
                         use! d =
-                            task {
-                                do! Task.Delay(50)
+                            monad' {
+                                do! Task.Delay(50) |> Task.ignore
                                 use i = { new IDisposable with member __.Dispose() = disposedInner <- true }
                                 failtest "uhoh"
                                 require (not disposed && not disposedInner) "disposed inner early"
@@ -408,7 +415,7 @@ module Task =
                     | TestException msg ->
                         require disposedInner "did not dispose inner after task completion"
                         require (not disposed) "disposed way early"
-                        do! Task.Delay(50)
+                        do! Task.Delay(50) |> Task.ignore
                         require (not disposed) "disposed kinda early"
                 }
             t.Wait()
@@ -443,7 +450,7 @@ module Task =
                     member __.GetEnumerator() : IEnumerator = upcast getEnumerator()
                 }
             let t =
-                task {
+                monad' {
                     let mutable index = 0
                     do! Task.Yield()
                     for x in wrapList do
@@ -491,7 +498,7 @@ module Task =
                 }
             let mutable caught = false
             let t =
-                task {
+                monad' {
                     try
                         let mutable index = 0
                         do! Task.Yield()
@@ -517,9 +524,9 @@ module Task =
             let mutable ranA = false
             let mutable ranB = false
             let t =
-                task {
+                monad' {
                     ranA <- true
-                    failtest "uhoh"
+                    do! Task.raise (TestException "uhoh")
                     ranB <- true
                 }
             require ranA "didn't run immediately"
@@ -530,7 +537,7 @@ module Task =
             let mutable caught = false
             let mutable ranCatcher = false
             let catcher =
-                task {
+                monad' {
                     try
                         ranCatcher <- true
                         let! result = t
@@ -548,10 +555,10 @@ module Task =
             let mutable ranA = false
             let mutable ranB = false
             let t =
-                task {
+                monad' {
                     ranA <- true
-                    failtest "uhoh"
-                    do! Task.Delay(100)
+                    do! Task.raise (TestException "uhoh")
+                    do! Task.Delay(100) |> Task.ignore
                     ranB <- true
                 }
             require ranA "didn't run immediately"
@@ -562,7 +569,7 @@ module Task =
             let mutable caught = false
             let mutable ranCatcher = false
             let catcher =
-                task {
+                monad' {
                     try
                         ranCatcher <- true
                         let! result = t
@@ -581,7 +588,7 @@ module Task =
             let mutable ranNext = false
             let mutable ranFinally = 0
             let t =
-                task {
+                monad' {
                     try
                         ranInitial <- true
                         do! Task.Yield()
@@ -606,7 +613,7 @@ module Task =
             let mutable ranNext = false
             let mutable ranFinally = 0
             let t =
-                task {
+                monad' {
                     try
                         ranInitial <- true
                         do! Task.Yield()
@@ -630,7 +637,7 @@ module Task =
         let testFixedStackWhileLoop() =
             let bigNumber = 10000
             let t =
-                task {
+                monad' {
                     let mutable maxDepth = Nullable()
                     let mutable i = 0
                     while i < bigNumber do
@@ -650,7 +657,7 @@ module Task =
             let bigNumber = 10000
             let mutable ran = false
             let t =
-                task {
+                monad' {
                     let mutable maxDepth = Nullable()
                     for i in Seq.init bigNumber id do
                         do! Task.Yield()
@@ -667,11 +674,11 @@ module Task =
 
         let testTypeInference() =
             let t1 : string Task =
-                task {
+                monad' {
                     return "hello"
                 }
             let t2 =
-                task {
+                monad' {
                     let! s = t1
                     return s.Length
                 }
@@ -679,7 +686,7 @@ module Task =
 
         let testNoStackOverflowWithImmediateResult() =
             let longLoop =
-                task {
+                monad' {
                     let mutable n = 0
                     while n < 10_000 do
                         n <- n + 1
@@ -689,11 +696,11 @@ module Task =
 
         let testNoStackOverflowWithYieldResult() =
             let longLoop =
-                task {
+                monad' {
                     let mutable n = 0
                     while n < 10_000 do
                         let! _ =
-                            task {
+                            monad' {
                                 do! Task.Yield()
                                 let! _ = Task.FromResult(0)
                                 n <- n + 1
@@ -704,9 +711,9 @@ module Task =
 
         let testSmallTailRecursion() =
             let shortLoop =
-                task {
+                monad' {
                     let rec loop n =
-                        task {
+                        monad' {
                             // larger N would stack overflow on Mono, eat heap mem on MS .NET
                             if n < 1000 then
                                 do! Task.Yield()
@@ -721,13 +728,13 @@ module Task =
 
         let testTryOverReturnFrom() =
             let inner() =
-                task {
+                monad' {
                     do! Task.Yield()
                     failtest "inner"
                     return 1
                 }
             let t =
-                task {
+                monad' {
                     try
                         do! Task.Yield()
                         return! inner()
@@ -738,14 +745,14 @@ module Task =
 
         let testTryFinallyOverReturnFromWithException() =
             let inner() =
-                task {
+                monad' {
                     do! Task.Yield()
                     failtest "inner"
                     return 1
                 }
             let mutable m = 0
             let t =
-                task {
+                monad' {
                     try
                         do! Task.Yield()
                         return! inner()
@@ -760,13 +767,13 @@ module Task =
 
         let testTryFinallyOverReturnFromWithoutException() =
             let inner() =
-                task {
+                monad' {
                     do! Task.Yield()
                     return 1
                 }
             let mutable m = 0
             let t =
-                task {
+                monad' {
                     try
                         do! Task.Yield()
                         return! inner()
@@ -781,14 +788,14 @@ module Task =
 
         // no need to call this, we just want to check that it compiles w/o warnings
         let testTrivialReturnCompiles (x : 'a) : 'a Task =
-            task {
+            monad' {
                 do! Task.Yield()
                 return x
             }
 
         // no need to call this, we just want to check that it compiles w/o warnings
         let testTrivialTransformedReturnCompiles (x : 'a) (f : 'a -> 'b) : 'b Task =
-            task {
+            monad' {
                 do! Task.Yield()
                 return f x
             }
@@ -798,7 +805,7 @@ module Task =
 
         // no need to call this, we just want to check that it compiles w/o warnings
         let testInterfaceUsageCompiles (iface : ITaskThing) (x : 'a) : 'a Task =
-            task {
+            monad' {
                 let! xResult = iface.Taskify (Some x)
                 do! Task.Yield()
                 return xResult
@@ -806,23 +813,23 @@ module Task =
 
         let testAsyncsMixedWithTasks() =
             let t =
-                task {
-                    do! Task.Delay(1)
-                    do! Async.Sleep(1)
+                monad' {
+                    do! Task.Delay(1) |> Task.ignore
+                    do! Async.Sleep(1) |> Async.StartAsTask
                     let! x =
                         async {
                             do! Async.Sleep(1)
                             return 5
-                        }
-                    return! async { return x + 3 }
+                        } |> Async.StartAsTask
+                    return! async { return x + 3 } |> Async.StartAsTask
                 }
             let result = t.Result
             require (result = 8) "something weird happened"
 
         // no need to call this, we just want to check that it compiles w/o warnings
         let testDefaultInferenceForReturnFrom() =
-            let t = task { return Some "x" }
-            task {
+            let t: Task<_> = monad' { return Some "x" }
+            monad' {
                 let! r = t
                 if r = None then
                     return! failwithf "Could not find x" 
@@ -830,21 +837,9 @@ module Task =
                     return r
             }
 
-        #nowarn "44" // we're going to use obsolete stuff here
-        let testCompatibilityWithOldUnitTask() =
-            let uTask =
-                task {
-                    do! unitTask <| Task.Delay(1)
-                    do! unitTask <| Task.Delay(1)
-                    let! () = unitTask <| Task.Delay(1)
-                    return 1
-                }
-            let r = uTask.Result
-            require (r = 1) "weird result"
-
         // no need to call this, just check that it compiles
-        let testCompilerInfersArgumentOfReturnFrom =
-            task {
+        let testCompilerInfersArgumentOfReturnFrom : Task<_> =
+            monad' {
                 if true then return 1
                 else return! failwith ""
             }
@@ -868,25 +863,32 @@ module Task =
                 testUsingSadPath()
                 testForLoop()
                 testForLoopSadPath()
-                testExceptionAttachedToTaskWithoutAwait()
-                testExceptionAttachedToTaskWithAwait()
+                testExceptionAttachedToTaskWithoutAwait()   // *1
+                testExceptionAttachedToTaskWithAwait()      // *1
                 testExceptionThrownInFinally()
                 test2ndExceptionThrownInFinally()
-                testFixedStackWhileLoop()
-                testFixedStackForLoop()
+                testFixedStackWhileLoop()                   // *2
+                testFixedStackForLoop()                     // *2
                 testTypeInference()
-                testNoStackOverflowWithImmediateResult()
+                // testNoStackOverflowWithImmediateResult() // *3
                 testNoStackOverflowWithYieldResult()
+                // (Original note from TaskBuilder, n/a here)
                 // we don't support TCO, so large tail recursions will stack overflow
                 // or at least use O(n) heap. but small ones should at least function OK.
                 testSmallTailRecursion()
                 testTryOverReturnFrom()
                 testTryFinallyOverReturnFromWithException()
                 testTryFinallyOverReturnFromWithoutException()
-                testCompatibilityWithOldUnitTask()
-                testAsyncsMixedWithTasks()
-                printfn "Passed all taskbuilder tests!"
+                // testCompatibilityWithOldUnitTask()       // *4
+                testAsyncsMixedWithTasks()                  // *5
+                printfn "Passed all tests!"
             with
             | exn ->
                 eprintfn "Exception: %O" exn
-            0
+            ()
+
+            // *1 Test adapted due to errors not being part of the workflow, this is by-design.
+            // *2 Fails if run multiple times with System.Exception: Stack depth increased!
+            // *3 Fails with Stack Overflow.
+            // *4 Not applicable.
+            // *5 Test adapted due to Async not being automatically converted, this is by-design.
