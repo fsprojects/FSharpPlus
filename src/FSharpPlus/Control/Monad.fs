@@ -206,7 +206,7 @@ type TryWith =
     static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2, _) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith , _) = async.TryWith ((computation ()), catchHandler)
     #if !FABLE_COMPILER
-    static member        TryWith (computation: unit -> Task<_>       , catchHandler: exn -> Task<_>       , _: TryWith , _) = Task.tryWith computation catchHandler
+    static member        TryWith (computation: unit -> Task<_>       , catchHandler: exn -> Task<_>       , _: TryWith, True) = Task.tryWith computation catchHandler
     #endif
     static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith , _) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
 
@@ -236,7 +236,7 @@ type TryFinally =
     static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinally, _, _) = try computation () finally compensation ()
     static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinally, _, _) = async.TryFinally (computation (), compensation) : Async<_>
     #if !FABLE_COMPILER
-    static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinally, _, _) = Task.tryFinally  computation compensation : Task<_>
+    static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinally, _, True) = Task.tryFinally computation compensation : Task<_>
     #endif
     static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinally, _, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
 
