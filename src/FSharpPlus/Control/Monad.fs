@@ -177,13 +177,13 @@ module TryBlock =
     type False = False
     type While = While
 
-    let [<Literal>]MessageTryWith = "Method TryWith not implemented. If the computation's type is not lazy use a strict monad by adding .strict, otherwise it should have a static member TryWith."
+    let [<Literal>]MessageTryWith = "Method TryWith not implemented. If the computation type is not lazy use a strict monad computation expression by adding .strict, otherwise it should have a static member TryWith."
     let [<Literal>]CodeTryWith = 10708
 
-    let [<Literal>]MessageTryFinally = "Method TryFinally not implemented. If the computation's type is not lazy use a strict monad by adding .strict, otherwise it should have a static member TryFinally."
+    let [<Literal>]MessageTryFinally = "Method TryFinally not implemented. If the computation type is not lazy use a strict monad computation expression by adding .strict, otherwise it should have a static member TryFinally."
     let [<Literal>]CodeTryFinally = 10709
 
-    let [<Literal>]MessageWhile = "This monad doesn't seem to be lazy or at least it doesn't have the try-with method implemented. Using a while loop can lead to runtime errors. Make sure this type is lazy, otherwise use a strict monad by adding .strict"
+    let [<Literal>]MessageWhile = "This monad doesn't seem to be lazy or at least it doesn't have a try-with method implemented, so using a while loop can lead to runtime errors. Make sure this type is lazy, otherwise use a strict monad by adding .strict"
     let [<Literal>]CodeWhile = 10710
 
 open TryBlock
