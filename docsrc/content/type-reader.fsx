@@ -19,7 +19,7 @@ Examples
 *)
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net46/FSharpPlus.dll"
 
 (**
 One usage of the Reader monad is an alternative to dependency injection or currying
