@@ -6,6 +6,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>net5;net461</TargetFrameworks>
+    <TargetFrameworks>net5;net462</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;Fable</Configurations>
@@ -27,7 +28,7 @@
     <Compile Include="Compatibility.fs" />
     <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net461'" />
     <Compile Include="TypeLevel.fs" />
-    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
+    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net462'" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />

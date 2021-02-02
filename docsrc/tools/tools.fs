@@ -5,7 +5,7 @@ let (</>) x y = IO.Path.Combine(x,y)
 
 module Path =
     // Paths with template/source/output locations
-    let bin        = __SOURCE_DIRECTORY__ </> "../../src/FSharpPlus/bin/Release/net45/"
+    let bin        = __SOURCE_DIRECTORY__ </> "../../src/FSharpPlus/bin/Release/net46/"
     let content    = __SOURCE_DIRECTORY__ </> "../content"
     let output     = __SOURCE_DIRECTORY__ </> "../../docs"
     let files      = __SOURCE_DIRECTORY__ </> "../files"

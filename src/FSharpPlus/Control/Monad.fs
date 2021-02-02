@@ -161,8 +161,10 @@ type Delay =
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = NonEmptySeq.delay x : NonEmptySeq<'T>
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
-    static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
-    
+    #if !FABLE_COMPILER
+    static member        Delay (_mthd: Delay   , x: unit-> Task<_>                                        , _          ) = x () : Task<'T>
+    #endif
+    static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>    
 
     static member inline Invoke source : 'R =
         let inline call (mthd: ^M, input: unit -> ^I) = ((^M or ^I) : (static member Delay : _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
@@ -175,13 +177,13 @@ module TryBlock =
     type False = False
     type While = While
 
-    let [<Literal>]MessageTryWith = "Method TryWith not implemented. If the computation's type is not lazy use a strict monad by adding .strict, otherwise it should have a static member TryWith."
+    let [<Literal>]MessageTryWith = "Method TryWith not implemented. If the computation type is not lazy use a strict monad computation expression by adding .strict, otherwise it should have a static member TryWith."
     let [<Literal>]CodeTryWith = 10708
 
-    let [<Literal>]MessageTryFinally = "Method TryFinally not implemented. If the computation's type is not lazy use a strict monad by adding .strict, otherwise it should have a static member TryFinally."
+    let [<Literal>]MessageTryFinally = "Method TryFinally not implemented. If the computation type is not lazy use a strict monad computation expression by adding .strict, otherwise it should have a static member TryFinally."
     let [<Literal>]CodeTryFinally = 10709
 
-    let [<Literal>]MessageWhile = "This monad doesn't seem to be lazy or at least it doesn't have the try-with method implemented. Using a while loop can lead to runtime errors. Make sure this type is lazy, otherwise use a strict monad by adding .strict"
+    let [<Literal>]MessageWhile = "This monad doesn't seem to be lazy or at least it doesn't have a try-with method implemented, so using a while loop can lead to runtime errors. Make sure this type is lazy, otherwise use a strict monad by adding .strict"
     let [<Literal>]CodeWhile = 10710
 
 open TryBlock
@@ -211,6 +213,9 @@ type TryWith =
     static member        TryWith (computation: unit -> NonEmptySeq<_>, catchHandler: exn -> NonEmptySeq<_>, _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> NonEmptySeq.unsafeOfSeq
     static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2, _) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith , _) = async.TryWith ((computation ()), catchHandler)
+    #if !FABLE_COMPILER
+    static member        TryWith (computation: unit -> Task<_>       , catchHandler: exn -> Task<_>       , _: TryWith, True) = Task.tryWith computation catchHandler
+    #endif
     static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith , _) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
 
     static member inline Invoke (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
@@ -247,6 +252,9 @@ type TryFinally =
     
     static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinally, _, _) = try computation () finally compensation ()
     static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinally, _, _) = async.TryFinally (computation (), compensation) : Async<_>
+    #if !FABLE_COMPILER
+    static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinally, _, True) = Task.tryFinally computation compensation : Task<_>
+    #endif
     static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinally, _, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
 
     static member inline Invoke (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
@@ -281,6 +289,9 @@ type Using =
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>, _: Using) = seq (try Seq.toArray (body resource) finally if not (isNull (box resource)) then resource.Dispose ()) |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> 'R -> 'U , _: Using   ) = (fun s -> try body resource s finally if not (isNull (box resource)) then resource.Dispose ()) : 'R->'U
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
+    #if !FABLE_COMPILER
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Task<'U>, _: Using    ) = Task.using resource body
+    #endif
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Lazy<'U> , _: Using   ) = lazy (try (body resource).Force () finally if not (isNull (box resource)) then resource.Dispose ()) : Lazy<'U>
 
     static member inline Invoke (source : 'T when 'T :> IDisposable) (f : 'T -> '``Monad<'U>``) : '``Monad<'U>`` =

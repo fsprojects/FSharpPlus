@@ -1,12 +1,13 @@
 ﻿namespace FSharpPlus.Tests
 
 open System
+open System.Threading.Tasks
 open NUnit.Framework
 open FSharpPlus
 open FSharpPlus.Data
 open Helpers
 
-module ComputationExpressions = 
+module ComputationExpressions =
 
     [<Test>]
     let monadFx() =
@@ -426,6 +427,19 @@ module ComputationExpressions =
 
         SideEffects.reset ()
 
+        let readerTtaskM: ReaderT<unit,Task<unit>> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+                SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        SideEffects.are []
+        let a = ReaderT.run readerTtaskM
+        SideEffects.are []
+        let b = a ()
+        SideEffects.are effects
+
+        SideEffects.reset ()
+
         let optionTreaderM: OptionT<Reader<unit,unit option>> = monad {
           use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
           while (SideEffects.add "moving"; enum.MoveNext ()) do
@@ -511,6 +525,15 @@ module ComputationExpressions =
                 with _ -> () }
             x
         let _ = ((monadTransformer3layersTest2 () |> StateT.run) "" |> ReaderT.run) 0
+
+        let monadTransformer3layersTest2' () =
+            let x: StateT<string, ReaderT<int, Task<(unit * string)>>> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = ((monadTransformer3layersTest2' () |> StateT.run) "" |> ReaderT.run) 0
         
         let monadTransformer3layersTest3 () =
             let x: WriterT<OptionT<seq<(unit * string) option>>> = monad {
@@ -531,6 +554,15 @@ module ComputationExpressions =
                 with _ -> () }
             x
         let _ = monadTransformer3layersTest4 () |> WriterT.run |> OptionT.run
+
+        let monadTransformer3layersTest5 () =
+            let x: WriterT<OptionT<Task<(unit * string) option>>> = monad.strict {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = monadTransformer3layersTest5 () |> WriterT.run |> OptionT.run
         
 
         // ContT doesn't deal with the inner monad, so we don't need to do anything.
