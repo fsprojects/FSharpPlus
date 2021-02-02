@@ -242,4 +242,52 @@ module Task =
                     else tcs.SetResult ()
                 task.ContinueWith k |> ignore
             tcs.Task
+
+    /// Used to de-sugar try .. with .. blocks in Computation Expressions.
+    let rec tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> =
+        let unwrapException (agg: AggregateException) =
+            if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
+            else agg :> Exception
+        try
+            let task = body ()
+            match task.Status with 
+            | TaskStatus.RanToCompletion -> task
+            | TaskStatus.Faulted         -> task.ContinueWith((fun (x:Task<'T>) -> compensation (unwrapException x.Exception))).Unwrap ()
+            | TaskStatus.Canceled        -> task
+            | _                          -> task.ContinueWith((fun (x:Task<'T>) -> tryWith (fun () -> x) compensation) ).Unwrap ()
+        with
+        | :? AggregateException as exn -> compensation (unwrapException exn)
+        | exn                          -> compensation exn
+    
+    /// Used to de-sugar try .. finally .. blocks in Computation Expressions.
+    let tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> =
+        let mutable ran = false
+        let compensation () =
+            if not ran then
+                compensation ()
+                ran <- true
+        try
+            let task = body ()
+            let rec loop (task: Task<'T>) (compensation : unit -> unit) =
+                match task.Status with
+                | TaskStatus.RanToCompletion -> compensation (); task
+                | TaskStatus.Faulted         -> task.ContinueWith((fun (x:Task<'T>) -> compensation (); x)).Unwrap ()
+                | TaskStatus.Canceled        -> task
+                | _                          -> task.ContinueWith((fun (x:Task<'T>) -> (loop x compensation: Task<_>))).Unwrap ()
+            loop task compensation
+        with _ ->
+            compensation ()
+            reraise ()
+
+    /// Used to de-sugar use .. blocks in Computation Expressions.
+    let using (disp: #IDisposable) (body: _ -> Task<'a>) =
+        tryFinally
+            (fun () -> body disp)
+            (fun () -> if not (isNull (box disp)) then disp.Dispose ())
+
+    /// Raises an exception in the Task
+    let raise (e: exn) =
+        let tcs = TaskCompletionSource<'U> ()
+        tcs.SetException e
+        tcs.Task
 #endif
