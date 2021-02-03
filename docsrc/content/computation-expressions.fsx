@@ -13,7 +13,7 @@ There is a single computation expression: ``monad`` but it comes in 4 flavours:
 
  - Delayed or strict
 
-   Delayed computations require that the type implements a Delay method.
+   Delayed computations require that the type implements a TryWith, TryFinally and optionally a Delay method.
    F# comes with async and seq computation expressions, both are delayed.
 
  - It can have embedded side-effects or act as a monadplus
@@ -31,9 +31,9 @@ There is a single computation expression: ``monad`` but it comes in 4 flavours:
 
 In other words:
 
- - ``monad.fx`` is the same as ``monad``: Lazy monadic builder. Use when you want to use side-effects instead of the additive behavior of monad plus.
- - ``monad.fx'`` is the strict version of ``monad``
- - ``monad.plus`` Lazy additive monadic builder. Use when you expect one or more results.
+ - ``monad.fx`` or simply ``monad``: Lazy monadic builder. Use when you want to use side-effects instead of the additive behavior of monad plus.
+ - ``monad.fx.strict`` (or ``monad.fx'`` or simply ``monad.strict`` or ``monad'``) is the strict version of ``monad``.
+ - ``monad.plus``: Lazy additive monadic builder. Use when you expect one or more results.
  - ``monad.plus'`` is the strict version of ``monad.plus``
 
 Note that a type is either lazy or strict, but it could act as fx or plus at the same time (see below some examples). This means that we need to pay attention when using a CE over a type, if the type is lazy but with use a strict monad, we'll get strict semantics which probably would make no sense, but if we do the opposite we might run into runtime errors, fortunately a compile-time warning (or error) will prevent us.
