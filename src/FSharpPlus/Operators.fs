@@ -1545,11 +1545,16 @@ module Operators =
 
     #endif
     #if !FABLE_COMPILER || FABLE_COMPILER_3
+    
+    [<System.Obsolete("Use Parsed instead.")>]
+    /// <category index="23">Additional Functions</category>
+    let inline (|Parse|_|) str : 'T option = tryParse str
+    
     /// <summary>
     /// An active recognizer for a generic value parser.
     /// </summary>
     /// <category index="23">Additional Functions</category>
-    let inline (|Parse|_|) str : 'T option = tryParse str
+    let inline (|Parsed|_|) str : 'T option = tryParse str
 
     #endif
 
