@@ -1,6 +1,6 @@
 namespace FSharpPlus.Internals
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 module internal MonadOps =
     open FSharpPlus.Control

@@ -25,6 +25,21 @@ module Array =
     let lift2 f x y =
         let lenx, leny = Array.length x, Array.length y
         Array.init (lenx * leny) (fun i -> f x.[i / leny] y.[i % leny])
+        
+        
+    /// <summary>Combines all values from three arrays and calls a mapping function on this combination.</summary>
+    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First array.</param>
+    /// <param name="x2">Second array.</param>
+    /// <param name="x3">Third array.</param>
+    ///
+    /// <returns>Array with values returned from mapping function.</returns>
+    let lift3 f x y z =
+        let lenx, leny, lenz = Array.length x, Array.length y, Array.length z
+        let combinedFirstTwo = Array.init (lenx * leny) (fun i -> (x.[i / leny], y.[i % leny]))
+
+        Array.init (lenx * leny * lenz) (fun i -> combinedFirstTwo.[i/leny], z.[i%leny])
+        |> Array.map (fun x -> f (fst (fst x)) (snd (fst x)) (snd x))
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
@@ -47,7 +62,7 @@ module Array =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.

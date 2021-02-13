@@ -46,6 +46,21 @@ module Map =
             | Some vy -> yield (k, f.Invoke (vx, vy))
             | None    -> () }
     
+    /// <summary>Combines values from three maps using mapping function.</summary>
+    /// <remarks>Keys that are not present on every Map are dropped.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First input Map.</param>
+    /// <param name="y">Second input Map.</param>
+    /// <param name="y">Third input Map.</param>
+    ///
+    /// <returns>The mapped Map.</returns>
+    let mapValues3 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) (z: Map<'Key, 'T3>) = Map <| seq {
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
+        for KeyValue(k, vx) in x do
+            match Map.tryFind k y, lazy Map.tryFind k z with
+            | Some vy, Lazy (Some vz) -> yield (k, f.Invoke (vx, vy, vz))
+            | _      , _         -> () }
+    
     /// <summary>Applies given function to each value of the given Map.</summary>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The input Map.</param>
@@ -96,11 +111,24 @@ module Map =
                 KeyValuePair<'Key, 'T>(x.Key, combiner (x.Value) (y.Value))))
         |> Seq.map (fun kv -> (kv.Key, kv.Value))
         |> Map.ofSeq
+    #else
 
-   ///Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
+    /// Returns the intersection of two maps, using the combiner function for duplicate keys.
+    let intersectWith combiner (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) =
+        let keysSetOf = Map.toList>> (List.map fst) >> set
+        let keyIntersection = Set.intersect (keysSetOf source1) (keysSetOf source2)
+        let intersection = [
+            for key in keyIntersection do
+            let xValue=Map.find key source1
+            let yValue=Map.find key source2
+            yield (key, combiner xValue yValue)
+        ]
+        intersection |> Map.ofList
+    #endif
+
+    ///Returns the intersection of two maps, preferring values from the first in case of duplicate keys.
     let intersect (source1:Map<'Key, 'T>) (source2:Map<'Key, 'T>) = 
         intersectWith (fun a _ -> a) source1 source2
-    #endif
     
     /// <summary>Same as chooseValues but with access to the key.</summary>
     /// <param name="f">The mapping function, taking key and element as parameters.</param>

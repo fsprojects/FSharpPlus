@@ -16,17 +16,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 5.0.100
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build with dotnet
       run: dotnet build build.proj --configuration Release
     - name: Test with dotnet
       run: dotnet test build.proj -v n
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
-    - run: npm install -g fable-splitter fable-compiler
-    - run: cd src/FSharpPlus; npx fable-splitter --allFiles
-    - run: cd tests/FSharpPlusFable.Tests; npm install; npm run buildFSharpPlus; npm run test

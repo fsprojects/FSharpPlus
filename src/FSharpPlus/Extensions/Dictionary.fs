@@ -73,6 +73,23 @@ module Dictionary =
             | Some vy -> dct.Add (k, f.Invoke (vx, vy))
             | None    -> ()
         dct
+        
+    /// <summary>Combines values from three Dictionaries using mapping function.</summary>
+    /// <remarks>Keys that are not present on every Dictionary are dropped.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First input Dictionary.</param>
+    /// <param name="y">Second input Dictionary.</param>
+    /// <param name="y">Third input Dictionary.</param>
+    ///
+    /// <returns>The mapped Dictionary.</returns>
+    let map3 f (x: Dictionary<'Key, 'T1>) (y: Dictionary<'Key, 'T2>) (z: Dictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'U> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
+        for KeyValue(k, vx) in x do
+            match tryGetValue k y, tryGetValue k z with
+            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+            | _      , _       -> ()
+        dct
 
     /// <summary>Applies given function to each value of the given dictionary.</summary>
     /// <param name="f">The mapping function.</param>

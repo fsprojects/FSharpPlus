@@ -11,7 +11,7 @@
 
 #nowarn "40"
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]
@@ -85,6 +85,7 @@ module Builders =
 
     type MonadPlusStrictBuilder () =
         inherit StrictBuilder ()
+        member        __.YieldFrom  (expr) = expr                        : '``Monad<'T>``
         member inline __.Zero () = Empty.Invoke ()                       : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b () : '``MonadPlus<'T>``
         member inline __.While (guard, body: unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
@@ -115,6 +116,7 @@ module Builders =
 
     type MonadPlusBuilder () =
         inherit DelayedBuilder()
+        member        __.YieldFrom  (expr) = expr                     : '``Monad<'T>``
         member        __.strict = new MonadPlusStrictBuilder ()
         member inline __.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
