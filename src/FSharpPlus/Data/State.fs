@@ -16,9 +16,7 @@ type State<'s,'t> = State of ('s->('t * 's))
 /// Basic operations on State
 [<RequireQualifiedAccess>]
 module State =
-    /// <summary><para>Runs the state with an inital state to get back the result and the new state.</para>
-    /// <para>An example of using run would be:
-    /// <c>let (score, finalState) = State.run game initialState</c></para></summary>
+    /// Runs the state with an inital state to get back the result and the new state.
     let run (State x) = x                                                                                         : 'S->('T * 'S)
 
     let map   f (State m) = State (fun s -> let (a: 'T, s') = m s in (f a, s'))                                   : State<'S,'U>
@@ -84,9 +82,7 @@ type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 /// Basic operations on StateT
 [<RequireQualifiedAccess>]
 module StateT =
-    /// <summary><para>Runs the state with an inital state to get back the result and the new state wrapped in an inner monad.</para>
-    /// <para>An example of using run would be:
-    /// <c>let (score, finalState) = Monad.run ( StateT.run game initialState )</c></para></summary>
+    /// Runs the state with an inital state to get back the result and the new state wrapped in an inner monad.
     let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``
 
     /// Embed a Monad<'T> into a StateT<'S,'``Monad<'T * 'S>``>
