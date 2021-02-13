@@ -5,7 +5,7 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
@@ -14,6 +14,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
     <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'net46'">--warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -106,7 +108,7 @@
     <Compile Include="Data/Matrix.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
-    <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
+    <Content Condition=" '$(TargetFramework)' == 'net46'" Include="App.config" />
   </ItemGroup>
 
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
@@ -132,7 +134,7 @@
   </Target>
 
   <ItemGroup>
-    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
+    <Reference Condition=" '$(TargetFramework)' == 'net46'" Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.6.2" />

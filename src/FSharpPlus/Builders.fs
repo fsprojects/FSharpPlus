@@ -68,12 +68,10 @@ module Builders =
         inherit Builder ()
         member inline __.Delay expr = expr : unit -> '``Monad<'T>``
         member        __.Run f = f ()              : '``Monad<'T>``
-        member        __.TryWith    (expr, handler)      = try expr () with e -> handler e
-        member        __.TryFinally (expr, compensation) = try expr () finally compensation ()
+        member inline __.TryWith    (expr, handler)      = TryWith.InvokeForStrict    expr handler      : '``Monad<'T>``
+        member inline __.TryFinally (expr, compensation) = TryFinally.InvokeForStrict expr compensation : '``Monad<'T>``
         
-        member        rs.Using (disposable: #IDisposable, body) =
-            let body = fun () -> body disposable
-            rs.TryFinally (body, fun () -> dispose disposable)
+        member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body
 
     type DelayedBuilder () =
         inherit Builder ()
