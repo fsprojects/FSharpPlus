@@ -113,6 +113,39 @@ module Lens =
     let inline _5 f t = Map.InvokeOnInstance (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
 
     [<RequireQualifiedAccess>]
+    module List=
+        let removeAt i lst =
+            if List.length lst > i then
+                lst.[0..i-1] @ lst.[i+1..]
+            else lst
+
+        let setAt i x lst =
+            if List.length lst > i then
+                lst.[0..i-1] @ x::lst.[i+1..]
+            else lst
+
+        /// Given a specific key, produces a Lens from a List<value> to an Option<value>. When setting,
+        /// a Some(value) will insert or replace the value into the map at the given index. Setting a value of
+        /// None will delete the value at the specified index.  Works well together with non.
+        let inline _item i f t = Map.InvokeOnInstance
+                                  (function | None -> removeAt i t | Some x -> setAt i x t)
+                                  (f (List.tryItem i t))
+
+    [<RequireQualifiedAccess>]
+    module Array=
+        let setAt i x arr =
+            if Array.length arr > i then
+                Array.set arr i x
+                arr
+            else
+                arr
+
+        /// Given a specific key, produces a Lens from a Array<value> to an Option<value>.
+        let inline _item i f t = Map.InvokeOnInstance
+                                  (function | None -> t | Some x -> setAt i x t)
+                                  (f (Array.tryItem i t))
+
+    [<RequireQualifiedAccess>]
     module Set=
         let inline _contains i f t = Map.InvokeOnInstance (fun b -> if b then Set.add i t else Set.remove i t) (f (Set.contains i t))
 
