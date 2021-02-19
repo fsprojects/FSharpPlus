@@ -197,6 +197,7 @@ Collections / Traversable types:
    * split, replace,
    * findSliceIndex, trySliceIndex,
    * partitionMap
+   * setAt
  * [IList](reference/fsharpplus-ilist.html)
    * toIReadOnlyList
  * [List](reference/fsharpplus-list.html)
@@ -209,6 +210,7 @@ Collections / Traversable types:
    * toIReadOnlyList,
    * findSliceIndex, tryFindSliceIndex,
    * partitionMap
+   * setAt, removeAt
  * [Enumerator](reference/fsharpplus-enumerator.html)
    * EmptyEnumerator
       * Empty - create an empty enumerator
