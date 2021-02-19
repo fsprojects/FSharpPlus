@@ -128,3 +128,16 @@ module Array =
             incr i
             f !i x
         Array.choose fi a
+    
+    ///<summary>Sets the value of a index in an array</summary>
+    ///<param name="i">The index being set</param>
+    ///<param name="x">The new value</param>
+    ///<param name="a">The input array</param>
+    ///
+    ///<returns>Array with a new value at the given index</returns>
+    let setAt i x a =
+        if Array.length a > i then
+            Array.set a i x
+            a
+        else
+            a

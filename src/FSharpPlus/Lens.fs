@@ -123,18 +123,11 @@ module Lens =
                 (f (List.tryItem i t))
 
     [<RequireQualifiedAccess>]
-    module Array =
-        let private setAt i x arr =
-            if Array.length arr > i then
-                Array.set arr i x
-                arr
-            else
-                arr
-
+    module Array =        
         /// Given a specific key, produces a Lens from a Array<value> to an Option<value>.
         let inline _item i f t = 
             Map.InvokeOnInstance
-                (fun x -> setAt i x t)
+                (fun x -> Array.setAt i x t)
                 (f (Array.tryItem i t))
 
     [<RequireQualifiedAccess>]
