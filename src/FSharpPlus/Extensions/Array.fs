@@ -136,7 +136,7 @@ module Array =
     ///
     ///<returns>Array with a new value at the given index</returns>
     let setAt i x a =
-        if Array.length a > i then
+        if Array.length a > i && i >= 0 then
             Array.set a i x
             a
         else
