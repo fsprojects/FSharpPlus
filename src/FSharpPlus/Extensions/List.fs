@@ -189,6 +189,6 @@ module List =
     ///
     /// <returns>A new list with the updated element</returns>
     let setAt i x lst =
-        if List.length lst > i then
+        if List.length lst > i && i >= 0 then
             lst.[0..i-1] @ x::lst.[i+1..]
         else lst
