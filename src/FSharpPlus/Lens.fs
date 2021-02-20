@@ -115,7 +115,7 @@ module Lens =
     [<RequireQualifiedAccess>]
     module List =      
         /// Given a specific key, produces a Lens from a List<value> to an Option<value>. When setting,
-        /// a Some(value) will insert or replace the value into the map at the given index. Setting a value of
+        /// a Some(value) will insert or replace the value into the list at the given index. Setting a value of
         /// None will delete the value at the specified index.  Works well together with non.
         let inline _item i f t = 
             Map.InvokeOnInstance
