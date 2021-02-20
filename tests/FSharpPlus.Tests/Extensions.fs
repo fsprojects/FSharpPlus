@@ -432,3 +432,21 @@ module Extensions =
     // ResizeArray
     ResizeArray.lift3 (fun x y z -> x + y + z) (ResizeArray ([1; 2])) (ResizeArray ([7; 11])) (ResizeArray ([22; 33]))
     |> areEqual (ResizeArray ([30; 41; 34; 45; 31; 42; 35; 46]))
+
+  [<Test>]
+  let ``List.setAt works with good indices`` () =
+    areEquivalent [1;4;3] ([1;2;3] |> List.setAt 1 4)
+
+  [<Test>]
+  let ``List.setAt tolerates bad indices`` () =
+    areEquivalent [1;2;3] ([1;2;3] |> List.setAt -1 4)
+    areEquivalent [1;2;3] ([1;2;3] |> List.setAt 3 4)
+
+  [<Test>]
+  let ``List.removeAt works with good indices`` () =
+    areEquivalent [1;3] ([1;2;3] |> List.removeAt 1)
+
+  [<Test>]
+  let ``List.removeAt tolerates bad indices`` () =
+    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt -1)
+    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt 3)

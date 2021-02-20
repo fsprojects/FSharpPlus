@@ -172,3 +172,23 @@ module List =
             f !i x
         List.choose fi a
         
+    /// <summary>Attempts to remove an item from a list.</summary>
+    /// <param name="i">The index of the item to remove </param>
+    /// <param name="lst">The input list</param>
+    /// 
+    /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
+    let removeAt i lst =
+        if List.length lst > i then
+            lst.[0..i-1] @ lst.[i+1..]
+        else lst
+
+    /// <summary>Updates the value of an item in a list</summary>
+    /// <param name="i">The index of the item to update</param>
+    /// <param name="x">The new value of the item</param>
+    /// <param name="lst">The input list</param>
+    ///
+    /// <returns>A new list with the updated element</returns>
+    let setAt i x lst =
+        if List.length lst > i && i >= 0 then
+            lst.[0..i-1] @ x::lst.[i+1..]
+        else lst
