@@ -190,6 +190,21 @@ module Validation =
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline isoValidationResult x = x |> iso toResult ofResult
     #endif
+    
+    /// <summary>
+    /// Creates two lists by classifying the values depending on whether they were wrapped with Success or Failure.
+    /// </summary>
+    /// <returns>
+    /// A tuple with both resulting lists, Success are in the first list.
+    /// </returns>
+    let partition (source: list<Validation<'Error,'T>>) =
+        let rec loop ((acc1, acc2) as acc) = function
+            | [] -> acc
+            | x::xs ->
+                match x with
+                | Success x -> loop (x::acc1, acc2) xs
+                | Failure x -> loop (acc1, x::acc2) xs
+        loop ([], []) (List.rev source)
 
 
 type Validation<'err,'a> with
@@ -248,3 +263,12 @@ type Validation<'err,'a> with
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Bisequence (t: Validation<'err,'a>) = Validation.bisequence t
+    
+    
+    /// Creates a list with either all Success values or the Failure ones.
+    static member SequenceBiApply (t: list<Validation<'Error,'T>>) : Validation<list<'Error>,list<'T>> =
+        Validation.partition t |> fun (x, y) -> if List.isEmpty y then Success x else Failure y
+
+    /// Creates an array with either all Success values or the Failure ones.
+    static member SequenceBiApply (t: Validation<'Error,'T> []) : Validation<'Error [],'T []> =
+        Array.partitionMap Validation.toChoice t |> fun (x, y) -> if Array.isEmpty y then Success x else Failure y
