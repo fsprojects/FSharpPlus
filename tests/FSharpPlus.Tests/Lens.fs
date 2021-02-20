@@ -103,3 +103,15 @@ module Lens =
         let s = set [1;2]
         areEqual true (s ^. Set._contains 1)
         areEqual (set [1;2;3]) (s |> Set._contains 3 .-> true)
+
+    [<Test>]
+    let lens_list_item () =
+        let l = [1;2;3]
+        areEqual (Some 2) (l ^. List._item 1 )
+        areEqual None (l ^. List._item 3)
+
+    [<Test>]
+    let lens_array_item () =
+        let a = [|1;2;3|]
+        areEqual (Some 2) (a ^. Array._item 1 )
+        areEqual None (a ^. Array._item 3)
