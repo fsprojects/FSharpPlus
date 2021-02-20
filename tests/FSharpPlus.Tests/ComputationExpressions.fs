@@ -10,12 +10,13 @@ open Helpers
 module ComputationExpressions =
 
     exception TestException of string
+    
+    let task<'t> = monad'<Task<'t>>
 
     [<Test>]
     let specializedCEs () =
     
         // From Taskbuilder.fs
-        let task<'t> = monad'<Task<'t>>        
         let require x msg = if not x then failwith msg
         
         let testTryFinallyCaught () =
