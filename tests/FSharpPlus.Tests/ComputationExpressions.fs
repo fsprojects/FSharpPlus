@@ -18,6 +18,7 @@ module ComputationExpressions =
     
         // From Taskbuilder.fs
         let require x msg = if not x then failwith msg
+        let failtest str = raise (TestException str)
         
         let testTryFinallyCaught () =
             let mutable ran = false
