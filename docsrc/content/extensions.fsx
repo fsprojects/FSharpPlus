@@ -197,7 +197,6 @@ Collections / Traversable types:
    * split, replace,
    * findSliceIndex, trySliceIndex,
    * partitionMap
-   * setAt
  * [IList](reference/fsharpplus-ilist.html)
    * toIReadOnlyList
  * [List](reference/fsharpplus-list.html)

@@ -450,12 +450,3 @@ module Extensions =
   let ``List.removeAt tolerates bad indices`` () =
     areEquivalent [1;2;3] ([1;2;3] |> List.removeAt -1)
     areEquivalent [1;2;3] ([1;2;3] |> List.removeAt 3)
-
-  [<Test>]
-  let ``Array.setAt works with good indices`` () =
-    areEquivalent [|1;4;3|] ([|1;2;3|] |> Array.setAt 1 4)
-
-  [<Test>]
-  let ``Array.setAt tolerates bad indices`` () =
-    areEquivalent [|1;2;3|] ([|1;2;3|] |> Array.setAt -1 4)
-    areEquivalent [|1;2;3|] ([|1;2;3|] |> Array.setAt 3 4)

@@ -126,8 +126,14 @@ module Lens =
     module Array =        
         /// Given a specific key, produces a Lens from a Array<value> to an Option<value>.
         let inline _item i f t = 
+            let setAt i x a =
+                if Array.length a > i && i >= 0 then
+                    Array.set a i x
+                    a
+                else
+                    a
             Map.InvokeOnInstance
-                (fun x -> Array.setAt i x t)
+                (fun x -> setAt i x t)
                 (f (Array.tryItem i t))
 
     [<RequireQualifiedAccess>]
