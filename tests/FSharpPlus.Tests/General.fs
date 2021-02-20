@@ -2311,7 +2311,7 @@ module ApplicativeInference =
     let res6n7n8 = result (+) <*> result 5G <*> ZipList [1;2;3]
     let res18n14 = result (+) <*> ZipList(seq [8;4]) <*> result 10
 
-    open FSharpPlus.Builders // for applicative brackets
+    open FSharpPlus.GenericBuilders // for applicative brackets
 
     let res3n4''  = iI ((+) 2) [1;2] Ii
     let res3n4''' = iI (+) (result 2) [1;2] Ii                              // *1

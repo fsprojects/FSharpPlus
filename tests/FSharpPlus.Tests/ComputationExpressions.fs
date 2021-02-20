@@ -9,8 +9,45 @@ open Helpers
 
 module ComputationExpressions =
 
+    exception TestException of string
+    
+    let task<'t> = monad'<Task<'t>>
+
     [<Test>]
-    let monadFx() =
+    let specializedCEs () =
+    
+        // From Taskbuilder.fs
+        let require x msg = if not x then failwith msg
+        let failtest str = raise (TestException str)
+        
+        let testTryFinallyCaught () =
+            let mutable ran = false
+            let t =
+                task {
+                    try
+                        try
+                            require (not ran) "ran way early"
+                            do! Task.Delay(100) |> Task.ignore
+                            require (not ran) "ran kinda early"
+                            failtest "uhoh"
+                        finally
+                            ran <- true
+                        return 1
+                    with
+                    | TestException "uhoh" ->
+                        return 2
+                    | e ->
+                        raise e
+                        return 3
+                }
+            require (t.Result = 2) "wrong return"
+            require ran "never ran"
+        
+        testTryFinallyCaught ()
+        ()
+
+    [<Test>]
+    let monadFx () =
         SideEffects.reset ()
 
         // This workflow perform side-effects before and after an async operation in a monad.fx
