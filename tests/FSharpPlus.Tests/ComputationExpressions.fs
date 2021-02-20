@@ -11,7 +11,7 @@ module ComputationExpressions =
 
     exception TestException of string
 
-    [<Test>
+    [<Test>]
     let specializedCEs () =
     
         // From Taskbuilder.fs
