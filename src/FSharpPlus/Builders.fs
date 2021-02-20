@@ -1,4 +1,4 @@
-﻿namespace FSharpPlus
+namespace FSharpPlus
 
 /// <namespacedoc>
 /// <summary>
@@ -15,7 +15,7 @@
 
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]
-module Builders =    
+module GenericBuilders =
 
     open FSharpPlus.Operators
 
@@ -39,8 +39,8 @@ module Builders =
     open System.Collections.Generic
     open FSharpPlus.Control
 
-    type Builder () =
-        member        __.ReturnFrom (expr) = expr                                        : '``Monad<'T>``
+    type Builder<'``monad<'t>``> () =
+        member        __.ReturnFrom (expr) = expr                                        : '``monad<'t>``
         member inline __.Return (x: 'T) = result x                                       : '``Monad<'T>``
         member inline __.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
         member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
@@ -64,26 +64,26 @@ module Builders =
         [<CustomOperation("orderBy", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.OrderBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
 
-    type StrictBuilder () =
-        inherit Builder ()
-        member inline __.Delay expr = expr : unit -> '``Monad<'T>``
-        member        __.Run f = f ()              : '``Monad<'T>``
+    type StrictBuilder<'``monad<'t>``> () =
+        inherit Builder<'``monad<'t>``> ()
+        member        __.Delay expr = expr : unit -> '``Monad<'T>``
+        member        __.Run f = f ()              : '``monad<'t>``
         member inline __.TryWith    (expr, handler)      = TryWith.InvokeForStrict    expr handler      : '``Monad<'T>``
         member inline __.TryFinally (expr, compensation) = TryFinally.InvokeForStrict expr compensation : '``Monad<'T>``
         
         member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body
 
-    type DelayedBuilder () =
-        inherit Builder ()
+    type DelayedBuilder<'``monad<'t>``> () =
+        inherit Builder<'``monad<'t>``> ()
         member inline __.Delay (expr: _->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
-        member        __.Run f = f                                           : '``Monad<'T>``
+        member        __.Run f = f                                           : '``monad<'t>``
         member inline __.TryWith    (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
         member inline __.TryFinally (expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
         member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body : '``Monad<'T>``
 
-    type MonadPlusStrictBuilder () =
-        inherit StrictBuilder ()
-        member        __.YieldFrom  (expr) = expr                        : '``Monad<'T>``
+    type MonadPlusStrictBuilder<'``monad<'t>``> () =
+        inherit StrictBuilder<'``monad<'t>``> ()
+        member        __.YieldFrom expr = expr                           : '``monad<'t>``
         member inline __.Zero () = Empty.Invoke ()                       : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b () : '``MonadPlus<'T>``
         member inline __.While (guard, body: unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
@@ -96,8 +96,8 @@ module Builders =
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``)
 
-    type MonadFxStrictBuilder () =
-        inherit StrictBuilder ()
+    type MonadFxStrictBuilder<'``monad<'t>``> () =
+        inherit StrictBuilder<'``monad<'t>``> ()
         
         member inline __.Zero () = result ()                                       : '``Monad<unit>``
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b ()) : '``Monad<'T>``
@@ -112,10 +112,10 @@ module Builders =
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<unit>``)
 
-    type MonadPlusBuilder () =
-        inherit DelayedBuilder()
-        member        __.YieldFrom  (expr) = expr                     : '``Monad<'T>``
-        member        __.strict = new MonadPlusStrictBuilder ()
+    type MonadPlusBuilder<'``monad<'t>``> () =
+        inherit DelayedBuilder<'``monad<'t>``>()
+        member        __.YieldFrom expr = expr                        : '``monad<'t>``
+        member        __.strict = new MonadPlusStrictBuilder<'``monad<'t>``> ()
         member inline __.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
 
@@ -137,21 +137,21 @@ module Builders =
                 if isReallyDelayed then this.WhileImpl (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
-    type MonadFxBuilder () =
-        inherit DelayedBuilder ()
-        member        __.strict  = new MonadFxStrictBuilder ()
+    type MonadFxBuilder<'``monad<'t>``> () =
+        inherit DelayedBuilder<'``monad<'t>``> ()
+        member        __.strict  = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
         /// Makes it a (lazy) monadplus computation expression.
-        member        __.plus    = new MonadPlusBuilder ()
+        member        __.plus    = new MonadPlusBuilder<'``monad<'t>``> ()
 
         /// Makes it a strict monadplus computation expression.
-        member        __.plus'   = new MonadPlusStrictBuilder ()
+        member        __.plus'   = new MonadPlusStrictBuilder<'``monad<'t>``> ()
 
         /// Makes it a (lazy) monadic computation expression with side-effects
         member        this.fx    = this
 
         /// Makes it a strict monadic computation expression with side-effects
-        member        __.fx'     = new MonadFxStrictBuilder ()
+        member        __.fx'     = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
         member inline __.Zero () = result ()                                    : '``Monad<unit>``
 
@@ -178,9 +178,9 @@ module Builders =
 
 
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
-    let monad = new MonadFxBuilder ()
+    let monad<'``monad<'t>``> = new MonadFxBuilder<'``monad<'t>``> ()
 
     /// Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
-    let monad' = new MonadFxStrictBuilder ()
+    let monad'<'``monad<'t>``> = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
 #endif

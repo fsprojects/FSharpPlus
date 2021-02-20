@@ -156,8 +156,6 @@ let person3' = (tryHead ["gus"], tryHead ["42"] >>= tryParse) ||> lift2 Person.c
 
 // Using Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
 
-open FSharpPlus.Builders
-
 let res3n4   = iI ((+) 2) [1;2] Ii
 let res3n4'  = iI (+) (result 2) [1;2] Ii
 let res18n24 = iI (+) (ZipList(seq [8;4])) (ZipList(seq [10;20])) Ii
