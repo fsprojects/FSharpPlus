@@ -8,6 +8,8 @@
     <TargetFrameworks>net5;net461</TargetFrameworks>
     <TargetFrameworks>net5;net462</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <LangVersion Condition=" '$(TargetFramework)' == 'netstandard3.0'">5.0</LangVersion>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'netstandard3.0'">$(DefineConstants);FSHARP5</DefineConstants>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;Fable</Configurations>
     <Platforms>AnyCPU</Platforms>
