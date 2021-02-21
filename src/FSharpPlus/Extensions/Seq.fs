@@ -167,10 +167,10 @@ module Seq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let drop i (source: seq<_>) =
-        let mutable count = i
+    let drop count (source: seq<_>) =
+        let mutable i = count
         use e = source.GetEnumerator ()
-        while (count > 0 && e.MoveNext ()) do count <- count-1
+        while (i > 0 && e.MoveNext ()) do i <- i-1
         seq { while e.MoveNext () do yield e.Current }
 
     #if !FABLE_COMPILER
@@ -243,10 +243,10 @@ module Seq =
     #endif
     
     /// <summary>Choose with access to the index</summary>
-    /// <param name="f">The mapping function, taking index and element as parameters.</param>
-    /// <param name="x">The input seq.</param>
+    /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
+    /// <param name="source">The input seq.</param>
     ///
     /// <returns>Seq with values x for each List value where the function returns Some(x).</returns>
-    let choosei f l =
-        Seq.indexed l
-        |> Seq.choose (fun (a, b) -> f a b)
+    let choosei mapping source =
+        Seq.indexed source
+        |> Seq.choose (fun (a, b) -> mapping a b)
