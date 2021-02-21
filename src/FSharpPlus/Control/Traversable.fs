@@ -81,9 +81,8 @@ type Traverse =
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
 
     static member inline Traverse (t:Map<_,_>  , f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-        let insert_f m k v = Map.Invoke (Map.add k) v <*> m
-        Map.mapValues f t
-        |> Map.fold insert_f (result Map.empty)
+        let insert_f k x ys = Map.Invoke (Map.add k) (f x) <*> ys	        let insert_f m k v = Map.Invoke (Map.add k) v <*> m
+        Map.foldBack insert_f t (result Map.empty)
 
     static member inline Traverse (t: Result<'T,'Error>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<Result<'U,'Error>>``, [<Optional>]_impl: Traverse) : '``Functor<Result<'U,'Error>>`` =
         match t with
