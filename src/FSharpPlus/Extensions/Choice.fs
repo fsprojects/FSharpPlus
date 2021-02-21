@@ -24,21 +24,27 @@ module Choice =
     let map (mapping: 'T->'U) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 (mapping v) | Choice2Of2 e -> Choice2Of2 e
 
     /// <summary>Creates a Choice value from a pair of Choice values, using a function to combine the Choice1Of2 values.</summary>
+    /// <param name="mapping">A function to apply to the Choice1Of2 values.</param>
     /// <param name="x">The first Choice value.</param>
     /// <param name="y">The second Choice value.</param>
     ///
     /// <returns>The combined value, or the first Choice2Of2.</returns>
-    let map2 f (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) : Choice<'V,'Error> = match x, y with Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (f a b) | Choice2Of2 e, _ | _, Choice2Of2 e -> Choice2Of2 e
+    let map2 mapping (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) : Choice<'V,'Error> =
+        match x, y with
+        | Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (mapping a b) 
+        | Choice2Of2 e, _ 
+        | _, Choice2Of2 e -> Choice2Of2 e
 
     /// <summary>Creates a Choice value from three of Choice values, using a function to combine the Choice1Of2 values.</summary>
+    /// <param name="mapping">A function to apply to the Choice1Of2 values.</param>
     /// <param name="x">The first Choice value.</param>
     /// <param name="y">The second Choice value.</param>
     /// <param name="z">The third Choice value.</param>
     ///
     /// <returns>The combined value, or the first Choice2Of2.</returns>
-    let map3 f (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) (z: Choice<'V, 'Error>) : Choice<'W,'Error> =
+    let map3 mapping (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) (z: Choice<'V, 'Error>) : Choice<'W,'Error> =
         match x, y, z with
-        | Choice1Of2 a, Choice1Of2 b, Choice1Of2 c -> Choice1Of2 (f a b c)
+        | Choice1Of2 a, Choice1Of2 b, Choice1Of2 c -> Choice1Of2 (mapping a b c)
         | Choice2Of2 e, _           , _
         | _           , Choice2Of2 e, _
         | _           , _           , Choice2Of2 e -> Choice2Of2 e
