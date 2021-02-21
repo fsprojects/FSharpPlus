@@ -540,14 +540,14 @@ module Operators =
     /// 
     /// <param name="source">The input foldable.</param>
     /// <returns>The list of foldable elements.</returns>
-    let inline toList value : 'T list = ToList.Invoke value
+    let inline toList source : 'T list = ToList.Invoke source
 
     /// <summary>Builds an array from the given foldable.</summary>
     /// <category index="11">Foldable</category>
     /// 
     /// <param name="source">The input foldable.</param>
     /// <returns>The array of foldable elements.</returns>
-    let inline toArray value : 'T [] = ToArray.Invoke value
+    let inline toArray source : 'T [] = ToArray.Invoke source
 
     /// <summary>Views the given foldable as a sequence.</summary>
     /// <category index="11">Foldable</category>
@@ -654,7 +654,7 @@ module Operators =
     /// <summary>Gets the number of elements in the foldable.</summary>
     /// <category index="11">Foldable</category>
     /// 
-    /// <param name="list">The input foldable.</param>
+    /// <param name="source">The input foldable.</param>
     /// <returns>The length of the foldable.</returns>
     let inline length (source: '``Foldable<'T>``) : int = Length.Invoke source
 
@@ -1242,6 +1242,7 @@ module Operators =
     ///
     /// This is a stable sort, that is the original order of equal elements is preserved.</remarks>
     ///
+    /// <param name="projection">A function to transform items of the input collection into comparable keys.</param>
     /// <param name="source">The input collection.</param>
     ///
     /// <returns>The result collection.</returns>

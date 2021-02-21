@@ -108,8 +108,8 @@ module NonEmptyList =
     /// <summary>
     /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
     /// </summary>
-    /// <param name="a1">First input list.</param>
-    /// <param name="a2">Second input list.</param>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
     /// <returns>List with corresponding pairs of input lists.</returns>
     let zipShortest (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) =
         { Head = (list1.Head, list2.Head); Tail = List.zipShortest list1.Tail list2.Tail }
