@@ -107,9 +107,9 @@ module NonEmptyMap =
         | x::xs -> create x xs
 
     /// <summary>Builds a non empty map from the given non-empty sequence.</summary>
-    /// <param name="sequence">The input sequence.</param>
+    /// <param name="source">The input sequence.</param>
     /// <returns>Non empty map containing the elements of the non-empty sequence.</returns>
-    let ofNonEmptySeq (seq: _ NonEmptySeq) = create seq.First (Seq.tail seq)
+    let ofNonEmptySeq (source: _ NonEmptySeq) = create source.First (Seq.tail source)
 
     /// <summary>Builds a non empty map from the given map.</summary>
     /// <param name="map">The input map.</param>
