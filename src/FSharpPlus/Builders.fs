@@ -4,6 +4,84 @@ namespace FSharpPlus
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
 
+[<System.Obsolete("Compatibility with v1")>]
+module Builders =    
+
+    open FSharpPlus.Operators
+    open System.ComponentModel
+
+    // Idiom brackets
+    type Ii = Ii
+    type Ji = Ji
+    type J = J
+    type Idiomatic = Idiomatic with
+        static member inline ($) (Idiomatic, si) = fun sfi x -> (Idiomatic $ x) (sfi <*> si)
+        static member        ($) (Idiomatic, Ii) = id
+    
+    type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
+    type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idiomatic $ x) (join fii)
+
+    
+    // Workflows
+
+    open System
+    open System.Collections.Generic
+    open FSharpPlus.Control
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    type Builder () =
+        member        __.ReturnFrom (expr) = expr                                        : '``Monad<'T>``
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    type StrictBuilder () =
+        inherit Builder ()
+        member        __.Run f = f ()              : '``Monad<'T>``
+        member        __.TryWith    (expr, handler)      = try expr () with e -> handler e
+        member        __.TryFinally (expr, compensation) = try expr () finally compensation ()
+        
+        member        rs.Using (disposable: #IDisposable, body) =
+            let body = fun () -> body disposable
+            rs.TryFinally (body, fun () -> dispose disposable)
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    type DelayedBuilder () =
+        inherit Builder ()
+        member        __.Run f = f                                           : '``Monad<'T>``
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    type MonadPlusStrictBuilder () =
+        inherit StrictBuilder ()
+        member        __.YieldFrom  (expr) = expr                        : '``Monad<'T>``
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    type MonadFxStrictBuilder () =
+        inherit StrictBuilder ()
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    type MonadPlusBuilder () =
+        inherit DelayedBuilder()
+        member        __.YieldFrom  (expr) = expr                     : '``Monad<'T>``
+        member        __.strict = new MonadPlusStrictBuilder ()
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    type MonadFxBuilder () =
+        inherit DelayedBuilder ()
+        member        __.strict  = new MonadFxStrictBuilder ()
+
+        member        __.plus    = new MonadPlusBuilder ()
+
+        member        __.plus'   = new MonadPlusStrictBuilder ()
+
+        member        this.fx    = this
+
+        member        __.fx'     = new MonadFxStrictBuilder ()
+
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    let monad = new MonadFxBuilder ()
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    let monad' = new MonadFxStrictBuilder ()
+
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]
 module GenericBuilders =
