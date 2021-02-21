@@ -19,7 +19,7 @@ module Choice =
 
     /// <summary>Maps the value on the Choice1Of2 if any.</summary>
     /// <param name="mapping">A function to apply to the Choice1Of2 value.</param>
-    /// <param name="value">The source input value.</param>
+    /// <param name="source">The source input value.</param>
     /// <returns>A Choice1Of2 of the input value after applying the mapping function, or the original Choice2Of2 value if the input is Choice2Of2.</returns>
     let map (mapping: 'T->'U) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 (mapping v) | Choice2Of2 e -> Choice2Of2 e
 
