@@ -37,7 +37,7 @@ type Iterate =
     #if !FABLE_COMPILER
     static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
     #else
-    static member Iterate (x: Async<'T>            , action) = action (Async.StartImmediate x) : unit
+    static member Iterate (x: Async<'T>            , action) = action (x |> Async.Ignore |> Async.StartImmediate) : unit
     #endif
     static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
