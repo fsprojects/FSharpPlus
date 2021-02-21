@@ -197,7 +197,7 @@ module NonEmptySeq =
     /// not be used with large or infinite sequences.</remarks>
     /// <param name="mapping">The function to transform elements from the input collection and accumulate the final value.</param>
     /// <param name="state">The initial state.</param>
-    /// <param name="array">The input collection.</param>
+    /// <param name="source">The input collection.</param>
     /// <returns>The collection of transformed elements, and the final accumulated value.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
     let mapFold (mapping: 'State -> 'T -> 'Result * 'State) state (source: NonEmptySeq<_>) =
@@ -209,7 +209,7 @@ module NonEmptySeq =
     /// <remarks>This function digests the whole initial sequence as soon as it is called. As a result this function should
     /// not be used with large or infinite sequences.</remarks>
     /// <param name="mapping">The function to transform elements from the input collection and accumulate the final value.</param>
-    /// <param name="array">The input collection.</param>
+    /// <param name="source">The input collection.</param>
     /// <param name="state">The initial state.</param>
     /// <returns>The collection of transformed elements, and the final accumulated value.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
@@ -273,7 +273,7 @@ module NonEmptySeq =
         else Some (unsafeOfSeq seq)
 
     /// <summary>Builds a non empty sequence from the given array.</summary>
-    /// <param name="seq">The input array.</param>
+    /// <param name="array">The input array.</param>
     /// <returns>Non empty sequence containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
     /// <remarks>Throws exception for empty array</remarks>

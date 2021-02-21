@@ -420,7 +420,7 @@ module Enumerator =
     /// </summary>
     /// <param name="generator">The function that takes the current state and returns an
     /// option tuple of the next element of the list and the next state value.</param>
-    /// <param name="inititalState">The intitial state value.</param>
+    /// <param name="initialState">The intitial state value.</param>
     /// <returns>A new Enumerator yielding only elements that satsify the predicate.</returns>
     let unfold generator initialState : IEnumerator<_> =
         let state = ref initialState

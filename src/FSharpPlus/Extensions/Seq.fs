@@ -193,7 +193,7 @@ module Seq =
     /// <summary>Converts a seq to an IReadOnlyList (from System.Collections.Generic).</summary>
     /// <param name="source">The seq source</param>
     /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
-    let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
+    let toIReadOnlyList (source: seq<_>) = source |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
     #endif
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
