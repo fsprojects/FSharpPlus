@@ -3,10 +3,13 @@ namespace FSharpPlus
 /// Additional operations on Map<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Map =
+
     open System.Collections.Generic
+    
     #if !FABLE_COMPILER
     
     open System.Linq
+    
     #endif
 
     /// <summary>Returns the keys of the given map.</summary>
@@ -48,27 +51,27 @@ module Map =
     
     /// <summary>Combines values from three maps using mapping function.</summary>
     /// <remarks>Keys that are not present on every Map are dropped.</remarks>
-    /// <param name="f">The mapping function.</param>
+    /// <param name="mapping">The mapping function.</param>
     /// <param name="x">First input Map.</param>
     /// <param name="y">Second input Map.</param>
-    /// <param name="y">Third input Map.</param>
+    /// <param name="z">Third input Map.</param>
     ///
     /// <returns>The mapped Map.</returns>
-    let mapValues3 f (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) (z: Map<'Key, 'T3>) = Map <| seq {
-        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt f
+    let mapValues3 mapping (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) (z: Map<'Key, 'T3>) = Map <| seq {
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapping
         for KeyValue(k, vx) in x do
             match Map.tryFind k y, lazy Map.tryFind k z with
             | Some vy, Lazy (Some vz) -> yield (k, f.Invoke (vx, vy, vz))
             | _      , _         -> () }
     
     /// <summary>Applies given function to each value of the given Map.</summary>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">The input Map.</param>
+    /// <param name="mapping">The mapping function.</param>
+    /// <param name="source">The input Map.</param>
     ///
     /// <returns>Returns Map with values x for each Map value where the function returns Some(x).</returns>
-    let chooseValues f (x: Map<'Key, 'T>) = Map <| seq {
-        for KeyValue(k, v) in x do
-            match f v with
+    let chooseValues mapping (source: Map<'Key, 'T>) = Map <| seq {
+        for KeyValue(k, v) in source do
+            match mapping v with
             | Some v -> yield (k, v)
             | None    -> () }
 

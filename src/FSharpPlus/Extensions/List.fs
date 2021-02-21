@@ -64,12 +64,12 @@ module List =
     /// <param name="source">The input list.</param>
     ///
     /// <returns>The result list.</returns>
-    let drop i list = 
+    let drop count source = 
         let rec loop i lst = 
             match lst, i with
             | [] as x, _ | x, 0 -> x
             | x, n -> loop (n-1) (List.tail x)
-        if i > 0 then loop i list else list
+        if count > 0 then loop count source else source
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
@@ -151,26 +151,26 @@ module List =
     /// <summary>
     /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
     /// </summary>
-    /// <param name="a1">First input list.</param>
-    /// <param name="a2">Second input list.</param>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
     /// <returns>List with corresponding pairs of input lists.</returns>
-    let zipShortest (l1: list<'T1>) (l2: list<'T2>) =
+    let zipShortest (list1: list<'T1>) (list2: list<'T2>) =
         let rec loop acc = function
-            | (l::ls,r::rs) -> loop ((l,r)::acc) (ls,rs)
-            | (_,_) -> acc
-        loop [] (l1,l2) |> List.rev
+            | (l::ls, r::rs) -> loop ((l, r)::acc) (ls, rs)
+            | (_, _)         -> acc
+        loop [] (list1, list2) |> List.rev
         
     /// <summary>Same as choose but with access to the index.</summary>
-    /// <param name="f">The mapping function, taking index and element as parameters.</param>
-    /// <param name="x">The input list.</param>
+    /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
+    /// <param name="source">The input list.</param>
     ///
     /// <returns>List with values x for each List value where the function returns Some(x).</returns>
-    let choosei f a =
+    let choosei mapping source =
         let mutable i = ref -1
         let fi x =
             incr i
-            f !i x
-        List.choose fi a
+            mapping !i x
+        List.choose fi source
         
     /// <summary>Attempts to remove an item from a list.</summary>
     /// <param name="i">The index of the item to remove </param>

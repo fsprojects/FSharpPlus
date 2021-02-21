@@ -15,7 +15,7 @@ module ResizeArray =
     /// <returns>The result ResizeArray.</returns>
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input ResizeArray is null.</exception>
-    let map (f: 'T->'U) (x: ResizeArray<'T>) = ResizeArray (Seq.map f x)
+    let map (mapping: 'T->'U) (source: ResizeArray<'T>) = ResizeArray (Seq.map mapping source)
 
     /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.</summary>
     /// <param name="f">The functions.</param>
@@ -34,7 +34,7 @@ module ResizeArray =
     let lift2 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) = ResizeArray (Seq.lift2 mapping x1 x2)
 
     /// <summary>Combines values from three ResizeArrays and calls a mapping function on this combination.</summary>
-    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="mapping">Mapping function taking three element combination as input.</param>
     /// <param name="x1">First ResizeArray.</param>
     /// <param name="x2">Second ResizeArray.</param>
     /// <param name="x3">Third ResizeArray.</param>

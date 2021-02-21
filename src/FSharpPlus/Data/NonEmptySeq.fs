@@ -287,7 +287,7 @@ module NonEmptySeq =
         else Some (unsafeOfArray array)
 
     /// <summary>Builds a non empty sequence from the given list.</summary>
-    /// <param name="seq">The input list.</param>
+    /// <param name="list">The input list.</param>
     /// <returns>Non empty sequence containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
     /// <remarks>Throws exception for empty list</remarks>
@@ -391,7 +391,7 @@ module NonEmptySeq =
     ///
     /// This is a stable sort, that is the original order of equal elements is preserved.</remarks>
     /// <param name="comparer">The function to compare the collection elements.</param>
-    /// <param name="list">The input sequence.</param>
+    /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
     let sortWith comparer (source: NonEmptySeq<_>) = Seq.sortWith comparer source |> unsafeOfSeq
