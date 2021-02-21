@@ -18,6 +18,7 @@ module Result =
 
     
     /// <summary>Creates a Result value from a pair of Result values, using a function to combine them.</summary>
+    /// <param name="f">The mapping function.</param>
     /// <param name="x">The first Result value.</param>
     /// <param name="y">The second Result value.</param>
     ///
@@ -25,6 +26,7 @@ module Result =
     let map2 f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> = match x, y with Ok a, Ok b -> Ok (f a b) | Error e, _ | _, Error e -> Error e
 
     /// <summary>Creates a Result value from three Result values, using a function to combine them.</summary>
+    /// <param name="f">The mapping function.</param>
     /// <param name="x">The first Result value.</param>
     /// <param name="y">The second Result value.</param>
     /// <param name="z">The third Result value.</param>
@@ -41,7 +43,7 @@ module Result =
     /// <param name="source">The nested Results.</param>
     /// <returns>A single Ok of the value when it was nested with OKs, or the Error.</returns>
     /// <remarks><c>flatten</c> is equivalent to <c>bind id</c>.</remarks>
-    let flatten x : Result<'T,'Error> = match x with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
+    let flatten source : Result<'T,'Error> = match source with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
     
     [<System.Obsolete("Use Result.bindError instead.")>]
     let inline catch f = function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
