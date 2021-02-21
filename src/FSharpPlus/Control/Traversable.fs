@@ -95,8 +95,13 @@ type Traverse =
         | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
 
     static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-        let mapped = List.map f t
-        Sequence.ForInfiniteSequences (mapped, (fun _ -> true), id)
+        let rec loop acc = function
+            | [] -> acc
+            | x::xs -> 
+                let v = f x
+                loop (v::acc) xs
+        let cons_f x xs = Map.Invoke List.cons xs <*> x
+        List.fold cons_f (result []) (loop [] t)
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
         let cons x y = Array.append [|x|] y
