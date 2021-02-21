@@ -101,7 +101,7 @@ type Traverse =
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
         let mapped = Seq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, Array.ofSeq)
+        Sequence.ForInfiniteSequences (mapped, (fun _ -> true), Array.ofSeq)
 
     static member inline Invoke (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
