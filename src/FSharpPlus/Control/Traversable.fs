@@ -87,7 +87,7 @@ type Traverse =
 
     static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
         let mapped = List.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, id)
+        Sequence.ForInfiniteSequences (mapped, (fun _ -> true), id)
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
         let mapped = Seq.map f t
