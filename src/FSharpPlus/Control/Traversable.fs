@@ -38,6 +38,16 @@ type Traverse =
 
     static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) = Map.Invoke Id.create (f (Id.run t))
 
+    static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+       let cons x y = seq {yield x; yield! y}
+       let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
+       Seq.foldBack cons_f t (result Seq.empty)
+
+    static member inline Traverse (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+       let cons x y = seq {yield x; yield! y}
+       let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
+       Map.Invoke NonEmptySeq.ofSeq (Seq.foldBack cons_f t (result Seq.empty))
+
     static member inline Traverse (t: seq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
         let mapped = Seq.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq) : '``Functor<seq<'U>>``
