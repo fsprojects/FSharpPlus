@@ -4,7 +4,6 @@
 #I "../../bin"
 
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
-
 (**
 Lens
 ====
@@ -192,7 +191,7 @@ Fold
 ====
 
 *)
-
+open FSharpPlus.Data
 
 let f1 = over both length ("hello","world")
 // val f1 : int * int = (5, 5)
