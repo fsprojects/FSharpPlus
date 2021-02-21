@@ -69,7 +69,7 @@ module List =
             match lst, i with
             | [] as x, _ | x, 0 -> x
             | x, n -> loop (n-1) (List.tail x)
-        if i > 0 then loop count source else source
+        if count > 0 then loop count source else source
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
