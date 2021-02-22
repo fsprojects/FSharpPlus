@@ -105,8 +105,14 @@ type Traverse =
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
         let cons x y = Array.append [|x|] y
-        let cons_f x ys = Map.Invoke cons (f x) <*> ys
-        Array.foldBack cons_f t (result [||])
+        let rec loop acc = function
+            | [||] -> acc
+            | xxs ->
+                let x, xs = Array.head xxs, Array.tail xxs
+                let v = f x
+                loop (cons v acc) xs
+        let cons_f x xs = Map.Invoke cons xs <*> x
+        Array.fold cons_f (result [||]) (loop [||] t)
 
     static member inline Invoke (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
