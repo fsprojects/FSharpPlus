@@ -92,6 +92,14 @@ let traversable = testList "Traversable" [
     #endif
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
+    testList "traverse_Order" [
+        testCase "nelist" (fun () ->
+            SideEffects.reset()
+            let mapper v = SideEffects.add <| sprintf "mapping %d" v
+            let _ = traverse (Option.map mapper) [Some 1; Some 2]
+            SideEffects.are ["mapping 1"; "mapping 2"]
+        )]
+
     testList "traversableForNonPrimitive" [
         testCase "nelist" (fun () ->
             let nel = nelist { Some 1 }
