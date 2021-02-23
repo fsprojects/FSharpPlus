@@ -81,8 +81,8 @@ type Traverse =
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
 
     static member inline Traverse (t:Map<_,_>  , f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let insert_f k x ys = Map.Invoke (Map.add k) (f x) <*> ys
-       Map.foldBack insert_f t (result Map.empty)
+        let insert_f m k v = Map.Invoke (Map.add k) v <*> m        
+        Map.fold insert_f (result Map.empty) (Map.mapValues f t)
 
     static member inline Traverse (t: Result<'T,'Error>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<Result<'U,'Error>>``, [<Optional>]_impl: Traverse) : '``Functor<Result<'U,'Error>>`` =
         match t with
@@ -95,13 +95,24 @@ type Traverse =
         | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
 
     static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let cons_f x ys = Map.Invoke List.cons (f x) <*> ys
-       List.foldBack cons_f t (result [])
+        let rec loop acc = function
+            | [] -> acc
+            | x::xs -> 
+                let v = f x
+                loop (v::acc) xs
+        let cons_f x xs = Map.Invoke List.cons xs <*> x
+        List.fold cons_f (result []) (loop [] t)
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-       let cons x y = Array.append [|x|] y
-       let cons_f x ys = Map.Invoke cons (f x) <*> ys
-       Array.foldBack cons_f t (result [||])
+        let cons x y = Array.append [|x|] y
+        let rec loop acc = function
+            | [||] -> acc
+            | xxs ->
+                let x, xs = Array.head xxs, Array.tail xxs
+                let v = f x
+                loop (cons v acc) xs
+        let cons_f x xs = Map.Invoke cons xs <*> x
+        Array.fold cons_f (result [||]) (loop [||] t)
 
     static member inline Invoke (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)

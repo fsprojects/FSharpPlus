@@ -1262,6 +1262,14 @@ module Traversable =
         ()
 
     [<Test>]
+    let traverse_Order () =
+        SideEffects.reset()
+        let mapper v = SideEffects.add <| sprintf "mapping %d" v
+        let _ = traverse (Option.map mapper) [Some 1; Some 2]
+        SideEffects.are ["mapping 1"; "mapping 2"]
+
+
+    [<Test>]
     let traversableForNonPrimitive () =
         let nel = nelist { Some 1 }
         let rs1 = traverse id nel
