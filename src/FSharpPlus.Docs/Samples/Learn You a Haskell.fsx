@@ -258,7 +258,7 @@ let res70 = applyLog (3, "Smallish gang.") isBigGang                         // 
 let res71: Writer<List<string>, unit> = tell ["Something gonna happend"]     // Writer (None, ["Something gonna happend"])
 
 let logNumber (x:int) = Writer (x, ["Got number: " + (x |> string)])
-
+#if APPLICATIVE_FIX
 let multWithLog =                                                        // Writer (15, ["Got number: 3"; "Got number: 5"; "Gonna multiply these two"])
     monad {
         let! a = logNumber 3
@@ -285,7 +285,7 @@ let rec gcd' a b : Writer<List<string>, int> =
     }
 
 let res72 = gcd' 8 3                                                     // Writer (1, ["8 mod 3 = 2"; "3 mod 2 = 1"; "2 mod 1 = 0"; "Finished with 1"])
-
+#endif
 
 (* --------------------------------------------------
     Reader monad
@@ -421,6 +421,8 @@ let inline filterM (f : 'a -> 'Monad'Bool) (xs : List<'a>) : 'Monad'List'a =
          }
     loopM f xs
 
+#if APPLICATIVE_FIX
+
 // keepSmall :: Int -> Writer [String] Bool
 let keepSmall x : Writer<List<string>, bool> =
     monad {
@@ -441,6 +443,7 @@ let res96 = keepSmall 3                                                         
 let res97 = filterM keepSmall [9;1;5;2;10;3]                                        // Writer ([1; 2; 3], ["9 is too large, throwing it away"; "Keeping 1"; "5 is too large, throwing it away"; "Keeping 2"; "10 is too large, throwing it away"; "Keeping 3"])
 let res98 = filterM keepSmallSome [1;2;3]                                           // Some [1; 2; 3]
 let res99 = filterM keepSmallSome [9;1;5;2;10;3]                                    // None
+#endif
 
 // foldM             :: (Monad m) => (a -> b -> m a) -> a -> [b] -> m a
 // foldM _ a []      =  return a
