@@ -33,6 +33,7 @@ Examples
 
 
 #r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus.TypeLevel/bin/Release/net45/FSharpPlus.TypeLevel.dll"
 
 open FSharpPlus
 open FSharpPlus.Data

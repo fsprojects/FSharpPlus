@@ -35,7 +35,7 @@
     <Compile Include="TypeNat.Provider.fs" />
     <Compile Include="Matrix.Provider.fs" />
     <Compile Include="TypeProviderAssembly.fs" />
-    <Content Condition=" '$(TargetFramework)' == 'net46'" Include="../App.config" />
+    <Content Condition=" '$(TargetFramework)' == 'net46'" Include="../../FSharpPlus/App.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
@@ -44,6 +44,6 @@
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../FSharpPlus.fsproj" />
+    <ProjectReference Include="../FSharpPlus.TypeLevel.fsproj" />
   </ItemGroup>
 </Project>

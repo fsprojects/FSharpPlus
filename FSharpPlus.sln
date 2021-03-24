@@ -87,9 +87,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{81F5F559-FD2
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Docs", "src\FSharpPlus.Docs\FSharpPlus.Docs.fsproj", "{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.TypeLevel", "src\FSharpPlus\TypeLevel\FSharpPlus.TypeLevel.fsproj", "{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.TypeLevel", "src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj", "{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Providers", "src\FSharpPlus\Providers\FSharpPlus.Providers.fsproj", "{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Providers", "src\FSharpPlus.TypeLevel\Providers\FSharpPlus.Providers.fsproj", "{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLib", "tests\CSharpLib\CSharpLib.csproj", "{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}"
 EndProject

@@ -8,12 +8,13 @@
   </Target>
 
   <Target Name="Pack">
-    <Exec Command='dotnet build src/FSharpPlus/Providers -c Release --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet build src/FSharpPlus.TypeLevel/Providers -c Release --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
     <Exec Command='dotnet pack src/FSharpPlus -c Release -o "$(NupkgsDir)" --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet pack src/FSharpPlus.TypeLevel -c Release -o "$(NupkgsDir)" --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
 
   <Target Name="Test">
-    <Exec Command='dotnet build src/FSharpPlus/TypeLevel' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet build src/FSharpPlus.TypeLevel' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
     <Exec Command='dotnet test tests/FSharpPlus.Tests -c Release --logger:trx' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
 
