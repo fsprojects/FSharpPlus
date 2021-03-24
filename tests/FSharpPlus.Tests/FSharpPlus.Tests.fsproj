@@ -40,6 +40,8 @@
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\FSharpPlus.1\FSharpPlus.1.fsproj" />
+    <ProjectReference Include="..\CSharpLib\CSharpLib.csproj" />
+    <ProjectReference Include="..\..\src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
