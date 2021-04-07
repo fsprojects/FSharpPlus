@@ -73,7 +73,7 @@ module Result =
         | Ok x -> x
         | Error e ->
             match box e with
-            | :? string as s -> invalidArg "source" $"Result value was Error: {s}"
+            | :? string as s -> invalidArg "source" ("Result value was Error: " + s)
             | :? exn    as e -> raise <| System.ArgumentException ("Result value was Error", "source", e)
             | _              -> invalidArg "source" $"Result value was Error: {string e}"
 
