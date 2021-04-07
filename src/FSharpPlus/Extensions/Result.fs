@@ -74,7 +74,7 @@ module Result =
         | Error e ->
             match box e with
             | :? exn as e -> raise <| System.ArgumentException ("Result value was Error", "source", e)
-            | _           -> invalidArg "source" ("Result value was Error: " + string e)
+            | e           -> invalidArg "source" ("Result value was Error: " + string e)
 
     /// Extracts the Ok value or use the supplied default value when it's an Error.
     let defaultValue (value:'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | _ -> value
