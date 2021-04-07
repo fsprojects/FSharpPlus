@@ -68,7 +68,14 @@ module Result =
         with e -> Error e
 
     /// Gets the 'Ok' value. If it's an 'Error' this function will throw an exception.
-    let get (source: Result<'T,'Error>) = match source with Ok x -> x | _ -> invalidArg "source" "Result value was Error"
+    let get (source: Result<'T,'Error>) =
+        match source with
+        | Ok x -> x
+        | Error e ->
+            match box e with
+            | :? string as s -> invalidArg "source" $"Result value was Error: {s}"
+            | :? exn    as e -> raise <| System.ArgumentException ("Result value was Error", "source", e)
+            | _              -> invalidArg "source" $"Result value was Error: {string e}"
 
     /// Extracts the Ok value or use the supplied default value when it's an Error.
     let defaultValue (value:'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | _ -> value
