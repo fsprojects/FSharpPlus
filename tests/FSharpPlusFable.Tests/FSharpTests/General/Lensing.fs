@@ -20,7 +20,7 @@ let rayuela =
       Author = { Person.Name = "Julio Cortázar"
                  DateOfBirth = DateTime (1914, 8, 26) } }
 let lensing = testList "Lensing" [
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER // does not work due to Return || FABLE_COMPILER_3
     testCase "Lens" (fun () ->
                equal (view Book._authorName rayuela) "Julio Cortázar")
     testCase "Lens view 1, 2" (fun () ->
