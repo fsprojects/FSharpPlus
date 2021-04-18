@@ -29,7 +29,7 @@ let monad = testList "Monad" [
     #endif
     testCase "return" (fun () ->
         let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
-        equal (Some 1) (cf |> Const.run |> First.run)
+        equal None (cf |> Const.run |> First.run)
     )
 
     #if !FABLE_COMPILER
