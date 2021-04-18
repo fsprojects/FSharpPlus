@@ -27,10 +27,13 @@ let monad = testList "Monad" [
                 return ((+) x1 x2) }
         Assert.IsInstanceOf<WrappedListD<int>> (testVal))
     #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+
     testCase "return" (fun () ->
         let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
         equal None (cf |> Const.run |> First.run)
     )
+    #endif
 
     #if !FABLE_COMPILER
     testCase "DelayForCont" (fun () -> 
