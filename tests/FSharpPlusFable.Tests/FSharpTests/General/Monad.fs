@@ -29,9 +29,12 @@ let monad = testList "Monad" [
     #endif
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
-    testCase "return" (fun () ->
+    testCase "return Const First" (fun () ->
         let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
         equal None (cf |> Const.run |> First.run)
+    )
+    testCase "return Const" (fun () ->
+        let c : Const<int,int> = Control.Return.InvokeOnInstance 1 in equal 0 (Const.run c)
     )
     #endif
 

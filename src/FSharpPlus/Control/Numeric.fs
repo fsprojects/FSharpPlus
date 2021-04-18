@@ -146,7 +146,7 @@ type Zero =
     static member        Zero (_: Set<'a>                        , _: Zero    ) = Set.empty : Set<'a>
     static member        Zero (_: Map<'a,'b>                     , _: Zero    ) = Map.empty : Map<'a,'b>
 
-    static member inline Invoke () = 
+    static member inline Invoke () =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Zero : _*_ -> _) b, a)
         let inline call (a: 'a) = call_2 (a, Unchecked.defaultof<'r>) : 'r
         call Unchecked.defaultof<Zero>

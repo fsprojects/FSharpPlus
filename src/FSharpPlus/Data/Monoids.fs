@@ -94,7 +94,11 @@ module Const =
 type First<'t> = First of Option<'t> with
     static member get_Zero () = First None                                    : First<'t>
     static member (+) (x, y) = match x, y with First None, r -> r | l, _ -> l : First<'t>
+    #if FABLE_COMPILER
+    static member run (v:First<'t>) = if System.Object.ReferenceEquals(v,null) then None else match v with First a -> a : 't option
+    #else
     static member run (First a) = a                                           : 't option
+    #endif
 
 /// Option<'T> monoid returning the rightmost non-None value.
 [<Struct>]
