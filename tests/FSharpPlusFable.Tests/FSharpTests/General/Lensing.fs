@@ -14,11 +14,11 @@ type Book = { Title: string; Author: Person }
 module Book =
     let inline _author f { Author = a; Title = b } = f a <&> fun a' -> { Author = a'; Title = b }
     let inline _authorName b = _author << Person._name <| b
-#endif
 let rayuela =
     { Book.Title = "Rayuela"
       Author = { Person.Name = "Julio Cortázar"
                  DateOfBirth = DateTime (1914, 8, 26) } }
+#endif
 let lensing = testList "Lensing" [
 #if !FABLE_COMPILER // does not work due to Return || FABLE_COMPILER_3
     testCase "Lens" (fun () ->
