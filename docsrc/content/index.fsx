@@ -54,7 +54,7 @@ Example 1
 This example demonstrates using an extension function defined in this library.
 
 *)
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"nuget: FSharpPlus"
 open FSharpPlus
 
 let x = String.replace "old" "new" "Good old days"
