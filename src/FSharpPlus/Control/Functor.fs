@@ -119,9 +119,7 @@ type Map with
 
     static member        Map ((x: seq<_>                  , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
     static member        Map ((x: NonEmptySeq<_>          , f: 'T->'U), _mthd: Default2) = NonEmptySeq.map f x      : NonEmptySeq<'U>
-    #if !FABLE_COMPILER
     static member        Map ((x: IEnumerator<_>          , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
-    #endif
     static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = Dict.map f x             : IDictionary<'Key,'U>
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.map f x : IReadOnlyDictionary<'Key,_>
     static member        Map ((x: IObservable<'T>         , f: 'T->'U), _mthd: Default2) = Observable.map f x       : IObservable<'U>
@@ -175,9 +173,7 @@ type Unzip =
     static member        Unzip ((source: seq<'T * 'U>                      , _output: seq<'T> * seq<'U>                                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     static member        Unzip ((source: NonEmptySeq<'T * 'U>                      , _output: NonEmptySeq<'T> * NonEmptySeq<'U>            ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
 
-    #if !FABLE_COMPILER
     static member        Unzip ((source: IEnumerator<'T * 'U>              , _output: IEnumerator<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    #endif    
     static member        Unzip ((source: IDictionary<'Key, 'T * 'U>        , _output: IDictionary<_,'T> * IDictionary<_,'U>                ) , _mthd: Unzip   ) = Dict.unzip source
     static member        Unzip ((source: IReadOnlyDictionary<'Key,'T * 'U> , _output: IReadOnlyDictionary<_,'T> * IReadOnlyDictionary<_,'U>) , _mthd: Unzip   ) = IReadOnlyDictionary.unzip source
     static member        Unzip ((source: IObservable<'T * 'U>              , _output: IObservable<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
@@ -194,9 +190,7 @@ type Unzip =
 
 type Zip =
     inherit Default1
-    #if !FABLE_COMPILER
     static member Zip ((x: IEnumerator<'T>            , y: IEnumerator<'U>           , _output: IEnumerator<'T*'U>           ), _mthd: Zip) = Enumerator.zip          x y
-    #endif
     static member Zip ((x: seq<'T>                    , y: seq<'U>                   , _output: seq<'T*'U>                   ), _mthd: Zip) = Seq.zip                 x y
     static member Zip ((x: NonEmptySeq<'T>            , y: NonEmptySeq<'U>           , _output: NonEmptySeq<'T*'U>           ), _mthd: Zip) = NonEmptySeq.zip         x y
     static member Zip ((x: IDictionary<'K, 'T>        , y: IDictionary<'K,'U>        , _output: IDictionary<'K,'T*'U>        ), _mthd: Zip) = Dict.zip                x y

@@ -149,6 +149,7 @@ type Zero =
         let inline call (a: 'a) = call_2 (a, Unchecked.defaultof<'r>) : 'r
         call Unchecked.defaultof<Zero>
 
+#if !FABLE_COMPILER
 type Zero with
     static member inline Zero (t: 't, _:Zero) : 't =
         let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
@@ -161,6 +162,7 @@ type Zero with
         let (t2: 't2) = Zero.Invoke ()
         let (t1: 't1) = Zero.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+#endif
 
 type Zero with
     static member inline Zero (_: Tuple<'a>, _: Zero) = Tuple<_> (Zero.Invoke ()) : Tuple<'a>
@@ -183,7 +185,9 @@ type Zero with
     #endif
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
+    #if !FABLE_COMPILER
     static member inline Zero (_: Expr<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in Expr.Cast<'a>(Expr.Value (v))
+    #endif
     static member inline Zero (_: Lazy<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in lazy v
     static member        Zero (_: Dictionary<'a,'b>         , _: Zero) = Dictionary<'a,'b> ()
     static member        Zero (_: ResizeArray<'a>           , _: Zero) = ResizeArray () : ResizeArray<'a>
@@ -194,13 +198,9 @@ type Zero with
     static member inline Zero (_: ^R                             , _: Default5) = Implicit.Invoke 0   : ^R
 
     static member        Zero (_: seq<'a>                        , _: Default4) = Seq.empty      : seq<'a>
-    #if !FABLE_COMPILER
     static member        Zero (_: IEnumerator<'a>                , _: Default4) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
-    #endif
     static member        Zero (_: IDictionary<'a,'b>             , _: Default4) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
-    #if !FABLE_COMPILER
     static member        Zero (_: IReadOnlyDictionary<'a,'b>     , _: Default4) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
-    #endif
     static member inline Zero (_: 't                             , _: Default3) = (^t : (static member Empty: ^t) ()) : 't
 
     static member inline Zero (_: 't                             , _: Default2) = FromInt32.InvokeOnInstance 0        : 't

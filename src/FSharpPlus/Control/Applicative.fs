@@ -22,9 +22,7 @@ type Apply =
     static member        ``<*>`` (f: Lazy<'T->'U>     , x: Lazy<'T>             , [<Optional>]_output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
     static member        ``<*>`` (f: seq<_>           , x: seq<'T>              , [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
     static member        ``<*>`` (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>      , [<Optional>]_output: NonEmptySeq<'U>      , [<Optional>]_mthd: Apply) = NonEmptySeq.apply  f x                       : NonEmptySeq<'U>
-    #if !FABLE_COMPILER
     static member        ``<*>`` (f: IEnumerator<_>   , x: IEnumerator<'T>      , [<Optional>]_output: IEnumerator<'U>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
-    #endif
     static member        ``<*>`` (f: list<_>          , x: list<'T>             , [<Optional>]_output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
     static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
     static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: Apply) = fun x -> let f' = f x in f' (g x)            : 'U
@@ -75,9 +73,7 @@ type Lift2 =
     static member        Lift2 (f, (x: Lazy<_>            , y: Lazy<_>            ), _mthd: Lift2) = Lazy.map2 f x y
     static member        Lift2 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Lift2) = Seq.lift2 f x y
     static member        Lift2 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     ), _mthd: Lift2) = NonEmptySeq.lift2 f x y
-    #if !FABLE_COMPILER
     static member        Lift2 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     ), _mthd: Lift2) = Enumerator.map2 f x y
-    #endif
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = List.lift2 f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Array.lift2 f x y
     static member        Lift2 (f, (x: 'R -> 'T           , y: 'R -> 'U           ), _mthd: Lift2) = fun a -> f (x a) (y a)
@@ -116,9 +112,7 @@ type Lift3 =
     static member        Lift3 (f, (x: Lazy<_>            , y: Lazy<_>            , z: Lazy<_>             ), _mthd: Lift3) = Lazy.map3 f x y z
     static member        Lift3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Lift3) = Seq.lift3 f x y z
     static member        Lift3 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     , z: NonEmptySeq<_>      ), _mthd: Lift3) = NonEmptySeq.lift3 f x y z
-    #if !FABLE_COMPILER
     static member        Lift3 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     , z: IEnumerator<_>      ), _mthd: Lift3) = Enumerator.map3 f x y z
-    #endif
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = List.lift3 f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Array.lift3 f x y z
     static member        Lift3 (f, (x: 'R -> 'T           , y: 'R -> 'U           , z: 'R -> 'V            ), _mthd: Lift3) = fun a -> f (x a) (y a) (z a)
