@@ -51,9 +51,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -89,11 +89,6 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
-      Builders
-    </a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
       Choice
     </a>
@@ -116,6 +111,11 @@
   <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
       Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-genericbuilders.html">
+      GenericBuilders
     </a>
   </li>
   <li class="nav-item">
@@ -246,13 +246,6 @@
       FSharpPlus.Math
     </a>
   </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
-      FSharpPlus.TypeLevel
-    </a>
-  </span>
 </li>
             </ul>
         </div>
@@ -300,26 +293,26 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '185', 185)" onmouseover="showTip(event, '185', 185)">
+              <code onmouseout="hideTip(event, '199', 199)" onmouseover="showTip(event, '199', 199)">
                 <p>
                   <a id="chooseValues">
                     <a href="#chooseValues">
-                      <code><span>Map.chooseValues&#32;<span>f&#32;x</span></span></code>
+                      <code><span>Map.chooseValues&#32;<span>mapping&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="185">
+              <div class="fsdocs-tip" id="199">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Map.chooseValues&#32;<span>f&#32;x</span></span></code>
+                  <code><span>Map.chooseValues&#32;<span>mapping&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        f
+                        mapping
                       </b>
                       :
                       <code><span>'T&#32;->&#32;<span>'a&#32;option</span></span></code>
@@ -329,7 +322,7 @@
                     <br/>
                     <span>
                       <b>
-                        x
+                        source
                       </b>
                       :
                       <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
@@ -351,7 +344,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L54-54" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L72-72" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -360,7 +353,7 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  f
+                  mapping
                 </span>
                 :
                 <code><span>'T&#32;->&#32;<span>'a&#32;option</span></span></code>
@@ -372,7 +365,7 @@
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source
                 </span>
                 :
                 <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
@@ -401,7 +394,108 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '186', 186)" onmouseover="showTip(event, '186', 186)">
+              <code onmouseout="hideTip(event, '200', 200)" onmouseover="showTip(event, '200', 200)">
+                <p>
+                  <a id="choosei">
+                    <a href="#choosei">
+                      <code><span>Map.choosei&#32;<span>f&#32;x</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="200">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Map.choosei&#32;<span>f&#32;x</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'Key&#32;->&#32;'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+                       - 
+                      The mapping function, taking key and element as parameters.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                       - 
+                      The input map.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                  </span>
+                  Returns Map with values (k, v) for each Map value where the function returns Some(v).
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L141-141" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Same as chooseValues but with access to the key.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'Key&#32;->&#32;'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function, taking key and element as parameters.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input map.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Returns Map with values (k, v) for each Map value where the function returns Some(v).
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '201', 201)" onmouseover="showTip(event, '201', 201)">
                 <p>
                   <a id="intersect">
                     <a href="#intersect">
@@ -410,7 +504,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="186">
+              <div class="fsdocs-tip" id="201">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.intersect&#32;<span>source1&#32;source2</span></span></code>
@@ -447,7 +541,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L101-101" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L133-133" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -487,7 +581,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '187', 187)" onmouseover="showTip(event, '187', 187)">
+              <code onmouseout="hideTip(event, '202', 202)" onmouseover="showTip(event, '202', 202)">
                 <p>
                   <a id="intersectWith">
                     <a href="#intersectWith">
@@ -496,7 +590,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="187">
+              <div class="fsdocs-tip" id="202">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.intersectWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
@@ -541,7 +635,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L88-88" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L106-106" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -589,7 +683,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '188', 188)" onmouseover="showTip(event, '188', 188)">
+              <code onmouseout="hideTip(event, '203', 203)" onmouseover="showTip(event, '203', 203)">
                 <p>
                   <a id="keys">
                     <a href="#keys">
@@ -598,7 +692,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="188">
+              <div class="fsdocs-tip" id="203">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.keys&#32;<span>source</span></span></code>
@@ -630,7 +724,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L16-16" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L19-19" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -668,7 +762,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '189', 189)" onmouseover="showTip(event, '189', 189)">
+              <code onmouseout="hideTip(event, '204', 204)" onmouseover="showTip(event, '204', 204)">
                 <p>
                   <a id="mapValues">
                     <a href="#mapValues">
@@ -677,7 +771,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="189">
+              <div class="fsdocs-tip" id="204">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.mapValues&#32;<span>f&#32;x</span></span></code>
@@ -690,7 +784,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                         f
                       </b>
                       :
-                      <code><span>'T&#32;->&#32;'a</span></code>
+                      <code><span>'T&#32;->&#32;'h</span></code>
                        - 
                       The mapping function - takes only the value, and returns the mapped value.
                     </span>
@@ -709,7 +803,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'a</span>&gt;</span></code>
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'h</span>&gt;</span></code>
                   </span>
                   The mapped Map.
                   <br/>
@@ -719,7 +813,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L33-33" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L36-36" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -737,7 +831,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   f
                 </span>
                 :
-                <code><span>'T&#32;->&#32;'a</span></code>
+                <code><span>'T&#32;->&#32;'h</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -762,7 +856,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <span class="fsdocs-return-name">
                   Returns:
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'a</span>&gt;</span></code>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'h</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -775,7 +869,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '190', 190)" onmouseover="showTip(event, '190', 190)">
+              <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
                 <p>
                   <a id="mapValues2">
                     <a href="#mapValues2">
@@ -784,7 +878,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="190">
+              <div class="fsdocs-tip" id="205">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.mapValues2&#32;<span>f&#32;x&#32;y</span></span></code>
@@ -836,7 +930,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L42-42" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L45-45" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -901,7 +995,155 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '191', 191)" onmouseover="showTip(event, '191', 191)">
+              <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
+                <p>
+                  <a id="mapValues3">
+                    <a href="#mapValues3">
+                      <code><span>Map.mapValues3&#32;<span>mapping&#32;x&#32;y&#32;z</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="206">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Map.mapValues3&#32;<span>mapping&#32;x&#32;y&#32;z</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        mapping
+                      </b>
+                      :
+                      <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'T3&#32;->&#32;'b</span></code>
+                       - 
+                      The mapping function.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                       - 
+                      First input Map.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                       - 
+                      Second input Map.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        z
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
+                       - 
+                      Third input Map.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'b</span>&gt;</span></code>
+                  </span>
+                  The mapped Map.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L60-60" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Combines values from three maps using mapping function.
+            </p>
+            <p class="fsdocs-remarks">
+              Keys that are not present on every Map are dropped.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  mapping
+                </span>
+                :
+                <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'T3&#32;->&#32;'b</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  First input Map.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Second input Map.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  z
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Third input Map.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/microsoft.fsharp.collections.fsharpmap-2">Map</a>&lt;<span>'Key,&#32;'b</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The mapped Map.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
                 <p>
                   <a id="union">
                     <a href="#union">
@@ -910,7 +1152,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="191">
+              <div class="fsdocs-tip" id="207">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.union&#32;<span>source&#32;altSource</span></span></code>
@@ -947,7 +1189,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L83-83" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L101-101" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -987,7 +1229,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '192', 192)" onmouseover="showTip(event, '192', 192)">
+              <code onmouseout="hideTip(event, '208', 208)" onmouseover="showTip(event, '208', 208)">
                 <p>
                   <a id="unionWith">
                     <a href="#unionWith">
@@ -996,7 +1238,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="192">
+              <div class="fsdocs-tip" id="208">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.unionWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
@@ -1041,7 +1283,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L79-79" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L97-97" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1089,7 +1331,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '193', 193)" onmouseover="showTip(event, '193', 193)">
+              <code onmouseout="hideTip(event, '209', 209)" onmouseover="showTip(event, '209', 209)">
                 <p>
                   <a id="unzip">
                     <a href="#unzip">
@@ -1098,7 +1340,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="193">
+              <div class="fsdocs-tip" id="209">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.unzip&#32;<span>source</span></span></code>
@@ -1130,7 +1372,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L76-76" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L94-94" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1168,7 +1410,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '194', 194)" onmouseover="showTip(event, '194', 194)">
+              <code onmouseout="hideTip(event, '210', 210)" onmouseover="showTip(event, '210', 210)">
                 <p>
                   <a id="values">
                     <a href="#values">
@@ -1177,7 +1419,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="194">
+              <div class="fsdocs-tip" id="210">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.values&#32;<span>source</span></span></code>
@@ -1209,7 +1451,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L22-22" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L25-25" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1247,7 +1489,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '195', 195)" onmouseover="showTip(event, '195', 195)">
+              <code onmouseout="hideTip(event, '211', 211)" onmouseover="showTip(event, '211', 211)">
                 <p>
                   <a id="zip">
                     <a href="#zip">
@@ -1256,7 +1498,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="195">
+              <div class="fsdocs-tip" id="211">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Map.zip&#32;<span>x&#32;y</span></span></code>
@@ -1298,7 +1540,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L66-66" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Map.fs#L84-84" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>

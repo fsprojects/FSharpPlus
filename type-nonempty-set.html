@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -129,7 +129,7 @@
 <div class="fsdocs-tip" id="fs13">val set1234&#39; : Set&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs14">val toSet : NonEmptySet&lt;&#39;a&gt; -&gt; Set&lt;&#39;a&gt; (requires comparison)</div>
 <div class="fsdocs-tip" id="fs15">val set12345 : NonEmptySet&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs16">val add : value:&#39;a -&gt; nes:NonEmptySet&lt;&#39;a&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)</div>
+<div class="fsdocs-tip" id="fs16">val add : value:&#39;a -&gt; source:NonEmptySet&lt;&#39;a&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)</div>
 <div class="fsdocs-tip" id="fs17">val set12345&#39; : NonEmptySet&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs18">val unionMany : sets:NonEmptyList&lt;NonEmptySet&lt;&#39;a&gt;&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)</div>
 <div class="fsdocs-tip" id="fs19">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{ Head: &#39;t<br />&#160;&#160;&#160;&#160;Tail: &#39;t list }<br />&#160;&#160;&#160;&#160;interface NonEmptySeq&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member Length : int<br />&#160;&#160;&#160;&#160;static member Choice : source:NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ( &lt;|&gt; ))<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;...</div>

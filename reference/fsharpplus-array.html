@@ -51,9 +51,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -89,11 +89,6 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
-      Builders
-    </a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
       Choice
     </a>
@@ -116,6 +111,11 @@
   <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
       Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-genericbuilders.html">
+      GenericBuilders
     </a>
   </li>
   <li class="nav-item">
@@ -244,13 +244,6 @@
   <span>
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
       FSharpPlus.Math
-    </a>
-  </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
-      FSharpPlus.TypeLevel
     </a>
   </span>
 </li>
@@ -412,6 +405,107 @@
             <div>
               <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
                 <p>
+                  <a id="choosei">
+                    <a href="#choosei">
+                      <code><span>Array.choosei&#32;<span>mapping&#32;source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Array.choosei&#32;<span>mapping&#32;source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        mapping
+                      </b>
+                      :
+                      <code><span>int&#32;->&#32;'b&#32;->&#32;<span>'c&#32;option</span></span></code>
+                       - 
+                      The mapping function, taking index and element as parameters.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span>'b[]</span></code>
+                       - 
+                      The input array.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'c[]</span></code>
+                  </span>
+                  Array with values x for each Array value where the function returns Some(x).
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L125-125" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Same as choose but with access to the index.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  mapping
+                </span>
+                :
+                <code><span>int&#32;->&#32;'b&#32;->&#32;<span>'c&#32;option</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function, taking index and element as parameters.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span>'b[]</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input array.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'c[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Array with values x for each Array value where the function returns Some(x).
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
+                <p>
                   <a id="findSliceIndex">
                     <a href="#findSliceIndex">
                       <code><span>Array.findSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -419,7 +513,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="2">
+              <div class="fsdocs-tip" id="3">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.findSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -461,7 +555,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L59-59" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L74-74" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -526,7 +620,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
+              <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
                 <p>
                   <a id="intercalate">
                     <a href="#intercalate">
@@ -535,7 +629,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3">
+              <div class="fsdocs-tip" id="4">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.intercalate&#32;<span>separator&#32;source</span></span></code>
@@ -572,7 +666,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L30-30" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L45-45" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -612,7 +706,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
+              <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
                 <p>
                   <a id="intersperse">
                     <a href="#intersperse">
@@ -621,7 +715,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="4">
+              <div class="fsdocs-tip" id="5">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.intersperse&#32;<span>element&#32;source</span></span></code>
@@ -658,7 +752,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L33-33" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L48-48" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -698,7 +792,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+              <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
                 <p>
                   <a id="lift2">
                     <a href="#lift2">
@@ -707,7 +801,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="5">
+              <div class="fsdocs-tip" id="6">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.lift2&#32;<span>f&#32;x&#32;y</span></span></code>
@@ -800,7 +894,152 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
+              <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+                <p>
+                  <a id="lift3">
+                    <a href="#lift3">
+                      <code><span>Array.lift3&#32;<span>mapping&#32;list1&#32;list2&#32;list3</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="7">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Array.lift3&#32;<span>mapping&#32;list1&#32;list2&#32;list3</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        mapping
+                      </b>
+                      :
+                      <code><span>'e&#32;->&#32;'f&#32;->&#32;'g&#32;->&#32;'h</span></code>
+                       - 
+                      Mapping function taking three element combination as input.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        list1
+                      </b>
+                      :
+                      <code><span>'e[]</span></code>
+                       - 
+                      First array.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        list2
+                      </b>
+                      :
+                      <code><span>'f[]</span></code>
+                       - 
+                      Second array.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        list3
+                      </b>
+                      :
+                      <code><span>'g[]</span></code>
+                       - 
+                      Third array.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'h[]</span></code>
+                  </span>
+                  Array with values returned from mapping function.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L37-37" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Combines all values from three arrays and calls a mapping function on this combination.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  mapping
+                </span>
+                :
+                <code><span>'e&#32;->&#32;'f&#32;->&#32;'g&#32;->&#32;'h</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Mapping function taking three element combination as input.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  list1
+                </span>
+                :
+                <code><span>'e[]</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  First array.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  list2
+                </span>
+                :
+                <code><span>'f[]</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Second array.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  list3
+                </span>
+                :
+                <code><span>'g[]</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Third array.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'h[]</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Array with values returned from mapping function.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
                 <p>
                   <a id="map2Shortest">
                     <a href="#map2Shortest">
@@ -809,7 +1048,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="6">
+              <div class="fsdocs-tip" id="8">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.map2Shortest&#32;<span>f&#32;a1&#32;a2</span></span></code>
@@ -854,7 +1093,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L93-93" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L108-108" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -901,7 +1140,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+              <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
                 <p>
                   <a id="partitionMap">
                     <a href="#partitionMap">
@@ -910,7 +1149,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="7">
+              <div class="fsdocs-tip" id="9">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.partitionMap&#32;<span>mapper&#32;source</span></span></code>
@@ -950,7 +1189,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L85-85" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L100-100" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -997,7 +1236,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
+              <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
                 <p>
                   <a id="replace">
                     <a href="#replace">
@@ -1006,7 +1245,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="8">
+              <div class="fsdocs-tip" id="10">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.replace&#32;<span>oldValue&#32;newValue&#32;source</span></span></code>
@@ -1051,7 +1290,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L39-39" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L54-54" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1099,7 +1338,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
+              <code onmouseout="hideTip(event, '11', 11)" onmouseover="showTip(event, '11', 11)">
                 <p>
                   <a id="split">
                     <a href="#split">
@@ -1108,7 +1347,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="9">
+              <div class="fsdocs-tip" id="11">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.split&#32;<span>separators&#32;source</span></span></code>
@@ -1145,7 +1384,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L36-36" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L51-51" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1185,7 +1424,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
+              <code onmouseout="hideTip(event, '12', 12)" onmouseover="showTip(event, '12', 12)">
                 <p>
                   <a id="tryFindSliceIndex">
                     <a href="#tryFindSliceIndex">
@@ -1194,7 +1433,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="10">
+              <div class="fsdocs-tip" id="12">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.tryFindSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -1234,7 +1473,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L73-73" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L88-88" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1281,7 +1520,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '11', 11)" onmouseover="showTip(event, '11', 11)">
+              <code onmouseout="hideTip(event, '13', 13)" onmouseover="showTip(event, '13', 13)">
                 <p>
                   <a id="zipShortest">
                     <a href="#zipShortest">
@@ -1290,7 +1529,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="11">
+              <div class="fsdocs-tip" id="13">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Array.zipShortest&#32;<span>a1&#32;a2</span></span></code>
@@ -1332,7 +1571,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L102-102" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Array.fs#L117-117" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>

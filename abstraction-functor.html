@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -182,7 +182,7 @@
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 18)" onmouseover="showTip(event, 'fs14', 18)" class="fn">print</span>    <span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 20)" onmouseover="showTip(event, 'fs7', 20)" class="k">async</span> <span class="pn">{</span> <span onmouseout="hideTip(event, 'fs13', 21)" onmouseover="showTip(event, 'fs13', 21)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%A</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs15', 22)" onmouseover="showTip(event, 'fs15', 22)" class="id">x</span><span class="pn">}</span>
 
 <span class="c">// Test IO</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="id">action</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 24)" onmouseover="showTip(event, 'fs17', 24)" class="k">monad</span> <span class="pn">{</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="id">action</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 24)" onmouseover="showTip(event, 'fs17', 24)" class="id">monad</span> <span class="pn">{</span>
     <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs11', 25)" onmouseover="showTip(event, 'fs11', 25)" class="fn">putStrLn</span>  <span class="s">&quot;What is your first name?&quot;</span>
     <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs18', 26)" onmouseover="showTip(event, 'fs18', 26)" class="id">fn</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 27)" onmouseover="showTip(event, 'fs6', 27)" class="id">getLine</span>
     <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs11', 28)" onmouseover="showTip(event, 'fs11', 28)" class="fn">putStrLn</span>  <span class="pn">(</span><span class="s">&quot;Thanks, &quot;</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs18', 29)" onmouseover="showTip(event, 'fs18', 29)" class="id">fn</span><span class="pn">)</span> 
@@ -257,7 +257,7 @@
 <div class="fsdocs-tip" id="fs14">val print : x:&#39;a -&gt; Async&lt;unit&gt;</div>
 <div class="fsdocs-tip" id="fs15">val x : &#39;a</div>
 <div class="fsdocs-tip" id="fs16">val action : Async&lt;string&gt;</div>
-<div class="fsdocs-tip" id="fs17">val monad : MonadFxBuilder</div>
+<div class="fsdocs-tip" id="fs17">val monad&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;</div>
 <div class="fsdocs-tip" id="fs18">val fn : string</div>
 <div class="fsdocs-tip" id="fs19">val ln : string</div>
 <div class="fsdocs-tip" id="fs20">val fullname : string</div>

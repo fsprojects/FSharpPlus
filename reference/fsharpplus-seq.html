@@ -51,9 +51,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -89,11 +89,6 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
-      Builders
-    </a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
       Choice
     </a>
@@ -116,6 +111,11 @@
   <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
       Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-genericbuilders.html">
+      GenericBuilders
     </a>
   </li>
   <li class="nav-item">
@@ -246,13 +246,6 @@
       FSharpPlus.Math
     </a>
   </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
-      FSharpPlus.TypeLevel
-    </a>
-  </span>
 </li>
             </ul>
         </div>
@@ -300,7 +293,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '459', 459)" onmouseover="showTip(event, '459', 459)">
+              <code onmouseout="hideTip(event, '479', 479)" onmouseover="showTip(event, '479', 479)">
                 <p>
                   <a id="apply">
                     <a href="#apply">
@@ -309,7 +302,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="459">
+              <div class="fsdocs-tip" id="479">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.apply&#32;<span>f&#32;x</span></span></code>
@@ -410,7 +403,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '460', 460)" onmouseover="showTip(event, '460', 460)">
+              <code onmouseout="hideTip(event, '480', 480)" onmouseover="showTip(event, '480', 480)">
                 <p>
                   <a id="bind">
                     <a href="#bind">
@@ -419,7 +412,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="460">
+              <div class="fsdocs-tip" id="480">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.bind&#32;<span>mapping&#32;source</span></span></code>
@@ -528,7 +521,108 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '461', 461)" onmouseover="showTip(event, '461', 461)">
+              <code onmouseout="hideTip(event, '481', 481)" onmouseover="showTip(event, '481', 481)">
+                <p>
+                  <a id="choosei">
+                    <a href="#choosei">
+                      <code><span>Seq.choosei&#32;<span>mapping&#32;source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="481">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Seq.choosei&#32;<span>mapping&#32;source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        mapping
+                      </b>
+                      :
+                      <code><span>int&#32;->&#32;'a&#32;->&#32;<span>'b&#32;option</span></span></code>
+                       - 
+                      The mapping function, taking index and element as parameters.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span>seq&lt;'a&gt;</span></code>
+                       - 
+                      The input seq.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;'b&gt;</span></code>
+                  </span>
+                  Seq with values x for each List value where the function returns Some(x).
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L250-250" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Choose with access to the index
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  mapping
+                </span>
+                :
+                <code><span>int&#32;->&#32;'a&#32;->&#32;<span>'b&#32;option</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function, taking index and element as parameters.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  source
+                </span>
+                :
+                <code><span>seq&lt;'a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input seq.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;'b&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Seq with values x for each List value where the function returns Some(x).
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '482', 482)" onmouseover="showTip(event, '482', 482)">
                 <p>
                   <a id="chunkBy">
                     <a href="#chunkBy">
@@ -537,7 +631,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="461">
+              <div class="fsdocs-tip" id="482">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.chunkBy&#32;<span>projection&#32;source</span></span></code>
@@ -579,7 +673,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L66-66" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L80-80" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -642,29 +736,31 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '462', 462)" onmouseover="showTip(event, '462', 462)">
+              <code onmouseout="hideTip(event, '483', 483)" onmouseover="showTip(event, '483', 483)">
                 <p>
                   <a id="drop">
                     <a href="#drop">
-                      <code><span>Seq.drop&#32;<span>i&#32;source</span></span></code>
+                      <code><span>Seq.drop&#32;<span>count&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="462">
+              <div class="fsdocs-tip" id="483">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Seq.drop&#32;<span>i&#32;source</span></span></code>
+                  <code><span>Seq.drop&#32;<span>count&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        i
+                        count
                       </b>
                       :
                       <code>int</code>
+                       - 
+                      The number of items to drop.
                     </span>
                     <br/>
                     <span>
@@ -691,7 +787,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L156-156" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L170-170" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -705,12 +801,16 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  i
+                  count
                 </span>
                 :
                 <code>int</code>
               </dt>
-              <dd class="fsdocs-param-docs"></dd>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The number of items to drop.
+                </p>
+              </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
                   source
@@ -742,7 +842,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '463', 463)" onmouseover="showTip(event, '463', 463)">
+              <code onmouseout="hideTip(event, '484', 484)" onmouseover="showTip(event, '484', 484)">
                 <p>
                   <a id="findSliceIndex">
                     <a href="#findSliceIndex">
@@ -751,7 +851,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="463">
+              <div class="fsdocs-tip" id="484">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.findSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -791,7 +891,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L198-198" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L213-213" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -858,7 +958,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '464', 464)" onmouseover="showTip(event, '464', 464)">
+              <code onmouseout="hideTip(event, '485', 485)" onmouseover="showTip(event, '485', 485)">
                 <p>
                   <a id="foldBack">
                     <a href="#foldBack">
@@ -867,7 +967,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="464">
+              <div class="fsdocs-tip" id="485">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.foldBack&#32;<span>f&#32;x&#32;z</span></span></code>
@@ -912,7 +1012,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L46-46" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L60-60" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -967,7 +1067,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '465', 465)" onmouseover="showTip(event, '465', 465)">
+              <code onmouseout="hideTip(event, '486', 486)" onmouseover="showTip(event, '486', 486)">
                 <p>
                   <a id="intercalate">
                     <a href="#intercalate">
@@ -976,7 +1076,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="465">
+              <div class="fsdocs-tip" id="486">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.intercalate&#32;<span>separator&#32;source</span></span></code>
@@ -1013,7 +1113,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L92-92" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L106-106" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1053,7 +1153,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '466', 466)" onmouseover="showTip(event, '466', 466)">
+              <code onmouseout="hideTip(event, '487', 487)" onmouseover="showTip(event, '487', 487)">
                 <p>
                   <a id="intersperse">
                     <a href="#intersperse">
@@ -1062,7 +1162,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="466">
+              <div class="fsdocs-tip" id="487">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.intersperse&#32;<span>sep&#32;list</span></span></code>
@@ -1099,7 +1199,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L84-84" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L98-98" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1140,7 +1240,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '467', 467)" onmouseover="showTip(event, '467', 467)">
+              <code onmouseout="hideTip(event, '488', 488)" onmouseover="showTip(event, '488', 488)">
                 <p>
                   <a id="lift2">
                     <a href="#lift2">
@@ -1149,7 +1249,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="467">
+              <div class="fsdocs-tip" id="488">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.lift2&#32;<span>f&#32;x1&#32;x2</span></span></code>
@@ -1242,7 +1342,152 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '468', 468)" onmouseover="showTip(event, '468', 468)">
+              <code onmouseout="hideTip(event, '489', 489)" onmouseover="showTip(event, '489', 489)">
+                <p>
+                  <a id="lift3">
+                    <a href="#lift3">
+                      <code><span>Seq.lift3&#32;<span>f&#32;x1&#32;x2&#32;x3</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="489">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Seq.lift3&#32;<span>f&#32;x1&#32;x2&#32;x3</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'b&#32;->&#32;'c&#32;->&#32;'d&#32;->&#32;'e</span></code>
+                       - 
+                      Mapping function taking three element combination as input.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x1
+                      </b>
+                      :
+                      <code><span>seq&lt;'d&gt;</span></code>
+                       - 
+                      First seq.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x2
+                      </b>
+                      :
+                      <code><span>seq&lt;'b&gt;</span></code>
+                       - 
+                      Second seq.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x3
+                      </b>
+                      :
+                      <code><span>seq&lt;'c&gt;</span></code>
+                       - 
+                      Third seq.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>seq&lt;'e&gt;</span></code>
+                  </span>
+                  Seq with values returned from mapping function.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L46-46" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Combines values from three seq and calls a mapping function on this combination.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'b&#32;->&#32;'c&#32;->&#32;'d&#32;->&#32;'e</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Mapping function taking three element combination as input.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x1
+                </span>
+                :
+                <code><span>seq&lt;'d&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  First seq.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x2
+                </span>
+                :
+                <code><span>seq&lt;'b&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Second seq.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x3
+                </span>
+                :
+                <code><span>seq&lt;'c&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Third seq.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>seq&lt;'e&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Seq with values returned from mapping function.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '490', 490)" onmouseover="showTip(event, '490', 490)">
                 <p>
                   <a id="replace">
                     <a href="#replace">
@@ -1251,7 +1496,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="468">
+              <div class="fsdocs-tip" id="490">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.replace&#32;<span>oldValue&#32;newValue&#32;source</span></span></code>
@@ -1296,7 +1541,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L127-127" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L141-141" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1344,7 +1589,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '469', 469)" onmouseover="showTip(event, '469', 469)">
+              <code onmouseout="hideTip(event, '491', 491)" onmouseover="showTip(event, '491', 491)">
                 <p>
                   <a id="replicate">
                     <a href="#replicate">
@@ -1353,7 +1598,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="469">
+              <div class="fsdocs-tip" id="491">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.replicate&#32;<span>count&#32;initial</span></span></code>
@@ -1390,7 +1635,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L171-171" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L185-185" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1436,7 +1681,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '470', 470)" onmouseover="showTip(event, '470', 470)">
+              <code onmouseout="hideTip(event, '492', 492)" onmouseover="showTip(event, '492', 492)">
                 <p>
                   <a id="split">
                     <a href="#split">
@@ -1445,7 +1690,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="470">
+              <div class="fsdocs-tip" id="492">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.split&#32;<span>separators&#32;source</span></span></code>
@@ -1482,7 +1727,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L100-100" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L114-114" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1522,29 +1767,31 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '471', 471)" onmouseover="showTip(event, '471', 471)">
+              <code onmouseout="hideTip(event, '493', 493)" onmouseover="showTip(event, '493', 493)">
                 <p>
                   <a id="toIReadOnlyList">
                     <a href="#toIReadOnlyList">
-                      <code><span>Seq.toIReadOnlyList&#32;<span>x</span></span></code>
+                      <code><span>Seq.toIReadOnlyList&#32;<span>source</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="471">
+              <div class="fsdocs-tip" id="493">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Seq.toIReadOnlyList&#32;<span>x</span></span></code>
+                  <code><span>Seq.toIReadOnlyList&#32;<span>source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        x
+                        source
                       </b>
                       :
                       <code><span>seq&lt;'a&gt;</span></code>
+                       - 
+                      The seq source
                     </span>
                     <br/>
                   </ul>
@@ -1561,7 +1808,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L182-182" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L196-196" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1570,12 +1817,16 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source
                 </span>
                 :
                 <code><span>seq&lt;'a&gt;</span></code>
               </dt>
-              <dd class="fsdocs-param-docs"></dd>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The seq source
+                </p>
+              </dd>
             </dl>
             <dl class="fsdocs-returns">
               <dt>
@@ -1595,7 +1846,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '472', 472)" onmouseover="showTip(event, '472', 472)">
+              <code onmouseout="hideTip(event, '494', 494)" onmouseover="showTip(event, '494', 494)">
                 <p>
                   <a id="tryFindSliceIndex">
                     <a href="#tryFindSliceIndex">
@@ -1604,7 +1855,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="472">
+              <div class="fsdocs-tip" id="494">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Seq.tryFindSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -1644,7 +1895,7 @@ http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-int
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L217-217" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Seq.fs#L236-236" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>

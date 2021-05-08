@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -187,7 +187,7 @@ methods.</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;../../packages/docs/MathNet.Numerics/lib/net40/MathNet.Numerics.dll&quot;</span>
 <span class="pp">#r</span> <span class="s">&quot;../../packages/docs/MathNet.Numerics.FSharp/lib/net45/MathNet.Numerics.FSharp.dll&quot;</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 69)" onmouseover="showTip(event, 'fs30', 69)" class="id">x</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs31', 70)" onmouseover="showTip(event, 'fs31', 70)" class="rt">MathNet</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs32', 71)" onmouseover="showTip(event, 'fs32', 71)" class="id">Numerics</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs33', 72)" onmouseover="showTip(event, 'fs33', 72)" class="id">BigRational</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs34', 73)" onmouseover="showTip(event, 'fs34', 73)" class="fn">fromBigInt</span> <span class="m">10I</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 69)" onmouseover="showTip(event, 'fs30', 69)" class="id">x</span> <span class="pn">:</span> <span class="id">MathNet</span><span class="pn">.</span><span class="id">Numerics</span><span class="pn">.</span><span class="id">BigRational</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs31', 70)" onmouseover="showTip(event, 'fs31', 70)" class="fn">fromBigInt</span> <span class="m">10I</span>
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
@@ -219,11 +219,8 @@ methods.</p>
 <div class="fsdocs-tip" id="fs27">val x : &#39;b</div>
 <div class="fsdocs-tip" id="fs28">val t1 : Tree&lt;&#39;b&gt;</div>
 <div class="fsdocs-tip" id="fs29">val t2 : Tree&lt;&#39;b&gt;</div>
-<div class="fsdocs-tip" id="fs30">val x : MathNet.Numerics.BigRational</div>
-<div class="fsdocs-tip" id="fs31">namespace MathNet</div>
-<div class="fsdocs-tip" id="fs32">namespace MathNet.Numerics</div>
-<div class="fsdocs-tip" id="fs33">type BigRational =<br />&#160;&#160;interface IComparable<br />&#160;&#160;override GetHashCode : unit -&gt; int<br />&#160;&#160;override ToString : unit -&gt; string<br />&#160;&#160;member Denominator : BigInteger<br />&#160;&#160;member IsInteger : bool<br />&#160;&#160;member IsNegative : bool<br />&#160;&#160;member IsOne : bool<br />&#160;&#160;member IsPositive : bool<br />&#160;&#160;member IsZero : bool<br />&#160;&#160;member Numerator : BigInteger<br />&#160;&#160;...</div>
-<div class="fsdocs-tip" id="fs34">val fromBigInt : x:bigint -&gt; &#39;Num (requires member FromBigInt)</div>
+<div class="fsdocs-tip" id="fs30">val x : obj</div>
+<div class="fsdocs-tip" id="fs31">val fromBigInt : x:bigint -&gt; &#39;Num (requires member FromBigInt)</div>
 
         </div>
 

@@ -51,9 +51,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -89,11 +89,6 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
-      Builders
-    </a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
       Choice
     </a>
@@ -116,6 +111,11 @@
   <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
       Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-genericbuilders.html">
+      GenericBuilders
     </a>
   </li>
   <li class="nav-item">
@@ -246,13 +246,6 @@
       FSharpPlus.Math
     </a>
   </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
-      FSharpPlus.TypeLevel
-    </a>
-  </span>
 </li>
             </ul>
         </div>
@@ -300,7 +293,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '417', 417)" onmouseover="showTip(event, '417', 417)">
+              <code onmouseout="hideTip(event, '434', 434)" onmouseover="showTip(event, '434', 434)">
                 <p>
                   <a id="apply">
                     <a href="#apply">
@@ -309,7 +302,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="417">
+              <div class="fsdocs-tip" id="434">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Option.apply&#32;<span>f&#32;x</span></span></code>
@@ -401,7 +394,99 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '418', 418)" onmouseover="showTip(event, '418', 418)">
+              <code onmouseout="hideTip(event, '435', 435)" onmouseover="showTip(event, '435', 435)">
+                <p>
+                  <a id="ofPair">
+                    <a href="#ofPair">
+                      <code><span>Option.ofPair&#32;<span><span>(<span>arg1,&#32;arg2</span>)</span></span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="435">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Option.ofPair&#32;<span><span>(<span>arg1,&#32;arg2</span>)</span></span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code>bool</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        arg1
+                      </b>
+                      :
+                      <code>'T</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'T&#32;option</span></code>
+                  </span>
+                  <code>Some</code> if bool is `true`, <code>None</code> otherwise.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Option.fs#L59-59" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Converts pair of bool and value to Option.
+            </p>
+            <p class="fsdocs-remarks">
+              Useful for handling C# try pattern with `out` parameter. E.g. `Int.TryParse` or `Dictionary.TryGetValue`.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg1
+                </span>
+                :
+                <code>'T</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span>'T&#32;option</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  <code>Some</code> if bool is `true`, <code>None</code> otherwise.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '436', 436)" onmouseover="showTip(event, '436', 436)">
                 <p>
                   <a id="ofResult">
                     <a href="#ofResult">
@@ -410,7 +495,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="418">
+              <div class="fsdocs-tip" id="436">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Option.ofResult&#32;<span>source</span></span></code>
@@ -483,7 +568,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '419', 419)" onmouseover="showTip(event, '419', 419)">
+              <code onmouseout="hideTip(event, '437', 437)" onmouseover="showTip(event, '437', 437)">
                 <p>
                   <a id="protect">
                     <a href="#protect">
@@ -492,7 +577,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="419">
+              <div class="fsdocs-tip" id="437">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Option.protect&#32;<span>f&#32;x</span></span></code>
@@ -569,7 +654,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '420', 420)" onmouseover="showTip(event, '420', 420)">
+              <code onmouseout="hideTip(event, '438', 438)" onmouseover="showTip(event, '438', 438)">
                 <p>
                   <a id="toResult">
                     <a href="#toResult">
@@ -578,7 +663,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="420">
+              <div class="fsdocs-tip" id="438">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Option.toResult&#32;<span>source</span></span></code>
@@ -648,7 +733,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '421', 421)" onmouseover="showTip(event, '421', 421)">
+              <code onmouseout="hideTip(event, '439', 439)" onmouseover="showTip(event, '439', 439)">
                 <p>
                   <a id="toResultWith">
                     <a href="#toResultWith">
@@ -657,7 +742,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="421">
+              <div class="fsdocs-tip" id="439">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Option.toResultWith&#32;<span>errorValue&#32;source</span></span></code>
@@ -749,7 +834,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '422', 422)" onmouseover="showTip(event, '422', 422)">
+              <code onmouseout="hideTip(event, '440', 440)" onmouseover="showTip(event, '440', 440)">
                 <p>
                   <a id="unzip">
                     <a href="#unzip">
@@ -758,7 +843,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="422">
+              <div class="fsdocs-tip" id="440">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Option.unzip&#32;<span>v</span></span></code>
@@ -828,7 +913,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '423', 423)" onmouseover="showTip(event, '423', 423)">
+              <code onmouseout="hideTip(event, '441', 441)" onmouseover="showTip(event, '441', 441)">
                 <p>
                   <a id="zip">
                     <a href="#zip">
@@ -837,7 +922,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="423">
+              <div class="fsdocs-tip" id="441">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Option.zip&#32;<span>x&#32;y</span></span></code>

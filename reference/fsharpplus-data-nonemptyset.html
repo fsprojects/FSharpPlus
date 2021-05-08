@@ -51,9 +51,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -263,21 +263,6 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrix.html">
-      Matrix
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrix-3.html">
-      Matrix<'Item, 'Row, 'Column>
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-matrixoperators.html">
-      MatrixOperators
-    </a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-mult-1.html">
       Mult<'a>
     </a>
@@ -478,16 +463,6 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-vector.html">
-      Vector
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-vector-2.html">
-      Vector<'Item, 'Length>
-    </a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data-writer.html">
       Writer
     </a>
@@ -529,13 +504,6 @@
   <span>
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math.html">
       FSharpPlus.Math
-    </a>
-  </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
-      FSharpPlus.TypeLevel
     </a>
   </span>
 </li>
@@ -585,19 +553,19 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '776', 776)" onmouseover="showTip(event, '776', 776)">
+              <code onmouseout="hideTip(event, '756', 756)" onmouseover="showTip(event, '756', 756)">
                 <p>
                   <a id="add">
                     <a href="#add">
-                      <code><span>NonEmptySet.add&#32;<span>value&#32;nes</span></span></code>
+                      <code><span>NonEmptySet.add&#32;<span>value&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="776">
+              <div class="fsdocs-tip" id="756">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>NonEmptySet.add&#32;<span>value&#32;nes</span></span></code>
+                  <code><span>NonEmptySet.add&#32;<span>value&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -614,10 +582,12 @@
                     <br/>
                     <span>
                       <b>
-                        nes
+                        source
                       </b>
                       :
                       <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
                     </span>
                     <br/>
                   </ul>
@@ -656,12 +626,16 @@
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  nes
+                  source
                 </span>
                 :
                 <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
               </dt>
-              <dd class="fsdocs-param-docs"></dd>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
             </dl>
             <dl class="fsdocs-returns">
               <dt>
@@ -681,19 +655,19 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '777', 777)" onmouseover="showTip(event, '777', 777)">
+              <code onmouseout="hideTip(event, '757', 757)" onmouseover="showTip(event, '757', 757)">
                 <p>
                   <a id="contains">
                     <a href="#contains">
-                      <code><span>NonEmptySet.contains&#32;<span>element&#32;nes</span></span></code>
+                      <code><span>NonEmptySet.contains&#32;<span>element&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="777">
+              <div class="fsdocs-tip" id="757">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>NonEmptySet.contains&#32;<span>element&#32;nes</span></span></code>
+                  <code><span>NonEmptySet.contains&#32;<span>element&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -710,10 +684,12 @@
                     <br/>
                     <span>
                       <b>
-                        nes
+                        source
                       </b>
                       :
                       <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input set.
                     </span>
                     <br/>
                   </ul>
@@ -751,12 +727,16 @@
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  nes
+                  source
                 </span>
                 :
                 <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyset-1.html">NonEmptySet</a>&lt;'a&gt;</span></code>
               </dt>
-              <dd class="fsdocs-param-docs"></dd>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input set.
+                </p>
+              </dd>
             </dl>
             <dl class="fsdocs-returns">
               <dt>
@@ -776,7 +756,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '778', 778)" onmouseover="showTip(event, '778', 778)">
+              <code onmouseout="hideTip(event, '758', 758)" onmouseover="showTip(event, '758', 758)">
                 <p>
                   <a id="count">
                     <a href="#count">
@@ -785,7 +765,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="778">
+              <div class="fsdocs-tip" id="758">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.count&#32;<span>nes</span></span></code>
@@ -846,7 +826,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '779', 779)" onmouseover="showTip(event, '779', 779)">
+              <code onmouseout="hideTip(event, '759', 759)" onmouseover="showTip(event, '759', 759)">
                 <p>
                   <a id="create">
                     <a href="#create">
@@ -855,7 +835,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="779">
+              <div class="fsdocs-tip" id="759">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.create&#32;<span>x&#32;xs</span></span></code>
@@ -930,7 +910,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '780', 780)" onmouseover="showTip(event, '780', 780)">
+              <code onmouseout="hideTip(event, '760', 760)" onmouseover="showTip(event, '760', 760)">
                 <p>
                   <a id="exists">
                     <a href="#exists">
@@ -939,7 +919,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="780">
+              <div class="fsdocs-tip" id="760">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.exists&#32;<span>predicate&#32;set</span></span></code>
@@ -1033,7 +1013,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '781', 781)" onmouseover="showTip(event, '781', 781)">
+              <code onmouseout="hideTip(event, '761', 761)" onmouseover="showTip(event, '761', 761)">
                 <p>
                   <a id="fold">
                     <a href="#fold">
@@ -1042,7 +1022,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="781">
+              <div class="fsdocs-tip" id="761">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.fold&#32;<span>folder&#32;state&#32;set</span></span></code>
@@ -1156,7 +1136,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '782', 782)" onmouseover="showTip(event, '782', 782)">
+              <code onmouseout="hideTip(event, '762', 762)" onmouseover="showTip(event, '762', 762)">
                 <p>
                   <a id="foldBack">
                     <a href="#foldBack">
@@ -1165,7 +1145,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="782">
+              <div class="fsdocs-tip" id="762">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.foldBack&#32;<span>folder&#32;set&#32;state</span></span></code>
@@ -1279,7 +1259,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '783', 783)" onmouseover="showTip(event, '783', 783)">
+              <code onmouseout="hideTip(event, '763', 763)" onmouseover="showTip(event, '763', 763)">
                 <p>
                   <a id="forall">
                     <a href="#forall">
@@ -1288,7 +1268,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="783">
+              <div class="fsdocs-tip" id="763">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.forall&#32;<span>predicate&#32;set</span></span></code>
@@ -1382,7 +1362,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '784', 784)" onmouseover="showTip(event, '784', 784)">
+              <code onmouseout="hideTip(event, '764', 764)" onmouseover="showTip(event, '764', 764)">
                 <p>
                   <a id="isProperSubset">
                     <a href="#isProperSubset">
@@ -1391,7 +1371,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="784">
+              <div class="fsdocs-tip" id="764">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.isProperSubset&#32;<span>set1&#32;set2</span></span></code>
@@ -1484,7 +1464,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '785', 785)" onmouseover="showTip(event, '785', 785)">
+              <code onmouseout="hideTip(event, '765', 765)" onmouseover="showTip(event, '765', 765)">
                 <p>
                   <a id="isProperSuperset">
                     <a href="#isProperSuperset">
@@ -1493,7 +1473,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="785">
+              <div class="fsdocs-tip" id="765">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.isProperSuperset&#32;<span>set1&#32;set2</span></span></code>
@@ -1586,7 +1566,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '786', 786)" onmouseover="showTip(event, '786', 786)">
+              <code onmouseout="hideTip(event, '766', 766)" onmouseover="showTip(event, '766', 766)">
                 <p>
                   <a id="isSubset">
                     <a href="#isSubset">
@@ -1595,7 +1575,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="786">
+              <div class="fsdocs-tip" id="766">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.isSubset&#32;<span>set1&#32;set2</span></span></code>
@@ -1687,7 +1667,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '787', 787)" onmouseover="showTip(event, '787', 787)">
+              <code onmouseout="hideTip(event, '767', 767)" onmouseover="showTip(event, '767', 767)">
                 <p>
                   <a id="isSuperset">
                     <a href="#isSuperset">
@@ -1696,7 +1676,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="787">
+              <div class="fsdocs-tip" id="767">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.isSuperset&#32;<span>set1&#32;set2</span></span></code>
@@ -1788,7 +1768,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '788', 788)" onmouseover="showTip(event, '788', 788)">
+              <code onmouseout="hideTip(event, '768', 768)" onmouseover="showTip(event, '768', 768)">
                 <p>
                   <a id="iter">
                     <a href="#iter">
@@ -1797,7 +1777,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="788">
+              <div class="fsdocs-tip" id="768">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.iter&#32;<span>action&#32;set</span></span></code>
@@ -1871,7 +1851,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '789', 789)" onmouseover="showTip(event, '789', 789)">
+              <code onmouseout="hideTip(event, '769', 769)" onmouseover="showTip(event, '769', 769)">
                 <p>
                   <a id="map">
                     <a href="#map">
@@ -1880,7 +1860,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="789">
+              <div class="fsdocs-tip" id="769">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.map&#32;<span>mapping&#32;set</span></span></code>
@@ -1973,7 +1953,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '790', 790)" onmouseover="showTip(event, '790', 790)">
+              <code onmouseout="hideTip(event, '770', 770)" onmouseover="showTip(event, '770', 770)">
                 <p>
                   <a id="maxElement">
                     <a href="#maxElement">
@@ -1982,7 +1962,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="790">
+              <div class="fsdocs-tip" id="770">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.maxElement&#32;<span>set</span></span></code>
@@ -2052,7 +2032,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '791', 791)" onmouseover="showTip(event, '791', 791)">
+              <code onmouseout="hideTip(event, '771', 771)" onmouseover="showTip(event, '771', 771)">
                 <p>
                   <a id="minElement">
                     <a href="#minElement">
@@ -2061,7 +2041,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="791">
+              <div class="fsdocs-tip" id="771">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.minElement&#32;<span>set</span></span></code>
@@ -2131,7 +2111,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '792', 792)" onmouseover="showTip(event, '792', 792)">
+              <code onmouseout="hideTip(event, '772', 772)" onmouseover="showTip(event, '772', 772)">
                 <p>
                   <a id="ofArray">
                     <a href="#ofArray">
@@ -2140,7 +2120,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="792">
+              <div class="fsdocs-tip" id="772">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.ofArray&#32;<span>array</span></span></code>
@@ -2225,7 +2205,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '793', 793)" onmouseover="showTip(event, '793', 793)">
+              <code onmouseout="hideTip(event, '773', 773)" onmouseover="showTip(event, '773', 773)">
                 <p>
                   <a id="ofList">
                     <a href="#ofList">
@@ -2234,7 +2214,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="793">
+              <div class="fsdocs-tip" id="773">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.ofList&#32;<span>list</span></span></code>
@@ -2319,7 +2299,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '794', 794)" onmouseover="showTip(event, '794', 794)">
+              <code onmouseout="hideTip(event, '774', 774)" onmouseover="showTip(event, '774', 774)">
                 <p>
                   <a id="ofNonEmptyList">
                     <a href="#ofNonEmptyList">
@@ -2328,7 +2308,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="794">
+              <div class="fsdocs-tip" id="774">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.ofNonEmptyList&#32;<span>list</span></span></code>
@@ -2398,29 +2378,31 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '795', 795)" onmouseover="showTip(event, '795', 795)">
+              <code onmouseout="hideTip(event, '775', 775)" onmouseover="showTip(event, '775', 775)">
                 <p>
                   <a id="ofNonEmptySeq">
                     <a href="#ofNonEmptySeq">
-                      <code><span>NonEmptySet.ofNonEmptySeq&#32;<span>seq</span></span></code>
+                      <code><span>NonEmptySet.ofNonEmptySeq&#32;<span>source</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="795">
+              <div class="fsdocs-tip" id="775">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>NonEmptySet.ofNonEmptySeq&#32;<span>seq</span></span></code>
+                  <code><span>NonEmptySet.ofNonEmptySeq&#32;<span>source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        seq
+                        source
                       </b>
                       :
                       <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">NonEmptySeq</a>&lt;'a&gt;</span></code>
+                       - 
+                      The input sequence.
                     </span>
                     <br/>
                   </ul>
@@ -2446,12 +2428,16 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  seq
+                  source
                 </span>
                 :
                 <code><span><a href="/FSharpPlus/reference/fsharpplus-data-nonemptyseq-1.html">NonEmptySeq</a>&lt;'a&gt;</span></code>
               </dt>
-              <dd class="fsdocs-param-docs"></dd>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input sequence.
+                </p>
+              </dd>
             </dl>
             <dl class="fsdocs-returns">
               <dt>
@@ -2471,7 +2457,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '796', 796)" onmouseover="showTip(event, '796', 796)">
+              <code onmouseout="hideTip(event, '776', 776)" onmouseover="showTip(event, '776', 776)">
                 <p>
                   <a id="ofSeq">
                     <a href="#ofSeq">
@@ -2480,7 +2466,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="796">
+              <div class="fsdocs-tip" id="776">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.ofSeq&#32;<span>seq</span></span></code>
@@ -2565,7 +2551,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '797', 797)" onmouseover="showTip(event, '797', 797)">
+              <code onmouseout="hideTip(event, '777', 777)" onmouseover="showTip(event, '777', 777)">
                 <p>
                   <a id="ofSet">
                     <a href="#ofSet">
@@ -2574,7 +2560,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="797">
+              <div class="fsdocs-tip" id="777">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.ofSet&#32;<span>set</span></span></code>
@@ -2659,7 +2645,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '798', 798)" onmouseover="showTip(event, '798', 798)">
+              <code onmouseout="hideTip(event, '778', 778)" onmouseover="showTip(event, '778', 778)">
                 <p>
                   <a id="reduce">
                     <a href="#reduce">
@@ -2668,7 +2654,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="798">
+              <div class="fsdocs-tip" id="778">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.reduce&#32;<span>reduction&#32;set</span></span></code>
@@ -2743,7 +2729,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '799', 799)" onmouseover="showTip(event, '799', 799)">
+              <code onmouseout="hideTip(event, '779', 779)" onmouseover="showTip(event, '779', 779)">
                 <p>
                   <a id="singleton">
                     <a href="#singleton">
@@ -2752,7 +2738,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="799">
+              <div class="fsdocs-tip" id="779">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.singleton&#32;<span>x</span></span></code>
@@ -2811,7 +2797,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '800', 800)" onmouseover="showTip(event, '800', 800)">
+              <code onmouseout="hideTip(event, '780', 780)" onmouseover="showTip(event, '780', 780)">
                 <p>
                   <a id="toArray">
                     <a href="#toArray">
@@ -2820,7 +2806,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="800">
+              <div class="fsdocs-tip" id="780">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.toArray&#32;<span>arg1</span></span></code>
@@ -2879,7 +2865,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '801', 801)" onmouseover="showTip(event, '801', 801)">
+              <code onmouseout="hideTip(event, '781', 781)" onmouseover="showTip(event, '781', 781)">
                 <p>
                   <a id="toList">
                     <a href="#toList">
@@ -2888,7 +2874,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="801">
+              <div class="fsdocs-tip" id="781">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.toList&#32;<span>arg1</span></span></code>
@@ -2947,7 +2933,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '802', 802)" onmouseover="showTip(event, '802', 802)">
+              <code onmouseout="hideTip(event, '782', 782)" onmouseover="showTip(event, '782', 782)">
                 <p>
                   <a id="toNonEmptyList">
                     <a href="#toNonEmptyList">
@@ -2956,7 +2942,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="802">
+              <div class="fsdocs-tip" id="782">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.toNonEmptyList&#32;<span>arg1</span></span></code>
@@ -3015,7 +3001,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '803', 803)" onmouseover="showTip(event, '803', 803)">
+              <code onmouseout="hideTip(event, '783', 783)" onmouseover="showTip(event, '783', 783)">
                 <p>
                   <a id="toNonEmptySeq">
                     <a href="#toNonEmptySeq">
@@ -3024,7 +3010,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="803">
+              <div class="fsdocs-tip" id="783">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.toNonEmptySeq&#32;<span>set</span></span></code>
@@ -3083,7 +3069,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '804', 804)" onmouseover="showTip(event, '804', 804)">
+              <code onmouseout="hideTip(event, '784', 784)" onmouseover="showTip(event, '784', 784)">
                 <p>
                   <a id="toSeq">
                     <a href="#toSeq">
@@ -3092,7 +3078,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="804">
+              <div class="fsdocs-tip" id="784">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.toSeq&#32;<span>arg1</span></span></code>
@@ -3151,7 +3137,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '805', 805)" onmouseover="showTip(event, '805', 805)">
+              <code onmouseout="hideTip(event, '785', 785)" onmouseover="showTip(event, '785', 785)">
                 <p>
                   <a id="toSet">
                     <a href="#toSet">
@@ -3160,7 +3146,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="805">
+              <div class="fsdocs-tip" id="785">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.toSet&#32;<span>arg1</span></span></code>
@@ -3219,7 +3205,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '806', 806)" onmouseover="showTip(event, '806', 806)">
+              <code onmouseout="hideTip(event, '786', 786)" onmouseover="showTip(event, '786', 786)">
                 <p>
                   <a id="tryOfSet">
                     <a href="#tryOfSet">
@@ -3228,7 +3214,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="806">
+              <div class="fsdocs-tip" id="786">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.tryOfSet&#32;<span>set</span></span></code>
@@ -3289,7 +3275,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '807', 807)" onmouseover="showTip(event, '807', 807)">
+              <code onmouseout="hideTip(event, '787', 787)" onmouseover="showTip(event, '787', 787)">
                 <p>
                   <a id="union">
                     <a href="#union">
@@ -3298,7 +3284,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="807">
+              <div class="fsdocs-tip" id="787">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.union&#32;<span>set1&#32;set2</span></span></code>
@@ -3390,7 +3376,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '808', 808)" onmouseover="showTip(event, '808', 808)">
+              <code onmouseout="hideTip(event, '788', 788)" onmouseover="showTip(event, '788', 788)">
                 <p>
                   <a id="unionMany">
                     <a href="#unionMany">
@@ -3399,7 +3385,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="808">
+              <div class="fsdocs-tip" id="788">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>NonEmptySet.unionMany&#32;<span>sets</span></span></code>

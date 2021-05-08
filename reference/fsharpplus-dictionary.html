@@ -51,9 +51,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus.git/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -89,11 +89,6 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-builders.html">
-      Builders
-    </a>
-  </li>
-  <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-choice.html">
       Choice
     </a>
@@ -116,6 +111,11 @@
   <li class="nav-item">
     <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-extensions.html">
       Extensions
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-genericbuilders.html">
+      GenericBuilders
     </a>
   </li>
   <li class="nav-item">
@@ -246,13 +246,6 @@
       FSharpPlus.Math
     </a>
   </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-typelevel.html">
-      FSharpPlus.TypeLevel
-    </a>
-  </span>
 </li>
             </ul>
         </div>
@@ -300,7 +293,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
+              <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
                 <p>
                   <a id="chooseValues">
                     <a href="#chooseValues">
@@ -309,7 +302,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="46">
+              <div class="fsdocs-tip" id="47">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.chooseValues&#32;<span>f&#32;x</span></span></code>
@@ -351,7 +344,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L82-82" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L100-100" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -401,7 +394,108 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
+              <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
+                <p>
+                  <a id="choosei">
+                    <a href="#choosei">
+                      <code><span>Dictionary.choosei&#32;<span>f&#32;x</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="48">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Dictionary.choosei&#32;<span>f&#32;x</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'Key&#32;->&#32;'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+                       - 
+                      The mapping function, taking key and element as parameters.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                       - 
+                      The input dictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                  </span>
+                  Dictionary with values (k, x) for each dictionary value where the function returns Some(x).
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L176-176" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Same as chooseValues but with access to the key.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'Key&#32;->&#32;'T&#32;->&#32;<span>'U&#32;option</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function, taking key and element as parameters.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The input dictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  Dictionary with values (k, x) for each dictionary value where the function returns Some(x).
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
                 <p>
                   <a id="containsKey">
                     <a href="#containsKey">
@@ -410,7 +504,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="47">
+              <div class="fsdocs-tip" id="49">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.containsKey&#32;<span>k&#32;dct</span></span></code>
@@ -505,7 +599,7 @@
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
+              <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
                 <p>
                   <a id="intersect">
                     <a href="#intersect">
@@ -514,7 +608,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="48">
+              <div class="fsdocs-tip" id="50">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.intersect&#32;<span>source1&#32;source2</span></span></code>
@@ -551,7 +645,7 @@
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L149-149" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L167-167" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -591,7 +685,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
+              <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
                 <p>
                   <a id="intersectWith">
                     <a href="#intersectWith">
@@ -600,7 +694,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="49">
+              <div class="fsdocs-tip" id="51">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.intersectWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
@@ -645,7 +739,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L137-137" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L155-155" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -693,7 +787,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
+              <code onmouseout="hideTip(event, '52', 52)" onmouseover="showTip(event, '52', 52)">
                 <p>
                   <a id="keys">
                     <a href="#keys">
@@ -702,7 +796,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="50">
+              <div class="fsdocs-tip" id="52">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.keys&#32;<span>source</span></span></code>
@@ -772,26 +866,26 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
+              <code onmouseout="hideTip(event, '53', 53)" onmouseover="showTip(event, '53', 53)">
                 <p>
                   <a id="map">
                     <a href="#map">
-                      <code><span>Dictionary.map&#32;<span>f&#32;x</span></span></code>
+                      <code><span>Dictionary.map&#32;<span>mapping&#32;x</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="51">
+              <div class="fsdocs-tip" id="53">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.map&#32;<span>f&#32;x</span></span></code>
+                  <code><span>Dictionary.map&#32;<span>mapping&#32;x</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        f
+                        mapping
                       </b>
                       :
                       <code><span>'T&#32;->&#32;'U</span></code>
@@ -832,7 +926,7 @@ Returns the intersection of two maps, preferring values from the first in case o
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  f
+                  mapping
                 </span>
                 :
                 <code><span>'T&#32;->&#32;'U</span></code>
@@ -873,29 +967,31 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '52', 52)" onmouseover="showTip(event, '52', 52)">
+              <code onmouseout="hideTip(event, '54', 54)" onmouseover="showTip(event, '54', 54)">
                 <p>
                   <a id="map2">
                     <a href="#map2">
-                      <code><span>Dictionary.map2&#32;<span>f&#32;x&#32;y</span></span></code>
+                      <code><span>Dictionary.map2&#32;<span>mapping&#32;x&#32;y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="52">
+              <div class="fsdocs-tip" id="54">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.map2&#32;<span>f&#32;x&#32;y</span></span></code>
+                  <code><span>Dictionary.map2&#32;<span>mapping&#32;x&#32;y</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        f
+                        mapping
                       </b>
                       :
                       <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'U</span></code>
+                       - 
+                      The mapping function.
                     </span>
                     <br/>
                     <span>
@@ -932,7 +1028,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L68-68" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L69-69" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -944,12 +1040,16 @@ Returns the intersection of two maps, preferring values from the first in case o
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  f
+                  mapping
                 </span>
                 :
                 <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'U</span></code>
               </dt>
-              <dd class="fsdocs-param-docs"></dd>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function.
+                </p>
+              </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
                   x
@@ -993,7 +1093,155 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '53', 53)" onmouseover="showTip(event, '53', 53)">
+              <code onmouseout="hideTip(event, '55', 55)" onmouseover="showTip(event, '55', 55)">
+                <p>
+                  <a id="map3">
+                    <a href="#map3">
+                      <code><span>Dictionary.map3&#32;<span>mapping&#32;x&#32;y&#32;z</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="55">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Dictionary.map3&#32;<span>mapping&#32;x&#32;y&#32;z</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        mapping
+                      </b>
+                      :
+                      <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'T3&#32;->&#32;'U</span></code>
+                       - 
+                      The mapping function.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                       - 
+                      First input Dictionary.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                       - 
+                      Second input Dictionary.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        z
+                      </b>
+                      :
+                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
+                       - 
+                      Third input Dictionary.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                  </span>
+                  The mapped Dictionary.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-xmldoc">
+            <p class="fsdocs-summary">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L86-86" class="fsdocs-source-link">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+              </a>
+              Combines values from three Dictionaries using mapping function.
+            </p>
+            <p class="fsdocs-remarks">
+              Keys that are not present on every Dictionary are dropped.
+            </p>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  mapping
+                </span>
+                :
+                <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'T3&#32;->&#32;'U</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  The mapping function.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  First input Dictionary.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Second input Dictionary.
+                </p>
+              </dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  z
+                </span>
+                :
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs">
+                <p>
+                  Third input Dictionary.
+                </p>
+              </dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns:
+                </span>
+                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs">
+                <p>
+                  The mapped Dictionary.
+                </p>
+              </dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-name">
+            <div>
+              <code onmouseout="hideTip(event, '56', 56)" onmouseover="showTip(event, '56', 56)">
                 <p>
                   <a id="toIReadOnlyDictionary">
                     <a href="#toIReadOnlyDictionary">
@@ -1002,7 +1250,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="53">
+              <div class="fsdocs-tip" id="56">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.toIReadOnlyDictionary&#32;<span>source</span></span></code>
@@ -1063,7 +1311,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '54', 54)" onmouseover="showTip(event, '54', 54)">
+              <code onmouseout="hideTip(event, '57', 57)" onmouseover="showTip(event, '57', 57)">
                 <p>
                   <a id="tryGetValue">
                     <a href="#tryGetValue">
@@ -1072,7 +1320,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="54">
+              <div class="fsdocs-tip" id="57">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.tryGetValue&#32;<span>k&#32;dct</span></span></code>
@@ -1170,7 +1418,7 @@ Returns the intersection of two maps, preferring values from the first in case o
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '55', 55)" onmouseover="showTip(event, '55', 55)">
+              <code onmouseout="hideTip(event, '58', 58)" onmouseover="showTip(event, '58', 58)">
                 <p>
                   <a id="union">
                     <a href="#union">
@@ -1179,7 +1427,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="55">
+              <div class="fsdocs-tip" id="58">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.union&#32;<span>source&#32;altSource</span></span></code>
@@ -1216,7 +1464,7 @@ Returns the intersection of two maps, preferring values from the first in case o
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L126-126" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L144-144" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1256,7 +1504,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '56', 56)" onmouseover="showTip(event, '56', 56)">
+              <code onmouseout="hideTip(event, '59', 59)" onmouseover="showTip(event, '59', 59)">
                 <p>
                   <a id="unionWith">
                     <a href="#unionWith">
@@ -1265,7 +1513,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="56">
+              <div class="fsdocs-tip" id="59">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.unionWith&#32;<span>combiner&#32;source1&#32;source2</span></span></code>
@@ -1310,7 +1558,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L117-117" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L135-135" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1358,7 +1606,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '57', 57)" onmouseover="showTip(event, '57', 57)">
+              <code onmouseout="hideTip(event, '60', 60)" onmouseover="showTip(event, '60', 60)">
                 <p>
                   <a id="unzip">
                     <a href="#unzip">
@@ -1367,7 +1615,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="57">
+              <div class="fsdocs-tip" id="60">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.unzip&#32;<span>source</span></span></code>
@@ -1399,7 +1647,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L108-108" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L126-126" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
@@ -1437,7 +1685,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '58', 58)" onmouseover="showTip(event, '58', 58)">
+              <code onmouseout="hideTip(event, '61', 61)" onmouseover="showTip(event, '61', 61)">
                 <p>
                   <a id="values">
                     <a href="#values">
@@ -1446,7 +1694,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="58">
+              <div class="fsdocs-tip" id="61">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.values&#32;<span>source</span></span></code>
@@ -1516,7 +1764,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
         <tr>
           <td class="fsdocs-member-name">
             <div>
-              <code onmouseout="hideTip(event, '59', 59)" onmouseover="showTip(event, '59', 59)">
+              <code onmouseout="hideTip(event, '62', 62)" onmouseover="showTip(event, '62', 62)">
                 <p>
                   <a id="zip">
                     <a href="#zip">
@@ -1525,7 +1773,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="59">
+              <div class="fsdocs-tip" id="62">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Dictionary.zip&#32;<span>x&#32;y</span></span></code>
@@ -1567,7 +1815,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
           </td>
           <td class="fsdocs-xmldoc">
             <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L96-96" class="fsdocs-source-link">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Dictionary.fs#L114-114" class="fsdocs-source-link">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
               </a>
