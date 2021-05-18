@@ -32,7 +32,7 @@ module Parsing =
               groups
                 |> Seq.map (fun g -> g.Value)
                 |> Seq.toArray
-          (getGroup s, getGroup pf.Value) ||> Array.zip
+          (getGroup s, getGroup pf.Value) ||> Array.zipShortest
 
         
        
