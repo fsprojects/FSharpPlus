@@ -2185,8 +2185,12 @@ module Parsing =
         let _f8 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
         
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
-
-        ()
+        
+        let x = trySscanf "%X %x" "13 43"
+        let o = trySscanf "%o" "10"
+        
+        areEqual (Some (19, 67)) x
+        areEqual (Some 8) o
 
 
 module Conversions =
