@@ -20,12 +20,14 @@ let rayuela =
                  DateOfBirth = DateTime (1914, 8, 26) } }
 #endif
 let lensing = testList "Lensing" [
-#if !FABLE_COMPILER // does not work due to Return || FABLE_COMPILER_3
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "Lens" (fun () ->
                equal (view Book._authorName rayuela) "Julio Cortázar")
     testCase "Lens view 1, 2" (fun () ->
                equal (view _1 (1, '2')) 1
                equal (view _2 ('1', 2)) 2 )
+#endif
+#if !FABLE_COMPILER
     testCase "Lens preview _Ok, Error" (fun () -> equal None (preview _Ok (Error 1)))
     testCase "Lens preview _Ok, OK" (fun () -> equal (Some 1) (preview _Ok (Ok 1)))
     testCase "Lens preview _Error, Error" (fun () -> equal (Some 1) (preview _Error (Error 1)))
@@ -39,4 +41,4 @@ let lensing = testList "Lensing" [
     testCase "prism3" (fun () -> equal (Some ()) (preview _None None))
     testCase "prism4" (fun () -> equal true (Option.isNone (preview _None (Some 1))))
 #endif
-]
+    ]

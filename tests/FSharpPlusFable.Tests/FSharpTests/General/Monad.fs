@@ -26,11 +26,16 @@ let monad = testList "Monad" [
                 let! x2 = WrappedListD [10;20]
                 return ((+) x1 x2) }
         Assert.IsInstanceOf<WrappedListD<int>> (testVal))
+
+    testCase "return Const First using invoke on instance" (fun () ->
+        let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
+        equal None (cf |> Const.run |> First.run)
+    )
     #endif
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
-    testCase "return Const First" (fun () ->
-        let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
+    testCase "return Const First using explicit method" (fun () ->
+        let cf : Const<First<int>,int> = Const.Return<_,_> 1
         equal None (cf |> Const.run |> First.run)
     )
     testCase "return Const" (fun () ->
