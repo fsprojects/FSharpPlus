@@ -112,16 +112,16 @@ let indexable = testList "Indexable" [
             let h = ResizeArray [1, "one"; 2, "two"]
             let _ = tryItem 1 h
             ())
+        #if !FABLE_COMPILER // TODO: Worked in previous iterations
         testCase "nemap" (fun () ->
             let k = NonEmptyMap.Create (("a", 1), ("b", 2))
             let _ = tryItem "b" k
             ())
-        #if !FABLE_COMPILER // worked in previous iterations of Fable
+        #endif
         testCase "WrappedListA" (fun () ->
             let w = WrappedListA [1, "one"; 2, "two"]
             let _ = tryItem 1 w
             ())
-        #endif
         ]
     #endif
 
