@@ -2188,10 +2188,13 @@ module Parsing =
         
         let x = trySscanf "%X %x" "13 43"
         let o = trySscanf "%o" "10"
+        let b = trySscanf (PrintfFormat<int -> string, unit, string, string, int> "%B") "101"
+        let a = trySscanf (PrintfFormat<int -> int -> int -> int -> string, unit, string, string, int * int * int * int> "%B %o %x %X") "100 100 100 100"
         
         areEqual (Some (19, 67)) x
         areEqual (Some 8) o
-
+        areEqual (Some 5) b
+        areEqual (Some (4, 64, 256, 256) b
 
 module Conversions =
     let test =
