@@ -2194,7 +2194,7 @@ module Parsing =
         areEqual (Some (19, 67)) x
         areEqual (Some 8) o
         areEqual (Some 5) b
-        areEqual (Some (4, 64, 256, 256) a
+        areEqual (Some (4, 64, 256, 256)) a
 
 module Conversions =
     let test =
