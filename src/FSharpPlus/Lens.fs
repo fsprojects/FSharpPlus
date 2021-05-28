@@ -52,7 +52,11 @@ module Lens =
     /// <param name="prism">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
+    #if FABLE_COMPILER
     let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (First (Some x))) |> Const.run |> First.run
+    #else
+    let preview prism = First.run << Const.run << prism (fun x -> Const (FSharpPlus.Data.First (Some x)))
+    #endif
 
     /// <summary>Build a 'Lens' from a getter and a setter.</summary>
     /// <remarks>The lens should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
