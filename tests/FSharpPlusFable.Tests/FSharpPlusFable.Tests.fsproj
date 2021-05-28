@@ -23,7 +23,8 @@
     <Compile Include="FSharpTests/General/Indexable.fs" />
     <Compile Include="FSharpTests/General/Parsing.fs" />
     <Compile Include="FSharpTests/General/Traversable.fs" />
-    <Compile Include="FSharpTests\General\Lensing.fs" />
+    <Compile Include="FSharpTests/General/Lensing.fs" />
+    <Compile Include="FSharpTests/General/Numeric.fs" />
     <Compile Include="FSharpTests/General.fs" />
     <Compile Include="FSharpTests/Extensions.fs" />
     <Compile Include="Tests.fs" />
@@ -31,8 +32,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Fable.Core" Version="3.1.6" />
-    <PackageReference Include="Fable.Promise" Version="2.1.0" />
+    <PackageReference Include="Fable.Core" Version="3.2.5" />
+    <PackageReference Include="Fable.Promise" Version="2.2.0" />
     <PackageReference Include="Fable.Fetch" Version="2.2.0" />
     <PackageReference Include="Fuchu" Version="1.2.0-beta-1" />
  </ItemGroup>
@@ -41,6 +42,6 @@
     <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
       <Private>True</Private>
     </ProjectReference>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="5.0.1" />
   </ItemGroup>
 </Project>

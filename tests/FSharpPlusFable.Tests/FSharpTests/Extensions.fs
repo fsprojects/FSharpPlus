@@ -79,7 +79,7 @@ let ExtensionsTest =
       #if FABLE_COMPILER && !FABLE_COMPILER_FAKE
       testCase "eq on DList 5" (fun () -> equal true  ((dlistA :> obj) = (dlistD :> obj))) // this behavior differs from (non-fable) F# but same way it would be with normal lists.
       #endif
-      #if !FABLE_COMPILER || FABLE_COMPILER_3
+      #if !FABLE_COMPILER
       testCase "semigroups 1"
         (fun () ->
             let lzy1 = plus (lazy [1]) (lazy [2;3])
