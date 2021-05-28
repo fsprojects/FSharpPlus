@@ -18,7 +18,7 @@ module Parsing =
         open FSharpPlus
         open FSharpPlus.Internals.Prelude
 
-        let formatters = [|"%b"; "%d"; "%i"; "%s"; "%u"; "%x"; "%X"; "%o"; "%e"; "%E"; "%f"; "%F"; "%g"; "%G"; "%M"; "%c"; "%A"|]
+        let formatters = [|"%A"; "%b"; "%B"; "%c"; "%d"; "%e"; "%E"; "%f"; "%F"; "%g"; "%G"; "%i"; "%M"; "%o"; "%O"; "%s"; "%u"; "%x"; "%X"|]
 
         let getGroups (pf: PrintfFormat<_,_,_,_,_>) s =
           let formatStr = replace "%%" "%" pf.Value
@@ -34,8 +34,6 @@ module Parsing =
                 |> Seq.toArray
           (getGroup s, getGroup pf.Value) ||> Array.zipShortest
 
-        
-       
         let conv (destType: System.Type) (b: int) (s: string) =
             match destType with    
             | t when t = typeof<byte>   -> Convert.ToByte   (s, b) |> box
@@ -51,12 +49,14 @@ module Parsing =
         
         let inline parse (s: string, f: string) : 'r =
             match f with
+            | "%B"        -> conv typeof<'r> 2  s |> string |> parse
             | "%o"        -> conv typeof<'r> 8  s |> string |> parse
             | "%x" | "%X" -> conv typeof<'r> 16 s |> string |> parse
             | _ -> parse s
 
         let inline tryParse (s: string, f: string) : 'r option =
             match f with
+            | "%B"        -> Option.protect (conv typeof<'r>  2) s |> Option.map string |> Option.bind tryParse
             | "%o"        -> Option.protect (conv typeof<'r>  8) s |> Option.map string |> Option.bind tryParse
             | "%x" | "%X" -> Option.protect (conv typeof<'r> 16) s |> Option.map string |> Option.bind tryParse
             | _ -> tryParse s
