@@ -66,7 +66,7 @@ let idiomBrackets = testList "IdiomBrackets" [
         Assert.AreEqual ("outerinner", string output)
         Assert.AreEqual (4, v4))
     #endif
-]
+    ]
 
 type RErrors = | NegativeValue
 
@@ -156,7 +156,7 @@ let monadTransformers = testList "MonadTransformers" [
         equal (Error NegativeValue) y)
     #endif
     #endif
-]
+    ]
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
 module ProfunctorDefaults =
@@ -203,7 +203,7 @@ let invariant = testList "Invariant" [
         Assert.AreEqual (Result<int, string>.Ok 1, oneParsed)
         Assert.AreEqual ("10", tenEncoded))
 #endif
-]
+    ]
 
 type Sum<'a> = Sum of 'a with
     static member inline get_Zero () = Sum 0
@@ -252,7 +252,7 @@ let splits = testList "Splits" [
         // Assert.IsTrue((c = Sum 13))
         Assert.IsTrue((d = Sum 13)))
 #endif
-]
+    ]
 
 let bitConverter = testList "BitConverter" [
 #if !FABLE_COMPILER
@@ -277,7 +277,7 @@ let bitConverter = testList "BitConverter" [
         Assert.IsTrue ((h0 = (h0 |> toBytes |> ofBytes)))
         Assert.IsTrue ((i0 = (i0 |> toBytes |> ofBytes))))
 #endif
-]
+    ]
 
 
 let curry = testList "Curry" [
@@ -330,7 +330,7 @@ let curry = testList "Curry" [
 
         ())
 #endif
-]
+    ]
 
 
 let memoization = testList "Memoization" [
@@ -379,7 +379,7 @@ let memoization = testList "Memoization" [
         let _ = mf null null  // should not throw
         ())
 #endif
-]
+    ]
 
 open General.Alternative
 open General.Applicative
@@ -392,6 +392,7 @@ open General.Monoid
 open General.Parsing
 open General.Traversable
 open General.Lensing
+open General.Numeric
 
 let generalTests = testList "General" [
     idiomBrackets
@@ -411,4 +412,5 @@ let generalTests = testList "General" [
     parsing
     traversable
     lensing
+    numeric
 ]

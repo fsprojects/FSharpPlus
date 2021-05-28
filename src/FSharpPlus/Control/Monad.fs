@@ -122,9 +122,7 @@ type Return =
 
     static member        Return (_: seq<'a>        , _: Default2) = fun  x      -> Seq.singleton x : seq<'a>
     static member        Return (_: NonEmptySeq<'a>, _: Default2) = fun  x      -> NonEmptySeq.singleton x : NonEmptySeq<'a>
-    #if !FABLE_COMPILER
     static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
-    #endif
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
     #if !FABLE_COMPILER
