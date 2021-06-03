@@ -1,0 +1,56 @@
+name: Fable
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+  testfable3:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Restore tools
+      run: dotnet tool restore
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install npm dependencies
+      working-directory: tests/FSharpPlusFable.Tests
+      run: npm install
+    - name: Run Fable tests
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet fable . --outDir bin --runScript ./bin 
+  
+  testFable3SubsetOnCore:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Restore tools
+      run: dotnet tool restore
+    - name: Run tests (Fable2 subset but on .net)
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet run -c Fable
+    - name: Run tests (Fable3 subset but on .net)
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet run -c Fable3
+    - name: Run tests (Full subset for of tests .net)
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet run -c Release

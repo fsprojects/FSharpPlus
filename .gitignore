@@ -212,3 +212,4 @@ tests/FSharpPlusFable.Tests/node_modules/
 # Fable compilation files
 tests/FSharpPlusFable.Tests/FSharpPlusFable
 /node_modules
+*.fs.js

@@ -95,10 +95,10 @@ module NonEmptySet =
         | x::xs -> create x xs
 
     /// <summary>Builds a non empty set from the given non-empty sequence.</summary>
-    /// <param name="list">The input sequence.</param>
+    /// <param name="source">The input sequence.</param>
     /// <returns>Non empty set containing the elements of the non-empty sequence.</returns>
-    let ofNonEmptySeq (seq: _ NonEmptySeq) =
-        create seq.First (Seq.tail seq)
+    let ofNonEmptySeq (source: _ NonEmptySeq) =
+        create source.First (Seq.tail source)
 
     /// <summary>Builds a non empty set from the given set.</summary>
     /// <param name="set">The input set.</param>
@@ -120,15 +120,15 @@ module NonEmptySet =
     /// <summary>Returns a new set with an element added to the set. No exception is raised if
     /// the set already contains the given element.</summary>
     /// <param name="value">The value to add.</param>
-    /// <param name="set">The input set.</param>
+    /// <param name="source">The input set.</param>
     /// <returns>A new set containing <c>value</c>.</returns>
-    let add value (nes: _ NonEmptySet) = { Value = Set.add value nes.Value }
+    let add value (source: _ NonEmptySet) = { Value = Set.add value source.Value }
 
     /// <summary>Evaluates to "true" if the given element is in the given set.</summary>
     /// <param name="element">The element to test.</param>
-    /// <param name="set">The input set.</param>
+    /// <param name="source">The input set.</param>
     /// <returns>True if <c>element</c> is in <c>set</c>.</returns>
-    let contains element (nes: _ NonEmptySet) = nes.Value |> Set.contains element
+    let contains element (source: _ NonEmptySet) = source.Value |> Set.contains element
 
     /// <summary>Evaluates to "true" if all elements of the first set are in the second</summary>
     /// <param name="set1">The potential subset.</param>
@@ -235,7 +235,7 @@ type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member FoldBack (set: NonEmptySet<'a>, f, z) = Set.foldBack f set.Value z
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList (s: NonEmptySet<'a>, [<Optional>]_impl: ToList) = NonEmptySet.toList s
 

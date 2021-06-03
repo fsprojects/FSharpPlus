@@ -49,29 +49,47 @@ module Dictionary =
     let values (source: Dictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     /// <summary>Maps the given function over each value in the dictionary.</summary>
-    /// <param name="f">The mapping function.</param>
+    /// <param name="mapping">The mapping function.</param>
     /// <param name="x">The input dictionary.</param>
     ///
     /// <returns>The mapped dictionary.</returns>
-    let map f (x: Dictionary<'Key, 'T>) =
+    let map mapping (x: Dictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
         for KeyValue(k, v) in x do
-            dct.Add (k, f v)
+            dct.Add (k, mapping v)
         dct
 
     /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
+    /// <param name="mapping">The mapping function.</param>
     /// <param name="x">The first input dictionary.</param>
     /// <param name="y">The second input dictionary.</param>
     ///
     /// <returns>The combined dictionary.</returns>
-    let map2 f (x: Dictionary<'Key, 'T1>) (y: Dictionary<'Key, 'T2>) =
+    let map2 mapping (x: Dictionary<'Key, 'T1>) (y: Dictionary<'Key, 'T2>) =
         let dct = Dictionary<'Key, 'U> ()
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt mapping
         for KeyValue(k, vx) in x do
             match tryGetValue k y with
             | Some vy -> dct.Add (k, f.Invoke (vx, vy))
             | None    -> ()
+        dct
+        
+    /// <summary>Combines values from three Dictionaries using mapping function.</summary>
+    /// <remarks>Keys that are not present on every Dictionary are dropped.</remarks>
+    /// <param name="mapping">The mapping function.</param>
+    /// <param name="x">First input Dictionary.</param>
+    /// <param name="y">Second input Dictionary.</param>
+    /// <param name="z">Third input Dictionary.</param>
+    ///
+    /// <returns>The mapped Dictionary.</returns>
+    let map3 mapping (x: Dictionary<'Key, 'T1>) (y: Dictionary<'Key, 'T2>) (z: Dictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'U> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapping
+        for KeyValue(k, vx) in x do
+            match tryGetValue k y, tryGetValue k z with
+            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+            | _      , _       -> ()
         dct
 
     /// <summary>Applies given function to each value of the given dictionary.</summary>

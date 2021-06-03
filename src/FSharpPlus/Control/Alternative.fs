@@ -6,7 +6,7 @@ namespace FSharpPlus.Control
 /// </summary>
 /// </namespacedoc>
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open System.Runtime.InteropServices
 open FSharpPlus
@@ -76,7 +76,7 @@ type IsAltLeftZero =
 
 type Choice =
     inherit Default1
-
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline Choice (x: ref<'``Foldable<'Alternative<'T>>``>, _mthd: Default4) =
         use e = (ToSeq.Invoke x.Value).GetEnumerator ()
         let mutable res = Empty.Invoke ()
@@ -93,7 +93,8 @@ type Choice =
         while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res
-
+    #endif
+    
     static member inline Choice (x: ref<'``Foldable<'Alternative<'T>>``> , _mthd: Default1) = (^``Foldable<'Alternative<'T>>`` :  (static member Choice : _ -> _) x.Value) : '``Alternative<'T>``
     static member inline Choice (_: ref< ^t> when ^t: null and ^t: struct, _mthd: Default1) = ()
 

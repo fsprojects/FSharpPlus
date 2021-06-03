@@ -18,17 +18,32 @@ module Result =
 
     
     /// <summary>Creates a Result value from a pair of Result values, using a function to combine them.</summary>
+    /// <param name="f">The mapping function.</param>
     /// <param name="x">The first Result value.</param>
     /// <param name="y">The second Result value.</param>
     ///
     /// <returns>The combined value, or the first Error.</returns>
     let map2 f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> = match x, y with Ok a, Ok b -> Ok (f a b) | Error e, _ | _, Error e -> Error e
 
+    /// <summary>Creates a Result value from three Result values, using a function to combine them.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">The first Result value.</param>
+    /// <param name="y">The second Result value.</param>
+    /// <param name="z">The third Result value.</param>
+    ///
+    /// <returns>The combined value, or the first Error.</returns>
+    let map3 f (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) (z: Result<'V, 'Error>): Result<'V, 'Error> =
+        match x, y, z with
+        | Ok a, Ok b, Ok c -> Ok(f a b c)
+        | Error e, _, _
+        | _, Error e, _
+        | _, _, Error e -> Error e
+    
     /// <summary>Flattens two nested Results.</summary>
     /// <param name="source">The nested Results.</param>
     /// <returns>A single Ok of the value when it was nested with OKs, or the Error.</returns>
     /// <remarks><c>flatten</c> is equivalent to <c>bind id</c>.</remarks>
-    let flatten x : Result<'T,'Error> = match x with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
+    let flatten source : Result<'T,'Error> = match source with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
     
     [<System.Obsolete("Use Result.bindError instead.")>]
     let inline catch f = function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
@@ -53,7 +68,13 @@ module Result =
         with e -> Error e
 
     /// Gets the 'Ok' value. If it's an 'Error' this function will throw an exception.
-    let get (source: Result<'T,'Error>) = match source with Ok x -> x | _ -> invalidArg "source" "Result value was Error"
+    let get (source: Result<'T,'Error>) =
+        match source with
+        | Ok x -> x
+        | Error e ->
+            match box e with
+            | :? exn as e -> raise <| System.ArgumentException ("Result value was Error", "source", e)
+            | e           -> invalidArg "source" ("Result value was Error: " + string e)
 
     /// Extracts the Ok value or use the supplied default value when it's an Error.
     let defaultValue (value:'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | _ -> value

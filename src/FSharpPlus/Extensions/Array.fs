@@ -25,6 +25,21 @@ module Array =
     let lift2 f x y =
         let lenx, leny = Array.length x, Array.length y
         Array.init (lenx * leny) (fun i -> f x.[i / leny] y.[i % leny])
+        
+        
+    /// <summary>Combines all values from three arrays and calls a mapping function on this combination.</summary>
+    /// <param name="mapping">Mapping function taking three element combination as input.</param>
+    /// <param name="list1">First array.</param>
+    /// <param name="list2">Second array.</param>
+    /// <param name="list3">Third array.</param>
+    ///
+    /// <returns>Array with values returned from mapping function.</returns>
+    let lift3 mapping list1 list2 list3 =
+        let lenx, leny, lenz = Array.length list1, Array.length list2, Array.length list3
+        let combinedFirstTwo = Array.init (lenx * leny) (fun i -> (list1.[i / leny], list2.[i % leny]))
+
+        Array.init (lenx * leny * lenz) (fun i -> combinedFirstTwo.[i/leny], list3.[i%leny])
+        |> Array.map (fun x -> mapping (fst (fst x)) (snd (fst x)) (snd x))
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
@@ -47,7 +62,7 @@ module Array =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
@@ -103,13 +118,13 @@ module Array =
         Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])
 
     /// <summary>Same as choose but with access to the index.</summary>
-    /// <param name="f">The mapping function, taking index and element as parameters.</param>
-    /// <param name="x">The input array.</param>
+    /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
+    /// <param name="source">The input array.</param>
     ///
     /// <returns>Array with values x for each Array value where the function returns Some(x).</returns>
-    let choosei f a =
+    let choosei mapping source =
         let mutable i = ref -1
         let fi x =
             incr i
-            f !i x
-        Array.choose fi a
+            mapping !i x
+        Array.choose fi source

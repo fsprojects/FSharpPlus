@@ -7,14 +7,16 @@ open FSharpPlus
 
 
 /// <summary> Computation type: Computations which maintain state.
-/// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
-/// <para/>   Useful for: Building computations from sequences of operations that require a shared state. </summary>
+/// <para>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.</para>
+/// <para>   Useful for: Building computations from sequences of operations that require a shared state.</para>
+/// The <typeparamref name="'s"/> indicates the computation state, while <typeparamref name="'t"/> indicates the result.</summary>
 [<Struct>]
 type State<'s,'t> = State of ('s->('t * 's))
 
 /// Basic operations on State
 [<RequireQualifiedAccess>]
 module State =
+    /// Runs the state with an inital state to get back the result and the new state.
     let run (State x) = x                                                                                         : 'S->('T * 'S)
 
     let map   f (State m) = State (fun s -> let (a: 'T, s') = m s in (f a, s'))                                   : State<'S,'U>
@@ -24,8 +26,9 @@ module State =
 
     let bind  f (State m) = State (fun s -> let (a: 'T, s') = m s in run (f a) s')                                : State<'S,'U>
     let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x': 'T, s2) = x s1 in (f' x', s2)) : State<'S,'U>
-
+    /// Evaluates a <paramref name="sa">state computation</paramref> with the <paramref name="s">initial value</paramref> and return only the result value of the computation. Ignore the final state.
     let eval (State sa) (s: 's)         = fst (sa s) : 'T
+    /// Evaluates a <paramref name="sa">state computation</paramref> with the <paramref name="s">initial value</paramref> and return only the final state of the computation. Ignore the result value.
     let exec (State sa: State<'S,'A>) s = snd (sa s) : 'S
 
     /// Return the state from the internals of the monad.
@@ -56,7 +59,7 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                      : State<'S,unit>
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = State.zip x y
     #endif
@@ -67,7 +70,7 @@ type State<'s,'t> with
     static member Delay (body: unit->State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S,'T>
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open FSharpPlus.Control
 open FSharpPlus.Internals.Prelude
@@ -79,6 +82,7 @@ type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 /// Basic operations on StateT
 [<RequireQualifiedAccess>]
 module StateT =
+    /// Runs the state with an inital state to get back the result and the new state wrapped in an inner monad.
     let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``
 
     /// Embed a Monad<'T> into a StateT<'S,'``Monad<'T * 'S>``>

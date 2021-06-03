@@ -12,6 +12,8 @@
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
     <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
     <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -21,7 +23,11 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-
+    <Configurations>Debug;Release;Fable;Fable3</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">5.0</LangVersion>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
@@ -48,9 +54,6 @@
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
     <Compile Include="Extensions/Tuple.fs" />
-    <Compile Include="TypeLevel/TypeLevelOperators.fs" />
-    <Compile Include="TypeLevel/TypeBool.fs" />
-    <Compile Include="TypeLevel/TypeNat.fs" />
     <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
@@ -99,7 +102,6 @@
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
-    <Compile Include="Data/Matrix.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
@@ -109,23 +111,10 @@
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
     <Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
-    <Content Include="TypeLevel/*.fs" PackagePath="fable/TypeLevel" />
     <Content Include="Control/*.fs" PackagePath="fable/Control" />
     <Content Include="Math/*.fs" PackagePath="fable/Math" />
     <Content Include="Data/*.fs" PackagePath="fable/Data" />
   </ItemGroup>
-
-  <!-- Add the provider dll to Nuget package -->
-  <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);AddProviderToPackage</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-  <Target Name="AddProviderToPackage">
-    <Error Condition="!Exists('$(OutputPath)FSharpPlus.Providers.dll')" Text="FSharpPlus.Providers must be built before packaging." />
-    <ItemGroup>
-      <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.dll" />
-      <BuildOutputInPackage Include="$(OutputPath)FSharpPlus.Providers.xml" />
-    </ItemGroup>
-  </Target>
 
   <ItemGroup>
     <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />

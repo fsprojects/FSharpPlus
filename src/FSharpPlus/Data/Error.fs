@@ -7,7 +7,7 @@ open FSharpPlus.Internals.Prelude
 open FSharpPlus.Control
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 /// Additional operations on Result
 [<RequireQualifiedAccess>]
 module Result =
@@ -30,7 +30,7 @@ module ResultOrException =
     let Exception : Result<_,exn>   -> _ = function Error e -> e | _ -> exn ()
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 /// Monad Transformer for Result<'T, 'E>
 [<Struct>]

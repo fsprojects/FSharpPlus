@@ -46,3 +46,4 @@ let rec playGame =
 let startState = (false, 0)
 let moves = toList "abcaaacbbcabbab"
 State.eval (playGame moves) startState
+let (score, finalState) = State.run (playGame moves) startState

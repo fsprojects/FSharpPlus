@@ -1,11 +1,17 @@
-#### 1.1.5  - November 22 2020
+#### 1.1.7  - January 7 2021
+- Fix short-circuiting Traverse
 
+#### 1.1.6  - December 7 2020
+- Fix signature of Free.fold
+- Update Task extensions so they can handle short-circuit, exceptions and cancellations
+- Fix String.drop function
+
+#### 1.1.5  - November 22 2020
 - Use list internally instead of array for the generic implementation of sequence
 - Make `<*>` for functions evaluate side-effects left-to-right
 - Remove BindReturn from monad computation expression in order to avoid type inference issues in F#5
 
 #### 1.1.4  - October 7 2020
-
 - Fix: `TryWith` for State and Reader, `Filter`, `DistinctBy`, `SortBy` and `SortByAscending` for user defined types.
 - Compile-time safety for try-blocks and while-loops in generic computation expressions.
 - Reduce allocations in NonEmptyList builder implementation.

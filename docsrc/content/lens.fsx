@@ -39,9 +39,17 @@ module Person =
     let inline _name f p =
         f p.Name <&> fun x -> { p with Name = x }
 
+type Page =
+    { Contents: string }
+
+module Page =
+    let inline _contents f p =
+        f p.Contents <&> fun x -> {p with Contents = x}
+
 type Book = 
     { Title: string
-      Author: Person }
+      Author: Person 
+      Pages: Page list }
 
 module Book =
     let inline _author f b =
@@ -49,10 +57,19 @@ module Book =
 
     let inline _authorName b = _author << Person._name <| b
 
+    let inline _pages f b =
+        f b.Pages <&> fun p -> { b with Pages = p }
+
+    let inline _pageNumber i b =
+        _pages << List._item i << _Some <| b
+
 let rayuela =
     { Book.Title = "Rayuela"
       Author = { Person.Name = "Julio Cortázar"
-                 DateOfBirth = DateTime(1914, 8, 26) } }
+                 DateOfBirth = DateTime(1914, 8, 26) } 
+      Pages = [
+        { Contents = "Once upon a time" }
+        { Contents = "The End"} ] }
     
 // read book author name:
 let authorName1 = view Book._authorName rayuela

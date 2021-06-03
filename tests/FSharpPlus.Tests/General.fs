@@ -98,6 +98,9 @@ type WrappedListD<'s> = WrappedListD of 's list with
     static member ChooseIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's ChooseIndexed"
         WrappedListD (List.choosei f x)
+    static member Lift3 (f, WrappedListD x, WrappedListD y, WrappedListD z) =
+        SideEffects.add "Using WrappedListD's Lift3"
+        WrappedListD (List.lift3 f x y z)
     static member IterateIndexed (WrappedListD x, f) =
         SideEffects.add "Using WrappedListD's IterateIndexed"
         List.iteri f x
@@ -209,6 +212,9 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member ChooseIndexed (WrappedSeqD x, f) =
             SideEffects.add "Using WrappedSeqD's ChooseIndexed"
             WrappedSeqD (Seq.choosei f x)
+    static member Lift3 (f, WrappedSeqD x, WrappedSeqD y, WrappedSeqD z) =
+            SideEffects.add "Using WrappedSeqD's Lift3"
+            WrappedSeqD (Seq.lift3 f x y z)
 
 type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
@@ -1256,6 +1262,14 @@ module Traversable =
         ()
 
     [<Test>]
+    let traverse_Order () =
+        SideEffects.reset()
+        let mapper v = SideEffects.add <| sprintf "mapping %d" v
+        let _ = traverse (Option.map mapper) [Some 1; Some 2]
+        SideEffects.are ["mapping 1"; "mapping 2"]
+
+
+    [<Test>]
     let traversableForNonPrimitive () =
         let nel = nelist { Some 1 }
         let rs1 = traverse id nel
@@ -1278,7 +1292,9 @@ module Traversable =
     let toOptions x = if x <> 4 then Some x       else None
     let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
     let toLists   x = if x <> 4 then [x; x]       else []
-    let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
+    let toEithers x =
+        if x > 4 then failwithf "Shouldn't be mapping for %i" x
+        if x = 4 then Left ["This is a failure"] else Right x
 
     let expectedEffects =
         [
@@ -1341,35 +1357,38 @@ module Traversable =
         Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e)
         
 
+    let toEithersStrict x =
+        if x = 4 then Left ["This is a failure"] else Right x
+
     [<Test>]
-    let traverseFiniteApplicatives () = // TODO -> implement short-circuit without breaking anything else
+    let traverseFiniteApplicatives () =
 
         SideEffects.reset ()
 
-        let a = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
-        let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
-        let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
+        let a = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let b = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let c = sequence (Seq.initInfinite toChoices       |> Seq.take 20 |> Seq.toList)
+        let d = sequence (Seq.initInfinite toLists         |> Seq.take 20 |> Seq.toList)
+        let e = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toList)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let f = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toArray)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let _a = traverse toOptions       [1..20]
+        let _b = traverse toOptions       [1..20]
+        let _c = traverse toChoices       [1..20]
+        let _d = traverse toLists         [1..20]
+        let _e = traverse toEithersStrict [1..20]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
-
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
-
-        let _a = traverse toOptions [1..20]
-        let _b = traverse toOptions [1..20]
-        let _c = traverse toChoices [1..20]
-        let _d = traverse toLists   [1..20]
-        let _e = traverse toEithers [1..20]
-
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
-
-        let _f = traverse toEithers [|1..20|]
+        let _f = traverse toEithersStrict [|1..20|]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         Assert.AreEqual (None, a)
@@ -2166,9 +2185,16 @@ module Parsing =
         let _f8 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
         
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
-
-        ()
-
+        
+        let x = trySscanf "%X %x" "13 43"
+        let o = trySscanf "%o" "10"
+        let b = trySscanf (PrintfFormat<int -> string, unit, string, string, int> "%B") "101"
+        let a = trySscanf (PrintfFormat<int -> int -> int -> int -> string, unit, string, string, int * int * int * int> "%B %o %x %X") "100 100 100 100"
+        
+        areEqual (Some (19, 67)) x
+        areEqual (Some 8) o
+        areEqual (Some 5) b
+        areEqual (Some (4, 64, 256, 256)) a
 
 module Conversions =
     let test =
@@ -2325,7 +2351,7 @@ module ApplicativeInference =
     let res6n7n8 = result (+) <*> result 5G <*> ZipList [1;2;3]
     let res18n14 = result (+) <*> ZipList(seq [8;4]) <*> result 10
 
-    open FSharpPlus.Builders // for applicative brackets
+    open FSharpPlus.GenericBuilders // for applicative brackets
 
     let res3n4''  = iI ((+) 2) [1;2] Ii
     let res3n4''' = iI (+) (result 2) [1;2] Ii                              // *1
@@ -2581,3 +2607,24 @@ module Choosei =
         SideEffects.reset ()
         (choosei someIfIndexEven (WrappedSeqD [1..5])) |> ignore
         areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
+
+module lift3 = 
+    [<Test>]
+    let NonEmptySeqLift3 () =
+        // NonEmptySeq
+        NonEmptySeq.lift3 (fun x y z -> x + y + z) (NonEmptySeq.ofList[1;2]) (NonEmptySeq.ofList[7;11]) (NonEmptySeq.ofList[22;33]) 
+        |> areEqual (NonEmptySeq.ofList[30; 41; 34; 45; 31; 42; 35; 46])
+    
+    [<Test>]
+    let CorrectOverload () =
+        let sumOfThree x y z = x + y + z
+        
+        // correct overload:
+        SideEffects.reset ()
+        areEquivalent [3] (Lift3.InvokeOnInstance sumOfThree (WrappedListD [1]) (WrappedListD [1]) (WrappedListD [1]))
+        areEqual ["Using WrappedListD's Lift3"] (SideEffects.get ())
+        
+        SideEffects.reset ()
+        (Lift3.InvokeOnInstance sumOfThree (WrappedSeqD [1]) (WrappedSeqD [1]) (WrappedSeqD [1])) |> ignore
+        areEqual ["Using WrappedSeqD's Lift3"] (SideEffects.get ())
+        

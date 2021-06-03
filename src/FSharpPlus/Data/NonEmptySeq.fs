@@ -197,7 +197,7 @@ module NonEmptySeq =
     /// not be used with large or infinite sequences.</remarks>
     /// <param name="mapping">The function to transform elements from the input collection and accumulate the final value.</param>
     /// <param name="state">The initial state.</param>
-    /// <param name="array">The input collection.</param>
+    /// <param name="source">The input collection.</param>
     /// <returns>The collection of transformed elements, and the final accumulated value.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
     let mapFold (mapping: 'State -> 'T -> 'Result * 'State) state (source: NonEmptySeq<_>) =
@@ -209,7 +209,7 @@ module NonEmptySeq =
     /// <remarks>This function digests the whole initial sequence as soon as it is called. As a result this function should
     /// not be used with large or infinite sequences.</remarks>
     /// <param name="mapping">The function to transform elements from the input collection and accumulate the final value.</param>
-    /// <param name="array">The input collection.</param>
+    /// <param name="source">The input collection.</param>
     /// <param name="state">The initial state.</param>
     /// <returns>The collection of transformed elements, and the final accumulated value.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
@@ -273,7 +273,7 @@ module NonEmptySeq =
         else Some (unsafeOfSeq seq)
 
     /// <summary>Builds a non empty sequence from the given array.</summary>
-    /// <param name="seq">The input array.</param>
+    /// <param name="array">The input array.</param>
     /// <returns>Non empty sequence containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
     /// <remarks>Throws exception for empty array</remarks>
@@ -287,7 +287,7 @@ module NonEmptySeq =
         else Some (unsafeOfArray array)
 
     /// <summary>Builds a non empty sequence from the given list.</summary>
-    /// <param name="seq">The input list.</param>
+    /// <param name="list">The input list.</param>
     /// <returns>Non empty sequence containing the elements of the list.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
     /// <remarks>Throws exception for empty list</remarks>
@@ -391,7 +391,7 @@ module NonEmptySeq =
     ///
     /// This is a stable sort, that is the original order of equal elements is preserved.</remarks>
     /// <param name="comparer">The function to compare the collection elements.</param>
-    /// <param name="list">The input sequence.</param>
+    /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
     let sortWith comparer (source: NonEmptySeq<_>) = Seq.sortWith comparer source |> unsafeOfSeq
@@ -501,6 +501,19 @@ module NonEmptySeq =
     let apply f x = bind (fun f -> map ((<|) f) x) f
 
     let lift2 f x1 x2 = allPairs x1 x2 |> map (fun (x, y) -> f x y)
+    
+    /// <summary>Combines values from three NonEmptySeq and calls a mapping function on this combination.</summary>
+    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First NonEmptySeq.</param>
+    /// <param name="x2">Second NonEmptySeq.</param>
+    /// <param name="x3">Third NonEmptySeq.</param>
+    ///
+    /// <returns>NonEmptySeq with values returned from mapping function.</returns>
+    let lift3 f x1 x2 x3 =
+        allPairs x2 x3
+        |> allPairs x1
+        |> map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> map (fun (x, y, z) -> f x y z)
 
     let replace (oldValue: NonEmptySeq<'T>) (newValue: NonEmptySeq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> =
         Seq.replace oldValue newValue source |> unsafeOfSeq

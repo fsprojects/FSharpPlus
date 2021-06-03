@@ -15,7 +15,7 @@ module ResizeArray =
     /// <returns>The result ResizeArray.</returns>
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input ResizeArray is null.</exception>
-    let map (f: 'T->'U) (x: ResizeArray<'T>) = ResizeArray (Seq.map f x)
+    let map (mapping: 'T->'U) (source: ResizeArray<'T>) = ResizeArray (Seq.map mapping source)
 
     /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.</summary>
     /// <param name="f">The functions.</param>
@@ -33,6 +33,16 @@ module ResizeArray =
     /// Combines all values from the first ResizeArray with the second, using the supplied mapping function.
     let lift2 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) = ResizeArray (Seq.lift2 mapping x1 x2)
 
+    /// <summary>Combines values from three ResizeArrays and calls a mapping function on this combination.</summary>
+    /// <param name="mapping">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First ResizeArray.</param>
+    /// <param name="x2">Second ResizeArray.</param>
+    /// <param name="x3">Third ResizeArray.</param>
+    ///
+    /// <returns>ResizeArray with values returned from mapping function.</returns>
+    let lift3 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) (x3: ResizeArray<'V>) =
+        ResizeArray (Seq.lift3 mapping x1 x2 x3)
+    
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
 

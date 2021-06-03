@@ -5,7 +5,7 @@ namespace FSharpPlus.Data
 open System.ComponentModel
 open FSharpPlus
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 open FSharpPlus.Lens
 #endif
 
@@ -64,7 +64,7 @@ module Validation =
         | Success a -> folder a state
         | Failure _ -> state
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// Traverse the Success case with the supplied function.
     let inline traverse (f: 'T->'``Functor<'U>``) (source: Validation<'Error,'T>) : '``Functor<Validation<'Error,'U>>`` =
@@ -165,7 +165,7 @@ module Validation =
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
     /// they are a common semigroup to use.
@@ -185,10 +185,26 @@ module Validation =
 
     #if !FABLE_COMPILER
     let inline _Success x = (prism Success <| either Ok (Error << Failure)) x
-    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x    
-    
+    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline isoValidationResult x = x |> iso toResult ofResult
     #endif
+    
+    /// <summary>
+    /// Creates two lists by classifying the values depending on whether they were wrapped with Success or Failure.
+    /// </summary>
+    /// <returns>
+    /// A tuple with both resulting lists, Success are in the first list.
+    /// </returns>
+    let partition (source: list<Validation<'Error,'T>>) =
+        let rec loop ((acc1, acc2) as acc) = function
+            | [] -> acc
+            | x::xs ->
+                match x with
+                | Success x -> loop (x::acc1, acc2) xs
+                | Failure x -> loop (acc1, x::acc2) xs
+        loop ([], []) (List.rev source)
 
 
 type Validation<'err,'a> with
@@ -198,7 +214,7 @@ type Validation<'err,'a> with
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
     static member inline Lift2  (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     // as Alternative (inherits from Applicative)
     static member inline get_Empty () = Failure (getEmpty ())
     static member inline (<|>) (x: Validation<_,_>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
@@ -214,7 +230,7 @@ type Validation<'err,'a> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Bimap (x: Validation<'T,'V>, f: 'T->'U, g: 'V->'W) : Validation<'U,'W> = Validation.bimap f g x
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -247,3 +263,12 @@ type Validation<'err,'a> with
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Bisequence (t: Validation<'err,'a>) = Validation.bisequence t
+    
+    
+    /// Creates a list with either all Success values or the Failure ones.
+    static member SequenceBiApply (t: list<Validation<'Error,'T>>) : Validation<list<'Error>,list<'T>> =
+        Validation.partition t |> fun (x, y) -> if List.isEmpty y then Success x else Failure y
+
+    /// Creates an array with either all Success values or the Failure ones.
+    static member SequenceBiApply (t: Validation<'Error,'T> []) : Validation<'Error [],'T []> =
+        Array.partitionMap Validation.toChoice t |> fun (x, y) -> if Array.isEmpty y then Success x else Failure y

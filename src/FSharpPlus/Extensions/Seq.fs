@@ -34,6 +34,20 @@ module Seq =
 
     /// Combines all values from the first seq with the second, using the supplied mapping function.
     let lift2 f x1 x2 = Seq.allPairs x1 x2 |> Seq.map (fun (x, y) -> f x y)
+    
+
+    /// <summary>Combines values from three seq and calls a mapping function on this combination.</summary>
+    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First seq.</param>
+    /// <param name="x2">Second seq.</param>
+    /// <param name="x3">Third seq.</param>
+    ///
+    /// <returns>Seq with values returned from mapping function.</returns>
+    let lift3 f x1 x2 x3 =
+        Seq.allPairs x2 x3
+        |> Seq.allPairs x1
+        |> Seq.map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> Seq.map (fun (x, y, z) -> f x y z)
 
     /// <summary>
     /// Applies a function to each element of the collection, starting from the end,
@@ -153,10 +167,10 @@ module Seq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let drop i (source: seq<_>) =
-        let mutable count = i
+    let drop count (source: seq<_>) =
+        let mutable i = count
         use e = source.GetEnumerator ()
-        while (count > 0 && e.MoveNext ()) do count <- count-1
+        while (i > 0 && e.MoveNext ()) do i <- i-1
         seq { while e.MoveNext () do yield e.Current }
 
     #if !FABLE_COMPILER
@@ -179,8 +193,9 @@ module Seq =
     /// <summary>Converts a seq to an IReadOnlyList (from System.Collections.Generic).</summary>
     /// <param name="source">The seq source</param>
     /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
-    let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
-
+    let toIReadOnlyList (source: seq<_>) = source |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
+    #endif
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
     /// </summary>
@@ -196,7 +211,11 @@ module Seq =
     /// The index of the slice.
     /// </returns>
     let findSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
         if index = -1 then
             ArgumentException("The specified slice was not found in the sequence.") |> raise
         else
@@ -215,15 +234,19 @@ module Seq =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
         if index = -1 then None else Some index
     #endif
     
     /// <summary>Choose with access to the index</summary>
-    /// <param name="f">The mapping function, taking index and element as parameters.</param>
-    /// <param name="x">The input seq.</param>
+    /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
+    /// <param name="source">The input seq.</param>
     ///
     /// <returns>Seq with values x for each List value where the function returns Some(x).</returns>
-    let choosei f l =
-        Seq.indexed l
-        |> Seq.choose (fun (a, b) -> f a b)
+    let choosei mapping source =
+        Seq.indexed source
+        |> Seq.choose (fun (a, b) -> mapping a b)

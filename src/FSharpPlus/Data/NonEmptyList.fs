@@ -85,7 +85,7 @@ module NonEmptyList =
     /// <summary>Safely build a new non empty list whose elements are the results of applying the given function
     /// to each of the elements of the two non empty list pairwise.</summary>
     /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
-    let map2Shortest f l1 l2 = { Head = f l1.Head l2.Head; Tail = List.map2 f l1.Tail l2.Tail }
+    let map2Shortest f l1 l2 = { Head = f l1.Head l2.Head; Tail = List.map2Shortest f l1.Tail l2.Tail }
     
     /// <summary>Build a new non empty list whose elements are the results of applying the given function with index
     /// to each of the elements of the non empty list.</summary>
@@ -108,8 +108,8 @@ module NonEmptyList =
     /// <summary>
     /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
     /// </summary>
-    /// <param name="a1">First input list.</param>
-    /// <param name="a2">Second input list.</param>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
     /// <returns>List with corresponding pairs of input lists.</returns>
     let zipShortest (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) =
         { Head = (list1.Head, list2.Head); Tail = List.zipShortest list1.Tail list2.Tail }
@@ -129,7 +129,7 @@ module NonEmptyList =
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
         let lst = traverse f (toList s) : '``Functor<'List<'U>>``
         (create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<NonEmptyList<'U>>``
@@ -190,7 +190,7 @@ module NonEmptyList =
     /// Equivalent to [start..stop] on regular lists.
     let inline range (start: 'T) stop = create start (List.drop 1 [start..stop])
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     /// Reduces using alternative operator `<|>`.
     let inline choice (list: NonEmptyList<'``Alt<'T>``>) = reduce (<|>) list : '``Alt<'T>``
 #endif
@@ -233,7 +233,7 @@ type NonEmptyList<'t> with
 
     static member Extract   {Head = h; Tail = _} = h : 't
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member Duplicate (s: NonEmptyList<'a>, [<Optional>]_impl: Duplicate) = NonEmptyList.tails s
     #endif
 
@@ -246,7 +246,7 @@ type NonEmptyList<'t> with
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
     static member Sum (source: seq<NonEmptyList<'T>>) = source |> Seq.map NonEmptyList.toList |> List.concat |> NonEmptyList.ofList
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList (s: NonEmptyList<'a>, [<Optional>]_impl: ToList) = NonEmptyList.toList s    
 

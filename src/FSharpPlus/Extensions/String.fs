@@ -40,11 +40,23 @@ module String =
     /// Converts to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method.
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
 
-    /// Trims white space -- function wrapper for String.Trim method.
+    /// Trims leading and trailing white spaces -- function wrapper for String.Trim method.
     /// 
     /// Note this is distinct from trim which trims the given characters,
-    /// not whitespace.
+    /// not white spaces.
     let trimWhiteSpaces (source: string) = source.Trim ()
+    
+    /// Trims leading white spaces -- function wrapper for String.TrimStart method.
+    /// 
+    /// Note this is distinct from trim which trims the given characters,
+    /// not white spaces.
+    let trimStartWhiteSpaces (source: string) = source.TrimStart ()
+    
+    /// Trims trailing white spaces -- function wrapper for String.TrimEnd method.
+    /// 
+    /// Note this is distinct from trim which trims the given characters,
+    /// not white spaces.
+    let trimEndWhiteSpaces (source: string) = source.TrimEnd ()
 
     #if !FABLE_COMPILER
        
@@ -181,7 +193,7 @@ module String =
     /// When count exceeds the length of the string it returns an empty string.
     let drop count (source: string) =
         if count < 1 then source
-        else if String.length source >= count then String.Empty
+        else if String.length source <= count then String.Empty
         else skip count source
 
     /// Finds the first index of the char in the substring which satisfies the given predicate.

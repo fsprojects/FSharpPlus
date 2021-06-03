@@ -1,15 +1,53 @@
 ﻿namespace FSharpPlus.Tests
 
 open System
+open System.Threading.Tasks
 open NUnit.Framework
 open FSharpPlus
 open FSharpPlus.Data
 open Helpers
 
-module ComputationExpressions = 
+module ComputationExpressions =
+
+    exception TestException of string
+    
+    let task<'t> = monad'<Task<'t>>
 
     [<Test>]
-    let monadFx() =
+    let specializedCEs () =
+    
+        // From Taskbuilder.fs
+        let require x msg = if not x then failwith msg
+        let failtest str = raise (TestException str)
+        
+        let testTryFinallyCaught () =
+            let mutable ran = false
+            let t =
+                task {
+                    try
+                        try
+                            require (not ran) "ran way early"
+                            do! Task.Delay(100) |> Task.ignore
+                            require (not ran) "ran kinda early"
+                            failtest "uhoh"
+                        finally
+                            ran <- true
+                        return 1
+                    with
+                    | TestException "uhoh" ->
+                        return 2
+                    | e ->
+                        raise e
+                        return 3
+                }
+            require (t.Result = 2) "wrong return"
+            require ran "never ran"
+        
+        testTryFinallyCaught ()
+        ()
+
+    [<Test>]
+    let monadFx () =
         SideEffects.reset ()
 
         // This workflow perform side-effects before and after an async operation in a monad.fx
@@ -78,6 +116,23 @@ module ComputationExpressions =
         // Check the result
         areEquivalent [42] seqValue
 
+    open FsCheck
+
+    [<Test>]
+    let monadPlusReturnAndYieldEquality () =
+        let yieldFromEqualsReturnFrom (l1: int list, l2: int list) =
+            let r1 = monad.plus { yield!  l1; yield!  l2 }
+            let r2 = monad.plus { return! l1; return! l2 }
+            r1 = r2
+
+        Check.QuickThrowOnFailure yieldFromEqualsReturnFrom
+
+        let yieldsEqualsReturns (l1: int list, i1: int, i2: int) =
+            let r1 = monad.plus { yield  i1; yield!  l1; yield  i2 }
+            let r2 = monad.plus { return i1; return! l1; return i2 }
+            r1 = r2
+
+        Check.QuickThrowOnFailure yieldsEqualsReturns
 
     [<Test>]
     let delayedMonadTransformers() =
@@ -409,6 +464,19 @@ module ComputationExpressions =
 
         SideEffects.reset ()
 
+        let readerTtaskM: ReaderT<unit,Task<unit>> = monad {
+          use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
+          while (SideEffects.add "moving"; enum.MoveNext ()) do
+                SideEffects.add (sprintf "--> %i" enum.Current) }
+
+        SideEffects.are []
+        let a = ReaderT.run readerTtaskM
+        SideEffects.are []
+        let b = a ()
+        SideEffects.are effects
+
+        SideEffects.reset ()
+
         let optionTreaderM: OptionT<Reader<unit,unit option>> = monad {
           use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
           while (SideEffects.add "moving"; enum.MoveNext ()) do
@@ -494,6 +562,15 @@ module ComputationExpressions =
                 with _ -> () }
             x
         let _ = ((monadTransformer3layersTest2 () |> StateT.run) "" |> ReaderT.run) 0
+
+        let monadTransformer3layersTest2' () =
+            let x: StateT<string, ReaderT<int, Task<(unit * string)>>> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = ((monadTransformer3layersTest2' () |> StateT.run) "" |> ReaderT.run) 0
         
         let monadTransformer3layersTest3 () =
             let x: WriterT<OptionT<seq<(unit * string) option>>> = monad {
@@ -514,6 +591,15 @@ module ComputationExpressions =
                 with _ -> () }
             x
         let _ = monadTransformer3layersTest4 () |> WriterT.run |> OptionT.run
+
+        let monadTransformer3layersTest5 () =
+            let x: WriterT<OptionT<Task<(unit * string) option>>> = monad.strict {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = monadTransformer3layersTest5 () |> WriterT.run |> OptionT.run
         
 
         // ContT doesn't deal with the inner monad, so we don't need to do anything.
