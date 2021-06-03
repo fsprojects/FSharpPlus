@@ -10,12 +10,12 @@ type MultiMap<'Key, 'Value when 'Key : comparison> = private MMap of Map<'Key, '
     interface IEnumerable<KeyValuePair<'Key, 'Value>> with
         member x.GetEnumerator () =
             let (MMap x) = x
-            (x |> Map.toSeq |> Seq.collect (fun (k, v) -> v |> map (fun v -> KeyValuePair (k, v)))).GetEnumerator ()
+            (x |> Map.toSeq |> Seq.collect (fun (k, v) -> v |> List.map (fun v -> KeyValuePair (k, v)))).GetEnumerator ()
 
     interface System.Collections.IEnumerable with
         member x.GetEnumerator () =
             let (MMap x) = x
-            (x |> Map.toSeq |> Seq.collect (fun (k, v) -> v |> map (fun v -> KeyValuePair (k, v)))).GetEnumerator () :> System.Collections.IEnumerator
+            (x |> Map.toSeq |> Seq.collect (fun (k, v) -> v |> List.map (fun v -> KeyValuePair (k, v)))).GetEnumerator () :> System.Collections.IEnumerator
 
     member x.Item
         with get (key: 'Key) : 'Value list =
@@ -25,7 +25,7 @@ type MultiMap<'Key, 'Value when 'Key : comparison> = private MMap of Map<'Key, '
             | None        -> []
 
     static member get_Zero () = MMap (Map.ofList [])
-    static member (+) (MMap x, MMap y) = MMap (x ++ y)
+    static member (+) (MMap x, MMap y) = MMap (Map.unionWith (@) x y)
 
 
 module MultiMap =
@@ -34,7 +34,7 @@ module MultiMap =
     let ofList (x: list<'Key * 'Value>) = x |> Seq.groupBy fst |> Seq.map (fun (k, v) -> k, v |> Seq.map snd |> Seq.toList) |> Map.ofSeq |> MMap
 
     /// Converts a MultiMap to a list of tuples.
-    let toList (MMap x) = x |> toList |> List.collect (fun x -> x.Value |> map (fun v -> (x.Key, v)))
+    let toList (MMap x) = x :> seq<_> |> Seq.collect (fun x -> x.Value |> List.map (fun v -> (x.Key, v)))
 
 
 type MultiMap<'Key, 'Value when 'Key : comparison> with
