@@ -45,6 +45,9 @@ module MultiMap =
             | None        -> [value]
         MMap (Map.add key v x)
 
+    /// Maps values of the original multiMap.
+    let mapValues mapping source = let (MMap x) = source in MMap (Map.mapValues (List.map mapping) x)
+
 
 type MultiMap<'Key, 'Value when 'Key : comparison> with
 
@@ -53,3 +56,6 @@ type MultiMap<'Key, 'Value when 'Key : comparison> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member OfList x = MultiMap.ofList x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Map (x, f) = MultiMap.mapValues f x
