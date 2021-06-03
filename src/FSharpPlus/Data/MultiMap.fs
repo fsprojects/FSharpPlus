@@ -30,11 +30,20 @@ type MultiMap<'Key, 'Value when 'Key : comparison> = private MMap of Map<'Key, '
 
 module MultiMap =
 
-    /// Converts a list of tuples to a MultiMap.
+    /// Converts a list of tuples to a multiMap.
     let ofList (x: list<'Key * 'Value>) = x |> Seq.groupBy fst |> Seq.map (fun (k, v) -> k, v |> Seq.map snd |> Seq.toList) |> Map.ofSeq |> MMap
 
-    /// Converts a MultiMap to a list of tuples.
+    /// Converts a multiMap to a list of tuples.
     let toList (MMap x) = x :> seq<_> |> Seq.collect (fun x -> x.Value |> List.map (fun v -> (x.Key, v)))
+
+    /// Returns a new multiMap with the new binding added to the given multiMap.
+    let add (key: 'Key) (value: 'Value) source =
+        let (MMap x) = source
+        let v =
+            match Map.tryFind key x with
+            | Some values -> value::values
+            | None        -> [value]
+        MMap (Map.add key v x)
 
 
 type MultiMap<'Key, 'Value when 'Key : comparison> with
