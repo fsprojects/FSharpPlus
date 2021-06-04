@@ -93,6 +93,7 @@
     <Compile Include="Data/Writer.fs" />
     <Compile Include="Data/State.fs" />
     <Compile Include="Data/Monoids.fs" />
+    <Compile Include="Data/MultiMap.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="Data/NonEmptyList.fs" />
     <Compile Include="Data/NonEmptySet.fs" />
