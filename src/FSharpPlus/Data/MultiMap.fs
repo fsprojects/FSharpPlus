@@ -30,11 +30,23 @@ type MultiMap<'Key, 'Value when 'Key : comparison> = private MMap of Map<'Key, '
 
 module MultiMap =
 
+    /// Converts a seq of tuples to a multiMap.
+    let ofSeq (source: seq<'Key * 'Value>) = source |> Seq.groupBy fst |> Seq.map (fun (k, v) -> k, v |> Seq.map snd |> Seq.toList) |> Map.ofSeq |> MMap
+
     /// Converts a list of tuples to a multiMap.
-    let ofList (x: list<'Key * 'Value>) = x |> Seq.groupBy fst |> Seq.map (fun (k, v) -> k, v |> Seq.map snd |> Seq.toList) |> Map.ofSeq |> MMap
+    let ofList (source: list<'Key * 'Value>) = source |> ofSeq
+
+    /// Converts an array of tuples to a multiMap.
+    let ofArray (source: ('Key * 'Value) []) = source |> ofSeq
+
+    /// Converts a multiMap to a seq of tuples.
+    let toSeq (MMap x) = x :> seq<_> |> Seq.collect (fun x -> x.Value |> List.map (fun v -> (x.Key, v)))
 
     /// Converts a multiMap to a list of tuples.
-    let toList (MMap x) = x :> seq<_> |> Seq.collect (fun x -> x.Value |> List.map (fun v -> (x.Key, v)))
+    let toList source = source |> toSeq |> Seq.toList
+
+    /// Converts a multiMap to an array of tuples.
+    let toArray source = source |> toSeq |> Seq.toArray
 
     /// Returns a new multiMap with the new binding added to the given multiMap.
     let add (key: 'Key) (value: 'Value) source =
@@ -52,10 +64,22 @@ module MultiMap =
 type MultiMap<'Key, 'Value when 'Key : comparison> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member ToSeq x = MultiMap.toSeq x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList x = MultiMap.toList x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member ToArray x = MultiMap.toArray x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member OfSeq x = MultiMap.ofSeq x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member OfList x = MultiMap.ofList x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member OfArray x = MultiMap.ofArray x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x, f) = MultiMap.mapValues f x
