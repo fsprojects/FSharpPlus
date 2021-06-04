@@ -187,8 +187,8 @@ module Dict =
                 member __.Count = System.Int32.MaxValue
                 member __.ContainsKey (_key: 'TKey) = true
                 member __.Contains (item: KeyValuePair<'TKey,'TValue>) = obj.ReferenceEquals (item.Value, source)
-                member __.GetEnumerator () = Seq.empty.GetEnumerator () :> System.Collections.IEnumerator
-                member __.GetEnumerator () = Seq.empty.GetEnumerator () : IEnumerator<KeyValuePair<'TKey,'TValue>>
+                member __.GetEnumerator () = invalidOp "Key set is potentially infinite." : System.Collections.IEnumerator
+                member __.GetEnumerator () = invalidOp "Key set is potentially infinite." : IEnumerator<KeyValuePair<'TKey,'TValue>>
                 member __.IsReadOnly = true
                 member __.Values = icollection source
                 member __.Item
