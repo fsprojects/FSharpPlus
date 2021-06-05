@@ -200,9 +200,9 @@ module TypeProviderTests =
         let col2 = Matrix.Col<2>.AsVector m
         let center = Matrix.Slice<1, 1, 1, 1>.Invoke m
         Assert (Matrix.rowLength center =^ S Z)
-        Assert (Matrix.colength center =^ S Z)
+        Assert (Matrix.colLength center =^ S Z)
         areEqual 5 (Matrix.get Z Z center)
         Assert (Matrix.rowLength row1 =^ S Z)
-        Assert (Matrix.colength row1 =^ (Z |> S |> S |> S))
+        Assert (Matrix.colLength row1 =^ (Z |> S |> S |> S))
         areEqual 5 (Matrix.get Z (S Z) row1)
         areEqual [3; 6; 9] (Vector.toList col2)
