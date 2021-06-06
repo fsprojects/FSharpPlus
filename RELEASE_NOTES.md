@@ -1,33 +1,28 @@
 #### 1.2.0  - June 6 2021
 
-- Type-level literals and Nat-dependent vector/matrix
+- Update to compile with Fable 3
+- Allow specialized builders for generic CEs
+- Add new types: NonEmptySeq, NonEmptySet, NonEmptyMap and MultiMap
+- Integrate Task in strict CEs
 - Add Mapi Support in NonEmpty List
-- Add new types: NonEmptySeq, NonEmptySet and NonEmptyMap
 - Add Cont.eval / ContT.eval
-- Add type alias for non-empty collections and builder for NonEmptySeq
-- Add choose function to the Map and Dictionaries modules (in the Extensions namespace)
+- Builder for NonEmptySeq
+- Add choose function to Map and Dictionaries modules (in Extensions)
+- Add choosei to several modules
 - Add zipShortest function and use that to make generic Zip safe for collections
+- Add map2Shortest, a safe map2 variant to several modules
+- Add missing map3/lift3 extensions
 - Add TryLast to Foldable and introduce operator tryLast
 - Add tryHead and tryLast to String module (in the Extensions namespace)
+- Add yield! to monad.plus
+- Add SequenceBiApply and partition to Validation
+- Add indexer optic for List and Array
+- Rename Parse active pattern to Parsed
+- Include internal error in Result.get
+- Add support for %o %x %X and %B to scan functions
+- Bugfix: Evaluate traverse left to right
 - Use list instead of array for the generic implementation of sequence
-- Add NonEmptySeq.unsafeOfSeq (#394)
-- Add choosei to several modules (#391)
-- Add map2Shortest (#373), a safe map2 variant, to several modules
-- Add yield! to monad.plus (#410)
-- Bugfix: NonEmptyList.map2Shortest, Fix FsCheck tests (#412)
-- Update to compile with Fable 3 (#392)
-- Add missing map3/lift3 extensions (#403)
-- Bugfix: Evaluate traverse left to right (#418)
-- Allow specialized builders for generic CEs (#425)
-- Integrate Task in strict CEs (#420)
-- Add SequenceBiApply and partition to Validation (#424)
-- Add indexer optic for List and Array (#423)
-- Rename Parse active pattern (#422)
-- Include internal error in Result.get (#433)
-- Add support for %o %x and %X to scan functions (#443)
-- Add support for %B in scan functions (#446)
-- Bump to Fable 3.1.15 (include more of F#+ in Fable) (#434)
-- Better hiding of internals in parsing (#445)
+- Better hiding of internals in parsing
 
 #### 1.1.7  - January 7 2021
 - Fix short-circuiting Traverse
