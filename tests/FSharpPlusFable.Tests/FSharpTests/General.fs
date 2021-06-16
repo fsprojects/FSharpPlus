@@ -282,7 +282,7 @@ let bitConverter = testList "BitConverter" [
 
 let curry = testList "Curry" [
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "curryTest" (fun () ->
         let f1  (x: Tuple<_>) = [x.Item1]
         let f2  (x, y)    = [x + y]
@@ -307,7 +307,7 @@ let curry = testList "Curry" [
         ())
 #endif
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "uncurryTest" (fun () ->
         let g2  x y   = [x + y]
         let g3  x y z = [x + y + z]
