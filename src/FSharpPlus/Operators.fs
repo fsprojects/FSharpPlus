@@ -22,21 +22,19 @@ module Operators =
     /// <category index="0">Common Combinators</category>
     let inline curry f (x: 'T1) (y: 'T2) : 'Result = f (x, y)
     
-    #if !FABLE_COMPILER
-    /// <summary>
-    /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
-    /// </summary>
-    /// <category index="0">Common Combinators</category>
-    let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'Result) : 'T1 -> '``T2 -> ... -> 'Tn -> 'Result`` = fun t -> Curry.Invoke f t
-    #endif
-
     /// <summary>
     /// Takes a function expecting two curried arguments and returns a function expecting a tuple of two elements. Same as (&lt;||).
     /// </summary>
     /// <category index="0">Common Combinators</category>
     let inline uncurry f (x: 'T1, y: 'T2) : 'Result = f x y
     
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    /// <summary>
+    /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
+    /// </summary>
+    /// <category index="0">Common Combinators</category>
+    let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'Result) : 'T1 -> '``T2 -> ... -> 'Tn -> 'Result`` = fun t -> Curry.Invoke f t
+    
     /// <summary>
     /// Takes a function expecting any N number of curried arguments and returns a function expecting a tuple of N elements.
     /// </summary>
