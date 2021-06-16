@@ -19,8 +19,14 @@ module internal Prelude =
     let inline flip f x y = f y x
     let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
-    let inline retype (x: 'T) : 'U = (# "" x: 'U #)
     let inline opaqueId x = Unchecked.defaultof<_>; x
+    
+    let inline retype (x: 'T) : 'U =
+    #if !FABLE_COMPILER
+        (# "" x: 'U #)
+    #else
+        unbox<'U> x
+    #endif
 
 
 [<RequireQualifiedAccess>]
@@ -95,6 +101,12 @@ type Either<'t,'u> =
     | Right of 'u
 
 type DmStruct = struct end
+
+#if FABLE_COMPILER
+type Tuple<'t> (v: 't) =
+    let value = v
+    member _.Item1 = value
+#endif
 
 
 [<Sealed>]
