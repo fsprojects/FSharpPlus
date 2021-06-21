@@ -128,7 +128,11 @@ type Sequence with
                         Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, List.toSeq)   : '``Applicative<seq<'T>>``
+    
+    #if !FABLE_COMPILER
     static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone, List.toSeq)                                : option<seq<'t>>
+    #endif
+    
     static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Error _      -> true | _ -> false), List.toSeq) : Result<seq<'t>, 'e>
     static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Choice2Of2 _ -> true | _ -> false), List.toSeq) : Choice<seq<'t>, 'e>
     static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty, List.toSeq)                                 : list<seq<'t>>
