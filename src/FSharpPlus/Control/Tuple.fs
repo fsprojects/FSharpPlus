@@ -183,7 +183,7 @@ type MapItem5 =
         call (Unchecked.defaultof<MapItem5>, value)
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open FSharpPlus.Internals.Prelude
 
