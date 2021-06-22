@@ -56,7 +56,6 @@ let parsing = testList "Parsing" [
         equal r123 (Some (WrappedListA [1; 2; 3])))
     #endif
 
-    #if !FABLE_COMPILER
     testCase "scanfParsing" (fun () ->
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
         
@@ -89,5 +88,4 @@ let parsing = testList "Parsing" [
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
 
         ())
-    #endif
 ]

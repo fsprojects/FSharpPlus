@@ -1,7 +1,5 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER
-
 [<AutoOpen>]
 module Parsing =
 
@@ -136,5 +134,3 @@ module Parsing =
 
     /// Gets a tuple with the result of parsing each element of a formatted text from the Console. Returns None in case of failure.
     let inline tryScanfn pf : '``(T1 * T2 * ... * Tn)`` option = trySscanf pf (Console.ReadLine ())
-
-#endif
