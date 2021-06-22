@@ -33,17 +33,19 @@ let parsing = testList "Parsing" [
         let _MTS = [tryParse "Monday" ; Some DayOfWeek.Thursday; Some DayOfWeek.Saturday]
         #endif
         let _103 = tryParse "103" : Text.StringBuilder option
+        
         #if !FABLE_COMPILER
         let _109 = parse "10.0.9.1" : Net.IPAddress
         #endif
-        let _111 = parse "true" && true
-        #if !FABLE_COMPILER
+        
+        let _111 = parse "true" && true        
         let _MTF = [parse "Monday" ; DayOfWeek.Thursday; DayOfWeek.Friday]
-        #endif
+        
         #if !FABLE_COMPILER
         let _110 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;0uy;0uy;0uy;0uy|] + 100.
         let _120 = parse "10" + ofBytes [|10uy;0uy;0uy;0uy;|]                + 100
         #endif
+        
         let _121 = parse "121" : string
         let _122 = parse "122" : Text.StringBuilder
         
