@@ -29,12 +29,12 @@ module internal Prelude =
     #endif
 
     let inline tuple1<'t> (x: 't) =
-        // #if FABLE_COMPILER
-        // let t = ((),(),(),(),(),(),(),x)
-        // t.Rest
-        // #else
+        #if FABLE_COMPILER
+        let t = ((),(),(),(),(),(),(),x)
+        t.Rest
+        #else
         System.Tuple<_> x
-        // #endif
+        #endif
 
 
 [<RequireQualifiedAccess>]
