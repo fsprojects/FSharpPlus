@@ -19,19 +19,19 @@ with
 
 let parsing = testList "Parsing" [
     #if !FABLE_COMPILER || FABLE_COMPILER_3
-    testCase "parse" (fun () -> 
+    testCase "parse" (fun () ->
+    
         #if !FABLE_COMPILER
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
-
         Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))
         #endif
+        
         #if !FABLE_COMPILER
         let _101 = tryParse "10.1.0.1" : Net.IPAddress option
         #endif
-        let _102 = tryParse "102" : string option
-        #if !FABLE_COMPILER
-        let _MTS = [tryParse "Monday" ; Some DayOfWeek.Thursday; Some DayOfWeek.Saturday]
-        #endif
+        
+        let _102 = tryParse "102" : string option        
+        let _MTS = [tryParse "Monday" ; Some DayOfWeek.Thursday; Some DayOfWeek.Saturday]        
         let _103 = tryParse "103" : Text.StringBuilder option
         
         #if !FABLE_COMPILER
