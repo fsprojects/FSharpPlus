@@ -14,11 +14,9 @@ with
         match value.Split('_') |> List.ofArray with
         | "P" :: Int32 v :: [] -> Some { Value = v }
         | _ -> None
-#endif
 
 
 let parsing = testList "Parsing" [
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "parse" (fun () -> 
         #if !FABLE_COMPILER
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
@@ -54,7 +52,6 @@ let parsing = testList "Parsing" [
 
         let r123: WrappedListA<int> option = tryParse "[1;2;3]"
         equal r123 (Some (WrappedListA [1; 2; 3])))
-    #endif
 
     testCase "scanfParsing" (fun () ->
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
@@ -89,3 +86,4 @@ let parsing = testList "Parsing" [
 
         ())
 ]
+#endif
