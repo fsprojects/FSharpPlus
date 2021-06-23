@@ -58,8 +58,8 @@ let parsing = testList "Parsing" [
         // let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
         
         // let _t = sscanf "(%i-%i-%f-%i-%i-%i-%i-%i-%i)" "(32-66-888-4-5-6-7-8-9)"
-        let (_a,_b) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
-        let (_x,_y,_z) = sscanf "%s-%s-%s" "test-this-string"
+        // let (_a,_b) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
+        // let (_x,_y,_z) = sscanf "%s-%s-%s" "test-this-string"
         let (_j,_k,_l,_m,_n,_o,_p) = sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"
         
         // let (_r1,_r2,_r3,_r4,_r5,_r6,_r7,_r8)          = sscanf "%f %F %g %G %e %E %c %c"    "1 2.1 3.4 .3 43.2e32 0 f f"
@@ -70,8 +70,8 @@ let parsing = testList "Parsing" [
         // let (_w1,_w2,_w3,_w4,_w5,_w6,_w7,_w8,_w9,_w10,_w11,_w12,_w13,_w14,_w15,_w16,_w17) = sscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
         
         
-        let _zzz = sscanf "(%%%s)" "(%hello)"
-        let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
+        // let _zzz = sscanf "(%%%s)" "(%hello)"
+        // let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
         
         let _f1 = trySscanf "(%%%s)" "(%hello)"
@@ -83,7 +83,7 @@ let parsing = testList "Parsing" [
         // let _f7 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i"    "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16"
         // let _f8 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
         
-        let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
+        // let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
 
         ())
 
