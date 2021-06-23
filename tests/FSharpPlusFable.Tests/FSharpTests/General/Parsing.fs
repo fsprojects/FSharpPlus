@@ -56,6 +56,9 @@ let parsing = testList "Parsing" [
 
     testCase "scanfParsing" (fun () ->
 
+        let dateAsInts      = sscanf    "%i-%i-%i" "2015-04-23"
+        let maybeDateAsInts = trySscanf "%i-%i-%i" "2015-04-23"
+
         // Infinite loop
         #if !FABLE_COMPILER
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]        
