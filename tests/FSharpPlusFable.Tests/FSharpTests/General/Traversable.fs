@@ -49,7 +49,8 @@ let traversable = testList "Traversable" [
         Assert.IsInstanceOf<Option<array<int>>> testVal)
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    // .. Control/Functor.fs(..): (..) error FABLE: Cannot resolve trait call Map - Inline call from ./Traversable.fs [Wrong line number??]
+    #if !FABLE_COMPILER
     testCase "traverseDerivedFromSequence" (fun () -> 
         let testVal = traverse (fun x -> [int16 x..int16 (x+2)]) (WrappedListH [1; 4])
         Assert.AreEqual (
@@ -83,7 +84,7 @@ let traversable = testList "Traversable" [
         ())
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "traverse_Specialization" (fun () ->
         let _ = Seq.traverse id [WrappedSeqD [1]; WrappedSeqD [2]]
         let _ = Seq.sequence    [WrappedSeqD [1]; WrappedSeqD [2]]
