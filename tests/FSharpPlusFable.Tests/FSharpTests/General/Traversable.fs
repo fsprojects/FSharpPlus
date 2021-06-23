@@ -40,7 +40,7 @@ let expectedEffects =
     ]
 
 let traversable = testList "Traversable" [
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "sequence_Default_Primitive" (fun () -> 
         let testVal = sequence [|Some 1; Some 2|]
         Assert.AreEqual (Some [|1;2|], testVal)
