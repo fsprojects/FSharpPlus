@@ -84,7 +84,8 @@ let traversable = testList "Traversable" [
         ())
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    // Control/Applicative.fs(..): (..) error FABLE: Cannot resolve trait call IsLeftZero - Inline call from ./Traversable.fs(..) < ..
+    #if !FABLE_COMPILER
     testCase "traverse_Specialization" (fun () ->
         let _ = Seq.traverse id [WrappedSeqD [1]; WrappedSeqD [2]]
         let _ = Seq.sequence    [WrappedSeqD [1]; WrappedSeqD [2]]
