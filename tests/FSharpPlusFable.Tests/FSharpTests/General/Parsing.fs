@@ -56,16 +56,6 @@ let parsing = testList "Parsing" [
 
     testCase "scanfParsing" (fun () ->
 
-        let _dateAsInts      = sscanf    "%i-%i-%i" "2015-04-23"
-
-        // Works in Fable Repl but here we get
-        // [this file, wrong line number] error FABLE: Cannot get type info of generic parameter a5$, please inline or inject a type resolver [* multiple times]
-        #if !FABLE_COMPILER
-        let _f2 = trySscanf "%s--%s-%s" "test--this-string"
-        let _maybeDateAsInts = trySscanf "%i-%i-%i" "2015-04-23"
-        #endif
-        
-
         // Infinite loop
         #if !FABLE_COMPILER
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]        
@@ -103,6 +93,14 @@ let parsing = testList "Parsing" [
         #endif
         
         let _f1 = trySscanf "(%%%s)" "(%hello)"
+
+        // Works in Fable Repl but here we get
+        // [this file, wrong line number] error FABLE: Cannot get type info of generic parameter a5$, please inline or inject a type resolver [* multiple times]
+        #if !FABLE_COMPILER
+        let _f2 = trySscanf "%s--%s-%s" "test--this-string"
+        let _dateAsInts      = sscanf    "%i-%i-%i" "2015-04-23"
+        let _maybeDateAsInts = trySscanf "%i-%i-%i" "2015-04-23"
+        #endif
 
         // Infinite loop
         #if !FABLE_COMPILER
