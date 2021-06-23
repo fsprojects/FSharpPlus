@@ -307,7 +307,6 @@ module Operators =
     
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     
-    /// S
     module Seq =
         /// <summary>
         /// Folds all values in the sequence using the monoidal addition.
@@ -715,7 +714,7 @@ module Operators =
     let inline traverse (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = Traverse.Invoke f t
 
     /// <summary>
-    /// Evaluate each action in the structure from left to right, and and collect the results.
+    /// Evaluate each action in the structure from left to right, and collect the results.
     /// </summary>
     /// <category index="13">Traversable</category>
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
