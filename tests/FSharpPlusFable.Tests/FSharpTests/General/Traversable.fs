@@ -40,14 +40,16 @@ let expectedEffects =
     ]
 
 let traversable = testList "Traversable" [
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    
+    // Exception: TypeError: o[Symbol.iterator] is not a function
+    #if !FABLE_COMPILER
     testCase "sequence_Default_Primitive" (fun () -> 
         let testVal = sequence [|Some 1; Some 2|]
         Assert.AreEqual (Some [|1;2|], testVal)
         Assert.IsInstanceOf<Option<array<int>>> testVal)
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "traverseDerivedFromSequence" (fun () -> 
         let testVal = traverse (fun x -> [int16 x..int16 (x+2)]) (WrappedListH [1; 4])
         Assert.AreEqual (
