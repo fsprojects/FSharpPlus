@@ -16,14 +16,13 @@ type Either<'l,'r> = Left of 'l | Right of 'r with
         SideEffects.add ("f(x) <*> " + string x)
         match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e
     static member IsLeftZero x = match x with Left _ -> true | _ -> false
-#endif
 
-#if !FABLE_COMPILER
 let traverseTest =
     let _None = sequence (seq [Some 3;None ;Some 1])
     let _None2 = sequence (TestNonEmptyCollection.Create (Some 42))
     ()
 #endif
+
 let toOptions x = if x <> 4 then Some x       else None
 let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
 let toLists   x = if x <> 4 then [x; x]       else []
