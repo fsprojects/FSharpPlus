@@ -58,7 +58,7 @@ module Lens =
     /// <returns>The lens.</returns>
     let inline lens (getter: 's -> 'a) (setter: 's -> 'b -> 't) (f: 'a -> '``F<'b>``) = fun s -> setter s </Map.InvokeOnInstance/> f (getter s) : '``F<'t>``
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3 // there are issues on Fable with Return.InvokeOnInstance
+#if !FABLE_COMPILER // there are issues on Fable with Return.InvokeOnInstance
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
     /// <remarks>Using Result instead of Option to permit the types of 's and 't to differ.</remarks>
@@ -157,7 +157,7 @@ module Lens =
     let inline non def f ma = Map.InvokeOnInstance (fun a' -> if a' = def then None else Some(a')) (f (Option.defaultValue def ma))
 
     // Prism
-#if !FABLE_COMPILER || FABLE_COMPILER_3 // there are issues on Fable with Return.InvokeOnInstance for prism 'Const First'
+#if !FABLE_COMPILER // there are issues on Fable with Return.InvokeOnInstance for prism 'Const First'
 
     /// Prism providing a Traversal for targeting the 'Ok' part of a Result<'T,'Error>
     let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x

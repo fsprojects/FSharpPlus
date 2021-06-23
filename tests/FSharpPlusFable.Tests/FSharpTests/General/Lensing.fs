@@ -27,12 +27,8 @@ let lensing = testList "Lensing" [
                equal (view _1 (1, '2')) 1
                equal (view _2 ('1', 2)) 2 )
 #endif
-
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER
     testCase "Lens preview _Ok, Error" (fun () -> equal None (preview _Ok (Error 1)))
-    #endif
-
-#if !FABLE_COMPILER    
     testCase "Lens preview _Ok, OK" (fun () -> equal (Some 1) (preview _Ok (Ok 1)))
     testCase "Lens preview _Error, Error" (fun () -> equal (Some 1) (preview _Error (Error 1)))
     testCase "Lens preview _Error, Ok" (fun () -> equal None (preview _Error (Ok 1)))
