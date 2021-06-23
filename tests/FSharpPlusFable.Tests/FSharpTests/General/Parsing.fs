@@ -74,7 +74,7 @@ let parsing = testList "Parsing" [
         // let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
         
-        // let _f1 = trySscanf "(%%%s)" "(%hello)"
+        let _f1 = trySscanf "(%%%s)" "(%hello)"
         // let _f2 = trySscanf "%s--%s-%s" "test--this-gg"
         // let _f3 = trySscanf "%f %F %g %G %e %E %c %c"    "1 2.1 3.4 .3 43.2e32 0 f f"
         // let _f4 = trySscanf "%f %F %g %G %e %E %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f"
