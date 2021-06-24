@@ -71,7 +71,7 @@ let idiomBrackets = testList "IdiomBrackets" [
 type RErrors = | NegativeValue
 
 let monadTransformers = testList "MonadTransformers" [
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER
     testCase "testCompileResultT" (fun () ->
         // Test MonadError
         let _err1Layers = catch (Error "Invalid Value") (fun s -> Error ["the error was: " + s]) : Result<int, _>
@@ -211,7 +211,7 @@ type Sum<'a> = Sum of 'a with
 
 
 let splits = testList "Splits" [
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "splitArraysAndStrings" (fun () -> 
         let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
         let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|] |> Seq.map System.Text.Encoding.ASCII.GetString
