@@ -165,8 +165,8 @@ type Zero with
 #endif
 
 type Zero with
-    static member inline Zero (_: Tuple<'a>, _: Zero) = Tuple<_> (Zero.Invoke ()) : Tuple<'a>
-    static member inline Zero (_: Id<'a>   , _: Zero) = Id<_>    (Zero.Invoke ())
+    static member inline Zero (_: Tuple<'a>, _: Zero) = tuple1 (Zero.Invoke ()) : Tuple<'a>
+    static member inline Zero (_: Id<'a>   , _: Zero) = Id<_>  (Zero.Invoke ())
     
 type Zero with static member inline Zero (_: 'a*'b               , _: Zero) = (Zero.Invoke (), Zero.Invoke ()                                                                                ) : 'a*'b
 type Zero with static member inline Zero (_: 'a*'b*'c            , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                                ) : 'a*'b*'c
@@ -556,8 +556,8 @@ type MinValue =
         let (t1: 't1) = MinValue.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
-    static member inline MinValue (_: Tuple<'a>, _: MinValue) = Tuple<_> (MinValue.Invoke ()) : Tuple<'a>
-    static member inline MinValue (_: Id<'a>   , _: MinValue) = Id<_>    (MinValue.Invoke ())
+    static member inline MinValue (_: Tuple<'a>, _: MinValue) = tuple1 (MinValue.Invoke ()) : Tuple<'a>
+    static member inline MinValue (_: Id<'a>   , _: MinValue) = Id<_>  (MinValue.Invoke ())
 
     static member inline MinValue (_: 'a*'b               , _: MinValue) = (MinValue.Invoke (), MinValue.Invoke ())
     static member inline MinValue (_: 'a*'b*'c            , _: MinValue) = (MinValue.Invoke (), MinValue.Invoke (), MinValue.Invoke ())
@@ -606,8 +606,8 @@ type MaxValue =
         let (t1: 't1) = MaxValue.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
-    static member inline MaxValue (_: Tuple<'a>, _: MaxValue) = Tuple<_> (MaxValue.Invoke ()) : Tuple<'a>
-    static member inline MaxValue (_: Id<'a>   , _: MaxValue) = Id<_>    (MaxValue.Invoke ())
+    static member inline MaxValue (_: Tuple<'a>, _: MaxValue) = tuple1 (MaxValue.Invoke ()) : Tuple<'a>
+    static member inline MaxValue (_: Id<'a>   , _: MaxValue) = Id<_>  (MaxValue.Invoke ())
 
     static member inline MaxValue (_: 'a*'b               , _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke ())
     static member inline MaxValue (_: 'a*'b*'c            , _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke ())

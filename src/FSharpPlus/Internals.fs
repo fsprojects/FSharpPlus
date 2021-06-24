@@ -22,6 +22,14 @@ module internal Prelude =
         unbox<'U> x
     #endif
 
+    let inline tuple1<'t> (x: 't) =
+        #if FABLE_COMPILER
+        let t = ((),(),(),(),(),(),(),x)
+        t.Rest
+        #else
+        System.Tuple<_> x
+        #endif
+
 
 [<RequireQualifiedAccess>]
 module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
@@ -95,13 +103,6 @@ type Either<'t,'u> =
     | Right of 'u
 
 type DmStruct = struct end
-
-#if FABLE_COMPILER
-type Tuple<'t> (v: 't) =
-    let value = v
-    member _.Item1 = value
-#endif
-
 
 [<Sealed>]
 type Set2<'T when 'T: comparison >() = class end
