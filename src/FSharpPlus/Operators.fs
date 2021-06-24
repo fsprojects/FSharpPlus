@@ -982,9 +982,27 @@ module Operators =
     /// <category index="18">Monad Transformers</category>
     let inline throw (error: 'E) : '``'MonadError<'E,'T>`` = Throw.Invoke error
 
-    /// <summary> Executes a handler when the value contained in the Error monad represents an error. </summary>
+    /// <summary>
+    /// Executes a handler when the value contained in the Error monad represents an error.
+    /// This is bindError flipped, which makes it useful when used as an operator.
+    /// </summary>
+    /// <example>
+    /// <code>
+    ///    let doSomeOperation x = ResultT <| async {
+    ///        if x < 10 then return Ok 10
+    ///        else return Error "failure" }
+    ///
+    ///    doSomeOperation &lt;/catch/&gt; (fun s -> throw ("The error was: " + s))
+    /// </code>
+    /// </example>
     /// <category index="18">Monad Transformers</category>
     let inline catch (value: '``'MonadError<'E1,'T>``) (handler: 'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = Catch.Invoke value handler
+
+    /// <summary>
+    /// Executes a handler when the value contained in the Error monad represents an error.
+    /// </summary>
+    /// <category index="18">Monad Transformers</category>
+    let inline bindError  (handler: 'E1->'``'MonadError<'E2,'T>``) (value: '``'MonadError<'E1,'T>``): '``'MonadError<'E2,'T>`` = Catch.Invoke value handler
 
     #endif
     #if !FABLE_COMPILER || FABLE_COMPILER_3
