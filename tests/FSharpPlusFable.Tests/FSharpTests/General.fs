@@ -71,7 +71,7 @@ let idiomBrackets = testList "IdiomBrackets" [
 type RErrors = | NegativeValue
 
 let monadTransformers = testList "MonadTransformers" [
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "testCompileResultT" (fun () ->
         // Test MonadError
         let _err1Layers = catch (Error "Invalid Value") (fun s -> Error ["the error was: " + s]) : Result<int, _>
