@@ -242,12 +242,10 @@ let splits = testList "Splits" [
         Assert.IsTrue ((b1 = "this...is...a...t.........est"))
         Assert.IsTrue ((b2 = [|116uy; 104uy; 105uy; 115uy; 46uy; 46uy; 46uy; 105uy; 115uy; 46uy; 46uy; 46uy; 97uy; 46uy; 46uy; 46uy; 116uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 101uy; 115uy; 116uy|]))
         )
-        #endif
 
-#if !FABLE_COMPILER
     testCase "intercalateArraysAndStrings" (fun () -> 
         let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
-        let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B |> System.Text.Encoding.ASCII.GetString
+        let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B
 
         //let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
 
@@ -255,11 +253,14 @@ let splits = testList "Splits" [
         let d  = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
         let _e = intercalate 10 (seq [1; 2; 3])
 
-        Assert.IsTrue((a1 = a2))
+        Assert.IsTrue((a1 = "this is a test"))
+        Assert.IsTrue((a2 = [|116uy; 104uy; 105uy; 115uy; 32uy; 105uy; 115uy; 32uy; 97uy; 32uy; 116uy; 101uy; 115uy; 116uy|]))
         //Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
         // Assert.IsTrue((c = Sum 13))
-        Assert.IsTrue((d = Sum 13)))
-#endif
+        Assert.IsTrue((d = Sum 13))
+        )
+    #endif
+
     ]
 
 let bitConverter = testList "BitConverter" [
