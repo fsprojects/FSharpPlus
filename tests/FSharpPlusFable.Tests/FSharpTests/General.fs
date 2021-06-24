@@ -221,27 +221,28 @@ let splits = testList "Splits" [
         let b2 = "this.is.a.t...est"B |> split [|"."B; "..."B|]
         
         Assert.IsTrue ((toList a1 = ["this.isABa.t"; "est"]))
-        Assert.IsTrue ((toList a2 = [[|116uy; 104uy; 105uy; 115uy; 46uy; 105uy; 115uy; 65uy; 66uy; 97uy; 46uy;116uy|]; [|101uy; 115uy; 116uy|]]))
+        Assert.IsTrue ((toList a2 = [[|116uy; 104uy; 105uy; 115uy; 46uy; 105uy; 115uy; 65uy; 66uy; 97uy; 46uy; 116uy|]; [|101uy; 115uy; 116uy|]]))
         Assert.IsTrue ((toList b1 = ["this"; "is"; "a"; "t"; ""; ""; "est"]))
-        Assert.IsTrue ((toList b2 = [[|116uy; 104uy; 105uy; 115uy|]; [|105uy; 115uy|]; [|97uy|]; [|116uy|];[||]; [||]; [|101uy; 115uy; 116uy|]]))
+        Assert.IsTrue ((toList b2 = [[|116uy; 104uy; 105uy; 115uy|]; [|105uy; 115uy|]; [|97uy|]; [|116uy|]; [||]; [||]; [|101uy; 115uy; 116uy|]]))
 
-        // #if !FABLE_COMPILER
-        // Assert.IsInstanceOf<Option<string []>> (Some a1)
-        // #endif
+        #if !FABLE_COMPILER
+        Assert.IsInstanceOf<Option<string []>> (Some a1)
+        #endif
         )
-    #endif
 
-#if !FABLE_COMPILER
     testCase "replaceArraysAndStrings" (fun () -> 
         let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
-        let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B |> System.Text.Encoding.ASCII.GetString
+        let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B
 
         let b1 = "this.is.a.t...est"  |> replace "."  "..."
-        let b2 = "this.is.a.t...est"B |> replace "."B "..."B |> System.Text.Encoding.ASCII.GetString
+        let b2 = "this.is.a.t...est"B |> replace "."B "..."B
 
-        Assert.IsTrue ((a1 = a2))
-        Assert.IsTrue ((b1 = b2)))
-#endif
+        Assert.IsTrue ((a1 = "this.isABa.tABCest"))
+        Assert.IsTrue ((a2 = [|116uy; 104uy; 105uy; 115uy; 46uy; 105uy; 115uy; 65uy; 66uy; 97uy; 46uy; 116uy; 65uy; 66uy; 67uy; 101uy; 115uy; 116uy|]))
+        Assert.IsTrue ((b1 = "this...is...a...t.........est"))
+        Assert.IsTrue ((b2 = [|116uy; 104uy; 105uy; 115uy; 46uy; 46uy; 46uy; 105uy; 115uy; 46uy; 46uy; 46uy; 97uy; 46uy; 46uy; 46uy; 116uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 46uy; 101uy; 115uy; 116uy|]))
+        )
+        #endif
 
 #if !FABLE_COMPILER
     testCase "intercalateArraysAndStrings" (fun () -> 
