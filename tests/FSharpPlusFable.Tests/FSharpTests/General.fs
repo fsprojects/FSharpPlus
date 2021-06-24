@@ -211,18 +211,25 @@ type Sum<'a> = Sum of 'a with
 
 
 let splits = testList "Splits" [
-#if !FABLE_COMPILER || FABLE_COMPILER_3
-    testCase "splitArraysAndStrings" (fun () -> 
+
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    testCase "splitArraysAndStrings" (fun () ->
         let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
-        let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|] |> Seq.map System.Text.Encoding.ASCII.GetString
+        let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|]
 
         let b1 = "this.is.a.t...est"  |> split [|"." ; "..." |]
-        let b2 = "this.is.a.t...est"B |> split [|"."B; "..."B|] |> Seq.map System.Text.Encoding.ASCII.GetString
+        let b2 = "this.is.a.t...est"B |> split [|"."B; "..."B|]
+        
+        Assert.IsTrue ((toList a1 = ["this.isABa.t"; "est"]))
+        Assert.IsTrue ((toList a2 = [[|116uy; 104uy; 105uy; 115uy; 46uy; 105uy; 115uy; 65uy; 66uy; 97uy; 46uy;116uy|]; [|101uy; 115uy; 116uy|]]))
+        Assert.IsTrue ((toList b1 = ["this"; "is"; "a"; "t"; ""; ""; "est"]))
+        Assert.IsTrue ((toList b2 = [[|116uy; 104uy; 105uy; 115uy|]; [|105uy; 115uy|]; [|97uy|]; [|116uy|];[||]; [||]; [|101uy; 115uy; 116uy|]]))
 
-        Assert.IsTrue((toList a1 = toList a2))
-        Assert.IsTrue((toList b1 = toList b2))
-        Assert.IsInstanceOf<Option<string []>> (Some a1))
-#endif
+        // #if !FABLE_COMPILER
+        // Assert.IsInstanceOf<Option<string []>> (Some a1)
+        // #endif
+        )
+    #endif
 
 #if !FABLE_COMPILER
     testCase "replaceArraysAndStrings" (fun () -> 
