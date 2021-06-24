@@ -249,15 +249,20 @@ let splits = testList "Splits" [
 
         //let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
 
+        // /Control/Monoid.fs(..): (..) error FABLE: Cannot resolve trait call + - Inline call from ./Collection.fs(..) < ../../../tests/FSharpPlusFable.Tests/FSharpTests/General.fs(..)
+        #if !FABLE_COMPILER
         let _c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
         let d  = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
         let _e = intercalate 10 (seq [1; 2; 3])
+        #endif
 
         Assert.IsTrue((a1 = "this is a test"))
         Assert.IsTrue((a2 = [|116uy; 104uy; 105uy; 115uy; 32uy; 105uy; 115uy; 32uy; 97uy; 32uy; 116uy; 101uy; 115uy; 116uy|]))
         //Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
         // Assert.IsTrue((c = Sum 13))
+        #if !FABLE_COMPILER
         Assert.IsTrue((d = Sum 13))
+        #endif
         )
     #endif
 
