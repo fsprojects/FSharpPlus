@@ -117,6 +117,6 @@ let parsing = testList "Parsing" [
         #endif
 
         ())
-
     #endif
-]
+
+    ]

@@ -344,7 +344,8 @@ let traversable = testList "Traversable" [
         equalSeq expected a
         equalSeq expected b)
     #endif
-]
+
+    ]
 
 module Bitraversable =
     #if !FABLE_COMPILER
