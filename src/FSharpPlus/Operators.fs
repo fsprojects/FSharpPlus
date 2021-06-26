@@ -149,8 +149,6 @@ module Operators =
     /// <category index="1">Functor</category>
     let inline iter (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Un-zips (un-tuple) two functors.
     /// </summary>
@@ -165,9 +163,6 @@ module Operators =
     /// </remarks>
     /// <category index="1">Functor</category>
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
-
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Applicative ------------------------------------------------------------
     
@@ -226,9 +221,6 @@ module Operators =
 
     // Monad -----------------------------------------------------------
     
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
     /// <summary>
     /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
     /// </summary>
@@ -258,17 +250,13 @@ module Operators =
     /// </summary>
     /// <category index="3">Monad</category>
     let inline (<=<) (g: 'b->'``Monad<'V>``) (f: 'T->'``Monad<'U>``) : 'T -> '``Monad<'V>`` = fun x -> Bind.Invoke (f x) g
-    #endif
 
     /// <summary>
     /// Flattens two layers of monadic information into one.
     /// </summary>
     /// <category index="3">Monad</category>
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
-    #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Equivalent to map but only for Monads.
     /// </summary>
@@ -290,8 +278,6 @@ module Operators =
     /// <category index="4">Monoid</category>
     let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke ()
     
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Combines two monoids in one.
     /// </summary>
@@ -303,9 +289,7 @@ module Operators =
     /// </summary>
     /// <category index="4">Monoid</category>
     let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
-    #endif
-    
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+
     
     module Seq =
         /// <summary>
@@ -345,8 +329,7 @@ module Operators =
     /// <category index="5">Alternative/Monadplus/Arrowplus</category>
     let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
 
     /// <summary>
@@ -497,9 +480,6 @@ module Operators =
     /// <category index="10">Arrow Apply</category>
     let inline app< ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` when (App or ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) : (static member App : ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` * App -> ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) > =
         App.Invoke () : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
-
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// Foldable
 
@@ -685,9 +665,6 @@ module Operators =
     /// <category index="11">Foldable</category>
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
     // Reducible
 
     /// <summary>Applies a function to each element of the reducible, threading an accumulator argument
@@ -702,9 +679,7 @@ module Operators =
     /// <returns>The final reduced value.</returns>
     let inline reduce reduction (source: '``Reducible<'T>``) = Reduce.Invoke reduction source : 'T
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Traversable
 
     /// <summary>
@@ -719,9 +694,7 @@ module Operators =
     /// <category index="13">Traversable</category>
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Bifoldable
 
     /// <summary>
@@ -763,9 +736,7 @@ module Operators =
     /// <category index="15">Bitraversable</category>
     let inline bisequence (source: '``Bitraversable<'Functor<'T>,'Functor<'U>>``) : '``Functor<'Bitraversable<'T,'U>>`` = Bisequence.Invoke source
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Indexable
 
     /// <summary>
@@ -875,8 +846,6 @@ module Operators =
     let inline tryFindSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindSliceIndex.Invoke slice source
 
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     // Comonads
 
     /// <summary>
@@ -900,9 +869,7 @@ module Operators =
     /// <category index="17">Comonads</category>
     let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Monad Transformers
 
     /// <summary>
@@ -1004,9 +971,7 @@ module Operators =
     /// <category index="18">Monad Transformers</category>
     let inline bindError  (handler: 'E1->'``'MonadError<'E2,'T>``) (value: '``'MonadError<'E1,'T>``): '``'MonadError<'E2,'T>`` = Catch.Invoke value handler
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Collection
 
     /// <summary>
@@ -1353,8 +1318,11 @@ module Operators =
     /// </summary>
     /// <category index="21">Converter</category>
     let inline explicit (value: 'T) : 'U = Explicit.Invoke value
+
     #endif
+
     #if !FABLE_COMPILER
+
     /// <summary>
     /// Convert from a byte array value, given options of little-endian, and startIndex
     /// </summary>
@@ -1384,8 +1352,11 @@ module Operators =
     /// </summary>
     /// <category index="21">Converter</category>
     let inline toBytesBE value : byte[] = ToBytes.Invoke false value
+
     #endif
+
     #if !FABLE_COMPILER || FABLE_COMPILER_3
+
     /// <summary>
     /// Converts to a value from its string representation.
     /// </summary>
@@ -1430,6 +1401,7 @@ module Operators =
     let inline maxValue< ^Num when (MaxValue or ^Num) : (static member MaxValue : ^Num * MaxValue -> ^Num) > : ^Num = MaxValue.Invoke ()
 
     #endif
+
     #if !FABLE_COMPILER
 
     /// <summary>Converts from BigInteger to the inferred destination type.</summary>
@@ -1530,8 +1502,9 @@ module Operators =
     /// <returns>The absolute value of the input.</returns>
     let inline abs' (value: 'Num) : 'Num = Abs'.Invoke value
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+#endif
+
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Additional functions
 
@@ -1559,8 +1532,6 @@ module Operators =
     /// <category index="23">Additional Functions</category>
     let inline implicit (x: ^T) = ((^R or ^T) : (static member op_Implicit : ^T -> ^R) x) : ^R
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     
     [<System.Obsolete("Use Parsed instead.")>]
     /// <category index="23">Additional Functions</category>
@@ -1574,12 +1545,14 @@ module Operators =
 
     #endif
 
+
     /// <summary>
     /// Safely dispose a resource (includes null-checking).
     /// </summary>
     /// <category index="23">Additional Functions</category>
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
 
+    
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
