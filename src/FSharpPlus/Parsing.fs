@@ -129,10 +129,10 @@ module Parsing =
     let inline scanfn pf : '``(T1 * T2 * ... * Tn)`` = sscanf pf (Console.ReadLine ())
 
     /// Gets a tuple with the result of parsing each element of a string array. Returns None in case of failure.
-    let inline tryParseArray g : '``(T1 * T2 * ... * Tn)`` option = TryParseArray.Invoke g
+    let inline tryParseArray (source: string []) : '``(T1 * T2 * ... * Tn)`` option = TryParseArray.Invoke (Array.map (fun x -> (x, "")) source)
 
     /// Gets a tuple with the result of parsing each element of a formatted text. Returns None in case of failure.
-    let inline trySscanf (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` option = getGroups pf s |> tryParseArray
+    let inline trySscanf (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` option = getGroups pf s |> TryParseArray.Invoke
 
     /// Gets a tuple with the result of parsing each element of a formatted text from the Console. Returns None in case of failure.
     let inline tryScanfn pf : '``(T1 * T2 * ... * Tn)`` option = trySscanf pf (Console.ReadLine ())
