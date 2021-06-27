@@ -26,7 +26,7 @@ type Bind =
     static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                  : list<'U>
     static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                  : 'U []
     static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)               : 'R->'U
-    #if !FABLE_COMPILER || !FABLE_COMPILER_3
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b) : 'Monoid*'U
     #else
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)           : 'Monoid*'U
