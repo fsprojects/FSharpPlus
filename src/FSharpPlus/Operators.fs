@@ -933,7 +933,7 @@ module Operators =
 
     /// <summary> Executes the action <paramref name="m"/> and adds its output to the value of the computation. </summary>
     /// <category index="18">Monad Transformers</category>
-    /// 
+    ///
     /// <param name="m">The action to be executed.</param>
     let inline listen (m: '``MonadWriter<'Monoid,'T>``) : '``MonadWriter<'Monoid,('T * 'Monoid)>`` = Listen.Invoke m
 
@@ -955,8 +955,8 @@ module Operators =
     /// </summary>
     /// <example>
     /// <code>
-    ///    let doSomeOperation x = ResultT <| async {
-    ///        if x < 10 then return Ok 10
+    ///    let doSomeOperation x = ResultT &lt;| async {
+    ///        if x &lt; 10 then return Ok 10
     ///        else return Error "failure" }
     ///
     ///    doSomeOperation &lt;/catch/&gt; (fun s -> throw ("The error was: " + s))
