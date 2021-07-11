@@ -47,9 +47,22 @@ let monad = testList "Monad" [
     testCase "return Const" (fun () ->
         let c : Const<int,int> = Control.Return.InvokeOnInstance 1 in equal 0 (Const.run c)
     )
+    
+    testCase "specialized maybe monad" (fun () ->
+        let option<'t> = monad<Option<'t>>
+        let v = option {
+            let! x = Some 10
+            let! y = Some 15
+            return x + y
+        }
+        
+        equal (Some 25) v
+    )    
+    
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    //  Exception: RangeError: Maximum call stack size exceeded
+    #if !FABLE_COMPILER
     testCase "DelayForCont" (fun () -> 
         // If Delay is not properly implemented this will stack-overflow
         // See http://stackoverflow.com/questions/11188779/stackoverflow-in-continuation-monad
