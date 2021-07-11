@@ -59,7 +59,7 @@ let monad = testList "Monad" [
             return x + y
         }
         
-        equal (Some 25) v
+        equal (25) (Option.get v)
     )    
     
     #endif
