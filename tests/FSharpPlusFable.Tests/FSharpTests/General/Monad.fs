@@ -18,7 +18,7 @@ let monad = testList "Monad" [
         equal ["Join"] (SideEffects.get ()))
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "workFlow" (fun () ->       
         let testVal = 
             monad {
