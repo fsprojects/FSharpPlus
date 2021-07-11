@@ -29,9 +29,7 @@ let monad = testList "Monad" [
         Assert.IsInstanceOf<WrappedListD<int>> (testVal)
         #endif
         () )
-    #endif
 
-    #if !FABLE_COMPILER
     testCase "return Const First using invoke on instance" (fun () ->
         let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
         equal None (cf |> Const.run |> First.run)
