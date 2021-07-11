@@ -5,6 +5,10 @@ open FSharpPlus
 open FSharpPlus.Data
 #nowarn "686"
 
+#if !FABLE_COMPILER || FABLE_COMPILER_3
+let option<'t> = monad<Option<'t>>
+#endif
+
 let monad = testList "Monad" [
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "joinDefaultCustom" (fun () -> 
@@ -49,7 +53,6 @@ let monad = testList "Monad" [
     )
     
     testCase "specialized maybe monad" (fun () ->
-        let option<'t> = monad<Option<'t>>
         let v = option {
             let! x = Some 10
             let! y = Some 15
