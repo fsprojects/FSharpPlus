@@ -29,7 +29,10 @@ let monad = testList "Monad" [
         Assert.IsInstanceOf<WrappedListD<int>> (testVal)
         #endif
         () )
-
+    #endif
+    
+    // Exception: TypeError: Cannot read property '0' of undefined 
+    #if !FABLE_COMPILER
     testCase "return Const First using invoke on instance" (fun () ->
         let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
         equal None (cf |> Const.run |> First.run)
@@ -46,7 +49,7 @@ let monad = testList "Monad" [
     )
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "DelayForCont" (fun () -> 
         // If Delay is not properly implemented this will stack-overflow
         // See http://stackoverflow.com/questions/11188779/stackoverflow-in-continuation-monad
