@@ -7,6 +7,7 @@ open FSharpPlus.Data
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
 let option<'t> = monad<Option<'t>>
+let list<'t>   = monad'<list<'t>>
 #endif
 
 let monad = testList "Monad" [
@@ -58,10 +59,18 @@ let monad = testList "Monad" [
             let! x = Some 10
             let! y = Some 15
             return x + y
-        }
-        
-        equal (25) (Option.get v)
-    )    
+        }        
+        equal (Some 25) v
+    )
+    
+    testCase "specialized (strict) list monad" (fun () ->
+        let v = list {
+            let! x = [10]
+            let! y = [15]
+            return x + y
+        }        
+        equal [25] v
+    )  
     
     #endif
 
