@@ -30,9 +30,8 @@ let monad = testList "Monad" [
                 let! x1 = WrappedListD [1;2]
                 let! x2 = WrappedListD [10;20]
                 return ((+) x1 x2) }
-        #if !FABLE_COMPILER
+        
         Assert.IsInstanceOf<WrappedListD<int>> (testVal)
-        #endif
         equal (WrappedListD [11; 21; 12; 22]) testVal
         () )
     #endif
