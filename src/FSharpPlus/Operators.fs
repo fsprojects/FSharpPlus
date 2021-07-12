@@ -189,6 +189,12 @@ module Operators =
     let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
 
     /// <summary>
+    /// Applies 3 lifted arguments to a non-lifted function. Equivalent to map3 in non list-like types.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline lift3 (f: 'T->'U->'V->'W) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) (z: '``Applicative<'V>``) : '``Applicative<'W>`` = Lift3.Invoke f x y z
+
+    /// <summary>
     /// Sequences two applicatives left-to-right, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
