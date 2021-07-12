@@ -151,23 +151,28 @@ type Return =
 type Delay =
     inherit Default1
     
+    #if !FABLE_COMPILER
     static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>``                                 , _: Default1) = Bind.Invoke (Return.Invoke ()) x : ^``Monad<'T>``
     
-    #if !FABLE_COMPILER
     static member inline Delay (_mthd: Default1, x: unit-> ^I                                             , _: Delay   ) = (^I : (static member Delay : _->_) x) : ^I
     static member inline Delay (_mthd: Default1, _: unit-> ^t when  ^t : null and ^t  : struct            , _          ) = ()
 
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = Seq.delay x      : seq<'T>
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = NonEmptySeq.delay x : NonEmptySeq<'T>
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
-    static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>    
-    static member        Delay (_mthd: Delay   , x: unit-> Task<_>                                        , _          ) = x () : Task<'T>    
+    static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
+    static member        Delay (_mthd: Delay   , x: unit-> Task<_>                                        , _          ) = x () : Task<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
-    #endif
-    
+        
     static member inline Invoke source : 'R =
         let inline call (mthd: ^M, input: unit -> ^I) = ((^M or ^I) : (static member Delay : _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
         call (Unchecked.defaultof<Delay>, source)
+    
+    #else
+    
+    static member inline Invoke source : '``Monad<'T>`` = Bind.Invoke (Return.Invoke ()) source
+    
+    #endif
 
 
 [<System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>]
