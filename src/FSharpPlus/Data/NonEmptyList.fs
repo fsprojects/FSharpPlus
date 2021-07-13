@@ -230,6 +230,7 @@ type NonEmptyList<'t> with
         {Head = r.Head; Tail = r.Tail}
 
     static member Lift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.ofList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
+    static member Lift3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.ofList (List.lift3 f (NonEmptyList.toList x) (NonEmptyList.toList y) (NonEmptyList.toList z))
 
     static member Extract   {Head = h; Tail = _} = h : 't
 

@@ -54,6 +54,7 @@ module ResultT =
     let inline apply (ResultT f:ResultT<'``Monad<'Result<('T -> 'U),'E>>``>) (ResultT x: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (map Result.apply f <*> x) : ResultT<'``Monad<'Result<'U,'E>>``>
     let inline map (f: 'T->'U) (ResultT m: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (map (Result.map f) m) : ResultT<'``Monad<'Result<('T -> 'U),'E>>``>
     let inline map2 (f: 'T->'U->'V) (ResultT x: ResultT<'``Monad<Result<'T,'E>>``>) (ResultT y: ResultT<'``Monad<Result<'U,'E>>``>) : ResultT<'``Monad<Result<'V,'E>>``> = ResultT (lift2 (Result.map2 f) x y)
+    let inline map3 (f: 'T->'U->'V->'W) (ResultT x: ResultT<'``Monad<Result<'T,'E>>``>) (ResultT y: ResultT<'``Monad<Result<'U,'E>>``>) (ResultT z: ResultT<'``Monad<Result<'V,'E>>``>) : ResultT<'``Monad<Result<'W,'E>>``> = ResultT (lift3 (Result.map3 f) x y z)
 
 type ResultT<'``monad<'result<'t,'e>>``> with
     
@@ -64,6 +65,9 @@ type ResultT<'``monad<'result<'t,'e>>``> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: ResultT<'``Monad<Result<'T,'E>``>, y: ResultT<'``Monad<Result<'U,'E>``>) : ResultT<'``Monad<Result<'V,'E>``> = ResultT.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: ResultT<'``Monad<Result<'T,'E>``>, y: ResultT<'``Monad<Result<'U,'E>``>, z: ResultT<'``Monad<Result<'V,'E>``>) : ResultT<'``Monad<Result<'W,'E>``> = ResultT.map3 f x y z
 
     static member inline (<*>) (f: ResultT<'``Monad<'Result<('T -> 'U),'E>>``>, x: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT.apply f x : ResultT<'``Monad<'Result<'U,'E>>``>    
     static member inline (>>=) (x: ResultT<'``Monad<'Result<'T,'E>>``>, f: 'T->ResultT<'``Monad<'Result<'U,'E>>``>)     = ResultT.bind  f x

@@ -29,6 +29,9 @@ module Cont =
     let bind (f: 'T->_) (Cont x) = Cont (fun k -> x (fun a -> run (f a) k))           : Cont<'R,'U>
     let apply  (Cont f) (Cont x) = Cont (fun k -> f (fun (f': 'T->_) -> x (k << f'))) : Cont<'R,'U>
 
+    let map2 (f: 'T -> 'U -> 'V) (Cont x) (Cont y)                = Cont (fun k -> x (f >> fun k' -> y (k' >> k)))                       : Cont<'R, 'V>
+    let map3 (f: 'T -> 'U -> 'V -> 'W) (Cont x) (Cont y) (Cont z) = Cont (fun k -> x (f >> fun k' -> y (k' >> fun k'' -> z (k'' >> k)))) : Cont<'R, 'W>
+
 
 /// Monad Transformer for Cont<'R,'T>
 type ContT<'r,'t> = Cont<'r,'t>
@@ -38,6 +41,12 @@ type Cont<'r,'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x: Cont<'R,'T>, f) = Cont.map f x    : Cont<'R,'U>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f: 'T->'U->'V, x: Cont<'R,'T>, y: Cont<'R,'U>) : Cont<'R,'V> = Cont.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: Cont<'R,'T>, y: Cont<'R,'U>, z: Cont<'R,'V>) : Cont<'R,'W> = Cont.map3 f x y z
 
     static member (<*>) (f, x: Cont<'R,'T>) = Cont.apply f x  : Cont<'R,'U>
     static member (>>=) (x, f: 'T->_)       = Cont.bind f x   : Cont<'R,'U>

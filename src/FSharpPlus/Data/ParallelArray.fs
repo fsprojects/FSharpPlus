@@ -39,6 +39,19 @@ module ParallelArray =
             if x.LongLength < y.LongLength then Bounded (Array.Parallel.mapi (fun i x -> f x y.[i]) x)
             else                                Bounded (Array.Parallel.mapi (fun i y -> f x.[i] y) y)
 
+    let map3 f x y z =
+        match x, y, z with
+        | Infinite x, Infinite y, Infinite z -> Infinite (f x y z)
+        | Infinite x, Bounded  _, Bounded  _ -> map2 (f x) y z
+        | Bounded  _, Infinite y, Bounded  _ -> map2 (fun x z -> f x y z) x z
+        | Bounded  _, Bounded  _, Infinite z -> map2 (fun x y -> f x y z) x y
+        | Bounded  x, Infinite y, Infinite z -> Bounded (Array.Parallel.map (fun x -> f x y z) x)
+        | Infinite x, Bounded  y, Infinite z -> Bounded (Array.Parallel.map (fun y -> f x y z) y)
+        | Infinite x, Infinite y, Bounded  z -> Bounded (Array.Parallel.map (f x y) z)
+        | Bounded  x, Bounded  y, Bounded  z ->
+            if   x.LongLength < y.LongLength && x.LongLength <= z.LongLength then Bounded (Array.Parallel.mapi (fun i x -> f x y.[i] z.[i]) x)
+            elif y.LongLength < x.LongLength && y.LongLength <= z.LongLength then Bounded (Array.Parallel.mapi (fun i y -> f x.[i] y z.[i]) y)
+            else                                                                  Bounded (Array.Parallel.mapi (fun i z -> f x.[i] y.[i] z) z)
     #endif
 
 /// A type alias for ParallelArray<'T>
@@ -59,7 +72,13 @@ type ParallelArray<'t> with
     static member Return (x: 'a) = Infinite x
     #if !FABLE_COMPILER
     static member (<*>) (f: parray<'a->'b>, x: parray<_>) = ParallelArray.ap f x : parray<'b>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Lift2 (f, x: parray<'T>, y: parray<'U>) = ParallelArray.map2 f x y : parray<'V>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Lift3 (f, x: parray<'T>, y: parray<'U>, z: parray<'V>) = ParallelArray.map3 f x y z : parray<'W>
+
     static member inline get_Zero () = Bounded (getZero ()) : parray<'m>
     static member inline (+) (x: parray<'m>, y: parray<'m>) = lift2 plus x y : parray<'m>
     #endif

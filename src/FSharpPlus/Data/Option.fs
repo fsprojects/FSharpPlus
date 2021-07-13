@@ -34,6 +34,7 @@ module OptionT =
     let inline apply (OptionT f: OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x: OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x) : OptionT<'``Monad<option<'U>``>    
     let inline map  (f: 'T->'U) (OptionT m: OptionT<'``Monad<option<'T>``>)                                          = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
     let inline map2 (f: 'T->'U->'V) (OptionT x: OptionT<'``Monad<option<'T>>``>) (OptionT y: OptionT<'``Monad<option<'U>>``>) = OptionT (lift2 (Option.map2 f) x y) : OptionT<'``Monad<option<'V>>``>
+    let inline map3 (f: 'T->'U->'V->'W) (OptionT x: OptionT<'``Monad<option<'T>>``>) (OptionT y: OptionT<'``Monad<option<'U>>``>) (OptionT z: OptionT<'``Monad<option<'V>>``>) = OptionT (lift3 (Option.map3 f) x y z) : OptionT<'``Monad<option<'W>>``>
 
 type OptionT<'``monad<option<'t>>``> with
     
@@ -44,6 +45,9 @@ type OptionT<'``monad<option<'t>>``> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: OptionT<'``Monad<option<'T>``>, y: OptionT<'``Monad<option<'U>``>) = OptionT.map2 f x y  : OptionT<'``Monad<option<'V>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: OptionT<'``Monad<option<'T>``>, y: OptionT<'``Monad<option<'U>``>, z: OptionT<'``Monad<option<'W>``>) = OptionT.map3 f x y z : OptionT<'``Monad<option<'W>``>
 
     static member inline (<*>)  (f: OptionT<'``Monad<option<('T -> 'U)>``>, x: OptionT<'``Monad<option<'T>``>) = OptionT.apply f x : OptionT<'``Monad<option<'U>``>
     static member inline (>>=)  (x: OptionT<'``Monad<option<'T>``>, f: 'T -> OptionT<'``Monad<option<'U>``>)   = OptionT.bind  f x
