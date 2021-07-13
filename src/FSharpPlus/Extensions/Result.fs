@@ -32,7 +32,7 @@ module Result =
     /// <param name="z">The third Result value.</param>
     ///
     /// <returns>The combined value, or the first Error.</returns>
-    let map3 f (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) (z: Result<'V, 'Error>): Result<'V, 'Error> =
+    let map3 f (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) (z: Result<'V, 'Error>) : Result<'W, 'Error> =
         match x, y, z with
         | Ok a, Ok b, Ok c -> Ok(f a b c)
         | Error e, _, _
