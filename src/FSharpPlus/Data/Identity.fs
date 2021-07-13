@@ -15,6 +15,7 @@ type Identity<'t> = Identity of 't with
     static member (>>=) (Identity x, f :'T -> Identity<'U>) = f x                   : Identity<'U>
     static member (<*>) (Identity (f : 'T->'U), Identity (x : 'T)) = Identity (f x) : Identity<'U>
     static member Lift2 (f, Identity (x: 'T), Identity (y: 'U)) = Identity (f x y)  : Identity<'V>
+    static member Lift3 (f, Identity (x: 'T), Identity (y: 'U), Identity (z: 'V)) = Identity (f x y z) : Identity<'W>
     static member Map   (Identity x, f : 'T->'U) = Identity (f x)                   : Identity<'U>
     static member Zip   (Identity x, Identity y) = Identity (x, y)                  : Identity<'T * 'U>
 

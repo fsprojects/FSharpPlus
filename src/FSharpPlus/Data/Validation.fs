@@ -59,6 +59,30 @@ module Validation =
         | Success _ , Failure e2 -> Failure e2
         | Success x , Success y  -> Success (f x y)
 
+    let inline map3 f x y z : Validation<'Error,'W> =
+        match (x: Validation<'Error,'T>), (y: Validation<'Error,'U>), (z: Validation<'Error,'V>) with
+        | Success x , Success y, Success z -> Success (f x y z)
+
+        #if !FABLE_COMPILER
+        | Failure e1, Failure e2, Failure e3 -> Failure (e1 ++ e2 ++ e3)
+        #else
+        | Failure e1, Failure e2, Failure e3 -> Failure (e1 + e2 + e3)
+        #endif
+
+        | Failure e, Success _, Success _
+        | Success _, Failure e, Success _
+        | Success _, Success _, Failure e
+            -> Failure e
+
+        | Success _ , Failure e1, Failure e2
+        | Failure e1, Success _ , Failure e2
+        | Failure e1, Failure e2, Success _            
+            #if !FABLE_COMPILER
+            -> Failure (plus e1 e2)
+            #else
+            -> Failure (e1 + e2)
+            #endif
+
     let inline foldBack (folder: 'T->'State->'State) (source: Validation<'Error,'T>) (state: 'State) =
         match source with
         | Success a -> folder a state
@@ -212,7 +236,12 @@ type Validation<'err,'a> with
     // as Applicative
     static member Return x = Success x
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
-    static member inline Lift2  (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f, x: Validation<_,'T>, y: Validation<_,'U>, z: Validation<_,'V>) : Validation<_,'W> = Validation.map3 f x y z
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     // as Alternative (inherits from Applicative)

@@ -60,6 +60,7 @@ type Const<'t,'u> = Const of 't with
     static member inline Return (_: 'U) = Const (getZero ()) : Const<'T,'U>
     static member inline (<*>) (Const f: Const<'C,'T->'U>, Const x: Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
     static member inline Lift2 (_: 'T->'U->'V, Const x: Const<'C,'T>, Const y: Const<'C,'U>) = Const (plus x y) : Const<'C,'V>
+    static member inline Lift3 (_: 'T->'U->'V->'W, Const x: Const<'C,'T>, Const y: Const<'C,'U>, Const z: Const<'C,'V>) = Const (x ++ y ++ z) : Const<'C,'W>
 
     // Contravariant
     static member Contramap (Const x: Const<'C,'T>, _: 'U->'T) = Const x     : Const<'C,'U>
@@ -130,6 +131,9 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
 
     static member inline Lift2 (f: 'T -> 'U -> 'V, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``)) =
         Compose (Lift2.Invoke (Lift2.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>``) x y: '``ApplicativeF<'ApplicativeG<'V>``)
+
+    static member inline Lift3 (f: 'T -> 'U -> 'V -> 'W, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``), Compose (z: '``ApplicativeF<'ApplicativeG<'V>``)) =
+        Compose (Lift3.Invoke (Lift3.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>`` -> '``ApplicativeG<'W>``) x y z: '``ApplicativeF<'ApplicativeG<'W>``)
 
     // Alternative
     static member inline get_Empty ()                 = Compose (getEmpty ()) : Compose<'``AlternativeF<'ApplicativeG<'T>``>
