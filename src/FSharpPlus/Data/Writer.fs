@@ -25,7 +25,10 @@ module Writer =
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// Combines two Writers into one by applying a mapping function.
-    let inline map2 f (Writer (a: 'T, w1)) (Writer (b: 'U, w2)) = Writer (f a b, w1 plus w2)   : Writer<'Monoid,'V>
+    let inline map2 f (Writer (a: 'T, w1)) (Writer (b: 'U, w2)) = Writer (f a b, w1 ++ w2) : Writer<'Monoid,'V>
+
+    /// Combines three Writers into one by applying a mapping function.
+    let inline map3 f (Writer (a: 'T, w1)) (Writer (b: 'U, w2)) (Writer (c: 'V, w3)) = Writer (f a b c, w1 ++ w2 ++ w3) : Writer<'Monoid,'W>
 
     let inline bind f (Writer (a: 'T, w)) = Writer (let (b, w') = run (f a) in (b, plus w w')) : Writer<'Monoid,'U>
     let inline apply  (Writer (f, a)) (Writer (x: 'T, b))       = Writer (f x, plus a b)       : Writer<'Monoid,'U>
@@ -34,6 +37,9 @@ module Writer =
 
     /// Combines two Writers into one by applying a mapping function.
     let inline map2 f (Writer (a: 'T, w1)) (Writer (b: 'U, w2)) = Writer (f a b, w1 + w2)   : Writer<'Monoid,'V>
+
+    /// Combines three Writers into one by applying a mapping function.
+    let inline map3 f (Writer (a: 'T, w1)) (Writer (b: 'U, w2)) (Writer (c: 'V, w3)) = Writer (f a b c, w1 + w2 + w3) : Writer<'Monoid, 'W>
 
     let inline bind f (Writer (a: 'T, w)) = Writer (let (b, w') = run (f a) in (b, w + w')) : Writer<'Monoid,'U>
     let inline apply  (Writer (f, a)) (Writer (x: 'T, b))       = Writer (f x, a + b)       : Writer<'Monoid,'U>
@@ -98,7 +104,10 @@ module WriterT =
         WriterT (map (mapWriter f) m) : WriterT<'``Monad<'U * 'Monoid>``>
 
     /// Combines two WriterTs into one by applying a mapping function.
-    let inline map2 (f: 'T->'U->'V) (WriterT x: WriterT<'``Monad<option<'T>``>) (WriterT y: WriterT<'``Monad<option<'U>``>) : WriterT<'``Monad<option<'V>``> = WriterT (lift2 (fun (a, x) (b, y) -> Plus.Invoke a b, f x y) x y)
+    let inline map2 (f: 'T->'U->'V) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT (lift2 (fun (a, x) (b, y) -> Plus.Invoke a b, f x y) x y)
+
+    /// Combines three WriterTs into one by applying a mapping function.
+    let inline map3 (f: 'T->'U->'V->'W) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) (WriterT z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT (lift3 (fun (a, x) (b, y) (c, z) -> a ++ b ++ c, f x y z) x y z)
 
     let inline apply (WriterT f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) (WriterT x : WriterT<'``Monad<'T * 'Monoid>``>) =
         let applyWriter (a, w) (b, w') = (a b, plus w w')
@@ -116,6 +125,9 @@ type WriterT<'``monad<'t * 'monoid>``> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>, z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT.map3 f x y z
 
     static member inline (<*>) (f: WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x: WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
     static member inline (>>=) (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> _)                                    = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>

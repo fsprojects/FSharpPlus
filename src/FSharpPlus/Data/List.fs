@@ -56,7 +56,8 @@ module ListT =
 
     let inline bind (f: 'T-> ListT<'``Monad<list<'U>``>) (ListT m: ListT<'``Monad<list<'T>``>) = (ListT (m >>= mapM (run << f) >>= ((List.concat: list<_>->_) >> result)))
     let inline apply (ListT f: ListT<'``Monad<list<('T -> 'U)>``>) (ListT x: ListT<'``Monad<list<'T>``>) = ListT (map List.apply f <*> x) : ListT<'``Monad<list<'U>``>
-    let inline lift2 (f: 'T->'U->'V) (ListT x: ListT<'``Monad<list<'T>``>) (ListT y: ListT<'``Monad<list<'U>``>) = ListT (lift2 (List.lift2 f) x y)  : ListT<'``Monad<list<'V>``>
+    let inline lift2 (f: 'T->'U->'V) (ListT x: ListT<'``Monad<list<'T>``>) (ListT y: ListT<'``Monad<list<'U>``>) = ListT (lift2 (List.lift2 f) x y) : ListT<'``Monad<list<'V>``>
+    let inline lift3 (f: 'T->'U->'V->'W) (ListT x: ListT<'``Monad<list<'T>``>) (ListT y: ListT<'``Monad<list<'U>``>) (ListT z: ListT<'``Monad<list<'V>``>) = ListT (lift3 (List.lift3 f) x y z) : ListT<'``Monad<list<'W>``>
     let inline map  (f: 'T->'U) (ListT m: ListT<'``Monad<list<'T>``>) =  ListT (map (List.map f) m) : ListT<'``Monad<list<'U>``>
 
 type ListT<'``monad<list<'t>>``> with
@@ -68,6 +69,9 @@ type ListT<'``monad<list<'t>>``> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: ListT<'``Monad<list<'T>``>, y: ListT<'``Monad<list<'U>``>) = ListT.lift2 f x y : ListT<'``Monad<list<'V>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: ListT<'``Monad<list<'T>``>, y: ListT<'``Monad<list<'U>``>, z: ListT<'``Monad<list<'V>``>) = ListT.lift3 f x y z : ListT<'``Monad<list<'W>``>
 
     static member inline (<*>) (f: ListT<'``Monad<list<('T -> 'U)>``>, x: ListT<'``Monad<list<'T>``>) = ListT.apply f x : ListT<'``Monad<list<'U>``>
     static member inline (>>=) (x: ListT<'``Monad<list<'T>``>, f: 'T -> ListT<'``Monad<list<'U>``>)   = ListT.bind f x

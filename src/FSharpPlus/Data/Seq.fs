@@ -42,6 +42,7 @@ module SeqT =
     let inline bind (f: 'T-> SeqT<'``Monad<seq<'U>``>) (SeqT m: SeqT<'``Monad<seq<'T>``>)          = SeqT (m >>= (mapM : _->seq<_>->_) (run << f) >>= ((Seq.concat: seq<seq<_>>->_) >> result))
     let inline apply (SeqT f: SeqT<'``Monad<seq<('T -> 'U)>``>) (SeqT x: SeqT<'``Monad<seq<'T>``>) = SeqT (map (Seq.apply : seq<_->_>->seq<_>->seq<_>) f <*> x) : SeqT<'``Monad<seq<'U>``>
     let inline lift2 (f: 'T->'U->'V) (SeqT x: SeqT<'``Monad<seq<'T>``>) (SeqT y: SeqT<'``Monad<seq<'U>``>) = SeqT (lift2 (Seq.lift2 f) x y)                     : SeqT<'``Monad<seq<'V>``>
+    let inline lift3 (f: 'T->'U->'V->'W) (SeqT x: SeqT<'``Monad<seq<'T>``>) (SeqT y: SeqT<'``Monad<seq<'U>``>) (SeqT z: SeqT<'``Monad<seq<'V>``>) = SeqT (lift3 (Seq.lift3 f) x y z) : SeqT<'``Monad<seq<'W>``>
     let inline map (f: 'T->'U) (SeqT m: SeqT<'``Monad<seq<'T>``>)                                  = SeqT <| map (Seq.map f : (seq<_>->_)) m                    : SeqT<'``Monad<seq<'U>``>
 
 type SeqT<'``monad<seq<'t>>``> with
@@ -53,6 +54,9 @@ type SeqT<'``monad<seq<'t>>``> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: SeqT<'``Monad<seq<'T>``>, y: SeqT<'``Monad<seq<'U>``>) = SeqT.lift2 f x y : SeqT<'``Monad<seq<'V>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: SeqT<'``Monad<seq<'T>``>, y: SeqT<'``Monad<seq<'U>``>, z: SeqT<'``Monad<seq<'V>``>) = SeqT.lift3 f x y z : SeqT<'``Monad<seq<'W>``>
 
     static member inline (<*>) (f: SeqT<'``Monad<seq<('T -> 'U)>``>, x: SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x : SeqT<'``Monad<seq<'U>``>
     static member inline (>>=) (x: SeqT<'``Monad<seq<'T>``>, f: 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind  f x

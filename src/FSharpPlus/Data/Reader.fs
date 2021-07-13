@@ -23,6 +23,9 @@ module Reader =
 
     /// Combines two Readers into one by applying a mapping function.
     let map2 (mapping: 'T->'U->'V) (Reader x) (Reader y) = Reader (fun r -> mapping (x r) (y r)) : Reader<'R,'V>
+
+    /// Combines three Readers into one by applying a mapping function.
+    let map3 (mapping: 'T->'U->'V->'W) (Reader x) (Reader y) (Reader z) = Reader (fun r -> mapping (x r) (y r) (z r)) : Reader<'R,'W>
     
     /// Zips two Readers into one.
     let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = map2 tuple2 x y        : Reader<'R, 'T * 'U>
@@ -43,6 +46,12 @@ type Reader<'r,'t> with
     static member Return x = Reader (fun _ -> x)                 : Reader<'R,'T>
     static member (>>=) (x: Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
     static member (<*>) (f, x: Reader<'R,'T>) = Reader.apply f x : Reader<'R,'U>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Lift2 (f, x: Reader<'R,'T>, y: Reader<'R,'U>) = Reader.map2 f x y : Reader<'R,'V>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Lift3 (f, x: Reader<'R,'T>, y: Reader<'R,'U>, z: Reader<'R,'V>) = Reader.map3 f x y z : Reader<'R,'W>
 
     static member get_Ask ()    = Reader.ask                     : Reader<'R,'R>
 
@@ -82,6 +91,9 @@ module ReaderT =
     /// Combines two ReaderTs into one by applying a mapping function.
     let inline map2 (f: 'T->'U->'V) (ReaderT x: ReaderT<'R,'``Monad<'T>``>) (ReaderT y: ReaderT<'R,'``Monad<'U>``>) = ReaderT (fun a -> lift2 f (x a) (y a)) : ReaderT<'R,'``Monad<'V>``>
 
+    /// Combines three ReaderTs into one by applying a mapping function.
+    let inline map3 (f: 'T->'U->'V->'W) (ReaderT x: ReaderT<'R,'``Monad<'T>``>) (ReaderT y: ReaderT<'R,'``Monad<'U>``>) (ReaderT z: ReaderT<'R,'``Monad<'V>``>) = ReaderT (fun a -> lift3 f (x a) (y a) (z a)) : ReaderT<'R,'``Monad<'W>``>
+
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x: _->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
 
     /// Zips two ReaderTs into one.
@@ -100,7 +112,10 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Map   (x: ReaderT<'R, '``Monad<'T>``>, f: 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift2 (f: 'T->'U->'V, x: ReaderT<'S,'``Monad<'T>``>, y: ReaderT<'S,'``Monad<'U>``>) : ReaderT<'S,'``Monad<'V>``> = ReaderT.map2 f x y
+    static member inline Lift2 (f: 'T->'U->'V, x: ReaderT<'R,'``Monad<'T>``>, y: ReaderT<'R,'``Monad<'U>``>) : ReaderT<'R,'``Monad<'V>``> = ReaderT.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: ReaderT<'R,'``Monad<'T>``>, y: ReaderT<'R,'``Monad<'U>``>, z: ReaderT<'R,'``Monad<'V>``>) : ReaderT<'R,'``Monad<'W>``> = ReaderT.map3 f x y z
 
     static member inline (<*>) (f: ReaderT<_,'``Monad<'T -> 'U>``>, x: ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x : ReaderT<'R, '``Monad<'U>``>
     static member inline (>>=) (x: ReaderT<_,'``Monad<'T>``>, f: 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>
