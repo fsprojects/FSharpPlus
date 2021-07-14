@@ -1,3 +1,10 @@
+#### 1.2.1  - July 14 2021
+
+- Fable compatibility for un/curry functions
+- Bump Fable to 3.2.6
+- Fix tryParseArray
+- Enable CEs in Fable
+
 #### 1.2.0  - June 6 2021
 
 - Update to compile with Fable 3
