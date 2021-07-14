@@ -183,6 +183,10 @@ docs/
 # Temp folder used for publishing docs
 temp/
 
+# FSDocs cache and watch
+.fsdocs/
+tmp/watch
+
 # Test results produced by build
 TestResults.xml
 TestResult.xml
@@ -193,8 +197,6 @@ release.cmd
 release.sh
 localpackages/
 *.orig
-docsrc/content/license.md
-docsrc/content/release-notes.md
 .fake
 docsrc/tools/FSharp.Formatting.svclog
 
@@ -210,3 +212,4 @@ tests/FSharpPlusFable.Tests/node_modules/
 # Fable compilation files
 tests/FSharpPlusFable.Tests/FSharpPlusFable
 /node_modules
+*.fs.js

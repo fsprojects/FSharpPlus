@@ -10,6 +10,15 @@ open FSharpPlus.Control
 open NUnit.Framework
 open Helpers
 open FSharpPlus.Math.Applicative
+open CSharpLib
+
+type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
+    static member ToMap (WrappedMapA m) = m
+    static member inline TraverseIndexed (WrappedMapA m, f) =
+        SideEffects.add "Using WrappedMapA's TraverseIndexed"
+        WrappedMapA <!> (traversei f m : ^__)
+module WrappedMapA=
+    let inline ofList l = Map.ofList l |> WrappedMapA
 
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
@@ -83,11 +92,36 @@ type WrappedListD<'s> = WrappedListD of 's list with
         SideEffects.add "Using WrappedListD's MaxBy"
         let (WrappedListD lst) = x
         List.maxBy f lst
+    static member MapIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's MapIndexed"
+        WrappedListD (List.mapi f x)
+    static member ChooseIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's ChooseIndexed"
+        WrappedListD (List.choosei f x)
+    static member Lift3 (f, WrappedListD x, WrappedListD y, WrappedListD z) =
+        SideEffects.add "Using WrappedListD's Lift3"
+        WrappedListD (List.lift3 f x y z)
+    static member IterateIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's IterateIndexed"
+        List.iteri f x
+    static member inline FoldIndexed (WrappedListD x, f, z) =
+        SideEffects.add "Using WrappedListD's FoldIndexed"
+        foldi f z x
+    static member inline TraverseIndexed (WrappedListD x, f) =
+        SideEffects.add "Using WrappedListD's TraverseIndexed"
+        WrappedListD <!> (traversei f x : ^r)
+    static member FindIndex (WrappedListD x, y) =
+        SideEffects.add "Using WrappedListD's FindIndex"
+        printfn "WrappedListD.FindIndex"
+        findIndex y x
+    static member FindSliceIndex (WrappedListD x, WrappedListD y) =
+        SideEffects.add "Using WrappedListD's FindSliceIndex"
+        printfn "WrappedListD.FindSliceIndex"
+        findSliceIndex y x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
         List.length lst
-
 type WrappedListE<'s> = WrappedListE of 's list with
     static member Return x = WrappedListE [x]
     static member (>>=)  (WrappedListE x: WrappedListE<'T>, f) = WrappedListE (List.collect (f >> (fun (WrappedListE x) -> x)) x)
@@ -109,7 +143,7 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member Join  (WrappedListG wlst) = (*SideEffects.add "Join";*)  WrappedListG wlst >>= id
     static member get_Empty () = WrappedListG List.empty
     static member (<|>) (WrappedListG l, WrappedListG x) = WrappedListG (l @ x)
-    static member Delay (f: unit -> WrappedListD<_>) = SideEffects.add "Using WrappedListG's Delay"; f ()
+    static member Delay (f: unit -> WrappedListG<_>) = SideEffects.add "Using WrappedListG's Delay"; f ()
     static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
 type WrappedListH<'s> = WrappedListH of 's list with
@@ -175,10 +209,31 @@ type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Apply"; WrappedSeqD (f <*> x)
     static member ToList (WrappedSeqD x) = Seq.toList x
+    static member ChooseIndexed (WrappedSeqD x, f) =
+            SideEffects.add "Using WrappedSeqD's ChooseIndexed"
+            WrappedSeqD (Seq.choosei f x)
+    static member Lift3 (f, WrappedSeqD x, WrappedSeqD y, WrappedSeqD z) =
+            SideEffects.add "Using WrappedSeqD's Lift3"
+            WrappedSeqD (Seq.lift3 f x y z)
 
 type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
     static member ToSeq  (WrappedSeqE x) = SideEffects.add "Using WrappedSeqE's ToSeq"; x
+
+type TestNonEmptyCollection<'a> = private { Singleton: 'a } with
+    interface NonEmptySeq<'a> with
+        member this.First =
+          SideEffects.add "Using TestNonEmptyCollection's Head"
+          this.Singleton
+        member this.GetEnumerator() =
+          SideEffects.add "Using TestNonEmptyCollection's GetEnumerator<>"
+          (Seq.singleton this.Singleton).GetEnumerator()
+        member this.GetEnumerator() =
+          SideEffects.add "Using TestNonEmptyCollection's GetEnumerator"
+          (Seq.singleton this.Singleton).GetEnumerator() :> System.Collections.IEnumerator
+
+module TestNonEmptyCollection =
+    let Create x = { Singleton = x } :> NonEmptySeq<_>
 
 open System.Collections.Generic
 open System.Collections
@@ -250,6 +305,8 @@ module Monoid =
         let _asy = plus (zero) asy1
         let _bigNestedTuple1 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (2, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (3, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20))
         let _bigNestedTuple2 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (zero, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ zero
+
+        let _nes : NonEmptySeq<_> = plus (NonEmptySeq.singleton 1) (NonEmptySeq.singleton 2)
 
         let mapA = Map.empty 
                     |> Map.add 1 (async.Return "Hey")
@@ -330,7 +387,7 @@ module Functor =
         SideEffects.reset ()
 
         // NonEmptyList<_> has Map but at the same time is a seq<_>
-        let testVal1 = map ((+) 1) {Head = 10; Tail = [20;30]}
+        let testVal1 = map ((+) 1) (nelist {10; 20; 30})
         Assert.IsInstanceOf<Option<NonEmptyList<int>>> (Some testVal1)
 
         let testVal2 = map ((+) 1) ((ofSeq :seq<_*_> -> Dictionary<_,_>) (seq ["a", 1; "b", 2]))
@@ -338,6 +395,15 @@ module Functor =
 
         let testVal3 = map ((+) 1) (dict (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
+
+        let testVal4 = map ((+) 1) (NonEmptySet.Create(10, 20, 30))
+        Assert.IsInstanceOf<Option<NonEmptySet<int>>> (Some testVal4)
+
+        let testVal5 = map ((+) 1) (NonEmptyMap.Create(("a", 1), ("b", 2)))
+        Assert.IsInstanceOf<Option<NonEmptyMap<string,int>>> (Some testVal5)
+
+        let testVal6 = map ((+) 1) (TestNonEmptyCollection.Create 1)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int>>> (Some testVal6)
 
         // WrappedSeqD is Applicative. Applicatives are Functors => map should work
         Assert.AreEqual ([], SideEffects.get ())
@@ -355,11 +421,28 @@ module Functor =
         let testVal6 = map ((+) 1) (WrappedListD [1..3])
         Assert.IsInstanceOf<Option<WrappedListD<int>>> (Some testVal6)
         Assert.AreEqual (["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"], SideEffects.get ())
+        SideEffects.reset ()
+
+        let testVal7 = TestNonEmptyCollection.Create 42
+        head testVal7 |> ignore
+        Assert.AreEqual (["Using TestNonEmptyCollection's Head"], SideEffects.get ())
+        let testVal8 = testVal7 >>= fun i -> result (string i)
+        Assert.IsInstanceOf<Option<NonEmptySeq<string>>> (Some testVal8)
+        
+        let testVal9 = map ((+) 1) (IReadOnlyCollection.ofList [1..3])
+        Assert.IsInstanceOf<Option<IReadOnlyCollection<int>>> (Some testVal9)
+
+        let testVal10 = map ((+) 1) (async { return 1})
+        Assert.IsInstanceOf<Option<Async<int>>> (Some testVal10)
+        areEqual 2 (testVal10 |> Async.RunSynchronously)
 
     [<Test>]
     let unzip () = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
+
+        let testVal2 = unzip (NonEmptyMap.Create((1,(true, 'a')), (2, (false, 'b'))))
+        Assert.IsInstanceOf<Option<NonEmptyMap<int, bool> * NonEmptyMap<int, char>>> (Some testVal2)
 
     [<Test>]
     let zipTest () =
@@ -380,6 +463,7 @@ module Functor =
         let _j = zip (async {return 1}) (async {return '2'})
         let _h = zip (Task.FromResult 1) (Task.FromResult '2')
         let _i = zip List.singleton<int> Array.singleton<int>
+        let _k = zip (TestNonEmptyCollection.Create 1) (result 2)
 
         let _fa a = zip a (seq [1. .. 3. ])
         let _fb a = zip a (WrappedListD [1. .. 3. ])
@@ -392,6 +476,7 @@ module Functor =
         let _fj a = zip a (async {return '2'})
         let _fh a = zip a (Task.FromResult '2')
         let _fi a = zip a Array.singleton<int>
+        let _fj a = zip a (TestNonEmptyCollection.Create 2)
 
         let _ga b = zip (seq [1;2;3]) b
         let _gb b = zip (WrappedListD [1;2;3]) b
@@ -404,6 +489,7 @@ module Functor =
         let _gj b = zip (async {return 1}) b
         let _gh b = zip (Task.FromResult 1) b
         let _gh b = zip List.singleton<int> b
+        let _gj b = zip (TestNonEmptyCollection.Create 1) b
 
         let _ha : _ -> _ -> _ seq            = zip
         let _hb : _ -> _ -> _ WrappedListD   = zip
@@ -416,9 +502,23 @@ module Functor =
         let _hj : _ -> _ -> Async<_>         = zip
         let _hh : _ -> _ -> Task<_>          = zip
         let _hi : _ -> _ -> (int -> _ )      = zip
+        let _hj : _ -> _ -> NonEmptySeq<_>   = zip
 
         ()
 
+    [<Test>]
+    let genericZipShortest () =
+        let a = zip [|1; 2; 3|]  [|"a"; "b"|]
+        CollectionAssert.AreEqual ([|1,"a"; 2,"b"|], a)
+        
+        let l = zip [1; 2]  ["a"; "b"; "c"]
+        CollectionAssert.AreEqual ([1,"a"; 2,"b"], l)
+        
+        let e = zip (ResizeArray [1; 2]) (ResizeArray ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (ResizeArray [1,"a"; 2,"b"], e)
+        
+        let nel = zip (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
+        CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
 
 module Collections =
 
@@ -467,6 +567,7 @@ module Collections =
         let _d: Generic.IDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let r : IReadOnlyDictionary<_,_>  = ofSeq (seq [("One", 1)])             // but it will come back as ...
         let _r: IReadOnlyDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let rc: IReadOnlyCollection<_>    = ofSeq (seq [2..7])
         let ut: Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
         let al: ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
         let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
@@ -494,6 +595,7 @@ module Collections =
         let _mp'  = toSeq mp 
         let _d'   = toSeq d  
         let _r'   = toSeq r
+        let _rc'  = toSeq rc
         let _ut'  = toSeq ut 
         let _al'  = toSeq al 
         let _us'  = toSeq us 
@@ -543,6 +645,7 @@ module Collections =
         let _d: Generic.IDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let r : IReadOnlyDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
         let _r: IReadOnlyDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+        let rc: IReadOnlyCollection<_>    = ofList ([2..5])
         let ut: Hashtable                 = ofList ([1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
         let al: ArrayList                 = ofList (["1";"2";"3"])            // but it will come back as seq<obj>
         let us: SortedList                = ofList ([4,'2';3,'4'])            // but it will come back as seq<obj>
@@ -570,6 +673,7 @@ module Collections =
         let _mp'  = toList mp
         let _d'   = toList d
         let _r'   = toList r
+        let _rc'  = toList rc
         let _ut'  = toList ut
         let _al'  = toList al
         let _us'  = toList us
@@ -615,6 +719,20 @@ module Collections =
         let rl = ReadOnlyListOnlyIndex [1..10]
         Assert.AreEqual (2, nth 1 rl)
 
+    [<Test>]
+    let choose () = 
+        let d = choose Some ((ofSeq :seq<_*_> -> Dictionary<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<Dictionary<string,int>>> (Some d)
+
+        let d' = choose Some ((ofSeq :seq<_*_> -> IDictionary<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some d')
+        
+        let rd = choose Some ((ofSeq :seq<_*_> -> IReadOnlyDictionary<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<IReadOnlyDictionary<string,int>>> (Some rd)
+        
+        let m = choose Some ((ofSeq :seq<_*_> -> Map<_,_>) (seq ["a", 1; "b", 2]))
+        Assert.IsInstanceOf<Option<Map<string,int>>> (Some m)
+        
 module Foldable =
 
     let foldables =
@@ -733,6 +851,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = exists ((=) 2) [1..3]
         let _ = exists ((=) '2') (System.Text.StringBuilder "abc")
+        let _ = exists ((=) 2) (NonEmptySet.Create(1,2,3))
         let _ = exists ((=) 2) (WrappedListA [1..3])
         let _ = exists ((=) 2) (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Exists"; "Using WrappedListD's Exists"] (SideEffects.get ())
@@ -743,6 +862,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = pick Some [1..3]
         let _ = pick Some (System.Text.StringBuilder "abc")
+        let _ = pick Some (NonEmptySet.Create(1,2,3))
         let _ = pick Some (WrappedListA [1..3])
         let _ = pick Some (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Pick"; "Using WrappedListD's Pick"] (SideEffects.get ())
@@ -753,6 +873,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = minimum [1..3]
         let _ = minimum (System.Text.StringBuilder "abc")
+        let _ = minimum (NonEmptySet.Create(1,2,3))
         let _ = minimum (WrappedListA [1..3])
         let _ = minimum (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Min"; "Using WrappedListD's Min"] (SideEffects.get ())
@@ -763,6 +884,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = maxBy id [1..3]
         let _ = maxBy id (System.Text.StringBuilder "abc")
+        let _ = maxBy id (NonEmptySet.Create(1,2,3))
         let _ = maxBy id (WrappedListA [1..3])
         let _ = maxBy id (WrappedListD [1..3])
         areEqual ["Using WrappedListA's MaxBy"; "Using WrappedListD's MaxBy"] (SideEffects.get ())
@@ -773,11 +895,73 @@ module Foldable =
         SideEffects.reset ()
         let _ = length [1..3]
         let _ = length (System.Text.StringBuilder "abc")
+        let _ = length (NonEmptySet.Create(1,2,3))
         let _ = length (WrappedListA [1..3])
         let _ = length (WrappedListD [1..3])
         areEqual ["Using WrappedListA's Length"; "Using WrappedListD's Length"] (SideEffects.get ())
         ()
 
+    [<Test>]
+    let tryHead () =
+        let s                = tryHead <| seq [1;2]
+        let s': int option   = tryHead <| seq []
+        areEqual s (Some 1)
+        areEqual s' None
+
+        let l                = tryHead [1;2;3]
+        let l': int option   = tryHead []
+        areEqual l (Some 1)
+        areEqual l' None
+
+        let a                = tryHead [|1|]
+        let a': int option   = tryHead [||]
+        areEqual a (Some 1)
+        areEqual a' None
+
+        let nes              = tryHead <| NonEmptySeq.ofList [1;2]
+        areEqual nes (Some 1)
+
+        let str                = tryHead "string"
+        let str': char option  = tryHead ""
+        areEqual str (Some 's')
+        areEqual str' None
+
+        let sb               = tryHead (System.Text.StringBuilder("string"))
+        let sb'              = tryHead (System.Text.StringBuilder())
+        areEqual sb (Some 's')
+        areEqual sb' None
+        ()
+
+    [<Test>]
+    let tryLast () =
+        let s                = tryLast <| seq [1;2]
+        let s': int option   = tryLast <| seq []
+        areEqual s (Some 2)
+        areEqual s' None
+
+        let l                = tryLast [1;2;3]
+        let l': int option   = tryLast []
+        areEqual l (Some 3)
+        areEqual l' None
+
+        let a                = tryLast [|1|]
+        let a': int option   = tryLast [||]
+        areEqual a (Some 1)
+        areEqual a' None
+
+        let nes              = tryLast <| NonEmptySeq.ofList [1;2]
+        areEqual nes (Some 2)
+
+        let str                = tryLast "string"
+        let str': char option  = tryLast ""
+        areEqual str (Some 'g')
+        areEqual str' None
+
+        let sb               = tryLast (System.Text.StringBuilder("string"))
+        let sb'              = tryLast (System.Text.StringBuilder())
+        areEqual sb (Some 'g')
+        areEqual sb' None
+        ()
 
 module Indexable = 
     [<Test>]
@@ -812,6 +996,9 @@ module Indexable =
 
         let j = Array4D.create 3 2 2 3 0
         let _ = item (1, 1, 1, 1) j
+
+        let k = NonEmptyMap.Create (("a", 1), ("b", 2))
+        let _ = item "b" k
 
         // This doesn't intentionally compile: seq is not Indexable. Not all foldables are Indexable, for example a Set is foldable but not Indexable. For seq use nth instead.
         // let f = seq [1, "one"; 2, "two"]
@@ -852,10 +1039,19 @@ module Indexable =
         let j = Array4D.create 3 2 2 3 0
         let _ = tryItem (1, 1, 1, 1) j
 
+        let k = NonEmptyMap.Create (("a", 1), ("b", 2))
+        let _ = tryItem "b" k
+
         let w = WrappedListA [1, "one"; 2, "two"]
         let _ = tryItem 1 w
 
         ()
+
+    [<Test>]
+    let testCompileAndExecuteTraverseIndexed () =
+        let nem = NonEmptyMap.Create (("a", Some 1), ("b", Some 2), ("c", Some 3))
+        let rs1 = traversei (fun _ v -> v) nem
+        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs1
 
     [<Test>]
     let tryItemReadonly () =
@@ -874,6 +1070,96 @@ module Indexable =
         Assert.AreEqual (Some 2, tryItem 1 l)
         Assert.AreEqual (Some 2, tryItem 1 iReadOnlyList)
         Assert.AreEqual (Some 2, tryItem 1 rarr)
+
+    [<Test>]
+    let mapiUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        let l = ReadOnlyCollection [|1..2|]
+        let iReadOnlyList = l :> IReadOnlyList<_>
+        let rarr = ResizeArray [|1..2|]
+        let mapDS = sprintf "%d-%s"
+        areEquivalent [KeyValuePair(1,"1-one"); KeyValuePair(2,"2-two")] (mapi mapDS m)
+        let mapDD = sprintf "%d-%d"
+        areEquivalent ["0-1";"1-2"] (mapi mapDD l)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD iReadOnlyList)
+        areEquivalent ["0-1";"1-2"] (mapi mapDD rarr)
+
+        // correct overload:
+        SideEffects.reset ()
+        areEquivalent ["0-1";"1-2"] (mapi mapDD (WrappedListD [1..2]))
+        areEqual ["Using WrappedListD's MapIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        areEquivalent ["0-1";"1-2"] (MapIndexed.InvokeOnInstance mapDD (WrappedListD [1..2]))
+        areEqual ["Using WrappedListD's MapIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    let iteriUsage () =
+        let m = Map.ofList [1, "one"; 2, "two"]
+        SideEffects.reset ()
+        iteri (fun i v -> SideEffects.add <| sprintf "Got %d-%s" i v) m
+        areEquivalent ["Got 1-one";"Got 2-two"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let onIteration i v= ()
+        iteri onIteration (WrappedListD [1..2])
+        areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        IterateIndexed.InvokeOnInstance onIteration (WrappedListD [1..2])
+        areEqual ["Using WrappedListD's IterateIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    let foldiUsage () =
+        SideEffects.reset ()
+        let folder (s:int) (i:int) (t:int) = t * s - i
+        let wlist = WrappedListD [1..2]
+        let res = foldi folder 10 wlist
+        areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
+        areEqual 19 res
+        SideEffects.reset ()
+        let res1 = FoldIndexed.InvokeOnInstance folder 10 wlist
+        areEquivalent ["Using WrappedListD's FoldIndexed"] (SideEffects.get ())
+        areEqual 19 res1
+
+    [<Test>]
+    let traverseiUsage () =
+        let m1 = WrappedMapA.ofList [(1, [1;1;1]); (2, [2;2;2])]
+
+        SideEffects.reset ()
+        let r1 = m1 |> TraverseIndexed.InvokeOnInstance (fun _ _ -> None)
+        Assert.AreEqual(None, r1)
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let r1 = m1 |> traversei (fun _ _ -> None)
+        Assert.AreEqual(None, r1)
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let r2 = m1 |> TraverseIndexed.InvokeOnInstance (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r2.Value
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+        SideEffects.reset ()
+        let r3 = m1 |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        areEqual (WrappedMapA.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])]) r3.Value
+        areEquivalent ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ())
+
+    [<Test>]
+    let findIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        SideEffects.reset ()
+        let i1 = findIndex ((=) 2) m1
+        areEquivalent ["Using WrappedListD's FindIndex"] (SideEffects.get ())
+        areEqual i1 2
+
+    [<Test>]
+    let findSliceIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        let m2 = WrappedListD [1..3]
+        SideEffects.reset ()
+        let i1 = findSliceIndex m2 m1
+        areEquivalent ["Using WrappedListD's FindSliceIndex"] (SideEffects.get ())
+        areEqual i1 1
 
 module Monad = 
     [<Test>]
@@ -930,6 +1216,7 @@ module Traversable =
 
     let traverseTest =
         let _None = sequence (seq [Some 3;None ;Some 1])
+        let _None2 = sequence (TestNonEmptyCollection.Create (Some 42))
         ()
 
     [<Test>]
@@ -975,17 +1262,39 @@ module Traversable =
         ()
 
     [<Test>]
+    let traverse_Order () =
+        SideEffects.reset()
+        let mapper v = SideEffects.add <| sprintf "mapping %d" v
+        let _ = traverse (Option.map mapper) [Some 1; Some 2]
+        SideEffects.are ["mapping 1"; "mapping 2"]
+
+
+    [<Test>]
     let traversableForNonPrimitive () =
-        let nel = NonEmptyList.create (Some 1) [Some 2]
-        let rs1  = traverse id nel
+        let nel = nelist { Some 1 }
+        let rs1 = traverse id nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs1
-        let rs2  = sequence nel
+        let rs2 = sequence nel
         Assert.IsInstanceOf<option<NonEmptyList<int>>> rs2
+        let nem = NonEmptyMap.Create (("a", Some 1), ("b", Some 2), ("c", Some 3))
+        let rs3 = traverse id nem
+        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs3
+        let rs4 = sequence nem
+        Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs4
+        let rs5 = traverse id (TestNonEmptyCollection.Create (Some 42))
+        Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs5
+        let nes = neseq { Some 1 }
+        let rs6 = traverse id nes
+        Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs6
+        let rs7 = sequence nes
+        Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs7
 
     let toOptions x = if x <> 4 then Some x       else None
     let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
     let toLists   x = if x <> 4 then [x; x]       else []
-    let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
+    let toEithers x =
+        if x > 4 then failwithf "Shouldn't be mapping for %i" x
+        if x = 4 then Left ["This is a failure"] else Right x
 
     let expectedEffects =
         [
@@ -1022,37 +1331,64 @@ module Traversable =
         Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
         Assert.AreEqual ([], d)
         Assert.AreEqual (Either<string list,seq<int>>.Left ["This is a failure"], e)
+
+        SideEffects.reset ()
+
+        let a = sequence (NonEmptySeq.initInfinite toOptions)
+        let b = sequence (NonEmptySeq.initInfinite toOptions)
+        let c = sequence (NonEmptySeq.initInfinite toChoices)
+        let d = sequence (NonEmptySeq.initInfinite toLists)
+        let e = sequence (NonEmptySeq.initInfinite toEithers)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let _a = traverse toOptions (NonEmptySeq.initInfinite id)
+        let _b = traverse toOptions (NonEmptySeq.initInfinite id)
+        let _c = traverse toChoices (NonEmptySeq.initInfinite id)
+        let _d = traverse toLists   (NonEmptySeq.initInfinite id)
+        let _e = traverse toEithers (NonEmptySeq.initInfinite id)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        Assert.AreEqual (None, a)
+        Assert.AreEqual (None, b)
+        Assert.AreEqual (Choice<NonEmptySeq<int>,string>.Choice2Of2 "This is a failure", c)
+        Assert.AreEqual ([], d)
+        Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e)
         
 
+    let toEithersStrict x =
+        if x = 4 then Left ["This is a failure"] else Right x
+
     [<Test>]
-    let traverseFiniteApplicatives () = // TODO -> implement short-circuit without breaking anything else
+    let traverseFiniteApplicatives () =
 
         SideEffects.reset ()
 
-        let a = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let b = sequence (Seq.initInfinite toOptions |> Seq.take 20 |> Seq.toList)
-        let c = sequence (Seq.initInfinite toChoices |> Seq.take 20 |> Seq.toList)
-        let d = sequence (Seq.initInfinite toLists   |> Seq.take 20 |> Seq.toList)
-        let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
+        let a = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let b = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
+        let c = sequence (Seq.initInfinite toChoices       |> Seq.take 20 |> Seq.toList)
+        let d = sequence (Seq.initInfinite toLists         |> Seq.take 20 |> Seq.toList)
+        let e = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toList)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let f = sequence (Seq.initInfinite toEithersStrict |> Seq.take 20 |> Seq.toArray)
+
+        CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
+        SideEffects.reset ()
+
+        let _a = traverse toOptions       [1..20]
+        let _b = traverse toOptions       [1..20]
+        let _c = traverse toChoices       [1..20]
+        let _d = traverse toLists         [1..20]
+        let _e = traverse toEithersStrict [1..20]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         SideEffects.reset ()
 
-        let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
-
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
-
-        let _a = traverse toOptions [1..20]
-        let _b = traverse toOptions [1..20]
-        let _c = traverse toChoices [1..20]
-        let _d = traverse toLists   [1..20]
-        let _e = traverse toEithers [1..20]
-
-        CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
-        SideEffects.reset ()
-
-        let _f = traverse toEithers [|1..20|]
+        let _f = traverse toEithersStrict [|1..20|]
 
         CollectionAssert.AreNotEqual (expectedEffects, SideEffects.get ())
         Assert.AreEqual (None, a)
@@ -1062,6 +1398,28 @@ module Traversable =
         Assert.AreEqual (Either<string list,list<int>>.Left ["This is a failure"], e)
         Assert.AreEqual (Either<string list,array<int>>.Left ["This is a failure"], f)
         ()
+
+    [<Test>]
+    let traverseAsyncSequences =
+        SideEffects.reset ()
+
+        let doSomething v =
+            SideEffects.add (sprintf "doSomething: %A" v)
+            sprintf "some: %A" v
+            |> async.Return
+        
+        seq [1..10] 
+        |> traverse doSomething
+        |> map  (head >> printfn "%A")
+        |> Async.RunSynchronously
+        CollectionAssert.AreEqual (["doSomething: 1"], SideEffects.get ())
+
+        SideEffects.reset ()
+        NonEmptySeq.create 1 [2..10]
+        |> traverse doSomething
+        |> map  (head >> printfn "%A")
+        |> Async.RunSynchronously
+        CollectionAssert.AreEqual (["doSomething: 1"], SideEffects.get ())
 
     [<Test>]
     let traverseInfiniteAsyncSequences =
@@ -1163,6 +1521,10 @@ module Applicative =
         Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
         Assert.IsInstanceOf<Option<list<int>>> (Some testVal)
 
+        let testVal2 = NonEmptySeq.create 1 [2] .+. NonEmptySeq.create 10 [20] .+. NonEmptySeq.create 100 [200] .+ 2
+        Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], Seq.toList testVal2)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int>>> (Some testVal2)
+
         let testLTE1 = Some 1 .<=. Some 2
         Assert.AreEqual (Some true, testLTE1)
         Assert.IsInstanceOf<Option<bool>> testLTE1
@@ -1201,10 +1563,18 @@ module Applicative =
         let run (ZipList x) = x
         let run' (ZipList' x) = x
 
+
         // Test Applicative (functions)
+        let fn = 
+            let mutable x = 0
+            fun () -> 
+                x <- x + 1
+                x
         let res607 = map (+) ( (*) 100 ) 6 7
         let res606 = ( (+) <*>  (*) 100 ) 6
         let res508 = (map (+) ((+) 3 ) <*> (*) 100) 5
+        let res123 = (map tuple3 fn <*> fn <*> fn) ()
+        let res456 = (sequence [fn; fn; fn] : unit -> int list) ()
 
         // Test Applicative (ZipList)
         let res9n5  = map ((+) 1) (ZipList [8;4])
@@ -1215,6 +1585,8 @@ module Applicative =
         Assert.AreEqual (607, res607)
         Assert.AreEqual (606, res606)
         Assert.AreEqual (508, res508)
+        Assert.AreEqual ((1,2,3), res123)
+        Assert.AreEqual ([4;5;6], res456)
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
 
     let testLift2 () =
@@ -1223,6 +1595,20 @@ module Applicative =
         let _ = (WrappedSeqD [1] , WrappedSeqD [2]) ||> lift2 (+)
         CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
 
+        let a1 = StateT <| fun x -> (async { return 1, "Here's the state " +  x})
+        let b1 = StateT <| fun x -> (async { return 5, "Here's the other state " +  x})
+        let r1 = lift2 (+) a1 b1
+        Assert.AreEqual ((6, "Here's the other state Here's the state S"), (StateT.run r1 "S" |> Async.RunSynchronously))
+
+        let a2 = WriterT <| (async { return 1, "Here's the state "})
+        let b2 = WriterT <| (async { return 5, "Here's the other state "})
+        let r2 = lift2 (+) a2 b2
+        Assert.AreEqual ((6, "Here's the state Here's the other state "), (WriterT.run r2 |> Async.RunSynchronously))
+
+        let a3 = ReaderT <| fun x -> (async { return "Here's the state " +  x})
+        let b3 = ReaderT <| fun x -> (async { return "Here's the other state " +  x})
+        let r3 = lift2 (+) a3 b3
+        Assert.AreEqual ("Here's the state SHere's the other state S", (ReaderT.run r3 "S" |> Async.RunSynchronously))
 
 // Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
 type Ii = Ii
@@ -1286,6 +1672,7 @@ module Alternative =
         let _ = [1;2] <|> [3;4]
         let _ = WrappedListG [1;2] <|> WrappedListG [3;4]
         let _ = seq [1;2] <|> seq [3;4]
+        let _ = NonEmptySeq.create 1 [2] <|> NonEmptySeq.create 3 [4]
 
         // shoud not compile. 
         // Although WrappedListD implements IEnumerable, it should explicitely implement (<|>). Not all IEnumerables have (<|>).
@@ -1382,6 +1769,7 @@ module Alternative =
 
 
 module MonadTransformers =
+    [<Test>]
     let testCompileResultT () =
         // Test MonadError
         let _err1Layers = catch (Error "Invalid Value") (fun s -> Error ["the error was: " + s]) : Result<int, _>
@@ -1404,6 +1792,7 @@ module MonadTransformers =
 
         ()
 
+    [<Test>]
     let testCompileChoiceT () =
         // Test MonadError
         let _err1Layers = catch (Choice2Of2 "Invalid Value") (fun s -> Choice2Of2 ["the error was: " + s]) : Choice<int, _>
@@ -1431,6 +1820,7 @@ module MonadTransformers =
 
         ()
 
+    [<Test>]
     let testStateT () =
         let lst1: StateT<string,_> = StateT.lift [1;2]
         let lst2: StateT<string,_> = StateT.lift [4;5]
@@ -1446,6 +1836,24 @@ module MonadTransformers =
         CollectionAssert.AreEqual ([((1, 6), "OK"); ((1, 7), "OK"); ((2, 6), "OK"); ((2, 7), "OK")], StateT.run m "ok")
 
         ()
+
+    type RErrors = | NegativeValue
+    [<Test>]
+    let testCompilationMT1 () =
+
+        let fn : ResultT<Reader<int,Result<_,RErrors>>> = 
+            monad {
+               let! x1 = lift ask
+               let! x2 = 
+                   if x1 > 0 then result 1
+                   else ResultT (result (Error NegativeValue)) 
+               return x1 + x2
+            }
+
+        let x = (fn |> ResultT.run |> Reader.run) 10
+        areEqual (Ok 11) x
+        let y = (fn |> ResultT.run |> Reader.run) -1
+        areEqual (Error NegativeValue) y
 
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
@@ -1676,11 +2084,9 @@ module Splits =
 
         let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
 
-        // Fails to compile but works in F#4.1
-        // let c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
-        // 
-
-        let d = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
+        let _c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
+        let d  = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
+        let _e = intercalate 10 (seq [1; 2; 3])
 
         Assert.IsTrue((a1 = a2))
         Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
@@ -1688,7 +2094,15 @@ module Splits =
         Assert.IsTrue((d = Sum 13))
 
 
-module Parsing = 
+module Parsing =
+    let (|Int32|_|) : _-> Int32 option = tryParse
+    type ProductId = { Value:int }
+    with
+        static member TryParse(value:string) : ProductId option=
+            match value.Split('_') |> List.ofArray with
+            | "P" :: Int32 v :: [] -> Some { Value = v }
+            | _ -> None
+
     [<Test>]
     let parseDateTime () =
 #if MONO
@@ -1722,7 +2136,24 @@ module Parsing =
 
         let r123: WrappedListA<int> option = tryParse "[1;2;3]"
         areStEqual r123 (Some (WrappedListA [1; 2; 3]))
-        
+
+    [<Test>]
+    let parseCustomType () = 
+        let v1 : CustomerId option = tryParse "C_1"
+        Assert.IsTrue((v1.Value.Value = 1L))
+        let v2 : CustomerId option = tryParse "C_X"
+        Assert.IsTrue(Option.isNone v2)
+        let v3 : ProductId option = tryParse "P_1"
+        Assert.IsTrue((v3.Value.Value = 1))
+        let v4 : ProductId option = tryParse "P_X"
+        Assert.IsTrue(Option.isNone v4)
+#if NETSTANDARD3_0
+        let v5 : ICustomerId option = tryParse "C_1"
+        Assert.IsTrue((v5.Value.Value = 1L))
+        let v6 : ICustomerId option = tryParse "C_X"
+        Assert.IsTrue(Option.isNone v6)
+#endif
+
     [<Test>]
     let scanfParsing () =
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
@@ -1754,9 +2185,16 @@ module Parsing =
         let _f8 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
         
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
-
-        ()
-
+        
+        let x = trySscanf "%X %x" "13 43"
+        let o = trySscanf "%o" "10"
+        let b = trySscanf (PrintfFormat<int -> string, unit, string, string, int> "%B") "101"
+        let a = trySscanf (PrintfFormat<int -> int -> int -> int -> string, unit, string, string, int * int * int * int> "%B %o %x %X") "100 100 100 100"
+        
+        areEqual (Some (19, 67)) x
+        areEqual (Some 8) o
+        areEqual (Some 5) b
+        areEqual (Some (4, 64, 256, 256)) a
 
 module Conversions =
     let test =
@@ -1847,7 +2285,7 @@ module Sequences =
           let! z = seq [1..50]
           let! x = seq [1..z]
           let! y = seq [x..z]
-          if (x*x + y*y = z*z) then return (x, y, z)}
+          if (x*x + y*y = z*z) then return (x, y, z) else () }
 
         let _ = monad.plus {
           let! z = seq [1..50]
@@ -1913,7 +2351,7 @@ module ApplicativeInference =
     let res6n7n8 = result (+) <*> result 5G <*> ZipList [1;2;3]
     let res18n14 = result (+) <*> ZipList(seq [8;4]) <*> result 10
 
-    open FSharpPlus.Builders // for applicative brackets
+    open FSharpPlus.GenericBuilders // for applicative brackets
 
     let res3n4''  = iI ((+) 2) [1;2] Ii
     let res3n4''' = iI (+) (result 2) [1;2] Ii                              // *1
@@ -2132,3 +2570,61 @@ module testCompileOldCode =
         let rec f a b n = if n == 0G then a else f (b * a) b (n - 1G)
         if (n < 0G) then failwith "Negative exponent" else f 1G x n
     let inline ( **^^ ) (x:'Fractional) (n:'Integral) = if n >= 0G then x**^n else recip (x**^(negate n))
+
+module Choosei =
+    [<Test>]
+    let choosei () =
+        let someIfIndexEven i x =
+            if i % 2 = 0 then Some x
+            else None
+        let l = (choosei someIfIndexEven [1;2;3;4;5]) 
+        areEqual [1;3;5] l
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.List<int>>> (Some l)
+        
+        let a = (choosei someIfIndexEven [|1;2;3;4;5|]) 
+        areEqual [|1;3;5|] a
+        Assert.IsInstanceOf<Option<int[]>> (Some a)
+        
+        let s =(choosei someIfIndexEven (seq [1;2;3;4;5])) 
+        areEqual (seq [1;3;5]) s
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.seq<int>>> (Some s)
+        
+        let m = (choosei someIfIndexEven (Map [1,2;2,3;3,4])) 
+        areEqual (Map [2,3]) m
+        Assert.IsInstanceOf<Option<Microsoft.FSharp.Collections.Map<int, int>>> (Some m)
+        
+        // correct overload:
+        SideEffects.reset ()
+        areEquivalent [1;3;5] (ChooseIndexed.InvokeOnInstance someIfIndexEven (WrappedListD [1..5]))
+        areEqual ["Using WrappedListD's ChooseIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        areEquivalent [1;3;5] (choosei someIfIndexEven (WrappedListD [1..5]))
+        areEqual ["Using WrappedListD's ChooseIndexed"] (SideEffects.get ())
+        
+        SideEffects.reset ()
+        (ChooseIndexed.InvokeOnInstance someIfIndexEven (WrappedSeqD [1..5])) |> ignore
+        areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
+        SideEffects.reset ()
+        (choosei someIfIndexEven (WrappedSeqD [1..5])) |> ignore
+        areEqual ["Using WrappedSeqD's ChooseIndexed"] (SideEffects.get ())
+
+module lift3 = 
+    [<Test>]
+    let NonEmptySeqLift3 () =
+        // NonEmptySeq
+        NonEmptySeq.lift3 (fun x y z -> x + y + z) (NonEmptySeq.ofList[1;2]) (NonEmptySeq.ofList[7;11]) (NonEmptySeq.ofList[22;33]) 
+        |> areEqual (NonEmptySeq.ofList[30; 41; 34; 45; 31; 42; 35; 46])
+    
+    [<Test>]
+    let CorrectOverload () =
+        let sumOfThree x y z = x + y + z
+        
+        // correct overload:
+        SideEffects.reset ()
+        areEquivalent [3] (Lift3.InvokeOnInstance sumOfThree (WrappedListD [1]) (WrappedListD [1]) (WrappedListD [1]))
+        areEqual ["Using WrappedListD's Lift3"] (SideEffects.get ())
+        
+        SideEffects.reset ()
+        (Lift3.InvokeOnInstance sumOfThree (WrappedSeqD [1]) (WrappedSeqD [1]) (WrappedSeqD [1])) |> ignore
+        areEqual ["Using WrappedSeqD's Lift3"] (SideEffects.get ())
+        

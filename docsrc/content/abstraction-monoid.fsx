@@ -73,8 +73,8 @@ From .Net/F#
  
 From F#+
  
- -  ``ZipList<'S>``
- -  [``Dual<'T>](type-dual.html)
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``Dual<'T>``](type-dual.html)
  -  [``Endo<'T>``](type-endo.html)
  -  [``All``](type-all.html)
  -  [``Any``](type-any.html)
@@ -82,6 +82,9 @@ From F#+
  -  [``First<'T>``](type-first.html)
  -  [``Last<'T>``](type-last.html)
  -  [``DList<'T>``](type-dlist.html)
+ -  [``Vector<'T,'Dimension>``](type-vector.html)
+ -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
+
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

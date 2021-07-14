@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open FSharpPlus.Operators
 open FSharpPlus.Data
@@ -47,17 +47,18 @@ module Lens =
     /// <param name="optic">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (FSharpPlus.Data.First (Some x))) |> Const.run |> First.run
+    let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (First (Some x))) |> Const.run |> First.run
 
     /// <summary>Build a 'Lens' from a getter and a setter.</summary>
     /// <remarks>The lens should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
     /// <param name="getter">The getter function.</param>
     /// <param name="setter">The setter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
+    /// <param name="s"></param>
     /// <returns>The lens.</returns>
     let inline lens (getter: 's -> 'a) (setter: 's -> 'b -> 't) (f: 'a -> '``F<'b>``) = fun s -> setter s </Map.InvokeOnInstance/> f (getter s) : '``F<'t>``
 
-
+#if !FABLE_COMPILER // there are issues on Fable with Return.InvokeOnInstance
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
     /// <remarks>Using Result instead of Option to permit the types of 's and 't to differ.</remarks>
@@ -75,6 +76,7 @@ module Lens =
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
     let inline prism' (constructor: 'b -> 's) (getter: 's -> Option<'a>) (f: 'a -> '``F<'b>``) = prism constructor (fun s -> option Ok (Error s) (getter s)) f : 's -> '``F<'t>``
+#endif
 
     /// <summary>Build an 'Iso' from a pair of inverse functions.</summary>
     /// <param name="func">The transform function.</param>
@@ -112,11 +114,30 @@ module Lens =
     let inline _5 f t = Map.InvokeOnInstance (fun x -> mapItem5 (fun _ -> x) t) (f (item5 t))
 
     [<RequireQualifiedAccess>]
-    module Set=
+    module List =      
+        /// Given a specific key, produces a Lens from a List<value> to an Option<value>. When setting,
+        /// a Some(value) will insert or replace the value into the list at the given index. Setting a value of
+        /// None will delete the value at the specified index.  Works well together with non.
+        let inline _item i f t = 
+            Map.InvokeOnInstance
+                (function | None -> List.removeAt i t | Some x -> List.setAt i x t)
+                (f (List.tryItem i t))
+
+    [<RequireQualifiedAccess>]
+    module Array =        
+        /// Given a specific key, produces a Lens from a Array<value> to an Option<value>.
+        let inline _item i f t = 
+            let setAt i x a = Array.init (Array.length a) (fun i' -> if i = i' then x else a.[i'])
+            Map.InvokeOnInstance
+                (fun x -> setAt i x t)
+                (f (Array.tryItem i t))
+
+    [<RequireQualifiedAccess>]
+    module Set =
         let inline _contains i f t = Map.InvokeOnInstance (fun b -> if b then Set.add i t else Set.remove i t) (f (Set.contains i t))
 
     [<RequireQualifiedAccess>]
-    module Map=
+    module Map =
         /// Given a specific key, produces a Lens from a Map<key, value> to an Option<value>.  When setting,
         /// a Some(value) will insert or replace the value into the map at the given key.  Setting a value of
         /// None will delete the value at the specified key.  Works well together with non.
@@ -124,7 +145,7 @@ module Lens =
                                   (function | None -> Map.remove i t | Some(x) -> Map.add i x t)
                                   (f (Map.tryFind i t))
     [<RequireQualifiedAccess>]
-    module IReadOnlyDictionary=
+    module IReadOnlyDictionary =
         /// Given a specific key, produces a Lens from a IReadOnlyDictionary<key, value> to an Option<value>.  When setting,
         /// a Some(value) will insert or replace the value into the dictionary at the given key.  Setting a value of
         /// None will delete the value at the specified key.  Works well together with non.
@@ -136,6 +157,7 @@ module Lens =
     let inline non def f ma = Map.InvokeOnInstance (fun a' -> if a' = def then None else Some(a')) (f (Option.defaultValue def ma))
 
     // Prism
+#if !FABLE_COMPILER // there are issues on Fable with Return.InvokeOnInstance for prism 'Const First'
 
     /// Prism providing a Traversal for targeting the 'Ok' part of a Result<'T,'Error>
     let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x
@@ -148,6 +170,7 @@ module Lens =
 
     /// Prism providing a Traversal for targeting the 'None' part of an Option<'T>
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
+#endif
 
     // Traversal
     let inline _all ref f s =

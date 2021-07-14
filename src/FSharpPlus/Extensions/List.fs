@@ -9,11 +9,40 @@ module List =
     /// Creates a list with a single element.
     let singleton x = [x]
 
-    let cons x y = x :: y
+    /// <summary>Adds an element to the beginning of the given list</summary>
+    /// <param name="x">The element to add</param>
+    /// <param name="list">The list to add to</param>
+    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    let cons x list = x :: list 
+
+    /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
+    /// <param name="f">The list of functions.</param>
+    /// <param name="x">The list of values.</param>
+    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > List.apply [double; triple] [1; 2; 3];;  
+    /// val it : int list = [2; 4; 6; 3; 6; 9]
+    /// </code>
+    /// </example>
     let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
     let lift2 f x1 x2 = List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
+    
+    /// <summary>Combines values from three list and calls a mapping function on this combination.</summary>
+    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First list.</param>
+    /// <param name="x2">Second list.</param>
+    /// <param name="x3">Third list.</param>
+    ///
+    /// <returns>List with values returned from mapping function.</returns>
+    let lift3 f x1 x2 x3 =
+        List.allPairs x2 x3
+        |> List.allPairs x1
+        |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> List.map (fun (x, y, z) -> f x y z)
 
     /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
@@ -35,24 +64,28 @@ module List =
     /// <param name="source">The input list.</param>
     ///
     /// <returns>The result list.</returns>
-    let drop i list = 
+    let drop count source = 
         let rec loop i lst = 
             match lst, i with
             | [] as x, _ | x, 0 -> x
             | x, n -> loop (n-1) (List.tail x)
-        if i > 0 then loop i list else list
+        if count > 0 then loop count source else source
 
+    /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
 
-    /// Inserts a separator between each element in the source list.
+    /// Inserts a separator element between each element in the source list.
     let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList : list<'T>
 
     /// Creates a sequence of lists by splitting the source list on any of the given separators.
     let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
 
-    /// Replace a subsequence of the source list with the given replacement list.
+    /// Replaces a subsequence of the source list with the given replacement list.
     let replace oldValue (newValue: _ list) (source: _ list) = source |> List.toSeq |> Seq.replace oldValue newValue |> Seq.toList : list<'T>
 
+    /// <summary>Converts a list to an IReadOnlyList (from System.Collections.Generic).</summary>
+    /// <param name="source">The list source</param>
+    /// <returns>The list converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (source: _ list) =
         { new System.Collections.Generic.IReadOnlyList<_> with
             member __.Count = source.Length
@@ -60,7 +93,7 @@ module List =
             member __.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member __.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
@@ -105,3 +138,57 @@ module List =
                 | Choice1Of2 x -> loop (x::acc1, acc2) xs
                 | Choice2Of2 x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
+
+    /// <summary>Safely build a new list whose elements are the results of applying the given function
+    /// to each of the elements of the two lists pairwise.</summary>
+    /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
+    let map2Shortest f (l1: list<_>) (l2: list<_>) =
+        let rec loop acc = function
+            | (l::ls,r::rs) -> loop ((f l r)::acc) (ls,rs)
+            | (_,_) -> acc
+        loop [] (l1,l2) |> List.rev
+        
+    /// <summary>
+    /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
+    /// </summary>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
+    /// <returns>List with corresponding pairs of input lists.</returns>
+    let zipShortest (list1: list<'T1>) (list2: list<'T2>) =
+        let rec loop acc = function
+            | (l::ls, r::rs) -> loop ((l, r)::acc) (ls, rs)
+            | (_, _)         -> acc
+        loop [] (list1, list2) |> List.rev
+        
+    /// <summary>Same as choose but with access to the index.</summary>
+    /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
+    /// <param name="source">The input list.</param>
+    ///
+    /// <returns>List with values x for each List value where the function returns Some(x).</returns>
+    let choosei mapping source =
+        let mutable i = ref -1
+        let fi x =
+            incr i
+            mapping !i x
+        List.choose fi source
+        
+    /// <summary>Attempts to remove an item from a list.</summary>
+    /// <param name="i">The index of the item to remove </param>
+    /// <param name="lst">The input list</param>
+    /// 
+    /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
+    let removeAt i lst =
+        if List.length lst > i then
+            lst.[0..i-1] @ lst.[i+1..]
+        else lst
+
+    /// <summary>Updates the value of an item in a list</summary>
+    /// <param name="i">The index of the item to update</param>
+    /// <param name="x">The new value of the item</param>
+    /// <param name="lst">The input list</param>
+    ///
+    /// <returns>A new list with the updated element</returns>
+    let setAt i x lst =
+        if List.length lst > i && i >= 0 then
+            lst.[0..i-1] @ x::lst.[i+1..]
+        else lst

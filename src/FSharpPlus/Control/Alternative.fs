@@ -1,9 +1,16 @@
-namespace FSharpPlus.Control
+namespace FSharpPlus.Control 
 
-#if !FABLE_COMPILER
+/// <namespacedoc>
+/// <summary>
+/// Generally internal and not useful directly - contains generic function overloaded implementations.
+/// </summary>
+/// </namespacedoc>
+
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open System.Runtime.InteropServices
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Internals
 
 
@@ -28,6 +35,7 @@ type Empty =
 type Append =
     inherit Default1
     static member        ``<|>`` (x: 'T seq              , y              , [<Optional>]_mthd: Default2) = Seq.append   x y
+    static member        ``<|>`` (x: 'T NonEmptySeq      , y              , [<Optional>]_mthd: Default2) = NonEmptySeq.append x y
 
     static member inline ``<|>`` (x: '``Alt<'T>``        , y: '``Alt<'T>``, [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member (<|>) : _*_ -> _) x, y) : '``Alt<'T>``
     static member inline ``<|>`` (_: ^t when ^t: null and ^t: struct   , _,             _mthd: Default1) = ()
@@ -68,7 +76,7 @@ type IsAltLeftZero =
 
 type Choice =
     inherit Default1
-
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline Choice (x: ref<'``Foldable<'Alternative<'T>>``>, _mthd: Default4) =
         use e = (ToSeq.Invoke x.Value).GetEnumerator ()
         let mutable res = Empty.Invoke ()
@@ -85,7 +93,8 @@ type Choice =
         while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res
-
+    #endif
+    
     static member inline Choice (x: ref<'``Foldable<'Alternative<'T>>``> , _mthd: Default1) = (^``Foldable<'Alternative<'T>>`` :  (static member Choice : _ -> _) x.Value) : '``Alternative<'T>``
     static member inline Choice (_: ref< ^t> when ^t: null and ^t: struct, _mthd: Default1) = ()
 

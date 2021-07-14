@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Condition="'$(CompilerTest)' == 'true'">
+    <FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
+    <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <Title>FSharpPlus.Providers</Title>
+    <AssemblyName>FSharpPlus.Providers</AssemblyName>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'net46'">--warnon:1182 $(OtherFlags)</OtherFlags>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+
+    <BaseOutputPath>..\bin</BaseOutputPath>
+
+    <Configurations>Debug;Release;Fable</Configurations>
+
+    <Platforms>AnyCPU</Platforms>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable'">5.0</LangVersion>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../../external/FSharp.TypeProviders.SDK/src/ProvidedTypes.fsi" />
+    <Compile Include="../../../external/FSharp.TypeProviders.SDK/src/ProvidedTypes.fs" />
+    <Compile Include="TypeNat.Provider.fs" />
+    <Compile Include="Matrix.Provider.fs" />
+    <Compile Include="TypeProviderAssembly.fs" />
+    <Content Condition=" '$(TargetFramework)' == 'net46'" Include="../../FSharpPlus/App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../FSharpPlus.TypeLevel.fsproj" />
+  </ItemGroup>
+</Project>

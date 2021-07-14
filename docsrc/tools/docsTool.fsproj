@@ -2,23 +2,23 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="templates/template.fs" />
     <Compile Include="templates/plantuml.fs" />
     <Compile Include="doclib.fs" />
     <Compile Include="tools.fs" />
-    <Compile Include="generate.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="Fable.Core" Version="3.1.5" />
+    <PackageReference Include="Fable.Core" Version="3.1.6" />
     <PackageReference Include="Fable.React" Version="5.3.6" />
-    <PackageReference Include="FSharp.Literate" Version="4.0.0-alpha03" />
+    <PackageReference Include="FSharp.Formatting.Literate" Version="7.2.9" />
+    <PackageReference Include="FSharp.Formatting" Version="7.2.9" />
+    <PackageReference Include="FSharp.Compiler.Service" Version="36.0.3" />
     <PackageReference Include="MathNet.Numerics.FSharp" Version="4.9.0" />
   </ItemGroup>
 

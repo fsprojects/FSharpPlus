@@ -12,6 +12,12 @@
     <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus</PackageProjectUrl>
     <PackageIconUrl>https://raw.github.com/fsprojects/FSharpPlus/master/docsrc/files/img/logo.png</PackageIconUrl>
     <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading</PackageTags>
+    <VersionPrefix>1.2.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+    <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
+
+    <FsDocsNavBarPosition>fixed-left</FsDocsNavBarPosition>
   </PropertyGroup>
 
   <PropertyGroup>

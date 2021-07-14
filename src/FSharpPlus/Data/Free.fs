@@ -62,7 +62,7 @@ module Free =
         loop y x
 
     /// Folds the Free structure into a Monad
-    let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
+    let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'U>``,'U>) : '``Monad<'U>`` =
         let rec loop f x =
             match run x with
             | Pure a -> Return.Invoke a

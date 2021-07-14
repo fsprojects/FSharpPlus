@@ -7,7 +7,7 @@ open FSharpPlus.Internals.Prelude
 open FSharpPlus.Control
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 /// Additional operations on Result
 [<RequireQualifiedAccess>]
 module Result =
@@ -30,7 +30,7 @@ module ResultOrException =
     let Exception : Result<_,exn>   -> _ = function Error e -> e | _ -> exn ()
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 /// Monad Transformer for Result<'T, 'E>
 [<Struct>]
@@ -53,6 +53,7 @@ module ResultT =
 
     let inline apply (ResultT f:ResultT<'``Monad<'Result<('T -> 'U),'E>>``>) (ResultT x: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (map Result.apply f <*> x) : ResultT<'``Monad<'Result<'U,'E>>``>
     let inline map (f: 'T->'U) (ResultT m: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT (map (Result.map f) m) : ResultT<'``Monad<'Result<('T -> 'U),'E>>``>
+    let inline map2 (f: 'T->'U->'V) (ResultT x: ResultT<'``Monad<Result<'T,'E>>``>) (ResultT y: ResultT<'``Monad<Result<'U,'E>>``>) : ResultT<'``Monad<Result<'V,'E>>``> = ResultT (lift2 (Result.map2 f) x y)
 
 type ResultT<'``monad<'result<'t,'e>>``> with
     
@@ -60,6 +61,9 @@ type ResultT<'``monad<'result<'t,'e>>``> with
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: ResultT<'``Monad<'Result<'T,'E>>``>, f: 'T->'U) = ResultT.map f x                                        : ResultT<'``Monad<'Result<'U,'E>>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f: 'T->'U->'V, x: ResultT<'``Monad<Result<'T,'E>``>, y: ResultT<'``Monad<Result<'U,'E>``>) : ResultT<'``Monad<Result<'V,'E>``> = ResultT.map2 f x y
 
     static member inline (<*>) (f: ResultT<'``Monad<'Result<('T -> 'U),'E>>``>, x: ResultT<'``Monad<'Result<'T,'E>>``>) = ResultT.apply f x : ResultT<'``Monad<'Result<'U,'E>>``>    
     static member inline (>>=) (x: ResultT<'``Monad<'Result<'T,'E>>``>, f: 'T->ResultT<'``Monad<'Result<'U,'E>>``>)     = ResultT.bind  f x
@@ -114,6 +118,7 @@ module ChoiceT =
 
     let inline apply (ChoiceT f: ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>) (ChoiceT x: ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT (map Choice.apply f <*> x) : ChoiceT<'``Monad<'Choice<'U,'E>>``>
     let inline map  (f: 'T->'U) (ChoiceT m: ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT (map (Choice.map f) m) : ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>
+    let inline map2 (f: 'T->'U->'V) (ChoiceT x: ChoiceT<'``Monad<Choice<'T,'E>>``>) (ChoiceT y: ChoiceT<'``Monad<Choice<'U,'E>>``>) : ChoiceT<'``Monad<Choice<'V,'E>>``> = ChoiceT (lift2 (Choice.map2 f) x y)
 
 type ChoiceT<'``monad<'choice<'t,'e>>``> with
     
@@ -121,6 +126,9 @@ type ChoiceT<'``monad<'choice<'t,'e>>``> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: ChoiceT<'``Monad<'Choice<'T,'E>>``>, f: 'T->'U) = ChoiceT.map f x                                        : ChoiceT<'``Monad<'Choice<'U,'E>>``>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f: 'T->'U->'V, x: ChoiceT<'``Monad<Choice<'T,'E>``>, y: ChoiceT<'``Monad<Choice<'U,'E>``>) : ChoiceT<'``Monad<Choice<'V,'E>``> = ChoiceT.map2 f x y
 
     static member inline (<*>) (f: ChoiceT<'``Monad<'Choice<('T -> 'U),'E>>``>, x: ChoiceT<'``Monad<'Choice<'T,'E>>``>) = ChoiceT.apply f x : ChoiceT<'``Monad<'Choice<'U,'E>>``>
     static member inline (>>=) (x: ChoiceT<'``Monad<'Choice<'T,'E>>``>, f: 'T->ChoiceT<'``Monad<'Choice<'U,'E>>``>)     = ChoiceT.bind f x

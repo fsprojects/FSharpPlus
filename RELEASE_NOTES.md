@@ -1,3 +1,63 @@
+#### 1.2.0  - June 6 2021
+
+- Update to compile with Fable 3
+- Allow specialized builders for generic CEs
+- Add new types: NonEmptySeq, NonEmptySet, NonEmptyMap and MultiMap
+- Integrate Task in strict CEs
+- Add Mapi Support in NonEmpty List
+- Add Cont.eval / ContT.eval
+- Builder for NonEmptySeq
+- Add choose function to Map and Dictionaries modules (in Extensions)
+- Add choosei to several modules
+- Add zipShortest function and use that to make generic Zip safe for collections
+- Add map2Shortest, a safe map2 variant to several modules
+- Add missing map3/lift3 extensions
+- Add TryLast to Foldable and introduce operator tryLast
+- Add tryHead and tryLast to String module (in the Extensions namespace)
+- Add yield! to monad.plus
+- Add SequenceBiApply and partition to Validation
+- Add indexer optic for List and Array
+- Rename Parse active pattern to Parsed
+- Include internal error in Result.get
+- Add support for %o %x %X and %B to scan functions
+- Bugfix: Evaluate traverse left to right
+- Use list instead of array for the generic implementation of sequence
+- Better hiding of internals in parsing
+
+#### 1.1.7  - January 7 2021
+- Fix short-circuiting Traverse
+
+#### 1.1.6  - December 7 2020
+- Fix signature of Free.fold
+- Update Task extensions so they can handle short-circuit, exceptions and cancellations
+- Fix String.drop function
+
+#### 1.1.5  - November 22 2020
+- Use list internally instead of array for the generic implementation of sequence
+- Make `<*>` for functions evaluate side-effects left-to-right
+- Remove BindReturn from monad computation expression in order to avoid type inference issues in F#5
+
+#### 1.1.4  - October 7 2020
+- Fix: `TryWith` for State and Reader, `Filter`, `DistinctBy`, `SortBy` and `SortByAscending` for user defined types.
+- Compile-time safety for try-blocks and while-loops in generic computation expressions.
+- Reduce allocations in NonEmptyList builder implementation.
+- Add support for clean signatures to all Indexables.
+- Improved, fixed and additional documentation in the extensions namespace.
+
+#### 1.1.3  - July 19 2020
+* Add map2/lift2 for all monad transformers
+* Add Tuple2 and Tuple3 extensions
+* Add non-generic <!> operator for Validation, mainly intended to be used for applicative validation in Fable
+
+#### 1.1.1  - May 10 2020
+* Fix: issue with generic intercalate function
+* Fix: traverse for seq of asyncs
+
+#### 1.1.0  - April 14 2020
+* Fix: issue with equality for DLists in Fable
+* Add Nullable module and map and bind overloads for Nullable
+* Add <= and >= Applicative Math operators
+
 #### 1.1.0-RC4  - March 31 2020
 * Fix: issue with Fable consumption of the library
 * Bitraversable abstraction

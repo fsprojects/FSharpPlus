@@ -1,12 +1,21 @@
-﻿namespace FSharpPlus
+namespace FSharpPlus
+
+/// <namespacedoc>
+/// <summary>
+/// Extension modules, along with, Builders, Lens, Memoization, Operators, and Parsing.
+/// </summary>
+/// <remarks>
+/// See Operators for generic functions.
+/// </remarks>
+/// </namespacedoc>
 
 #nowarn "40"
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]
-module Builders =    
+module GenericBuilders =
 
     open FSharpPlus.Operators
 
@@ -30,13 +39,12 @@ module Builders =
     open System.Collections.Generic
     open FSharpPlus.Control
 
-    type Builder () =
-        member        __.ReturnFrom (expr) = expr                                        : '``Monad<'T>``
+    type Builder<'``monad<'t>``> () =
+        member        __.ReturnFrom (expr) = expr                                        : '``monad<'t>``
         member inline __.Return (x: 'T) = result x                                       : '``Monad<'T>``
         member inline __.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
         member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
         member inline __.MergeSources (t1: '``Monad<'T>``, t2: '``Monad<'U>``)           : '``Monad<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
-        member inline __.BindReturn   (x : '``Monad<'T>``, f: 'T -> 'U)                  : '``Monad<'U>``      = Map.Invoke f x
 
         [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.Select (x, [<ProjectionParameter>] f) = map f x
@@ -56,27 +64,26 @@ module Builders =
         [<CustomOperation("orderBy", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline __.OrderBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
 
-    type StrictBuilder () =
-        inherit Builder ()
-        member inline __.Delay expr = expr : unit -> '``Monad<'T>``
-        member        __.Run f = f ()              : '``Monad<'T>``
-        member        __.TryWith    (expr, handler)      = try expr () with e -> handler e
-        member        __.TryFinally (expr, compensation) = try expr () finally compensation ()
+    type StrictBuilder<'``monad<'t>``> () =
+        inherit Builder<'``monad<'t>``> ()
+        member        __.Delay expr = expr : unit -> '``Monad<'T>``
+        member        __.Run f = f ()              : '``monad<'t>``
+        member inline __.TryWith    (expr, handler)      = TryWith.InvokeForStrict    expr handler      : '``Monad<'T>``
+        member inline __.TryFinally (expr, compensation) = TryFinally.InvokeForStrict expr compensation : '``Monad<'T>``
         
-        member        rs.Using (disposable: #IDisposable, body) =
-            let body = fun () -> body disposable
-            rs.TryFinally (body, fun () -> dispose disposable)
+        member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body
 
-    type DelayedBuilder () =
-        inherit Builder ()
+    type DelayedBuilder<'``monad<'t>``> () =
+        inherit Builder<'``monad<'t>``> ()
         member inline __.Delay (expr: _->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
-        member        __.Run f = f                                           : '``Monad<'T>``
+        member        __.Run f = f                                           : '``monad<'t>``
         member inline __.TryWith    (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
         member inline __.TryFinally (expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
         member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body : '``Monad<'T>``
 
-    type MonadPlusStrictBuilder () =
-        inherit StrictBuilder ()
+    type MonadPlusStrictBuilder<'``monad<'t>``> () =
+        inherit StrictBuilder<'``monad<'t>``> ()
+        member        __.YieldFrom expr = expr                           : '``monad<'t>``
         member inline __.Zero () = Empty.Invoke ()                       : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b () : '``MonadPlus<'T>``
         member inline __.While (guard, body: unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
@@ -89,8 +96,8 @@ module Builders =
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``)
 
-    type MonadFxStrictBuilder () =
-        inherit StrictBuilder ()
+    type MonadFxStrictBuilder<'``monad<'t>``> () =
+        inherit StrictBuilder<'``monad<'t>``> ()
         
         member inline __.Zero () = result ()                                       : '``Monad<unit>``
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b ()) : '``Monad<'T>``
@@ -105,60 +112,75 @@ module Builders =
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<unit>``)
 
-    type MonadPlusBuilder () =
-        inherit DelayedBuilder()
-        member        __.strict = new MonadPlusStrictBuilder ()
+    type MonadPlusBuilder<'``monad<'t>``> () =
+        inherit DelayedBuilder<'``monad<'t>``>()
+        member        __.YieldFrom expr = expr                        : '``monad<'t>``
+        member        __.strict = new MonadPlusStrictBuilder<'``monad<'t>``> ()
         member inline __.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
         member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
-        member inline __.While (guard, body: '``MonadPlus<'T>``)      : '``MonadPlus<'T>`` =
+
+        member inline __.WhileImpl (guard, body: '``MonadPlus<'T>``)  : '``MonadPlus<'T>`` =
             let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
             fix ()
+        
+        member inline this.While (guard, body: '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
+            // Check the type is lazy, otherwise display a warning.
+            let __ ()  = TryWith.InvokeForWhile (Unchecked.defaultof<'``MonadPlus<'T>``>) (fun (_: exn) -> Unchecked.defaultof<'``MonadPlus<'T>``>) : '``MonadPlus<'T>``
+
+            this.WhileImpl (guard, body)
+
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) : '``MonadPlus<'U>`` =
             let mutable isReallyDelayed = true
             Delay.Invoke (fun () -> isReallyDelayed <- false; Empty.Invoke () : '``MonadPlus<'U>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
-                if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
+                if isReallyDelayed then this.WhileImpl (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
-    type MonadFxBuilder () =
-        inherit DelayedBuilder ()
-        member        __.strict  = new MonadFxStrictBuilder ()
+    type MonadFxBuilder<'``monad<'t>``> () =
+        inherit DelayedBuilder<'``monad<'t>``> ()
+        member        __.strict  = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
         /// Makes it a (lazy) monadplus computation expression.
-        member        __.plus    = new MonadPlusBuilder ()
+        member        __.plus    = new MonadPlusBuilder<'``monad<'t>``> ()
 
         /// Makes it a strict monadplus computation expression.
-        member        __.plus'   = new MonadPlusStrictBuilder ()
+        member        __.plus'   = new MonadPlusStrictBuilder<'``monad<'t>``> ()
 
         /// Makes it a (lazy) monadic computation expression with side-effects
         member        this.fx    = this
 
         /// Makes it a strict monadic computation expression with side-effects
-        member        __.fx'     = new MonadFxStrictBuilder ()
+        member        __.fx'     = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
         member inline __.Zero () = result ()                                    : '``Monad<unit>``
 
         member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
         
-        member inline __.While (guard, body: '``Monad<unit>``)                  : '``Monad<unit>`` =
+        member inline __.WhileImpl (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body >>= (fun () -> loop guard body)
                 else result ()
             loop guard body
+
+        member inline this.While (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
+            // Check the type is lazy, otherwise display a warning.
+            let __ ()  = TryWith.InvokeForWhile (Unchecked.defaultof<'``Monad<unit>``>) (fun (_: exn) -> Unchecked.defaultof<'``Monad<unit>``>) : '``Monad<unit>``
+            this.WhileImpl (guard, body)
+
         member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) : '``Monad<unit>``=
             let mutable isReallyDelayed = true
             Delay.Invoke (fun () -> isReallyDelayed <- false; Return.Invoke () : '``Monad<unit>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
-                if isReallyDelayed then this.While (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
+                if isReallyDelayed then this.WhileImpl (enum.MoveNext, Delay.Invoke (fun () -> rest enum.Current))
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
 
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
-    let monad = new MonadFxBuilder ()
+    let monad<'``monad<'t>``> = new MonadFxBuilder<'``monad<'t>``> ()
 
     /// Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
-    let monad' = new MonadFxStrictBuilder ()
+    let monad'<'``monad<'t>``> = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
 #endif

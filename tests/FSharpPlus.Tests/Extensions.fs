@@ -2,6 +2,7 @@ namespace FSharpPlus.Tests
 
 module Extensions =
 
+  open System
   open System.Collections.Generic
   open NUnit.Framework
   open FSharpPlus
@@ -268,3 +269,184 @@ module Extensions =
   [<Test>]
   let ``Array.lift2 should combine all arrays `` () =
     areStEqual [|11; 21; 31; 12; 22; 32|] (Array.lift2 (+) [|1;2|] [|10;20;30|])
+
+  [<Test>]
+  let ``Nullable.bind should return the expected result`` () =
+    let add1 x = x + 1 |> Nullable
+    let firstOfYear x = DateTime(x, 1, 1) |> Nullable
+    Nullable.bind add1 (Nullable 2) |> areEqual (Nullable 3)
+    Nullable.bind firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+    // generic bind should work the same way
+    bind add1 (Nullable 2) |> areEqual (Nullable 3)
+    bind firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+
+  [<Test>]
+  let ``Nullable.map should return the expected result`` () =
+    let firstOfYear x = DateTime(x, 1, 1)
+    Nullable.map ((+) 1) (Nullable 1) |> areEqual (Nullable 2)
+    Nullable.map firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+    // generic map should work the same way
+    map ((+) 1) (Nullable 1) |> areEqual (Nullable 2)
+    map firstOfYear (Nullable 2020) |> areEqual (Nullable (DateTime(2020, 1, 1)))
+
+  [<Test>]
+  let ``Nullable.iter should only invoke the function when a value is present`` () =
+    let mutable v = 0
+    Nullable.iter (fun x -> v <- x) (Nullable 1)
+    v |> areEqual 1
+
+    Nullable.iter (fun x -> failwith "this should not be called") (Nullable ())
+
+  [<Test>]
+  let ``Nullable.defaultWith should only invoke thunk if needed`` () =
+    Nullable.defaultWith (fun () -> failwith "this should not be called") (Nullable 2) |> areEqual 2
+    Nullable.defaultWith (fun () -> 1) (Nullable()) |> areEqual 1
+
+  [<Test>]
+  let ``Nullable.defaultValue uses default when Nullable has no value`` () =
+    Nullable.defaultValue 1 (Nullable 2) |> areEqual 2
+    Nullable.defaultValue 1 (Nullable()) |> areEqual 1
+
+  [<Test>]
+  let ``Nullable.exists returns whether there is a matching value`` () =
+    let pred x = x > 1
+    Nullable.exists pred (Nullable 2) |> areEqual true
+    Nullable.exists pred (Nullable 1) |> areEqual false
+    Nullable.exists pred (Nullable()) |> areEqual false
+
+  [<Test>]
+  let ``Nullable.filter returns empty Nullable when there is no matching value`` () =
+    let pred x = x > 1
+    Nullable.filter pred (Nullable 2) |> areEqual (Nullable 2)
+    Nullable.filter pred (Nullable 1) |> areEqual (Nullable())
+    Nullable.filter pred (Nullable()) |> areEqual (Nullable())
+
+  [<Test>]
+  let ``Nullable.fold and foldBack return the expected value`` () =
+    let d = DateTime(2020, 1, 1)
+    let update (s: DateTime) (x: int) = s.AddDays(float x)
+    Nullable.fold update d (Nullable 2) |> areEqual (DateTime(2020, 1, 3))
+    Nullable.fold update d (Nullable()) |> areEqual d
+    Nullable.foldBack (flip update) d (Nullable 2) |> areEqual (DateTime(2020, 1, 3))
+    Nullable.foldBack (flip update) d (Nullable()) |> areEqual d
+
+  [<Test>]
+  let ``Nullable.forall returns whether there is a matching value or no value`` () =
+    let pred x = x > 1
+    Nullable.forall pred (Nullable 2) |> areEqual true
+    Nullable.forall pred (Nullable 1) |> areEqual false
+    Nullable.forall pred (Nullable()) |> areEqual true
+
+  [<Test>]
+  let ``Nullable.toList returns a list with the value if there is one`` () =
+    Nullable.toList (Nullable 1) |> areEqual [1]
+    Nullable.toList (Nullable()) |> areEqual []
+ 
+  [<Test>]
+  let ``Option.ofPair returns Some when operation succeeds`` () =
+    Int32.TryParse("123") |> Option.ofPair |> areEqual (Some 123)
+    (dict [("abc",234)]).TryGetValue("abc") |> Option.ofPair |> areEqual (Some 234)
+
+  [<Test>]
+  let ``Option.ofPair returns None when operation fails`` () =
+    Int32.TryParse("abc") |> Option.ofPair |> areEqual None
+    (dict []).TryGetValue("abc") |> Option.ofPair |> areEqual None
+
+  [<Test>]
+  let map2Shortest () =
+    List.map2Shortest (+) [1;2;3] [2;3] |> areEqual [3;5]
+    Array.map2Shortest (+) [|1;2|] [|2;3;4|] |> areEqual [|3;5|]
+    ResizeArray.map2Shortest (+) (ResizeArray [1;2;3]) (ResizeArray [2;3]) |> areEqual (ResizeArray [3;5])
+  
+  [<Test>]
+  let ``choosei does not throw stack overflow exception`` () =
+    List.choosei (fun _ x -> Some x) [1..30000] |> ignore
+    Array.choosei (fun _ x -> Some x) [|1..30000|] |> ignore
+    Seq.choosei (fun _ x -> Some x) (seq [1..30000]) |> ignore
+    Map.choosei (fun _ x -> Some x) ([1..30000] |> List.map (fun x -> (x, "x")) |> Map) |> ignore
+
+  [<Test>]
+  let ``choosei returns elements in correct order`` () =
+    Array.choosei (fun _ x -> Some x) [|1..10|] |> areEqual [|1..10|]
+    List.choosei (fun _ x -> Some x) [1..10] |> areEqual [1..10]
+    
+  [<Test>]
+  let ``map3 or lift3 should work`` () =
+    // Result
+    Result.map3 (fun x y z -> x + y + z) (Ok 1: Result<int, int>) (Ok 3) (Ok 5) |> areEqual (Ok 9: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Error 1: Result<int, int>) (Error 3) (Ok 5) |> areEqual (Error 1: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Ok 1: Result<int, int>) (Error 3) (Error 5) |> areEqual (Error 3: Result<int, int>)
+    Result.map3 (fun x y z -> x + y + z) (Ok 1: Result<int, int>) (Ok 3) (Error 5) |> areEqual (Error 5: Result<int, int>)
+    
+    // Choice
+    Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (result 3) (result 5) |> areEqual (result 9: Choice<int, int>)
+    Choice.map3 (fun x y z -> x + y + z) (throw 1: Choice<int, int>) (throw 3) (result 5) |> areEqual (throw 1: Choice<int, int>)
+    Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (throw 3) (throw 5) |> areEqual (throw 3: Choice<int, int>)
+    Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (result 3) (throw 5) |> areEqual (throw 5: Choice<int, int>)
+    
+    // Async
+    Async.map3 (fun x y z -> x + y + z) (async {return 1}) (async {return 3}) (async {return 5}) |> Async.RunSynchronously |> areEqual 9
+    
+    // Task
+    Task.map3 (fun x y z -> x + y + z) (async {return 1} |> Async.StartAsTask) (async {return 3} |> Async.StartAsTask) (async {return 5} |> Async.StartAsTask) 
+     |> Async.AwaitTask |> Async.RunSynchronously |> areEqual 9
+
+    // List
+    List.lift3 (fun x y z -> x + y + z) [1; 2] [7; 11] [22; 33] |> areEqual [30; 41; 34; 45; 31; 42; 35; 46]
+    
+    // Array
+    Array.lift3 (fun x y z -> x + y + z) [|1; 2|] [|7; 11|] [|22; 33|] |> areEqual [|30; 41; 34; 45; 31; 42; 35; 46|]
+    
+    // Map
+    Map.mapValues3 (fun x y z -> x + y + z) (Map [(1, 1); (2, 1); (3, 3)]) (Map [(1, 3); (2, 5); (4, 7)]) (Map [(1, 3); (2, 3); (5, 11)])
+    |> areEqual (Map [(1, 7); (2, 9)])
+
+    // Dictionary
+    let d1 = new Dictionary<int, int>()
+    d1.Add (1, 1)
+    d1.Add (2, 1)
+    d1.Add (3, 3)
+
+    let d2 = new Dictionary<int, int>()
+    d2.Add (1, 3)
+    d2.Add (2, 5)
+    d2.Add (4, 7)
+    
+    let d3 = new Dictionary<int, int>()
+    d3.Add (1, 3)
+    d3.Add (2, 3)
+    d3.Add (5, 11)
+    
+    let d4 = new Dictionary<int, int>()
+    d4.Add (1, 7)
+    d4.Add (2, 9)
+    
+    Dictionary.map3 (fun x y z -> x + y + z) d1 d2 d3 |> areEqual d4
+    
+    // Seq
+    Seq.lift3 (fun x y z -> x + y + z) (seq {1; 2}) (seq {7; 11}) (seq {22; 33}) |> areEqual (seq {30; 41; 34; 45; 31; 42; 35; 46})
+
+    // Lazy
+    (Lazy.map3 (fun x y z -> x + y + z) (Lazy<int>.CreateFromValue 1) (Lazy<int>.CreateFromValue 2) (Lazy<int>.CreateFromValue 4)).Value |> areEqual 7
+    
+    // ResizeArray
+    ResizeArray.lift3 (fun x y z -> x + y + z) (ResizeArray ([1; 2])) (ResizeArray ([7; 11])) (ResizeArray ([22; 33]))
+    |> areEqual (ResizeArray ([30; 41; 34; 45; 31; 42; 35; 46]))
+
+  [<Test>]
+  let ``List.setAt works with good indices`` () =
+    areEquivalent [1;4;3] ([1;2;3] |> List.setAt 1 4)
+
+  [<Test>]
+  let ``List.setAt tolerates bad indices`` () =
+    areEquivalent [1;2;3] ([1;2;3] |> List.setAt -1 4)
+    areEquivalent [1;2;3] ([1;2;3] |> List.setAt 3 4)
+
+  [<Test>]
+  let ``List.removeAt works with good indices`` () =
+    areEquivalent [1;3] ([1;2;3] |> List.removeAt 1)
+
+  [<Test>]
+  let ``List.removeAt tolerates bad indices`` () =
+    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt -1)
+    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt 3)

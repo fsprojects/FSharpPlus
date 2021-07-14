@@ -6,6 +6,7 @@ open System
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Tests.Helpers
+open NUnit.Framework
 
 module Free =
     
@@ -274,3 +275,46 @@ module TestCoproduct =
         <*> readDate
         <*> readName
         <*> readEmail
+
+module Fold =
+    type FooId = FooId of string
+
+    type Foo = { Id: FooId; Name: string }
+
+    // An example of an operation in the domain implemented as a Free monad that reads a foo
+    module GetFoo =
+        type Error = NotFound
+
+        type Instruction<'next> =
+            | Read of (FooId * (Foo option -> 'next))
+            static member Map(instruction, f: 'a -> 'b) =
+                match instruction with
+                | Read (id, next) -> Read(id, next >> f)
+
+        type Program<'a> = Free<Instruction<'a>, 'a>
+
+        let read fooId = Read(fooId, id) |> Free.liftF
+
+        type Request = { Id: FooId }
+        type Response = Result<Foo, Error>
+
+        let handle request: Program<Response> =
+            monad {
+                let! foo = read request.Id
+                return foo |> Option.toResultWith NotFound
+            }
+
+    // An example application layer that defines an interpreter for the GetFoo program which targets the async monad
+    module App =
+        let interpreter =
+            Free.fold (function
+                | GetFoo.Read (fooId, next) -> async { return Some({ Id = fooId; Name = "test" }) |> next })
+
+    [<Test>]
+    let interpretProgramWithFold =
+        async {
+            let request: GetFoo.Request = { Id = FooId "1" }
+            let! response = request |> GetFoo.handle |> App.interpreter
+
+            Assert.AreEqual(Some({ Id = FooId "1"; Name = "test" }), response)
+        }

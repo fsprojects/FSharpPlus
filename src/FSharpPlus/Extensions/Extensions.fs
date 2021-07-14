@@ -63,6 +63,7 @@ module Extensions =
 
     type Async<'t> with
 
+        #if !FABLE_COMPILER
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
             let! ct = Async.CancellationToken
@@ -70,6 +71,7 @@ module Extensions =
                 use enum = t.GetEnumerator ()
                 while enum.MoveNext() do
                     yield Async.RunSynchronously (enum.Current, cancellationToken = ct) }}
+        #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t: list<Async<_>>) : Async<list<_>> =

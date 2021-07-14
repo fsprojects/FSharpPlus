@@ -1,6 +1,5 @@
 # FSharpPlus
 
-[![Build Status](https://api.travis-ci.org/fsprojects/FSharpPlus.svg?branch=master)](https://travis-ci.org/fsprojects/FSharpPlus)
 [![Build Status](https://ci.appveyor.com/api/projects/status/25ukpc0lamyf7pdx/branch/master?svg=true)](https://ci.appveyor.com/project/wallymathieu/fsharpplus/branch/master)
 [![Download](https://img.shields.io/nuget/dt/FSharpPlus.svg)](https://www.nuget.org/packages/FSharpPlus)
 [![NuGet](https://img.shields.io/nuget/v/FSharpPlus.svg)](https://www.nuget.org/packages/FSharpPlus)

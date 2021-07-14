@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus.Data
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open FSharpPlus
 open FSharpPlus.Internals.Prelude
@@ -41,7 +41,7 @@ type Any = Any of bool with
     static member (+) (Any x, Any y) = Any (x || y)
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 /// <summary> The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
 /// <para/>   Useful for: Lens getters.
@@ -104,7 +104,7 @@ type Last<'t> = Last of Option<'t> with
     static member run (Last a) = a                                            : 't option
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 /// Numeric wrapper for multiplication monoid (*, 1)
 [<Struct>]
@@ -112,6 +112,8 @@ type Mult<'a> = Mult of 'a with
     static member inline get_Zero () = Mult one
     static member inline (+) (Mult (x: 'n), Mult (y: 'n)) = Mult (x * y)
 
+
+open FSharpPlus.Control
 
 /// Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
 [<Struct>]
@@ -122,8 +124,12 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
 
     // Applicative
     static member inline Return (x: 'T) = Compose (result (result x: '``ApplicativeG<'T>``)) : Compose<'``ApplicativeF<'ApplicativeG<'T>``>
+
     static member inline (<*>) (Compose (f: '``ApplicativeF<'ApplicativeG<'T->'U>``), Compose (x: '``ApplicativeF<'ApplicativeG<'T>``)) =
         Compose ((((<*>) : '``ApplicativeG<'T->'U>`` -> '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>``) <!> f: '``ApplicativeF<'ApplicativeG<'T>->'ApplicativeG<'U>`` ) <*> x: '``ApplicativeF<'ApplicativeG<'U>``)
+
+    static member inline Lift2 (f: 'T -> 'U -> 'V, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``)) =
+        Compose (Lift2.Invoke (Lift2.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>``) x y: '``ApplicativeF<'ApplicativeG<'V>``)
 
     // Alternative
     static member inline get_Empty ()                 = Compose (getEmpty ()) : Compose<'``AlternativeF<'ApplicativeG<'T>``>

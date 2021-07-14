@@ -4,13 +4,13 @@ namespace FSharpPlus.Control
 // Warn FS0077 -> Member constraints with the name 'op_Explicit' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // But all simulated types are being handled so here Explicit is SAFE from runtime errors.
 
-#if !FABLE_COMPILER
 
 open System
 open System.Text
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 type Explicit =
     inherit Default1
@@ -26,18 +26,19 @@ type Explicit =
     static member inline Explicit (_: uint32    , _: Explicit) = fun x -> uint32          x
     static member inline Explicit (_: int64     , _: Explicit) = fun x -> int64           x
     static member inline Explicit (_: uint64    , _: Explicit) = fun x -> uint64          x
+#if !FABLE_COMPILER_3
     static member inline Explicit (_: nativeint , _: Explicit) = fun x -> nativeint  (int x)
     static member inline Explicit (_: unativeint, _: Explicit) = fun x -> unativeint (uint32 x)
+#endif    
     static member inline Explicit (_: float     , _: Explicit) = fun x -> float           x
     static member inline Explicit (_: float32   , _: Explicit) = fun x -> float32         x    
     static member inline Explicit (_: decimal   , _: Explicit) = fun x -> decimal         x
     static member inline Explicit (_: char      , _: Explicit) = fun x -> char            x
-
     static member inline Invoke value : 'T      =
         let inline call_2 (a: ^a, b: ^r) = ((^a or ^r or ^t) : (static member Explicit : _*_ -> ('t  -> ^r)) b, a)
         let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r
         call Unchecked.defaultof<Explicit> value
-
+#if !FABLE_COMPILER_3
 type OfBytes =
     static member OfBytes (_: bool   , _: OfBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
 
@@ -78,12 +79,12 @@ type ToBytes =
         let inline call (a: 'a, b: 'b, e) = call_2 (a, b, e)
         call (Unchecked.defaultof<ToBytes>, value, isLittleEndian)
 
-
+#endif
 open System.Globalization
 
 type TryParse =
     inherit Default1
-
+#if !FABLE_COMPILER_3
     static member TryParse (_: decimal       , _: TryParse) = fun x -> Decimal.TryParse (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<decimal>
     static member TryParse (_: float32       , _: TryParse) = fun x -> Single.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float32>
     static member TryParse (_: float         , _: TryParse) = fun x -> Double.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float>
@@ -93,11 +94,24 @@ type TryParse =
     static member TryParse (_: int16         , _: TryParse) = fun x -> Int16.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int16>
     static member TryParse (_: int           , _: TryParse) = fun x -> Int32.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int>
     static member TryParse (_: int64         , _: TryParse) = fun x -> Int64.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int64>
+#else
+    static member TryParse (_: decimal       , _: TryParse) = fun (x:string) -> Decimal.TryParse (x) |> tupleToOption : option<decimal>
+    static member TryParse (_: float32       , _: TryParse) = fun (x:string) -> Single.TryParse  (x) |> tupleToOption : option<float32>
+    static member TryParse (_: float         , _: TryParse) = fun (x:string) -> Double.TryParse  (x) |> tupleToOption : option<float>
+    static member TryParse (_: uint16        , _: TryParse) = fun (x:string) -> UInt16.TryParse  (x) |> tupleToOption : option<uint16>
+    static member TryParse (_: uint32        , _: TryParse) = fun (x:string) -> UInt32.TryParse  (x) |> tupleToOption : option<uint32>
+    static member TryParse (_: uint64        , _: TryParse) = fun (x:string) -> UInt64.TryParse  (x) |> tupleToOption : option<uint64>
+    static member TryParse (_: int16         , _: TryParse) = fun (x:string) -> Int16.TryParse   (x) |> tupleToOption : option<int16>
+    static member TryParse (_: int           , _: TryParse) = fun (x:string) -> Int32.TryParse   (x) |> tupleToOption : option<int>
+    static member TryParse (_: int64         , _: TryParse) = fun (x:string) -> Int64.TryParse   (x) |> tupleToOption : option<int64>
+#endif
 
     static member TryParse (_: string        , _: TryParse) = fun x -> Some x                               : option<string>
     static member TryParse (_: StringBuilder , _: TryParse) = fun x -> Some (new StringBuilder (x: string)) : option<StringBuilder>
-    static member TryParse (_: DateTime      , _: TryParse) = fun x -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
-    static member TryParse (_: DateTimeOffset, _: TryParse) = fun x -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
+    #if !FABLE_COMPILER
+    static member TryParse (_: DateTime      , _: TryParse) = fun (x:string) -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
+    static member TryParse (_: DateTimeOffset, _: TryParse) = fun (x:string) -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
+    #endif
 
     static member inline Invoke (value: string) =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member TryParse : _*_ -> _) b, a)
@@ -116,13 +130,15 @@ type Parse =
     inherit Default1
     static member inline Parse (_: ^R                  , _: Default1) = fun (x:string) -> (^R: (static member Parse : _ -> ^R) x)
     static member inline Parse (_: ^R                  , _: Parse   ) = fun (x:string) -> (^R: (static member Parse : _ * _ -> ^R) (x, CultureInfo.InvariantCulture))
-    static member        Parse (_: 'T when 'T : enum<_>, _: Parse   ) = fun x ->
+
+    static member inline Parse (_: 'T when 'T : enum<_>, _: Parse   ) = fun x ->
         (match Enum.TryParse (x) with
             | (true, v) -> v
             | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")
         ) : 'enum
 
-    static member Parse (_: bool         , _: Parse) = fun x -> Boolean.Parse (x)
+
+    static member Parse (_: bool         , _: Parse) = fun (x:string) -> Boolean.Parse (x)
 
     static member Parse (_: char         , _: Parse) = fun x -> Char   .Parse (x)
     static member Parse (_: string       , _: Parse) = id : string->_

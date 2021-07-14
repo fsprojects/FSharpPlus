@@ -7,21 +7,28 @@ open FSharpPlus
 
 
 /// <summary> Computation type: Computations which maintain state.
-/// <para/>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.
-/// <para/>   Useful for: Building computations from sequences of operations that require a shared state. </summary>
+/// <para>   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.</para>
+/// <para>   Useful for: Building computations from sequences of operations that require a shared state.</para>
+/// The <typeparamref name="'s"/> indicates the computation state, while <typeparamref name="'t"/> indicates the result.</summary>
 [<Struct>]
 type State<'s,'t> = State of ('s->('t * 's))
 
 /// Basic operations on State
 [<RequireQualifiedAccess>]
 module State =
+    /// Runs the state with an inital state to get back the result and the new state.
     let run (State x) = x                                                                                         : 'S->('T * 'S)
 
     let map   f (State m) = State (fun s -> let (a: 'T, s') = m s in (f a, s'))                                   : State<'S,'U>
+
+    /// Combines two States into one by applying a mapping function.
+    let map2 (f: 'T->'U->_) (State x) (State y) = State (fun s -> let (g, s1) = Tuple2.mapItem1 f (x s) in Tuple2.mapItem1 g (y s1)) : State<'S,'V>
+
     let bind  f (State m) = State (fun s -> let (a: 'T, s') = m s in run (f a) s')                                : State<'S,'U>
     let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x': 'T, s2) = x s1 in (f' x', s2)) : State<'S,'U>
-
+    /// Evaluates a <paramref name="sa">state computation</paramref> with the <paramref name="s">initial value</paramref> and return only the result value of the computation. Ignore the final state.
     let eval (State sa) (s: 's)         = fst (sa s) : 'T
+    /// Evaluates a <paramref name="sa">state computation</paramref> with the <paramref name="s">initial value</paramref> and return only the final state of the computation. Ignore the result value.
     let exec (State sa: State<'S,'A>) s = snd (sa s) : 'S
 
     /// Return the state from the internals of the monad.
@@ -36,10 +43,8 @@ module State =
     /// Modify the state inside the monad by applying a function.
     let modify f = State (fun s -> ((), f s))                                                                     : State<'S,unit>
 
-    #if !FABLE_COMPILER
     /// Zips two States into one.
-    let zip (x: State<'S,'T>) (y: State<'S,'U>) = lift2 tuple2 x y : State<'S, ('T * 'U)>
-    #endif
+    let zip (x: State<'S,'T>) (y: State<'S,'U>) = map2 tuple2 x y : State<'S, ('T * 'U)>
 
 type State<'s,'t> with
 
@@ -54,18 +59,18 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                      : State<'S,unit>
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = State.zip x y
     #endif
 
-    static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> (h e) s) : State<'S,'T>
+    static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> State.run (h e) s) : State<'S,'T>
     static member TryFinally (State computation, f) = State (fun s -> try computation s finally f ()) : State<'S,'T>
     static member Using (resource, f: _ -> State<'S,'T>) = State.TryFinally (f resource, fun () -> dispose resource)
     static member Delay (body: unit->State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S,'T>
 
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 open FSharpPlus.Control
 open FSharpPlus.Internals.Prelude
@@ -77,6 +82,7 @@ type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
 /// Basic operations on StateT
 [<RequireQualifiedAccess>]
 module StateT =
+    /// Runs the state with an inital state to get back the result and the new state wrapped in an inner monad.
     let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``
 
     /// Embed a Monad<'T> into a StateT<'S,'``Monad<'T * 'S>``>
@@ -88,6 +94,10 @@ module StateT =
     let inline hoist (x: State<'S, 'T>) = (StateT << (fun a -> result << a) << State.run) x : StateT<'S, '``Monad<'T * 'S>``>
 
     let inline map (f: 'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s'))) : StateT<'S,'``Monad<'U * 'S>``>
+    
+    /// Combines two StateTs into one by applying a mapping function.
+    let inline map2 (f: 'T->'U->'V) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2) -> result (f g h, s2)) : StateT<'S,'``Monad<'V * 'S>``>
+
     let inline apply (StateT f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a: StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z: 'T, u: 'S) -> ((g z: 'U), u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
 
     /// Zips two StateTs into one.
@@ -102,6 +112,9 @@ type StateT<'s,'``monad<'t * 's>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x: StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f: 'T->'U->'V, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT.map2 f x y
+
     static member inline (<*>)  (f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x: StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
     static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>)     = StateT.bind  f x
 
@@ -111,8 +124,8 @@ type StateT<'s,'``monad<'t * 's>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Zip (x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) = StateT.zip x y
 
-    static member inline TryWith (source: StateT<'S,'``Monad<'T * 'S>``>, f: exn -> StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> TryWith.Invoke (StateT.run source s) (fun x -> StateT.run (f x) s))
-    static member inline TryFinally (computation: StateT<'S,'``Monad<'T * 'S>``>, f) = StateT (fun s -> TryFinally.Invoke     (StateT.run computation s) f)
+    static member inline TryWith (source: StateT<'S,'``Monad<'T * 'S>``>, f: exn -> StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> TryWith.InvokeForStrict (fun () -> StateT.run source s) (fun x -> StateT.run (f x) s))
+    static member inline TryFinally (computation: StateT<'S,'``Monad<'T * 'S>``>, f) = StateT (fun s -> TryFinally.InvokeForStrict (fun () -> StateT.run computation s) f)
     static member inline Using (resource, f: _ -> StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Using.Invoke resource (fun x -> StateT.run (f x) s))
     static member inline Delay (body : unit   ->  StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Delay.Invoke (fun _ -> StateT.run (body ()) s)) : StateT<'S,'``Monad<'T * 'S>``>
 

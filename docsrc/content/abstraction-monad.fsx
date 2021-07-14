@@ -80,18 +80,23 @@ From F#
  
 From F#+
 
- -  ``Identity<'T>`` 
- -  ``Cont<'R,'T>`` 
- -  ``ContT<'R,'T>``
- -  ``Reader<'R,'T>`` 
- -  ``ReaderT<'R,'Monad<'T>>``
- -  ``Writer<'Monoid,'T>``
- -  ``WriterT<'Monad<'T * 'Monoid>>``
- -  ``State<'S,'T * 'S>`` 
- -  ``StateT<'S,'Monad<'T * 'S>>``
- -  ``Free<'Functor<'T>,'T>``
- -  ``NonEmptyList<'T>``
- -  ``DList<'T>``
+ -  [``Identity<'T>``](type-identity.html)
+ -  [``Cont<'R,'T>``](type-cont.html)
+ -  [``ContT<'R,'T>``](type-contt.html)
+ -  [``Reader<'R,'T>``](type-reader.html)
+ -  [``ReaderT<'R,'Monad<'T>>``](type-readert.html)
+ -  [``Writer<'Monoid,'T>``](type-writer.html)
+ -  [``WriterT<'Monad<'T * 'Monoid>>``](type-writert.html)
+ -  [``State<'S,'T * 'S>``](type-state.html)
+ -  [``StateT<'S,'Monad<'T * 'S>>``](type-statet.html)
+ -  [``OptionT<'Monad<option<'T>>``](type-optiont.html)
+ -  [``SeqT<'Monad<seq<'T>>``](type-seqt.html)
+ -  [``ListT<'Monad<list<'T>>``](type-listt.html)
+ -  [``ResultT<'Monad<Result<'T,'TError>>``](type-resultt.html)
+ -  [``ChoiceT<'Monad<Choice<'T,'TError>>``](type-choicet.html)
+ -  [``Free<'Functor<'T>,'T>``](type-free.html)
+ -  [``NonEmptyList<'T>``](type-nonempty.html)
+ -  [``DList<'T>``](type-dlist.html)
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
@@ -138,22 +143,23 @@ let some14 =
 //
 // Monads do not compose directly, we need to use Monad Transformers
 
-
-
+(**
+```f#
 let fn : ResultT<Reader<int,Result<_,string>>> = 
     monad {
        let! x1 = lift ask
        let! x2 = 
            if x1 > 0 then result 1
-           else ResultT (result (Error "Negative value")) 
+           else ResultT (result (Error "Negative value"))
        return x1 + x2
     }
 
 let x = (fn |> ResultT.run |> Reader.run) 10
 // Result<int,string> = Ok 11
 let y = (fn |> ResultT.run |> Reader.run) -1
-// Result<int,string> = Error "Negative value"         
-
+// Result<int,string> = Error "Negative value"
+```
+*)
 
 
 // The following example comes from Haskell
@@ -188,7 +194,7 @@ let getValidPassword : ResultT<_> =
 let askPassword = monad {
     do! lift <| putStrLn "Insert your new password:"
     let! value = getValidPassword
-    do! lift <| putStrLn "Storing in database..."
+    //do! lift <| putStrLn "Storing in database..."
     return value}
 
 //try -> Async.RunSynchronously (ResultT.run askPassword)
@@ -259,7 +265,7 @@ module CombineReaderWithWriterWithResult =
 
 
 // Many popular F# libraries are in fact an instantiation of a specific monad combination.
-// The followong example demonstrate how to code a mini-Suave lib in a few lines
+// The following example demonstrate how to code a mini-Suave lib in a few lines
 
 module Suave =
     // setup something that reminds us of what Suave can work with

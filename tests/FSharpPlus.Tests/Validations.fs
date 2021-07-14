@@ -12,86 +12,107 @@ module Validation =
   open Validation
   open FSharpPlus.Tests.Helpers
 
+  let fsCheck s x = Check.One({Config.QuickThrowOnFailure with Name = s}, x)
   module FunctorP =
     [<Test>]
     let ``map id = id `` () =
-      Check.Quick ("map id = id", fun (x :Validation<string list, int>) ->
-        (Validation.map id) x = id x)
+      fsCheck 
+        "map id = id" 
+        (fun (x :Validation<string list, int>) -> 
+          (Validation.map id) x = id x)
 
     [<Test>]
     let ``map (f << g) = map f << map g `` () =
-      Check.Quick ("map (f << g) = map f << map g", fun (x :Validation<string list, int>) (f:string->int) (g:int->string) ->
-        (Validation.map (f << g)) x = (Validation.map f << Validation.map g) x)
+      fsCheck 
+        "map (f << g) = map f << map g" 
+        (fun (x :Validation<string list, int>) (f:string->int) (g:int->string) ->
+          (Validation.map (f << g)) x = (Validation.map f << Validation.map g) x)
 
   module BifunctorP =
     [<Test>]
     let ``bimap f g = first f << second g`` () =
-       Check.Quick ("bimap f g = first f << second g", fun (x :Validation<string, int>) (f:string->int) (g:int->string) ->
-         (bimap f g) x = (first f << second g) x)
+      fsCheck 
+        "bimap f g = first f << second g"
+        (fun (x :Validation<string, int>) (f:string->int) (g:int->string) ->
+          (bimap f g) x = (first f << second g) x)
 
   module ApplicativeP =
 
     ///The identity law
     [<Test>]
     let ``result id <*> v = v`` () =
-      Check.Quick ("result id <*> v = v", fun (v :Validation<string list, int>) ->
-        result id <*> v = v)
+      fsCheck
+        "result id <*> v = v"
+        (fun (v :Validation<string list, int>) ->
+          result id <*> v = v)
 
     [<Test>]
     let ``result (<<) <*> u <*> v <*> w = u <*> (v <*> w)`` () =
-      Check.Quick ("result (<<) <*> u <*> v <*> w = u <*> (v <*> w)", fun (v :Validation<string list, string->string>) (u :Validation<string list, string->string>) (w :Validation<string list, string>) ->
-        (result (<<) <*> u <*> v <*> w) = (u <*> (v <*> w)))
+      fsCheck
+        "result (<<) <*> u <*> v <*> w = u <*> (v <*> w)"
+        (fun (v :Validation<string list, string->string>) (u :Validation<string list, string->string>) (w :Validation<string list, string>) ->
+          (result (<<) <*> u <*> v <*> w) = (u <*> (v <*> w)))
 
 
     ///Homomorphism:
     [<Test>]
     let ``result f <*> result x = result (f x)`` () =
-      Check.Quick ("result f <*> result x = result (f x)", fun (x :Validation<string list, int>) (f:Validation<string list, int> -> int) ->
-        let y:Validation<string list, int> = result (f x)
-        y = (result f <*> result x))
+      fsCheck 
+        "result f <*> result x = result (f x)"
+        (fun (x :Validation<string list, int>) (f:Validation<string list, int> -> int) ->
+          let y:Validation<string list, int> = result (f x)
+          y = (result f <*> result x))
 
     /// Interchange
     /// in haskell: u <*> pure y = pure ($ y) <*> u
     [<Test>] 
     let ``u <*> result y = result ((|>) y) <*> u`` () =
-      Check.Quick ("u <*> result y = result ((|>) y) <*> u", fun (u:Validation<string list, string->int>) (y:string) ->
-        let right_side =result ((|>) y) <*> u
-        let left_side = u <*> (result y)
-        right_side = left_side)
+      fsCheck 
+        "u <*> result y = result ((|>) y) <*> u"
+        (fun (u:Validation<string list, string->int>) (y:string) ->
+          let right_side =result ((|>) y) <*> u
+          let left_side = u <*> (result y)
+          right_side = left_side)
 
   module AlternativeP =
     [<Test>]
     let ``empty <|> x = x`` () =
-      Check.Quick ("empty <|> x = x", fun (x :Validation<string list, int>) ->
-        getEmpty() <|> x = x)
+      fsCheck "empty <|> x = x" 
+        (fun (x :Validation<string list, int>) ->
+          getEmpty() <|> x = x)
 
     [<Test>]
     let ``x <|> empty = x`` () =
-      Check.Quick ("x <|> empty = x", fun (x :Validation<string list, int>) ->
-        x <|> getEmpty() = x)
+      fsCheck "x <|> empty = x" 
+        (fun (x :Validation<string list, int>) ->
+          x <|> getEmpty() = x)
 
     [<Test>]
     let ``(x <|> y) <|> z = x <|> (y <|> z)`` () =
-      Check.Quick ("(x <|> y) <|> z = x <|> (y <|> z)", fun (x :Validation<string list, int>) (y :Validation<string list, int>) (z :Validation<string list, int>) ->
-        ((x <|> y) <|> z) = (x <|> (y <|> z)))
+      fsCheck "(x <|> y) <|> z = x <|> (y <|> z)" 
+        (fun (x :Validation<string list, int>) (y :Validation<string list, int>) (z :Validation<string list, int>) ->
+          ((x <|> y) <|> z) = (x <|> (y <|> z)))
 
     [<Test>]
     let ``f <!> (x <|> y) = (f <!> x) <|> (f <!> y)`` () =
-      Check.Quick ("f <!> (x <|> y) = (f <!> x) <|> (f <!> y)", fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:int->string)->
-        (f <!> (x <|> y)) = ((f <!> x) <|> (f <!> y)))
+      fsCheck "f <!> (x <|> y) = (f <!> x) <|> (f <!> y)" 
+        (fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:int->string)->
+          (f <!> (x <|> y)) = ((f <!> x) <|> (f <!> y)))
 
     //Right Distribution: does not hold
     //[<Test()>]
     let ``(f <|> g) <*> x = (f <*> x) <|> (g <*> x)`` () =
-      Check.Quick ("(f <|> g) <*> x = (f <*> x) <|> (g <*> x)", fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:Validation<string list,int->string>) (g:Validation<string list,int->string>) ->
-        ((f <|> g) <*> x) = ((f <*> x) <|> (g <*> x)))
+      fsCheck "(f <|> g) <*> x = (f <*> x) <|> (g <*> x)"
+        (fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:Validation<string list,int->string>) (g:Validation<string list,int->string>) ->
+          ((f <|> g) <*> x) = ((f <*> x) <|> (g <*> x)))
 
     // holds when f is a function (success)
     [<Test>]
     let ``empty <*> f = empty `` () =
-      Check.Quick ("empty <*> f = empty", fun (f:string->int) ->
-        let e: Validation<string list,_> = empty
-        (e <*> Success f) = empty)
+      fsCheck "empty <*> f = empty" 
+        (fun (f:string->int) ->
+          let e: Validation<string list,_> = empty
+          (e <*> Success f) = empty)
 
   module TraversableP =
 
@@ -114,8 +135,9 @@ module Validation =
   *)
     [<Test>]
     let ``traverse Identity = Identity`` () =
-      Check.Quick ("traverse Identity = Identity", fun (x :Validation<int list, string>) ->
-        Validation.traverse Identity x = Identity x)
+      fsCheck "traverse Identity = Identity"
+        (fun (x :Validation<int list, string>) ->
+          Validation.traverse Identity x = Identity x)
   (*
     [<Property>]
     let ``traverse (Compose << fmap g . f) = Compose << fmap (traverse g) << traverse f``(x :Validation<int list, string>) (g :int list->string) (f:string->int list) =

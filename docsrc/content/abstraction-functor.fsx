@@ -66,26 +66,33 @@ From F#
  
 From F#+
 
- -  ``Cont<'R,'T>`` 
- -  ``ContT<'R,'T>``
- -  ``Reader<'R,'T>`` 
- -  ``ReaderT<'R,'Monad<'T>>``
- -  ``Writer<'Monoid,'T>``
- -  ``WriterT<'Monad<'T * 'Monoid>>``
- -  ``State<'S,'T * 'S>``
- -  ``StateT<'S,'Monad<'T * 'S>>``
- -  ``OptionT<'Monad<option<'T>>``
- -  ``ResultT<'Monad<Result<'T,'TError>>``
- -  ``ChoiceT<'Monad<Choice<'T,'TError>>``
- -  ``Free<'Functor<'T>,'T>``
- -  ``NonEmptyList<'T>``
- -  ``ZipList<'T>``
- -  ``ParallelArray<'T>``
- -  ``Const<'C,'T>``
- -  ``Kleisli<'T, 'Monad<'U>>``
- -  ``Compose<'F<'G<'T>>>``
- -  ``Coproduct<'FunctorL<'T>,'FunctorR<'T>>``
- -  ``DList<'T>``
+ -  [``Cont<'R,'T>``](type-cont.html)
+ -  [``ContT<'R,'T>``](type-contt.html)
+ -  [``Reader<'R,'T>``](type-reader.html)
+ -  [``ReaderT<'R,'Monad<'T>>``](type-readert.html)
+ -  [``Writer<'Monoid,'T>``](type-writer.html)
+ -  [``WriterT<'Monad<'T * 'Monoid>>``](type-writert.html)
+ -  [``State<'S,'T * 'S>``](type-state.html)
+ -  [``StateT<'S,'Monad<'T * 'S>>``](type-statet.html)
+ -  [``OptionT<'Monad<option<'T>>``](type-optiont.html)
+ -  [``SeqT<'Monad<seq<'T>>``](type-seqt.html)
+ -  [``ListT<'Monad<list<'T>>``](type-listt.html)
+ -  [``ResultT<'Monad<Result<'T,'TError>>``](type-resultt.html)
+ -  [``ChoiceT<'Monad<Choice<'T,'TError>>``](type-choicet.html)
+ -  [``Free<'Functor<'T>,'T>``](type-free.html)
+ -  [``NonEmptyList<'T>``](type-nonempty.html)
+ -  [``NonEmptySet<'T>``](type-nonempty-set.html)
+ -  [``NonEmptyMap<'Key, 'T>``](type-nonempty-map.html)
+ -  [``Validation<'Error,'T>``](type-validation.html)
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``ParallelArray<'T>``](type-parallelarray.html)
+ -  [``Const<'C,'T>``](type-const.html)
+ -  [``Compose<'AlternativeF<'AlternativeG<'T>>>``](type-compose.html)
+ -  [``DList<'T>``](type-dlist.html)
+ -  [``Kleisli<'T, 'Monad<'U>>``](type-kleisli.html)
+ -  [``Coproduct<'FunctorL<'T>,'FunctorR<'T>>``](type-coproduct.html)
+ -  [``Vector<'T,'Dimension>``](type-vector.html)
+ -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
 
 Restricted:
  -  ``string``
