@@ -1,5 +1,11 @@
-#### 1.2.0  - June 6 2021
+#### 1.2.1  - July 16 2021
+- Bump Fable to 3.2.6
+- Fable compatibility for un/curry functions and CE expressions
+- Add missing Lift2, Lift3, lift3 and use MergeSources3
+- Add bindError function
+- Bug fixes: tryParseArray and Result.map3 signature
 
+#### 1.2.0  - June 6 2021
 - Update to compile with Fable 3
 - Allow specialized builders for generic CEs
 - Add new types: NonEmptySeq, NonEmptySet, NonEmptyMap and MultiMap
