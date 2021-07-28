@@ -304,17 +304,15 @@ module Fold =
                 return foo |> Option.toResultWith NotFound
             }
 
-    // An example application layer that defines an interpreter for the GetFoo program which targets the async monad
-    module App =
-        let interpreter =
-            Free.fold (function
-                | GetFoo.Read (fooId, next) -> async { return Some({ Id = fooId; Name = "test" }) |> next })
-
     [<Test>]
-    let interpretProgramWithFold =
-        async {
-            let request: GetFoo.Request = { Id = FooId "1" }
-            let! response = request |> GetFoo.handle |> App.interpreter
+    let ``should interpret program with fold`` () =
+        let request: GetFoo.Request = { Id = FooId "1" }
+        let response = 
+            request
+            |> GetFoo.handle 
+            |> Free.fold 
+                (function
+                | GetFoo.Read (fooId, next) -> { Id = fooId; Name = "test" } |> Some |> next |> result) 
+            |> Identity.run
 
-            Assert.AreEqual(Some({ Id = FooId "1"; Name = "test" }), response)
-        }
+        areStEqual (Ok { Id = FooId "1"; Name = "test" }) response
