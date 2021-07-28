@@ -1,4 +1,4 @@
-module FSharpPlus
+namespace FSharpPlus
 
 [<RequireQualifiedAccess>]
 module DateTime =
