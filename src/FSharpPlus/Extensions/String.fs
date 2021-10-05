@@ -32,6 +32,7 @@ module String =
     let endsWith subString (source: string) = source.EndsWith (subString, false, CultureInfo.InvariantCulture)
 
     /// Does the source string contain the given character?
+    /// Use `String.isSubstring` to check for strings.
     let contains char      (source: string) = Seq.contains char source
 
     /// Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.
