@@ -168,10 +168,12 @@ module Seq =
     ///
     /// <returns>The result sequence.</returns>
     let drop count (source: seq<_>) =
-        let mutable i = count
-        use e = source.GetEnumerator ()
-        while (i > 0 && e.MoveNext ()) do i <- i-1
-        seq { while e.MoveNext () do yield e.Current }
+        seq {
+            let mutable i = count
+
+            for x in source do
+                if i > 0 then i <- i - 1 else yield x
+        }
 
     #if !FABLE_COMPILER
     
