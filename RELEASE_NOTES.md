@@ -1,3 +1,7 @@
+#### 1.2.2  - October 7 2021
+
+- Bugfix: Seq.drop returns an empty sequence instead of intended output
+
 #### 1.2.1  - July 16 2021
 - Bump Fable to 3.2.6
 - Fable compatibility for un/curry functions and CE expressions
