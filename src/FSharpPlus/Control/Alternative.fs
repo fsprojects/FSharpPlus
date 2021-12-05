@@ -105,6 +105,14 @@ type Choice =
             res <- Append.Invoke res e.Current
         res
 
+    static member inline Choice (x: ref<NonEmptySeq<'``Alternative<'T>``>>, _mthd: Choice) =
+        use e = x.Value.GetEnumerator ()
+        e.MoveNext() |> ignore
+        let mutable res = e.Current
+        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
+            res <- Append.Invoke res e.Current
+        res
+
     static member inline Choice (x: ref<list<'``Alternative<'T>``>>, _mthd: Choice) =
         use e = (List.toSeq x.Value ).GetEnumerator ()
         let mutable res = Empty.Invoke ()
