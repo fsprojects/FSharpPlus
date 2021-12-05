@@ -518,6 +518,16 @@ module NonEmptySeq =
     let replace (oldValue: NonEmptySeq<'T>) (newValue: NonEmptySeq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> =
         Seq.replace oldValue newValue source |> unsafeOfSeq
 
+    /// <summary>Applies a function to each element of the sequence, threading an accumulator argument
+    /// through the computation. Apply the function to the first two elements of the sequence.
+    /// Then feed this result into the function along with the third element and so on. 
+    /// Return the final result. If the input function is <c>f</c> and the elements are <c>i0...iN</c> then computes 
+    /// <c>f (... (f i0 i1) i2 ...) iN</c>.</summary>
+    /// <param name="reduction">The function to reduce two sequence elements to a single element.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The final reduced value.</returns>
+    let reduce (reduction: 'T -> 'T -> 'T) source = Seq.reduce reduction source
+
 
 [<AutoOpen>]
 module NonEmptySeqBuilder =
