@@ -17,7 +17,7 @@ type neseq<'t> = NonEmptySeq<'t>
 module NonEmptySeq =
     /// <summary>Builds a non empty sequence from the given sequence.</summary>
     /// <param name="seq">The input sequence.</param>
-    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <returns>Non empty sequence containing the elements of the original sequence.</returns>
     /// <remarks>
     ///   **This function does not check whether the sequence is actually non empty or not.**
     /// 
@@ -254,7 +254,7 @@ module NonEmptySeq =
 
     /// <summary>Builds a non empty sequence from the given sequence.</summary>
     /// <param name="seq">The input sequence.</param>
-    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <returns>Non empty sequence containing the elements of the sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input sequence is empty.</exception>
     /// <remarks>
     ///   Throws exception for empty sequence.
@@ -274,7 +274,7 @@ module NonEmptySeq =
 
     /// <summary>Builds a non empty sequence from the given array.</summary>
     /// <param name="array">The input array.</param>
-    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <returns>Non empty sequence containing the elements of the array.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
     /// <remarks>Throws exception for empty array</remarks>
     let ofArray (array: _[]) =
@@ -462,7 +462,7 @@ module NonEmptySeq =
             }
         go head state |> unsafeOfSeq
 
-    /// <summary>Combines the two sequences into a list of pairs. The two sequences need not have equal lengths:
+    /// <summary>Combines the two sequences into a sequence of pairs. The two sequences need not have equal lengths:
     /// when one sequence is exhausted any remaining elements in the other
     /// sequence are ignored.</summary>
     ///
@@ -472,7 +472,7 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     let zip (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = Seq.zip source1 source2 |> unsafeOfSeq
 
-    /// <summary>Combines the three sequences into a list of triples. The sequences need not have equal lengths:
+    /// <summary>Combines the three sequences into a sequence of triples. The sequences need not have equal lengths:
     /// when one sequence is exhausted any remaining elements in the other
     /// sequences are ignored.</summary>
     ///
