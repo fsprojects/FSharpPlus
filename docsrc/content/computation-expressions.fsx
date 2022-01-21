@@ -55,6 +55,23 @@ let _ : OptionT<seq<unit option>> = monad { printfn "I'm strict" }
 // won't print anything, because seq is lazy
 
 (**
+
+Applicatives
+============
+
+There are some F# issues preventing applicative required `BindReturn` to be included in `monad`, so for the moment the following snipped can be used to quickly create a generic applicative CE:
+
+*)
+
+type ApplicativeBuilder<'t> () =
+    inherit MonadFxStrictBuilder<'t> ()
+    member inline _.BindReturn (x, f) = map f x
+
+let applicative<'t> = ApplicativeBuilder<'t> ()
+
+(**
+
+
 Examples
 ========
 
