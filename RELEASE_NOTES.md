@@ -1,3 +1,8 @@
+#### 1.2.3  - March 31 2022
+
+- Fix: upcoming problem with new .NET6 overloads
+- Add Choice method and reduce function for NonEmptySeq
+
 #### 1.2.2  - October 7 2021
 
 - Bugfix: Seq.drop returns an empty sequence instead of intended output
