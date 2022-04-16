@@ -53,12 +53,40 @@ type Const<'t,'u> = Const of 't with
     static member inline get_Zero () = Const (getZero ()) : Const<'T,'U>
     static member inline (+) (Const x: Const<'T,'U>, Const y: Const<'T,'U>) = Const (plus x y) : Const<'T,'U>
 
+/// Basic operations on Const
+[<RequireQualifiedAccess>]
+module Const =
+    let run (Const t) = t
+    let map (_: 'T -> 'U) (Const x: Const<_, 'T>) : Const<'C, 'U> = Const x
+    let inline apply (Const f: Const<'C, 'T -> 'U>) (Const x: Const<'C, 'T>) : Const<'C, 'U> = Const (plus f x)
+
+type Const<'t,'u> with
+
     // Functor
-    static member Map (Const x: Const<_,'T>, _: 'T->'U) = Const x : Const<'C,'U>
+    static member Map (Const x: Const<_, 'T>, _: 'T->'U) = Const x : Const<'C,'U>
+
+    /// <summary>Lifts a function into a Const. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (_: 'T->'U, Const x: Const<_,'T>) : Const<'C, 'U> = Const x
 
     // Applicative
     static member inline Return (_: 'U) = Const (getZero ()) : Const<'T,'U>
     static member inline (<*>) (Const f: Const<'C,'T->'U>, Const x: Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
+
+    /// <summary>
+    /// Sequences two Consts left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: Const<'C, 'T>, y: Const<'C, 'U>) : Const<'C, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Const.map/> x : Const<'C, 'U->'U>) </Const.apply/> y
+    
+    /// <summary>
+    /// Sequences two Consts left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (x: Const<'C, 'U>, y: Const<'C, 'T>): Const<'C, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Const.map/> x : Const<'C, 'T->'U>) </Const.apply/> y
+
     static member inline Lift2 (_: 'T->'U->'V, Const x: Const<'C,'T>, Const y: Const<'C,'U>) = Const (plus x y) : Const<'C,'V>
     static member inline Lift3 (_: 'T->'U->'V->'W, Const x: Const<'C,'T>, Const y: Const<'C,'U>, Const z: Const<'C,'V>) = Const (x ++ y ++ z) : Const<'C,'W>
 
@@ -83,10 +111,6 @@ type Const<'t,'u> = Const of 't with
             ()
         (Const : _ -> Const<'T2,'U2>) <!> f x
 
-/// Basic operations on Const
-[<RequireQualifiedAccess>]
-module Const =
-    let run (Const t) = t
 
 #endif
 
