@@ -275,9 +275,9 @@ module Enumerator =
         upcast {  
             new MapEnumerator<_> () with
                 member __.DoMoveNext curr =
-                    i := !i + 1
+                    i.Value <- i.Value + 1
                     if e.MoveNext () then
-                        curr <- f.Invoke (!i, e.Current)
+                        curr <- f.Invoke (i.Value, e.Current)
                         true
                     else false
                 member __.Dispose () = e.Dispose () }
@@ -325,9 +325,9 @@ module Enumerator =
         upcast {
             new MapEnumerator<_> () with
                 member __.DoMoveNext curr =
-                    i := !i + 1
+                    i.Value <- i.Value + 1
                     if e1.MoveNext () && e2.MoveNext () then
-                        curr <- f.Invoke (!i, e1.Current, e2.Current)
+                        curr <- f.Invoke (i.Value, e1.Current, e2.Current)
                         true
                     else false
                 member __.Dispose () =
@@ -376,17 +376,17 @@ module Enumerator =
     let choose chooser (e: IEnumerator<'T>) =
         let started = ref false
         let curr = ref None
-        let get () =  check !started; (match !curr with None -> alreadyFinished () | Some x -> x)
+        let get () =  check started.Value; (match curr.Value with None -> alreadyFinished () | Some x -> x)
         { new IEnumerator<'U> with
               member __.Current = get ()
           interface IEnumerator with
               member __.Current = box (get ())
               member __.MoveNext () =
-                  if not !started then started := true
-                  curr := None
-                  while (!curr).IsNone && e.MoveNext () do
-                      curr := chooser e.Current
-                  Option.isSome !curr
+                  if not started.Value then started.Value <- true
+                  curr.Value <- None
+                  while curr.Value.IsNone && e.MoveNext () do
+                      curr.Value <- chooser e.Current
+                  Option.isSome curr.Value
               member __.Reset() = noReset ()
           interface System.IDisposable with
               member __.Dispose () = e.Dispose () }
@@ -401,12 +401,12 @@ module Enumerator =
     let filter predicate (e: IEnumerator<'T>) =
         let started = ref false
         { new IEnumerator<'T> with
-                member __.Current = check !started; e.Current
+                member __.Current = check started.Value; e.Current
             interface IEnumerator with
-                member __.Current = check !started; box e.Current
+                member __.Current = check started.Value; box e.Current
                 member __.MoveNext () =
                     let rec next () =
-                        if not !started then started := true
+                        if not started.Value then started.Value <- true
                         e.MoveNext () && (predicate e.Current || next ())
                     next ()
                 member __.Reset () = noReset ()
@@ -427,11 +427,11 @@ module Enumerator =
         upcast {
             new MapEnumerator<_> () with
                 member __.DoMoveNext curr =
-                    match generator !state with
+                    match generator state.Value with
                     |   None -> false
                     |   Some (r, s) ->
                             curr <- r
-                            state := s
+                            state.Value <- s
                             true
                 member __.Dispose () = () }
     
@@ -465,29 +465,29 @@ module Enumerator =
             let index = ref unstarted
             // a Lazy node to cache the result/exception
             let current = ref Unchecked.defaultof<_>
-            let setIndex i = index := i; current := Unchecked.defaultof<_> // cache node unprimed, initialized on demand.
+            let setIndex i = index.Value <- i; current.Value <- Unchecked.defaultof<_> // cache node unprimed, initialized on demand.
             let getCurrent () =
-                if !index = unstarted then notStarted ()
-                if !index = completed then alreadyFinished ()
-                match box !current with
-                | null -> current := Lazy<_>.Create (fun () -> f !index)
+                if index.Value = unstarted then notStarted ()
+                if index.Value = completed then alreadyFinished ()
+                match box current.Value with
+                | null -> current.Value <- Lazy<_>.Create (fun () -> f index.Value)
                 | _    -> ()
                 // forced or re-forced immediately.
-                (!current).Force ()
+                current.Value.Force ()
             { new IEnumerator<'U> with
                   member __.Current = getCurrent ()
               interface IEnumerator with
                   member __.Current = box (getCurrent ())
                   member __.MoveNext () =
-                      if !index = completed then false
-                      elif !index = unstarted then
+                      if index.Value = completed then false
+                      elif index.Value = unstarted then
                           setIndex 0
                           true
                       else (
-                          if !index = System.Int32.MaxValue then raise <| System.InvalidOperationException ("Enumeration based on System.Int32 exceeded System.Int32.MaxValue.")
-                          if !index = finalIndex then false
+                          if index.Value = System.Int32.MaxValue then raise <| System.InvalidOperationException ("Enumeration based on System.Int32 exceeded System.Int32.MaxValue.")
+                          if index.Value = finalIndex then false
                           else
-                              setIndex (!index + 1)
+                              setIndex (index.Value + 1)
                               true )
                   member __.Reset () = noReset ()
               interface System.IDisposable with
