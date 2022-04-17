@@ -168,8 +168,8 @@ module List =
     let choosei mapping source =
         let mutable i = ref -1
         let fi x =
-            incr i
-            mapping !i x
+            i.Value <- i.Value + 1
+            mapping i.Value x
         List.choose fi source
         
     /// <summary>Attempts to remove an item from a list.</summary>

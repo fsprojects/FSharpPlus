@@ -125,6 +125,6 @@ module Array =
     let choosei mapping source =
         let mutable i = ref -1
         let fi x =
-            incr i
-            mapping !i x
+            i.Value <- i.Value + 1
+            mapping i.Value x
         Array.choose fi source
