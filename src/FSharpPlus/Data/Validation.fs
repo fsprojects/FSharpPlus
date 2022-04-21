@@ -237,6 +237,18 @@ type Validation<'err,'a> with
     static member Return x = Success x
     static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
 
+    /// <summary>
+    /// Sequences two Validations left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Validation.map/>  x : Validation<'Error, 'U->'U>) </Validation.apply/> y
+    
+    /// <summary>
+    /// Sequences two Validations left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<*  ) (x: Validation<'Error, 'U>, y: Validation<'Error, 'T>): Validation<'Error, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Validation.map/> x : Validation<'Error, 'T->'U>) </Validation.apply/> y
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
 
@@ -253,6 +265,10 @@ type Validation<'err,'a> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: Validation<_,_>, f) = Validation.map f x
     
+    /// <summary>Lifts a function into a Validator. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
     static member (<!>) (f, x: Validation<_,_>) = Validation.map f x
 
     // as Bifunctor
