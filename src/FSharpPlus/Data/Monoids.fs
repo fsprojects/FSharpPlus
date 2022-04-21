@@ -147,12 +147,30 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
     // Functor
     static member inline Map (Compose (x: '``FunctorF<'FunctorG<'T>>``), f: 'T->'U) = Compose (map (map f: '``FunctorG<'T>`` -> '``FunctorG<'U>``) x : '``FunctorF<'FunctorG<'U>>``)
 
+    /// <summary>Lifts a function into a Composed Applicative Functor. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member inline (<!>) (f: 'T->'U, x: '``FunctorF<'FunctorG<'T>>``) = Compose (map (map f: '``FunctorG<'T>`` -> '``FunctorG<'U>``) x : '``FunctorF<'FunctorG<'U>>``)
+
     // Applicative
     static member inline Return (x: 'T) = Compose (result (result x: '``ApplicativeG<'T>``)) : Compose<'``ApplicativeF<'ApplicativeG<'T>``>
 
     static member inline (<*>) (Compose (f: '``ApplicativeF<'ApplicativeG<'T->'U>``), Compose (x: '``ApplicativeF<'ApplicativeG<'T>``)) =
         Compose ((((<*>) : '``ApplicativeG<'T->'U>`` -> '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>``) <!> f: '``ApplicativeF<'ApplicativeG<'T>->'ApplicativeG<'U>`` ) <*> x: '``ApplicativeF<'ApplicativeG<'U>``)
 
+    /// <summary>
+    /// Sequences two composed applicatives left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: '``FunctorF<'FunctorG<'T>>``, y: '``FunctorF<'FunctorG<'U>>``) : '``FunctorF<'FunctorG<'U>>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``FunctorF<'FunctorG<'U->'U>>``) <*> y
+    
+    /// <summary>
+    /// Sequences two composed applicatives left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<*  ) (x: '``FunctorF<'FunctorG<'U>>``, y: '``FunctorF<'FunctorG<'T>>``): '``FunctorF<'FunctorG<'U>>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``FunctorF<'FunctorG<'T->'U>>``) <*> y
+    
     static member inline Lift2 (f: 'T -> 'U -> 'V, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``)) =
         Compose (Lift2.Invoke (Lift2.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>``) x y: '``ApplicativeF<'ApplicativeG<'V>``)
 
