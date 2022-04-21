@@ -79,13 +79,13 @@ type Const<'t,'u> with
     /// Sequences two Consts left-to-right, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member inline ( *>) (x: Const<'C, 'T>, y: Const<'C, 'U>) : Const<'C, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Const.map/> x : Const<'C, 'U->'U>) </Const.apply/> y
+    static member inline ( *>) (Const x: Const<'C, 'T>, Const y: Const<'C, 'U>) : Const<'C, 'U> = Const (plus x y)
     
     /// <summary>
     /// Sequences two Consts left-to-right, discarding the value of the second argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member inline (<* ) (x: Const<'C, 'U>, y: Const<'C, 'T>): Const<'C, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Const.map/> x : Const<'C, 'T->'U>) </Const.apply/> y
+    static member inline (<* ) (Const x: Const<'C, 'U>, Const y: Const<'C, 'T>) : Const<'C, 'U> = Const (plus x y)
 
     static member inline Lift2 (_: 'T->'U->'V, Const x: Const<'C,'T>, Const y: Const<'C,'U>) = Const (plus x y) : Const<'C,'V>
     static member inline Lift3 (_: 'T->'U->'V->'W, Const x: Const<'C,'T>, Const y: Const<'C,'U>, Const z: Const<'C,'V>) = Const (x ++ y ++ z) : Const<'C,'W>
