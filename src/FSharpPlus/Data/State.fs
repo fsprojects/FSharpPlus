@@ -54,6 +54,12 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x, f: 'T->_) = State.map f x          : State<'S,'U>
 
+    /// <summary>Lifts a function into a State. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (f: 'T->'U, x: State<'S, 'T>) : State<'S, 'U> = State.map f x
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Lift2 (f: 'T->'U->_, x, y) = State.map2 f x y : State<'S, 'V>
 
@@ -63,6 +69,19 @@ type State<'s,'t> with
     static member Return a = State (fun s -> (a, s))           : State<'S,'T>
     static member (>>=) (x, f: 'T->_) = State.bind f x         : State<'S,'U>
     static member (<*>) (f, x: State<'S,'T>) = State.apply f x : State<'S,'U>
+
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member ( *>) (x: State<'S, 'T>, y: State<'S, 'U>) : State<'S, 'U> = ((fun (_: 'T) (k: 'U) -> k) </State.map/> x : State<'S, 'U->'U>) </State.apply/> y
+
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member (<* ) (x: State<'S, 'U>, y: State<'S, 'T>) : State<'S, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </State.map/> x : State<'S, 'T->'U>) </State.apply/> y
+
     static member get_Get () = State.get                       : State<'S,'S>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -125,6 +144,12 @@ type StateT<'s,'``monad<'t * 's>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x: StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
 
+    /// <summary>Lifts a function into a StateT. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member inline (<!>) (f: 'T -> 'U, x: StateT<'S, '``Monad<'T * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = StateT.map f x
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT.map2 f x y
 
@@ -132,7 +157,20 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Lift3 (f: 'T->'U->'V->'W, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>, z : StateT<'S,'``Monad<'V * 'S>``>) : StateT<'S,'``Monad<'W * 'S>``> = StateT.map3 f x y z
 
     static member inline (<*>)  (f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x: StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
-    static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>)     = StateT.bind  f x
+    
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: StateT<'S, '``Monad<'T * 'S>``>, y: StateT<'S, '``Monad<'U * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = ((fun (_: 'T) (k: 'U) -> k) </StateT.map/> x : StateT<'S, '``Monad<('U->'U) * 'S>``>) </StateT.apply/> y
+
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (x: StateT<'S, '``Monad<'U * 'S>``>, y: StateT<'S, '``Monad<'T * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = ((fun (k: 'U) (_: 'T) -> k ) </StateT.map/> x : StateT<'S, '``Monad<('T->'U) * 'S>``>) </StateT.apply/> y
+    
+    static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>) = StateT.bind  f x
 
     static member inline get_Empty () = StateT (fun _ -> getEmpty ()) : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>

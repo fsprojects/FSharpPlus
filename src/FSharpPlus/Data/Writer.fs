@@ -65,6 +65,12 @@ type Writer<'monoid,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member        Map   (x, f: 'T->_) = Writer.map f x           : Writer<'Monoid,'U>
 
+    /// <summary>Lifts a function into a Writer. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (f: 'T -> _, x) : Writer<'Monoid, 'U> = Writer.map f x
+
     #if !FABLE_COMPILER
     static member inline Return x = Writer (x, getZero ())              : Writer<'Monoid,'T>
     #else
@@ -73,6 +79,18 @@ type Writer<'monoid,'t> with
 
     static member inline (>>=) (x, f: 'T->_) = Writer.bind f x          : Writer<'Monoid,'U>
     static member inline (<*>) (f, x: Writer<_,'T>) = Writer.apply f x  : Writer<'Monoid,'U>
+
+    /// <summary>
+    /// Sequences two Writers left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: Writer<'Monoid, 'T>, y: Writer<'Monoid, 'U>) : Writer<'Monoid, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Writer.map/> x : Writer<'Monoid, 'U -> 'U>) </Writer.apply/> y
+
+    /// <summary>
+    /// Sequences two Writers left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (x: Writer<'Monoid, 'U>, y: Writer<'Monoid, 'T>) : Writer<'Monoid, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Writer.map/> x : Writer<'Monoid, 'T -> 'U>) </Writer.apply/> y
 
     static member        Tell   w = Writer.tell w                       : Writer<'Monoid,unit>
     static member        Listen m = Writer.listen m                     : Writer<'Monoid,('T * 'Monoid)>
@@ -123,6 +141,12 @@ type WriterT<'``monad<'t * 'monoid>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> 'U)                                   = WriterT.map   f x : WriterT<'``Monad<'U * 'Monoid>``>
 
+    /// <summary>Lifts a function into a WriterT. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member inline (<!>) (f: 'T -> 'U, x: WriterT<'``Monad<'T * 'Monoid>``>) : WriterT<'``Monad<'U * 'Monoid>``> = WriterT.map f x
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT.map2 f x y
 
@@ -130,6 +154,19 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline Lift3 (f: 'T->'U->'V->'W, x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>, z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT.map3 f x y z
 
     static member inline (<*>) (f: WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x: WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
+    
+    /// <summary>
+    /// Sequences two Writers left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'U * 'Monoid>``> = ((fun (_: 'T) (k: 'U) -> k) </WriterT.map/> x : WriterT<'``Monad<('U -> 'U) * 'Monoid>``>) </WriterT.apply/> y
+
+    /// <summary>
+    /// Sequences two Writers left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (x: WriterT<'``Monad<'U * 'Monoid>``>, y: WriterT<'``Monad<'T * 'Monoid>``>) : WriterT<'``Monad<'U * 'Monoid>``> = ((fun (k: 'U) (_: 'T) -> k ) </WriterT.map/> x : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) </WriterT.apply/> y
+    
     static member inline (>>=) (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> _)                                    = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>
 
     static member inline get_Empty () = WriterT (getEmpty ()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
