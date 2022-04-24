@@ -42,6 +42,12 @@ type Cont<'r,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x: Cont<'R,'T>, f) = Cont.map f x    : Cont<'R,'U>
 
+    /// <summary>Lifts a function into a Cont. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (f: 'T->'U, x: Cont<'R, 'T>) : Cont<'R, 'U> = Cont.map f x
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: Cont<'R,'T>, y: Cont<'R,'U>) : Cont<'R,'V> = Cont.map2 f x y
 
@@ -49,6 +55,19 @@ type Cont<'r,'t> with
     static member inline Lift3 (f: 'T->'U->'V->'W, x: Cont<'R,'T>, y: Cont<'R,'U>, z: Cont<'R,'V>) : Cont<'R,'W> = Cont.map3 f x y z
 
     static member (<*>) (f, x: Cont<'R,'T>) = Cont.apply f x  : Cont<'R,'U>
+
+    /// <summary>
+    /// Sequences two Conts left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member ( *>) (x: Cont<'R, 'T>, y: Cont<'R, 'U>) : Cont<'R, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Cont.map/>  x : Cont<'R, 'U->'U>) </Cont.apply/> y
+    
+    /// <summary>
+    /// Sequences two Conts left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member (<*  ) (x: Cont<'R, 'U>, y: Cont<'R, 'T>) : Cont<'R, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Cont.map/> x : Cont<'R, 'T->'U>) </Cont.apply/> y
+
     static member (>>=) (x, f: 'T->_)       = Cont.bind f x   : Cont<'R,'U>
 
     static member Delay f = Cont (fun k -> Cont.run (f ()) k) : Cont<'R,'T>
