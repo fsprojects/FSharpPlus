@@ -48,6 +48,6 @@ type Bisequence with
 type Bitraverse with
     static member inline Bitraverse (x: '``Bitraversable<'T1,'U1>``, f: 'T1->'``Functor<'T2>``, g: 'U1->'``Functor<'U2>``, _impl: Default2) = Bimap.InvokeOnInstance f g x |> Bisequence.InvokeOnInstance : '``Functor<'Bitraversable<'T2,'U2>>``
     static member inline Bitraverse (x: '``Bitraversable<'T1,'U1>``, f: 'T1->'``Functor<'T2>``, g: 'U1->'``Functor<'U2>``, _impl: Default1) = Bitraverse.InvokeOnInstance f g x : '``Functor<'Bitraversable<'T2,'U2>>``
-    static member inline Bitraverse (_: 't when 't : null and 't : struct, _, _, _: Default1) = id
+    static member inline Bitraverse (_: 't when 't : null and 't : struct, _: 'a, _: 'b, _: Default1) = id : 'c -> 'c
 
 #endif

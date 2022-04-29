@@ -11,7 +11,7 @@ open FSharpPlus.Internals
 type Invoke =
     inherit Default1
 
-    static member inline Invoke (_: ^t when ^t : null and ^t : struct, _, _output: ^O, _mthd: Default1) = id
+    static member inline Invoke (_: ^t when ^t : null and ^t : struct, _: 'a, _output: ^O, _mthd: Default1) = id: 'b -> 'b
     static member inline Invoke (_: 'T, x, _output: ^O, _mthd: Default1) = (^T : (static member Invoke : _ -> _) x)
 
     static member        Invoke (g:  'T -> 'U  , x: 'T, _output: 'U, _mthd: Invoke) = g x        : 'U

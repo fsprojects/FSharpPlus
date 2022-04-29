@@ -57,7 +57,7 @@ type Traverse =
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq.ofList) : '``Functor<NonEmptySeq<'U>>``
 
     static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
-    static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
+    static member inline Traverse (_: ^a when ^a: null and ^a: struct, _: 'b, _: 'R, _impl: Default1) = id : 'c -> 'c
 
     #if !FABLE_COMPILER
     static member Traverse (t: 't seq, f: 't->Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Traverse) : Async<seq<_>> = async {

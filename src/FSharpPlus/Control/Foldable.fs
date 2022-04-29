@@ -135,7 +135,7 @@ type FoldMap =
 type FoldMap with
     static member inline FoldMap (x: seq<_>          , f, [<Optional>]_impl: Default2) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
     static member inline FoldMap (x                  , f, [<Optional>]_impl: Default1) = (^F : (static member FoldMap : ^F -> _ -> _) x, f)
-    static member inline FoldMap (_: ^t when  ^t: null and ^t: struct, _, _: Default1) = ()
+    static member inline FoldMap (_: ^t when ^t: null and ^t: struct, _: 'a, _: Default1) = ()
 
 type FoldBack with
     static member inline FromFoldMap f z x = let (f: _Endo<'t>) = FoldMap.Invoke (_Endo << f) x in f.Value z
@@ -314,7 +314,7 @@ type Nth =
     static member        Nth (x: 'a []            , n, [<Optional>]_impl: Nth     ) = x.[n] : 'a
     static member        Nth (x: 'a ResizeArray   , n, [<Optional>]_impl: Nth     ) = x.[n]
     static member        Nth (x: list<'a>         , n, [<Optional>]_impl: Nth     ) = x.[n]
-    static member        Nth (x: 'a Id            , _, [<Optional>]_impl: Nth     ) = x.getValue
+    static member        Nth (x: 'a Id        , _: 'b, [<Optional>]_impl: Nth     ) = x.getValue
 
     static member inline Invoke (n: int) (source: '``Foldable<'T>``) : 'T =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Nth : _*_*_ -> _) b, n, a)

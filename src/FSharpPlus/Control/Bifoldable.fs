@@ -40,7 +40,7 @@ type Bifold =
       
 type Bifold with
     static member inline Bifold (x: '``Bifoldable<'T1,'T2>``       , f, g, z, _impl: Default1) = Bifold.InvokeOnInstance f g z x
-    static member inline Bifold (_: 't when 't: null and 't: struct, _, _, _, _impl: Default1) = id
+    static member inline Bifold (_: 't when 't: null and 't: struct, _: 'a, _: 'b, _: 'c, _impl: Default1) = id : 'd -> 'd
 
 type BifoldBack =
     inherit Default1
@@ -58,7 +58,7 @@ type BifoldBack =
       
 type BifoldBack with
     static member inline BifoldBack (x: '``Bifoldable<'T1,'T2>``       , f, g, z, _impl: Default1) = BifoldBack.InvokeOnInstance f g z x
-    static member inline BifoldBack (_: 't when 't: null and 't: struct, _, _, _, _impl: Default1) = id
+    static member inline BifoldBack (_: 't when 't: null and 't: struct, _: 'a, _: 'b, _: 'c, _impl: Default1) = id : 'd -> 'd
 
 type Bisum =
     inherit Default1

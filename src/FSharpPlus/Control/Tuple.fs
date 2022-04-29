@@ -173,13 +173,13 @@ type Curry =
             let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
             f (Tuple<'t1,'t2,'t3,'t4,'t5,'t6,'t7,'tr> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype))
     
-    static member Curry (_: Tuple<'t1>        , _: Curry) = fun f t1                   -> f (tuple1 t1)
-    static member Curry ((_, _)               , _: Curry) = fun f t1 t2                -> f (t1, t2)
-    static member Curry ((_, _, _)            , _: Curry) = fun f t1 t2 t3             -> f (t1, t2, t3)
-    static member Curry ((_, _, _, _)         , _: Curry) = fun f t1 t2 t3 t4          -> f (t1, t2, t3, t4)
-    static member Curry ((_, _, _, _, _)      , _: Curry) = fun f t1 t2 t3 t4 t5       -> f (t1, t2, t3, t4, t5)
-    static member Curry ((_, _, _, _, _, _)   , _: Curry) = fun f t1 t2 t3 t4 t5 t6    -> f (t1, t2, t3, t4, t5, t6)
-    static member Curry ((_, _, _, _, _, _, _), _: Curry) = fun f t1 t2 t3 t4 t5 t6 t7 -> f (t1, t2, t3, t4, t5, t6, t7)
+    static member Curry (_: Tuple<'t1>                                    , _: Curry) = fun f t1                   -> f (tuple1 t1)
+    static member Curry ((_: 'a, _: 'b)                                   , _: Curry) = fun f t1 t2                -> f (t1, t2)
+    static member Curry ((_: 'a, _: 'b, _: 'c)                            , _: Curry) = fun f t1 t2 t3             -> f (t1, t2, t3)
+    static member Curry ((_: 'a, _: 'b, _: 'c, _: 'd)                     , _: Curry) = fun f t1 t2 t3 t4          -> f (t1, t2, t3, t4)
+    static member Curry ((_: 'a, _: 'b, _: 'c, _: 'd, _: 'e)              , _: Curry) = fun f t1 t2 t3 t4 t5       -> f (t1, t2, t3, t4, t5)
+    static member Curry ((_: 'a, _: 'b, _: 'c, _: 'd, _: 'e, _: 'f)       , _: Curry) = fun f t1 t2 t3 t4 t5 t6    -> f (t1, t2, t3, t4, t5, t6)
+    static member Curry ((_: 'a, _: 'b, _: 'c, _: 'd, _: 'e, _: 'f, _: 'g), _: Curry) = fun f t1 t2 t3 t4 t5 t6 t7 -> f (t1, t2, t3, t4, t5, t6, t7)
 
 type Uncurry =
     static member inline Invoke f t =

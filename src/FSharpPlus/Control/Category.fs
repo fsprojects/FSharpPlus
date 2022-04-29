@@ -40,7 +40,7 @@ type Comp =
 
 type Comp with
     static member inline ``<<<`` (f: '``Category<'U,'V>``, g: '``Category<'T,'U>``, _output (* : '``Category<'T,'V>``   *) , _mthd : Default1) = Comp.InvokeOnInstance' f g : '``Category<'T,'V>``
-    static member inline ``<<<`` (f: 'F, g: 'G, _, _mthd: Default1) =         
+    static member inline ``<<<`` (f: 'F, g: 'G, _: 'd, _mthd: Default1) =         
         let inline ivk (f: 'T) (x: 'U)  = (^T : (static member Invoke : _*_ -> _) f, x)
         let inline h f g x = 
             let i = ivk f x

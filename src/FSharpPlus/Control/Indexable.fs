@@ -18,7 +18,7 @@ type Item =
     inherit Default1
     
     static member inline Item (x: '``Indexable<'T>`` , k        , [<Optional>]_impl: Default1) = (^``Indexable<'T>`` : (member get_Item : _ -> 'T) x, k) : 'T
-    static member inline Item (_: 'T when 'T: null and 'T: struct, _,         _impl: Default1) = ()
+    static member inline Item (_: 'T when 'T: null and 'T: struct, _: 'a,     _impl: Default1) = ()
     
     static member        Item (x: string             , n        , [<Optional>]_impl: Item    ) = String.item n x
     static member        Item (x: StringBuilder      , n        , [<Optional>]_impl: Item    ) = x.ToString().[n]
@@ -213,7 +213,7 @@ type FindSliceIndex =
         (^``Collection<'T>``: (static member FindSliceIndex: _*_->_) source, slice)
     static member        FindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.findSliceIndex e x
     static member inline FindSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index = FindSliceIndex.InvokeOnInstance e x
-    static member inline FindSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
+    static member inline FindSliceIndex (_: ^t when ^t: null and ^t: struct, _: 'a, _impl: Default1) = ()
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindSliceIndex : _*_*_ -> _) b, n, a)
@@ -232,7 +232,7 @@ type TryFindSliceIndex =
         (^``Collection<'T>``: (static member TryFindSliceIndex: _*_->_) source, slice)
     static member        TryFindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.tryFindSliceIndex e x
     static member inline TryFindSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index option = TryFindSliceIndex.InvokeOnInstance e x
-    static member inline TryFindSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
+    static member inline TryFindSliceIndex (_: ^t when ^t: null and ^t: struct, _: 'a, _impl: Default1) = ()
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindSliceIndex : _*_*_ -> _) b, n, a)

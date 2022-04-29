@@ -44,7 +44,7 @@ type OfSeq =
     static member        OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: 'T when 'T :> IDictionary<'k,'v>), _: OfSeq   ) = let d = new 'T () in x |> Seq.iter d.Add; d
     #endif
     static member inline OfSeq ((x: seq<'t>                 , _: 'UserType                       ), _: OfSeq   ) = (^UserType : (static member OfSeq : seq<'t> -> ^UserType) x)
-    static member inline OfSeq (( _, _: 't when 't : null and 't : struct                        ), _: OfSeq   ) = id
+    static member inline OfSeq ((_:'a, _: 't when 't : null and 't : struct                      ), _: OfSeq   ) = id
     static member        OfSeq ((x                          , _: 't []                           ), _: OfSeq   ) = Array.ofSeq<'t> x
     static member        OfSeq ((x                          , _: 't list                         ), _: OfSeq   ) = List.ofSeq<'t> x
     static member        OfSeq ((x: seq<char>               , _: string                          ), _: OfSeq   ) = String.ofSeq x
@@ -94,7 +94,7 @@ type OfList =
     #endif
 
     static member inline OfList ((x: list<'t>                 , _: 'UserType                       ), _: OfList  ) = (^UserType : (static member OfList : list<'t> -> ^UserType) x)
-    static member inline OfList (( _, _: 't when 't : null and 't : struct                         ), _: OfList  ) = id
+    static member inline OfList ((_:'a, _: 't when 't : null and 't : struct                       ), _: OfList  ) = id: 'b -> 'b
     static member        OfList ((x                           , _: 't []                           ), _: OfList  ) = Array.ofList<'t> x
     static member        OfList ((x                           , _: 't list                         ), _: OfList  ) = x
     static member        OfList ((x: list<char>               , _: string                          ), _: OfList  ) = String.ofList x
@@ -129,7 +129,7 @@ type Filter with
     static member        Filter (x: 't seq             , p, [<Optional>]_impl: Default3) = Seq.filter p x
     static member inline Filter (x: '``Collection'<T>``, p, [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.filter p |> OfSeq.Invoke : '``Collection'<T>``
     static member inline Filter (x: '``Collection'<T>``, p, [<Optional>]_impl: Default1) = Filter.InvokeOnInstance p x                       : '``Collection'<T>``
-    static member inline Filter (_: ^t when ^t: null and ^t: struct  , _, _  : Default1) = ()
+    static member inline Filter (_: ^t when ^t: null and ^t: struct, _:'a, _ : Default1) = ()
 
 
 type Skip =
@@ -140,7 +140,7 @@ type Skip =
     static member        Skip (x: 'a []            , n, [<Optional>]_impl: Skip    ) = x.[n..] : 'a []
     static member        Skip (x: 'a ResizeArray   , n, [<Optional>]_impl: Skip    ) = ResizeArray<'a> (Seq.skip n x)
     static member        Skip (x: list<'a>         , n, [<Optional>]_impl: Skip    ) = List.skip n x
-    static member        Skip (x: 'a Id            , _, [<Optional>]_impl: Skip    ) = x
+    static member        Skip (x: 'a Id       , _: 'a0, [<Optional>]_impl: Skip    ) = x
 
     static member inline Invoke (n: int) (source: '``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Skip : _*_*_ -> _) b, n, a)
@@ -156,7 +156,7 @@ type Take =
     static member        Take (x: 'a []            , n, [<Optional>]_impl: Take    ) = x.[..n-1] : 'a []
     static member        Take (x: 'a ResizeArray   , n, [<Optional>]_impl: Take    ) = ResizeArray<'a> (Seq.take n x)
     static member        Take (x: list<'a>         , n, [<Optional>]_impl: Take    ) = List.take n x
-    static member        Take (x: 'a Id            , _, [<Optional>]_impl: Take    ) = x
+    static member        Take (x: 'a Id       , _: 'a0, [<Optional>]_impl: Take    ) = x
 
     static member inline Invoke (n: int) (source: '``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Take : _*_*_ -> _) b, n, a)
@@ -170,7 +170,7 @@ type TakeWhile =
     static member        TakeWhile (x: 'a []            , p, [<Optional>]_impl: TakeWhile) = Array.takeWhile p x
     static member        TakeWhile (x: 'a ResizeArray   , p, [<Optional>]_impl: TakeWhile) = ResizeArray<'a> (Seq.takeWhile p x)
     static member        TakeWhile (x: list<'a>         , p, [<Optional>]_impl: TakeWhile) = List.takeWhile p x
-    static member        TakeWhile (x: 'a Id            , _, [<Optional>]_impl: TakeWhile) = x
+    static member        TakeWhile (x: 'a Id        , _:'a0, [<Optional>]_impl: TakeWhile) = x
 
     static member inline Invoke (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TakeWhile : _*_*_ -> _) b, n, a)
@@ -184,7 +184,7 @@ type SkipWhile =
     static member        SkipWhile (x: 'a []            , p, [<Optional>]_impl: SkipWhile) = Array.skipWhile p x
     static member        SkipWhile (x: 'a ResizeArray   , p, [<Optional>]_impl: SkipWhile) = ResizeArray<'a> (Seq.skipWhile p x)
     static member        SkipWhile (x: list<'a>         , p, [<Optional>]_impl: SkipWhile) = List.skipWhile p x
-    static member        SkipWhile (x: 'a Id            , _, [<Optional>]_impl: SkipWhile) = x
+    static member        SkipWhile (x: 'a Id        , _:'a0, [<Optional>]_impl: SkipWhile) = x
 
     static member inline Invoke (predicate: 'T->bool) (source: '``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member SkipWhile : _*_*_ -> _) b, n, a)
@@ -199,7 +199,7 @@ type Drop =
     static member        Drop (x: 'a []            , n, [<Optional>]_impl: Drop    ) = if n > 0 then (if x.Length > n then x.[n..] else [||]) else x : 'a []
     static member        Drop (x: 'a ResizeArray   , n, [<Optional>]_impl: Drop    ) = ResizeArray<'a> (Seq.drop n x)
     static member        Drop (x: list<'a>         , n, [<Optional>]_impl: Drop    ) = List.drop n x
-    static member        Drop (x: 'a Id            , _, [<Optional>]_impl: Drop    ) = x
+    static member        Drop (x: 'a Id        , _:'a0, [<Optional>]_impl: Drop    ) = x
 
     static member inline Invoke (n: int) (source: '``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Drop : _*_*_ -> _) b, n, a)
@@ -215,7 +215,7 @@ type Limit =
     static member        Limit (x: 'a []            , n, [<Optional>]_impl: Limit   ) = if n < 1 then [||] elif n < x.Length then x.[..n-1] else x : 'a []
     static member        Limit (x: 'a ResizeArray   , n, [<Optional>]_impl: Limit   ) = ResizeArray<'a> (Seq.truncate n x)
     static member        Limit (x: list<'a>         , n, [<Optional>]_impl: Limit   ) = Seq.truncate n x |> Seq.toList
-    static member        Limit (x: 'a Id            , _, [<Optional>]_impl: Limit   ) = x
+    static member        Limit (x: 'a Id        , _:'a0, [<Optional>]_impl: Limit   ) = x
 
     static member inline Invoke (n: int) (source: '``Collection<'T>``) : '``Collection<'T>`` =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member Limit : _*_*_ -> _) b, n, a)

@@ -230,19 +230,19 @@ type TryWith =
 type TryFinally =
     inherit Default1
 
-    static member        TryFinally ((computation: unit -> seq<_>        , compensation: unit -> unit), _: Default2, _, _) = seq (try (Seq.toArray (computation ())) finally compensation ())
-    static member        TryFinally ((computation: unit -> NonEmptySeq<_>, compensation: unit -> unit), _: Default2, _, _) = seq (try (Seq.toArray (computation ())) finally compensation ()) |> NonEmptySeq.unsafeOfSeq
+    static member        TryFinally ((computation: unit -> seq<_>        , compensation: unit -> unit), _: Default2, _: 'b, _: 'c) = seq (try (Seq.toArray (computation ())) finally compensation ())
+    static member        TryFinally ((computation: unit -> NonEmptySeq<_>, compensation: unit -> unit), _: Default2, _: 'b, _: 'c) = seq (try (Seq.toArray (computation ())) finally compensation ()) |> NonEmptySeq.unsafeOfSeq
 
     [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
-    static member        TryFinally ((_:           unit -> 'R -> _            , _: unit -> unit), _: Default2  , _, _defaults: False) = raise Internals.Errors.exnUnreachable
-    static member        TryFinally ((computation: unit -> 'R -> _ , compensation: unit -> unit), _: Default2  , _, _defaults: True ) = fun s -> try computation () s finally compensation ()
+    static member        TryFinally ((_:           unit -> 'R -> _: 'a            , _: unit -> unit), _: Default2  , _: 'b, _defaults: False) = raise Internals.Errors.exnUnreachable
+    static member        TryFinally ((computation: unit -> 'R -> _: 'a , compensation: unit -> unit), _: Default2  , _: 'b, _defaults: True ) = fun s -> try computation () s finally compensation ()
     
-    static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinally, _, _) = try computation () finally compensation ()
-    static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinally, _, _) = async.TryFinally (computation (), compensation) : Async<_>
+    static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinally, _: 'b, _: 'c) = try computation () finally compensation ()
+    static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinally, _: 'b, _: 'c) = async.TryFinally (computation (), compensation) : Async<_>
     #if !FABLE_COMPILER
-    static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinally, _, True) = Task.tryFinally computation compensation : Task<_>
+    static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinally, _: 'b, True) = Task.tryFinally computation compensation : Task<_>
     #endif
-    static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinally, _, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
+    static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinally, _: 'b, _: 'c) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
 
     static member inline Invoke (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>, False)
