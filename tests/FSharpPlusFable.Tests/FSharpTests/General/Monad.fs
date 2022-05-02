@@ -44,14 +44,15 @@ let monad = testList "Monad" [
     )
     #endif
     
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "return Const First using explicit method" (fun () ->
         let cf : Const<First<int>,int> = Const.Return<_,_> 1
         equal None (cf |> Const.run |> First.run)
     )
+    #if !FABLE_COMPILER
     testCase "return Const" (fun () ->
         let c : Const<int,int> = Control.Return.InvokeOnInstance 1 in equal 0 (Const.run c)
     )
+    #endif
     
     testCase "specialized maybe monad" (fun () ->
         let v = option {
@@ -70,8 +71,6 @@ let monad = testList "Monad" [
         }        
         equal [25] v
     )  
-    
-    #endif
 
     //  Exception: RangeError: Maximum call stack size exceeded
     #if !FABLE_COMPILER
