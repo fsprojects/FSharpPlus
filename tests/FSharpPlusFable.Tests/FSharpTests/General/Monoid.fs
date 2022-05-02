@@ -76,7 +76,7 @@ let testCompile =
                 |> Map.add 3 (async.Return " You")
                 |> Map.add 2 (async.Return " World")
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER
     let mapAB = plus mapA mapB
     #endif
     #if !FABLE_COMPILER

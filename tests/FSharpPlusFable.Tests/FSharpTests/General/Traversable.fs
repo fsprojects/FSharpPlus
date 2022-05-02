@@ -123,23 +123,19 @@ let traversable = testList "Traversable" [
             let rs4 = sequence nem
             Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs4)
         #endif
+        #if !FABLE_COMPILER
         testCase "necol" (fun () ->
             let rs5 = traverse id (TestNonEmptyCollection.Create (Some 42))
-            #if !FABLE_COMPILER
             Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs5
-            #endif
             ())
         testCase "neseq" (fun () ->
             let nes = neseq { Some 1 }
             let rs6 = traverse id nes
-            #if !FABLE_COMPILER
             Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs6
-            #endif
             let rs7 = sequence nes
-            #if !FABLE_COMPILER
             Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs7
-            #endif
             ())
+        #endif
     ]
     #endif
 
