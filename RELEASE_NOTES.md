@@ -1,10 +1,12 @@
-#### 1.2.3  - March 31 2022
+#### 1.2.4  - May 5 2022
+- Fix: Fable regressions
+- Add additional applicative operators directly to types
 
+#### 1.2.3  - March 31 2022
 - Fix: upcoming problem with new .NET6 overloads
 - Add Choice method and reduce function for NonEmptySeq
 
 #### 1.2.2  - October 7 2021
-
 - Bugfix: Seq.drop returns an empty sequence instead of intended output
 
 #### 1.2.1  - July 16 2021
