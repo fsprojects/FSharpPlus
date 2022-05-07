@@ -1,5 +1,5 @@
 language: csharp
-dotnet: 5.0.100
+dotnet: 6.0.201 
 
 sudo: false  # use the new container-based Travis infrastructure 
 

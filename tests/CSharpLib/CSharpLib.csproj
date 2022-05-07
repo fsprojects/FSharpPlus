@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Configurations>Debug;Release;Fable</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <TargetFrameworks>netstandard2.1;net462</TargetFrameworks>
+    <LangVersion Condition=" '$(TargetFramework)' == 'netstandard2.1'">8.0</LangVersion>
+  </PropertyGroup>
+
+</Project>
