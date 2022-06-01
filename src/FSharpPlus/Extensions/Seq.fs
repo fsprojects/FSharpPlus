@@ -87,11 +87,11 @@ module Seq =
                 let key = projection e.Current
                 if g = key then members.Add e.Current
                 else
-                    yield g, members
+                    yield g, Data.NonEmptySeq.ofSeq members
                     g <- key
                     members <- ResizeArray ()
                     members.Add e.Current
-            yield g, members }
+            yield g, Data.NonEmptySeq.ofSeq members }
 
     /// Inserts a separator element between each element in the source seq.
    ///http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
