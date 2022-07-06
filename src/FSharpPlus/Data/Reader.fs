@@ -173,7 +173,7 @@ type ReaderT<'r,'``monad<'t>``> with
 
     static member inline LiftAsync (x: Async<'T>) = (ReaderT.lift (liftAsync x)         : ReaderT<'R,'``MonadAsync<'T>``>)
 
-    static member inline CallCC (f: ('T -> ReaderT<'R, Cont<_,'U>>) -> _)               : ReaderT<'R,'``MonadCont<'C,'T>``> =
+    static member inline CallCC (f: ('T -> ReaderT<'R, '``MonadCont<'C,'U>``>) -> _)    : ReaderT<'R,'``MonadCont<'C,'T>``> =
         ReaderT (fun r -> callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
           
     static member inline get_Ask () = ReaderT result                                    : ReaderT<'R,'``Monad<'T>``>
@@ -183,11 +183,11 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Catch (m: ReaderT<'R,'``MonadError<'E1,'T>``>, h: 'E1 -> _) =
         ReaderT (fun s -> catch (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s))     : ReaderT<'R,'``MonadError<'E2,'T>``>
 
-    static member inline Tell   w           = w |> tell |> ReaderT.lift                 : ReaderT<'R, '``MonadWriter<'Monoid,unit>``>
+    static member inline Tell  (w: 'Monoid) = w |> tell |> ReaderT.lift                 : ReaderT<'R, '``MonadWriter<'Monoid,unit>``>
     static member inline Listen (ReaderT m) = ReaderT (fun w -> listen (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T*'Monoid>``>
     static member inline Pass   (ReaderT m) = ReaderT (fun w -> pass   (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T>``>   
 
-    static member inline get_Get () = ReaderT.lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
-    static member inline Put x      = x |> put |> ReaderT.lift : ReaderT<'R, '``MonadState<'S, unit>``>
+    static member inline get_Get ()  = ReaderT.lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
+    static member inline Put (x: 'S) = x |> put |> ReaderT.lift : ReaderT<'R, '``MonadState<'S, unit>``>
 
 #endif

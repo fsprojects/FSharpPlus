@@ -124,7 +124,7 @@ module StateT =
     let inline map (f: 'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s'))) : StateT<'S,'``Monad<'U * 'S>``>
     
     /// Combines two StateTs into one by applying a mapping function.
-    let inline map2 (f: 'T->'U->'V) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2) -> result (f g h, s2)) : StateT<'S,'``Monad<'V * 'S>``>
+    let inline map2 (f: 'T->'U->'V) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2: 'S) -> result (f g h, s2)) : StateT<'S,'``Monad<'V * 'S>``>
 
     /// Combines three StateTs into one by applying a mapping function.
     let inline map3 (f: 'T->'U->'V->'W) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) (StateT z: StateT<'S,'``Monad<'V * 'S>``>) : StateT<'S,'``Monad<'W * 'S>``> =
