@@ -195,4 +195,7 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Catch (m: StateT<'S,'``MonadError<'E1,'T * 'S>``>, h: 'E1 -> _) =
         StateT (fun s -> catch (StateT.run m s) (fun e -> StateT.run (h e) s)) : StateT<'S,'``MonadError<'E2, 'T * 'S>``>
 
+    static member inline get_Ask ()                      = StateT.lift ask       : StateT<'S, '``MonadReader<'R, 'R>``>
+    static member inline Local (StateT m, f: 'R1 -> 'R2) = StateT (local f << m) : StateT<'S, '``MonadReader<'R1, 'T>``>
+
 #endif
