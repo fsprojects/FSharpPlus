@@ -122,10 +122,10 @@ module WriterT =
         WriterT (map (mapWriter f) m) : WriterT<'``Monad<'U * 'Monoid>``>
 
     /// Combines two WriterTs into one by applying a mapping function.
-    let inline map2 (f: 'T->'U->'V) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT (lift2 (fun (a, x) (b, y) -> Plus.Invoke a b, f x y) x y)
-    
+    let inline map2 (f: 'T->'U->'V) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT (lift2 (fun (x, a) (y, b) -> f x y, Plus.Invoke a b) x y)
+
     /// Combines three WriterTs into one by applying a mapping function.
-    let inline map3 (f: 'T->'U->'V->'W) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) (WriterT z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT (lift3 (fun (a, x) (b, y) (c, z) -> a ++ b ++ c, f x y z) x y z)
+    let inline map3 (f: 'T->'U->'V->'W) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) (WriterT z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT (lift3 (fun (x, a) (y, b) (z, c) -> f x y z, a ++ b ++ c) x y z)
 
     let inline apply (WriterT f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) (WriterT x : WriterT<'``Monad<'T * 'Monoid>``>) =
         let applyWriter (a, w) (b, w') = (a b, plus w w')
