@@ -87,7 +87,7 @@ type ResultT<'``monad<Result<'t,'e>>``> with
 
     static member inline CallCC (f: ('T -> ResultT<'``MonadCont<'R,Result<'U,'E>>``>) -> _) : ResultT<'``MonadCont<'R, Result<'T,'E>>``> = ResultT (callCC <| fun c -> ResultT.run (f (ResultT << c << Result<'T, 'E>.Ok)))
 
-    static member inline get_Ask () = (ResultT << (map Ok)) ask : ResultT<'``MonadReader<'R,Result<'R,'E>>``>
+    static member inline get_Ask () = ResultT.lift ask : ResultT<'``MonadReader<'R,Result<'R,'E>>``>
     static member inline Local (ResultT m : ResultT<'``MonadReader<'R2,Result<'R2,'E>>``>, f: 'R1->'R2) = ResultT (local f m)
 
     static member inline Tell (w: 'Monoid) = w |> tell |> ResultT.lift : ResultT<'``Writer<'Monoid,Result<unit,'E>>``>
@@ -147,7 +147,7 @@ type ChoiceT<'``monad<Choice<'t,'e>>``> with
 
     static member inline CallCC (f: ('T -> ChoiceT<'``MonadCont<'R,Choice<'U,'E>>``>) -> _) : ChoiceT<'``MonadCont<'R, Choice<'T,'E>>``> = ChoiceT (callCC <| fun c -> ChoiceT.run (f (ChoiceT << c << Choice1Of2)))
 
-    static member inline get_Ask () = (ChoiceT << (map Choice1Of2)) ask : ChoiceT<'``MonadReader<'R,Choice<'R,'E>>``>
+    static member inline get_Ask () = ChoiceT.lift ask : ChoiceT<'``MonadReader<'R,Choice<'R,'E>>``>
     static member inline Local (ChoiceT m: ChoiceT<'``MonadReader<'R2,Choice<'R2,'E>>``>, f: 'R1->'R2) = ChoiceT (local f m)
 
     static member inline Tell (w: 'Monoid) = w |> tell |> ChoiceT.lift : ChoiceT<'``Writer<'Monoid,Choice<unit,'E>>``>
