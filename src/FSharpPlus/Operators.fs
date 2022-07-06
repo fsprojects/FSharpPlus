@@ -586,16 +586,16 @@ module Operators =
     let inline callCC (f: ('T->'``MonadCont<'R,'U>``) -> '``MonadCont<'R,'T>``) : '``MonadCont<'R,'T>`` = CallCC.Invoke f
    
     /// The state from the internals of the monad.
-    let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
+    let inline get< ^``MonadState<'S, 'S>`` when ^``MonadState<'S, 'S>`` : (static member Get : ^``MonadState<'S, 'S>``)> = (^``MonadState<'S, 'S>`` : (static member Get : _) ())
 
     /// Gets a value which depends on the current state.
-    let inline gets (f: 'S->'T) : '``MonadState<'T * 'S>`` = get |> if FSharpPlus.Internals.Prelude.opaqueId false then liftM f else Map.InvokeOnInstance f
+    let inline gets (f: 'S -> 'T) : '``MonadState<'S, 'T>`` = get |> if FSharpPlus.Internals.Prelude.opaqueId false then liftM f else Map.InvokeOnInstance f
 
     /// Replaces the state inside the monad.
-    let inline put (x: 'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
+    let inline put (x: 'S) : '``MonadState<'S, unit>`` = Put.Invoke x
 
     /// Modifies the state inside the monad by applying a function.
-    let inline modify (f: 'S->'S) : '``MonadState<unit * ('S->'S)>`` = get >>= (Put.Invoke << f)
+    let inline modify (f: 'S -> 'S) : '``MonadState<'S, unit>`` = get >>= (Put.Invoke << f)
 
     /// The environment from the monad.
     let inline ask< ^``MonadReader<'R,'T>`` when ^``MonadReader<'R,'T>`` : (static member Ask : ^``MonadReader<'R,'T>``)> = (^``MonadReader<'R,'T>`` : (static member Ask : _) ())

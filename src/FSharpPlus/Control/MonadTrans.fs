@@ -52,14 +52,14 @@ type CallCC = static member inline Invoke (f: (('T -> '``MonadCont<'U>``) ->'``M
 
 // MonadState
 
-type Get = static member inline Invoke ()      : '``MonadState<'S * 'S>``   = (^``MonadState<'S * 'S>``   : (static member Get :      _) ())
-type Put = static member inline Invoke (x: 'S) : '``MonadState<unit * 'S>`` = (^``MonadState<unit * 'S>`` : (static member Put : _ -> _) x)
+type Get = static member inline Invoke ()      : '``MonadState<'S, 'S>``   = (^``MonadState<'S, 'S>``   : (static member Get :      _) ())
+type Put = static member inline Invoke (x: 'S) : '``MonadState<'S, unit>`` = (^``MonadState<'S, unit>`` : (static member Put : _ -> _) x)
 
 
 // MonadReader
 
-type Ask   = static member inline Invoke ()                                          : '``MonadReader<'R,'T>``  = (^``MonadReader<'R,'T>``  : (static member Ask   : _) ())
-type Local = static member inline Invoke (f: 'R1->'R2) (m: ^``MonadReader<'R2,'T>``) : '``MonadReader<'R1,'T>`` = (^``MonadReader<'R1,'T>`` : (static member Local : _*_ -> _) m, f)
+type Ask   = static member inline Invoke ()                                             : '``MonadReader<'R, 'T>``  = (^``MonadReader<'R, 'T>``  : (static member Ask   : _) ())
+type Local = static member inline Invoke (f: 'R1 -> 'R2) (m: ^``MonadReader<'R2, 'T>``) : '``MonadReader<'R1, 'T>`` = (^``MonadReader<'R1, 'T>`` : (static member Local : _*_ -> _) m, f)
 
 
 // MonadWriter
