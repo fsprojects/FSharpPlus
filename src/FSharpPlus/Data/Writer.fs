@@ -123,7 +123,7 @@ module WriterT =
 
     /// Combines two WriterTs into one by applying a mapping function.
     let inline map2 (f: 'T->'U->'V) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT (lift2 (fun (a, x) (b, y) -> Plus.Invoke a b, f x y) x y)
-
+    
     /// Combines three WriterTs into one by applying a mapping function.
     let inline map3 (f: 'T->'U->'V->'W) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) (WriterT z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT (lift3 (fun (a, x) (b, y) (c, z) -> a ++ b ++ c, f x y z) x y z)
 
@@ -178,8 +178,8 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline Delay (body : unit   ->  WriterT<'``Monad<'T * 'Monoid>``>)    = WriterT (Delay.Invoke (fun _ -> WriterT.run (body ()))) : WriterT<'``Monad<'T * 'Monoid>``>
 
     static member inline Tell   (w: 'Monoid) = WriterT (result ((), w))                                                                                        : WriterT<'``Monad<unit * 'Monoid>``>
-    static member inline Listen (WriterT m: WriterT<'``Monad<('T * ('Monoid'T -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w))) : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
-    static member inline Pass   (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w)))                          : WriterT<'``Monad<'T * 'Monoid>``>
+    static member inline Listen (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w)))                            : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
+    static member inline Pass   (WriterT m: WriterT<'``Monad<('T * ('Monoid -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w))) : WriterT<'``Monad<'T * 'Monoid>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT.lift m
@@ -187,8 +187,8 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline LiftAsync (x: Async<'T>) = WriterT.lift (liftAsync x) : WriterT<'``MonadAsync<'T>``>
 
     static member inline Throw (x: 'E) = x |> throw |> WriterT.lift
-    static member inline Catch (m: WriterT<'``MonadError<'E2, 'T * 'Monoid>``>, h: 'E2 -> _) =
-            WriterT (catch (WriterT.run m) (WriterT.run << h)) : WriterT<'``MonadChoice<'T * 'Monoid, 'E2>``>
+    static member inline Catch (m: WriterT<'``MonadError<'E1, 'T * 'Monoid>``>, h: 'E1 -> _) : WriterT<'``MonadError<'E2, 'T * 'Monoid>``> =
+        WriterT (catch (WriterT.run m) (WriterT.run << h))
 
     static member inline CallCC (f: ('a->WriterT<Cont<'r,'t>>)->_) : WriterT<'``MonadCont<'r,'a*'b>``> =
         WriterT (callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, getZero ()))))
