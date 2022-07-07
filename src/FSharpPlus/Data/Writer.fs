@@ -1,5 +1,8 @@
 ﻿namespace FSharpPlus.Data
 
+#nowarn "0193"
+#nowarn "0193"
+
 open System.ComponentModel
 open FSharpPlus
 open FSharpPlus.Internals.Prelude
@@ -104,99 +107,159 @@ type Writer<'monoid,'t> with
 
 /// Monad Transformer for Writer<'Monoid, 'T>
 [<Struct>]
-type WriterT<'``monad<'t * 'monoid>``> = WriterT of '``monad<'t * 'monoid>``
+type WriterT<'monoid, 'monad, 't> =
+    /// Rerepsenmted as 'monad<'t * 'monoid>
+    Value of obj
+
+type [<AutoOpen>]WriterTOperations =
+    [<GeneralizableValue>]
+    static member inline WriterT< ^``monad<'t * 'monoid>``, ^monad, 'monoid, 't when (Map or  ^``monad<'t * 'monoid>`` or  ^monad) : (static member Map: ( ^``monad<'t * 'monoid>`` * ('t * 'monoid -> __)) * Map ->  ^monad)
+                                                                     and  (Map or  ^monad or  ^``monad<'t * 'monoid>``) : (static member Map: ( ^monad * (__ -> 't * 'monoid)) * Map ->  ^``monad<'t * 'monoid>``)
+                                                                        > (f: '``monad<'t * 'monoid>``) : WriterT<'monoid,'monad,'t> =
+        if opaqueId false then
+            let _: 'monad = Unchecked.defaultof<'``monad<'t * 'monoid>``> |> map (fun (_: 't * 'monoid) -> Unchecked.defaultof<__>)
+            let _: '``monad<'t * 'monoid>`` = Unchecked.defaultof<'monad> |> map (fun (_: __) -> Unchecked.defaultof<'t * 'monoid>)
+            ()
+        Value (f |> box)
+
+module [<AutoOpen>]WriterTOperations =
+    let inline writerT (x: '``monad<'t * 'monoid>``) : WriterT<'monoid, 'monad, 't> = WriterT x
+    let inline (|WriterT|) (Value x: WriterT<'Monoid, 'Monad, 'T>) =
+        if opaqueId false then
+            let _: '``Monad<'T * 'Monoid>`` = map (fun (_: __) -> Unchecked.defaultof<'T * 'Monoid>) Unchecked.defaultof<'Monad>
+            ()
+        x |> unbox : '``Monad<'T * 'Monoid>``
 
 /// Basic operations on WriterT
 [<RequireQualifiedAccess>]
 module WriterT =
 
-    let run (WriterT x) = x : '``Monad<'T * 'Monoid>``
+    let inline run (WriterT (x : '``Monad<'T * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'T>) = x
 
     /// Embed a Monad<'T> into a WriterT<'Monad<'T * 'Monoid>>
-    let inline lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> =
-        if opaqueId false then m |> liftM (fun a -> (a, getZero ())) |> WriterT
-        else m |> map (fun a -> (a, getZero ())) |> WriterT
+    let inline lift<'T, .. > (m: '``Monad<'T>``) : WriterT<'Monoid, 'Monad, 'T> =
+        WriterT <| (m |> (if opaqueId false then liftM else map) (fun a -> (a, getZero () : 'T * 'Monoid)) : '``Monad<'T * 'Monoid>``)
 
-    let inline map (f: 'T->'U) (WriterT m:WriterT<'``Monad<'T * 'Monoid>``>) =
+    let inline map<'T, 'U, .. > (f: 'T -> 'U) (WriterT (m: '``Monad<'T * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'U> =
         let mapWriter f (a, m) = (f a, m)
-        WriterT (map (mapWriter f) m) : WriterT<'``Monad<'U * 'Monoid>``>
+        WriterT (map (mapWriter f: _ -> 'U * 'Monoid) m: '``Monad<'U * 'Monoid>``)
 
     /// Combines two WriterTs into one by applying a mapping function.
-    let inline map2 (f: 'T->'U->'V) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT (lift2 (fun (x, a) (y, b) -> f x y, Plus.Invoke a b) x y)
+    let inline map2<'T, 'U, 'V, .. > (f: 'T -> 'U -> 'V) (WriterT (x: '``Monad<'T * 'Monoid>``): WriterT<'Monoid, 'Monad, 'T>) (WriterT (y: '``Monad<'U * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'U>) : WriterT<'Monoid, 'Monad, 'V> =
+        WriterT (lift2 (fun (x, a: 'Monoid) (y, b: 'Monoid) -> f x y, Plus.Invoke a b) x y : '``Monad<'V * 'Monoid>``)
 
     /// Combines three WriterTs into one by applying a mapping function.
-    let inline map3 (f: 'T->'U->'V->'W) (WriterT x: WriterT<'``Monad<'T * 'Monoid>``>) (WriterT y: WriterT<'``Monad<'U * 'Monoid>``>) (WriterT z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT (lift3 (fun (x, a) (y, b) (z, c) -> f x y z, a ++ b ++ c) x y z)
+    let inline map3<'T, 'U, 'V, 'W, .. > (f: 'T -> 'U -> 'V -> 'W) (WriterT (x: '``Monad<'T * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'T>) (WriterT (y: '``Monad<'U * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'U>) (WriterT (z: '``Monad<'V * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'V>) : WriterT<'Monoid, 'Monad, 'W> =
+        WriterT (lift3 (fun (x, a: 'Monoid) (y, b: 'Monoid) (z, c: 'Monoid) -> f x y z, a ++ b ++ c) x y z : '``Monad<'W * 'Monoid>``)
 
-    let inline apply (WriterT f : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) (WriterT x : WriterT<'``Monad<'T * 'Monoid>``>) =
-        let applyWriter (a, w) (b, w') = (a b, plus w w')
-        WriterT (result applyWriter <*> f <*> x) : WriterT<'``Monad<'U * 'Monoid>``>
+    let inline apply<'T, 'U, .. > (WriterT (f: '``Monad<('T -> 'U) * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'T -> 'U>) (WriterT x: WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'U> =
+        WriterT ((f >>= fun ((a: 'T -> 'U), w) -> (Map.Invoke (fun (b: 'T, w': 'Monoid) -> ((a b), plus w w')) (x: '``Monad<'T * 'Monoid>``))) : '``Monad<'U * 'Monoid>``)
         
-    let inline bind (f: 'T->WriterT<'``Monad<'U * 'Monoid>``>) (WriterT (m: '``Monad<'T * 'Monoid>``)) = 
-        WriterT (m >>= (fun (a, w) -> run (f a) >>= (fun (b, w') -> result (b, plus w w'))))  : WriterT<'``Monad<'U * 'Monoid>``>
+    let inline bind<'T, 'U, .. > (f: 'T -> WriterT<'Monoid, 'Monad, 'U>) (WriterT (m: '``Monad<'T * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'U> =
+        WriterT (m >>= (fun (a, w) -> (run (f a) : '``Monad<'U * 'Monoid>``) >>= (fun (b, w') -> (result ((b: 'U), (plus w w': 'Monoid)) : '``Monad<'U * 'Monoid>``) )))
 
-type WriterT<'``monad<'t * 'monoid>``> with
+type WriterT<'monoid, 'monad, 't> with
 
-    static member inline Return (x: 'T) = WriterT (result (x, getZero ())) : WriterT<'``Monad<'T * 'Monoid>``>
+    static member inline Return (x: 'T) =
+        let _:'``Monad<'T * 'Monoid>`` = 
+            if opaqueId false then
+                result Unchecked.defaultof<'T * 'Monoid>
+            else Unchecked.defaultof<_>
+        let _: '``Monad<'T * 'Monoid>`` = 
+            if opaqueId false then
+                map (fun (_: __) -> Unchecked.defaultof<'T * 'Monoid>) Unchecked.defaultof<'Monad>
+            else Unchecked.defaultof<_>
+        Value (result (x, getZero ()) : '``Monad<'T * 'Monoid>``) : WriterT<'Monoid,'Monad,'T>
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Map   (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> 'U)                                   = WriterT.map   f x : WriterT<'``Monad<'U * 'Monoid>``>
+    // [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Map (x: WriterT<'Monoid, 'Monad, 'T>, f: 'T -> 'U) = WriterT.map f x : WriterT<'Monoid, 'Monad, 'U>
 
     /// <summary>Lifts a function into a WriterT. Same as map.
     /// To be used in Applicative Style expressions, combined with &lt;*&gt;
     /// </summary>
     /// <category index="1">Functor</category>
-    static member inline (<!>) (f: 'T -> 'U, x: WriterT<'``Monad<'T * 'Monoid>``>) : WriterT<'``Monad<'U * 'Monoid>``> = WriterT.map f x
+    static member inline (<!>) (f: 'T -> 'U, x: WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'U> = WriterT.map<_, _, _, 'Monad, '``Monad<'T * 'Monoid>``, '``Monad<'U * 'Monoid>``> f x
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift2 (f: 'T->'U->'V, x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'V * 'Monoid>``> = WriterT.map2 f x y
+    // [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f: 'T -> 'U -> 'V, x: WriterT<'Monoid, 'Monad, 'T>, y: WriterT<'Monoid, 'Monad, 'U>) : WriterT<'Monoid, 'Monad, 'V> =
+        WriterT.map2<'T, 'U, 'V, 'Monoid, 'Monad, '``Monad<'T * 'Monoid>``, '``Monad<'U * 'Monoid>``, '``Monad<'V * 'Monoid>``> f x y
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift3 (f: 'T->'U->'V->'W, x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>, z: WriterT<'``Monad<'V * 'Monoid>``>) : WriterT<'``Monad<'W * 'Monoid>``> = WriterT.map3 f x y z
+    // [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T -> 'U -> 'V -> 'W, x: WriterT<'Monoid, 'Monad, 'T>, y: WriterT<'Monoid, 'Monad, 'U>, z: WriterT<'Monoid, 'Monad, 'V>) : WriterT<'Monoid, 'Monad, 'W> =
+        WriterT.map3<'T, 'U, 'V, 'W, 'Monoid, 'Monad, '``Monad<'T * 'Monoid>``, '``Monad<'U * 'Monoid>``, '``Monad<'V * 'Monoid>``, '``Monad<'W * 'Monoid>``> f x y z
 
-    static member inline (<*>) (f: WriterT<'``Monad<('T -> 'U) * 'Monoid>``>, x: WriterT<'``Monad<'T * 'Monoid>``>)  = WriterT.apply f x : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline (<*>) (f: WriterT<'Monoid, 'Monad, 'T -> 'U>, x: WriterT<'Monoid, 'Monad, 'T>) =
+        WriterT.apply<_, _, _, 'Monad, '``Monad<'(T -> 'U) * 'Monoid>``, '``Monad<'U * 'Monoid>``, '``Monad<'T * 'Monoid>``> f x : WriterT<'Monoid, 'Monad, 'U>
     
     /// <summary>
     /// Sequences two Writers left-to-right, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member inline ( *>) (x: WriterT<'``Monad<'T * 'Monoid>``>, y: WriterT<'``Monad<'U * 'Monoid>``>) : WriterT<'``Monad<'U * 'Monoid>``> = ((fun (_: 'T) (k: 'U) -> k) </WriterT.map/> x : WriterT<'``Monad<('U -> 'U) * 'Monoid>``>) </WriterT.apply/> y
-
+    static member inline ( *>) (x: WriterT<'Monoid, 'Monad, 'T>, y: WriterT<'Monoid, 'Monad, 'U>) : WriterT<'Monoid, 'Monad, 'U> =
+        let (<!>) = WriterT.map<_, _, _, 'Monad, '``Monad<'T * 'Monoid>``, '``Monad<('U -> 'U) * 'Monoid>``>
+        let (<*>) = WriterT.apply<_, _, _, 'Monad, '``Monad<'(U -> 'U) * 'Monoid>``, '``Monad<'U * 'Monoid>``, '``Monad<'U * 'Monoid>``>
+        ((fun (_: 'T) (k: 'U) -> k) <!> x: WriterT<'Monoid, 'Monad, ('U -> 'U)>) <*> y
+    
     /// <summary>
     /// Sequences two Writers left-to-right, discarding the value of the second argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member inline (<* ) (x: WriterT<'``Monad<'U * 'Monoid>``>, y: WriterT<'``Monad<'T * 'Monoid>``>) : WriterT<'``Monad<'U * 'Monoid>``> = ((fun (k: 'U) (_: 'T) -> k ) </WriterT.map/> x : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) </WriterT.apply/> y
+    static member inline (<* ) (x: WriterT<'Monoid, 'Monad, 'U>, y: WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'U> =
+        let (<!>) = WriterT.map<_, _, _, 'Monad, '``Monad<'U * 'Monoid>``, '``Monad<('T -> 'U) * 'Monoid>``>
+        let (<*>) = WriterT.apply<_, _, _, 'Monad, '``Monad<'(T -> 'U) * 'Monoid>``, '``Monad<'U * 'Monoid>``, '``Monad<'T * 'Monoid>``>
+        ((fun (k: 'U) (_: 'T) -> k) <!> x: WriterT<'Monoid, 'Monad, ('T -> 'U)>) <*> y
     
-    static member inline (>>=) (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> _)                                    = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>
+    static member inline (>>=) (x: WriterT<'Monoid, 'Monad, 'T>, f: 'T -> _) : WriterT<'Monoid, 'Monad, 'U> =
+        WriterT.bind<'T, 'U, 'Monoid, ' Monad, '``Monad<'T * 'Monoid>``, '``Monad<'U * 'Monoid>``> f x
 
-    static member inline get_Empty () = WriterT (getEmpty ()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
-    static member inline (<|>) (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>
+    static member inline get_Empty () : WriterT<'Monoid, 'MonadPlus, 'T> =
+        WriterTOperations.WriterT (getEmpty () : '``MonadPlus<'T * 'Monoid>``)
 
-    static member inline TryWith (source: WriterT<'``Monad<'T * 'Monoid>``>, f: exn -> WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (TryWith.Invoke (WriterT.run source) (WriterT.run << f))
-    static member inline TryFinally (computation: WriterT<'``Monad<'T * 'Monoid>``>, f) = WriterT (TryFinally.Invoke     (WriterT.run computation) f)
-    static member inline Using (resource, f: _ -> WriterT<'``Monad<'T * 'Monoid>``>)    = WriterT (Using.Invoke resource (WriterT.run << f))
-    static member inline Delay (body : unit   ->  WriterT<'``Monad<'T * 'Monoid>``>)    = WriterT (Delay.Invoke (fun _ -> WriterT.run (body ()))) : WriterT<'``Monad<'T * 'Monoid>``>
+    static member inline (<|>) (WriterT (m: '``MonadPlus<'T * 'S>``), WriterT (n: '``MonadPlus<'T * 'S>``)) : WriterT<'Monoid, 'MonadPlus, 'T> =
+        WriterTOperations.WriterT (m <|> n)
 
-    static member inline Tell   (w: 'Monoid) = WriterT (result ((), w))                                                                                        : WriterT<'``Monad<unit * 'Monoid>``>
-    static member inline Listen (WriterT m: WriterT<'``Monad<'T * 'Monoid>``>) = WriterT (m >>= (fun (a, w) -> result ((a, w), w)))                            : WriterT<'``Monad<('T * 'Monoid) * 'Monoid>``>
-    static member inline Pass   (WriterT m: WriterT<'``Monad<('T * ('Monoid -> 'Monoid)) * 'Monoid>``>) = WriterT (m >>= (fun ((a, f), w) -> result (a, f w))) : WriterT<'``Monad<'T * 'Monoid>``>
+    static member inline TryWith (source: WriterT<'Monoid, 'Monad, 'T>, f: exn -> WriterT<'Monoid, 'Monad, 'T>) =
+        WriterTOperations.WriterT< '``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (TryWith.Invoke (WriterT.run source) (WriterT.run << f))
+
+    static member inline TryFinally (computation: WriterT<'Monoid, 'Monad, 'T>, f) = WriterTOperations.WriterT<'``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (TryFinally.Invoke     (WriterT.run computation) f)
+    static member inline Using (resource, f: _ -> WriterT<'Monoid, 'Monad, 'T>)    = WriterTOperations.WriterT<'``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (Using.Invoke resource (WriterT.run << f))
+    static member inline Delay (body : unit   ->  WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'T> =
+        Value ((Delay.Invoke (fun _ -> WriterT.run (body ()) : '``Monad<'T * 'S>``)) |> box<'``Monad<'T * 'S>``>)
+
+
+    static member inline Tell (w: 'Monoid) : WriterT<'Monoid, 'Monad, unit> =
+        WriterTOperations.WriterT (result ((), w) : '``Monad<unit * 'Monoid>``)
+
+    static member inline Listen (WriterT (m: '``Monad<'T * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'T> ) : WriterT<'Monoid, 'Monad, 'T * 'Monoid> =
+        WriterTOperations.WriterT ((m >>= (fun ((a: 'T), w: 'Monoid) -> result ((a, w), w))) : '``Monad<('T * 'Monoid) * 'Monoid>``)
+
+    static member inline Pass   (WriterT (m: '``Monad<('T * ('Monoid' -> 'Monoid)) * 'Monoid>``) : WriterT<'Monoid, 'Monad, 'T * ('Monoid' -> 'Monoid)>) : WriterT<'Monoid, 'Monad, 'T> =
+        WriterTOperations.WriterT ((m >>= (fun ((a, f), w: 'Monoid) -> result ((a: 'T) , (f w: 'Monoid)))) : '``Monad<'T * 'Monoid>``)
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift (m: '``Monad<'T>``) : WriterT<'``Monad<'T * 'Monoid>``> = WriterT.lift m
+    static member inline Lift (m: '``Monad<'T>``) : WriterT<'Monoid, 'Monad, 'T> = WriterT.lift<_, _, '``Monad<'T * 'Monoid>``, _, _> m
     
-    static member inline LiftAsync (x: Async<'T>) = WriterT.lift (liftAsync x) : WriterT<'``MonadAsync<'T>``>
+    static member inline LiftAsync (x: Async<'T>) : WriterT<'Monoid, 'MonadAsync, 'T> = WriterT.lift<_, _, '``MonadAsync<'T * 'Monoid>``, _, _> (liftAsync x: '``MonadAsync<'T>``)
 
-    static member inline Throw (x: 'E) = x |> throw |> WriterT.lift
-    static member inline Catch (m: WriterT<'``MonadError<'E1, 'T * 'Monoid>``>, h: 'E1 -> _) : WriterT<'``MonadError<'E2, 'T * 'Monoid>``> =
-        WriterT (catch (WriterT.run m) (WriterT.run << h))
+    static member inline Throw (x: 'E) : WriterT<'Monoid, '``MonadError<'E>``, 'T> =
+        WriterT.lift<'T, '``MonadError<'E, 'T>``, '``MonadError<'E, 'T *  ^Monoid>``, '``MonadError<'E>``, 'Monoid> (throw x : '``MonadError<'E, 'T>``)
 
-    static member inline CallCC (f: ('a->WriterT<Cont<'r,'t>>)->_) : WriterT<'``MonadCont<'r,'a*'b>``> =
-        WriterT (callCC <| fun c -> WriterT.run (f (fun a -> WriterT <| c (a, getZero ()))))
+    static member inline Catch (m: WriterT<'Monoid, '``MonadError<'E1>``, 'T>, h: 'E1 -> WriterT<'Monoid, '``MonadError<'E2>``, 'T>) : WriterT<'Monoid, '``MonadError<'E2>``, 'T> =
+        WriterTOperations.WriterT (catch (WriterT.run m : '``MonadError<'E1, ('T * 'Monoid)>``) (WriterT.run << h) : '``MonadError<'E2, ('T * 'Monoid)>``)
+    
+    // 'Monad : MonadCont<'R, 'Monad>
+    static member inline CallCC (f: ('T -> WriterT<'Monoid, 'Monad, 'U>) -> WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'T> =
+        WriterTOperations.WriterT (callCC <| fun (c: ('T * 'Monoid) -> '``Monad<'U * 'Monoid>``) -> (WriterT.run (f (fun a -> WriterTOperations.WriterT <| c (a, (getZero () : 'Monoid)))) : '``Monad<'T * 'Monoid>``))
        
-    static member inline get_Ask ()                     = WriterT.lift ask    : WriterT<'``MonadReader<'R,'R*'Monoid>``>
-    static member inline Local (WriterT m, f: 'R1->'R2) = WriterT (local f m) : WriterT<'``MonadReader<'R1,'T*'Monoid>``>
+    // 'Monad : MonadReader<'R, 'Monad>
+    static member inline get_Ask () : WriterT<'Monoid, '``MonadReader<'R>``, 'R> = WriterT.lift<_, '``MonadReader<'R, 'R>``, '``MonadReader<'R, ('R * 'Monoid)>``, '``MonadReader<'R>``, _> ask
+    static member inline Local (WriterT m : WriterT<'Monoid, '``MonadReader<'R2>``, 'T>, f: 'R1 -> 'R2) : WriterT<'Monoid, '``MonadReader<'R1>``, 'T> =
+        WriterTOperations.WriterT (local f (m: '``MonadReader<'R2, 'T * 'Monoid>``) : '``MonadReader<'R1, 'T * 'Monoid>``)
+    
+    static member inline get_Get () : WriterT<'Monoid, '``StateMonad<'S>``, 'S> =
+        WriterT.lift<_, '``StateMonad<'S, 'S>``, '``StateMonad<'S, 'S *  'Monoid>``, '``StateMonad<'S>``, _> get
 
-    static member inline get_Get () = WriterT.lift get          : WriterT<'``MonadState<'S,'S*'Monoid>``>
-    static member inline Put (x: 'S) = x |> put |> WriterT.lift : WriterT<'``MonadState<'S,unit*'Monoid>``>
+    static member inline Put (x: 'S) : WriterT<'Monoid, '``StateMonad<'S>``, unit> =
+        x |> put |> WriterT.lift<_, '``StateMonad<'S, unit>``, '``StateMonad<'S, (unit * 'Monoid)>``, '``StateMonad<'S>``, _>
 
 #endif

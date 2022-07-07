@@ -1,3 +1,10 @@
+namespace FSharpPlus
+
+/// Represents a type parameter that goes here but right now is not applied.
+[<Sealed; NoComparison>]
+type __ = class end
+
+
 namespace FSharpPlus.Internals
 
 /// <namespacedoc>

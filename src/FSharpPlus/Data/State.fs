@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus.Data
 
+#nowarn "0193"
 #nowarn "1125"
 
 open System.ComponentModel
@@ -105,97 +106,165 @@ open FSharpPlus.Internals.Prelude
 
 /// Monad Transformer for State<'S, 'T>
 [<Struct>]
-type StateT<'s,'``monad<'t * 's>``> = StateT of ('s -> '``monad<'t * 's>``)
+type StateT<'s, 'monad, 't> =
+    /// Represented as 'monad<'t * 's>
+    Value of ('s -> obj)
+
+type [<AutoOpen>]StateTOperations =
+    [<GeneralizableValue>]
+    static member inline StateT< ^``monad<'t * 's>``, ^monad, 's, 't when (Map or  ^``monad<'t * 's>`` or  ^monad) : (static member Map: ( ^``monad<'t * 's>`` * ('t * 's -> __)) * Map ->  ^monad)
+                                                                     and  (Map or  ^monad or  ^``monad<'t * 's>``) : (static member Map: ( ^monad * (__ -> 't * 's)) * Map ->  ^``monad<'t * 's>``)
+                                                                        > (f: 's -> '``monad<'t * 's>``) : StateT<'s,'monad,'t> =
+        if opaqueId false then
+            let _: 'monad = Unchecked.defaultof<'``monad<'t * 's>``> |> map (fun (_: 't * 's) -> Unchecked.defaultof<__>)
+            let _: '``monad<'t * 's>`` = Unchecked.defaultof<'monad> |> map (fun (_: __) -> Unchecked.defaultof<'t * 's>)
+            ()
+        Value (f >> box)
+
+module [<AutoOpen>]StateTOperations =
+    let inline stateT (x: 's -> '``monad<'t * 's>``) : StateT<'s, 'monad, 't> = StateT x
+    let inline (|StateT|) (Value x: StateT<'S,'Monad,'T>) =
+        if opaqueId false then
+            let _: '``Monad<'T * 'S>`` = map (fun (_: __) -> Unchecked.defaultof<'T * 'S>) Unchecked.defaultof<'Monad>
+            ()
+        x >> unbox : 'S -> '``Monad<'T * 'S>``
 
 /// Basic operations on StateT
 [<RequireQualifiedAccess>]
 module StateT =
+
+    open FSharpPlus.Control
+
     /// Runs the state with an inital state to get back the result and the new state wrapped in an inner monad.
-    let run (StateT x) = x : 'S -> '``Monad<'T * 'S>``
+    let inline run (StateT (x : 'S -> '``Monad<'T * 'S>``) : StateT<'S, 'Monad, 'T>) = x
 
-    /// Embed a Monad<'T> into a StateT<'S,'``Monad<'T * 'S>``>
-    let inline lift (m: '``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> =
-        if opaqueId false then StateT <| fun s -> (m |> liftM (fun a -> (a, s)))
-        else StateT <| fun s -> (m |> map (fun a -> (a, s)))
-
-    /// Transform a State<'S, 'T> to a StateT<'S, '``Monad<'T * 'S>``>
-    let inline hoist (x: State<'S, 'T>) = (StateT << (fun a -> result << a) << State.run) x : StateT<'S, '``Monad<'T * 'S>``>
-
-    let inline map (f: 'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s'))) : StateT<'S,'``Monad<'U * 'S>``>
+    /// Embed a Monad<'T> into a StateT<'S, 'Monad, 'T>
+    let inline lift<'T, 'S, .. > (m: '``Monad<'T>``) : StateT<'S, 'Monad, 'T> =
+        StateT <| fun s -> ((m |> (if opaqueId false then liftM else map) (fun (a: 'T) -> (a, s))) : '``Monad<'T * 'S>``)
     
+    /// Transform a State<'S, 'T> to a StateT<'S, '``Monad<'T * 'S>``>
+    let inline hoist (x: State<'S, 'T>) =
+        let _: '``Monad<'T * 'S>`` = 
+            if opaqueId false then
+                map (fun _ -> Unchecked.defaultof<'T * 'S>) Unchecked.defaultof<'Monad>
+            else Unchecked.defaultof<_>
+        (StateT << (fun a -> (result: ('T * 'S) -> '``Monad<'T * 'S>``) << a) << State.run) x : StateT<'S, 'Monad, 'T>
+
+    let inline map<'T, 'U, 'S, .. > (f: 'T -> 'U) (StateT (m: _ -> '``Monad<'T * 'S>``) : StateT<'S, 'Monad, 'T>) =
+        StateT (m >> (Map.Invoke (fun (a, s': 'S) -> (f a, s')) : _ -> '``Monad<'U * 'S>``)) : StateT<'S, 'Monad, 'U>
+
     /// Combines two StateTs into one by applying a mapping function.
-    let inline map2 (f: 'T->'U->'V) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2: 'S) -> result (f g h, s2)) : StateT<'S,'``Monad<'V * 'S>``>
+    let inline map2<'T, 'U, 'V, 'S, .. > (f: 'T -> 'U -> 'V) (StateT (x: 'S -> '``Monad<'T * 'S>``) : StateT<'S, 'Monad, 'T>) (StateT (y: 'S -> '``Monad<'U * 'S>``) : StateT<'S, 'Monad, 'U>) : StateT<'S, 'Monad, 'V> =
+        StateT (fun s -> (x s: '``Monad<'T * 'S>``) >>= fun (g, s1) -> (y s1: '``Monad<'U * 'S>``) >>= fun (h, s2: 'S) -> (result (f g h, s2) : '``Monad<'V * 'S>``))
 
     /// Combines three StateTs into one by applying a mapping function.
-    let inline map3 (f: 'T->'U->'V->'W) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) (StateT z: StateT<'S,'``Monad<'V * 'S>``>) : StateT<'S,'``Monad<'W * 'S>``> =
-        StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2) -> z s2 >>= fun (i, s3) -> result (f g h i, s3))
+    let inline map3<'T, 'U, 'V, 'W, 'S, .. > (f: 'T -> 'U -> 'V -> 'W) (StateT (x: 'S -> '``Monad<'T * 'S>``) : StateT<'S, 'Monad, 'T>) (StateT (y: 'S -> '``Monad<'U * 'S>``) : StateT<'S, 'Monad, 'U>) (StateT (z: 'S -> '``Monad<'V * 'S>``): StateT<'S, 'Monad, 'V>) : StateT<'S, 'Monad, 'W> =
+        StateT (fun s -> (x s: '``Monad<'T * 'S>``) >>= fun (g, s1) -> (y s1: '``Monad<'U * 'S>``) >>= fun (h, s2) -> (z s2: '``Monad<'V * 'S>``) >>= fun (i, s3: 'S) -> (result (f g h i, s3) : '``Monad<'W * 'S>``))
+    
+    let inline apply<'T, 'U, 'S, .. > (StateT (f: 'S -> '``Monad<('T -> 'U) * 'S>``) : StateT<'S,'Monad,('T -> 'U)>) (StateT a: StateT<'S,'Monad,'T>) : StateT<'S, 'Monad, 'U> =
+        StateT (fun s -> f s >>= fun (g, t) -> (Map.Invoke (fun (z: 'T, u: 'S) -> ((g z: 'U), u)) (a t: '``Monad<'T * 'S>``) : '``Monad<'U * 'S>``))
 
-    let inline apply (StateT f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a: StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z: 'T, u: 'S) -> ((g z: 'U), u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
+    // /// Zips two StateTs into one.
+    let inline zip (x: StateT<'S, 'Monad, 'T>) (y: StateT<'S, 'Monad, 'U>) = apply (map tuple2 x) y : StateT<'S, 'Monad, ('T * 'U)>
 
-    /// Zips two StateTs into one.
-    let inline zip (x: StateT<'S,'``Monad<'T * 'S>``>) (y: StateT<'S,'``Monad<'U * 'S>``>) = apply (map tuple2 x) y : StateT<'S,'``Monad<('T * 'U) * 'S>``>
+    let inline bind<'T, 'U, 'S, .. > (f: 'T -> StateT<'S, 'Monad, 'U>) (StateT m: StateT<'S, 'Monad, 'T>) : StateT<'S ,'Monad, 'U> =
+        StateT (fun s -> (m s: '``Monad<'T * 'S>``) >>= (fun (a, s') -> run (f a) s') : '``Monad<'U * 'S>``)        
 
-    let inline bind (f: 'T->StateT<'S,'``Monad<'U * 'S>``>) (StateT m: StateT<'S,'``Monad<'T * 'S>``>) = StateT <| fun s -> m s >>= (fun (a, s') -> run (f a) s')
+type StateT<'s, 'monad, 't> with
 
-type StateT<'s,'``monad<'t * 's>``> with
-
-    static member inline Return (x: 'T) = StateT (fun s -> result (x, s)) : StateT<'S,'``Monad<'T * 'S>``>
+    static member inline Return (x: 'T) =
+        let _: '``Monad<'T * 'S>`` = 
+            if opaqueId false then
+                result Unchecked.defaultof<'T * 'S>
+            else Unchecked.defaultof<_>
+        let _: '``Monad<'T * 'S>`` = 
+            if opaqueId false then
+                map (fun (_: __) -> Unchecked.defaultof<'T * 'S>) Unchecked.defaultof<'Monad>
+            else Unchecked.defaultof<_>
+        Value (fun s -> box (result (x, s) : '``Monad<'T * 'S>``)) : StateT<'S, 'Monad, 'T>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Map    (x: StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
+    static member inline Map (x: StateT<'S, 'Monad, 'T>, f : 'T -> 'U) : StateT<'S, 'Monad, 'U> = StateT.map<_, _, _, 'Monad, '``Monad<'T * 'S>``, '``Monad<'U * 'S>``> f x
 
     /// <summary>Lifts a function into a StateT. Same as map.
     /// To be used in Applicative Style expressions, combined with &lt;*&gt;
     /// </summary>
     /// <category index="1">Functor</category>
-    static member inline (<!>) (f: 'T -> 'U, x: StateT<'S, '``Monad<'T * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = StateT.map f x
-
+    static member inline (<!>) (f: 'T -> 'U, x: StateT<'S, 'Monad, 'T>) : StateT<'S, 'Monad, 'U> = StateT.map<_, _, _, 'Monad, '``Monad<'T * 'S>``, '``Monad<'U * 'S>``> f x
+    
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift2 (f: 'T->'U->'V, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT.map2 f x y
-
+    static member inline Lift2 (f: 'T -> 'U -> 'V, x: StateT<'S, 'Monad, 'T>, y: StateT<'S, 'Monad, 'U>) : StateT<'S, 'Monad, 'V> =
+        StateT.map2<'T, 'U, 'V, 'S, 'Monad, '``Monad<'T * 'S>``, '``Monad<'U * 'S>``, '``Monad<'V * 'S>``> f x y
+    
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift3 (f: 'T->'U->'V->'W, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>, z : StateT<'S,'``Monad<'V * 'S>``>) : StateT<'S,'``Monad<'W * 'S>``> = StateT.map3 f x y z
-
-    static member inline (<*>)  (f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x: StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
+    static member inline Lift3 (f: 'T -> 'U -> 'V -> 'W, x: StateT<'S, 'Monad, 'T>, y: StateT<'S, 'Monad, 'U>, z : StateT<'S, 'Monad, 'V>) : StateT<'S, 'Monad, 'W> =
+        StateT.map3<'T, 'U, 'V, 'W, 'S, 'Monad, '``Monad<'T * 'S>``, '``Monad<'U * 'S>``, '``Monad<'V * 'S>``, '``Monad<'W * 'S>``> f x y z
+    
+    static member inline (<*>)  (f: StateT<'S, 'Monad, ('T -> 'U)>, x: StateT<'S, 'Monad, 'T>) =
+        StateT.apply<_, _, _, 'Monad, '``Monad<'(T -> 'U) * 'S>``, '``Monad<'U * 'S>``, '``Monad<'T * 'S>``> f x : StateT<'S, 'Monad, 'U>
     
     /// <summary>
     /// Sequences two States left-to-right, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member inline ( *>) (x: StateT<'S, '``Monad<'T * 'S>``>, y: StateT<'S, '``Monad<'U * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = ((fun (_: 'T) (k: 'U) -> k) </StateT.map/> x : StateT<'S, '``Monad<('U->'U) * 'S>``>) </StateT.apply/> y
-
+    static member inline ( *>) (x: StateT<'S, 'Monad, 'T>, y: StateT<'S, 'Monad, 'U>) : StateT<'S, 'Monad, 'U> =
+        let (<!>) = StateT.map<_, _, _, 'Monad, '``Monad<'T * 'S>``, '``Monad<('U -> 'U) * 'S>``>
+        let (<*>) = StateT.apply<_, _, _, 'Monad, '``Monad<'(U -> 'U) * 'S>``, '``Monad<'U * 'S>``, '``Monad<'U * 'S>``>
+        ((fun (_: 'T) (k: 'U) -> k) <!> x: StateT<'S, 'Monad, ('U -> 'U)>) <*> y
+    
     /// <summary>
     /// Sequences two States left-to-right, discarding the value of the second argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member inline (<* ) (x: StateT<'S, '``Monad<'U * 'S>``>, y: StateT<'S, '``Monad<'T * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = ((fun (k: 'U) (_: 'T) -> k ) </StateT.map/> x : StateT<'S, '``Monad<('T->'U) * 'S>``>) </StateT.apply/> y
+    static member inline (<* ) (x: StateT<'S, 'Monad, 'U>, y: StateT<'S, 'Monad, 'T>) : StateT<'S, 'Monad, 'U> =
+        let (<!>) = StateT.map<_, _, _, 'Monad, '``Monad<'U * 'S>``, '``Monad<('T -> 'U) * 'S>``>
+        let (<*>) = StateT.apply<_, _, _, 'Monad, '``Monad<'(T -> 'U) * 'S>``, '``Monad<'U * 'S>``, '``Monad<'T * 'S>``>
+        ((fun (k: 'U) (_: 'T) -> k) <!> x: StateT<'S, 'Monad, ('T -> 'U)>) <*> y
+
+    static member inline (>>=) (x: StateT<'S, 'Monad, 'T>, f: 'T -> StateT<'S, 'Monad, 'U>) : StateT<'S, 'Monad, 'U> =
+        StateT.bind<_, _, _, 'Monad, '``Monad<'T>``, '``Monad<'U>``> f x
+
+    static member inline get_Empty () =
+        StateTOperations.StateT (fun _ -> getEmpty () : '``MonadPlus<'T * 'S>``) : StateT<'S, 'MonadPlus, 'T>
+
+    static member inline (<|>) (StateT (m: 'S -> '``MonadPlus<'T * 'S>``) : StateT<'S, 'MonadPlus, 'T>, StateT (n: 'S -> '``MonadPlus<'T * 'S>``) : StateT<'S, 'MonadPlus, 'T>) : StateT<'S, 'MonadPlus, 'T> =
+        StateTOperations.StateT (fun s -> m s <|> n s)
     
-    static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>) = StateT.bind  f x
-
-    static member inline get_Empty () = StateT (fun _ -> getEmpty ()) : StateT<'S,'``MonadPlus<'T * 'S>``>
-    static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
-
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Zip (x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) = StateT.zip x y
-
-    static member inline TryWith (source: StateT<'S,'``Monad<'T * 'S>``>, f: exn -> StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> TryWith.InvokeForStrict (fun () -> StateT.run source s) (fun x -> StateT.run (f x) s))
-    static member inline TryFinally (computation: StateT<'S,'``Monad<'T * 'S>``>, f) = StateT (fun s -> TryFinally.InvokeForStrict (fun () -> StateT.run computation s) f)
-    static member inline Using (resource, f: _ -> StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Using.Invoke resource (fun x -> StateT.run (f x) s))
-    static member inline Delay (body : unit   ->  StateT<'S,'``Monad<'T * 'S>``>)    = StateT (fun s -> Delay.Invoke (fun _ -> StateT.run (body ()) s)) : StateT<'S,'``Monad<'T * 'S>``>
-
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift (m: '``Monad<'T>``) : StateT<'S,'``Monad<'T * 'S>``> = StateT.lift m
-
-    static member inline LiftAsync (x :Async<'T>) = StateT.lift (liftAsync x) : StateT<'S,'``MonadAsync<'T>``>
+    static member inline Zip (x: StateT<'S, 'Monad, 'T>, y: StateT<'S, 'Monad, 'U>) = StateT.zip x y
     
-    static member inline get_Get ()  = StateT (fun s -> result (s , s)) : StateT<'S, '``Monad<'S * 'S>``>
-    static member inline Put (x: 'S) = StateT (fun _ -> result ((), x)) : StateT<'S, '``Monad<unit * 'S>``>
+    static member inline TryWith (source: StateT<'S, 'Monad, 'T>, f: exn -> StateT<'S, 'Monad, 'T>) =
+        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryWith.InvokeForStrict (fun () -> (StateT.run source s : '``Monad<'T * 'S>`` )) (fun x -> StateT.run (f x) s))
 
-    static member inline Throw (x: 'E) = x |> throw |> StateT.lift
-    static member inline Catch (m: StateT<'S,'``MonadError<'E1,'T * 'S>``>, h: 'E1 -> _) =
-        StateT (fun s -> catch (StateT.run m s) (fun e -> StateT.run (h e) s)) : StateT<'S,'``MonadError<'E2, 'T * 'S>``>
+    static member inline TryFinally (computation: StateT<'S,'Monad,'T>, f) =
+        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryFinally.InvokeForStrict (fun () -> StateT.run computation s) f)
 
-    static member inline get_Ask ()                      = StateT.lift ask       : StateT<'S, '``MonadReader<'R, 'R>``>
-    static member inline Local (StateT m, f: 'R1 -> 'R2) = StateT (local f << m) : StateT<'S, '``MonadReader<'R1, 'T>``>
+    static member inline Using (resource: 'S, f: _ -> StateT<'S,'Monad,'T>) =
+        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> Using.Invoke resource (fun x -> StateT.run (f x) s))
+    
+    static member inline Delay (body: unit -> StateT<'S, 'Monad, 'T>) =
+        Value ((fun s -> Delay.Invoke (fun _ -> (StateT.run (body ()) s: '``Monad<'T * 'S>``) )) >> box<'``Monad<'T * 'S>``>) : StateT<'S, 'Monad, 'T>
+
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift (m: '``Monad<'T>``) : StateT<'S, 'Monad, 'T> = StateT.lift<_, _, _, '``Monad<'T * 'S>``, _> m
+  
+    static member inline LiftAsync (x: Async<'T>) =
+        StateT.lift<_, _, _, '``MonadAsync<'T * 'S>``, _> (liftAsync x: '``MonadAsync<'T>``) : StateT<'S, 'MonadAsync, 'T>
+         
+    static member inline get_Get ()  =
+        StateTOperations.StateT (fun s -> result (s , s) : '``Monad<'S * 'S>``) : StateT<'S, 'Monad, 'S>
+
+    static member inline Put (x: 'S) =
+        StateTOperations.StateT (fun _ -> (result ((), x) : '``Monad<unit * 'S>``)) : StateT<'S, 'Monad, unit>
+
+    static member inline Throw (x: 'E) : StateT<'S, '``MonadError<'E>``, 'T> =
+        x |> (throw: 'E -> '``MonadError<'E, 'T>``) |> StateT.lift
+
+    static member inline Catch (m: StateT<'S, '``MonadError<'E1>`` ,'T>, h: 'E1 -> StateT<'S, '``MonadError<'E2>``, 'T>) =
+        StateTOperations.StateT (fun s -> catch (StateT.run m s: '``MonadError<'E1, ('T * 'S)>``) (fun e -> StateT.run (h e) s: '``MonadError<'E2, ('T * 'S)>``)) : StateT<'S, '``MonadError<'E2>``, 'T>
+
+    static member inline get_Ask () : StateT<'S, '``MonadReader<'R>``, 'R> = StateT.lift<'R, 'S, '``MonadReader<'R, 'R>``, '``MonadReader<'R, ('R * 'S)>``, '``MonadReader<'R>``> ask
+    static member inline Local (StateT (m: 'S -> '``MonadReader<'R2, ('T * 'S)>``) : StateT<'S, '``MonadReader<'`R2>``, 'T>, f: 'R1 -> 'R2) : StateT<'S, '``MonadReader<'R1>``, 'T> = StateTOperations.StateT (local f << m: 'S -> '``MonadReader<'R1, ('T * 'S)>``)
 
 #endif
