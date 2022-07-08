@@ -262,11 +262,8 @@ type TryFinally with
     [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
     static member        TryFinally ((_: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, _: unit -> unit), _: Default3, _: Default1, _defaults: False) = raise Internals.Errors.exnUnreachable
 
-    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2, _defaults: True) = try computation () finally compensation ()
-    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1, _defaults: True) = try computation () finally compensation ()
-    
-    static member inline TryFinally ((computation: unit -> '``Monad<'T>``                                 , compensation: unit -> unit), _: Default1, _: TryFinally, _) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
-    static member inline TryFinally (( _         : unit -> ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _            , _) = ()
+    static member        TryFinally ((computation: unit -> '``Monad<'T>``, compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: True ) = try computation () finally compensation ()
+    static member inline TryFinally ((computation: unit -> '``Monad<'T>``, compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: False) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
 
 
 type Using =
