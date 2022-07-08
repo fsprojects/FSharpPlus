@@ -239,22 +239,36 @@ type TryFinally =
     
     static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinally, _, _) = try computation () finally compensation ()
     static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinally, _, _) = async.TryFinally (computation (), compensation) : Async<_>
-    #if !FABLE_COMPILER
-    static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinally, _, True) = Task.tryFinally computation compensation : Task<_>
-    #endif
     static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinally, _, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
 
     static member inline Invoke (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>, False)
         call (Unchecked.defaultof<TryFinally>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
 
-    static member inline InvokeForStrict (source: unit ->'``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>, True)
-        call (Unchecked.defaultof<TryFinally>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
-
-    static member inline InvokeOnInstance (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = (^``Monad<'T>`` : (static member TryFinally : _*_->_) source, f) : '``Monad<'T>``
+    static member inline InvokeOnInstance (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = printfn "Try Finally default 8 for %A" typeof< ^``Monad<'T>``>; (^``Monad<'T>`` : (static member TryFinally : _*_->_) source, f) : '``Monad<'T>``
 
 type TryFinally with
+    static member inline TryFinally ((computation: unit -> '``Monad<'T>`` , compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: False) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
+    static member inline TryFinally (( _         : unit -> ^t when ^t:null and ^t:struct                  , _           : unit -> unit), _: Default1, _: TryFinally , _) = ()
+
+type TryFinallyS =
+    inherit Default1
+
+    [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
+    static member        TryFinally ((_:           unit -> 'R -> _            , _: unit -> unit), _: Default2  , _, _defaults: False) = raise Internals.Errors.exnUnreachable
+    
+    static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinallyS, _, _) = try computation () finally compensation ()
+    #if !FABLE_COMPILER
+    static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinallyS, _, True) = Task.tryFinally computation compensation : Task<_>
+    #endif
+
+    static member inline Invoke (source: unit ->'``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinallyS>, True)
+        call (Unchecked.defaultof<TryFinallyS>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
+
+    static member inline InvokeOnInstance (source: unit -> '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = (^``Monad<'T>`` : (static member TryFinally : _*_->_) source, f) : '``Monad<'T>``
+
+type TryFinallyS with
 
     [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
     static member        TryFinally ((_: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, _: unit -> unit), _: Default3, _: Default2, _defaults: False) = raise Internals.Errors.exnUnreachable
@@ -262,9 +276,12 @@ type TryFinally with
     [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
     static member        TryFinally ((_: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, _: unit -> unit), _: Default3, _: Default1, _defaults: False) = raise Internals.Errors.exnUnreachable
 
-    static member        TryFinally ((computation: unit -> '``Monad<'T>``, compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: True ) = try computation () finally compensation ()
-    static member inline TryFinally ((computation: unit -> '``Monad<'T>``, compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: False) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
-    static member inline TryFinally (( _         : unit -> ^t when ^t: null and ^t: struct, _: unit -> unit), _: Default1, _      , _               ) = ()
+    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, compensation: unit -> unit), _: Default3, _: Default2, _defaults: True) = try computation () finally compensation ()
+    static member        TryFinally ((computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, compensation: unit -> unit), _: Default3, _: Default1, _defaults: True) = try computation () finally compensation ()
+    
+    static member inline TryFinally ((computation: unit -> '``Monad<'T>`` , compensation: unit -> unit), _: Default1, _: TryFinallyS, _defaults: _) = TryFinallyS.InvokeOnInstance computation compensation: '``Monad<'T>``
+    static member inline TryFinally (( _: unit -> ^t when ^t : null and ^t : struct , _ : unit -> unit), _: Default1, _             , _           ) = ()
+
 
 type Using =
     inherit Default1

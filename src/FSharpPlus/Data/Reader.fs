@@ -223,7 +223,7 @@ type ReaderT<'r, 'monad, 't> with
         ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryWith.InvokeForStrict (fun () -> (ReaderT.run source s : '``Monad<'T>``)) (fun x -> ReaderT.run (f x) s))
 
     static member inline TryFinally (computation: ReaderT<'R, 'Monad, 'T>, f) =
-        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryFinally.InvokeForStrict (fun () -> ReaderT.run computation s) f)
+        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryFinallyS.Invoke (fun () -> ReaderT.run computation s) f)
 
     static member inline Using (resource, f: _ -> ReaderT<'R, 'Monad, 'T>) =
         ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> Using.Invoke resource (fun x -> ReaderT.run (f x) s))

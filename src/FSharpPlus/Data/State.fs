@@ -237,7 +237,7 @@ type StateT<'s, 'monad, 't> with
         StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryWith.InvokeForStrict (fun () -> (StateT.run source s : '``Monad<'T * 'S>`` )) (fun x -> StateT.run (f x) s))
 
     static member inline TryFinally (computation: StateT<'S,'Monad,'T>, f) =
-        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryFinally.InvokeForStrict (fun () -> StateT.run computation s) f)
+        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryFinallyS.Invoke (fun () -> StateT.run computation s) f)
 
     static member inline Using (resource: 'S, f: _ -> StateT<'S,'Monad,'T>) =
         StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> Using.Invoke resource (fun x -> StateT.run (f x) s))
