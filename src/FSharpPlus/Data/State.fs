@@ -234,7 +234,7 @@ type StateT<'s, 'monad, 't> with
     static member inline Zip (x: StateT<'S, 'Monad, 'T>, y: StateT<'S, 'Monad, 'U>) = StateT.zip x y
     
     static member inline TryWith (source: StateT<'S, 'Monad, 'T>, f: exn -> StateT<'S, 'Monad, 'T>) =
-        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryWith.InvokeForStrict (fun () -> (StateT.run source s : '``Monad<'T * 'S>`` )) (fun x -> StateT.run (f x) s))
+        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryWithS.Invoke (fun () -> (StateT.run source s : '``Monad<'T * 'S>`` )) (fun x -> StateT.run (f x) s))
 
     static member inline TryFinally (computation: StateT<'S,'Monad,'T>, f) =
         StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryFinallyS.Invoke (fun () -> StateT.run computation s) f)

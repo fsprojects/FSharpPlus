@@ -220,7 +220,7 @@ type ReaderT<'r, 'monad, 't> with
     static member inline Zip (x: ReaderT<'S, 'Monad, 'T>, y: ReaderT<'S, 'Monad, 'U>) = ReaderT.zip x y
  
     static member inline TryWith (source: ReaderT<'R, 'Monad, 'T>, f: exn -> ReaderT<'R, 'Monad, 'T>) =
-        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryWith.InvokeForStrict (fun () -> (ReaderT.run source s : '``Monad<'T>``)) (fun x -> ReaderT.run (f x) s))
+        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryWithS.Invoke (fun () -> (ReaderT.run source s : '``Monad<'T>``)) (fun x -> ReaderT.run (f x) s))
 
     static member inline TryFinally (computation: ReaderT<'R, 'Monad, 'T>, f) =
         ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryFinallyS.Invoke (fun () -> ReaderT.run computation s) f)
