@@ -264,7 +264,7 @@ type TryFinally with
 
     static member        TryFinally ((computation: unit -> '``Monad<'T>``, compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: True ) = try computation () finally compensation ()
     static member inline TryFinally ((computation: unit -> '``Monad<'T>``, compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: False) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``
-
+    static member inline TryFinally (( _         : unit -> ^t when ^t: null and ^t: struct, _: unit -> unit), _: Default1, _      , _               ) = ()
 
 type Using =
     inherit Default1
