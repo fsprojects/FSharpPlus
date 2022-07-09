@@ -144,7 +144,7 @@ let some14 =
 
 (**
 ```f#
-let fn : ResultT<Reader<int,Result<_,string>>> = 
+let fn : ResultT<string, Reader<int,__>, _> = 
     monad {
        let! x1 = lift ask
        let! x2 = 
@@ -182,7 +182,7 @@ let decodeError = function
 
 // Now the following functions compose the Error monad with the Async one.
 
-let getValidPassword : ResultT<_> =
+let getValidPassword : ResultT<_, _, _> =
     monad {
         let! s = liftAsync getLine
         if isValid s then return s
@@ -254,11 +254,11 @@ module CombineReaderWithWriterWithResult =
         let! w = eitherConv divide5By       6.0
         let! x = eitherConv divide5By       3.0
         let! y = eitherConv divide5By       0.0
-        let! z = eitherConv otherDivide5By  0.0 </catch/> (throw << (fun _ -> "Unknown error"))
+        let! z = eitherConv otherDivide5By  0.0 </catch/> (throw << (fun (_: unit) -> "Unknown error"))
 
         return (w, x, y, z) }
 
-    let run expr = ReaderT.run expr >> ResultT.run >> Writer.run
+    let run expr  = ReaderT.run expr >> ResultT.run >> Writer.run
 
     let (_, log) = run divide DateTime.UtcNow
 
