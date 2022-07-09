@@ -206,7 +206,7 @@ type TryWith =
     static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1, _) = ()
     
     static member        TryWith (computation: unit -> seq<_>        , catchHandler: exn -> seq<_>        , _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e))
-    static member        TryWith (computation: unit -> FSharpPlus.Data.NonEmptySeq<_>, catchHandler: exn -> FSharpPlus.Data.NonEmptySeq<_>, _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> FSharpPlus.Data.NonEmptySeq.unsafeOfSeq
+    static member        TryWith (computation: unit -> NonEmptySeq<_>, catchHandler: exn -> NonEmptySeq<_>, _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> NonEmptySeq.unsafeOfSeq
     static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2, _) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith , _) = async.TryWith ((computation ()), catchHandler)
     #if !FABLE_COMPILER
@@ -217,6 +217,10 @@ type TryWith =
     static member inline Invoke (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, False)
         call (Unchecked.defaultof<TryWith>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
+
+    static member inline InvokeFromOtherMonad (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, True)
+        call (Unchecked.defaultof<TryWith>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
 
     static member inline InvokeForWhile (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, While)
@@ -237,7 +241,7 @@ type TryWithS =
     static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1, _) = ()
     
     static member        TryWith (computation: unit -> seq<_>        , catchHandler: exn -> seq<_>        , _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e))
-    static member        TryWith (computation: unit -> FSharpPlus.Data.NonEmptySeq<_>, catchHandler: exn -> FSharpPlus.Data.NonEmptySeq<_>, _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> FSharpPlus.Data.NonEmptySeq.unsafeOfSeq
+    static member        TryWith (computation: unit -> NonEmptySeq<_>, catchHandler: exn -> NonEmptySeq<_>, _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> NonEmptySeq.unsafeOfSeq
     static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2, _) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWithS, _) = async.TryWith ((computation ()), catchHandler)
     #if !FABLE_COMPILER
