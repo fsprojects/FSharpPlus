@@ -18,6 +18,14 @@
     <Exec Command='dotnet test tests/FSharpPlus.Tests -c Release --logger:trx' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
 
+  <!-- dotnet msbuild -target:AllDocs build.proj -->
+  <Target Name="AllDocs">
+    <Exec Command='dotnet build FSharpPlus.sln -c Release' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='./docsrc/tools/download_nugets.cmd' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" Condition=" '$(OS)' == 'Windows_NT' " />
+    <Exec Command='./docsrc/tools/download_nugets.sh' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" Condition=" '$(OS)' != 'Windows_NT' " />
+    <Exec Command='dotnet run -c Release --project ./docsrc/tools' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
   <Target Name="VSTest" DependsOnTargets="Test" />
 
 </Project>
