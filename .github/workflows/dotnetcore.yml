@@ -23,3 +23,24 @@ jobs:
       run: dotnet build build.proj --configuration Release
     - name: Test with dotnet
       run: dotnet test build.proj -v n
+
+  docs:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.201
+    - name: Setup .NET Core 5
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.405
+    - name: Setup .NET Core 3.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.416
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Build All Docs
+      run: dotnet msbuild -target:AllDocs build.proj
