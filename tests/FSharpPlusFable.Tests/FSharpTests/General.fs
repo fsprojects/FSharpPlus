@@ -118,7 +118,7 @@ let monadTransformers = testList "MonadTransformers" [
 
         // test generic put (no unknown(1,1): error FS0073: internal error: Undefined or unsolved type variable:  ^_?51242)
         let initialState = -1
-        let _ = put initialState : ListT<State<int, unit list>>
+        let _ = put initialState : ListT<State<int, unit>>
         let _ = put initialState : ChoiceT<string, State<int, __>, unit>
 
         ())
