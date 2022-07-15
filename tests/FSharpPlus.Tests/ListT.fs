@@ -19,7 +19,7 @@ module BasicTests =
   
     [<Test>]
     let infiniteLists () =
-        let (infinite: ListT<Lazy<_>>) = ListT.unfold (fun x -> monad { return (Some (x, x + 1) ) }) 0
+        let (infinite: ListT<Lazy<__>, _>) = ListT.unfold (fun x -> monad { return (Some (x, x + 1) ) }) 0
         let finite = take 12 infinite
         let res = finite <|> infinite
         CollectionAssert.AreEqual (res |> take 13 |> ListT.run |> extract, [0;1;2;3;4;5;6;7;8;9;10;11;0])
@@ -30,7 +30,7 @@ module BasicTests =
         let res2 = listT (Task.FromResult [1..4]) >>= (fun x -> listT (Task.FromResult  [x * 2]))
         let res3 = listT (ResizeArray [ [1..4] ]) >>= (fun x -> listT (ResizeArray [ [x * 2] ]))
         let res4 = listT (lazy [1..4]) >>= (fun x -> listT (lazy ( [x * 2])))
-        let (res5: ListT<_ seq>) = listT (seq [ [1..4] ]) >>= (fun x -> listT (seq [ [x * 2] ]))
+        let (res5: ListT<__ seq, _>) = listT (seq [ [1..4] ]) >>= (fun x -> listT (seq [ [x * 2] ]))
         () // Note: seq needs type annotation.
         
     let bind_for_ideantity () =
@@ -38,7 +38,7 @@ module BasicTests =
         ()    
         
     let computation_expressions () =
-        let oneTwoThree : ListT<_> = monad.plus { 
+        let oneTwoThree : ListT<_, _> = monad.plus { 
             do! lift <| Async.Sleep 10
             yield 1
             do! lift <| Async.Sleep 50
