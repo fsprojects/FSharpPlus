@@ -291,6 +291,8 @@ type TryFinallyS =
     static member        TryFinally ((computation: unit -> Id<_>   , compensation: unit -> unit), _: TryFinallyS, _, _) = try computation () finally compensation ()
     #if !FABLE_COMPILER
     static member        TryFinally ((computation: unit -> Task<_> , compensation: unit -> unit), _: TryFinallyS, _, True) = Task.tryFinally computation compensation : Task<_>
+    #else
+    static member        TryFinally ((computation: unit -> Tuple<_> , compensation: unit -> unit), _: TryFinallyS, _, True) = try computation () finally compensation ()
     #endif
 
     static member inline Invoke (source: unit ->'``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` =
