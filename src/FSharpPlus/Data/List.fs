@@ -298,6 +298,10 @@ type ListT<'monad, 't> with
     static member inline Local (m: ListT<'``MonadReader<'R2>``, 'T>, f: 'R1 -> 'R2) : ListT<'``MonadReader<'R1>``, 'T> =
         listT<'T, '``MonadReader<'R1, list<'T>>``, '``MonadReader<'R1, ('T * int) option>``, '``MonadReader<'R1, ListTNode<MonadReader<'R1>, 'T>>``, _> (local f (ListT.run<'T, '``MonadReader<'R2>``, '``MonadReader<'R2, ListTNode<MonadReader<'R2>, 'T>>``, '``MonadReader<'R2, list<'T>>``> m))
 
-    static member inline Take (lst : ListT<'Monad, 'T>, c: int, _: Take) : ListT<'Monad, 'T> = ListT.take<_, _,  '``Monad<ListTNode<'Monad, 'T>>``> c lst
+    #if FABLE_COMPILER_3
+    static member inline Take (lst : ListT<'Monad, 'T>, c: int, _: Take) : ListT<'Monad, 'T> = ListT.take c lst
+    #else
+    static member inline Take (lst : ListT<'Monad, 'T>, c: int, _: Take) : ListT<'Monad, 'T> = ListT.take<_, _, '``Monad<ListTNode<'Monad, 'T>>``> c lst
+    #endif
 
 #endif
