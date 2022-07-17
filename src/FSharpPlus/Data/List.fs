@@ -275,7 +275,7 @@ type ListT<'monad, 't> with
     static member inline TryWith (source: ListT<'Monad, 'T>, f: exn -> ListT<'Monad, 'T>) = ListT (TryWith.Invoke (ListT.unwrap source: '``Monad<ListTNode<'Monad, 'T>>``) (ListT.unwrap << f))
     static member inline TryFinally (computation: ListT<'Monad, 'T>, f) = ListT (TryFinally.Invoke     (ListT.unwrap computation: '``Monad<ListTNode<'Monad, 'T>>``) f)
     static member inline Using (resource, f: _ -> ListT<'Monad, 'T>)    = ListT (Using.Invoke resource (ListT.unwrap << f : 'R -> '``Monad<ListTNode<'Monad, 'T>>``))
-    static member inline Delay (body : unit   ->  ListT<'Monad, 'T>) : ListT<'Monad, 'T> = ListT (Delay.Invoke (fun _ -> ListT.unwrap (body ()) : '``Monad<ListTNode<'Monad, 'T>>``))
+    static member inline Delay (body: unit -> ListT<'Monad, 'T>) : ListT<'Monad, 'T> = ListT (Delay.Invoke (fun () -> ListT.unwrap (body ()) : '``Monad<ListTNode<'Monad, 'T>>``))
 
     static member inline Lift (x: '``Monad<'T>``) = ListT.lift<_, _, '``Monad<ListTNode<'Monad, 'T>>``, _> x : ListT<'Monad, 'T>
     
