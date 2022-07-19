@@ -126,10 +126,10 @@ type ResultT<'e, 'monad, 't> with
     static member inline (>>=) (x: ResultT<'E, 'Monad, 'T>, f: 'T -> ResultT<'E, 'Monad, 'U>) =
         ResultT.bind<'T, 'U, 'E, 'Monad, '``Monad<Result<'T, 'E>>``, '``Monad<Result<'U, 'E>>``> f x : ResultT<'E, 'Monad, 'U>
 
-    static member inline TryWith (source: ResultT<'E, 'Monad, 'T>, f: exn -> ResultT<'E, 'Monad, 'T>) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWith.Invoke (ResultT.run source) (ResultT.run << f))
-    static member inline TryFinally (computation: ResultT<'E, 'Monad, 'T>, f) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinally.Invoke     (ResultT.run computation) f)
+    static member inline TryWith (source: unit -> ResultT<'E, 'Monad, 'T>, f: exn -> ResultT<'E, 'Monad, 'T>) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWithS.InvokeFromOtherMonad (fun () -> ResultT.run (source ())) (ResultT.run << f))
+    static member inline TryFinally (computation: unit -> ResultT<'E, 'Monad, 'T>, f) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinallyS.Invoke (fun () -> ResultT.run (computation ())) f)
     static member inline Using (resource, f: _ -> ResultT<'E, 'Monad, 'T>)    = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> (Using.Invoke resource (ResultT.run << f))
-    static member inline Delay (body : unit   ->  ResultT<'E, 'Monad, 'T>)    = Value ((Delay.Invoke (fun _ -> ResultT.run (body ()) : '``Monad<Result<'T, 'E>>``)) |> box<'``Monad<Result<'T, 'E>>``>)
+    static member inline Delay (body: unit -> ResultT<'E, 'Monad, 'T>) = Value ((Delay.Invoke (fun () -> ResultT.run (body ()) : '``Monad<Result<'T, 'E>>``)) |> box<'``Monad<Result<'T, 'E>>``>)
 
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -161,8 +161,8 @@ type ResultT<'e, 'monad, 't> with
     static member inline Pass (m: ResultT<'E, '``MonadWriter<'Monoid>``, ('T * ('Monoid -> 'Monoid))>) : ResultT<'E, '``MonadWriter<'Monoid>``, 'T> =
         ResultTOperations.ResultT<'``MonadWriter<'Monoid, Result<'T, 'E>>``, _, _, _> ((ResultT.run m: '``MonadWriter<'Monoid, Result<('T * ('Monoid -> 'Monoid)), 'E>>``) >>= either (map Result<'T, 'E>.Ok << (pass: '``MonadWriter<'Monoid, ('T * ('Monoid -> 'Monoid))>`` -> '``MonadWriter<'Monoid, 'T>``) << (result: ('T * ('Monoid -> 'Monoid)) -> _)) (result << Result<'T, 'E>.Error))
     
-    static member inline get_Get () : ResultT<'E, '``StateMonad<'S>``, 'S> = ResultT.lift<_, _, '``StateMonad<'S, 'S>``, '``StateMonad<'S, Result<'S, 'E>>``, '``StateMonad<'S>``> get
-    static member inline Put (x: 'S) : ResultT<'E, '``StateMonad<'S>``, unit> = x |> put |> ResultT.lift<_, _, '``StateMonad<'S, unit>``, '``StateMonad<'S, Result<unit, 'E>>``, '``StateMonad<'S>``>
+    static member inline get_Get () : ResultT<'E, '``MonadState<'S>``, 'S> = ResultT.lift<_, _, '``MonadState<'S, 'S>``, '``MonadState<'S, Result<'S, 'E>>``, '``MonadState<'S>``> get
+    static member inline Put (x: 'S) : ResultT<'E, '``MonadState<'S>``, unit> = x |> put |> ResultT.lift<_, _, '``MonadState<'S, unit>``, '``MonadState<'S, Result<unit, 'E>>``, '``MonadState<'S>``>
 
 
 
@@ -259,10 +259,10 @@ type ChoiceT<'e, 'monad, 't> with
     static member inline (>>=) (x: ChoiceT<'E, 'Monad, 'T>, f: 'T -> ChoiceT<'E, 'Monad, 'U>) =
         ChoiceT.bind<'T, 'U, 'E, 'Monad, '``Monad<Choice<'T, 'E>>``, '``Monad<Choice<'U, 'E>>``> f x : ChoiceT<'E, 'Monad, 'U>
 
-    static member inline TryWith (source: ChoiceT<'E, 'Monad, 'T>, f: exn -> ChoiceT<'E, 'Monad, 'T>) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWith.Invoke (ChoiceT.run source) (ChoiceT.run << f))
-    static member inline TryFinally (computation: ChoiceT<'E, 'Monad, 'T>, f) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinally.Invoke     (ChoiceT.run computation) f)
+    static member inline TryWith (source: unit -> ChoiceT<'E, 'Monad, 'T>, f: exn -> ChoiceT<'E, 'Monad, 'T>) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWithS.InvokeFromOtherMonad (fun () -> ChoiceT.run (source ())) (ChoiceT.run << f))
+    static member inline TryFinally (computation: unit -> ChoiceT<'E, 'Monad, 'T>, f) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinallyS.Invoke (fun () -> ChoiceT.run (computation ())) f)
     static member inline Using (resource, f: _ -> ChoiceT<'E, 'Monad, 'T>)    = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> (Using.Invoke resource (ChoiceT.run << f))
-    static member inline Delay (body : unit   ->  ChoiceT<'E, 'Monad, 'T>)    = Value ((Delay.Invoke (fun _ -> ChoiceT.run (body ()) : '``Monad<Choice<'T, 'E>>``)) |> box<'``Monad<Choice<'T, 'E>>``>)
+    static member inline Delay (body: unit -> ChoiceT<'E, 'Monad, 'T>) = Value ((Delay.Invoke (fun () -> ChoiceT.run (body ()) : '``Monad<Choice<'T, 'E>>``)) |> box<'``Monad<Choice<'T, 'E>>``>)
 
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -294,7 +294,7 @@ type ChoiceT<'e, 'monad, 't> with
     static member inline Pass (m: ChoiceT<'E, '``MonadWriter<'Monoid>``, ('T * ('Monoid -> 'Monoid))>) : ChoiceT<'E, '``MonadWriter<'Monoid>``, 'T> =
         ChoiceTOperations.ChoiceT<'``MonadWriter<'Monoid, Choice<'T, 'E>>``, _, _, _> ((ChoiceT.run m: '``MonadWriter<'Monoid, Choice<('T * ('Monoid -> 'Monoid)), 'E>>``) >>= either (map Choice<'T, 'E>.Choice1Of2 << (pass: '``MonadWriter<'Monoid, ('T * ('Monoid -> 'Monoid))>`` -> '``MonadWriter<'Monoid, 'T>``) << (result: ('T * ('Monoid -> 'Monoid)) -> _)) (result << Choice<'T, 'E>.Choice2Of2))
     
-    static member inline get_Get () : ChoiceT<'E, '``StateMonad<'S>``, 'S> = ChoiceT.lift<_, _, '``StateMonad<'S, 'S>``, '``StateMonad<'S, Choice<'S, 'E>>``, '``StateMonad<'S>``> get
-    static member inline Put (x: 'S) : ChoiceT<'E, '``StateMonad<'S>``, unit> = x |> put |> ChoiceT.lift<_, _, '``StateMonad<'S, unit>``, '``StateMonad<'S, Choice<unit, 'E>>``, '``StateMonad<'S>``>
+    static member inline get_Get () : ChoiceT<'E, '``MonadState<'S>``, 'S> = ChoiceT.lift<_, _, '``MonadState<'S, 'S>``, '``MonadState<'S, Choice<'S, 'E>>``, '``MonadState<'S>``> get
+    static member inline Put (x: 'S) : ChoiceT<'E, '``MonadState<'S>``, unit> = x |> put |> ChoiceT.lift<_, _, '``MonadState<'S, unit>``, '``MonadState<'S, Choice<unit, 'E>>``, '``MonadState<'S>``>
 
 #endif

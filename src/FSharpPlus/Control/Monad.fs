@@ -170,7 +170,7 @@ type Delay =
     
     #else
     
-    static member inline Invoke (source : unit -> '``Monad<'T>``) : '``Monad<'T>`` =
+    static member inline Invoke (source : unit -> '``Monad<'T>``) : '``Monad<'T>`` = Bind.Invoke (Return.Invoke ()) source
     
     #endif
 
@@ -250,6 +250,10 @@ type TryWithS =
     static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWithS, _) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
 
     static member inline Invoke (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, False)
+        call (Unchecked.defaultof<TryWithS>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
+
+    static member inline InvokeFromOtherMonad (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, True)
         call (Unchecked.defaultof<TryWithS>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
 
@@ -276,7 +280,7 @@ type TryFinally =
         let inline call (mthd: 'M, input: unit ->'I, _output: 'I, h: unit -> unit) = ((^M or ^I) : (static member TryFinally : (_*_)*_*_*_ -> _) (input, h), mthd, Unchecked.defaultof<TryFinally>, False)
         call (Unchecked.defaultof<TryFinally>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
 
-    static member inline InvokeOnInstance (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = printfn "Try Finally default 8 for %A" typeof< ^``Monad<'T>``>; (^``Monad<'T>`` : (static member TryFinally : _*_->_) source, f) : '``Monad<'T>``
+    static member inline InvokeOnInstance (source: '``Monad<'T>``) (f: unit -> unit) : '``Monad<'T>`` = (^``Monad<'T>`` : (static member TryFinally : _*_->_) source, f) : '``Monad<'T>``
 
 type TryFinally with
     static member inline TryFinally ((computation: unit -> '``Monad<'T>`` , compensation: unit -> unit), _: Default1, _: TryFinally, _defaults: False) = TryFinally.InvokeOnInstance (computation ()) compensation: '``Monad<'T>``

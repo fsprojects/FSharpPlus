@@ -69,7 +69,7 @@ module GenericBuilders =
         inherit Builder<'``monad<'t>``> ()
         member        __.Delay expr = expr : unit -> '``Monad<'T>``
         member        __.Run f = f ()              : '``monad<'t>``
-        member inline __.TryWith    (expr, handler)      = TryWithS.Invoke    expr handler      : '``Monad<'T>``
+        member inline __.TryWith    (expr, handler)      = TryWithS.InvokeFromOtherMonad expr handler      : '``Monad<'T>``
         member inline __.TryFinally (expr, compensation) = TryFinallyS.Invoke expr compensation : '``Monad<'T>``
         
         member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body
@@ -78,8 +78,8 @@ module GenericBuilders =
         inherit Builder<'``monad<'t>``> ()
         member inline __.Delay (expr: _->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
         member        __.Run f = f                                           : '``monad<'t>``
-        member inline __.TryWith    (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
-        member inline __.TryFinally (expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
+        member inline __.TryWith    (expr, handler     ) = TryWithS.Invoke    (fun () -> expr) handler      : '``Monad<'T>``
+        member inline __.TryFinally (expr, compensation) = TryFinallyS.Invoke (fun () -> expr) compensation : '``Monad<'T>``
         member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body : '``Monad<'T>``
 
     type MonadPlusStrictBuilder<'``monad<'t>``> () =

@@ -93,10 +93,10 @@ type State<'s,'t> with
     static member Zip (x, y) = State.zip x y
     #endif
 
-    static member TryWith (State computation, h)    = State (fun s -> try computation s with e -> State.run (h e) s) : State<'S,'T>
-    static member TryFinally (State computation, f) = State (fun s -> try computation s finally f ()) : State<'S,'T>
-    static member Using (resource, f: _ -> State<'S,'T>) = State.TryFinally (f resource, fun () -> dispose resource)
-    static member Delay (body: unit->State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S,'T>
+    static member TryWith (computation: unit -> State<_, _>, h)    = State (fun s -> try (State.run (computation ())) s with e -> State.run (h e) s) : State<'S, 'T>
+    static member TryFinally (computation: unit -> State<_, _>, f) = State (fun s -> try (State.run (computation ())) s finally f ()) : State<'S, 'T>
+    static member Using (resource, f: _ -> State<'S,'T>) = State.TryFinally ((fun () -> f resource), fun () -> dispose resource)
+    static member Delay (body: unit -> State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S, 'T>
 
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
@@ -161,7 +161,7 @@ module StateT =
     let inline map3<'T, 'U, 'V, 'W, 'S, .. > (f: 'T -> 'U -> 'V -> 'W) (StateT (x: 'S -> '``Monad<'T * 'S>``) : StateT<'S, 'Monad, 'T>) (StateT (y: 'S -> '``Monad<'U * 'S>``) : StateT<'S, 'Monad, 'U>) (StateT (z: 'S -> '``Monad<'V * 'S>``): StateT<'S, 'Monad, 'V>) : StateT<'S, 'Monad, 'W> =
         StateT (fun s -> (x s: '``Monad<'T * 'S>``) >>= fun (g, s1) -> (y s1: '``Monad<'U * 'S>``) >>= fun (h, s2) -> (z s2: '``Monad<'V * 'S>``) >>= fun (i, s3: 'S) -> (result (f g h i, s3) : '``Monad<'W * 'S>``))
     
-    let inline apply<'T, 'U, 'S, .. > (StateT (f: 'S -> '``Monad<('T -> 'U) * 'S>``) : StateT<'S,'Monad,('T -> 'U)>) (StateT a: StateT<'S,'Monad,'T>) : StateT<'S, 'Monad, 'U> =
+    let inline apply<'T, 'U, 'S, .. > (StateT (f: 'S -> '``Monad<('T -> 'U) * 'S>``) : StateT<'S, 'Monad, ('T -> 'U)>) (StateT a: StateT<'S, 'Monad,'T>) : StateT<'S, 'Monad, 'U> =
         StateT (fun s -> f s >>= fun (g, t) -> (Map.Invoke (fun (z: 'T, u: 'S) -> ((g z: 'U), u)) (a t: '``Monad<'T * 'S>``) : '``Monad<'U * 'S>``))
 
     // /// Zips two StateTs into one.
@@ -233,17 +233,17 @@ type StateT<'s, 'monad, 't> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Zip (x: StateT<'S, 'Monad, 'T>, y: StateT<'S, 'Monad, 'U>) = StateT.zip x y
     
-    static member inline TryWith (source: StateT<'S, 'Monad, 'T>, f: exn -> StateT<'S, 'Monad, 'T>) =
-        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryWith.InvokeFromOtherMonad (fun () -> (StateT.run source s : '``Monad<'T * 'S>`` )) (fun x -> StateT.run (f x) s))
+    static member inline TryWith (source: unit -> StateT<'S, 'Monad, 'T>, f: exn -> StateT<'S, 'Monad, 'T>) =
+        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryWithS.InvokeFromOtherMonad (fun () -> (StateT.run (source ()) s : '``Monad<'T * 'S>`` )) (fun x -> StateT.run (f x) s))
 
-    static member inline TryFinally (computation: StateT<'S,'Monad,'T>, f) =
-        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryFinallyS.Invoke (fun () -> StateT.run computation s) f)
+    static member inline TryFinally (computation: unit -> StateT<'S,'Monad,'T>, f) =
+        StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> TryFinallyS.Invoke (fun () -> StateT.run (computation ()) s) f)
 
     static member inline Using (resource: 'S, f: _ -> StateT<'S,'Monad,'T>) =
         StateTOperations.StateT< '``Monad<'T * 'S>``, 'Monad, 'S, 'T> (fun s -> Using.Invoke resource (fun x -> StateT.run (f x) s))
     
-    static member inline Delay (body: unit -> StateT<'S, 'Monad, 'T>) =
-        Value ((fun s -> Delay.Invoke (fun _ -> (StateT.run (body ()) s: '``Monad<'T * 'S>``) )) >> box<'``Monad<'T * 'S>``>) : StateT<'S, 'Monad, 'T>
+    static member inline Delay (body: unit -> StateT<'S, 'Monad, 'T>) : StateT<'S, 'Monad, 'T> =
+        Value ((fun s -> Delay.Invoke (fun () -> (StateT.run (body ()) s: '``Monad<'T * 'S>``))) >> box<'``Monad<'T * 'S>``>)
 
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]

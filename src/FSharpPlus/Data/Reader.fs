@@ -87,9 +87,9 @@ type Reader<'r,'t> with
 
     #endif
 
-    static member TryWith (Reader computation, h)    = Reader (fun s -> try computation s with e -> Reader.run (h e) s) : Reader<'R,'T>
-    static member TryFinally (Reader computation, f) = Reader (fun s -> try computation s finally f ())
-    static member Using (resource, f: _ -> Reader<'R,'T>) = Reader.TryFinally (f resource, fun () -> dispose resource)
+    static member TryWith    (computation: unit -> Reader<_, _>, h) = Reader (fun s -> try (Reader.run (computation ())) s with e -> Reader.run (h e) s) : Reader<'R,'T>
+    static member TryFinally (computation: unit -> Reader<_, _>, f) = Reader (fun s -> try (Reader.run (computation ())) s finally f ())
+    static member Using (resource, f: _ -> Reader<'R,'T>) = Reader.TryFinally ((fun () -> f resource), fun () -> dispose resource)
     static member Delay (body: unit->Reader<'R,'T>)  = Reader (fun s -> Reader.run (body ()) s) : Reader<'R,'T>
 
 
@@ -219,17 +219,17 @@ type ReaderT<'r, 'monad, 't> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Zip (x: ReaderT<'S, 'Monad, 'T>, y: ReaderT<'S, 'Monad, 'U>) = ReaderT.zip x y
  
-    static member inline TryWith (source: ReaderT<'R, 'Monad, 'T>, f: exn -> ReaderT<'R, 'Monad, 'T>) =
-        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryWith.InvokeFromOtherMonad (fun () -> (ReaderT.run source s : '``Monad<'T>``)) (fun x -> ReaderT.run (f x) s))
+    static member inline TryWith (source: unit -> ReaderT<'R, 'Monad, 'T>, f: exn -> ReaderT<'R, 'Monad, 'T>) =
+        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryWithS.InvokeFromOtherMonad (fun () -> ((ReaderT.run (source ()) s: '``Monad<'T>``))) (fun x -> ReaderT.run (f x) s))
 
-    static member inline TryFinally (computation: ReaderT<'R, 'Monad, 'T>, f) =
-        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryFinallyS.Invoke (fun () -> ReaderT.run computation s) f)
+    static member inline TryFinally (computation: unit -> ReaderT<'R, 'Monad, 'T>, f) =
+        ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> TryFinallyS.Invoke (fun () -> ReaderT.run (computation ()) s) f)
 
     static member inline Using (resource, f: _ -> ReaderT<'R, 'Monad, 'T>) =
         ReaderTOperations.ReaderT<'``Monad<'T>``, 'Monad, 'R, 'T> (fun s -> Using.Invoke resource (fun x -> ReaderT.run (f x) s))
 
-    static member inline Delay (body : unit   ->  ReaderT<'R, 'Monad, 'T>) : ReaderT<'R, 'Monad, 'T> =
-        Value ((fun s -> Delay.Invoke (fun _ -> (ReaderT.run (body ()) s : '``Monad<'T>``) )) >> box<'``Monad<'T>``>)
+    static member inline Delay (body: unit -> ReaderT<'R, 'Monad, 'T>) : ReaderT<'R, 'Monad, 'T> =
+        Value ((fun s -> Delay.Invoke (fun () -> (ReaderT.run (body ()) s : '``Monad<'T>``))) >> box<'``Monad<'T>``>)
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m: '``Monad<'T>``) : ReaderT<'R, 'Monad, 'T> = ReaderT.lift m
