@@ -600,6 +600,15 @@ module ComputationExpressions =
                 with _ -> () }
             x
         let _ = monadTransformer3layersTest5 () |> WriterT.run |> ResultT.run
+
+        let monadTransformer3layersTest6 () =
+            let x: ReaderT<unit, ResultT<unit, Task<__>, __>, unit> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = (monadTransformer3layersTest6 () |> ReaderT.run) ()
         
 
         // ContT doesn't deal with the inner monad, so we don't need to do anything.
