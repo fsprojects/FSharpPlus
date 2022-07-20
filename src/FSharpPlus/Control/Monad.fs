@@ -231,11 +231,18 @@ type TryWithS =
     inherit Default1
 
     [<CompilerMessage(MessageWhile  , CodeWhile  , IsError = false)>]
-    static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: While) = raise Internals.Errors.exnUnreachable
+    static member        TryWith (_:           unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, _:            exn -> '``Monad<'T>``, _: Default4, _defaults: While) = raise Internals.Errors.exnUnreachable
+    [<CompilerMessage(MessageWhile  , CodeWhile  , IsError = false)>]
+    static member        TryWith (_:           unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: While) = raise Internals.Errors.exnUnreachable
     
     [<CompilerMessage(MessageTryWith, CodeTryWith, IsError = true)>]
-    static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: False) = raise Internals.Errors.exnUnreachable
-    static member        TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3, _defaults: True ) = try computation () with e -> catchHandler e
+    static member        TryWith (_:           unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, _:            exn -> '``Monad<'T>``, _: Default4, _defaults: False) = raise Internals.Errors.exnUnreachable
+    [<CompilerMessage(MessageTryWith, CodeTryWith, IsError = true)>]
+    static member        TryWith (_:           unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: False) = raise Internals.Errors.exnUnreachable
+
+    static member        TryWith (computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, catchHandler: exn -> '``Monad<'T>``, _: Default4, _defaults: True ) = try computation () with e -> catchHandler e
+    static member        TryWith (computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, catchHandler: exn -> '``Monad<'T>``, _: Default3, _defaults: True ) = try computation () with e -> catchHandler e
+
 
     static member inline TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1, _) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation, catchHandler) : '``Monad<'T>``
     static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1, _) = ()
