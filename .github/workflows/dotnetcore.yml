@@ -32,6 +32,19 @@ jobs:
       run: dotnet build build.proj --configuration Release
     - name: Test with dotnet
       run: dotnet test build.proj -v n
+
+  package:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.201
+    - name: Restore
+      run: git submodule update --init --recursive
+
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -47,8 +60,7 @@ jobs:
           Write-Output "##[set-output name=version_suffix]$($env:VersionSuffix)"
       id: version_suffix
     - name: Package 
-      shell: bash
-      run: (export VersionSuffix=${{ steps.version_suffix.outputs.version_suffix }}; dotnet pack build.proj)
+      run: dotnet pack build.proj --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
