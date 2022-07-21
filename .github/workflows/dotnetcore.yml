@@ -55,7 +55,7 @@ jobs:
         name: nupkg
         path: ./bin/nupkg/*.nupkg
     - name: Push to GitHub Feed
-        run: |
+      run: |
           for f in ./bin/nupkg/*.nupkg
           do
             curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
