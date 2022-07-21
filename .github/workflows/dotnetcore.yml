@@ -55,6 +55,7 @@ jobs:
         name: nupkg
         path: ./bin/nupkg/*.nupkg
     - name: Push to GitHub Feed
+      shell: bash
       run: |
           for f in ./bin/nupkg/*.nupkg
           do
