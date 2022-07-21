@@ -6,7 +6,7 @@ env:
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   # GitHub Packages Feed settings
-  GITHUB_FEED: https://nuget.pkg.github.com/fsprojects/FSharpPlus
+  GITHUB_FEED: https://nuget.pkg.github.com/fsprojects
   GITHUB_USER: fsprojects
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
