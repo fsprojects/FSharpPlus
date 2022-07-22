@@ -257,15 +257,15 @@ type TryWithS =
     static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWithS, _) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
 
     static member inline Invoke (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> _) input, h, mthd, False)
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'I, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> 'I) input, h, mthd, False)
         call (Unchecked.defaultof<TryWithS>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
 
     static member inline InvokeFromOtherMonad (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> _) input, h, mthd, True)
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'I, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> 'I) input, h, mthd, True)
         call (Unchecked.defaultof<TryWithS>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
 
     static member inline InvokeForWhile (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> _) input, h, mthd, While)
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'I, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> 'I) input, h, mthd, While)
         call (Unchecked.defaultof<TryWithS>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
 
 
