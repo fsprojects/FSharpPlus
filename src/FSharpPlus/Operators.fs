@@ -79,41 +79,41 @@ module Operators =
     /// Tuple two arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple2 a b             = a,b
+    let inline tuple2<'T1, 'T2> (t1: 'T1) (t2: 'T2) = t1, t2
 
     /// <summary>
     /// Tuple three arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple3 a b c           = a,b,c
+    let inline tuple3<'T1, 'T2, 'T3> (t1: 'T1) (t2: 'T2) (t3: 'T3) = t1, t2, t3
 
     /// <summary>
     /// Tuple four arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple4 a b c d         = a,b,c,d
+    let inline tuple4<'T1, 'T2, 'T3, 'T4> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) = t1, t2, t3, t4
 
     /// <summary>
     /// Tuple five arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple5 a b c d e       = a,b,c,d,e
+    let inline tuple5<'T1, 'T2, 'T3, 'T4, 'T5> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) = t1, t2, t3, t4, t5
 
     /// Tuple six arguments
     /// <category index="0">Common Combinators</category>
-    let inline tuple6 a b c d e f     = a,b,c,d,e,f
+    let inline tuple6<'T1, 'T2, 'T3, 'T4, 'T5, 'T6> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) = t1, t2, t3, t4, t5, t6
 
     /// <summary>
     /// Tuple seven arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
+    let inline tuple7<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) = t1, t2, t3, t4, t5, t6, t7
 
     /// <summary>
     /// Tuple eight arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
+    let inline tuple8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7, 'T8> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) (t8: 'T8) = t1, t2, t3, t4, t5, t6, t7, t8
 
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
