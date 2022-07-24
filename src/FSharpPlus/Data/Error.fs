@@ -126,8 +126,8 @@ type ResultT<'e, 'monad, 't> with
     static member inline (>>=) (x: ResultT<'E, 'Monad, 'T>, f: 'T -> ResultT<'E, 'Monad, 'U>) =
         ResultT.bind<'T, 'U, 'E, 'Monad, '``Monad<Result<'T, 'E>>``, '``Monad<Result<'U, 'E>>``> f x : ResultT<'E, 'Monad, 'U>
 
-    static member inline TryWith (source: unit -> ResultT<'E, 'Monad, 'T>, f: exn -> ResultT<'E, 'Monad, 'T>) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWithS.InvokeFromOtherMonad (fun () -> ResultT.run (source ())) (ResultT.run << f))
-    static member inline TryFinally (computation: unit -> ResultT<'E, 'Monad, 'T>, f) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinallyS.Invoke (fun () -> ResultT.run (computation ())) f)
+    static member inline TryWith (source: unit -> ResultT<'E, 'Monad, 'T>, f: exn -> ResultT<'E, 'Monad, 'T>) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWith.Invoke  (fun () -> ResultT.run (source ())) (ResultT.run << f))
+    static member inline TryFinally (computation: unit -> ResultT<'E, 'Monad, 'T>, f) = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinally.Invoke (fun () -> ResultT.run (computation ())) f)
     static member inline Using (resource, f: _ -> ResultT<'E, 'Monad, 'T>)    = ResultTOperations.ResultT< '``Monad<Result<'T, 'E>>``, 'Monad, 'E, 'T> (Using.Invoke resource (ResultT.run << f))
     static member inline Delay (body: unit -> ResultT<'E, 'Monad, 'T>) = Value ((Delay.Invoke (fun () -> ResultT.run (body ()) : '``Monad<Result<'T, 'E>>``)) |> box<'``Monad<Result<'T, 'E>>``>)
 
@@ -259,8 +259,8 @@ type ChoiceT<'e, 'monad, 't> with
     static member inline (>>=) (x: ChoiceT<'E, 'Monad, 'T>, f: 'T -> ChoiceT<'E, 'Monad, 'U>) =
         ChoiceT.bind<'T, 'U, 'E, 'Monad, '``Monad<Choice<'T, 'E>>``, '``Monad<Choice<'U, 'E>>``> f x : ChoiceT<'E, 'Monad, 'U>
 
-    static member inline TryWith (source: unit -> ChoiceT<'E, 'Monad, 'T>, f: exn -> ChoiceT<'E, 'Monad, 'T>) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWithS.InvokeFromOtherMonad (fun () -> ChoiceT.run (source ())) (ChoiceT.run << f))
-    static member inline TryFinally (computation: unit -> ChoiceT<'E, 'Monad, 'T>, f) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinallyS.Invoke (fun () -> ChoiceT.run (computation ())) f)
+    static member inline TryWith (source: unit -> ChoiceT<'E, 'Monad, 'T>, f: exn -> ChoiceT<'E, 'Monad, 'T>) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> <| (TryWith.Invoke  (fun () -> ChoiceT.run (source ())) (ChoiceT.run << f))
+    static member inline TryFinally (computation: unit -> ChoiceT<'E, 'Monad, 'T>, f) = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> (TryFinally.Invoke (fun () -> ChoiceT.run (computation ())) f)
     static member inline Using (resource, f: _ -> ChoiceT<'E, 'Monad, 'T>)    = ChoiceTOperations.ChoiceT< '``Monad<Choice<'T, 'E>>``, 'Monad, 'E, 'T> (Using.Invoke resource (ChoiceT.run << f))
     static member inline Delay (body: unit -> ChoiceT<'E, 'Monad, 'T>) = Value ((Delay.Invoke (fun () -> ChoiceT.run (body ()) : '``Monad<Choice<'T, 'E>>``)) |> box<'``Monad<Choice<'T, 'E>>``>)
 

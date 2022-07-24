@@ -272,8 +272,8 @@ type ListT<'monad, 't> with
     static member inline get_Empty () : ListT<'Monad, 'T> = ListT.empty<_, _, '``Monad<ListTNode<'Monad, 'T>>``> ()
     static member inline (<|>) (x: ListT<'Monad, 'T>, y: ListT<'Monad, 'T>) : ListT<'Monad, 'T> = ListT.concat<_, _, '``Monad<ListTNode<'Monad, 'T>>``> x y
 
-    static member inline TryWith (source: unit -> ListT<'Monad, 'T>, f: exn -> ListT<'Monad, 'T>) = ListT (TryWithS.InvokeFromOtherMonad (fun () -> ListT.unwrap (source ()) : '``Monad<ListTNode<'Monad, 'T>>``) (ListT.unwrap << f))
-    static member inline TryFinally (computation: unit -> ListT<'Monad, 'T>, f) = ListT (TryFinallyS.Invoke (fun () -> ListT.unwrap (computation ()) : '``Monad<ListTNode<'Monad, 'T>>``) f)
+    static member inline TryWith (source: unit -> ListT<'Monad, 'T>, f: exn -> ListT<'Monad, 'T>) = ListT (TryWith.Invoke  (fun () -> ListT.unwrap (source ()) : '``Monad<ListTNode<'Monad, 'T>>``) (ListT.unwrap << f))
+    static member inline TryFinally (computation: unit -> ListT<'Monad, 'T>, f) = ListT (TryFinally.Invoke (fun () -> ListT.unwrap (computation ()) : '``Monad<ListTNode<'Monad, 'T>>``) f)
     static member inline Using (resource, f: _ -> ListT<'Monad, 'T>)    = ListT (Using.Invoke resource (ListT.unwrap << f : 'R -> '``Monad<ListTNode<'Monad, 'T>>``))
     static member inline Delay (body: unit -> ListT<'Monad, 'T>) : ListT<'Monad, 'T> = ListT (Delay.Invoke (fun () -> ListT.unwrap (body ()) : '``Monad<ListTNode<'Monad, 'T>>``))
 

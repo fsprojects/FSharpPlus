@@ -185,7 +185,7 @@ type WrappedSeqB<'s> = WrappedSeqB of 's seq with
                     WrappedSeqB (Seq.delay (f >> run))
     static member TryFinally (computation, compensation) =
                     SideEffects.add "Using WrappedSeqA's TryFinally"
-                    try computation finally compensation ()
+                    try computation () finally compensation ()
     static member Using (resource, body) = 
                     SideEffects.add "Using WrappedSeqB's Using"
                     using resource body
@@ -203,7 +203,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
                     WrappedSeqC (Seq.delay (f >> run))
     static member TryFinally (computation, compensation) =
                     SideEffects.add "Using WrappedSeqC's TryFinally"
-                    try computation finally compensation ()
+                    try computation () finally compensation ()
 
 type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)

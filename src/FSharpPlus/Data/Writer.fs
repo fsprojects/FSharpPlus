@@ -219,9 +219,9 @@ type WriterT<'monoid, 'monad, 't> with
         WriterTOperations.WriterT (m <|> n)
 
     static member inline TryWith (source: unit -> WriterT<'Monoid, 'Monad, 'T>, f: exn -> WriterT<'Monoid, 'Monad, 'T>) =
-        WriterTOperations.WriterT< '``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (TryWithS.InvokeFromOtherMonad (fun () -> WriterT.run (source ())) (WriterT.run << f))
+        WriterTOperations.WriterT< '``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (TryWith.Invoke  (fun () -> WriterT.run (source ())) (WriterT.run << f))
 
-    static member inline TryFinally (computation: unit -> WriterT<'Monoid, 'Monad, 'T>, f) = WriterTOperations.WriterT<'``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (TryFinallyS.Invoke (fun () -> WriterT.run (computation ())) f)
+    static member inline TryFinally (computation: unit -> WriterT<'Monoid, 'Monad, 'T>, f) = WriterTOperations.WriterT<'``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (TryFinally.Invoke (fun () -> WriterT.run (computation ())) f)
     static member inline Using (resource, f: _ -> WriterT<'Monoid, 'Monad, 'T>)    = WriterTOperations.WriterT<'``Monad<'T * 'Monoid>``, 'Monad, 'Monoid, 'T> (Using.Invoke resource (WriterT.run << f))
     static member inline Delay (body: unit ->  WriterT<'Monoid, 'Monad, 'T>) : WriterT<'Monoid, 'Monad, 'T> =
         Value ((Delay.Invoke (fun () -> WriterT.run (body ()) : '``Monad<'T * 'S>``)) |> box<'``Monad<'T * 'S>``>)
