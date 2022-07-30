@@ -185,7 +185,7 @@ type WrappedSeqB<'s> = WrappedSeqB of 's seq with
                     WrappedSeqB (Seq.delay (f >> run))
     static member TryFinally (computation, compensation) =
                     SideEffects.add "Using WrappedSeqA's TryFinally"
-                    try computation finally compensation ()
+                    try computation () finally compensation ()
     static member Using (resource, body) = 
                     SideEffects.add "Using WrappedSeqB's Using"
                     using resource body
@@ -203,7 +203,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
                     WrappedSeqC (Seq.delay (f >> run))
     static member TryFinally (computation, compensation) =
                     SideEffects.add "Using WrappedSeqC's TryFinally"
-                    try computation finally compensation ()
+                    try computation () finally compensation ()
 
 type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
@@ -1781,7 +1781,7 @@ module MonadTransformers =
             if x < 10 then return Result.Ok 10
             else return Result.Error "failure" }
 
-        let okFoo10Comp: ResultT<_> =
+        let okFoo10Comp: ResultT<_, _, _> =
             monad {
                 let! resFoo = ResultT.hoist <| someResultFunction "foo"
                 let! res10  = doSomeOperation 0
@@ -1804,7 +1804,7 @@ module MonadTransformers =
             if x < 10 then return Choice1Of2 10
             else return Choice2Of2 "failure"   }
 
-        let okFoo10Comp: ChoiceT<_> =
+        let okFoo10Comp: ChoiceT<_, _, _> =
             monad {
                 let! resFoo = ChoiceT.hoist <| someErrorFunction "foo"
                 let! res10  = doSomeOperation 0
@@ -1815,15 +1815,15 @@ module MonadTransformers =
 
         // test generic put (no unknown(1,1): error FS0073: internal error: Undefined or unsolved type variable:  ^_?51242)
         let initialState = -1
-        let _ = put initialState : ListT<State<int, unit list>>
-        let _ = put initialState : ChoiceT<State<int, Choice<unit,string>>>
+        let _ = put initialState : ListT<State<int, __>, _>
+        let _ = put initialState : ChoiceT<string, State<int, __>, _>
 
         ()
 
     [<Test>]
     let testStateT () =
-        let lst1: StateT<string,_> = StateT.lift [1;2]
-        let lst2: StateT<string,_> = StateT.lift [4;5]
+        let lst1: StateT<string, _, _> = StateT.lift [1;2]
+        let lst2: StateT<string, _, _> = StateT.lift [4;5]
 
         let m = monad { 
             let! x =  lst1
@@ -1841,9 +1841,9 @@ module MonadTransformers =
     [<Test>]
     let testCompilationMT1 () =
 
-        let fn : ResultT<Reader<int,Result<_,RErrors>>> = 
+        let fn : ResultT<RErrors, Reader<int, __>, _> =
             monad {
-               let! x1 = lift ask
+               let! x1 = ask
                let! x2 = 
                    if x1 > 0 then result 1
                    else ResultT (result (Error NegativeValue)) 
@@ -1875,7 +1875,7 @@ module BifunctorDefaults =
 
 module Invariant =
 
-    type StringCodec<'t> = StringCodec of ReaderT<string, Result<'t,string>> * ('t -> Const<string, unit>) with
+    type StringCodec<'t> = StringCodec of ReaderT<string, Result<__,string>, 't> * ('t -> Const<string, unit>) with
         static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (map f d, contramap g e)
     module StringCodec =
         let decode (StringCodec (d,_)) x = ReaderT.run d x

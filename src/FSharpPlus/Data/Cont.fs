@@ -77,9 +77,9 @@ type Cont<'r,'t> with
     static member (>>=) (x, f: 'T->_)       = Cont.bind f x   : Cont<'R,'U>
 
     static member Delay f = Cont (fun k -> Cont.run (f ()) k) : Cont<'R,'T>
-    static member TryWith    (Cont c, h) = Cont (fun k -> try (c k) with e -> Cont.run (h e) k) : Cont<'R,'T>
-    static member TryFinally (Cont c, h) = Cont (fun k -> try (c k) finally h ())               : Cont<'R,'T>
-    static member Using (resource, f: _ -> Cont<'R,'T>) = Cont.TryFinally (f resource, fun () -> dispose resource)
+    static member TryWith    (c: unit -> Cont<_, _>, h) = Cont (fun k -> try (Cont.run (c ()) k) with e -> Cont.run (h e) k) : Cont<'R,'T>
+    static member TryFinally (c: unit -> Cont<_, _>, h) = Cont (fun k -> try (Cont.run (c ()) k) finally h ())               : Cont<'R,'T>
+    static member Using (resource, f: _ -> Cont<'R,'T>) = Cont.TryFinally ((fun () -> f resource), fun () -> dispose resource)
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member CallCC (f: ('T -> Cont<'R,'U>) -> _) = Cont.callCC f : Cont<'R,'T>

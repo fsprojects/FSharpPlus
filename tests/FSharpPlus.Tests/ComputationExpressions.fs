@@ -139,7 +139,7 @@ module ComputationExpressions =
 
         SideEffects.reset ()
 
-        let threeElements: ReaderT<string, list<_>> = monad.plus {
+        let threeElements: ReaderT<string, list<__>, _> = monad.plus {
             let! s = ask
             for i in 1 .. 3 do
                 SideEffects.add (sprintf "processing %i" i)
@@ -440,7 +440,7 @@ module ComputationExpressions =
         // Monad transformers are delayed if at least one of the layers is lazy.
         SideEffects.reset ()
         
-        let readerToptionM : ReaderT<unit,unit option> = monad {
+        let readerToptionM : ReaderT<unit, __ option, unit> = monad {
           use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
@@ -451,7 +451,7 @@ module ComputationExpressions =
 
         SideEffects.reset ()
 
-        let readerTfuncM: ReaderT<unit,unit->unit> = monad {
+        let readerTfuncM: ReaderT<unit, (unit -> __), unit> = monad {
           use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
           while (SideEffects.add "moving"; enum.MoveNext ()) do
              SideEffects.add (sprintf "--> %i" enum.Current) }
@@ -464,7 +464,7 @@ module ComputationExpressions =
 
         SideEffects.reset ()
 
-        let readerTtaskM: ReaderT<unit,Task<unit>> = monad {
+        let readerTtaskM: ReaderT<unit, Task<__>, unit> = monad {
           use enum = toDebugEnum (SideEffects.add "using"; testSeq.GetEnumerator ())
           while (SideEffects.add "moving"; enum.MoveNext ()) do
                 SideEffects.add (sprintf "--> %i" enum.Current) }
@@ -546,7 +546,7 @@ module ComputationExpressions =
         let _ = strictMonadTest ()  
     
         let monadTransformer3layersTest1 () =
-            let x: StateT<string, ReaderT<int, seq<(unit * string)>>> = monad {
+            let x: StateT<string, ReaderT<int, seq<__>, __>, unit> = monad {
                 try
                     failwith "Exception in try-with not handled"
                     ()
@@ -555,7 +555,7 @@ module ComputationExpressions =
         let _ = ((monadTransformer3layersTest1 () |> StateT.run) "" |> ReaderT.run) 0 |> Seq.toList
         
         let monadTransformer3layersTest2 () =
-            let x: StateT<string, ReaderT<int, list<(unit * string)>>> = monad {
+            let x: StateT<string, ReaderT<int, list<__>, __>, unit> = monad {
                 try
                     failwith "Exception in try-with not handled"
                     ()
@@ -564,7 +564,7 @@ module ComputationExpressions =
         let _ = ((monadTransformer3layersTest2 () |> StateT.run) "" |> ReaderT.run) 0
 
         let monadTransformer3layersTest2' () =
-            let x: StateT<string, ReaderT<int, Task<(unit * string)>>> = monad {
+            let x: StateT<string, ReaderT<int, Task<__>, __>, unit> = monad {
                 try
                     failwith "Exception in try-with not handled"
                     ()
@@ -573,33 +573,42 @@ module ComputationExpressions =
         let _ = ((monadTransformer3layersTest2' () |> StateT.run) "" |> ReaderT.run) 0
         
         let monadTransformer3layersTest3 () =
-            let x: WriterT<OptionT<seq<(unit * string) option>>> = monad {
+            let x: WriterT<string, ResultT<unit, seq<__>, __>, unit> = monad {
                 try
                     failwith "Exception in try-with not handled"
                     ()
                 with _ -> () }
             x
-        let _ = monadTransformer3layersTest3 () |> WriterT.run |> OptionT.run |> Seq.toList
+        let _ = monadTransformer3layersTest3 () |> WriterT.run |> ResultT.run |> Seq.toList
         
         // Same test but with list instead of seq, which makes the whole monad strict
         // If .strict is not used it fails compilation with a nice error asking us to add it
         let monadTransformer3layersTest4 () =
-            let x: WriterT<OptionT<list<(unit * string) option>>> = monad.strict {
+            let x: WriterT<string, ResultT<unit, list<__>, __>, unit> = monad.strict {
                 try
                     failwith "Exception in try-with not handled"
                     ()
                 with _ -> () }
             x
-        let _ = monadTransformer3layersTest4 () |> WriterT.run |> OptionT.run
+        let _ = monadTransformer3layersTest4 () |> WriterT.run |> ResultT.run
 
         let monadTransformer3layersTest5 () =
-            let x: WriterT<OptionT<Task<(unit * string) option>>> = monad.strict {
+            let x: WriterT<string, ResultT<unit, Task<__>, __>, unit> = monad.strict {
                 try
                     failwith "Exception in try-with not handled"
                     ()
                 with _ -> () }
             x
-        let _ = monadTransformer3layersTest5 () |> WriterT.run |> OptionT.run
+        let _ = monadTransformer3layersTest5 () |> WriterT.run |> ResultT.run
+
+        let monadTransformer3layersTest6 () =
+            let x: ReaderT<unit, ResultT<unit, Task<__>, __>, unit> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = (monadTransformer3layersTest6 () |> ReaderT.run) ()
         
 
         // ContT doesn't deal with the inner monad, so we don't need to do anything.
@@ -646,7 +655,7 @@ module ComputationExpressions =
 
         let monadTransformer3layersTest1 () =
             SideEffects.reset ()
-            let x: StateT<string, ReaderT<int, seq<(unit * string)>>> = monad {
+            let x: StateT<string, ReaderT<int, seq<__>, __>, unit> = monad {
                 use disp = { new IDisposable with override __.Dispose() = SideEffects.add "Disposing" }
                 try
                     failwith "Exception in try-finally"
@@ -659,7 +668,7 @@ module ComputationExpressions =
 
         let monadTransformer3layersTest2 () =
             SideEffects.reset ()
-            let x: StateT<string, ReaderT<int, list<(unit * string)>>> = monad {
+            let x: StateT<string, ReaderT<int, list<__>, __>, unit> = monad {
                 use disp = { new IDisposable with override __.Dispose() = SideEffects.add "Disposing" }
                 try
                     failwith "Exception in try-finally"
@@ -672,7 +681,7 @@ module ComputationExpressions =
 
         let monadTransformer3layersTest3 () =
             SideEffects.reset ()
-            let x: WriterT<OptionT<seq<(unit * string) option>>> = monad {
+            let x: WriterT<string, ResultT<unit, seq<__>, __>, unit> = monad {
                 use disp = { new IDisposable with override __.Dispose() = SideEffects.add "Disposing" }
                 try
                     failwith "Exception in try-finally"
@@ -680,14 +689,14 @@ module ComputationExpressions =
                 finally
                     SideEffects.add "Finally goes here" }
             x
-        let _ = try (monadTransformer3layersTest3 () |> WriterT.run |> OptionT.run |> Seq.toList) with _ -> Unchecked.defaultof<_>
+        let _ = try (monadTransformer3layersTest3 () |> WriterT.run |> ResultT.run |> Seq.toList) with _ -> Unchecked.defaultof<_>
         SideEffects.are ["Finally goes here"; "Disposing"]
 
         // Same test but with list instead of seq, which makes the whole monad strict
         // If .strict is not used it fails compilation with a nice error asking us to add it
         let monadTransformer3layersTest4 () =
             SideEffects.reset ()
-            let x: WriterT<OptionT<list<(unit * string) option>>> = monad.strict {
+            let x: WriterT<string, ResultT<unit, list<__>, __>, unit> = monad.strict {
                 use disp = { new IDisposable with override __.Dispose() = SideEffects.add "Disposing" }
                 try
                     failwith "Exception in try-finally"
@@ -695,7 +704,7 @@ module ComputationExpressions =
                 finally
                     SideEffects.add "Finally goes here" }
             x
-        let _ = try (monadTransformer3layersTest4 () |> WriterT.run |> OptionT.run) with _ -> Unchecked.defaultof<_>
+        let _ = try (monadTransformer3layersTest4 () |> WriterT.run |> ResultT.run) with _ -> Unchecked.defaultof<_>
         SideEffects.are ["Finally goes here"; "Disposing"]
 
         // ContT doesn't deal with the inner monad, so we don't need to do anything.

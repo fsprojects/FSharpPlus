@@ -38,7 +38,7 @@ module Sample1 =
             | Get (k,    c) -> Get (k,      c >> f)
             | Set (k, v, c) -> Set (k, v, f c     )
 
-    type FreeDSL<'a> = Free<DSL<'a>,'a>
+    type FreeDSL<'a> = Free<DSL<__>,'a>
 
     let ex1  = Set ("alma", "bela", (Get ("alma", id)))
     let exF1 = Roll (Set ("alma", "bela", (Roll (Get ("alma", (fun s -> Pure s))))))
@@ -173,7 +173,7 @@ module Sample3 =
                 | GetSlots (x, next) -> GetSlots (x, next >> f)
                 | PostReservation (x, next) -> PostReservation (x, next |> f)
 
-    type Program<'t> = Free<Coproduct<CommandLineInstruction<'t>, ReservationsApiInstruction<'t>>,'t>
+    type Program<'t> = Free<Coproduct<CommandLineInstruction<__>, ReservationsApiInstruction<__>, __>, 't>
 
 
     let readLine = (Free.liftF << InL) (ReadLine id) : Program<_>
@@ -264,7 +264,7 @@ module TestCoproduct =
     let a36 = map string a31
     let a37 = map string a32
 
-    let a41 = InL [3] : Coproduct<_,_ list>
+    let a41 = InL [3] : Coproduct<_,__ list, _>
     let a42 = map ((+)10 >> string) a41
 
     open Sample3
@@ -291,7 +291,7 @@ module Fold =
                 match instruction with
                 | Read (id, next) -> Read(id, next >> f)
 
-        type Program<'a> = Free<Instruction<'a>, 'a>
+        type Program<'a> = Free<Instruction<__>, 'a>
 
         let read fooId = Read(fooId, id) |> Free.liftF
 
