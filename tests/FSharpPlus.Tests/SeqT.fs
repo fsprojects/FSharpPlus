@@ -19,7 +19,7 @@ module BasicTests =
   
     [<Test>]
     let infiniteLists () =
-        let infinite = SeqT.unfold (fun x -> monad<Lazy<_>> { return (Some (x, x + 1) ) }) 0
+        let infinite = SeqT.unfold (fun x -> monad<Lazy<_>> { return (Some (x, x + 1) ) }) 0 // note type inference doesn't flow from result type
         let finite = take 12 infinite
         let res = finite <|> infinite
         CollectionAssert.AreEqual (res |> take 13 |> SeqT.run |> extract, [0;1;2;3;4;5;6;7;8;9;10;11;0])
@@ -50,4 +50,68 @@ module BasicTests =
         let x = (+) <!> SeqT None <*> SeqT (Some (seq [1;2;3;4]))
         let y = (+) <!> SeqT (async.Return (seq [1])) <*> SeqT (async.Return (seq [2]))
         let z = (+) <!> SeqT (Task.FromResult (seq [1])) <*> SeqT (Task.FromResult (seq [2]))
+        ()
+
+
+module ComputationExpressions =
+
+    type __ = bool
+    
+    type Task = Task<__>
+    type Async = Async<__>
+
+    [<Test>]
+    let tryWithBlocks () =
+        
+        let monadTransformer2layersTest5 () =
+            let x: SeqT<Task, unit> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = monadTransformer2layersTest5 () |> SeqT.run |> Async.AwaitTask |> Async.RunSynchronously |> Seq.toList
+        
+        let monadTransformer2layersTest5_a () =
+            let x: SeqT<Async, unit> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = monadTransformer2layersTest5_a () |> SeqT.run |> Async.RunSynchronously |> Seq.toList
+        
+        
+        let monadTransformer3layersTest4 () =
+            let x: SeqT<ReaderT<unit, Task>, unit> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        // let _ = (monadTransformer3layersTest4 () |> SeqT.run |> ReaderT.run) ()
+        // type inference doesn't work with full piping
+        let _ = let x = (monadTransformer3layersTest4 () |> SeqT.run) in (x |> ReaderT.run) ()
+        
+        let monadTransformer3layersTest5 () =
+            let x: SeqT<ResultT<Task<Result<bool, unit>>>, unit> = monad {
+              return // need to add this
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        // type inference doesn't work with full piping
+        let _ = let x = (monadTransformer3layersTest5 () |> SeqT.run) in  x |> ResultT.run |> extract |> Result.get
+        
+        
+        let monadTransformer3layersTest1 () =
+            let x: ReaderT<unit, ResultT<Task<Result<unit,unit>>>> = monad {
+                try
+                    failwith "Exception in try-with not handled"
+                    ()
+                with _ -> () }
+            x
+        let _ = (monadTransformer3layersTest1 () |> ReaderT.run) () |> ResultT.run |> extract |> Result.get
+
         ()
