@@ -52,6 +52,21 @@ module BasicTests =
         let z = (+) <!> SeqT (Task.FromResult (seq [1])) <*> SeqT (Task.FromResult (seq [2]))
         ()
 
+    let monadTransOps () =
+        let fn : SeqT<Reader<int, bool>, int> = 
+            monad.plus {
+                let! x1 = ask
+                let! x2 = 
+                    if x1 > 0 then result 1
+                    else empty
+                return x1 + x2
+            }
+        
+        let x = (fn |> SeqT.run |> Reader.run) 10 |> Seq.toList
+        areEqual [11] x
+        let y = (fn |> SeqT.run |> Reader.run) -1 |> Seq.toList
+        areEqual [] y
+
 
 module ComputationExpressions =
 

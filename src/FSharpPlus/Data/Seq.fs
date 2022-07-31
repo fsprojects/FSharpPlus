@@ -234,7 +234,7 @@ module SeqT =
          make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = inp in return f v })
 
     let inline lift<'T, .. > (x: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> =
-        let a: '``Monad<seq<'T>>`` = map Seq.singleton<'T> x
+        let a = (if opaqueId false then liftM else map) Seq.singleton<'T> x : '``Monad<seq<'T>>``
         wrap a
 
 
@@ -249,7 +249,7 @@ module SeqT =
     let inline collect<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (inp: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
         SeqT
           { new IEnumerableM<'``Monad<bool>``, 'U> with
-                member x.GetEnumerator() =
+                member _.GetEnumerator() =
                     let state = ref (CollectState.NotStarted inp)
                     let current = ref Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U>  with
@@ -512,7 +512,7 @@ module SeqT =
                    b := moven
         }
 
-    let inline iterM<'T, .. > (f: 'T -> '``Monad<unit>``) (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun _ x -> f x) inp    
+    let inline iterM<'T, .. > (f: 'T -> '``Monad<unit>``) (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> f x) inp    
     let inline iteri<'T, .. > (f: int -> 'T -> unit)      (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> result (f i x)) inp
     let inline iter<'T, .. > f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iterM (f >> result) source
 
@@ -673,6 +673,24 @@ type SeqT<'``monad<bool>``, 'T> with
         SeqT.tryFinally (f resource) (fun () -> if box resource <> null then dispose resource)
 
     static member inline Lift (m: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.lift m
+    static member inline LiftAsync (x: Async<'T>) = SeqT.lift (liftAsync x: '``MonadAsync<'T>``) : SeqT<'MonadAsync, 'T>
+
+    static member inline Throw (x: 'E) : SeqT<'``MonadError<'E>``, 'T> = x |> throw |> SeqT.lift
+    static member inline Catch (m: SeqT<'``MonadError<'E1>``, 'T>, h: 'E1 -> SeqT<'``MonadError<'E2>``, 'T>) : SeqT<'``MonadError<'E2>``, 'T> =
+        seqT (
+            (fun v h -> Catch.Invoke v h)
+                (SeqT.run m)
+                (SeqT.run << h))
+    
+    static member inline CallCC (f: (('T -> SeqT<'``MonadCont<'R>``, 'U>) -> _)) : SeqT<'``MonadCont<'R>``, 'T> =
+        seqT (callCC <| fun c -> SeqT.run (f (seqT << c << Seq.singleton)))
+    
+    static member inline get_Get ()  : SeqT<'``MonadState<'S>``, 'S> = SeqT.lift get
+    static member inline Put (x: 'T) : SeqT<'``MonadState<unit>``, 'S> = x |> put |> SeqT.lift
+    
+    static member inline get_Ask () : SeqT<'``MonadReader<'R>``, 'R> = SeqT.lift ask
+    static member inline Local (m: SeqT<'``MonadReader<'R2>``, 'T>, f: 'R1 -> 'R2) : SeqT<'``MonadReader<'R1>``, 'T> =
+        seqT (local f (SeqT.run m))
     
 [<AutoOpen>]
 module Extension =
