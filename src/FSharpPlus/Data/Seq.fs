@@ -177,7 +177,7 @@ module SeqT =
                           member _.Current =
                               if stateStarted.Value then v
                               else invalidOp "Enumeration has not started. Call MoveNext."
-                          member _.Dispose() = () } }
+                          member _.Dispose () = () } }
 
 
 
@@ -233,9 +233,25 @@ module SeqT =
     let inline bindM<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (inp: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'U> =
          make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = inp in return f v })
 
-    let inline lift<'T, .. > (x: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> =
-        let a = (if opaqueId false then liftM else map) Seq.singleton<'T> x : '``Monad<seq<'T>>``
-        wrap a
+    let inline lift (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> =
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with 
+                member _.GetEnumerator () = 
+                    let stateStarted = ref None
+                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
+                        member _.MoveNext () =
+                            let res: '``Monad<bool>`` =
+                                source
+                                |> (if opaqueId false then liftM else map) (fun v ->
+                                    match stateStarted.Value with
+                                    | None -> stateStarted := Some v; true
+                                    | Some _ -> stateStarted := None; false )
+                            res
+                        member _.Current =
+                            match stateStarted.Value with
+                            | Some v -> v
+                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                        member _.Dispose() = () } }
 
 
     [<RequireQualifiedAccess>]
