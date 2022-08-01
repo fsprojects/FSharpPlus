@@ -528,7 +528,7 @@ module SeqT =
                    b := moven
         }
 
-    let inline iterM<'T, .. > (f: 'T -> '``Monad<unit>``) (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> f x) inp    
+    let inline iterM<'T, .. > (f: 'T -> '``Monad<unit>``) (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun _ x -> f x) inp    
     let inline iteri<'T, .. > (f: int -> 'T -> unit)      (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> result (f i x)) inp
     let inline iter<'T, .. > f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iterM (f >> result) source
 
@@ -656,13 +656,32 @@ module SeqT =
                               | _ -> () } }
 
     let inline unfold (f: 'State -> '``Monad<('T * 'State) option>``) (s: 'State) : SeqT<'``Monad<bool>``, 'T> =
-        let rec unfoldM f s =
-            delay (fun () ->
-                (f s)
-                |> bindM<_, _, _, '``Monad<SeqT<'Monad<bool>, 'T>>``, _> (function
-                    | None -> empty
-                    | Some (v, s2) -> append (singleton v) (unfoldM f s2)))
-        unfoldM f s
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
+                  member x.GetEnumerator () =
+                      let stateStarted = ref false
+                      let currentState = ref s
+                      let current = ref Option<'T>.None
+                      { new IEnumeratorM<'``Monad<bool>``, 'T>  with
+                          member _.Current =
+                              match !current, !stateStarted with
+                              | Some c, true -> c
+                              | _     , false -> invalidOp "Enumeration has not started. Call MoveNext."
+                              | None  , true  -> invalidOp "Enumeration finished."
+                          member x.MoveNext () =
+                                monad' {
+                                    if not stateStarted.Value then
+                                        stateStarted := true
+                                        return! x.MoveNext ()
+                                    else
+                                        let! res = f currentState.Value
+                                        match res with
+                                        | None -> return false
+                                        | Some (t, newState) ->
+                                            current := Some t
+                                            currentState := newState
+                                            return true }
+                          member _.Dispose() = () } }
 
 
 type [<AutoOpen>]SeqTOperations =

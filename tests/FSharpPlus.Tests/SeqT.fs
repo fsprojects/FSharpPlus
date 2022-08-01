@@ -19,7 +19,14 @@ module BasicTests =
   
     [<Test>]
     let infiniteLists () =
-        let infinite = SeqT.unfold (fun x -> monad<Lazy<_>> { return (Some (x, x + 1) ) }) 0 // note type inference doesn't flow from result type
+        let infinite: SeqT<Lazy<_>, _> = SeqT.unfold (fun x -> monad { return (Some (x, x + 1) ) }) 0
+        let finite = take 12 infinite
+        let res = finite <|> infinite
+        CollectionAssert.AreEqual (res |> take 13 |> SeqT.run |> extract, [0;1;2;3;4;5;6;7;8;9;10;11;0])
+
+    [<Test>]
+    let infiniteLists2 () =
+        let infinite: SeqT<Async<_>, _> = SeqT.unfold (fun x -> monad { return (Some (x, x + 1) ) }) 0
         let finite = take 12 infinite
         let res = finite <|> infinite
         CollectionAssert.AreEqual (res |> take 13 |> SeqT.run |> extract, [0;1;2;3;4;5;6;7;8;9;10;11;0])
