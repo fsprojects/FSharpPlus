@@ -240,13 +240,9 @@ module SeqT =
                     let stateStarted = ref None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
                         member _.MoveNext () =
-                            let res: '``Monad<bool>`` =
-                                source
-                                |> (if opaqueId false then liftM else map) (fun v ->
-                                    match stateStarted.Value with
-                                    | None -> stateStarted := Some v; true
-                                    | Some _ -> stateStarted := None; false )
-                            res
+                            match stateStarted.Value with
+                            | Some _ -> result false
+                            | None -> source |> (if opaqueId false then liftM else map) (fun v -> stateStarted := Some v; true)
                         member _.Current =
                             match stateStarted.Value with
                             | Some v -> v
