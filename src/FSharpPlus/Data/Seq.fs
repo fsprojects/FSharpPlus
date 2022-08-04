@@ -742,7 +742,40 @@ module Extension =
                             b := moven
                         else b := false }
 
+        let inline map2M (f: 'T1 -> 'T2 -> '``Monad<'U>``) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = monad.plus {
+            use ie1 = (source1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+            use ie2 = (source2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+            let! move1 = SeqT.lift (ie1.MoveNext () : '``Monad<bool>``)
+            let! move2 = SeqT.lift (ie2.MoveNext () : '``Monad<bool>``)
+            let b1 = ref move1
+            let b2 = ref move2
+            while b1.Value && b2.Value do
+                let! res = SeqT.lift (f ie1.Current ie2.Current)
+                yield res
+                let! move1n = SeqT.lift (ie1.MoveNext ())
+                let! move2n = SeqT.lift (ie2.MoveNext ())
+                b1 := move1n
+                b2 := move2n }
+
+        let inline map2 (f: 'T1 -> 'T2 -> 'U) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = monad.plus {
+            use ie1 = (source1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+            use ie2 = (source2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+            let! move1 = SeqT.lift (ie1.MoveNext ())
+            let! move2 = SeqT.lift (ie2.MoveNext ())
+            let b1 = ref move1
+            let b2 = ref move2
+            while b1.Value && b2.Value do
+                yield f ie1.Current ie2.Current
+                let! move1n = SeqT.lift (ie1.MoveNext ())
+                let! move2n = SeqT.lift (ie2.MoveNext ())
+                b1 := move1n
+                b2 := move2n }
+
+        let inline zip (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> =
+            map2 tuple2 source1 source2
+
 type SeqT<'``monad<bool>``, 'T> with
     static member inline Take (source: SeqT<'``Monad<bool>``, 'T>, count, _: Take) : SeqT<'``Monad<bool>``, 'T> = SeqT.take count source
+    static member inline Zip (source1: SeqT<'``Monad<bool>``, 'T1>, source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> = SeqT.zip source1 source2
 
 #endif

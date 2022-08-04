@@ -30,6 +30,22 @@ module BasicTests =
         let finite = take 12 infinite
         let res = finite <|> infinite
         CollectionAssert.AreEqual (res |> take 13 |> SeqT.run |> extract, [0;1;2;3;4;5;6;7;8;9;10;11;0])
+
+    [<Test>]
+    let zipLists1 () =
+        let infinite: SeqT<Lazy<_>, int> = SeqT.unfold (fun x -> monad { return if x = 13 then failwith "Unlucky number" else (Some (x, x + 1) ) }) 0
+        let finite:   SeqT<Lazy<_>, int> = SeqT.unfold (fun x -> monad { return if x = 7 then None else (Some (x, x + 1) ) }) 0
+        let x = zip (map string infinite) finite
+        let y = SeqT.run x |> extract |> toList
+        CollectionAssert.AreEqual (y, [("0", 0); ("1", 1); ("2", 2); ("3", 3); ("4", 4); ("5", 5); ("6", 6)])
+
+    [<Test>]
+    let zipLists2 () =
+        let infinite: SeqT<Async<_>, _> = SeqT.unfold (fun x -> monad { return if x = 13 then failwith "Unlucky number" else (Some (x, x + 1) ) }) 0
+        let finite:   SeqT<Async<_>, _> = SeqT.unfold (fun x -> monad { return if x = 7 then None else (Some (x, x + 1) ) }) 0
+        let x = zip (map string infinite) finite
+        let y = SeqT.run x |> extract |> toList
+        CollectionAssert.AreEqual (y, [("0", 0); ("1", 1); ("2", 2); ("3", 3); ("4", 4); ("5", 5); ("6", 6)])
         
     // Compile tests
     let binds () =
