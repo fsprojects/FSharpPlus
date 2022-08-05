@@ -746,6 +746,25 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline Map   (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> 'U) : SeqT<'``Monad<bool>``, 'U> = SeqT.map f x
     static member inline (<!>) (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> 'U) : SeqT<'``Monad<bool>``, 'U> = SeqT.map f x
     static member inline (<*>) (f: SeqT<'``Monad<bool>``, ('T -> 'U)>, x: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> = SeqT.apply f x
+
+    /// <summary>
+    /// Sequences two lists left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: SeqT<'``Monad<bool>``, 'T>, y: SeqT<'``Monad<bool>``, 'U>) : SeqT<'``Monad<bool>``, 'U> =
+        let (<!>) = SeqT.map
+        let (<*>) = SeqT.apply
+        ((fun (_: 'T) (k: 'U) -> k) <!> x: SeqT<'``Monad<bool>``, ('U -> 'U)>) <*> y
+    
+    /// <summary>
+    /// Sequences two lists left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (x: SeqT<'``Monad<bool>``, 'U>, y: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
+        let (<!>) = SeqT.map
+        let (<*>) = SeqT.apply
+        ((fun (k: 'U) (_: 'T) -> k) <!> x: SeqT<'``Monad<bool>``, ('T -> 'U)>) <*> y
+
     static member inline (>>=) (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> SeqT<'``Monad<bool>``, 'U>) : SeqT<'``Monad<bool>``, 'U> = SeqT.collect f x
     static member inline get_Empty () : SeqT<'``Monad<bool>``, 'T> = SeqT.empty
     static member inline (<|>) (x, y) : SeqT<'``Monad<bool>``, 'T> = SeqT.append x y
