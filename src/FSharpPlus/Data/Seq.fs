@@ -519,6 +519,8 @@ module SeqT =
                                   dispose e1
                               | _ -> () } }
 
+    let inline lift3<'T1, 'T2, 'T3, 'U, .. > (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: SeqT<'``Monad<bool>``, 'T1>) (x2: SeqT<'``Monad<bool>``, 'T2>) (x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
+        f </map/> x1 </apply/> x2 </apply/> x3
 
     let inline filter (f: 'T -> bool) (inp: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
@@ -749,6 +751,7 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline (<|>) (x, y) : SeqT<'``Monad<bool>``, 'T> = SeqT.append x y
 
     static member inline Lift2 (f: 'T1 -> 'T2 -> 'U, x1: SeqT<'``Monad<bool>``, 'T1>, x2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = SeqT.lift2 f x1 x2
+    static member inline Lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U, x1: SeqT<'``Monad<bool>``, 'T1>, x2: SeqT<'``Monad<bool>``, 'T2>, x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> = SeqT.lift3 f x1 x2 x3
 
     static member inline TryWith (source: SeqT<'``Monad<bool>``, 'T>, f: exn -> SeqT<'``Monad<bool>``, 'T>) = SeqT.tryWith<_, _, '``Monad<unit>``, _> source f
     static member inline TryFinally (computation: SeqT<'``Monad<bool>``, 'T>, f) = SeqT.tryFinally computation f
@@ -826,6 +829,12 @@ module Extension =
 
         let inline zip (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> =
             map2 tuple2 source1 source2
+
+        let inline map3<'T1, 'T2, 'T3, 'U, .. > (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: SeqT<'``Monad<bool>``, 'T1>) (x2: SeqT<'``Monad<bool>``, 'T2>) (x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
+            map2 (<|) (map2 f x1 x2) x3
+
+        let inline zip3 (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, ('T1 * 'T2 * 'T3)> =
+            map3 tuple3 source1 source2 source3
 
 type SeqT<'``monad<bool>``, 'T> with
     static member inline Take (source: SeqT<'``Monad<bool>``, 'T>, count, _: Take) : SeqT<'``Monad<bool>``, 'T> = SeqT.take count source
