@@ -35,18 +35,26 @@ module BasicTests =
     let zipLists1 () =
         let infinite: SeqT<Lazy<_>, int> = SeqT.unfold (fun x -> monad { return if x = 13 then failwith "Unlucky number" else (Some (x, x + 1) ) }) 0
         let finite:   SeqT<Lazy<_>, int> = SeqT.unfold (fun x -> monad { return if x = 7 then None else (Some (x, x + 1) ) }) 0
-        let x = zip (map string infinite) finite
-        let y = SeqT.run x |> extract |> toList
-        CollectionAssert.AreEqual (y, [("0", 0); ("1", 1); ("2", 2); ("3", 3); ("4", 4); ("5", 5); ("6", 6)])
+        let x1 = zip (map string infinite) finite
+        let y1 = SeqT.run x1 |> extract |> toList
+        CollectionAssert.AreEqual (y1, [("0", 0); ("1", 1); ("2", 2); ("3", 3); ("4", 4); ("5", 5); ("6", 6)])
+
+        let x2 = lift2 tuple2 (map string finite) (take 2 infinite)
+        let y2 = SeqT.run x2 |> extract |> toList
+        CollectionAssert.AreEqual (y2, [("0", 0); ("0", 1); ("1", 0); ("1", 1); ("2", 0); ("2", 1); ("3", 0); ("3", 1); ("4", 0); ("4", 1); ("5", 0); ("5", 1); ("6", 0); ("6", 1)])
 
     [<Test>]
     let zipLists2 () =
         let infinite: SeqT<Async<_>, _> = SeqT.unfold (fun x -> monad { return if x = 13 then failwith "Unlucky number" else (Some (x, x + 1) ) }) 0
         let finite:   SeqT<Async<_>, _> = SeqT.unfold (fun x -> monad { return if x = 7 then None else (Some (x, x + 1) ) }) 0
-        let x = zip (map string infinite) finite
-        let y = SeqT.run x |> extract |> toList
-        CollectionAssert.AreEqual (y, [("0", 0); ("1", 1); ("2", 2); ("3", 3); ("4", 4); ("5", 5); ("6", 6)])
+        let x1 = zip (map string infinite) finite
+        let y1 = SeqT.run x1 |> extract |> toList
+        CollectionAssert.AreEqual (y1, [("0", 0); ("1", 1); ("2", 2); ("3", 3); ("4", 4); ("5", 5); ("6", 6)])
         
+        let x2 = lift2 tuple2 (map string finite) (take 2 infinite)
+        let y2 = SeqT.run x2 |> extract |> toList
+        CollectionAssert.AreEqual (y2, [("0", 0); ("0", 1); ("1", 0); ("1", 1); ("2", 0); ("2", 1); ("3", 0); ("3", 1); ("4", 0); ("4", 1); ("5", 0); ("5", 1); ("6", 0); ("6", 1)])
+
     // Compile tests
     let binds () =
         let res1 = SeqT [|seq [1..4] |] >>= fun x -> SeqT [|seq [x * 2] |]

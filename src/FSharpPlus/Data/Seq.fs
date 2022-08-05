@@ -361,7 +361,56 @@ module SeqT =
                                 dispose e1
                             | _ -> () } }
 
-
+    let inline lift2<'T1, 'T2, 'U, .. > (f: 'T1 -> 'T2 -> 'U) (x1: SeqT<'``Monad<bool>``, 'T1>) (x2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> =
+        SeqT
+          { new IEnumerableM<'``Monad<bool>``, 'U> with
+                member _.GetEnumerator () =
+                    let state = ref (CollectState.NotStarted x1)
+                    let current = ref Option<'U>.None
+                    { new IEnumeratorM<'``Monad<bool>``, 'U>  with
+                        member _.Current =
+                            match !current with
+                            | Some c -> c
+                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                        member x.MoveNext () =
+                            monad' {
+                                match !state with
+                                    | CollectState.NotStarted x1 ->
+                                        return! (
+                                            let e1 = (x1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+                                            state := CollectState.HaveInputEnumerator e1
+                                            x.MoveNext ())
+                                    | CollectState.HaveInputEnumerator e1 ->
+                                        let! res1 = e1.MoveNext ()
+                                        return! (
+                                            if res1 then
+                                                let e2 = (x2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+                                                state := CollectState.HaveInnerEnumerator (e1, e2)
+                                            else
+                                                x.Dispose ()
+                                            x.MoveNext () )
+                                    | CollectState.HaveInnerEnumerator (e1, e2) ->
+                                        let! (res2: bool) = e2.MoveNext ()
+                                        if res2 then
+                                            current := Some (f e1.Current e2.Current)
+                                            return res2
+                                        else
+                                            state := CollectState.HaveInputEnumerator e1
+                                            dispose e2
+                                            return! x.MoveNext ()
+                                    | _ ->
+                                        return false }
+                        member _.Dispose () =
+                            match !state with
+                            | CollectState.HaveInputEnumerator e1 ->
+                                state := CollectState.Finished
+                                dispose e1
+                            | CollectState.HaveInnerEnumerator (e1, e2) ->
+                                state := CollectState.Finished
+                                dispose e2
+                                dispose e1
+                            | _ -> () } }
+    
     [<RequireQualifiedAccess>]
     type AppendState<'``Monad<bool>``, 'T> =
        | NotStarted1     of SeqT<'``Monad<bool>``, 'T> * SeqT<'``Monad<bool>``, 'T>
@@ -698,6 +747,8 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline (>>=) (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> SeqT<'``Monad<bool>``, 'U>) : SeqT<'``Monad<bool>``, 'U> = SeqT.collect f x
     static member inline get_Empty () : SeqT<'``Monad<bool>``, 'T> = SeqT.empty
     static member inline (<|>) (x, y) : SeqT<'``Monad<bool>``, 'T> = SeqT.append x y
+
+    static member inline Lift2 (f: 'T1 -> 'T2 -> 'U, x1: SeqT<'``Monad<bool>``, 'T1>, x2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = SeqT.lift2 f x1 x2
 
     static member inline TryWith (source: SeqT<'``Monad<bool>``, 'T>, f: exn -> SeqT<'``Monad<bool>``, 'T>) = SeqT.tryWith<_, _, '``Monad<unit>``, _> source f
     static member inline TryFinally (computation: SeqT<'``Monad<bool>``, 'T>, f) = SeqT.tryFinally computation f
