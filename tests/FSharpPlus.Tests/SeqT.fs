@@ -14,8 +14,8 @@ module BasicTests =
     let wrap_unwrap () =
         let c = SeqT (async.Return (seq ['a'..'g']))
         let res = c |> SeqT.run |> SeqT |> SeqT.run |> extract
-        let exp = c |> SeqT.run |> extract
-        CollectionAssert.AreEqual (res, exp)
+        let (SeqT exp) = c
+        CollectionAssert.AreEqual (res, extract exp)
   
     [<Test>]
     let infiniteLists1 () =

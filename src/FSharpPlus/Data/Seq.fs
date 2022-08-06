@@ -739,6 +739,7 @@ type [<AutoOpen>]SeqTOperations =
 
 module [<AutoOpen>]SeqTOperations =
     let inline seqT<'T, .. > (source: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.wrap source
+    let inline (|SeqT|) (x: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>`` = SeqT.toSeqM x
 
 
 type SeqT<'``monad<bool>``, 'T> with
