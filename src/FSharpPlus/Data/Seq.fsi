@@ -72,377 +72,1822 @@ namespace FSharpPlus.Data
                    (static member Sequence:
                       seq< ^Applicative<'T>> *  ^e * Control.Sequence ->  ^e)
     
-    /// Monad Transformer for seq<'T>
+    module Internal =
+        
+        val inline monomorphicBind:
+          binder: ('T ->  ^Monad<'T>) -> source:  ^Monad<'T> ->  ^Monad<'T>
+            when (Control.Bind or  ^Monad<'T>) :
+                   (static member (>>=) :
+                       ^Monad<'T> * ('T ->  ^Monad<'T>) ->  ^Monad<'T>)
+    
+    type MonadFxStrictBuilderMod<'monad<'t>> =
+        inherit GenericBuilders.MonadFxStrictBuilder<'monad<'t>>
+        
+        new: unit -> MonadFxStrictBuilderMod<'monad<'t>>
+        
+        member
+          inline Delay: expr: (unit ->  ^Monad<'T>) -> (unit ->  ^Monad<'T>)
+                          when (Control.Delay or  ^Monad<'T>) :
+                                 (static member Delay:
+                                    Control.Delay * (unit ->  ^Monad<'T>) *
+                                    Control.Delay ->  ^Monad<'T>)
+    
+    type MonadPlusStrictBuilderMod<'monad<'t>> =
+        inherit GenericBuilders.MonadPlusStrictBuilder<'monad<'t>>
+        
+        new: unit -> MonadPlusStrictBuilderMod<'monad<'t>>
+        
+        member
+          inline Delay: expr: (unit ->  ^Monad<'T>) -> (unit ->  ^Monad<'T>)
+                          when (Control.Delay or  ^Monad<'T>) :
+                                 (static member Delay:
+                                    Control.Delay * (unit ->  ^Monad<'T>) *
+                                    Control.Delay ->  ^Monad<'T>)
+    
+    type MonadFxStrictBuilderMod2<'monad<'t>, ^monad<unit>
+                                    when (Control.Return or  ^monad<unit>) :
+                                           (static member Return:
+                                               ^monad<unit> * Control.Return
+                                                -> (unit ->  ^monad<unit>)) and
+                                         (Control.Bind or  ^monad<unit>) :
+                                           (static member (>>=) :
+                                               ^monad<unit> *
+                                              (unit ->  ^monad<unit>)
+                                                ->  ^monad<unit>) and
+                                         (Control.Using or  ^monad<unit>) :
+                                           (static member Using:
+                                              System.IDisposable *
+                                              (System.IDisposable
+                                                 ->  ^monad<unit>) *
+                                              Control.Using ->  ^monad<unit>)> =
+        inherit GenericBuilders.StrictBuilder<'monad<'t>>
+        
+        new: unit -> MonadFxStrictBuilderMod2<'monad<'t>, ^monad<unit>>
+        
+        member
+          inline Combine: a:  ^Monad<unit> * b: (unit ->  ^Monad<'T>)
+                            ->  ^Monad<'T>
+                            when (Control.Bind or  ^Monad<unit> or  ^Monad<'T>) :
+                                   (static member (>>=) :
+                                       ^Monad<unit> * (unit ->  ^Monad<'T>)
+                                        ->  ^Monad<'T>)
+        
+        member
+          inline Delay: expr: (unit ->  ^Monad<'T>) -> (unit ->  ^Monad<'T>)
+                          when (Control.Delay or  ^Monad<'T>) :
+                                 (static member Delay:
+                                    Control.Delay * (unit ->  ^Monad<'T>) *
+                                    Control.Delay ->  ^Monad<'T>)
+        
+        member
+          inline For: p: #seq<'T> * rest: ('T ->  ^monad<unit>) ->  ^monad<unit>
+        
+        member
+          inline While: guard: (unit -> bool) * body: (unit ->  ^monad<unit>)
+                          ->  ^monad<unit>
+        
+        member inline Zero: unit ->  ^monad<unit>
+    
+    module SpecialBuilders =
+        
+        val innerMonad<'mt> : MonadFxStrictBuilderMod<'mt>
+        
+        val inline innerMonad2:
+          unit -> MonadFxStrictBuilderMod2<'mt, ^a>
+            when (Control.Return or  ^a) :
+                   (static member Return:  ^a * Control.Return -> (unit ->  ^a)) and
+                 (Control.Bind or  ^a) :
+                   (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                 (Control.Using or  ^a) :
+                   (static member Using:
+                      System.IDisposable * (System.IDisposable ->  ^a) *
+                      Control.Using ->  ^a)
+    
+    type IEnumeratorM<'Monad<bool>,'T> =
+        inherit System.IDisposable
+        
+        abstract MoveNext: unit -> 'Monad<bool>
+        
+        abstract Current: 'T
+    
+    type IEnumerableM<'Monad<bool>,'T> =
+        
+        abstract GetEnumerator: unit -> IEnumeratorM<'Monad<bool>,'T>
+    
     [<Struct>]
-    type SeqT<'monad<seq<'t>>> =
-        | SeqT of 'monad<seq<'t>>
+    type SeqT<'monad,'t> =
+        | SeqT of IEnumerableM<'monad,'t>
+        interface IEnumerableM<'monad,'t>
+        
+        /// <summary>
+        /// Sequences two lists left-to-right, discarding the value of the first argument.
+        /// </summary>
+        /// <category index="2">Applicative</category>
+        static member
+          inline ( *> ) : x: SeqT< ^Monad<bool>,'T> * y: SeqT< ^Monad<bool>,'U>
+                            -> SeqT< ^Monad<bool>,'U>
+                            when (Control.Bind or  ^Monad<bool>) :
+                                   (static member (>>=) :
+                                       ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                        ->  ^Monad<bool>) and
+                                 (Control.Return or  ^Monad<bool>) :
+                                   (static member Return:
+                                       ^Monad<bool> * Control.Return
+                                        -> (bool ->  ^Monad<bool>)) and
+                                 (Control.Delay or  ^Monad<bool>) :
+                                   (static member Delay:
+                                      Control.Delay * (unit ->  ^Monad<bool>) *
+                                      Control.Delay ->  ^Monad<bool>)
+        
+        /// <summary>
+        /// Sequences two lists left-to-right, discarding the value of the second argument.
+        /// </summary>
+        /// <category index="2">Applicative</category>
+        static member
+          inline ( <* ) : x: SeqT< ^Monad<bool>,'U> * y: SeqT< ^Monad<bool>,'T>
+                            -> SeqT< ^Monad<bool>,'U>
+                            when (Control.Bind or  ^Monad<bool>) :
+                                   (static member (>>=) :
+                                       ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                        ->  ^Monad<bool>) and
+                                 (Control.Return or  ^Monad<bool>) :
+                                   (static member Return:
+                                       ^Monad<bool> * Control.Return
+                                        -> (bool ->  ^Monad<bool>)) and
+                                 (Control.Delay or  ^Monad<bool>) :
+                                   (static member Delay:
+                                      Control.Delay * (unit ->  ^Monad<bool>) *
+                                      Control.Delay ->  ^Monad<bool>)
         
         static member
-          inline (<*>) : f: SeqT< ^Monad<seq<('T -> 'U)>> *
-                         x: SeqT< ^Monad<seq<'T>> -> SeqT< ^Monad<seq<'U>>
-                           when (Control.Map or  ^Monad<seq<('T -> 'U)> or  ^a) :
+          inline (<!>) : x: SeqT< ^Monad<bool>,'T> * f: ('T -> 'U)
+                           -> SeqT< ^Monad<bool>,'U>
+                           when (Control.Delay or  ^Monad<bool>) :
+                                  (static member Delay:
+                                     Control.Delay * (unit ->  ^Monad<bool>) *
+                                     Control.Delay ->  ^Monad<bool>) and
+                                (Control.Bind or  ^Monad<bool>) :
+                                  (static member (>>=) :
+                                      ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                       ->  ^Monad<bool>) and
+                                (Control.Return or  ^Monad<bool>) :
+                                  (static member Return:
+                                      ^Monad<bool> * Control.Return
+                                       -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline (<*>) : f: SeqT< ^Monad<bool>,('T -> 'U)> *
+                         x: SeqT< ^Monad<bool>,'T> -> SeqT< ^Monad<bool>,'U>
+                           when (Control.Bind or  ^Monad<bool>) :
+                                  (static member (>>=) :
+                                      ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                       ->  ^Monad<bool>) and
+                                (Control.Return or  ^Monad<bool>) :
+                                  (static member Return:
+                                      ^Monad<bool> * Control.Return
+                                       -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline (<|>) : x: SeqT< ^Monad<bool>,'T> * y: SeqT< ^Monad<bool>,'T>
+                           -> SeqT< ^Monad<bool>,'T>
+                           when (Control.Delay or  ^Monad<bool>) :
+                                  (static member Delay:
+                                     Control.Delay * (unit ->  ^Monad<bool>) *
+                                     Control.Delay ->  ^Monad<bool>) and
+                                (Control.Return or  ^Monad<bool>) :
+                                  (static member Return:
+                                      ^Monad<bool> * Control.Return
+                                       -> (bool ->  ^Monad<bool>)) and
+                                (Control.Bind or  ^Monad<bool>) :
+                                  (static member (>>=) :
+                                      ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                       ->  ^Monad<bool>)
+        
+        static member
+          inline (>>=) : x: SeqT< ^Monad<bool>,'T> *
+                         f: ('T -> SeqT< ^Monad<bool>,'U>)
+                           -> SeqT< ^Monad<bool>,'U>
+                           when (Control.Bind or  ^Monad<bool>) :
+                                  (static member (>>=) :
+                                      ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                       ->  ^Monad<bool>) and
+                                (Control.Return or  ^Monad<bool>) :
+                                  (static member Return:
+                                      ^Monad<bool> * Control.Return
+                                       -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline CallCC: f: (('T -> SeqT< ^MonadCont<'R>,'U>) -> SeqT< ^d,'e>)
+                           -> SeqT< ^MonadCont<'R>,'T>
+                           when (Control.Bind or  ^a or  ^MonadCont<'R>) :
+                                  (static member (>>=) :
+                                      ^a * (seq<'T> ->  ^MonadCont<'R>)
+                                       ->  ^MonadCont<'R>) and
+                                (Control.Return or  ^MonadCont<'R>) :
+                                  (static member Return:
+                                      ^MonadCont<'R> * Control.Return
+                                       -> (bool ->  ^MonadCont<'R>)) and
+                                (Control.Bind or  ^f or  ^MonadCont<'R>) :
+                                  (static member (>>=) :
+                                      ^f * (seq<'U> ->  ^MonadCont<'R>)
+                                       ->  ^MonadCont<'R>) and
+                                (Control.Map or  ^b or  ^a) :
                                   (static member Map:
-                                     ( ^Monad<seq<('T -> 'U)> *
-                                      (seq<('b -> 'c)> -> seq<'b> -> seq<'c>)) *
-                                     Control.Map ->  ^a) and
-                                (Control.Apply or  ^a or  ^Monad<seq<'T> or
-                                  ^Monad<seq<'U>) :
-                                  (static member ``<*>`` :
-                                      ^a *  ^Monad<seq<'T> *  ^Monad<seq<'U> *
-                                     Control.Apply ->  ^Monad<seq<'U>)
-        
-        static member
-          inline (<|>) : SeqT< ^a> * SeqT< ^c> -> SeqT< ^MonadPlus<seq<'T>>
-                           when (Control.Bind or  ^a or  ^MonadPlus<seq<'T>) :
+                                     ( ^b * ('e[] -> seq<'e>)) * Control.Map
+                                       ->  ^a) and
+                                 ^a:
+                                  (static member CallCC:
+                                     ((seq<'T> ->  ^f) ->  ^a) ->  ^a) and
+                                (Control.Bind or  ^c or  ^b) :
                                   (static member (>>=) :
-                                      ^a * (seq<'b> ->  ^MonadPlus<seq<'T>)
-                                       ->  ^MonadPlus<seq<'T>) and
-                                (Control.Bind or  ^c or  ^MonadPlus<seq<'T>) :
+                                      ^c * (unit ->  ^b) ->  ^b) and
+                                (Control.Bind or  ^d or  ^b) :
                                   (static member (>>=) :
-                                      ^c * (seq<'b> ->  ^MonadPlus<seq<'T>)
-                                       ->  ^MonadPlus<seq<'T>) and
-                                (Control.Return or  ^MonadPlus<seq<'T>) :
+                                      ^d * (bool ->  ^b) ->  ^b) and
+                                (Control.Using or  ^b) :
+                                  (static member Using:
+                                     IEnumeratorM< ^d,'e> *
+                                     (IEnumeratorM< ^d,'e> ->  ^b) *
+                                     Control.Using ->  ^b) and
+                                (Control.Return or  ^b) :
                                   (static member Return:
-                                      ^MonadPlus<seq<'T> * Control.Return
-                                       -> (seq<'b> ->  ^MonadPlus<seq<'T>))
-        
-        static member
-          inline (>>=) : x: SeqT< ^Monad<seq<'T>> *
-                         f: ('T -> SeqT< ^Monad<seq<'U>>) -> SeqT< ^c>
-                           when (Control.Bind or  ^Monad<seq<'T> or  ^a) :
+                                      ^b * Control.Return -> ('e[] ->  ^b)) and
+                                (Control.Bind or  ^d or  ^c) :
                                   (static member (>>=) :
-                                      ^Monad<seq<'T> * (seq<'T> ->  ^a) ->  ^a) and
-                                (Control.Return or  ^a) :
-                                  (static member Return:
-                                      ^a * Control.Return -> (seq<'b> ->  ^a)) and
-                                (Control.Bind or  ^a) :
+                                      ^d * (bool ->  ^c) ->  ^c) and
+                                (Control.Bind or  ^c) :
                                   (static member (>>=) :
-                                      ^a * (seq<'b> ->  ^a) ->  ^a) and
-                                (Control.Bind or  ^Monad<seq<'U> or  ^a) :
-                                  (static member (>>=) :
-                                      ^Monad<seq<'U> * ('b ->  ^a) ->  ^a) and
-                                (Control.Bind or  ^a or  ^c) :
-                                  (static member (>>=) :
-                                      ^a * (seq<seq<'d>> ->  ^c) ->  ^c) and
+                                      ^c * (unit ->  ^c) ->  ^c) and
                                 (Control.Return or  ^c) :
                                   (static member Return:
-                                      ^c * Control.Return -> (seq<'d> ->  ^c))
+                                      ^c * Control.Return -> (unit ->  ^c))
         
         static member
-          inline CallCC: f: (('T -> SeqT<'MonadCont<'R,seq<'U>>>)
-                               -> SeqT< ^MonadCont<'R, seq<'T>>>)
-                           -> SeqT< ^MonadCont<'R, seq<'T>>>
-                           when  ^MonadCont<'R, seq<'T>> :
-                                  (static member CallCC:
-                                     ((seq<'T> -> 'MonadCont<'R,seq<'U>>)
-                                        ->  ^MonadCont<'R, seq<'T>>)
-                                       ->  ^MonadCont<'R, seq<'T>>)
-        
-        static member
-          inline Catch: m: SeqT< ^MonadError<'E1,'T>> *
-                        h: ('E1 -> SeqT< ^MonadError<'E2,'T>>)
-                          -> SeqT< ^MonadError<'E2,'T>>
-                          when (Control.Catch or  ^MonadError<'E1,'T> or
-                                 ^MonadError<'E2,'T>) :
-                                 (static member Catch:
-                                     ^MonadError<'E1,'T> *
-                                    ('E1 ->  ^MonadError<'E2,'T>)
-                                      ->  ^MonadError<'E2,'T>)
-        
-        static member
-          inline Delay: body: (unit -> SeqT< ^Monad<seq<'T>>>)
-                          -> SeqT< ^Monad<seq<'T>>>
-                          when (Control.Delay or  ^Monad<seq<'T>>) :
-                                 (static member Delay:
-                                    Control.Delay * (unit ->  ^Monad<seq<'T>>) *
-                                    Control.Delay ->  ^Monad<seq<'T>>)
-        
-        [<System.ComponentModel.EditorBrowsable
-          (enum<System.ComponentModel.EditorBrowsableState> (1))>]
-        static member
-          inline Lift: x:  ^Monad<'T> -> SeqT< ^Monad<seq<'T>>>
-                         when (Control.Map or  ^Monad<'T> or  ^Monad<seq<'T>>) :
-                                (static member Map:
-                                   ( ^Monad<'T> * ('b -> seq<'b>)) * Control.Map
-                                     ->  ^Monad<seq<'T>>) and
-                              (Control.Bind or  ^Monad<'T> or  ^Monad<seq<'T>>) :
-                                (static member (>>=) :
-                                    ^Monad<'T> * ('a ->  ^Monad<seq<'T>>)
-                                     ->  ^Monad<seq<'T>>) and
-                              (Control.Return or  ^Monad<seq<'T>>) :
-                                (static member Return:
-                                    ^Monad<seq<'T>> * Control.Return
-                                     -> (seq<'a> ->  ^Monad<seq<'T>>))
-        
-        [<System.ComponentModel.EditorBrowsable
-          (enum<System.ComponentModel.EditorBrowsableState> (1))>]
-        static member
-          inline Lift2: f: ('T -> 'U -> 'V) * x: SeqT< ^Monad<seq<'T>> *
-                        y: SeqT< ^Monad<seq<'U>> -> SeqT< ^Monad<seq<'V>>
-                          when (Control.Lift2 or  ^Monad<seq<'T> or
-                                 ^Monad<seq<'U> or  ^Monad<seq<'V>) :
-                                 (static member Lift2:
-                                    ('a -> 'b -> seq<'V>) *
-                                    ( ^Monad<seq<'T> *  ^Monad<seq<'U>) *
-                                    Control.Lift2 ->  ^Monad<seq<'V>) and
-                               'a :> seq<'T> and 'b :> seq<'U>
-        
-        [<System.ComponentModel.EditorBrowsable
-          (enum<System.ComponentModel.EditorBrowsableState> (1))>]
-        static member
-          inline Lift3: f: ('T -> 'U -> 'V -> 'W) * x: SeqT< ^Monad<seq<'T>> *
-                        y: SeqT< ^Monad<seq<'U>> * z: SeqT< ^Monad<seq<'V>>
-                          -> SeqT< ^Monad<seq<'W>>
-                          when (Control.Lift3 or  ^Monad<seq<'T> or
-                                 ^Monad<seq<'U> or  ^Monad<seq<'V> or
-                                 ^Monad<seq<'W>) :
-                                 (static member Lift3:
-                                    ('a -> 'b -> 'c -> seq<'W>) *
-                                    ( ^Monad<seq<'T> *  ^Monad<seq<'U> *
-                                      ^Monad<seq<'V>) * Control.Lift3
-                                      ->  ^Monad<seq<'W>) and 'a :> seq<'V> and
-                               'b :> seq<'T> and 'c :> seq<'U>
-        
-        static member
-          inline LiftAsync: x: Async<'T> -> SeqT< ^MonadAsync<'T>>
-                              when (Control.Return or  ^MonadAsync<'T>) :
-                                     (static member Return:
-                                         ^MonadAsync<'T> * Control.Return
-                                          -> (seq<'a> ->  ^MonadAsync<'T>)) and
-                                   (Control.Bind or  ^b or  ^MonadAsync<'T>) :
-                                     (static member (>>=) :
-                                         ^b * ('a ->  ^MonadAsync<'T>)
-                                          ->  ^MonadAsync<'T>) and
-                                   (Control.Map or  ^b or  ^MonadAsync<'T>) :
-                                     (static member Map:
-                                        ( ^b * ('c -> seq<'c>)) * Control.Map
-                                          ->  ^MonadAsync<'T>) and
-                                   (Control.LiftAsync or  ^b) :
-                                     (static member LiftAsync:
-                                         ^b -> (Async<'T> ->  ^b))
-        
-        static member
-          inline Local: SeqT< ^MonadReader<'R2,'T>> * f: ('R1 -> 'R2)
-                          -> SeqT< ^a>
-                          when  ^a:
-                                 (static member Local:
-                                     ^MonadReader<'R2,'T> * ('R1 -> 'R2) ->  ^a)
-        
-        [<System.ComponentModel.EditorBrowsable
-          (enum<System.ComponentModel.EditorBrowsableState> (1))>]
-        static member
-          inline Map: x: SeqT< ^Monad<seq<'T>> * f: ('T -> 'U)
-                        -> SeqT< ^Monad<seq<'U>>
-                        when (Control.Map or  ^Monad<seq<'T> or  ^Monad<seq<'U>) :
-                               (static member Map:
-                                  ( ^Monad<seq<'T> * (seq<'T> -> seq<'U>)) *
-                                  Control.Map ->  ^Monad<seq<'U>)
-        
-        static member
-          inline Put: x: 'S -> SeqT< ^MonadState<unit,'S>>
-                        when (Control.Return or  ^MonadState<unit,'S>) :
-                               (static member Return:
-                                   ^MonadState<unit,'S> * Control.Return
-                                    -> (seq<'a> ->  ^MonadState<unit,'S>)) and
-                             (Control.Bind or  ^b or  ^MonadState<unit,'S>) :
-                               (static member (>>=) :
-                                   ^b * ('a ->  ^MonadState<unit,'S>)
-                                    ->  ^MonadState<unit,'S>) and
-                             (Control.Map or  ^b or  ^MonadState<unit,'S>) :
-                               (static member Map:
-                                  ( ^b * ('c -> seq<'c>)) * Control.Map
-                                    ->  ^MonadState<unit,'S>) and
-                              ^b: (static member Put: 'S ->  ^b)
-        
-        static member
-          inline Return: x: 'T -> SeqT< ^Monad<seq<'T>>
-                           when (Control.Return or  ^Monad<seq<'T>) :
-                                  (static member Return:
-                                      ^Monad<seq<'T> * Control.Return
-                                       -> (seq<'T> ->  ^Monad<seq<'T>))
-        
-        static member
-          inline Throw: x: 'E -> SeqT< ^a>
-                          when (Control.Return or  ^a) :
+          inline Catch: m: SeqT< ^MonadError<'E1>,'T> *
+                        h: ('E1 -> SeqT< ^MonadError<'E2>,'T>)
+                          -> SeqT< ^MonadError<'E2>,'T>
+                          when (Control.Bind or  ^MonadError<'E1> or  ^a) :
+                                 (static member (>>=) :
+                                     ^MonadError<'E1> * (bool ->  ^a) ->  ^a) and
+                               (Control.Bind or  ^MonadError<'E1> or  ^b) :
+                                 (static member (>>=) :
+                                     ^MonadError<'E1> * (bool ->  ^b) ->  ^b) and
+                               (Control.Bind or  ^b or  ^a) :
+                                 (static member (>>=) :
+                                     ^b * (unit ->  ^a) ->  ^a) and
+                               (Control.Using or  ^a) :
+                                 (static member Using:
+                                    IEnumeratorM< ^MonadError<'E1>,'T> *
+                                    (IEnumeratorM< ^MonadError<'E1>,'T> ->  ^a) *
+                                    Control.Using ->  ^a) and
+                               (Control.Return or  ^a) :
                                  (static member Return:
-                                     ^a * Control.Return -> (seq<'b> ->  ^a)) and
-                               (Control.Bind or  ^c or  ^a) :
-                                 (static member (>>=) :  ^c * ('b ->  ^a) ->  ^a) and
-                               (Control.Map or  ^c or  ^a) :
+                                     ^a * Control.Return -> ('T[] ->  ^a)) and
+                               (Control.Map or  ^a or  ^c) :
                                  (static member Map:
-                                    ( ^c * ('d -> seq<'d>)) * Control.Map ->  ^a) and
-                               (Control.Throw or  ^c) :
-                                 (static member Throw:  ^c * 'E ->  ^c)
+                                    ( ^a * ('T[] -> seq<'T>)) * Control.Map
+                                      ->  ^c) and
+                               (Control.Bind or  ^b) :
+                                 (static member (>>=) :
+                                     ^b * (unit ->  ^b) ->  ^b) and
+                               (Control.Return or  ^b) :
+                                 (static member Return:
+                                     ^b * Control.Return -> (unit ->  ^b)) and
+                               (Control.Catch or  ^c or  ^d) :
+                                 (static member Catch:  ^c * ('E1 ->  ^d) ->  ^d) and
+                               (Control.Map or  ^e or  ^d) :
+                                 (static member Map:
+                                    ( ^e * ('T[] -> seq<'T>)) * Control.Map
+                                      ->  ^d) and
+                               (Control.Bind or  ^d or  ^MonadError<'E2>) :
+                                 (static member (>>=) :
+                                     ^d * (seq<'T> ->  ^MonadError<'E2>)
+                                      ->  ^MonadError<'E2>) and
+                               (Control.Bind or  ^f or  ^e) :
+                                 (static member (>>=) :
+                                     ^f * (unit ->  ^e) ->  ^e) and
+                               (Control.Bind or  ^MonadError<'E2> or  ^e) :
+                                 (static member (>>=) :
+                                     ^MonadError<'E2> * (bool ->  ^e) ->  ^e) and
+                               (Control.Using or  ^e) :
+                                 (static member Using:
+                                    IEnumeratorM< ^MonadError<'E2>,'T> *
+                                    (IEnumeratorM< ^MonadError<'E2>,'T> ->  ^e) *
+                                    Control.Using ->  ^e) and
+                               (Control.Return or  ^e) :
+                                 (static member Return:
+                                     ^e * Control.Return -> ('T[] ->  ^e)) and
+                               (Control.Bind or  ^MonadError<'E2> or  ^f) :
+                                 (static member (>>=) :
+                                     ^MonadError<'E2> * (bool ->  ^f) ->  ^f) and
+                               (Control.Bind or  ^f) :
+                                 (static member (>>=) :
+                                     ^f * (unit ->  ^f) ->  ^f) and
+                               (Control.Return or  ^f) :
+                                 (static member Return:
+                                     ^f * Control.Return -> (unit ->  ^f)) and
+                               (Control.Return or  ^MonadError<'E2>) :
+                                 (static member Return:
+                                     ^MonadError<'E2> * Control.Return
+                                      -> (bool ->  ^MonadError<'E2>))
         
         static member
-          inline TryFinally: computation: SeqT< ^Monad<seq<'T>>> *
-                             f: (unit -> unit) -> SeqT< ^Monad<seq<'T>>>
-                               when (Control.TryFinally or  ^Monad<seq<'T>>) :
-                                      (static member TryFinally:
-                                         ((unit ->  ^Monad<seq<'T>>) *
-                                          (unit -> unit)) * Control.TryFinally *
-                                         Control.TryFinally *
-                                         Control.TryBlock.False
-                                           ->  ^Monad<seq<'T>>)
+          inline Delay: body: (unit -> SeqT<'Monad<bool>,'T>)
+                          -> SeqT<'Monad<bool>,'T>
         
         static member
-          inline TryWith: source: SeqT< ^Monad<seq<'T>>> *
-                          f: (exn -> SeqT< ^Monad<seq<'T>>>)
-                            -> SeqT< ^Monad<seq<'T>>>
-                            when (Control.TryWith or  ^Monad<seq<'T>>) :
+          inline Lift: m:  ^Monad<'T> -> SeqT< ^Monad<bool>,'T>
+                         when (Control.Bind or  ^Monad<'T> or  ^Monad<bool>) :
+                                (static member (>>=) :
+                                    ^Monad<'T> * ('T ->  ^Monad<bool>)
+                                     ->  ^Monad<bool>) and
+                              (Control.Map or  ^Monad<'T> or  ^Monad<bool>) :
+                                (static member Map:
+                                   ( ^Monad<'T> * ('T -> bool)) * Control.Map
+                                     ->  ^Monad<bool>) and
+                              (Control.Return or  ^Monad<bool>) :
+                                (static member Return:
+                                    ^Monad<bool> * Control.Return
+                                     -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline Lift2: f: ('T1 -> 'T2 -> 'U) * x1: SeqT< ^Monad<bool>,'T1> *
+                        x2: SeqT< ^Monad<bool>,'T2> -> SeqT< ^Monad<bool>,'U>
+                          when (Control.Bind or  ^Monad<bool>) :
+                                 (static member (>>=) :
+                                     ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                      ->  ^Monad<bool>) and
+                               (Control.Return or  ^Monad<bool>) :
+                                 (static member Return:
+                                     ^Monad<bool> * Control.Return
+                                      -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline Lift3: f: ('T1 -> 'T2 -> 'T3 -> 'U) *
+                        x1: SeqT< ^Monad<bool>,'T1> *
+                        x2: SeqT< ^Monad<bool>,'T2> *
+                        x3: SeqT< ^Monad<bool>,'T3> -> SeqT< ^Monad<bool>,'U>
+                          when (Control.Delay or  ^Monad<bool>) :
+                                 (static member Delay:
+                                    Control.Delay * (unit ->  ^Monad<bool>) *
+                                    Control.Delay ->  ^Monad<bool>) and
+                               (Control.Bind or  ^Monad<bool>) :
+                                 (static member (>>=) :
+                                     ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                      ->  ^Monad<bool>) and
+                               (Control.Return or  ^Monad<bool>) :
+                                 (static member Return:
+                                     ^Monad<bool> * Control.Return
+                                      -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline LiftAsync: x: Async<'T> -> SeqT< ^MonadAsync,'T>
+                              when (Control.Return or  ^MonadAsync) :
+                                     (static member Return:
+                                         ^MonadAsync * Control.Return
+                                          -> (bool ->  ^MonadAsync)) and
+                                   (Control.Map or  ^MonadAsync<'T> or
+                                     ^MonadAsync) :
+                                     (static member Map:
+                                        ( ^MonadAsync<'T> * ('T -> bool)) *
+                                        Control.Map ->  ^MonadAsync) and
+                                   (Control.Bind or  ^MonadAsync<'T> or
+                                     ^MonadAsync) :
+                                     (static member (>>=) :
+                                         ^MonadAsync<'T> * ('T ->  ^MonadAsync)
+                                          ->  ^MonadAsync) and
+                                   (Control.LiftAsync or  ^MonadAsync<'T>) :
+                                     (static member LiftAsync:
+                                         ^MonadAsync<'T>
+                                          -> (Async<'T> ->  ^MonadAsync<'T>))
+        
+        static member
+          inline Local: m: SeqT< ^MonadReader<'R2>,'T> * f: ('R1 -> 'R2)
+                          -> SeqT< ^MonadReader<'R1>,'T>
+                          when (Control.Bind or  ^MonadReader<'R2> or  ^a) :
+                                 (static member (>>=) :
+                                     ^MonadReader<'R2> * (bool ->  ^a) ->  ^a) and
+                               (Control.Bind or  ^MonadReader<'R2> or  ^b) :
+                                 (static member (>>=) :
+                                     ^MonadReader<'R2> * (bool ->  ^b) ->  ^b) and
+                               (Control.Bind or  ^b or  ^a) :
+                                 (static member (>>=) :
+                                     ^b * (unit ->  ^a) ->  ^a) and
+                               (Control.Using or  ^a) :
+                                 (static member Using:
+                                    IEnumeratorM< ^MonadReader<'R2>,'T> *
+                                    (IEnumeratorM< ^MonadReader<'R2>,'T> ->  ^a) *
+                                    Control.Using ->  ^a) and
+                               (Control.Return or  ^a) :
+                                 (static member Return:
+                                     ^a * Control.Return -> ('T[] ->  ^a)) and
+                               (Control.Map or  ^a or  ^c) :
+                                 (static member Map:
+                                    ( ^a * ('T[] -> seq<'T>)) * Control.Map
+                                      ->  ^c) and
+                               (Control.Bind or  ^b) :
+                                 (static member (>>=) :
+                                     ^b * (unit ->  ^b) ->  ^b) and
+                               (Control.Return or  ^b) :
+                                 (static member Return:
+                                     ^b * Control.Return -> (unit ->  ^b)) and
+                               (Control.Bind or  ^d or  ^MonadReader<'R1>) :
+                                 (static member (>>=) :
+                                     ^d * (seq<'T> ->  ^MonadReader<'R1>)
+                                      ->  ^MonadReader<'R1>) and
+                               (Control.Return or  ^MonadReader<'R1>) :
+                                 (static member Return:
+                                     ^MonadReader<'R1> * Control.Return
+                                      -> (bool ->  ^MonadReader<'R1>)) and
+                                ^d:
+                                 (static member Local:  ^c * ('R1 -> 'R2) ->  ^d)
+        
+        static member
+          inline Map: x: SeqT< ^Monad<bool>,'T> * f: ('T -> 'U)
+                        -> SeqT< ^Monad<bool>,'U>
+                        when (Control.Delay or  ^Monad<bool>) :
+                               (static member Delay:
+                                  Control.Delay * (unit ->  ^Monad<bool>) *
+                                  Control.Delay ->  ^Monad<bool>) and
+                             (Control.Bind or  ^Monad<bool>) :
+                               (static member (>>=) :
+                                   ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                    ->  ^Monad<bool>) and
+                             (Control.Return or  ^Monad<bool>) :
+                               (static member Return:
+                                   ^Monad<bool> * Control.Return
+                                    -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline Put: x: 'T -> SeqT< ^MonadState<unit>,'S>
+                        when (Control.Return or  ^MonadState<unit>) :
+                               (static member Return:
+                                   ^MonadState<unit> * Control.Return
+                                    -> (bool ->  ^MonadState<unit>)) and
+                             (Control.Map or  ^a or  ^MonadState<unit>) :
+                               (static member Map:
+                                  ( ^a * ('S -> bool)) * Control.Map
+                                    ->  ^MonadState<unit>) and
+                             (Control.Bind or  ^a or  ^MonadState<unit>) :
+                               (static member (>>=) :
+                                   ^a * ('S ->  ^MonadState<unit>)
+                                    ->  ^MonadState<unit>) and
+                              ^a: (static member Put: 'T ->  ^a)
+        
+        static member
+          inline Return: x: 'T -> SeqT< ^Monad<bool>,'T>
+                           when (Control.Delay or  ^Monad<bool>) :
+                                  (static member Delay:
+                                     Control.Delay * (unit ->  ^Monad<bool>) *
+                                     Control.Delay ->  ^Monad<bool>) and
+                                (Control.Return or  ^Monad<bool>) :
+                                  (static member Return:
+                                      ^Monad<bool> * Control.Return
+                                       -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline Take: source: SeqT< ^Monad<bool>,'T> * count: int *
+                       Control.Take -> SeqT< ^Monad<bool>,'T>
+                         when (Control.Delay or  ^Monad<bool>) :
+                                (static member Delay:
+                                   Control.Delay * (unit ->  ^Monad<bool>) *
+                                   Control.Delay ->  ^Monad<bool>) and
+                              (Control.Return or  ^Monad<bool>) :
+                                (static member Return:
+                                    ^Monad<bool> * Control.Return
+                                     -> (bool ->  ^Monad<bool>)) and
+                              (Control.Bind or  ^Monad<bool> or  ^a) :
+                                (static member (>>=) :
+                                    ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                              (Control.Bind or  ^a or  ^Monad<bool>) :
+                                (static member (>>=) :
+                                    ^a * (unit ->  ^Monad<bool>)
+                                     ->  ^Monad<bool>) and
+                              (Control.Map or  ^Monad<bool>) :
+                                (static member Map:
+                                   ( ^Monad<bool> * (bool -> bool)) *
+                                   Control.Map ->  ^Monad<bool>) and
+                              (Control.Bind or  ^Monad<bool>) :
+                                (static member (>>=) :
+                                    ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                     ->  ^Monad<bool>) and
+                              (Control.Bind or  ^Monad<bool> or  ^c) :
+                                (static member (>>=) :
+                                    ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                              (Control.Bind or  ^c or  ^Monad<bool>) :
+                                (static member (>>=) :
+                                    ^c * (unit ->  ^Monad<bool>)
+                                     ->  ^Monad<bool>) and
+                              (Control.Return or  ^a) :
+                                (static member Return:
+                                    ^a * Control.Return -> (unit ->  ^a)) and
+                              (Control.Bind or  ^a) :
+                                (static member (>>=) :
+                                    ^a * (unit ->  ^a) ->  ^a) and
+                              (Control.Using or  ^a) :
+                                (static member Using:
+                                   System.IDisposable *
+                                   (System.IDisposable ->  ^a) * Control.Using
+                                     ->  ^a) and
+                              (Control.TryWith or  ^a) :
+                                (static member TryWith:
+                                   (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                                   Control.TryBlock.True ->  ^a) and
+                              (Control.Delay or  ^a) :
+                                (static member Delay:
+                                   Control.Delay * (unit ->  ^a) * Control.Delay
+                                     ->  ^a) and 'b :> exn and
+                              (Control.Return or  ^c) :
+                                (static member Return:
+                                    ^c * Control.Return -> (unit ->  ^c)) and
+                              (Control.Bind or  ^c) :
+                                (static member (>>=) :
+                                    ^c * (unit ->  ^c) ->  ^c) and
+                              (Control.Using or  ^c) :
+                                (static member Using:
+                                   System.IDisposable *
+                                   (System.IDisposable ->  ^c) * Control.Using
+                                     ->  ^c) and
+                              (Control.TryWith or  ^c) :
+                                (static member TryWith:
+                                   (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                                   Control.TryBlock.True ->  ^c) and
+                              (Control.Delay or  ^c) :
+                                (static member Delay:
+                                   Control.Delay * (unit ->  ^c) * Control.Delay
+                                     ->  ^c) and 'd :> exn
+        
+        static member
+          inline Throw: x: 'E -> SeqT< ^MonadError<'E>,'T>
+                          when (Control.Return or  ^MonadError<'E>) :
+                                 (static member Return:
+                                     ^MonadError<'E> * Control.Return
+                                      -> (bool ->  ^MonadError<'E>)) and
+                               (Control.Map or  ^a or  ^MonadError<'E>) :
+                                 (static member Map:
+                                    ( ^a * ('T -> bool)) * Control.Map
+                                      ->  ^MonadError<'E>) and
+                               (Control.Bind or  ^a or  ^MonadError<'E>) :
+                                 (static member (>>=) :
+                                     ^a * ('T ->  ^MonadError<'E>)
+                                      ->  ^MonadError<'E>) and
+                               (Control.Throw or  ^a) :
+                                 (static member Throw:  ^a * 'E ->  ^a)
+        
+        static member
+          inline TryFinally: computation: SeqT< ^Monad<bool>,'T> *
+                             f: (unit -> unit) -> SeqT< ^Monad<bool>,'T>
+                               when (Control.Delay or  ^Monad<bool>) :
+                                      (static member Delay:
+                                         Control.Delay * (unit ->  ^Monad<bool>) *
+                                         Control.Delay ->  ^Monad<bool>) and
+                                    (Control.Bind or  ^Monad<bool>) :
+                                      (static member (>>=) :
+                                          ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                           ->  ^Monad<bool>) and
+                                    (Control.Return or  ^Monad<bool>) :
+                                      (static member Return:
+                                          ^Monad<bool> * Control.Return
+                                           -> (bool ->  ^Monad<bool>))
+        
+        static member
+          inline TryWith: source: SeqT< ^Monad<bool>,'T> *
+                          f: (exn -> SeqT< ^Monad<bool>,'T>)
+                            -> SeqT< ^Monad<bool>,'T>
+                            when (Control.Bind or  ^Monad<bool>) :
+                                   (static member (>>=) :
+                                       ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                        ->  ^Monad<bool>) and
+                                 (Control.Return or  ^Monad<bool>) :
+                                   (static member Return:
+                                       ^Monad<bool> * Control.Return
+                                        -> (bool ->  ^Monad<bool>)) and
+                                 (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                                   (static member (>>=) :
+                                       ^Monad<bool> * (bool ->  ^Monad<unit>)
+                                        ->  ^Monad<unit>) and
+                                 (Control.Bind or  ^Monad<unit> or  ^Monad<bool>) :
+                                   (static member (>>=) :
+                                       ^Monad<unit> * (unit ->  ^Monad<bool>)
+                                        ->  ^Monad<bool>) and
+                                 (Control.Delay or  ^Monad<bool>) :
+                                   (static member Delay:
+                                      Control.Delay * (unit ->  ^Monad<bool>) *
+                                      Control.Delay ->  ^Monad<bool>) and
+                                 (Control.Return or  ^Monad<unit>) :
+                                   (static member Return:
+                                       ^Monad<unit> * Control.Return
+                                        -> (unit ->  ^Monad<unit>)) and
+                                 (Control.Bind or  ^Monad<unit>) :
+                                   (static member (>>=) :
+                                       ^Monad<unit> * (unit ->  ^Monad<unit>)
+                                        ->  ^Monad<unit>) and
+                                 (Control.Using or  ^Monad<unit>) :
+                                   (static member Using:
+                                      System.IDisposable *
+                                      (System.IDisposable ->  ^Monad<unit>) *
+                                      Control.Using ->  ^Monad<unit>) and
+                                 (Control.TryWith or  ^Monad<unit>) :
                                    (static member TryWith:
-                                      (unit ->  ^Monad<seq<'T>>) *
-                                      ('a ->  ^Monad<seq<'T>>) * Control.TryWith *
-                                      Control.TryBlock.False ->  ^Monad<seq<'T>>) and
+                                      (unit ->  ^Monad<unit>) *
+                                      ('a ->  ^Monad<unit>) * Control.TryWith *
+                                      Control.TryBlock.True ->  ^Monad<unit>) and
+                                 (Control.Delay or  ^Monad<unit>) :
+                                   (static member Delay:
+                                      Control.Delay * (unit ->  ^Monad<unit>) *
+                                      Control.Delay ->  ^Monad<unit>) and
                                  'a :> exn
         
         static member
-          inline Using: resource: 'a * f: ('a -> SeqT< ^Monad<seq<'T>>>)
-                          -> SeqT< ^Monad<seq<'T>>>
+          inline Using: resource: 'a * f: ('a -> SeqT< ^Monad<bool>,'T>)
+                          -> SeqT< ^Monad<bool>,'T>
                           when 'a :> System.IDisposable and
-                               (Control.Using or  ^Monad<seq<'T>>) :
-                                 (static member Using:
-                                    'a * ('a ->  ^Monad<seq<'T>>) *
-                                    Control.Using ->  ^Monad<seq<'T>>)
+                               (Control.Delay or  ^Monad<bool>) :
+                                 (static member Delay:
+                                    Control.Delay * (unit ->  ^Monad<bool>) *
+                                    Control.Delay ->  ^Monad<bool>) and
+                               (Control.Bind or  ^Monad<bool>) :
+                                 (static member (>>=) :
+                                     ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                      ->  ^Monad<bool>) and
+                               (Control.Return or  ^Monad<bool>) :
+                                 (static member Return:
+                                     ^Monad<bool> * Control.Return
+                                      -> (bool ->  ^Monad<bool>))
         
         static member
-          inline get_Ask: unit -> SeqT< ^MonadReader<'R,seq<'R>>>
-                            when (Control.Return or  ^MonadReader<'R,seq<'R>>) :
+          inline Zip: source1: SeqT< ^Monad<bool>,'T1> *
+                      source2: SeqT< ^Monad<bool>,'T2>
+                        -> SeqT< ^Monad<bool>,('T1 * 'T2)>
+                        when (Control.Delay or  ^Monad<bool>) :
+                               (static member Delay:
+                                  Control.Delay * (unit ->  ^Monad<bool>) *
+                                  Control.Delay ->  ^Monad<bool>) and
+                             (Control.Return or  ^Monad<bool>) :
+                               (static member Return:
+                                   ^Monad<bool> * Control.Return
+                                    -> (bool ->  ^Monad<bool>)) and
+                             (Control.Bind or  ^Monad<bool> or  ^a) :
+                               (static member (>>=) :
+                                   ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                             (Control.Bind or  ^a or  ^Monad<bool>) :
+                               (static member (>>=) :
+                                   ^a * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                             (Control.Map or  ^Monad<bool>) :
+                               (static member Map:
+                                  ( ^Monad<bool> * (bool -> bool)) * Control.Map
+                                    ->  ^Monad<bool>) and
+                             (Control.Bind or  ^Monad<bool>) :
+                               (static member (>>=) :
+                                   ^Monad<bool> * (bool ->  ^Monad<bool>)
+                                    ->  ^Monad<bool>) and
+                             (Control.Bind or  ^Monad<bool> or  ^c) :
+                               (static member (>>=) :
+                                   ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                             (Control.Bind or  ^c or  ^Monad<bool>) :
+                               (static member (>>=) :
+                                   ^c * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                             (Control.Return or  ^a) :
+                               (static member Return:
+                                   ^a * Control.Return -> (unit ->  ^a)) and
+                             (Control.Bind or  ^a) :
+                               (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                             (Control.Using or  ^a) :
+                               (static member Using:
+                                  System.IDisposable *
+                                  (System.IDisposable ->  ^a) * Control.Using
+                                    ->  ^a) and
+                             (Control.TryWith or  ^a) :
+                               (static member TryWith:
+                                  (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                                  Control.TryBlock.True ->  ^a) and
+                             (Control.Delay or  ^a) :
+                               (static member Delay:
+                                  Control.Delay * (unit ->  ^a) * Control.Delay
+                                    ->  ^a) and 'b :> exn and
+                             (Control.Return or  ^c) :
+                               (static member Return:
+                                   ^c * Control.Return -> (unit ->  ^c)) and
+                             (Control.Bind or  ^c) :
+                               (static member (>>=) :  ^c * (unit ->  ^c) ->  ^c) and
+                             (Control.Using or  ^c) :
+                               (static member Using:
+                                  System.IDisposable *
+                                  (System.IDisposable ->  ^c) * Control.Using
+                                    ->  ^c) and
+                             (Control.TryWith or  ^c) :
+                               (static member TryWith:
+                                  (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                                  Control.TryBlock.True ->  ^c) and
+                             (Control.Delay or  ^c) :
+                               (static member Delay:
+                                  Control.Delay * (unit ->  ^c) * Control.Delay
+                                    ->  ^c) and 'd :> exn
+        
+        static member
+          inline get_Ask: unit -> SeqT< ^MonadReader<'R>,'R>
+                            when (Control.Return or  ^MonadReader<'R>) :
                                    (static member Return:
-                                       ^MonadReader<'R,seq<'R>> * Control.Return
-                                        -> (seq<'a> ->  ^MonadReader<'R,seq<'R>>)) and
-                                 (Control.Bind or  ^b or
-                                   ^MonadReader<'R,seq<'R>>) :
-                                   (static member (>>=) :
-                                       ^b * ('a ->  ^MonadReader<'R,seq<'R>>)
-                                        ->  ^MonadReader<'R,seq<'R>>) and
-                                 (Control.Map or  ^b or
-                                   ^MonadReader<'R,seq<'R>>) :
+                                       ^MonadReader<'R> * Control.Return
+                                        -> (bool ->  ^MonadReader<'R>)) and
+                                 (Control.Map or  ^a or  ^MonadReader<'R>) :
                                    (static member Map:
-                                      ( ^b * ('c -> seq<'c>)) * Control.Map
-                                        ->  ^MonadReader<'R,seq<'R>>) and
-                                  ^b: (static member get_Ask: ->  ^b)
+                                      ( ^a * ('R -> bool)) * Control.Map
+                                        ->  ^MonadReader<'R>) and
+                                 (Control.Bind or  ^a or  ^MonadReader<'R>) :
+                                   (static member (>>=) :
+                                       ^a * ('R ->  ^MonadReader<'R>)
+                                        ->  ^MonadReader<'R>) and
+                                  ^a: (static member get_Ask: ->  ^a)
         
         static member
-          inline get_Empty: unit -> SeqT< ^MonadPlus<seq<'T>>
-                              when (Control.Return or  ^MonadPlus<seq<'T>) :
+          inline get_Empty: unit -> SeqT< ^Monad<bool>,'T>
+                              when (Control.Return or  ^Monad<bool>) :
                                      (static member Return:
-                                         ^MonadPlus<seq<'T> * Control.Return
-                                          -> (seq<'a> ->  ^MonadPlus<seq<'T>))
+                                         ^Monad<bool> * Control.Return
+                                          -> (bool ->  ^Monad<bool>))
         
         static member
-          inline get_Get: unit -> SeqT< ^MonadState<'S,'S>>
-                            when (Control.Return or  ^MonadState<'S,'S>) :
+          inline get_Get: unit -> SeqT< ^MonadState<'S>,'S>
+                            when (Control.Return or  ^MonadState<'S>) :
                                    (static member Return:
-                                       ^MonadState<'S,'S> * Control.Return
-                                        -> (seq<'a> ->  ^MonadState<'S,'S>)) and
-                                 (Control.Bind or  ^b or  ^MonadState<'S,'S>) :
-                                   (static member (>>=) :
-                                       ^b * ('a ->  ^MonadState<'S,'S>)
-                                        ->  ^MonadState<'S,'S>) and
-                                 (Control.Map or  ^b or  ^MonadState<'S,'S>) :
+                                       ^MonadState<'S> * Control.Return
+                                        -> (bool ->  ^MonadState<'S>)) and
+                                 (Control.Map or  ^a or  ^MonadState<'S>) :
                                    (static member Map:
-                                      ( ^b * ('c -> seq<'c>)) * Control.Map
-                                        ->  ^MonadState<'S,'S>) and
-                                  ^b: (static member get_Get: ->  ^b)
+                                      ( ^a * ('S -> bool)) * Control.Map
+                                        ->  ^MonadState<'S>) and
+                                 (Control.Bind or  ^a or  ^MonadState<'S>) :
+                                   (static member (>>=) :
+                                       ^a * ('S ->  ^MonadState<'S>)
+                                        ->  ^MonadState<'S>) and
+                                  ^a: (static member get_Get: ->  ^a)
     
-    /// Basic operations on SeqT
     module SeqT =
         
-        val run: SeqT<'a> -> 'a
+        val ofIEnumerableM:
+          x: IEnumerableM<'Monad<bool>,'T> -> SeqT<'Monad<bool>,'T>
         
-        /// Embed a Monad<'T> into a SeqT<'Monad<seq<'T>>>
-        val inline lift:
-          x:  ^Monad<'T> -> SeqT< ^Monad<seq<'T>>>
-            when (Control.Bind or  ^Monad<'T> or  ^Monad<seq<'T>>) :
+        [<RequireQualifiedAccess>]
+        type MapState<'Monad<seq<'T>>,'T> =
+            | NotStarted of 'Monad<seq<'T>>
+            | HaveEnumerator of System.Collections.Generic.IEnumerator<'T>
+            | Finished
+        
+        val inline wrap:
+          inp:  ^Monad<seq<'T>> -> SeqT< ^Monad<bool>,'T>
+            when (Control.Bind or  ^Monad<seq<'T>> or  ^Monad<bool>) :
                    (static member (>>=) :
-                       ^Monad<'T> * ('a ->  ^Monad<seq<'T>>) ->  ^Monad<seq<'T>>) and
-                 (Control.Map or  ^Monad<'T> or  ^Monad<seq<'T>>) :
-                   (static member Map:
-                      ( ^Monad<'T> * ('b -> seq<'b>)) * Control.Map
-                        ->  ^Monad<seq<'T>>) and
+                       ^Monad<seq<'T>> * (seq<'T> ->  ^Monad<bool>)
+                        ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val inline hoist:
+          source: seq<'T> -> SeqT< ^Monad<bool>,'T>
+            when (Control.Bind or  ^Monad<seq<'T>> or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<seq<'T>> * (seq<'T> ->  ^Monad<bool>)
+                        ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>)) and
                  (Control.Return or  ^Monad<seq<'T>>) :
                    (static member Return:
                        ^Monad<seq<'T>> * Control.Return
-                        -> (seq<'a> ->  ^Monad<seq<'T>>))
+                        -> (seq<'T> ->  ^Monad<seq<'T>>))
         
-        val inline internal sequence:
-          ms: seq< ^a> ->  ^M
-            when (Control.Bind or  ^a or  ^M) :
-                   (static member (>>=) :  ^a * ('a0 ->  ^M) ->  ^M) and
-                 (Control.Return or  ^M) :
-                   (static member Return:
-                       ^M * Control.Return -> (seq<'a0> ->  ^M)) and
-                 (Control.Bind or  ^M) :
-                   (static member (>>=) :  ^M * (seq<'a0> ->  ^M) ->  ^M)
-        
-        val inline internal mapM:
-          f: ('a ->  ^b) -> as': seq<'a> ->  ^c
-            when (Control.Bind or  ^b or  ^c) :
-                   (static member (>>=) :  ^b * ('d ->  ^c) ->  ^c) and
-                 (Control.Return or  ^c) :
-                   (static member Return:
-                       ^c * Control.Return -> (seq<'d> ->  ^c)) and
-                 (Control.Bind or  ^c) :
-                   (static member (>>=) :  ^c * (seq<'d> ->  ^c) ->  ^c)
-        
-        val inline bind:
-          f: ('T -> SeqT< ^Monad<seq<'U>>) -> SeqT< ^Monad<seq<'T>> -> SeqT< ^c>
-            when (Control.Bind or  ^Monad<seq<'U> or  ^a) :
-                   (static member (>>=) :  ^Monad<seq<'U> * ('b ->  ^a) ->  ^a) and
-                 (Control.Return or  ^a) :
-                   (static member Return:
-                       ^a * Control.Return -> (seq<'b> ->  ^a)) and
-                 (Control.Bind or  ^a) :
-                   (static member (>>=) :  ^a * (seq<'b> ->  ^a) ->  ^a) and
-                 (Control.Bind or  ^Monad<seq<'T> or  ^a) :
+        val inline toArrayM:
+          source: SeqT< ^Monad<bool>,'T> ->  ^Monad<'T []>
+            when (Control.Bind or  ^Monad<bool> or  ^Monad<'T []>) :
                    (static member (>>=) :
-                       ^Monad<seq<'T> * (seq<'T> ->  ^a) ->  ^a) and
-                 (Control.Bind or  ^a or  ^c) :
-                   (static member (>>=) :  ^a * (seq<seq<'d>> ->  ^c) ->  ^c) and
-                 (Control.Return or  ^c) :
+                       ^Monad<bool> * (bool ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Using or  ^Monad<'T []>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<'T []>) *
+                      Control.Using ->  ^Monad<'T []>) and
+                 (Control.Bind or  ^Monad<unit> or  ^Monad<'T []>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Return or  ^Monad<'T []>) :
                    (static member Return:
-                       ^c * Control.Return -> (seq<'d> ->  ^c))
+                       ^Monad<'T []> * Control.Return
+                        -> ('T[] ->  ^Monad<'T []>)) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>))
+        
+        val inline toListM:
+          source: SeqT< ^Monad<bool>,'T> ->  ^Monad<'T list>
+            when (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Bind or  ^Monad<bool> or  ^Monad<'T []>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Bind or  ^Monad<unit> or  ^Monad<'T []>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>)) and
+                 (Control.Using or  ^Monad<'T []>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<'T []>) *
+                      Control.Using ->  ^Monad<'T []>) and
+                 (Control.Return or  ^Monad<'T []>) :
+                   (static member Return:
+                       ^Monad<'T []> * Control.Return
+                        -> ('T[] ->  ^Monad<'T []>)) and
+                 (Control.Map or  ^Monad<'T []> or  ^Monad<'T list>) :
+                   (static member Map:
+                      ( ^Monad<'T []> * ('T[] -> 'T list)) * Control.Map
+                        ->  ^Monad<'T list>)
+        
+        val inline toSeqM:
+          source: SeqT< ^Monad<bool>,'T> ->  ^Monad<'T seq>
+            when (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Bind or  ^Monad<bool> or  ^Monad<'T []>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Bind or  ^Monad<unit> or  ^Monad<'T []>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>)) and
+                 (Control.Using or  ^Monad<'T []>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<'T []>) *
+                      Control.Using ->  ^Monad<'T []>) and
+                 (Control.Return or  ^Monad<'T []>) :
+                   (static member Return:
+                       ^Monad<'T []> * Control.Return
+                        -> ('T[] ->  ^Monad<'T []>)) and
+                 (Control.Map or  ^Monad<'T []> or  ^Monad<'T seq>) :
+                   (static member Map:
+                      ( ^Monad<'T []> * ('T[] -> seq<'T>)) * Control.Map
+                        ->  ^Monad<'T seq>)
+        
+        val inline run:
+          source: SeqT< ^Monad<bool>,'T> ->  ^Monad<'T seq>
+            when (Control.Bind or  ^Monad<bool> or  ^Monad<'T []>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Bind or  ^Monad<unit> or  ^Monad<'T []>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<'T []>) ->  ^Monad<'T []>) and
+                 (Control.Using or  ^Monad<'T []>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<'T []>) *
+                      Control.Using ->  ^Monad<'T []>) and
+                 (Control.Return or  ^Monad<'T []>) :
+                   (static member Return:
+                       ^Monad<'T []> * Control.Return
+                        -> ('T[] ->  ^Monad<'T []>)) and
+                 (Control.Map or  ^Monad<'T []> or  ^Monad<'T seq>) :
+                   (static member Map:
+                      ( ^Monad<'T []> * ('T[] -> seq<'T>)) * Control.Map
+                        ->  ^Monad<'T seq>) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>))
+        
+        [<GeneralizableValue>]
+        val inline empty<'T, ^Monad<bool>
+                           when (Control.Return or  ^Monad<bool>) :
+                                  (static member Return:
+                                      ^Monad<bool> * Control.Return
+                                       -> (bool ->  ^Monad<bool>))> :
+          SeqT< ^Monad<bool>,'T>
+            when (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val inline singleton:
+          v: 'T -> SeqT< ^Monad<bool>,'T>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val inline make:
+          f: (unit ->  ^Monad<SeqT<'Monad<bool>, 'T>>) -> SeqT< ^Monad<bool>,'T>
+            when (Control.Bind or  ^Monad<SeqT<'Monad<bool>, 'T>> or
+                   ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<SeqT<'Monad<bool>, 'T>> *
+                      (SeqT< ^Monad<bool>,'T> ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val delay: f: (unit -> SeqT<'Monad<bool>,'T>) -> SeqT<'Monad<bool>,'T>
+        
+        val inline bindM:
+          f: ('T -> SeqT< ^Monad<bool>,'U>) -> inp:  ^Monad<'T>
+            -> SeqT< ^Monad<bool>,'U>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<SeqT<'Monad<bool>, 'U>> or
+                   ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<SeqT<'Monad<bool>, 'U>> *
+                      (SeqT< ^Monad<bool>,'U> ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>)) and
+                 (Control.Delay or  ^Monad<SeqT<'Monad<bool>, 'U>>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<SeqT<'Monad<bool>, 'U>>) *
+                      Control.Delay ->  ^Monad<SeqT<'Monad<bool>, 'U>>) and
+                 (Control.Bind or  ^Monad<'T> or  ^Monad<SeqT<'Monad<bool>, 'U>>) :
+                   (static member (>>=) :
+                       ^Monad<'T> * ('T ->  ^Monad<SeqT<'Monad<bool>, 'U>>)
+                        ->  ^Monad<SeqT<'Monad<bool>, 'U>>) and
+                 (Control.Return or  ^Monad<SeqT<'Monad<bool>, 'U>>) :
+                   (static member Return:
+                       ^Monad<SeqT<'Monad<bool>, 'U>> * Control.Return
+                        -> (SeqT< ^Monad<bool>,'U>
+                              ->  ^Monad<SeqT<'Monad<bool>, 'U>>))
+        
+        val inline lift:
+          source:  ^Monad<'T> -> SeqT< ^Monad<bool>,'T>
+            when (Control.Bind or  ^Monad<'T> or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<'T> * ('T ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Map or  ^Monad<'T> or  ^Monad<bool>) :
+                   (static member Map:
+                      ( ^Monad<'T> * ('T -> bool)) * Control.Map
+                        ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        [<RequireQualifiedAccess>]
+        type CollectState<'T,'U,'Monad<bool>> =
+            | NotStarted of SeqT<'Monad<bool>,'T>
+            | HaveInputEnumerator of IEnumeratorM<'Monad<bool>,'T>
+            | HaveInnerEnumerator of
+              IEnumeratorM<'Monad<bool>,'T> * IEnumeratorM<'Monad<bool>,'U>
+            | Finished
+        
+        val inline collect:
+          f: ('T -> SeqT< ^Monad<bool>,'U>) -> inp: SeqT< ^Monad<bool>,'T>
+            -> SeqT< ^Monad<bool>,'U>
+            when (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
         
         val inline apply:
-          SeqT< ^Monad<seq<('T -> 'U)>> -> SeqT< ^Monad<seq<'T>>
-            -> SeqT< ^Monad<seq<'U>>
-            when (Control.Map or  ^Monad<seq<('T -> 'U)> or  ^a) :
-                   (static member Map:
-                      ( ^Monad<seq<('T -> 'U)> *
-                       (seq<('b -> 'c)> -> seq<'b> -> seq<'c>)) * Control.Map
-                        ->  ^a) and
-                 (Control.Apply or  ^a or  ^Monad<seq<'T> or  ^Monad<seq<'U>) :
-                   (static member ``<*>`` :
-                       ^a *  ^Monad<seq<'T> *  ^Monad<seq<'U> * Control.Apply
-                        ->  ^Monad<seq<'U>)
+          f: SeqT< ^Monad<bool>,('T -> 'U)> -> x1: SeqT< ^Monad<bool>,'T>
+            -> SeqT< ^Monad<bool>,'U>
+            when (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
         
         val inline lift2:
-          f: ('T -> 'U -> 'V) -> SeqT< ^Monad<seq<'T>> -> SeqT< ^Monad<seq<'U>>
-            -> SeqT< ^Monad<seq<'V>>
-            when (Control.Lift2 or  ^Monad<seq<'T> or  ^Monad<seq<'U> or
-                   ^Monad<seq<'V>) :
-                   (static member Lift2:
-                      ('a -> 'b -> seq<'V>) *
-                      ( ^Monad<seq<'T> *  ^Monad<seq<'U>) * Control.Lift2
-                        ->  ^Monad<seq<'V>) and 'a :> seq<'T> and 'b :> seq<'U>
+          f: ('T1 -> 'T2 -> 'U) -> x1: SeqT< ^Monad<bool>,'T1>
+          -> x2: SeqT< ^Monad<bool>,'T2> -> SeqT< ^Monad<bool>,'U>
+            when (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
         
-        val inline lift3:
-          f: ('T -> 'U -> 'V -> 'W) -> SeqT< ^Monad<seq<'T>>
-          -> SeqT< ^Monad<seq<'U>> -> SeqT< ^Monad<seq<'V>>
-            -> SeqT< ^Monad<seq<'W>>
-            when (Control.Lift3 or  ^Monad<seq<'T> or  ^Monad<seq<'U> or
-                   ^Monad<seq<'V> or  ^Monad<seq<'W>) :
-                   (static member Lift3:
-                      ('a -> 'b -> 'c -> seq<'W>) *
-                      ( ^Monad<seq<'T> *  ^Monad<seq<'U> *  ^Monad<seq<'V>) *
-                      Control.Lift3 ->  ^Monad<seq<'W>) and 'a :> seq<'V> and
-                 'b :> seq<'T> and 'c :> seq<'U>
+        [<RequireQualifiedAccess>]
+        type AppendState<'Monad<bool>,'T> =
+            | NotStarted1 of SeqT<'Monad<bool>,'T> * SeqT<'Monad<bool>,'T>
+            | HaveEnumerator1 of
+              IEnumeratorM<'Monad<bool>,'T> * SeqT<'Monad<bool>,'T>
+            | NotStarted2 of SeqT<'Monad<bool>,'T>
+            | HaveEnumerator2 of IEnumeratorM<'Monad<bool>,'T>
+            | Finished
+        
+        val inline append:
+          inp1: SeqT< ^Monad<bool>,'T> -> inp2: SeqT< ^Monad<bool>,'T>
+            -> SeqT< ^Monad<bool>,'T>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>)) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>)
+        
+        val inline mapM:
+          f: ('T ->  ^Monad<'U>) -> source: SeqT< ^Monad<bool>,'T>
+            -> SeqT< ^Monad<bool>,'U>
+            when (Control.Bind or  ^Monad<'U> or  ^Monad<SeqT<'Monad<bool>, 'U>>) :
+                   (static member (>>=) :
+                       ^Monad<'U> * ('U ->  ^Monad<SeqT<'Monad<bool>, 'U>>)
+                        ->  ^Monad<SeqT<'Monad<bool>, 'U>>) and
+                 (Control.Bind or  ^Monad<SeqT<'Monad<bool>, 'U>> or
+                   ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<SeqT<'Monad<bool>, 'U>> *
+                      (SeqT< ^Monad<bool>,'U> ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Delay or  ^Monad<SeqT<'Monad<bool>, 'U>>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<SeqT<'Monad<bool>, 'U>>) *
+                      Control.Delay ->  ^Monad<SeqT<'Monad<bool>, 'U>>) and
+                 (Control.Return or  ^Monad<SeqT<'Monad<bool>, 'U>>) :
+                   (static member Return:
+                       ^Monad<SeqT<'Monad<bool>, 'U>> * Control.Return
+                        -> (SeqT< ^Monad<bool>,'U>
+                              ->  ^Monad<SeqT<'Monad<bool>, 'U>>)) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>)) and
+                 (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>)
         
         val inline map:
-          f: ('T -> 'U) -> SeqT< ^Monad<seq<'T>> -> SeqT< ^Monad<seq<'U>>
-            when (Control.Map or  ^Monad<seq<'T> or  ^Monad<seq<'U>) :
-                   (static member Map:
-                      ( ^Monad<seq<'T> * (seq<'T> -> seq<'U>)) * Control.Map
-                        ->  ^Monad<seq<'U>)
+          f: ('T -> 'U) -> inp: SeqT< ^Monad<bool>,'T> -> SeqT< ^Monad<bool>,'U>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val inline lift3:
+          f: ('T1 -> 'T2 -> 'T3 -> 'U) -> x1: SeqT< ^Monad<bool>,'T1>
+          -> x2: SeqT< ^Monad<bool>,'T2> -> x3: SeqT< ^Monad<bool>,'T3>
+            -> SeqT< ^Monad<bool>,'U>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val inline filter:
+          f: ('T -> bool) -> inp: SeqT< ^Monad<bool>,'T>
+            -> SeqT< ^Monad<bool>,'T>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val inline iteriM:
+          f: (int -> 'T ->  ^Monad<unit>) -> source: SeqT< ^Monad<bool>,'T>
+            ->  ^Monad<unit>
+            when (Control.Delay or  ^Monad<unit>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<unit>) * Control.Delay
+                        ->  ^Monad<unit>) and
+                 (Control.Using or  ^Monad<unit>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<unit>) *
+                      Control.Using ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>)) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>)
+        
+        val inline iterM:
+          f: ('T ->  ^Monad<unit>) -> inp: SeqT< ^Monad<bool>,'T>
+            ->  ^Monad<unit>
+            when (Control.Delay or  ^Monad<unit>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<unit>) * Control.Delay
+                        ->  ^Monad<unit>) and
+                 (Control.Using or  ^Monad<unit>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<unit>) *
+                      Control.Using ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>)) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>)
+        
+        val inline iteri:
+          f: (int -> 'T -> unit) -> inp: SeqT< ^Monad<bool>,'T> ->  ^Monad<unit>
+            when (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Delay or  ^Monad<unit>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<unit>) * Control.Delay
+                        ->  ^Monad<unit>) and
+                 (Control.Using or  ^Monad<unit>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<unit>) *
+                      Control.Using ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>)) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>)
+        
+        val inline iter:
+          f: ('T -> unit) -> source: SeqT< ^Monad<bool>,'T> ->  ^Monad<unit>
+            when (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Delay or  ^Monad<unit>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<unit>) * Control.Delay
+                        ->  ^Monad<unit>) and
+                 (Control.Using or  ^Monad<unit>) :
+                   (static member Using:
+                      IEnumeratorM< ^Monad<bool>,'T> *
+                      (IEnumeratorM< ^Monad<bool>,'T> ->  ^Monad<unit>) *
+                      Control.Using ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>)) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>)
+        
+        [<RequireQualifiedAccess>]
+        type TryWithState<'Monad<bool>,'T> =
+            | NotStarted of SeqT<'Monad<bool>,'T>
+            | HaveBodyEnumerator of IEnumeratorM<'Monad<bool>,'T>
+            | HaveHandlerEnumerator of IEnumeratorM<'Monad<bool>,'T>
+            | Finished
+        
+        /// Implements the 'TryWith' functionality for computation builder
+        val inline tryWith:
+          inp: SeqT< ^Monad<bool>,'T>
+          -> handler: (exn -> SeqT< ^Monad<bool>,'T>) -> SeqT< ^Monad<bool>,'T>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<unit> or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<bool> or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>)) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<unit>) :
+                   (static member Return:
+                       ^Monad<unit> * Control.Return -> (unit ->  ^Monad<unit>)) and
+                 (Control.Bind or  ^Monad<unit>) :
+                   (static member (>>=) :
+                       ^Monad<unit> * (unit ->  ^Monad<unit>) ->  ^Monad<unit>) and
+                 (Control.Using or  ^Monad<unit>) :
+                   (static member Using:
+                      System.IDisposable * (System.IDisposable ->  ^Monad<unit>) *
+                      Control.Using ->  ^Monad<unit>) and
+                 (Control.TryWith or  ^Monad<unit>) :
+                   (static member TryWith:
+                      (unit ->  ^Monad<unit>) * ('a ->  ^Monad<unit>) *
+                      Control.TryWith * Control.TryBlock.True ->  ^Monad<unit>) and
+                 (Control.Delay or  ^Monad<unit>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<unit>) * Control.Delay
+                        ->  ^Monad<unit>) and 'a :> exn
+        
+        [<RequireQualifiedAccess>]
+        type TryFinallyState<'Monad<bool>,'T> =
+            | NotStarted of SeqT<'Monad<bool>,'T>
+            | HaveBodyEnumerator of IEnumeratorM<'Monad<bool>,'T>
+            | Finished
+        
+        val inline tryFinally:
+          inp: SeqT< ^Monad<bool>,'T> -> compensation: (unit -> unit)
+            -> SeqT< ^Monad<bool>,'T>
+            when (Control.Delay or  ^Monad<bool>) :
+                   (static member Delay:
+                      Control.Delay * (unit ->  ^Monad<bool>) * Control.Delay
+                        ->  ^Monad<bool>) and
+                 (Control.Bind or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<bool> * (bool ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+        
+        val inline unfold:
+          f: ('State ->  ^Monad<('T * 'State) option>) -> s: 'State
+            -> SeqT< ^Monad<bool>,'T>
+            when (Control.Bind or  ^Monad<('T * 'State) option> or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<('T * 'State) option> *
+                      (('T * 'State) option ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+    
+    [<AutoOpen; Class>]
+    type SeqTOperations =
+        
+        static member
+          inline SeqT: source:  ^Monad<seq<'T>> -> SeqT< ^Monad<bool>,'T>
+                         when (Control.Bind or  ^Monad<seq<'T>> or  ^Monad<bool>) :
+                                (static member (>>=) :
+                                    ^Monad<seq<'T>> * (seq<'T> ->  ^Monad<bool>)
+                                     ->  ^Monad<bool>) and
+                              (Control.Return or  ^Monad<bool>) :
+                                (static member Return:
+                                    ^Monad<bool> * Control.Return
+                                     -> (bool ->  ^Monad<bool>))
+    
+    module SeqTOperations =
+        
+        val inline seqT:
+          source:  ^Monad<seq<'T>> -> SeqT< ^Monad<bool>,'T>
+            when (Control.Bind or  ^Monad<seq<'T>> or  ^Monad<bool>) :
+                   (static member (>>=) :
+                       ^Monad<seq<'T>> * (seq<'T> ->  ^Monad<bool>)
+                        ->  ^Monad<bool>) and
+                 (Control.Return or  ^Monad<bool>) :
+                   (static member Return:
+                       ^Monad<bool> * Control.Return -> (bool ->  ^Monad<bool>))
+    
+    module Extension =
+        
+        module SeqT =
+            
+            val inline take:
+              count: int -> source: SeqT< ^Monad<bool>,'T>
+                -> SeqT< ^Monad<bool>,'T>
+                when (Control.Delay or  ^Monad<bool>) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^Monad<bool>) *
+                          Control.Delay ->  ^Monad<bool>) and
+                     (Control.Return or  ^Monad<bool>) :
+                       (static member Return:
+                           ^Monad<bool> * Control.Return
+                            -> (bool ->  ^Monad<bool>)) and
+                     (Control.Bind or  ^Monad<bool> or  ^a) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                     (Control.Bind or  ^a or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^a * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Map or  ^Monad<bool>) :
+                       (static member Map:
+                          ( ^Monad<bool> * (bool -> bool)) * Control.Map
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^Monad<bool>)
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^c) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                     (Control.Bind or  ^c or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^c * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Return or  ^a) :
+                       (static member Return:
+                           ^a * Control.Return -> (unit ->  ^a)) and
+                     (Control.Bind or  ^a) :
+                       (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                     (Control.Using or  ^a) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^a) *
+                          Control.Using ->  ^a) and
+                     (Control.TryWith or  ^a) :
+                       (static member TryWith:
+                          (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                          Control.TryBlock.True ->  ^a) and
+                     (Control.Delay or  ^a) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^a) * Control.Delay ->  ^a) and
+                     'b :> exn and
+                     (Control.Return or  ^c) :
+                       (static member Return:
+                           ^c * Control.Return -> (unit ->  ^c)) and
+                     (Control.Bind or  ^c) :
+                       (static member (>>=) :  ^c * (unit ->  ^c) ->  ^c) and
+                     (Control.Using or  ^c) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^c) *
+                          Control.Using ->  ^c) and
+                     (Control.TryWith or  ^c) :
+                       (static member TryWith:
+                          (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                          Control.TryBlock.True ->  ^c) and
+                     (Control.Delay or  ^c) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^c) * Control.Delay ->  ^c) and
+                     'd :> exn
+            
+            val inline map2M:
+              f: ('T1 -> 'T2 ->  ^Monad<'U>) -> source1: SeqT< ^Monad<bool>,'T1>
+              -> source2: SeqT< ^Monad<bool>,'T2> -> SeqT< ^Monad<bool>,'U>
+                when (Control.Bind or  ^Monad<'U> or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^Monad<'U> * ('U ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Map or  ^Monad<'U> or  ^Monad<bool>) :
+                       (static member Map:
+                          ( ^Monad<'U> * ('U -> bool)) * Control.Map
+                            ->  ^Monad<bool>) and
+                     (Control.Delay or  ^Monad<bool>) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^Monad<bool>) *
+                          Control.Delay ->  ^Monad<bool>) and
+                     (Control.Return or  ^Monad<bool>) :
+                       (static member Return:
+                           ^Monad<bool> * Control.Return
+                            -> (bool ->  ^Monad<bool>)) and
+                     (Control.Bind or  ^Monad<bool> or  ^a) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                     (Control.Bind or  ^a or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^a * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Map or  ^Monad<bool>) :
+                       (static member Map:
+                          ( ^Monad<bool> * (bool -> bool)) * Control.Map
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^Monad<bool>)
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^c) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                     (Control.Bind or  ^c or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^c * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Return or  ^a) :
+                       (static member Return:
+                           ^a * Control.Return -> (unit ->  ^a)) and
+                     (Control.Bind or  ^a) :
+                       (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                     (Control.Using or  ^a) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^a) *
+                          Control.Using ->  ^a) and
+                     (Control.TryWith or  ^a) :
+                       (static member TryWith:
+                          (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                          Control.TryBlock.True ->  ^a) and
+                     (Control.Delay or  ^a) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^a) * Control.Delay ->  ^a) and
+                     'b :> exn and
+                     (Control.Return or  ^c) :
+                       (static member Return:
+                           ^c * Control.Return -> (unit ->  ^c)) and
+                     (Control.Bind or  ^c) :
+                       (static member (>>=) :  ^c * (unit ->  ^c) ->  ^c) and
+                     (Control.Using or  ^c) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^c) *
+                          Control.Using ->  ^c) and
+                     (Control.TryWith or  ^c) :
+                       (static member TryWith:
+                          (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                          Control.TryBlock.True ->  ^c) and
+                     (Control.Delay or  ^c) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^c) * Control.Delay ->  ^c) and
+                     'd :> exn
+            
+            val inline map2:
+              f: ('T1 -> 'T2 -> 'U) -> source1: SeqT< ^Monad<bool>,'T1>
+              -> source2: SeqT< ^Monad<bool>,'T2> -> SeqT< ^Monad<bool>,'U>
+                when (Control.Delay or  ^Monad<bool>) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^Monad<bool>) *
+                          Control.Delay ->  ^Monad<bool>) and
+                     (Control.Return or  ^Monad<bool>) :
+                       (static member Return:
+                           ^Monad<bool> * Control.Return
+                            -> (bool ->  ^Monad<bool>)) and
+                     (Control.Bind or  ^Monad<bool> or  ^a) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                     (Control.Bind or  ^a or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^a * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Map or  ^Monad<bool>) :
+                       (static member Map:
+                          ( ^Monad<bool> * (bool -> bool)) * Control.Map
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^Monad<bool>)
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^c) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                     (Control.Bind or  ^c or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^c * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Return or  ^a) :
+                       (static member Return:
+                           ^a * Control.Return -> (unit ->  ^a)) and
+                     (Control.Bind or  ^a) :
+                       (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                     (Control.Using or  ^a) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^a) *
+                          Control.Using ->  ^a) and
+                     (Control.TryWith or  ^a) :
+                       (static member TryWith:
+                          (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                          Control.TryBlock.True ->  ^a) and
+                     (Control.Delay or  ^a) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^a) * Control.Delay ->  ^a) and
+                     'b :> exn and
+                     (Control.Return or  ^c) :
+                       (static member Return:
+                           ^c * Control.Return -> (unit ->  ^c)) and
+                     (Control.Bind or  ^c) :
+                       (static member (>>=) :  ^c * (unit ->  ^c) ->  ^c) and
+                     (Control.Using or  ^c) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^c) *
+                          Control.Using ->  ^c) and
+                     (Control.TryWith or  ^c) :
+                       (static member TryWith:
+                          (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                          Control.TryBlock.True ->  ^c) and
+                     (Control.Delay or  ^c) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^c) * Control.Delay ->  ^c) and
+                     'd :> exn
+            
+            val inline zip:
+              source1: SeqT< ^Monad<bool>,'T1>
+              -> source2: SeqT< ^Monad<bool>,'T2>
+                -> SeqT< ^Monad<bool>,('T1 * 'T2)>
+                when (Control.Delay or  ^Monad<bool>) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^Monad<bool>) *
+                          Control.Delay ->  ^Monad<bool>) and
+                     (Control.Return or  ^Monad<bool>) :
+                       (static member Return:
+                           ^Monad<bool> * Control.Return
+                            -> (bool ->  ^Monad<bool>)) and
+                     (Control.Bind or  ^Monad<bool> or  ^a) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                     (Control.Bind or  ^a or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^a * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Map or  ^Monad<bool>) :
+                       (static member Map:
+                          ( ^Monad<bool> * (bool -> bool)) * Control.Map
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^Monad<bool>)
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^c) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                     (Control.Bind or  ^c or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^c * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Return or  ^a) :
+                       (static member Return:
+                           ^a * Control.Return -> (unit ->  ^a)) and
+                     (Control.Bind or  ^a) :
+                       (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                     (Control.Using or  ^a) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^a) *
+                          Control.Using ->  ^a) and
+                     (Control.TryWith or  ^a) :
+                       (static member TryWith:
+                          (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                          Control.TryBlock.True ->  ^a) and
+                     (Control.Delay or  ^a) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^a) * Control.Delay ->  ^a) and
+                     'b :> exn and
+                     (Control.Return or  ^c) :
+                       (static member Return:
+                           ^c * Control.Return -> (unit ->  ^c)) and
+                     (Control.Bind or  ^c) :
+                       (static member (>>=) :  ^c * (unit ->  ^c) ->  ^c) and
+                     (Control.Using or  ^c) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^c) *
+                          Control.Using ->  ^c) and
+                     (Control.TryWith or  ^c) :
+                       (static member TryWith:
+                          (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                          Control.TryBlock.True ->  ^c) and
+                     (Control.Delay or  ^c) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^c) * Control.Delay ->  ^c) and
+                     'd :> exn
+            
+            val inline map3:
+              f: ('T1 -> 'T2 -> 'T3 -> 'U) -> x1: SeqT< ^Monad<bool>,'T1>
+              -> x2: SeqT< ^Monad<bool>,'T2> -> x3: SeqT< ^Monad<bool>,'T3>
+                -> SeqT< ^Monad<bool>,'U>
+                when (Control.Delay or  ^Monad<bool>) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^Monad<bool>) *
+                          Control.Delay ->  ^Monad<bool>) and
+                     (Control.Return or  ^Monad<bool>) :
+                       (static member Return:
+                           ^Monad<bool> * Control.Return
+                            -> (bool ->  ^Monad<bool>)) and
+                     (Control.Bind or  ^Monad<bool> or  ^a) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                     (Control.Bind or  ^a or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^a * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Map or  ^Monad<bool>) :
+                       (static member Map:
+                          ( ^Monad<bool> * (bool -> bool)) * Control.Map
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^Monad<bool>)
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^c) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                     (Control.Bind or  ^c or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^c * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^e) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^e) ->  ^e) and
+                     (Control.Bind or  ^e or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^e * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^g) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^g) ->  ^g) and
+                     (Control.Bind or  ^g or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^g * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Return or  ^a) :
+                       (static member Return:
+                           ^a * Control.Return -> (unit ->  ^a)) and
+                     (Control.Bind or  ^a) :
+                       (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                     (Control.Using or  ^a) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^a) *
+                          Control.Using ->  ^a) and
+                     (Control.TryWith or  ^a) :
+                       (static member TryWith:
+                          (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                          Control.TryBlock.True ->  ^a) and
+                     (Control.Delay or  ^a) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^a) * Control.Delay ->  ^a) and
+                     'b :> exn and
+                     (Control.Return or  ^c) :
+                       (static member Return:
+                           ^c * Control.Return -> (unit ->  ^c)) and
+                     (Control.Bind or  ^c) :
+                       (static member (>>=) :  ^c * (unit ->  ^c) ->  ^c) and
+                     (Control.Using or  ^c) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^c) *
+                          Control.Using ->  ^c) and
+                     (Control.TryWith or  ^c) :
+                       (static member TryWith:
+                          (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                          Control.TryBlock.True ->  ^c) and
+                     (Control.Delay or  ^c) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^c) * Control.Delay ->  ^c) and
+                     'd :> exn and
+                     (Control.Return or  ^e) :
+                       (static member Return:
+                           ^e * Control.Return -> (unit ->  ^e)) and
+                     (Control.Bind or  ^e) :
+                       (static member (>>=) :  ^e * (unit ->  ^e) ->  ^e) and
+                     (Control.Using or  ^e) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^e) *
+                          Control.Using ->  ^e) and
+                     (Control.TryWith or  ^e) :
+                       (static member TryWith:
+                          (unit ->  ^e) * ('f ->  ^e) * Control.TryWith *
+                          Control.TryBlock.True ->  ^e) and
+                     (Control.Delay or  ^e) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^e) * Control.Delay ->  ^e) and
+                     'f :> exn and
+                     (Control.Return or  ^g) :
+                       (static member Return:
+                           ^g * Control.Return -> (unit ->  ^g)) and
+                     (Control.Bind or  ^g) :
+                       (static member (>>=) :  ^g * (unit ->  ^g) ->  ^g) and
+                     (Control.Using or  ^g) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^g) *
+                          Control.Using ->  ^g) and
+                     (Control.TryWith or  ^g) :
+                       (static member TryWith:
+                          (unit ->  ^g) * ('h ->  ^g) * Control.TryWith *
+                          Control.TryBlock.True ->  ^g) and
+                     (Control.Delay or  ^g) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^g) * Control.Delay ->  ^g) and
+                     'h :> exn
+            
+            val inline zip3:
+              source1: SeqT< ^Monad<bool>,'T1>
+              -> source2: SeqT< ^Monad<bool>,'T2>
+              -> source3: SeqT< ^Monad<bool>,'T3>
+                -> SeqT< ^Monad<bool>,('T1 * 'T2 * 'T3)>
+                when (Control.Delay or  ^Monad<bool>) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^Monad<bool>) *
+                          Control.Delay ->  ^Monad<bool>) and
+                     (Control.Return or  ^Monad<bool>) :
+                       (static member Return:
+                           ^Monad<bool> * Control.Return
+                            -> (bool ->  ^Monad<bool>)) and
+                     (Control.Bind or  ^Monad<bool> or  ^a) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^a) ->  ^a) and
+                     (Control.Bind or  ^a or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^a * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Map or  ^Monad<bool>) :
+                       (static member Map:
+                          ( ^Monad<bool> * (bool -> bool)) * Control.Map
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^Monad<bool>)
+                            ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^c) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^c) ->  ^c) and
+                     (Control.Bind or  ^c or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^c * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^e) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^e) ->  ^e) and
+                     (Control.Bind or  ^e or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^e * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Bind or  ^Monad<bool> or  ^g) :
+                       (static member (>>=) :
+                           ^Monad<bool> * (bool ->  ^g) ->  ^g) and
+                     (Control.Bind or  ^g or  ^Monad<bool>) :
+                       (static member (>>=) :
+                           ^g * (unit ->  ^Monad<bool>) ->  ^Monad<bool>) and
+                     (Control.Return or  ^a) :
+                       (static member Return:
+                           ^a * Control.Return -> (unit ->  ^a)) and
+                     (Control.Bind or  ^a) :
+                       (static member (>>=) :  ^a * (unit ->  ^a) ->  ^a) and
+                     (Control.Using or  ^a) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^a) *
+                          Control.Using ->  ^a) and
+                     (Control.TryWith or  ^a) :
+                       (static member TryWith:
+                          (unit ->  ^a) * ('b ->  ^a) * Control.TryWith *
+                          Control.TryBlock.True ->  ^a) and
+                     (Control.Delay or  ^a) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^a) * Control.Delay ->  ^a) and
+                     'b :> exn and
+                     (Control.Return or  ^c) :
+                       (static member Return:
+                           ^c * Control.Return -> (unit ->  ^c)) and
+                     (Control.Bind or  ^c) :
+                       (static member (>>=) :  ^c * (unit ->  ^c) ->  ^c) and
+                     (Control.Using or  ^c) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^c) *
+                          Control.Using ->  ^c) and
+                     (Control.TryWith or  ^c) :
+                       (static member TryWith:
+                          (unit ->  ^c) * ('d ->  ^c) * Control.TryWith *
+                          Control.TryBlock.True ->  ^c) and
+                     (Control.Delay or  ^c) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^c) * Control.Delay ->  ^c) and
+                     'd :> exn and
+                     (Control.Return or  ^e) :
+                       (static member Return:
+                           ^e * Control.Return -> (unit ->  ^e)) and
+                     (Control.Bind or  ^e) :
+                       (static member (>>=) :  ^e * (unit ->  ^e) ->  ^e) and
+                     (Control.Using or  ^e) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^e) *
+                          Control.Using ->  ^e) and
+                     (Control.TryWith or  ^e) :
+                       (static member TryWith:
+                          (unit ->  ^e) * ('f ->  ^e) * Control.TryWith *
+                          Control.TryBlock.True ->  ^e) and
+                     (Control.Delay or  ^e) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^e) * Control.Delay ->  ^e) and
+                     'f :> exn and
+                     (Control.Return or  ^g) :
+                       (static member Return:
+                           ^g * Control.Return -> (unit ->  ^g)) and
+                     (Control.Bind or  ^g) :
+                       (static member (>>=) :  ^g * (unit ->  ^g) ->  ^g) and
+                     (Control.Using or  ^g) :
+                       (static member Using:
+                          System.IDisposable * (System.IDisposable ->  ^g) *
+                          Control.Using ->  ^g) and
+                     (Control.TryWith or  ^g) :
+                       (static member TryWith:
+                          (unit ->  ^g) * ('h ->  ^g) * Control.TryWith *
+                          Control.TryBlock.True ->  ^g) and
+                     (Control.Delay or  ^g) :
+                       (static member Delay:
+                          Control.Delay * (unit ->  ^g) * Control.Delay ->  ^g) and
+                     'h :> exn
 
