@@ -130,7 +130,8 @@ module SeqT =
                                 dispose e1
                             | _ -> () } }
 
-
+    let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
+    
     let inline toArrayM<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
         let ra = new ResizeArray<_> ()
         Using.Invoke

@@ -66,7 +66,7 @@ module BasicTests =
     // Compile tests
     let binds () =
         let res1 = SeqT [|seq [1..4] |] >>= fun x -> SeqT [|seq [x * 2] |]
-        let res2 = SeqT (Task.FromResult (seq [1..4])) >>= (fun x -> SeqT (Task.FromResult (seq [x * 2])))
+        let res2 = SeqT.hoist [1..4] >>= (fun x -> SeqT (Task.FromResult (seq [x * 2])))
         let res3 = SeqT (ResizeArray [seq [1..4] ]) >>= (fun x -> SeqT (ResizeArray [seq [x * 2] ]))
         let res4 = SeqT (lazy (seq [1..4])) >>= (fun x -> SeqT (lazy (seq [x * 2])))
         let res5 = SeqT (seq [seq [1..4] ]) >>= (fun x -> SeqT (seq [seq [x * 2] ]))
