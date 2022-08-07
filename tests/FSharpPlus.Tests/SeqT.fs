@@ -86,7 +86,7 @@ module BasicTests =
         ()
 
     let applicatives () =
-        let x = (+) <!> SeqT None <*> SeqT (Some (seq [1;2;3;4]))
+        let x = (+) <!> SeqT None <*> SeqT.ofSeq [1;2;3;4]
         let y = (+) <!> SeqT (async.Return (seq [1])) <*> SeqT (async.Return (seq [2]))
         let z = (+) <!> SeqT (Task.FromResult (seq [1])) <*> SeqT (Task.FromResult (seq [2]))
         ()

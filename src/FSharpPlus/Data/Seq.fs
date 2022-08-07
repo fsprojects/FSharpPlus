@@ -130,6 +130,41 @@ module SeqT =
                                 dispose e1
                             | _ -> () } }
 
+
+
+    let inline ofSeq (inp: seq<'T>) : SeqT<'``Monad<bool>``, 'T> =
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
+                member _.GetEnumerator () =
+                    let state = ref (MapState.NotStarted inp)
+                    let current = ref Option<'T>.None
+                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
+                        member _.Current =
+                            match !current with
+                            | Some c -> c
+                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                        member x.MoveNext () = monad' {
+                            match !state with
+                            | MapState.NotStarted inp ->
+                                let e = inp.GetEnumerator ()
+                                state := MapState.HaveEnumerator e
+                                return! x.MoveNext ()
+                            | MapState.HaveEnumerator e ->
+                                return
+                                    (if e.MoveNext ()  then
+                                         current := Some e.Current
+                                         true
+                                     else
+                                         x.Dispose ()
+                                         false)
+                            | _ -> return false }
+                        member _.Dispose () =
+                            match !state with
+                            | MapState.HaveEnumerator e ->
+                                state := MapState.Finished
+                                dispose e
+                            | _ -> () } }
+
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
     
     let inline toArrayM<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
@@ -799,6 +834,8 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline get_Ask () : SeqT<'``MonadReader<'R>``, 'R> = SeqT.lift ask
     static member inline Local (m: SeqT<'``MonadReader<'R2>``, 'T>, f: 'R1 -> 'R2) : SeqT<'``MonadReader<'R1>``, 'T> =
         seqT (local f (SeqT.run m))
+
+    static member inline OfSeq (x: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = SeqT.ofSeq x
     
 [<AutoOpen>]
 module Extension =
