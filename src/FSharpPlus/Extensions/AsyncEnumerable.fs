@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER && (NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER)
 
 open System
 open System.Threading
@@ -26,22 +26,20 @@ module AsyncEnumerable =
             if r then yield e.Current
     }
 
-    let ofAsyncSeq (source: SeqT<Async<_>, 'a>) = {
-        new Collections.Generic.IAsyncEnumerable<'a> with
+    let ofAsyncSeq (source: SeqT<Async<_>, 'T>) = {
+        new Collections.Generic.IAsyncEnumerable<'T> with
             member _.GetAsyncEnumerator (cancellationToken: CancellationToken) =
                 let mutable current = Unchecked.defaultof<_>
-                let enumerator = source.GetEnumerator()
-                { new Collections.Generic.IAsyncEnumerator<'a> with
+                let enumerator = (source :> IEnumerableM<Async<_>, 'T>).GetEnumerator ()
+                { new Collections.Generic.IAsyncEnumerator<'T> with
                     member _.Current = current
                     member _.MoveNextAsync() =
                         let moveNextAsync = async {
                             let! enumerationResult = enumerator.MoveNext ()
-                            match enumerationResult with
-                            | Some v ->
-                                current <- v
+                            if enumerationResult then
+                                current <- enumerator.Current
                                 return true
-                            | _ -> return false
-                        }
+                            else return false }
                         Async.StartAsTask(moveNextAsync, cancellationToken = cancellationToken) |> ValueTask<bool>
                     member _.DisposeAsync () =
                         enumerator.Dispose ()
