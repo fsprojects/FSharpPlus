@@ -167,7 +167,7 @@ module SeqT =
 
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
     
-    let inline toArrayM<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
+    let inline runToArray<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
         let ra = new ResizeArray<_> ()
         Using.Invoke
             ((source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ())
@@ -186,9 +186,8 @@ module SeqT =
                                 result () )
                     >>= fun () -> result (ra.ToArray ()) )
     
-    let inline toListM<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T list>`` = toArrayM<_, _, '``Monad<'T []>``, '``Monad<unit>``> source |> map Array.toList<'T>
-    let inline toSeqM<'T, .. >  (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>``  = toArrayM<_, _, '``Monad<'T []>``, '``Monad<unit>``> source |> map Array.toSeq<'T>
-    let inline run<'T, .. >     (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>``  =   toSeqM<_, _, '``Monad<unit>``, '``Monad<'T []>``, '``Monad<'T seq>``> source
+    let inline runToList<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T list>`` = runToArray<_, _, '``Monad<'T []>``, '``Monad<unit>``> source |> map Array.toList<'T>
+    let inline run<'T, .. >       (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>``  = runToArray<_, _, '``Monad<'T []>``, '``Monad<unit>``> source |> map Array.toSeq<'T>
 
     [<GeneralizableValue>]
     let inline empty<'T, .. > : SeqT<'``Monad<bool>``, 'T> =
@@ -268,8 +267,8 @@ module SeqT =
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () = (f () :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator () }
 
-    let inline bindM<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (inp: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'U> =
-         make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = inp in return f v })
+    let inline bindLift<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (inp: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'U> =
+        make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = inp in return f v })
 
     let inline lift (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
@@ -510,10 +509,10 @@ module SeqT =
                                   dispose enum 
                               | _ -> () } }
 
+    /// A transformation, which traverses the sequence with an action in the inner monad.
     let inline mapM (f: 'T -> '``Monad<'U>``) (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
         source |> collect (fun itm ->
-            f itm |> bindM<_, _, _, '``Monad<SeqT<'Monad<bool>, 'U>>``, _> (fun v ->
-                singleton v))
+            f itm |> bindLift<_, _, _, '``Monad<SeqT<'Monad<bool>, 'U>>``, _> singleton)
 
     let inline map (f: 'T -> 'U) (inp: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
         SeqT
@@ -740,7 +739,7 @@ module SeqT =
                                   compensation ()
                               | _ -> () } }
 
-    let inline unfold (f: 'State -> '``Monad<('T * 'State) option>``) (s: 'State) : SeqT<'``Monad<bool>``, 'T> =
+    let inline unfoldM (f: 'State -> '``Monad<('T * 'State) option>``) (s: 'State) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                   member _.GetEnumerator () =
@@ -774,7 +773,7 @@ type [<AutoOpen>]SeqTOperations =
 
 module [<AutoOpen>]SeqTOperations =
     let inline seqT<'T, .. > (source: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.wrap source
-    let inline (|SeqT|) (x: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>`` = SeqT.toSeqM x
+    let inline (|SeqT|) (x: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>`` = SeqT.run x
 
 
 type SeqT<'``monad<bool>``, 'T> with
