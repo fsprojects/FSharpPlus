@@ -769,6 +769,24 @@ module SeqT =
 
     let inline unfold (f: 'State -> ('T * 'State) option) (s: 'State) : SeqT<'``Monad<bool>``, 'T> = unfoldM (result << f) s
 
+    let inline take count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+        if (count < 0) then invalidArg "count" "must be non-negative"
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
+                member _.GetEnumerator () =
+                    let mutable i = 0
+                    let e = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
+                        member _.Current = e.Current                       
+                        member x.MoveNext () =
+                            if i < count then
+                                i <- i + 1
+                                e.MoveNext ()
+                            else
+                                x.Dispose ()
+                                result false
+                        member _.Dispose () = dispose e } }
+
 
 type [<AutoOpen>]SeqTOperations =
     static member inline SeqT (source: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.wrap source
@@ -837,25 +855,11 @@ type SeqT<'``monad<bool>``, 'T> with
         seqT (local f (SeqT.run m))
 
     static member inline OfSeq (x: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = SeqT.ofSeq x
+    static member inline Take (source: SeqT<'``Monad<bool>``, 'T>, count, _: Take) : SeqT<'``Monad<bool>``, 'T> = SeqT.take count source
     
 [<AutoOpen>]
 module Extension =
     module SeqT =
-        let inline take count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
-            if (count < 0) then invalidArg "count" "must be non-negative"
-            monad.plus {
-                use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                let n = ref count
-                if n.Value > 0 then
-                    let! (move: bool) = SeqT.lift (ie.MoveNext ())
-                    let b = ref move
-                    while b.Value do
-                        yield ie.Current
-                        n := n.Value - 1
-                        if n.Value > 0 then
-                            let! moven = SeqT.lift (ie.MoveNext ())
-                            b := moven
-                        else b := false }
 
         let inline map2M (f: 'T1 -> 'T2 -> '``Monad<'U>``) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = monad.plus {
             use ie1 = (source1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
@@ -899,7 +903,6 @@ module Extension =
             map3 tuple3 source1 source2 source3
 
 type SeqT<'``monad<bool>``, 'T> with
-    static member inline Take (source: SeqT<'``Monad<bool>``, 'T>, count, _: Take) : SeqT<'``Monad<bool>``, 'T> = SeqT.take count source
     static member inline Zip (source1: SeqT<'``Monad<bool>``, 'T1>, source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> = SeqT.zip source1 source2
 
 #endif
