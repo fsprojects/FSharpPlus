@@ -556,6 +556,99 @@ module SeqT =
                                   dispose e
                               | _ -> () } }
 
+    [<RequireQualifiedAccess>]
+    type Map2State<'T1, 'T2, '``Monad<bool>``> =
+       | NotStarted     of SeqT<'``Monad<bool>``, 'T1> * SeqT<'``Monad<bool>``, 'T2>
+       | HaveEnumerator of IEnumeratorM<'``Monad<bool>``, 'T1> * IEnumeratorM<'``Monad<bool>``, 'T2>
+       | Finished
+
+    let inline map2 (f: 'T1 -> 'T2 -> 'U) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> =
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'U> with
+                member _.GetEnumerator () =
+                    let state = ref (Map2State.NotStarted (source1, source2))
+                    let current = ref Option<'U>.None
+                    { new IEnumeratorM<'``Monad<bool>``, 'U> with
+                        member _.Current =
+                            match !current with
+                            | Some c -> c
+                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                        member x.MoveNext () = innerMonad {
+                            match !state with
+                                | Map2State.NotStarted (s1, s2) -> return! (
+                                    let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+                                    let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+                                    state := Map2State.HaveEnumerator (e1, e2)
+                                    x.MoveNext ())
+                                | Map2State.HaveEnumerator (e1, e2) ->
+                                    let! res1 = e1.MoveNext ()
+                                    let! res2 = e2.MoveNext ()
+                                    if res1 && res2 then
+                                        current := Some (f e1.Current e2.Current)
+                                        return true
+                                    else
+                                        x.Dispose ()
+                                        return! x.MoveNext ()
+                                | _ -> return false }
+                          member _.Dispose () =
+                              match !state with
+                              | Map2State.HaveEnumerator (e1, e2) ->
+                                  state := Map2State.Finished
+                                  dispose e1
+                                  dispose e2
+                              | _ -> () } }
+
+
+    let inline map2M (f: 'T1 -> 'T2 -> '``Monad<'U>``) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> =
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'U> with
+                member _.GetEnumerator () =
+                    let state = ref (Map2State.NotStarted (source1, source2))
+                    let current = ref Option<'U>.None
+                    { new IEnumeratorM<'``Monad<bool>``, 'U> with
+                        member _.Current =
+                            match !current with
+                            | Some c -> c
+                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                        member x.MoveNext () = innerMonad {
+                            match !state with
+                                | Map2State.NotStarted (s1, s2) ->
+                                    return! (
+                                        let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+                                        let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+                                        state := Map2State.HaveEnumerator (e1, e2)
+                                        x.MoveNext ())
+                                | Map2State.HaveEnumerator (e1, e2) ->
+                                    let! res1 = e1.MoveNext ()
+                                    let! res2 = e2.MoveNext ()
+                                    if res1 && res2 then
+                                        let! x = f e1.Current e2.Current
+                                        current := Some x
+                                        return true
+                                    else
+                                        x.Dispose ()
+                                        return! x.MoveNext ()
+                                | _ -> return false }
+                          member _.Dispose () =
+                              match !state with
+                              | Map2State.HaveEnumerator (e1, e2) ->
+                                  state := Map2State.Finished
+                                  dispose e1
+                                  dispose e2
+                              | _ -> () } }
+
+    let inline map3<'T1, 'T2, 'T3, 'U, .. > (f: 'T1 -> 'T2 -> 'T3 -> 'U) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
+        map2 (<|) (map2 f source1 source2) source3
+
+    let inline map3M (f: 'T1 -> 'T2 -> 'T3 -> '``Monad<'U>``) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
+        map2M (<|) (map2 f source1 source2) source3
+
+    let inline zip (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> =
+        map2 tuple2 source1 source2
+
+    let inline zip3 (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, ('T1 * 'T2 * 'T3)> =
+        map3 tuple3 source1 source2 source3
+    
     let inline lift3<'T1, 'T2, 'T3, 'U, .. > (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: SeqT<'``Monad<bool>``, 'T1>) (x2: SeqT<'``Monad<bool>``, 'T2>) (x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
         f </map/> x1 </apply/> x2 </apply/> x3
 
@@ -859,52 +952,6 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline OfSeq (x: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = SeqT.ofSeq x
     static member inline Take (source: SeqT<'``Monad<bool>``, 'T>, count, _: Take) : SeqT<'``Monad<bool>``, 'T> = SeqT.take count source
     
-[<AutoOpen>]
-module Extension =
-    module SeqT =
-
-        let inline map2M (f: 'T1 -> 'T2 -> '``Monad<'U>``) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = monad.plus {
-            use ie1 = (source1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
-            use ie2 = (source2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
-            let! move1 = SeqT.lift (ie1.MoveNext () : '``Monad<bool>``)
-            let! move2 = SeqT.lift (ie2.MoveNext () : '``Monad<bool>``)
-            let b1 = ref move1
-            let b2 = ref move2
-            while b1.Value && b2.Value do
-                let! res = SeqT.lift (f ie1.Current ie2.Current)
-                yield res
-                let! move1n = SeqT.lift (ie1.MoveNext ())
-                let! move2n = SeqT.lift (ie2.MoveNext ())
-                b1 := move1n
-                b2 := move2n }
-
-        let inline map2 (f: 'T1 -> 'T2 -> 'U) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = monad.plus {
-            use ie1 = (source1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
-            use ie2 = (source2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
-            let! move1 = SeqT.lift (ie1.MoveNext ())
-            let! move2 = SeqT.lift (ie2.MoveNext ())
-            let b1 = ref move1
-            let b2 = ref move2
-            while b1.Value && b2.Value do
-                yield f ie1.Current ie2.Current
-                let! move1n = SeqT.lift (ie1.MoveNext ())
-                let! move2n = SeqT.lift (ie2.MoveNext ())
-                b1 := move1n
-                b2 := move2n }
-
-        let inline map3<'T1, 'T2, 'T3, 'U, .. > (f: 'T1 -> 'T2 -> 'T3 -> 'U) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
-            map2 (<|) (map2 f source1 source2) source3
-
-        let inline map3M (f: 'T1 -> 'T2 -> 'T3 -> '``Monad<'U>``) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
-            map2M (<|) (map2 f source1 source2) source3
-
-        let inline zip (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> =
-            map2 tuple2 source1 source2
-
-        let inline zip3 (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, ('T1 * 'T2 * 'T3)> =
-            map3 tuple3 source1 source2 source3
-
-type SeqT<'``monad<bool>``, 'T> with
     static member inline Zip (source1: SeqT<'``Monad<bool>``, 'T1>, source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> = SeqT.zip source1 source2
 
 #endif
