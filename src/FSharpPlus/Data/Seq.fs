@@ -96,11 +96,11 @@ module SeqT =
        | HaveEnumerator of IEnumerator<'T>
        | Finished
 
-    let inline wrap (inp: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> =
+    let inline wrap (source: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
-                    let state = ref (SeqState.NotStarted inp)
+                    let state = ref (SeqState.NotStarted source)
                     let current = ref Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
                         member _.Current =
@@ -130,13 +130,11 @@ module SeqT =
                                 dispose e1
                             | _ -> () } }
 
-
-
-    let inline ofSeq (inp: seq<'T>) : SeqT<'``Monad<bool>``, 'T> =
+    let inline ofSeq (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
-                    let state = ref (SeqState.NotStarted inp)
+                    let state = ref (SeqState.NotStarted source)
                     let current = ref Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
                         member _.Current =
@@ -192,13 +190,12 @@ module SeqT =
     [<GeneralizableValue>]
     let inline empty<'T, .. > : SeqT<'``Monad<bool>``, 'T> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'T> with
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
-                          member _.MoveNext () = result false
-                          member _.Current = invalidOp "Enumeration has not started. Call MoveNext."
-                          member _.Dispose () = () } }
-
+                        member _.MoveNext () = result false
+                        member _.Current = invalidOp "Enumeration has not started. Call MoveNext."
+                        member _.Dispose () = () } }
 
     let inline singleton (v: 'T) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
@@ -206,22 +203,18 @@ module SeqT =
                 member _.GetEnumerator () = 
                     let stateStarted = ref false
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with 
-                          member _.MoveNext () =
-                              innerMonad {
-                                  let res = not stateStarted.Value
-                                  stateStarted := true
-                                  return res }
-                          member _.Current =
-                              if stateStarted.Value then v
-                              else invalidOp "Enumeration has not started. Call MoveNext."
-                          member _.Dispose () = () } }
-
-
-
+                        member _.MoveNext () = innerMonad {
+                            let res = not stateStarted.Value
+                            stateStarted := true
+                            return res }
+                        member _.Current =
+                            if stateStarted.Value then v
+                            else invalidOp "Enumeration has not started. Call MoveNext."
+                        member _.Dispose () = () } }
 
     let inline make (f: unit -> '``Monad<SeqT<'Monad<bool>, 'T>>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'T> with
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () = 
                     let state   = ref -1
                     let enum    = ref Unchecked.defaultof<IEnumeratorM<'``Monad<bool>``, 'T>>
@@ -232,24 +225,23 @@ module SeqT =
                             | -1 -> invalidOp "Enumeration has not started. Call MoveNext."
                             | _  -> current.Value
 
-                        member x.MoveNext () = 
-                            innerMonad {
-                                match !state with
-                                    | -1 -> 
-                                        let! (s: SeqT<'``Monad<bool>``, 'T>) = f ()
-                                        return! (
-                                            let e = (s :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                            enum := e
-                                            state := 0
-                                            x.MoveNext ())
-                                    | 0 ->   
-                                        let e = enum.Value
-                                        let! (res: bool) = e.MoveNext ()
-                                        do
-                                            current := e.Current
-                                            if not res then x.Dispose ()
-                                        return res
-                                    | _ -> return false }
+                        member x.MoveNext () = innerMonad {
+                            match !state with
+                            | -1 -> 
+                                let! (s: SeqT<'``Monad<bool>``, 'T>) = f ()
+                                return! (
+                                    let e = (s :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                    enum := e
+                                    state := 0
+                                    x.MoveNext ())
+                            | 0 ->   
+                                let e = enum.Value
+                                let! (res: bool) = e.MoveNext ()
+                                do
+                                    current := e.Current
+                                    if not res then x.Dispose ()
+                                return res
+                            | _ -> return false }
                         member _.Dispose () = 
                             match !state with 
                             | 0 -> 
@@ -259,16 +251,13 @@ module SeqT =
                                 dispose e 
                             | _ -> () } }
 
-
-    // let inline delayO (f: unit -> SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =  make (fun () -> monad { return f() })
-
     let delay (f: unit -> SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () = (f () :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator () }
 
-    let inline bindLift<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (inp: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'U> =
-        make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = inp in return f v })
+    let inline bindLift<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'U> =
+        make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = source in return f v })
 
     let inline lift (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
@@ -286,7 +275,6 @@ module SeqT =
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."
                         member _.Dispose () = () } }
 
-
     [<RequireQualifiedAccess>]
     type CollectState<'T, 'U, '``Monad<bool>``> =
        | NotStarted    of SeqT<'``Monad<bool>``, 'T>
@@ -294,46 +282,43 @@ module SeqT =
        | HaveInnerEnumerator of IEnumeratorM<'``Monad<bool>``, 'T> * IEnumeratorM<'``Monad<bool>``, 'U>
        | Finished
 
-
-    let inline collect<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (inp: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
+    let inline collect<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'U> with
+            { new IEnumerableM<'``Monad<bool>``, 'U> with
                 member _.GetEnumerator () =
-                    let state = ref (CollectState.NotStarted inp)
+                    let state = ref (CollectState.NotStarted source)
                     let current = ref Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U>  with
                         member _.Current =
                             match !current with
                             | Some c -> c
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
-                        member x.MoveNext () =
-                            monad' {
-                                match !state with
-                                    | CollectState.NotStarted inp ->
-                                        return! (
-                                            let e1 = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                            state := CollectState.HaveInputEnumerator e1
-                                            x.MoveNext ())
-                                    | CollectState.HaveInputEnumerator e1 ->
-                                        let! res1 = e1.MoveNext ()
-                                        return! (
-                                            if res1 then
-                                                let e2 = (f e1.Current :> IEnumerableM<'``Monad<bool>``, 'U>).GetEnumerator ()
-                                                state := CollectState.HaveInnerEnumerator (e1, e2)
-                                            else
-                                                x.Dispose ()
-                                            x.MoveNext () )
-                                    | CollectState.HaveInnerEnumerator (e1, e2) ->
-                                        let! (res2: bool) = e2.MoveNext ()
-                                        if res2 then
-                                            current := Some e2.Current
-                                            return res2
-                                        else
-                                            state := CollectState.HaveInputEnumerator e1
-                                            dispose e2
-                                            return! x.MoveNext ()
-                                    | _ ->
-                                        return false }
+                        member x.MoveNext () = monad' {
+                            match !state with
+                            | CollectState.NotStarted inp ->
+                                return! (
+                                    let e1 = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                    state := CollectState.HaveInputEnumerator e1
+                                    x.MoveNext ())
+                            | CollectState.HaveInputEnumerator e1 ->
+                                let! res1 = e1.MoveNext ()
+                                return! (
+                                    if res1 then
+                                        let e2 = (f e1.Current :> IEnumerableM<'``Monad<bool>``, 'U>).GetEnumerator ()
+                                        state := CollectState.HaveInnerEnumerator (e1, e2)
+                                    else
+                                        x.Dispose ()
+                                    x.MoveNext () )
+                            | CollectState.HaveInnerEnumerator (e1, e2) ->
+                                let! (res2: bool) = e2.MoveNext ()
+                                if res2 then
+                                    current := Some e2.Current
+                                    return res2
+                                else
+                                    state := CollectState.HaveInputEnumerator e1
+                                    dispose e2
+                                    return! x.MoveNext ()
+                            | _ -> return false }
                         member _.Dispose () =
                             match !state with
                             | CollectState.HaveInputEnumerator e1 ->
@@ -345,10 +330,9 @@ module SeqT =
                                 dispose e1
                             | _ -> () } }
 
-
     let inline apply<'T, 'U, .. > (f: SeqT<'``Monad<bool>``, 'T -> 'U>) (x1: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'U> with
+            { new IEnumerableM<'``Monad<bool>``, 'U> with
                 member _.GetEnumerator () =
                     let state = ref (CollectState.NotStarted f)
                     let current = ref Option<'U>.None
@@ -357,34 +341,32 @@ module SeqT =
                             match !current with
                             | Some c -> c
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
-                        member x.MoveNext () =
-                            monad' {
-                                match !state with
-                                    | CollectState.NotStarted f ->
-                                        return! (
-                                            let e1 = (f :> IEnumerableM<'``Monad<bool>``, ('T -> 'U)>).GetEnumerator ()
-                                            state := CollectState.HaveInputEnumerator e1
-                                            x.MoveNext ())
-                                    | CollectState.HaveInputEnumerator e1 ->
-                                        let! res1 = e1.MoveNext ()
-                                        return! (
-                                            if res1 then
-                                                let e2 = (x1 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                                state := CollectState.HaveInnerEnumerator (e1, e2)
-                                            else
-                                                x.Dispose ()
-                                            x.MoveNext () )
-                                    | CollectState.HaveInnerEnumerator (e1, e2) ->
-                                        let! (res2: bool) = e2.MoveNext ()
-                                        if res2 then
-                                            current := Some (e1.Current e2.Current)
-                                            return res2
-                                        else
-                                            state := CollectState.HaveInputEnumerator e1
-                                            dispose e2
-                                            return! x.MoveNext ()
-                                    | _ ->
-                                        return false }
+                        member x.MoveNext () = monad' {
+                            match !state with
+                            | CollectState.NotStarted f ->
+                                return! (
+                                    let e1 = (f :> IEnumerableM<'``Monad<bool>``, ('T -> 'U)>).GetEnumerator ()
+                                    state := CollectState.HaveInputEnumerator e1
+                                    x.MoveNext ())
+                            | CollectState.HaveInputEnumerator e1 ->
+                                let! res1 = e1.MoveNext ()
+                                return! (
+                                    if res1 then
+                                        let e2 = (x1 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                        state := CollectState.HaveInnerEnumerator (e1, e2)
+                                    else
+                                        x.Dispose ()
+                                    x.MoveNext () )
+                            | CollectState.HaveInnerEnumerator (e1, e2) ->
+                                let! (res2: bool) = e2.MoveNext ()
+                                if res2 then
+                                    current := Some (e1.Current e2.Current)
+                                    return res2
+                                else
+                                    state := CollectState.HaveInputEnumerator e1
+                                    dispose e2
+                                    return! x.MoveNext ()
+                            | _ -> return false }
                         member _.Dispose () =
                             match !state with
                             | CollectState.HaveInputEnumerator e1 ->
@@ -398,7 +380,7 @@ module SeqT =
 
     let inline lift2<'T1, 'T2, 'U, .. > (f: 'T1 -> 'T2 -> 'U) (x1: SeqT<'``Monad<bool>``, 'T1>) (x2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'U> with
+            { new IEnumerableM<'``Monad<bool>``, 'U> with
                 member _.GetEnumerator () =
                     let state = ref (CollectState.NotStarted x1)
                     let current = ref Option<'U>.None
@@ -407,34 +389,31 @@ module SeqT =
                             match !current with
                             | Some c -> c
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
-                        member x.MoveNext () =
-                            monad' {
-                                match !state with
-                                    | CollectState.NotStarted x1 ->
-                                        return! (
-                                            let e1 = (x1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
-                                            state := CollectState.HaveInputEnumerator e1
-                                            x.MoveNext ())
-                                    | CollectState.HaveInputEnumerator e1 ->
-                                        let! res1 = e1.MoveNext ()
-                                        return! (
-                                            if res1 then
-                                                let e2 = (x2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
-                                                state := CollectState.HaveInnerEnumerator (e1, e2)
-                                            else
-                                                x.Dispose ()
-                                            x.MoveNext () )
-                                    | CollectState.HaveInnerEnumerator (e1, e2) ->
-                                        let! (res2: bool) = e2.MoveNext ()
-                                        if res2 then
-                                            current := Some (f e1.Current e2.Current)
-                                            return res2
-                                        else
-                                            state := CollectState.HaveInputEnumerator e1
-                                            dispose e2
-                                            return! x.MoveNext ()
-                                    | _ ->
-                                        return false }
+                        member x.MoveNext () = monad' {
+                            match !state with
+                            | CollectState.NotStarted x1 ->
+                                return! (
+                                    let e1 = (x1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+                                    state := CollectState.HaveInputEnumerator e1
+                                    x.MoveNext ())
+                            | CollectState.HaveInputEnumerator e1 ->
+                                let! res1 = e1.MoveNext ()
+                                return! (
+                                    if res1 then
+                                        let e2 = (x2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+                                        state := CollectState.HaveInnerEnumerator (e1, e2)
+                                    else x.Dispose ()
+                                    x.MoveNext () )
+                            | CollectState.HaveInnerEnumerator (e1, e2) ->
+                                let! (res2: bool) = e2.MoveNext ()
+                                if res2 then
+                                    current := Some (f e1.Current e2.Current)
+                                    return res2
+                                else
+                                    state := CollectState.HaveInputEnumerator e1
+                                    dispose e2
+                                    return! x.MoveNext ()
+                            | _ -> return false }
                         member _.Dispose () =
                             match !state with
                             | CollectState.HaveInputEnumerator e1 ->
@@ -454,11 +433,11 @@ module SeqT =
        | HaveEnumerator2 of IEnumeratorM<'``Monad<bool>``, 'T> 
        | Finished
 
-    let inline append (inp1: SeqT<'``Monad<bool>``, 'T>) (inp2: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+    let inline append (source1: SeqT<'``Monad<bool>``, 'T>) (source2: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'T>  with 
+            { new IEnumerableM<'``Monad<bool>``, 'T>  with 
                 member _.GetEnumerator () = 
-                    let state = ref (AppendState.NotStarted1 (inp1, inp2) )
+                    let state = ref (AppendState.NotStarted1 (source1, source2) )
                     let current = ref Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T>  with
                         member _.Current =
@@ -466,41 +445,37 @@ module SeqT =
                             | Some c -> c
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."     
     
-                        member x.MoveNext () = 
-                            innerMonad {
-                                match !state with 
-                                    | AppendState.NotStarted1 (inp1, inp2) -> 
-                                        return! (
-                                            let enum1 = (inp1 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                            state := AppendState.HaveEnumerator1 (enum1, inp2)
-                                            x.MoveNext ())
-                                    | AppendState.HaveEnumerator1 (enum1, inp2) ->
-                                        let! (res: bool) = enum1.MoveNext ()
-                                        if res then
-                                            current := Some enum1.Current
-                                            return res
-                                        else
-                                            return! 
-                                              (state := AppendState.NotStarted2 inp2
-                                               dispose enum1
-                                               x.MoveNext ())
-                                    | AppendState.NotStarted2 inp2 ->
-                                        return! (
-                                            let enum2 = (inp2 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                            state := AppendState.HaveEnumerator2 enum2
-                                            x.MoveNext () )
-                                    | AppendState.HaveEnumerator2 enum2 ->   
-                                        let! (res: bool) = enum2.MoveNext ()
-                                        return (
-                                            if res then
-                                                current := Some enum2.Current
-                                            else
-                                                state := AppendState.Finished
-                                                dispose enum2
-                                            res)
-                                               
-                                    | _ -> 
-                                        return false }
+                        member x.MoveNext () = innerMonad {
+                            match !state with 
+                            | AppendState.NotStarted1 (inp1, inp2) -> 
+                                return! (
+                                    let enum1 = (inp1 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                    state := AppendState.HaveEnumerator1 (enum1, inp2)
+                                    x.MoveNext ())
+                            | AppendState.HaveEnumerator1 (enum1, inp2) ->
+                                let! (res: bool) = enum1.MoveNext ()
+                                if res then
+                                    current := Some enum1.Current
+                                    return res
+                                else
+                                    return! (
+                                        state := AppendState.NotStarted2 inp2
+                                        dispose enum1
+                                        x.MoveNext ())
+                            | AppendState.NotStarted2 inp2 ->
+                                return! (
+                                    let enum2 = (inp2 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                    state := AppendState.HaveEnumerator2 enum2
+                                    x.MoveNext () )
+                            | AppendState.HaveEnumerator2 enum2 ->   
+                                let! (res: bool) = enum2.MoveNext ()
+                                return (
+                                    if res then current := Some enum2.Current
+                                    else
+                                        state := AppendState.Finished
+                                        dispose enum2
+                                    res)
+                            | _ -> return false }
                           member _.Dispose () = 
                               match !state with 
                               | AppendState.HaveEnumerator1 (enum, _) 
@@ -513,13 +488,13 @@ module SeqT =
     let inline mapM (f: 'T -> '``Monad<'U>``) (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
         source |> collect (fun itm ->
             f itm |> bindLift<_, _, _, '``Monad<SeqT<'Monad<bool>, 'U>>``, _> singleton)
-
     
     [<RequireQualifiedAccess>]
     type MapState<'T, '``Monad<bool>``> =
        | NotStarted     of SeqT<'``Monad<bool>``, 'T>
        | HaveEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
        | Finished
+
     let inline map (f: 'T -> 'U) (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'U> with
@@ -531,24 +506,22 @@ module SeqT =
                             match !current with
                             | Some c -> c
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
-                        member x.MoveNext () =
-                              innerMonad {
-                                  match !state with
-                                      | MapState.NotStarted inp ->
-                                          return! (
-                                              let e = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                              state := MapState.HaveEnumerator e
-                                              x.MoveNext ())
-                                      | MapState.HaveEnumerator e ->
-                                          let! res1 = e.MoveNext ()
-                                          if res1 then
-                                              current := Some (f e.Current)
-                                              return true
-                                          else
-                                              x.Dispose ()
-                                              return! x.MoveNext ()
-                                      | _ ->
-                                          return false }
+                        member x.MoveNext () = innerMonad {
+                              match !state with
+                              | MapState.NotStarted inp ->
+                                  return! (
+                                      let e = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                      state := MapState.HaveEnumerator e
+                                      x.MoveNext ())
+                              | MapState.HaveEnumerator e ->
+                                  let! res1 = e.MoveNext ()
+                                  if res1 then
+                                      current := Some (f e.Current)
+                                      return true
+                                  else
+                                      x.Dispose ()
+                                      return! x.MoveNext ()
+                              | _ -> return false }
                           member _.Dispose () =
                               match !state with
                               | MapState.HaveEnumerator e ->
@@ -575,29 +548,28 @@ module SeqT =
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
                         member x.MoveNext () = innerMonad {
                             match !state with
-                                | Map2State.NotStarted (s1, s2) -> return! (
-                                    let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
-                                    let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
-                                    state := Map2State.HaveEnumerator (e1, e2)
-                                    x.MoveNext ())
-                                | Map2State.HaveEnumerator (e1, e2) ->
-                                    let! res1 = e1.MoveNext ()
-                                    let! res2 = e2.MoveNext ()
-                                    if res1 && res2 then
-                                        current := Some (f e1.Current e2.Current)
-                                        return true
-                                    else
-                                        x.Dispose ()
-                                        return! x.MoveNext ()
-                                | _ -> return false }
-                          member _.Dispose () =
-                              match !state with
-                              | Map2State.HaveEnumerator (e1, e2) ->
-                                  state := Map2State.Finished
-                                  dispose e1
-                                  dispose e2
-                              | _ -> () } }
-
+                            | Map2State.NotStarted (s1, s2) -> return! (
+                                let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+                                let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+                                state := Map2State.HaveEnumerator (e1, e2)
+                                x.MoveNext ())
+                            | Map2State.HaveEnumerator (e1, e2) ->
+                                let! res1 = e1.MoveNext ()
+                                let! res2 = e2.MoveNext ()
+                                if res1 && res2 then
+                                    current := Some (f e1.Current e2.Current)
+                                    return true
+                                else
+                                    x.Dispose ()
+                                    return! x.MoveNext ()
+                            | _ -> return false }
+                        member _.Dispose () =
+                            match !state with
+                            | Map2State.HaveEnumerator (e1, e2) ->
+                                state := Map2State.Finished
+                                dispose e1
+                                dispose e2
+                            | _ -> () } }
 
     let inline map2M (f: 'T1 -> 'T2 -> '``Monad<'U>``) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> =
         SeqT
@@ -612,30 +584,30 @@ module SeqT =
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
                         member x.MoveNext () = innerMonad {
                             match !state with
-                                | Map2State.NotStarted (s1, s2) ->
-                                    return! (
-                                        let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
-                                        let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
-                                        state := Map2State.HaveEnumerator (e1, e2)
-                                        x.MoveNext ())
-                                | Map2State.HaveEnumerator (e1, e2) ->
-                                    let! res1 = e1.MoveNext ()
-                                    let! res2 = e2.MoveNext ()
-                                    if res1 && res2 then
-                                        let! x = f e1.Current e2.Current
-                                        current := Some x
-                                        return true
-                                    else
-                                        x.Dispose ()
-                                        return! x.MoveNext ()
-                                | _ -> return false }
-                          member _.Dispose () =
-                              match !state with
-                              | Map2State.HaveEnumerator (e1, e2) ->
-                                  state := Map2State.Finished
-                                  dispose e1
-                                  dispose e2
-                              | _ -> () } }
+                            | Map2State.NotStarted (s1, s2) ->
+                                return! (
+                                    let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
+                                    let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
+                                    state := Map2State.HaveEnumerator (e1, e2)
+                                    x.MoveNext ())
+                            | Map2State.HaveEnumerator (e1, e2) ->
+                                let! res1 = e1.MoveNext ()
+                                let! res2 = e2.MoveNext ()
+                                if res1 && res2 then
+                                    let! x = f e1.Current e2.Current
+                                    current := Some x
+                                    return true
+                                else
+                                    x.Dispose ()
+                                    return! x.MoveNext ()
+                            | _ -> return false }
+                        member _.Dispose () =
+                            match !state with
+                            | Map2State.HaveEnumerator (e1, e2) ->
+                                state := Map2State.Finished
+                                dispose e1
+                                dispose e2
+                            | _ -> () } }
 
     let inline map3<'T1, 'T2, 'T3, 'U, .. > (f: 'T1 -> 'T2 -> 'T3 -> 'U) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) (source3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
         map2 (<|) (map2 f source1 source2) source3
@@ -652,63 +624,58 @@ module SeqT =
     let inline lift3<'T1, 'T2, 'T3, 'U, .. > (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: SeqT<'``Monad<bool>``, 'T1>) (x2: SeqT<'``Monad<bool>``, 'T2>) (x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> =
         f </map/> x1 </apply/> x2 </apply/> x3
 
-    let inline filter (f: 'T -> bool) (inp: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+    let inline filter (f: 'T -> bool) (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'T> with
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
-                    let state = ref (CollectState.NotStarted inp)
+                    let state = ref (CollectState.NotStarted source)
                     let current = ref Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T>  with
                         member _.Current =
                             match !current with
                             | Some c -> c
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."
-                        member x.MoveNext () =
-                              innerMonad {
-                                  match !state with
-                                      | CollectState.NotStarted inp ->
-                                          return! (
-                                              let e1 = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                              state := CollectState.HaveInputEnumerator e1
-                                              x.MoveNext ())
-                                      | CollectState.HaveInputEnumerator e1 ->
-                                          let! res1 = e1.MoveNext ()
-                                          if res1 && f e1.Current then
-                                              current := Some e1.Current
-                                              return true
-                                          elif res1 then
-                                              return! x.MoveNext ()
-                                          else
-                                              x.Dispose ()
-                                              return! x.MoveNext ()
-                                      | _ ->
-                                          return false }
-                          member _.Dispose () =
+                        member x.MoveNext () = innerMonad {
                               match !state with
+                              | CollectState.NotStarted inp ->
+                                  return! (
+                                      let e1 = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                      state := CollectState.HaveInputEnumerator e1
+                                      x.MoveNext ())
                               | CollectState.HaveInputEnumerator e1 ->
-                                  state := CollectState.Finished
-                                  dispose e1
-                              | CollectState.HaveInnerEnumerator (e1, e2) ->
-                                  state := CollectState.Finished
-                                  dispose e2
-                                  dispose e1
-                              | _ -> () } }
+                                  let! res1 = e1.MoveNext ()
+                                  if res1 && f e1.Current then
+                                      current := Some e1.Current
+                                      return true
+                                  elif res1 then return! x.MoveNext ()
+                                  else
+                                      x.Dispose ()
+                                      return! x.MoveNext ()
+                                  | _ -> return false }
+                        member _.Dispose () =
+                            match !state with
+                            | CollectState.HaveInputEnumerator e1 ->
+                                state := CollectState.Finished
+                                dispose e1
+                            | CollectState.HaveInnerEnumerator (e1, e2) ->
+                                state := CollectState.Finished
+                                dispose e2
+                                dispose e1
+                            | _ -> () } }
 
-    let inline iteriM<'T, .. > (f: int -> 'T -> '``Monad<unit>``) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = 
-        innerMonad { 
-            use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-            let count = ref 0
-            let! (move: bool) = ie.MoveNext ()
-            let b = ref move
-            while b.Value do
-                do! f !count ie.Current
-                let! moven = ie.MoveNext ()
-                do incr count
-                   b := moven
-        }
+    let inline iteriM<'T, .. > (f: int -> 'T -> '``Monad<unit>``) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = innerMonad { 
+        use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+        let count = ref 0
+        let! (move: bool) = ie.MoveNext ()
+        let b = ref move
+        while b.Value do
+            do! f !count ie.Current
+            let! moven = ie.MoveNext ()
+            do incr count
+            b := moven }
 
-    let inline iterM<'T, .. > (f: 'T -> '``Monad<unit>``) (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun _ x -> f x) inp    
-    let inline iteri<'T, .. > (f: int -> 'T -> unit)      (inp: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> result (f i x)) inp
+    let inline iterM<'T, .. > (f: 'T -> '``Monad<unit>``) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun _ x -> f x) source    
+    let inline iteri<'T, .. > (f: int -> 'T -> unit)      (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> result (f i x)) source
     let inline iter<'T, .. > f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iterM (f >> result) source
 
     [<RequireQualifiedAccess>]
@@ -718,149 +685,139 @@ module SeqT =
        | HaveHandlerEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
        | Finished
 
-    /// Implements the 'TryWith' functionality for computation builder
-    let inline tryWith<'T, .. > (inp: SeqT<'``Monad<bool>``, 'T>) (handler : exn -> SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
-          // Note: this is put outside the object deliberately, so the object doesn't permanently capture inp1 and inp2
+    /// Implements the 'TryWith' functionality for the computation expression builder.
+    let inline tryWith<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) (handler : exn -> SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'T> with
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
-                    let state = ref (TryWithState.NotStarted inp)
-                    let current = ref Option<'T>.None
-                    { new IEnumeratorM<'``Monad<bool>``, 'T>  with
-                        member _.Current =
-                            match !current with
-                            | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
-                        member x.MoveNext () =
-                            innerMonad2<_, '``Monad<unit>``> () {
-                              match !state with
-                              | TryWithState.NotStarted inp ->
-                                  let res = ref Unchecked.defaultof<_>
-                                  try
-                                      res := Choice1Of2 ((inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ())
-                                  with exn ->
-                                      res := Choice2Of2 exn
-                                  match res.Value with
-                                  | Choice1Of2 r ->
-                                      return!
-                                        (state := TryWithState.HaveBodyEnumerator r
-                                         x.MoveNext ())
-                                  | Choice2Of2 exn ->
-                                      return!
-                                         (x.Dispose ()
-                                          let enum = (handler exn :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                          state := TryWithState.HaveHandlerEnumerator enum
-                                          x.MoveNext ())
-                              | TryWithState.HaveBodyEnumerator e ->
-                                  let res = ref Unchecked.defaultof<Choice<bool, exn>>
-                                  try
-                                      let! r = e.MoveNext ()
-                                      res := Choice1Of2 r
-                                  with exn ->
-                                      res := Choice2Of2 exn
-                                  match res.Value with
-                                  | Choice1Of2 res ->
-                                      return
-                                          (match res with
-                                           | false -> x.Dispose ()
-                                           | true  -> current := Some e.Current
-                                           res)
-                                  | Choice2Of2 exn ->
-                                      return! (
-                                         x.Dispose ()
-                                         let e = (handler exn :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                         state := TryWithState.HaveHandlerEnumerator e
-                                         x.MoveNext ())
-                              | TryWithState.HaveHandlerEnumerator e ->
-                                  let! res = e.MoveNext()
-                                  return (
-                                      if res then
-                                          current := Some e.Current
-                                          true
-                                      else
-                                          x.Dispose ()
-                                          false)
-                              | _ ->
-                                  return false }
-                                
-                          member _.Dispose () =
-                              match !state with
-                              | TryWithState.HaveBodyEnumerator e | TryWithState.HaveHandlerEnumerator e ->
-                                  state := TryWithState.Finished
-                                  dispose e
-                              | _ -> () } }
-
-
-    [<RequireQualifiedAccess>]
-    type TryFinallyState<'``Monad<bool>``, 'T> =
-       | NotStarted    of SeqT<'``Monad<bool>``, 'T>
-       | HaveBodyEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
-       | Finished
-
-    // This pushes the handler through all the async computations
-    // The (synchronous) compensation is run when the Dispose () is called
-    let inline tryFinally (inp: SeqT<'``Monad<bool>``, 'T>) (compensation : unit -> unit) : SeqT<'``Monad<bool>``, 'T> =
-        SeqT
-          { new IEnumerableM<'``Monad<bool>``, 'T> with
-                member _.GetEnumerator () =
-                    let state = ref (TryFinallyState.NotStarted inp)
+                    let state = ref (TryWithState.NotStarted source)
                     let current = ref Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
                         member _.Current =
                             match !current with
                             | Some c -> c
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."
-                        member x.MoveNext () =
-                              innerMonad {
-                                  match !state with
-                                      | TryFinallyState.NotStarted inp ->
-                                          return! (
-                                              let e = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                              state := TryFinallyState.HaveBodyEnumerator e
-                                              x.MoveNext ())
-                                      | TryFinallyState.HaveBodyEnumerator e ->
-                                          let! (res: bool) = e.MoveNext ()
-                                          return (
-                                              if res then current := Some e.Current
-                                              else x.Dispose ()
-                                              res)
-                                      | _ ->
-                                          return false }
-                          member _.Dispose () =
-                              match !state with
-                              | TryFinallyState.HaveBodyEnumerator e ->
-                                  state := TryFinallyState.Finished
-                                  dispose e
-                                  compensation ()
-                              | _ -> () } }
+                        member x.MoveNext () = innerMonad2<_, '``Monad<unit>``> () {
+                            match !state with
+                            | TryWithState.NotStarted inp ->
+                                let res = ref Unchecked.defaultof<_>
+                                try
+                                    res := Choice1Of2 ((inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ())
+                                with exn ->
+                                    res := Choice2Of2 exn
+                                match res.Value with
+                                | Choice1Of2 r ->
+                                    return! (
+                                       state := TryWithState.HaveBodyEnumerator r
+                                       x.MoveNext ())
+                                | Choice2Of2 exn ->
+                                    return! (
+                                        x.Dispose ()
+                                        let enum = (handler exn :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                        state := TryWithState.HaveHandlerEnumerator enum
+                                        x.MoveNext ())
+                            | TryWithState.HaveBodyEnumerator e ->
+                                let res = ref Unchecked.defaultof<Choice<bool, exn>>
+                                try
+                                    let! r = e.MoveNext ()
+                                    res := Choice1Of2 r
+                                with exn ->
+                                    res := Choice2Of2 exn
+                                match res.Value with
+                                | Choice1Of2 res ->
+                                    return (
+                                        if res then current := Some e.Current
+                                        else x.Dispose ()
+                                        res)
+                                | Choice2Of2 exn ->
+                                    return! (
+                                        x.Dispose ()
+                                        let e = (handler exn :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                        state := TryWithState.HaveHandlerEnumerator e
+                                        x.MoveNext ())
+                            | TryWithState.HaveHandlerEnumerator e ->
+                                let! res = e.MoveNext()
+                                return (
+                                    if res then current := Some e.Current
+                                    else x.Dispose ()
+                                    res)
+                            | _ -> return false }
+                                
+                        member _.Dispose () =
+                            match !state with
+                            | TryWithState.HaveBodyEnumerator e | TryWithState.HaveHandlerEnumerator e ->
+                                state := TryWithState.Finished
+                                dispose e
+                            | _ -> () } }
+
+    [<RequireQualifiedAccess>]
+    type TryFinallyState<'``Monad<bool>``, 'T> =
+       | NotStarted    of SeqT<'``Monad<bool>``, 'T>
+       | HaveBodyEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
+       | Finished
+    
+    /// Implements the 'TryFinally' functionality for the computation expression builder.
+    let inline tryFinally (source: SeqT<'``Monad<bool>``, 'T>) (compensation : unit -> unit) : SeqT<'``Monad<bool>``, 'T> =
+        // This pushes the handler through all the monadic computations.
+        // The (synchronous) compensation is run when the Dispose () is called.
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
+                member _.GetEnumerator () =
+                    let state = ref (TryFinallyState.NotStarted source)
+                    let current = ref Option<'T>.None
+                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
+                        member _.Current =
+                            match !current with
+                            | Some c -> c
+                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                        member x.MoveNext () = innerMonad {
+                            match !state with
+                            | TryFinallyState.NotStarted inp ->
+                                return! (
+                                    let e = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                                    state := TryFinallyState.HaveBodyEnumerator e
+                                    x.MoveNext ())
+                            | TryFinallyState.HaveBodyEnumerator e ->
+                                let! (res: bool) = e.MoveNext ()
+                                return (
+                                    if res then current := Some e.Current
+                                    else x.Dispose ()
+                                    res)
+                            | _ -> return false }
+                        member _.Dispose () =
+                            match !state with
+                            | TryFinallyState.HaveBodyEnumerator e ->
+                                state := TryFinallyState.Finished
+                                dispose e
+                                compensation ()
+                            | _ -> () } }
 
     let inline unfoldM (f: 'State -> '``Monad<('T * 'State) option>``) (s: 'State) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
-                  member _.GetEnumerator () =
-                      let stateStarted = ref false
-                      let currentState = ref s
-                      let current = ref Option<'T>.None
-                      { new IEnumeratorM<'``Monad<bool>``, 'T>  with
-                          member _.Current =
-                              match !current, !stateStarted with
-                              | Some c, true -> c
-                              | _     , false -> invalidOp "Enumeration has not started. Call MoveNext."
-                              | None  , true  -> invalidOp "Enumeration finished."
-                          member x.MoveNext () =
-                                monad' {
-                                    if not stateStarted.Value then
-                                        stateStarted := true
-                                        return! x.MoveNext ()
-                                    else
-                                        let! res = f currentState.Value
-                                        match res with
-                                        | None -> return false
-                                        | Some (t, newState) ->
-                                            current := Some t
-                                            currentState := newState
-                                            return true }
-                          member _.Dispose () = () } }
+                member _.GetEnumerator () =
+                    let stateStarted = ref false
+                    let currentState = ref s
+                    let current = ref Option<'T>.None
+                    { new IEnumeratorM<'``Monad<bool>``, 'T>  with
+                        member _.Current =
+                            match !current, !stateStarted with
+                            | Some c, true -> c
+                            | _     , false -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | None  , true  -> invalidOp "Enumeration finished."
+                        member x.MoveNext () = monad' {
+                            if not stateStarted.Value then
+                                stateStarted := true
+                                return! x.MoveNext ()
+                            else
+                                let! res = f currentState.Value
+                                match res with
+                                | None -> return false
+                                | Some (t, newState) ->
+                                    current := Some t
+                                    currentState := newState
+                                    return true }
+                        member _.Dispose () = () } }
 
     let inline unfold (f: 'State -> ('T * 'State) option) (s: 'State) : SeqT<'``Monad<bool>``, 'T> = unfoldM (result << f: 'State -> '``Monad<('T * 'State) option>``) s
 
