@@ -14,8 +14,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
     <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
