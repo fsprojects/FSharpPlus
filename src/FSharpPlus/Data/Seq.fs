@@ -767,6 +767,8 @@ module SeqT =
                                             return true }
                           member _.Dispose () = () } }
 
+    let inline unfold (f: 'State -> ('T * 'State) option) (s: 'State) : SeqT<'``Monad<bool>``, 'T> = unfoldM (result << f) s
+
 
 type [<AutoOpen>]SeqTOperations =
     static member inline SeqT (source: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.wrap source
