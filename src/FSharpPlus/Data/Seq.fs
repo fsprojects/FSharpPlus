@@ -164,8 +164,8 @@ module SeqT =
                             | _ -> () } }
 
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
-    
-    let inline runToArray<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
+
+    let inline runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
         let ra = new ResizeArray<_> ()
         Using.Invoke
             ((source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ())
@@ -182,11 +182,17 @@ module SeqT =
                             ie.MoveNext () >>= fun moven ->
                                 b <- moven
                                 result () )
-                    >>= fun () -> result (ra.ToArray ()) )
+                    >>= fun () -> result (f ra))
     
-    let inline runToList<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T list>`` = runToArray<_, _, '``Monad<'T []>``, '``Monad<unit>``> source |> map Array.toList<'T>
-    let inline run<'T, .. >       (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>``  = runToArray<_, _, '``Monad<'T []>``, '``Monad<unit>``> source |> map Array.toSeq<'T>
+    let inline runToArray<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
+        runThen<'T, 'T [], '``Monad<bool>``, '``Monad<'T []>``, '``Monad<unit>``> toArray source
+    
+    let inline runToList<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T list>`` =
+        runThen<'T, 'T list, '``Monad<bool>``, '``Monad<'T list>``, '``Monad<unit>``> toList source
 
+    let inline run<'T, .. >       (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>`` =
+        runThen<'T, 'T seq, '``Monad<bool>``, '``Monad<'T seq>``, '``Monad<unit>``> toSeq source
+    
     [<GeneralizableValue>]
     let inline empty<'T, .. > : SeqT<'``Monad<bool>``, 'T> =
         SeqT
