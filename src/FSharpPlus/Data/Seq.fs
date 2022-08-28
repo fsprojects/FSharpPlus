@@ -880,12 +880,11 @@ module SeqT =
                         member x.MoveNext () =
                             if i > 0 then
                                 i <- i - 1
-                                innerMonad {
-                                    let! res = e.MoveNext ()
+                                e.MoveNext () |> monomorphicBind (fun res ->
                                     if not res then
                                         let msg = sprintf "The input sequence has an insufficient number of elements: tried to take %i %s past the end of the sequence. Use SeqT.truncate to get %i or less elements" (i+1) (if i = 0 then "element" else "elements") count
                                         raise (new InvalidOperationException(msg))
-                                    return res }
+                                    result res )
                             else
                                 x.Dispose ()
                                 result false
