@@ -7,6 +7,10 @@
     <Exec Command='dotnet build src/FSharpPlus -c Release --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
 
+  <Target Name="AllSigs">
+    <Exec Command='dotnet msbuild src/FSharpPlus -target:Build -property:Configuration=Release -property:OtherFlags=--allsigs' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
   <Target Name="Pack">
     <Exec Command='dotnet build src/FSharpPlus.TypeLevel/Providers -c Release --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
     <Exec Command='dotnet pack src/FSharpPlus -c Release -o "$(NupkgsDir)" --version-suffix "$(VersionSuffix)" ' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
