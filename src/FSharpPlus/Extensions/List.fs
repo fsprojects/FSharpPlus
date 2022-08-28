@@ -75,10 +75,8 @@ module List =
     /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
 
-    [<Obsolete("Use FSharp.Collections.List.take instead")>]
     let take i list = FSharp.Collections.List.take i list
 
-    [<Obsolete("Use FSharp.Collections.List.skip instead")>]
     let skip i list = FSharp.Collections.List.skip i list
 
 
