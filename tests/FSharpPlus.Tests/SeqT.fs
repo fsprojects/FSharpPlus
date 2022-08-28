@@ -169,3 +169,115 @@ module ComputationExpressions =
         let _ = (monadTransformer3layersTest1 () |> ReaderT.run) () |> ResultT.run |> extract |> Result.get
 
         ()
+
+
+    module AsyncSeq =
+
+        type AsyncSeq<'t> = SeqT<Async<bool>, 't>
+        let asyncSeq<'t> = monad<SeqT<Async<bool>, 't>>.plus
+
+        /// Determines equality of two async sequences by convering them to lists, ignoring side-effects.
+        let EQ (a: AsyncSeq<'a>) (b: AsyncSeq<'a>) =
+            let exp = a |> SeqT.runToList |> Async.RunSynchronously
+            let act = b |> SeqT.runToList |> Async.RunSynchronously
+            if (exp = act) then true
+            else
+                printfn "expected=%A" exp
+                printfn "actual=%A" act
+                false
+
+        
+        [<Test>]
+        let ``try finally works no exception``() =
+            let mutable x = 0
+            let s = asyncSeq {
+                try yield 1
+                finally x <- x + 3 }
+
+            Assert.True ((x = 0))
+
+            let s1 = s |> SeqT.runToList |> Async.RunSynchronously
+            Assert.True ((x = 3))
+
+            let s2 = s |> SeqT.runToList |> Async.RunSynchronously
+            Assert.True ((x = 6))
+
+
+        [<Test>]
+        let ``try finally works exception``() =
+            let mutable x = 0
+            let s = asyncSeq {
+                try
+                    try yield 1
+                        failwith "fffail"
+                    finally x <- x + 1
+                finally x <- x + 2 }
+
+            Assert.True ((x = 0))
+
+            let s1 = try (s |> SeqT.runToList |> Async.RunSynchronously) with _ -> []
+            Assert.True ((s1 = []))
+            Assert.True ((x = 3))
+            ()
+            let s2 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            Assert.True ((s2 = []))
+            Assert.True ((x = 6))
+
+
+        [<Test>]
+        let ``try with works exception``() =
+            let mutable x = 0
+            let s = asyncSeq {
+                 try failwith "ffail"
+                 with e -> x <- x + 3 }
+            
+            Assert.True ((x = 0))
+
+            let s1 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            Assert.True ((s1 = []))
+            Assert.True ((x = 3))
+
+            let s2 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            Assert.True ((s2 = []))
+            Assert.True ((x = 6))
+
+        
+        [<Test>]
+        let ``try with works no exception``() =
+            let mutable x = 0
+            let s = asyncSeq {
+                try yield 1
+                with e -> x <- x + 3 }
+            
+            Assert.True ((x = 0))
+
+            let s1 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            Assert.True ((s1 = [1]))
+            Assert.True ((x = 0))
+
+            let s2 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            Assert.True ((s2 = [1]))
+
+
+        [<Test>]
+        let ``AsyncSeq.zip``() =
+            for la in [ []; [1]; [1;2;3;4;5] ] do
+                for lb in [ []; [1]; [1;2;3;4;5] ] do
+                    let a: SeqT<Async<_>, _> = la |> SeqT.ofSeq
+                    let b: SeqT<Async<_>, _> = lb |> SeqT.ofSeq
+                    let actual = SeqT.zip a b
+                    let expected = Seq.zip la lb |> SeqT.ofSeq
+                    Assert.True (EQ expected actual)
+        
+        
+        [<Test>]
+        let ``AsyncSeq.zipWithAsync``() =
+            for la in [ []; [1]; [1;2;3;4;5] ] do
+                for lb in [ []; [1]; [1;2;3;4;5] ] do
+                    let a: SeqT<Async<_>, _> = la |> SeqT.ofSeq
+                    let b: SeqT<Async<_>, _> = lb |> SeqT.ofSeq
+                    let actual = SeqT.map2M (fun a b -> a + b |> async.Return) a b
+                    let expected = Seq.zip la lb |> Seq.map ((<||) (+)) |> SeqT.ofSeq
+                    Assert.True (EQ expected actual)
+            
+        
