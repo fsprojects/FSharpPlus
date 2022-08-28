@@ -890,6 +890,84 @@ module SeqT =
                                 result false
                         member _.Dispose () = dispose e } }
 
+    /// <summary>Returns a sequence that skips at most N elements of the underlying sequence and then yields the
+    /// remaining elements of the sequence.</summary>
+    ///
+    /// <param name="count">The number of items to skip.</param>
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
+    let inline drop count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+        if (count < 0) then invalidArg "count" "must be non-negative"
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
+                member _.GetEnumerator () =
+                    let mutable i = count
+                    let e = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
+                        member _.Current = e.Current                       
+                        member x.MoveNext () =
+                            if i > 0 then
+                                i <- i - 1
+                                e.MoveNext () |> monomorphicBind (fun res ->
+                                    if res then
+                                        x.MoveNext ()
+                                    else
+                                        x.Dispose ()
+                                        result res)
+                            else
+                                e.MoveNext () |> monomorphicBind (fun res ->
+                                    if not res then
+                                        x.Dispose ()
+                                    result res)
+                        member _.Dispose () = dispose e } }
+
+    /// <summary>Returns a sequence that skips N elements of the underlying sequence and then yields the
+    /// remaining elements of the sequence.</summary>
+    ///
+    /// <remarks>Throws <c>InvalidOperationException</c>
+    /// if the count exceeds the number of elements in the sequence. <c>SeqT.drop</c>
+    /// returns as many items as the sequence contains instead of throwing an exception.</remarks>
+    ///
+    /// <param name="count">The number of items to skip.</param>
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
+    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// in the sequence.</exception>
+    let inline skip count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+        if (count < 0) then invalidArg "count" "must be non-negative"
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
+                member _.GetEnumerator () =
+                    let mutable i = count
+                    let e = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
+                        member _.Current = e.Current                       
+                        member x.MoveNext () =
+                            if i > 0 then
+                                i <- i - 1
+                                e.MoveNext () |> monomorphicBind (fun res ->
+                                    if res then
+                                        x.MoveNext ()
+                                    else
+                                        invalidOp (
+                                            sprintf
+                                                "tried to skip %i %s past the end of the seq. Use SeqT.drop to skip %i or less elements."
+                                                (i + 1)
+                                                (if i = 0 then "element" else "elements")
+                                                count))
+                            else
+                                e.MoveNext () |> monomorphicBind (fun res ->
+                                    if not res then
+                                        x.Dispose ()
+                                    result res)
+                        member _.Dispose () = dispose e } }
+
 
 type [<AutoOpen>]SeqTOperations =
     static member inline SeqT (source: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.wrap source
@@ -970,6 +1048,12 @@ type SeqT<'``monad<bool>``, 'T> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Limit (source: SeqT<'``Monad<bool>``, 'T>, count, _: Limit) : SeqT<'``Monad<bool>``, 'T> = SeqT.truncate count source
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Skip (source: SeqT<'``Monad<bool>``, 'T>, count, _: Skip) : SeqT<'``Monad<bool>``, 'T> = SeqT.skip count source
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Drop (source: SeqT<'``Monad<bool>``, 'T>, count, _: Drop) : SeqT<'``Monad<bool>``, 'T> = SeqT.drop count source
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Zip (source1: SeqT<'``Monad<bool>``, 'T1>, source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> = SeqT.zip source1 source2
