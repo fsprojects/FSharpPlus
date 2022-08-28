@@ -92,6 +92,9 @@ type SeqT<'``monad``, 't> =
 
 module SeqT =
 
+    [<Literal>]
+    let private enumNotStarted = "Enumeration has not started. Call MoveNext."
+
     let ofIEnumerableM x : SeqT<'``Monad<bool>``, 'T> = SeqT x
 
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
@@ -110,7 +113,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = monad' {
                             match state with
                             | SeqState.NotStarted inp ->
@@ -144,7 +147,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = monad' {
                             match state with
                             | SeqState.NotStarted inp ->
@@ -205,7 +208,7 @@ module SeqT =
                 member _.GetEnumerator () =
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
                         member _.MoveNext () = result false
-                        member _.Current = invalidOp "Enumeration has not started. Call MoveNext."
+                        member _.Current = invalidOp enumNotStarted
                         member _.Dispose () = () } }
 
     let inline singleton (v: 'T) : SeqT<'``Monad<bool>``, 'T> =
@@ -220,7 +223,7 @@ module SeqT =
                             return res }
                         member _.Current =
                             if started then v
-                            else invalidOp "Enumeration has not started. Call MoveNext."
+                            else invalidOp enumNotStarted
                         member _.Dispose () = () } }
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -234,7 +237,7 @@ module SeqT =
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with 
                         member _.Current =
                             match state with
-                            | -1 -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | -1 -> invalidOp enumNotStarted
                             | _  -> current
                         member x.MoveNext () = innerMonad {
                             match state with
@@ -283,7 +286,7 @@ module SeqT =
                         member _.Current =
                             match started with
                             | Some v -> v
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | None -> invalidOp enumNotStarted
                         member _.Dispose () = () } }
 
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
@@ -303,7 +306,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = monad' {
                             match state with
                             | CollectState.NotStarted inp ->
@@ -318,7 +321,7 @@ module SeqT =
                                         let e2 = (f e1.Current :> IEnumerableM<'``Monad<bool>``, 'U>).GetEnumerator ()
                                         state <- CollectState.HaveInnerEnumerator (e1, e2)
                                     else x.Dispose ()
-                                    x.MoveNext () )
+                                    x.MoveNext ())
                             | CollectState.HaveInnerEnumerator (e1, e2) ->
                                 let! (res2: bool) = e2.MoveNext ()
                                 if res2 then
@@ -350,7 +353,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = monad' {
                             match state with
                             | CollectState.NotStarted f ->
@@ -365,7 +368,7 @@ module SeqT =
                                         let e2 = (x1 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
                                         state <- CollectState.HaveInnerEnumerator (e1, e2)
                                     else x.Dispose ()
-                                    x.MoveNext () )
+                                    x.MoveNext ())
                             | CollectState.HaveInnerEnumerator (e1, e2) ->
                                 let! (res2: bool) = e2.MoveNext ()
                                 if res2 then
@@ -397,7 +400,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = monad' {
                             match state with
                             | CollectState.NotStarted x1 ->
@@ -412,7 +415,7 @@ module SeqT =
                                         let e2 = (x2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
                                         state <- CollectState.HaveInnerEnumerator (e1, e2)
                                     else x.Dispose ()
-                                    x.MoveNext () )
+                                    x.MoveNext ())
                             | CollectState.HaveInnerEnumerator (e1, e2) ->
                                 let! (res2: bool) = e2.MoveNext ()
                                 if res2 then
@@ -452,7 +455,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = innerMonad {
                             match state with 
                             | AppendState.NotStarted1 (inp1, inp2) -> 
@@ -474,7 +477,7 @@ module SeqT =
                                 return! (
                                     let enum2 = (inp2 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
                                     state <- AppendState.HaveEnumerator2 enum2
-                                    x.MoveNext () )
+                                    x.MoveNext ())
                             | AppendState.HaveEnumerator2 enum2 ->   
                                 let! (res: bool) = enum2.MoveNext ()
                                 return (
@@ -513,7 +516,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = innerMonad {
                               match state with
                               | MapState.NotStarted inp ->
@@ -553,7 +556,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = innerMonad {
                             match state with
                             | Map2State.NotStarted (s1, s2) -> return! (
@@ -589,7 +592,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."                            
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = innerMonad {
                             match state with
                             | Map2State.NotStarted (s1, s2) ->
@@ -642,7 +645,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = innerMonad {
                               match state with
                               | CollectState.NotStarted inp ->
@@ -704,7 +707,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = innerMonad2<_, '``Monad<unit>``> () {
                             match state with
                             | TryWithState.NotStarted inp ->
@@ -776,7 +779,7 @@ module SeqT =
                         member _.Current =
                             match current with
                             | Some c -> c
-                            | None -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | None -> invalidOp enumNotStarted
                         member x.MoveNext () = innerMonad {
                             match state with
                             | TryFinallyState.NotStarted inp ->
@@ -810,7 +813,7 @@ module SeqT =
                         member _.Current =
                             match current, started with
                             | Some c, true -> c
-                            | _     , false -> invalidOp "Enumeration has not started. Call MoveNext."
+                            | _     , false -> invalidOp enumNotStarted
                             | None  , true  -> invalidOp "Enumeration finished."
                         member x.MoveNext () = monad' {
                             if not started then
@@ -881,25 +884,20 @@ module SeqT =
                             if i > 0 then
                                 i <- i - 1
                                 e.MoveNext () |> monomorphicBind (fun res ->
-                                    if not res then
-                                        let msg = sprintf "The input sequence has an insufficient number of elements: tried to take %i %s past the end of the sequence. Use SeqT.truncate to get %i or less elements" (i+1) (if i = 0 then "element" else "elements") count
-                                        raise (new InvalidOperationException(msg))
-                                    result res )
+                                    if not res then invalidOp (
+                                        sprintf
+                                            "The input sequence has an insufficient number of elements: tried to take %i %s past the end of the sequence. Use SeqT.truncate to get %i or less elements."
+                                            (i + 1)
+                                            (if i = 0 then "element" else "elements")
+                                            count)
+                                    result res)
                             else
                                 x.Dispose ()
                                 result false
                         member _.Dispose () = dispose e } }
-
-    /// <summary>Returns a sequence that skips at most N elements of the underlying sequence and then yields the
-    /// remaining elements of the sequence.</summary>
-    ///
-    /// <param name="count">The number of items to skip.</param>
-    /// <param name="source">The input sequence.</param>
-    ///
-    /// <returns>The result sequence.</returns>
-    ///
-    /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
-    let inline drop count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    let inline skipImpl throw count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         if (count < 0) then invalidArg "count" "must be non-negative"
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
@@ -915,14 +913,33 @@ module SeqT =
                                     if res then
                                         x.MoveNext ()
                                     else
-                                        x.Dispose ()
-                                        result res)
+                                        if throw then
+                                            invalidOp (
+                                                sprintf
+                                                    "tried to skip %i %s past the end of the seq. Use SeqT.drop to skip %i or less elements."
+                                                    (i + 1)
+                                                    (if i = 0 then "element" else "elements")
+                                                    count)
+                                        else
+                                            x.Dispose ()
+                                            result false)
                             else
                                 e.MoveNext () |> monomorphicBind (fun res ->
                                     if not res then
                                         x.Dispose ()
                                     result res)
                         member _.Dispose () = dispose e } }
+
+    /// <summary>Returns a sequence that skips at most N elements of the underlying sequence and then yields the
+    /// remaining elements of the sequence.</summary>
+    ///
+    /// <param name="count">The number of items to skip.</param>
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
+    let inline drop count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> = skipImpl false count source
 
     /// <summary>Returns a sequence that skips N elements of the underlying sequence and then yields the
     /// remaining elements of the sequence.</summary>
@@ -939,34 +956,7 @@ module SeqT =
     /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
     /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements
     /// in the sequence.</exception>
-    let inline skip count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
-        if (count < 0) then invalidArg "count" "must be non-negative"
-        SeqT
-            { new IEnumerableM<'``Monad<bool>``, 'T> with
-                member _.GetEnumerator () =
-                    let mutable i = count
-                    let e = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
-                        member _.Current = e.Current                       
-                        member x.MoveNext () =
-                            if i > 0 then
-                                i <- i - 1
-                                e.MoveNext () |> monomorphicBind (fun res ->
-                                    if res then
-                                        x.MoveNext ()
-                                    else
-                                        invalidOp (
-                                            sprintf
-                                                "tried to skip %i %s past the end of the seq. Use SeqT.drop to skip %i or less elements."
-                                                (i + 1)
-                                                (if i = 0 then "element" else "elements")
-                                                count))
-                            else
-                                e.MoveNext () |> monomorphicBind (fun res ->
-                                    if not res then
-                                        x.Dispose ()
-                                    result res)
-                        member _.Dispose () = dispose e } }
+    let inline skip count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> = skipImpl true count source
 
 
 type [<AutoOpen>]SeqTOperations =
