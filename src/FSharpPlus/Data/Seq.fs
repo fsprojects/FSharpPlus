@@ -24,6 +24,7 @@ open FSharpPlus.Control
 #nowarn "0193"
 #if !FABLE_COMPILER
 
+[<EditorBrowsable(EditorBrowsableState.Never)>]
 module Internal =
     let inline monomorphicBind (binder: 'T -> '``Monad<'T>``) (source: '``Monad<'T>``) : '``Monad<'T>`` =
         let inline call (_mthd: 'M, input: 'I, _output: 'I, f) = ((^M or ^I) : (static member (>>=) : _*_ -> _) input, f)
@@ -31,14 +32,17 @@ module Internal =
 
 open Internal
 
+[<EditorBrowsable(EditorBrowsableState.Never)>]
 type MonadFxStrictBuilderMod<'``monad<'t>``> () =
     inherit FSharpPlus.GenericBuilders.MonadFxStrictBuilder<'``monad<'t>``> ()
     member inline _.Delay expr = (fun () -> Delay.Invoke expr) : unit -> '``Monad<'T>``
 
+[<EditorBrowsable(EditorBrowsableState.Never)>]
 type MonadPlusStrictBuilderMod<'``monad<'t>``> () =
     inherit FSharpPlus.GenericBuilders.MonadPlusStrictBuilder<'``monad<'t>``> ()
     member inline _.Delay expr = (fun () -> Delay.Invoke expr) : unit -> '``Monad<'T>``
 
+[<EditorBrowsable(EditorBrowsableState.Never)>]
 type MonadFxStrictBuilderMod2<'``monad<'t>``, ^``monad<unit>``>
                                     when (Return or ^``monad<unit>``) : (static member Return: ^``monad<unit>`` * Return -> (unit -> ^``monad<unit>``)) 
                                     and  (Bind   or ^``monad<unit>``) : (static member (>>=): ^``monad<unit>`` * (unit -> ^``monad<unit>``) -> ^``monad<unit>``)
@@ -62,12 +66,12 @@ type MonadFxStrictBuilderMod2<'``monad<'t>``, ^``monad<unit>``>
     member inline _.Delay expr = (fun () -> Delay.Invoke expr) : unit -> '``Monad<'T>``
 
 
+[<EditorBrowsable(EditorBrowsableState.Never)>]
 module SpecialBuilders =
     let innerMonad<'mt> = new MonadFxStrictBuilderMod<'mt> ()
     let inline innerMonad2<'mt, .. > () = new MonadFxStrictBuilderMod2<'mt, _> ()
 
 open SpecialBuilders
-
 
 
 type IEnumeratorM<'``Monad<bool>``, 'T> =
@@ -90,7 +94,7 @@ module SeqT =
 
     let ofIEnumerableM x : SeqT<'``Monad<bool>``, 'T> = SeqT x
 
-    [<RequireQualifiedAccess>]
+    [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type SeqState<'``Monad<seq<'T>>``, 'T> =
        | NotStarted    of '``Monad<seq<'T>>``
        | HaveEnumerator of IEnumerator<'T>
@@ -165,6 +169,7 @@ module SeqT =
 
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     let inline runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
         let ra = new ResizeArray<_> ()
         Using.Invoke
@@ -218,6 +223,7 @@ module SeqT =
                             else invalidOp "Enumeration has not started. Call MoveNext."
                         member _.Dispose () = () } }
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     let inline make (f: unit -> '``Monad<SeqT<'Monad<bool>, 'T>>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
@@ -280,7 +286,7 @@ module SeqT =
                             | None -> invalidOp "Enumeration has not started. Call MoveNext."
                         member _.Dispose () = () } }
 
-    [<RequireQualifiedAccess>]
+    [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type CollectState<'T, 'U, '``Monad<bool>``> =
        | NotStarted    of SeqT<'``Monad<bool>``, 'T>
        | HaveInputEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
@@ -428,7 +434,7 @@ module SeqT =
                                 dispose e1
                             | _ -> () } }
     
-    [<RequireQualifiedAccess>]
+    [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type AppendState<'``Monad<bool>``, 'T> =
        | NotStarted1     of SeqT<'``Monad<bool>``, 'T> * SeqT<'``Monad<bool>``, 'T>
        | HaveEnumerator1 of IEnumeratorM<'``Monad<bool>``, 'T> * SeqT<'``Monad<bool>``, 'T>
@@ -491,7 +497,7 @@ module SeqT =
         source |> collect (fun itm ->
             f itm |> bindLift<_, _, _, '``Monad<SeqT<'Monad<bool>, 'U>>``, _> singleton)
     
-    [<RequireQualifiedAccess>]
+    [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type MapState<'T, '``Monad<bool>``> =
        | NotStarted     of SeqT<'``Monad<bool>``, 'T>
        | HaveEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
@@ -531,7 +537,7 @@ module SeqT =
                                   dispose e
                               | _ -> () } }
 
-    [<RequireQualifiedAccess>]
+    [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type Map2State<'T1, 'T2, '``Monad<bool>``> =
        | NotStarted     of SeqT<'``Monad<bool>``, 'T1> * SeqT<'``Monad<bool>``, 'T2>
        | HaveEnumerator of IEnumeratorM<'``Monad<bool>``, 'T1> * IEnumeratorM<'``Monad<bool>``, 'T2>
@@ -680,7 +686,7 @@ module SeqT =
     let inline iteri<'T, .. > (f: int -> 'T -> unit)      (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> result (f i x)) source
     let inline iter<'T, .. > f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iterM (f >> result) source
 
-    [<RequireQualifiedAccess>]
+    [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type TryWithState<'``Monad<bool>``, 'T> =
        | NotStarted of SeqT<'``Monad<bool>``, 'T>
        | HaveBodyEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
@@ -751,7 +757,7 @@ module SeqT =
                                 dispose e
                             | _ -> () } }
 
-    [<RequireQualifiedAccess>]
+    [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type TryFinallyState<'``Monad<bool>``, 'T> =
        | NotStarted    of SeqT<'``Monad<bool>``, 'T>
        | HaveBodyEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
@@ -878,7 +884,10 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline get_Empty () : SeqT<'``Monad<bool>``, 'T> = SeqT.empty
     static member inline (<|>) (x, y) : SeqT<'``Monad<bool>``, 'T> = SeqT.append x y
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T1 -> 'T2 -> 'U, x1: SeqT<'``Monad<bool>``, 'T1>, x2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> = SeqT.lift2 f x1 x2
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U, x1: SeqT<'``Monad<bool>``, 'T1>, x2: SeqT<'``Monad<bool>``, 'T2>, x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> = SeqT.lift3 f x1 x2 x3
 
     static member inline TryWith (source: SeqT<'``Monad<bool>``, 'T>, f: exn -> SeqT<'``Monad<bool>``, 'T>) = SeqT.tryWith<_, _, '``Monad<unit>``, _> source f
@@ -887,7 +896,9 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline Using (resource, f: _ -> SeqT<'``Monad<bool>``, 'T>) =
         SeqT.tryFinally (f resource) (fun () -> if box resource <> null then dispose resource)
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.lift m
+
     static member inline LiftAsync (x: Async<'T>) = SeqT.lift (liftAsync x: '``MonadAsync<'T>``) : SeqT<'MonadAsync, 'T>
 
     static member inline Throw (x: 'E) : SeqT<'``MonadError<'E>``, 'T> = x |> throw |> SeqT.lift
@@ -907,9 +918,13 @@ type SeqT<'``monad<bool>``, 'T> with
     static member inline Local (m: SeqT<'``MonadReader<'R2>``, 'T>, f: 'R1 -> 'R2) : SeqT<'``MonadReader<'R1>``, 'T> =
         seqT (local f (SeqT.run m))
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline OfSeq (x: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = SeqT.ofSeq x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Take (source: SeqT<'``Monad<bool>``, 'T>, count, _: Take) : SeqT<'``Monad<bool>``, 'T> = SeqT.take count source
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Zip (source1: SeqT<'``Monad<bool>``, 'T1>, source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> = SeqT.zip source1 source2
 
 #endif
