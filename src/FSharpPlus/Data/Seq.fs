@@ -828,19 +828,64 @@ module SeqT =
 
     let inline unfold (f: 'State -> ('T * 'State) option) (s: 'State) : SeqT<'``Monad<bool>``, 'T> = unfoldM (result << f: 'State -> '``Monad<('T * 'State) option>``) s
 
+    /// <summary>Returns a sequence that when enumerated returns at most N elements.</summary>
+    ///
+    /// <param name="count">The maximum number of items to enumerate.</param>
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
+    let inline truncate count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+        if (count < 0) then invalidArg "count" "must be non-negative"
+        SeqT
+            { new IEnumerableM<'``Monad<bool>``, 'T> with
+                member _.GetEnumerator () =
+                    let mutable i = count
+                    let e = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+                    { new IEnumeratorM<'``Monad<bool>``, 'T> with
+                        member _.Current = e.Current                       
+                        member x.MoveNext () =
+                            if i > 0 then
+                                i <- i - 1
+                                e.MoveNext ()
+                            else
+                                x.Dispose ()
+                                result false
+                        member _.Dispose () = dispose e } }
+
+    /// <summary>Returns the first N elements of the sequence.</summary>
+    ///
+    /// <remarks>Throws <c>InvalidOperationException</c>
+    /// if the count exceeds the number of elements in the sequence. <c>SeqT.truncate</c>
+    /// returns as many items as the sequence contains instead of throwing an exception.</remarks>
+    ///
+    /// <param name="count">The number of items to take.</param>
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
+    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// in the sequence.</exception>
     let inline take count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         if (count < 0) then invalidArg "count" "must be non-negative"
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
-                    let mutable i = 0
+                    let mutable i = count
                     let e = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
                         member _.Current = e.Current                       
                         member x.MoveNext () =
-                            if i < count then
-                                i <- i + 1
-                                e.MoveNext ()
+                            if i > 0 then
+                                i <- i - 1
+                                innerMonad {
+                                    let! res = e.MoveNext ()
+                                    if not res then
+                                        let msg = sprintf "The input sequence has an insufficient number of elements: tried to take %i %s past the end of the sequence. Use SeqT.truncate to get %i or less elements" (i+1) (if i = 0 then "element" else "elements") count
+                                        raise (new InvalidOperationException(msg))
+                                    return res }
                             else
                                 x.Dispose ()
                                 result false
@@ -923,6 +968,9 @@ type SeqT<'``monad<bool>``, 'T> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Take (source: SeqT<'``Monad<bool>``, 'T>, count, _: Take) : SeqT<'``Monad<bool>``, 'T> = SeqT.take count source
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Limit (source: SeqT<'``Monad<bool>``, 'T>, count, _: Limit) : SeqT<'``Monad<bool>``, 'T> = SeqT.truncate count source
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Zip (source1: SeqT<'``Monad<bool>``, 'T1>, source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, ('T1 * 'T2)> = SeqT.zip source1 source2
