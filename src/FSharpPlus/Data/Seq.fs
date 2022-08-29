@@ -100,7 +100,7 @@ module SeqT =
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type SeqState<'``Monad<seq<'T>>``, 'T> =
        | NotStarted    of '``Monad<seq<'T>>``
-       | HaveEnumerator of IEnumerator<'T>
+       | HasEnumerator of IEnumerator<'T>
        | Finished
 
     let inline wrap (source: '``Monad<seq<'T>>``) : SeqT<'``Monad<bool>``, 'T> =
@@ -119,9 +119,9 @@ module SeqT =
                             | SeqState.NotStarted inp ->
                                 let! (s: seq<'T>) = inp
                                 let e1 = s.GetEnumerator ()
-                                state <- SeqState.HaveEnumerator e1
+                                state <- SeqState.HasEnumerator e1
                                 return! (x.MoveNext ())
-                            | SeqState.HaveEnumerator e1 ->
+                            | SeqState.HasEnumerator e1 ->
                                 let res1 = e1.MoveNext ()
                                 if res1 then
                                     current <- Some e1.Current
@@ -132,7 +132,7 @@ module SeqT =
                             | _ -> return false }
                         member _.Dispose () =
                             match state with
-                            | SeqState.HaveEnumerator e1 ->
+                            | SeqState.HasEnumerator e1 ->
                                 state <- SeqState.Finished
                                 dispose e1
                             | _ -> () } }
@@ -152,9 +152,9 @@ module SeqT =
                             match state with
                             | SeqState.NotStarted inp ->
                                 let e = inp.GetEnumerator ()
-                                state <- SeqState.HaveEnumerator e
+                                state <- SeqState.HasEnumerator e
                                 return! x.MoveNext ()
-                            | SeqState.HaveEnumerator e ->
+                            | SeqState.HasEnumerator e ->
                                 return
                                     (if e.MoveNext () then
                                          current <- Some e.Current
@@ -165,7 +165,7 @@ module SeqT =
                             | _ -> return false }
                         member _.Dispose () =
                             match state with
-                            | SeqState.HaveEnumerator e ->
+                            | SeqState.HasEnumerator e ->
                                 state <- SeqState.Finished
                                 dispose e
                             | _ -> () } }
@@ -440,9 +440,9 @@ module SeqT =
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type AppendState<'``Monad<bool>``, 'T> =
        | NotStarted1     of SeqT<'``Monad<bool>``, 'T> * SeqT<'``Monad<bool>``, 'T>
-       | HaveEnumerator1 of IEnumeratorM<'``Monad<bool>``, 'T> * SeqT<'``Monad<bool>``, 'T>
+       | HasEnumerator1 of IEnumeratorM<'``Monad<bool>``, 'T> * SeqT<'``Monad<bool>``, 'T>
        | NotStarted2     of SeqT<'``Monad<bool>``, 'T>
-       | HaveEnumerator2 of IEnumeratorM<'``Monad<bool>``, 'T> 
+       | HasEnumerator2 of IEnumeratorM<'``Monad<bool>``, 'T> 
        | Finished
 
     let inline append (source1: SeqT<'``Monad<bool>``, 'T>) (source2: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
@@ -461,9 +461,9 @@ module SeqT =
                             | AppendState.NotStarted1 (inp1, inp2) -> 
                                 return! (
                                     let enum1 = (inp1 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                    state <- AppendState.HaveEnumerator1 (enum1, inp2)
+                                    state <- AppendState.HasEnumerator1 (enum1, inp2)
                                     x.MoveNext ())
-                            | AppendState.HaveEnumerator1 (enum1, inp2) ->
+                            | AppendState.HasEnumerator1 (enum1, inp2) ->
                                 let! (res: bool) = enum1.MoveNext ()
                                 if res then
                                     current <- Some enum1.Current
@@ -476,9 +476,9 @@ module SeqT =
                             | AppendState.NotStarted2 inp2 ->
                                 return! (
                                     let enum2 = (inp2 :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                    state <- AppendState.HaveEnumerator2 enum2
+                                    state <- AppendState.HasEnumerator2 enum2
                                     x.MoveNext ())
-                            | AppendState.HaveEnumerator2 enum2 ->   
+                            | AppendState.HasEnumerator2 enum2 ->   
                                 let! (res: bool) = enum2.MoveNext ()
                                 return (
                                     if res then current <- Some enum2.Current
@@ -489,8 +489,8 @@ module SeqT =
                             | _ -> return false }
                           member _.Dispose () = 
                               match state with 
-                              | AppendState.HaveEnumerator1 (enum, _) 
-                              | AppendState.HaveEnumerator2 enum -> 
+                              | AppendState.HasEnumerator1 (enum, _) 
+                              | AppendState.HasEnumerator2 enum -> 
                                   state <- AppendState.Finished
                                   dispose enum 
                               | _ -> () } }
@@ -503,7 +503,7 @@ module SeqT =
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type MapState<'T, '``Monad<bool>``> =
        | NotStarted     of SeqT<'``Monad<bool>``, 'T>
-       | HaveEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
+       | HasEnumerator of IEnumeratorM<'``Monad<bool>``, 'T>
        | Finished
 
     let inline map (f: 'T -> 'U) (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
@@ -522,9 +522,9 @@ module SeqT =
                               | MapState.NotStarted inp ->
                                   return! (
                                       let e = (inp :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-                                      state <- MapState.HaveEnumerator e
+                                      state <- MapState.HasEnumerator e
                                       x.MoveNext ())
-                              | MapState.HaveEnumerator e ->
+                              | MapState.HasEnumerator e ->
                                   let! res1 = e.MoveNext ()
                                   if res1 then
                                       current <- Some (f e.Current)
@@ -535,7 +535,7 @@ module SeqT =
                               | _ -> return false }
                           member _.Dispose () =
                               match state with
-                              | MapState.HaveEnumerator e ->
+                              | MapState.HasEnumerator e ->
                                   state <- MapState.Finished
                                   dispose e
                               | _ -> () } }
@@ -543,7 +543,7 @@ module SeqT =
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type Map2State<'T1, 'T2, '``Monad<bool>``> =
        | NotStarted     of SeqT<'``Monad<bool>``, 'T1> * SeqT<'``Monad<bool>``, 'T2>
-       | HaveEnumerator of IEnumeratorM<'``Monad<bool>``, 'T1> * IEnumeratorM<'``Monad<bool>``, 'T2>
+       | HasEnumerator of IEnumeratorM<'``Monad<bool>``, 'T1> * IEnumeratorM<'``Monad<bool>``, 'T2>
        | Finished
 
     let inline map2 (f: 'T1 -> 'T2 -> 'U) (source1: SeqT<'``Monad<bool>``, 'T1>) (source2: SeqT<'``Monad<bool>``, 'T2>) : SeqT<'``Monad<bool>``, 'U> =
@@ -562,9 +562,9 @@ module SeqT =
                             | Map2State.NotStarted (s1, s2) -> return! (
                                 let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
                                 let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
-                                state <- Map2State.HaveEnumerator (e1, e2)
+                                state <- Map2State.HasEnumerator (e1, e2)
                                 x.MoveNext ())
-                            | Map2State.HaveEnumerator (e1, e2) ->
+                            | Map2State.HasEnumerator (e1, e2) ->
                                 let! res1 = e1.MoveNext ()
                                 let! res2 = e2.MoveNext ()
                                 if res1 && res2 then
@@ -576,7 +576,7 @@ module SeqT =
                             | _ -> return false }
                         member _.Dispose () =
                             match state with
-                            | Map2State.HaveEnumerator (e1, e2) ->
+                            | Map2State.HasEnumerator (e1, e2) ->
                                 state <- Map2State.Finished
                                 dispose e1
                                 dispose e2
@@ -599,9 +599,9 @@ module SeqT =
                                 return! (
                                     let e1 = (s1 :> IEnumerableM<'``Monad<bool>``, 'T1>).GetEnumerator ()
                                     let e2 = (s2 :> IEnumerableM<'``Monad<bool>``, 'T2>).GetEnumerator ()
-                                    state <- Map2State.HaveEnumerator (e1, e2)
+                                    state <- Map2State.HasEnumerator (e1, e2)
                                     x.MoveNext ())
-                            | Map2State.HaveEnumerator (e1, e2) ->
+                            | Map2State.HasEnumerator (e1, e2) ->
                                 let! res1 = e1.MoveNext ()
                                 let! res2 = e2.MoveNext ()
                                 if res1 && res2 then
@@ -614,7 +614,7 @@ module SeqT =
                             | _ -> return false }
                         member _.Dispose () =
                             match state with
-                            | Map2State.HaveEnumerator (e1, e2) ->
+                            | Map2State.HasEnumerator (e1, e2) ->
                                 state <- Map2State.Finished
                                 dispose e1
                                 dispose e2
