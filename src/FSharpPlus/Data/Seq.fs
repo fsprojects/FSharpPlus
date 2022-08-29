@@ -192,10 +192,10 @@ module SeqT =
                                 result () )
                     >>= fun () -> result (f ra))
     
-    let inline runToArray<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
+    let inline runAsArray<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T []>`` =
         runThen<'T, 'T [], '``Monad<bool>``, '``Monad<'T []>``, '``Monad<unit>``> toArray source
     
-    let inline runToList<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T list>`` =
+    let inline runAsList<'T, .. > (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T list>`` =
         runThen<'T, 'T list, '``Monad<bool>``, '``Monad<'T list>``, '``Monad<unit>``> toList source
 
     let inline run<'T, .. >       (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>`` =

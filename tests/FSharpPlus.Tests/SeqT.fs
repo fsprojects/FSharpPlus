@@ -178,8 +178,8 @@ module ComputationExpressions =
 
         /// Determines equality of two async sequences by convering them to lists, ignoring side-effects.
         let EQ (a: AsyncSeq<'a>) (b: AsyncSeq<'a>) =
-            let exp = a |> SeqT.runToList |> Async.RunSynchronously
-            let act = b |> SeqT.runToList |> Async.RunSynchronously
+            let exp = a |> SeqT.runAsList |> Async.RunSynchronously
+            let act = b |> SeqT.runAsList |> Async.RunSynchronously
             if (exp = act) then true
             else
                 printfn "expected=%A" exp
@@ -196,10 +196,10 @@ module ComputationExpressions =
 
             Assert.True ((x = 0))
 
-            let s1 = s |> SeqT.runToList |> Async.RunSynchronously
+            let s1 = s |> SeqT.runAsList |> Async.RunSynchronously
             Assert.True ((x = 3))
 
-            let s2 = s |> SeqT.runToList |> Async.RunSynchronously
+            let s2 = s |> SeqT.runAsList |> Async.RunSynchronously
             Assert.True ((x = 6))
 
 
@@ -215,11 +215,11 @@ module ComputationExpressions =
 
             Assert.True ((x = 0))
 
-            let s1 = try (s |> SeqT.runToList |> Async.RunSynchronously) with _ -> []
+            let s1 = try (s |> SeqT.runAsList |> Async.RunSynchronously) with _ -> []
             Assert.True ((s1 = []))
             Assert.True ((x = 3))
             ()
-            let s2 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            let s2 = try s |> SeqT.runAsList |> Async.RunSynchronously with _ -> []
             Assert.True ((s2 = []))
             Assert.True ((x = 6))
 
@@ -233,11 +233,11 @@ module ComputationExpressions =
             
             Assert.True ((x = 0))
 
-            let s1 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            let s1 = try s |> SeqT.runAsList |> Async.RunSynchronously with _ -> []
             Assert.True ((s1 = []))
             Assert.True ((x = 3))
 
-            let s2 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            let s2 = try s |> SeqT.runAsList |> Async.RunSynchronously with _ -> []
             Assert.True ((s2 = []))
             Assert.True ((x = 6))
 
@@ -251,11 +251,11 @@ module ComputationExpressions =
             
             Assert.True ((x = 0))
 
-            let s1 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            let s1 = try s |> SeqT.runAsList |> Async.RunSynchronously with _ -> []
             Assert.True ((s1 = [1]))
             Assert.True ((x = 0))
 
-            let s2 = try s |> SeqT.runToList |> Async.RunSynchronously with _ -> []
+            let s2 = try s |> SeqT.runAsList |> Async.RunSynchronously with _ -> []
             Assert.True ((s2 = [1]))
 
 
