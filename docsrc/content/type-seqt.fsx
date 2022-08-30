@@ -1,6 +1,11 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+
+// For some reason AsyncDownloadString is not found during doc build. The following is a dumb implementation just to make the compiler happy.
+// TODO find out why.
+type System.Net.WebClient with member wc.AsyncDownloadString (uri: System.Uri) = async { return wc.DownloadString uri }
+
 (*
 SeqT<Monad<bool>, 'T>
 =====================
@@ -39,7 +44,6 @@ In order to do so we need to be aware of the design differences of both implemen
 Examples
 --------
 *)
-
 
 #r @"C:\Repos\FSharpPlus\src\FSharpPlus\bin\Release\net6\FSharpPlus.dll"
 
