@@ -45,7 +45,7 @@ Examples
 --------
 *)
 
-#r @"C:\Repos\FSharpPlus\src\FSharpPlus\bin\Release\net6\FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 open System
 open System.Net
