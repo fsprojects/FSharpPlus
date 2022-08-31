@@ -25,7 +25,7 @@ In order to do so we need to be aware of the design differences of both implemen
 |`AsyncSeq<'T>`                 |`SeqT<Async<bool>, 'T>`                |           |
 |`asyncSeq { .. }`              |`monad.plus { .. }`                    | At some point it needs to be inferred as `SeqT<Async<bool>, 'T>`, or it can be specified with type parameters: `monad<SeqT<Async<bool>, 'T>>.plus` |
 |`let! x = y`                   |`let! x = SeqT.lift y`                 | No auto lifting. Lifting should be explicit. |
-|`do! x`                        |`do! x`                                | ''        |
+|`do! x`                        |`do! SeqT.lift x`                      | ''        |
 |`for x in s`                   |`let! x = s`                           | When `s: AsyncSeq<'T>` otherwise `for` is still ok with regular sequences. |
 |`AsyncSeq.[function]`          |`SeqT.[function]`                      | See differences in functions below. |
 |`AsyncSeq.[function]Async`     |`SeqT.[function]M`                     | ''        |
