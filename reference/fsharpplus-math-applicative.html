@@ -68,55 +68,13 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
                 <li class="nav-header">
-  Namespaces
+  API Reference
 </li>             
 <li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus.html">
-      FSharpPlus
-    </a>
-  </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-control.html">
-      FSharpPlus.Control
-    </a>
-  </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-data.html">
-      FSharpPlus.Data
-    </a>
-  </span>
-</li>             
-<li class="nav-item">
-  <span>
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-internals.html">
-      FSharpPlus.Internals
-    </a>
-  </span>
-</li>             
-<li class="nav-item active">
-  <span>
-    <a class="nav-link active" href="/FSharpPlus/reference/fsharpplus-math.html">
-      FSharpPlus.Math
-    </a>
-  </span>
-</li>             
-<ul list-style-type="none">
-  <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math-applicative.html">
-      Applicative
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/FSharpPlus/reference/fsharpplus-math-generic.html">
-      Generic
-    </a>
-  </li>
-</ul>
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
@@ -127,20 +85,26 @@
         <hr />
         <div class="container" id="fsdocs-content">
             <div>
-  <h1>
+  <h2>
     Applicative Module
-  </h1>
-  <p>
-    Namespace: 
-    <a href="/FSharpPlus/reference/fsharpplus-math.html">
-      FSharpPlus.Math
-    </a>
-  </p>
-  <p>
-    Assembly: FSharpPlus.dll
-  </p>
+  </h2>
+  <dl class="fsdocs-metadata">
+    <dt>
+      Namespace: 
+      <a href="/FSharpPlus/reference/fsharpplus-math.html">
+        FSharpPlus.Math
+      </a>
+    </dt>
+    <dt>
+      Assembly: FSharpPlus.dll
+    </dt>
+  </dl>
   <div class="fsdocs-xmldoc">
-    Math Operators ready to use over Applicative Functors.
+    <div>
+      <p class="fsdocs-summary">
+        Math Operators ready to use over Applicative Functors.
+      </p>
+    </div>
   </div>
   <div>
     <h3>
@@ -159,177 +123,9 @@
       </thead>
       <tbody>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '924', 924)" onmouseover="showTip(event, '924', 924)">
-                <p>
-                  <a id="( %. )">
-                    <a href="#( %. )">
-                      <code><span><span>x</span>&#32;%.&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="924">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;%.&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>^T</code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>^Functor<'T></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Functor<'T></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L32-32" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>^T</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '925', 925)" onmouseover="showTip(event, '925', 925)">
-                <p>
-                  <a id="( &&. )">
-                    <a href="#( &&. )">
-                      <code><span><span>x</span>&#32;&&.&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="925">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;&&.&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>bool</code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>^Functor<bool></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Functor<bool></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L56-56" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>bool</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>^Functor<bool></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Functor<bool></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '926', 926)" onmouseover="showTip(event, '926', 926)">
+              <code onmouseout="hideTip(event, '1001', 1001)" onmouseover="showTip(event, '1001', 1001)">
                 <p>
                   <a id="( *. )">
                     <a href="#( *. )">
@@ -338,7 +134,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="926">
+              <div class="fsdocs-tip" id="1001">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;*.&#32;<span>y</span></span></code>
@@ -369,18 +165,31 @@
                     <code>^Functor<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L28-28" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_MultiplyDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_MultiplyDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L28-28" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -402,7 +211,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<'T></code>
               </dt>
@@ -411,513 +220,9 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '927', 927)" onmouseover="showTip(event, '927', 927)">
-                <p>
-                  <a id="( +. )">
-                    <a href="#( +. )">
-                      <code><span><span>x</span>&#32;+.&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="927">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;+.&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>^T</code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>^Functor<'T></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Functor<'T></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L20-20" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>^T</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '928', 928)" onmouseover="showTip(event, '928', 928)">
-                <p>
-                  <a id="( -. )">
-                    <a href="#( -. )">
-                      <code><span><span>x</span>&#32;-.&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="928">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;-.&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>^T</code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>^Functor<'T></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Functor<'T></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L24-24" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>^T</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '929', 929)" onmouseover="showTip(event, '929', 929)">
-                <p>
-                  <a id="( .% )">
-                    <a href="#( .% )">
-                      <code><span><span>x</span>&#32;.%&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="929">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;.%&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>^Functor<'T></code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>^T</code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Functor<'T></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L31-31" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>^T</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Functor<'T></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '930', 930)" onmouseover="showTip(event, '930', 930)">
-                <p>
-                  <a id="( .%. )">
-                    <a href="#( .%. )">
-                      <code><span><span>x</span>&#32;.%.&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="930">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;.%.&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>^Applicative<'T></code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>^Applicative<'T></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Applicative<'T></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L33-33" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>^Applicative<'T></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>^Applicative<'T></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Applicative<'T></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '931', 931)" onmouseover="showTip(event, '931', 931)">
-                <p>
-                  <a id="( .&& )">
-                    <a href="#( .&& )">
-                      <code><span><span>x</span>&#32;.&&&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="931">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;.&&&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>^Functor<bool></code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>bool</code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Functor<bool></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L55-55" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>^Functor<bool></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>bool</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Functor<bool></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '932', 932)" onmouseover="showTip(event, '932', 932)">
-                <p>
-                  <a id="( .&&. )">
-                    <a href="#( .&&. )">
-                      <code><span><span>x</span>&#32;.&&.&#32;<span>y</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="932">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span><span>x</span>&#32;.&&.&#32;<span>y</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        x
-                      </b>
-                      :
-                      <code>^Applicative<bool></code>
-                    </span>
-                    <br/>
-                    <span>
-                      <b>
-                        y
-                      </b>
-                      :
-                      <code>^Applicative<bool></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code>^Applicative<bool></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L57-57" class="fsdocs-source-link">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
-              </a>
-              
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>^Applicative<bool></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code>^Applicative<bool></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns:
-                </span>
-                <code>^Applicative<bool></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-name">
-            <div>
-              <code onmouseout="hideTip(event, '933', 933)" onmouseover="showTip(event, '933', 933)">
+              <code onmouseout="hideTip(event, '1002', 1002)" onmouseover="showTip(event, '1002', 1002)">
                 <p>
                   <a id="( .* )">
                     <a href="#( .* )">
@@ -926,7 +231,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="933">
+              <div class="fsdocs-tip" id="1002">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.*&#32;<span>y</span></span></code>
@@ -957,18 +262,31 @@
                     <code>^Functor<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L27-27" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotMultiply``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotMultiply``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L27-27" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -990,7 +308,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<'T></code>
               </dt>
@@ -999,18 +317,798 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '934', 934)" onmouseover="showTip(event, '934', 934)">
+              <code onmouseout="hideTip(event, '1003', 1003)" onmouseover="showTip(event, '1003', 1003)">
                 <p>
-                  <a id="( .*. )">
-                    <a href="#( .*. )">
+                  <a id="(%.)">
+                    <a href="#(%.)">
+                      <code><span><span>x</span>&#32;%.&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1003">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;%.&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>^T</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>^Functor<'T></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Functor<'T></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_PercentDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_PercentDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L32-32" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>^T</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1004', 1004)" onmouseover="showTip(event, '1004', 1004)">
+                <p>
+                  <a id="(&&.)">
+                    <a href="#(&&.)">
+                      <code><span><span>x</span>&#32;&&.&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1004">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;&&.&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>bool</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>^Functor<bool></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Functor<bool></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;bool&gt;
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_AmpAmpDot``1```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_AmpAmpDot``1\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L56-56" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>^Functor<bool></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Functor<bool></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1005', 1005)" onmouseover="showTip(event, '1005', 1005)">
+                <p>
+                  <a id="(+.)">
+                    <a href="#(+.)">
+                      <code><span><span>x</span>&#32;+.&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1005">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;+.&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>^T</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>^Functor<'T></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Functor<'T></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_PlusDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_PlusDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L20-20" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>^T</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1006', 1006)" onmouseover="showTip(event, '1006', 1006)">
+                <p>
+                  <a id="(-.)">
+                    <a href="#(-.)">
+                      <code><span><span>x</span>&#32;-.&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1006">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;-.&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>^T</code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>^Functor<'T></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Functor<'T></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_MinusDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_MinusDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L24-24" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>^T</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1007', 1007)" onmouseover="showTip(event, '1007', 1007)">
+                <p>
+                  <a id="(.%)">
+                    <a href="#(.%)">
+                      <code><span><span>x</span>&#32;.%&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1007">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;.%&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>^Functor<'T></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>^T</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Functor<'T></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotPercent``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotPercent``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L31-31" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>^T</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Functor<'T></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1008', 1008)" onmouseover="showTip(event, '1008', 1008)">
+                <p>
+                  <a id="(.%.)">
+                    <a href="#(.%.)">
+                      <code><span><span>x</span>&#32;.%.&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1008">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;.%.&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>^Applicative<'T></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>^Applicative<'T></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Applicative<'T></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotPercentDot``5```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotPercentDot``5\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L33-33" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>^Applicative<'T></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>^Applicative<'T></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Applicative<'T></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1009', 1009)" onmouseover="showTip(event, '1009', 1009)">
+                <p>
+                  <a id="(.&&)">
+                    <a href="#(.&&)">
+                      <code><span><span>x</span>&#32;.&&&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1009">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;.&&&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>^Functor<bool></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>bool</code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Functor<bool></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;bool&gt;
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotAmpAmp``1```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotAmpAmp``1\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L55-55" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>^Functor<bool></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>bool</code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Functor<bool></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1010', 1010)" onmouseover="showTip(event, '1010', 1010)">
+                <p>
+                  <a id="(.&&.)">
+                    <a href="#(.&&.)">
+                      <code><span><span>x</span>&#32;.&&.&#32;<span>y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="1010">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span><span>x</span>&#32;.&&.&#32;<span>y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code>^Applicative<bool></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code>^Applicative<bool></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>^Applicative<bool></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotAmpAmpDot``2```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotAmpAmpDot``2\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L57-57" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code>^Applicative<bool></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code>^Applicative<bool></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code>^Applicative<bool></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '1011', 1011)" onmouseover="showTip(event, '1011', 1011)">
+                <p>
+                  <a id="(.*.)">
+                    <a href="#(.*.)">
                       <code><span><span>x</span>&#32;.*.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="934">
+              <div class="fsdocs-tip" id="1011">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.*.&#32;<span>y</span></span></code>
@@ -1041,18 +1139,31 @@
                     <code>^Applicative<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L29-29" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotMultiplyDot``5```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotMultiplyDot``5\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L29-29" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1074,7 +1185,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<'T></code>
               </dt>
@@ -1083,18 +1194,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '935', 935)" onmouseover="showTip(event, '935', 935)">
+              <code onmouseout="hideTip(event, '1012', 1012)" onmouseover="showTip(event, '1012', 1012)">
                 <p>
-                  <a id="( .+ )">
-                    <a href="#( .+ )">
+                  <a id="(.+)">
+                    <a href="#(.+)">
                       <code><span><span>x</span>&#32;.+&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="935">
+              <div class="fsdocs-tip" id="1012">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.+&#32;<span>y</span></span></code>
@@ -1125,18 +1236,31 @@
                     <code>^Functor<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L19-19" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotPlus``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotPlus``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L19-19" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1158,7 +1282,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<'T></code>
               </dt>
@@ -1167,18 +1291,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '936', 936)" onmouseover="showTip(event, '936', 936)">
+              <code onmouseout="hideTip(event, '1013', 1013)" onmouseover="showTip(event, '1013', 1013)">
                 <p>
-                  <a id="( .+. )">
-                    <a href="#( .+. )">
+                  <a id="(.+.)">
+                    <a href="#(.+.)">
                       <code><span><span>x</span>&#32;.+.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="936">
+              <div class="fsdocs-tip" id="1013">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.+.&#32;<span>y</span></span></code>
@@ -1209,18 +1333,31 @@
                     <code>^Applicative<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L21-21" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotPlusDot``5```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotPlusDot``5\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L21-21" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1242,7 +1379,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<'T></code>
               </dt>
@@ -1251,18 +1388,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '937', 937)" onmouseover="showTip(event, '937', 937)">
+              <code onmouseout="hideTip(event, '1014', 1014)" onmouseover="showTip(event, '1014', 1014)">
                 <p>
-                  <a id="( .- )">
-                    <a href="#( .- )">
+                  <a id="(.-)">
+                    <a href="#(.-)">
                       <code><span><span>x</span>&#32;.-&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="937">
+              <div class="fsdocs-tip" id="1014">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.-&#32;<span>y</span></span></code>
@@ -1293,18 +1430,31 @@
                     <code>^Functor<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L23-23" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotMinus``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotMinus``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L23-23" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1326,7 +1476,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<'T></code>
               </dt>
@@ -1335,18 +1485,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '938', 938)" onmouseover="showTip(event, '938', 938)">
+              <code onmouseout="hideTip(event, '1015', 1015)" onmouseover="showTip(event, '1015', 1015)">
                 <p>
-                  <a id="( .-. )">
-                    <a href="#( .-. )">
+                  <a id="(.-.)">
+                    <a href="#(.-.)">
                       <code><span><span>x</span>&#32;.-.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="938">
+              <div class="fsdocs-tip" id="1015">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.-.&#32;<span>y</span></span></code>
@@ -1377,18 +1527,31 @@
                     <code>^Applicative<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L25-25" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotMinusDot``5```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotMinusDot``5\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L25-25" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1410,7 +1573,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<'T></code>
               </dt>
@@ -1419,18 +1582,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '939', 939)" onmouseover="showTip(event, '939', 939)">
+              <code onmouseout="hideTip(event, '1016', 1016)" onmouseover="showTip(event, '1016', 1016)">
                 <p>
-                  <a id="( ./ )">
-                    <a href="#( ./ )">
+                  <a id="(./)">
+                    <a href="#(./)">
                       <code><span><span>x</span>&#32;./&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="939">
+              <div class="fsdocs-tip" id="1016">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;./&#32;<span>y</span></span></code>
@@ -1461,18 +1624,31 @@
                     <code>^Functor<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L35-35" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotDivide``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotDivide``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L35-35" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1494,7 +1670,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<'T></code>
               </dt>
@@ -1503,18 +1679,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '940', 940)" onmouseover="showTip(event, '940', 940)">
+              <code onmouseout="hideTip(event, '1017', 1017)" onmouseover="showTip(event, '1017', 1017)">
                 <p>
-                  <a id="( ./. )">
-                    <a href="#( ./. )">
+                  <a id="(./.)">
+                    <a href="#(./.)">
                       <code><span><span>x</span>&#32;./.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="940">
+              <div class="fsdocs-tip" id="1017">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;./.&#32;<span>y</span></span></code>
@@ -1545,18 +1721,31 @@
                     <code>^Applicative<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L37-37" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotDivideDot``5```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotDivideDot``5\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L37-37" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1578,7 +1767,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<'T></code>
               </dt>
@@ -1587,18 +1776,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '941', 941)" onmouseover="showTip(event, '941', 941)">
+              <code onmouseout="hideTip(event, '1018', 1018)" onmouseover="showTip(event, '1018', 1018)">
                 <p>
-                  <a id="( .< )">
-                    <a href="#( .< )">
+                  <a id="(.<)">
+                    <a href="#(.<)">
                       <code><span><span>x</span>&#32;.<&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="941">
+              <div class="fsdocs-tip" id="1018">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.<&#32;<span>y</span></span></code>
@@ -1629,18 +1818,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;, &#39;T
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L47-47" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotLess``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotLess``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L47-47" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1662,7 +1866,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -1671,18 +1875,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '942', 942)" onmouseover="showTip(event, '942', 942)">
+              <code onmouseout="hideTip(event, '1019', 1019)" onmouseover="showTip(event, '1019', 1019)">
                 <p>
-                  <a id="( .<. )">
-                    <a href="#( .<. )">
+                  <a id="(.<.)">
+                    <a href="#(.<.)">
                       <code><span><span>x</span>&#32;.<.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="942">
+              <div class="fsdocs-tip" id="1019">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.<.&#32;<span>y</span></span></code>
@@ -1713,18 +1917,31 @@
                     <code>^Applicative<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L49-49" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotLessDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotLessDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L49-49" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1746,7 +1963,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<bool></code>
               </dt>
@@ -1755,18 +1972,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '943', 943)" onmouseover="showTip(event, '943', 943)">
+              <code onmouseout="hideTip(event, '1020', 1020)" onmouseover="showTip(event, '1020', 1020)">
                 <p>
-                  <a id="( .<= )">
-                    <a href="#( .<= )">
+                  <a id="(.<=)">
+                    <a href="#(.<=)">
                       <code><span><span>x</span>&#32;.<=&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="943">
+              <div class="fsdocs-tip" id="1020">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.<=&#32;<span>y</span></span></code>
@@ -1797,18 +2014,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;, &#39;T
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L59-59" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotLessEquals``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotLessEquals``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L59-59" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1830,7 +2062,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -1839,18 +2071,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '944', 944)" onmouseover="showTip(event, '944', 944)">
+              <code onmouseout="hideTip(event, '1021', 1021)" onmouseover="showTip(event, '1021', 1021)">
                 <p>
-                  <a id="( .<=. )">
-                    <a href="#( .<=. )">
+                  <a id="(.<=.)">
+                    <a href="#(.<=.)">
                       <code><span><span>x</span>&#32;.<=.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="944">
+              <div class="fsdocs-tip" id="1021">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.<=.&#32;<span>y</span></span></code>
@@ -1881,18 +2113,31 @@
                     <code>^Applicative<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L61-61" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotLessEqualsDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotLessEqualsDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L61-61" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1914,7 +2159,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<bool></code>
               </dt>
@@ -1923,18 +2168,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '945', 945)" onmouseover="showTip(event, '945', 945)">
+              <code onmouseout="hideTip(event, '1022', 1022)" onmouseover="showTip(event, '1022', 1022)">
                 <p>
-                  <a id="( .= )">
-                    <a href="#( .= )">
+                  <a id="(.=)">
+                    <a href="#(.=)">
                       <code><span><span>x</span>&#32;.=&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="945">
+              <div class="fsdocs-tip" id="1022">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.=&#32;<span>y</span></span></code>
@@ -1965,18 +2210,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;, &#39;T
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L39-39" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotEquals``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotEquals``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L39-39" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -1998,7 +2258,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -2007,18 +2267,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '946', 946)" onmouseover="showTip(event, '946', 946)">
+              <code onmouseout="hideTip(event, '1023', 1023)" onmouseover="showTip(event, '1023', 1023)">
                 <p>
-                  <a id="( .=. )">
-                    <a href="#( .=. )">
+                  <a id="(.=.)">
+                    <a href="#(.=.)">
                       <code><span><span>x</span>&#32;.=.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="946">
+              <div class="fsdocs-tip" id="1023">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.=.&#32;<span>y</span></span></code>
@@ -2049,18 +2309,31 @@
                     <code>^Applicative<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L41-41" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotEqualsDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotEqualsDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L41-41" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2082,7 +2355,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<bool></code>
               </dt>
@@ -2091,18 +2364,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '947', 947)" onmouseover="showTip(event, '947', 947)">
+              <code onmouseout="hideTip(event, '1024', 1024)" onmouseover="showTip(event, '1024', 1024)">
                 <p>
-                  <a id="( .> )">
-                    <a href="#( .> )">
+                  <a id="(.>)">
+                    <a href="#(.>)">
                       <code><span><span>x</span>&#32;.>&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="947">
+              <div class="fsdocs-tip" id="1024">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.>&#32;<span>y</span></span></code>
@@ -2133,18 +2406,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;, &#39;T
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L43-43" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotGreater``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotGreater``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L43-43" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2166,7 +2454,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -2175,18 +2463,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '948', 948)" onmouseover="showTip(event, '948', 948)">
+              <code onmouseout="hideTip(event, '1025', 1025)" onmouseover="showTip(event, '1025', 1025)">
                 <p>
-                  <a id="( .>. )">
-                    <a href="#( .>. )">
+                  <a id="(.>.)">
+                    <a href="#(.>.)">
                       <code><span><span>x</span>&#32;.>.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="948">
+              <div class="fsdocs-tip" id="1025">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.>.&#32;<span>y</span></span></code>
@@ -2217,18 +2505,31 @@
                     <code>^Applicative<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L45-45" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotGreaterDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotGreaterDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L45-45" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2250,7 +2551,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<bool></code>
               </dt>
@@ -2259,18 +2560,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '949', 949)" onmouseover="showTip(event, '949', 949)">
+              <code onmouseout="hideTip(event, '1026', 1026)" onmouseover="showTip(event, '1026', 1026)">
                 <p>
-                  <a id="( .>= )">
-                    <a href="#( .>= )">
+                  <a id="(.>=)">
+                    <a href="#(.>=)">
                       <code><span><span>x</span>&#32;.>=&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="949">
+              <div class="fsdocs-tip" id="1026">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.>=&#32;<span>y</span></span></code>
@@ -2301,18 +2602,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;, &#39;T
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L63-63" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotGreaterEquals``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotGreaterEquals``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L63-63" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2334,7 +2650,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -2343,18 +2659,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '950', 950)" onmouseover="showTip(event, '950', 950)">
+              <code onmouseout="hideTip(event, '1027', 1027)" onmouseover="showTip(event, '1027', 1027)">
                 <p>
-                  <a id="( .>=. )">
-                    <a href="#( .>=. )">
+                  <a id="(.>=.)">
+                    <a href="#(.>=.)">
                       <code><span><span>x</span>&#32;.>=.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="950">
+              <div class="fsdocs-tip" id="1027">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.>=.&#32;<span>y</span></span></code>
@@ -2385,18 +2701,31 @@
                     <code>^Applicative<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L65-65" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotGreaterEqualsDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotGreaterEqualsDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L65-65" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2418,7 +2747,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<bool></code>
               </dt>
@@ -2427,18 +2756,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '951', 951)" onmouseover="showTip(event, '951', 951)">
+              <code onmouseout="hideTip(event, '1028', 1028)" onmouseover="showTip(event, '1028', 1028)">
                 <p>
-                  <a id="( .|| )">
-                    <a href="#( .|| )">
+                  <a id="(.||)">
+                    <a href="#(.||)">
                       <code><span><span>x</span>&#32;.||&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="951">
+              <div class="fsdocs-tip" id="1028">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.||&#32;<span>y</span></span></code>
@@ -2469,18 +2798,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;bool&gt;
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L51-51" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotBarBar``1```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotBarBar``1\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L51-51" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2502,7 +2846,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -2511,18 +2855,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '952', 952)" onmouseover="showTip(event, '952', 952)">
+              <code onmouseout="hideTip(event, '1029', 1029)" onmouseover="showTip(event, '1029', 1029)">
                 <p>
-                  <a id="( .||. )">
-                    <a href="#( .||. )">
+                  <a id="(.||.)">
+                    <a href="#(.||.)">
                       <code><span><span>x</span>&#32;.||.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="952">
+              <div class="fsdocs-tip" id="1029">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;.||.&#32;<span>y</span></span></code>
@@ -2553,18 +2897,31 @@
                     <code>^Applicative<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L53-53" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DotBarBarDot``2```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DotBarBarDot``2\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L53-53" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2586,7 +2943,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Applicative<bool></code>
               </dt>
@@ -2595,18 +2952,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '953', 953)" onmouseover="showTip(event, '953', 953)">
+              <code onmouseout="hideTip(event, '1030', 1030)" onmouseover="showTip(event, '1030', 1030)">
                 <p>
-                  <a id="( /. )">
-                    <a href="#( /. )">
+                  <a id="(/.)">
+                    <a href="#(/.)">
                       <code><span><span>x</span>&#32;/.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="953">
+              <div class="fsdocs-tip" id="1030">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;/.&#32;<span>y</span></span></code>
@@ -2637,18 +2994,31 @@
                     <code>^Functor<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L36-36" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_DivideDot``4```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_DivideDot``4\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L36-36" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2670,7 +3040,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<'T></code>
               </dt>
@@ -2679,18 +3049,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '954', 954)" onmouseover="showTip(event, '954', 954)">
+              <code onmouseout="hideTip(event, '1031', 1031)" onmouseover="showTip(event, '1031', 1031)">
                 <p>
-                  <a id="( <. )">
-                    <a href="#( <. )">
+                  <a id="(<.)">
+                    <a href="#(<.)">
                       <code><span><span>x</span>&#32;<.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="954">
+              <div class="fsdocs-tip" id="1031">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;<.&#32;<span>y</span></span></code>
@@ -2721,18 +3091,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  &#39;T, ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L48-48" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_LessDot``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_LessDot``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L48-48" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2754,7 +3139,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -2763,18 +3148,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '955', 955)" onmouseover="showTip(event, '955', 955)">
+              <code onmouseout="hideTip(event, '1032', 1032)" onmouseover="showTip(event, '1032', 1032)">
                 <p>
-                  <a id="( <=. )">
-                    <a href="#( <=. )">
+                  <a id="(<=.)">
+                    <a href="#(<=.)">
                       <code><span><span>x</span>&#32;<=.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="955">
+              <div class="fsdocs-tip" id="1032">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;<=.&#32;<span>y</span></span></code>
@@ -2805,18 +3190,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  &#39;T, ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L60-60" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_LessEqualsDot``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_LessEqualsDot``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L60-60" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2838,7 +3238,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -2847,18 +3247,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '956', 956)" onmouseover="showTip(event, '956', 956)">
+              <code onmouseout="hideTip(event, '1033', 1033)" onmouseover="showTip(event, '1033', 1033)">
                 <p>
-                  <a id="( =. )">
-                    <a href="#( =. )">
+                  <a id="(=.)">
+                    <a href="#(=.)">
                       <code><span><span>x</span>&#32;=.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="956">
+              <div class="fsdocs-tip" id="1033">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;=.&#32;<span>y</span></span></code>
@@ -2889,18 +3289,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  &#39;T, ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L40-40" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_EqualsDot``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_EqualsDot``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L40-40" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -2922,7 +3337,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -2931,18 +3346,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '957', 957)" onmouseover="showTip(event, '957', 957)">
+              <code onmouseout="hideTip(event, '1034', 1034)" onmouseover="showTip(event, '1034', 1034)">
                 <p>
-                  <a id="( >. )">
-                    <a href="#( >. )">
+                  <a id="(>.)">
+                    <a href="#(>.)">
                       <code><span><span>x</span>&#32;>.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="957">
+              <div class="fsdocs-tip" id="1034">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;>.&#32;<span>y</span></span></code>
@@ -2973,18 +3388,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  &#39;T, ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L44-44" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_GreaterDot``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_GreaterDot``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L44-44" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -3006,7 +3436,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -3015,18 +3445,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '958', 958)" onmouseover="showTip(event, '958', 958)">
+              <code onmouseout="hideTip(event, '1035', 1035)" onmouseover="showTip(event, '1035', 1035)">
                 <p>
-                  <a id="( >=. )">
-                    <a href="#( >=. )">
+                  <a id="(>=.)">
+                    <a href="#(>=.)">
                       <code><span><span>x</span>&#32;>=.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="958">
+              <div class="fsdocs-tip" id="1035">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;>=.&#32;<span>y</span></span></code>
@@ -3057,18 +3487,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  &#39;T, ^Functor&lt;&#39;T&gt;, ^Functor&lt;bool&gt;
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L64-64" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_GreaterEqualsDot``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_GreaterEqualsDot``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L64-64" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -3090,7 +3535,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -3099,18 +3544,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '959', 959)" onmouseover="showTip(event, '959', 959)">
+              <code onmouseout="hideTip(event, '1036', 1036)" onmouseover="showTip(event, '1036', 1036)">
                 <p>
-                  <a id="( ||. )">
-                    <a href="#( ||. )">
+                  <a id="(||.)">
+                    <a href="#(||.)">
                       <code><span><span>x</span>&#32;||.&#32;<span>y</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="959">
+              <div class="fsdocs-tip" id="1036">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span><span>x</span>&#32;||.&#32;<span>y</span></span></code>
@@ -3141,18 +3586,33 @@
                     <code>^Functor<bool></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^Functor&lt;bool&gt;
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L52-52" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_BarBarDot``1```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_BarBarDot``1\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L52-52" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -3174,7 +3634,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<bool></code>
               </dt>
@@ -3183,18 +3643,18 @@
           </td>
         </tr>
         <tr>
-          <td class="fsdocs-member-name">
+          <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '960', 960)" onmouseover="showTip(event, '960', 960)">
+              <code onmouseout="hideTip(event, '1037', 1037)" onmouseover="showTip(event, '1037', 1037)">
                 <p>
-                  <a id="( ~-. )">
-                    <a href="#( ~-. )">
+                  <a id="(~-.)">
+                    <a href="#(~-.)">
                       <code><span>~-.<span>x</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="960">
+              <div class="fsdocs-tip" id="1037">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>~-.<span>x</span></span></code>
@@ -3217,18 +3677,31 @@
                     <code>^Functor<'T></code>
                   </span>
                   <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
                 </div>
               </div>
             </div>
           </td>
-          <td class="fsdocs-xmldoc">
-            <p class="fsdocs-summary">
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L17-17" class="fsdocs-source-link">
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Math.Applicative.op_TwiddleMinusDot``2```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Math.Applicative.op_TwiddleMinusDot``2\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Math/Applicative.fs#L17-17" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-blue.png" class="hover"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
-              
-            </p>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -3242,7 +3715,7 @@
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
-                  Returns:
+                  Returns: 
                 </span>
                 <code>^Functor<'T></code>
               </dt>

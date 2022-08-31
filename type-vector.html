@@ -102,10 +102,10 @@
 <li><a href="abstraction-misc.html">Reducible</a></li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-<span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus.TypeLevel/bin/Release/net45/FSharpPlus.TypeLevel.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+#r @"nuget: FSharpPlus.TypeLevel"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 
 
@@ -125,22 +125,29 @@
 
 <span class="c">// Another way</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 14)" onmouseover="showTip(event, 'fs1', 14)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">Math</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="id">Generic</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 14)" onmouseover="showTip(event, 'fs1', 14)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">Math</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="m">Generic</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="id">vector3d_4</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 18)" onmouseover="showTip(event, 'fs4', 18)" class="fn">vector</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span> <span class="n">2</span><span class="pn">,</span> <span class="n">3</span><span class="pn">)</span> <span class="o">+</span> <span class="m">5G</span>
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs3">val vector3d_1 : Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs4">val vector : definition:&#39;a * &#39;a * .. * &#39;a -&gt; Vector&lt;&#39;a,&#39;n&gt; (requires member CountTuple and member TupleToList)</div>
-<div class="fsdocs-tip" id="fs5">val vector3d_2 : Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs6">val vector3d_sum : Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs7">val vector3d_3 : Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs8">val result : x:&#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)</div>
+<div class="fsdocs-tip" id="fs3">val vector3d_1: Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs4">val vector: definition: &#39;a * &#39;a * .. * &#39;a -&gt; Vector&lt;&#39;a,&#39;n&gt; (requires member CountTuple and member TupleToList)</div>
+<div class="fsdocs-tip" id="fs5">val vector3d_2: Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs6">val vector3d_sum: Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs7">val vector3d_3: Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs8">val result: x: &#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)<br /><em>&lt;summary&gt;
+ Lifts a value into a Functor. Same as return in Computation Expressions.
+ &lt;/summary&gt;<br />&lt;category index=&quot;2&quot;&gt;Applicative&lt;/category&gt;</em></div>
 <div class="fsdocs-tip" id="fs9">namespace FSharpPlus.Math</div>
-<div class="fsdocs-tip" id="fs10">module Generic<br /><br />from FSharpPlus.Math</div>
-<div class="fsdocs-tip" id="fs11">val vector3d_4 : Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs10">module Generic
+
+from FSharpPlus.Math<br /><em>&lt;summary&gt;
+ Generic numbers, functions and operators.
+ By opening this module some common operators become restricted, like (+) to &#39;T-&amp;gt;&#39;T-&amp;gt;&#39;T
+ &lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs11">val vector3d_4: Vector&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;</div>
 
         </div>
 

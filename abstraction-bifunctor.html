@@ -131,9 +131,9 @@
 </li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">FSharpPlus</span>
 
 <span class="c">// convert (map) first element to an int and the second to a string</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">rInt10Str10</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="fn">bimap</span>  <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="fn">int</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="fn">string</span> <span class="pn">(</span><span class="n">10.0</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
@@ -144,18 +144,50 @@
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="id">rStr10</span>   <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="fn">second</span> <span onmouseout="hideTip(event, 'fs6', 16)" onmouseover="showTip(event, 'fs6', 16)" class="fn">string</span> <span class="pn">(</span><span class="k">true</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">Multiple items<br />module Map<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IComparable<br />&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;interface IDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;...<br /><br />--------------------<br />new : elements:seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+            <div class="fsdocs-tip" id="fs1">Multiple items<br />module Map
+
+from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.FSharpMap`2&quot; /&gt;.&lt;/summary&gt;</em><br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =
+  interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
+  interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
+  interface IEnumerable
+  interface IComparable
+  interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
+  interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
+  interface IDictionary&lt;&#39;Key,&#39;Value&gt;
+  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  ...<br /><em>&lt;summary&gt;Immutable maps based on binary trees, where keys are ordered by F# generic comparison. By default
+ comparison is the F# structural comparison function or uses implementations of the IComparable interface on key values.&lt;/summary&gt;<br />&lt;remarks&gt;See the &lt;see cref=&quot;T:Microsoft.FSharp.Collections.MapModule&quot; /&gt; module for further operations on maps.
+
+ All members of this class are thread-safe and may be used concurrently from multiple threads.&lt;/remarks&gt;</em><br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
-<div class="fsdocs-tip" id="fs3">val rInt10Str10 : int * string</div>
-<div class="fsdocs-tip" id="fs4">val bimap : f:(&#39;T -&gt; &#39;U) -&gt; g:(&#39;V -&gt; &#39;W) -&gt; source:&#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;U,&#39;W&gt; (requires member Bimap)</div>
-<div class="fsdocs-tip" id="fs5">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
-<div class="fsdocs-tip" id="fs6">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
-<div class="fsdocs-tip" id="fs7">val resOk11 : Result&lt;string,int&gt;</div>
-<div class="fsdocs-tip" id="fs8">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
-<div class="fsdocs-tip" id="fs9">val rStrTrue : string * int</div>
-<div class="fsdocs-tip" id="fs10">val first : f:(&#39;T -&gt; &#39;V) -&gt; source:&#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;U,&#39;V&gt; (requires member First)</div>
-<div class="fsdocs-tip" id="fs11">val rStr10 : bool * string</div>
-<div class="fsdocs-tip" id="fs12">val second : f:(&#39;V -&gt; &#39;W) -&gt; source:&#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;T,&#39;W&gt; (requires member Map)</div>
+<div class="fsdocs-tip" id="fs3">val rInt10Str10: int * string</div>
+<div class="fsdocs-tip" id="fs4">val bimap: f: (&#39;T -&gt; &#39;U) -&gt; g: (&#39;V -&gt; &#39;W) -&gt; source: &#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;U,&#39;W&gt; (requires member Bimap)<br /><em>&lt;summary&gt;
+ Maps over both arguments of the Bifunctor at the same time.
+ &lt;/summary&gt;<br />&lt;category index=&quot;6&quot;&gt;Contravariant/Bifunctor/Profunctor/Invariant&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
+ of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to
+ &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs7">val resOk11: Result&lt;string,int&gt;</div>
+<div class="fsdocs-tip" id="fs8">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;<br /><em>&lt;summary&gt;
+ Represents an OK or a Successful result. The code succeeded with a value of &#39;T.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs9">val rStrTrue: string * int</div>
+<div class="fsdocs-tip" id="fs10">val first: f: (&#39;T -&gt; &#39;V) -&gt; source: &#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;U,&#39;V&gt; (requires member First)<br /><em>&lt;summary&gt;
+ Maps covariantly over the first argument of the Bifunctor.
+ &lt;/summary&gt;<br />&lt;category index=&quot;6&quot;&gt;Contravariant/Bifunctor/Profunctor/Invariant&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs11">val rStr10: bool * string</div>
+<div class="fsdocs-tip" id="fs12">val second: f: (&#39;V -&gt; &#39;W) -&gt; source: &#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;T,&#39;W&gt; (requires member Map)<br /><em>&lt;summary&gt;
+ Maps covariantly over the second argument of the Bifunctor.
+ &lt;/summary&gt;<br />&lt;category index=&quot;6&quot;&gt;Contravariant/Bifunctor/Profunctor/Invariant&lt;/category&gt;</em></div>
 
         </div>
 

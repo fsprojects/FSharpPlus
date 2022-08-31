@@ -127,15 +127,15 @@
 </ul>
 <p><a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 
 
 <span class="c">// Some functions</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">getLine</span>    <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="fn">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="id">ReadLine</span><span class="pn">(</span><span class="pn">)</span> <span class="pn">}</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="id">x</span> <span class="o">=</span> <span class="k">if</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="id">x</span> <span class="o">&lt;</span> <span class="n">200</span> <span class="k">then</span> <span class="pn">[</span><span class="n">3</span> <span class="o">-</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="id">x</span><span class="pn">]</span> <span class="k">else</span> <span class="pn">[</span><span class="pn">]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="id">x</span> <span class="o">=</span> <span class="k">if</span> <span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="id">x</span> <span class="o">&lt;</span> <span class="n">200</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="uc">Some</span> <span class="pn">(</span><span class="n">3</span> <span class="o">-</span> <span onmouseout="hideTip(event, 'fs8', 15)" onmouseover="showTip(event, 'fs8', 15)" class="id">x</span><span class="pn">)</span> <span class="k">else</span> <span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="uc">None</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">getLine</span>    <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="id">ReadLine</span><span class="pn">(</span><span class="pn">)</span> <span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="fn">x</span> <span class="o">=</span> <span class="k">if</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="fn">x</span> <span class="o">&lt;</span> <span class="n">200</span> <span class="k">then</span> <span class="pn">[</span><span class="n">3</span> <span class="o">-</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="fn">x</span><span class="pn">]</span> <span class="k">else</span> <span class="pn">[</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="fn">x</span> <span class="o">=</span> <span class="k">if</span> <span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="fn">x</span> <span class="o">&lt;</span> <span class="n">200</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="uc">Some</span> <span class="pn">(</span><span class="n">3</span> <span class="o">-</span> <span onmouseout="hideTip(event, 'fs8', 15)" onmouseover="showTip(event, 'fs8', 15)" class="fn">x</span><span class="pn">)</span> <span class="k">else</span> <span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="uc">None</span>
 
 <span class="c">// traverse</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 17)" onmouseover="showTip(event, 'fs12', 17)" class="id">resSomeminus100</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="fn">traverse</span> <span onmouseout="hideTip(event, 'fs7', 19)" onmouseover="showTip(event, 'fs7', 19)" class="fn">f</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 20)" onmouseover="showTip(event, 'fs10', 20)" class="uc">Some</span> <span class="n">103</span><span class="pn">)</span>
@@ -159,31 +159,56 @@
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
-<div class="fsdocs-tip" id="fs2">val getLine : Async&lt;string&gt;</div>
-<div class="fsdocs-tip" id="fs3">val async : AsyncBuilder</div>
+<div class="fsdocs-tip" id="fs2">val getLine: Async&lt;string&gt;</div>
+<div class="fsdocs-tip" id="fs3">val async: AsyncBuilder<br /><em>&lt;summary&gt;Builds an asynchronous workflow using computation expression syntax.&lt;/summary&gt;<br />&lt;example id=&quot;async-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ let sleepExample() =
+     async {
+         printfn &quot;sleeping&quot;
+         do! Async.Sleep 10
+         printfn &quot;waking up&quot;
+         return 6
+      }
+
+ sleepExample() |&amp;gt; Async.RunSynchronously
+ &lt;/code&gt;&lt;/example&gt;</em></div>
 <div class="fsdocs-tip" id="fs4">namespace System</div>
-<div class="fsdocs-tip" id="fs5">type Console =<br />&#160;&#160;static member BackgroundColor : ConsoleColor with get, set<br />&#160;&#160;static member Beep : unit -&gt; unit + 1 overload<br />&#160;&#160;static member BufferHeight : int with get, set<br />&#160;&#160;static member BufferWidth : int with get, set<br />&#160;&#160;static member CapsLock : bool<br />&#160;&#160;static member Clear : unit -&gt; unit<br />&#160;&#160;static member CursorLeft : int with get, set<br />&#160;&#160;static member CursorSize : int with get, set<br />&#160;&#160;static member CursorTop : int with get, set<br />&#160;&#160;static member CursorVisible : bool with get, set<br />&#160;&#160;...</div>
+<div class="fsdocs-tip" id="fs5">type Console =
+  static member Beep: unit -&gt; unit + 1 overload
+  static member Clear: unit -&gt; unit
+  static member GetCursorPosition: unit -&gt; struct (int * int)
+  static member MoveBufferArea: sourceLeft: int * sourceTop: int * sourceWidth: int * sourceHeight: int * targetLeft: int * targetTop: int -&gt; unit + 1 overload
+  static member OpenStandardError: unit -&gt; Stream + 1 overload
+  static member OpenStandardInput: unit -&gt; Stream + 1 overload
+  static member OpenStandardOutput: unit -&gt; Stream + 1 overload
+  static member Read: unit -&gt; int
+  static member ReadKey: unit -&gt; ConsoleKeyInfo + 1 overload
+  static member ReadLine: unit -&gt; string
+  ...<br /><em>&lt;summary&gt;Represents the standard input, output, and error streams for console applications. This class cannot be inherited.&lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs6">System.Console.ReadLine() : string</div>
-<div class="fsdocs-tip" id="fs7">val f : x:int -&gt; int list</div>
-<div class="fsdocs-tip" id="fs8">val x : int</div>
-<div class="fsdocs-tip" id="fs9">val g : x:int -&gt; int option</div>
-<div class="fsdocs-tip" id="fs10">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs11">union case Option.None: Option&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs12">val resSomeminus100 : int option list</div>
-<div class="fsdocs-tip" id="fs13">val traverse : f:(&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; t:&#39;Traversable&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;Traversable&lt;&#39;U&gt;&gt; (requires member Traverse)</div>
-<div class="fsdocs-tip" id="fs14">val resLstOfNull : int option list</div>
-<div class="fsdocs-tip" id="fs15">val res210 : int list list</div>
-<div class="fsdocs-tip" id="fs16">val resSome210 : int list option</div>
-<div class="fsdocs-tip" id="fs17">val resEmptyList : int list list</div>
-<div class="fsdocs-tip" id="fs18">val resEListOfElist : int list list</div>
-<div class="fsdocs-tip" id="fs19">val resSome321 : int list option</div>
-<div class="fsdocs-tip" id="fs20">val sequence : t:&#39;Traversable&lt;&#39;Functor&lt;&#39;T&gt;&gt; -&gt; &#39;Functor&lt;&#39;Traversable&lt;&#39;T&gt;&gt; (requires member Sequence)</div>
-<div class="fsdocs-tip" id="fs21">val resNone : int list option</div>
-<div class="fsdocs-tip" id="fs22">val res654 : int list</div>
-<div class="fsdocs-tip" id="fs23">val resCombined : int list list</div>
-<div class="fsdocs-tip" id="fs24">val resLstOfArr : int [] list</div>
-<div class="fsdocs-tip" id="fs25">val resArrOfLst : int list []</div>
-<div class="fsdocs-tip" id="fs26">val get3strings : Async&lt;string list&gt;</div>
+<div class="fsdocs-tip" id="fs7">val f: x: int -&gt; int list</div>
+<div class="fsdocs-tip" id="fs8">val x: int</div>
+<div class="fsdocs-tip" id="fs9">val g: x: int -&gt; int option</div>
+<div class="fsdocs-tip" id="fs10">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;Value of type &#39;T&quot;&lt;/summary&gt;<br />&lt;param name=&quot;Value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;An option representing the value.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs11">union case Option.None: Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;No value&quot;&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs12">val resSomeminus100: int option list</div>
+<div class="fsdocs-tip" id="fs13">val traverse: f: (&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; t: &#39;Traversable&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;Traversable&lt;&#39;U&gt;&gt; (requires member Traverse)<br /><em>&lt;summary&gt;
+ Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
+ &lt;/summary&gt;<br />&lt;category index=&quot;13&quot;&gt;Traversable&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs14">val resLstOfNull: int option list</div>
+<div class="fsdocs-tip" id="fs15">val res210: int list list</div>
+<div class="fsdocs-tip" id="fs16">val resSome210: int list option</div>
+<div class="fsdocs-tip" id="fs17">val resEmptyList: int list list</div>
+<div class="fsdocs-tip" id="fs18">val resEListOfElist: int list list</div>
+<div class="fsdocs-tip" id="fs19">val resSome321: int list option</div>
+<div class="fsdocs-tip" id="fs20">val sequence: t: &#39;Traversable&lt;&#39;Functor&lt;&#39;T&gt;&gt; -&gt; &#39;Functor&lt;&#39;Traversable&lt;&#39;T&gt;&gt; (requires member Sequence)<br /><em>&lt;summary&gt;
+ Evaluate each action in the structure from left to right, and collect the results.
+ &lt;/summary&gt;<br />&lt;category index=&quot;13&quot;&gt;Traversable&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs21">val resNone: int list option</div>
+<div class="fsdocs-tip" id="fs22">val res654: int list</div>
+<div class="fsdocs-tip" id="fs23">val resCombined: int list list</div>
+<div class="fsdocs-tip" id="fs24">val resLstOfArr: int[] list</div>
+<div class="fsdocs-tip" id="fs25">val resArrOfLst: int list[]</div>
+<div class="fsdocs-tip" id="fs26">val get3strings: Async&lt;string list&gt;</div>
 
         </div>
 

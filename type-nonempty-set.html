@@ -88,9 +88,9 @@
             <h1><a name="NonEmptySet-T" class="anchor" href="#NonEmptySet-T">NonEmptySet<'T></a></h1>
 <p>A type-safe set that contains at least one element.</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 </code></pre>
 <h3><a name="Constructing-NonEmptySet" class="anchor" href="#Constructing-NonEmptySet">Constructing NonEmptySet</a></h3>
@@ -116,26 +116,76 @@
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs3">val set123 : NonEmptySet&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />module NonEmptySet<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptySet&lt;&#39;a (requires comparison)&gt; =<br />&#160;&#160;private { Value: Set&lt;&#39;a&gt; }<br />&#160;&#160;&#160;&#160;interface NonEmptySeq&lt;&#39;a&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;a&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;a&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;member Add : value:&#39;a -&gt; NonEmptySet&lt;&#39;a&gt;<br />&#160;&#160;&#160;&#160;member Contains : value:&#39;a -&gt; bool<br />&#160;&#160;&#160;&#160;member IsProperSubsetOf : other:NonEmptySet&lt;&#39;a&gt; -&gt; bool<br />&#160;&#160;&#160;&#160;member IsProperSupersetOf : other:NonEmptySet&lt;&#39;a&gt; -&gt; bool<br />&#160;&#160;&#160;&#160;member IsSubsetOf : other:NonEmptySet&lt;&#39;a&gt; -&gt; bool<br />&#160;&#160;&#160;&#160;member IsSupersetOf : other:NonEmptySet&lt;&#39;a&gt; -&gt; bool<br />&#160;&#160;&#160;&#160;...</div>
-<div class="fsdocs-tip" id="fs5">static member NonEmptySet.Create : first:&#39;a * [&lt;System.ParamArray&gt;] rest:&#39;a [] -&gt; NonEmptySet&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs6">val set4 : NonEmptySet&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs7">val singleton : x:&#39;a -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs8">val set4&#39; : NonEmptySet&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs9">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
-<div class="fsdocs-tip" id="fs10">val result : x:&#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)</div>
-<div class="fsdocs-tip" id="fs11">val set1234 : NonEmptySet&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs12">val union : set1:NonEmptySet&lt;&#39;a&gt; -&gt; set2:NonEmptySet&lt;&#39;a&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs13">val set1234&#39; : Set&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs14">val toSet : NonEmptySet&lt;&#39;a&gt; -&gt; Set&lt;&#39;a&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs15">val set12345 : NonEmptySet&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs16">val add : value:&#39;a -&gt; source:NonEmptySet&lt;&#39;a&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs17">val set12345&#39; : NonEmptySet&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs18">val unionMany : sets:NonEmptyList&lt;NonEmptySet&lt;&#39;a&gt;&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs19">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{ Head: &#39;t<br />&#160;&#160;&#160;&#160;Tail: &#39;t list }<br />&#160;&#160;&#160;&#160;interface NonEmptySeq&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member Length : int<br />&#160;&#160;&#160;&#160;static member Choice : source:NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ( &lt;|&gt; ))<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;...</div>
-<div class="fsdocs-tip" id="fs20">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs21">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
-<div class="fsdocs-tip" id="fs22">val isSubset : set1:NonEmptySet&lt;&#39;a&gt; -&gt; set2:NonEmptySet&lt;&#39;a&gt; -&gt; bool (requires comparison)</div>
+<div class="fsdocs-tip" id="fs3">val set123: NonEmptySet&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />module NonEmptySet
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on NonEmptySet
+&lt;/summary&gt;</em><br /><br />--------------------<br />type NonEmptySet&lt;&#39;a (requires comparison)&gt; =
+  private { Value: Set&lt;&#39;a&gt; }
+  interface NonEmptySeq&lt;&#39;a&gt;
+  interface IReadOnlyCollection&lt;&#39;a&gt;
+  interface IEnumerable&lt;&#39;a&gt;
+  interface IEnumerable
+  member Add: value: &#39;a -&gt; NonEmptySet&lt;&#39;a&gt;
+  member Contains: value: &#39;a -&gt; bool
+  member IsProperSubsetOf: other: NonEmptySet&lt;&#39;a&gt; -&gt; bool
+  member IsProperSupersetOf: other: NonEmptySet&lt;&#39;a&gt; -&gt; bool
+  member IsSubsetOf: other: NonEmptySet&lt;&#39;a&gt; -&gt; bool
+  member IsSupersetOf: other: NonEmptySet&lt;&#39;a&gt; -&gt; bool
+  ...<br /><em>&lt;summary&gt;
+ A type-safe set that contains at least one element.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">static member NonEmptySet.Create: first: &#39;a * [&lt;System.ParamArray&gt;] rest: &#39;a[] -&gt; NonEmptySet&lt;&#39;a&gt;</div>
+<div class="fsdocs-tip" id="fs6">val set4: NonEmptySet&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs7">val singleton: x: &#39;a -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)<br /><em>&lt;summary&gt;Builds a non empty set with a single element.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val set4&#39;: NonEmptySet&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs9">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
+ of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to
+ &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val result: x: &#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)<br /><em>&lt;summary&gt;
+ Lifts a value into a Functor. Same as return in Computation Expressions.
+ &lt;/summary&gt;<br />&lt;category index=&quot;2&quot;&gt;Applicative&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs11">val set1234: NonEmptySet&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs12">val union: set1: NonEmptySet&lt;&#39;a&gt; -&gt; set2: NonEmptySet&lt;&#39;a&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)<br /><em>&lt;summary&gt;Computes the union of the two sets.&lt;/summary&gt;<br />&lt;param name=&quot;set1&quot;&gt;The first input set.&lt;/param&gt;<br />&lt;param name=&quot;set2&quot;&gt;The second input set.&lt;/param&gt;<br />&lt;returns&gt;The union of &lt;c&gt;set1&lt;/c&gt; and &lt;c&gt;set2&lt;/c&gt;.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs13">val set1234&#39;: Set&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs14">val toSet: NonEmptySet&lt;&#39;a&gt; -&gt; Set&lt;&#39;a&gt; (requires comparison)<br /><em>&lt;summary&gt;Builds a set from the given non empty set.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">val set12345: NonEmptySet&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs16">val add: value: &#39;a -&gt; source: NonEmptySet&lt;&#39;a&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)<br /><em>&lt;summary&gt;Returns a new set with an element added to the set. No exception is raised if
+ the set already contains the given element.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The value to add.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The input set.&lt;/param&gt;<br />&lt;returns&gt;A new set containing &lt;c&gt;value&lt;/c&gt;.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs17">val set12345&#39;: NonEmptySet&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs18">val unionMany: sets: NonEmptyList&lt;NonEmptySet&lt;&#39;a&gt;&gt; -&gt; NonEmptySet&lt;&#39;a&gt; (requires comparison)<br /><em>&lt;summary&gt;Computes the union of a non empty list of sets.&lt;/summary&gt;<br />&lt;param name=&quot;sets&quot;&gt;The sequence of sets to union.&lt;/param&gt;<br />&lt;returns&gt;The union of the input sets.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs19">Multiple items<br />module NonEmptyList
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on NonEmptyList
+&lt;/summary&gt;</em><br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =
+  {
+    Head: &#39;t
+    Tail: &#39;t list
+  }
+  interface NonEmptySeq&lt;&#39;t&gt;
+  interface IReadOnlyList&lt;&#39;t&gt;
+  interface IReadOnlyCollection&lt;&#39;t&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;t&gt;
+  static member (+) : NonEmptyList&lt;&#39;a1&gt; * x: NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;
+  static member (&lt;*&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
+  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a1&gt; * g: (NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a1&gt; * f: (&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member Choice: source: NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ``&lt;|&gt;``)
+  ...<br /><em>&lt;summary&gt;
+ A type-safe list that contains at least one element.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs20">val create: x: &#39;a -&gt; xs: &#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;Builds a non empty list.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs21">val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><em>&lt;summary&gt;Print to &lt;c&gt;stdout&lt;/c&gt; using the given format, and add a newline.&lt;/summary&gt;<br />&lt;param name=&quot;format&quot;&gt;The formatter.&lt;/param&gt;<br />&lt;returns&gt;The formatted result.&lt;/returns&gt;<br />&lt;example&gt;See &lt;c&gt;Printf.printfn&lt;/c&gt; (link: &lt;see cref=&quot;M:Microsoft.FSharp.Core.PrintfModule.PrintFormatLine``1&quot; /&gt;) for examples.&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs22">val isSubset: set1: NonEmptySet&lt;&#39;a&gt; -&gt; set2: NonEmptySet&lt;&#39;a&gt; -&gt; bool (requires comparison)<br /><em>&lt;summary&gt;Evaluates to &quot;true&quot; if all elements of the first set are in the second&lt;/summary&gt;<br />&lt;param name=&quot;set1&quot;&gt;The potential subset.&lt;/param&gt;<br />&lt;param name=&quot;set2&quot;&gt;The set to test against.&lt;/param&gt;<br />&lt;returns&gt;True if &lt;c&gt;set1&lt;/c&gt; is a subset of &lt;c&gt;set2&lt;/c&gt;.&lt;/returns&gt;</em></div>
 
         </div>
 

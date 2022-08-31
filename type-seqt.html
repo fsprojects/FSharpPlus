@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TO-DO Add some docs here !
-</title>
+    <title>type-seqt</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Gusty">
 
@@ -85,14 +84,137 @@
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
-            <h1><a name="TO-DO-Add-some-docs-here" class="anchor" href="#TO-DO-Add-some-docs-here">TO-DO Add some docs here !</a></h1>
-<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+            
+            <div class="fsdocs-tip" id="fs1">namespace System</div>
+<div class="fsdocs-tip" id="fs2">namespace System.Net</div>
+<div class="fsdocs-tip" id="fs3">type WebClient =
+  inherit Component
+  new: unit -&gt; unit
+  member CancelAsync: unit -&gt; unit
+  member DownloadData: address: string -&gt; byte[] + 1 overload
+  member DownloadDataAsync: address: Uri -&gt; unit + 1 overload
+  member DownloadDataTaskAsync: address: string -&gt; Task&lt;byte[]&gt; + 1 overload
+  member DownloadFile: address: string * fileName: string -&gt; unit + 1 overload
+  member DownloadFileAsync: address: Uri * fileName: string -&gt; unit + 1 overload
+  member DownloadFileTaskAsync: address: string * fileName: string -&gt; Task + 1 overload
+  member DownloadString: address: string -&gt; string + 1 overload
+  ...<br /><em>&lt;summary&gt;Provides common methods for sending data to and receiving data from a resource identified by a URI.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs4">val wc: System.Net.WebClient</div>
+<div class="fsdocs-tip" id="fs5">val uri: System.Uri</div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />type Uri =
+  interface ISerializable
+  new: uriString: string -&gt; unit + 6 overloads
+  member Equals: comparand: obj -&gt; bool
+  member GetComponents: components: UriComponents * format: UriFormat -&gt; string
+  member GetHashCode: unit -&gt; int
+  member GetLeftPart: part: UriPartial -&gt; string
+  member IsBaseOf: uri: Uri -&gt; bool
+  member IsWellFormedOriginalString: unit -&gt; bool
+  member MakeRelative: toUri: Uri -&gt; string
+  member MakeRelativeUri: uri: Uri -&gt; Uri
+  ...<br /><em>&lt;summary&gt;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&lt;/summary&gt;</em><br /><br />--------------------<br />System.Uri(uriString: string) : System.Uri<br />System.Uri(uriString: string, creationOptions: inref&lt;System.UriCreationOptions&gt;) : System.Uri<br />System.Uri(uriString: string, uriKind: System.UriKind) : System.Uri<br />System.Uri(baseUri: System.Uri, relativeUri: string) : System.Uri<br />System.Uri(baseUri: System.Uri, relativeUri: System.Uri) : System.Uri</div>
+<div class="fsdocs-tip" id="fs7">val async: AsyncBuilder<br /><em>&lt;summary&gt;Builds an asynchronous workflow using computation expression syntax.&lt;/summary&gt;<br />&lt;example id=&quot;async-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ let sleepExample() =
+     async {
+         printfn &quot;sleeping&quot;
+         do! Async.Sleep 10
+         printfn &quot;waking up&quot;
+         return 6
+      }
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
-</code></pre>
+ sleepExample() |&amp;gt; Async.RunSynchronously
+ &lt;/code&gt;&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">System.Net.WebClient.DownloadString(address: System.Uri) : string<br />System.Net.WebClient.DownloadString(address: string) : string</div>
+<div class="fsdocs-tip" id="fs9">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs10">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs11">val urls: string list</div>
+<div class="fsdocs-tip" id="fs12">val pages: SeqT&lt;Async&lt;bool&gt;,(string * int)&gt;</div>
+<div class="fsdocs-tip" id="fs13">Multiple items<br />static member SeqTOperations.SeqT: source: &#39;Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Return)<br /><br />--------------------<br />active recognizer SeqT: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; &#39;Monad&lt;&#39;T seq&gt;<br /><br />--------------------<br />module SeqT
 
-            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
+from FSharpPlus.Data.SeqT_V2<br /><br />--------------------<br />[&lt;Struct&gt;]
+type SeqT&lt;&#39;monad,&#39;t&gt; =
+  | SeqT of IEnumerableM&lt;&#39;monad,&#39;t&gt;
+  interface IEnumerableM&lt;&#39;monad,&#39;t&gt;
+  static member ( *&gt; ) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return and member Delay)
+  static member (&lt;!&gt;) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * f: (&#39;T -&gt; &#39;U) -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member Delay and member (&gt;&gt;=) and member Return)
+  static member ( &lt;* ) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return and member Delay)
+  static member (&lt;*&gt;) : f: SeqT&lt;&#39;Monad&lt;bool&gt;,(&#39;T -&gt; &#39;U)&gt; * x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return)
+  static member (&lt;|&gt;) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member Delay and member Return and member (&gt;&gt;=))
+  static member (&gt;&gt;=) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * f: (&#39;T -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt;) -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return)
+  static member CallCC: f: ((&#39;T -&gt; SeqT&lt;&#39;MonadCont&lt;&#39;R&gt;,&#39;U&gt;) -&gt; SeqT&lt;&#39;a5,&#39;a7&gt;) -&gt; SeqT&lt;&#39;MonadCont&lt;&#39;R&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Return and member (&gt;&gt;=) and member (&gt;&gt;=) and member Using and member (&gt;&gt;=) and member Return and member CallCC and member (&gt;&gt;=) and member (&gt;&gt;=) and member Return)
+  static member Catch: m: SeqT&lt;&#39;MonadError&lt;&#39;E1&gt;,&#39;T&gt; * h: (&#39;E1 -&gt; SeqT&lt;&#39;MonadError&lt;&#39;E2&gt;,&#39;T&gt;) -&gt; SeqT&lt;&#39;MonadError&lt;&#39;E2&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member (&gt;&gt;=) and member Using and member (&gt;&gt;=) and member Return and member Catch and member (&gt;&gt;=) and member Return and member (&gt;&gt;=) and member Using and member (&gt;&gt;=) and member Return and member (&gt;&gt;=) and member Return and member (&gt;&gt;=) and member (&gt;&gt;=) and member Return)
+  static member Delay: body: (unit -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt;) -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt;
+  ...</div>
+<div class="fsdocs-tip" id="fs14">val monad&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">val wc: WebClient</div>
+<div class="fsdocs-tip" id="fs16">val url: string</div>
+<div class="fsdocs-tip" id="fs17">val html: string</div>
+<div class="fsdocs-tip" id="fs18">member WebClient.AsyncDownloadString: address: Uri -&gt; Async&lt;string&gt;<br />member WebClient.AsyncDownloadString: uri: Uri -&gt; Async&lt;string&gt;<br /><em>&lt;summary&gt;Returns an asynchronous computation that, when run, will wait for the download of the given URI.&lt;/summary&gt;<br />&lt;param name=&quot;address&quot;&gt;The URI to retrieve.&lt;/param&gt;<br />&lt;returns&gt;An asynchronous computation that will wait for the download of the URI.&lt;/returns&gt;<br />&lt;example id=&quot;async-download-string&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ open System
+ let client = new WebClient()
+ Uri(&quot;https://www.w3.org&quot;) |&amp;gt; client.AsyncDownloadString |&amp;gt; Async.RunSynchronously
+ &lt;/code&gt;
+ This will download the server response from https://www.w3.org
+ &lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs19">Multiple items<br />type Uri =
+  interface ISerializable
+  new: uriString: string -&gt; unit + 6 overloads
+  member Equals: comparand: obj -&gt; bool
+  member GetComponents: components: UriComponents * format: UriFormat -&gt; string
+  member GetHashCode: unit -&gt; int
+  member GetLeftPart: part: UriPartial -&gt; string
+  member IsBaseOf: uri: Uri -&gt; bool
+  member IsWellFormedOriginalString: unit -&gt; bool
+  member MakeRelative: toUri: Uri -&gt; string
+  member MakeRelativeUri: uri: Uri -&gt; Uri
+  ...<br /><em>&lt;summary&gt;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&lt;/summary&gt;</em><br /><br />--------------------<br />Uri(uriString: string) : Uri<br />Uri(uriString: string, creationOptions: inref&lt;UriCreationOptions&gt;) : Uri<br />Uri(uriString: string, uriKind: UriKind) : Uri<br />Uri(baseUri: Uri, relativeUri: string) : Uri<br />Uri(baseUri: Uri, relativeUri: Uri) : Uri</div>
+<div class="fsdocs-tip" id="fs20">Multiple items<br />val lift: source: &#39;Monad&lt;&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Map and member Return)<br /><br />--------------------<br />val lift: x: &#39;Monad&lt;&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;seq&lt;&#39;T&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Map and member Return)<br /><em>&lt;summary&gt;
+ Embed a Monad&amp;lt;&#39;T&amp;gt; into a SeqT&amp;lt;&#39;Monad&amp;lt;seq&amp;lt;&#39;T&amp;gt;&amp;gt;&amp;gt;
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs21">property String.Length: int with get</div>
+<div class="fsdocs-tip" id="fs22">val printPages: Async&lt;unit&gt;</div>
+<div class="fsdocs-tip" id="fs23">val filter: f: (&#39;T -&gt; bool) -&gt; source: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member Delay and member (&gt;&gt;=) and member Return)</div>
+<div class="fsdocs-tip" id="fs24">val len: int</div>
+<div class="fsdocs-tip" id="fs25">Multiple items<br />val map: f: (&#39;T -&gt; &#39;U) -&gt; source: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member Delay and member (&gt;&gt;=) and member Return)<br /><br />--------------------<br />val map: f: (&#39;T -&gt; &#39;U) -&gt; SeqT&lt;&#39;Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;&#39;Monad&lt;seq&lt;&#39;U&gt;&gt; (requires member Map)</div>
+<div class="fsdocs-tip" id="fs26">val fst: tuple: (&#39;T1 * &#39;T2) -&gt; &#39;T1<br /><em>&lt;summary&gt;Return the first element of a tuple, &lt;c&gt;fst (a,b) = a&lt;/c&gt;.&lt;/summary&gt;<br />&lt;param name=&quot;tuple&quot;&gt;The input tuple.&lt;/param&gt;<br />&lt;returns&gt;The first value.&lt;/returns&gt;<br />&lt;example id=&quot;fst-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ fst (&quot;first&quot;, 2)  //  Evaluates to &quot;first&quot;
+ &lt;/code&gt;&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs27">val iter: f: (&#39;T -&gt; unit) -&gt; source: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; &#39;Monad&lt;unit&gt; (requires member (&gt;&gt;=) and member Delay and member Using and member Return and member (&gt;&gt;=))</div>
+<div class="fsdocs-tip" id="fs28">val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><em>&lt;summary&gt;Print to &lt;c&gt;stdout&lt;/c&gt; using the given format, and add a newline.&lt;/summary&gt;<br />&lt;param name=&quot;format&quot;&gt;The formatter.&lt;/param&gt;<br />&lt;returns&gt;The formatted result.&lt;/returns&gt;<br />&lt;example&gt;See &lt;c&gt;Printf.printfn&lt;/c&gt; (link: &lt;see cref=&quot;M:Microsoft.FSharp.Core.PrintfModule.PrintFormatLine``1&quot; /&gt;) for examples.&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs29">Multiple items<br />module Async
+
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Async
+&lt;/summary&gt;</em><br /><br />--------------------<br />type Async =
+  static member AsBeginEnd: computation: (&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)
+  static member AwaitEvent: event: IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)
+  static member AwaitIAsyncResult: iar: IAsyncResult * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member AwaitTask: task: Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt; + 1 overload
+  static member AwaitWaitHandle: waitHandle: WaitHandle * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member CancelDefaultToken: unit -&gt; unit
+  static member Catch: computation: Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;
+  static member Choice: computations: seq&lt;Async&lt;&#39;T option&gt;&gt; -&gt; Async&lt;&#39;T option&gt;
+  static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
+  static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
+  ...<br /><em>&lt;summary&gt;Holds static members for creating and manipulating asynchronous computations.&lt;/summary&gt;<br />&lt;remarks&gt;
+  See also &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/asynchronous-workflows&quot;&gt;F# Language Guide - Async Workflows&lt;/a&gt;.
+ &lt;/remarks&gt;<br />&lt;category index=&quot;1&quot;&gt;Async Programming&lt;/category&gt;</em><br /><br />--------------------<br />type Async&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
+ An asynchronous computation, which, when run, will eventually produce a value  of type T, or else raises an exception.
+ &lt;/summary&gt;<br />&lt;remarks&gt;
+  This type has no members. Asynchronous computations are normally specified either by using an async expression
+  or the static methods in the &lt;see cref=&quot;T:Microsoft.FSharp.Control.FSharpAsync`1&quot; /&gt; type.
+
+  See also &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/asynchronous-workflows&quot;&gt;F# Language Guide - Async Workflows&lt;/a&gt;.
+ &lt;/remarks&gt;<br />&lt;namespacedoc&gt;&lt;summary&gt;
+   Library functionality for asynchronous programming, events and agents. See also
+   &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/asynchronous-workflows&quot;&gt;Asynchronous Programming&lt;/a&gt;, 
+   &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/members/events&quot;&gt;Events&lt;/a&gt; and
+   &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/lazy-expressions&quot;&gt;Lazy Expressions&lt;/a&gt; in the
+   F# Language Guide.
+ &lt;/summary&gt;&lt;/namespacedoc&gt;<br />&lt;category index=&quot;1&quot;&gt;Async Programming&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs30">static member Async.Start: computation: Async&lt;unit&gt; * ?cancellationToken: Threading.CancellationToken -&gt; unit</div>
 
         </div>
 

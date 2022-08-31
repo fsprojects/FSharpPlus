@@ -87,7 +87,7 @@
         <div class="container" id="fsdocs-content">
             <h1><a name="Monoid" class="anchor" href="#Monoid">Monoid</a></h1>
 <p>Types with an associative binary operation that has an identity.
-<em></em>_</p>
+___</p>
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
 <li><code>zero</code>`</li>
@@ -156,26 +156,26 @@
 </ul>
 <p><a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="id">FSharpPlus</span>
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="id">Math</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="id">Generic</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="id">Math</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="m">Generic</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 10)" onmouseover="showTip(event, 'fs4', 10)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="id">Data</span>
 
 
 <span class="c">/// A monoid that represents results of comparisons</span>
 <span class="k">type</span> <span class="rt">Ordering</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="uc">LT</span><span class="pn">|</span><span onmouseout="hideTip(event, 'fs9', 13)" onmouseover="showTip(event, 'fs9', 13)" class="uc">EQ</span><span class="pn">|</span><span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="uc">GT</span> <span class="k">with</span>
     <span class="k">static</span> <span class="k">member</span>        <span class="prop">Zero</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="uc">EQ</span>
-    <span class="k">static</span> <span class="k">member</span>        <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs12', 17)" onmouseover="showTip(event, 'fs12', 17)" class="rt">Ordering</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="id">y</span><span class="pn">)</span> <span class="o">=</span> 
-        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="id">y</span> <span class="k">with</span>
+    <span class="k">static</span> <span class="k">member</span>        <span class="pn">(</span><span class="fn">+</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs12', 17)" onmouseover="showTip(event, 'fs12', 17)" class="rt">Ordering</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="fn">y</span><span class="pn">)</span> <span class="o">=</span> 
+        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="fn">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="fn">y</span> <span class="k">with</span>
         <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs8', 21)" onmouseover="showTip(event, 'fs8', 21)" class="uc">LT</span><span class="pn">,</span> <span class="id">_</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs8', 22)" onmouseover="showTip(event, 'fs8', 22)" class="uc">LT</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs9', 23)" onmouseover="showTip(event, 'fs9', 23)" class="uc">EQ</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs14', 24)" onmouseover="showTip(event, 'fs14', 24)" class="id">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs14', 25)" onmouseover="showTip(event, 'fs14', 25)" class="id">a</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs9', 23)" onmouseover="showTip(event, 'fs9', 23)" class="uc">EQ</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs14', 24)" onmouseover="showTip(event, 'fs14', 24)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs14', 25)" onmouseover="showTip(event, 'fs14', 25)" class="fn">a</span>
         <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs10', 26)" onmouseover="showTip(event, 'fs10', 26)" class="uc">GT</span><span class="pn">,</span> <span class="id">_</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 27)" onmouseover="showTip(event, 'fs10', 27)" class="uc">GT</span>
 
-<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="fn">compare&#39;</span> <span onmouseout="hideTip(event, 'fs16', 29)" onmouseover="showTip(event, 'fs16', 29)" class="id">x</span> <span onmouseout="hideTip(event, 'fs17', 30)" onmouseover="showTip(event, 'fs17', 30)" class="id">y</span> <span class="o">=</span>
-    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs18', 31)" onmouseover="showTip(event, 'fs18', 31)" class="fn">compare</span> <span onmouseout="hideTip(event, 'fs16', 32)" onmouseover="showTip(event, 'fs16', 32)" class="id">x</span> <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="id">y</span> <span class="k">with</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs19', 34)" onmouseover="showTip(event, 'fs19', 34)" class="id">a</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="id">a</span> <span class="o">&gt;</span> <span class="n">0</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 36)" onmouseover="showTip(event, 'fs10', 36)" class="uc">GT</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs19', 37)" onmouseover="showTip(event, 'fs19', 37)" class="id">a</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs19', 38)" onmouseover="showTip(event, 'fs19', 38)" class="id">a</span> <span class="o">&lt;</span> <span class="n">0</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs8', 39)" onmouseover="showTip(event, 'fs8', 39)" class="uc">LT</span>
+<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="fn">compare&#39;</span> <span onmouseout="hideTip(event, 'fs16', 29)" onmouseover="showTip(event, 'fs16', 29)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs17', 30)" onmouseover="showTip(event, 'fs17', 30)" class="fn">y</span> <span class="o">=</span>
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs18', 31)" onmouseover="showTip(event, 'fs18', 31)" class="fn">compare</span> <span onmouseout="hideTip(event, 'fs16', 32)" onmouseover="showTip(event, 'fs16', 32)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="fn">y</span> <span class="k">with</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs19', 34)" onmouseover="showTip(event, 'fs19', 34)" class="fn">a</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="fn">a</span> <span class="o">&gt;</span> <span class="n">0</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 36)" onmouseover="showTip(event, 'fs10', 36)" class="uc">GT</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs19', 37)" onmouseover="showTip(event, 'fs19', 37)" class="fn">a</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs19', 38)" onmouseover="showTip(event, 'fs19', 38)" class="fn">a</span> <span class="o">&lt;</span> <span class="n">0</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs8', 39)" onmouseover="showTip(event, 'fs8', 39)" class="uc">LT</span>
     <span class="pn">|</span> <span class="id">_</span>            <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs9', 40)" onmouseover="showTip(event, 'fs9', 40)" class="uc">EQ</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 41)" onmouseover="showTip(event, 'fs20', 41)" class="id">resGreater</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 42)" onmouseover="showTip(event, 'fs15', 42)" class="fn">compare&#39;</span> <span class="n">7</span> <span class="n">6</span>
@@ -183,8 +183,8 @@
 <span class="c">/// A monoid of all numbers from 0 to 4</span>
 <span class="k">type</span> <span class="rt">Mod5</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 43)" onmouseover="showTip(event, 'fs21', 43)" class="uc">Mod5</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs22', 44)" onmouseover="showTip(event, 'fs22', 44)" class="vt">uint32</span> <span class="k">with</span>
     <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="fn">get_Zero</span><span class="pn">(</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 45)" onmouseover="showTip(event, 'fs21', 45)" class="uc">Mod5</span> <span class="n">0u</span>
-    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs21', 46)" onmouseover="showTip(event, 'fs21', 46)" class="uc">Mod5</span> <span onmouseout="hideTip(event, 'fs23', 47)" onmouseover="showTip(event, 'fs23', 47)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs21', 48)" onmouseover="showTip(event, 'fs21', 48)" class="uc">Mod5</span> <span onmouseout="hideTip(event, 'fs24', 49)" onmouseover="showTip(event, 'fs24', 49)" class="id">y</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 50)" onmouseover="showTip(event, 'fs21', 50)" class="uc">Mod5</span> <span class="pn">(</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs23', 51)" onmouseover="showTip(event, 'fs23', 51)" class="id">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs24', 52)" onmouseover="showTip(event, 'fs24', 52)" class="id">y</span><span class="pn">)</span> <span class="o">%</span> <span class="n">5u</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 53)" onmouseover="showTip(event, 'fs25', 53)" class="fn">Mod5</span> <span onmouseout="hideTip(event, 'fs23', 54)" onmouseover="showTip(event, 'fs23', 54)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 55)" onmouseover="showTip(event, 'fs21', 55)" class="uc">Mod5</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs23', 56)" onmouseover="showTip(event, 'fs23', 56)" class="id">x</span> <span class="o">%</span> <span class="n">5u</span><span class="pn">)</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="pn">(</span><span class="fn">+</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs21', 46)" onmouseover="showTip(event, 'fs21', 46)" class="id">Mod5</span> <span onmouseout="hideTip(event, 'fs23', 47)" onmouseover="showTip(event, 'fs23', 47)" class="fn">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs21', 48)" onmouseover="showTip(event, 'fs21', 48)" class="id">Mod5</span> <span onmouseout="hideTip(event, 'fs24', 49)" onmouseover="showTip(event, 'fs24', 49)" class="fn">y</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 50)" onmouseover="showTip(event, 'fs21', 50)" class="uc">Mod5</span> <span class="pn">(</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs23', 51)" onmouseover="showTip(event, 'fs23', 51)" class="fn">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs24', 52)" onmouseover="showTip(event, 'fs24', 52)" class="fn">y</span><span class="pn">)</span> <span class="o">%</span> <span class="n">5u</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 53)" onmouseover="showTip(event, 'fs25', 53)" class="fn">Mod5</span> <span onmouseout="hideTip(event, 'fs23', 54)" onmouseover="showTip(event, 'fs23', 54)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 55)" onmouseover="showTip(event, 'fs21', 55)" class="uc">Mod5</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs23', 56)" onmouseover="showTip(event, 'fs23', 56)" class="fn">x</span> <span class="o">%</span> <span class="n">5u</span><span class="pn">)</span>
 
 
 <span class="c">// Results of Monoid operations</span>
@@ -213,65 +213,172 @@
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs58', 136)" onmouseover="showTip(event, 'fs58', 136)" class="id">tuple5</span> <span class="pn">:</span><span onmouseout="hideTip(event, 'fs59', 137)" onmouseover="showTip(event, 'fs59', 137)" class="rt">string</span><span class="pn">*</span><span class="pn">(</span><span onmouseout="hideTip(event, 'fs40', 138)" onmouseover="showTip(event, 'fs40', 138)" class="vt">Any</span><span class="pn">*</span><span onmouseout="hideTip(event, 'fs59', 139)" onmouseover="showTip(event, 'fs59', 139)" class="rt">string</span><span class="pn">)</span><span class="pn">*</span><span class="pn">(</span><span onmouseout="hideTip(event, 'fs42', 140)" onmouseover="showTip(event, 'fs42', 140)" class="vt">All</span><span class="pn">*</span><span onmouseout="hideTip(event, 'fs42', 141)" onmouseover="showTip(event, 'fs42', 141)" class="vt">All</span><span class="pn">*</span><span onmouseout="hideTip(event, 'fs42', 142)" onmouseover="showTip(event, 'fs42', 142)" class="vt">All</span><span class="pn">)</span><span class="pn">*</span><span onmouseout="hideTip(event, 'fs28', 143)" onmouseover="showTip(event, 'fs28', 143)" class="vt">int</span><span class="pn">*</span><span onmouseout="hideTip(event, 'fs59', 144)" onmouseover="showTip(event, 'fs59', 144)" class="rt">string</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs29', 145)" onmouseover="showTip(event, 'fs29', 145)" class="id">zero</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">module Seq<br /><br />from Microsoft.FSharp.Collections</div>
-<div class="fsdocs-tip" id="fs2">val sum : source:seq&lt;&#39;T&gt; -&gt; &#39;T (requires member ( + ) and member get_Zero)</div>
-<div class="fsdocs-tip" id="fs3">val fold : folder:(&#39;State -&gt; &#39;T -&gt; &#39;State) -&gt; state:&#39;State -&gt; source:seq&lt;&#39;T&gt; -&gt; &#39;State</div>
+            <div class="fsdocs-tip" id="fs1">module Seq
+
+from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.seq`1&quot; /&gt;.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs2">val sum: source: seq&lt;&#39;T&gt; -&gt; &#39;T (requires member (+) and member get_Zero)<br /><em>&lt;summary&gt;Returns the sum of the elements in the sequence.&lt;/summary&gt;<br />&lt;remarks&gt;The elements are summed using the &lt;c&gt;+&lt;/c&gt; operator and &lt;c&gt;Zero&lt;/c&gt; property associated with the generated type.&lt;/remarks&gt;<br />&lt;param name=&quot;source&quot;&gt;The input sequence.&lt;/param&gt;<br />&lt;returns&gt;The computed sum.&lt;/returns&gt;<br />&lt;example id=&quot;sum-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ let input = [ 1; 5; 3; 2 ]
+
+ input |&amp;gt; Seq.sum
+ &lt;/code&gt;
+ Evaluates to &lt;c&gt;11&lt;/c&gt;.
+ &lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs3">val fold: folder: (&#39;State -&gt; &#39;T -&gt; &#39;State) -&gt; state: &#39;State -&gt; source: seq&lt;&#39;T&gt; -&gt; &#39;State<br /><em>&lt;summary&gt;Applies a function to each element of the collection, threading an accumulator argument
+ through the computation. If the input function is &lt;c&gt;f&lt;/c&gt; and the elements are &lt;c&gt;i0...iN&lt;/c&gt;
+ then computes &lt;c&gt;f (... (f s i0)...) iN&lt;/c&gt;&lt;/summary&gt;<br />&lt;param name=&quot;folder&quot;&gt;A function that updates the state with each element from the sequence.&lt;/param&gt;<br />&lt;param name=&quot;state&quot;&gt;The initial state.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The input sequence.&lt;/param&gt;<br />&lt;returns&gt;The state object after the folding function is applied to each element of the sequence.&lt;/returns&gt;<br />&lt;exception cref=&quot;T:System.ArgumentNullException&quot;&gt;Thrown when the input sequence is null.&lt;/exception&gt;<br />&lt;example id=&quot;fold-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ type Charge =
+     | In of int
+     | Out of int
+
+ let inputs = [In 1; Out 2; In 3]
+
+ (0, inputs) ||&amp;gt; Seq.fold (fun acc charge -&amp;gt;
+     match charge with
+     | In i -&amp;gt; acc + i
+     | Out o -&amp;gt; acc - o)
+ &lt;/code&gt;
+ Evaluates to &lt;c&gt;2&lt;/c&gt;&lt;/example&gt;</em></div>
 <div class="fsdocs-tip" id="fs4">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs5">namespace FSharpPlus.Math</div>
-<div class="fsdocs-tip" id="fs6">module Generic<br /><br />from FSharpPlus.Math</div>
+<div class="fsdocs-tip" id="fs6">module Generic
+
+from FSharpPlus.Math<br /><em>&lt;summary&gt;
+ Generic numbers, functions and operators.
+ By opening this module some common operators become restricted, like (+) to &#39;T-&amp;gt;&#39;T-&amp;gt;&#39;T
+ &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs7">namespace FSharpPlus.Data</div>
 <div class="fsdocs-tip" id="fs8">union case Ordering.LT: Ordering</div>
 <div class="fsdocs-tip" id="fs9">union case Ordering.EQ: Ordering</div>
 <div class="fsdocs-tip" id="fs10">union case Ordering.GT: Ordering</div>
-<div class="fsdocs-tip" id="fs11">val x : Ordering</div>
-<div class="fsdocs-tip" id="fs12">type Ordering =<br />&#160;&#160;| LT<br />&#160;&#160;| EQ<br />&#160;&#160;| GT<br />&#160;&#160;&#160;&#160;static member Zero : Ordering<br />&#160;&#160;&#160;&#160;static member ( + ) : x:Ordering * y:Ordering -&gt; Ordering<br /><em><br /><br />&#160;A monoid that represents results of comparisons</em></div>
-<div class="fsdocs-tip" id="fs13">val y : Ordering</div>
-<div class="fsdocs-tip" id="fs14">val a : Ordering</div>
-<div class="fsdocs-tip" id="fs15">val compare&#39; : x:&#39;a -&gt; y:&#39;a -&gt; Ordering (requires comparison)</div>
-<div class="fsdocs-tip" id="fs16">val x : &#39;a (requires comparison)</div>
-<div class="fsdocs-tip" id="fs17">val y : &#39;a (requires comparison)</div>
-<div class="fsdocs-tip" id="fs18">val compare : e1:&#39;T -&gt; e2:&#39;T -&gt; int (requires comparison)</div>
-<div class="fsdocs-tip" id="fs19">val a : int</div>
-<div class="fsdocs-tip" id="fs20">val resGreater : Ordering</div>
-<div class="fsdocs-tip" id="fs21">Multiple items<br />union case Mod5.Mod5: uint32 -&gt; Mod5<br /><br />--------------------<br />type Mod5 =<br />&#160;&#160;| Mod5 of uint32<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Mod5<br />&#160;&#160;&#160;&#160;static member ( + ) : Mod5 * Mod5 -&gt; Mod5<br /><em><br /><br />&#160;A monoid of all numbers from 0 to 4</em></div>
-<div class="fsdocs-tip" id="fs22">Multiple items<br />val uint32 : value:&#39;T -&gt; uint32 (requires member op_Explicit)<br /><br />--------------------<br />type uint32 = System.UInt32</div>
-<div class="fsdocs-tip" id="fs23">val x : uint32</div>
-<div class="fsdocs-tip" id="fs24">val y : uint32</div>
-<div class="fsdocs-tip" id="fs25">Multiple items<br />val Mod5 : x:uint32 -&gt; Mod5<br /><br />--------------------<br />type Mod5 =<br />&#160;&#160;| Mod5 of uint32<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Mod5<br />&#160;&#160;&#160;&#160;static member ( + ) : Mod5 * Mod5 -&gt; Mod5<br /><em><br /><br />&#160;A monoid of all numbers from 0 to 4</em></div>
-<div class="fsdocs-tip" id="fs26">val emptyLst : int list</div>
-<div class="fsdocs-tip" id="fs27">type &#39;T list = List&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs28">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
-<div class="fsdocs-tip" id="fs29">val zero&lt;&#39;Monoid (requires member Zero)&gt; : &#39;Monoid (requires member Zero)</div>
-<div class="fsdocs-tip" id="fs30">val zeroUint : Mod5</div>
-<div class="fsdocs-tip" id="fs31">val res1 : Mod5</div>
-<div class="fsdocs-tip" id="fs32">val res2 : Mod5</div>
-<div class="fsdocs-tip" id="fs33">val sum : x:&#39;Foldable&lt;&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Fold and member ( + ) and member Zero)</div>
-<div class="fsdocs-tip" id="fs34">val map : f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)</div>
-<div class="fsdocs-tip" id="fs35">val res3 : Mod5</div>
-<div class="fsdocs-tip" id="fs36">val res8n4 : int list list</div>
-<div class="fsdocs-tip" id="fs37">val res15 : Mult&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs38">Multiple items<br />union case Mult.Mult: &#39;a -&gt; Mult&lt;&#39;a&gt;<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Mult&lt;&#39;a&gt; =<br />&#160;&#160;| Mult of &#39;a<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Mult&lt;&#39;a1&gt; (requires member One)<br />&#160;&#160;&#160;&#160;static member ( + ) : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a2&gt; (requires member ( * ))</div>
-<div class="fsdocs-tip" id="fs39">val resTrue : Any</div>
-<div class="fsdocs-tip" id="fs40">Multiple items<br />union case Any.Any: bool -&gt; Any<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Any =<br />&#160;&#160;| Any of bool<br />&#160;&#160;&#160;&#160;static member Zero : Any<br />&#160;&#160;&#160;&#160;static member ( + ) : Any * Any -&gt; Any</div>
-<div class="fsdocs-tip" id="fs41">val resFalse : All</div>
-<div class="fsdocs-tip" id="fs42">Multiple items<br />union case All.All: bool -&gt; All<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type All =<br />&#160;&#160;| All of bool<br />&#160;&#160;&#160;&#160;static member Zero : All<br />&#160;&#160;&#160;&#160;static member ( + ) : All * All -&gt; All</div>
-<div class="fsdocs-tip" id="fs43">val resHi : string</div>
-<div class="fsdocs-tip" id="fs44">val resGT : Ordering</div>
-<div class="fsdocs-tip" id="fs45">val resLT : Ordering</div>
-<div class="fsdocs-tip" id="fs46">val res9823 : Dual&lt;string&gt;</div>
-<div class="fsdocs-tip" id="fs47">Multiple items<br />union case Dual.Dual: &#39;t -&gt; Dual&lt;&#39;t&gt;<br /><br />--------------------<br />module Dual<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Dual&lt;&#39;t&gt; =<br />&#160;&#160;| Dual of &#39;t<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; Dual&lt;&#39;T&gt; (requires member Zero)<br />&#160;&#160;&#160;&#160;static member ( + ) : Dual&lt;&#39;T&gt; * Dual&lt;&#39;T&gt; -&gt; Dual&lt;&#39;T&gt; (requires member ( + ))</div>
-<div class="fsdocs-tip" id="fs48">val resBA : Dual&lt;string&gt;</div>
-<div class="fsdocs-tip" id="fs49">val resEl00 : int list * float</div>
-<div class="fsdocs-tip" id="fs50">Multiple items<br />val float : value:&#39;T -&gt; float (requires member op_Explicit)<br /><br />--------------------<br />type float = System.Double<br /><br />--------------------<br />type float&lt;&#39;Measure&gt; = float</div>
-<div class="fsdocs-tip" id="fs51">val resS3P20 : int * Mult&lt;float&gt;</div>
-<div class="fsdocs-tip" id="fs52">val res230 : int list * float list</div>
-<div class="fsdocs-tip" id="fs53">val res243 : int list * int list</div>
-<div class="fsdocs-tip" id="fs54">val res23 : int list * string</div>
-<div class="fsdocs-tip" id="fs55">val resLtDualGt : Ordering * Dual&lt;Ordering&gt;</div>
-<div class="fsdocs-tip" id="fs56">val res230hiSum2 : int list * (float list * string) * int</div>
-<div class="fsdocs-tip" id="fs57">val res230hiS4P3 : int list * (float list * string * int * Mult&lt;int&gt;)</div>
-<div class="fsdocs-tip" id="fs58">val tuple5 : string * (Any * string) * (All * All * All) * int * string</div>
-<div class="fsdocs-tip" id="fs59">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
+<div class="fsdocs-tip" id="fs11">val x: Ordering</div>
+<div class="fsdocs-tip" id="fs12">type Ordering =
+  | LT
+  | EQ
+  | GT
+  static member (+) : x: Ordering * y: Ordering -&gt; Ordering
+  static member Zero: Ordering<br /><em>&#160;A monoid that represents results of comparisons</em></div>
+<div class="fsdocs-tip" id="fs13">val y: Ordering</div>
+<div class="fsdocs-tip" id="fs14">val a: Ordering</div>
+<div class="fsdocs-tip" id="fs15">val compare&#39;: x: &#39;a -&gt; y: &#39;a -&gt; Ordering (requires comparison)</div>
+<div class="fsdocs-tip" id="fs16">val x: &#39;a (requires comparison)</div>
+<div class="fsdocs-tip" id="fs17">val y: &#39;a (requires comparison)</div>
+<div class="fsdocs-tip" id="fs18">val compare: e1: &#39;T -&gt; e2: &#39;T -&gt; int (requires comparison)<br /><em>&lt;summary&gt;Generic comparison.&lt;/summary&gt;<br />&lt;param name=&quot;e1&quot;&gt;The first value.&lt;/param&gt;<br />&lt;param name=&quot;e2&quot;&gt;The second value.&lt;/param&gt;<br />&lt;returns&gt;The result of the comparison.&lt;/returns&gt;<br />&lt;example id=&quot;compare-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ compare 1 2             //  Evaluates to -1
+ compare [1;2;3] [1;2;4] //  Evaluates to -1
+ compare 2 2             //  Evaluates to 0
+ compare [1;2;3] [1;2;3] //  Evaluates to 0
+ compare 2 1             //  Evaluates to 1
+ compare [1;2;4] [1;2;3] //  Evaluates to 1
+ &lt;/code&gt;&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs19">val a: int</div>
+<div class="fsdocs-tip" id="fs20">val resGreater: Ordering</div>
+<div class="fsdocs-tip" id="fs21">Multiple items<br />union case Mod5.Mod5: uint32 -&gt; Mod5<br /><br />--------------------<br />type Mod5 =
+  | Mod5 of uint32
+  static member (+) : Mod5 * Mod5 -&gt; Mod5
+  static member get_Zero: unit -&gt; Mod5<br /><em>&#160;A monoid of all numbers from 0 to 4</em></div>
+<div class="fsdocs-tip" id="fs22">Multiple items<br />val uint32: value: &#39;T -&gt; uint32 (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to unsigned 32-bit integer. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;UInt32.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted uint32&lt;/returns&gt;<br />&lt;example id=&quot;uint32-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type uint32 = System.UInt32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.UInt32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type uint32&lt;&#39;Measure&gt; = uint&lt;&#39;Measure&gt;<br /><em>&lt;summary&gt;The type of 32-bit unsigned integer numbers, annotated with a unit of measure.
+ The unit of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to
+ &lt;see cref=&quot;T:System.UInt32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs23">val x: uint32</div>
+<div class="fsdocs-tip" id="fs24">val y: uint32</div>
+<div class="fsdocs-tip" id="fs25">Multiple items<br />val Mod5: x: uint32 -&gt; Mod5<br /><br />--------------------<br />type Mod5 =
+  | Mod5 of uint32
+  static member (+) : Mod5 * Mod5 -&gt; Mod5
+  static member get_Zero: unit -&gt; Mod5<br /><em>&#160;A monoid of all numbers from 0 to 4</em></div>
+<div class="fsdocs-tip" id="fs26">val emptyLst: int list</div>
+<div class="fsdocs-tip" id="fs27">type &#39;T list = List&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The type of immutable singly-linked lists. &lt;/summary&gt;<br />&lt;remarks&gt;See the &lt;see cref=&quot;T:Microsoft.FSharp.Collections.ListModule&quot; /&gt; module for further operations related to lists.
+
+ Use the constructors &lt;c&gt;[]&lt;/c&gt; and &lt;c&gt;::&lt;/c&gt; (infix) to create values of this type, or
+ the notation &lt;c&gt;[1; 2; 3]&lt;/c&gt;. Use the values in the &lt;c&gt;List&lt;/c&gt; module to manipulate 
+ values of this type, or pattern match against the values directly.
+
+  See also &lt;a href=&quot;https://docs.microsoft.com/dotnet/fsharp/language-reference/lists&quot;&gt;F# Language Guide - Lists&lt;/a&gt;.
+ &lt;/remarks&gt;</em></div>
+<div class="fsdocs-tip" id="fs28">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
+ of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to
+ &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs29">val zero&lt;&#39;Monoid (requires member Zero)&gt; : &#39;Monoid (requires member Zero)<br /><em>&lt;summary&gt;
+ A value that represents the 0 element of a Monoid.
+ &lt;/summary&gt;<br />&lt;category index=&quot;4&quot;&gt;Monoid&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs30">val zeroUint: Mod5</div>
+<div class="fsdocs-tip" id="fs31">val res1: Mod5</div>
+<div class="fsdocs-tip" id="fs32">val res2: Mod5</div>
+<div class="fsdocs-tip" id="fs33">val sum: x: &#39;Foldable&lt;&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Fold and member ``+`` and member Zero)<br /><em>&lt;summary&gt;
+ Folds the sum of all monoid elements in the Foldable.
+ &lt;/summary&gt;<br />&lt;category index=&quot;23&quot;&gt;Additional Functions&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs34">val map: f: (&#39;T -&gt; &#39;U) -&gt; x: &#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)<br /><em>&lt;summary&gt;Lifts a function into a Functor.&lt;/summary&gt;<br />&lt;category index=&quot;1&quot;&gt;Functor&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs35">val res3: Mod5</div>
+<div class="fsdocs-tip" id="fs36">val res8n4: int list list</div>
+<div class="fsdocs-tip" id="fs37">val res15: Mult&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs38">Multiple items<br />union case Mult.Mult: &#39;a -&gt; Mult&lt;&#39;a&gt;<br /><br />--------------------<br />[&lt;Struct&gt;]
+type Mult&lt;&#39;a&gt; =
+  | Mult of &#39;a
+  static member (+) : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a2&gt; (requires member ( * ))
+  static member get_Zero: unit -&gt; Mult&lt;&#39;a1&gt; (requires member One)<br /><em>&lt;summary&gt;
+ Numeric wrapper for multiplication monoid (*, 1)
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs39">val resTrue: Any</div>
+<div class="fsdocs-tip" id="fs40">Multiple items<br />union case Any.Any: bool -&gt; Any<br /><br />--------------------<br />[&lt;Struct&gt;]
+type Any =
+  | Any of bool
+  static member (+) : Any * Any -&gt; Any
+  static member Zero: Any<br /><em>&lt;summary&gt;
+ Boolean monoid under disjunction.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs41">val resFalse: All</div>
+<div class="fsdocs-tip" id="fs42">Multiple items<br />union case All.All: bool -&gt; All<br /><br />--------------------<br />[&lt;Struct&gt;]
+type All =
+  | All of bool
+  static member (+) : All * All -&gt; All
+  static member Zero: All<br /><em>&lt;summary&gt;
+ Boolean monoid under conjunction.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs43">val resHi: string</div>
+<div class="fsdocs-tip" id="fs44">val resGT: Ordering</div>
+<div class="fsdocs-tip" id="fs45">val resLT: Ordering</div>
+<div class="fsdocs-tip" id="fs46">val res9823: Dual&lt;string&gt;</div>
+<div class="fsdocs-tip" id="fs47">Multiple items<br />union case Dual.Dual: &#39;t -&gt; Dual&lt;&#39;t&gt;<br /><br />--------------------<br />module Dual
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on Dual
+&lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type Dual&lt;&#39;t&gt; =
+  | Dual of &#39;t
+  static member (+) : Dual&lt;&#39;T&gt; * Dual&lt;&#39;T&gt; -&gt; Dual&lt;&#39;T&gt; (requires member ``+``)
+  static member get_Zero: unit -&gt; Dual&lt;&#39;T&gt; (requires member Zero)<br /><em>&lt;summary&gt;
+ The dual of a monoid, obtained by swapping the arguments of append.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs48">val resBA: Dual&lt;string&gt;</div>
+<div class="fsdocs-tip" id="fs49">val resEl00: int list * float</div>
+<div class="fsdocs-tip" id="fs50">Multiple items<br />val float: value: &#39;T -&gt; float (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to 64-bit float. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;Double.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted float&lt;/returns&gt;<br />&lt;example id=&quot;float-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type float = System.Double<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Double&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type float&lt;&#39;Measure&gt; =
+  float<br /><em>&lt;summary&gt;The type of double-precision floating point numbers, annotated with a unit of measure.
+ The unit of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to
+ &lt;see cref=&quot;T:System.Double&quot; /&gt;.&lt;/summary&gt;<br />&lt;category index=&quot;6&quot;&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs51">val resS3P20: int * Mult&lt;float&gt;</div>
+<div class="fsdocs-tip" id="fs52">val res230: int list * float list</div>
+<div class="fsdocs-tip" id="fs53">val res243: int list * int list</div>
+<div class="fsdocs-tip" id="fs54">val res23: int list * string</div>
+<div class="fsdocs-tip" id="fs55">val resLtDualGt: Ordering * Dual&lt;Ordering&gt;</div>
+<div class="fsdocs-tip" id="fs56">val res230hiSum2: int list * (float list * string) * int</div>
+<div class="fsdocs-tip" id="fs57">val res230hiS4P3: int list * (float list * string * int * Mult&lt;int&gt;)</div>
+<div class="fsdocs-tip" id="fs58">val tuple5: string * (Any * string) * (All * All * All) * int * string</div>
+<div class="fsdocs-tip" id="fs59">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
 
         </div>
 

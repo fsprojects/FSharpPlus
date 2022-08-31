@@ -98,15 +98,15 @@ The contained bools would become true only if both (all) operands are true.</p>
 <li><a href="abstraction-monoid.html">Monoid</a></li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">res1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="uc">All</span> <span class="k">true</span> <span class="o">++</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">zero</span> <span class="o">++</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="uc">All</span> <span class="k">false</span>
 <span class="c">// val res1 : All = All false</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="fn">even</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="id">x</span> <span class="o">%</span> <span class="n">2</span> <span class="o">=</span> <span class="n">0</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="fn">even</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="fn">x</span> <span class="o">%</span> <span class="n">2</span> <span class="o">=</span> <span class="n">0</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">res2</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">6</span><span class="pn">;</span><span class="n">7</span><span class="pn">;</span><span class="n">8</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="fn">map</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="fn">even</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs4', 14)" onmouseover="showTip(event, 'fs4', 14)" class="uc">All</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="fn">sum</span>
 <span class="c">// val res2 : All = All false</span>
@@ -114,14 +114,24 @@ The contained bools would become true only if both (all) operands are true.</p>
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs3">val res1 : All</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />union case All.All: bool -&gt; All<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type All =<br />&#160;&#160;| All of bool<br />&#160;&#160;&#160;&#160;static member Zero : All<br />&#160;&#160;&#160;&#160;static member ( + ) : All * All -&gt; All</div>
-<div class="fsdocs-tip" id="fs5">val zero&lt;&#39;Monoid (requires member Zero)&gt; : &#39;Monoid (requires member Zero)</div>
-<div class="fsdocs-tip" id="fs6">val even : x:int -&gt; bool</div>
-<div class="fsdocs-tip" id="fs7">val x : int</div>
-<div class="fsdocs-tip" id="fs8">val res2 : All</div>
-<div class="fsdocs-tip" id="fs9">val map : f:(&#39;T -&gt; &#39;U) -&gt; x:&#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)</div>
-<div class="fsdocs-tip" id="fs10">val sum : x:&#39;Foldable&lt;&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Fold and member ( + ) and member Zero)</div>
+<div class="fsdocs-tip" id="fs3">val res1: All</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />union case All.All: bool -&gt; All<br /><br />--------------------<br />[&lt;Struct&gt;]
+type All =
+  | All of bool
+  static member (+) : All * All -&gt; All
+  static member Zero: All<br /><em>&lt;summary&gt;
+ Boolean monoid under conjunction.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val zero&lt;&#39;Monoid (requires member Zero)&gt; : &#39;Monoid (requires member Zero)<br /><em>&lt;summary&gt;
+ A value that represents the 0 element of a Monoid.
+ &lt;/summary&gt;<br />&lt;category index=&quot;4&quot;&gt;Monoid&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs6">val even: x: int -&gt; bool</div>
+<div class="fsdocs-tip" id="fs7">val x: int</div>
+<div class="fsdocs-tip" id="fs8">val res2: All</div>
+<div class="fsdocs-tip" id="fs9">val map: f: (&#39;T -&gt; &#39;U) -&gt; x: &#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)<br /><em>&lt;summary&gt;Lifts a function into a Functor.&lt;/summary&gt;<br />&lt;category index=&quot;1&quot;&gt;Functor&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val sum: x: &#39;Foldable&lt;&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Fold and member ``+`` and member Zero)<br /><em>&lt;summary&gt;
+ Folds the sum of all monoid elements in the Foldable.
+ &lt;/summary&gt;<br />&lt;category index=&quot;23&quot;&gt;Additional Functions&lt;/category&gt;</em></div>
 
         </div>
 

@@ -88,9 +88,9 @@
             <h1><a name="NonEmptyList-T" class="anchor" href="#NonEmptyList-T">NonEmptyList<'T></a></h1>
 <p>A type-safe list that contains at least one element.</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 </code></pre>
 <h3><a name="Constructing-NonEmptyList" class="anchor" href="#Constructing-NonEmptyList">Constructing NonEmptyList</a></h3>
@@ -120,28 +120,57 @@
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs3">val list123&#39; : NonEmptyList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />module NonEmptyList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =<br />&#160;&#160;{ Head: &#39;t<br />&#160;&#160;&#160;&#160;Tail: &#39;t list }<br />&#160;&#160;&#160;&#160;interface NonEmptySeq&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyList&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;&#39;t&gt;<br />&#160;&#160;&#160;&#160;member GetSlice : (int option * int option -&gt; NonEmptyList&lt;&#39;t&gt;)<br />&#160;&#160;&#160;&#160;member Item : (int -&gt; &#39;t)<br />&#160;&#160;&#160;&#160;member Length : int<br />&#160;&#160;&#160;&#160;static member Choice : source:NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ( &lt;|&gt; ))<br />&#160;&#160;&#160;&#160;static member Duplicate : s:NonEmptyList&lt;&#39;a&gt; * _impl:Duplicate -&gt; NonEmptyList&lt;NonEmptyList&lt;&#39;a&gt;&gt;<br />&#160;&#160;&#160;&#160;...</div>
-<div class="fsdocs-tip" id="fs5">val create : x:&#39;a -&gt; xs:&#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs6">val list123 : NonEmptyList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />val nelist : NelBuilder<br /><br />--------------------<br />type nelist&lt;&#39;t&gt; = NonEmptyList&lt;&#39;t&gt;</div>
-<div class="fsdocs-tip" id="fs8">val listOne : NonEmptyList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs9">val singleton : x:&#39;a -&gt; NonEmptyList&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs10">val list2 : NonEmptyList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs11">val cons : e:&#39;a -&gt; NonEmptyList&lt;&#39;a&gt; -&gt; NonEmptyList&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs12">val list3 : NonEmptyList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs13">val plus : x:&#39;Monoid -&gt; y:&#39;Monoid -&gt; &#39;Monoid (requires member ( + ))</div>
-<div class="fsdocs-tip" id="fs14">val list3&#39; : NonEmptyList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs15">val result : x:&#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)</div>
-<div class="fsdocs-tip" id="fs16">val list4 : int list</div>
-<div class="fsdocs-tip" id="fs17">val toList : source:&#39;a -&gt; &#39;T list (requires member ToList)</div>
-<div class="fsdocs-tip" id="fs18">val lengthOfList3 : int</div>
-<div class="fsdocs-tip" id="fs19">val length : source:&#39;Foldable&lt;&#39;T&gt; -&gt; int (requires member Length)</div>
-<div class="fsdocs-tip" id="fs20">val headOf3 : int</div>
+<div class="fsdocs-tip" id="fs3">val list123&#39;: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />module NonEmptyList
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on NonEmptyList
+&lt;/summary&gt;</em><br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =
+  {
+    Head: &#39;t
+    Tail: &#39;t list
+  }
+  interface NonEmptySeq&lt;&#39;t&gt;
+  interface IReadOnlyList&lt;&#39;t&gt;
+  interface IReadOnlyCollection&lt;&#39;t&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;t&gt;
+  static member (+) : NonEmptyList&lt;&#39;a1&gt; * x: NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;
+  static member (&lt;*&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
+  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a1&gt; * g: (NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a1&gt; * f: (&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member Choice: source: NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ``&lt;|&gt;``)
+  ...<br /><em>&lt;summary&gt;
+ A type-safe list that contains at least one element.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val create: x: &#39;a -&gt; xs: &#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;Builds a non empty list.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs6">val list123: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />val nelist: NelBuilder<br /><br />--------------------<br />type nelist&lt;&#39;t&gt; = NonEmptyList&lt;&#39;t&gt;<br /><em>&lt;summary&gt;
+ A type alias for NonEmptyList&amp;lt;&#39;t&amp;gt;
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val listOne: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs9">val singleton: x: &#39;a -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;Builds a non empty list with a single element.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val list2: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs11">val cons: e: &#39;a -&gt; NonEmptyList&lt;&#39;a&gt; -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;
+ Returns a new NonEmptyList with the element added to the beginning.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs12">val list3: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs13">val plus: x: &#39;Monoid -&gt; y: &#39;Monoid -&gt; &#39;Monoid (requires member ``+``)<br /><em>&lt;summary&gt;
+ Combines two monoids in one.
+ &lt;/summary&gt;<br />&lt;category index=&quot;4&quot;&gt;Monoid&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs14">val list3&#39;: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs15">val result: x: &#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)<br /><em>&lt;summary&gt;
+ Lifts a value into a Functor. Same as return in Computation Expressions.
+ &lt;/summary&gt;<br />&lt;category index=&quot;2&quot;&gt;Applicative&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs16">val list4: int list</div>
+<div class="fsdocs-tip" id="fs17">val toList: source: &#39;a -&gt; &#39;T list (requires member ToList)<br /><em>&lt;summary&gt;Builds a list from the given foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input foldable.&lt;/param&gt;<br />&lt;returns&gt;The list of foldable elements.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs18">val lengthOfList3: int</div>
+<div class="fsdocs-tip" id="fs19">val length: source: &#39;Foldable&lt;&#39;T&gt; -&gt; int (requires member Length)<br /><em>&lt;summary&gt;Gets the number of elements in the foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input foldable.&lt;/param&gt;<br />&lt;returns&gt;The length of the foldable.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs20">val headOf3: int</div>
 <div class="fsdocs-tip" id="fs21">NonEmptyList.Head: int</div>
-<div class="fsdocs-tip" id="fs22">val headOf3&#39; : int</div>
-<div class="fsdocs-tip" id="fs23">val head : source:&#39;Foldable&lt;&#39;T&gt; -&gt; &#39;T (requires member Head)</div>
-<div class="fsdocs-tip" id="fs24">val tailOf3 : int list</div>
+<div class="fsdocs-tip" id="fs22">val headOf3&#39;: int</div>
+<div class="fsdocs-tip" id="fs23">val head: source: &#39;Foldable&lt;&#39;T&gt; -&gt; &#39;T (requires member Head)<br /><em>&lt;summary&gt;Gets the first element of the foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input flodable.&lt;/param&gt;<br />&lt;exception cref=&quot;System.ArgumentException&quot;&gt;Thrown when the foldable is empty.&lt;/exception&gt;<br />&lt;returns&gt;The first element of the foldable.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs24">val tailOf3: int list</div>
 <div class="fsdocs-tip" id="fs25">NonEmptyList.Tail: int list</div>
 
         </div>

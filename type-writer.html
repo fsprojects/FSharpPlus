@@ -93,32 +93,32 @@ It gives you a different way of logging that can be useful when you want to be a
 
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
-<span class="k">type</span> <span class="rt">LogEntry</span><span class="o">=</span><span class="pn">{</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">msg</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="rt">string</span><span class="pn">}</span>
+<span class="k">type</span> <span class="rt">LogEntry</span><span class="o">=</span><span class="pn">{</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="prop">msg</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="rt">string</span><span class="pn">}</span>
 <span class="k">with</span>
-    <span class="k">static</span> <span class="k">member</span> <span class="fn">create</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">x</span> <span class="o">=</span> <span class="pn">{</span><span class="id">msg</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="id">x</span><span class="pn">}</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="fn">create</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="fn">x</span> <span class="o">=</span> <span class="pn">{</span><span class="prop">msg</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="fn">x</span><span class="pn">}</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="fn">output</span> <span onmouseout="hideTip(event, 'fs5', 9)" onmouseover="showTip(event, 'fs5', 9)" class="id">x</span> <span class="o">=</span>  <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">tell</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="rt">LogEntry</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="id">create</span> <span onmouseout="hideTip(event, 'fs5', 14)" onmouseover="showTip(event, 'fs5', 14)" class="id">x</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="fn">output</span> <span onmouseout="hideTip(event, 'fs5', 9)" onmouseover="showTip(event, 'fs5', 9)" class="fn">x</span> <span class="o">=</span>  <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">tell</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="rt">LogEntry</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="id">create</span> <span onmouseout="hideTip(event, 'fs5', 14)" onmouseover="showTip(event, 'fs5', 14)" class="fn">x</span><span class="pn">]</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="id">calc</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="id">monad</span> <span class="pn">{</span>
   <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 17)" onmouseover="showTip(event, 'fs6', 17)" class="fn">output</span> <span class="s">&quot;I&#39;m going to start a heavy computation&quot;</span> <span class="c">// start logging</span>
-  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="id">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 19)" onmouseover="showTip(event, 'fs14', 19)" class="fn">sum</span> <span class="pn">[</span><span class="n">1..</span><span class="n">100_000</span><span class="pn">]</span>
-  <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 20)" onmouseover="showTip(event, 'fs6', 20)" class="fn">output</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 21)" onmouseover="showTip(event, 'fs4', 21)" class="fn">string</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="id">y</span><span class="pn">)</span>
+  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="fn">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 19)" onmouseover="showTip(event, 'fs14', 19)" class="fn">sum</span> <span class="pn">[</span><span class="n">1..</span><span class="n">100_000</span><span class="pn">]</span>
+  <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 20)" onmouseover="showTip(event, 'fs6', 20)" class="fn">output</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 21)" onmouseover="showTip(event, 'fs4', 21)" class="fn">string</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="fn">y</span><span class="pn">)</span>
   <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 23)" onmouseover="showTip(event, 'fs6', 23)" class="fn">output</span> <span class="s">&quot;The computation finished&quot;</span>
-  <span class="k">return</span> <span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="id">y</span> <span class="c">// return the result of the computation</span>
+  <span class="k">return</span> <span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="fn">y</span> <span class="c">// return the result of the computation</span>
 <span class="pn">}</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 25)" onmouseover="showTip(event, 'fs15', 25)" class="id">logs</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 26)" onmouseover="showTip(event, 'fs7', 26)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 27)" onmouseover="showTip(event, 'fs16', 27)" class="id">exec</span> <span onmouseout="hideTip(event, 'fs11', 28)" onmouseover="showTip(event, 'fs11', 28)" class="id">calc</span>
 <span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs13', 29)" onmouseover="showTip(event, 'fs13', 29)" class="id">y</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs17', 30)" onmouseover="showTip(event, 'fs17', 30)" class="id">logs&#39;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 31)" onmouseover="showTip(event, 'fs7', 31)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs18', 32)" onmouseover="showTip(event, 'fs18', 32)" class="id">run</span> <span onmouseout="hideTip(event, 'fs11', 33)" onmouseover="showTip(event, 'fs11', 33)" class="id">calc</span>
 </code></pre>
 <p>There are some performance implications around using a regular list, that's why you should use DList in these scenarios</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 34)" onmouseover="showTip(event, 'fs19', 34)" class="fn">output&#39;</span> <span onmouseout="hideTip(event, 'fs5', 35)" onmouseover="showTip(event, 'fs5', 35)" class="id">x</span> <span class="o">=</span>  <span onmouseout="hideTip(event, 'fs7', 36)" onmouseover="showTip(event, 'fs7', 36)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 37)" onmouseover="showTip(event, 'fs8', 37)" class="id">tell</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs20', 38)" onmouseover="showTip(event, 'fs20', 38)" class="m">DList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 39)" onmouseover="showTip(event, 'fs21', 39)" class="id">ofSeq</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs9', 40)" onmouseover="showTip(event, 'fs9', 40)" class="rt">LogEntry</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 41)" onmouseover="showTip(event, 'fs10', 41)" class="id">create</span> <span onmouseout="hideTip(event, 'fs5', 42)" onmouseover="showTip(event, 'fs5', 42)" class="id">x</span><span class="pn">]</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 34)" onmouseover="showTip(event, 'fs19', 34)" class="fn">output&#39;</span> <span onmouseout="hideTip(event, 'fs5', 35)" onmouseover="showTip(event, 'fs5', 35)" class="fn">x</span> <span class="o">=</span>  <span onmouseout="hideTip(event, 'fs7', 36)" onmouseover="showTip(event, 'fs7', 36)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 37)" onmouseover="showTip(event, 'fs8', 37)" class="id">tell</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs20', 38)" onmouseover="showTip(event, 'fs20', 38)" class="m">DList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 39)" onmouseover="showTip(event, 'fs21', 39)" class="id">ofSeq</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs9', 40)" onmouseover="showTip(event, 'fs9', 40)" class="rt">LogEntry</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 41)" onmouseover="showTip(event, 'fs10', 41)" class="id">create</span> <span onmouseout="hideTip(event, 'fs5', 42)" onmouseover="showTip(event, 'fs5', 42)" class="fn">x</span><span class="pn">]</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 43)" onmouseover="showTip(event, 'fs22', 43)" class="id">calc&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 44)" onmouseover="showTip(event, 'fs12', 44)" class="id">monad</span> <span class="pn">{</span>
   <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs19', 45)" onmouseover="showTip(event, 'fs19', 45)" class="fn">output&#39;</span> <span class="s">&quot;I&#39;m going to start a heavy computation&quot;</span> <span class="c">// start logging</span>
-  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 46)" onmouseover="showTip(event, 'fs13', 46)" class="id">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 47)" onmouseover="showTip(event, 'fs14', 47)" class="fn">sum</span> <span class="pn">[</span><span class="n">1..</span><span class="n">100_000</span><span class="pn">]</span>
-  <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs19', 48)" onmouseover="showTip(event, 'fs19', 48)" class="fn">output&#39;</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 49)" onmouseover="showTip(event, 'fs4', 49)" class="fn">string</span> <span onmouseout="hideTip(event, 'fs13', 50)" onmouseover="showTip(event, 'fs13', 50)" class="id">y</span><span class="pn">)</span>
+  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 46)" onmouseover="showTip(event, 'fs13', 46)" class="fn">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 47)" onmouseover="showTip(event, 'fs14', 47)" class="fn">sum</span> <span class="pn">[</span><span class="n">1..</span><span class="n">100_000</span><span class="pn">]</span>
+  <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs19', 48)" onmouseover="showTip(event, 'fs19', 48)" class="fn">output&#39;</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 49)" onmouseover="showTip(event, 'fs4', 49)" class="fn">string</span> <span onmouseout="hideTip(event, 'fs13', 50)" onmouseover="showTip(event, 'fs13', 50)" class="fn">y</span><span class="pn">)</span>
   <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs19', 51)" onmouseover="showTip(event, 'fs19', 51)" class="fn">output&#39;</span> <span class="s">&quot;The computation finished&quot;</span>
-  <span class="k">return</span> <span onmouseout="hideTip(event, 'fs13', 52)" onmouseover="showTip(event, 'fs13', 52)" class="id">y</span> <span class="c">// return the result of the computation</span>
+  <span class="k">return</span> <span onmouseout="hideTip(event, 'fs13', 52)" onmouseover="showTip(event, 'fs13', 52)" class="fn">y</span> <span class="c">// return the result of the computation</span>
 <span class="pn">}</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 53)" onmouseover="showTip(event, 'fs23', 53)" class="id">logs2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 54)" onmouseover="showTip(event, 'fs7', 54)" class="m">Writer</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 55)" onmouseover="showTip(event, 'fs16', 55)" class="id">exec</span> <span onmouseout="hideTip(event, 'fs22', 56)" onmouseover="showTip(event, 'fs22', 56)" class="id">calc&#39;</span>
@@ -128,28 +128,78 @@ It gives you a different way of logging that can be useful when you want to be a
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
 <div class="fsdocs-tip" id="fs3">LogEntry.msg: string</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
-<div class="fsdocs-tip" id="fs5">val x : string</div>
-<div class="fsdocs-tip" id="fs6">val output : x:string -&gt; Writer&lt;LogEntry list,unit&gt;</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />union case Writer.Writer: (&#39;t * &#39;monoid) -&gt; Writer&lt;&#39;monoid,&#39;t&gt;<br /><br />--------------------<br />module Writer<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Writer&lt;&#39;monoid,&#39;t&gt; =<br />&#160;&#160;| Writer of (&#39;t * &#39;monoid)<br />&#160;&#160;&#160;&#160;static member Extract : Writer&lt;&#39;T,&#39;W&gt; -&gt; &#39;T<br />&#160;&#160;&#160;&#160;static member Listen : m:Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,(&#39;T * &#39;Monoid)&gt;<br />&#160;&#160;&#160;&#160;static member Pass : m:Writer&lt;&#39;Monoid,(&#39;T * (&#39;Monoid -&gt; &#39;Monoid))&gt; -&gt; Writer&lt;&#39;Monoid,&#39;T&gt;<br />&#160;&#160;&#160;&#160;static member Return : x:&#39;T -&gt; Writer&lt;&#39;Monoid,&#39;T&gt; (requires member Zero)<br />&#160;&#160;&#160;&#160;static member Tell : w:&#39;Monoid -&gt; Writer&lt;&#39;Monoid,unit&gt;<br />&#160;&#160;&#160;&#160;static member ( =&gt;&gt; ) : g:Writer&lt;&#39;T,&#39;W&gt; * f:(Writer&lt;&#39;T,&#39;W&gt; -&gt; &#39;U) -&gt; Writer&lt;&#39;U,&#39;W&gt;<br />&#160;&#160;&#160;&#160;static member ( &gt;&gt;= ) : x:Writer&lt;&#39;Monoid,&#39;T&gt; * f:(&#39;T -&gt; Writer&lt;&#39;Monoid,&#39;U&gt;) -&gt; Writer&lt;&#39;Monoid,&#39;U&gt; (requires member ( + ))<br />&#160;&#160;&#160;&#160;static member ( &lt;*&gt; ) : f:Writer&lt;&#39;Monoid,(&#39;T -&gt; &#39;U)&gt; * x:Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,&#39;U&gt; (requires member ( + ))</div>
-<div class="fsdocs-tip" id="fs8">val tell : w:&#39;Monoid -&gt; Writer&lt;&#39;Monoid,unit&gt;</div>
-<div class="fsdocs-tip" id="fs9">type LogEntry =<br />&#160;&#160;{ msg: string }<br />&#160;&#160;&#160;&#160;static member create : x:string -&gt; LogEntry</div>
-<div class="fsdocs-tip" id="fs10">static member LogEntry.create : x:string -&gt; LogEntry</div>
-<div class="fsdocs-tip" id="fs11">val calc : Writer&lt;LogEntry list,int&gt;</div>
-<div class="fsdocs-tip" id="fs12">val monad&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs13">val y : int</div>
-<div class="fsdocs-tip" id="fs14">val sum : x:&#39;Foldable&lt;&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Fold and member ( + ) and member Zero)</div>
-<div class="fsdocs-tip" id="fs15">val logs : LogEntry list</div>
-<div class="fsdocs-tip" id="fs16">val exec : Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; &#39;Monoid</div>
-<div class="fsdocs-tip" id="fs17">val logs&#39; : LogEntry list</div>
-<div class="fsdocs-tip" id="fs18">val run : Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; &#39;T * &#39;Monoid</div>
-<div class="fsdocs-tip" id="fs19">val output&#39; : x:string -&gt; Writer&lt;DList&lt;LogEntry&gt;,unit&gt;</div>
-<div class="fsdocs-tip" id="fs20">Multiple items<br />module DList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type DList&lt;&#39;T&gt; =<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IReadOnlyList&lt;&#39;T&gt;<br />&#160;&#160;interface IReadOnlyCollection&lt;&#39;T&gt;<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;new : length:int * data:DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;<br />&#160;&#160;member Add : x:&#39;T -&gt; DList&lt;&#39;T&gt;<br />&#160;&#160;member Cons : hd:&#39;T -&gt; DList&lt;&#39;T&gt;<br />&#160;&#160;override Equals : other:obj -&gt; bool<br />&#160;&#160;override GetHashCode : unit -&gt; int<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;...<br /><br />--------------------<br />new : length:int * data:DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs21">Multiple items<br />val ofSeq : s:seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;<br /><br />--------------------<br />static member DList.ofSeq : s:seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs22">val calc&#39; : Writer&lt;DList&lt;LogEntry&gt;,int&gt;</div>
-<div class="fsdocs-tip" id="fs23">val logs2 : DList&lt;LogEntry&gt;</div>
-<div class="fsdocs-tip" id="fs24">val y&#39; : int</div>
-<div class="fsdocs-tip" id="fs25">val logs2&#39; : DList&lt;LogEntry&gt;</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val x: string</div>
+<div class="fsdocs-tip" id="fs6">val output: x: string -&gt; Writer&lt;LogEntry list,unit&gt;</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />union case Writer.Writer: (&#39;t * &#39;monoid) -&gt; Writer&lt;&#39;monoid,&#39;t&gt;<br /><br />--------------------<br />module Writer
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on Writer
+&lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type Writer&lt;&#39;monoid,&#39;t&gt; =
+  | Writer of (&#39;t * &#39;monoid)
+  static member ( *&gt; ) : x: Writer&lt;&#39;Monoid,&#39;T&gt; * y: Writer&lt;&#39;Monoid,&#39;U&gt; -&gt; Writer&lt;&#39;Monoid,&#39;U&gt; (requires member ``+``)
+  static member (&lt;!&gt;) : f: (&#39;T -&gt; &#39;U) * x: Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,&#39;U&gt;
+  static member ( &lt;* ) : x: Writer&lt;&#39;Monoid,&#39;U&gt; * y: Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,&#39;U&gt; (requires member ``+``)
+  static member (&lt;*&gt;) : f: Writer&lt;&#39;Monoid,(&#39;T -&gt; &#39;U)&gt; * x: Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,&#39;U&gt; (requires member ``+``)
+  static member (=&gt;&gt;) : g: Writer&lt;&#39;T,&#39;W&gt; * f: (Writer&lt;&#39;T,&#39;W&gt; -&gt; &#39;U) -&gt; Writer&lt;&#39;U,&#39;W&gt;
+  static member (&gt;&gt;=) : x: Writer&lt;&#39;Monoid,&#39;T&gt; * f: (&#39;T -&gt; Writer&lt;&#39;Monoid,&#39;U&gt;) -&gt; Writer&lt;&#39;Monoid,&#39;U&gt; (requires member ``+``)
+  static member Extract: Writer&lt;&#39;T,&#39;W&gt; -&gt; &#39;T
+  static member Listen: m: Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; Writer&lt;&#39;Monoid,(&#39;T * &#39;Monoid)&gt;
+  static member Pass: m: Writer&lt;&#39;Monoid,(&#39;T * (&#39;Monoid -&gt; &#39;Monoid))&gt; -&gt; Writer&lt;&#39;Monoid,&#39;T&gt;
+  static member Return: x: &#39;T -&gt; Writer&lt;&#39;Monoid,&#39;T&gt; (requires member Zero)
+  ...<br /><em>&lt;summary&gt; Computation type: Computations which produce a stream of data in addition to the computed values.
+ &lt;para /&gt;   Binding strategy: Combines the outputs of the subcomputations using &lt;c&gt;mappend&lt;/c&gt;.
+ &lt;para /&gt;   Useful for: Logging, or other computations that produce output &quot;on the side&quot;. &lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val tell: w: &#39;Monoid -&gt; Writer&lt;&#39;Monoid,unit&gt;<br /><em>&lt;summary&gt;
+ Embeds a simple writer action.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs9">type LogEntry =
+  { msg: string }
+  static member create: x: string -&gt; LogEntry</div>
+<div class="fsdocs-tip" id="fs10">static member LogEntry.create: x: string -&gt; LogEntry</div>
+<div class="fsdocs-tip" id="fs11">val calc: Writer&lt;LogEntry list,int&gt;</div>
+<div class="fsdocs-tip" id="fs12">val monad&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs13">val y: int</div>
+<div class="fsdocs-tip" id="fs14">val sum: x: &#39;Foldable&lt;&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Fold and member ``+`` and member Zero)<br /><em>&lt;summary&gt;
+ Folds the sum of all monoid elements in the Foldable.
+ &lt;/summary&gt;<br />&lt;category index=&quot;23&quot;&gt;Additional Functions&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">val logs: LogEntry list</div>
+<div class="fsdocs-tip" id="fs16">val exec: Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; &#39;Monoid<br /><em>&lt;summary&gt;
+ Extract the output from a writer computation.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs17">val logs&#39;: LogEntry list</div>
+<div class="fsdocs-tip" id="fs18">val run: Writer&lt;&#39;Monoid,&#39;T&gt; -&gt; &#39;T * &#39;Monoid<br /><em>&lt;summary&gt;
+ Unwraps a writer computation as a (result, output) pair. (The inverse of Writer.)
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs19">val output&#39;: x: string -&gt; Writer&lt;DList&lt;LogEntry&gt;,unit&gt;</div>
+<div class="fsdocs-tip" id="fs20">Multiple items<br />module DList
+
+from FSharpPlus.Data<br /><br />--------------------<br />type DList&lt;&#39;T&gt; =
+  interface IEnumerable
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable&lt;&#39;T&gt;
+  new: length: int * data: DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;
+  member Add: x: &#39;T -&gt; DList&lt;&#39;T&gt;
+  member Cons: hd: &#39;T -&gt; DList&lt;&#39;T&gt;
+  override Equals: other: obj -&gt; bool
+  override GetHashCode: unit -&gt; int
+  member toSeq: unit -&gt; IEnumerator&lt;&#39;T&gt;
+  ...<br /><em>&lt;summary&gt;
+ DList is an ordered linear structure implementing the List signature (head, tail, cons), 
+ end-insertion (add), and O(1) append. Ordering is by insertion history.
+ DList is an implementation of [John Hughes&#39; append list](http://dl.acm.org/citation.cfm?id=8475).
+&lt;/summary&gt;</em><br /><br />--------------------<br />new: length: int * data: DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs21">Multiple items<br />val ofSeq: s: seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
+ O(n). Returns a DList of the seq.
+&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.ofSeq: s: seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs22">val calc&#39;: Writer&lt;DList&lt;LogEntry&gt;,int&gt;</div>
+<div class="fsdocs-tip" id="fs23">val logs2: DList&lt;LogEntry&gt;</div>
+<div class="fsdocs-tip" id="fs24">val y&#39;: int</div>
+<div class="fsdocs-tip" id="fs25">val logs2&#39;: DList&lt;LogEntry&gt;</div>
 
         </div>
 

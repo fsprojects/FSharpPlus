@@ -110,27 +110,71 @@
 </code></pre></td></tr></table>
 <p>A neat thing when you have types that implement the above definition is that it's simple to define active patterns:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="pn">(</span><span class="fn">|</span><span class="uc">Port</span><span class="pn">|</span><span class="id">_</span><span class="pn">|</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">_</span><span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="vt">UInt16</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="fn">tryParse</span>
-<span class="k">let</span> <span class="pn">(</span><span class="fn">|</span><span class="uc">IPAddress</span><span class="pn">|</span><span class="id">_</span><span class="pn">|</span><span class="pn">)</span> <span class="pn">:</span><span class="id">_</span><span class="k">-&gt;</span><span onmouseout="hideTip(event, 'fs1', 6)" onmouseover="showTip(event, 'fs1', 6)" class="rt">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="id">Net</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="id">IPAddress</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="fn">tryParse</span>
+<span class="k">let</span> <span class="pn">(</span><span class="fn">|</span><span class="uc">IPAddress</span><span class="pn">|</span><span class="id">_</span><span class="pn">|</span><span class="pn">)</span> <span class="pn">:</span><span class="id">_</span><span class="k">-&gt;</span><span onmouseout="hideTip(event, 'fs1', 6)" onmouseover="showTip(event, 'fs1', 6)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="id">Net</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="id">IPAddress</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="fn">tryParse</span>
 </code></pre>
 <h2><a name="sscanf-trySscanf-and-friends" class="anchor" href="#sscanf-trySscanf-and-friends">sscanf, trySscanf and friends</a></h2>
 <p>In F# you have some nice utility functions for creating printf style string writer function. In F#+ we find the inverse: sscanf and trySscanf.</p>
 <p>For instance if you want to parse based on known format of a url:</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="fn">route1</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="fn">trySscanf</span> <span class="s">&quot;/api/resource/</span><span class="pf">%d</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs9', 14)" onmouseover="showTip(event, 'fs9', 14)" class="id">x</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="fn">route1</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="fn">trySscanf</span> <span class="s">&quot;/api/resource/</span><span class="pf">%d</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs9', 14)" onmouseover="showTip(event, 'fs9', 14)" class="fn">x</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="id">parsed</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="vt">int</span> <span onmouseout="hideTip(event, 'fs4', 17)" onmouseover="showTip(event, 'fs4', 17)" class="rt">option</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 18)" onmouseover="showTip(event, 'fs8', 18)" class="fn">route1</span> <span class="s">&quot;/api/resource/1&quot;</span>
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">namespace System</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
-<div class="fsdocs-tip" id="fs3">type UInt16 =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;member CompareTo : value:obj -&gt; int + 1 overload<br />&#160;&#160;&#160;&#160;member Equals : obj:obj -&gt; bool + 1 overload<br />&#160;&#160;&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;&#160;&#160;member GetTypeCode : unit -&gt; TypeCode<br />&#160;&#160;&#160;&#160;member ToString : unit -&gt; string + 3 overloads<br />&#160;&#160;&#160;&#160;member TryFormat : destination:Span&lt;char&gt; * charsWritten:int * ?format:ReadOnlySpan&lt;char&gt; * ?provider:IFormatProvider -&gt; bool<br />&#160;&#160;&#160;&#160;static val MaxValue : uint16<br />&#160;&#160;&#160;&#160;static val MinValue : uint16<br />&#160;&#160;&#160;&#160;static member Parse : s:string -&gt; uint16 + 4 overloads<br />&#160;&#160;&#160;&#160;static member TryParse : s:string * result:uint16 -&gt; bool + 3 overloads<br />&#160;&#160;end</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />val option : f:(&#39;g -&gt; &#39;h) -&gt; n:&#39;h -&gt; _arg1:&#39;g option -&gt; &#39;h<br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs5">val tryParse : value:string -&gt; &#39;b option (requires member TryParse)</div>
+<div class="fsdocs-tip" id="fs3">[&lt;Struct&gt;]
+type UInt16 =
+  member CompareTo: value: obj -&gt; int + 1 overload
+  member Equals: obj: obj -&gt; bool + 1 overload
+  member GetHashCode: unit -&gt; int
+  member GetTypeCode: unit -&gt; TypeCode
+  member ToString: unit -&gt; string + 3 overloads
+  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool
+  static member Parse: s: ReadOnlySpan&lt;char&gt; * ?style: NumberStyles * ?provider: IFormatProvider -&gt; uint16 + 4 overloads
+  static member TryParse: s: ReadOnlySpan&lt;char&gt; * style: NumberStyles * provider: IFormatProvider * result: byref&lt;uint16&gt; -&gt; bool + 3 overloads
+  static val MaxValue: uint16
+  static val MinValue: uint16<br /><em>&lt;summary&gt;Represents a 16-bit unsigned integer.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
+ Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
+ Otherwise, it applies the function to the value inside Some and returns the result.
+ &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The type of optional values. When used from other CLI languages the
+ empty option is the &lt;c&gt;null&lt;/c&gt; value. &lt;/summary&gt;<br />&lt;remarks&gt;Use the constructors &lt;c&gt;Some&lt;/c&gt; and &lt;c&gt;None&lt;/c&gt; to create values of this type.
+ Use the values in the &lt;c&gt;Option&lt;/c&gt; module to manipulate values of this type,
+ or pattern match against the values directly.
+
+ &#39;None&#39; values will appear as the value &lt;c&gt;null&lt;/c&gt; to other CLI languages.
+ Instance methods on this type will appear as static methods to other CLI languages
+ due to the use of &lt;c&gt;null&lt;/c&gt; as a value representation.&lt;/remarks&gt;<br />&lt;category index=&quot;3&quot;&gt;Options&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val tryParse: value: string -&gt; &#39;a option (requires member TryParse)<br /><em>&lt;summary&gt;
+ Converts to a value from its string representation. Returns None if the convertion doesn&#39;t succeed.
+ &lt;/summary&gt;<br />&lt;category index=&quot;21&quot;&gt;Converter&lt;/category&gt;</em></div>
 <div class="fsdocs-tip" id="fs6">namespace System.Net</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />type IPAddress =<br />&#160;&#160;new : newAddress:int64 -&gt; IPAddress + 4 overloads<br />&#160;&#160;member Address : int64 with get, set<br />&#160;&#160;member AddressFamily : AddressFamily<br />&#160;&#160;member Equals : comparand:obj -&gt; bool<br />&#160;&#160;member GetAddressBytes : unit -&gt; byte[]<br />&#160;&#160;member GetHashCode : unit -&gt; int<br />&#160;&#160;member IsIPv4MappedToIPv6 : bool<br />&#160;&#160;member IsIPv6LinkLocal : bool<br />&#160;&#160;member IsIPv6Multicast : bool<br />&#160;&#160;member IsIPv6SiteLocal : bool<br />&#160;&#160;...<br /><br />--------------------<br />Net.IPAddress(newAddress: int64) : Net.IPAddress<br />Net.IPAddress(address: byte []) : Net.IPAddress<br />Net.IPAddress(address: ReadOnlySpan&lt;byte&gt;) : Net.IPAddress<br />Net.IPAddress(address: byte [], scopeid: int64) : Net.IPAddress<br />Net.IPAddress(address: ReadOnlySpan&lt;byte&gt;, scopeid: int64) : Net.IPAddress</div>
-<div class="fsdocs-tip" id="fs8">val route1 : x:string -&gt; int option</div>
-<div class="fsdocs-tip" id="fs9">val x : string</div>
-<div class="fsdocs-tip" id="fs10">val trySscanf : pf:PrintfFormat&lt;&#39;a,&#39;b,&#39;c,&#39;d,&#39;(T1 * T2 * ... * Tn)&gt; -&gt; s:string -&gt; &#39;(T1 * T2 * ... * Tn) option (requires member TryParseArray)</div>
-<div class="fsdocs-tip" id="fs11">val parsed : int option</div>
-<div class="fsdocs-tip" id="fs12">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />type IPAddress =
+  new: address: byte[] -&gt; unit + 4 overloads
+  member Equals: comparand: obj -&gt; bool
+  member GetAddressBytes: unit -&gt; byte[]
+  member GetHashCode: unit -&gt; int
+  member MapToIPv4: unit -&gt; IPAddress
+  member MapToIPv6: unit -&gt; IPAddress
+  member ToString: unit -&gt; string
+  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; -&gt; bool
+  member TryWriteBytes: destination: Span&lt;byte&gt; * bytesWritten: byref&lt;int&gt; -&gt; bool
+  static member HostToNetworkOrder: host: int16 -&gt; int16 + 2 overloads
+  ...<br /><em>&lt;summary&gt;Provides an Internet Protocol (IP) address.&lt;/summary&gt;</em><br /><br />--------------------<br />Net.IPAddress(address: byte[]) : Net.IPAddress<br />Net.IPAddress(newAddress: int64) : Net.IPAddress<br />Net.IPAddress(address: ReadOnlySpan&lt;byte&gt;) : Net.IPAddress<br />Net.IPAddress(address: byte[], scopeid: int64) : Net.IPAddress<br />Net.IPAddress(address: ReadOnlySpan&lt;byte&gt;, scopeid: int64) : Net.IPAddress</div>
+<div class="fsdocs-tip" id="fs8">val route1: x: string -&gt; int option</div>
+<div class="fsdocs-tip" id="fs9">val x: string</div>
+<div class="fsdocs-tip" id="fs10">val trySscanf: pf: PrintfFormat&lt;&#39;a,&#39;b,&#39;c,&#39;d,&#39;(T1 * T2 * ... * Tn)&gt; -&gt; s: string -&gt; &#39;(T1 * T2 * ... * Tn) option (requires member TryParseArray)<br /><em>&lt;summary&gt;
+ Gets a tuple with the result of parsing each element of a formatted text. Returns None in case of failure.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs11">val parsed: int option</div>
+<div class="fsdocs-tip" id="fs12">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
+ of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to
+ &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
 
         </div>
 

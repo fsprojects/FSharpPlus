@@ -94,9 +94,9 @@
 <li>A composition of 2 monads is not always a monad</li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 
 <span class="c">// First let&#39;s create some values</span>
@@ -117,17 +117,98 @@
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs3">val one : Async&lt;Result&lt;int,string&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />module Async<br /><br />from FSharpPlus<br /><br />--------------------<br />type Async =<br />&#160;&#160;static member AsBeginEnd : computation:(&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)<br />&#160;&#160;static member AwaitEvent : event:IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)<br />&#160;&#160;static member AwaitIAsyncResult : iar:IAsyncResult * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member AwaitTask : task:Task -&gt; Async&lt;unit&gt;<br />&#160;&#160;static member AwaitTask : task:Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;static member AwaitWaitHandle : waitHandle:WaitHandle * ?millisecondsTimeout:int -&gt; Async&lt;bool&gt;<br />&#160;&#160;static member CancelDefaultToken : unit -&gt; unit<br />&#160;&#160;static member Catch : computation:Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;<br />&#160;&#160;static member Choice : computations:seq&lt;Async&lt;&#39;T option&gt;&gt; -&gt; Async&lt;&#39;T option&gt;<br />&#160;&#160;static member FromBeginEnd : beginAction:(AsyncCallback * obj -&gt; IAsyncResult) * endAction:(IAsyncResult -&gt; &#39;T) * ?cancelAction:(unit -&gt; unit) -&gt; Async&lt;&#39;T&gt;<br />&#160;&#160;...<br /><br />--------------------<br />type Async&lt;&#39;T&gt; =</div>
-<div class="fsdocs-tip" id="fs5">Multiple items<br />module Result<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />module Result<br /><br />from FSharpPlus<br /><br />--------------------<br />module Result<br /><br />from Microsoft.FSharp.Core<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Result&lt;&#39;T,&#39;TError&gt; =<br />&#160;&#160;| Ok of ResultValue: &#39;T<br />&#160;&#160;| Error of ErrorValue: &#39;TError</div>
-<div class="fsdocs-tip" id="fs6">Multiple items<br />val int : value:&#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; = int</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
-<div class="fsdocs-tip" id="fs8">val async : AsyncBuilder</div>
-<div class="fsdocs-tip" id="fs9">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
-<div class="fsdocs-tip" id="fs10">val two : Async&lt;Result&lt;int,string&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs11">Multiple items<br />union case Compose.Compose: &#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt; -&gt; Compose&lt;&#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;&gt;<br /><br />--------------------<br />module Compose<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />[&lt;Struct&gt;]<br />type Compose&lt;&#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;&gt; =<br />&#160;&#160;| Compose of &#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;<br />&#160;&#160;&#160;&#160;static member Map : Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt;&gt; * f:(&#39;T -&gt; &#39;U) -&gt; Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt;&gt; (requires member Map and member Map)<br />&#160;&#160;&#160;&#160;static member Return : x:&#39;T -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member Return and member Return)<br />&#160;&#160;&#160;&#160;static member get_Empty : unit -&gt; Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member Empty)<br />&#160;&#160;&#160;&#160;static member ( &lt;|&gt; ) : Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member ( &lt;|&gt; ))<br />&#160;&#160;&#160;&#160;static member ( &lt;*&gt; ) : Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T-&gt;&#39;U&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; (requires member Map and member ( &lt;*&gt; ) and member ( &lt;*&gt; ))</div>
-<div class="fsdocs-tip" id="fs12">val three : Async&lt;Result&lt;int,string&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs13">val three&#39; : Async&lt;Result&lt;int,string&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs3">val one: Async&lt;Result&lt;int,string&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />module Async
+
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Async
+&lt;/summary&gt;</em><br /><br />--------------------<br />type Async =
+  static member AsBeginEnd: computation: (&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)
+  static member AwaitEvent: event: IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)
+  static member AwaitIAsyncResult: iar: IAsyncResult * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member AwaitTask: task: Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt; + 1 overload
+  static member AwaitWaitHandle: waitHandle: WaitHandle * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member CancelDefaultToken: unit -&gt; unit
+  static member Catch: computation: Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;
+  static member Choice: computations: seq&lt;Async&lt;&#39;T option&gt;&gt; -&gt; Async&lt;&#39;T option&gt;
+  static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
+  static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
+  ...<br /><em>&lt;summary&gt;Holds static members for creating and manipulating asynchronous computations.&lt;/summary&gt;<br />&lt;remarks&gt;
+  See also &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/asynchronous-workflows&quot;&gt;F# Language Guide - Async Workflows&lt;/a&gt;.
+ &lt;/remarks&gt;<br />&lt;category index=&quot;1&quot;&gt;Async Programming&lt;/category&gt;</em><br /><br />--------------------<br />type Async&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
+ An asynchronous computation, which, when run, will eventually produce a value  of type T, or else raises an exception.
+ &lt;/summary&gt;<br />&lt;remarks&gt;
+  This type has no members. Asynchronous computations are normally specified either by using an async expression
+  or the static methods in the &lt;see cref=&quot;T:Microsoft.FSharp.Control.FSharpAsync`1&quot; /&gt; type.
+
+  See also &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/asynchronous-workflows&quot;&gt;F# Language Guide - Async Workflows&lt;/a&gt;.
+ &lt;/remarks&gt;<br />&lt;namespacedoc&gt;&lt;summary&gt;
+   Library functionality for asynchronous programming, events and agents. See also
+   &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/asynchronous-workflows&quot;&gt;Asynchronous Programming&lt;/a&gt;, 
+   &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/members/events&quot;&gt;Events&lt;/a&gt; and
+   &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/lazy-expressions&quot;&gt;Lazy Expressions&lt;/a&gt; in the
+   F# Language Guide.
+ &lt;/summary&gt;&lt;/namespacedoc&gt;<br />&lt;category index=&quot;1&quot;&gt;Async Programming&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">Multiple items<br />module Result
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Additional operations on Result
+&lt;/summary&gt;</em><br /><br />--------------------<br />module Result
+
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Result&amp;lt;&#39;T,&#39;Error&amp;gt;
+&lt;/summary&gt;</em><br /><br />--------------------<br />module Result
+
+from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Core.FSharpResult`2&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type Result&lt;&#39;T,&#39;TError&gt; =
+  | Ok of ResultValue: &#39;T
+  | Error of ErrorValue: &#39;TError<br /><em>&lt;summary&gt;Helper type for error handling without exceptions.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+ primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
+ with InvariantCulture settings. Otherwise the operation requires an appropriate
+ static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
+ of measure is erased in compiled code and when values of this type
+ are analyzed using reflection. The type is representationally equivalent to
+ &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val async: AsyncBuilder<br /><em>&lt;summary&gt;Builds an asynchronous workflow using computation expression syntax.&lt;/summary&gt;<br />&lt;example id=&quot;async-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ let sleepExample() =
+     async {
+         printfn &quot;sleeping&quot;
+         do! Async.Sleep 10
+         printfn &quot;waking up&quot;
+         return 6
+      }
+
+ sleepExample() |&amp;gt; Async.RunSynchronously
+ &lt;/code&gt;&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs9">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;<br /><em>&lt;summary&gt;
+ Represents an OK or a Successful result. The code succeeded with a value of &#39;T.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val two: Async&lt;Result&lt;int,string&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs11">Multiple items<br />union case Compose.Compose: &#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt; -&gt; Compose&lt;&#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;&gt;<br /><br />--------------------<br />module Compose
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on Compose
+&lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type Compose&lt;&#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;&gt; =
+  | Compose of &#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;
+  static member ( *&gt; ) : x: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt; * y: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; -&gt; &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;``)
+  static member (&lt;!&gt;) : f: (&#39;T -&gt; &#39;U) * x: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt;&gt; (requires member Map and member Map)
+  static member ( &lt;* ) : x: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; * y: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt; -&gt; &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; (requires member ``&lt;*&gt;`` and member Map)
+  static member (&lt;*&gt;) : Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T-&gt;&#39;U&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member ``&lt;*&gt;``)
+  static member (&lt;|&gt;) : Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member ``&lt;|&gt;``)
+  static member Lift2: f: (&#39;T -&gt; &#39;U -&gt; &#39;V) * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;V&gt;&gt; (requires member Lift2 and member Lift2)
+  static member Lift3: f: (&#39;T -&gt; &#39;U -&gt; &#39;V -&gt; &#39;W) * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;V&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;W&gt;&gt; (requires member Lift3 and member Lift3)
+  static member Map: Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt;&gt; * f: (&#39;T -&gt; &#39;U) -&gt; Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt;&gt; (requires member Map and member Map)
+  static member Return: x: &#39;T -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member Return and member Return)
+  static member get_Empty: unit -&gt; Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member Empty)<br /><em>&lt;summary&gt;
+ Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs12">val three: Async&lt;Result&lt;int,string&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs13">val three&#39;: Async&lt;Result&lt;int,string&gt;&gt;</div>
 
         </div>
 

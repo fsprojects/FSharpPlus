@@ -93,12 +93,12 @@
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">seq1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="k">seq</span> <span class="pn">{</span> <span class="n">1..</span><span class="n">100000</span><span class="pn">}</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">seq2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="k">seq</span> <span class="pn">{</span><span class="n">10..</span><span class="n">100000</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">seq1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="fn">seq</span> <span class="pn">{</span> <span class="n">1..</span><span class="n">100000</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">seq2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="fn">seq</span> <span class="pn">{</span><span class="n">10..</span><span class="n">100000</span><span class="pn">}</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="id">seq1_plus_seq2</span>  <span class="o">=</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="o">&lt;!&gt;</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="uc">ZipList</span> <span onmouseout="hideTip(event, 'fs3', 10)" onmouseover="showTip(event, 'fs3', 10)" class="id">seq1</span> <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="uc">ZipList</span> <span onmouseout="hideTip(event, 'fs5', 12)" onmouseover="showTip(event, 'fs5', 12)" class="id">seq2</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="id">Math</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">Applicative</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="id">Math</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="m">Applicative</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="id">seq1_plus_seq2&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 17)" onmouseover="showTip(event, 'fs7', 17)" class="uc">ZipList</span> <span onmouseout="hideTip(event, 'fs3', 18)" onmouseover="showTip(event, 'fs3', 18)" class="id">seq1</span> <span class="o">.</span><span class="o">+.</span> <span onmouseout="hideTip(event, 'fs7', 19)" onmouseover="showTip(event, 'fs7', 19)" class="uc">ZipList</span> <span onmouseout="hideTip(event, 'fs5', 20)" onmouseover="showTip(event, 'fs5', 20)" class="id">seq2</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 21)" onmouseover="showTip(event, 'fs11', 21)" class="id">arrCombined</span>     <span class="o">=</span> <span class="n">10</span> <span class="o">*.</span> <span onmouseout="hideTip(event, 'fs7', 22)" onmouseover="showTip(event, 'fs7', 22)" class="uc">ZipList</span> <span onmouseout="hideTip(event, 'fs3', 23)" onmouseover="showTip(event, 'fs3', 23)" class="id">seq1</span> <span class="o">.</span><span class="o">+.</span> <span onmouseout="hideTip(event, 'fs7', 24)" onmouseover="showTip(event, 'fs7', 24)" class="uc">ZipList</span> <span onmouseout="hideTip(event, 'fs5', 25)" onmouseover="showTip(event, 'fs5', 25)" class="id">seq2</span> <span class="o">.</span><span class="o">-</span> <span class="n">5</span>
@@ -109,18 +109,46 @@
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs3">val seq1 : seq&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />val seq : sequence:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs5">val seq2 : seq&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs6">val seq1_plus_seq2 : ZipList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />union case ZipList.ZipList: seq&lt;&#39;s&gt; -&gt; ZipList&lt;&#39;s&gt;<br /><br />--------------------<br />module ZipList<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type ZipList&lt;&#39;s&gt; =<br />&#160;&#160;| ZipList of seq&lt;&#39;s&gt;<br />&#160;&#160;&#160;&#160;member Item : n:int -&gt; &#39;s<br />&#160;&#160;&#160;&#160;static member IsLeftZero : ZipList&lt;&#39;a1&gt; -&gt; bool<br />&#160;&#160;&#160;&#160;static member Lift2 : f:(&#39;T1 -&gt; &#39;T2 -&gt; &#39;a3) * x:ZipList&lt;&#39;T1&gt; * y:ZipList&lt;&#39;T2&gt; -&gt; ZipList&lt;&#39;a3&gt;<br />&#160;&#160;&#160;&#160;static member Return : x:&#39;a -&gt; ZipList&lt;&#39;a&gt;<br />&#160;&#160;&#160;&#160;static member ToSeq : ZipList&lt;&#39;a1&gt; -&gt; seq&lt;&#39;a1&gt;<br />&#160;&#160;&#160;&#160;static member Traverse : ZipList&lt;&#39;T&gt; * f:(&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;ZipList&lt;&#39;U&gt;&gt; (requires member ( &lt;*&gt; ) and member IsLeftZero and member Map and member Return and member Map and member Traverse and member Map)<br />&#160;&#160;&#160;&#160;static member get_Empty : unit -&gt; ZipList&lt;&#39;a1&gt;<br />&#160;&#160;&#160;&#160;static member get_Zero : unit -&gt; ZipList&lt;&#39;a&gt; (requires member Zero)<br />&#160;&#160;&#160;&#160;static member ( + ) : x:ZipList&lt;&#39;a&gt; * y:ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt; (requires member ( + ))<br />&#160;&#160;&#160;&#160;static member ( &lt;|&gt; ) : ZipList&lt;&#39;a1&gt; * ZipList&lt;&#39;a1&gt; -&gt; ZipList&lt;&#39;a1&gt;<br />&#160;&#160;&#160;&#160;...</div>
+<div class="fsdocs-tip" id="fs3">val seq1: seq&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />val seq: sequence: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><em>&lt;summary&gt;Builds a sequence using sequence expression syntax&lt;/summary&gt;<br />&lt;param name=&quot;sequence&quot;&gt;The input sequence.&lt;/param&gt;<br />&lt;returns&gt;The result sequence.&lt;/returns&gt;<br />&lt;example id=&quot;seq-cast-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+ seq { for i in 0..10 do yield (i, i*i) }
+ &lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Collections.Generic.IEnumerable`1&quot; /&gt;&lt;/summary&gt;<br />&lt;remarks&gt;
+  See the &lt;see cref=&quot;T:Microsoft.FSharp.Collections.SeqModule&quot; /&gt; module for further operations related to sequences.
+
+  See also &lt;a href=&quot;https://docs.microsoft.com/dotnet/fsharp/language-reference/sequences&quot;&gt;F# Language Guide - Sequences&lt;/a&gt;.
+&lt;/remarks&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val seq2: seq&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs6">val seq1_plus_seq2: ZipList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />union case ZipList.ZipList: seq&lt;&#39;s&gt; -&gt; ZipList&lt;&#39;s&gt;<br /><br />--------------------<br />module ZipList
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on ZipList
+&lt;/summary&gt;</em><br /><br />--------------------<br />type ZipList&lt;&#39;s&gt; =
+  | ZipList of seq&lt;&#39;s&gt;
+  member Item: n: int -&gt; &#39;s
+  static member (+) : x: ZipList&lt;&#39;a&gt; * y: ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt; (requires member ``+``)
+  static member (&lt;*&gt;) : ZipList&lt;(&#39;a -&gt; &#39;b)&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;b&gt;
+  static member (&lt;|&gt;) : ZipList&lt;&#39;a1&gt; * ZipList&lt;&#39;a1&gt; -&gt; ZipList&lt;&#39;a1&gt;
+  static member Return: x: &#39;a -&gt; ZipList&lt;&#39;a&gt;
+  static member ToSeq: ZipList&lt;&#39;a1&gt; -&gt; seq&lt;&#39;a1&gt;
+  static member Traverse: ZipList&lt;&#39;T&gt; * f: (&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;ZipList&lt;&#39;U&gt;&gt; (requires member ``&lt;*&gt;`` and member IsLeftZero and member Map and member Return and member Map and member Traverse and member Map)
+  static member get_Empty: unit -&gt; ZipList&lt;&#39;a1&gt;
+  static member get_Zero: unit -&gt; ZipList&lt;&#39;a&gt; (requires member Zero)<br /><em>&lt;summary&gt;
+ A sequence with an Applicative functor based on zipping.
+&lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs8">namespace FSharpPlus.Math</div>
-<div class="fsdocs-tip" id="fs9">module Applicative<br /><br />from FSharpPlus.Math</div>
-<div class="fsdocs-tip" id="fs10">val seq1_plus_seq2&#39; : ZipList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs11">val arrCombined : ZipList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs12">val asMonoid : ZipList&lt;string&gt;</div>
-<div class="fsdocs-tip" id="fs13">val result : x:&#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)</div>
-<div class="fsdocs-tip" id="fs14">val plus : x:&#39;Monoid -&gt; y:&#39;Monoid -&gt; &#39;Monoid (requires member ( + ))</div>
+<div class="fsdocs-tip" id="fs9">module Applicative
+
+from FSharpPlus.Math<br /><em>&lt;summary&gt;Math Operators ready to use over Applicative Functors.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val seq1_plus_seq2&#39;: ZipList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs11">val arrCombined: ZipList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs12">val asMonoid: ZipList&lt;string&gt;</div>
+<div class="fsdocs-tip" id="fs13">val result: x: &#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)<br /><em>&lt;summary&gt;
+ Lifts a value into a Functor. Same as return in Computation Expressions.
+ &lt;/summary&gt;<br />&lt;category index=&quot;2&quot;&gt;Applicative&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs14">val plus: x: &#39;Monoid -&gt; y: &#39;Monoid -&gt; &#39;Monoid (requires member ``+``)<br /><em>&lt;summary&gt;
+ Combines two monoids in one.
+ &lt;/summary&gt;<br />&lt;category index=&quot;4&quot;&gt;Monoid&lt;/category&gt;</em></div>
 
         </div>
 

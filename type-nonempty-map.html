@@ -88,9 +88,9 @@
             <h1><a name="NonEmptyMap-Key-Value" class="anchor" href="#NonEmptyMap-Key-Value">NonEmptyMap<'Key, 'Value></a></h1>
 <p>A type-safe map that contains at least one element.</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
-
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 </code></pre>
 <h3><a name="Constructing-NonEmptyMap" class="anchor" href="#Constructing-NonEmptyMap">Constructing NonEmptyMap</a></h3>
@@ -112,19 +112,41 @@
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs3">val map1 : NonEmptyMap&lt;string,int&gt;</div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />module NonEmptyMap<br /><br />from FSharpPlus.Data<br /><br />--------------------<br />type NonEmptyMap&lt;&#39;Key,&#39;Value (requires comparison)&gt; =<br />&#160;&#160;private { Value: Map&lt;&#39;Key,&#39;Value&gt; }<br />&#160;&#160;&#160;&#160;interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;&#160;&#160;interface NonEmptySeq&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;&#160;&#160;interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;<br />&#160;&#160;&#160;&#160;interface IEnumerable<br />&#160;&#160;&#160;&#160;member Add : key:&#39;Key * value:&#39;Value -&gt; NonEmptyMap&lt;&#39;Key,&#39;Value&gt;<br />&#160;&#160;&#160;&#160;member ContainsKey : key:&#39;Key -&gt; bool<br />&#160;&#160;&#160;&#160;member TryFind : key:&#39;Key -&gt; &#39;Value option<br />&#160;&#160;&#160;&#160;member TryGetValue : key:&#39;Key * value:byref&lt;&#39;Value&gt; -&gt; bool<br />&#160;&#160;&#160;&#160;member Item : key:&#39;Key -&gt; &#39;Value with get<br />&#160;&#160;&#160;&#160;...</div>
-<div class="fsdocs-tip" id="fs5">static member NonEmptyMap.Create : (&#39;Key * &#39;Value) * [&lt;System.ParamArray&gt;] rest:(&#39;Key * &#39;Value) [] -&gt; NonEmptyMap&lt;&#39;Key,&#39;Value&gt;</div>
-<div class="fsdocs-tip" id="fs6">val map2 : NonEmptyMap&lt;string,int&gt;</div>
-<div class="fsdocs-tip" id="fs7">val singleton : key:&#39;a -&gt; value:&#39;b -&gt; NonEmptyMap&lt;&#39;a,&#39;b&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs8">val map1&#39; : Map&lt;string,int&gt;</div>
-<div class="fsdocs-tip" id="fs9">val toMap : NonEmptyMap&lt;&#39;a,&#39;b&gt; -&gt; Map&lt;&#39;a,&#39;b&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs10">val map3 : NonEmptyMap&lt;string,int&gt;</div>
-<div class="fsdocs-tip" id="fs11">val add : key:&#39;a -&gt; value:&#39;b -&gt; table:NonEmptyMap&lt;&#39;a,&#39;b&gt; -&gt; NonEmptyMap&lt;&#39;a,&#39;b&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs12">val map4 : NonEmptyMap&lt;string,int&gt;</div>
-<div class="fsdocs-tip" id="fs13">val union : source:NonEmptyMap&lt;&#39;Key,&#39;T&gt; -&gt; altSource:NonEmptyMap&lt;&#39;Key,&#39;T&gt; -&gt; NonEmptyMap&lt;&#39;Key,&#39;T&gt; (requires comparison)</div>
-<div class="fsdocs-tip" id="fs14">val tryFind : key:&#39;a -&gt; table:NonEmptyMap&lt;&#39;a,&#39;b&gt; -&gt; &#39;b option (requires comparison)</div>
-<div class="fsdocs-tip" id="fs15">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs3">val map1: NonEmptyMap&lt;string,int&gt;</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />module NonEmptyMap
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on NonEmptyMap
+&lt;/summary&gt;</em><br /><br />--------------------<br />type NonEmptyMap&lt;&#39;Key,&#39;Value (requires comparison)&gt; =
+  private { Value: Map&lt;&#39;Key,&#39;Value&gt; }
+  interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
+  interface NonEmptySeq&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
+  interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
+  interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
+  interface IEnumerable
+  member Add: key: &#39;Key * value: &#39;Value -&gt; NonEmptyMap&lt;&#39;Key,&#39;Value&gt;
+  member ContainsKey: key: &#39;Key -&gt; bool
+  member TryFind: key: &#39;Key -&gt; &#39;Value option
+  member TryGetValue: key: &#39;Key * value: byref&lt;&#39;Value&gt; -&gt; bool
+  static member Create: (&#39;Key * &#39;Value) * [&lt;ParamArray&gt;] rest: (&#39;Key * &#39;Value)[] -&gt; NonEmptyMap&lt;&#39;Key,&#39;Value&gt;
+  ...<br /><em>&lt;summary&gt;
+ A type-safe map that contains at least one element.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">static member NonEmptyMap.Create: (&#39;Key * &#39;Value) * [&lt;System.ParamArray&gt;] rest: (&#39;Key * &#39;Value)[] -&gt; NonEmptyMap&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="fsdocs-tip" id="fs6">val map2: NonEmptyMap&lt;string,int&gt;</div>
+<div class="fsdocs-tip" id="fs7">val singleton: key: &#39;a -&gt; value: &#39;b -&gt; NonEmptyMap&lt;&#39;a,&#39;b&gt; (requires comparison)<br /><em>&lt;summary&gt;Builds a non empty map with a single element.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val map1&#39;: Map&lt;string,int&gt;</div>
+<div class="fsdocs-tip" id="fs9">val toMap: NonEmptyMap&lt;&#39;a,&#39;b&gt; -&gt; Map&lt;&#39;a,&#39;b&gt; (requires comparison)<br /><em>&lt;summary&gt;Builds a map from the given non empty map.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val map3: NonEmptyMap&lt;string,int&gt;</div>
+<div class="fsdocs-tip" id="fs11">val add: key: &#39;a -&gt; value: &#39;b -&gt; table: NonEmptyMap&lt;&#39;a,&#39;b&gt; -&gt; NonEmptyMap&lt;&#39;a,&#39;b&gt; (requires comparison)<br /><em>&lt;summary&gt;Returns a new map with the binding added to the given map.
+ If a binding with the given key already exists in the input map, the existing binding is replaced by the new binding in the result map.&lt;/summary&gt;<br />&lt;param name=&quot;key&quot;&gt;The input key.&lt;/param&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;param name=&quot;table&quot;&gt;The input map.&lt;/param&gt;<br />&lt;returns&gt;The resulting map.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs12">val map4: NonEmptyMap&lt;string,int&gt;</div>
+<div class="fsdocs-tip" id="fs13">val union: source: NonEmptyMap&lt;&#39;Key,&#39;T&gt; -&gt; altSource: NonEmptyMap&lt;&#39;Key,&#39;T&gt; -&gt; NonEmptyMap&lt;&#39;Key,&#39;T&gt; (requires comparison)<br /><em>&lt;summary&gt;
+ Returns the union of two maps, preferring values from the first in case of duplicate keys.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs14">val tryFind: key: &#39;a -&gt; table: NonEmptyMap&lt;&#39;a,&#39;b&gt; -&gt; &#39;b option (requires comparison)<br /><em>&lt;summary&gt;Lookup an element in the map, returning a &lt;c&gt;Some&lt;/c&gt; value if the element is in the domain
+ of the map and &lt;c&gt;None&lt;/c&gt; if not.&lt;/summary&gt;<br />&lt;param name=&quot;key&quot;&gt;The input key.&lt;/param&gt;<br />&lt;param name=&quot;table&quot;&gt;The input map.&lt;/param&gt;<br />&lt;returns&gt;The found &lt;c&gt;Some&lt;/c&gt; value or &lt;c&gt;None&lt;/c&gt;.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><em>&lt;summary&gt;Print to &lt;c&gt;stdout&lt;/c&gt; using the given format, and add a newline.&lt;/summary&gt;<br />&lt;param name=&quot;format&quot;&gt;The formatter.&lt;/param&gt;<br />&lt;returns&gt;The formatted result.&lt;/returns&gt;<br />&lt;example&gt;See &lt;c&gt;Printf.printfn&lt;/c&gt; (link: &lt;see cref=&quot;M:Microsoft.FSharp.Core.PrintfModule.PrintFormatLine``1&quot; /&gt;) for examples.&lt;/example&gt;</em></div>
 
         </div>
 
