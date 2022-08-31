@@ -1093,7 +1093,7 @@ module FSFormatting =
                     ([  "build"; 
                         "--input"; arguments.Input
                         "--output"; arguments.OutputDirectory
-                        "--sourcerepo"; arguments.SourceRepository;
+                        "--sourcerepo"; arguments.SourceRepository
                         "--projects"; arguments.Projects
                         "--parameters" ])
             |> Seq.map (fun s -> if s.StartsWith "\"" then s else sprintf "\"%s\"" s)
