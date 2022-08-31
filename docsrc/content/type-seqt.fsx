@@ -2,8 +2,11 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
 // For some reason AsyncDownloadString is not found during doc build. The following is a dumb implementation just to make the compiler happy.
 // TODO find out why.
+
 type System.Net.WebClient with member wc.AsyncDownloadString (uri: System.Uri) = async { return wc.DownloadString uri }
 
 (*
@@ -45,7 +48,7 @@ Examples
 --------
 *)
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r "nuget: FSharpPlus"
 
 open System
 open System.Net
