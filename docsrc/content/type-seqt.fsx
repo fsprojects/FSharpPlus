@@ -23,7 +23,10 @@ The original post from AsyncSeq can be found [here](http://tomasp.net/blog/async
 
 In order to do so we need to be aware of the design differences of both implementations.
 
-<style>#fsdocs-content table, th, td{border: 1px solid black;border-collapse: collapse;}</style>
+<style>
+body #fsdocs-content table, th, td { border: 1px solid black;border-collapse: collapse; }
+body #fsdocs-content table code { word-break: normal; }
+</style>
 
 | **AsyncSeq**                  | **SeqT**                              | **Notes**	|
 |:------------------------------|:--------------------------------------|:----------|
