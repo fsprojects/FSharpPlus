@@ -41,7 +41,6 @@ Examples
 #r @"nuget: FSharpPlus.TypeLevel"
 ```
 *)
-
 open FSharpPlus
 open FSharpPlus.Data
 

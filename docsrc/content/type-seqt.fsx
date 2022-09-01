@@ -9,7 +9,7 @@
 
 type System.Net.WebClient with member wc.AsyncDownloadString (uri: System.Uri) = async { return wc.DownloadString uri }
 
-(*
+(**
 SeqT<Monad<bool>, 'T>
 =====================
 

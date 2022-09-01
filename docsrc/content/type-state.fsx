@@ -22,7 +22,6 @@ Examples
 #r @"nuget: FSharpPlus"
 ```
 *)
-
 open FSharpPlus
 open FSharpPlus.Data
 (**
