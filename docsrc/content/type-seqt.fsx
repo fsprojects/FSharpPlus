@@ -10,7 +10,7 @@
 type System.Net.WebClient with member wc.AsyncDownloadString (uri: System.Uri) = async { return wc.DownloadString uri }
 
 (**
-SeqT<Monad<bool>, 'T>
+SeqT&lt;Monad&lt;bool&gt;, 'T&gt;
 =====================
 
 This is the the Monad Transformer for `seq<'T>` so it adds sequencing to existing monads by composing then with `seq<'T>`.
