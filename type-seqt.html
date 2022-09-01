@@ -94,90 +94,90 @@
 <table>
 <thead>
 <tr class="header">
-<th><p>AsyncSeq</p></th>
-<th><p>SeqT</p></th>
+<th align="left"><p>AsyncSeq</p></th>
+<th align="left"><p>SeqT</p></th>
 <th align="center"><p>Notes</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><p><code>AsyncSeq&lt;'T&gt;</code></p></td>
-<td><p><code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code></p></td>
+<td align="left"><p><code>AsyncSeq&lt;'T&gt;</code></p></td>
+<td align="left"><p><code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code></p></td>
 <td align="center"></td>
 </tr>
 <tr class="even">
-<td><p><code>asyncSeq { .. }</code></p></td>
-<td><p><code>monad.plus { .. }</code></p></td>
+<td align="left"><p><code>asyncSeq { .. }</code></p></td>
+<td align="left"><p><code>monad.plus { .. }</code></p></td>
 <td align="center"><p>At some point it needs to be inferred as <code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code>, or it can be specified with type parameters: <code>monad&lt;SeqT&lt;Async&lt;bool&gt;, 'T&gt;&gt;.plus</code></p></td>
 </tr>
 <tr class="odd">
-<td><p><code>let! x = y</code></p></td>
-<td><p><code>let! x = SeqT.lift y</code></p></td>
+<td align="left"><p><code>let! x = y</code></p></td>
+<td align="left"><p><code>let! x = SeqT.lift y</code></p></td>
 <td align="center"><p>No auto lifting. Lifting should be explicit.</p></td>
 </tr>
 <tr class="even">
-<td><p><code>do! x</code></p></td>
-<td><p><code>do! SeqT.lift x</code></p></td>
+<td align="left"><p><code>do! x</code></p></td>
+<td align="left"><p><code>do! SeqT.lift x</code></p></td>
 <td align="center"><p>''</p></td>
 </tr>
 <tr class="odd">
-<td><p><code>for x in s</code></p></td>
-<td><p><code>let! x = s</code></p></td>
+<td align="left"><p><code>for x in s</code></p></td>
+<td align="left"><p><code>let! x = s</code></p></td>
 <td align="center"><p>When <code>s: AsyncSeq&lt;'T&gt;</code> otherwise <code>for</code> is still ok with regular sequences.</p></td>
 </tr>
 <tr class="even">
-<td><p><code>AsyncSeq.[function]</code></p></td>
-<td><p><code>SeqT.[function]</code></p></td>
+<td align="left"><p><code>AsyncSeq.[function]</code></p></td>
+<td align="left"><p><code>SeqT.[function]</code></p></td>
 <td align="center"><p>See differences in functions below.</p></td>
 </tr>
 <tr class="odd">
-<td><p><code>AsyncSeq.[function]Async</code></p></td>
-<td><p><code>SeqT.[function]M</code></p></td>
+<td align="left"><p><code>AsyncSeq.[function]Async</code></p></td>
+<td align="left"><p><code>SeqT.[function]M</code></p></td>
 <td align="center"><p>''</p></td>
 </tr>
 <tr class="even">
-<td><p><code>AsyncSeq.skip</code></p></td>
-<td><p><code>SeqT.drop</code></p></td>
+<td align="left"><p><code>AsyncSeq.skip</code></p></td>
+<td align="left"><p><code>SeqT.drop</code></p></td>
 <td align="center"><p><code>.skip</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
 </tr>
 <tr class="odd">
-<td><p><code>AsyncSeq.take</code></p></td>
-<td><p><code>SeqT.truncate</code></p></td>
+<td align="left"><p><code>AsyncSeq.take</code></p></td>
+<td align="left"><p><code>SeqT.truncate</code></p></td>
 <td align="center"><p><code>.take</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
 </tr>
 <tr class="even">
-<td><p><code>AsyncSeq.toBlockingSequence</code></p></td>
-<td><p><code>SeqT.run &gt;&gt; Async.RunSynchronously</code></p></td>
+<td align="left"><p><code>AsyncSeq.toBlockingSequence</code></p></td>
+<td align="left"><p><code>SeqT.run &gt;&gt; Async.RunSynchronously</code></p></td>
 <td align="center"><p>Not really the same but semantically equivalent.</p></td>
 </tr>
 <tr class="odd">
-<td><p><code>AsyncSeq.toListAsync</code></p></td>
-<td><p><code>SeqT.runAsList</code></p></td>
+<td align="left"><p><code>AsyncSeq.toListAsync</code></p></td>
+<td align="left"><p><code>SeqT.runAsList</code></p></td>
 <td align="center"></td>
 </tr>
 <tr class="even">
-<td><p><code>AsyncSeq.toArrayAsync</code></p></td>
-<td><p><code>SeqT.runAsArray</code></p></td>
+<td align="left"><p><code>AsyncSeq.toArrayAsync</code></p></td>
+<td align="left"><p><code>SeqT.runAsArray</code></p></td>
 <td align="center"></td>
 </tr>
 <tr class="odd">
-<td><p><code>AsyncSeq.zipWith</code></p></td>
-<td><p><code>SeqT.map2</code></p></td>
+<td align="left"><p><code>AsyncSeq.zipWith</code></p></td>
+<td align="left"><p><code>SeqT.map2</code></p></td>
 <td align="center"><p>Aligned with F# collections.</p></td>
 </tr>
 <tr class="even">
-<td><p><code>AsyncSeq.zipWithAsync</code></p></td>
-<td><p><code>SeqT.map2M</code></p></td>
+<td align="left"><p><code>AsyncSeq.zipWithAsync</code></p></td>
+<td align="left"><p><code>SeqT.map2M</code></p></td>
 <td align="center"><p>''</p></td>
 </tr>
 <tr class="odd">
-<td><p><code>AsyncSeq.ofObservable</code></p></td>
-<td><p><code>Observable.toAsyncSeq</code></p></td>
+<td align="left"><p><code>AsyncSeq.ofObservable</code></p></td>
+<td align="left"><p><code>Observable.toAsyncSeq</code></p></td>
 <td align="center"><p><code>.toAsyncTask</code> is also available.</p></td>
 </tr>
 <tr class="even">
-<td><p><code>AsyncSeq.toObservable</code></p></td>
-<td><p><code>Observable.ofAsyncSeq</code></p></td>
+<td align="left"><p><code>AsyncSeq.toObservable</code></p></td>
+<td align="left"><p><code>Observable.ofAsyncSeq</code></p></td>
 <td align="center"><p><code>.ofAsyncTask</code> is also available.</p></td>
 </tr>
 </tbody>
@@ -216,11 +216,8 @@
     <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 46)" onmouseover="showTip(event, 'fs13', 46)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs27', 47)" onmouseover="showTip(event, 'fs27', 47)" class="id">iter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 48)" onmouseover="showTip(event, 'fs28', 48)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span><span class="pn">)</span>
  
 <span onmouseout="hideTip(event, 'fs22', 49)" onmouseover="showTip(event, 'fs22', 49)" class="id">printPages</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs29', 50)" onmouseover="showTip(event, 'fs29', 50)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs30', 51)" onmouseover="showTip(event, 'fs30', 51)" class="id">Start</span>
-
-<span class="c">(*</span>
-<span class="c">To make it work with tasks simply add `|&gt; Async.StartAsTask` between `wc.AsyncDownloadString (Uri url)` and `|&gt; SeqT.lift` then run eveything but the `printPages |&gt; Async.Start`.</span>
-<span class="c">**)</span>
 </code></pre>
+<p>To make it work with tasks simply add <code>|&gt; Async.StartAsTask</code> between <code>wc.AsyncDownloadString (Uri url)</code> and <code>|&gt; SeqT.lift</code> then run eveything but the <code>printPages |&gt; Async.Start</code>.</p>
 
             <div class="fsdocs-tip" id="fs1">namespace System</div>
 <div class="fsdocs-tip" id="fs2">namespace System.Net</div>
