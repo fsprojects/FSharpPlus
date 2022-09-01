@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <title>type-seqt</title>
+    <title>SeqT<Monad<bool>, 'T&gt;
+</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Gusty">
 
@@ -84,7 +85,143 @@
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
-            
+            <h1><a name="SeqT-Monad-bool-T-gt" class="anchor" href="#SeqT-Monad-bool-T-gt">SeqT<Monad<bool>, 'T&gt;</a></h1>
+<p>This is the the Monad Transformer for <code>seq&lt;'T&gt;</code> so it adds sequencing to existing monads by composing then with <code>seq&lt;'T&gt;</code>.</p>
+<p>Any monad can be composed, but a very typical usage is when combined with <code>Async</code> or <code>Task</code>, which gives rise to what's called async sequences.</p>
+<p>Therefore the <a href="https://github.com/fsprojects/FSharp.Control.AsyncSeq">AsyncSeq</a> library can be considered a specialization of this monad in Async.</p>
+<p>The original post from AsyncSeq can be found <a href="http://tomasp.net/blog/async-sequences.aspx">here</a> and we can run those examples with <code>SeqT</code> by adapting the code.</p>
+<p>In order to do so we need to be aware of the design differences of both implementations.</p>
+<table>
+<thead>
+<tr class="header">
+<th><p>AsyncSeq</p></th>
+<th><p>SeqT</p></th>
+<th align="center"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p><code>AsyncSeq&lt;'T&gt;</code></p></td>
+<td><p><code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code></p></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td><p><code>asyncSeq { .. }</code></p></td>
+<td><p><code>monad.plus { .. }</code></p></td>
+<td align="center"><p>At some point it needs to be inferred as <code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code>, or it can be specified with type parameters: <code>monad&lt;SeqT&lt;Async&lt;bool&gt;, 'T&gt;&gt;.plus</code></p></td>
+</tr>
+<tr class="odd">
+<td><p><code>let! x = y</code></p></td>
+<td><p><code>let! x = SeqT.lift y</code></p></td>
+<td align="center"><p>No auto lifting. Lifting should be explicit.</p></td>
+</tr>
+<tr class="even">
+<td><p><code>do! x</code></p></td>
+<td><p><code>do! SeqT.lift x</code></p></td>
+<td align="center"><p>''</p></td>
+</tr>
+<tr class="odd">
+<td><p><code>for x in s</code></p></td>
+<td><p><code>let! x = s</code></p></td>
+<td align="center"><p>When <code>s: AsyncSeq&lt;'T&gt;</code> otherwise <code>for</code> is still ok with regular sequences.</p></td>
+</tr>
+<tr class="even">
+<td><p><code>AsyncSeq.[function]</code></p></td>
+<td><p><code>SeqT.[function]</code></p></td>
+<td align="center"><p>See differences in functions below.</p></td>
+</tr>
+<tr class="odd">
+<td><p><code>AsyncSeq.[function]Async</code></p></td>
+<td><p><code>SeqT.[function]M</code></p></td>
+<td align="center"><p>''</p></td>
+</tr>
+<tr class="even">
+<td><p><code>AsyncSeq.skip</code></p></td>
+<td><p><code>SeqT.drop</code></p></td>
+<td align="center"><p><code>.skip</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
+</tr>
+<tr class="odd">
+<td><p><code>AsyncSeq.take</code></p></td>
+<td><p><code>SeqT.truncate</code></p></td>
+<td align="center"><p><code>.take</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
+</tr>
+<tr class="even">
+<td><p><code>AsyncSeq.toBlockingSequence</code></p></td>
+<td><p><code>SeqT.run &gt;&gt; Async.RunSynchronously</code></p></td>
+<td align="center"><p>Not really the same but semantically equivalent.</p></td>
+</tr>
+<tr class="odd">
+<td><p><code>AsyncSeq.toListAsync</code></p></td>
+<td><p><code>SeqT.runAsList</code></p></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td><p><code>AsyncSeq.toArrayAsync</code></p></td>
+<td><p><code>SeqT.runAsArray</code></p></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td><p><code>AsyncSeq.zipWith</code></p></td>
+<td><p><code>SeqT.map2</code></p></td>
+<td align="center"><p>Aligned with F# collections.</p></td>
+</tr>
+<tr class="even">
+<td><p><code>AsyncSeq.zipWithAsync</code></p></td>
+<td><p><code>SeqT.map2M</code></p></td>
+<td align="center"><p>''</p></td>
+</tr>
+<tr class="odd">
+<td><p><code>AsyncSeq.ofObservable</code></p></td>
+<td><p><code>Observable.toAsyncSeq</code></p></td>
+<td align="center"><p><code>.toAsyncTask</code> is also available.</p></td>
+</tr>
+<tr class="even">
+<td><p><code>AsyncSeq.toObservable</code></p></td>
+<td><p><code>Observable.ofAsyncSeq</code></p></td>
+<td align="center"><p><code>.ofAsyncTask</code> is also available.</p></td>
+</tr>
+</tbody>
+</table>
+
+<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;nuget: FSharpPlus&quot;</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 12)" onmouseover="showTip(event, 'fs1', 12)" class="id">System</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 14)" onmouseover="showTip(event, 'fs2', 14)" class="id">Net</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="id">Data</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="id">urls</span> <span class="o">=</span>
+  <span class="pn">[</span> <span class="s">&quot;http://bing.com&quot;</span><span class="pn">;</span> <span class="s">&quot;http://yahoo.com&quot;</span><span class="pn">;</span>
+    <span class="s">&quot;http://google.com&quot;</span><span class="pn">;</span> <span class="s">&quot;http://msn.com&quot;</span><span class="pn">;</span> <span class="pn">]</span>
+
+<span class="c">// Asynchronous sequence that returns URLs and lengths</span>
+<span class="c">// of the downloaded HTML. Web pages from a given list</span>
+<span class="c">// are downloaded asynchronously in sequence.</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 19)" onmouseover="showTip(event, 'fs12', 19)" class="id">pages</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="vt">SeqT</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span> <span class="id">_</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="id">monad</span><span class="pn">.</span><span class="id">plus</span> <span class="pn">{</span>
+    <span class="k">use</span> <span onmouseout="hideTip(event, 'fs15', 22)" onmouseover="showTip(event, 'fs15', 22)" class="d">wc</span> <span class="o">=</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs3', 23)" onmouseover="showTip(event, 'fs3', 23)" class="d">WebClient</span> <span class="pn">(</span><span class="pn">)</span>
+    <span class="k">for</span> <span onmouseout="hideTip(event, 'fs16', 24)" onmouseover="showTip(event, 'fs16', 24)" class="fn">url</span> <span class="k">in</span> <span onmouseout="hideTip(event, 'fs11', 25)" onmouseover="showTip(event, 'fs11', 25)" class="id">urls</span> <span class="k">do</span>
+        <span class="k">try</span>
+            <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs17', 26)" onmouseover="showTip(event, 'fs17', 26)" class="fn">html</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 27)" onmouseover="showTip(event, 'fs15', 27)" class="d">wc</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="id">AsyncDownloadString</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="fn">Uri</span> <span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="fn">url</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 31)" onmouseover="showTip(event, 'fs13', 31)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 32)" onmouseover="showTip(event, 'fs20', 32)" class="id">lift</span>
+            <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs16', 33)" onmouseover="showTip(event, 'fs16', 33)" class="fn">url</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs17', 34)" onmouseover="showTip(event, 'fs17', 34)" class="fn">html</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 35)" onmouseover="showTip(event, 'fs21', 35)" class="id">Length</span>
+        <span class="k">with</span> <span class="id">_</span> <span class="k">-&gt;</span>
+            <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs16', 36)" onmouseover="showTip(event, 'fs16', 36)" class="fn">url</span><span class="pn">,</span> <span class="o">-</span><span class="n">1</span> <span class="pn">}</span>
+
+
+<span class="c">// Print URL of pages that are smaller than 100k</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 37)" onmouseover="showTip(event, 'fs22', 37)" class="id">printPages</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs12', 38)" onmouseover="showTip(event, 'fs12', 38)" class="id">pages</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 39)" onmouseover="showTip(event, 'fs13', 39)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs23', 40)" onmouseover="showTip(event, 'fs23', 40)" class="id">filter</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span class="id">_</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs24', 41)" onmouseover="showTip(event, 'fs24', 41)" class="fn">len</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 42)" onmouseover="showTip(event, 'fs24', 42)" class="fn">len</span> <span class="o">&lt;</span> <span class="n">100000</span><span class="pn">)</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 43)" onmouseover="showTip(event, 'fs13', 43)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 44)" onmouseover="showTip(event, 'fs25', 44)" class="id">map</span> <span onmouseout="hideTip(event, 'fs26', 45)" onmouseover="showTip(event, 'fs26', 45)" class="fn">fst</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 46)" onmouseover="showTip(event, 'fs13', 46)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs27', 47)" onmouseover="showTip(event, 'fs27', 47)" class="id">iter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 48)" onmouseover="showTip(event, 'fs28', 48)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span><span class="pn">)</span>
+ 
+<span onmouseout="hideTip(event, 'fs22', 49)" onmouseover="showTip(event, 'fs22', 49)" class="id">printPages</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs29', 50)" onmouseover="showTip(event, 'fs29', 50)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs30', 51)" onmouseover="showTip(event, 'fs30', 51)" class="id">Start</span>
+
+<span class="c">(*</span>
+<span class="c">To make it work with tasks simply add `|&gt; Async.StartAsTask` between `wc.AsyncDownloadString (Uri url)` and `|&gt; SeqT.lift` then run eveything but the `printPages |&gt; Async.Start`.</span>
+<span class="c">**)</span>
+</code></pre>
+
             <div class="fsdocs-tip" id="fs1">namespace System</div>
 <div class="fsdocs-tip" id="fs2">namespace System.Net</div>
 <div class="fsdocs-tip" id="fs3">type WebClient =
