@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>SeqT<Monad<bool>, 'T&gt;
+    <title>SeqT&lt;Monad&lt;bool&gt;, 'T&gt;
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Gusty">
@@ -85,7 +85,7 @@
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
-            <h1><a name="SeqT-Monad-bool-T-gt" class="anchor" href="#SeqT-Monad-bool-T-gt">SeqT<Monad<bool>, 'T&gt;</a></h1>
+            <h1><a name="SeqT-lt-Monad-lt-bool-gt-T-gt" class="anchor" href="#SeqT-lt-Monad-lt-bool-gt-T-gt">SeqT&lt;Monad&lt;bool&gt;, 'T&gt;</a></h1>
 <p>This is the the Monad Transformer for <code>seq&lt;'T&gt;</code> so it adds sequencing to existing monads by composing then with <code>seq&lt;'T&gt;</code>.</p>
 <p>Any monad can be composed, but a very typical usage is when combined with <code>Async</code> or <code>Task</code>, which gives rise to what's called async sequences.</p>
 <p>Therefore the <a href="https://github.com/fsprojects/FSharp.Control.AsyncSeq">AsyncSeq</a> library can be considered a specialization of this monad in Async.</p>
