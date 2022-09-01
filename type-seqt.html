@@ -100,89 +100,89 @@ body #fsdocs-content table code { word-break: normal; }
 <tr class="header">
 <th align="left"><p><strong>AsyncSeq</strong></p></th>
 <th align="left"><p><strong>SeqT</strong></p></th>
-<th align="left"><p><strong>Notes</strong></p></th>
+<th align="center"><p><strong>Notes</strong></p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left"><p><code>AsyncSeq&lt;'T&gt;</code></p></td>
 <td align="left"><p><code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code></p></td>
-<td align="left"></td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>asyncSeq { .. }</code></p></td>
 <td align="left"><p><code>monad.plus { .. }</code></p></td>
-<td align="left"><p>At some point it needs to be inferred as <code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code>, or it can be specified with type parameters: <code>monad&lt;SeqT&lt;Async&lt;bool&gt;, 'T&gt;&gt;.plus</code></p></td>
+<td align="center"><p>At some point it needs to be inferred as <code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code>, or it can be specified with type parameters: <code>monad&lt;SeqT&lt;Async&lt;bool&gt;, 'T&gt;&gt;.plus</code></p></td>
 </tr>
 <tr class="odd">
 <td align="left"><p><code>let! x = y</code></p></td>
 <td align="left"><p><code>let! x = SeqT.lift y</code></p></td>
-<td align="left"><p>No auto lifting. Lifting should be explicit.</p></td>
+<td align="center"><p>No auto lifting. Lifting should be explicit.</p></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>do! x</code></p></td>
 <td align="left"><p><code>do! SeqT.lift x</code></p></td>
-<td align="left"><p>''</p></td>
+<td align="center"><p>''</p></td>
 </tr>
 <tr class="odd">
 <td align="left"><p><code>for x in s</code></p></td>
 <td align="left"><p><code>let! x = s</code></p></td>
-<td align="left"><p>When <code>s: AsyncSeq&lt;'T&gt;</code> otherwise <code>for</code> is still ok with regular sequences.</p></td>
+<td align="center"><p>When <code>s: AsyncSeq&lt;'T&gt;</code> otherwise <code>for</code> is still ok with regular sequences.</p></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>AsyncSeq.[function]</code></p></td>
 <td align="left"><p><code>SeqT.[function]</code></p></td>
-<td align="left"><p>See differences in functions below.</p></td>
+<td align="center"><p>See differences in functions below.</p></td>
 </tr>
 <tr class="odd">
 <td align="left"><p><code>AsyncSeq.[function]Async</code></p></td>
 <td align="left"><p><code>SeqT.[function]M</code></p></td>
-<td align="left"><p>''</p></td>
+<td align="center"><p>''</p></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>AsyncSeq.skip</code></p></td>
 <td align="left"><p><code>SeqT.drop</code></p></td>
-<td align="left"><p><code>.skip</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
+<td align="center"><p><code>.skip</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
 </tr>
 <tr class="odd">
 <td align="left"><p><code>AsyncSeq.take</code></p></td>
 <td align="left"><p><code>SeqT.truncate</code></p></td>
-<td align="left"><p><code>.take</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
+<td align="center"><p><code>.take</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>AsyncSeq.toBlockingSequence</code></p></td>
 <td align="left"><p><code>SeqT.run &gt;&gt; Async.RunSynchronously</code></p></td>
-<td align="left"><p>Not really the same but semantically equivalent.</p></td>
+<td align="center"><p>Not really the same but semantically equivalent.</p></td>
 </tr>
 <tr class="odd">
 <td align="left"><p><code>AsyncSeq.toListAsync</code></p></td>
 <td align="left"><p><code>SeqT.runAsList</code></p></td>
-<td align="left"></td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>AsyncSeq.toArrayAsync</code></p></td>
 <td align="left"><p><code>SeqT.runAsArray</code></p></td>
-<td align="left"></td>
+<td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="left"><p><code>AsyncSeq.zipWith</code></p></td>
 <td align="left"><p><code>SeqT.map2</code></p></td>
-<td align="left"><p>Aligned with F# collections.</p></td>
+<td align="center"><p>Aligned with F# collections.</p></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>AsyncSeq.zipWithAsync</code></p></td>
 <td align="left"><p><code>SeqT.map2M</code></p></td>
-<td align="left"><p>''</p></td>
+<td align="center"><p>''</p></td>
 </tr>
 <tr class="odd">
 <td align="left"><p><code>AsyncSeq.ofObservable</code></p></td>
 <td align="left"><p><code>Observable.toAsyncSeq</code></p></td>
-<td align="left"><p><code>.toAsyncTask</code> is also available.</p></td>
+<td align="center"><p><code>.toAsyncTask</code> is also available.</p></td>
 </tr>
 <tr class="even">
 <td align="left"><p><code>AsyncSeq.toObservable</code></p></td>
 <td align="left"><p><code>Observable.ofAsyncSeq</code></p></td>
-<td align="left"><p><code>.ofAsyncTask</code> is also available.</p></td>
+<td align="center"><p><code>.ofAsyncTask</code> is also available.</p></td>
 </tr>
 </tbody>
 </table>
