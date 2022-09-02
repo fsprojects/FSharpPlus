@@ -41,8 +41,8 @@ In order to do so we need to be aware of the design differences of both implemen
 |`AsyncSeq.toArrayAsync`        |`SeqT.runAsArray`                      |           |
 |`AsyncSeq.zipWith`             |`SeqT.map2`                            | Aligned with F# collections. |
 |`AsyncSeq.zipWithAsync`        |`SeqT.map2M`                           |  ''       |
-|`AsyncSeq.ofObservable`        |`Observable.toAsyncSeq`                |`.toAsyncTask` is also available. |
-|`AsyncSeq.toObservable`        |`Observable.ofAsyncSeq`                |`.ofAsyncTask` is also available. |
+|`AsyncSeq.ofObservable`        |`Observable.toAsyncSeq`                |`.toTaskSeq` is also available. |
+|`AsyncSeq.toObservable`        |`Observable.ofAsyncSeq`                |`.ofTaskSeq` is also available. |
 
 
 
