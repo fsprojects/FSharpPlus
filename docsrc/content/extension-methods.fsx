@@ -17,7 +17,11 @@ Some methods are also exposed as extensions. This makes possible some uses from 
 Here are some examples:
 
 *)
-
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open FSharpPlus.Extensions
 
 let opt  = Option.Sequence [Some 1; Some 2]

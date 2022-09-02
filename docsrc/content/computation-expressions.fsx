@@ -79,7 +79,11 @@ You may run this script step-by-step.
 
 *)
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open FSharpPlus
 
 let lazyValue = monad {

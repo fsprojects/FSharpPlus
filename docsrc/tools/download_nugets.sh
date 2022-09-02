@@ -17,6 +17,3 @@ fi
 $MONO $NUGET install FSharp.Core "-ExcludeVersion" "-version" 4.6.2 "-source" https://www.nuget.org/api/v2 "-OutputDirectory" packages/docs/
 $MONO $NUGET install System.Runtime "-ExcludeVersion" "-version" 4.3.1  "-source" https://www.nuget.org/api/v2 "-OutputDirectory" packages/docs/
 $MONO $NUGET install MathNet.Numerics.FSharp "-ExcludeVersion" "-version" 4.8.1  -source https://www.nuget.org/api/v2 "-OutputDirectory" packages/docs/
-$MONO $NUGET install FSharp.Formatting.Literate "-ExcludeVersion" "-version" 7.2.9  -source https://www.nuget.org/api/v2 "-OutputDirectory" packages/docs/
-$MONO $NUGET install FSharp.Compiler.Service "-ExcludeVersion" "-source" https://www.nuget.org/api/v2 "-OutputDirectory" packages/docs/
-$MONO $NUGET install FSharp.Formatting "-ExcludeVersion" "-version" 7.2.9 "-source" https://www.nuget.org/api/v2 "-OutputDirectory" packages/docs/
