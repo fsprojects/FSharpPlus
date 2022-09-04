@@ -29,7 +29,7 @@ body #fsdocs-content table code { word-break: normal; }
 </style>
 
 | **AsyncSeq**                  | **SeqT**                              | **Notes**	|
-|:------------------------------|:--------------------------------------|:---------:|
+|:------------------------------|:--------------------------------------|:----------|
 |`AsyncSeq<'T>`                 |`SeqT<Async<bool>, 'T>`                |           |
 |`asyncSeq { .. }`              |`monad.plus { .. }`                    | At some point it needs to be inferred as `SeqT<Async<bool>, 'T>`, or it can be specified with type parameters: `monad<SeqT<Async<bool>, 'T>>.plus` |
 |`let! x = y`                   |`let! x = SeqT.lift y`                 | No auto lifting. Lifting should be explicit. |
@@ -44,8 +44,8 @@ body #fsdocs-content table code { word-break: normal; }
 |`AsyncSeq.toArrayAsync`        |`SeqT.runAsArray`                      |           |
 |`AsyncSeq.zipWith`             |`SeqT.map2`                            | Aligned with F# collections. |
 |`AsyncSeq.zipWithAsync`        |`SeqT.map2M`                           |  ''       |
-|`AsyncSeq.ofObservable`        |`Observable.toAsyncSeq`                |`.toAsyncTask` is also available. |
-|`AsyncSeq.toObservable`        |`Observable.ofAsyncSeq`                |`.ofAsyncTask` is also available. |
+|`AsyncSeq.ofObservable`        |`Observable.toAsyncSeq`                |`.toTaskSeq` is also available. |
+|`AsyncSeq.toObservable`        |`Observable.ofAsyncSeq`                |`.ofTaskSeq` is also available. |
 
 
 
