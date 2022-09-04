@@ -195,6 +195,8 @@ type FindIndex =
     static member        FindIndex (x: 'a []            , p            , [<Optional>]_impl: FindIndex) = Array.findIndex p x
     static member        FindIndex (x: 'a ResizeArray   , p: 'a -> bool, [<Optional>]_impl: FindIndex) = Seq.findIndex p x
     static member        FindIndex (x: list<'a>         , p            , [<Optional>]_impl: FindIndex) = List.findIndex p x
+    static member        FindIndex (x: seq<'a>          , p            , [<Optional>]_impl: FindIndex) = Seq.findIndex p x
+
     static member        FindIndex (x: 'a Id            , p: 'a -> bool, [<Optional>]_impl: FindIndex) = List.findIndex p [x.getValue]
     // End compat members
 
@@ -210,12 +212,6 @@ type FindIndex =
     static member inline FindIndex ((x: '``C<T>``, p: 'T -> bool), _impl: Default1) : 'Index = FindIndex.InvokeOnInstance p x
     static member inline FindIndex ((_: ^t when ^t: null and ^t: struct, _: 'T -> 'bool), _impl: Default1) = ()
 
-    static member inline InvokeOnInstance (p: 'T -> bool) (source: '``Collection<'T>``) : 'Index = (^``Collection<'T>``: (static member FindIndex: _*_->_) source,p)
-
-    static member        FindIndex (x: seq<'a>          , p            , [<Optional>]_impl: Default2) = Seq.findIndex p x
-    static member inline FindIndex (x: '``C<T>``, p: 'T -> bool, _impl: Default1) : 'Index = FindIndex.InvokeOnInstance p x
-    static member inline FindIndex (_: ^t when ^t: null and ^t: struct, _: 'T -> 'bool, _impl: Default1) = ()
-
     static member inline Invoke (p: 'T -> bool) (source: '``Collection<'T>``) : 'Index =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindIndex : (_*_)*_ -> _) (b, n), a)
         let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
@@ -228,6 +224,7 @@ type TryFindIndex =
     static member        TryFindIndex (x: 'a []            , p            , [<Optional>]_impl: TryFindIndex) = Array.tryFindIndex p x
     static member        TryFindIndex (x: 'a ResizeArray   , p: 'a -> bool, [<Optional>]_impl: TryFindIndex) = Seq.tryFindIndex p x
     static member        TryFindIndex (x: list<'a>         , p            , [<Optional>]_impl: TryFindIndex) = List.tryFindIndex p x
+    static member        TryFindIndex (x: seq<'a>          , p            , [<Optional>]_impl: TryFindIndex) = Seq.tryFindIndex p x
     static member        TryFindIndex (x: 'a Id            , p: 'a -> bool, [<Optional>]_impl: TryFindIndex) = List.tryFindIndex p [x.getValue]
     // End compat members
 
@@ -243,12 +240,6 @@ type TryFindIndex =
     static member inline TryFindIndex ((x: '``C<T>``, p: 'T -> bool), _impl: Default1) : 'Index option = TryFindIndex.InvokeOnInstance p x
     static member inline TryFindIndex ((_: ^t when ^t: null and ^t: struct, _: 'T -> bool), _impl: Default1) = ()
 
-    static member inline InvokeOnInstance (p: 'T -> bool) (source: '``Collection<'T>``) : 'Index option = (^``Collection<'T>``: (static member TryFindIndex: _*_->_) source,p)
-
-    static member        TryFindIndex (x: seq<'a>          , p            , [<Optional>]_impl: Default2) = Seq.tryFindIndex p x
-    static member inline TryFindIndex (x: '``C<T>``, p: 'T -> bool, _impl: Default1) : 'Index option = TryFindIndex.InvokeOnInstance p x
-    static member inline TryFindIndex (_: ^t when ^t: null and ^t: struct, _: 'T -> bool, _impl: Default1) = ()
-
     static member inline Invoke (p: 'T -> bool) (source: '``Collection<'T>``) : 'Index option =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindIndex : (_*_)*_ -> _) (b, n), a)
         let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
@@ -263,6 +254,7 @@ type FindSliceIndex =
     static member        FindSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
     static member        FindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
     static member        FindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex e x
+    static member        FindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
     static member        FindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex [e.getValue] [x.getValue]
     #endif
     // End compat members
@@ -291,6 +283,7 @@ type TryFindSliceIndex =
     static member        TryFindSliceIndex (x: string           , e                   , [<Optional>]_impl: TryFindSliceIndex) = String.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: TryFindSliceIndex) = Array.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex e x
+    static member        TryFindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: TryFindSliceIndex) = Seq.tryFindSliceIndex e x
     static member        TryFindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: TryFindSliceIndex) = List.tryFindSliceIndex [e.getValue] [x.getValue]
     // End compat members
 
@@ -306,12 +299,6 @@ type TryFindSliceIndex =
     static member        TryFindSliceIndex ((x: #seq<'a>          , e                   ), [<Optional>]_impl: Default2) = Seq.tryFindSliceIndex e x
     static member inline TryFindSliceIndex ((x: '``C<'T>``, e: '``C<'T>``), _impl: Default1) : 'Index option = TryFindSliceIndex.InvokeOnInstance e x
     static member inline TryFindSliceIndex ((_: ^t when ^t: null and ^t: struct, _), _impl: Default1) = ()
-
-    static member inline InvokeOnInstance (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
-        (^``Collection<'T>``: (static member TryFindSliceIndex: _*_->_) source, slice)
-    static member        TryFindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.tryFindSliceIndex e x
-    static member inline TryFindSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index option = TryFindSliceIndex.InvokeOnInstance e x
-    static member inline TryFindSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindSliceIndex : (_*_)*_ -> _) (b, n), a)

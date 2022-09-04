@@ -51,7 +51,7 @@ module Array =
     let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
     /// Replaces a subsequence of the source array with the given replacement array.
-    let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
+    let replace oldValue newValue source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray                : 'T []
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.

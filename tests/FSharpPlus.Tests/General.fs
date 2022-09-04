@@ -20,14 +20,6 @@ type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
 module WrappedMapA=
     let inline ofList l = Map.ofList l |> WrappedMapA
 
-type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
-    static member ToMap (WrappedMapA m) = m
-    static member inline TraverseIndexed (WrappedMapA m, f) =
-        SideEffects.add "Using WrappedMapA's TraverseIndexed"
-        WrappedMapA <!> (traversei f m : ^__)
-module WrappedMapA=
-    let inline ofList l = Map.ofList l |> WrappedMapA
-
 type WrappedListA<'s> = WrappedListA of 's list with
     static member ToSeq (WrappedListA lst) = SideEffects.add "Using WrappedListA's ToSeq"; List.toSeq lst
     static member OfSeq lst = WrappedListA (Seq.toList lst)

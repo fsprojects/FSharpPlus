@@ -23,7 +23,7 @@ type Cont<'r,'t> = Cont of (('t->'r)->'r)
 module Cont =
 
     /// The result of running a CPS computation with a given final continuation.
-    let run (Cont x) (continuation: 'T->'R) = x continuation : 'R
+    let run (Cont x) = x : ('T->'R)->'R
     
     /// The result of running a CPS computation with the identity function as the final continuation.
     let eval (Cont x) = x id : 'R
