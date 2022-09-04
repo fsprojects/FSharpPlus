@@ -1,6 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 (**
 Validation<'Error, 'T>
 ======================
@@ -11,9 +12,11 @@ Examples
 --------
 *)
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
-
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open System
 open FSharpPlus
 open FSharpPlus.Data
@@ -53,11 +56,11 @@ module MovieValidations =
             else Failure [MustBeADate]
     
     type Genre =
-        |Classic
-        |PostClassic
-        |Modern
-        |PostModern
-        |Contemporary
+        | Classic
+        | PostClassic
+        | Modern
+        | PostModern
+        | Contemporary
     
     type Movie = {
         Id: int
@@ -171,24 +174,24 @@ module Email =
 
     // ***** Base smart constructors *****
     // String must contain an '@' character
-    let atString (x:string) : Validation<VError list, AtString> =
+    let atString (x: string) : Validation<VError list, AtString> =
         if String.contains '@' x then Success <| AtString x
         else Failure [MustContainAt]
 
     // String must contain an '.' character
-    let periodString (x:string) : Validation<VError list, PeriodString> =
+    let periodString (x: string) : Validation<VError list, PeriodString> =
         if String.contains '.' x
         then Success <| PeriodString x
         else Failure [MustContainPeriod]
 
     // String must not be empty
-    let nonEmptyString (x:string) : Validation<VError list, NonEmptyString> =
+    let nonEmptyString (x: string) : Validation<VError list, NonEmptyString> =
         if not <| String.IsNullOrEmpty x
         then Success <| NonEmptyString x
         else Failure [MustNotBeEmpty]
 
     // ***** Combining smart constructors *****
-    let email (x:string) : Validation<VError list, Email> =
+    let email (x: string) : Validation<VError list, Email> =
         result (Email x) <*
         nonEmptyString x <*
         atString       x <*

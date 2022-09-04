@@ -22,6 +22,11 @@ Here's an example usage of lenses with business objects:
 
 
 *)
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open System
 open FSharpPlus
 // In order to use the Lens module of F#+ we import the following:

@@ -2,16 +2,15 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 
-(**
-TO-DO Add some docs here !
-=========================
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 // For some reason AsyncDownloadString is not found during doc build. The following is a dumb implementation just to make the compiler happy.
 // TODO find out why.
+
 type System.Net.WebClient with member wc.AsyncDownloadString (uri: System.Uri) = async { return wc.DownloadString uri }
 
-(*
-SeqT<Monad<bool>, 'T>
+(**
+SeqT&lt;Monad&lt;bool&gt;, 'T&gt;
 =====================
 
 This is the the Monad Transformer for `seq<'T>` so it adds sequencing to existing monads by composing then with `seq<'T>`.
@@ -24,12 +23,14 @@ The original post from AsyncSeq can be found [here](http://tomasp.net/blog/async
 
 In order to do so we need to be aware of the design differences of both implementations.
 
-| AsyncSeq  			        | SeqT 	                                | Notes	|
-|--|--|:--:|
+<style>#fsdocs-content table, th, td{border: 1px solid black;border-collapse: collapse;}</style>
+
+| **AsyncSeq**                  | **SeqT**                              | **Notes**	|
+|:------------------------------|:--------------------------------------|:----------|
 |`AsyncSeq<'T>`                 |`SeqT<Async<bool>, 'T>`                |           |
 |`asyncSeq { .. }`              |`monad.plus { .. }`                    | At some point it needs to be inferred as `SeqT<Async<bool>, 'T>`, or it can be specified with type parameters: `monad<SeqT<Async<bool>, 'T>>.plus` |
 |`let! x = y`                   |`let! x = SeqT.lift y`                 | No auto lifting. Lifting should be explicit. |
-|`do! x`                        |`do! x`                                | ''        |
+|`do! x`                        |`do! SeqT.lift x`                      | ''        |
 |`for x in s`                   |`let! x = s`                           | When `s: AsyncSeq<'T>` otherwise `for` is still ok with regular sequences. |
 |`AsyncSeq.[function]`          |`SeqT.[function]`                      | See differences in functions below. |
 |`AsyncSeq.[function]Async`     |`SeqT.[function]M`                     | ''        |
@@ -40,14 +41,14 @@ In order to do so we need to be aware of the design differences of both implemen
 |`AsyncSeq.toArrayAsync`        |`SeqT.runAsArray`                      |           |
 |`AsyncSeq.zipWith`             |`SeqT.map2`                            | Aligned with F# collections. |
 |`AsyncSeq.zipWithAsync`        |`SeqT.map2M`                           |  ''       |
-|`AsyncSeq.ofObservable`        |`Observable.toAsyncSeq`                |`.toAsyncTask` is also available. |
-|`AsyncSeq.toObservable`        |`Observable.ofAsyncSeq`                |`.ofAsyncTask` is also available. |
+|`AsyncSeq.ofObservable`        |`Observable.toAsyncSeq`                |`.toTaskSeq` is also available. |
+|`AsyncSeq.toObservable`        |`Observable.ofAsyncSeq`                |`.ofTaskSeq` is also available. |
 
 Examples
 --------
 *)
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r "nuget: FSharpPlus"
 
 open System
 open System.Net
@@ -80,6 +81,6 @@ let printPages =
  
 printPages |> Async.Start
 
-(*
+(**
 To make it work with tasks simply add `|> Async.StartAsTask` between `wc.AsyncDownloadString (Uri url)` and `|> SeqT.lift` then run eveything but the `printPages |> Async.Start`.
-**)
+*)

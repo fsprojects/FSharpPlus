@@ -1,7 +1,7 @@
 <Project ToolsVersion="15.0">
 
   <PropertyGroup>
-    <RepositoryUrl>https://github.com/fsprojects/FSharpPlus.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/fsprojects/FSharpPlus</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>
       A complete and extensible base library for F#.
@@ -16,6 +16,10 @@
     <VersionSuffix></VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
+
+    <FsDocsNavBarPosition>fixed-left</FsDocsNavBarPosition>
+    <FsDocsReleaseNotesLink>https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+    <FsDocsLicenseLink>https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md</FsDocsLicenseLink>
   </PropertyGroup>
 
   <PropertyGroup>

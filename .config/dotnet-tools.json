@@ -8,16 +8,16 @@
         "fake"
       ]
     },
-    "fsharp.formatting.commandtool": {
-      "version": "7.2.9",
-      "commands": [
-        "fsdocs"
-      ]
-    },
     "fable": {
       "version": "3.7.11",
       "commands": [
         "fable"
+      ]
+    },
+    "fsdocs-tool": {
+      "version": "16.1.0",
+      "commands": [
+        "fsdocs"
       ]
     }
   }
