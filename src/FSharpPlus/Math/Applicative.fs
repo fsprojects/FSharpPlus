@@ -1,5 +1,11 @@
 namespace FSharpPlus.Math
 
+/// <namespacedoc>
+/// <summary>
+/// Math operators and generic functions
+/// </summary>
+/// </namespacedoc>
+ 
 #if !FABLE_COMPILER
 
 open FSharpPlus

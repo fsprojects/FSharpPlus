@@ -38,9 +38,43 @@ Note:
 open System
 open FSharpPlus
 open FSharpPlus.Data
+
+type IUserRepository =
+    abstract GetUser : email : string -> string
+
+type IShoppingListRepository =
+    abstract AddToCart : shoppingList : string list -> string
+
+let getUser email =
+    Reader(fun (env : #IUserRepository) -> env.GetUser email)
+
+let addToShoppingList shoppingListItems =
+    Reader(fun (env : #IShoppingListRepository) -> env.AddToCart shoppingListItems)
+
+let addShoppingListM email = monad {
+    let! user = getUser email
+    // 
+    let shoppingListItems = ["Apple"; "Pear";]
+    return! addToShoppingList shoppingListItems
+}
+
+type MockDataEnv() = // This is how an environment could be constructed
+    interface IUserRepository with
+        member this.GetUser email =
+                "Sandeep"
+    interface IShoppingListRepository with
+            member this.AddToCart shoppingListItems =
+                sprintf "Added the following items %A to the cart" shoppingListItems
+
+Reader.run (addShoppingListM "sandeep@test.com")  (MockDataEnv())
+
 (**
 Sample from [The Reader monad on Haskell Wiki](https://wiki.haskell.org/All_About_Monads#The_Reader_monad)
 *)
+open System
+open FSharpPlus
+open FSharpPlus.Data
+
 /// This the abstract syntax representation of a template
 type Template =
     /// Text
@@ -104,3 +138,4 @@ and
                                         let! name = resolve t
                                         let! value = resolve d
                                         return (name,value) }
+

@@ -1,4 +1,10 @@
-namespace FSharpPlus.Control
+namespace FSharpPlus.Control 
+
+/// <namespacedoc>
+/// <summary>
+/// Generally internal and not useful directly - contains generic function overloaded implementations.
+/// </summary>
+/// </namespacedoc>
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
 

@@ -73,7 +73,8 @@ From .Net/F#
  
 From F#+
 
- -  ``Const<'T1,'T2>``
+ -  [``Const<'C,'T>``](type-const.html)
+ -  [``Validation<'Error,'T>``](type-validation.html)
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

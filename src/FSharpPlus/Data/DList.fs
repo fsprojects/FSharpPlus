@@ -270,7 +270,7 @@ module DList =
     /// O(n). Returns a seq of the DList elements.
     let inline toSeq (l: DList<'T>) = l :> seq<'T>
 
-    // additions to fit f#+ :
+    // additions to fit F#+ :
     let inline map f (x: DList<_>) = DList.foldBack (cons << f ) x empty
     let concat x = DList.fold append empty x 
     let inline ap f x = concat <| map (fun y -> map ((|>) y) f) x

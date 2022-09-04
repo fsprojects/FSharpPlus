@@ -70,8 +70,8 @@ From .Net/F#
  
 From F#+
 
- -  ``Reader<'R,'T>`` 
- -  ``Writer<'Monoid,'T>``
+ -  [``Reader<'R,'T>``](type-reader.html)
+ -  [``Writer<'Monoid,'T>``](type-writer.html)
 
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation

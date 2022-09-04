@@ -36,6 +36,8 @@ The additions can be summarised as:
  * A polymorphic [Lenses/Optics](tutorial.html#Lens) to easily read and update
    parts of immutable data
 
+ * Generic methods that help you with [parsing](parsing.html)
+
 Note, however, that F#+ does not go into solving a specific thing for a specific
 technology, such as JSON parsing.
 

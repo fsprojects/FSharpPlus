@@ -6,7 +6,7 @@ dotnet tool restore
 
 # Build
 # Note: some bug means can't build debug
-dotnet build -c Release
+dotnet build -c Release FSharpPlus.sln
 
 # Gen docs
 dotnet run --project ./docsrc/tools 

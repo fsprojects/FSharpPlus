@@ -57,7 +57,7 @@ From .Net/F#
  
 From F#+
 
- -  ``Const<'C,'T>``
+ -  [``Const<'C,'T>``](type-const.html)
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

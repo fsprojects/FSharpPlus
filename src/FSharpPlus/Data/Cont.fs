@@ -1,5 +1,11 @@
 ﻿namespace FSharpPlus.Data
 
+/// <namespacedoc>
+/// <summary>
+/// Data contains types and modules that represent data structures designed to be used with F#+ abstractions.
+/// </summary>
+/// </namespacedoc>
+
 #nowarn "1125"
 
 open System.ComponentModel
@@ -17,7 +23,7 @@ type Cont<'r,'t> = Cont of (('t->'r)->'r)
 module Cont =
 
     /// The result of running a CPS computation with a given final continuation.
-    let run (Cont x) = x : ('T->'R)->'R
+    let run (Cont x) (continuation: 'T->'R) = x continuation : 'R
     
     /// The result of running a CPS computation with the identity function as the final continuation.
     let eval (Cont x) = x id : 'R

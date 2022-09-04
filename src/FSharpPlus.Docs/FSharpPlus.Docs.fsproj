@@ -40,6 +40,9 @@
     <Compile Include="..\..\docsrc\content\tutorial.fsx">
       <Link>Docs\%(FileName)%(Extension)</Link>	
     </Compile>
+    <Compile Include="..\..\docsrc\content\parsing.fsx">
+      <Link>Docs\%(FileName)%(Extension)</Link>
+    </Compile>
     <Compile Include="..\..\docsrc\content\type-*.fsx">
       <Link>Docs\Type\%(FileName)%(Extension)</Link>	
     </Compile>

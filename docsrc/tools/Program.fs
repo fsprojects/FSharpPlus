@@ -66,23 +66,6 @@ Target.create "Build" (fun _ ->
            )
 )
 
-let copyFiles () =
-    Shell.copyRecursive files output true 
-    |> Trace.logItems "Copying file: "
-    Directory.ensure (output @@ "content")
-        
-Target.create "Docs" (fun _ ->
-    System.IO.File.Delete ( rootDir @@ "docsrc/content/release-notes.md" )
-    Shell.copyFile (rootDir @@ "docsrc/content/") "RELEASE_NOTES.md"
-    Shell.rename ( rootDir @@ "docsrc/content/release-notes.md" ) "docsrc/content/RELEASE_NOTES.md"
-
-    System.IO.File.Delete ( rootDir @@ "docsrc/content/license.md" )
-    Shell.copyFile ( rootDir @@ "docsrc/content/" ) "LICENSE.txt"
-    Shell.rename ( rootDir @@ "docsrc/content/license.md" ) "docsrc/content/LICENSE.txt"
-
-    copyFiles ()
-)
-
 // --------------------------------------------------------------------------------------
 // Post process here:
 
@@ -112,7 +95,8 @@ let main argv =
         Target.create "ReleaseDocs" (fun _ ->
             let tempDocsDir = rootDir @@ "temp/gh-pages"
             Shell.cleanDir tempDocsDir
-            Git.Repository.cloneSingleBranch rootDir (gitHome + "/" + gitName + ".git") "gh-pages" tempDocsDir
+            let repoUrl = Git.Config.remoteOriginUrl rootDir
+            Git.Repository.cloneSingleBranch rootDir repoUrl "gh-pages" tempDocsDir
             let docDir = rootDir @@ "docs"
             Shell.copyRecursive docDir tempDocsDir true |> Trace.tracefn "%A"
             Git.Staging.stageAll tempDocsDir

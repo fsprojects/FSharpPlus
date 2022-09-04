@@ -95,33 +95,32 @@ See the following example using the built-in `_Some` prism.
 
 *)
 
-type Team   = {name: string; victories: int}
-let inline _name      f {name = a; victories = b} = f a <&> fun a' -> {name = a'; victories = b }
-let inline _victories f {name = a; victories = b} = f b <&> fun b' -> {name = a ; victories = b'}
+type Team   = { Name: string; Victories: int }
+let inline _name      f t = f t.Name      <&> fun n -> { t with Name      = n }
+let inline _victories f t = f t.Victories <&> fun v -> { t with Victories = v }
 
-type Player = {team: Team; score: int}
-let inline _team  f {team = a; score = b} = f a <&> fun a' -> {team = a'; score = b }
-let inline _score f {team = a; score = b} = f b <&> fun b' -> {team = a ; score = b'}
+type Player = { Team: Team; Score: int }
+let inline _team  f p = f p.Team  <&> fun t -> { p with Team  = t }
+let inline _score f p = f p.Score <&> fun s -> { p with Score = s }
 
-type Result = {winner: Player option; started: bool}
-let inline _winner   f {winner = a; started = b} = f a <&> fun a' -> {winner = a'; started = b }
-let inline _started  f {winner = a; started = b} = f b <&> fun b' -> {winner = a ; started = b'}
+type Result = { Winner: Player option; Started: bool}
+let inline _winner   f r = f r.Winner  <&> fun w -> { r with Winner  = w }
+let inline _started  f r = f r.Started <&> fun s -> { r with Started = s }
 
-type Match<'t>  = {players: 't; finished: bool}
-let inline _players  f {players = a; finished = b} = f a <&> fun a' -> {players = a'; finished = b }
-let inline _finished f {players = a; finished = b} = f b <&> fun b' -> {players = a ; finished = b'}
+type Match<'t>  = { Players: 't; Finished: bool }
+// For polymorphic updates to be possible, we can't use `with` expression on generic field lens.
+let inline _players  f m = f m.Players  <&> fun p -> { Finished = m.Finished; Players  = p }
+let inline _finished f m = f m.Finished <&> fun f -> { m with Finished = f }
 
 // Lens composed with Prism -> Prism
-let inline _winner_team x = (_players << _winner << _Some << _team) x
+let inline _winnerTeam x = (_players << _winner << _Some << _team) x
 
 // initial state
 let match0 =
-    {
-        players = 
-            {team = {name = "The A Team"; victories = 0}; score = 0},
-            {team = {name = "The B Team"; victories = 0}; score = 0}
-        finished = false
-    }
+    { Players = 
+            { Team = { Name = "The A Team"; Victories = 0 }; Score = 0 },
+            { Team = { Name = "The B Team"; Victories = 0 }; Score = 0 }
+      Finished = false }
 
 
 // Team 1 scores
@@ -132,10 +131,10 @@ let match2 = over (_players << _2 << _score) ((+) 1) match1
 
 // Produce Match<Result> from Match<Player * Player> 
 // This is possible with these Lenses since they support polymorphic updates.
-let matchResult0 = setl _players {winner = None; started = true} match2
+let matchResult0 = setl _players { Winner = None; Started = true } match2
 
 // See if there is a winner by using a prism
-let _noWinner = preview _winner_team matchResult0
+let _noWinner = preview _winnerTeam matchResult0
 
 // Team 1 scores
 let match3 = over (_players << _1 << _score) ((+) 1) match2
@@ -143,10 +142,10 @@ let match3 = over (_players << _1 << _score) ((+) 1) match2
 // End of the match
 let match4 = setl _finished true match3
 let match5 = over (_players << _1 << _team << _victories) ((+) 1) match4
-let matchResult1 = over _players (fun (x, _) -> {winner = Some x; started = true}) match5
+let matchResult1 = over _players (fun (x, _) -> { Winner = Some x; Started = true }) match5
 
 // And the winner is ...
-let winner = preview _winner_team matchResult1
+let winner = preview _winnerTeam matchResult1
 
 
 
@@ -189,7 +188,9 @@ Fold
 ====
 
 *)
-open FSharpPlus.Data
+open FSharpPlus.Lens
+open FSharpPlus // This module contain other functions relevant for the examples (length, traverse)
+open FSharpPlus.Data // Mult
 
 let f1 = over both length ("hello","world")
 // val f1 : int * int = (5, 5)

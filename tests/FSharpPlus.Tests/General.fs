@@ -10,6 +10,15 @@ open FSharpPlus.Control
 open NUnit.Framework
 open Helpers
 open FSharpPlus.Math.Applicative
+open CSharpLib
+
+type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
+    static member ToMap (WrappedMapA m) = m
+    static member inline TraverseIndexed (WrappedMapA m, f) =
+        SideEffects.add "Using WrappedMapA's TraverseIndexed"
+        WrappedMapA <!> (traversei f m : ^__)
+module WrappedMapA=
+    let inline ofList l = Map.ofList l |> WrappedMapA
 
 type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
     static member ToMap (WrappedMapA m) = m
@@ -1854,7 +1863,6 @@ module MonadTransformers =
         let y = (fn |> ResultT.run |> Reader.run) -1
         areEqual (Error NegativeValue) y
 
-
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
         static member Dimap ((Fun f): Fun<'B,'C>, g: 'A->'B, h:'C->'D) = Fun (g >> f >> h)
@@ -2094,7 +2102,15 @@ module Splits =
         Assert.IsTrue((d = Sum 13))
 
 
-module Parsing = 
+module Parsing =
+    let (|Int32|_|) : _-> Int32 option = tryParse
+    type ProductId = { Value:int }
+    with
+        static member TryParse(value:string) : ProductId option=
+            match value.Split('_') |> List.ofArray with
+            | "P" :: Int32 v :: [] -> Some { Value = v }
+            | _ -> None
+
     [<Test>]
     let parseDateTime () =
 #if MONO
@@ -2128,7 +2144,24 @@ module Parsing =
 
         let r123: WrappedListA<int> option = tryParse "[1;2;3]"
         areStEqual r123 (Some (WrappedListA [1; 2; 3]))
-        
+
+    [<Test>]
+    let parseCustomType () = 
+        let v1 : CustomerId option = tryParse "C_1"
+        Assert.IsTrue((v1.Value.Value = 1L))
+        let v2 : CustomerId option = tryParse "C_X"
+        Assert.IsTrue(Option.isNone v2)
+        let v3 : ProductId option = tryParse "P_1"
+        Assert.IsTrue((v3.Value.Value = 1))
+        let v4 : ProductId option = tryParse "P_X"
+        Assert.IsTrue(Option.isNone v4)
+#if NETSTANDARD3_0
+        let v5 : ICustomerId option = tryParse "C_1"
+        Assert.IsTrue((v5.Value.Value = 1L))
+        let v6 : ICustomerId option = tryParse "C_X"
+        Assert.IsTrue(Option.isNone v6)
+#endif
+
     [<Test>]
     let scanfParsing () =
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
@@ -2260,7 +2293,7 @@ module Sequences =
           let! z = seq [1..50]
           let! x = seq [1..z]
           let! y = seq [x..z]
-          if (x*x + y*y = z*z) then return (x, y, z)}
+          if (x*x + y*y = z*z) then return (x, y, z) else () }
 
         let _ = monad.plus {
           let! z = seq [1..50]

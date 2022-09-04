@@ -13,7 +13,7 @@ module String =
     /// Inserts a separator char between each char in the source string.
     let intersperse (element: char) (source: string) = String.Join ("", Array.ofSeq (source |> Seq.intersperse element))
 
-    /// Creates a sequence of strings by splitting the srouce string on any of the given separators.
+    /// Creates a sequence of strings by splitting the source string on any of the given separators.
     let split (separators: seq<string>) (source: string) = source.Split (Seq.toArray separators, StringSplitOptions.None) :> seq<_>
 
     /// Replaces a substring with the given replacement string.
