@@ -23,10 +23,13 @@ The original post from AsyncSeq can be found [here](http://tomasp.net/blog/async
 
 In order to do so we need to be aware of the design differences of both implementations.
 
-<style>#fsdocs-content table, th, td{border: 1px solid black;border-collapse: collapse;}</style>
+<style>
+body #fsdocs-content table, th, td { border: 1px solid black;border-collapse: collapse; }
+body #fsdocs-content table code { word-break: normal; }
+</style>
 
 | **AsyncSeq**                  | **SeqT**                              | **Notes**	|
-|:------------------------------|:--------------------------------------|:----------|
+|:------------------------------|:--------------------------------------|:---------:|
 |`AsyncSeq<'T>`                 |`SeqT<Async<bool>, 'T>`                |           |
 |`asyncSeq { .. }`              |`monad.plus { .. }`                    | At some point it needs to be inferred as `SeqT<Async<bool>, 'T>`, or it can be specified with type parameters: `monad<SeqT<Async<bool>, 'T>>.plus` |
 |`let! x = y`                   |`let! x = SeqT.lift y`                 | No auto lifting. Lifting should be explicit. |
