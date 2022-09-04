@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard2.0;net45;net6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net462;net6</TargetFrameworks>
     <DefineConstants>$(DefineConstants);TYPELEVEL_DEBUG</DefineConstants>
     <Configurations>Debug;Release;Fable</Configurations>
     <Platforms>AnyCPU</Platforms>
