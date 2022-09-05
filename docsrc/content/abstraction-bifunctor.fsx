@@ -2,6 +2,7 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 (**
 Bifunctor
 =======
@@ -73,7 +74,8 @@ From .Net/F#
  
 From F#+
 
- -  ``Const<'T1,'T2>``
+ -  [``Const<'C,'T>``](type-const.html)
+ -  [``Validation<'Error,'T>``](type-validation.html)
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
@@ -82,8 +84,11 @@ Examples
 *)
 
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 

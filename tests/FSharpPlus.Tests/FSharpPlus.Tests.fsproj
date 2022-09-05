@@ -5,8 +5,6 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>net5;net461</TargetFrameworks>
-    <TargetFrameworks>net5;net462</TargetFrameworks>
     <TargetFrameworks>net6;net462</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
@@ -31,6 +29,8 @@
     <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net461'" />
     <Compile Include="TypeLevel.fs" />
     <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net462'" />
+    <Compile Include="TypeLevel.fs" />
+    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net462'" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
@@ -42,6 +42,7 @@
     <ProjectReference Include="..\FSharpPlus.1\FSharpPlus.1.fsproj" />
     <ProjectReference Include="..\..\src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj" />
     <ProjectReference Include="..\..\src\FSharpPlus.TypeLevel\Providers\FSharpPlus.Providers.fsproj" />
+    <ProjectReference Include="..\CSharpLib\CSharpLib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />

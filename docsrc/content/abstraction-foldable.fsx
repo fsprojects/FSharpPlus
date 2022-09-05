@@ -67,9 +67,9 @@ From .Net/F#
  
 From F#+
 
- -  ``ZipList<'T>``
- -  ``NonEmptyList<'T>``
- -  ``DList<'T>``
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``NonEmptyList<'S>``](type-nonempty.html)
+ -  [``DList<'T>``](type-dlist.html)
 
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation

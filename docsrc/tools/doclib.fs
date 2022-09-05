@@ -1093,7 +1093,7 @@ module FSFormatting =
                     ([  "build"; 
                         "--input"; arguments.Input
                         "--output"; arguments.OutputDirectory
-                        "--sourcerepo"; arguments.SourceRepository;
+                        "--sourcerepo"; arguments.SourceRepository
                         "--projects"; arguments.Projects
                         "--parameters" ])
             |> Seq.map (fun s -> if s.StartsWith "\"" then s else sprintf "\"%s\"" s)
@@ -1178,7 +1178,17 @@ module Git =
             sprintf "clone -b %s --single-branch %s %s" branchName repoUrl toPath
             |> runSimpleGitCommand workingDir
             |> Trace.trace
-
+    module Config = 
+        /// Get remote origin url
+        /// ## Parameters
+        ///
+        ///  - `workingDir` - The working directory.
+        let remoteOriginUrl workingDir =
+            let url = 
+                "config --get remote.origin.url"
+                |> runSimpleGitCommand workingDir
+            url.Trim([|'\n';'\r';'\t';' '|])
+    
 
 
 module DotNet =

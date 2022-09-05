@@ -243,7 +243,7 @@ module SeqT_V2 =
                             | _ -> () } }
 
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
-
+    
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     let inline runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
         let ra = new ResizeArray<_> ()

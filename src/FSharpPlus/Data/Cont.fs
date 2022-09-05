@@ -1,5 +1,11 @@
 ﻿namespace FSharpPlus.Data
 
+/// <namespacedoc>
+/// <summary>
+/// Data contains types and modules that represent data structures designed to be used with F#+ abstractions.
+/// </summary>
+/// </namespacedoc>
+
 #nowarn "1125"
 
 open System.ComponentModel

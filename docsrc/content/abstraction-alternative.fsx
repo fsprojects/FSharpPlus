@@ -1,6 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
 
 (**
 Alternative
@@ -61,12 +62,12 @@ From .Net/F#
  
 From F#+
  
- -  ``ReaderT<'R, 'MonadPlus<'T>>``
- -  ``WriterT<'MonadPlus<'T * 'Monoid>>``
- -  ``StateT<'S,'MonadPlus<'T * 'S>>``
- -  ``Compose<'F<'G<'T>>>``
- -  ``DList<'T>``
- -  ``ZipList<'T>``
+ -  [``ReaderT<'R, 'MonadPlus<'T>>``](type-readert.html)
+ -  [``WriterT<'MonadPlus<'T * 'Monoid>>``](type-writert.html)
+ -  [``StateT<'S,'MonadPlus<'T * 'S>>``](type-statet.html)
+ -  [``Compose<'AlternativeF<'AlternativeG<'T>>>``](type-compose.html)
+ -  [``DList<'T>``](type-dlist.html)
+ -  [``ZipList<'S>``](type-ziplist.html)
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
@@ -76,7 +77,11 @@ Examples
 
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 

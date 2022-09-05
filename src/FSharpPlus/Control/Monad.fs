@@ -196,13 +196,12 @@ type TryWith =
     inherit Default1
     // Begin compat members
     static member        TryWith (computation: '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3) = try computation with e -> catchHandler e
-
     static member        TryWith (computation: seq<_>        , catchHandler: exn -> seq<_>        , _: Default2) = seq (try (Seq.toArray computation) with e -> Seq.toArray (catchHandler e))
     static member        TryWith (computation: 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2) = (fun s -> try computation s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith ) = async.TryWith (computation, catchHandler)
     static member        TryWith (computation: Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith ) = lazy (try computation.Force () with e -> (catchHandler e).Force ()) : Lazy<_>
     // End compat members
-
+    
     [<CompilerMessage(MessageWhile  , CodeWhile  , IsError = false)>]
     static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: While) = raise Internals.Errors.exnUnreachable
     

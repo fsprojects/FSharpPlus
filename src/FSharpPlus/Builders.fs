@@ -1,5 +1,14 @@
 namespace FSharpPlus
 
+/// <namespacedoc>
+/// <summary>
+/// Extension modules, along with, Builders, Lens, Memoization, Operators, and Parsing.
+/// </summary>
+/// <remarks>
+/// See Operators for generic functions.
+/// </remarks>
+/// </namespacedoc>
+
 #nowarn "40"
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
@@ -81,6 +90,9 @@ module Builders =
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     let monad' = new MonadFxStrictBuilder ()
+
+#endif
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]

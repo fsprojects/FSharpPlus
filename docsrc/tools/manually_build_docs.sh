@@ -4,9 +4,11 @@ cd ../../
 # Restore fake and paket
 dotnet tool restore
 
+./docsrc/tools/download_nugets.sh
+
 # Build
 # Note: some bug means can't build debug
-dotnet build -c Release
+dotnet build -c Release FSharpPlus.sln
 
 # Gen docs
 dotnet run --project ./docsrc/tools 

@@ -196,6 +196,7 @@ type FindIndex =
     static member        FindIndex (x: 'a ResizeArray   , p: 'a -> bool, [<Optional>]_impl: FindIndex) = Seq.findIndex p x
     static member        FindIndex (x: list<'a>         , p            , [<Optional>]_impl: FindIndex) = List.findIndex p x
     static member        FindIndex (x: seq<'a>          , p            , [<Optional>]_impl: FindIndex) = Seq.findIndex p x
+
     static member        FindIndex (x: 'a Id            , p: 'a -> bool, [<Optional>]_impl: FindIndex) = List.findIndex p [x.getValue]
     // End compat members
 
@@ -255,9 +256,8 @@ type FindSliceIndex =
     static member        FindSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex e x
     static member        FindSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
     static member        FindSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: FindSliceIndex) = List.findSliceIndex [e.getValue] [x.getValue]
+    #endif
     // End compat members
-
-
     static member        FindSliceIndex ((x: string           , e                   ), [<Optional>]_impl: FindSliceIndex) = String.findSliceIndex e x
     static member        FindSliceIndex ((x: 'a []            , e                   ), [<Optional>]_impl: FindSliceIndex) = Array.findSliceIndex e x
     static member        FindSliceIndex ((x: 'a ResizeArray   , e: 'a ResizeArray   ), [<Optional>]_impl: FindSliceIndex) = Seq.findSliceIndex e x
@@ -270,7 +270,6 @@ type FindSliceIndex =
     static member        FindSliceIndex ((x: #seq<'a>          , e                   ), [<Optional>]_impl: Default2) = Seq.findSliceIndex e x
     static member inline FindSliceIndex ((x: '``C<'T>``, e: '``C<'T>``), _impl: Default1) : 'Index = FindSliceIndex.InvokeOnInstance e x
     static member inline FindSliceIndex ((_: ^t when ^t: null and ^t: struct, _), _impl: Default1) = ()
-    #endif
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
         let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindSliceIndex : (_*_)*_ -> _) (b, n), a)

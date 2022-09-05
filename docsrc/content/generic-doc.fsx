@@ -20,7 +20,7 @@ Read about the specific operators:
 
  * Docs on [Operators - Common Combinators](operators-common.html)
  * Other docs exist for each [abstraction](abstractions.html)
- * API Doc for [Generic functions and operators](reference/operators.html)
+ * API Doc for [Generic functions and operators](reference/fsharpplus-operators.html)
 
 They're particularly useful in that the specific function called will
 depend on the input arguments and return type. However, this means you

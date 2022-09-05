@@ -1,6 +1,9 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
 (**
 Introducing FSharpPlus
 ======================
@@ -11,7 +14,11 @@ Introducing FSharpPlus
 
 *)
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open FSharpPlus
 
 (**

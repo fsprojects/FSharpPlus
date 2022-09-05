@@ -1,6 +1,9 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+
+#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+
 (**
 Cont<'R,'U>
 ===========
@@ -15,11 +18,15 @@ by reading [Real World Functional Programming by Tomas Petricek with Jon Skeet](
 Examples
 --------
 
-In order to get an idea about this style, let us contrast some of the examples and how they look in when using f#+ or without help.  
+In order to get an idea about this style, let us contrast some of the examples and how they look in when using F#+ or without help.  
 
 *)
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 open FSharpPlus.Data
