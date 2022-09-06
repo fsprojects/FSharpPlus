@@ -6,6 +6,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net462;net6</TargetFrameworks>
     <Title>FSharpPlus.Providers</Title>
     <AssemblyName>FSharpPlus.Providers</AssemblyName>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
@@ -34,9 +35,14 @@
     <Compile Include="TypeNat.Provider.fs" />
     <Compile Include="Matrix.Provider.fs" />
     <Compile Include="TypeProviderAssembly.fs" />
+    <Content Condition=" '$(TargetFramework)' == 'net462'" Include="../../FSharpPlus/App.config" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="6.0.6" />
+    <Reference Condition=" '$(TargetFramework)' == 'net462'" Include="System.Runtime" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../FSharpPlus.TypeLevel.fsproj" />
