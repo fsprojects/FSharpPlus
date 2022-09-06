@@ -18,6 +18,7 @@ namespace FSharpPlus
 module GenericBuilders =
 
     open FSharpPlus.Operators
+    open FSharpPlus.Data
 
     // Idiom brackets
     type Ii = Ii
@@ -178,10 +179,30 @@ module GenericBuilders =
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
 
+    // Generic applicative CE builder.
+    type ApplicativeBuilder<'``Applicative<'T>``> () =
+        inherit Builder<'``Applicative<'T>``> ()
+        member inline _.BindReturn(x, f) = map f x
+    
+    // Generic 2 layer applicative CE builder.
+    type ApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> () =
+        inherit Builder<'``Applicative1<Applicative2<'T>>``> ()
+        member inline _.BindReturn (x, f) = map f x
+        member inline _.Source x = Compose x
+        member inline _.Run x = Compose.run x
+    
+
+
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad<'``monad<'t>``> = new MonadFxBuilder<'``monad<'t>``> ()
 
     /// Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad'<'``monad<'t>``> = new MonadFxStrictBuilder<'``monad<'t>``> ()
+
+    /// Creates an applicative computation expression.
+    let applicative<'``Applicative<'T>``> = ApplicativeBuilder<'``Applicative<'T>``> ()
+
+    /// Creates an applicative computation expression which compose effects of two Applicatives.
+    let applicative2<'``Applicative1<Applicative2<'T>>``> = ApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> ()
 
 #endif
