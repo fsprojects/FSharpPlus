@@ -254,10 +254,7 @@ module List =
     /// <param name="lst">The input list</param>
     /// 
     /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
-    let removeAt i lst =
-        if List.length lst > i then
-            lst.[0..i-1] @ lst.[i+1..]
-        else lst
+    let removeAt i lst = FSharp.Collections.List.removeAt i lst
 
     /// <summary>Updates the value of an item in a list</summary>
     /// <param name="i">The index of the item to update</param>
@@ -265,7 +262,4 @@ module List =
     /// <param name="lst">The input list</param>
     ///
     /// <returns>A new list with the updated element</returns>
-    let setAt i x lst =
-        if List.length lst > i && i >= 0 then
-            lst.[0..i-1] @ x::lst.[i+1..]
-        else lst
+    let setAt i x lst = FSharp.Collections.List.updateAt i x lst

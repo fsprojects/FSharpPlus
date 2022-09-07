@@ -126,6 +126,6 @@
     <Reference Condition=" '$(TargetFramework)' == 'net462'" Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="6.0.0" />
   </ItemGroup>
 </Project>

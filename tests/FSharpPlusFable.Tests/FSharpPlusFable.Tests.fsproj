@@ -45,5 +45,6 @@
       <Private>True</Private>
     </ProjectReference>
     <PackageReference Update="FSharp.Core" Version="6.0.6" />
+    <PackageReference Update="FSharp.Core" Version="6.0.0" />
   </ItemGroup>
 </Project>
