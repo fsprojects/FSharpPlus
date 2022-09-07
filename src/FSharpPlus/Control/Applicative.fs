@@ -143,6 +143,9 @@ type Lift3 with
     static member inline Lift3 (_, (_:'t when 't: null and 't: struct, _: ^u when ^u : null and ^u: struct, _: ^v when ^v : null and ^v: struct), _mthd: Default1) = id
     static member inline Lift3 (f: 'T -> 'U -> 'V -> 'W, (x: '``Applicative<'T>``, y: '``Applicative<'U>``, z: '``Applicative<'V>``)            , _mthd: Default1) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` or ^``Applicative<'V>`` ) : (static member Lift3 : _*_*_*_ -> _) f, x, y, z)
 
+
+open System.Reflection
+
 type IsLeftZero =
     inherit Default1
 
@@ -155,9 +158,17 @@ type IsLeftZero =
     static member IsLeftZero (t: ref<Choice<_,_>> , _mthd: IsLeftZero) = match t.Value with Choice2Of2 _ -> true | _ -> false
 
     static member inline Invoke (x: '``Applicative<'T>``) : bool =
-        let inline call (mthd : ^M, input: ^I) =
-            ((^M or ^I) : (static member IsLeftZero : _*_ -> _) ref input, mthd)
-        call(Unchecked.defaultof<IsLeftZero>, x)
+        
+        let ty = typeof<IsLeftZero>        
+        let mi = ty.GetMethod ("IsLeftZero", [|typeof<ref<'``Applicative<'T>``>>; ty|])
+        if not (isNull mi) then mi.Invoke (null, [|box x|]) |> FSharpPlus.Internals.Prelude.retype
+        else
+            let ty = typeof<'``Applicative<'T>``>
+            let mi = ty.GetMethod ("IsLeftZero", [|ty|])
+            if isNull mi then false
+            else
+                mi.Invoke (null, [|box x|])
+                |> FSharpPlus.Internals.Prelude.retype
 
     static member inline InvokeOnInstance (x: '``Applicative<'T>``) : bool =
         ((^``Applicative<'T>``) : (static member IsLeftZero : _ -> _) x)
