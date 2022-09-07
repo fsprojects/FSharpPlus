@@ -179,17 +179,17 @@ module GenericBuilders =
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
 
-    // Generic applicative CE builder.
+    /// Generic applicative CE builder.
     type ApplicativeBuilder<'``Applicative<'T>``> () =
         inherit Builder<'``Applicative<'T>``> ()
         member inline _.BindReturn(x, f) = map f x
     
-    // Generic 2 layer applicative CE builder.
-    type ApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> () =
-        inherit Builder<'``Applicative1<Applicative2<'T>>``> ()
-        member inline _.BindReturn (x, f) = map f x
-        member inline _.Source x = Compose x
-        member inline _.Run x = Compose.run x
+    /// Generic 2 layer applicative CE builder.
+    type ApplicativeBuilder2<'``applicative1<applicative2<'t>>``> () =
+        inherit Builder<'``applicative1<applicative2<'t>>``> ()
+        member inline _.BindReturn (x: Compose<_>, f: _ -> _) = Compose.Map (x, f) : Compose<_>
+        member inline _.Source x = Compose (x: '``Applicative1<Applicative2<'T>>``)
+        member inline _.Run x = Compose.run x : '``Applicative1<Applicative2<'T>>``
     
 
 
