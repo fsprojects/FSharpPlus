@@ -14,6 +14,21 @@ module ComputationExpressions =
     let task<'t> = monad'<Task<'t>>
 
     [<Test>]
+    let twoLayersApplicatives () =
+        let id   : Task<Validation<_, string>>   = Failure (Map.ofList ["Id",   ["Negative number"]]) |> Task.FromResult
+        let firstName : Validation<_, string>    = Failure (Map.ofList ["Name", ["Invalid chars"]])
+        let lastName :  Validation<_, string>    = Failure (Map.ofList ["Name", ["Too long"]])
+        let date : Task<Validation<_, DateTime>> = Failure (Map.ofList ["DoB" , ["Invalid date"]]) |> result
+        
+        let person = applicative2 {
+            let! i = id
+            and! f = result firstName
+            and! l = result lastName
+            and! d = date
+            return {| Id = i; Name = f + l; DateOfBirth = d |} }
+        ()
+
+    [<Test>]
     let specializedCEs () =
     
         // From Taskbuilder.fs
