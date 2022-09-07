@@ -199,6 +199,16 @@ module GenericBuilders =
         member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (lift3 >> lift3) tuple3 t1 t2 t3
         member        _.Run x : '``applicative1<applicative2<'t>>`` = x
     
+    /// Generic 3 layers Applicative CE builder.
+    type ApplicativeBuilder3<'``applicative1<applicative2<applicative3<'t>>>``> () =
+        member        _.ReturnFrom expr : '``applicative1<applicative2<applicative3<'t>>>`` = expr
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (result >> result >> result) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (result >> result >> result) x
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift2 >> lift2 >> lift2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift3 >> lift3 >> lift3) tuple3 t1 t2 t3
+        member        _.Run x : '``applicative1<applicative2<applicative3<'t>>>`` = x
+
 
 
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
@@ -212,5 +222,8 @@ module GenericBuilders =
 
     /// Creates an applicative computation expression which compose effects of two Applicatives.
     let applicative2<'``Applicative1<Applicative2<'T>>``> = ApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> ()
+
+    /// Creates an applicative computation expression which compose effects of three Applicatives.
+    let applicative3<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
 
 #endif
