@@ -20,12 +20,27 @@ module ComputationExpressions =
         let lastName :  Validation<_, string>    = Failure (Map.ofList ["Name", ["Too long"]])
         let date : Task<Validation<_, DateTime>> = Failure (Map.ofList ["DoB" , ["Invalid date"]]) |> result
         
-        let person = applicative2 {
+        let _person = applicative2 {
             let! i = id
             and! f = result firstName
             and! l = result lastName
             and! d = date
             return {| Id = i; Name = f + l; DateOfBirth = d |} }
+        ()
+
+    [<Test>]
+    let threeLayersApplicatives () =
+        let id        : Lazy<Task<Validation<Map<string, string list>, int>>>      = lazy (Failure (Map.ofList ["Id",   ["Negative number"]]) |> result)
+        let firstName :      Task<Validation<Map<string, string list>, string>>    =       Failure (Map.ofList ["Name", ["Invalid chars"]]) |> Task.FromResult
+        let lastName                                                               = "Smith"
+        let date      : Lazy<Task<Validation<Map<string, string list>, DateTime>>> = lazy (Failure (Map.ofList ["DoB" , ["Invalid date"]]) |> result)
+
+        let _person = applicative3 {
+            let! i = id
+            and! d = date
+            and! f = result firstName
+            let  l = lastName
+            return {| Id = i; Name = f + l ; DateOfBirth = d |} }
         ()
 
     [<Test>]
