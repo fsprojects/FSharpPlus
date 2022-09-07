@@ -191,14 +191,13 @@ module GenericBuilders =
     
     /// Generic 2 layers Applicative CE builder.
     type ApplicativeBuilder2<'``applicative1<applicative2<'t>>``> () =
-        member        _.ReturnFrom (expr) = expr  : '``applicative1<applicative2<'t>>``
-        member inline _.Return (x: 'T) = result x : Compose<_>
-        member inline _.Yield  (x: 'T) = result x : Compose<_>
-        member inline _.BindReturn (x: Compose<_>, f: _ -> _) = Compose.Map (x, f) : Compose<_>
-        member inline _.MergeSources  (t1: Compose<_>, t2: Compose<_>) : Compose<_> = Compose.Lift2 (tuple2, t1, t2)
-        member inline _.MergeSources3 (t1: Compose<_>, t2: Compose<_>, t3: Compose<_>) : Compose<_> = Compose.Lift3 (tuple3, t1, t2, t3)
-        member        _.Source x = Compose (x: '``Applicative1<Applicative2<'T>>``)
-        member        _.Run x = Compose.run x : '``applicative1<applicative2<'t>>``
+        member        _.ReturnFrom expr : '``applicative1<applicative2<'t>>`` = expr
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (result >> result) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (result >> result) x
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (lift2 >> lift2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (lift3 >> lift3) tuple3 t1 t2 t3
+        member        _.Run x : '``applicative1<applicative2<'t>>`` = x
     
 
 
