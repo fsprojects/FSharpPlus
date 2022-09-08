@@ -62,11 +62,11 @@ module Free =
         loop y x
 
     let inline map3 (f: 'T->'U->'V->'W) (x: Free<'``Functor<'T>``,'T>) (y: Free<'``Functor<'U>``,'U>) (z: Free<'``Functor<'V>``,'V>) : Free<'``Functor<'W>``,'W> =
-        let rec loop (y: Free<_,_>) (x: Free<_,_>) (z: Free<_,_>) =
+        let rec loop (y: Free<_,_>) (z: Free<_,_>) (x: Free<_,_>) =
             match run x with
-            | Pure x -> map2<'U,'V,'W,'``Functor<'U>``,'``Functor<Free<'Functor<'U>,'U>>``,'``Functor<Free<'Functor<'V>,'V>>``,'``Functor<Free<'Functor<'W>,'W>>``,'``Functor<'V>``,'``Functor<'W>``> (f x) y z : Free<'``Functor<'W>``,'W>
-            | Roll (x: ^``Functor<Free<'Functor<'T>,'T>>``) -> Roll (Map.Invoke (loop y: Free<'``Functor<'T>``,'T> -> _) x: '``Functor<Free<'Functor<'W>,'W>>``)
-        loop y x z
+            | Pure x -> map2<'U,'V,'W,'``Functor<'U>``,'``Functor<Free<'Functor<'U>,'U>>``,'``Functor<Free<'Functor<'W>,'W>>``,'``Functor<Free<'Functor<'V>,'V>>``,'``Functor<'V>``,'``Functor<'W>``> (f x) y z : Free<'``Functor<'W>``,'W>
+            | Roll (x: ^``Functor<Free<'Functor<'T>,'T>>``) -> Roll (Map.Invoke (loop y z: Free<'``Functor<'T>``,'T> -> _) x: '``Functor<Free<'Functor<'W>,'W>>``)
+        loop y z x
 
     /// Folds the Free structure into a Monad
     let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'U>``,'U>) : '``Monad<'U>`` =
