@@ -331,7 +331,19 @@ module List =
     /// <param name="lst">The input list</param>
     /// 
     /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
-    let removeAt i lst = FSharp.Collections.List.removeAt i lst
+    let deleteAt i lst =
+         if List.length lst > i then
+             lst.[0..i-1] @ lst.[i+1..]
+         else lst
+
+    /// <summary>Attempts to remove an item from a list.</summary>
+    /// <param name="i">The index of the item to remove </param>
+    /// <param name="lst">The input list</param>
+    ///
+    /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
+    /// <remarks>Use deletaAt instead or if you want to throw exceptions use the full path to removeAt in Core until this function is removed from this library.</remarks>
+    [<Obsolete("This function was included in FSharp.Core but throwing")>]
+    let removeAt i lst = deleteAt i lst
 
     /// <summary>Updates the value of an item in a list</summary>
     /// <param name="i">The index of the item to update</param>
@@ -339,4 +351,9 @@ module List =
     /// <param name="lst">The input list</param>
     ///
     /// <returns>A new list with the updated element</returns>
-    let setAt i x lst = FSharp.Collections.List.updateAt i x lst
+    /// <remarks>Use List.updateAt if you want to throw exceptions when using invalid indexes.</remarks>
+    let setAt i x lst =
+         if List.length lst > i && i >= 0 then
+             lst.[0..i-1] @ x::lst.[i+1..]
+         else lst
+
