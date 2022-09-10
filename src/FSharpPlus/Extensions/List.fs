@@ -75,9 +75,86 @@ module List =
     /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
 
-    let take i list = FSharp.Collections.List.take i list
 
-    let skip i list = FSharp.Collections.List.skip i list
+    /// <summary>Returns the first N elements of the list.</summary>
+    /// <remarks>Throws <c>InvalidOperationException</c>
+    /// if the count exceeds the number of elements in the list. <c>List.truncate</c>
+    /// returns as many items as the list contains instead of throwing an exception.</remarks>
+    ///
+    /// <param name="count">The number of items to take.</param>
+    /// <param name="list">The input list.</param>
+    ///
+    /// <returns>The result list.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentException">Thrown when the input list is empty.</exception>
+    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// in the list.</exception>
+    ///
+    /// <example id="take-1">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.take 2
+    /// </code>
+    /// Evaluates to <c>["a"; "b"]</c>
+    /// </example>
+    ///
+    /// <example id="take-2">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.take 6
+    /// </code>
+    /// Throws <c>InvalidOperationException</c>.
+    /// </example>
+    ///
+    /// <example id="take-3">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.take 0
+    /// </code>
+    /// Evaluates to the empty list.
+    /// </example>
+    let take count list = FSharp.Collections.List.take count list
+
+    /// <summary>Returns the list after removing the first N elements.</summary>
+    ///
+    /// <param name="count">The number of elements to skip. If the number is 0 or negative the input list is returned.</param>
+    /// <param name="list">The input list.</param>
+    ///
+    /// <returns>The list after removing the first N elements.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentException">Thrown when count exceeds the number of 
+    /// elements in the list.</exception>
+    ///
+    /// <example id="skip-1">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.skip 2
+    /// </code>
+    /// Evaluates to <c>["c"; "d"]</c>
+    /// </example>
+    ///
+    /// <example id="skip-2">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.skip 5
+    /// </code>
+    /// Throws <c>ArgumentException</c>.
+    /// </example>
+    ///
+    /// <example id="skip-3">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.skip -1
+    /// </code>
+    /// Evaluates to <c>["a"; "b"; "c"; "d"]</c>.
+    /// </example>
+    let skip count list = FSharp.Collections.List.skip count list
 
 
     /// <summary>Returns a list that drops N elements of the original list and then yields the
