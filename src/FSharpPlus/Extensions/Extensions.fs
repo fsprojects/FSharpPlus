@@ -125,30 +125,3 @@ module Extensions =
                     | Some v -> yield v
                     | None   -> ok <- false })
             if ok then Some (Array.toSeq res) else None
-
-    type Result<'t, 'tError> with
-        /// Returns the first Error if it contains an Error element, otherwise a list of all elements
-        static member Sequence (t: seq<Result<'T, 'TError>>) =
-            let mutable error = None
-            let res = Seq.toArray (seq {
-                use e = t.GetEnumerator ()
-                while e.MoveNext () && error.IsNone do
-                    match e.Current with
-                    | Ok v -> yield v
-                    | Error e -> error <- Some e })
-            match error with
-            | None -> Ok (Array.toSeq res)
-            | Some e -> Error e
-
-        /// Returns the first Error if it contains an Error element, otherwise a list of all elements
-        static member Sequence (t: list<Result<'T, 'TError>>) =
-            let mutable error = None
-            let res = Seq.toArray (seq {
-                use e = (t :> seq<_>).GetEnumerator ()
-                while e.MoveNext () && error.IsNone do
-                    match e.Current with
-                    | Ok v -> yield v
-                    | Error e -> error <- Some e })
-            match error with
-            | None -> Ok (Array.toList res)
-            | Some e -> Error e
