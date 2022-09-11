@@ -36,7 +36,7 @@
     <Compile Include="TypeProviderAssembly.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="6.0.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../FSharpPlus.TypeLevel.fsproj" />
