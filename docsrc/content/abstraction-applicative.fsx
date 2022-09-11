@@ -92,7 +92,7 @@ From F#+
  -  [``ZipList<'T>``](type-ziplist.html)
  -  [``ParallelArray<'T>``](type-parallelarray.html)
  -  [``Const<'C,'T>``](type-const.html)
- -  [``Compose<'ApplicativeF<'ApplicativeG<'T>>>``](type-compose.html)
+ -  [``Compose<'Applicative1<'Applicative2<'T>>>``](type-compose.html)
  -  [``DList<'T>``](type-dlist.html)
  -  [``Vector<'T,'Dimension>``](type-vector.html)
  -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
@@ -141,7 +141,7 @@ let resLazy22 : Lazy<_>   = result 22
 let (quot5 : Microsoft.FSharp.Quotations.Expr<int>) = result 5
 
 // Example
-type Person = { name: string; age: int } with static member create n a = {name = n; age = a}
+type Person = { Name: string; Age: int } with static member create n a = { Name = n; Age = a }
 
 let person1 = Person.create <!> tryHead ["gus"] <*> tryParse "42"
 let person2 = Person.create <!> tryHead ["gus"] <*> tryParse "fourty two"
@@ -190,18 +190,43 @@ let optFalse = tryParse "30" .< 29
 let m1m2m3 = -.[1;2;3]
 
 
+// Using applicative computation expression
+
+let getName s = tryHead s
+let getAge  s = tryParse s
+
+let person4 = applicative {
+    let! name = getName ["gus"]
+    and! age  = getAge "42"
+    return { Name = name; Age = age } }
 
 
-// Composing applicatives
+(**
+
+Composing applicatives
+----------------------
+
+Unlike monads, applicatives are always composable.
+
+The date type [``Compose<'Applicative1<'Applicative2<'T>>>``](type-compose.html) can be used to compose any 2 applicatives:
+*)
 
 let res4 = (+) <!> Compose [Some 3] <*> Compose [Some 1]
 
-let getName s = async { return tryHead s }
-let getAge  s = async { return tryParse s }
+let getNameAsync s = async { return tryHead s }
+let getAgeAsync  s = async { return tryParse s }
 
-let person4 = Person.create <!> Compose (getName ["gus"]) <*> Compose (getAge "42")
+let person5 = Person.create <!> Compose (getNameAsync ["gus"]) <*> Compose (getAgeAsync "42")
 
+(**
 
+The computation expressions applicative2 and applicative3 can also be used to compose applicatives:
+*)
+
+let person6 = applicative2 {
+    let! name = printfn "aa"; getNameAsync ["gus"]
+    and! age  = getAgeAsync "42"
+    return { Name = name; Age = age } }
 
 
 
