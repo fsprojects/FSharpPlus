@@ -88,10 +88,10 @@ module List =
     /// <returns>The list converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (source: _ list) =
         { new System.Collections.Generic.IReadOnlyList<_> with
-            member __.Count = source.Length
-            member __.Item with get index = source.[index]
-            member __.GetEnumerator () = (source :> _ seq).GetEnumerator ()
-            member __.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
+            member _.Count = source.Length
+            member _.Item with get index = source.[index]
+            member _.GetEnumerator () = (source :> _ seq).GetEnumerator ()
+            member _.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
