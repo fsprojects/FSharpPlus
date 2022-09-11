@@ -12,7 +12,9 @@ Computations Expressions
 
 This library allows to use some common computation expressions without writing any boiler plate code.
 
-There is a single computation expression: ``monad`` but it comes in 4 flavours:
+For applicatives there is single computation expression: ``applicative { .. }``. Additionally ``applicative2 { .. }`` and ``applicative3 { .. }`` exists for composed (aka layered) applicatives.
+
+For monadic code there is a single computation expression: ``monad { .. }`` but it comes in 4 flavours:
 
  - Delayed or strict
 
@@ -52,21 +54,6 @@ let _ : OptionT<list<unit option>> = monad { printfn "I'm strict" }
 
 let _ : OptionT<seq<unit option>> = monad { printfn "I'm strict" }
 // won't print anything, because seq is lazy
-
-(**
-
-Applicatives
-============
-
-There are some F# issues preventing applicative required `BindReturn` to be included in `monad`, so for the moment the following snipped can be used to quickly create a generic applicative CE:
-
-*)
-
-type ApplicativeBuilder<'t> () =
-    inherit MonadFxStrictBuilder<'t> ()
-    member inline _.BindReturn (x, f) = map f x
-
-let applicative<'t> = ApplicativeBuilder<'t> ()
 
 (**
 
