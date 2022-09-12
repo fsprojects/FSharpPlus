@@ -246,7 +246,8 @@ module SeqT_V2 =
                             | _ -> () } }
 
     /// Transforms a regular sequence into a SeqT, driven by the return type.
-    let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
+    /// An alias of `ofSeq`.
+    let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = ofSeq source
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     let inline runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
