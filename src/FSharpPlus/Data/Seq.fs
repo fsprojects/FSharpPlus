@@ -167,6 +167,7 @@ module SeqT_V2 =
     [<Literal>]
     let private enumNotStarted = "Enumeration has not started. Call MoveNext."
 
+    /// Creates a SeqT sequence from an IEnumerableM.
     let ofIEnumerableM x : SeqT<'``Monad<bool>``, 'T> = SeqT x
 
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
@@ -209,6 +210,8 @@ module SeqT_V2 =
                                 dispose e1
                             | _ -> () } }
 
+    
+    /// Transforms a regular sequence into a SeqT, driven by the return type.
     let inline ofSeq (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
@@ -242,6 +245,7 @@ module SeqT_V2 =
                                 dispose e
                             | _ -> () } }
 
+    /// Transforms a regular sequence into a SeqT, driven by the return type.
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -342,9 +346,11 @@ module SeqT_V2 =
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () = (f () :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator () }
 
+    /// A combination of bind and lift operations.
     let inline bindLift<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'U> =
         make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = source in return f v })
 
+    /// Lifts the source into the SeqT.
     let inline lift (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with 
@@ -941,7 +947,7 @@ module SeqT_V2 =
     /// <returns>The result sequence.</returns>
     ///
     /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
-    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements.
     /// in the sequence.</exception>
     let inline take count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         if (count < 0) then invalidArg "count" "must be non-negative"

@@ -984,13 +984,13 @@ module Operators =
     /// Converts to a Collection from a list.
     /// </summary>
     /// <category index="19">Collection</category>
-    let inline ofList (source: list<'T>) = OfList.Invoke source : 'Collection
+    let inline ofList (source: list<'T>) = OfList.Invoke source : '``Collection<'T>``
 
     /// <summary>
     /// Converts to a Collection from a seq.
     /// </summary>
     /// <category index="19">Collection</category>
-    let inline ofSeq (source: seq<'T> ) = OfSeq.Invoke source : 'Collection
+    let inline ofSeq (source: seq<'T> ) = OfSeq.Invoke source : '``Collection<'T>``
 
     /// <summary>Returns a new collection containing only the elements of the collection
     /// for which the given predicate returns "true"</summary>
@@ -999,7 +999,7 @@ module Operators =
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="source">The input collection.</param>
     /// <returns>A collection containing only the elements that satisfy the predicate.</returns>
-    let inline filter (predicate: _->bool) (source: 'Collection) : 'Collection = Filter.Invoke predicate source
+    let inline filter (predicate: 'T -> bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = Filter.Invoke predicate source
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>

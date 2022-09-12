@@ -101,9 +101,15 @@ module Validation =
 
     #endif
 
-    let bimap (f: 'T1->'U1) (g: 'T2->'U2) = function
-        | Failure e -> Failure (f e)
-        | Success a -> Success (g a)
+    /// <summary>Maps both success and failure of a Validation.</summary>
+    /// <param name="failureMapper">Function to be applied to source, if it contains a Failure value.</param>
+    /// <param name="successMapper">Function to be applied to source, if it contains a Success value.</param>
+    /// <param name="source">The source value, containing a Success or a Failure.</param>
+    /// <returns>The result of applying the corresponding mapping function.</returns>
+    let bimap (failureMapper: 'TError -> 'UError) (successMapper: 'T -> 'U) source =
+        match source with
+        | Failure e -> Failure (failureMapper e)
+        | Success a -> Success (successMapper a)
 
     let bifoldBack f g (source: Validation<'Error,'T>) (state: 'State) : 'State =
         match source with
@@ -117,7 +123,7 @@ module Validation =
         | Failure e -> f e x
 
     /// Like traverse but taking an additional function to traverse the Failure part as well.
-    let inline bitraverse (f: 'Error1->'``Functor<'Error2>``) (g: 'T1->'``Functor<'T2>``) (source: Validation<'Error1,'T1>) : '``Functor<Validation<'Error2,'T2>>`` =
+    let inline bitraverse (f: 'TError -> '``Functor<'UError>``) (g: 'T -> '``Functor<'U>``) (source: Validation<'TError, 'T>) : '``Functor<Validation<'UError, 'U>>`` =
         match source with
         | Success a -> Validation<'Error2,'T2>.Success <!> g a
         | Failure e -> Validation<'Error2,'T2>.Failure <!> f e
@@ -180,11 +186,11 @@ module Validation =
     let ofChoice (x: Choice<'T,'Error>) = match x with Choice1Of2 a -> Success a | Choice2Of2 e -> Failure e
 
     /// <summary> Extracts a value from either side of a Validation.</summary>
-    /// <param name="fSuccess">Function to be applied to source, if it contains a Success value.</param>
-    /// <param name="fFailure">Function to be applied to source, if it contains a Failure value.</param>
+    /// <param name="successMapper">Function to be applied to source, if it contains a Success value.</param>
+    /// <param name="failureMapper">Function to be applied to source, if it contains a Failure value.</param>
     /// <param name="source">The source value, containing a Success or a Failure.</param>
     /// <returns>The result of applying either functions.</returns>
-    let either (fSuccess: 'T->'U) (fFailure: 'Error->'U) source = match source with Success v -> fSuccess v | Failure e -> fFailure e
+    let either (failureMapper: 'TError -> 'U) (successMapper: 'T -> 'U) source = match source with Success v -> successMapper v | Failure e -> failureMapper e
 
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
@@ -193,7 +199,7 @@ module Validation =
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
     /// they are a common semigroup to use.
-    let validationNel (x: Result<_,_>) : (Validation<NonEmptyList<'e>,'a>) = (liftResult result) x
+    let validationNel (x: Result<'T, 'TError>) : (Validation<NonEmptyList<'TError>, 'T>) = (liftResult result) x
     #endif
 
     [<System.Obsolete("This function will not be supported in future versions.")>]
@@ -201,10 +207,10 @@ module Validation =
         | Failure x -> Failure x
         | Success a -> validate e p a
 
-    /// Creates a safe version of the supplied function, which returns a Validation<exn,'U> instead of throwing exceptions.
-    let protect (f: 'T->'U) x =
+    /// Creates a safe version of the supplied function, which returns a Validation<exn, 'U> instead of throwing exceptions.
+    let protect (unsafeFunction: 'T -> 'U) x =
         try
-            Success (f x)
+            Success (unsafeFunction x)
         with e -> Failure e
 
     #if !FABLE_COMPILER
@@ -221,7 +227,7 @@ module Validation =
     /// <returns>
     /// A tuple with both resulting lists, Success are in the first list.
     /// </returns>
-    let partition (source: list<Validation<'Error,'T>>) =
+    let partition (source: list<Validation<'TErrors, 'T>>) =
         let rec loop ((acc1, acc2) as acc) = function
             | [] -> acc
             | x::xs ->
