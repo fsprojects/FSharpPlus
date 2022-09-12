@@ -2,10 +2,10 @@ namespace FSharpPlus.Tests
 
 module Lens =
 
-    open NUnit.Framework
     open FSharpPlus
     open FSharpPlus.Data
     open FSharpPlus.Lens
+    open Helpers.NUnit.Framework
     open Helpers
 
 

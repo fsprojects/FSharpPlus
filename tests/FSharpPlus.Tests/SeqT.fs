@@ -3,8 +3,8 @@
 open System
 open FSharpPlus
 open FSharpPlus.Data
-open NUnit.Framework
 open FsCheck
+open Helpers.NUnit.Framework
 open Helpers
 open System.Collections.Generic
 open System.Threading.Tasks

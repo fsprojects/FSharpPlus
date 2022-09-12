@@ -6,6 +6,7 @@ module Validation =
 
   open System
   open FsCheck
+  open Helpers
   open NUnit.Framework
   open FSharpPlus
   open FSharpPlus.Data

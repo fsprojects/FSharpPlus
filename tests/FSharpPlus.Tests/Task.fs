@@ -4,6 +4,7 @@ module Task =
 
     open System
     open System.Threading.Tasks
+    open Helpers
     open NUnit.Framework
     open FSharpPlus
     open FSharpPlus.Data

@@ -4,7 +4,7 @@ module Extensions =
 
   open System
   open System.Collections.Generic
-  open NUnit.Framework
+  open Helpers.NUnit.Framework
   open FSharpPlus
   open FSharpPlus.Tests.Helpers
 

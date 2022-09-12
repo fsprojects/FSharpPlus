@@ -3,7 +3,7 @@
 module BifoldableTests =
 
     open FSharpPlus
-    open NUnit.Framework
+    open Helpers.NUnit.Framework
 
     let listMapSeqLength = List.map Seq.length
     let listMapTimes2 = List.map ((*) 2)

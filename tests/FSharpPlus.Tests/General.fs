@@ -7,8 +7,8 @@ open System.Collections.ObjectModel
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
-open NUnit.Framework
 open Helpers
+open NUnit.Framework
 open FSharpPlus.Math.Applicative
 open CSharpLib
 

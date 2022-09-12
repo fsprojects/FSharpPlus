@@ -1,6 +1,8 @@
 module FSharpPlus.Tests.Data
 
 open System
+open Xunit
+open Helpers
 open NUnit.Framework
 open FsCheck
 open FSharpPlus
@@ -163,26 +165,26 @@ module DList =
         let lq = DList.fold (fun (l' : string list) (elem : string) -> elem::l') [] q
         lq |> shouldEqual (List.rev (DList.toList q))
 
-    [<Test>]
-    [<TestCaseSource("intGensStart1")>]
+    [<Theory>]
+    [<MemberData("intGensStart1")>]
     let ``get head from DList`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (DList.head q) = (List.item 0 l) ))
 
-    [<Test>]
-    [<TestCaseSource("intGensStart1")>]
+    [<Theory>]
+    [<MemberData("intGensStart1")>]
     let ``get head from DList safely`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> (DList.tryHead q).Value = (List.item 0 l) ))
 
-    [<Test>]
-    [<TestCaseSource("intGensStart2")>]
+    [<Theory>]
+    [<MemberData("intGensStart2")>]
     let ``get tail from DList`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun ((q : DList<int>), l) -> q.Tail.Head = (List.item 1 l) ))
 
-    [<Test>]
-    [<TestCaseSource("intGensStart2")>]
+    [<Theory>]
+    [<MemberData("intGensStart2")>]
     let ``get tail from DList safely`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> q.TryTail.Value.Head = (List.item 1 l) ))
@@ -195,8 +197,8 @@ module DList =
     let ``give None if there is no tail in the DList`` () =
         emptyDList |> DList.tryTail |> shouldEqual None
 
-    [<Test>]
-    [<TestCaseSource("intGensStart1")>]
+    [<Theory>]
+    [<MemberData("intGensStart1")>]
     let ``int DList builds and serializes`` (x: obj) =
         let genAndName = unbox x 
         fsCheck (snd genAndName) (Prop.forAll (Arb.fromGen (fst genAndName)) (fun (q : DList<int>, l) -> q |> Seq.toList = l ))

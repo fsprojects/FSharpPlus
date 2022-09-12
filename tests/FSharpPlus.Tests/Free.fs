@@ -5,8 +5,8 @@ namespace FSharpPlus.Tests
 open System
 open FSharpPlus
 open FSharpPlus.Data
+open FSharpPlus.Tests.Helpers.NUnit.Framework
 open FSharpPlus.Tests.Helpers
-open NUnit.Framework
 
 module Free =
     

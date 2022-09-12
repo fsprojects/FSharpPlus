@@ -2,9 +2,9 @@
 
 open System
 open System.Threading.Tasks
-open NUnit.Framework
 open FSharpPlus
 open FSharpPlus.Data
+open Helpers.NUnit.Framework
 open Helpers
 
 module ComputationExpressions =

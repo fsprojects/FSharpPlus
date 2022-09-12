@@ -1,7 +1,8 @@
 ﻿namespace FSharpPlus.Tests
 
 open System
-open NUnit.Framework
+open Helpers.NUnit.Framework
+open Helpers
 open FSharpPlus
 open FSharpPlus.TypeLevel
 open FSharpPlus.TypeLevel.TypeBool
