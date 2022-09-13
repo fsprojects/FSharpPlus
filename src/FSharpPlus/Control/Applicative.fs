@@ -154,6 +154,11 @@ type IsLeftZeroHelper =
 
 #if !FABLE_COMPILER
 type IsLeftZeroHelper<'a>() =
+    /// turns false if
+    /// - it should always return false because neither `IsLeftZero` nor `Empty` are present
+    /// - the target method is inlined and cannot be called through reflection
+    static let mutable isValid = true
+
     static let isLeftZero =
         let ty = typeof<'a>
         let check typedef = ty.IsGenericType && (ty.GetGenericTypeDefinition() = typedef)
@@ -161,30 +166,47 @@ type IsLeftZeroHelper<'a>() =
         let helper helperName tprms : 'a -> bool =
             let meth = helperTy.GetMethod(helperName).MakeGenericMethod(tprms)
             fun x -> meth.Invoke(null, [|box x|]) |> unbox
-        if check typedefof<seq<_>> then helper "Seq" (ty.GetGenericArguments())
-        else if check typedefof<NonEmptySeq<_>> then helper "NonEmptySeq" (ty.GetGenericArguments())
-        else if check typedefof<list<_>> then helper "List" (ty.GetGenericArguments())
+        let targs = ty.GetGenericArguments()
+        if check typedefof<seq<_>> then helper "Seq" targs
+        else if check typedefof<NonEmptySeq<_>> then helper "NonEmptySeq" targs
+        else if check typedefof<list<_>> then helper "List" targs
         else if ty.IsArray then helper "Array" [| ty.GetElementType() |]
-        else if check typedefof<option<_>> then helper "Option" (ty.GetGenericArguments())
-        else if check typedefof<Result<_, _>> then helper "Result" (ty.GetGenericArguments())
-        else if check typedefof<Choice<_, _>> then helper "Choice" (ty.GetGenericArguments())
+        else if check typedefof<option<_>> then helper "Option" targs
+        else if check typedefof<Result<_, _>> then helper "Result" targs
+        else if check typedefof<Choice<_, _>> then helper "Choice" targs
         else
+            let makeGeneric (mi: Reflection.MethodInfo) =
+                if Array.isEmpty targs || not mi.ContainsGenericParameters then mi
+                else mi.MakeGenericMethod(targs)
+            let isInlineError (e: Reflection.TargetInvocationException) =
+                match e.InnerException with
+                | :? NotSupportedException -> true
+                | _ -> false
             let isLeftZero = ty.GetMethod("IsLeftZero")
             if not (isNull isLeftZero) then
-                let isLeftZero =
-                    let targs = ty.GetGenericArguments()
-                    if Array.isEmpty targs || not isLeftZero.ContainsGenericParameters then isLeftZero
-                    else isLeftZero.MakeGenericMethod(targs)
-                (fun x -> isLeftZero.Invoke(null, [| box x |]) |> unbox)
+                let isLeftZero = makeGeneric isLeftZero
+                (fun x ->
+                    try
+                       isLeftZero.Invoke(null, [| box x |]) |> unbox
+                    with
+                    | :? Reflection.TargetInvocationException as e when isInlineError e ->
+                        isValid <- false; false)
             else
+                let fallback = fun _ -> false
                 let compareWith (obj: obj) = fun (x: 'a) -> obj.Equals(x)
-                let emptyProp = ty.GetProperty("Empty")
-                if not (isNull emptyProp) then emptyProp.GetValue(null) |> compareWith
-                else
-                    let emptyMeth = ty.GetMethod("get_Empty")
-                    if not (isNull emptyMeth) then emptyMeth.Invoke(null, null) |> compareWith
-                    else fun _ -> false
-    static member Invoke(x: 'a) = isLeftZero x
+                try
+                    let emptyProp = ty.GetProperty("Empty")
+                    if not (isNull emptyProp) then emptyProp.GetValue(null) |> compareWith
+                    else
+                        let emptyMeth = ty.GetMethod("get_Empty", [||])
+                        if not (isNull emptyMeth) then
+                            let emptyMeth = makeGeneric emptyMeth
+                            emptyMeth.Invoke(null, [||]) |> compareWith
+                        else isValid <- false; fallback
+                with
+                | :? Reflection.TargetInvocationException as e when isInlineError e -> isValid <- false; fallback
+
+    static member Invoke(x: 'a) = isValid && isLeftZero x
 #endif
 
 type IsLeftZero =
