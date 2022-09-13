@@ -10,8 +10,14 @@ open FSharpPlus.Internals.Prelude
 /// Additional operations on Seq
 module Seq =
 
+    /// <summary>
+    /// Evaluates each action in the sequence from left to right and collect the results.
+    /// </summary>
     let inline sequence (ms: seq<'``Applicative<'T>``>) : '``Applicative<seq<'T>>`` = sequence ms
 
+    /// <summary>
+    /// Maps each element of the sequence to an action, evaluates these actions from left to right and collect the results.
+    /// </summary>
     let inline traverse (f: 'T->'``Applicative<'U>``) (xs: seq<'T>) : '``Applicative<seq<'U>>`` = traverse f xs
 
     let inline replicateM count (initial: '``Applicative<'T>``) = sequence (Seq.replicate count initial)

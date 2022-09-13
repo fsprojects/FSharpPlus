@@ -130,9 +130,19 @@ module NonEmptyList =
         | h::t -> cons s (tails {Head = h; Tail = t})
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
-    let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
-        let lst = traverse f (toList s) : '``Functor<'List<'U>>``
+
+    /// <summary>
+    /// Maps each element of the list to an action, evaluates these actions from left to right and collect the results.
+    /// </summary>
+    let inline traverse (f: 'T -> '``Functor<'U>``) (source: NonEmptyList<'T>) =
+        let lst = traverse f (toList source) : '``Functor<'List<'U>>``
         (create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<NonEmptyList<'U>>``
+
+    /// <summary>
+    /// Evaluates each action in the list from left to right and collect the results.
+    /// </summary>
+    let inline sequence (source: NonEmptyList<'``Functor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` = traverse id source
+
 #endif
 
     /// <summary>Returns the average of the elements in the list.</summary>
@@ -255,7 +265,10 @@ type NonEmptyList<'t> with
     static member ToSeq (s: NonEmptyList<'a>, [<Optional>]_impl: ToSeq ) = NonEmptyList.toList s |> List.toSeq
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Traverse (s: NonEmptyList<'T>, f: 'T->'``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
+    static member inline Traverse (s: NonEmptyList<'T>, f: 'T -> '``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Sequence (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.sequence s
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
         let lst = source |> NonEmptyList.toSeq |> Seq.replace oldValue newValue |> Seq.toList
