@@ -60,6 +60,7 @@ module SeqT =
 
 type SeqT<'``monad<seq<'t>>``> with
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return (x: 'T) = x |> Seq.singleton |> result |> SeqT                                     : SeqT<'``Monad<seq<'T>``>
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -71,31 +72,55 @@ type SeqT<'``monad<seq<'t>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift3 (f: 'T->'U->'V->'W, x: SeqT<'``Monad<seq<'T>``>, y: SeqT<'``Monad<seq<'U>``>, z: SeqT<'``Monad<seq<'V>``>) = SeqT.lift3 f x y z : SeqT<'``Monad<seq<'W>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>) (f: SeqT<'``Monad<seq<('T -> 'U)>``>, x: SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x : SeqT<'``Monad<seq<'U>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=) (x: SeqT<'``Monad<seq<'T>``>, f: 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind  f x
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () = SeqT <| result Seq.empty : SeqT<'``MonadPlus<seq<'T>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<|>) (SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline TryWith (source: SeqT<'``Monad<seq<'T>>``>, f: exn -> SeqT<'``Monad<seq<'T>>``>) = SeqT (TryWith.Invoke (SeqT.run source) (SeqT.run << f))
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline TryFinally (computation: SeqT<'``Monad<seq<'T>>``>, f) = SeqT (TryFinally.Invoke     (SeqT.run computation) f)
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Using (resource, f: _ -> SeqT<'``Monad<seq<'T>>``>)    = SeqT (Using.Invoke resource (SeqT.run << f))
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Delay (body : unit   ->  SeqT<'``Monad<seq<'T>>``>)    = SeqT (Delay.Invoke (fun _ -> SeqT.run (body ()))) : SeqT<'``Monad<seq<'T>>``>
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> = SeqT.lift x
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x: Async<'T>) = SeqT.lift (liftAsync x) : SeqT<'``MonadAsync<'T>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Throw (x: 'E) = x |> throw |> SeqT.lift
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Catch (m: SeqT<'``MonadError<'E1,'T>``>, h: 'E1 -> SeqT<'``MonadError<'E2,'T>``>) = SeqT ((fun v h -> catch v h) (SeqT.run m) (SeqT.run << h)) : SeqT<'``MonadError<'E2,'T>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f: (('T -> SeqT<'``MonadCont<'R,seq<'U>>``>) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get ()  = SeqT.lift get         : SeqT<'``MonadState<'S,'S>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x: 'S) = x |> put |> SeqT.lift : SeqT<'``MonadState<unit,'S>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask () = SeqT.lift ask          : SeqT<'``MonadReader<'R,seq<'R>>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (SeqT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = SeqT (local f m)
 
 // END old SeqT code
@@ -1054,8 +1079,12 @@ module [<AutoOpen>]SeqTOperations =
 
 type SeqT<'``monad<bool>``, 'T> with
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return (x: 'T) : SeqT<'``Monad<bool>``, 'T> = SeqT.singleton x
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> 'U) : SeqT<'``Monad<bool>``, 'U> = SeqT.map f x
+
     static member inline (<!>) (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> 'U) : SeqT<'``Monad<bool>``, 'U> = SeqT.map f x
     static member inline (<*>) (f: SeqT<'``Monad<bool>``, ('T -> 'U)>, x: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> = SeqT.apply f x
 
@@ -1078,7 +1107,10 @@ type SeqT<'``monad<bool>``, 'T> with
         ((fun (k: 'U) (_: 'T) -> k) <!> x: SeqT<'``Monad<bool>``, ('T -> 'U)>) <*> y
 
     static member inline (>>=) (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> SeqT<'``Monad<bool>``, 'U>) : SeqT<'``Monad<bool>``, 'U> = SeqT.collect f x
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () : SeqT<'``Monad<bool>``, 'T> = SeqT.empty
+
     static member inline (<|>) (x, y) : SeqT<'``Monad<bool>``, 'T> = SeqT.append x y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -1087,31 +1119,49 @@ type SeqT<'``monad<bool>``, 'T> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U, x1: SeqT<'``Monad<bool>``, 'T1>, x2: SeqT<'``Monad<bool>``, 'T2>, x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> = SeqT.lift3 f x1 x2 x3
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline TryWith (source: SeqT<'``Monad<bool>``, 'T>, f: exn -> SeqT<'``Monad<bool>``, 'T>) = SeqT.tryWith<_, _, '``Monad<unit>``> source f
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline TryFinally (computation: SeqT<'``Monad<bool>``, 'T>, f) = SeqT.tryFinally computation f
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Delay (body: unit -> SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> = SeqT.delay body
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Using (resource, f: _ -> SeqT<'``Monad<bool>``, 'T>) =
         SeqT.tryFinally (f resource) (fun () -> if box resource <> null then dispose resource)
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.lift m
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x: Async<'T>) = SeqT.lift (liftAsync x: '``MonadAsync<'T>``) : SeqT<'MonadAsync, 'T>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Throw (x: 'E) : SeqT<'``MonadError<'E>``, 'T> = x |> throw |> SeqT.lift
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Catch (m: SeqT<'``MonadError<'E1>``, 'T>, h: 'E1 -> SeqT<'``MonadError<'E2>``, 'T>) : SeqT<'``MonadError<'E2>``, 'T> =
         seqT (
             (fun v h -> Catch.Invoke v h)
                 (SeqT.run m)
                 (SeqT.run << h))
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f: (('T -> SeqT<'``MonadCont<'R>``, 'U>) -> _)) : SeqT<'``MonadCont<'R>``, 'T> =
         seqT (callCC <| fun c -> SeqT.run (f (seqT << c << Seq.singleton)))
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get ()  : SeqT<'``MonadState<'S>``, 'S> = SeqT.lift get
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x: 'T) : SeqT<'``MonadState<unit>``, 'S> = x |> put |> SeqT.lift
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask () : SeqT<'``MonadReader<'R>``, 'R> = SeqT.lift ask
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (m: SeqT<'``MonadReader<'R2>``, 'T>, f: 'R1 -> 'R2) : SeqT<'``MonadReader<'R1>``, 'T> =
         seqT (local f (SeqT.run m))
 
