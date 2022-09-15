@@ -9,8 +9,15 @@ open FSharpPlus.Internals.Prelude
 
 /// Additional operations on List
 module List =
+
+    /// <summary>
+    /// Evaluates each action in the list from left to right and collect the results.
+    /// </summary>
     let inline sequence (ms: list<'``Applicative<'T>``>) : '``Applicative<list<'T>>`` = sequence ms
 
+    /// <summary>
+    /// Maps each element of the list to an action, evaluates these actions from left to right and collect the results.
+    /// </summary>
     let inline traverse (f: 'T->'``Applicative<'U>``) (xs:list<'T>) : '``Applicative<list<'U>>`` = traverse f xs
     
     let inline foldM (f: 'T->'U->'``Monad<'T>``) (a: 'T) (bx:list<'U>) : '``Monad<'T>`` =

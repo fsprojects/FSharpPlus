@@ -2,7 +2,7 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 // For some reason AsyncDownloadString is not found during doc build. The following is a dumb implementation just to make the compiler happy.
 // TODO find out why.
@@ -23,10 +23,13 @@ The original post from AsyncSeq can be found [here](http://tomasp.net/blog/async
 
 In order to do so we need to be aware of the design differences of both implementations.
 
-<style>#fsdocs-content table, th, td{border: 1px solid black;border-collapse: collapse;}</style>
+<style>
+body #fsdocs-content table, th, td { border: 1px solid black;border-collapse: collapse; }
+body #fsdocs-content table code { word-break: normal; }
+</style>
 
 | **AsyncSeq**                  | **SeqT**                              | **Notes**	|
-|:------------------------------|:--------------------------------------|:----------|
+|:------------------------------|:--------------------------------------|:---------:|
 |`AsyncSeq<'T>`                 |`SeqT<Async<bool>, 'T>`                |           |
 |`asyncSeq { .. }`              |`monad.plus { .. }`                    | At some point it needs to be inferred as `SeqT<Async<bool>, 'T>`, or it can be specified with type parameters: `monad<SeqT<Async<bool>, 'T>>.plus` |
 |`let! x = y`                   |`let! x = SeqT.lift y`                 | No auto lifting. Lifting should be explicit. |
@@ -81,6 +84,80 @@ let printPages =
  
 printPages |> Async.Start
 
+
 (**
-To make it work with tasks simply add `|> Async.StartAsTask` between `wc.AsyncDownloadString (Uri url)` and `|> SeqT.lift` then run eveything but the `printPages |> Async.Start`.
+These samples above and below come from the [original AsyncSeq post](http://tomasp.net/blog/async-sequences.aspx) and they can be easily switched to task sequeces (taskSeq), simply add `|> Async.StartAsTask` between `wc.AsyncDownloadString (Uri url)` and `|> SeqT.lift` then run eveything but the `printPages |> Async.Start`.
 *)
+
+// A simple webcrawler
+
+#r "nuget: FSharpPlus"
+#r "nuget: HtmlAgilityPack"
+
+open System
+open System.Net
+open System.Text.RegularExpressions
+open HtmlAgilityPack
+open FSharp.Control
+
+open FSharpPlus
+open FSharpPlus.Data
+
+// ----------------------------------------------------------------------------
+// Helper functions for downloading documents, extracting links etc.
+
+/// Asynchronously download the document and parse the HTML
+let downloadDocument url = async {
+  try let wc = new WebClient ()
+      let! html = wc.AsyncDownloadString (Uri url)
+      let doc = new HtmlDocument ()
+      doc.LoadHtml html
+      return Some doc 
+  with _ -> return None }
+
+/// Extract all links from the document that start with "http://"
+let extractLinks (doc:HtmlDocument) = 
+  try
+    [ for a in doc.DocumentNode.SelectNodes ("//a") do
+        if a.Attributes.Contains "href" then
+          let href = a.Attributes.["href"].Value
+          if href.StartsWith "https://" then
+            let endl = href.IndexOf '?'
+            yield if endl > 0 then href.Substring(0, endl) else href ]
+  with _ -> []
+
+/// Extract the <title> of the web page
+let getTitle (doc: HtmlDocument) =
+  let title = doc.DocumentNode.SelectSingleNode "//title"
+  if title <> null then title.InnerText.Trim () else "Untitled"
+
+// ----------------------------------------------------------------------------
+// Basic crawling - crawl web pages and follow just one link from every page
+
+/// Crawl the internet starting from the specified page
+/// From each page follow the first not-yet-visited page
+let rec randomCrawl url = 
+  let visited = new System.Collections.Generic.HashSet<_> ()
+
+  // Visits page and then recursively visits all referenced pages
+  let rec loop url = monad.plus {
+    if visited.Add(url) then
+      let! doc = downloadDocument url |> SeqT.lift
+      match doc with 
+      | Some doc ->
+          // Yield url and title as the next element
+          yield url, getTitle doc
+          // For every link, yield all referenced pages too
+          for link in extractLinks doc do
+            yield! loop link 
+      | _ -> () }
+  loop url
+
+// Use SeqT combinators to print the titles of the first 10
+// web sites that are from other domains than en.wikipedia.org
+randomCrawl "https://en.wikipedia.org/wiki/Main_Page"
+|> SeqT.filter (fun (url, title) -> url.Contains "en.wikipedia.org" |> not)
+|> SeqT.map snd
+|> SeqT.take 10
+|> SeqT.iter (printfn "%s")
+|> Async.Start

@@ -99,6 +99,7 @@ module Builders =
 module GenericBuilders =
 
     open FSharpPlus.Operators
+    open FSharpPlus.Data
 
     // Idiom brackets
     type Ii = Ii
@@ -259,10 +260,51 @@ module GenericBuilders =
                 else this.strict.While (enum.MoveNext, fun () -> rest enum.Current))
 
 
+    /// Generic Applicative CE builder.
+    type ApplicativeBuilder<'``applicative<'t>``> () =
+        member        _.ReturnFrom (expr) = expr   : '``applicative<'t>``
+        member inline _.Return (x: 'T) = result x  : '``Applicative<'T>``
+        member inline _.Yield  (x: 'T) = result x  : '``Applicative<'T>``
+        member inline _.BindReturn(x, f) = map f x : '``Applicative<'U>``
+        member inline _.MergeSources  (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``) : '``Applicative<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
+        member inline _.MergeSources3 (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``, t3: '``Applicative<'V>``) : '``Applicative<'T * 'U * 'V>`` = Lift3.Invoke tuple3 t1 t2 t3
+        member        _.Run f = f : '``applicative<'t>``
+    
+    /// Generic 2 layers Applicative CE builder.
+    type ApplicativeBuilder2<'``applicative1<applicative2<'t>>``> () =
+        member        _.ReturnFrom expr : '``applicative1<applicative2<'t>>`` = expr
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (result >> result) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (result >> result) x
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (lift2 >> lift2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (lift3 >> lift3) tuple3 t1 t2 t3
+        member        _.Run x : '``applicative1<applicative2<'t>>`` = x
+    
+    /// Generic 3 layers Applicative CE builder.
+    type ApplicativeBuilder3<'``applicative1<applicative2<applicative3<'t>>>``> () =
+        member        _.ReturnFrom expr : '``applicative1<applicative2<applicative3<'t>>>`` = expr
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (result >> result >> result) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (result >> result >> result) x
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift2 >> lift2 >> lift2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift3 >> lift3 >> lift3) tuple3 t1 t2 t3
+        member        _.Run x : '``applicative1<applicative2<applicative3<'t>>>`` = x
+
+
+
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad<'``monad<'t>``> = new MonadFxBuilder<'``monad<'t>``> ()
 
     /// Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad'<'``monad<'t>``> = new MonadFxStrictBuilder<'``monad<'t>``> ()
+
+    /// Creates an applicative computation expression.
+    let applicative<'``Applicative<'T>``> = ApplicativeBuilder<'``Applicative<'T>``> ()
+
+    /// Creates an applicative computation expression which compose effects of two Applicatives.
+    let applicative2<'``Applicative1<Applicative2<'T>>``> = ApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> ()
+
+    /// Creates an applicative computation expression which compose effects of three Applicatives.
+    let applicative3<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
 
 #endif

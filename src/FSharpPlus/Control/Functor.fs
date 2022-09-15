@@ -312,11 +312,11 @@ type Contramap =
     static member Contramap (k: Func<'T, 'C>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Func<'U, 'C> (f >> k.Invoke)
     #if !FABLE_COMPILER
     static member Contramap (p: Predicate<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = Predicate (fun x -> p.Invoke (f x))    
-    static member Contramap (c: IComparer<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { new IComparer<'U> with member __.Compare (x, y) = c.Compare (f x, f y) }
+    static member Contramap (c: IComparer<_>        , f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { new IComparer<'U> with member _.Compare (x, y) = c.Compare (f x, f y) }
     static member Contramap (c: IEqualityComparer<_>, f: 'U -> 'T, [<Optional>]_mthd: Contramap) = { 
                     new IEqualityComparer<'U> with
-                        member __.Equals (x, y) = c.Equals (f x, f y)
-                        member __.GetHashCode x = c.GetHashCode (f x) }
+                        member _.Equals (x, y) = c.Equals (f x, f y)
+                        member _.GetHashCode x = c.GetHashCode (f x) }
     #endif
 #endif
 

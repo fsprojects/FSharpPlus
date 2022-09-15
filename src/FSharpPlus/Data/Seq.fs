@@ -10,8 +10,14 @@ open FSharpPlus.Internals.Prelude
 /// Additional operations on Seq
 module Seq =
 
+    /// <summary>
+    /// Evaluates each action in the sequence from left to right and collect the results.
+    /// </summary>
     let inline sequence (ms: seq<'``Applicative<'T>``>) : '``Applicative<seq<'T>>`` = sequence ms
 
+    /// <summary>
+    /// Maps each element of the sequence to an action, evaluates these actions from left to right and collect the results.
+    /// </summary>
     let inline traverse (f: 'T->'``Applicative<'U>``) (xs: seq<'T>) : '``Applicative<seq<'U>>`` = traverse f xs
 
     let inline replicateM count (initial: '``Applicative<'T>``) = sequence (Seq.replicate count initial)
@@ -54,6 +60,7 @@ module SeqT =
 
 type SeqT<'``monad<seq<'t>>``> with
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return (x: 'T) = x |> Seq.singleton |> result |> SeqT                                     : SeqT<'``Monad<seq<'T>``>
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -65,31 +72,55 @@ type SeqT<'``monad<seq<'t>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift3 (f: 'T->'U->'V->'W, x: SeqT<'``Monad<seq<'T>``>, y: SeqT<'``Monad<seq<'U>``>, z: SeqT<'``Monad<seq<'V>``>) = SeqT.lift3 f x y z : SeqT<'``Monad<seq<'W>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<*>) (f: SeqT<'``Monad<seq<('T -> 'U)>``>, x: SeqT<'``Monad<seq<'T>``>) = SeqT.apply f x : SeqT<'``Monad<seq<'U>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (>>=) (x: SeqT<'``Monad<seq<'T>``>, f: 'T -> SeqT<'``Monad<seq<'U>``>)   = SeqT.bind  f x
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () = SeqT <| result Seq.empty : SeqT<'``MonadPlus<seq<'T>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline (<|>) (SeqT x, SeqT y) = SeqT <| (x >>= (fun a -> y >>= (fun b ->  result ((Seq.append:seq<_>->seq<_>->_) a b)))) : SeqT<'``MonadPlus<seq<'T>``>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline TryWith (source: SeqT<'``Monad<seq<'T>>``>, f: exn -> SeqT<'``Monad<seq<'T>>``>) = SeqT (TryWith.Invoke (SeqT.run source) (SeqT.run << f))
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline TryFinally (computation: SeqT<'``Monad<seq<'T>>``>, f) = SeqT (TryFinally.Invoke     (SeqT.run computation) f)
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Using (resource, f: _ -> SeqT<'``Monad<seq<'T>>``>)    = SeqT (Using.Invoke resource (SeqT.run << f))
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Delay (body : unit   ->  SeqT<'``Monad<seq<'T>>``>)    = SeqT (Delay.Invoke (fun _ -> SeqT.run (body ()))) : SeqT<'``Monad<seq<'T>>``>
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (x: '``Monad<'T>``) : SeqT<'``Monad<seq<'T>>``> = SeqT.lift x
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x: Async<'T>) = SeqT.lift (liftAsync x) : SeqT<'``MonadAsync<'T>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Throw (x: 'E) = x |> throw |> SeqT.lift
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Catch (m: SeqT<'``MonadError<'E1,'T>``>, h: 'E1 -> SeqT<'``MonadError<'E2,'T>``>) = SeqT ((fun v h -> catch v h) (SeqT.run m) (SeqT.run << h)) : SeqT<'``MonadError<'E2,'T>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f: (('T -> SeqT<'``MonadCont<'R,seq<'U>>``>) -> _)) = SeqT (callCC <| fun c -> SeqT.run (f (SeqT  << c << Seq.singleton ))) : SeqT<'``MonadCont<'R, seq<'T>>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get ()  = SeqT.lift get         : SeqT<'``MonadState<'S,'S>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x: 'S) = x |> put |> SeqT.lift : SeqT<'``MonadState<unit,'S>``>
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask () = SeqT.lift ask          : SeqT<'``MonadReader<'R,seq<'R>>``>
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (SeqT (m: '``MonadReader<'R2,'T>``), f: 'R1->'R2) = SeqT (local f m)
 
 // END old SeqT code
@@ -167,6 +198,7 @@ module SeqT_V2 =
     [<Literal>]
     let private enumNotStarted = "Enumeration has not started. Call MoveNext."
 
+    /// Creates a SeqT sequence from an IEnumerableM.
     let ofIEnumerableM x : SeqT<'``Monad<bool>``, 'T> = SeqT x
 
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
@@ -209,6 +241,8 @@ module SeqT_V2 =
                                 dispose e1
                             | _ -> () } }
 
+    
+    /// Transforms a regular sequence into a SeqT, driven by the return type.
     let inline ofSeq (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
@@ -242,8 +276,10 @@ module SeqT_V2 =
                                 dispose e
                             | _ -> () } }
 
-    let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = wrap (result source: '``Monad<seq<'T>>``)
-    
+    /// Transforms a regular sequence into a SeqT, driven by the return type.
+    /// An alias of `ofSeq`.
+    let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = ofSeq source
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     let inline runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
         let ra = new ResizeArray<_> ()
@@ -342,9 +378,11 @@ module SeqT_V2 =
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () = (f () :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator () }
 
+    /// A combination of bind and lift operations.
     let inline bindLift<'T, 'U, .. > (f: 'T -> SeqT<'``Monad<bool>``, 'U>) (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'U> =
         make (fun () -> innerMonad<'``Monad<SeqT<'Monad<bool>, 'U>>``> { let! v = source in return f v })
 
+    /// Lifts the source into the SeqT.
     let inline lift (source: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with 
@@ -941,7 +979,7 @@ module SeqT_V2 =
     /// <returns>The result sequence.</returns>
     ///
     /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
-    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements.
     /// in the sequence.</exception>
     let inline take count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         if (count < 0) then invalidArg "count" "must be non-negative"
@@ -1041,8 +1079,12 @@ module [<AutoOpen>]SeqTOperations =
 
 type SeqT<'``monad<bool>``, 'T> with
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return (x: 'T) : SeqT<'``Monad<bool>``, 'T> = SeqT.singleton x
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map   (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> 'U) : SeqT<'``Monad<bool>``, 'U> = SeqT.map f x
+
     static member inline (<!>) (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> 'U) : SeqT<'``Monad<bool>``, 'U> = SeqT.map f x
     static member inline (<*>) (f: SeqT<'``Monad<bool>``, ('T -> 'U)>, x: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> = SeqT.apply f x
 
@@ -1055,17 +1097,11 @@ type SeqT<'``monad<bool>``, 'T> with
         let (<*>) = SeqT.apply
         ((fun (_: 'T) (k: 'U) -> k) <!> x: SeqT<'``Monad<bool>``, ('U -> 'U)>) <*> y
     
-    /// <summary>
-    /// Sequences two lists left-to-right, discarding the value of the second argument.
-    /// </summary>
-    /// <category index="2">Applicative</category>
-    static member inline (<* ) (x: SeqT<'``Monad<bool>``, 'U>, y: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'U> =
-        let (<!>) = SeqT.map
-        let (<*>) = SeqT.apply
-        ((fun (k: 'U) (_: 'T) -> k) <!> x: SeqT<'``Monad<bool>``, ('T -> 'U)>) <*> y
-
     static member inline (>>=) (x: SeqT<'``Monad<bool>``, 'T>, f: 'T -> SeqT<'``Monad<bool>``, 'U>) : SeqT<'``Monad<bool>``, 'U> = SeqT.collect f x
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Empty () : SeqT<'``Monad<bool>``, 'T> = SeqT.empty
+
     static member inline (<|>) (x, y) : SeqT<'``Monad<bool>``, 'T> = SeqT.append x y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -1074,31 +1110,49 @@ type SeqT<'``monad<bool>``, 'T> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U, x1: SeqT<'``Monad<bool>``, 'T1>, x2: SeqT<'``Monad<bool>``, 'T2>, x3: SeqT<'``Monad<bool>``, 'T3>) : SeqT<'``Monad<bool>``, 'U> = SeqT.lift3 f x1 x2 x3
 
-    static member inline TryWith (source: SeqT<'``Monad<bool>``, 'T>, f: exn -> SeqT<'``Monad<bool>``, 'T>) = SeqT.tryWith<_, _, '``Monad<unit>``, _> source f
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline TryWith (source: SeqT<'``Monad<bool>``, 'T>, f: exn -> SeqT<'``Monad<bool>``, 'T>) = SeqT.tryWith<_, _, '``Monad<unit>``> source f
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline TryFinally (computation: SeqT<'``Monad<bool>``, 'T>, f) = SeqT.tryFinally computation f
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Delay (body: unit -> SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> = SeqT.delay body
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Using (resource, f: _ -> SeqT<'``Monad<bool>``, 'T>) =
         SeqT.tryFinally (f resource) (fun () -> if box resource <> null then dispose resource)
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (m: '``Monad<'T>``) : SeqT<'``Monad<bool>``, 'T> = SeqT.lift m
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline LiftAsync (x: Async<'T>) = SeqT.lift (liftAsync x: '``MonadAsync<'T>``) : SeqT<'MonadAsync, 'T>
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Throw (x: 'E) : SeqT<'``MonadError<'E>``, 'T> = x |> throw |> SeqT.lift
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Catch (m: SeqT<'``MonadError<'E1>``, 'T>, h: 'E1 -> SeqT<'``MonadError<'E2>``, 'T>) : SeqT<'``MonadError<'E2>``, 'T> =
         seqT (
             (fun v h -> Catch.Invoke v h)
                 (SeqT.run m)
                 (SeqT.run << h))
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline CallCC (f: (('T -> SeqT<'``MonadCont<'R>``, 'U>) -> _)) : SeqT<'``MonadCont<'R>``, 'T> =
         seqT (callCC <| fun c -> SeqT.run (f (seqT << c << Seq.singleton)))
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Get ()  : SeqT<'``MonadState<'S>``, 'S> = SeqT.lift get
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Put (x: 'T) : SeqT<'``MonadState<unit>``, 'S> = x |> put |> SeqT.lift
     
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline get_Ask () : SeqT<'``MonadReader<'R>``, 'R> = SeqT.lift ask
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Local (m: SeqT<'``MonadReader<'R2>``, 'T>, f: 'R1 -> 'R2) : SeqT<'``MonadReader<'R1>``, 'T> =
         seqT (local f (SeqT.run m))
 
