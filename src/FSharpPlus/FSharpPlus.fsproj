@@ -5,7 +5,7 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45;net6</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
@@ -14,7 +14,10 @@
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OtherFlags>--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -102,21 +105,25 @@
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
-    <Compile Include="Extensions/Observable.fs" />
-    <Compile Include="Extensions/AsyncEnumerable.fs" />
+	<Compile Include="Extensions/Observable.fs" />
+	<Compile Include="Extensions/AsyncEnumerable.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
+    <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
 
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
-    <Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
+	<Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
     <Content Include="Control/*.fs" PackagePath="fable/Control" />
     <Content Include="Math/*.fs" PackagePath="fable/Math" />
     <Content Include="Data/*.fs" PackagePath="fable/Data" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
   </ItemGroup>
