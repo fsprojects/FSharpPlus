@@ -168,12 +168,12 @@ type IsLeftZeroHelper<'a>() =
             fun x -> meth.Invoke(null, [|box x|]) |> unbox
         let targs = ty.GetGenericArguments()
         if check typedefof<seq<_>> then helper "Seq" targs
-        else if check typedefof<NonEmptySeq<_>> then helper "NonEmptySeq" targs
-        else if check typedefof<list<_>> then helper "List" targs
-        else if ty.IsArray then helper "Array" [| ty.GetElementType() |]
-        else if check typedefof<option<_>> then helper "Option" targs
-        else if check typedefof<Result<_, _>> then helper "Result" targs
-        else if check typedefof<Choice<_, _>> then helper "Choice" targs
+        elif check typedefof<NonEmptySeq<_>> then helper "NonEmptySeq" targs
+        elif check typedefof<list<_>> then helper "List" targs
+        elif ty.IsArray then helper "Array" [| ty.GetElementType() |]
+        elif check typedefof<option<_>> then helper "Option" targs
+        elif check typedefof<Result<_, _>> then helper "Result" targs
+        elif check typedefof<Choice<_, _>> then helper "Choice" targs
         else
             let makeGeneric (mi: Reflection.MethodInfo) =
                 if Array.isEmpty targs || not mi.ContainsGenericParameters then mi
