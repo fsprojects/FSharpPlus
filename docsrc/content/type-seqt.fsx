@@ -53,7 +53,7 @@ Examples
 --------
 *)
 
-#r "nuget: FSharpPlus"
+#r "nuget: FSharpPlus,1.3.0-CI02744" // still as pre-release
 
 open System
 open System.Net
@@ -93,7 +93,7 @@ These samples above and below come from the [original AsyncSeq post](http://toma
 
 // A simple webcrawler
 
-#r "nuget: FSharpPlus"
+#r "nuget: FSharpPlus,1.3.0-CI02744"
 #r "nuget: HtmlAgilityPack"
 
 open System
