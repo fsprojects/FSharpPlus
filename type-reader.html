@@ -383,7 +383,9 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
  the notation &lt;c&gt;[1;2;3]&lt;/c&gt;. Use the values in the &lt;c&gt;List&lt;/c&gt; module to manipulate 
  values of this type, or pattern match against the values directly.
  &lt;/remarks&gt;<br />&lt;exclude /&gt;</em></div>
-<div class="fsdocs-tip" id="fs60">val traverse: f: (&#39;T -&gt; &#39;Applicative&lt;&#39;U&gt;) -&gt; xs: &#39;T list -&gt; &#39;Applicative&lt;list&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member Traverse and member Return)</div>
+<div class="fsdocs-tip" id="fs60">val traverse: f: (&#39;T -&gt; &#39;Applicative&lt;&#39;U&gt;) -&gt; xs: &#39;T list -&gt; &#39;Applicative&lt;list&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member Traverse and member Return)<br /><em>&lt;summary&gt;
+ Maps each element of the list to an action, evaluates these actions from left to right and collect the results.
+ &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs61">val resolveDef: _arg10: Definition -&gt; Reader&lt;Environment,(string * string)&gt;<br /><em>&#160;resolve a Definition and produce a (name,value) pair</em></div>
 <div class="fsdocs-tip" id="fs62">val local: f: (&#39;R1 -&gt; &#39;R2) -&gt; m: &#39;MonadReader&lt;&#39;R2,&#39;T&gt; -&gt; &#39;MonadReader&lt;&#39;R1,&#39;T&gt; (requires member Local)<br /><em>&lt;summary&gt; Executes a computation in a modified environment. &lt;/summary&gt;<br />&lt;category index=&quot;18&quot;&gt;Monad Transformers&lt;/category&gt;<br />&lt;param name=&quot;f&quot;&gt; The function to modify the environment.    &lt;/param&gt;<br />&lt;param name=&quot;m&quot;&gt; Reader to run in the modified environment. &lt;/param&gt;</em></div>
 <div class="fsdocs-tip" id="fs63">union case Option.None: Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;No value&quot;&lt;/summary&gt;</em></div>

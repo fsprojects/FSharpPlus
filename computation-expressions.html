@@ -87,7 +87,8 @@
         <div class="container" id="fsdocs-content">
             <h1><a name="Computations-Expressions" class="anchor" href="#Computations-Expressions">Computations Expressions</a></h1>
 <p>This library allows to use some common computation expressions without writing any boiler plate code.</p>
-<p>There is a single computation expression: <code>monad</code> but it comes in 4 flavours:</p>
+<p>For applicatives there is single computation expression: <code>applicative { .. }</code>. Additionally <code>applicative2 { .. }</code> and <code>applicative3 { .. }</code> exists for composed (aka layered) applicatives.</p>
+<p>For monadic code there is a single computation expression: <code>monad { .. }</code> but it comes in 4 flavours:</p>
 <ul>
 <li>
 <p>Delayed or strict</p>
@@ -120,77 +121,69 @@ Note that <code>monad.fx</code> is an alias for <code>monad</code>: fx is used a
 <span class="k">let</span> <span class="id">_</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 10)" onmouseover="showTip(event, 'fs3', 10)" class="vt">OptionT</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="if">seq</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs5', 12)" onmouseover="showTip(event, 'fs5', 12)" class="rt">unit</span> <span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="rt">option</span><span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 14)" onmouseover="showTip(event, 'fs7', 14)" class="id">monad</span> <span class="pn">{</span> <span onmouseout="hideTip(event, 'fs8', 15)" onmouseover="showTip(event, 'fs8', 15)" class="fn">printfn</span> <span class="s">&quot;I&#39;m strict&quot;</span> <span class="pn">}</span>
 <span class="c">// won&#39;t print anything, because seq is lazy</span>
 </code></pre>
-<h1><a name="Applicatives" class="anchor" href="#Applicatives">Applicatives</a></h1>
-<p>There are some F# issues preventing applicative required <code>BindReturn</code> to be included in <code>monad</code>, so for the moment the following snipped can be used to quickly create a generic applicative CE:</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">type</span> <span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="rt">ApplicativeBuilder</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
-    <span class="k">inherit</span> <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="rt">MonadFxStrictBuilder</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="pn">)</span>
-    <span class="k">member</span> <span class="k">inline</span> <span class="id">_</span><span class="pn">.</span><span class="fn">BindReturn</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="fn">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 20)" onmouseover="showTip(event, 'fs14', 20)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs13', 21)" onmouseover="showTip(event, 'fs13', 21)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs12', 22)" onmouseover="showTip(event, 'fs12', 22)" class="fn">x</span>
-
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 23)" onmouseover="showTip(event, 'fs15', 23)" class="id">applicative</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 24)" onmouseover="showTip(event, 'fs10', 24)" class="fn">ApplicativeBuilder</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="pn">)</span>
-</code></pre>
 <h1><a name="Examples" class="anchor" href="#Examples">Examples</a></h1>
 <p>You may run this script step-by-step.</p>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 25)" onmouseover="showTip(event, 'fs1', 25)" class="id">FSharpPlus</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 16)" onmouseover="showTip(event, 'fs1', 16)" class="id">FSharpPlus</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 26)" onmouseover="showTip(event, 'fs16', 26)" class="id">lazyValue</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 27)" onmouseover="showTip(event, 'fs7', 27)" class="id">monad</span> <span class="pn">{</span>
-    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs17', 28)" onmouseover="showTip(event, 'fs17', 28)" class="fn">a</span> <span class="o">=</span> <span class="k">lazy</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 29)" onmouseover="showTip(event, 'fs8', 29)" class="fn">printfn</span> <span class="s">&quot;I&#39;m lazy&quot;</span><span class="pn">;</span> <span class="n">2</span><span class="pn">)</span>
-    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs18', 30)" onmouseover="showTip(event, 'fs18', 30)" class="fn">b</span> <span class="o">=</span> <span class="k">lazy</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 31)" onmouseover="showTip(event, 'fs8', 31)" class="fn">printfn</span> <span class="s">&quot;I&#39;m lazy too&quot;</span><span class="pn">;</span> <span class="n">10</span><span class="pn">)</span>
-    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs17', 32)" onmouseover="showTip(event, 'fs17', 32)" class="fn">a</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs18', 33)" onmouseover="showTip(event, 'fs18', 33)" class="fn">b</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="id">lazyValue</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 18)" onmouseover="showTip(event, 'fs7', 18)" class="id">monad</span> <span class="pn">{</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="fn">a</span> <span class="o">=</span> <span class="k">lazy</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 20)" onmouseover="showTip(event, 'fs8', 20)" class="fn">printfn</span> <span class="s">&quot;I&#39;m lazy&quot;</span><span class="pn">;</span> <span class="n">2</span><span class="pn">)</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs12', 21)" onmouseover="showTip(event, 'fs12', 21)" class="fn">b</span> <span class="o">=</span> <span class="k">lazy</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 22)" onmouseover="showTip(event, 'fs8', 22)" class="fn">printfn</span> <span class="s">&quot;I&#39;m lazy too&quot;</span><span class="pn">;</span> <span class="n">10</span><span class="pn">)</span>
+    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs11', 23)" onmouseover="showTip(event, 'fs11', 23)" class="fn">a</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs12', 24)" onmouseover="showTip(event, 'fs12', 24)" class="fn">b</span><span class="pn">}</span>
 
 <span class="c">// val lazyValue : System.Lazy&lt;int&gt; = Value is not created.</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 34)" onmouseover="showTip(event, 'fs19', 34)" class="id">res12</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs16', 35)" onmouseover="showTip(event, 'fs16', 35)" class="id">lazyValue</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 36)" onmouseover="showTip(event, 'fs20', 36)" class="id">Value</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 25)" onmouseover="showTip(event, 'fs13', 25)" class="id">res12</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 26)" onmouseover="showTip(event, 'fs10', 26)" class="id">lazyValue</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 27)" onmouseover="showTip(event, 'fs14', 27)" class="id">Value</span>
 
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs21', 37)" onmouseover="showTip(event, 'fs21', 37)" class="id">maybeWithSideFx</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs22', 38)" onmouseover="showTip(event, 'fs22', 38)" class="id">monad&#39;</span> <span class="pn">{</span> 
-    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs17', 39)" onmouseover="showTip(event, 'fs17', 39)" class="fn">a</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 40)" onmouseover="showTip(event, 'fs23', 40)" class="uc">Some</span> <span class="n">3</span>
-    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 41)" onmouseover="showTip(event, 'fs24', 41)" class="mv">b</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs25', 42)" onmouseover="showTip(event, 'fs25', 42)" class="fn">ref</span> <span class="n">0</span>
-    <span class="k">while</span> <span class="o">!</span><span onmouseout="hideTip(event, 'fs24', 43)" onmouseover="showTip(event, 'fs24', 43)" class="mv">b</span> <span class="o">&lt;</span> <span class="n">10</span> <span class="k">do</span> 
-        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs26', 44)" onmouseover="showTip(event, 'fs26', 44)" class="fn">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 45)" onmouseover="showTip(event, 'fs23', 45)" class="uc">Some</span> <span class="pn">(</span><span class="pn">)</span>
-        <span onmouseout="hideTip(event, 'fs27', 46)" onmouseover="showTip(event, 'fs27', 46)" class="fn">incr</span> <span onmouseout="hideTip(event, 'fs24', 47)" onmouseover="showTip(event, 'fs24', 47)" class="mv">b</span>
-    <span class="k">if</span> <span onmouseout="hideTip(event, 'fs17', 48)" onmouseover="showTip(event, 'fs17', 48)" class="fn">a</span> <span class="o">=</span> <span class="n">3</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs8', 49)" onmouseover="showTip(event, 'fs8', 49)" class="fn">printfn</span> <span class="s">&quot;got 3&quot;</span>
-    <span class="k">else</span> <span onmouseout="hideTip(event, 'fs8', 50)" onmouseover="showTip(event, 'fs8', 50)" class="fn">printfn</span> <span class="s">&quot;got something else (will never print this)&quot;</span>
-    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs17', 51)" onmouseover="showTip(event, 'fs17', 51)" class="fn">a</span> <span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="id">maybeWithSideFx</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs16', 29)" onmouseover="showTip(event, 'fs16', 29)" class="id">monad&#39;</span> <span class="pn">{</span> 
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs11', 30)" onmouseover="showTip(event, 'fs11', 30)" class="fn">a</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 31)" onmouseover="showTip(event, 'fs17', 31)" class="uc">Some</span> <span class="n">3</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 32)" onmouseover="showTip(event, 'fs18', 32)" class="mv">b</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs19', 33)" onmouseover="showTip(event, 'fs19', 33)" class="fn">ref</span> <span class="n">0</span>
+    <span class="k">while</span> <span class="o">!</span><span onmouseout="hideTip(event, 'fs18', 34)" onmouseover="showTip(event, 'fs18', 34)" class="mv">b</span> <span class="o">&lt;</span> <span class="n">10</span> <span class="k">do</span> 
+        <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs20', 35)" onmouseover="showTip(event, 'fs20', 35)" class="fn">n</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 36)" onmouseover="showTip(event, 'fs17', 36)" class="uc">Some</span> <span class="pn">(</span><span class="pn">)</span>
+        <span onmouseout="hideTip(event, 'fs21', 37)" onmouseover="showTip(event, 'fs21', 37)" class="fn">incr</span> <span onmouseout="hideTip(event, 'fs18', 38)" onmouseover="showTip(event, 'fs18', 38)" class="mv">b</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, 'fs11', 39)" onmouseover="showTip(event, 'fs11', 39)" class="fn">a</span> <span class="o">=</span> <span class="n">3</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs8', 40)" onmouseover="showTip(event, 'fs8', 40)" class="fn">printfn</span> <span class="s">&quot;got 3&quot;</span>
+    <span class="k">else</span> <span onmouseout="hideTip(event, 'fs8', 41)" onmouseover="showTip(event, 'fs8', 41)" class="fn">printfn</span> <span class="s">&quot;got something else (will never print this)&quot;</span>
+    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs11', 42)" onmouseover="showTip(event, 'fs11', 42)" class="fn">a</span> <span class="pn">}</span>
 
 <span class="c">// val maybeWithSideFx : int option = Some 3</span>
 
 
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs28', 52)" onmouseover="showTip(event, 'fs28', 52)" class="id">lst</span> <span class="o">=</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs29', 53)" onmouseover="showTip(event, 'fs29', 53)" class="uc">None</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs29', 54)" onmouseover="showTip(event, 'fs29', 54)" class="uc">None</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs23', 55)" onmouseover="showTip(event, 'fs23', 55)" class="uc">Some</span> <span class="n">2</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs23', 56)" onmouseover="showTip(event, 'fs23', 56)" class="uc">Some</span> <span class="n">4</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs23', 57)" onmouseover="showTip(event, 'fs23', 57)" class="uc">Some</span> <span class="n">10</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs29', 58)" onmouseover="showTip(event, 'fs29', 58)" class="uc">None</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 43)" onmouseover="showTip(event, 'fs22', 43)" class="id">lst</span> <span class="o">=</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs23', 44)" onmouseover="showTip(event, 'fs23', 44)" class="uc">None</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs23', 45)" onmouseover="showTip(event, 'fs23', 45)" class="uc">None</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs17', 46)" onmouseover="showTip(event, 'fs17', 46)" class="uc">Some</span> <span class="n">2</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs17', 47)" onmouseover="showTip(event, 'fs17', 47)" class="uc">Some</span> <span class="n">4</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs17', 48)" onmouseover="showTip(event, 'fs17', 48)" class="uc">Some</span> <span class="n">10</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs23', 49)" onmouseover="showTip(event, 'fs23', 49)" class="uc">None</span><span class="pn">]</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 59)" onmouseover="showTip(event, 'fs30', 59)" class="id">maybeManyTimes</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 60)" onmouseover="showTip(event, 'fs7', 60)" class="id">monad</span><span class="pn">.</span><span class="id">plus&#39;</span> <span class="pn">{</span>
-    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 61)" onmouseover="showTip(event, 'fs31', 61)" class="fn">defaultValue</span> <span class="o">=</span> <span class="n">42</span>
-    <span class="k">let</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs32', 62)" onmouseover="showTip(event, 'fs32', 62)" class="mv">i</span> <span class="o">=</span> <span class="n">0</span>
-    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs29', 63)" onmouseover="showTip(event, 'fs29', 63)" class="uc">None</span>
-    <span class="k">while</span> <span onmouseout="hideTip(event, 'fs32', 64)" onmouseover="showTip(event, 'fs32', 64)" class="mv">i</span> <span class="o">&lt;</span> <span class="n">5</span> <span class="k">do</span>
-        <span onmouseout="hideTip(event, 'fs8', 65)" onmouseover="showTip(event, 'fs8', 65)" class="fn">printfn</span> <span class="s">&quot;looping </span><span class="pf">%i</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs32', 66)" onmouseover="showTip(event, 'fs32', 66)" class="mv">i</span>
-        <span onmouseout="hideTip(event, 'fs32', 67)" onmouseover="showTip(event, 'fs32', 67)" class="mv">i</span> <span class="k">&lt;-</span> <span onmouseout="hideTip(event, 'fs32', 68)" onmouseover="showTip(event, 'fs32', 68)" class="mv">i</span> <span class="o">+</span> <span class="n">1</span>
-        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs28', 69)" onmouseover="showTip(event, 'fs28', 69)" class="id">lst</span><span class="pn">.</span><span class="pn">[</span><span onmouseout="hideTip(event, 'fs32', 70)" onmouseover="showTip(event, 'fs32', 70)" class="mv">i</span><span class="pn">]</span>
-    <span onmouseout="hideTip(event, 'fs8', 71)" onmouseover="showTip(event, 'fs8', 71)" class="fn">printfn</span> <span class="s">&quot;halfway&quot;</span>
-    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs29', 72)" onmouseover="showTip(event, 'fs29', 72)" class="uc">None</span>
-    <span onmouseout="hideTip(event, 'fs8', 73)" onmouseover="showTip(event, 'fs8', 73)" class="fn">printfn</span> <span class="s">&quot;near the end&quot;</span>
-    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs31', 74)" onmouseover="showTip(event, 'fs31', 74)" class="fn">defaultValue</span> <span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 50)" onmouseover="showTip(event, 'fs24', 50)" class="id">maybeManyTimes</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 51)" onmouseover="showTip(event, 'fs7', 51)" class="id">monad</span><span class="pn">.</span><span class="id">plus&#39;</span> <span class="pn">{</span>
+    <span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 52)" onmouseover="showTip(event, 'fs25', 52)" class="fn">defaultValue</span> <span class="o">=</span> <span class="n">42</span>
+    <span class="k">let</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs26', 53)" onmouseover="showTip(event, 'fs26', 53)" class="mv">i</span> <span class="o">=</span> <span class="n">0</span>
+    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs23', 54)" onmouseover="showTip(event, 'fs23', 54)" class="uc">None</span>
+    <span class="k">while</span> <span onmouseout="hideTip(event, 'fs26', 55)" onmouseover="showTip(event, 'fs26', 55)" class="mv">i</span> <span class="o">&lt;</span> <span class="n">5</span> <span class="k">do</span>
+        <span onmouseout="hideTip(event, 'fs8', 56)" onmouseover="showTip(event, 'fs8', 56)" class="fn">printfn</span> <span class="s">&quot;looping </span><span class="pf">%i</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs26', 57)" onmouseover="showTip(event, 'fs26', 57)" class="mv">i</span>
+        <span onmouseout="hideTip(event, 'fs26', 58)" onmouseover="showTip(event, 'fs26', 58)" class="mv">i</span> <span class="k">&lt;-</span> <span onmouseout="hideTip(event, 'fs26', 59)" onmouseover="showTip(event, 'fs26', 59)" class="mv">i</span> <span class="o">+</span> <span class="n">1</span>
+        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs22', 60)" onmouseover="showTip(event, 'fs22', 60)" class="id">lst</span><span class="pn">.</span><span class="pn">[</span><span onmouseout="hideTip(event, 'fs26', 61)" onmouseover="showTip(event, 'fs26', 61)" class="mv">i</span><span class="pn">]</span>
+    <span onmouseout="hideTip(event, 'fs8', 62)" onmouseover="showTip(event, 'fs8', 62)" class="fn">printfn</span> <span class="s">&quot;halfway&quot;</span>
+    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs23', 63)" onmouseover="showTip(event, 'fs23', 63)" class="uc">None</span>
+    <span onmouseout="hideTip(event, 'fs8', 64)" onmouseover="showTip(event, 'fs8', 64)" class="fn">printfn</span> <span class="s">&quot;near the end&quot;</span>
+    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs25', 65)" onmouseover="showTip(event, 'fs25', 65)" class="fn">defaultValue</span> <span class="pn">}</span>
 
 <span class="c">// val maybeManyTimes : int option = Some 2</span>
 
 
-<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs33', 75)" onmouseover="showTip(event, 'fs33', 75)" class="id">asnNumber</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs34', 76)" onmouseover="showTip(event, 'fs34', 76)" class="rt">Async</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 77)" onmouseover="showTip(event, 'fs7', 77)" class="id">monad</span><span class="pn">.</span><span class="id">fx</span> <span class="pn">{</span>
-    <span class="k">let</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs35', 78)" onmouseover="showTip(event, 'fs35', 78)" class="mv">m</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs36', 79)" onmouseover="showTip(event, 'fs36', 79)" class="fn">ResizeArray</span> <span class="pn">(</span><span class="pn">)</span>
+<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs27', 66)" onmouseover="showTip(event, 'fs27', 66)" class="id">asnNumber</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs28', 67)" onmouseover="showTip(event, 'fs28', 67)" class="rt">Async</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 68)" onmouseover="showTip(event, 'fs7', 68)" class="id">monad</span><span class="pn">.</span><span class="id">fx</span> <span class="pn">{</span>
+    <span class="k">let</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs29', 69)" onmouseover="showTip(event, 'fs29', 69)" class="mv">m</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs30', 70)" onmouseover="showTip(event, 'fs30', 70)" class="fn">ResizeArray</span> <span class="pn">(</span><span class="pn">)</span>
     <span class="k">try</span>
-        <span class="k">for</span> <span onmouseout="hideTip(event, 'fs37', 80)" onmouseover="showTip(event, 'fs37', 80)" class="fn">i</span> <span class="o">=</span> <span class="n">1</span> <span class="k">to</span> <span class="n">10</span> <span class="k">do</span>
-            <span onmouseout="hideTip(event, 'fs35', 81)" onmouseover="showTip(event, 'fs35', 81)" class="mv">m</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs38', 82)" onmouseover="showTip(event, 'fs38', 82)" class="id">Add</span> <span onmouseout="hideTip(event, 'fs37', 83)" onmouseover="showTip(event, 'fs37', 83)" class="fn">i</span>
-        <span class="k">return</span> <span onmouseout="hideTip(event, 'fs35', 84)" onmouseover="showTip(event, 'fs35', 84)" class="mv">m</span><span class="pn">.</span><span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">]</span>
-    <span class="k">with</span> <span onmouseout="hideTip(event, 'fs39', 85)" onmouseover="showTip(event, 'fs39', 85)" class="fn">e</span> <span class="k">-&gt;</span>
+        <span class="k">for</span> <span onmouseout="hideTip(event, 'fs31', 71)" onmouseover="showTip(event, 'fs31', 71)" class="fn">i</span> <span class="o">=</span> <span class="n">1</span> <span class="k">to</span> <span class="n">10</span> <span class="k">do</span>
+            <span onmouseout="hideTip(event, 'fs29', 72)" onmouseover="showTip(event, 'fs29', 72)" class="mv">m</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs32', 73)" onmouseover="showTip(event, 'fs32', 73)" class="id">Add</span> <span onmouseout="hideTip(event, 'fs31', 74)" onmouseover="showTip(event, 'fs31', 74)" class="fn">i</span>
+        <span class="k">return</span> <span onmouseout="hideTip(event, 'fs29', 75)" onmouseover="showTip(event, 'fs29', 75)" class="mv">m</span><span class="pn">.</span><span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">]</span>
+    <span class="k">with</span> <span onmouseout="hideTip(event, 'fs33', 76)" onmouseover="showTip(event, 'fs33', 76)" class="fn">e</span> <span class="k">-&gt;</span>
         <span class="k">return</span> <span class="o">-</span><span class="n">3</span> <span class="pn">}</span>
 
 
-<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs40', 86)" onmouseover="showTip(event, 'fs40', 86)" class="id">lstNumber</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs4', 87)" onmouseover="showTip(event, 'fs4', 87)" class="rt">list</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 88)" onmouseover="showTip(event, 'fs7', 88)" class="id">monad</span><span class="pn">.</span><span class="id">plus&#39;</span> <span class="pn">{</span>
+<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs34', 77)" onmouseover="showTip(event, 'fs34', 77)" class="id">lstNumber</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs4', 78)" onmouseover="showTip(event, 'fs4', 78)" class="rt">list</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 79)" onmouseover="showTip(event, 'fs7', 79)" class="id">monad</span><span class="pn">.</span><span class="id">plus&#39;</span> <span class="pn">{</span>
     <span class="k">try</span>
-        <span class="k">for</span> <span onmouseout="hideTip(event, 'fs37', 89)" onmouseover="showTip(event, 'fs37', 89)" class="fn">i</span> <span class="o">=</span> <span class="n">1</span> <span class="k">to</span> <span class="n">10</span> <span class="k">do</span>
-            <span class="k">return</span> <span onmouseout="hideTip(event, 'fs37', 90)" onmouseover="showTip(event, 'fs37', 90)" class="fn">i</span>
-    <span class="k">with</span> <span onmouseout="hideTip(event, 'fs39', 91)" onmouseover="showTip(event, 'fs39', 91)" class="fn">e</span> <span class="k">-&gt;</span>
+        <span class="k">for</span> <span onmouseout="hideTip(event, 'fs31', 80)" onmouseover="showTip(event, 'fs31', 80)" class="fn">i</span> <span class="o">=</span> <span class="n">1</span> <span class="k">to</span> <span class="n">10</span> <span class="k">do</span>
+            <span class="k">return</span> <span onmouseout="hideTip(event, 'fs31', 81)" onmouseover="showTip(event, 'fs31', 81)" class="fn">i</span>
+    <span class="k">with</span> <span onmouseout="hideTip(event, 'fs33', 82)" onmouseover="showTip(event, 'fs33', 82)" class="fn">e</span> <span class="k">-&gt;</span>
         <span class="k">return</span> <span class="o">-</span><span class="n">3</span> <span class="pn">}</span>
 
 
@@ -254,50 +247,35 @@ type OptionT&lt;&#39;monad&lt;option&lt;&#39;t&gt;&gt;&gt; =
 
   See also &lt;a href=&quot;https://docs.microsoft.com/dotnet/fsharp/language-reference/sequences&quot;&gt;F# Language Guide - Sequences&lt;/a&gt;.
 &lt;/remarks&gt;</em></div>
-<div class="fsdocs-tip" id="fs10">Multiple items<br />type ApplicativeBuilder&lt;&#39;t&gt; =
-  inherit MonadFxStrictBuilder&lt;&#39;t&gt;
-  new: unit -&gt; ApplicativeBuilder&lt;&#39;t&gt;
-  member BindReturn: x: &#39;a * f: (&#39;c -&gt; &#39;d) -&gt; &#39;b (requires member Map)<br /><br />--------------------<br />new: unit -&gt; ApplicativeBuilder&lt;&#39;t&gt;</div>
-<div class="fsdocs-tip" id="fs11">Multiple items<br />type MonadFxStrictBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt; =
-  inherit StrictBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;
-  new: unit -&gt; MonadFxStrictBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;
-  member Combine: a: &#39;Monad&lt;unit&gt; * b: (unit -&gt; &#39;Monad&lt;&#39;T&gt;) -&gt; &#39;Monad&lt;&#39;T&gt; (requires member (&gt;&gt;=))
-  member For: p: #seq&lt;&#39;T&gt; * rest: (&#39;T -&gt; &#39;Monad&lt;unit&gt;) -&gt; &#39;Monad&lt;unit&gt; (requires member Using and member Return and member (&gt;&gt;=))
-  member While: guard: (unit -&gt; bool) * body: (unit -&gt; &#39;Monad&lt;unit&gt;) -&gt; &#39;Monad&lt;unit&gt; (requires member (&gt;&gt;=) and member Return)
-  member Zero: unit -&gt; &#39;Monad&lt;unit&gt; (requires member Return)<br /><br />--------------------<br />new: unit -&gt; MonadFxStrictBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs12">val x: &#39;a (requires member Map)</div>
-<div class="fsdocs-tip" id="fs13">val f: (&#39;c -&gt; &#39;d)</div>
-<div class="fsdocs-tip" id="fs14">val map: f: (&#39;T -&gt; &#39;U) -&gt; x: &#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)<br /><em>&lt;summary&gt;Lifts a function into a Functor.&lt;/summary&gt;<br />&lt;category index=&quot;1&quot;&gt;Functor&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs15">val applicative&lt;&#39;t&gt; : ApplicativeBuilder&lt;&#39;t&gt;</div>
-<div class="fsdocs-tip" id="fs16">val lazyValue: System.Lazy&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs17">val a: int</div>
-<div class="fsdocs-tip" id="fs18">val b: int</div>
-<div class="fsdocs-tip" id="fs19">val res12: int</div>
-<div class="fsdocs-tip" id="fs20">property System.Lazy.Value: int with get</div>
-<div class="fsdocs-tip" id="fs21">val maybeWithSideFx: int option</div>
-<div class="fsdocs-tip" id="fs22"></div>
-<div class="fsdocs-tip" id="fs23">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;Value of type &#39;T&quot;&lt;/summary&gt;<br />&lt;param name=&quot;Value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;An option representing the value.&lt;/returns&gt;</em></div>
-<div class="fsdocs-tip" id="fs24">val b: int ref</div>
-<div class="fsdocs-tip" id="fs25">Multiple items<br />val ref: value: &#39;T -&gt; &#39;T ref<br /><em>&lt;summary&gt;Create a mutable reference cell&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The value to contain in the cell.&lt;/param&gt;<br />&lt;returns&gt;The created reference cell.&lt;/returns&gt;<br />&lt;example id=&quot;ref-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+<div class="fsdocs-tip" id="fs10">val lazyValue: System.Lazy&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs11">val a: int</div>
+<div class="fsdocs-tip" id="fs12">val b: int</div>
+<div class="fsdocs-tip" id="fs13">val res12: int</div>
+<div class="fsdocs-tip" id="fs14">property System.Lazy.Value: int with get</div>
+<div class="fsdocs-tip" id="fs15">val maybeWithSideFx: int option</div>
+<div class="fsdocs-tip" id="fs16"></div>
+<div class="fsdocs-tip" id="fs17">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;Value of type &#39;T&quot;&lt;/summary&gt;<br />&lt;param name=&quot;Value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;An option representing the value.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs18">val b: int ref</div>
+<div class="fsdocs-tip" id="fs19">Multiple items<br />val ref: value: &#39;T -&gt; &#39;T ref<br /><em>&lt;summary&gt;Create a mutable reference cell&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The value to contain in the cell.&lt;/param&gt;<br />&lt;returns&gt;The created reference cell.&lt;/returns&gt;<br />&lt;example id=&quot;ref-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
  let count = ref 0   // Creates a reference cell object with a mutable Value property
  count.Value         // Evaluates to 0
  count.Value &amp;lt;- 1    // Updates the value
  count.Value         // Evaluates to 1        
  &lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type &#39;T ref = Ref&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The type of mutable references. Use the functions [!] and [:=] to get and
  set values of this type.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs26">val n: unit</div>
-<div class="fsdocs-tip" id="fs27">val incr: cell: int ref -&gt; unit<br /><em>&lt;summary&gt;Increment a mutable reference cell containing an integer&lt;/summary&gt;<br />&lt;param name=&quot;cell&quot;&gt;The reference cell.&lt;/param&gt;<br />&lt;example id=&quot;incr-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+<div class="fsdocs-tip" id="fs20">val n: unit</div>
+<div class="fsdocs-tip" id="fs21">val incr: cell: int ref -&gt; unit<br /><em>&lt;summary&gt;Increment a mutable reference cell containing an integer&lt;/summary&gt;<br />&lt;param name=&quot;cell&quot;&gt;The reference cell.&lt;/param&gt;<br />&lt;example id=&quot;incr-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
  let count = ref 99  // Creates a reference cell object with a mutable Value property
  incr count          // Increments our counter
  count.Value         // Evaluates to 100
  &lt;/code&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs28">val lst: int option list</div>
-<div class="fsdocs-tip" id="fs29">union case Option.None: Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;No value&quot;&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs30">val maybeManyTimes: int option</div>
-<div class="fsdocs-tip" id="fs31">val defaultValue: int</div>
-<div class="fsdocs-tip" id="fs32">val mutable i: int</div>
-<div class="fsdocs-tip" id="fs33">val asnNumber: Async&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs34">Multiple items<br />module Async
+<div class="fsdocs-tip" id="fs22">val lst: int option list</div>
+<div class="fsdocs-tip" id="fs23">union case Option.None: Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;No value&quot;&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs24">val maybeManyTimes: int option</div>
+<div class="fsdocs-tip" id="fs25">val defaultValue: int</div>
+<div class="fsdocs-tip" id="fs26">val mutable i: int</div>
+<div class="fsdocs-tip" id="fs27">val asnNumber: Async&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs28">Multiple items<br />module Async
 
 from FSharpPlus<br /><em>&lt;summary&gt;
  Additional operations on Async
@@ -328,16 +306,16 @@ from FSharpPlus<br /><em>&lt;summary&gt;
    &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/lazy-expressions&quot;&gt;Lazy Expressions&lt;/a&gt; in the
    F# Language Guide.
  &lt;/summary&gt;&lt;/namespacedoc&gt;<br />&lt;category index=&quot;1&quot;&gt;Async Programming&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs35">val mutable m: ResizeArray&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs36">Multiple items<br />module ResizeArray
+<div class="fsdocs-tip" id="fs29">val mutable m: ResizeArray&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs30">Multiple items<br />module ResizeArray
 
 from FSharpPlus<br /><em>&lt;summary&gt;
  Additional operations on ResizeArray
 &lt;/summary&gt;</em><br /><br />--------------------<br />type ResizeArray&lt;&#39;T&gt; = System.Collections.Generic.List&lt;&#39;T&gt;<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Collections.Generic.List`1&quot; /&gt;&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs37">val i: int</div>
-<div class="fsdocs-tip" id="fs38">System.Collections.Generic.List.Add(item: int) : unit</div>
-<div class="fsdocs-tip" id="fs39">val e: exn</div>
-<div class="fsdocs-tip" id="fs40">val lstNumber: int list</div>
+<div class="fsdocs-tip" id="fs31">val i: int</div>
+<div class="fsdocs-tip" id="fs32">System.Collections.Generic.List.Add(item: int) : unit</div>
+<div class="fsdocs-tip" id="fs33">val e: exn</div>
+<div class="fsdocs-tip" id="fs34">val lstNumber: int list</div>
 
         </div>
 
