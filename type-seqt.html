@@ -224,7 +224,7 @@ body #fsdocs-content table code { word-break: normal; }
 <p>These samples above and below come from the <a href="http://tomasp.net/blog/async-sequences.aspx">original AsyncSeq post</a> and they can be easily switched to task sequeces (taskSeq), simply add <code>|&gt; Async.StartAsTask</code> between <code>wc.AsyncDownloadString (Uri url)</code> and <code>|&gt; SeqT.lift</code> then run eveything but the <code>printPages |&gt; Async.Start</code>.</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// A simple webcrawler</span>
 
-<span class="pp">#r</span> <span class="s">&quot;nuget: FSharpPlus&quot;</span>
+<span class="pp">#r</span> <span class="s">&quot;nuget: FSharpPlus,1.3.0-CI02744&quot;</span>
 <span class="pp">#r</span> <span class="s">&quot;nuget: HtmlAgilityPack&quot;</span>
 
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 52)" onmouseover="showTip(event, 'fs1', 52)" class="id">System</span>
