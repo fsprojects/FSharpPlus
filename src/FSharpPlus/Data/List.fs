@@ -100,10 +100,15 @@ module ListT =
         let mresult x = result x
         wrap ((mresult <| ListTNode<'Monad, 'T>.Cons (v, (wrap (mresult ListTNode<'Monad, 'T>.Nil): ListT<'Monad, 'T> ))) : '``Monad<ListTNode<'Monad, 'T>>``) : ListT<'Monad, 'T>
 
-    let inline apply<'T, 'U, .. > (f: ListT<'Monad, ('T -> 'U)>) (x: ListT<'Monad, 'T>) : ListT<'Monad, 'U> =
-        bind<_, _, _, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, ('T -> 'U)>>``> (fun (x1: _) ->
-            bind<_, _, _, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'T>>``> (fun x2 ->
-                singleton<_, _, '``Monad<ListTNode<'Monad, 'U>>``> (x1 x2)) x) f
+    let inline apply<'T, 'U, .. > (f: ListT<'Monad, ('T -> 'U)>) (source: ListT<'Monad, 'T>) : ListT<'Monad, 'U> =
+        let rec loop f input =
+            ListT (
+                (unwrap f: '``Monad<ListTNode<'Monad, ('T -> 'U)>>``) >>= function
+                    | Nil -> result Nil
+                    | Cons (f: 'T -> 'U, fs: ListT<'Monad, ('T -> 'U)>) ->
+                        let res = concat<'U, _, '``Monad<ListTNode<'Monad, 'U>>``> (map<'T, 'U, 'Monad, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'T>>``> f input) (loop fs input)
+                        unwrap res : '``Monad<ListTNode<'Monad, 'U>>``) 
+        loop f source
 
     /// <summary>Safely builds a new list whose elements are the results of applying the given function
     /// to each of the elements of the two lists pairwise.</summary>
@@ -147,7 +152,7 @@ module ListT =
     /// <returns>List with values returned from mapping function.</returns>
     let inline lift2<'T, 'U, 'V, .. > (f: 'T -> 'U -> 'V) (x: ListT<'Monad, 'T>) (y : ListT<'Monad, 'U>) : ListT<'Monad, 'V> =
         f </map<'T, 'U -> 'V, 'Monad, '``Monad<ListTNode<'Monad, 'U -> 'V>>``, '``Monad<ListTNode<'Monad, 'T>>``> /> x
-          </apply<'U, 'V    , 'Monad, '``Monad<ListTNode<'Monad, 'U -> 'V>>``, '``Monad<ListTNode<'Monad, 'V>>``, '``Monad<ListTNode<'Monad, 'U>>``> /> y
+          </apply<'U, 'V    , 'Monad, '``Monad<ListTNode<'Monad, 'V>>``, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'U -> 'V>>``> /> y
 
     /// <summary>Combines values from three list and calls a mapping function on this combination.</summary>
     /// <param name="f">Mapping function taking three element combination as input.</param>
@@ -158,8 +163,8 @@ module ListT =
     /// <returns>List with values returned from mapping function.</returns>
     let inline lift3<'T, 'U, 'V, 'W, .. > (f: 'T -> 'U -> 'V -> 'W) (x: ListT<'Monad, 'T>) (y : ListT<'Monad, 'U>) (z: ListT<'Monad, 'V>) : ListT<'Monad, 'W> =
         f </map<'T, 'U -> 'V -> 'W, 'Monad, '``Monad<ListTNode<'Monad, 'U -> 'V -> 'W>>``, '``Monad<ListTNode<'Monad, 'T>>``> /> x
-          </apply<'U, 'V -> 'W    , 'Monad, '``Monad<ListTNode<'Monad, 'U -> 'V -> 'W>>``, '``Monad<ListTNode<'Monad, 'V -> 'W>>``, '``Monad<ListTNode<'Monad, 'U>>``> /> y
-          </apply<'V, 'W          , 'Monad, '``Monad<ListTNode<'Monad, 'V -> 'W>>``      , '``Monad<ListTNode<'Monad, 'W>>``      , '``Monad<ListTNode<'Monad, 'V>>``> /> z
+          </apply<'U, 'V -> 'W    , 'Monad, '``Monad<ListTNode<'Monad, 'V -> 'W>>``, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'U -> 'V -> 'W>>``> /> y
+          </apply<'V, 'W          , 'Monad, '``Monad<ListTNode<'Monad, 'W>>``      , '``Monad<ListTNode<'Monad, 'V>>``, '``Monad<ListTNode<'Monad, 'V -> 'W>>``> /> z
 
     let inline append (head: 'T) tail = wrap ((result <| ListTNode<'Monad, 'T>.Cons (head, (tail: ListT<'Monad, 'T> ))) : '``Monad<ListTNode<'Monad, 'T>>``) : ListT<'Monad, 'T>
 
@@ -246,7 +251,7 @@ type ListT<'monad, 't> with
         ListT.lift3<_, _, _, _, _, '``Monad<ListTNode<'Monad, 'T>>``, '``Monad<ListTNode<'Monad, 'U -> 'V -> 'W>>``, '``Monad<ListTNode<'Monad, 'V -> 'W>>``, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'W>>``, '``Monad<ListTNode<'Monad, 'V>>``> f x y z
 
     static member inline (<*>) (f: ListT<'Monad, ('T -> 'U)>, x: ListT<'Monad, 'T>) : ListT<'Monad, 'U> =
-        ListT.apply<_, _, _, '``Monad<ListTNode<'Monad, 'T -> 'U>>``, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'T>>``> f x
+        ListT.apply<_, _, _, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'T>>``, '``Monad<ListTNode<'Monad, 'T -> 'U>>``> f x
 
     /// <summary>
     /// Sequences two lists left-to-right, discarding the value of the first argument.
@@ -254,7 +259,7 @@ type ListT<'monad, 't> with
     /// <category index="2">Applicative</category>
     static member inline ( *>) (x: ListT<'Monad, 'T>, y: ListT<'Monad, 'U>) : ListT<'Monad, 'U> =
         let (<!>) = ListT.map<_, _, 'Monad, '``Monad<ListTNode<'Monad, ('U -> 'U)>>``, '``Monad<ListTNode<'Monad, 'T>>``>
-        let (<*>) = ListT.apply<_, _, 'Monad, '``Monad<ListTNode<'Monad, 'U -> 'U>>``, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'U>>``>
+        let (<*>) = ListT.apply<_, _, 'Monad, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'U -> 'U>>``>
         ((fun (_: 'T) (k: 'U) -> k) <!> x: ListT<'Monad, ('U -> 'U)>) <*> y
     
     /// <summary>
@@ -263,7 +268,7 @@ type ListT<'monad, 't> with
     /// <category index="2">Applicative</category>
     static member inline (<* ) (x: ListT<'Monad, 'U>, y: ListT<'Monad, 'T>) : ListT<'Monad, 'U> =
         let (<!>) = ListT.map<_, _, 'Monad, '``Monad<ListTNode<'Monad, 'T -> 'U>>``, '``Monad<ListTNode<'Monad, 'U>>``>
-        let (<*>) = ListT.apply<_, _, 'Monad, '``Monad<ListTNode<'Monad, 'T -> 'U>>``, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'T>>``>
+        let (<*>) = ListT.apply<_, _, 'Monad, '``Monad<ListTNode<'Monad, 'U>>``, '``Monad<ListTNode<'Monad, 'T>>``, '``Monad<ListTNode<'Monad, 'T -> 'U>>``>
         ((fun (k: 'U) (_: 'T) -> k) <!> x: ListT<'Monad, ('T -> 'U)>) <*> y
 
     static member inline (>>=) (x: ListT<'Monad, 'T>, f: 'T -> ListT<'Monad, ' U>) : ListT<'Monad, ' U> =
