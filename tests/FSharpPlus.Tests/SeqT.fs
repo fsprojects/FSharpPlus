@@ -170,6 +170,51 @@ module ComputationExpressions =
 
         ()
 
+module Applicative =
+    [<Test>]
+    let applicateiveShortCircuits () =
+    
+        // This should be the case for any lazy monad stack with short-circuit applicative (Collections, Options, short-circuits Eithers)
+    
+        let mutable actions : string list = []
+        
+        let getNumberO i : SeqT<Task<_>, int> = monad.plus {
+            let! _ =
+                monad' {
+                    do! Task.Delay 10 |> Task.ignore
+                    actions <- "init" :: actions
+                }
+                |> SeqT.lift
+
+            let! x =
+                monad' {
+                    do! Task.Delay 10 |> Task.ignore
+                    actions <- ("read " + (string i)) :: actions
+                    return (string i)
+                }
+                |>> tryParse
+                |>> Option.toList
+                |>> List.toSeq
+                |> SeqT
+            if x = i + 10 then yield x // will be always false
+        }
+
+        let seqt = result (+) <*> getNumberO 1 <*> getNumberO 2
+        
+        // Non-lazy stacks would have been executed at this point
+        CollectionAssert.AreEqual (actions, [])
+
+        let res = SeqT.run seqt
+        
+        // Still executing
+        CollectionAssert.AreEqual (actions, [])
+        
+        // Now we block until it finish
+        CollectionAssert.AreEqual (res.Result, [])
+
+        // Since the first value was an empty list, no further effect should be expected
+        CollectionAssert.AreEqual (actions, ["read 1"; "init"])        
+
 
     module AsyncSeq =
 
