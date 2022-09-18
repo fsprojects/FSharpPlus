@@ -43,7 +43,7 @@ module Reader =
 type Reader<'r,'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Map   (x: Reader<'R,'T>, f) = Reader.map f x   : Reader<'R,'U>
+    static member Map   (x: Reader<'R,'T>, f) = Reader.map f x : Reader<'R,'U>
 
     /// <summary>Lifts a function into a Reader. Same as map.
     /// To be used in Applicative Style expressions, combined with &lt;*&gt;
@@ -59,38 +59,38 @@ type Reader<'r,'t> with
     /// Sequences two Readers left-to-right, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member ( *>) (x: Reader<'R, 'T>, y: Reader<'R, 'U>) : Reader<'R, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Reader.map/> x : Reader<'R, 'U->'U>) </Reader.apply/> y
+    static member ( *>) (x: Reader<'R, 'T>, y: Reader<'R, 'U>) : Reader<'R, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Reader.map/> x : Reader<'R, 'U -> 'U>) </Reader.apply/> y
 
     /// <summary>
     /// Sequences two Readers left-to-right, discarding the value of the second argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    static member (<* ) (x: Reader<'R, 'U>, y: Reader<'R, 'T>) : Reader<'R, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Reader.map/> x : Reader<'R, 'T->'U>) </Reader.apply/> y
+    static member (<* ) (x: Reader<'R, 'U>, y: Reader<'R, 'T>) : Reader<'R, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Reader.map/> x : Reader<'R, 'T -> 'U>) </Reader.apply/> y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Lift2 (f, x: Reader<'R,'T>, y: Reader<'R,'U>) = Reader.map2 f x y : Reader<'R,'V>
+    static member Lift2 (f, x: Reader<'R, 'T>, y: Reader<'R, 'U>) = Reader.map2 f x y : Reader<'R, 'V>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Lift3 (f, x: Reader<'R,'T>, y: Reader<'R,'U>, z: Reader<'R,'V>) = Reader.map3 f x y z : Reader<'R,'W>
+    static member Lift3 (f, x: Reader<'R, 'T>, y: Reader<'R, 'U>, z: Reader<'R,'V>) = Reader.map3 f x y z : Reader<'R, 'W>
 
-    static member get_Ask ()    = Reader.ask                     : Reader<'R,'R>
+    static member get_Ask () : Reader<'R, 'R> = Reader.ask
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Local (m, f: 'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
+    static member Local (m, f: 'R1 -> 'R2) : Reader<'R1, 'T> = Reader.local f m
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = Reader.zip x y
 
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke ()) : 'T
-    static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
+    static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid, 'T> -> 'U) : Reader<'Monoid, 'U> = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b)))))
 
     #endif
 
-    static member TryWith    (computation: unit -> Reader<_, _>, h) = Reader (fun s -> try (Reader.run (computation ())) s with e -> Reader.run (h e) s) : Reader<'R,'T>
+    static member TryWith    (computation: unit -> Reader<_, _>, h) : Reader<'R, 'T> = Reader (fun s -> try (Reader.run (computation ())) s with e -> Reader.run (h e) s)
     static member TryFinally (computation: unit -> Reader<_, _>, f) = Reader (fun s -> try (Reader.run (computation ())) s finally f ())
-    static member Using (resource, f: _ -> Reader<'R,'T>) = Reader.TryFinally ((fun () -> f resource), fun () -> dispose resource)
-    static member Delay (body: unit->Reader<'R,'T>)  = Reader (fun s -> Reader.run (body ()) s) : Reader<'R,'T>
+    static member Using (resource, f: _ -> Reader<'R, 'T>) = Reader.TryFinally ((fun () -> f resource), fun () -> dispose resource)
+    static member Delay (body: unit->Reader<'R, 'T>) : Reader<'R, 'T> = Reader (fun s -> Reader.run (body ()) s)
 
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
@@ -103,8 +103,8 @@ type ReaderT<'r, 'monad, 't> =
 
 type [<AutoOpen>]ReaderTOperations =
     [<GeneralizableValue>]
-    static member inline ReaderT< ^``monad<'t>``, ^monad, 'r, 't when (Map or  ^``monad<'t>`` or  ^monad) : (static member Map: ( ^``monad<'t>`` * ('t -> __)) * Map ->  ^monad)
-                                                                 and  (Map or  ^monad or  ^``monad<'t>``) : (static member Map: ( ^monad * (__ -> 't)) * Map ->  ^``monad<'t>``)
+    static member inline ReaderT< ^``monad<'t>``, ^monad, 'r, 't when (Map or ^``monad<'t>`` or  ^monad) : (static member Map: (^``monad<'t>`` * ('t -> __)) * Map -> ^monad)
+                                                                 and  (Map or ^monad or  ^``monad<'t>``) : (static member Map: (^monad * (__ -> 't)) * Map -> ^``monad<'t>``)
                                                                         > (f: 'r -> '``monad<'t>``) : ReaderT<'r, 'monad, 't> =
         if opaqueId false then
             let _: 'monad = Unchecked.defaultof<'``monad<'t>``> |> map (fun (_: 't) -> Unchecked.defaultof<__>)
