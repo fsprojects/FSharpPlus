@@ -751,7 +751,7 @@ module Foldable =
         SideEffects.reset ()
         let _ = foldMap ((+) 10) {1..4}  //= 50 w/o side effect
         Assert.AreEqual (50, x)
-        Assert.AreEqual ([], SideEffects.get ())
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
 
     [<Test>]
     let filterDefaultCustom () = 
