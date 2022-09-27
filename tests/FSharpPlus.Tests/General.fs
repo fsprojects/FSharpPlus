@@ -339,10 +339,10 @@ module Monoid =
         let _res330 = Seq.sum [async {return (fun (x:int) -> string x)}; async {return (fun (x:int) -> string (x*10))}; async {return zero } ] </Async.RunSynchronously/>  3
         ()
 
-    (*
+    
     [<Test>]
-    let seqSumDefaultCustom () =
-        
+    let hangingTest () =
+        (*
         let (WrappedListB x) = Seq.sum [WrappedListB [10]; WrappedListB [15]]
         let (WrappedListC y) = Seq.sum [WrappedListC [10]; WrappedListC [15]]
         Assert.AreEqual ([10;15], x)
@@ -373,8 +373,8 @@ module Monoid =
         let _seqGroup   = groupBy ((%)/> 2) (seq [11;2;3;9;5;6;7;8;9;10])
 
         let _arrayGroupAdj   = chunkBy ((%)/> 2) [11;2;3;9;5;6;7;8;9;10]
-        
-        () *)
+        *)
+        ()
 
 
 
