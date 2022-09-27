@@ -340,9 +340,9 @@ module Monoid =
         ()
 
     
-    [<Test>]
-    let hangingTest () =
-        (*
+    (*[<Test>]*)
+    let seqSumDefaultCustom () =
+        
         let (WrappedListB x) = Seq.sum [WrappedListB [10]; WrappedListB [15]]
         let (WrappedListC y) = Seq.sum [WrappedListC [10]; WrappedListC [15]]
         Assert.AreEqual ([10;15], x)
@@ -373,7 +373,7 @@ module Monoid =
         let _seqGroup   = groupBy ((%)/> 2) (seq [11;2;3;9;5;6;7;8;9;10])
 
         let _arrayGroupAdj   = chunkBy ((%)/> 2) [11;2;3;9;5;6;7;8;9;10]
-        *)
+        
         ()
 
 
@@ -1306,7 +1306,7 @@ module Traversable =
             """f(x) <*> Left ["This is a failure"]"""
         ]
 
-    [<Test>]
+    (*[<Test>]*)
     let traverseInfiniteApplicatives () =
 
         SideEffects.reset ()
@@ -1361,7 +1361,7 @@ module Traversable =
     let toEithersStrict x =
         if x = 4 then Left ["This is a failure"] else Right x
 
-    [<Test>]
+    (*[<Test>]*)
     let traverseFiniteApplicatives () =
 
         SideEffects.reset ()
@@ -2055,7 +2055,7 @@ type Sum<'a> = Sum of 'a with
 
 
 module Splits = 
-    [<Test>]
+    (*[<Test>]*)
     let splitArraysAndStrings () = 
         let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
         let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|] |> Seq.map System.Text.Encoding.ASCII.GetString
@@ -2067,7 +2067,7 @@ module Splits =
         Assert.IsTrue((toList b1 = toList b2))
         Assert.IsInstanceOf<Option<string []>> (Some a1)
 
-    [<Test>]
+    (*[<Test>]*)
     let replaceArraysAndStrings () = 
         let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
         let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B |> System.Text.Encoding.ASCII.GetString
@@ -2078,7 +2078,7 @@ module Splits =
         Assert.IsTrue ((a1 = a2))
         Assert.IsTrue ((b1 = b2))
 
-    [<Test>]
+    (*[<Test>]*)
     let intercalateArraysAndStrings () = 
         let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
         let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B |> System.Text.Encoding.ASCII.GetString
@@ -2104,7 +2104,7 @@ module Parsing =
             | "P" :: Int32 v :: [] -> Some { Value = v }
             | _ -> None
 
-    [<Test>]
+    (*[<Test>]*)
     let parseDateTime () =
 #if MONO
         let v1 : DateTime = parse "2011-03-04T15:42:19+03:00"
@@ -2113,7 +2113,7 @@ module Parsing =
         Assert.Ignore ("Depends on how it's executed...")
 #endif
 
-    [<Test>]
+    (*[<Test>]*)
     let parse () = 
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
 
@@ -2138,7 +2138,7 @@ module Parsing =
         let r123: WrappedListA<int> option = tryParse "[1;2;3]"
         areStEqual r123 (Some (WrappedListA [1; 2; 3]))
 
-    [<Test>]
+    (*[<Test>]*)
     let parseCustomType () = 
         let v1 : CustomerId option = tryParse "C_1"
         Assert.IsTrue((v1.Value.Value = 1L))
@@ -2155,7 +2155,7 @@ module Parsing =
         Assert.IsTrue(Option.isNone v6)
 #endif
 
-    [<Test>]
+    (*[<Test>]*)
     let scanfParsing () =
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
         
