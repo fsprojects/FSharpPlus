@@ -359,7 +359,7 @@ module Monoid =
         let quotLst123  = plus zero (ZipList [ [1];[2];[3] ])
 
         Assert.AreEqual ([[1]; [2]; [3]], quotLst123 |> toList)
-        Assert.AreEqual ([], SideEffects.get ())
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
 
         let quotLst123' = Seq.sum [zero; zero; ZipList' [ [1];[2];[3] ]]
 
@@ -407,7 +407,7 @@ module Functor =
         Assert.IsInstanceOf<Option<NonEmptySeq<int>>> (Some testVal6)
 
         // WrappedSeqD is Applicative. Applicatives are Functors => map should work
-        Assert.AreEqual ([], SideEffects.get ())
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
         Assert.AreEqual (["Using WrappedSeqD's Return"; "Using WrappedSeqD's Apply"], SideEffects.get ())
@@ -418,7 +418,7 @@ module Functor =
         Assert.IsInstanceOf<Option<WrappedListE<int>>> (Some testVal5)
 
         // Same with WrappedListD but WrappedListD is also IEnumerable<_>
-        Assert.AreEqual ([], SideEffects.get ())
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
         let testVal6 = map ((+) 1) (WrappedListD [1..3])
         Assert.IsInstanceOf<Option<WrappedListD<int>>> (Some testVal6)
         Assert.AreEqual (["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"], SideEffects.get ())
@@ -450,7 +450,7 @@ module Functor =
 
         SideEffects.reset ()
         let _a = zip (seq [1;2;3]) (seq [1. .. 3. ])
-        Assert.AreEqual ([], SideEffects.get ())
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
 
         let _b = zip (WrappedListD [1;2;3]) (WrappedListD [1. .. 3. ])
         Assert.AreEqual (["Using WrappedListD's zip"], SideEffects.get ())
