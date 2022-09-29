@@ -1306,8 +1306,19 @@ module Traversable =
             """f(x) <*> Left ["This is a failure"]"""
         ]
 
-    (*[<Test>]*)
+#if !FABLE_COMPILER
+    [<Test>]
     let traverseInfiniteApplicatives () =
+
+        // It hangs if we don't repeat these lines
+        let expectedEffects =
+            [
+                """f(x) <*> Right 0"""
+                """f(x) <*> Right 1"""
+                """f(x) <*> Right 2"""
+                """f(x) <*> Right 3"""
+                """f(x) <*> Left ["This is a failure"]"""
+            ]
 
         SideEffects.reset ()
 
@@ -1330,7 +1341,7 @@ module Traversable =
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<seq<int>,string>.Choice2Of2 "This is a failure", c)
-        Assert.AreEqual ([], d)
+        Assert.AreEqual (List.empty<seq<int>>, d)
         Assert.AreEqual (Either<string list,seq<int>>.Left ["This is a failure"], e)
 
         SideEffects.reset ()
@@ -1354,18 +1365,28 @@ module Traversable =
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<NonEmptySeq<int>,string>.Choice2Of2 "This is a failure", c)
-        Assert.AreEqual ([], d)
+        Assert.True ((d = []))
         Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e)
         
 
     let toEithersStrict x =
         if x = 4 then Left ["This is a failure"] else Right x
 
-    (*[<Test>]*)
+    [<Test>]
     let traverseFiniteApplicatives () =
 
-        SideEffects.reset ()
+        // It hangs if we don't repeat these lines
+        let expectedEffects =
+            [
+                """f(x) <*> Right 0"""
+                """f(x) <*> Right 1"""
+                """f(x) <*> Right 2"""
+                """f(x) <*> Right 3"""
+                """f(x) <*> Left ["This is a failure"]"""
+            ]
 
+        SideEffects.reset ()
+        
         let a = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
         let b = sequence (Seq.initInfinite toOptions       |> Seq.take 20 |> Seq.toList)
         let c = sequence (Seq.initInfinite toChoices       |> Seq.take 20 |> Seq.toList)
@@ -1395,10 +1416,11 @@ module Traversable =
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<list<int>,string>.Choice2Of2 "This is a failure", c)
-        Assert.AreEqual ([], d)
+        Assert.AreEqual (List.empty<list<int>>, d)
         Assert.AreEqual (Either<string list,list<int>>.Left ["This is a failure"], e)
         Assert.AreEqual (Either<string list,array<int>>.Left ["This is a failure"], f)
         ()
+#endif
 
     [<Test>]
     let traverseAsyncSequences =
