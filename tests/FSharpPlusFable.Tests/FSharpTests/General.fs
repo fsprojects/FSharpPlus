@@ -379,7 +379,7 @@ let generalTests = testList "General" [
     functor
     indexable
     monad
-    monoidCompile
+    // monoidCompile
     monoid
     parsing
     traversable
