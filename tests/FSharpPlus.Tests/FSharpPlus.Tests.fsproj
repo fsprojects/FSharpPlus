@@ -18,6 +18,8 @@
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
     <Compile Include="Splits.fs" />
+    <Compile Include="Monoid.fs" />
+    <Compile Include="Parsing.fs" />
     <Compile Include="Traversals.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="Task.fs" />
