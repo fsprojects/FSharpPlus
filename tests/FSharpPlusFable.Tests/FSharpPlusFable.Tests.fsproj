@@ -13,6 +13,8 @@
   <ItemGroup>
     <Compile Include="Util.fs" />
     <Compile Include="FSharpTests/General/Util.fs" />
+    <Compile Include="FSharpTests/General/Splits.fs" />
+    <Compile Include="FSharpTests/General/MonoidCompile.fs" />
     <Compile Include="FSharpTests/General/Monoid.fs" />
     <Compile Include="FSharpTests/General/Functor.fs" />
     <Compile Include="FSharpTests/General/Collections.fs" />
