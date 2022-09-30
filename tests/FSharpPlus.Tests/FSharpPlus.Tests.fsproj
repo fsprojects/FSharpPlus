@@ -17,6 +17,8 @@
     <Compile Include="Helpers.fs" />
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
+    <Compile Include="Splits.fs" />
+    <Compile Include="Traversals.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="Task.fs" />
     <Compile Include="Free.fs" />
