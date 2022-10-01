@@ -27,10 +27,28 @@ module List =
     /// val it : int list = [2; 4; 6; 3; 6; 9]
     /// </code>
     /// </example>
-    let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
+    let apply (f: list<'T -> 'U>) (x: list<'T>) : list<'U> =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+        List.collect (fun f -> List.map ((<|) f) x) f
+    #else
+        let mutable coll = ListCollector<'U> ()
+        f |> List.iter (fun f ->
+            x |> List.iter (fun x ->
+                coll.Add (f x)))
+        coll.Close ()
+    #endif
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
-    let lift2 f x1 x2 = List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
+    let lift2 (f: 'T1 -> 'T2 -> 'U) (x1: list<'T1>) (x2: list<'T2>) =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+        List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
+    #else
+        let mutable coll = ListCollector<'U> ()
+        x1 |> List.iter (fun x1 ->
+            x2 |> List.iter (fun x2 ->
+                coll.Add (f x1 x2)))
+        coll.Close ()
+    #endif
     
     /// <summary>Combines values from three list and calls a mapping function on this combination.</summary>
     /// <param name="f">Mapping function taking three element combination as input.</param>
@@ -40,10 +58,19 @@ module List =
     ///
     /// <returns>List with values returned from mapping function.</returns>
     let lift3 f x1 x2 x3 =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
         List.allPairs x2 x3
         |> List.allPairs x1
         |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
         |> List.map (fun (x, y, z) -> f x y z)
+    #else
+        let mutable coll = ListCollector<'U> ()
+        x1 |> List.iter (fun x1 ->
+            x2 |> List.iter (fun x2 ->
+                x3 |> List.iter (fun x3 ->
+                    coll.Add (f x1 x2 x3))))
+        coll.Close ()
+    #endif
 
     /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
