@@ -6,7 +6,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <TargetFrameworks>netstandard2.0;net462;net6</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
@@ -14,10 +13,6 @@
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OtherFlags>--warnon:1182 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net462'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net462'">--warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -109,7 +104,6 @@
     <Compile Include="Extensions/AsyncEnumerable.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
-    <Content Condition=" '$(TargetFramework)' == 'net462'" Include="App.config" />
   </ItemGroup>
 
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
@@ -123,9 +117,5 @@
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="6.0.6" />
-    <Reference Condition=" '$(TargetFramework)' == 'net462'" Include="System.Runtime" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.0" />
   </ItemGroup>
 </Project>
