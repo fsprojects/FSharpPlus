@@ -153,23 +153,50 @@ module List =
     /// <returns>
     /// A tuple with both resulting lists.
     /// </returns>
-    let partitionMap (mapping: 'T -> Choice<'T1,'T2>) (source: list<'T>) =
+    let partitionMap (mapping: 'T -> Choice<'T1, 'T2>) (source: list<'T>) =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
         let rec loop ((acc1, acc2) as acc) = function
-            | [] -> acc
+            | []    -> acc
             | x::xs ->
                 match mapping x with
                 | Choice1Of2 x -> loop (x::acc1, acc2) xs
                 | Choice2Of2 x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
+    #else
+        let mutable coll1 = new ListCollector<'T1> ()
+        let mutable coll2 = new ListCollector<'T2> ()
+        let rec loop = function
+            | []    -> coll1.Close (), coll2.Close ()
+            | x::xs ->
+                match mapping x with
+                | Choice1Of2 x -> coll1.Add x
+                | Choice2Of2 x -> coll2.Add x
+                loop xs
+        loop source
+    #endif
 
     /// <summary>Safely build a new list whose elements are the results of applying the given function
     /// to each of the elements of the two lists pairwise.</summary>
+    /// <param name="mapping">Mapping function.</param>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
+    /// <returns>List with corresponding results of applying the mapping function pairwise over both input lists elments.</returns>
     /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
-    let map2Shortest f (l1: list<_>) (l2: list<_>) =
+    let map2Shortest mapping (list1: list<'T1>) (list2: list<'T2>) : list<'U> =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
         let rec loop acc = function
-            | (l::ls,r::rs) -> loop ((f l r)::acc) (ls,rs)
+            | (l::ls,r::rs) -> loop ((mapping l r)::acc) (ls,rs)
             | (_,_) -> acc
-        loop [] (l1,l2) |> List.rev
+        loop [] (list1, list2) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'U> ()
+        let rec loop = function
+            | ([], _) | (_, []) -> coll.Close ()
+            | (l::ls, r::rs) ->
+                coll.Add (mapping l r)
+                loop (ls,rs)
+        loop (list1, list2)
+    #endif
         
     /// <summary>
     /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
@@ -177,11 +204,21 @@ module List =
     /// <param name="list1">First input list.</param>
     /// <param name="list2">Second input list.</param>
     /// <returns>List with corresponding pairs of input lists.</returns>
-    let zipShortest (list1: list<'T1>) (list2: list<'T2>) =
+    let zipShortest (list1: list<'T1>) (list2: list<'T2>) : list<'T1 * 'T2> =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
         let rec loop acc = function
             | (l::ls, r::rs) -> loop ((l, r)::acc) (ls, rs)
             | (_, _)         -> acc
         loop [] (list1, list2) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'U> ()
+        let rec loop = function
+            | ([], _) | (_, []) -> coll.Close ()
+            | (l::ls,r::rs) ->
+                coll.Add (l, r)
+                loop (ls,rs)
+        loop (list1, list2)
+    #endif
         
     /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
