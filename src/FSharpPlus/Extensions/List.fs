@@ -74,6 +74,9 @@ module List =
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<'T>) (source: seq<list<'T>>) =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+        source |> Seq.intercalate separator |> Seq.toList
+    #else
         let mutable coll = new ListCollector<'T> ()
         let mutable notFirst = false
         source |> Seq.iter (fun element ->
@@ -81,9 +84,13 @@ module List =
             coll.AddMany element
             notFirst <- true)
         coll.Close ()
+    #endif
 
     /// Inserts a separator element between each element in the source list.
     let intersperse separator (source: list<'T>) =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+        source |> List.toSeq |> Seq.intersperse separator |> Seq.toList
+    #else
         let mutable coll = new ListCollector<'T> ()
         let mutable notFirst = false
         source |> Seq.iter (fun element ->
@@ -91,6 +98,7 @@ module List =
             coll.Add element
             notFirst <- true)
         coll.Close ()
+    #endif
 
     /// Creates a sequence of lists by splitting the source list on any of the given separators.
     let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
