@@ -28,7 +28,7 @@ module List =
     /// </code>
     /// </example>
     let apply (f: list<'T -> 'U>) (x: list<'T>) : list<'U> =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if FABLE_COMPILER
         List.collect (fun f -> List.map ((<|) f) x) f
     #else
         let mutable coll = ListCollector<'U> ()
@@ -40,7 +40,7 @@ module List =
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
     let lift2 (f: 'T1 -> 'T2 -> 'U) (x1: list<'T1>) (x2: list<'T2>) =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if FABLE_COMPILER
         List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
     #else
         let mutable coll = ListCollector<'U> ()
@@ -101,7 +101,7 @@ module List =
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<'T>) (source: seq<list<'T>>) =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if FABLE_COMPILER
         source |> Seq.intercalate separator |> Seq.toList
     #else
         let mutable coll = new ListCollector<'T> ()
@@ -115,12 +115,12 @@ module List =
 
     /// Inserts a separator element between each element in the source list.
     let intersperse separator (source: list<'T>) =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if FABLE_COMPILER
         source |> List.toSeq |> Seq.intersperse separator |> Seq.toList
     #else
         let mutable coll = new ListCollector<'T> ()
         let mutable notFirst = false
-        source |> Seq.iter (fun element ->
+        source |> List.iter (fun element ->
             if notFirst then coll.Add separator
             coll.Add element
             notFirst <- true)
@@ -181,7 +181,7 @@ module List =
     /// A tuple with both resulting lists.
     /// </returns>
     let partitionMap (mapping: 'T -> Choice<'T1, 'T2>) (source: list<'T>) =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if FABLE_COMPILER
         let rec loop ((acc1, acc2) as acc) = function
             | []    -> acc
             | x::xs ->
@@ -192,14 +192,8 @@ module List =
     #else
         let mutable coll1 = new ListCollector<'T1> ()
         let mutable coll2 = new ListCollector<'T2> ()
-        let rec loop = function
-            | []    -> coll1.Close (), coll2.Close ()
-            | x::xs ->
-                match mapping x with
-                | Choice1Of2 x -> coll1.Add x
-                | Choice2Of2 x -> coll2.Add x
-                loop xs
-        loop source
+        List.iter (mapping >> function Choice1Of2 e -> coll1.Add e | Choice2Of2 e -> coll2.Add e) source
+        coll1.Close (), coll2.Close ()
     #endif
 
     /// <summary>Safely build a new list whose elements are the results of applying the given function
@@ -210,18 +204,18 @@ module List =
     /// <returns>List with corresponding results of applying the mapping function pairwise over both input lists elments.</returns>
     /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
     let map2Shortest mapping (list1: list<'T1>) (list2: list<'T2>) : list<'U> =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if FABLE_COMPILER
         let rec loop acc = function
-            | (l::ls,r::rs) -> loop ((mapping l r)::acc) (ls,rs)
-            | (_,_) -> acc
+            | (l::ls, r::rs) -> loop ((mapping l r)::acc) (ls, rs)
+            | (_, _)         -> acc
         loop [] (list1, list2) |> List.rev
     #else
         let mutable coll = new ListCollector<'U> ()
         let rec loop = function
             | ([], _) | (_, []) -> coll.Close ()
-            | (l::ls, r::rs) ->
+            | (l::ls, r::rs)    ->
                 coll.Add (mapping l r)
-                loop (ls,rs)
+                loop (ls, rs)
         loop (list1, list2)
     #endif
         
@@ -232,13 +226,13 @@ module List =
     /// <param name="list2">Second input list.</param>
     /// <returns>List with corresponding pairs of input lists.</returns>
     let zipShortest (list1: list<'T1>) (list2: list<'T2>) : list<'T1 * 'T2> =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if FABLE_COMPILER
         let rec loop acc = function
             | (l::ls, r::rs) -> loop ((l, r)::acc) (ls, rs)
             | (_, _)         -> acc
         loop [] (list1, list2) |> List.rev
     #else
-        let mutable coll = new ListCollector<'U> ()
+        let mutable coll = new ListCollector<'T1 * 'T2> ()
         let rec loop = function
             | ([], _) | (_, []) -> coll.Close ()
             | (l::ls,r::rs) ->
