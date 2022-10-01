@@ -5,6 +5,7 @@ namespace FSharpPlus
 module List =
 
     open System
+    open FSharp.Core.CompilerServices
 
     /// Creates a list with a single element.
     let singleton x = [x]
@@ -72,10 +73,24 @@ module List =
         if count > 0 then loop count source else source
 
     /// Concatenates all elements, using the specified separator between each element.
-    let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
+    let intercalate (separator: list<'T>) (source: seq<list<'T>>) =
+        let mutable coll = new ListCollector<'T> ()
+        let mutable notFirst = false
+        source |> Seq.iter (fun element ->
+            if notFirst then coll.AddMany separator
+            coll.AddMany element
+            notFirst <- true)
+        coll.Close ()
 
     /// Inserts a separator element between each element in the source list.
-    let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList : list<'T>
+    let intersperse separator (source: list<'T>) =
+        let mutable coll = new ListCollector<'T> ()
+        let mutable notFirst = false
+        source |> Seq.iter (fun element ->
+            if notFirst then coll.Add separator
+            coll.Add element
+            notFirst <- true)
+        coll.Close ()
 
     /// Creates a sequence of lists by splitting the source list on any of the given separators.
     let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
