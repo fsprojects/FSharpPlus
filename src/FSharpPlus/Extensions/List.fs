@@ -7,8 +7,19 @@ module List =
     open System
     open FSharp.Core.CompilerServices
 
-    /// Creates a list with a single element.
-    let singleton x = [x]
+    /// <summary>Returns a list that contains one item only.</summary>
+    ///
+    /// <param name="value">The input item.</param>
+    ///
+    /// <returns>The result list of one item.</returns>
+    ///
+    /// <example id="singleton-1">
+    /// <code lang="fsharp">
+    /// List.singleton 7
+    /// </code>
+    /// Evaluates to <c>[ 7 ]</c>.
+    /// </example>
+    let singleton value = [value]
 
     /// <summary>Adds an element to the beginning of the given list</summary>
     /// <param name="x">The element to add</param>
