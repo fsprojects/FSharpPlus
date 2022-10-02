@@ -19,13 +19,13 @@ module List =
     /// </code>
     /// Evaluates to <c>[ 7 ]</c>.
     /// </example>
-    let singleton value = [value]
+    let singleton value = [value] : list<'T>
 
     /// <summary>Adds an element to the beginning of the given list</summary>
-    /// <param name="x">The element to add</param>
+    /// <param name="value">The element to add</param>
     /// <param name="list">The list to add to</param>
     /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
-    let cons x list = x :: list 
+    let cons value list = value :: list : list<'T>
 
     /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
     /// <param name="f">The list of functions.</param>
@@ -84,7 +84,7 @@ module List =
     #endif
 
     /// Returns a list with all possible tails of the source list.
-    let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
+    let tails list  = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop list : list<list<'T>>
 
 
     /// <summary>Returns the first N elements of the list.</summary>
@@ -127,7 +127,7 @@ module List =
     /// </code>
     /// Evaluates to the empty list.
     /// </example>
-    let take count list = FSharp.Collections.List.take count list
+    let take count list = FSharp.Collections.List.take<'T> count list
 
     /// <summary>Returns the list after removing the first N elements.</summary>
     ///
@@ -165,7 +165,7 @@ module List =
     /// </code>
     /// Evaluates to <c>["a"; "b"; "c"; "d"]</c>.
     /// </example>
-    let skip count list = FSharp.Collections.List.skip count list
+    let skip count list = FSharp.Collections.List.skip<'T> count list
 
 
     /// <summary>Returns a list that drops N elements of the original list and then yields the
@@ -176,11 +176,11 @@ module List =
     /// <param name="source">The input list.</param>
     ///
     /// <returns>The result list.</returns>
-    let drop count source = 
+    let drop<'T> count source =
         let rec loop i lst = 
             match lst, i with
             | [] as x, _ | x, 0 -> x
-            | x, n -> loop (n-1) (List.tail x)
+            | x, n -> loop (n-1) (List.tail<'T> x)
         if count > 0 then loop count source else source
 
     /// Concatenates all elements, using the specified separator between each element.
