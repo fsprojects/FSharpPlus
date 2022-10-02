@@ -364,7 +364,7 @@ module List =
     /// <returns>A new list with the updated element</returns>
     /// <remarks>Use List.updateAt if you want to throw exceptions when using invalid indexes.</remarks>
     let setAt i x lst =
-         if List.length lst > i && i >= 0 then
-             lst.[0..i-1] @ x::lst.[i+1..]
-         else lst
+        if List.length lst > i && i >= 0 then
+            lst.[0..i-1] @ x::lst.[i+1..]
+        else lst
 
