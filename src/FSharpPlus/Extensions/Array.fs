@@ -73,6 +73,10 @@ module Array =
         | null -> null
         | [||] -> [||]
         | _ ->
+        match source with
+        | null -> null
+        | [||] -> [||]
+        | _ ->
             let candidate = new ResizeArray<'T>()
             let mutable sourceIndex = 0
             while sourceIndex < source.Length do
@@ -80,16 +84,24 @@ module Array =
                 if sourceItem = oldValue.[0]
                     && sourceIndex + newValue.Length <= source.Length
                 then
-                    let mutable oldValueIndex = 0
-                    while oldValueIndex < oldValue.Length
-                        && source.[sourceIndex + oldValueIndex] = oldValue.[oldValueIndex] do
-                        oldValueIndex <- oldValueIndex + 1
-                    
-                    if oldValueIndex = oldValue.Length
-                    then
-                        if sourceIndex > 0
-                        then candidate.Count - 1 |> candidate.RemoveAt
+                    let middleIndex = (oldValue.Length - 1) / 2
+                    let mutable oldValueIndexLeft = 0
+                    let mutable oldValueIndexRight = oldValue.Length - 1
+                    let mutable matchingElements =
+                            source.[sourceIndex + oldValueIndexLeft] = oldValue.[oldValueIndexLeft]
+                            && source.[sourceIndex + oldValueIndexRight] = oldValue.[oldValueIndexRight]
 
+                    while oldValueIndexLeft <= middleIndex
+                        && oldValueIndexRight >= middleIndex
+                        && matchingElements do
+                        matchingElements <-
+                            source.[sourceIndex + oldValueIndexLeft] = oldValue.[oldValueIndexLeft]
+                            && source.[sourceIndex + oldValueIndexRight] = oldValue.[oldValueIndexRight]
+                        oldValueIndexLeft <- oldValueIndexLeft + 1
+                        oldValueIndexRight <- oldValueIndexRight - 1
+
+                    if matchingElements
+                    then
                         candidate.AddRange(newValue)
                         sourceIndex <- sourceIndex + oldValue.Length
                     else
@@ -176,3 +188,4 @@ module Array =
             i.Value <- i.Value + 1
             mapping i.Value x
         Array.choose fi source
+
