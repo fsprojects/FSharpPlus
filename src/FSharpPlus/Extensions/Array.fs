@@ -69,39 +69,45 @@ module Array =
 
     /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: 'T []) (newValue: 'T []) (source: 'T[]) : 'T[] =
-        match source with
-        | null -> null
-        | [||] -> [||]
-        | _ ->
+    #if FABLE_COMPILER
+        source
+        |> Array.toSeq
+        |> Seq.replace oldValue newValue
+        |> Seq.toArray: 'T []
+    #else
         match source with
         | null -> null
         | [||] -> [||]
         | _ ->
             let candidate = new ResizeArray<'T>()
             let mutable sourceIndex = 0
+
             while sourceIndex < source.Length do
                 let sourceItem = source.[sourceIndex]
+
                 if sourceItem = oldValue.[0]
-                    && sourceIndex + newValue.Length <= source.Length
-                then
+                   && sourceIndex + newValue.Length <= source.Length then
                     let middleIndex = (oldValue.Length - 1) / 2
                     let mutable oldValueIndexLeft = 0
-                    let mutable oldValueIndexRight = oldValue.Length - 1
+
+                    let mutable oldValueIndexRight =
+                        oldValue.Length - 1
+
                     let mutable matchingElements =
-                            source.[sourceIndex + oldValueIndexLeft] = oldValue.[oldValueIndexLeft]
-                            && source.[sourceIndex + oldValueIndexRight] = oldValue.[oldValueIndexRight]
+                        source.[sourceIndex + oldValueIndexLeft] = oldValue.[oldValueIndexLeft]
+                        && source.[sourceIndex + oldValueIndexRight] = oldValue.[oldValueIndexRight]
 
                     while oldValueIndexLeft <= middleIndex
-                        && oldValueIndexRight >= middleIndex
-                        && matchingElements do
+                          && oldValueIndexRight >= middleIndex
+                          && matchingElements do
                         matchingElements <-
                             source.[sourceIndex + oldValueIndexLeft] = oldValue.[oldValueIndexLeft]
                             && source.[sourceIndex + oldValueIndexRight] = oldValue.[oldValueIndexRight]
+
                         oldValueIndexLeft <- oldValueIndexLeft + 1
                         oldValueIndexRight <- oldValueIndexRight - 1
 
-                    if matchingElements
-                    then
+                    if matchingElements then
                         candidate.AddRange(newValue)
                         sourceIndex <- sourceIndex + oldValue.Length
                     else
@@ -110,8 +116,9 @@ module Array =
                 else
                     sourceIndex <- sourceIndex + 1
                     candidate.Add(sourceItem)
-            
+
             candidate.ToArray()
+    #endif
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
