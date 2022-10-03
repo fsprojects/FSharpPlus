@@ -55,7 +55,6 @@ module Array =
     /// Inserts a separator element between each element in the source array.
     let intersperse element (source: 'T []) =
         match source with
-        | null -> null
         | [||] -> [||]
         | _ ->
             let finalLength = Array.length source * 2 - 1
@@ -69,17 +68,16 @@ module Array =
 
     /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: 'T []) (newValue: 'T []) (source: 'T[]) : 'T[] =
-    #if FABLE_COMPILER
+    #if FABLE_COMPILER || FABLE_COMPILER_3
         source
         |> Array.toSeq
         |> Seq.replace oldValue newValue
         |> Seq.toArray: 'T []
     #else
         match source with
-        | null -> null
         | [||] -> [||]
         | _ ->
-            let candidate = new ResizeArray<'T>()
+            let mutable candidate = new ArrayCollector<'T>()
             let mutable sourceIndex = 0
 
             while sourceIndex < source.Length do
@@ -108,16 +106,16 @@ module Array =
                         oldValueIndexRight <- oldValueIndexRight - 1
 
                     if matchingElements then
-                        candidate.AddRange(newValue)
+                        candidate.AddMany newValue
                         sourceIndex <- sourceIndex + oldValue.Length
                     else
-                        candidate.Add(sourceItem)
+                        candidate.Add sourceItem
                         sourceIndex <- sourceIndex + 1
                 else
                     sourceIndex <- sourceIndex + 1
-                    candidate.Add(sourceItem)
+                    candidate.Add sourceItem
 
-            candidate.ToArray()
+            candidate.Close()
     #endif
 
     /// <summary>
