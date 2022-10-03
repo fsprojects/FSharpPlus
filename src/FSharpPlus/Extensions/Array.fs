@@ -85,7 +85,7 @@ module Array =
                 let sourceItem = source.[sourceIndex]
 
                 if sourceItem = oldValue.[0]
-                   && sourceIndex + newValue.Length <= source.Length then
+                    && sourceIndex + newValue.Length <= source.Length then
                     let middleIndex = (oldValue.Length - 1) / 2
                     let mutable oldValueIndexLeft = 0
 
@@ -97,8 +97,8 @@ module Array =
                         && source.[sourceIndex + oldValueIndexRight] = oldValue.[oldValueIndexRight]
 
                     while oldValueIndexLeft <= middleIndex
-                          && oldValueIndexRight >= middleIndex
-                          && matchingElements do
+                            && oldValueIndexRight >= middleIndex
+                            && matchingElements do
                         matchingElements <-
                             source.[sourceIndex + oldValueIndexLeft] = oldValue.[oldValueIndexLeft]
                             && source.[sourceIndex + oldValueIndexRight] = oldValue.[oldValueIndexRight]
