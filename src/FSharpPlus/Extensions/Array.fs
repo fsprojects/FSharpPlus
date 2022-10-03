@@ -44,6 +44,9 @@ module Array =
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: 'T []) (source: seq<'T []>) =
+    #if FABLE_COMPILER
+        source |> Seq.intercalate separator |> Seq.toArray
+    #else
         let mutable coll = new ArrayCollector<'T> ()
         let mutable notFirst = false
         source |> Seq.iter (fun element ->
@@ -51,6 +54,7 @@ module Array =
             coll.AddMany element
             notFirst <- true)
         coll.Close ()
+    #endif
 
     /// Inserts a separator element between each element in the source array.
     let intersperse element (source: 'T []) =
@@ -68,11 +72,8 @@ module Array =
 
     /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: 'T []) (newValue: 'T []) (source: 'T[]) : 'T[] =
-    #if FABLE_COMPILER || FABLE_COMPILER_3
-        source
-        |> Array.toSeq
-        |> Seq.replace oldValue newValue
-        |> Seq.toArray: 'T []
+    #if FABLE_COMPILER
+        source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray: 'T []
     #else
         match source with
         | [||] -> [||]
@@ -193,4 +194,3 @@ module Array =
             i.Value <- i.Value + 1
             mapping i.Value x
         Array.choose fi source
-
