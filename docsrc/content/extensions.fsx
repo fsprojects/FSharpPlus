@@ -262,10 +262,11 @@ Collections / Traversable types:
 Async and Tasks:
 ================
  * [ Task ](reference/fsharpplus-task.html)
-   * map, map2
+   * map, map2, map3
    * apply
    * zip
    * join
+   * ignore
  * [ Async ](reference/fsharpplus-async.html)
    * map, map2
    * zip
