@@ -371,10 +371,11 @@ MapEnumerators
 <li>
 <a href="reference/fsharpplus-task.html"> Task </a>
 <ul>
-<li>map, map2</li>
+<li>map, map2, map3</li>
 <li>apply</li>
 <li>zip</li>
 <li>join</li>
+<li>ignore</li>
 </ul>
 </li>
 <li>
@@ -518,7 +519,7 @@ from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Contains operations for worki
 <div class="fsdocs-tip" id="fs13">val tryExactlyOne: xs: &#39;a list -&gt; &#39;a option</div>
 <div class="fsdocs-tip" id="fs14">val xs: &#39;a list</div>
 <div class="fsdocs-tip" id="fs15">val a: string list</div>
-<div class="fsdocs-tip" id="fs16">val intersperse: element: &#39;T -&gt; source: &#39;T list -&gt; &#39;T list<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs16">val intersperse: separator: &#39;T -&gt; source: &#39;T list -&gt; &#39;T list<br /><em>&lt;summary&gt;
  Inserts a separator element between each element in the source list.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs17">val b: string</div>
@@ -537,7 +538,7 @@ from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Functional programming operat
  Inserts a separator char between each char in the source string.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs20">val c: int list</div>
-<div class="fsdocs-tip" id="fs21">val intercalate: separator: &#39;a list -&gt; source: seq&lt;&#39;a list&gt; -&gt; &#39;a list<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs21">val intercalate: separator: &#39;T list -&gt; source: seq&lt;&#39;T list&gt; -&gt; &#39;T list<br /><em>&lt;summary&gt;
  Concatenates all elements, using the specified separator between each element.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs22">val d: string</div>
