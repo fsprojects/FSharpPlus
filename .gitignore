@@ -213,3 +213,5 @@ tests/FSharpPlusFable.Tests/node_modules/
 tests/FSharpPlusFable.Tests/FSharpPlusFable
 /node_modules
 *.fs.js
+
+tests/Benchmarks/BenchmarkDotNet.Artifacts/results/
