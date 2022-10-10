@@ -4,11 +4,14 @@ namespace FSharpPlus
 [<RequireQualifiedAccess>]
 module Result =
     open FSharp.Core.CompilerServices
+    open System
     
     /// Creates an Ok with the supplied value.
+    [<Obsolete("Prefer Result.Ok")>]
     let result value : Result<'T,'Error> = Ok value
 
     /// Creates an Error With the supplied value.
+    [<Obsolete("Prefer Result.Error")>]
     let throw value : Result<'T,'Error> = Error value
 
     /// Applies the wrapped value to the wrapped function when both are Ok and returns a wrapped result or the first Error.
