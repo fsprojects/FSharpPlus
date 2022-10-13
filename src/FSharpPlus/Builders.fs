@@ -41,54 +41,54 @@ module GenericBuilders =
     open FSharpPlus.Control
 
     type Builder<'``monad<'t>``> () =
-        member        __.ReturnFrom (expr) = expr                                        : '``monad<'t>``
-        member inline __.Return (x: 'T) = result x                                       : '``Monad<'T>``
-        member inline __.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
-        member inline __.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
-        member inline __.MergeSources  (t1: '``Monad<'T>``, t2: '``Monad<'U>``)          : '``Monad<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
-        member inline __.MergeSources3 (t1: '``Monad<'T>``, t2: '``Monad<'U>``, t3: '``Monad<'V>``) : '``Monad<'T * 'U * 'V>`` = Lift3.Invoke tuple3 t1 t2 t3
+        member        _.ReturnFrom (expr) = expr                                        : '``monad<'t>``
+        member inline _.Return (x: 'T) = result x                                       : '``Monad<'T>``
+        member inline _.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
+        member inline _.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
+        member inline _.MergeSources  (t1: '``Monad<'T>``, t2: '``Monad<'U>``)          : '``Monad<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
+        member inline _.MergeSources3 (t1: '``Monad<'T>``, t2: '``Monad<'U>``, t3: '``Monad<'V>``) : '``Monad<'T * 'U * 'V>`` = Lift3.Invoke tuple3 t1 t2 t3
 
         [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
-        member inline __.Select (x, [<ProjectionParameter>] f) = map f x
+        member inline _.Select (x, [<ProjectionParameter>] f) = map f x
 
         [<CustomOperation("where", MaintainsVariableSpaceUsingBind=true)>]
-        member inline __.Where (x, [<ProjectionParameter>] p) = mfilter p x
+        member inline _.Where (x, [<ProjectionParameter>] p) = mfilter p x
 
         [<CustomOperation("top", MaintainsVariableSpaceUsingBind=true)>]
-        member inline __.Top (source, n) = limit n source
+        member inline _.Top (source, n) = limit n source
 
         [<CustomOperation("groupBy", AllowIntoPattern=true, MaintainsVariableSpaceUsingBind=true)>]
-        member inline __.GroupBy (x,[<ProjectionParameter>] f : 'T -> 'key) = groupBy f x
+        member inline _.GroupBy (x,[<ProjectionParameter>] f : 'T -> 'key) = groupBy f x
 
         [<CustomOperation("chunkBy", AllowIntoPattern=true, MaintainsVariableSpaceUsingBind=true)>]
-        member inline __.ChunkBy (x,[<ProjectionParameter>] f : 'T -> 'key) = chunkBy f x
+        member inline _.ChunkBy (x,[<ProjectionParameter>] f : 'T -> 'key) = chunkBy f x
 
         [<CustomOperation("orderBy", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
-        member inline __.OrderBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
+        member inline _.OrderBy (x,[<ProjectionParameter>] f : 'T -> 'key) = sortBy f x
 
     type StrictBuilder<'``monad<'t>``> () =
         inherit Builder<'``monad<'t>``> ()
-        member        __.Delay expr = expr : unit -> '``Monad<'T>``
-        member        __.Run f = f ()              : '``monad<'t>``
-        member inline __.TryWith    (expr, handler)      = TryWith.InvokeForStrict    expr handler      : '``Monad<'T>``
-        member inline __.TryFinally (expr, compensation) = TryFinally.InvokeForStrict expr compensation : '``Monad<'T>``
+        member        _.Delay expr = expr : unit -> '``Monad<'T>``
+        member        _.Run f = f ()              : '``monad<'t>``
+        member inline _.TryWith    (expr, handler)      = TryWith.InvokeForStrict    expr handler      : '``Monad<'T>``
+        member inline _.TryFinally (expr, compensation) = TryFinally.InvokeForStrict expr compensation : '``Monad<'T>``
         
-        member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body
+        member inline _.Using (disposable: #IDisposable, body) = Using.Invoke disposable body
 
     type DelayedBuilder<'``monad<'t>``> () =
         inherit Builder<'``monad<'t>``> ()
-        member inline __.Delay (expr: _->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
-        member        __.Run f = f                                           : '``monad<'t>``
-        member inline __.TryWith    (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
-        member inline __.TryFinally (expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
-        member inline __.Using (disposable: #IDisposable, body) = Using.Invoke disposable body : '``Monad<'T>``
+        member inline _.Delay (expr: _->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
+        member        _.Run f = f                                           : '``monad<'t>``
+        member inline _.TryWith    (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
+        member inline _.TryFinally (expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
+        member inline _.Using (disposable: #IDisposable, body) = Using.Invoke disposable body : '``Monad<'T>``
 
     type MonadPlusStrictBuilder<'``monad<'t>``> () =
         inherit StrictBuilder<'``monad<'t>``> ()
-        member        __.YieldFrom expr = expr                           : '``monad<'t>``
-        member inline __.Zero () = Empty.Invoke ()                       : '``MonadPlus<'T>``
-        member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b () : '``MonadPlus<'T>``
-        member inline __.While (guard, body: unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
+        member        _.YieldFrom expr = expr                           : '``monad<'t>``
+        member inline _.Zero () = Empty.Invoke ()                       : '``MonadPlus<'T>``
+        member inline _.Combine (a: '``MonadPlus<'T>``, b) = a <|> b () : '``MonadPlus<'T>``
+        member inline _.While (guard, body: unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
             let rec loop guard body =
                 if guard () then body () <|> loop guard body
                 else Empty.Invoke ()
@@ -101,10 +101,10 @@ module GenericBuilders =
     type MonadFxStrictBuilder<'``monad<'t>``> () =
         inherit StrictBuilder<'``monad<'t>``> ()
         
-        member inline __.Zero () = result ()                                       : '``Monad<unit>``
-        member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b ()) : '``Monad<'T>``
+        member inline _.Zero () = result ()                                       : '``Monad<unit>``
+        member inline _.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b ()) : '``Monad<'T>``
         
-        member inline __.While (guard, body: unit -> '``Monad<unit>``)             : '``Monad<unit>`` =
+        member inline _.While (guard, body: unit -> '``Monad<unit>``)             : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body () >>= fun () -> loop guard body
                 else result ()
@@ -116,12 +116,12 @@ module GenericBuilders =
 
     type MonadPlusBuilder<'``monad<'t>``> () =
         inherit DelayedBuilder<'``monad<'t>``>()
-        member        __.YieldFrom expr = expr                        : '``monad<'t>``
-        member        __.strict = new MonadPlusStrictBuilder<'``monad<'t>``> ()
-        member inline __.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
-        member inline __.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
+        member        _.YieldFrom expr = expr                        : '``monad<'t>``
+        member        _.strict = new MonadPlusStrictBuilder<'``monad<'t>``> ()
+        member inline _.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
+        member inline _.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
 
-        member inline __.WhileImpl (guard, body: '``MonadPlus<'T>``)  : '``MonadPlus<'T>`` =
+        member inline _.WhileImpl (guard, body: '``MonadPlus<'T>``)  : '``MonadPlus<'T>`` =
             let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
             fix ()
         
@@ -141,25 +141,25 @@ module GenericBuilders =
 
     type MonadFxBuilder<'``monad<'t>``> () =
         inherit DelayedBuilder<'``monad<'t>``> ()
-        member        __.strict  = new MonadFxStrictBuilder<'``monad<'t>``> ()
+        member        _.strict  = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
         /// Makes it a (lazy) monadplus computation expression.
-        member        __.plus    = new MonadPlusBuilder<'``monad<'t>``> ()
+        member        _.plus    = new MonadPlusBuilder<'``monad<'t>``> ()
 
         /// Makes it a strict monadplus computation expression.
-        member        __.plus'   = new MonadPlusStrictBuilder<'``monad<'t>``> ()
+        member        _.plus'   = new MonadPlusStrictBuilder<'``monad<'t>``> ()
 
         /// Makes it a (lazy) monadic computation expression with side-effects
         member        this.fx    = this
 
         /// Makes it a strict monadic computation expression with side-effects
-        member        __.fx'     = new MonadFxStrictBuilder<'``monad<'t>``> ()
+        member        _.fx'     = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
-        member inline __.Zero () = result ()                                    : '``Monad<unit>``
+        member inline _.Zero () = result ()                                    : '``Monad<unit>``
 
-        member inline __.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
+        member inline _.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
         
-        member inline __.WhileImpl (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
+        member inline _.WhileImpl (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
             let rec loop guard body =
                 if guard () then body >>= (fun () -> loop guard body)
                 else result ()
