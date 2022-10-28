@@ -1367,7 +1367,7 @@ module Operators =
     /// Converts to a value from its string representation.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline parse (value: string) = Parse.Invoke value
+    let inline parse< ^T when (Control.Parse or ^T) : (static member Parse: ^T * Control.Parse -> (string -> ^T))> (value: string) : 'T = Parse.Invoke value
 
     /// <summary>
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
