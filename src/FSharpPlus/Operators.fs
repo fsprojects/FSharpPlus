@@ -1333,19 +1333,19 @@ module Operators =
     /// Convert from a byte array value, given options of little-endian, and startIndex
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesWithOptions (isLtEndian: bool) (startIndex: int) (value: byte[]) = OfBytes.Invoke isLtEndian startIndex value
+    let inline ofBytesWithOptions< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (isLtEndian: bool) (startIndex: int) (value: byte[]) : 'T = OfBytes.Invoke isLtEndian startIndex value
 
     /// <summary>
     /// Convert from a byte array value, assuming little-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytes (value: byte[]) = OfBytes.Invoke true 0 value
+    let inline ofBytes< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke true 0 value
 
     /// <summary>
     /// Convert from a byte array value, assuming big-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesBE (value: byte[]) = OfBytes.Invoke false 0 value
+    let inline ofBytesBE< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke false 0 value
 
     /// <summary>
     /// Convert to a byte array value, assuming little endian
@@ -1367,7 +1367,7 @@ module Operators =
     /// Converts to a value from its string representation.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline parse< ^T when (Control.Parse or ^T) : (static member Parse: ^T * Control.Parse -> (string -> ^T))> (value: string) : 'T = Parse.Invoke value
+    let inline parse< ^T when (Parse or ^T) : (static member Parse: ^T * Parse -> (string -> ^T))> (value: string) : 'T = Parse.Invoke value
 
     /// <summary>
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
