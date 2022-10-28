@@ -294,7 +294,7 @@ module Operators =
     /// Combines two monoids in one.
     /// </summary>
     /// <category index="4">Monoid</category>
-    let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
+    let inline plus< ^Monoid when (Plus or ^Monoid) : (static member ``+`` : ^Monoid * ^Monoid * Plus -> ^Monoid)> (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
 
     
     module Seq =
@@ -302,7 +302,7 @@ module Operators =
         /// Folds all values in the sequence using the monoidal addition.
         /// </summary>
         /// <category index="4">Monoid</category>
-        let inline sum (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
+        let inline sum< ^Monoid when (Sum or seq<^Monoid> or ^Monoid) : (static member Sum: seq<^Monoid> * ^Monoid * Sum -> ^Monoid)> (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
@@ -333,7 +333,9 @@ module Operators =
     /// Common uses of guard include conditionally signaling an error in an error monad and conditionally rejecting the current choice in an Alternative-based parser.
     /// </summary>
     /// <category index="5">Alternative/Monadplus/Arrowplus</category>
-    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
+    let inline guard< ^``MonadPlus<unit>`` when (Return or ^``MonadPlus<unit>``) :
+        (static member Return: ^``MonadPlus<unit>`` * Return -> (unit -> ^``MonadPlus<unit>``)) and
+        (Empty or ^``MonadPlus<unit>``) : (static member Empty: ^``MonadPlus<unit>`` * Empty -> ^``MonadPlus<unit>``)> x : '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
     
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
