@@ -1373,7 +1373,7 @@ module Operators =
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline tryParse (value: string) = TryParse.Invoke value
+    let inline tryParse< ^T when (TryParse or ^T) : (static member TryParse: ^T * TryParse -> (string -> ^T option))> (value: string) : 'T option = TryParse.Invoke value
 
 
     // Numerics
