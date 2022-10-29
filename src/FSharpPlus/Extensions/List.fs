@@ -29,6 +29,10 @@ module List =
     /// <param name="value">The element to add</param>
     /// <param name="list">The list to add to</param>
     /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let cons value list = value :: list : list<'T>
 
     /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
