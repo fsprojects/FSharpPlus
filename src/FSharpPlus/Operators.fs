@@ -302,7 +302,7 @@ module Operators =
         /// Folds all values in the sequence using the monoidal addition.
         /// </summary>
         /// <category index="4">Monoid</category>
-        let inline sum< ^Monoid when (Sum or seq<^Monoid> or ^Monoid) : (static member Sum: seq<^Monoid> * ^Monoid * Sum -> ^Monoid)> (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
+        let inline sum< ^Monoid when (Sum or seq<^Monoid> or ^Monoid) : (static member Sum: seq<'Monoid> * 'Monoid * Sum -> 'Monoid)> (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
