@@ -17,14 +17,20 @@ module Map =
     /// <param name="source">The input map.</param>
     ///
     /// <returns>A seq of the keys in the map.</returns>
-    [<Obsolete("This function was included in FSharp.Core but returning ICollection")>]
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let keys   (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(k, _)) -> k) source
 
     /// <summary>Returns the values of the given map.</summary>
     /// <param name="source">The input map.</param>
     ///
     /// <returns>A seq of the values in the map.</returns>
-    [<Obsolete("This function was included in FSharp.Core but returning ICollection")>]
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     /// <summary>Maps the values of the original Map.</summary>
