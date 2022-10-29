@@ -80,11 +80,27 @@ module Result =
             | :? exn as e -> raise <| System.ArgumentException ("Result value was Error", "source", e)
             | e           -> invalidArg "source" ("Result value was Error: " + string e)
 
-    /// Extracts the Ok value or use the supplied default value when it's an Error.
-    let defaultValue (value:'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | _ -> value
+    /// <summary>Gets the value of the result if the result is <c>Ok</c>, otherwise returns the specified default value.</summary>
+    ///
+    /// <param name="value">The specified default value.</param>
+    /// <param name="result">The input result.</param>
+    ///
+    /// <returns>The result if the result is Ok, else the default value.</returns>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
+    let defaultValue (value:'T) (result: Result<'T,'Error>) : 'T = match result with Ok v -> v | _ -> value
 
-    /// Extracts the Ok value or applies the compensation function over the Error.
-    let defaultWith (compensation: 'Error->'T) (source: Result<'T,'Error>) : 'T = match source with Ok v -> v | Error e -> compensation e
+    /// <summary>Gets the value of the result if the result is <c>Ok</c>, otherwise evaluates <paramref name="defThunk"/> and returns the result.</summary>
+    ///
+    /// <param name="defThunk">A thunk that provides a default value when evaluated.</param>
+    /// <param name="result">The input result.</param>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
+    let defaultWith (defThunk: 'Error->'T) (result: Result<'T,'Error>) : 'T = match result with Ok v -> v | Error e -> defThunk e
 
     /// Converts a Result<'T,'Error> to a Choice<'T,'Error>.
     let toChoice (source: Result<'T,'U>) = match source with Ok x-> Choice1Of2 x | Error x -> Choice2Of2 x

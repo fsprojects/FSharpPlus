@@ -19,6 +19,10 @@ module List =
     /// </code>
     /// Evaluates to <c>[ 7 ]</c>.
     /// </example>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let singleton value = [value] : list<'T>
 
     /// <summary>Adds an element to the beginning of the given list</summary>
@@ -127,6 +131,10 @@ module List =
     /// </code>
     /// Evaluates to the empty list.
     /// </example>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let take count list = FSharp.Collections.List.take<'T> count list
 
     /// <summary>Returns the list after removing the first N elements.</summary>
@@ -165,6 +173,10 @@ module List =
     /// </code>
     /// Evaluates to <c>["a"; "b"; "c"; "d"]</c>.
     /// </example>
+    /// <remarks>
+    /// Note: this function has since been added to FSharpCore, so effectively
+    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let skip count list = FSharp.Collections.List.skip<'T> count list
 
 
