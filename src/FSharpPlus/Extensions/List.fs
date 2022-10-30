@@ -92,7 +92,7 @@ module List =
     #endif
 
     /// Returns a list with all possible tails of the source list.
-    let tails list  = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop list : list<list<'T>>
+    let tails list = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop list : list<list<'T>>
 
 
     /// <summary>Returns the first N elements of the list.</summary>
