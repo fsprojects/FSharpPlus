@@ -368,7 +368,7 @@ module List =
     /// <param name="lst">The input list</param>
     ///
     /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
-    /// <remarks>Use deletaAt instead or if you want to throw exceptions use the full path to removeAt in Core until this function is removed from this library.</remarks>
+    /// <remarks>Use deletaAt instead or if you want to throw exceptions use the full path to removeAt in FSharp.Core until this function is removed from this library.</remarks>
     [<Obsolete("This function was included in FSharp.Core but throwing")>]
     let removeAt i lst = deleteAt i lst
 
