@@ -18,8 +18,8 @@ module Map =
     ///
     /// <returns>A seq of the keys in the map.</returns>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let keys   (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(k, _)) -> k) source
 
@@ -28,8 +28,8 @@ module Map =
     ///
     /// <returns>A seq of the values in the map.</returns>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 

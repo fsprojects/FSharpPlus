@@ -87,8 +87,8 @@ module Result =
     ///
     /// <returns>The result if the result is Ok, else the default value.</returns>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let defaultValue (value:'T) (result: Result<'T,'Error>) : 'T = match result with Ok v -> v | _ -> value
 
@@ -97,8 +97,8 @@ module Result =
     /// <param name="defThunk">A thunk that provides a default value when evaluated.</param>
     /// <param name="result">The input result.</param>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let defaultWith (defThunk: 'Error->'T) (result: Result<'T,'Error>) : 'T = match result with Ok v -> v | Error e -> defThunk e
 

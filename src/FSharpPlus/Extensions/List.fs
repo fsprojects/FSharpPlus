@@ -20,8 +20,8 @@ module List =
     /// Evaluates to <c>[ 7 ]</c>.
     /// </example>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let singleton value = [value] : list<'T>
 
@@ -30,8 +30,8 @@ module List =
     /// <param name="list">The list to add to</param>
     /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let cons value list = value :: list : list<'T>
 
@@ -136,8 +136,8 @@ module List =
     /// Evaluates to the empty list.
     /// </example>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let take count list = FSharp.Collections.List.take<'T> count list
 
@@ -178,8 +178,8 @@ module List =
     /// Evaluates to <c>["a"; "b"; "c"; "d"]</c>.
     /// </example>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let skip count list = FSharp.Collections.List.skip<'T> count list
 

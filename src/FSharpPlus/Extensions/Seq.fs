@@ -57,8 +57,8 @@ module Seq =
     /// <param name="source">The input sequence.</param>
     /// <param name="state">The initial state.</param>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let foldBack folder source state = Array.foldBack folder (Seq.toArray source) state
 
@@ -187,8 +187,8 @@ module Seq =
     ///
     /// <returns>The generated sequence.</returns> 
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
     #endif
