@@ -7,14 +7,33 @@ module List =
     open System
     open FSharp.Core.CompilerServices
 
-    /// Creates a list with a single element.
-    let singleton x = [x]
+    /// <summary>Returns a list that contains one item only.</summary>
+    ///
+    /// <param name="value">The input item.</param>
+    ///
+    /// <returns>The result list of one item.</returns>
+    ///
+    /// <example id="singleton-1">
+    /// <code lang="fsharp">
+    /// List.singleton 7
+    /// </code>
+    /// Evaluates to <c>[ 7 ]</c>.
+    /// </example>
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
+    let singleton value = [value] : list<'T>
 
     /// <summary>Adds an element to the beginning of the given list</summary>
-    /// <param name="x">The element to add</param>
+    /// <param name="value">The element to add</param>
     /// <param name="list">The list to add to</param>
     /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
-    let cons x list = x :: list 
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
+    let cons value list = value :: list : list<'T>
 
     /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
     /// <param name="f">The list of functions.</param>
@@ -73,15 +92,96 @@ module List =
     #endif
 
     /// Returns a list with all possible tails of the source list.
-    let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
+    let tails list = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop list : list<list<'T>>
 
-    let take i list = Seq.take i list |> Seq.toList
 
-    let skip i list =
-        let rec listSkip lst = function 
-            | 0 -> lst 
-            | n -> listSkip (List.tail lst) (n-1)
-        listSkip list i
+    /// <summary>Returns the first N elements of the list.</summary>
+    /// <remarks>Throws <c>InvalidOperationException</c>
+    /// if the count exceeds the number of elements in the list. <c>List.truncate</c>
+    /// returns as many items as the list contains instead of throwing an exception.</remarks>
+    ///
+    /// <param name="count">The number of items to take.</param>
+    /// <param name="list">The input list.</param>
+    ///
+    /// <returns>The result list.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentException">Thrown when the input list is empty.</exception>
+    /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements
+    /// in the list.</exception>
+    ///
+    /// <example id="take-1">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.take 2
+    /// </code>
+    /// Evaluates to <c>["a"; "b"]</c>
+    /// </example>
+    ///
+    /// <example id="take-2">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.take 6
+    /// </code>
+    /// Throws <c>InvalidOperationException</c>.
+    /// </example>
+    ///
+    /// <example id="take-3">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.take 0
+    /// </code>
+    /// Evaluates to the empty list.
+    /// </example>
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
+    let take count list = FSharp.Collections.List.take<'T> count list
+
+    /// <summary>Returns the list after removing the first N elements.</summary>
+    ///
+    /// <param name="count">The number of elements to skip. If the number is 0 or negative the input list is returned.</param>
+    /// <param name="list">The input list.</param>
+    ///
+    /// <returns>The list after removing the first N elements.</returns>
+    ///
+    /// <exception cref="T:System.ArgumentException">Thrown when count exceeds the number of 
+    /// elements in the list.</exception>
+    ///
+    /// <example id="skip-1">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.skip 2
+    /// </code>
+    /// Evaluates to <c>["c"; "d"]</c>
+    /// </example>
+    ///
+    /// <example id="skip-2">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.skip 5
+    /// </code>
+    /// Throws <c>ArgumentException</c>.
+    /// </example>
+    ///
+    /// <example id="skip-3">
+    /// <code lang="fsharp">
+    /// let inputs = ["a"; "b"; "c"; "d"]
+    ///
+    /// inputs |> List.skip -1
+    /// </code>
+    /// Evaluates to <c>["a"; "b"; "c"; "d"]</c>.
+    /// </example>
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
+    let skip count list = FSharp.Collections.List.skip<'T> count list
 
 
     /// <summary>Returns a list that drops N elements of the original list and then yields the
@@ -92,11 +192,11 @@ module List =
     /// <param name="source">The input list.</param>
     ///
     /// <returns>The result list.</returns>
-    let drop count source = 
+    let drop<'T> count source =
         let rec loop i lst = 
             match lst, i with
             | [] as x, _ | x, 0 -> x
-            | x, n -> loop (n-1) (List.tail x)
+            | x, n -> loop (n-1) (List.tail<'T> x)
         if count > 0 then loop count source else source
 
     /// Concatenates all elements, using the specified separator between each element.
@@ -258,10 +358,19 @@ module List =
     /// <param name="lst">The input list</param>
     /// 
     /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
-    let removeAt i lst =
-        if List.length lst > i then
-            lst.[0..i-1] @ lst.[i+1..]
-        else lst
+    let deleteAt i lst =
+         if List.length lst > i then
+             lst.[0..i-1] @ lst.[i+1..]
+         else lst
+
+    /// <summary>Attempts to remove an item from a list.</summary>
+    /// <param name="i">The index of the item to remove </param>
+    /// <param name="lst">The input list</param>
+    ///
+    /// <returns>For invalid indexes, the input list.  Otherwise, a new list with the item removed.</returns>
+    /// <remarks>Use deletaAt instead or if you want to throw exceptions use the full path to removeAt in FSharp.Core until this function is removed from this library.</remarks>
+    [<Obsolete("This function was included in FSharp.Core but throwing")>]
+    let removeAt i lst = deleteAt i lst
 
     /// <summary>Updates the value of an item in a list</summary>
     /// <param name="i">The index of the item to update</param>
@@ -269,7 +378,9 @@ module List =
     /// <param name="lst">The input list</param>
     ///
     /// <returns>A new list with the updated element</returns>
+    /// <remarks>Use List.updateAt if you want to throw exceptions when using invalid indexes.</remarks>
     let setAt i x lst =
         if List.length lst > i && i >= 0 then
             lst.[0..i-1] @ x::lst.[i+1..]
         else lst
+
