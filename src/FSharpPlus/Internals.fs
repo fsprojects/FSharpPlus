@@ -36,7 +36,6 @@ module internal Prelude =
         System.Tuple<_> x
         #endif
 
-
 [<RequireQualifiedAccess>]
 module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
 
@@ -47,6 +46,10 @@ module Errors =
     let exnNoSqrt         = new System.Exception "No square root defined for this value in this domain."
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
+
+    let inline raiseIfNull paramName (paramValue: _ seq) =
+        if isNull paramValue then
+            nullArg paramName
 
 module Decimal =
     let inline trySqrt x =

@@ -6,13 +6,7 @@ module Array =
 
     open System
     open FSharp.Core.CompilerServices
-    
-    let inline private raiseIfNull paramName (paramValue: _ seq) =
-        if isNull paramValue then
-            $"%s{paramName} cannot be null"
-            |> ArgumentNullException
-            |> raise
-        
+    open FSharpPlus.Internals.Errors
 
     /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>
