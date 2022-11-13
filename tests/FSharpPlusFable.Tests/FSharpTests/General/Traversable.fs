@@ -30,15 +30,6 @@ let toLists   x = if x <> 4 then [x; x]       else []
 let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
 #endif
 
-let expectedEffects =
-    [
-        """f(x) <*> Right 0"""
-        """f(x) <*> Right 1"""
-        """f(x) <*> Right 2"""
-        """f(x) <*> Right 3"""
-        """f(x) <*> Left ["This is a failure"]"""
-    ]
-
 let traversable = testList "Traversable" [
     
     // Exception: TypeError: o[Symbol.iterator] is not a function
@@ -142,6 +133,15 @@ let traversable = testList "Traversable" [
     #if !FABLE_COMPILER
     testCase "traverseInfiniteApplicatives" (fun () ->
 
+        let expectedEffects =
+            [
+                """f(x) <*> Right 0"""
+                """f(x) <*> Right 1"""
+                """f(x) <*> Right 2"""
+                """f(x) <*> Right 3"""
+                """f(x) <*> Left ["This is a failure"]"""
+            ]
+
         SideEffects.reset ()
 
         let a = sequence (Seq.initInfinite toOptions)
@@ -193,6 +193,7 @@ let traversable = testList "Traversable" [
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     testList "traverseFiniteApplicatives" [ // TODO -> implement short-circuit without breaking anything else
+
         #if !FABLE_COMPILER
         testCase "a" (fun () ->
             SideEffects.reset ()
@@ -240,6 +241,14 @@ let traversable = testList "Traversable" [
             ())
 
         testCase "e" (fun () ->
+            let expectedEffects =
+                [
+                    """f(x) <*> Right 0"""
+                    """f(x) <*> Right 1"""
+                    """f(x) <*> Right 2"""
+                    """f(x) <*> Right 3"""
+                    """f(x) <*> Left ["This is a failure"]"""
+                ]
             SideEffects.reset ()
             let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
             SideEffects.are expectedEffects
@@ -251,6 +260,14 @@ let traversable = testList "Traversable" [
             ())
 
         testCase "f" (fun () ->
+            let expectedEffects =
+                [
+                    """f(x) <*> Right 0"""
+                    """f(x) <*> Right 1"""
+                    """f(x) <*> Right 2"""
+                    """f(x) <*> Right 3"""
+                    """f(x) <*> Left ["This is a failure"]"""
+                ]
             SideEffects.reset ()
             let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
             SideEffects.are expectedEffects

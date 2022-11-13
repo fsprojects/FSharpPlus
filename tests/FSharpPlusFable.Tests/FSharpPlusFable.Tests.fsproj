@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -13,6 +13,8 @@
   <ItemGroup>
     <Compile Include="Util.fs" />
     <Compile Include="FSharpTests/General/Util.fs" />
+    <Compile Include="FSharpTests/General/Splits.fs" />
+    <Compile Include="FSharpTests/General/MonoidCompile.fs" />
     <Compile Include="FSharpTests/General/Monoid.fs" />
     <Compile Include="FSharpTests/General/Functor.fs" />
     <Compile Include="FSharpTests/General/Collections.fs" />
@@ -42,6 +44,6 @@
     <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
       <Private>True</Private>
     </ProjectReference>
-    <PackageReference Update="FSharp.Core" Version="5.0.1" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" />
   </ItemGroup>
 </Project>

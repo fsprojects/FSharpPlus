@@ -41,7 +41,8 @@
     <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="4.6.2" Condition=" '$(TargetFramework)' == 'net45'" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" Condition=" '$(TargetFramework)' != 'net45'" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../FSharpPlus.TypeLevel.fsproj" />
