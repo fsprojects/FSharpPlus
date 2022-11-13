@@ -6,6 +6,7 @@ module Array =
 
     open System
     open FSharp.Core.CompilerServices
+    open FSharpPlus.Internals.Errors
 
     /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>
@@ -19,11 +20,16 @@ module Array =
     /// </code>
     /// </example>
     let apply f x =
+        raiseIfNull (nameof(x)) x
+
         let lenf, lenx = Array.length f, Array.length x
         Array.init (lenf * lenx) (fun i -> let (d, r) = Math.DivRem (i, lenx) in f.[d] x.[r])
 
     /// Combines all values from the first array with the second, using the supplied mapping function.
     let lift2 f x y =
+        raiseIfNull (nameof(x)) x
+        raiseIfNull (nameof(y)) y
+
         let lenx, leny = Array.length x, Array.length y
         Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in f x.[d] y.[r])
         
@@ -36,6 +42,10 @@ module Array =
     ///
     /// <returns>Array with values returned from mapping function.</returns>
     let lift3 mapping list1 list2 list3 =
+        raiseIfNull (nameof(list1)) list1
+        raiseIfNull (nameof(list2)) list2
+        raiseIfNull (nameof(list3)) list3
+
         let lenx, leny, lenz = Array.length list1, Array.length list2, Array.length list3
         let combinedFirstTwo = Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in (list1.[d], list2.[r]))
 
@@ -44,6 +54,8 @@ module Array =
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: 'T []) (source: seq<'T []>) =
+        raiseIfNull (nameof(source)) source
+
     #if FABLE_COMPILER
         source |> Seq.intercalate separator |> Seq.toArray
     #else
@@ -58,6 +70,8 @@ module Array =
 
     /// Inserts a separator element between each element in the source array.
     let intersperse element (source: 'T []) =
+        raiseIfNull (nameof(source)) source
+
         match source with
         | [||] -> [||]
         | _ ->
@@ -68,10 +82,18 @@ module Array =
                 | _    ->  element)
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
-    let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
+    let split (separators: seq<_ []>) (source: _ []) =
+        raiseIfNull (nameof(separators)) separators
+        raiseIfNull (nameof(source)) source
+
+        source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
     /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: 'T []) (newValue: 'T []) (source: 'T[]) : 'T[] =
+        raiseIfNull (nameof(oldValue)) oldValue
+        raiseIfNull (nameof(newValue)) newValue
+        raiseIfNull (nameof(source)) source
+
     #if FABLE_COMPILER
         source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray: 'T []
     #else
@@ -138,6 +160,9 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let findSliceIndex (slice: _ []) (source: _ []) =
+        raiseIfNull (nameof(slice)) slice
+        raiseIfNull (nameof(source)) source
+
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then
             ArgumentException("The specified slice was not found in the sequence.") |> raise
@@ -152,6 +177,9 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
+        raiseIfNull (nameof(slice)) slice
+        raiseIfNull (nameof(source)) source
+
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
     #endif
@@ -164,6 +192,8 @@ module Array =
     /// A tuple with both resulting arrays.
     /// </returns>
     let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: array<'T>) =
+        raiseIfNull (nameof(source)) source
+
         let (x, y) = ResizeArray (), ResizeArray ()
         Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
         x.ToArray (), y.ToArray ()
@@ -172,6 +202,9 @@ module Array =
     /// to each of the elements of the two arrays pairwise.</summary>
     /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
     let map2Shortest f (a1: 'T []) (a2: 'U []) =
+        raiseIfNull (nameof(a1)) a1
+        raiseIfNull (nameof(a2)) a2
+
         Array.init (min a1.Length a2.Length) (fun i -> f a1.[i] a2.[i])
     
     /// <summary>
@@ -181,6 +214,9 @@ module Array =
     /// <param name="a2">Second input array.</param>
     /// <returns>Array with corresponding pairs of input arrays.</returns>
     let zipShortest (a1: array<'T1>) (a2: array<'T2>) =
+        raiseIfNull (nameof(a1)) a1
+        raiseIfNull (nameof(a2)) a2
+
         Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])
 
     /// <summary>Same as choose but with access to the index.</summary>
@@ -189,6 +225,8 @@ module Array =
     ///
     /// <returns>Array with values x for each Array value where the function returns Some(x).</returns>
     let choosei mapping source =
+        raiseIfNull (nameof(source)) source
+
         let mutable i = ref -1
         let fi x =
             i.Value <- i.Value + 1
